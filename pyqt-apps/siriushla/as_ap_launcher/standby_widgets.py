@@ -8,44 +8,11 @@ import qtawesome as qta
 from pydm.widgets.base import PyDMWidget
 from pydm.widgets.channel import PyDMChannel
 
+from siriuspy.devices import InjSysStandbyHandler
+
 from siriushla.widgets import PyDMLedMultiChannel, PyDMLed, QLed
 from siriushla.widgets.led import MultiChannelStatusDialog
 from siriushla.widgets.dialog import PSStatusDialog
-from .standby_handlers import PS_ENBL_VAL, PU_ENBL_VAL, PS_STS_RMPWFM, \
-    LILLRF_ENBL_VAL,  BO_FAMS_EVT_INDEX, BO_CORRS_EVT_INDEX, \
-    EVG_NAME, EVT_CONT_VAL, TRG_ENBL_VAL, \
-    InjBOStandbyHandler, LILLRFStandbyHandler, PUStandbyHandler, \
-    BOPSRampStandbyHandler, BORFRampStandbyHandler
-
-
-CHANNELS_2_VALUES_MON = {
-    # BO RF
-    'BR-RF-DLLRF-01:RmpEnbl-Sts': TRG_ENBL_VAL,
-    'BO-Glob:TI-LLRF-Rmp:State-Sts': TRG_ENBL_VAL,
-    'BR-RF-DLLRF-01:RmpReady-Mon': TRG_ENBL_VAL,
-    # InjBO event
-    EVG_NAME+':InjBOMode-Sts': EVT_CONT_VAL,
-}
-# LI LLRF loop
-for dev in LILLRFStandbyHandler.DEVICES:
-    CHANNELS_2_VALUES_MON[dev + ':GET_INTEGRAL_ENABLE'] = LILLRF_ENBL_VAL
-    CHANNELS_2_VALUES_MON[dev + ':GET_FB_MODE'] = LILLRF_ENBL_VAL
-# BO PS
-for dev in BOPSRampStandbyHandler.DEVICES:
-    CHANNELS_2_VALUES_MON[dev+':OpMode-Sts'] = PS_STS_RMPWFM
-    CHANNELS_2_VALUES_MON[dev+':WfmUpdateAuto-Sts'] = PS_ENBL_VAL
-for trg in BOPSRampStandbyHandler.TRIGGERS:
-    CHANNELS_2_VALUES_MON[trg+':State-Sel'] = TRG_ENBL_VAL
-CHANNELS_2_VALUES_MON['BO-Glob:TI-Mags-Fams:Src-Sel'] = BO_FAMS_EVT_INDEX
-CHANNELS_2_VALUES_MON['BO-Glob:TI-Mags-Corrs:Src-Sel'] = BO_CORRS_EVT_INDEX
-# PU
-for dev in PUStandbyHandler.DEVICES:
-    if 'InjDpKckr' in dev:
-        continue
-    CHANNELS_2_VALUES_MON[dev+':Pulse-Sts'] = PU_ENBL_VAL
-    CHANNELS_2_VALUES_MON[dev+':PwrState-Sts'] = PU_ENBL_VAL
-for trg in PUStandbyHandler.TRIGGERS:
-    CHANNELS_2_VALUES_MON[trg+':State-Sts'] = TRG_ENBL_VAL
 
 
 class InjSysStandbyButton(PyDMWidget, QPushButton):
@@ -54,7 +21,7 @@ class InjSysStandbyButton(PyDMWidget, QPushButton):
     finished = Signal()
 
     def __init__(self, parent=None, label='', icon=None,
-                 handlers=None, function=None, order=None):
+                 handler=None, function=None):
         if not icon:
             QPushButton.__init__(self, label, parent)
         else:
@@ -62,11 +29,11 @@ class InjSysStandbyButton(PyDMWidget, QPushButton):
         PyDMWidget.__init__(self)
         self.initial_icon = icon
         self._alarm_sensitive_border = False
-        self._handlers = handlers
+        self._handler = handler
         self._function = function
-        self._order = order
+
         self._address2conn = dict()
-        for address in CHANNELS_2_VALUES_MON:
+        for address in self._handler.on_values:
             self._address2conn[address] = False
             self._channel = address
             channel = PyDMChannel(
@@ -89,11 +56,6 @@ class InjSysStandbyButton(PyDMWidget, QPushButton):
         self._connected = allconn
         self.check_enable_state()
 
-    @Slot(list)
-    def set_order(self, new_order):
-        """Update order."""
-        self._order = new_order
-
     def _show_wait_icon(self):
         """Show wait icon."""
         self.setIcon(
@@ -107,8 +69,7 @@ class InjSysStandbyButton(PyDMWidget, QPushButton):
         if not self._connected:
             return
 
-        thread = InjSysStandbySender(
-            self._handlers, self._order, self._function, self)
+        thread = InjSysStandbySender(self._handler, self._function, self)
         thread.sendWarning.connect(self._show_aux_message_box)
         thread.finished.connect(self._show_init_icon)
         thread.finished.connect(self.finished.emit)
@@ -132,16 +93,13 @@ class InjSysStandbyButton(PyDMWidget, QPushButton):
 class InjSysStandbyEnblDsbl(QWidget):
     """Widget to control injection system standby state."""
 
-    def __init__(self, handlers, on_order, off_order, parent=None):
+    def __init__(self, handler, parent=None):
         super().__init__(parent)
-        self._handlers = handlers
-        self._on_order = on_order
-        self._off_order = off_order
+        self._handler = handler
 
         self.pb_off = InjSysStandbyButton(
             parent=self, icon=qta.icon('mdi.power-off'),
-            handlers=self._handlers,
-            function='turn_off', order=self._off_order)
+            handler=self._handler, function='cmd_turn_off')
         self.pb_off.setToolTip('Click to Turn Off')
         self.pb_off.setObjectName('pb_off')
         self.pb_off.setStyleSheet("""
@@ -155,8 +113,7 @@ class InjSysStandbyEnblDsbl(QWidget):
 
         self.pb_on = InjSysStandbyButton(
             parent=self, icon=qta.icon('mdi.power-on'),
-            handlers=self._handlers,
-            function='turn_on', order=self._on_order)
+            handler=self._handler, function='cmd_turn_on')
         self.pb_on.setToolTip('Click to Turn On')
         self.pb_on.setObjectName('pb_on')
         self.pb_on.setStyleSheet("""
@@ -176,14 +133,6 @@ class InjSysStandbyEnblDsbl(QWidget):
         lay.addWidget(self.pb_on)
         lay.addStretch()
 
-    def set_commands_order(self, new_on_order, new_off_order):
-        if new_on_order != self._on_order:
-            self.pb_on.set_order(new_on_order)
-            self._on_order = new_on_order
-        if new_off_order != self._off_order:
-            self.pb_off.set_order(new_off_order)
-            self._off_order = new_off_order
-
     def _disable_commands(self):
         self.pb_off.setEnabled(False)
         self.pb_on.setEnabled(False)
@@ -198,29 +147,27 @@ class InjSysStandbySender(QThread):
 
     sendWarning = Signal(str, list)
 
-    def __init__(self, handlers, order, function, parent=None):
+    def __init__(self, handler, function, parent=None):
         """Initialize."""
         super().__init__(parent)
-        self._handlers = handlers
-        self._order = order
+        self._handler = handler
         self._function = function
 
     def run(self):
         """Run."""
-        for handler_name in self._order:
-            handler = self._handlers[handler_name]
-            func = getattr(handler, self._function)
-            retval = func()
-            if not retval[0]:
-                self.sendWarning.emit(retval[1], retval[2])
-                break
+        func = getattr(self._handler, self._function)
+        retval = func()
+        if retval is None:
+            return
+        if not retval[0]:
+            self.sendWarning.emit(retval[1], retval[2])
 
 
 class InjSysStandbyStatusLed(PyDMLedMultiChannel):
     """Led to check whether several PVs are in stanby state."""
 
-    def __init__(self, parent=None):
-        super().__init__(parent, CHANNELS_2_VALUES_MON)
+    def __init__(self, handler, parent=None):
+        super().__init__(parent, handler.on_values)
         self.stateColors = [PyDMLed.DarkGreen, PyDMLed.LightGreen,
                             PyDMLed.Yellow, PyDMLed.Gray]
 
@@ -268,32 +215,13 @@ class InjSysStandbyStatusLed(PyDMLedMultiChannel):
 
 class WidgetInjSys(QWidget):
 
-    DEF_ON_ORDER = ['bo_rf', 'injbo', 'as_pu', 'bo_ps', 'li_rf']
-    DEF_OFF_ORDER = ['li_rf', 'bo_rf', 'as_pu', 'bo_ps', 'injbo']
-    COMM_DESC = {
-        'as_pu': 'AS PU (Septa and Kickers)',
-        'bo_ps': 'BO PS Ramp',
-        'bo_rf': 'BO RF Ramp',
-        'injbo': 'TI InjBO Event',
-        'li_rf': 'LI LLRF (Klystrons Loop)',
-    }
-
     def __init__(self, parent=None):
         """Init."""
         super().__init__(parent)
-        self._on_order = WidgetInjSys.DEF_ON_ORDER
-        self._off_order = WidgetInjSys.DEF_OFF_ORDER
-        self._handlers = {
-            'as_pu': PUStandbyHandler(),
-            'bo_ps': BOPSRampStandbyHandler(),
-            'bo_rf': BORFRampStandbyHandler(),
-            'injbo': InjBOStandbyHandler(),
-            'li_rf': LILLRFStandbyHandler(),
-        }
+        self._handler = InjSysStandbyHandler()
 
-        self._but = InjSysStandbyEnblDsbl(
-            self._handlers, self._on_order, self._off_order, self)
-        self._led = InjSysStandbyStatusLed(self)
+        self._but = InjSysStandbyEnblDsbl(self._handler, self)
+        self._led = InjSysStandbyStatusLed(self._handler, self)
 
         # menu
         self.menu = QMenu(self)
@@ -301,16 +229,16 @@ class WidgetInjSys(QWidget):
         self.rstord_act.triggered.connect(self._reset_commands_order)
         self.menu.addAction(self.rstord_act)
         for cmmtype in ['on', 'off']:
-            order = getattr(self, '_'+cmmtype+'_order')
+            order = getattr(self._handler, cmmtype+'_order')
             menu = QMenu('Select Turn '+cmmtype.upper()+' Commands', self)
             setattr(self, cmmtype+'_menu', menu)
             self.menu.addMenu(menu)
             for cmm in order:
-                act = QAction(WidgetInjSys.COMM_DESC[cmm], self)
+                act = QAction(self._handler.HANDLER_DESC[cmm], self)
                 act.setObjectName(cmm)
                 act.setCheckable(True)
                 act.setChecked(True)
-                act.toggled.connect(self._set_button_commands_order)
+                act.toggled.connect(self._set_commands_order)
                 menu.addAction(act)
 
         lay = QGridLayout(self)
@@ -326,25 +254,23 @@ class WidgetInjSys(QWidget):
         """Show a custom context menu."""
         self.menu.popup(self.mapToGlobal(event.pos()))
 
-    def _set_button_commands_order(self):
-        self._on_order = [
+    def _set_commands_order(self):
+        self._handler.on_order = [
             a.objectName() for a in self.on_menu.actions() if a.isChecked()]
-        self._off_order = [
+        self._handler.off_order = [
             a.objectName() for a in self.off_menu.actions() if a.isChecked()]
-        self._but.set_commands_order(self._on_order, self._off_order)
-        if self._on_order != WidgetInjSys.DEF_ON_ORDER or \
-                self._off_order != WidgetInjSys.DEF_OFF_ORDER:
+
+        if self._handler.on_order != InjSysStandbyHandler.DEF_ON_ORDER or \
+                self._handler.off_order != InjSysStandbyHandler.DEF_OFF_ORDER:
             self._but.setStyleSheet('background-color: yellow;')
         else:
             self._but.setStyleSheet('background-color: white;')
 
     def _reset_commands_order(self):
-        self._on_order = WidgetInjSys.DEF_ON_ORDER
-        self._off_order = WidgetInjSys.DEF_OFF_ORDER
+        self._handler.cmd_reset_comm_order()
         for menu in [self.off_menu, self.on_menu]:
             for act in menu.actions():
                 act.toggled.disconnect()
                 act.setChecked(True)
-                act.toggled.connect(self._set_button_commands_order)
-        self._but.set_commands_order(self._on_order, self._off_order)
+                act.toggled.connect(self._set_commands_order)
         self._but.setStyleSheet('background-color: white;')
