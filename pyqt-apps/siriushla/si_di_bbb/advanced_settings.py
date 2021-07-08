@@ -18,7 +18,6 @@ class BbBAdvancedSettingsWidget(QWidget):
     def __init__(self, parent=None, prefix=_vaca_prefix, device=''):
         """Init."""
         super().__init__(parent)
-        self.setObjectName('SIApp')
         set_bbb_color(self, device)
         self.prefix = prefix
         self.device = device
@@ -47,7 +46,7 @@ class BbBGeneralSettingsWidget(QWidget):
     def __init__(self, parent=None, prefix=_vaca_prefix, device=''):
         """Init."""
         super().__init__(parent)
-        self.setObjectName('SIApp')
+        set_bbb_color(self, device)
         self._prefix = prefix
         self._device = device
         self.dev_pref = prefix + device
@@ -216,7 +215,7 @@ class BbBSlowDACsWidget(QWidget):
     def __init__(self, parent=None, prefix=_vaca_prefix, device=''):
         """Init."""
         super().__init__(parent)
-        self.setObjectName('SIApp')
+        set_bbb_color(self, device)
         self._prefix = prefix
         self._device = device
         self.dev_pref = prefix + device
@@ -334,7 +333,7 @@ class BbBADCWidget(QWidget):
     def __init__(self, parent=None, prefix=_vaca_prefix, device=''):
         """Init."""
         super().__init__(parent)
-        self.setObjectName('SIApp')
+        set_bbb_color(self, device)
         self._prefix = prefix
         self._device = device
         self.dev_pref = prefix + device

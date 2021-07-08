@@ -19,7 +19,6 @@ class BbBDriveSettingsWidget(QWidget):
     def __init__(self, parent=None, prefix=_vaca_prefix, device=''):
         """Init."""
         super().__init__(parent)
-        self.setObjectName('SIApp')
         set_bbb_color(self, device)
         self._prefix = prefix
         self._device = device

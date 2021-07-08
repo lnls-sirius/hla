@@ -1,12 +1,13 @@
 """BbB Util Module."""
 
+from qtpy.QtGui import QColor, QPalette
 import qtawesome as qta
 
 from ..util import get_appropriate_color
 
 
 def get_bbb_icon():
-    """."""
+    """Get BbB icon."""
     clr = get_appropriate_color('SI')
     icon = qta.icon(
         'fa5s.hammer', 'mdi.ellipse', 'mdi.ellipse', 'mdi.ellipse',
@@ -22,10 +23,12 @@ def get_bbb_icon():
 
 
 def set_bbb_color(obj, device):
-    """."""
-    if device.endswith('H'):
-        obj.setStyleSheet('background-color:#b3e5ff')
-    elif device.endswith('V'):
-        obj.setStyleSheet('background-color:#ffb3b3')
-    else:
-        obj.setStyleSheet('background-color:#f5f5f0')
+    """Set BbB color."""
+    ncolor = '#b3e5ff' if device.endswith('H') \
+        else '#ffb3b3' if device.endswith('V') \
+        else '#f5f5f0'
+    color = QColor(ncolor)
+    pal = obj.palette()
+    pal.setColor(QPalette.Background, color)
+    obj.setAutoFillBackground(True)
+    obj.setPalette(pal)

@@ -11,7 +11,7 @@ from ..widgets import SiriusMainWindow
 from ..widgets.windows import create_window_from_widget
 
 from .bbb import BbBMainSettingsWidget
-from .util import get_bbb_icon
+from .util import get_bbb_icon, set_bbb_color
 from .gpio import BbBGPIOWidget
 
 
@@ -56,6 +56,7 @@ class BbBMainWindow(SiriusMainWindow):
             dev_pref = 'SI-Glob:DI-BbBProc-'+idc
 
             wid = BbBMainSettingsWidget(self, self.prefix, dev_pref)
+            set_bbb_color(wid, dev_pref)
             connect_newprocess(
                 wid.pb_detail, [
                     'sirius-hla-si-di-bbb.py', '-dev', dev_pref, '-p',
