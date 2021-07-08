@@ -4,7 +4,7 @@ import qtawesome as qta
 
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QGroupBox, QPushButton, QLabel, \
-    QGridLayout, QApplication, QMessageBox, QMenu, QAction, QHBoxLayout
+    QGridLayout, QApplication, QHBoxLayout
 from pydm.widgets import PyDMPushButton, PyDMLabel
 
 from siriuspy.envars import VACA_PREFIX
@@ -16,30 +16,8 @@ from siriushla.widgets import SiriusMainWindow, PyDMStateButton, \
     SiriusLedAlert, PyDMLed, SiriusEnumComboBox
 from siriushla.common.epics.wrapper import PyEpicsWrapper
 from .menu import get_object
-from .standby_widgets import InjSysStandbyEnblDsbl, InjSysStandbyStatusLed
+from .standby_widgets import WidgetInjSys
 from .killbeam_widgets import RFKillBeamButton
-
-
-class WidgetInjSys(QGroupBox):
-
-    def contextMenuEvent(self, event):
-        """Show a custom context menu."""
-        menu = QMenu(self)
-        act = QAction('What does this box control?', self)
-        act.triggered.connect(self._show_help_message)
-        menu.addAction(act)
-        menu.popup(self.mapToGlobal(event.pos()))
-
-    def _show_help_message(self):
-        QMessageBox.information(
-            self, 'What does this box control?',
-            'This box controls: \n\n'
-            '- The Pulse-Sel/Sts and PwrState-Sel/Sts PVs of Pulsed Magnets\n'
-            ' (TB-04:PU-InjSept,  BO-01D:PU-InjKckr,\n'
-            '  BO-48D:PU-EjeKckr, TS-01:PU-EjeSeptF, TS-01:PU-EjeSeptG,\n'
-            '  TS-04:PU-InjSeptF, TS-04:PU-InjSeptG-1, TS-04:PU-InjSeptG-2,\n'
-            '  SI-01SA:PU-InjNLKckr);\n\n'
-            '- The RF Ramp (RmpEnbl-Sel/Sts).\n')
 
 
 class MainOperation(SiriusMainWindow):
@@ -114,18 +92,12 @@ class MainOperation(SiriusMainWindow):
         egun.setLayout(egun_lay)
 
         # Injection System
-        injsys = WidgetInjSys('Injection System')
-        injsys_state_sel = InjSysStandbyEnblDsbl(injsys)
-        injsys_state_sts = InjSysStandbyStatusLed(injsys)
+        injsys = QGroupBox('Injection System')
+        injsys_wid = WidgetInjSys()
 
         injsys_lay = QGridLayout()
-        injsys_lay.setVerticalSpacing(5)
-        injsys_lay.setHorizontalSpacing(15)
-        injsys_lay.addWidget(QLabel('', injsys), 0, 1)
-        injsys_lay.addWidget(injsys_state_sel, 1, 0, 1, 3)
-        injsys_lay.addWidget(injsys_state_sts, 2, 1)
-        injsys_lay.setColumnStretch(0, 2)
-        injsys_lay.setColumnStretch(2, 2)
+        injsys_lay.setContentsMargins(0, 0, 0, 0)
+        injsys_lay.addWidget(injsys_wid)
         injsys.setLayout(injsys_lay)
 
         # EVG control

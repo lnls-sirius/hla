@@ -357,16 +357,27 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
         return val2[0] < val1 < val2[1]
 
     def mouseDoubleClickEvent(self, ev):
-        pvs = set()
+        pv_groups, texts = list(), list()
+        pvs_err, pvs_und = set(), set()
         for k, v in self._address2status.items():
-            if (not v) or (v == 'UNDEF'):
-                pvs.add(k)
-        if pvs:
+            if not v:
+                pvs_err.add(k)
+        if pvs_err:
+            pv_groups.append(pvs_err)
+            texts.append(
+                'There are PVs with values different\n'
+                'from the desired ones!')
+        for k, v in self._address2conn.items():
+            if not v:
+                pvs_und.add(k)
+        if pvs_und:
+            pv_groups.append(pvs_und)
+            texts.append('There are disconnected PVs!')
+
+        if pv_groups:
             msg = MultiChannelStatusDialog(
-                parent=self, pvs=pvs,
-                text='There are PVs with values different\n'
-                     'from the desired ones!',
-                fun_show_diff=self._show_diff)
+                parent=self, pvs=pv_groups,
+                text=texts, fun_show_diff=self._show_diff)
             msg.exec_()
         super().mouseDoubleClickEvent(ev)
 
@@ -484,15 +495,21 @@ class MultiChannelStatusDialog(SiriusDialog):
         super().__init__(parent)
         self.setWindowTitle('Channels Status')
         self._fun_show_diff = fun_show_diff
-        self._label = QLabel(text, self)
-        self._pv_list = _PVList(pvs, self)
-        if fun_show_diff:
-            self._pv_list.clicked_item_data.connect(fun_show_diff)
+        if isinstance(pvs, set):
+            pvs = [pvs, ]
+            text = [text, ]
+
+        lay = QVBoxLayout(self)
+        for pvg, txt in zip(pvs, text):
+            label = QLabel(txt, self)
+            pv_list = _PVList(pvg, self)
+            if fun_show_diff:
+                pv_list.clicked_item_data.connect(fun_show_diff)
+            lay.addWidget(label)
+            lay.addWidget(pv_list)
+
         self._ok_bt = QPushButton('Ok', self)
         self._ok_bt.clicked.connect(self.close)
-        lay = QVBoxLayout(self)
-        lay.addWidget(self._label)
-        lay.addWidget(self._pv_list)
         lay.addWidget(self._ok_bt)
 
 
