@@ -316,9 +316,9 @@ class RFMainControl(SiriusMainWindow):
         lay_over.addWidget(self.bt_slenbl, 1, 1)
         lay_over.addWidget(self.led_slenbl, 1, 2, alignment=Qt.AlignLeft)
 
-        self.sb_amp = PyDMSpinbox(self, self.chs['SL']['ASet']+':S')
+        self.sb_amp = PyDMSpinbox(self, self.chs['SL']['ASet']+'-SP')
         self.sb_amp.showStepExponent = False
-        self.lb_amp = PyDMLabel(self, self.chs['SL']['ASet'])
+        self.lb_amp = PyDMLabel(self, self.chs['SL']['ASet']+'-RB')
         self.cb_ampincrate = PyDMEnumComboBox(
             self, self.chs['SL']['AInc']+':S')
         self.lb_ampincrate = PyDMLabel(self, self.chs['SL']['AInc'])
