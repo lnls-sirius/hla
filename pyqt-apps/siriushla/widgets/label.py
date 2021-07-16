@@ -92,9 +92,9 @@ class SiriusLabel(QLabel, TextFormatter, PyDMWidget, DisplayFormat):
             return
         # If the value is an enum, display the appropriate enum string for
         # the value.
-        if self.enum_strings is not None and isinstance(new_value, int):
+        if self.enum_strings and isinstance(new_value, (int, float)):
             try:
-                self.setText(self.enum_strings[new_value])
+                self.setText(self.enum_strings[int(new_value)])
             except IndexError:
                 self.setText("**INVALID**")
             return
