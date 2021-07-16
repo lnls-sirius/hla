@@ -512,13 +512,15 @@ class BbBInterlock(QWidget):
             self, init_channel=self.dev_pref+':ILOCK_UPDATE', pressValue=1)
         pb_upt.setText('Update Filter')
         pb_upt.setToolTip('Update Filter Config')
-        pb_upt.setIcon(qta.icon('mdi.cloud-upload-outline'))
+        pb_upt.setIcon(qta.icon('mdi.sync'))
+        pb_upt.setStyleSheet("icon-size:20px;")
 
         pb_ld = SiriusPushButton(
             self, init_channel=self.dev_pref+':BO_CPCOEFF', pressValue=1)
-        pb_ld.setText('Load Filter')
-        pb_ld.setToolTip('Load Filter Config')
-        pb_ld.setIcon(qta.icon('mdi.cloud-download-outline'))
+        pb_ld.setText('Apply Filter')
+        pb_ld.setToolTip('Apply Filter Config to Feedback')
+        pb_ld.setIcon(qta.icon('mdi.upload'))
+        pb_ld.setStyleSheet("icon-size:20px;")
 
         lay = QGridLayout(self)
         lay.setAlignment(Qt.AlignCenter | Qt.AlignTop)
