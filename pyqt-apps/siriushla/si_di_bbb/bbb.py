@@ -233,9 +233,7 @@ class BbBStatusWidget(QWidget):
                  resume=False):
         """Init."""
         super().__init__(parent)
-        if parent.isWindow():
-            set_bbb_color(parent, device)
-        set_bbb_color(self, device)
+        self.setObjectName('SIApp')
         self._prefix = prefix
         self._device = device
         self.dev_pref = prefix + device
@@ -276,7 +274,9 @@ class BbBStatusWidget(QWidget):
         pb_intvl.setIcon(qta.icon('fa5s.sync'))
         pb_intvl.setObjectName('conf')
 
-        lay = QGridLayout(self)
+        wid = QWidget(self)
+        set_bbb_color(wid, self._device)
+        lay = QGridLayout(wid)
         lay.setContentsMargins(0, 0, 0, 0)
         if self._is_resumed:
             lay.addWidget(
@@ -314,6 +314,10 @@ class BbBStatusWidget(QWidget):
         hlay.addWidget(lb_intvl)
         hlay.addStretch()
         hlay.addWidget(pb_intvl)
+
+        mainlay = QHBoxLayout(self)
+        mainlay.setContentsMargins(0, 0, 0, 0)
+        mainlay.addWidget(wid)
 
 
 class BbBInfoWidget(QGroupBox):
