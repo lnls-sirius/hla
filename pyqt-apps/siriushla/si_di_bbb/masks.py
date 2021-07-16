@@ -30,6 +30,8 @@ class BbBMasksWidget(QWidget):
             alignment=Qt.AlignCenter)
 
         graph_exct = WfmGraph(self)
+        graph_exct.setAutoRangeY(False)
+        graph_exct.setYRange(-0.01, 1.08)
         graph_exct.showLegend = True
         graph_exct.axisColor = QColor('black')
         graph_exct.add_scatter_curve(
@@ -39,13 +41,23 @@ class BbBMasksWidget(QWidget):
         graph_exct.add_scatter_curve(
             ychannel=self.dev_pref+':CF_MASK',
             xchannel=self.dev_pref+':SRAM_XSC',
-            name='Alternate', color=QColor('green'))
+            name='Alternate', color=QColor('green'), offset=0.02)
         graph_exct.add_scatter_curve(
-            ychannel=self.dev_pref+':DRIVE_MASK',
+            ychannel=self.dev_pref+':DRIVE0_MASK',
             xchannel=self.dev_pref+':SRAM_XSC',
-            name='Drive', color=QColor('red'))
+            name='Drive0', color=QColor('red'), offset=0.04)
+        graph_exct.add_scatter_curve(
+            ychannel=self.dev_pref+':DRIVE1_MASK',
+            xchannel=self.dev_pref+':SRAM_XSC',
+            name='Drive1', color=QColor('magenta'), offset=0.06)
+        graph_exct.add_scatter_curve(
+            ychannel=self.dev_pref+':DRIVE2_MASK',
+            xchannel=self.dev_pref+':SRAM_XSC',
+            name='Drive2', color=QColor('orange'), offset=0.08)
 
         graph_spec = WfmGraph(self)
+        graph_spec.setAutoRangeY(False)
+        graph_spec.setYRange(-0.01, 1.08)
         graph_spec.showLegend = True
         graph_spec.axisColor = QColor('black')
         graph_spec.add_scatter_curve(
@@ -55,7 +67,7 @@ class BbBMasksWidget(QWidget):
         graph_spec.add_scatter_curve(
             ychannel=self.dev_pref+':BRAM_ACQ_MASK',
             xchannel=self.dev_pref+':BRAM_XSC',
-            name='BRAM', color=QColor('blue'))
+            name='BRAM', color=QColor('blue'), offset=0.02)
 
         lay = QGridLayout(self)
         lay.addWidget(ld_exct_masks, 0, 0)

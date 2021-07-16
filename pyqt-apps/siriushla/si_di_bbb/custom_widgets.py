@@ -42,7 +42,8 @@ class WfmGraph(PyDMWaveformPlot):
 
     def add_scatter_curve(
             self, ychannel='', xchannel='', name='', color=QColor('blue'),
-            lineStyle=Qt.NoPen, lineWidth=1, symbolSize=10, nchannel=None):
+            lineStyle=Qt.NoPen, lineWidth=1, symbolSize=10, nchannel=None,
+            offset=None):
         """."""
         self.addChannel(
             x_channel='', y_channel='',
@@ -51,6 +52,7 @@ class WfmGraph(PyDMWaveformPlot):
         curve = self.curveAtIndex(-1)
         curve.opts['symbolBrush'] = mkBrush(color)
         curve.nchannel = None
+        curve.offset = offset
         if nchannel is not None:
             curve.nchannel = SiriusConnectionSignal(nchannel)
         x_chan_obj = SiriusConnectionSignal(xchannel)
@@ -87,6 +89,8 @@ class WfmGraph(PyDMWaveformPlot):
 
     def _update_waveform_value(self, curve, axis, value):
         func = getattr(curve, 'receive'+axis+'Waveform')
+        offset = curve.offset or 0.0
+        value = value + offset
         if curve.nchannel is None:
             func(value)
             return

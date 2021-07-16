@@ -335,6 +335,10 @@ class BbBInfoWidget(QGroupBox):
         lb_rffreq = PyDMLabel(self, self.dev_pref+':RF_FREQ')
         lb_rffreq.showUnits = True
 
+        ld_revfrq = QLabel('Revolution Frequency', self)
+        lb_revfrq = PyDMLabel(self, self.dev_pref+':FREV')
+        lb_revfrq.showUnits = True
+
         ld_hn = QLabel('Harmonic Number', self)
         lb_hn = PyDMLabel(self, self.dev_pref+':HARM_NUM')
 
@@ -352,14 +356,16 @@ class BbBInfoWidget(QGroupBox):
         lay.setVerticalSpacing(15)
         lay.addWidget(ld_rffreq, 0, 0)
         lay.addWidget(lb_rffreq, 0, 1)
-        lay.addWidget(ld_hn, 1, 0)
-        lay.addWidget(lb_hn, 1, 1)
-        lay.addWidget(ld_gtwrvw, 2, 0)
-        lay.addWidget(lb_gtwrvw, 2, 1)
-        lay.addWidget(ld_gtwtyp, 3, 0)
-        lay.addWidget(lb_gtwtyp, 3, 1)
-        lay.addWidget(ld_ipaddr, 4, 0)
-        lay.addWidget(lb_ipaddr, 4, 1)
+        lay.addWidget(ld_revfrq, 1, 0)
+        lay.addWidget(lb_revfrq, 1, 1)
+        lay.addWidget(ld_hn, 2, 0)
+        lay.addWidget(lb_hn, 2, 1)
+        lay.addWidget(ld_gtwrvw, 3, 0)
+        lay.addWidget(lb_gtwrvw, 3, 1)
+        lay.addWidget(ld_gtwtyp, 4, 0)
+        lay.addWidget(lb_gtwtyp, 4, 1)
+        lay.addWidget(ld_ipaddr, 5, 0)
+        lay.addWidget(lb_ipaddr, 5, 1)
 
         self.setStyleSheet(
             "PyDMLabel{qproperty-alignment: AlignCenter;}")

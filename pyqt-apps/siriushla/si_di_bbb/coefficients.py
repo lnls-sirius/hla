@@ -259,35 +259,48 @@ class BbBCoefficientsWidget(QWidget):
         ld_bcenbl = QLabel('Enable', self)
         cb_bcenbl = PyDMStateButton(self, self.dev_pref+':CLEAN_ENABLE')
 
-        ld_bcrenbl = QLabel('Prior Settings', self)
-        cb_bcrenbl = PyDMEnumComboBox(
-            self, self.dev_pref+':CLEAN_RENABLE')
-
         ld_bcamp = QLabel('Amplitude', self)
         sb_bcamp = PyDMSpinbox(self, self.dev_pref+':CLEAN_AMPL')
         sb_bcamp.showStepExponent = False
+        lb_svamp = PyDMLabel(self, self.dev_pref+':CLEAN_SAVE_AMPL')
 
         ld_bctune = QLabel('Tune', self)
         sb_bctune = PyDMSpinbox(self, self.dev_pref+':CLEAN_TUNE')
         sb_bctune.showStepExponent = False
+        lb_svfreq = PyDMLabel(self, self.dev_pref+':CLEAN_SAVE_FREQ')
 
-        ld_bcpatt = QLabel('Bunch Clean Mask', self)
+        ld_bcspan = QLabel('Span', self)
+        le_bcspan = PyDMLineEdit(self, self.dev_pref+':CLEAN_SPAN')
+        lb_svspan = PyDMLabel(self, self.dev_pref+':CLEAN_SAVE_SPAN')
+
+        ld_bcper = QLabel('Period', self)
+        le_bcper = PyDMLineEdit(self, self.dev_pref+':CLEAN_PERIOD')
+        lb_svper = PyDMLabel(self, self.dev_pref+':CLEAN_SAVE_PERIOD')
+
+        ld_bcpatt = QLabel('Mask', self)
         le_bcpatt = PyDMLineEdit(self, self.dev_pref+':CLEAN_PATTERN')
 
         lay_clean = QGridLayout(gbox_settings)
-        lay_clean.addWidget(ld_bcenbl, 0, 0)
-        lay_clean.addWidget(cb_bcenbl, 0, 1)
-        lay_clean.addWidget(ld_bcrenbl, 1, 0)
-        lay_clean.addWidget(cb_bcrenbl, 1, 1)
-        lay_clean.addWidget(ld_bcamp, 0, 3)
-        lay_clean.addWidget(sb_bcamp, 0, 4)
-        lay_clean.addWidget(ld_bctune, 1, 3)
-        lay_clean.addWidget(sb_bctune, 1, 4)
+        lay_clean.addWidget(QLabel('SAVED VALS.'), 0, 2)
+
+        lay_clean.addWidget(ld_bcamp, 1, 0)
+        lay_clean.addWidget(sb_bcamp, 1, 1)
+        lay_clean.addWidget(lb_svamp, 1, 2)
+        lay_clean.addWidget(ld_bctune, 2, 0)
+        lay_clean.addWidget(sb_bctune, 2, 1)
+        lay_clean.addWidget(lb_svfreq, 2, 2)
+        lay_clean.addWidget(ld_bcspan, 3, 0)
+        lay_clean.addWidget(le_bcspan, 3, 1)
+        lay_clean.addWidget(lb_svspan, 3, 2)
+        lay_clean.addWidget(ld_bcper, 4, 0)
+        lay_clean.addWidget(le_bcper, 4, 1)
+        lay_clean.addWidget(lb_svper, 4, 2)
+        lay_clean.addWidget(ld_bcenbl, 5, 0)
+        lay_clean.addWidget(cb_bcenbl, 5, 1)
         lay = QGridLayout()
         lay.addWidget(ld_bcpatt, 0, 0)
         lay.addWidget(le_bcpatt, 0, 1)
-        lay_clean.addLayout(lay, 3, 0, 1, 5)
-        lay_clean.setColumnStretch(2, 2)
+        lay_clean.addLayout(lay, 6, 0, 1, 3)
         return gbox_settings
 
     def _setupCoefficientsViewWidget(self):

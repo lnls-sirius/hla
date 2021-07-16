@@ -3,10 +3,11 @@
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, QGroupBox, QHBoxLayout
 from pydm.widgets import PyDMSpinbox, PyDMEnumComboBox
+import qtawesome as qta
 
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 
-from ..widgets import SiriusFrame
+from ..widgets import SiriusFrame, SiriusLabel, SiriusPushButton
 
 from .custom_widgets import MyScaleIndicator
 from .util import set_bbb_color
@@ -27,9 +28,11 @@ class BbBAdvancedSettingsWidget(QWidget):
         dac_wid = BbBSlowDACsWidget(self, self.prefix, self.device)
         adc_wid = BbBADCWidget(self, self.prefix, self.device)
         devs_wid = BbBGeneralSettingsWidget(self, self.prefix, self.device)
+        intlk = BbBInterlock(self, self.prefix, self.device)
 
         lay = QGridLayout(self)
-        lay.addWidget(devs_wid, 1, 1, 1, 3)
+        lay.addWidget(devs_wid, 1, 1)
+        lay.addWidget(intlk, 1, 3)
         lay.addWidget(adc_wid, 3, 1)
         lay.addWidget(dac_wid, 3, 3)
         lay.setColumnStretch(0, 3)
@@ -420,3 +423,127 @@ class BbBADCWidget(QWidget):
         lay.addWidget(si_adcch3, 4, 1)
         lay.addWidget(si_adcch5, 4, 2)
         lay.addWidget(si_adcch7, 4, 3)
+
+
+class BbBInterlock(QWidget):
+    """BbB Interlock Settings Widget."""
+
+    def __init__(self, parent=None, prefix=_vaca_prefix, device=''):
+        """Init."""
+        super().__init__(parent)
+        set_bbb_color(self, device)
+        self._prefix = prefix
+        self._device = device
+        self.dev_pref = prefix + device
+        self._setupUi()
+
+    def _setupUi(self):
+        ld_intlk = QLabel(
+            '<h3>Interlock Controls</h3>', self, alignment=Qt.AlignCenter)
+
+        ld_sp = QLabel('Setpoint', self, alignment=Qt.AlignCenter)
+        # ld_sp.setStyleSheet('font-weight: bold; max-width: 3em;')
+        ld_cyc = QLabel('RF/4 Cycles', self, alignment=Qt.AlignCenter)
+        # ld_cyc.setStyleSheet('font-weight: bold; max-width: 3em;')
+
+        ld_sat = QLabel('Saturation Time', self)
+        sb_sat = PyDMSpinbox(self, self.dev_pref+':ILOCK_TSAT')
+        sb_sat.showStepExponent = False
+        sb_sat.showUnits = True
+        lb_sat = SiriusLabel(self, self.dev_pref+':ILOCK_TSAT_T2C')
+        lb_sat.setAlignment(Qt.AlignCenter)
+
+        ld_tim = QLabel('Timeout', self)
+        sb_tim = PyDMSpinbox(self, self.dev_pref+':ILOCK_TOUT')
+        sb_tim.showStepExponent = False
+        sb_tim.showUnits = True
+        lb_tim = SiriusLabel(self, self.dev_pref+':ILOCK_TOUT_T2C')
+        lb_tim.setAlignment(Qt.AlignCenter)
+
+        pvn = self.dev_pref+':ILOCK_TRIPPED'
+        lb_sts = SiriusLabel(self, init_channel=pvn)
+        lb_sts.enum_strings = ['Status Ok', 'Interlocked']
+        lb_sts.displayFormat = lb_sts.DisplayFormat.String
+        fr_sts = SiriusFrame(self, pvn, is_float=True)
+        fr_sts.borderWidth = 2
+        fr_sts.add_widget(lb_sts)
+        pb_rst = SiriusPushButton(
+            self, init_channel=self.dev_pref+':ILOCK_RESET', pressValue=1)
+        pb_rst.setText('Reset')
+        pb_rst.setToolTip('Reset Counts')
+        pb_rst.setIcon(qta.icon('fa5s.sync'))
+        wd_sts = QWidget(self)
+        wd_sts.setLayout(QHBoxLayout())
+        wd_sts.layout().addStretch()
+        wd_sts.layout().addWidget(fr_sts)
+        wd_sts.layout().addStretch()
+        wd_sts.layout().addWidget(pb_rst)
+        wd_sts.layout().addStretch()
+
+        ld_sens = QLabel(
+            '<h3>Sensitivity Controls</h3>', self, alignment=Qt.AlignCenter)
+
+        ld_tun = QLabel('Fractional Tune', self)
+        sb_tun = PyDMSpinbox(self, self.dev_pref+':ILOCK_TUNE')
+        sb_tun.showStepExponent = False
+        sb_tun.showUnits = True
+
+        ld_tap = QLabel('Filter Taps', self)
+        sb_tap = PyDMSpinbox(self, self.dev_pref+':ILOCK_TAPS')
+        sb_tap.showStepExponent = False
+        sb_tap.showUnits = True
+
+        ld_cal = QLabel('Calibration', self)
+        sb_cal = PyDMSpinbox(self, self.dev_pref+':ILOCK_FE_CAL')
+        sb_cal.showStepExponent = False
+        sb_cal.showUnits = True
+
+        ld_ncur = QLabel('Nominal Current', self)
+        sb_ncur = PyDMSpinbox(self, self.dev_pref+':ILOCK_CURRENT')
+        sb_ncur.showStepExponent = False
+        sb_ncur.showUnits = True
+
+        ld_thr = QLabel('Threshold', self)
+        sb_thr = PyDMSpinbox(self, self.dev_pref+':ILOCK_THRESH')
+        sb_thr.showStepExponent = False
+        sb_thr.showUnits = True
+
+        pb_upt = SiriusPushButton(
+            self, init_channel=self.dev_pref+':ILOCK_UPDATE', pressValue=1)
+        pb_upt.setText('Update Filter')
+        pb_upt.setToolTip('Update Filter Config')
+        pb_upt.setIcon(qta.icon('mdi.cloud-upload-outline'))
+
+        pb_ld = SiriusPushButton(
+            self, init_channel=self.dev_pref+':BO_CPCOEFF', pressValue=1)
+        pb_ld.setText('Load Filter')
+        pb_ld.setToolTip('Load Filter Config')
+        pb_ld.setIcon(qta.icon('mdi.cloud-download-outline'))
+
+        lay = QGridLayout(self)
+        lay.setAlignment(Qt.AlignCenter | Qt.AlignTop)
+        lay.addWidget(ld_intlk, 0, 0, 1, 5)
+        lay.addWidget(ld_sp, 1, 1)
+        lay.addWidget(ld_cyc, 1, 2)
+        lay.addWidget(ld_sat, 2, 0)
+        lay.addWidget(sb_sat, 2, 1)
+        lay.addWidget(lb_sat, 2, 2)
+        lay.addWidget(ld_tim, 3, 0)
+        lay.addWidget(sb_tim, 3, 1)
+        lay.addWidget(lb_tim, 3, 2)
+        lay.addWidget(wd_sts, 4, 0, 1, 3)
+        lays = QGridLayout()
+        lays.addWidget(ld_sens, 0, 0, 1, 4)
+        lays.addWidget(ld_tun, 1, 0)
+        lays.addWidget(sb_tun, 1, 1)
+        lays.addWidget(ld_tap, 2, 0)
+        lays.addWidget(sb_tap, 2, 1)
+        lays.addWidget(ld_cal, 3, 0)
+        lays.addWidget(sb_cal, 3, 1)
+        lays.addWidget(ld_ncur, 4, 0)
+        lays.addWidget(sb_ncur, 4, 1)
+        lays.addWidget(ld_thr, 1, 2)
+        lays.addWidget(sb_thr, 1, 3)
+        lays.addWidget(pb_upt, 3, 2, 1, 2)
+        lays.addWidget(pb_ld, 4, 2, 1, 2)
+        lay.addLayout(lays, 5, 0, 1, 3)
