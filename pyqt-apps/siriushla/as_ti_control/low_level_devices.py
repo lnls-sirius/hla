@@ -151,7 +151,8 @@ class EVG(BaseWidget):
         sp.setObjectName('but')
         sp.setStyleSheet(
             '#but{min-width:25px; max-width:25px; icon-size:20px;}')
-        rb = PyDMLed(self, init_channel=prefix + "RFStatus-Mon")
+        rb = SiriusLedState(self, init_channel=prefix + "RFStatus-Mon")
+        rb.offColor = rb.Red
         layrow.addWidget(self._create_prop_widget(
                         'RF Status', self.configs_wid, (sp, rb)))
 
@@ -162,7 +163,8 @@ class EVG(BaseWidget):
         sp.setObjectName('but')
         sp.setStyleSheet(
             '#but{min-width:25px; max-width:25px; icon-size:20px;}')
-        rb = PyDMLed(self, init_channel=prefix + "EvtSyncStatus-Mon")
+        rb = SiriusLedState(self, init_channel=prefix + "EvtSyncStatus-Mon")
+        rb.offColor = rb.Red
         layrow.addWidget(self._create_prop_widget(
                         'Update Evts', self.configs_wid, (sp, rb)))
 
@@ -172,11 +174,12 @@ class EVG(BaseWidget):
         configlayout.addStretch()
 
         sp = PyDMStateButton(self, init_channel=prefix + "ACEnbl-Sel")
-        rb = PyDMLed(self, init_channel=prefix + "ACEnbl-Sts")
+        rb = SiriusLedState(self, init_channel=prefix + "ACEnbl-Sts")
         layrow.addWidget(self._create_prop_widget(
                         'AC Enable', self.configs_wid, (sp, rb)))
 
-        mon = PyDMLed(self, init_channel=prefix + "ACStatus-Mon")
+        mon = SiriusLedState(self, init_channel=prefix + "ACStatus-Mon")
+        mon.offColor = rb.Red
         layrow.addWidget(self._create_prop_widget(
                         'AC Status', self.configs_wid, (mon,)))
 
@@ -202,12 +205,12 @@ class EVG(BaseWidget):
         configlayout.addStretch()
 
         sp = PyDMStateButton(self, init_channel=prefix + "ContinuousEvt-Sel")
-        rb = PyDMLed(self, init_channel=prefix + "ContinuousEvt-Sts")
+        rb = SiriusLedState(self, init_channel=prefix + "ContinuousEvt-Sts")
         layrow.addWidget(self._create_prop_widget(
                         'Continuous', self.configs_wid, (sp, rb)))
 
         sp = PyDMStateButton(self, init_channel=prefix + "InjectionEvt-Sel")
-        rb = PyDMLed(self, init_channel=prefix + "InjectionEvt-Sts")
+        rb = SiriusLedState(self, init_channel=prefix + "InjectionEvt-Sts")
         layrow.addWidget(self._create_prop_widget(
                         'Injection', self.configs_wid, (sp, rb)))
 
@@ -299,8 +302,17 @@ class EVG(BaseWidget):
         status_layout.addWidget(gb, 2, 2)
 
         wids = list()
+        conn = LLTimeSearch.get_connections_from_evg()
+        conn = {int(dev.propty[-1]) for dev in conn if dev.dev == 'EVG'}
         for i in range(8):
-            rb = SiriusLedAlert(self, init_channel=prefix + "Los-Mon", bit=i)
+            if i in conn:
+                rb = SiriusLedAlert(
+                    self, init_channel=prefix + "Los-Mon", bit=i)
+            else:
+                rb = SiriusLedState(
+                    self, init_channel=prefix + "Los-Mon", bit=i)
+                rb.onColor = rb.DarkGreen
+                rb.offColor = rb.LightGreen
             wids.append(rb)
         gb = self._create_small_GB(
                 'Down Connection', self.status_wid, wids, align_ver=False)
@@ -692,8 +704,17 @@ class FOUT(BaseWidget):
         status_layout.addWidget(gb, 0, 3)
 
         wids = list()
+        conn = LLTimeSearch.get_fout2trigsrc_mapping()[prefix.device_name]
+        conn = {int(dev[-1]) for dev in conn}
         for i in range(8):
-            rb = SiriusLedAlert(self, init_channel=prefix + "Los-Mon", bit=i)
+            if i in conn:
+                rb = SiriusLedAlert(
+                    self, init_channel=prefix + "Los-Mon", bit=i)
+            else:
+                rb = SiriusLedState(
+                    self, init_channel=prefix + "Los-Mon", bit=i)
+                rb.onColor = rb.DarkGreen
+                rb.offColor = rb.LightGreen
             wids.append(rb)
         gb = self._create_small_GB(
                 'Down Connection', self.status_wid, wids, align_ver=False)
@@ -924,9 +945,20 @@ class _EVR_EVE(BaseWidget):
 
         if self.device_type == 'EVR':
             wids = list()
+            conn = LLTimeSearch.get_connections_from_evg()
+            conn = {
+                dev.propty for dev in conn
+                if dev.device_name == self.prefix.device_name}
+            conn = {int(p[-1]) for p in conn if p.startswith('OUT')}
             for i in range(8):
-                rb = SiriusLedAlert(
-                    parent=self, init_channel=prefix + "Los-Mon", bit=i)
+                if i in conn:
+                    rb = SiriusLedAlert(
+                        self, init_channel=prefix + "Los-Mon", bit=i)
+                else:
+                    rb = SiriusLedState(
+                        self, init_channel=prefix + "Los-Mon", bit=i)
+                    rb.onColor = rb.DarkGreen
+                    rb.offColor = rb.LightGreen
                 wids.append(rb)
             gb = self._create_small_GB(
                     'Down Connection', self.status_wid, wids, align_ver=False)
