@@ -1,9 +1,8 @@
 """Define Controllers for the orbits displayed in the graphic."""
 
-from PyQt5.QtWidgets import QSpacerItem
 import numpy as _np
 from qtpy.QtWidgets import QLabel, QGroupBox, QPushButton, QFormLayout, \
-    QVBoxLayout, QHBoxLayout, QGridLayout, QWidget, QTabWidget
+    QVBoxLayout, QHBoxLayout, QGridLayout, QWidget, QTabWidget, QSpacerItem
 from qtpy.QtCore import Qt
 import qtawesome as qta
 
@@ -471,7 +470,8 @@ class PerformanceWidget(QWidget):
         self._setupui()
 
     def _setupui(self):
-        lamb = lambda x: self.prefix.substitute(propty=x)
+        def lamb(x):
+            return self.prefix.substitute(propty=x)
 
         lbl_main = QLabel(
             '<h3>Loop Performance</h3>', self, alignment=Qt.AlignCenter)
