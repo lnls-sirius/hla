@@ -534,7 +534,7 @@ class PerformanceWidget(QWidget):
             lay_tim.addWidget(lbl, i+2, 0)
             for j, ld in enumerate(['Avg', 'Std', 'Min', 'Max']):
                 ld_ = SiriusLabel(
-                    self, lamb(f'LoopPerfTim{lab:s}{ld:s}-Mon'))
+                    self, lamb(f'LoopPerfTim{nm:s}{ld:s}-Mon'))
                 lay_tim.addWidget(ld_, i+2, j+1)
 
         lay = QGridLayout(self)
