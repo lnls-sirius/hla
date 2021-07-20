@@ -1,5 +1,6 @@
 """Define Controllers for the orbits displayed in the graphic."""
 
+from PyQt5.QtWidgets import QSpacerItem
 import numpy as _np
 from qtpy.QtWidgets import QLabel, QGroupBox, QPushButton, QFormLayout, \
     QVBoxLayout, QHBoxLayout, QGridLayout, QWidget, QTabWidget
@@ -7,6 +8,7 @@ from qtpy.QtCore import Qt
 import qtawesome as qta
 
 from pydm.widgets import PyDMPushButton, PyDMLabel
+from siriushla.widgets.label import SiriusLabel
 
 from ...widgets import SiriusConnectionSignal, \
     SiriusLedAlert, SiriusSpinbox, PyDMStateButton, SiriusLedState
@@ -68,7 +70,6 @@ class SOFBControl(BaseWidget):
     def get_orbit_widget(self, parent):
         """."""
         orb_wid = QWidget(parent)
-        # orb_wid = QGroupBox('Orbit', parent)
         orb_wid.setObjectName('grp')
         orb_wid.setStyleSheet('#grp{min-height: 11em; max-height: 15em;}')
         orb_wid.setLayout(QGridLayout())
@@ -353,6 +354,19 @@ class SOFBControl(BaseWidget):
         wid = self.create_pair(gpbx, 'LoopMaxOrbDistortion')
         fbl.addRow(lbl, wid)
 
+        wid = QWidget(gpbx)
+        wid.setLayout(QHBoxLayout())
+        pbtn = QPushButton('Loop Performance', wid)
+        pbtn.setIcon(qta.icon('mdi.poll'))
+        wid.layout().addStretch()
+        wid.layout().addWidget(pbtn)
+        icon = qta.icon(
+            'fa5s.hammer', color=_util.get_appropriate_color(self.acc))
+        wind = create_window_from_widget(
+            PerformanceWidget, title='Loop Performance', icon=icon)
+        _util.connect_window(pbtn, wind, self, prefix=self.prefix)
+        fbl.addRow(wid)
+
         # Add PID Tab
         gpbx = QWidget(tabw)
         gpbx_lay = QGridLayout(gpbx)
@@ -444,3 +458,93 @@ class OfflineOrbControl(BaseCombo):
         readback['x'] = SiriusConnectionSignal(prefix+'OfflineOrbX-RB')
         readback['y'] = SiriusConnectionSignal(prefix+'OfflineOrbY-RB')
         super().__init__(parent, ctrls, setpoint, readback, acc)
+
+
+class PerformanceWidget(QWidget):
+    """."""
+
+    def __init__(self, parent, prefix):
+        """."""
+        super().__init__(parent)
+        self.prefix = prefix
+        self.setObjectName(prefix.sec+'App')
+        self._setupui()
+
+    def _setupui(self):
+        lamb = lambda x: self.prefix.substitute(propty=x)
+
+        lbl_main = QLabel(
+            '<h3>Loop Performance</h3>', self, alignment=Qt.AlignCenter)
+
+        lbl_iters = QLabel('Iterations [%]:', self)
+        lbl_ok = QLabel('OK', self, alignment=Qt.AlignCenter)
+        lbl_tout = QLabel('Timeout', self, alignment=Qt.AlignCenter)
+        lbl_diff = QLabel('Diff', self, alignment=Qt.AlignCenter)
+        ld_ok = SiriusLabel(self, lamb('LoopPerfItersOk-Mon'))
+        ld_tout = SiriusLabel(self, lamb('LoopPerfItersTOut-Mon'))
+        ld_diff = SiriusLabel(self, lamb('LoopPerfItersDiff-Mon'))
+        lay_iters = QGridLayout()
+        lay_iters.addWidget(lbl_iters, 1, 0)
+        lay_iters.addWidget(lbl_ok, 0, 1)
+        lay_iters.addWidget(lbl_tout, 0, 2)
+        lay_iters.addWidget(lbl_diff, 0, 3)
+        lay_iters.addWidget(ld_ok, 1, 1, alignment=Qt.AlignCenter)
+        lay_iters.addWidget(ld_tout, 1, 2, alignment=Qt.AlignCenter)
+        lay_iters.addWidget(ld_diff, 1, 3, alignment=Qt.AlignCenter)
+
+        lbl_psd = QLabel('# of PSs with Diffs:', self)
+        lbl_avg = QLabel('AVG', self, alignment=Qt.AlignCenter)
+        lbl_std = QLabel('STD', self, alignment=Qt.AlignCenter)
+        lbl_max = QLabel('MAX', self, alignment=Qt.AlignCenter)
+        ld_avg = SiriusLabel(self, lamb('LoopPerfDiffNrPSMax-Mon'))
+        ld_std = SiriusLabel(self, lamb('LoopPerfDiffNrPSAvg-Mon'))
+        ld_max = SiriusLabel(self, lamb('LoopPerfDiffNrPSStd-Mon'))
+        lay_psd = QGridLayout()
+        lay_psd.addWidget(lbl_psd, 1, 0)
+        lay_psd.addWidget(lbl_avg, 0, 1)
+        lay_psd.addWidget(lbl_std, 0, 2)
+        lay_psd.addWidget(lbl_max, 0, 3)
+        lay_psd.addWidget(ld_avg, 1, 1, alignment=Qt.AlignCenter)
+        lay_psd.addWidget(ld_std, 1, 2, alignment=Qt.AlignCenter)
+        lay_psd.addWidget(ld_max, 1, 3, alignment=Qt.AlignCenter)
+
+        lbl_tim = QLabel('Duration Statistics', self, alignment=Qt.AlignCenter)
+        lbl_unt = QLabel('[ms]', self, alignment=Qt.AlignCenter)
+        lbl_avg = QLabel('AVG', self, alignment=Qt.AlignCenter)
+        lbl_std = QLabel('STD', self, alignment=Qt.AlignCenter)
+        lbl_min = QLabel('MIN', self, alignment=Qt.AlignCenter)
+        lbl_max = QLabel('MAX', self, alignment=Qt.AlignCenter)
+        lbl_avg.setStyleSheet('min-width: 5em;')
+        lbl_std.setStyleSheet('min-width: 5em;')
+        lbl_min.setStyleSheet('min-width: 5em;')
+        lbl_max.setStyleSheet('min-width: 5em;')
+        lay_tim = QGridLayout()
+        lay_tim.addWidget(lbl_tim, 0, 0, 1, 5)
+        lay_tim.addWidget(lbl_unt, 1, 0)
+        lay_tim.addWidget(lbl_avg, 1, 1)
+        lay_tim.addWidget(lbl_std, 1, 2)
+        lay_tim.addWidget(lbl_min, 1, 3)
+        lay_tim.addWidget(lbl_max, 1, 4)
+
+        labs = [
+            'Get Orbit', 'Get Kick', 'Calculate', 'Process', 'Apply', 'Total']
+        nms = ['GetO', 'GetK', 'Calc', 'Proc', 'App', 'Tot']
+        for i, (nm, lab) in enumerate(zip(nms, labs)):
+            lbl = QLabel(lab, self)
+            lay_tim.addWidget(lbl, i+2, 0)
+            for j, ld in enumerate(['Avg', 'Std', 'Min', 'Max']):
+                ld_ = SiriusLabel(
+                    self, lamb(f'LoopPerfTim{lab:s}{ld:s}-Mon'))
+                lay_tim.addWidget(ld_, i+2, j+1)
+
+        lay = QGridLayout(self)
+        lay.addWidget(lbl_main, 0, 0)
+        lay.addItem(QSpacerItem(1, 20), 1, 0)
+        lay.addLayout(lay_iters, 2, 0)
+        lay.addItem(QSpacerItem(1, 20), 3, 0)
+        lay.addLayout(lay_psd, 4, 0)
+        lay.addItem(QSpacerItem(1, 20), 5, 0)
+        lay.addLayout(lay_tim, 6, 0)
+        lay.setRowStretch(1, 2)
+        lay.setRowStretch(3, 2)
+        lay.setRowStretch(5, 2)
