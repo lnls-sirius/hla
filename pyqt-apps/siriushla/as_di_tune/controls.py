@@ -437,18 +437,17 @@ class SITuneMonitor(QWidget):
         self.description = description
         self.use_color_labels = use_color_labels
         if self.description == 'long':
-            self.hdesc = 'Horizontal'
-            self.vdesc = 'Vertical'
+            self.hdesc = '<h4> Horizontal </h4>'
+            self.vdesc = '<h4> Vertical </h4>'
         else:
-            self.hdesc = 'Tune-H'
-            self.vdesc = 'Tune-V'
+            self.hdesc = '<h3> Tune-H </h3>'
+            self.vdesc = '<h3> Tune-V </h3>'
         self._setupUi()
 
     def _setupUi(self):
         lay_tune = QGridLayout(self)
 
-        self.ld_tunefrach = QLabel('<h4>'+self.hdesc+'</h4>', self,
-                                   alignment=Qt.AlignHCenter)
+        self.ld_tunefrach = QLabel(self.hdesc, self, alignment=Qt.AlignHCenter)
         self.lb_tunefrach = PyDMLabel(
             parent=self,
             init_channel=self.prefix+'SI-Glob:DI-Tune-H:TuneFrac-Mon')
@@ -465,8 +464,7 @@ class SITuneMonitor(QWidget):
         vbox_tuneh.addWidget(self.lb_tunefrach)
         lay_tune.addWidget(wid_tuneh, 0, 0)
 
-        self.ld_tunefracv = QLabel('<h4>'+self.vdesc+'</h4>', self,
-                                   alignment=Qt.AlignHCenter)
+        self.ld_tunefracv = QLabel(self.vdesc, self, alignment=Qt.AlignHCenter)
         self.lb_tunefracv = PyDMLabel(
             parent=self,
             init_channel=self.prefix+'SI-Glob:DI-Tune-V:TuneFrac-Mon')
@@ -485,7 +483,7 @@ class SITuneMonitor(QWidget):
         lay_tune.addWidget(wid_tunev, 0, 1)
 
     def changeEvent(self, event):
-        if event.type() == QEvent.FontChange:
+        if event.type() == QEvent.FontChange and self.description == 'long':
             fontsize = self.app.font().pointSize() + 20
             self.lb_tunefrach.setStyleSheet(
                 'QLabel{font-size: '+str(fontsize)+'pt;}')
