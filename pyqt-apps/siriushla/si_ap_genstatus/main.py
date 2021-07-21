@@ -13,6 +13,7 @@ from pydm.widgets import PyDMLabel
 
 from siriuspy.envars import VACA_PREFIX
 from siriuspy.clientarch.time import Time
+from siriuspy.devices import InjSysStandbyHandler
 
 from siriushla.util import get_appropriate_color
 from siriushla.widgets import SiriusMainWindow, SiriusTimePlot, SiriusFrame, \
@@ -38,11 +39,11 @@ class SIGenStatusWindow(SiriusMainWindow):
     def _setupUi(self):
         # controls
         self.ld_machsht = QLabel(
-            '<h4>Shift: </h4>', self, alignment=Qt.AlignCenter)
+            '<h3>Shift: </h3>', self, alignment=Qt.AlignCenter)
         self.lb_machsht = PyDMLabel(
             self, self.prefix+'AS-Glob:AP-MachShift:Mode-Sts')
         self.lb_machsht.setAlignment(Qt.AlignCenter)
-        self.lb_machsht.setStyleSheet('QLabel{font-size: 13.5pt;}')
+        self.lb_machsht.setStyleSheet('QLabel{font-size: 45pt;}')
         color_list = [
             SiriusFrame.Yellow,  # Users
             SiriusFrame.LightBlue,  # Commissioning
@@ -66,20 +67,21 @@ class SIGenStatusWindow(SiriusMainWindow):
         self._led_siriusintlk = SiriusLedAlert(
             self, self.prefix+'RA-RaSIA02:RF-IntlkCtrl:IntlkSirius-Mon')
         self._led_siriusintlk.setStyleSheet(
-            'min-width:2em; min-height:2em;')
+            'min-width:3em;min-height:3em;max-width:3em;max-height:3em;')
         self._gbox_siriusintlk = self._create_groupbox(
             'Sirius Interlock', self._led_siriusintlk)
 
-        self._led_injsyssts = InjSysStandbyStatusLed()
+        self._led_injsyssts = InjSysStandbyStatusLed(
+            InjSysStandbyHandler(), self)
         self._led_injsyssts.setStyleSheet(
-            'min-width:2em; min-height:2em;')
+            'min-width:3em;min-height:3em;max-width:3em;max-height:3em;')
         self._gbox_injsyssts = self._create_groupbox(
             'Injection System', self._led_injsyssts)
 
         self._led_sofbloop = SiriusLedState(
             self, self.prefix+'SI-Glob:AP-SOFB:LoopState-Sts')
         self._led_sofbloop.setStyleSheet(
-            'min-width:2em; min-height:2em;')
+            'min-width:3em;min-height:3em;max-width:3em;max-height:3em;')
         self._led_sofbloop.offColor = SiriusLedState.Red
         self._gbox_sofbloop = self._create_groupbox(
             'SOFB Loop', self._led_sofbloop)
@@ -88,7 +90,7 @@ class SIGenStatusWindow(SiriusMainWindow):
         self._led_bbbloop = SiriusLedState(
             self, self.prefix+bbbdev_pref+':FBCTRL')
         self._led_bbbloop.setStyleSheet(
-            'min-width:2em; min-height:2em;')
+            'min-width:3em;min-height:3em;max-width:3em;max-height:3em;')
         self._led_bbbloop.offColor = SiriusLedState.Red
         chs2vals = {
             bbbdev_pref+':CLKMISS': 0,
@@ -99,20 +101,20 @@ class SIGenStatusWindow(SiriusMainWindow):
             bbbdev_pref+':FID_ERR': 0}
         self._led_bbbsts = PyDMLedMultiChannel(self, chs2vals)
         self._led_bbbsts.setStyleSheet(
-            'min-width:2em; min-height:2em;')
+            'min-width:3em;min-height:3em;max-width:3em;max-height:3em;')
         self._led_bbbsts.offColor = SiriusLedState.Red
         self._gbox_bbbloop = self._create_groupbox(
             'BbB Loop', [self._led_bbbloop, self._led_bbbsts], orientation='H')
 
         # current
         self.ld_curr = QLabel(
-            '<h4>Current [mA]</h4>', self, alignment=Qt.AlignCenter)
+            '<h3>Current [mA]</h3>', self, alignment=Qt.AlignCenter)
         self.ld_curr.setStyleSheet('max-height: 2em;')
         self.lb_curr = PyDMLabel(
             self, self.prefix+'SI-Glob:AP-CurrInfo:Current-Mon')
         self.lb_curr.setAlignment(Qt.AlignCenter)
         self.lb_curr.setStyleSheet(
-            'QLabel{background-color: '+self.app_color+';font-size: 30pt;}')
+            'QLabel{background-color: '+self.app_color+';font-size: 45pt;}')
         self.frm_curr = SiriusFrame(
             self, self.prefix+'SI-Glob:AP-CurrInfo:StoredEBeam-Mon',
             color_list=[SiriusFrame.DarkGreen, SiriusFrame.LightGreen],
@@ -126,10 +128,10 @@ class SIGenStatusWindow(SiriusMainWindow):
         lay_curr.addWidget(self.frm_curr)
 
         self.ld_lifetime = QLabel(
-            '<h4>Lifetime</h4>', self, alignment=Qt.AlignCenter)
+            '<h3>Lifetime</h3>', self, alignment=Qt.AlignCenter)
         self.ld_lifetime.setStyleSheet('max-height: 2em;')
         self.lb_lifetime = QLabel('0:00:00', self, alignment=Qt.AlignCenter)
-        self.lb_lifetime.setStyleSheet('QLabel{font-size: 30pt;}')
+        self.lb_lifetime.setStyleSheet('QLabel{font-size: 45pt;}')
         self.ch_lifetime = SiriusConnectionSignal(
             self.prefix+'SI-Glob:AP-CurrInfo:Lifetime-Mon')
         self.ch_lifetime.new_value_signal[float].connect(
@@ -142,7 +144,8 @@ class SIGenStatusWindow(SiriusMainWindow):
 
         self.tune_mon = SITuneMonitor(self, self.prefix, description='short',
                                       use_color_labels=False)
-
+        self.tune_mon.lb_tunefrach.setStyleSheet('QLabel{font-size: 45pt;}')
+        self.tune_mon.lb_tunefracv.setStyleSheet('QLabel{font-size: 45pt;}')
         self.curr_graph = SiriusTimePlot(self)
         self.curr_graph.setObjectName('curr_graph')
         self.curr_graph.setStyleSheet(
@@ -230,8 +233,11 @@ class SIGenStatusWindow(SiriusMainWindow):
         if not isinstance(widgets, list):
             widgets = [widgets, ]
         gbox = QGroupBox(title, self)
+        gbox.setStyleSheet(
+            'QGroupBox{font-size: 12pt; font-weight: bold;}')
 
         lay = QVBoxLayout(gbox) if orientation == 'V' else QHBoxLayout(gbox)
+        lay.setAlignment(Qt.AlignCenter)
         lay.addStretch()
         for wid in widgets:
             lay.addWidget(wid)
@@ -243,13 +249,30 @@ class SIGenStatusWindow(SiriusMainWindow):
             fontsize = self.app.font().pointSize()
 
             # labels
-            self._lb_machsht.setStyleSheet(
-                'QLabel{font-size: '+str(fontsize+3.5)+'pt;}')
+            self.lb_machsht.setStyleSheet(
+                'QLabel{font-size: '+str(fontsize+35)+'pt;}')
             self.lb_curr.setStyleSheet(
                 'QLabel{background-color: '+self.app_color+';'
-                'font-size: '+str(fontsize+20)+'pt;}')
+                'font-size: '+str(fontsize+35)+'pt;}')
             self.lb_lifetime.setStyleSheet(
-                'QLabel{font-size: '+str(fontsize+20)+'pt;}')
+                'QLabel{font-size: '+str(fontsize+35)+'pt;}')
+            self.tune_mon.lb_tunefrach.setStyleSheet(
+                'QLabel{font-size: '+str(fontsize+35)+'pt;}')
+            self.tune_mon.lb_tunefracv.setStyleSheet(
+                'QLabel{font-size: '+str(fontsize+35)+'pt;}')
+
+            self._gbox_siriusintlk.setStyleSheet(
+                'QGroupBox{font-size: '+str(fontsize+2)+'pt;'
+                'font-weight: bold;}')
+            self._gbox_injsyssts.setStyleSheet(
+                'QGroupBox{font-size: '+str(fontsize+2)+'pt;'
+                'font-weight: bold;}')
+            self._gbox_sofbloop.setStyleSheet(
+                'QGroupBox{font-size: '+str(fontsize+2)+'pt;'
+                'font-weight: bold;}')
+            self._gbox_bbbloop.setStyleSheet(
+                'QGroupBox{font-size: '+str(fontsize+2)+'pt;'
+                'font-weight: bold;}')
 
             # graph
             graph_fontsize = fontsize + 2
