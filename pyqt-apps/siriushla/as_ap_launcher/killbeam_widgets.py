@@ -28,8 +28,8 @@ class RFKillBeamHandler:
         pvnames = {
             'SR-RF-DLLRF-01:AMPREF:INCRATE',
             'SR-RF-DLLRF-01:AMPREF:INCRATE:S',
-            'SR-RF-DLLRF-01:mV:AL:REF',
-            'SR-RF-DLLRF-01:mV:AL:REF:S'}
+            'SR-RF-DLLRF-01:mV:AL:REF-RB',
+            'SR-RF-DLLRF-01:mV:AL:REF-SP'}
         for pvn in pvnames:
             _pvs[pvn] = _PV(_vaca_prefix+pvn, connection_timeout=0.05)
 
@@ -68,10 +68,10 @@ class RFKillBeamHandler:
                            '(SR-RF-DLLRF-01:AMPREF:INCRATE)!']
 
         # get initial Amplitude Reference
-        ALRef_init = self._get_pv('SR-RF-DLLRF-01:mV:AL:REF')
+        ALRef_init = self._get_pv('SR-RF-DLLRF-01:mV:AL:REF-RB')
         if ALRef_init is None:
             return [False, 'Could not read Amplitude Reference PV\n'
-                           '(SR-RF-DLLRF-01:mV:AL:REF)!']
+                           '(SR-RF-DLLRF-01:mV:AL:REF-RB)!']
 
         # set Amplitude Increase Rate to 50 mV/s and wait
         self._set_pv('SR-RF-DLLRF-01:AMPREF:INCRATE:S',
@@ -86,16 +86,16 @@ class RFKillBeamHandler:
         wait_time = int((ALRef_init - RFKillBeamHandler.REFMIN_VALUE)/50)
 
         # set Amplitude Reference to 60mV and wait for wait_time seconds
-        if not self._set_pv('SR-RF-DLLRF-01:mV:AL:REF:S',
+        if not self._set_pv('SR-RF-DLLRF-01:mV:AL:REF-SP',
                             RFKillBeamHandler.REFMIN_VALUE):
             return [False, 'Could not set Amplitude Reference PV\n'
-                           '(SR-RF-DLLRF-01:mV:AL:REF:S)!']
+                           '(SR-RF-DLLRF-01:mV:AL:REF-SP)!']
         _time.sleep(wait_time)
 
         # set Amplitude Reference to initial value
-        if not self._set_pv('SR-RF-DLLRF-01:mV:AL:REF:S', ALRef_init):
+        if not self._set_pv('SR-RF-DLLRF-01:mV:AL:REF-SP', ALRef_init):
             return [False, 'Could not set Amplitude Reference PV\n'
-                           '(SR-RF-DLLRF-01:mV:AL:REF:S)!']
+                           '(SR-RF-DLLRF-01:mV:AL:REF-SP)!']
         _time.sleep(wait_time)
 
         # set Amplitude Increase Rate to initial value
