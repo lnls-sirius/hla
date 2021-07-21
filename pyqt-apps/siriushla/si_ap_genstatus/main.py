@@ -13,6 +13,7 @@ from pydm.widgets import PyDMLabel
 
 from siriuspy.envars import VACA_PREFIX
 from siriuspy.clientarch.time import Time
+from siriuspy.devices import InjSysStandbyHandler
 
 from siriushla.util import get_appropriate_color
 from siriushla.widgets import SiriusMainWindow, SiriusTimePlot, SiriusFrame, \
@@ -42,7 +43,7 @@ class SIGenStatusWindow(SiriusMainWindow):
         self.lb_machsht = PyDMLabel(
             self, self.prefix+'AS-Glob:AP-MachShift:Mode-Sts')
         self.lb_machsht.setAlignment(Qt.AlignCenter)
-        self.lb_machsht.setStyleSheet('QLabel{font-size: 13.5pt;}')
+        self.lb_machsht.setStyleSheet('QLabel{font-size: 30pt;}')
         color_list = [
             SiriusFrame.Yellow,  # Users
             SiriusFrame.LightBlue,  # Commissioning
@@ -70,7 +71,8 @@ class SIGenStatusWindow(SiriusMainWindow):
         self._gbox_siriusintlk = self._create_groupbox(
             'Sirius Interlock', self._led_siriusintlk)
 
-        self._led_injsyssts = InjSysStandbyStatusLed()
+        self._led_injsyssts = InjSysStandbyStatusLed(
+            InjSysStandbyHandler(), self)
         self._led_injsyssts.setStyleSheet(
             'min-width:2em; min-height:2em;')
         self._gbox_injsyssts = self._create_groupbox(
@@ -243,8 +245,8 @@ class SIGenStatusWindow(SiriusMainWindow):
             fontsize = self.app.font().pointSize()
 
             # labels
-            self._lb_machsht.setStyleSheet(
-                'QLabel{font-size: '+str(fontsize+3.5)+'pt;}')
+            self.lb_machsht.setStyleSheet(
+                'QLabel{font-size: '+str(fontsize+20)+'pt;}')
             self.lb_curr.setStyleSheet(
                 'QLabel{background-color: '+self.app_color+';'
                 'font-size: '+str(fontsize+20)+'pt;}')
