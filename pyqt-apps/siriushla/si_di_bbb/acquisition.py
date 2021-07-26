@@ -459,7 +459,7 @@ class _BbBAcqBase(QWidget):
         lb_peak2.showUnits = True
         lb_pfrq2 = PyDMLabel(self, self.dev_pref+':'+self.TYPE+'_PEAKFREQ2')
         lb_pfrq2.showUnits = True
-        lb_tune2 = PyDMLabel(self, self.dev_pref+':'+self.TYPE+'_PEAKTUNE1')
+        lb_tune2 = PyDMLabel(self, self.dev_pref+':'+self.TYPE+'_PEAKTUNE2')
 
         gbox_mark = QGroupBox('Markers', self)
         lay_mark = QGridLayout(gbox_mark)

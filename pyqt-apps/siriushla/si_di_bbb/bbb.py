@@ -253,7 +253,7 @@ class BbBStatusWidget(QWidget):
         led_dcmulk = SiriusLedAlert(self, self.dev_pref+':DCM_UNLOCK')
         lb_dcmulk = PyDMLabel(self, self.dev_pref+':DCM_UNLOCK_COUNT')
 
-        ld_avcovr = QLabel('AVC Overrange', alignment=Qt.AlignCenter)
+        ld_avcovr = QLabel('ADC Overrange', alignment=Qt.AlignCenter)
         led_avcovr = SiriusLedAlert(self, self.dev_pref+':ADC_OVR')
         lb_avcovr = PyDMLabel(self, self.dev_pref+':ADC_OVR_COUNT')
 
