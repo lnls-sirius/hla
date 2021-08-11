@@ -11,7 +11,7 @@ from pydm.widgets import PyDMLabel
 from siriuspy.envars import VACA_PREFIX
 from siriuspy.namesys import SiriusPVName as _PVName
 
-from ..util import connect_window
+from ..util import connect_window, get_appropriate_color
 from ..widgets import SiriusMainWindow, SiriusLedState, SiriusSpinbox, \
     SiriusPushButton, PyDMStateButton
 from .auxiliary_dialogs import ModIntlkDetailDialog, ModEmerStopDialog
@@ -26,7 +26,8 @@ class LIModltrWindow(SiriusMainWindow):
         self.prefix = prefix
         self.setWindowTitle('Linac Modulators Window')
         self.setObjectName('LIApp')
-        self.setWindowIcon(qta.icon('mdi.current-ac'))
+        self.setWindowIcon(
+            qta.icon('mdi.current-ac', color=get_appropriate_color('LI')))
 
         self._setupUi()
 
