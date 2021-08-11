@@ -467,6 +467,8 @@ class ModEmerStopDialog(SiriusDialog):
         self._pb_yes = PyDMPushButton(
             self, label='YES', pressValue=1,
             init_channel=self._mod_prefix + ':EMER_STOP')
+        self._pb_yes.setObjectName('yes')
+        self._pb_yes.setStyleSheet('#yes{background-color:red;}')
 
         self._pb_exit = QPushButton('EXIT', self)
         self._pb_exit.clicked.connect(self.close)
