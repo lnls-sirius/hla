@@ -43,10 +43,6 @@ class LIModltrWindow(SiriusMainWindow):
         self.setStyleSheet("""
             QLed{
                 min-width: 1.29em; max-width: 1.29em;
-            }
-            QPushButton{
-                min-width: 5em; max-width: 5em;
-                min-height: 1.5em; max-height: 1.5em;
             }""")
 
     def _setupModltrWidget(self, dev):
@@ -94,6 +90,12 @@ class LIModltrWindow(SiriusMainWindow):
             self, label='Reset', icon=qta.icon('fa5s.sync'),
             pressValue=1, releaseValue=0,
             init_channel=dev+':RESET')
+        pb_reset.setObjectName('reset')
+        pb_reset.setStyleSheet("""
+            #reset{
+                min-width: 5em; max-width: 5em;
+                min-height: 1.5em; max-height: 1.5em;
+            }""")
 
         # Interlocks
         lay_ilks = QGridLayout()
@@ -117,6 +119,12 @@ class LIModltrWindow(SiriusMainWindow):
             lay_ilks.addLayout(hbox, row, col)
 
         pb_check = QPushButton('Check', self)
+        pb_check.setObjectName('check')
+        pb_check.setStyleSheet("""
+            #check{
+                min-width: 5em; max-width: 5em;
+                min-height: 1.5em; max-height: 1.5em;
+            }""")
         connect_window(
             pb_check, ModIntlkDetailDialog, self,
             device=dev, prefix=self.prefix)
@@ -168,6 +176,7 @@ class LIModltrWindow(SiriusMainWindow):
             '.QFrame{border: 2px solid gray;}')
         lay = QGridLayout(wid)
         lay.setAlignment(Qt.AlignCenter)
+        lay.setHorizontalSpacing(30)
         lay.addWidget(lb_RUN_STOP, 0, 0)
         lay.addWidget(led_RUN_STOP, 1, 0, alignment=Qt.AlignCenter)
         lay.addWidget(lb_PREHEAT, 0, 1)
@@ -210,7 +219,15 @@ class LIModltrWindow(SiriusMainWindow):
         return wid
 
     def _setupEmerStopWidget(self, dev):
-        pb_emerstop = QPushButton('EMER.STOP', self)
+        pb_emerstop = QPushButton('EMER\nSTOP', self)
+        pb_emerstop.setObjectName('emerstop')
+        pb_emerstop.setStyleSheet("""
+            #emerstop {
+                background-color: red;
+                min-width: 3em; max-width: 3em;
+                min-height: 3em; max-height: 3em;
+                font-weight: bold;
+            }""")
         connect_window(
             pb_emerstop, ModEmerStopDialog, self,
             device=dev, prefix=self.prefix)
