@@ -261,6 +261,10 @@ def get_object(ismenubar=True, parent=None):
             egun.setIcon(qta.icon('mdi.spotlight-beam'))
             self.connect_newprocess(egun, 'sirius-hla-li-eg-control.py')
 
+            mod = LEVEL2A('Modltrs', menu)
+            mod.setIcon(qta.icon('mdi.current-ac'))
+            self.connect_newprocess(mod, 'sirius-hla-li-pu-modltr.py')
+
             llrf = LEVEL2M('LLRF', menu)
             llrf.setObjectName('LIApp')
             llrf.setIcon(qta.icon('mdi.waves'))
@@ -282,6 +286,7 @@ def get_object(ismenubar=True, parent=None):
             self.add_object_to_level1(menu, PS)
             self.add_object_to_level1(menu, mps)
             self.add_object_to_level1(menu, egun)
+            self.add_object_to_level1(menu, mod)
             self.add_object_to_level1(menu, llrf)
             self.add_object_to_level1(menu, launcher)
             self.add_object_to_level1(menu, optics)

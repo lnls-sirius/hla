@@ -82,6 +82,7 @@ setup(
         'scripts/sirius-hla-li-ap-mpsmon.py',
         'scripts/sirius-hla-li-eg-control.py',
         'scripts/sirius-hla-li-ps-control.py',
+        'scripts/sirius-hla-li-pu-modltr.py',
         'scripts/sirius-hla-li-rf-llrf.py',
         'scripts/sirius-hla-si-ap-chromcorr.py',
         'scripts/sirius-hla-si-ap-currlt.py',

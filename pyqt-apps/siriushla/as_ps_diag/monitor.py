@@ -16,7 +16,6 @@ from siriuspy.diagsys.rfdiag.csdev import get_rf_diag_status_labels
 from siriuspy.namesys import SiriusPVName
 from siriuspy.util import get_bit
 
-from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets import PyDMLed
 from siriushla.widgets.dialog.pv_status_dialog import StatusDetailDialog
 from siriushla.util import run_newprocess
@@ -195,10 +194,10 @@ class MyLed(PyDMLed):
         self.labels = list()
         if self.pvname.dis == 'PS':
             self.labels = get_ps_diag_status_labels(dev)
-        elif self.pvname.dis == 'PU':
-            self.labels = get_pu_diag_status_labels()
         elif self.pvname.sec == 'LI':
             self.labels = get_li_diag_status_labels(dev)
+        elif self.pvname.dis == 'PU':
+            self.labels = get_pu_diag_status_labels()
         elif self.pvname.dis == 'RF':
             self.labels = get_rf_diag_status_labels(dev)
 
@@ -206,7 +205,10 @@ class MyLed(PyDMLed):
         if dev.dis == 'PS':
             self.dc_command = ['sirius-hla-as-ps-detail.py', dev]
         elif dev.dis == 'PU':
-            self.dc_command = ['sirius-hla-as-pu-detail.py', dev]
+            if dev.sec == 'LI':
+                self.dc_command = 'sirius-hla-li-pu-modltr.py'
+            else:
+                self.dc_command = ['sirius-hla-as-pu-detail.py', dev]
         elif dev.dis == 'RF':
             if dev.sec == 'LI':
                 self.dc_command = 'sirius-hla-li-rf-llrf.py'
