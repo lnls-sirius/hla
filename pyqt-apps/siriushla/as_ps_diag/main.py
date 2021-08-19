@@ -199,8 +199,10 @@ class PSDiag(SiriusMainWindow):
 
         channels = list()
         for ps in PSSearch.get_psnames(filters={'dis': 'PS'}):
-            channels.append(self._prefix+ps+':DiagCurrentDiff-Mon')
-            channels.append(self._prefix+ps+':OpMode-Sts')
+            channels.append(SiriusPVName(ps).substitute(
+                prefix=self._prefix, propty='DiagCurrentDiff-Mon'))
+            channels.append(SiriusPVName(ps).substitute(
+                prefix=self._prefix, propty='OpMode-Sts'))
         self._status = LogTable(cw, channels, table_label2px, is_status=True)
         self._status.setObjectName('status_table')
         self._status.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)

@@ -183,7 +183,7 @@ class SummaryWidget(QWidget):
         self._pstype = PSSearch.conv_psname_2_pstype(name)
         self.visible_props = sort_propties(visible_props)
         self.filled_widgets = set()
-        self._prefixed_name = VACA_PREFIX + name
+        self._prefixed_name = self._name.substitute(prefix=VACA_PREFIX)
         self._analog_name = get_analog_name(self._name)
         self._strength_name = get_strength_name(self._name)
         self._is_pulsed = IsPulsed.match(self._name)
@@ -356,59 +356,98 @@ class SummaryWidget(QWidget):
 
     def _create_pvs(self):
         if not self._is_reg_slave:
-            self._pwrstate_sel = self._prefixed_name + ':PwrState-Sel'
-            self._pwrstate_sts = self._prefixed_name + ':PwrState-Sts'
+            self._pwrstate_sel = self._prefixed_name.substitute(
+                propty='PwrState-Sel')
+            self._pwrstate_sts = self._prefixed_name.substitute(
+                propty='PwrState-Sts')
 
         if self._is_pulsed:
             self._intlk = list()
             for i in range(1, 8):
-                self._intlk.append(self._prefixed_name+":Intlk"+str(i)+"-Mon")
+                self._intlk.append(self._prefixed_name.substitute(
+
+                    propty='Intlk'+str(i)+'-Mon'))
             if 'Sept' not in self._name.dev:
-                self._intlk.append(self._prefixed_name+":Intlk8-Mon")
+                self._intlk.append(self._prefixed_name.substitute(
+
+                    propty='Intlk8-Mon'))
         elif self._is_linac:
-            self._intlk = self._prefixed_name + ":StatusIntlk-Mon"
+            self._intlk = self._prefixed_name.substitute(
+
+                propty='StatusIntlk-Mon')
         elif self._is_regatron:
             if not self._is_reg_slave:
-                self._generr = self._prefixed_name + ":GenIntlk-Mon"
-                self._genwrn = self._prefixed_name + ":GenWarn-Mon"
+                self._generr = self._prefixed_name.substitute(
+
+                    propty='GenIntlk-Mon')
+                self._genwrn = self._prefixed_name.substitute(
+
+                    propty='GenWarn-Mon')
         else:
-            self._soft_intlk = self._prefixed_name + ':IntlkSoft-Mon'
-            self._hard_intlk = self._prefixed_name + ':IntlkHard-Mon'
+            self._soft_intlk = self._prefixed_name.substitute(
+
+                propty='IntlkSoft-Mon')
+            self._hard_intlk = self._prefixed_name.substitute(
+
+                propty='IntlkHard-Mon')
 
         sp = self._analog_name
         if not self._is_reg_slave:
-            self._analog_sp = self._prefixed_name + ':{}-SP'.format(sp)
-            self._analog_mon = self._prefixed_name + ':{}-Mon'.format(sp)
+            self._analog_sp = self._prefixed_name.substitute(
+
+                propty='{}-SP'.format(sp))
+            self._analog_mon = self._prefixed_name.substitute(
+
+                propty='{}-Mon'.format(sp))
         else:
-            self._analog_mon = self._prefixed_name + ':ModOutVolt-Mon'
+            self._analog_mon = self._prefixed_name.substitute(
+
+                propty='ModOutVolt-Mon')
         if not self._is_regatron:
-            self._analog_rb = self._prefixed_name + ':{}-RB'.format(sp)
+            self._analog_rb = self._prefixed_name.substitute(
+
+                propty='{}-RB'.format(sp))
 
         if self._has_strength:
             st = self._strength_name
-            self._strength_sp = self._prefixed_name + ':{}-SP'.format(st)
-            self._strength_rb = self._prefixed_name + ':{}-RB'.format(st)
-            self._strength_mon = self._prefixed_name + ':{}-Mon'.format(st)
+            self._strength_sp = self._prefixed_name.substitute(
+                propty='{}-SP'.format(st))
+            self._strength_rb = self._prefixed_name.substitute(
+                propty='{}-RB'.format(st))
+            self._strength_mon = self._prefixed_name.substitute(
+                propty='{}-Mon'.format(st))
 
         if self._is_linac:
-            self._conn = self._prefixed_name + ':Connected-Mon'
+            self._conn = self._prefixed_name.substitute(
+                propty='Connected-Mon')
         else:
             if not self._is_reg_slave:
-                self._opmode_sts = self._prefixed_name + ':OpMode-Sts'
-                self._reset_intlk = self._prefixed_name + ':Reset-Cmd'
+                self._opmode_sts = self._prefixed_name.substitute(
+                    propty='OpMode-Sts')
+                self._reset_intlk = self._prefixed_name.substitute(
+                    propty='Reset-Cmd')
             else:
-                self._opmode_sts = self._prefixed_name + ':ModState-Mon'
+                self._opmode_sts = self._prefixed_name.substitute(
+                    propty='ModState-Mon')
             if not self._is_regatron:
-                self._opmode_sel = self._prefixed_name + ':OpMode-Sel'
-                self._ctrlmode_sts = self._prefixed_name+':CtrlMode-Mon'
-                self._ctrlloop_sel = self._prefixed_name+':CtrlLoop-Sel'
-                self._ctrlloop_sts = self._prefixed_name+':CtrlLoop-Sts'
-                self._wfmupdate_sel = self._prefixed_name+':WfmUpdateAuto-Sel'
-                self._wfmupdate_sts = self._prefixed_name+':WfmUpdateAuto-Sts'
+                self._opmode_sel = self._prefixed_name.substitute(
+                    propty='OpMode-Sel')
+                self._ctrlmode_sts = self._prefixed_name.substitute(
+                    propty='CtrlMode-Mon')
+                self._ctrlloop_sel = self._prefixed_name.substitute(
+                    propty='CtrlLoop-Sel')
+                self._ctrlloop_sts = self._prefixed_name.substitute(
+                    propty='CtrlLoop-Sts')
+                self._wfmupdate_sel = self._prefixed_name.substitute(
+                    propty='WfmUpdateAuto-Sel')
+                self._wfmupdate_sts = self._prefixed_name.substitute(
+                    propty='WfmUpdateAuto-Sts')
 
         if self._is_pulsed:
-            self._pulse_sel = self._prefixed_name + ':Pulse-Sel'
-            self._pulse_sts = self._prefixed_name + ':Pulse-Sts'
+            self._pulse_sel = self._prefixed_name.substitute(
+                propty='Pulse-Sel')
+            self._pulse_sts = self._prefixed_name.substitute(
+                propty='Pulse-Sts')
 
     def _build_widget(self, name='', orientation='h'):
         widget = QWidget(self)
