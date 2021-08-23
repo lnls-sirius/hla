@@ -67,6 +67,8 @@ class IDControl(SiriusMainWindow):
         self.blctrl_dsbl_act = QAction("Disable Beamline Control", self)
         self.blctrl_dsbl_act.triggered.connect(
             lambda: self._set_beamline_control(False))
+        self.park_act = QAction("Go to Parking Position", self)
+        self.park_act.triggered.connect(self._cmd_park)
 
     @Slot(bool)
     def _set_beamline_control(self, state):
@@ -80,12 +82,23 @@ class IDControl(SiriusMainWindow):
             except TypeError:
                 pass
 
+    @Slot(bool)
+    def _cmd_park(self, state):
+        """Execute park actions."""
+        for widget in self._apu_widgets:
+            try:
+                if state:
+                    widget.park()
+            except TypeError:
+                pass
+
     def contextMenuEvent(self, event):
         """Show a custom context menu."""
         point = event.pos()
         menu = QMenu("Actions", self)
         menu.addAction(self.blctrl_enbl_act)
         menu.addAction(self.blctrl_dsbl_act)
+        menu.addAction(self.park_act)
         menu.addSeparator()
         action = menu.addAction('Show Connections...')
         action.triggered.connect(self.show_connections)

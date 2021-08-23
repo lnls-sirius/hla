@@ -305,6 +305,7 @@ class APUSummaryBase(QWidget):
             ('Phase Speed', 6),
             ('Start', 4),
             ('Stop', 4),
+            ('Park', 4),
             ('Moving', 4),
             ('BeamLine Enable', 6),
             ('Beamline Control', 4),
@@ -383,6 +384,15 @@ class APUSummaryWidget(APUSummaryBase):
         self._pb_stop.setStyleSheet(
             '#Stop{min-width:30px; max-width:30px; icon-size:25px;}')
 
+        self._pb_park = PyDMPushButton(
+            self, label='', icon=qta.icon('fa5s.car'))
+        self._pb_park.setToolTip('Move to park position.')
+        self._pb_park.channel = self.dev_pref+':Park-Cmd'
+        self._pb_park.pressValue = 1  # Park
+        self._pb_park.setObjectName('Park')
+        self._pb_park.setStyleSheet(
+            '#Park{min-width:30px; max-width:30px; icon-size:25px;}')
+
         self._led_ismov = SiriusLedState(self, self.dev_pref+':Moving-Mon')
 
         self._led_status = PyDMLedMultiChannel(
@@ -410,6 +420,7 @@ class APUSummaryWidget(APUSummaryBase):
             'Phase Speed': ([self._sb_phsspd, self._lb_phsspd], 'v'),
             'Start': ([self._pb_start, ], 'v'),
             'Stop': ([self._pb_stop, ], 'v'),
+            'Park': ([self._pb_park, ], 'v'),
             'Moving': ([self._led_ismov, ], 'v'),
             'BeamLine Enable': ([self._sb_blenbl, self._led_blenbl], 'h'),
             'Beamline Control': ([self._led_blmon, ], 'v'),
@@ -448,3 +459,8 @@ class APUSummaryWidget(APUSummaryBase):
         if self._sb_blenbl.isEnabled():
             if self._sb_blenbl.value:
                 self._sb_blenbl.send_value()
+
+    def park(self):
+        """Move to park position."""
+        if self._pb_park.isEnabled():
+            self._pb_park.sendValue()
