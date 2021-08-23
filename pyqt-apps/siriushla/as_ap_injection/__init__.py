@@ -1,2 +1,5 @@
-from .InjectionController import InjectionController
-from .InjectionWindow import InjectionWindow
+from .main import InjCtrlWindow
+from .widgets import InjDiagLed, \
+    InjSysStbyControlWidget, \
+    MonitorSummaryWidget, \
+    InjSysStbyLed
