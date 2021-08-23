@@ -6,10 +6,13 @@ from pydm.widgets.display_format import DisplayFormat, parse_value_for_display
 from pydm.widgets.base import PyDMWidget, TextFormatter
 from pydm.utilities import is_pydm_app
 
+from siriuspy.clientarch import Time as _Time
+
 
 class SiriusLabel(QLabel, TextFormatter, PyDMWidget, DisplayFormat):
     Q_ENUMS(DisplayFormat)
     DisplayFormat = DisplayFormat
+    DisplayFormat.Time = 6
     """
     A QLabel with support for Channels and more from PyDM
 
@@ -81,6 +84,13 @@ class SiriusLabel(QLabel, TextFormatter, PyDMWidget, DisplayFormat):
             The new value from the channel. The type depends on the channel.
         """
         super(SiriusLabel, self).value_changed(new_value)
+        # If it is a DiaplayFormat.Time, parse with siriuspy.clientarch.Time
+        if self.displayFormat == self.DisplayFormat.Time:
+            time = _Time(int(new_value)).time().isoformat() \
+                if new_value is not None else ''
+            self.setText(time)
+            return
+
         new_value = parse_value_for_display(
             value=new_value, precision=self.precision,
             display_format_type=self._display_format_type,
