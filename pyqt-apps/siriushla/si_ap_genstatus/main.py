@@ -53,21 +53,21 @@ class SIGenStatusWindow(SiriusMainWindow):
         self._led_siriusintlk = SiriusLedAlert(
             self, self.prefix+'RA-RaSIA02:RF-IntlkCtrl:IntlkSirius-Mon')
         self._led_siriusintlk.setStyleSheet(
-            'min-width:3em;min-height:3em;max-width:3em;max-height:3em;')
+            'QLed{min-width:3em;min-height:3em;max-width:3em;max-height:3em;}')
         self._gbox_siriusintlk = self._create_groupbox(
             'Sirius Interlock', self._led_siriusintlk)
 
         self._led_injsyssts = InjSysStandbyStatusLed(
             InjSysStandbyHandler(), self)
         self._led_injsyssts.setStyleSheet(
-            'min-width:3em;min-height:3em;max-width:3em;max-height:3em;')
+            'QLed{min-width:3em;min-height:3em;max-width:3em;max-height:3em;}')
         self._gbox_injsyssts = self._create_groupbox(
             'Injection System', self._led_injsyssts)
 
         self._led_sofbloop = SiriusLedState(
             self, self.prefix+'SI-Glob:AP-SOFB:LoopState-Sts')
         self._led_sofbloop.setStyleSheet(
-            'min-width:3em;min-height:3em;max-width:3em;max-height:3em;')
+            'QLed{min-width:3em;min-height:3em;max-width:3em;max-height:3em;}')
         self._led_sofbloop.offColor = SiriusLedState.Red
         self._gbox_sofbloop = self._create_groupbox(
             'SOFB Loop', self._led_sofbloop)
@@ -76,7 +76,7 @@ class SIGenStatusWindow(SiriusMainWindow):
         self._led_bbbloop = SiriusLedState(
             self, self.prefix+bbbdev_pref+':FBCTRL')
         self._led_bbbloop.setStyleSheet(
-            'min-width:3em;min-height:3em;max-width:3em;max-height:3em;')
+            'QLed{min-width:3em;min-height:3em;max-width:3em;max-height:3em;}')
         self._led_bbbloop.offColor = SiriusLedState.Red
         chs2vals = {
             bbbdev_pref+':CLKMISS': 0,
@@ -87,7 +87,7 @@ class SIGenStatusWindow(SiriusMainWindow):
             bbbdev_pref+':FID_ERR': 0}
         self._led_bbbsts = PyDMLedMultiChannel(self, chs2vals)
         self._led_bbbsts.setStyleSheet(
-            'min-width:3em;min-height:3em;max-width:3em;max-height:3em;')
+            'QLed{min-width:3em;min-height:3em;max-width:3em;max-height:3em;}')
         self._led_bbbsts.offColor = SiriusLedState.Red
         self._gbox_bbbloop = self._create_groupbox(
             'BbB Loop', [self._led_bbbloop, self._led_bbbsts], orientation='H')
