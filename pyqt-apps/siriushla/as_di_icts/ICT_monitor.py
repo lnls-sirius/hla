@@ -1,7 +1,6 @@
 #!/usr/bin/env python-sirius
 """HLA TB and TS ICT monitoring Window."""
 
-import sys
 import os as _os
 import numpy as np
 import epics
@@ -18,7 +17,6 @@ from pydm.widgets.waveformplot import WaveformCurveItem
 from pydm.utilities.macro import substitute_in_file as _substitute_in_file
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
-from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets import SiriusMainWindow, SiriusDialog, \
     SiriusLedAlert, PyDMStateButton, PyDMLedMultiChannel, QSpinBoxPlus
 from siriushla.widgets.windows import create_window_from_widget

@@ -7,7 +7,6 @@ from qtpy.QtWidgets import QWidget, QGroupBox, QComboBox, QLabel, \
     QVBoxLayout, QHBoxLayout, QGridLayout, QSpacerItem, QMessageBox, \
     QSizePolicy as QSzPlcy
 
-from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets import SiriusMainWindow, QDoubleSpinBoxPlus
 
 from siriuspy.search import MASearch
