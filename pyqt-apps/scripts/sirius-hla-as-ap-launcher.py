@@ -7,7 +7,7 @@ import argparse as _argparse
 from siriushla import util
 from siriushla.sirius_application import SiriusApplication
 from siriuspy.envars import VACA_PREFIX
-from siriushla.as_ap_launcher import MainOperation
+from siriushla.as_ap_launcher import MainLauncher
 
 
 parser = _argparse.ArgumentParser(
@@ -32,5 +32,5 @@ if returnval:
 
 if need_new_window:
     app = SiriusApplication()
-    app.open_window(MainOperation, parent=None, prefix=args.prefix)
+    app.open_window(MainLauncher, parent=None, prefix=args.prefix)
     _sys.exit(app.exec_())
