@@ -17,7 +17,7 @@ from siriushla.widgets import SiriusMainWindow, PyDMStateButton, \
 from siriushla.common.epics.wrapper import PyEpicsWrapper
 from .menu import get_object
 from .standby_widgets import WidgetInjSys
-from .killbeam_widgets import RFKillBeamButton
+from ..as_rf_control import RFKillBeamButton
 
 
 class MainOperation(SiriusMainWindow):
