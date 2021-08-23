@@ -91,7 +91,8 @@ class EfficiencyMonitor(SiriusMainWindow):
             self._cb_show[pvn] = cb
 
             lb = PyDMLabel(self, pvname)
-            lb.setStyleSheet('font-weight: bold;')
+            lb.setStyleSheet(
+                'QLabel{font-weight: bold; min-width: 6em; max-width: 6em;}')
             lb.showUnits = True
             self._pvs_labels[pvn] = lb
 
