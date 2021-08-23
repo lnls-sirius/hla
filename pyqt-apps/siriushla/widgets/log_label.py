@@ -1,9 +1,14 @@
-import datetime as _datetime
+"""Log label."""
+
 from qtpy.QtWidgets import QListWidget, QListWidgetItem
 from qtpy.QtCore import Property, Q_ENUMS
 from qtpy.QtGui import QColor
+
+from pydm.data_plugins import plugin_for_address
 from pydm.widgets.base import PyDMWidget, TextFormatter
 from pydm.widgets.display_format import DisplayFormat, parse_value_for_display
+
+from siriuspy.clientarch import Time as _Time
 
 
 class PyDMLogLabel(QListWidget, TextFormatter, PyDMWidget, DisplayFormat):
@@ -34,6 +39,8 @@ class PyDMLogLabel(QListWidget, TextFormatter, PyDMWidget, DisplayFormat):
         self._date_time_fmt = '%Y/%m/%d-%H:%M:%S'
         self._replace = replace
 
+        self._plugin_conns = plugin_for_address(init_channel).connections
+
     def value_changed(self, new_value):
         """
         Callback invoked when the Channel value is changed.
@@ -59,7 +66,8 @@ class PyDMLogLabel(QListWidget, TextFormatter, PyDMWidget, DisplayFormat):
 
         prefix = ''
         if self._prepend_date_time:
-            prefix += _datetime.datetime.now().strftime(self._date_time_fmt)
+            timestamp = self._plugin_conns[self.channel].pv.timestamp
+            prefix += _Time(timestamp).strftime(self._date_time_fmt)
             prefix += ' '
         # If the value is a string, just display it as-is, no formatting
         # needed.
