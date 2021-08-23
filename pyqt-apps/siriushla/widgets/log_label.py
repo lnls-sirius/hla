@@ -24,7 +24,7 @@ class PyDMLogLabel(QListWidget, TextFormatter, PyDMWidget, DisplayFormat):
     errorcolor = QColor(255, 0, 0)
     warncolor = QColor(200, 200, 0)
 
-    def __init__(self, parent=None, init_channel=None):
+    def __init__(self, parent=None, init_channel=None, replace=list()):
         QListWidget.__init__(self, parent)
         PyDMWidget.__init__(self, init_channel=init_channel)
         self._buffer_size = 1000
@@ -32,6 +32,7 @@ class PyDMLogLabel(QListWidget, TextFormatter, PyDMWidget, DisplayFormat):
         self._display_format_type = DisplayFormat.String
         self._string_encoding = "utf_8"
         self._date_time_fmt = '%Y/%m/%d-%H:%M:%S'
+        self._replace = replace
 
     def value_changed(self, new_value):
         """
@@ -64,7 +65,17 @@ class PyDMLogLabel(QListWidget, TextFormatter, PyDMWidget, DisplayFormat):
         # needed.
         item = None
         if isinstance(new_value, str):
-            item = QListWidgetItem(prefix + new_value)
+            if self._replace:
+                last_item = self.item(self.count()-1)
+                if last_item is not None:
+                    last_text = last_item.text().lower()
+                    for r in self._replace:
+                        if r.lower() in new_value.lower() and \
+                                r.lower() in last_text.lower():
+                            item = last_item
+                            item.setText(prefix + new_value)
+            if item is None:
+                item = QListWidgetItem(prefix + new_value)
             if new_value.lower().startswith(('err', 'fatal')):
                 item.setForeground(self.errorcolor)
             elif new_value.lower().startswith('warn'):
