@@ -1,3 +1,5 @@
+"""Sirius Label."""
+
 from pyqtgraph import functions as func
 from qtpy.QtWidgets import QLabel, QApplication
 from qtpy.QtCore import Qt, Property, Q_ENUMS
@@ -10,6 +12,7 @@ from siriuspy.clientarch import Time as _Time
 
 
 class SiriusLabel(QLabel, TextFormatter, PyDMWidget, DisplayFormat):
+    """Sirius Label."""
     Q_ENUMS(DisplayFormat)
     DisplayFormat = DisplayFormat
     DisplayFormat.Time = 6
@@ -25,6 +28,7 @@ class SiriusLabel(QLabel, TextFormatter, PyDMWidget, DisplayFormat):
     """
 
     def __init__(self, parent=None, init_channel=None, **kws):
+        """Init."""
         QLabel.__init__(self, parent, **kws)
         PyDMWidget.__init__(self, init_channel=init_channel)
         self.app = QApplication.instance()
@@ -39,6 +43,7 @@ class SiriusLabel(QLabel, TextFormatter, PyDMWidget, DisplayFormat):
 
     @Property(DisplayFormat)
     def displayFormat(self):
+        """Display Format."""
         return self._display_format_type
 
     @displayFormat.setter
@@ -85,7 +90,7 @@ class SiriusLabel(QLabel, TextFormatter, PyDMWidget, DisplayFormat):
         """
         super(SiriusLabel, self).value_changed(new_value)
         # If it is a DiaplayFormat.Time, parse with siriuspy.clientarch.Time
-        if self.displayFormat == self.DisplayFormat.Time:
+        if self._display_format_type == self.DisplayFormat.Time:
             time = _Time(int(new_value)).time().isoformat() \
                 if new_value is not None else ''
             self.setText(time)
