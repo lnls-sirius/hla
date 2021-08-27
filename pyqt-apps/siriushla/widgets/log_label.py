@@ -29,7 +29,7 @@ class PyDMLogLabel(QListWidget, TextFormatter, PyDMWidget, DisplayFormat):
     errorcolor = QColor(255, 0, 0)
     warncolor = QColor(200, 200, 0)
 
-    def __init__(self, parent=None, init_channel=None, replace=list()):
+    def __init__(self, parent=None, init_channel=None, replace=None):
         QListWidget.__init__(self, parent)
         PyDMWidget.__init__(self, init_channel=init_channel)
         self._buffer_size = 1000
@@ -37,7 +37,7 @@ class PyDMLogLabel(QListWidget, TextFormatter, PyDMWidget, DisplayFormat):
         self._display_format_type = DisplayFormat.String
         self._string_encoding = "utf_8"
         self._date_time_fmt = '%Y/%m/%d-%H:%M:%S'
-        self._replace = replace
+        self._replace = list() if replace is None else replace
 
         self._plugin_conns = plugin_for_address(init_channel).connections
 
