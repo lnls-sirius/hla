@@ -1,13 +1,12 @@
 """InjCtrl MainWindow."""
 
-from qtpy.QtCore import Qt, Slot, Signal
+from qtpy.QtCore import Qt, Slot, Signal, QEvent
 from qtpy.QtWidgets import QWidget, QLabel, QGridLayout, QGroupBox, \
-    QHBoxLayout, QVBoxLayout, QPushButton
+    QHBoxLayout, QVBoxLayout
 
 import qtawesome as qta
 
 from pydm.widgets import PyDMPushButton, PyDMLabel
-from siriushla.widgets.label import SiriusLabel
 
 from siriuspy.search import LLTimeSearch
 from siriuspy.injctrl.csdev import Const as _Const
@@ -15,10 +14,11 @@ from siriuspy.injctrl.csdev import Const as _Const
 from ..util import get_appropriate_color, connect_newprocess
 from ..widgets import SiriusMainWindow, SiriusEnumComboBox, \
     PyDMLogLabel, PyDMStateButton, SiriusSpinbox, \
-    SiriusConnectionSignal, SiriusLedState
-from ..as_ti_control import BucketList, EVGInjectionLed
+    SiriusConnectionSignal, SiriusLedState, SiriusLabel
+from ..as_ti_control import BucketList, EVGInjectionLed, EVGInjectionButton
 from ..as_ap_machshift import MachShiftLabel
-from .widgets import InjDiagLed, MonitorSummaryWidget, InjSysStbyControlWidget
+from .widgets import InjDiagLed, MonitorSummaryWidget, \
+    InjSysStbyControlWidget, ClockLabel
 
 
 class InjCtrlWindow(SiriusMainWindow):
@@ -91,54 +91,35 @@ class InjCtrlWindow(SiriusMainWindow):
         self._cb_shift = SiriusEnumComboBox(
             self, self._prefix+'AS-Glob:AP-MachShift:Mode-Sel')
         self._lb_shift = MachShiftLabel()
-        self._lb_shift.setStyleSheet('max-height:2em;')
+        self._lb_shift.setStyleSheet(
+            'QLabel{max-height: 2em; min-width: 7em;}')
         self.wid_shift = QGroupBox('Mach.Shift')
         lay_shift = QVBoxLayout(self.wid_shift)
         lay_shift.addWidget(self._cb_shift)
         lay_shift.addWidget(self._lb_shift)
 
-        # TopUp status
-        self._lb_tusts = PyDMLabel(
-            self, self._inj_prefix + ':TopUpStatus-Mon')
-        self._lb_tusts.setAlignment(Qt.AlignCenter)
-        self._lb_tusts.setStyleSheet('max-height:2em;')
-        self._lb_tunxt = SiriusLabel(
-            self, self._inj_prefix + ':TopUpNextInj-Mon')
-        self._lb_tunxt.displayFormat = SiriusLabel.DisplayFormat.Time
-        self._lb_tunxt.setAlignment(Qt.AlignCenter)
-        self._lb_tunxt.setStyleSheet('max-height:2em;')
-        self._lb_tunxt.showUnits = True
-        self.wid_tusts = QGroupBox('Top-up status')
-        self.wid_tusts.setVisible(False)
-        lay_tusts = QGridLayout(self.wid_tusts)
-        lay_tusts.addWidget(self._lb_tusts, 0, 0, 1, 2)
-        lay_tusts.addWidget(
-            QLabel('Next:', self, alignment=Qt.AlignRight), 1, 0)
-        lay_tusts.addWidget(self._lb_tunxt, 1, 1)
-
         # Injection System
-        self.wid_injsys = QGroupBox('Inj.System', self)
         self.wid_is_summ = InjSysStbyControlWidget(self, is_summary=True)
-        self.wid_is_full = InjSysStbyControlWidget(self, is_summary=False)
-        self.wid_is_full.setVisible(False)
-        self._icon_expd = qta.icon('fa5s.plus')
-        self._icon_comp = qta.icon('fa5s.minus')
-        self.bt_is_tgl = QPushButton(self._icon_expd, '', self)
-        self.bt_is_tgl.clicked.connect(self._handle_injsys_details_vis)
-        self.bt_is_tgl.setObjectName('bt')
-        self.bt_is_tgl.setStyleSheet("""
-            #bt{
-                min-width: 0.8em; max-width: 0.8em;
-                min-height: 0.8em; max-height: 0.8em;
-                icon-size:12px;}
-        """)
+        self.wid_injsys = QGroupBox('Inj.System', self)
         lay_injsys = QGridLayout(self.wid_injsys)
         lay_injsys.setContentsMargins(0, 0, 0, 0)
-        lay_injsys.setAlignment(Qt.AlignRight)
         lay_injsys.addWidget(self.wid_is_summ, 0, 0)
-        lay_injsys.addWidget(self.wid_is_full, 0, 0)
-        lay_injsys.addWidget(
-            self.bt_is_tgl, 0, 1, alignment=Qt.AlignRight | Qt.AlignBottom)
+        # self.wid_is_full = InjSysStbyControlWidget(self, is_summary=False)
+        # self.wid_is_full.setVisible(False)
+        # lay_injsys.addWidget(self.wid_is_full, 0, 0)
+        # self._icon_expd = qta.icon('fa5s.plus')
+        # self._icon_comp = qta.icon('fa5s.minus')
+        # self.bt_is_tgl = QPushButton(self._icon_expd, '', self)
+        # self.bt_is_tgl.clicked.connect(self._handle_injsys_details_vis)
+        # self.bt_is_tgl.setObjectName('bt')
+        # self.bt_is_tgl.setStyleSheet("""
+        #     #bt{
+        #         min-width: 0.8em; max-width: 0.8em;
+        #         min-height: 0.8em; max-height: 0.8em;
+        #         icon-size:12px;}
+        # """)
+        # lay_injsys.addWidget(
+        #     self.bt_is_tgl, 0, 1, alignment=Qt.AlignRight | Qt.AlignBottom)
 
         # EGun
         self._sb_eguntrg = PyDMStateButton(
@@ -151,18 +132,10 @@ class InjCtrlWindow(SiriusMainWindow):
             'EGun Trig.', [self._sb_eguntrg, ], [self._led_eguntrg, ])
 
         # Injection
-        self._pb_injstop = PyDMPushButton(
-            self, label='', icon=qta.icon('mdi.stop'), pressValue=0,
-            init_channel=self._inj_prefix + ':Stop-Cmd')
-        self._pb_injstop.setObjectName('bt')
-        self._pb_injstop.setStyleSheet(
-            '#bt{min-width:25px; max-width:25px; icon-size:20px;}')
-        self._pb_injstart = PyDMPushButton(
-            self, label='', icon=qta.icon('mdi.play'), pressValue=0,
-            init_channel=self._inj_prefix + ':Start-Cmd')
-        self._pb_injstart.setObjectName('bt')
-        self._pb_injstart.setStyleSheet(
-            '#bt{min-width:25px; max-width:25px; icon-size:20px;}')
+        self._pb_tiinj = EVGInjectionButton(self, self._prefix)
+        self._pb_topup = PyDMStateButton(
+            self, init_channel=self._inj_prefix + ':TopUpState-Sel')
+        self._pb_topup.setVisible(False)
         self._led_injti = EVGInjectionLed(self, self._prefix)
         self._lb_injcnt = PyDMLabel(self)
         self._lb_injcnt.setToolTip(
@@ -170,71 +143,120 @@ class InjCtrlWindow(SiriusMainWindow):
         self._lb_injcnt.channel = \
             'AS-Glob:AP-CurrInfo:InjCount-Mon'
         self._lb_injcnt.setStyleSheet('QLabel{max-width: 3.5em;}')
-        self.wid_inj = self._create_groupwidget(
-            'Injection', [self._pb_injstop, self._pb_injstart],
-            [self._led_injti, self._lb_injcnt])
+        hbox_injsts = QHBoxLayout()
+        hbox_injsts.setContentsMargins(0, 0, 0, 0)
+        hbox_injsts.addWidget(self._led_injti)
+        hbox_injsts.addWidget(self._lb_injcnt)
+        self.wid_inj = QGroupBox('Injection')
+        lay_inj = QGridLayout(self.wid_inj)
+        lay_inj.setAlignment(Qt.AlignCenter)
+        lay_inj.addWidget(self._pb_tiinj, 0, 0)
+        lay_inj.addWidget(self._pb_topup, 0, 0)
+        lay_inj.addLayout(hbox_injsts, 1, 0)
 
         # Current
         self._lb_curr = PyDMLabel(self, 'SI-Glob:AP-CurrInfo:Current-Mon')
         self._lb_curr.showUnits = True
         self._lb_curr.setStyleSheet("""
             QLabel{
-                font-size: 16pt; qproperty-alignment: AlignCenter;
+                font-size: 18pt; qproperty-alignment: AlignCenter;
                 min-width: 5.5em; max-width: 5.5em;
         }""")
         self.wid_curr = QGroupBox('Current')
         lay_curr = QHBoxLayout(self.wid_curr)
         lay_curr.addWidget(self._lb_curr)
 
-        # # Gamma Shutter
-        # self._led_gmsht = SiriusLedAlert(
-        #     self, 'AS-Glob:PP-GammaShutter:Status-Mon')
-        # self.wid_gmsht = QGroupBox('Gamma')
-        # lay_gmsht = QHBoxLayout(self.wid_gmsht)
-        # lay_gmsht.addWidget(self._led_gmsht)
+        # TopUp status
+        self._lb_tusts = PyDMLabel(
+            self, self._inj_prefix + ':TopUpState-Sts')
+        self._lb_tusts.setAlignment(Qt.AlignCenter)
+        self._lb_tusts.setStyleSheet('QLabel{max-height:2em;}')
+        self._ld_tunow = QLabel(
+            'Now:', self, alignment=Qt.AlignRight | Qt.AlignCenter)
+        self._lb_tunow = ClockLabel(self)
+        self._lb_tunow.setStyleSheet('QLabel{max-height:2em;}')
+        self._ld_tunxt = QLabel(
+            'Next:', self, alignment=Qt.AlignRight | Qt.AlignCenter)
+        self._lb_tunxt = SiriusLabel(
+            self, self._inj_prefix + ':TopUpNextInj-Mon')
+        self._lb_tunxt.displayFormat = SiriusLabel.DisplayFormat.Time
+        self._lb_tunxt.setAlignment(Qt.AlignCenter)
+        self._lb_tunxt.setStyleSheet('QLabel{max-height:2em;}')
+        self._pb_round = PyDMPushButton(
+            self, label='', icon=qta.icon('mdi.tilde'), pressValue=1,
+            init_channel=self._inj_prefix + ':TopUpNextInjRound-Cmd')
+        self._pb_round.setObjectName('but')
+        self._pb_round.setStyleSheet(
+            '#but{min-width:18px; max-width:18px; icon-size:16px;}')
+        self.wid_tusts = QGroupBox('Top-up status')
+        self.wid_tusts.setVisible(False)
+        lay_tusts = QGridLayout(self.wid_tusts)
+        lay_tusts.addWidget(self._lb_tusts, 0, 0, 1, 2)
+        lay_tusts.addWidget(self._ld_tunow, 1, 0)
+        lay_tusts.addWidget(self._lb_tunow, 1, 1)
+        lay_tusts.addWidget(self._ld_tunxt, 2, 0)
+        lay_tusts.addWidget(self._lb_tunxt, 2, 1)
+        lay_tusts.addWidget(self._pb_round, 2, 2)
 
         wid = QWidget()
         lay = QGridLayout(wid)
         lay.setContentsMargins(0, 0, 0, 0)
         lay.addWidget(self.wid_shift, 0, 0)
-        lay.addWidget(self.wid_tusts, 0, 1)
-        lay.addWidget(self.wid_injsys, 0, 2)
-        lay.addWidget(self.wid_egun, 0, 3)
-        lay.addWidget(self.wid_inj, 0, 4)
+        lay.addWidget(self.wid_injsys, 0, 1)
+        lay.addWidget(self.wid_egun, 0, 2)
+        lay.addWidget(self.wid_inj, 0, 3)
+        lay.addWidget(self.wid_tusts, 0, 4)
         lay.addWidget(self.wid_curr, 0, 5)
-        # lay.addWidget(self.wid_gmsht, 0, 6)
         lay.setColumnStretch(0, 3)
+        lay.setColumnStretch(1, 2)
         lay.setColumnStretch(2, 2)
         lay.setColumnStretch(3, 2)
-        lay.setColumnStretch(4, 2)
-        lay.setColumnStretch(5, 4)
-        wid.setStyleSheet('.QLabel{max-height: 1em;}')
+        lay.setColumnStretch(4, 4)
+        lay.setColumnStretch(5, 3)
+        wid.setStyleSheet('.QLabel{min-height: 1em; max-height: 1em;}')
         return wid
 
     def _setupSettingsWidget(self):
-        # Mon
-        self._ld_injset = QLabel(
-            'Setup ok', self, alignment=Qt.AlignRight)
-        self._ld_injset.setStyleSheet(
-            'min-width: 7.5em; max-width: 7.5em;')
-        self._led_injset = InjDiagLed(self)
-
         # Mode
         self._ld_injmode = QLabel(
-            'Mode', self, alignment=Qt.AlignRight)
+            'Mode', self, alignment=Qt.AlignRight | Qt.AlignCenter)
         self._ld_injmode.setStyleSheet(
-            'min-width: 7.5em; max-width: 7.5em;')
+            'QLabel{min-width: 6.5em; max-width: 6.5em; min-height: 1em;}')
         self._cb_injmode = SiriusEnumComboBox(
             self, self._inj_prefix + ':Mode-Sel')
         self._lb_injmode = PyDMLabel(
             self, self._inj_prefix + ':Mode-Sts')
         self._lb_injmode.showUnits = True
 
+        # Target current
+        self._ld_currtgt = QLabel(
+            'Target Curr.', self, alignment=Qt.AlignRight | Qt.AlignCenter)
+        self._ld_currtgt.setStyleSheet(
+            'QLabel{min-width: 6.5em; max-width: 6.5em; min-height: 1em;}')
+        self._sb_currtgt = SiriusSpinbox(
+            self, self._inj_prefix + ':TargetCurrent-SP')
+        self._sb_currtgt.showStepExponent = False
+        self._lb_currtgt = PyDMLabel(
+            self, self._inj_prefix + ':TargetCurrent-RB')
+        self._lb_currtgt.showUnits = True
+
+        # mode specific configurations
+        self.wid_dcdtls = self._setupDecayModeWidget()
+        self.wid_tudtls = self._setupTopUpModeWidget()
+        self.wid_tudtls.setVisible(False)
+
+        # Mon
+        self._ld_injset = QLabel(
+            'Setup ok', self, alignment=Qt.AlignRight | Qt.AlignCenter)
+        self._ld_injset.setStyleSheet(
+            'QLabel{min-width: 6.5em; max-width: 6.5em; min-height: 1em;}')
+        self._led_injset = InjDiagLed(self)
+
         # Type
         self._ld_injtype = QLabel(
-            'Type', self, alignment=Qt.AlignRight)
+            'Type', self, alignment=Qt.AlignRight | Qt.AlignCenter)
         self._ld_injtype.setStyleSheet(
-            'min-width: 7.5em; max-width: 7.5em;')
+            'QLabel{min-width: 6.5em; max-width: 6.5em; min-height: 1em;}')
         self._cb_injtype = SiriusEnumComboBox(
             self, self._inj_prefix + ':Type-Sel')
         self._lb_injtype = PyDMLabel(
@@ -247,9 +269,9 @@ class InjCtrlWindow(SiriusMainWindow):
 
         # Single bunch bias voltage
         self._ld_sbbias = QLabel(
-            'SB Bias Voltage', self, alignment=Qt.AlignRight)
+            'SB Bias Voltage', self, alignment=Qt.AlignRight | Qt.AlignCenter)
         self._ld_sbbias.setStyleSheet(
-            'min-width: 7.5em; max-width: 7.5em;')
+            'QLabel{min-width: 6.5em; max-width: 6.5em; min-height: 1em;}')
         self._sb_sbbias = SiriusSpinbox(
             self, self._inj_prefix + ':SglBunBiasVolt-SP')
         self._sb_sbbias.showStepExponent = False
@@ -262,9 +284,9 @@ class InjCtrlWindow(SiriusMainWindow):
 
         # Multi bunch bias voltage
         self._ld_mbbias = QLabel(
-            'MB Bias Volt.', self, alignment=Qt.AlignRight)
+            'MB Bias Volt.', self, alignment=Qt.AlignRight | Qt.AlignCenter)
         self._ld_mbbias.setStyleSheet(
-            'min-width: 7.5em; max-width: 7.5em;')
+            'QLabel{min-width: 6.5em; max-width: 6.5em; min-height: 1em;}')
         self._sb_mbbias = SiriusSpinbox(
             self, self._inj_prefix + ':MultBunBiasVolt-SP')
         self._sb_mbbias.showStepExponent = False
@@ -274,9 +296,9 @@ class InjCtrlWindow(SiriusMainWindow):
 
         # Filament current op value
         self._ld_filaopcurr = QLabel(
-            'Fila.Op. Curr.', self, alignment=Qt.AlignRight)
+            'Fila.Op. Curr.', self, alignment=Qt.AlignRight | Qt.AlignCenter)
         self._ld_filaopcurr.setStyleSheet(
-            'min-width: 7.5em; max-width: 7.5em;')
+            'QLabel{min-width: 6.5em; max-width: 6.5em; min-height: 1em;}')
         self._sb_filaopcurr = SiriusSpinbox(
             self, self._inj_prefix + ':FilaOpCurr-SP')
         self._sb_filaopcurr.showStepExponent = False
@@ -286,9 +308,9 @@ class InjCtrlWindow(SiriusMainWindow):
 
         # High voltage op value
         self._ld_hvopvolt = QLabel(
-            'HV.Op. Volt.', self, alignment=Qt.AlignRight)
+            'HV.Op. Volt.', self, alignment=Qt.AlignRight | Qt.AlignCenter)
         self._ld_hvopvolt.setStyleSheet(
-            'min-width: 7.5em; max-width: 7.5em;')
+            'QLabel{min-width: 6.5em; max-width: 6.5em; min-height: 1em;}')
         self._sb_hvopvolt = SiriusSpinbox(
             self, self._inj_prefix + ':HVOpVolt-SP')
         self._sb_hvopvolt.showStepExponent = False
@@ -296,28 +318,11 @@ class InjCtrlWindow(SiriusMainWindow):
             self, self._inj_prefix + ':HVOpVolt-RB')
         self._lb_hvopvolt.showUnits = True
 
-        # Target current
-        self._ld_currtgt = QLabel(
-            'Target Curr.', self, alignment=Qt.AlignRight)
-        self._ld_currtgt.setStyleSheet(
-            'min-width: 7.5em; max-width: 7.5em;')
-        self._sb_currtgt = SiriusSpinbox(
-            self, self._inj_prefix + ':TargetCurrent-SP')
-        self._sb_currtgt.showStepExponent = False
-        self._lb_currtgt = PyDMLabel(
-            self, self._inj_prefix + ':TargetCurrent-RB')
-        self._lb_currtgt.showUnits = True
-
-        # mode specific configurations
-        self.wid_dcdtls = self._setupDecayModeWidget()
-        self.wid_tudtls = self._setupTopUpModeWidget()
-
         # Bucket list
         evg_name = LLTimeSearch.get_evg_name()
         self._wid_bl = BucketList(
             self, prefix=self._prefix+evg_name+':', min_size=15,
             show_graph=True)
-        self._wid_bl.setStyleSheet('#graph{min-height: 6em;}')
 
         wid1 = QWidget()
         glay1 = QGridLayout(wid1)
@@ -328,11 +333,11 @@ class InjCtrlWindow(SiriusMainWindow):
         glay1.addWidget(self._ld_currtgt, 1, 0)
         glay1.addWidget(self._sb_currtgt, 1, 1)
         glay1.addWidget(self._lb_currtgt, 1, 2)
-        glay1.addWidget(self.wid_tudtls, 2, 0, 1, 3)
-        glay1.addWidget(self.wid_dcdtls, 2, 0, 1, 3)
+        glay1.addWidget(self.wid_tudtls, 2, 0, 2, 3)
+        glay1.addWidget(self.wid_dcdtls, 2, 0, 2, 3)
         glay1.setColumnStretch(0, 3)
-        glay1.setColumnStretch(0, 2)
-        glay1.setColumnStretch(0, 2)
+        glay1.setColumnStretch(1, 2)
+        glay1.setColumnStretch(2, 2)
 
         wid2 = QWidget()
         glay2 = QGridLayout(wid2)
@@ -355,81 +360,58 @@ class InjCtrlWindow(SiriusMainWindow):
         glay2.addWidget(self._sb_hvopvolt, 5, 1)
         glay2.addWidget(self._lb_hvopvolt, 5, 2)
         glay2.setColumnStretch(0, 3)
-        glay2.setColumnStretch(0, 2)
-        glay2.setColumnStretch(0, 2)
+        glay2.setColumnStretch(1, 2)
+        glay2.setColumnStretch(2, 2)
 
         wid = QGroupBox('Settings')
         lay = QGridLayout(wid)
         lay.addWidget(wid1, 0, 0)
         lay.addWidget(wid2, 0, 1)
         lay.addWidget(self._wid_bl, 1, 0, 1, 2)
-        wid.setStyleSheet('.QLabel{max-height: 1em;}')
         return wid
 
     def _setupTopUpModeWidget(self):
-        self._ld_tumode = QLabel(
-            'Top-up Mode', self, alignment=Qt.AlignRight)
-        self._cb_tumode = SiriusEnumComboBox(
-            self, self._inj_prefix + ':TopUpMode-Sel')
-        self._lb_tumode = PyDMLabel(
-            self, self._inj_prefix + ':TopUpMode-Sts')
-        self._lb_tumode.showUnits = True
-        vlay_tumode = QVBoxLayout()
-        vlay_tumode.setContentsMargins(0, 0, 0, 0)
-        vlay_tumode.addWidget(self._cb_tumode)
-        vlay_tumode.addWidget(self._lb_tumode)
-
         self._ld_tuperd = QLabel(
-            'Top-up Period', self, alignment=Qt.AlignRight)
+            'Period', self, alignment=Qt.AlignRight | Qt.AlignCenter)
         self._sb_tuperd = SiriusSpinbox(
             self, self._inj_prefix + ':TopUpPeriod-SP')
         self._sb_tuperd.showStepExponent = False
         self._lb_tuperd = PyDMLabel(
             self, self._inj_prefix + ':TopUpPeriod-RB')
         self._lb_tuperd.showUnits = True
-        self._ld_tuperd.setVisible(False)
-        self._sb_tuperd.setVisible(False)
-        self._lb_tuperd.setVisible(False)
 
-        self._ld_tuthres = QLabel(
-            'Top-up Thres.', self, alignment=Qt.AlignRight)
-        self._sb_tuthres = SiriusSpinbox(
-            self, self._inj_prefix + ':TopUpThres-SP')
-        self._sb_tuthres.showStepExponent = False
-        self._lb_tuthres = PyDMLabel(
-            self, self._inj_prefix + ':TopUpThres-RB')
-        self._lb_tuthres.showUnits = True
-
-        self._ch_tumode = SiriusConnectionSignal(
-            self._inj_prefix + ':TopUpMode-Sts')
-        self._ch_tumode.new_value_signal[int].connect(
-            self._handle_topupmode_settings_vis)
+        self._ld_tumaxpu = QLabel(
+            'Max.Nr.Pulses', self, alignment=Qt.AlignRight | Qt.AlignCenter)
+        self._sb_tumaxpu = SiriusSpinbox(
+            self, self._inj_prefix + ':TopUpMaxNrPulses-SP')
+        self._sb_tumaxpu.showStepExponent = False
+        self._lb_tumaxpu = PyDMLabel(
+            self, self._inj_prefix + ':TopUpMaxNrPulses-RB')
+        self._lb_tumaxpu.showUnits = True
 
         wid = QWidget()
         lay = QGridLayout(wid)
-        lay.setContentsMargins(0, 9, 0, 0)
+        lay.setContentsMargins(0, 6, 0, 0)
         lay.setAlignment(Qt.AlignTop)
-        lay.addWidget(self._ld_tumode, 0, 0)
-        lay.addWidget(self._cb_tumode, 0, 1)
-        lay.addWidget(self._lb_tumode, 0, 2)
-        lay.addWidget(self._ld_tuthres, 1, 0)
-        lay.addWidget(self._sb_tuthres, 1, 1)
-        lay.addWidget(self._lb_tuthres, 1, 2)
-        lay.addWidget(self._ld_tuperd, 2, 0)
-        lay.addWidget(self._sb_tuperd, 2, 1)
-        lay.addWidget(self._lb_tuperd, 2, 2)
+        lay.addWidget(self._ld_tuperd, 0, 0)
+        lay.addWidget(self._sb_tuperd, 0, 1)
+        lay.addWidget(self._lb_tuperd, 0, 2)
+        lay.addWidget(self._ld_tumaxpu, 1, 0)
+        lay.addWidget(self._sb_tumaxpu, 1, 1)
+        lay.addWidget(self._lb_tumaxpu, 1, 2)
         lay.setColumnStretch(0, 3)
-        lay.setColumnStretch(0, 2)
-        lay.setColumnStretch(0, 2)
+        lay.setColumnStretch(1, 2)
+        lay.setColumnStretch(2, 2)
 
         wid.setStyleSheet("""
             .QLabel{
-                min-width: 7.5em; max-width: 7.5em; max-height: 1em;
+                min-width: 6.5em; max-width: 6.5em; min-height: 1em;
             }""")
         return wid
 
     def _setupDecayModeWidget(self):
-        self._ld_autostop = QLabel('Auto Stop', self, alignment=Qt.AlignRight)
+        self._ld_autostop = QLabel(
+            'Auto Stop', self, alignment=Qt.AlignRight | Qt.AlignCenter)
         self._cb_autostop = PyDMStateButton(
             self, self._inj_prefix + ':AutoStop-Sel')
         self._cb_autostop.shape = 1
@@ -439,14 +421,17 @@ class InjCtrlWindow(SiriusMainWindow):
         wid = QWidget()
         lay = QGridLayout(wid)
         lay.setAlignment(Qt.AlignTop)
-        lay.setContentsMargins(0, 0, 0, 0)
+        lay.setContentsMargins(0, 6, 0, 0)
         lay.addWidget(self._ld_autostop, 0, 0)
         lay.addWidget(self._cb_autostop, 0, 1)
         lay.addWidget(self._led_autostop, 0, 2, alignment=Qt.AlignLeft)
+        lay.setColumnStretch(0, 3)
+        lay.setColumnStretch(1, 2)
+        lay.setColumnStretch(2, 2)
 
         wid.setStyleSheet("""
             .QLabel{
-                min-width: 7.5em; max-width: 7.5em; max-height: 1em;
+                min-width: 6.5em; max-width: 6.5em; min-height: 1em;
             }""")
         return wid
 
@@ -472,18 +457,6 @@ class InjCtrlWindow(SiriusMainWindow):
     # ---- auxiliary commands ----
 
     @Slot(int)
-    def _handle_topupmode_settings_vis(self, new_topupmode):
-        is_period = new_topupmode == _Const.TopUpMode.TimePeriod
-        self._ld_tuperd.setVisible(is_period)
-        self._sb_tuperd.setVisible(is_period)
-        self._lb_tuperd.setVisible(is_period)
-        self._ld_tuthres.setVisible(not is_period)
-        self._sb_tuthres.setVisible(not is_period)
-        self._lb_tuthres.setVisible(not is_period)
-        self.centralWidget().adjustSize()
-        self.adjustSize()
-
-    @Slot(int)
     def _handle_injtype_settings_vis(self, new_type):
         is_sb = new_type == _Const.InjTypeSel.SingleBunch
         self._ld_sbbias.setVisible(is_sb)
@@ -498,11 +471,11 @@ class InjCtrlWindow(SiriusMainWindow):
     @Slot(int)
     def _handle_injmode_settings_vis(self, new_mode):
         is_topoup = new_mode == _Const.InjMode.TopUp
-        self.wid_tusts.setVisible(is_topoup)
         self.wid_tudtls.setVisible(is_topoup)
+        self._pb_topup.setVisible(is_topoup)
         self.wid_dcdtls.setVisible(not is_topoup)
-        self.centralWidget().adjustSize()
-        self.adjustSize()
+        self._pb_tiinj.setVisible(not is_topoup)
+        self.wid_tusts.setVisible(is_topoup)
 
     def _handle_injsys_details_vis(self):
         exp = self.wid_is_summ.isVisible()
@@ -543,10 +516,10 @@ class InjCtrlWindow(SiriusMainWindow):
             lay.addLayout(hbox_aux)
         return box
 
-    def mouseDoubleClickEvent(self, ev):
+    def mouseDoubleClickEvent(self, event):
         """Implement mouseDoubleClickEvent."""
-        if ev.button() == Qt.LeftButton:
-            point = ev.pos()
+        if event.button() == Qt.LeftButton:
+            point = event.pos()
             if self.wid_curr.geometry().contains(point):
                 self.showStatus.emit()
             elif self.wid_shift.geometry().contains(point):
@@ -555,4 +528,16 @@ class InjCtrlWindow(SiriusMainWindow):
                 self.showEgun.emit()
             elif self.wid_mon.geometry().contains(point):
                 self.showMonitor.emit()
-        return super().mouseDoubleClickEvent(ev)
+        return super().mouseDoubleClickEvent(event)
+
+    def changeEvent(self, event):
+        """Implement changeEvent."""
+        if event.type() == QEvent.FontChange:
+            fontsize = self.app.font().pointSize()
+            self._lb_curr.setStyleSheet(
+                'QLabel{'
+                '    font-size: '+str(fontsize+8)+'pt;'
+                '    qproperty-alignment: AlignCenter;'
+                '    min-width: 6em; max-width: 6em;'
+                '}')
+            self.ensurePolished()

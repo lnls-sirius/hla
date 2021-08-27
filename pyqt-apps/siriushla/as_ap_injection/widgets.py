@@ -1,7 +1,7 @@
 """Monitoring widgets."""
 
 from qtpy.QtGui import QPixmap
-from qtpy.QtCore import Qt, Slot, Signal, QSize
+from qtpy.QtCore import Qt, Slot, Signal, QSize, QTimer
 from qtpy.QtWidgets import QWidget, QLabel, QGridLayout, QGroupBox, \
     QHBoxLayout, QCheckBox, QMenu, QFrame
 
@@ -11,6 +11,7 @@ from pydm.widgets import PyDMPushButton
 
 from siriuspy.envars import VACA_PREFIX
 from siriuspy.devices import InjSysStandbyHandler
+from siriuspy.clientarch import Time as _Time
 from siriuspy.injctrl.csdev import get_status_labels, Const as _Const
 
 from ..widgets import SiriusLedAlert, PyDMLedMultiChannel, PyDMLed, QLed, \
@@ -456,3 +457,19 @@ class InjSysStbyControlWidget(QWidget):
     def contextMenuEvent(self, event):
         """Show a custom context menu."""
         self.menu.popup(self.mapToGlobal(event.pos()))
+
+
+class ClockLabel(QLabel):
+    """Clock label."""
+
+    def __init__(self, parent=None):
+        """Init."""
+        super().__init__(parent)
+        self._update_timer = QTimer(self)
+        self._update_timer.timeout.connect(self._update)
+        self._update_timer.setInterval(1000)
+        self._update_timer.start()
+
+    def _update(self):
+        text = _Time.strftime(_Time.now(), '%H:%M:%S')
+        self.setText(text)
