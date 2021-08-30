@@ -1,7 +1,7 @@
 """DCCT Monitor Windows."""
 
 from qtpy.QtCore import Qt
-from qtpy.QtWidgets import QWidget, QLabel, QGridLayout, QVBoxLayout, \
+from qtpy.QtWidgets import QWidget, QLabel, QVBoxLayout, \
     QPushButton, QHBoxLayout
 import qtawesome as qta
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
