@@ -82,6 +82,7 @@ class PyDMLogLabel(QListWidget, TextFormatter, PyDMWidget, DisplayFormat):
                                 r.lower() in last_text.lower():
                             item = last_item
                             item.setText(prefix + new_value)
+                            return
             if item is None:
                 item = QListWidgetItem(prefix + new_value)
             if new_value.lower().startswith(('err', 'fatal')):
