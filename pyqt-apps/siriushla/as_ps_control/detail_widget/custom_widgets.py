@@ -5,6 +5,7 @@ from qtpy.QtCore import Signal
 from pydm.widgets.base import PyDMWidget
 
 from siriuspy.util import get_bit
+from siriuspy.namesys import SiriusPVName as PVName
 from siriuspy.envars import VACA_PREFIX
 from siriuspy.pwrsupply.csdev import ETypes as _PSe, \
     PS_LI_INTLK_THRS as _PS_LI_INTLK
@@ -27,14 +28,15 @@ class LISpectIntlkLed(QLed, PyDMWidget):
         self.offColor = PyDMLed.LightGreen
 
         self.prefix = VACA_PREFIX
-        self.devname = 'LI-01:PS-Spect'
+        self.devname = PVName('LI-01:PS-Spect')
+        self.prefixed_name = self.devname.substitute(prefix=self.prefix)
         self.filter = filters
 
         self.intlkstatus_ch = SiriusConnectionSignal(
-            self.prefix+self.devname+':StatusIntlk-Mon')
+            self.prefixed_name.substitute(propty='StatusIntlk-Mon'))
         self.intlkstatus_ch.connection_slot = self.connectionStateChanged
         self.intlkwarn_ch = SiriusConnectionSignal(
-            self.prefix+self.devname+':IntlkWarn-Mon')
+            self.prefixed_name.substitute(propty='IntlkWarn-Mon'))
         self.intlkwarn_ch.connection_slot = self.connectionStateChanged
         self.channel = self.intlkstatus_ch.address
 

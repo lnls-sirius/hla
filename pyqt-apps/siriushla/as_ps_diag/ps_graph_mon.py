@@ -504,7 +504,8 @@ class PSGraphMonWidget(QWidget):
     def _create_pvs(self, propty):
         new_pvs = dict()
         for psn in self._psnames:
-            pvname = self._prefix+psn+':'+propty
+            pvname = SiriusPVName(psn).substitute(
+                prefix=self._prefix, propty=propty)
             if pvname in PSGraphMonWidget._pvs:
                 continue
             new_pvs[pvname] = _PV(pvname, connection_timeout=0.05)
@@ -515,12 +516,14 @@ class PSGraphMonWidget(QWidget):
             return []
 
         for psn in self._psnames:
-            pvname = self._prefix+psn+':'+propty
+            pvname = SiriusPVName(psn).substitute(
+                prefix=self._prefix, propty=propty)
             PSGraphMonWidget._pvs[pvname].wait_for_connection()
 
         values = list()
         for psn in self._psnames:
-            pvname = self._prefix+psn+':'+propty
+            pvname = SiriusPVName(psn).substitute(
+                prefix=self._prefix, propty=propty)
             val = PSGraphMonWidget._pvs[pvname].get()
             val = val if val is not None else 0
             if propty in self.propsymb_2_defval.keys():
@@ -531,7 +534,8 @@ class PSGraphMonWidget(QWidget):
 
     def _set_values(self, propty, value):
         for psn in self._psnames:
-            pvname = self._prefix+psn+':'+propty
+            pvname = SiriusPVName(psn).substitute(
+                prefix=self._prefix, propty=propty)
             pv = PSGraphMonWidget._pvs[pvname]
             if pv.wait_for_connection():
                 pv.put(value)
