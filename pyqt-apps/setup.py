@@ -39,6 +39,7 @@ setup(
     package_data={
         'siriushla': ['VERSION', '*/*.py'],
         'siriushla.si_di_bbb': ['*.png', ],
+        'siriushla.si_id_control': ['*.gif', ],
     },
     include_package_data=True,
     scripts=[

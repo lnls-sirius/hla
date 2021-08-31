@@ -1,6 +1,8 @@
 """ID Control Module."""
 
-from qtpy.QtCore import Qt, Slot
+import os as _os
+from qtpy.QtGui import QMovie
+from qtpy.QtCore import Qt, Slot, QSize
 from qtpy.QtWidgets import QVBoxLayout, QWidget, QGroupBox, QGridLayout, \
     QLabel, QAction, QMenu
 from pydm.connection_inspector import ConnectionInspector
@@ -8,14 +10,14 @@ from pydm.connection_inspector import ConnectionInspector
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 from siriuspy.namesys import SiriusPVName as _PVName
 
-from siriushla.widgets import SiriusMainWindow
+from ..widgets import SiriusMainWindow, SiriusConnectionSignal
 
 from .apu_control import APUSummaryHeader, APUSummaryWidget
 from .util import get_id_icon
 
 
 class IDControl(SiriusMainWindow):
-    """IDs Control Window."""
+    """ID Control Window."""
 
     def __init__(self, parent=None, prefix=_vaca_prefix):
         super().__init__(parent)
@@ -30,16 +32,35 @@ class IDControl(SiriusMainWindow):
         cw = QWidget()
         self.setCentralWidget(cw)
 
-        label = QLabel('<h3>IDs Control Window</h3>',
+        label = QLabel('<h3>ID Control Window</h3>',
                        self, alignment=Qt.AlignCenter)
-        label.setStyleSheet('max-height: 1.29em;')
+        label.setStyleSheet('QLabel{min-height: 3em; max-height: 3em;}')
+
+        self.label_mov1 = QLabel(self)
+        self.label_mov1.setVisible(False)
+        self.label_mov1.setStyleSheet(
+            'QLabel{min-height: 3em; max-height: 3em;}')
+        self.label_mov2 = QLabel(self)
+        self.label_mov2.setVisible(False)
+        self.label_mov2.setStyleSheet(
+            'QLabel{min-height: 3em; max-height: 3em;}')
+        self.movie_mov = QMovie(_os.path.join(
+            _os.path.abspath(_os.path.dirname(__file__)), 'hula.gif'))
+        self.movie_mov.setScaledSize(QSize(50, 50))
+        self.label_mov1.setMovie(self.movie_mov)
+        self.label_mov2.setMovie(self.movie_mov)
 
         self._gbox_apu = QGroupBox('APU', self)
         self._gbox_apu.setLayout(self._setupAPULayout())
 
         lay = QGridLayout(cw)
-        lay.addWidget(label, 0, 0)
-        lay.addWidget(self._gbox_apu, 1, 0)
+        lay.addWidget(self.label_mov1, 0, 0)
+        lay.addWidget(label, 0, 1)
+        lay.addWidget(self.label_mov2, 0, 2)
+        lay.addWidget(self._gbox_apu, 1, 0, 1, 3)
+        lay.setColumnStretch(0, 1)
+        lay.setColumnStretch(1, 15)
+        lay.setColumnStretch(2, 1)
 
     def _setupAPULayout(self):
         lay = QVBoxLayout()
@@ -49,6 +70,7 @@ class IDControl(SiriusMainWindow):
         lay.addWidget(self._apu_header)
 
         self._apu_widgets = list()
+        self._channels_mov = list()
         idlist = ['SI-06SB:ID-APU22', 'SI-07SP:ID-APU22',
                   'SI-08SB:ID-APU22', 'SI-09SA:ID-APU22',
                   'SI-11SP:ID-APU58']
@@ -57,6 +79,9 @@ class IDControl(SiriusMainWindow):
             apu_wid = APUSummaryWidget(self, self._prefix, idname)
             lay.addWidget(apu_wid)
             self._apu_widgets.append(apu_wid)
+            ch_mov = SiriusConnectionSignal(idname+':Moving-Mon')
+            ch_mov.new_value_signal[float].connect(self._handle_moving_vis)
+            self._channels_mov.append(ch_mov)
 
         return lay
 
@@ -92,7 +117,17 @@ class IDControl(SiriusMainWindow):
         menu.popup(self.mapToGlobal(point))
 
     def show_connections(self, checked):
-        """."""
+        """Show connections."""
         _ = checked
         c = ConnectionInspector(self)
         c.show()
+
+    def _handle_moving_vis(self, value):
+        """Handle visualization of moving state label."""
+        show = any([ch.value != 0 for ch in self._channels_mov])
+        self.label_mov1.setVisible(show)
+        self.label_mov2.setVisible(show)
+        if show:
+            self.movie_mov.start()
+        else:
+            self.movie_mov.stop()
