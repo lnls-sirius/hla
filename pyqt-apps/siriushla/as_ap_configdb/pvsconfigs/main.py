@@ -1,7 +1,8 @@
-
-from siriuspy.clientconfigdb import ConfigDBClient
+"""PVs Config Main Module."""
 
 from qtpy.QtWidgets import QWidget, QPushButton, QHBoxLayout
+
+from siriuspy.clientconfigdb import ConfigDBClient
 
 from siriushla.widgets.windows import SiriusMainWindow
 from siriushla.util import connect_window
