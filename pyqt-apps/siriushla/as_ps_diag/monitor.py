@@ -137,7 +137,8 @@ class PSMonitor(QWidget):
                         and aux_col in (0, 3):
                     grid.addWidget(QLabel(''), aux_row, aux_col)
                     aux_col += 1
-                led = MyLed(self, self._prefix+name+':DiagStatus-Mon', name)
+                led = MyLed(self, SiriusPVName(name).substitute(
+                    prefix=self._prefix, propty='DiagStatus-Mon'), name)
                 grid.addWidget(led, aux_row, aux_col)
                 aux_row, aux_col = update_gridpos(
                     aux_row, aux_col, self.get_col2dev_count(sec, label),

@@ -1395,7 +1395,8 @@ class PSAuxMeasWidget(SiriusDialog):
             self._psname = list()
             for aux in auxdev:
                 self._psname.append(psname+aux)
-        self._prefixed_psname = VACA_PREFIX + psname
+        self._prefixed_psname = SiriusPVName(psname).substitute(
+            prefix=VACA_PREFIX)
 
         self.auxmeas = auxmeas
         self.mod2dbase = mod2dbase
@@ -1472,7 +1473,8 @@ class PSAuxMeasWidget(SiriusDialog):
             flay1.setVerticalSpacing(9)
             for pv in half1:
                 text = pv.split('-')[0]
-                lbl = PyDMLabel(self, self._prefixed_psname + ':' + pv)
+                lbl = PyDMLabel(
+                    self, self._prefixed_psname.substitute(propty=pv))
                 lbl.showUnits = True
                 flay1.addRow(text, lbl)
 
@@ -1481,7 +1483,8 @@ class PSAuxMeasWidget(SiriusDialog):
             flay2.setVerticalSpacing(9)
             for pv in half2:
                 text = pv.split('-')[0]
-                lbl = PyDMLabel(self, self._prefixed_psname + ':' + pv)
+                lbl = PyDMLabel(
+                    self, self._prefixed_psname.substitute(propty=pv))
                 lbl.showUnits = True
                 flay2.addRow(text, lbl)
 
@@ -1491,7 +1494,8 @@ class PSAuxMeasWidget(SiriusDialog):
             flay = QFormLayout(wid)
             for pv in self.auxmeas:
                 text = pv.split('-')[0]
-                lbl = PyDMLabel(self, self._prefixed_psname + ':' + pv)
+                lbl = PyDMLabel(
+                    self, self._prefixed_psname.substitute(propty=pv))
                 lbl.showUnits = True
                 flay.addRow(text, lbl)
         return wid
@@ -1527,9 +1531,10 @@ class PSParamsWidget(SiriusDialog):
     def __init__(self, parent, psname, params):
         """Init."""
         super().__init__(parent)
-        self._psname = psname
+        self._psname = SiriusPVName(psname)
         self._VACA_PREFIX = VACA_PREFIX
-        self._prefixed_psname = self._VACA_PREFIX + self._psname
+        self._prefixed_psname = self._psname.substitute(
+            prefix=self._VACA_PREFIX)
 
         self.params = params
 

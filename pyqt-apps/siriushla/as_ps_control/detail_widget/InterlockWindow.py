@@ -43,7 +43,8 @@ class InterlockListWidget(QWidget):
         db = get_ps_propty_database(psmodel, pstype)
         labels = db[key]['value']
 
-        ch = _VACA_PREFIX+self._devname+':'+self._interlock+'-Mon'
+        ch = self._devname.substitute(
+            prefix=_VACA_PREFIX, propty=self._interlock+'-Mon')
         lay = QGridLayout()
         hbox = QHBoxLayout()
         hbox.addWidget(QLabel('Value: ', self))
