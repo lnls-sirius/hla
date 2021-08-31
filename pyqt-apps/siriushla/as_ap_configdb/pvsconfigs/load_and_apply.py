@@ -44,6 +44,8 @@ class SelectAndApplyPVsWidget(QWidget):
         # Add Selection Tree
         self._tree = PVNameTree(
             tree_levels=('sec', 'dis', 'dev', 'device_name'))
+        self._tree.updateItemCheckedCount.connect(
+            self._update_but_text)
 
         self.setLayout(QVBoxLayout())
         self.layout().addWidget(QLabel('<h3>Configuration</h3>'))
@@ -140,6 +142,13 @@ class SelectAndApplyPVsWidget(QWidget):
         except ConfigDBException as err:
             self._tree.message = 'Failed to retrieve configuration:' + \
                 ' error {}'.format(err.server_code)
+
+    @Slot(int)
+    def _update_but_text(self, count):
+        """Update apply button text."""
+        text = 'Apply Selected PVs ({})'.format(count) \
+            if count else 'Apply Selected PVs'
+        self._set_btn.setText(text)
 
 
 class SelectConfigWidget(QWidget):
