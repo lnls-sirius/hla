@@ -14,12 +14,13 @@ from siriushla.widgets.led import SiriusLedAlert
 class StatusDetailDialog(SiriusDialog):
     """Status Detail Dialog."""
 
-    def __init__(self, pvname='', labels=list(), parent=None):
+    def __init__(self, pvname='', labels=None, parent=None, title=''):
         super().__init__(parent)
         self.pvname = SiriusPVName(pvname)
         self.section = self.pvname.sec
         self.setObjectName(self.section+'App')
-        self.labels = labels
+        self.labels = list() if labels is None else labels
+        self.title = title
         if not labels:
             labels_pv = pvname.replace('-Mon', 'Labels-Cte')
             ch = SiriusConnectionSignal(labels_pv)
@@ -33,8 +34,12 @@ class StatusDetailDialog(SiriusDialog):
         self._setupUi()
 
     def _setupUi(self):
-        label = QLabel('<h4>'+self.pvname.device_name+'</h4>',
-                       self, alignment=Qt.AlignCenter)
+        if self.title:
+            label = QLabel('<h4>'+self.title+'</h4>',
+                           self, alignment=Qt.AlignCenter)
+        else:
+            label = QLabel('<h4>'+self.pvname.device_name+'</h4>',
+                           self, alignment=Qt.AlignCenter)
         lay = QGridLayout(self)
         lay.addWidget(label, 0, 0, 1, 2)
         for idx, desc in enumerate(self.labels):

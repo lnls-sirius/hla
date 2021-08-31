@@ -1,13 +1,15 @@
 """."""
 import numpy as _np
 
-from qtpy.QtCore import Qt
-from qtpy.QtGui import QIntValidator
+from qtpy.QtCore import Qt, Slot
+from qtpy.QtGui import QColor, QBrush
 from qtpy.QtWidgets import QLabel, QPushButton, QGroupBox, QVBoxLayout, \
     QHBoxLayout, QGridLayout, QMenuBar, QSplitter, QTabWidget, QWidget, \
-    QSizePolicy as QSzPol, QDialog, QLineEdit
+    QSizePolicy as QSzPol, QCheckBox
 import qtawesome as qta
-from pydm.widgets import PyDMLabel, PyDMPushButton, PyDMLineEdit
+from pydm.widgets import PyDMLabel, PyDMPushButton, PyDMLineEdit, \
+    PyDMWaveformPlot
+from siriushla.widgets.signal_channel import SiriusConnectionSignal
 
 from siriuspy.search import LLTimeSearch, HLTimeSearch
 from siriuspy.namesys import SiriusPVName as _PVName
@@ -340,24 +342,108 @@ class EVG(BaseWidget):
             hbl.setAlignment(wid, Qt.AlignCenter)
         return pwid
 
-    # def _create_prop_widget(self, name, parent, wids, align_ver=True):
-    #     pwid = QWidget(parent)
-    #     lay = QGridLayout(pwid)
-    #     lab = QLabel(name)
-    #     lab.setAlignment(Qt.AlignCenter)
-    #     lay.addWidget(lab, 0, 0, 1, len(wids))
-    #     for i, wid in enumerate(wids):
-    #         wid.setParent(pwid)
-    #         lay.addWidget(wid, 1, i)
-    #     return pwid
+
+class BucketListGraph(QWidget):
+    """Bucket List Graph."""
+
+    def __init__(self, parent=None, prefix=''):
+        super().__init__(parent)
+        self._prefix = prefix
+        self._setupUi()
+
+    def _setupUi(self):
+        # Graph
+        self.graph = PyDMWaveformPlot(self)
+        self.graph.setBackgroundColor(QColor(255, 255, 255))
+        self.graph.maxRedrawRate = 2
+        self.graph.mouseEnabledX = True
+        self.graph.setShowXGrid(True)
+        self.graph.setShowYGrid(True)
+        self.graph.setAutoRangeX(False)
+        self.graph.setMinYRange(-0.1)
+        self.graph.setMaxYRange(1.1)
+        self.graph.plotItem.showButtons()
+        self.graph.setAxisColor(QColor(0, 0, 0))
+
+        self._curves = dict()
+        self.graph.addChannel(
+            y_channel='FAKE:SP', name='SP', color='red', lineWidth=2)
+        self._curves['SP'] = self.graph.curveAtIndex(0)
+        self._curves['SP'].setFillLevel(0)
+        self._curves['SP'].setBrush(QBrush(QColor('red')))
+        self.graph.addChannel(
+            y_channel='FAKE:RB', name='RB', color='blue', lineWidth=2)
+        self._curves['RB'] = self.graph.curveAtIndex(1)
+        self._curves['RB'].setFillLevel(0)
+        self._curves['RB'].setBrush(QBrush(QColor('blue')))
+        self.graph.addChannel(
+            y_channel='FAKE:Mon', name='Mon', color='green', lineWidth=2)
+        self._curves['Mon'] = self.graph.curveAtIndex(2)
+        self._curves['Mon'].setFillLevel(0)
+        self._curves['Mon'].setBrush(QBrush(QColor('green')))
+
+        # Show
+        self.show_sp = QCheckBox('SP')
+        self.show_sp.setChecked(True)
+        self.show_sp.setStyleSheet('color: red;')
+        self.show_sp.stateChanged.connect(self._curves['SP'].setVisible)
+        self.show_rb = QCheckBox('RB')
+        self.show_rb.setChecked(True)
+        self.show_rb.setStyleSheet('color: blue;')
+        self.show_rb.stateChanged.connect(self._curves['RB'].setVisible)
+        self.show_mn = QCheckBox('Mon')
+        self.show_mn.setChecked(True)
+        self.show_mn.setStyleSheet('color: green;')
+        self.show_mn.stateChanged.connect(self._curves['Mon'].setVisible)
+
+        lay = QGridLayout(self)
+        lay.addWidget(self.graph, 0, 0, 3, 1)
+        lay.addWidget(self.show_sp, 0, 1)
+        lay.addWidget(self.show_rb, 1, 1)
+        lay.addWidget(self.show_mn, 2, 1)
+
+        self._ch_sp = SiriusConnectionSignal(
+            self._prefix+'BucketList-SP')
+        self._ch_sp.new_value_signal[_np.ndarray].connect(
+            self._update_curves)
+        self._ch_rb = SiriusConnectionSignal(
+            self._prefix+'BucketList-RB')
+        self._ch_rb.new_value_signal[_np.ndarray].connect(
+            self._update_curves)
+        self._ch_mn = SiriusConnectionSignal(
+            self._prefix+'BucketList-Mon')
+        self._ch_mn.new_value_signal[_np.ndarray].connect(
+            self._update_curves)
+
+    @Slot(_np.ndarray)
+    def _update_curves(self, new_array):
+        for k in self._curves:
+            if k in self.sender().address:
+                curve = self._curves[k]
+                break
+
+        org_bunch = _np.arange(1, 864)
+        org_curve = _np.zeros(864)
+        org_curve[new_array-1] = 1
+
+        new_bunch = _np.linspace(1, 864, 10000)
+        new_bunch_indices = _np.searchsorted(
+            _np.nextafter(org_bunch, -_np.inf), new_bunch, side='left')
+        new_bunch_indices = new_bunch_indices.clip(
+            1, len(org_bunch)).astype(_np.intp)
+        new_curve = org_curve[new_bunch_indices-1]
+
+        curve.receiveXWaveform(new_bunch)
+        curve.receiveYWaveform(new_curve)
 
 
 class BucketList(BaseWidget):
 
-    def __init__(self, parent=None, prefix='', min_size=38):
+    def __init__(self, parent=None, prefix='', min_size=38, show_graph=False):
         super().__init__(parent, prefix=prefix)
         self.setObjectName('ASApp')
         self._min_size = min_size
+        self._show_graph = show_graph
         self.setupui()
 
     def setupui(self):
@@ -365,7 +451,7 @@ class BucketList(BaseWidget):
         wid = QGroupBox('Bucket List', self)
         self.layout().addWidget(wid)
         self.layout().setContentsMargins(0, 0, 0, 0)
-        lay = QHBoxLayout(wid)
+        lay = QGridLayout(wid)
         prefix = self.prefix
 
         tm = 'min-width:{0:d}em; max-width:{0:d}em; max-height:1.15em;'
@@ -381,7 +467,6 @@ class BucketList(BaseWidget):
         lay_sp.addWidget(lab)
         lay_sp.addWidget(sp)
         lay_sp.addWidget(pushbtn)
-
         rb = BucketListLabel(wid, init_channel=prefix + "BucketList-RB")
         rb.setStyleSheet(tm.format(self._min_size))
         rb.setSizePolicy(QSzPol.Maximum, QSzPol.Maximum)
@@ -397,10 +482,11 @@ class BucketList(BaseWidget):
         lay_mn.addWidget(lab)
         lay_mn.addWidget(mn)
         vlay = QVBoxLayout()
-        lay.addItem(vlay)
-        vlay.addItem(lay_sp)
-        vlay.addItem(lay_rb)
-        vlay.addItem(lay_mn)
+        vlay.setSpacing(1)
+        vlay.addLayout(lay_sp)
+        vlay.addLayout(lay_rb)
+        vlay.addLayout(lay_mn)
+        lay.addLayout(vlay, 0, 0)
 
         rb = PyDMLed(wid, init_channel=prefix + "BucketListSyncStatus-Mon")
         rb.setOffColor(rb.Red)
@@ -409,9 +495,10 @@ class BucketList(BaseWidget):
         lab.setStyleSheet("min-width:4em; max-height:1.15em;")
         lab.setAlignment(Qt.AlignCenter)
         vlay = QVBoxLayout()
-        lay.addItem(vlay)
+        vlay.setSpacing(1)
         vlay.addWidget(lab)
         vlay.addWidget(rb)
+        lay.addLayout(vlay, 0, 1)
 
         rb = PyDMLabel(wid, init_channel=prefix + "BucketListLen-Mon")
         rb.setStyleSheet("min-width:4em; max-height:1.15em;")
@@ -420,9 +507,10 @@ class BucketList(BaseWidget):
         lab.setStyleSheet("min-width:4em; max-height:1.15em;")
         lab.setAlignment(Qt.AlignCenter)
         vlay = QVBoxLayout()
-        lay.addItem(vlay)
+        vlay.setSpacing(1)
         vlay.addWidget(lab)
         vlay.addWidget(rb)
+        lay.addLayout(vlay, 0, 2)
 
         sp = SiriusSpinbox(wid, init_channel=prefix + "RepeatBucketList-SP")
         sp.showStepExponent = False
@@ -430,13 +518,19 @@ class BucketList(BaseWidget):
         rb.setStyleSheet("min-width:2.5em; max-height:1.15em;")
         rb.setStyleSheet("min-width:4em; max-height:1.15em;")
         lab = QLabel('Repeat', wid, alignment=Qt.AlignCenter)
-        vlay = QVBoxLayout()
         hlay = QHBoxLayout()
-        lay.addItem(vlay)
-        vlay.addWidget(lab)
-        vlay.addItem(hlay)
+        hlay.setSpacing(1)
         hlay.addWidget(sp)
         hlay.addWidget(rb)
+        vlay = QVBoxLayout()
+        vlay.setSpacing(1)
+        vlay.addWidget(lab)
+        vlay.addLayout(hlay)
+        lay.addLayout(vlay, 0, 3)
+
+        if self._show_graph:
+            graph = BucketListGraph(self, prefix)
+            lay.addWidget(graph, 1, 0, 1, 4)
 
     def _set_bucket_list(self):
 

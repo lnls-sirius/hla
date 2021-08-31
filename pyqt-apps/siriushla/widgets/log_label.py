@@ -1,9 +1,14 @@
-import datetime as _datetime
+"""Log label."""
+
 from qtpy.QtWidgets import QListWidget, QListWidgetItem
 from qtpy.QtCore import Property, Q_ENUMS
 from qtpy.QtGui import QColor
+
+from pydm.data_plugins import plugin_for_address
 from pydm.widgets.base import PyDMWidget, TextFormatter
 from pydm.widgets.display_format import DisplayFormat, parse_value_for_display
+
+from siriuspy.clientarch import Time as _Time
 
 
 class PyDMLogLabel(QListWidget, TextFormatter, PyDMWidget, DisplayFormat):
@@ -24,7 +29,7 @@ class PyDMLogLabel(QListWidget, TextFormatter, PyDMWidget, DisplayFormat):
     errorcolor = QColor(255, 0, 0)
     warncolor = QColor(200, 200, 0)
 
-    def __init__(self, parent=None, init_channel=None):
+    def __init__(self, parent=None, init_channel=None, replace=None):
         QListWidget.__init__(self, parent)
         PyDMWidget.__init__(self, init_channel=init_channel)
         self._buffer_size = 1000
@@ -32,6 +37,9 @@ class PyDMLogLabel(QListWidget, TextFormatter, PyDMWidget, DisplayFormat):
         self._display_format_type = DisplayFormat.String
         self._string_encoding = "utf_8"
         self._date_time_fmt = '%Y/%m/%d-%H:%M:%S'
+        self._replace = list() if replace is None else replace
+
+        self._plugin_conns = plugin_for_address(init_channel).connections
 
     def value_changed(self, new_value):
         """
@@ -58,13 +66,25 @@ class PyDMLogLabel(QListWidget, TextFormatter, PyDMWidget, DisplayFormat):
 
         prefix = ''
         if self._prepend_date_time:
-            prefix += _datetime.datetime.now().strftime(self._date_time_fmt)
+            timestamp = self._plugin_conns[self.channel].pv.timestamp
+            prefix += _Time(timestamp).strftime(self._date_time_fmt)
             prefix += ' '
         # If the value is a string, just display it as-is, no formatting
         # needed.
         item = None
         if isinstance(new_value, str):
-            item = QListWidgetItem(prefix + new_value)
+            if self._replace:
+                last_item = self.item(self.count()-1)
+                if last_item is not None:
+                    last_text = last_item.text().lower()
+                    for r in self._replace:
+                        if r.lower() in new_value.lower() and \
+                                r.lower() in last_text.lower():
+                            item = last_item
+                            item.setText(prefix + new_value)
+                            return
+            if item is None:
+                item = QListWidgetItem(prefix + new_value)
             if new_value.lower().startswith(('err', 'fatal')):
                 item.setForeground(self.errorcolor)
             elif new_value.lower().startswith('warn'):

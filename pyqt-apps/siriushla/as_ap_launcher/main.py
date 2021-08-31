@@ -17,10 +17,10 @@ from siriushla.widgets import SiriusMainWindow, PyDMStateButton, \
 from siriushla.common.epics.wrapper import PyEpicsWrapper
 from .menu import get_object
 from .standby_widgets import WidgetInjSys
-from .killbeam_widgets import RFKillBeamButton
+from ..as_rf_control import RFKillBeamButton
 
 
-class MainOperation(SiriusMainWindow):
+class MainLauncher(SiriusMainWindow):
     """Main Operation."""
 
     def __init__(self, parent=None, wrapper=PyEpicsWrapper,
@@ -33,7 +33,7 @@ class MainOperation(SiriusMainWindow):
         menubar.setNativeMenuBar(False)
         self.setMenuBar(menubar)
         self._setupUi()
-        self.setWindowTitle('Main Controls')
+        self.setWindowTitle('Sirius Launcher')
         self.setWindowIcon(
             qta.icon('mdi.rocket', color=get_appropriate_color('AS')))
         screens = QApplication.screens()

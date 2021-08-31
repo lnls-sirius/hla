@@ -15,11 +15,13 @@ from siriuspy.envars import VACA_PREFIX
 from siriuspy.clientarch.time import Time
 from siriuspy.devices import InjSysStandbyHandler
 
-from siriushla.util import get_appropriate_color
-from siriushla.widgets import SiriusMainWindow, SiriusTimePlot, SiriusFrame, \
+from ..util import get_appropriate_color
+from ..widgets import SiriusMainWindow, SiriusTimePlot, SiriusFrame, \
     SiriusLedState, SiriusLedAlert, SiriusConnectionSignal, PyDMLedMultiChannel
-from siriushla.as_di_tune.controls import SITuneMonitor
-from siriushla.as_ap_launcher.standby_widgets import InjSysStandbyStatusLed
+from ..as_di_tune.controls import SITuneMonitor
+from ..as_ap_launcher.standby_widgets import InjSysStandbyStatusLed
+from ..as_ap_machshift import MachShiftLabel
+
 
 
 class SIGenStatusWindow(SiriusMainWindow):
@@ -40,48 +42,32 @@ class SIGenStatusWindow(SiriusMainWindow):
         # controls
         self.ld_machsht = QLabel(
             '<h3>Shift: </h3>', self, alignment=Qt.AlignCenter)
-        self.lb_machsht = PyDMLabel(
-            self, self.prefix+'AS-Glob:AP-MachShift:Mode-Sts')
-        self.lb_machsht.setAlignment(Qt.AlignCenter)
-        self.lb_machsht.setStyleSheet('QLabel{font-size: 45pt;}')
-        color_list = [
-            SiriusFrame.Yellow,  # Users
-            SiriusFrame.LightBlue,  # Commissioning
-            SiriusFrame.DarkCyan,  # Conditioning
-            SiriusFrame.LightSalmon,  # Injection
-            SiriusFrame.LightBlue,  # MachineStudy
-            SiriusFrame.LightGreen,  # Maintenance
-            SiriusFrame.Salmon,  # Standby
-            SiriusFrame.Lavender,  # Shutdown
-        ]
-        self.frm_machsht = SiriusFrame(
-            self, self.prefix+'AS-Glob:AP-MachShift:Mode-Sts',
-            color_list=color_list, is_float=False)
-        self.frm_machsht.add_widget(self.lb_machsht)
+        self.lb_machsht = MachShiftLabel()
+        self.lb_machsht.label.setStyleSheet('QLabel{font-size: 45pt;}')
         box_mach = QHBoxLayout()
         box_mach.addWidget(self.ld_machsht)
-        box_mach.addWidget(self.frm_machsht)
+        box_mach.addWidget(self.lb_machsht)
         box_mach.setStretch(0, 1)
         box_mach.setStretch(1, 4)
 
         self._led_siriusintlk = SiriusLedAlert(
             self, self.prefix+'RA-RaSIA02:RF-IntlkCtrl:IntlkSirius-Mon')
         self._led_siriusintlk.setStyleSheet(
-            'min-width:3em;min-height:3em;max-width:3em;max-height:3em;')
+            'QLed{min-width:3em;min-height:3em;max-width:3em;max-height:3em;}')
         self._gbox_siriusintlk = self._create_groupbox(
             'Sirius Interlock', self._led_siriusintlk)
 
         self._led_injsyssts = InjSysStandbyStatusLed(
             InjSysStandbyHandler(), self)
         self._led_injsyssts.setStyleSheet(
-            'min-width:3em;min-height:3em;max-width:3em;max-height:3em;')
+            'QLed{min-width:3em;min-height:3em;max-width:3em;max-height:3em;}')
         self._gbox_injsyssts = self._create_groupbox(
             'Injection System', self._led_injsyssts)
 
         self._led_sofbloop = SiriusLedState(
             self, self.prefix+'SI-Glob:AP-SOFB:LoopState-Sts')
         self._led_sofbloop.setStyleSheet(
-            'min-width:3em;min-height:3em;max-width:3em;max-height:3em;')
+            'QLed{min-width:3em;min-height:3em;max-width:3em;max-height:3em;}')
         self._led_sofbloop.offColor = SiriusLedState.Red
         self._gbox_sofbloop = self._create_groupbox(
             'SOFB Loop', self._led_sofbloop)
@@ -90,7 +76,7 @@ class SIGenStatusWindow(SiriusMainWindow):
         self._led_bbbloop = SiriusLedState(
             self, self.prefix+bbbdev_pref+':FBCTRL')
         self._led_bbbloop.setStyleSheet(
-            'min-width:3em;min-height:3em;max-width:3em;max-height:3em;')
+            'QLed{min-width:3em;min-height:3em;max-width:3em;max-height:3em;}')
         self._led_bbbloop.offColor = SiriusLedState.Red
         chs2vals = {
             bbbdev_pref+':CLKMISS': 0,
@@ -101,7 +87,7 @@ class SIGenStatusWindow(SiriusMainWindow):
             bbbdev_pref+':FID_ERR': 0}
         self._led_bbbsts = PyDMLedMultiChannel(self, chs2vals)
         self._led_bbbsts.setStyleSheet(
-            'min-width:3em;min-height:3em;max-width:3em;max-height:3em;')
+            'QLed{min-width:3em;min-height:3em;max-width:3em;max-height:3em;}')
         self._led_bbbsts.offColor = SiriusLedState.Red
         self._gbox_bbbloop = self._create_groupbox(
             'BbB Loop', [self._led_bbbloop, self._led_bbbsts], orientation='H')
@@ -249,7 +235,7 @@ class SIGenStatusWindow(SiriusMainWindow):
             fontsize = self.app.font().pointSize()
 
             # labels
-            self.lb_machsht.setStyleSheet(
+            self.lb_machsht.label.setStyleSheet(
                 'QLabel{font-size: '+str(fontsize+35)+'pt;}')
             self.lb_curr.setStyleSheet(
                 'QLabel{background-color: '+self.app_color+';'

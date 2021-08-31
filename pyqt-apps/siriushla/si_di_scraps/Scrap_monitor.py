@@ -1,11 +1,8 @@
 #!/usr/bin/env python-sirius
 """HLA SI Scrapers monitoring Window."""
 
-import sys
 from qtpy.QtCore import QPoint
-from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
-from siriushla.sirius_application import SiriusApplication
-from siriushla.widgets import SiriusMainWindow, SiriusConnectionSignal
+from siriushla.widgets import SiriusConnectionSignal
 from siriushla.common.diff_ctrl import DiffCtrlDevMonitor, DiffCtrlView
 
 
