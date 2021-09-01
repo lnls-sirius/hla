@@ -10,7 +10,12 @@ from qtpy.QtWidgets import QWidget, QGroupBox, QPushButton, QLabel, \
     QSizePolicy as QSzPlcy, QCheckBox, QHeaderView, QAbstractItemView, \
     QScrollArea, QFrame
 from qtpy.QtGui import QColor
+
 import qtawesome as qta
+
+from pydm.widgets import PyDMLabel, PyDMEnumComboBox, PyDMPushButton, \
+    PyDMLineEdit, PyDMWaveformPlot
+from pydm.widgets.display_format import parse_value_for_display
 
 from siriuspy.namesys import SiriusPVName
 from siriuspy.envars import VACA_PREFIX
@@ -18,9 +23,7 @@ from siriuspy.search import PSSearch
 from siriuspy.pwrsupply.csdev import get_ps_propty_database, get_ps_modules, \
     DEF_WFMSIZE_FBP, DEF_WFMSIZE_OTHERS, PS_LI_INTLK_THRS as _PS_LI_INTLK, \
     ETypes as _PSet
-from pydm.widgets import PyDMLabel, PyDMEnumComboBox, PyDMPushButton, \
-    PyDMLineEdit, PyDMWaveformPlot
-from pydm.widgets.display_format import parse_value_for_display
+
 from siriushla import util
 from siriushla.widgets import PyDMStateButton, PyDMLinEditScrollbar, \
     SiriusConnectionSignal, SiriusLedState, SiriusLedAlert, \
@@ -33,32 +36,27 @@ class PSDetailWidget(QWidget):
     """Widget with control interface for a given magnet."""
 
     StyleSheet = """
-        #opmode1_rb_label,
-        #opmode2_rb_label {
+        #opmode_sp_cbox{
+            min-width: 7em;
+            max-width: 7em;
+        }
+        #opmode_rb_label{
             min-width: 7em;
             max-width: 7em;
             qproperty-alignment: AlignCenter;
         }
         #ctrlloop_label,
-        #ctrlmode1_label,
-        #ctrlmode2_label {
+        #ctrlmode_label {
             min-width: 4em;
             max-width: 4em;
             qproperty-alignment: AlignCenter;
         }
-        #pwrstate_label,
-        #pwrstate1_label,
-        #pwrstate2_label {
+        #pwrstate_label {
             min-width: 2em;
             max-width: 2em;
         }
         #current > PyDMLabel,
         #metric > PyDMLabel {
-            min-width: 7em;
-            max-width: 7em;
-            qproperty-alignment: AlignCenter;
-        }
-        #ctrlmode1_psconn_label {
             min-width: 7em;
             max-width: 7em;
             qproperty-alignment: AlignCenter;
@@ -440,14 +438,15 @@ class PSDetailWidget(QWidget):
     def _opModeLayout(self):
         self.opmode_sp = PyDMEnumComboBox(
             self, self._prefixed_psname + ":OpMode-Sel")
+        self.opmode_sp.setObjectName("opmode_sp_cbox")
         self.opmode_rb = PyDMLabel(
             self, self._prefixed_psname + ":OpMode-Sts")
-        self.opmode_rb.setObjectName("opmode1_rb_label")
+        self.opmode_rb.setObjectName("opmode_rb_label")
         self.ctrlmode_led = SiriusLedAlert(
             self, self._prefixed_psname + ":CtrlMode-Mon")
         self.ctrlmode_label = PyDMLabel(
             self, self._prefixed_psname + ":CtrlMode-Mon")
-        self.ctrlmode_label.setObjectName("ctrlmode1_label")
+        self.ctrlmode_label.setObjectName("ctrlmode_label")
 
         ctrlmode_layout = QHBoxLayout()
         ctrlmode_layout.addWidget(self.ctrlmode_led)

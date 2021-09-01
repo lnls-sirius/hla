@@ -156,6 +156,7 @@ class PVNameTree(QWidget):
     """Build a tree with SiriusPVNames."""
 
     itemChecked = Signal(QTreeItem, int, int)
+    updateItemCheckedCount = Signal(int)
 
     def __init__(self, items=tuple(), tree_levels=tuple(),
                  checked_levels=tuple(), parent=None):
@@ -190,6 +191,7 @@ class PVNameTree(QWidget):
         self.tree.setHeaderHidden(False)
         self.tree.setHeaderLabels(['Name', 'Value', 'Delay'])
 
+        self.updateItemCheckedCount.emit(0)
         self.itemChecked.connect(self._item_checked)
 
         # Add filter for tree
@@ -506,6 +508,7 @@ class PVNameTree(QWidget):
                 self._nr_checked_items -= 1
         self._check_count.setText(
             '{} Items checked.'.format(self._nr_checked_items))
+        self.updateItemCheckedCount.emit(self._nr_checked_items)
 
 
 if __name__ == "__main__":

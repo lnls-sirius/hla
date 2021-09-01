@@ -8,6 +8,7 @@ from qtpy.QtWidgets import QWidget, QComboBox, QLabel, QPushButton, \
 import qtawesome as qta
 
 from siriuspy.clientconfigdb import ConfigDBException
+
 from siriushla.common.epics.wrapper import PyEpicsWrapper
 from siriushla.common.epics.task import EpicsChecker, EpicsSetter, \
     EpicsConnector, EpicsWait
@@ -19,6 +20,7 @@ from ..models import ConfigPVsTypeModel
 
 
 class SelectAndApplyPVsWidget(QWidget):
+    """Select and Apply PVs widget."""
 
     settingFinished = Signal()
 
@@ -34,6 +36,7 @@ class SelectAndApplyPVsWidget(QWidget):
         self.setupui()
 
     def setupui(self):
+        """Setup widget."""
         # Add Send Button
         self._set_btn = QPushButton('Apply Selected PVs', self)
         self._set_btn.setObjectName('set_btn')
@@ -44,23 +47,28 @@ class SelectAndApplyPVsWidget(QWidget):
         # Add Selection Tree
         self._tree = PVNameTree(
             tree_levels=('sec', 'dis', 'dev', 'device_name'))
+        self._tree.updateItemCheckedCount.connect(
+            self._update_but_text)
 
         self.setLayout(QVBoxLayout())
         self.layout().addWidget(QLabel('<h3>Configuration</h3>'))
         self.layout().addWidget(self._tree)
-        hl = QHBoxLayout()
-        hl.addStretch()
-        hl.addWidget(self._set_btn)
-        hl.addStretch()
-        self.layout().addLayout(hl)
+        hlay = QHBoxLayout()
+        hlay.addStretch()
+        hlay.addWidget(self._set_btn)
+        hlay.addStretch()
+        self.layout().addLayout(hlay)
 
     @property
     def current_config_type(self):
+        """Current config type."""
         if self.current_config:
             return self.current_config['config_type']
+        return None
 
     @property
     def current_config(self):
+        """Current config data."""
         return self._current_config['name']
 
     @current_config.setter
@@ -76,17 +84,17 @@ class SelectAndApplyPVsWidget(QWidget):
         set_pvs_tuple = list()
         check_pvs_tuple = list()
 
-        for t in self._current_config['value']['pvs']:
+        for data in self._current_config['value']['pvs']:
             try:
-                pv, value, delay = t
+                pvo, value, delay = data
             except ValueError:
-                pv, value = t
+                pvo, value = data
                 delay = 1e-2
-            if pv in selected_pvs:
-                set_pvs_tuple.append((pv, value, delay))
-                if pv.endswith('-Cmd'):
-                    self.logger.warning('{} being checked'.format(pv))
-                check_pvs_tuple.append((pv, value, delay))
+            if pvo in selected_pvs:
+                set_pvs_tuple.append((pvo, value, delay))
+                if pvo.endswith('-Cmd'):
+                    self.logger.warning('{} being checked'.format(pvo))
+                check_pvs_tuple.append((pvo, value, delay))
 
         # Create thread
         failed_items = []
@@ -117,13 +125,14 @@ class SelectAndApplyPVsWidget(QWidget):
             return
         # Show report dialog informing user results
         for item in failed_items:
-            self.logger.warn('Failed to set/check {}'.format(item))
+            self.logger.warning('Failed to set/check {}'.format(item))
         self._report = ReportDialog(failed_items, self)
         self._report.exec_()
         self.settingFinished.emit()
 
     @Slot(str, str)
     def fill_config(self, config_type, config_name):
+        """Fill config data."""
         self._tree.clear()
         try:
             ret = self._client.get_config_info(
@@ -141,8 +150,16 @@ class SelectAndApplyPVsWidget(QWidget):
             self._tree.message = 'Failed to retrieve configuration:' + \
                 ' error {}'.format(err.server_code)
 
+    @Slot(int)
+    def _update_but_text(self, count):
+        """Update apply button text."""
+        text = 'Apply Selected PVs ({})'.format(count) \
+            if count else 'Apply Selected PVs'
+        self._set_btn.setText(text)
+
 
 class SelectConfigWidget(QWidget):
+    """Select config Widget."""
 
     configChanged = Signal(str, str)
 
@@ -152,6 +169,7 @@ class SelectConfigWidget(QWidget):
         self.setupui()
 
     def setupui(self):
+        """Setup widget."""
         self.setLayout(QVBoxLayout())
 
         # Add combo box with types
@@ -167,11 +185,11 @@ class SelectConfigWidget(QWidget):
         self._config_type_widget.setLayout(QVBoxLayout())
         self._config_type_widget.layout().addWidget(
             QLabel('<h3>Configuration Type</h3>'))
-        hl = QHBoxLayout()
-        hl.setContentsMargins(9, 9, 18, 9)
-        hl.addWidget(self._type_cb)
-        hl.addWidget(self._reload_btn)
-        self._config_type_widget.layout().addLayout(hl)
+        hlay = QHBoxLayout()
+        hlay.setContentsMargins(9, 9, 18, 9)
+        hlay.addWidget(self._type_cb)
+        hlay.addWidget(self._reload_btn)
+        self._config_type_widget.layout().addLayout(hlay)
 
         # Add table for the configuration name
         self._config_table = LoadConfigDialog('notexist', self)
@@ -198,6 +216,7 @@ class SelectConfigWidget(QWidget):
 
     @property
     def current_config_type(self):
+        """Current config type."""
         return self._type_cb.currentText()
 
     @current_config_type.setter
