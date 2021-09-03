@@ -30,15 +30,18 @@ class MacReportWindow(SiriusMainWindow):
         self._fsi = '{:8d}'
         self._fs1 = '{:8.3f}'
         self._fs2 = '{:8.3f} ± {:8.3f}'
-        self._fst = '{:02d}h{:02d}'
+        self._fst1 = '{:02d}h{:02d}'
+        self._fst2 = '{:02d}h{:02d} ± {:02d}h{:02d}'
+
+        self._update_task = None
 
         self._setupUi()
         self.setFocusPolicy(Qt.StrongFocus)
         self.setFocus(True)
 
     def _setupUi(self):
-        cw = QWidget(self)
-        self.setCentralWidget(cw)
+        cwid = QWidget(self)
+        self.setCentralWidget(cwid)
 
         title = QLabel('<h3>Machine Reports</h3>', self,
                        alignment=Qt.AlignCenter)
@@ -53,7 +56,7 @@ class MacReportWindow(SiriusMainWindow):
         self._progress_list.setStyleSheet(
             "#progress_list{min-height: 8em; max-height: 8em;}")
 
-        self._reports_wid = QTabWidget(cw)
+        self._reports_wid = QTabWidget(cwid)
         self._reports_wid.setObjectName('ASTab')
         self._reports_wid.addTab(
             self._setupUserShiftStatsWidget(), 'User Shift Stats')
@@ -67,7 +70,7 @@ class MacReportWindow(SiriusMainWindow):
         self._pb_showraw.setEnabled(False)
         self._pb_showraw.clicked.connect(self._show_raw_data)
 
-        lay = QGridLayout(cw)
+        lay = QGridLayout(cwid)
         lay.setVerticalSpacing(10)
         lay.setHorizontalSpacing(10)
         lay.setContentsMargins(18, 9, 18, 9)
@@ -123,14 +126,11 @@ class MacReportWindow(SiriusMainWindow):
         self.lb_usei = LbData('')
         self.lb_uspc = LbData('')
         self.lb_cav = LbData('')
-        self.lb_cmax = LbData('')
         self.lb_fi = LbData('')
         self.lb_bdc = LbData('')
-        self.lb_uspcc = LbData('')
         self.lb_mttr = LbData('')
         self.lb_mtbf = LbData('')
         self.lb_reli = LbData('')
-        self.lb_avail = LbData('')
         self.lb_isti = LbData('')
         self.lb_ismi = LbData('')
 
@@ -150,28 +150,22 @@ class MacReportWindow(SiriusMainWindow):
         lay.addWidget(self.lb_usei, 3, 2)
         lay.addWidget(LbHHeader('# Programmed User Shifts'), 4, 1)
         lay.addWidget(self.lb_uspc, 4, 2)
-        lay.addWidget(LbHHeader('Current Average ± std. dev. (mA)'), 5, 1)
+        lay.addWidget(LbHHeader('Current (Avg±std) (mA)'), 5, 1)
         lay.addWidget(self.lb_cav, 5, 2)
-        lay.addWidget(LbHHeader('Maximum Current (mA)'), 6, 1)
-        lay.addWidget(self.lb_cmax, 6, 2)
-        lay.addWidget(LbHHeader('Failures Interval (h)'), 7, 1)
-        lay.addWidget(self.lb_fi, 7, 2)
-        lay.addWidget(LbHHeader('# Beam Dumps'), 8, 1)
-        lay.addWidget(self.lb_bdc, 8, 2)
-        lay.addWidget(LbHHeader('# Canceled User Shifts'), 9, 1)
-        lay.addWidget(self.lb_uspcc, 9, 2)
-        lay.addWidget(LbHHeader('Mean Time To Recover (h)'), 10, 1)
-        lay.addWidget(self.lb_mttr, 10, 2)
-        lay.addWidget(LbHHeader('Mean Time Between Failures (h)'), 11, 1)
-        lay.addWidget(self.lb_mtbf, 11, 2)
-        lay.addWidget(LbHHeader('Beam Reliability (%)'), 12, 1)
-        lay.addWidget(self.lb_reli, 12, 2)
-        lay.addWidget(LbHHeader('Beam Availability (%)'), 13, 1)
-        lay.addWidget(self.lb_avail, 13, 2)
-        lay.addWidget(LbHHeader('Total Injection Shift Interval (h)'), 14, 1)
-        lay.addWidget(self.lb_isti, 14, 2)
-        lay.addWidget(LbHHeader('Mean Injection Shift Interval (h)'), 15, 1)
-        lay.addWidget(self.lb_ismi, 15, 2)
+        lay.addWidget(LbHHeader('Failures Interval (h)'), 6, 1)
+        lay.addWidget(self.lb_fi, 6, 2)
+        lay.addWidget(LbHHeader('# Beam Dumps'), 7, 1)
+        lay.addWidget(self.lb_bdc, 7, 2)
+        lay.addWidget(LbHHeader('Time To Recover (Avg±std) (h)'), 8, 1)
+        lay.addWidget(self.lb_mttr, 8, 2)
+        lay.addWidget(LbHHeader('Time Between Failures (Avg) (h)'), 9, 1)
+        lay.addWidget(self.lb_mtbf, 9, 2)
+        lay.addWidget(LbHHeader('Beam Reliability (%)'), 10, 1)
+        lay.addWidget(self.lb_reli, 10, 2)
+        lay.addWidget(LbHHeader('Total Injection Shift Interval (h)'), 11, 1)
+        lay.addWidget(self.lb_isti, 11, 2)
+        lay.addWidget(LbHHeader('Injection Shift Interval (Avg±std) (h)'), 12, 1)
+        lay.addWidget(self.lb_ismi, 12, 2)
         lay.addItem(QSpacerItem(120, 1, QSzPlcy.Fixed, QSzPlcy.Ignored), 0, 3)
         return wid
 
@@ -182,27 +176,35 @@ class MacReportWindow(SiriusMainWindow):
             'usti': ['user_shift_total_interval', ],
             'usei': ['user_shift_extra_interval', ],
             'uspc': ['user_shift_progmd_count', ],
-            'cav': ['user_shift_average_current', 'user_shift_stddev_current'],
-            'cmax': ['user_shift_max_current', ],
+            'cav': ['user_shift_current_average', 'user_shift_current_stddev'],
             'fi': ['failures_interval', ],
             'bdc': ['beam_dump_count', ],
-            'uspcc': ['user_shift_canceled_count', ],
-            'mttr': ['mean_time_to_recover', ],
-            'mtbf': ['mean_time_between_failures', ],
+            'mttr': ['time_to_recover_average', 'time_to_recover_stddev'],
+            'mtbf': ['time_between_failures_average', ],
             'reli': ['beam_reliability', ],
-            'avail': ['beam_availability', ],
             'isti': ['inj_shift_interval', ],
-            'ismi': ['inj_shift_mean_interval', ]}
+            'ismi': ['inj_shift_interval_average',
+                     'inj_shift_interval_stddev']}
 
         for wname, rname in w2r.items():
             wid = getattr(self, 'lb_'+wname)
             items = [getattr(self._macreport, n) for n in rname]
             if 'interval' in rname[0] or 'time' in rname[0]:
-                if items[0] not in [None, _np.inf]:
-                    hh = int(items[0])
-                    mm = int((items[0] - hh)*60)
-                    items = [hh, mm]
-                    str2fmt = self._fst
+                if len(items) == 2:
+                    if items[0] not in [None, _np.inf]:
+                        hour1 = int(items[0])
+                        minu1 = int((items[0] - hour1)*60)
+                        hour2 = int(items[1])
+                        minu2 = int((items[1] - hour2)*60)
+                        items = [hour1, minu1, hour2, minu2]
+                        str2fmt = self._fst2
+                    else:
+                        str2fmt = self._fs1
+                elif items[0] not in [None, _np.inf]:
+                    hour = int(items[0])
+                    minu = int((items[0] - hour)*60)
+                    items = [hour, minu]
+                    str2fmt = self._fst1
                 else:
                     str2fmt = self._fs1
             else:
@@ -217,49 +219,34 @@ class MacReportWindow(SiriusMainWindow):
 
     def _setupStoredCurrentStats(self):
         self.lb_user_mb_avg = LbData('')
-        self.lb_user_mb_max = LbData('')
         self.lb_user_mb_intvl = LbData('')
         self.lb_user_sb_avg = LbData('')
-        self.lb_user_sb_max = LbData('')
         self.lb_user_sb_intvl = LbData('')
         self.lb_user_tt_avg = LbData('')
-        self.lb_user_tt_max = LbData('')
         self.lb_user_tt_intvl = LbData('')
         self.lb_commi_mb_avg = LbData('')
-        self.lb_commi_mb_max = LbData('')
         self.lb_commi_mb_intvl = LbData('')
         self.lb_commi_sb_avg = LbData('')
-        self.lb_commi_sb_max = LbData('')
         self.lb_commi_sb_intvl = LbData('')
         self.lb_commi_tt_avg = LbData('')
-        self.lb_commi_tt_max = LbData('')
         self.lb_commi_tt_intvl = LbData('')
         self.lb_condi_mb_avg = LbData('')
-        self.lb_condi_mb_max = LbData('')
         self.lb_condi_mb_intvl = LbData('')
         self.lb_condi_sb_avg = LbData('')
-        self.lb_condi_sb_max = LbData('')
         self.lb_condi_sb_intvl = LbData('')
         self.lb_condi_tt_avg = LbData('')
-        self.lb_condi_tt_max = LbData('')
         self.lb_condi_tt_intvl = LbData('')
         self.lb_mstdy_mb_avg = LbData('')
-        self.lb_mstdy_mb_max = LbData('')
         self.lb_mstdy_mb_intvl = LbData('')
         self.lb_mstdy_sb_avg = LbData('')
-        self.lb_mstdy_sb_max = LbData('')
         self.lb_mstdy_sb_intvl = LbData('')
         self.lb_mstdy_tt_avg = LbData('')
-        self.lb_mstdy_tt_max = LbData('')
         self.lb_mstdy_tt_intvl = LbData('')
         self.lb_stord_mb_avg = LbData('')
-        self.lb_stord_mb_max = LbData('')
         self.lb_stord_mb_intvl = LbData('')
         self.lb_stord_sb_avg = LbData('')
-        self.lb_stord_sb_max = LbData('')
         self.lb_stord_sb_intvl = LbData('')
         self.lb_stord_tt_avg = LbData('')
-        self.lb_stord_tt_max = LbData('')
         self.lb_stord_tt_intvl = LbData('')
 
         wid = QWidget(self)
@@ -268,67 +255,49 @@ class MacReportWindow(SiriusMainWindow):
         lay.setHorizontalSpacing(0)
         lay.setAlignment(Qt.AlignTop)
         lay.addWidget(LbHHeader(
-            'Current Average ± std.dev. (mA) (MB)'), 1, 0)
-        lay.addWidget(LbHHeader('Maximum Current (mA) (MB)'), 2, 0)
-        lay.addWidget(LbHHeader('Interval in MB mode (h)'), 3, 0)
+            'Current (avg±std) (mA) (MB)'), 1, 0)
+        lay.addWidget(LbHHeader('Interval in MB mode (h)'), 2, 0)
         lay.addWidget(LbHHeader(
-            'Current Average ± std.dev. (mA) (SB)'), 4, 0)
-        lay.addWidget(LbHHeader('Maximum Current (mA) (SB)'), 5, 0)
-        lay.addWidget(LbHHeader('Interval in SB mode (h)'), 6, 0)
+            'Current (avg±std) (mA) (SB)'), 3, 0)
+        lay.addWidget(LbHHeader('Interval in SB mode (h)'), 4, 0)
         lay.addWidget(LbHHeader(
-            'Current Average ± std.dev. (mA) (SB+MB)'), 7, 0)
-        lay.addWidget(LbHHeader('Maximum Current (mA) (SB+MB)'), 8, 0)
-        lay.addWidget(LbHHeader('Total Interval (h) (SB+MB)'), 9, 0)
+            'Current (avg±std) (mA) (SB+MB)'), 5, 0)
+        lay.addWidget(LbHHeader('Total Interval (h) (SB+MB)'), 6, 0)
         lay.addWidget(LbVHeader('Users'), 0, 1)
         lay.addWidget(self.lb_user_mb_avg, 1, 1)
-        lay.addWidget(self.lb_user_mb_max, 2, 1)
-        lay.addWidget(self.lb_user_mb_intvl, 3, 1)
-        lay.addWidget(self.lb_user_sb_avg, 4, 1)
-        lay.addWidget(self.lb_user_sb_max, 5, 1)
-        lay.addWidget(self.lb_user_sb_intvl, 6, 1)
-        lay.addWidget(self.lb_user_tt_avg, 7, 1)
-        lay.addWidget(self.lb_user_tt_max, 8, 1)
-        lay.addWidget(self.lb_user_tt_intvl, 9, 1)
+        lay.addWidget(self.lb_user_mb_intvl, 2, 1)
+        lay.addWidget(self.lb_user_sb_avg, 3, 1)
+        lay.addWidget(self.lb_user_sb_intvl, 4, 1)
+        lay.addWidget(self.lb_user_tt_avg, 5, 1)
+        lay.addWidget(self.lb_user_tt_intvl, 6, 1)
         lay.addWidget(LbVHeader('Commissioning'), 0, 2)
         lay.addWidget(self.lb_commi_mb_avg, 1, 2)
-        lay.addWidget(self.lb_commi_mb_max, 2, 2)
-        lay.addWidget(self.lb_commi_mb_intvl, 3, 2)
-        lay.addWidget(self.lb_commi_sb_avg, 4, 2)
-        lay.addWidget(self.lb_commi_sb_max, 5, 2)
-        lay.addWidget(self.lb_commi_sb_intvl, 6, 2)
-        lay.addWidget(self.lb_commi_tt_avg, 7, 2)
-        lay.addWidget(self.lb_commi_tt_max, 8, 2)
-        lay.addWidget(self.lb_commi_tt_intvl, 9, 2)
+        lay.addWidget(self.lb_commi_mb_intvl, 2, 2)
+        lay.addWidget(self.lb_commi_sb_avg, 3, 2)
+        lay.addWidget(self.lb_commi_sb_intvl, 4, 2)
+        lay.addWidget(self.lb_commi_tt_avg, 5, 2)
+        lay.addWidget(self.lb_commi_tt_intvl, 6, 2)
         lay.addWidget(LbVHeader('Conditioning'), 0, 3)
         lay.addWidget(self.lb_condi_mb_avg, 1, 3)
-        lay.addWidget(self.lb_condi_mb_max, 2, 3)
-        lay.addWidget(self.lb_condi_mb_intvl, 3, 3)
-        lay.addWidget(self.lb_condi_sb_avg, 4, 3)
-        lay.addWidget(self.lb_condi_sb_max, 5, 3)
-        lay.addWidget(self.lb_condi_sb_intvl, 6, 3)
-        lay.addWidget(self.lb_condi_tt_avg, 7, 3)
-        lay.addWidget(self.lb_condi_tt_max, 8, 3)
-        lay.addWidget(self.lb_condi_tt_intvl, 9, 3)
+        lay.addWidget(self.lb_condi_mb_intvl, 2, 3)
+        lay.addWidget(self.lb_condi_sb_avg, 3, 3)
+        lay.addWidget(self.lb_condi_sb_intvl, 4, 3)
+        lay.addWidget(self.lb_condi_tt_avg, 5, 3)
+        lay.addWidget(self.lb_condi_tt_intvl, 6, 3)
         lay.addWidget(LbVHeader('Machine Study'), 0, 4)
         lay.addWidget(self.lb_mstdy_mb_avg, 1, 4)
-        lay.addWidget(self.lb_mstdy_mb_max, 2, 4)
-        lay.addWidget(self.lb_mstdy_mb_intvl, 3, 4)
-        lay.addWidget(self.lb_mstdy_sb_avg, 4, 4)
-        lay.addWidget(self.lb_mstdy_sb_max, 5, 4)
-        lay.addWidget(self.lb_mstdy_sb_intvl, 6, 4)
-        lay.addWidget(self.lb_mstdy_tt_avg, 7, 4)
-        lay.addWidget(self.lb_mstdy_tt_max, 8, 4)
-        lay.addWidget(self.lb_mstdy_tt_intvl, 9, 4)
+        lay.addWidget(self.lb_mstdy_mb_intvl, 2, 4)
+        lay.addWidget(self.lb_mstdy_sb_avg, 3, 4)
+        lay.addWidget(self.lb_mstdy_sb_intvl, 4, 4)
+        lay.addWidget(self.lb_mstdy_tt_avg, 5, 4)
+        lay.addWidget(self.lb_mstdy_tt_intvl, 6, 4)
         lay.addWidget(LbVHeader('All Stored Beam'), 0, 5)
         lay.addWidget(self.lb_stord_mb_avg, 1, 5)
-        lay.addWidget(self.lb_stord_mb_max, 2, 5)
-        lay.addWidget(self.lb_stord_mb_intvl, 3, 5)
-        lay.addWidget(self.lb_stord_sb_avg, 4, 5)
-        lay.addWidget(self.lb_stord_sb_max, 5, 5)
-        lay.addWidget(self.lb_stord_sb_intvl, 6, 5)
-        lay.addWidget(self.lb_stord_tt_avg, 7, 5)
-        lay.addWidget(self.lb_stord_tt_max, 8, 5)
-        lay.addWidget(self.lb_stord_tt_intvl, 9, 5)
+        lay.addWidget(self.lb_stord_mb_intvl, 2, 5)
+        lay.addWidget(self.lb_stord_sb_avg, 3, 5)
+        lay.addWidget(self.lb_stord_sb_intvl, 4, 5)
+        lay.addWidget(self.lb_stord_tt_avg, 5, 5)
+        lay.addWidget(self.lb_stord_tt_intvl, 6, 5)
         return wid
 
     def _updateStoredCurrentStats(self, setup=False):
@@ -344,7 +313,6 @@ class MacReportWindow(SiriusMainWindow):
             'tt': 'total'}
         stats = {
             'avg': ['average', 'stddev'],
-            'max': ['max', ],
             'intvl': ['interval', ]}
 
         for wsht, rsht in shifttype.items():
@@ -355,11 +323,11 @@ class MacReportWindow(SiriusMainWindow):
                     items = [getattr(self._macreport, pname+i)
                              for i in rstt]
                     if 'interval' in rstt[0] and items[0] is not None:
-                        hh = int(items[0])
-                        mm = int((items[0] - hh)*60)
-                        items = [hh, mm]
+                        hour = int(items[0])
+                        minu = int((items[0] - hour)*60)
+                        items = [hour, minu]
                     str2fmt = getattr(
-                        self, '_fst' if ('interval' in rstt[0])
+                        self, '_fst1' if ('interval' in rstt[0])
                         else '_fs'+str(len(rstt)))
                     text = '' if any([i is None for i in items]) \
                         else str2fmt.format(*items)
@@ -469,9 +437,9 @@ class MacReportWindow(SiriusMainWindow):
                 if tval is None:
                     text = ''
                 else:
-                    hh = int(tval)
-                    mm = int((tval - hh)*60)
-                    text = self._fst.format(hh, mm)
+                    hour = int(tval)
+                    minu = int((tval - hour)*60)
+                    text = self._fst1.format(hour, minu)
                 widt.setText(text)
                 if setup:
                     widt.setToolTip(getattr(MacReport, tname).__doc__)
@@ -487,9 +455,9 @@ class MacReportWindow(SiriusMainWindow):
         text = 'Total Usage Interval (h): '
         if self._macreport.lsusage_total_interval is not None:
             val = self._macreport.lsusage_total_interval
-            hh = int(val)
-            mm = int((val - hh)*60)
-            text += self._fst.format(hh, mm)
+            hour = int(val)
+            minu = int((val - hour)*60)
+            text += self._fst1.format(hour, minu)
         self.lb_total_intvl.setText(text)
 
     def _do_update(self):
@@ -581,6 +549,7 @@ class UpdateTask(QThread):
 
 
 class LbData(QLabel):
+    """Data label."""
 
     def __init__(self, *args, **kwargs):
         """Init."""
@@ -596,6 +565,7 @@ class LbData(QLabel):
 
 
 class LbVHeader(QLabel):
+    """Vertical Header label."""
 
     def __init__(self, *args, **kwargs):
         """Init."""
@@ -612,6 +582,7 @@ class LbVHeader(QLabel):
 
 
 class LbHHeader(QLabel):
+    """Horizontal Header label."""
 
     def __init__(self, *args, **kwargs):
         """Init."""
