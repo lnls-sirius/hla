@@ -70,6 +70,11 @@ class MacReportWindow(SiriusMainWindow):
         self._pb_showraw.setEnabled(False)
         self._pb_showraw.clicked.connect(self._show_raw_data)
 
+        self._pb_showpvsd = QPushButton(
+            qta.icon('mdi.chart-line'), 'Show Progrmd.vs.Delivered', self)
+        self._pb_showpvsd.setEnabled(False)
+        self._pb_showpvsd.clicked.connect(self._show_progmd_vs_delivd)
+
         lay = QGridLayout(cwid)
         lay.setVerticalSpacing(10)
         lay.setHorizontalSpacing(10)
@@ -79,6 +84,7 @@ class MacReportWindow(SiriusMainWindow):
         lay.addWidget(self._progress_list, 1, 1, 1, 2,
                       alignment=Qt.AlignBottom)
         lay.addWidget(self._reports_wid, 2, 0, 1, 3)
+        lay.addWidget(self._pb_showpvsd, 4, 0, alignment=Qt.AlignLeft)
         lay.addWidget(self._pb_showraw, 4, 2, alignment=Qt.AlignRight)
 
         self._updateUserShiftStats(setup=True)
@@ -483,6 +489,7 @@ class MacReportWindow(SiriusMainWindow):
 
             self._progress_list.clear()
             self._pb_showraw.setEnabled(False)
+            self._pb_showpvsd.setEnabled(False)
             self._setup_search_button()
 
             self._update_task = UpdateTask(self._macreport)
@@ -500,6 +507,7 @@ class MacReportWindow(SiriusMainWindow):
             self._updateStoredCurrentStats()
             self._updateLightSourceUsageStats()
             self._pb_showraw.setEnabled(True)
+            self._pb_showpvsd.setEnabled(True)
 
     def _setup_search_button(self):
         if self.pb_search.text() == 'Abort':
@@ -515,6 +523,15 @@ class MacReportWindow(SiriusMainWindow):
         wid = MatplotlibWidget(fig)
         wid.setWindowTitle(
             'Machine Reports - Raw Data (' +
+            str(self._macreport.time_start) + ' -> ' +
+            str(self._macreport.time_stop) + ')')
+        wid.show()
+
+    def _show_progmd_vs_delivd(self):
+        fig = self._macreport.plot_progmd_vs_delivd_hours()
+        wid = MatplotlibWidget(fig)
+        wid.setWindowTitle(
+            'Machine Reports - Programmed vs. Delivered Hours (' +
             str(self._macreport.time_start) + ' -> ' +
             str(self._macreport.time_stop) + ')')
         wid.show()
