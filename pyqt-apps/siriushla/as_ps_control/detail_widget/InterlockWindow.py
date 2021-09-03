@@ -73,7 +73,7 @@ class InterlockWindow(SiriusMainWindow):
         if isinstance(interlock, str):
             self._interlock = [interlock, ]
 
-        secs = {'AS', 'TB', 'BO', 'TS', 'SI'}
+        secs = {'AS', 'TB', 'BO', 'TS', 'SI', 'IT'}
         if self._devname.sub.endswith(('SA', 'SB', 'SP', 'ID')):
             self.setObjectName('IDApp')
         elif self._devname.sec in secs:

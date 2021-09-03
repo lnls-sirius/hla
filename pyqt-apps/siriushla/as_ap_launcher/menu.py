@@ -60,6 +60,7 @@ def get_object(ismenubar=True, parent=None):
             id_apps = self._create_id_menu()
             bl_apps = self._create_bl_menu()
             tool_apps = self._create_tool_menu()
+            it_apps = self._create_section_menu('IT', 'IT')
 
             self.add_object_to_level0(config)
             self.add_object_to_level0(as_apps)
@@ -71,6 +72,7 @@ def get_object(ismenubar=True, parent=None):
             self.add_object_to_level0(id_apps)
             self.add_object_to_level0(bl_apps)
             self.add_object_to_level0(tool_apps)
+            self.add_object_to_level0(it_apps)
 
         def add_object_to_level0(self, widget):
             if ismenubar:
@@ -300,6 +302,9 @@ def get_object(ismenubar=True, parent=None):
             PS = self._set_ps_menu(sec)
             PS.setIcon(qta.icon('mdi.car-battery'))
             self.add_object_to_level1(menu, PS)
+
+            if sec == 'it':
+                return menu
 
             if sec in {'bo', 'si'}:
                 PU = self._set_pu_menu(sec)
@@ -545,6 +550,12 @@ def get_object(ismenubar=True, parent=None):
             scr = 'sirius-hla-' + sec + '-ps-control.py'
             psmenu = LEVEL2M('PS', self)
             psmenu.setObjectName(sec.upper()+'App')
+
+            if sec == 'it':
+                lens = QAction('Lens', psmenu)
+                self.connect_newprocess(lens, [scr, '--device', 'lens'])
+                psmenu.addAction(lens)
+                return psmenu
 
             all_dev = QAction(
                 'All'+('' if sec != 'si' else ' Families'), psmenu)
