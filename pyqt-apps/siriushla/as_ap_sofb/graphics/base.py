@@ -93,8 +93,8 @@ class BaseWidget(QWidget):
         graphx = self.uigetgraph('x', (45, 15))
         graphy = self.uigetgraph('y', (45, 15))
         suf = 'Orbit' if self.is_orb else 'Correctors'
-        lab = QLabel('<h2>Horizontal ' + suf + '</h2>', self,
-                     alignment=Qt.AlignLeft)
+        lab = QLabel(
+            '<h2>Horizontal ' + suf + '</h2>', self, alignment=Qt.AlignLeft)
         lab.setStyleSheet("""min-height:1.5em; max-height:1.5em;""")
         self.hbl_nameh = QHBoxLayout()
         vbl.addItem(self.hbl_nameh)
@@ -102,8 +102,8 @@ class BaseWidget(QWidget):
         self.hbl_nameh.addStretch(1)
         vbl.addWidget(graphx)
         vbl.addSpacing(30)
-        lab = QLabel('<h2>Vertical ' + suf + '</h2>', self,
-                     alignment=Qt.AlignLeft)
+        lab = QLabel(
+            '<h2>Vertical ' + suf + '</h2>', self, alignment=Qt.AlignLeft)
         lab.setStyleSheet("""min-height:1.5em; max-height:1.5em;""")
         self.hbl_namev = QHBoxLayout()
         vbl.addItem(self.hbl_namev)
@@ -126,7 +126,7 @@ class BaseWidget(QWidget):
         graph = Graph(self)
         graph.doubleclick.connect(_part(self._set_enable_list, pln))
         graph.plotItem.scene().sigMouseMoved.connect(
-                                _part(self._show_tooltip, pln=pln))
+            _part(self._show_tooltip, pln=pln))
         if self.is_orb:
             xlabel = 'BPM '
         elif pln.lower().endswith('x'):
@@ -140,8 +140,6 @@ class BaseWidget(QWidget):
         graph.setLabel('left', text=lab, units=unit)
         graph.setObjectName(lab.replace(' ', '')+pln)
 
-        pref = 'BPM' if self.is_orb else 'CH' if pln == 'x' else 'CV'
-        suf = 'Mon' if self.is_orb else 'Cte'
         for i, lname in enumerate(self.line_names):
             opts = dict(
                 y_channel='A',
