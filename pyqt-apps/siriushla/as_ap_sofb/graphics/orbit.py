@@ -13,8 +13,8 @@ from siriushla.widgets.windows import create_window_from_widget
 from siriushla.widgets import SiriusSpectrogramView, SiriusConnectionSignal, \
     SiriusLabel
 
-from siriushla.as_ap_sofb.graphics.base import BaseWidget, Graph
-from siriushla.as_ap_sofb.graphics.correctors import CorrectorsWidget
+from .base import BaseWidget, Graph
+from .correctors import CorrectorsWidget
 
 
 class OrbitWidget(BaseWidget):
@@ -175,6 +175,9 @@ class MultiTurnWidget(QWidget):
 class MultiTurnSumWidget(QWidget):
     """."""
 
+    ratio_sum_avg = Signal(str)
+    ratio_sum_std = Signal(str)
+
     def __init__(self, parent, prefix, orbtype='sum', csorb=None):
         """."""
         super().__init__(parent)
@@ -225,9 +228,24 @@ class MultiTurnSumWidget(QWidget):
         lab = QLabel(
             'Average ' + lbl_text + ' vs Time', self, alignment=Qt.AlignCenter)
         lab.setStyleSheet("font-weight: bold;")
-        vbl.addWidget(lab)
+        hbl = QHBoxLayout()
+        hbl.addStretch()
+        hbl.addWidget(lab)
+        hbl.addStretch()
+        if self.orbtype.startswith('sum'):
+            hbl.addWidget(QLabel('  Eff [%] =', self))
+            ratio_avg = QLabel('000.0', self, alignment=Qt.AlignRight)
+            ratio_std = QLabel('000.0', self, alignment=Qt.AlignLeft)
+            hbl.addWidget(ratio_avg, alignment=Qt.AlignRight)
+            hbl.addWidget(QLabel(
+                '<html><head/><body><p>&#177;</p></body></html>', self))
+            hbl.addWidget(ratio_std, alignment=Qt.AlignLeft)
+            hbl.addStretch()
+            self.ratio_sum_avg.connect(ratio_avg.setText)
+            self.ratio_sum_std.connect(ratio_std.setText)
+        vbl.addLayout(hbl)
+
         graph = Graph(self)
-        vbl.addWidget(graph)
         graph.setLabel('bottom', text='Time', units='s')
         graph.setLabel('left', text='Avg ' + lbl_text, units=unit)
         opts = dict(
@@ -245,6 +263,7 @@ class MultiTurnSumWidget(QWidget):
         graph.plotItem.scene().sigMouseMoved.connect(self._show_tooltip_time)
         self.curve = graph.curveAtIndex(0)
         self.graph_time = graph
+        vbl.addWidget(graph)
 
         if not self.orbtype.startswith('sum'):
             return
@@ -336,7 +355,12 @@ class MultiTurnSumWidget(QWidget):
         scale = 1e-6
         if self.orbtype.startswith('sum'):
             scale = 1
-        self.curve.receiveYWaveform(scale*data.mean(axis=1))
+        datay = scale*data.mean(axis=1)
+        self.curve.receiveYWaveform(datay)
+        if self.orbtype.startswith('sum') and datay.size > 6:
+            ratios = datay[-5:]/datay[0]*100
+            self.ratio_sum_avg.emit(f'{ratios.mean():.1f}')
+            self.ratio_sum_std.emit(f'{ratios.std():.1f}')
 
 
 class Spectrogram(SiriusSpectrogramView):
@@ -433,7 +457,7 @@ class SinglePassSumWidget(QWidget):
 
         sca, prf = functions.siScale(posy)
         txt = '{0:s}, y = {1:.3f} {2:s}'.format(
-                                names[ind], sca*posy, prf+unit)
+            names[ind], sca*posy, prf+unit)
         QToolTip.showText(
             graph.mapToGlobal(pos.toPoint()),
             txt, graph, graph.geometry(), 500)
