@@ -158,6 +158,9 @@ class TesterDCLinkFBP(_TesterPSBase):
     def check_status(self):
         return self.check_intlk()
 
+    def check_comm(self):
+        return not self._pvs['PwrState-Sts'].status != 0
+
 
 class TesterDCLink(_TesterPSBase):
     """DCLink tester."""
@@ -211,6 +214,9 @@ class TesterDCLink(_TesterPSBase):
                 self._pvs['CapacitorBankVoltage-Mon'].value,
                 self._pvs['CapacitorBankVoltageRef-Mon'].value)
         return status
+
+    def check_comm(self):
+        return not self._pvs['PwrState-Sts'].status != 0
 
     def _cmp(self, value, target):
         return _np.isclose(value, target, rtol=0.05)
@@ -281,6 +287,11 @@ class TesterDCLinkRegatron(_TesterBase):
             status &= self.check_capvolt()
         return status
 
+    def check_comm(self):
+        prob = self._pvs['GenIntlk-Mon'].status != 0 or \
+            self._pvs['Voltage-Mon'].status != 0
+        return not prob
+
 
 class TesterPS(_TesterPSBase):
     """PS tester."""
@@ -345,6 +356,9 @@ class TesterPS(_TesterPSBase):
                 self._pvs['CurrentRef-Mon'].value)
         return status
 
+    def check_comm(self):
+        return not self._pvs['PwrState-Sts'].status != 0
+
     def _cmp(self, value, target):
         return abs(value - target) < self.test_tol
 
@@ -374,7 +388,8 @@ class TesterPSLinac(_TesterBase):
 
     properties = ['StatusIntlk-Mon', 'IntlkWarn-Mon',
                   'PwrState-Sel', 'PwrState-Sts',
-                  'Current-SP', 'Current-Mon']
+                  'Current-SP', 'Current-Mon',
+                  'Connected-Mon']
 
     def __init__(self, device):
         super().__init__(device)
@@ -442,6 +457,11 @@ class TesterPSLinac(_TesterBase):
                 self._pvs['Current-SP'].value,
                 self._pvs['Current-Mon'].value)
         return status
+
+    def check_comm(self):
+        prob = self._pvs['Connected-Mon'].value != 0 or \
+            self._pvs['Connected-Mon'].status != 0
+        return not prob
 
     def _cmp(self, value, target):
         return abs(value - target) < self.test_tol
