@@ -132,6 +132,8 @@ class MacReportWindow(SiriusMainWindow):
         self.lb_usei = LbData('')
         self.lb_uspc = LbData('')
         self.lb_cav = LbData('')
+        self.lb_cbav = LbData('')
+        self.lb_ceav = LbData('')
         self.lb_fi = LbData('')
         self.lb_bdc = LbData('')
         self.lb_mttr = LbData('')
@@ -156,22 +158,29 @@ class MacReportWindow(SiriusMainWindow):
         lay.addWidget(self.lb_usei, 3, 2)
         lay.addWidget(LbHHeader('# Programmed User Shifts'), 4, 1)
         lay.addWidget(self.lb_uspc, 4, 2)
-        lay.addWidget(LbHHeader('Current (Avg±std) (mA)'), 5, 1)
+        lay.addWidget(LbHHeader('Current (avg ± std) (mA)'), 5, 1)
         lay.addWidget(self.lb_cav, 5, 2)
-        lay.addWidget(LbHHeader('Failures Interval (h)'), 6, 1)
-        lay.addWidget(self.lb_fi, 6, 2)
-        lay.addWidget(LbHHeader('# Beam Dumps'), 7, 1)
-        lay.addWidget(self.lb_bdc, 7, 2)
-        lay.addWidget(LbHHeader('Time To Recover (Avg±std) (h)'), 8, 1)
-        lay.addWidget(self.lb_mttr, 8, 2)
-        lay.addWidget(LbHHeader('Time Between Failures (Avg) (h)'), 9, 1)
-        lay.addWidget(self.lb_mtbf, 9, 2)
-        lay.addWidget(LbHHeader('Beam Reliability (%)'), 10, 1)
-        lay.addWidget(self.lb_reli, 10, 2)
-        lay.addWidget(LbHHeader('Total Injection Shift Interval (h)'), 11, 1)
-        lay.addWidget(self.lb_isti, 11, 2)
-        lay.addWidget(LbHHeader('Injection Shift Interval (Avg±std) (h)'), 12, 1)
-        lay.addWidget(self.lb_ismi, 12, 2)
+        lay.addWidget(LbHHeader(
+            'Current at the Beg. of the Shift (avg ± std) (mA)'), 6, 1)
+        lay.addWidget(self.lb_cbav, 6, 2)
+        lay.addWidget(LbHHeader(
+            'Current at the End. of the Shift (avg ± std) (mA)'), 7, 1)
+        lay.addWidget(self.lb_ceav, 7, 2)
+        lay.addWidget(LbHHeader('Failures Interval (h)'), 8, 1)
+        lay.addWidget(self.lb_fi, 8, 2)
+        lay.addWidget(LbHHeader('# Beam Dumps'), 9, 1)
+        lay.addWidget(self.lb_bdc, 9, 2)
+        lay.addWidget(LbHHeader('Time To Recover (avg ± std) (h)'), 10, 1)
+        lay.addWidget(self.lb_mttr, 10, 2)
+        lay.addWidget(LbHHeader('Time Between Failures (avg) (h)'), 11, 1)
+        lay.addWidget(self.lb_mtbf, 11, 2)
+        lay.addWidget(LbHHeader('Beam Reliability (%)'), 12, 1)
+        lay.addWidget(self.lb_reli, 12, 2)
+        lay.addWidget(LbHHeader('Total Injection Shift Interval (h)'), 13, 1)
+        lay.addWidget(self.lb_isti, 13, 2)
+        lay.addWidget(LbHHeader(
+            'Injection Shift Interval (avg ± std) (h)'), 14, 1)
+        lay.addWidget(self.lb_ismi, 14, 2)
         lay.addItem(QSpacerItem(120, 1, QSzPlcy.Fixed, QSzPlcy.Ignored), 0, 3)
         return wid
 
@@ -183,6 +192,10 @@ class MacReportWindow(SiriusMainWindow):
             'usei': ['user_shift_extra_interval', ],
             'uspc': ['user_shift_progmd_count', ],
             'cav': ['user_shift_current_average', 'user_shift_current_stddev'],
+            'cbav': ['user_shift_current_beg_average',
+                     'user_shift_current_beg_stddev'],
+            'ceav': ['user_shift_current_end_average',
+                     'user_shift_current_end_stddev'],
             'fi': ['failures_interval', ],
             'bdc': ['beam_dump_count', ],
             'mttr': ['time_to_recover_average', 'time_to_recover_stddev'],
@@ -261,13 +274,13 @@ class MacReportWindow(SiriusMainWindow):
         lay.setHorizontalSpacing(0)
         lay.setAlignment(Qt.AlignTop)
         lay.addWidget(LbHHeader(
-            'Current (avg±std) (mA) (MB)'), 1, 0)
+            'Current (avg ± std) (mA) (MB)'), 1, 0)
         lay.addWidget(LbHHeader('Interval in MB mode (h)'), 2, 0)
         lay.addWidget(LbHHeader(
-            'Current (avg±std) (mA) (SB)'), 3, 0)
+            'Current (avg ± std) (mA) (SB)'), 3, 0)
         lay.addWidget(LbHHeader('Interval in SB mode (h)'), 4, 0)
         lay.addWidget(LbHHeader(
-            'Current (avg±std) (mA) (SB+MB)'), 5, 0)
+            'Current (avg ± std) (mA) (SB+MB)'), 5, 0)
         lay.addWidget(LbHHeader('Total Interval (h) (SB+MB)'), 6, 0)
         lay.addWidget(LbVHeader('Users'), 0, 1)
         lay.addWidget(self.lb_user_mb_avg, 1, 1)
