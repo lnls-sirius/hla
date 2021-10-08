@@ -71,7 +71,8 @@ class MacReportWindow(SiriusMainWindow):
         self._pb_showraw.clicked.connect(self._show_raw_data)
 
         self._pb_showpvsd = QPushButton(
-            qta.icon('mdi.chart-line'), 'Show Progrmd.vs.Delivered', self)
+            qta.icon('mdi.chart-line'),
+            'Show Progrmd.vs.Delivered Hours', self)
         self._pb_showpvsd.setEnabled(False)
         self._pb_showpvsd.clicked.connect(self._show_progmd_vs_delivd)
 
@@ -127,7 +128,7 @@ class MacReportWindow(SiriusMainWindow):
 
     def _setupUserShiftStatsWidget(self):
         self.lb_uspi = LbData('')
-        self.lb_usii = LbData('')
+        self.lb_usdi = LbData('')
         self.lb_usti = LbData('')
         self.lb_usei = LbData('')
         self.lb_uspc = LbData('')
@@ -150,8 +151,8 @@ class MacReportWindow(SiriusMainWindow):
         lay.addItem(QSpacerItem(120, 1, QSzPlcy.Fixed, QSzPlcy.Ignored), 0, 0)
         lay.addWidget(LbHHeader('Programmed User Shift Interval (h)'), 0, 1)
         lay.addWidget(self.lb_uspi, 0, 2)
-        lay.addWidget(LbHHeader('Implemented User Shift Interval (h)'), 1, 1)
-        lay.addWidget(self.lb_usii, 1, 2)
+        lay.addWidget(LbHHeader('Delivered User Shift Interval (h)'), 1, 1)
+        lay.addWidget(self.lb_usdi, 1, 2)
         lay.addWidget(LbHHeader('Total User Shift Interval (h)'), 2, 1)
         lay.addWidget(self.lb_usti, 2, 2)
         lay.addWidget(LbHHeader('Extra User Shift Interval (h)'), 3, 1)
@@ -164,7 +165,7 @@ class MacReportWindow(SiriusMainWindow):
             'Current at the Beg. of the Shift (avg ± std) (mA)'), 6, 1)
         lay.addWidget(self.lb_cbav, 6, 2)
         lay.addWidget(LbHHeader(
-            'Current at the End. of the Shift (avg ± std) (mA)'), 7, 1)
+            'Current at the End of the Shift (avg ± std) (mA)'), 7, 1)
         lay.addWidget(self.lb_ceav, 7, 2)
         lay.addWidget(LbHHeader('Failures Interval (h)'), 8, 1)
         lay.addWidget(self.lb_fi, 8, 2)
@@ -187,7 +188,7 @@ class MacReportWindow(SiriusMainWindow):
     def _updateUserShiftStats(self, setup=False):
         w2r = {
             'uspi': ['user_shift_progmd_interval', ],
-            'usii': ['user_shift_impltd_interval', ],
+            'usdi': ['user_shift_delivd_interval', ],
             'usti': ['user_shift_total_interval', ],
             'usei': ['user_shift_extra_interval', ],
             'uspc': ['user_shift_progmd_count', ],
