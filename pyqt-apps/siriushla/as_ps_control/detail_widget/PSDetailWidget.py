@@ -249,7 +249,8 @@ class PSDetailWidget(QWidget):
 
         analogs = QVBoxLayout()
         analogs.addWidget(self.current_box, Qt.AlignCenter)
-        analogs.addWidget(self.metric_box, Qt.AlignCenter)
+        if self._metric:
+            analogs.addWidget(self.metric_box, Qt.AlignCenter)
         analogs.addWidget(self.curve_tabs, Qt.AlignCenter)
 
         boxes_layout = QHBoxLayout()

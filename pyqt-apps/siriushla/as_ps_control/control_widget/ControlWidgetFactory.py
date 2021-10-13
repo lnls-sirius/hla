@@ -14,7 +14,7 @@ from .SkewQuadControlWidget import BOSkewQuadControlWidget, \
     SISkewQuadControlWidget
 from .TrimAllControlWidget import SITrimAllControlWidget
 from .SolenoidControlWidget import LISolenoidControlWidget
-from .LensControlWidget import LILensControlWidget
+from .LensControlWidget import LILensControlWidget, ITLensControlWidget
 from .FastCorrectorControlWidget import \
     SIFastCorrectorControlWidget
 
@@ -122,6 +122,12 @@ class ControlWidgetFactory:
                 return SITrimAllControlWidget(
                     subsection=subsection, orientation=orientation,
                     parent=parent)
+            else:
+                ControlWidgetFactory._device_not_found(section, device)
+        elif section == "IT":
+            if device == "lens":
+                return ITLensControlWidget(
+                    orientation=orientation, parent=parent)
             else:
                 ControlWidgetFactory._device_not_found(section, device)
         else:

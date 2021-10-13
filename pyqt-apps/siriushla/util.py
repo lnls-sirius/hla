@@ -160,6 +160,7 @@ def get_appropriate_color(section='SI'):
         'TS': '#b2ebf2',
         'SI': '#56aeff',
         'ID': '#bbbbdd',
+        'IT': '#ffece6',
     }
     return dic[section]
 

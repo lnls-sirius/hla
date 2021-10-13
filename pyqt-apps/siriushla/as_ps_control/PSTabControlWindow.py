@@ -17,8 +17,9 @@ class PSTabControlWindow(PSControlWindow):
         "BO": ["dipole", "quadrupole", "sextupole", "corrector-slow",
                "skew-quadrupole"],
         "TS": ["dipole", "quadrupole", "corrector-slow"],
-        "SI": ["dipole", "quadrupole", "sextupole"]}
-    #       "corrector-slow", "trim-quadrupole", "skew-quadrupole"]}
+        "SI": ["dipole", "quadrupole", "sextupole"],
+        #      "corrector-slow", "trim-quadrupole", "skew-quadrupole"]}
+        "IT": ["lens", ]}
 
     TabName = {"dipole": "Dipoles",
                "spectrometer": "Spectrometer",

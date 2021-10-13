@@ -32,7 +32,8 @@ class PSControlWindow(SiriusMainWindow):
             'TB': 'LTB ',
             'BO': 'Booster ',
             'TS': 'BTS ',
-            'SI': 'Storage Ring '}
+            'SI': 'Storage Ring ',
+            'IT': 'Injector Test '}
         dev2label = {
             "dipole": "Dipoles",
             "spectrometer": "Spectrometer",

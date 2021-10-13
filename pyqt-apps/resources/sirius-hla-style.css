@@ -17,6 +17,7 @@
 #TSApp {background-color: #b2ebf2;}
 #SIApp {background-color: #56aeff;}
 #IDApp {background-color: #bbbbdd;}
+#ITApp {background-color: #ffece6;}
 QScrollArea {background-color: transparent;}
 
 
@@ -109,6 +110,11 @@ QTabBar::tab:selected, QTabBar::tab:hover {
 }
 #ASTab QTabBar::tab:selected, #ASTab QTabBar::tab:hover {
   background-color: rgb(153, 149, 147);
+  color: white;
+  border: 0.1em solid white;
+}
+#ITTab QTabBar::tab:selected, #ITTab QTabBar::tab:hover {
+  background-color: rgb(255, 162, 133);
   color: white;
   border: 0.1em solid white;
 }
