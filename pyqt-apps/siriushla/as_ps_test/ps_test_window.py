@@ -21,7 +21,7 @@ from siriushla.widgets.dialog import ProgressDialog
 from siriushla.as_ti_control import HLTriggerDetailed
 
 from .tasks import CreateTesters, \
-    CheckStatus, \
+    CheckComm, CheckStatus, \
     ResetIntlk, CheckIntlk, \
     SetSOFBMode, CheckSOFBMode, \
     SetOpMode, CheckOpMode, \
@@ -112,6 +112,13 @@ class PSTestWindow(SiriusMainWindow):
         lay_ps.setColumnStretch(0, 1)
 
         # PS commands
+        self.checkcomm_ps_bt = QPushButton('Check Communication', self)
+        self.checkcomm_ps_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
+        self.checkcomm_ps_bt.clicked.connect(self._check_comm)
+        self.checkcomm_ps_bt.setToolTip(
+            'Check PS and DCLinks communication status (verify invalid alarms '
+            'and, if LI, the value of Connected-Mon PV)')
+
         self.checkstatus_ps_bt = QPushButton('Show Status Summary', self)
         self.checkstatus_ps_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
         self.checkstatus_ps_bt.clicked.connect(_part(self._check_status, 'PS'))
@@ -204,6 +211,7 @@ class PSTestWindow(SiriusMainWindow):
         lay_ps_comm.addWidget(QLabel(''))
         lay_ps_comm.addWidget(QLabel('<h4>Check</h4>', self,
                                      alignment=Qt.AlignCenter))
+        lay_ps_comm.addWidget(self.checkcomm_ps_bt)
         lay_ps_comm.addWidget(self.checkstatus_ps_bt)
         lay_ps_comm.addWidget(QLabel(''))
         lay_ps_comm.addWidget(QLabel('<h4>Prepare</h4>', self,
@@ -436,6 +444,26 @@ class PSTestWindow(SiriusMainWindow):
         self.central_widget.setLayout(lay)
 
     # ---------- commands ------------
+
+    def _check_comm(self):
+        self.ok_ps.clear()
+        self.nok_ps.clear()
+        devices = self._get_selected_ps()
+        if not devices:
+            return
+        dclinks = self._get_related_dclinks(
+            devices, include_regatrons=True)
+        devices.extend(dclinks)
+
+        task0 = CreateTesters(devices, parent=self)
+        task1 = CheckComm(devices, parent=self)
+        task1.itemDone.connect(self._log)
+
+        labels = ['Connecting to devices...',
+                  'Checking PS and DCLinks Comm. Status...']
+        tasks = [task0, task1]
+        dlg = ProgressDialog(labels, tasks, self)
+        dlg.exec_()
 
     def _check_status(self, dev_type):
         self.ok_ps.clear()

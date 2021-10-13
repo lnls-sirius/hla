@@ -126,6 +126,14 @@ class CreateTesters(BaseTask):
                 break
 
 
+class CheckComm(BaseTask):
+    """Check communication status."""
+
+    def function(self):
+        """Check communication status."""
+        self._check(method='check_comm')
+
+
 class CheckStatus(BaseTask):
     """Check Status."""
 
