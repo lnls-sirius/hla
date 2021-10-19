@@ -307,6 +307,10 @@ def get_object(ismenubar=True, parent=None):
             self.add_object_to_level1(menu, PS)
 
             if sec == 'it':
+                egun = LEVEL2A('Egun', menu)
+                egun.setIcon(qta.icon('mdi.spotlight-beam'))
+                self.connect_newprocess(egun, 'sirius-hla-it-eg-control.py')
+                self.add_object_to_level1(menu, egun)
                 return menu
 
             if sec in {'bo', 'si'}:
