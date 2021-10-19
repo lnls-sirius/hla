@@ -80,7 +80,7 @@ class GetPlotDataWindow(SiriusMainWindow):
             lay_intvl.addRow(self.ld_init, self.dt_init)
             lay_intvl.addRow(self.ld_end, self.dt_end)
 
-        self.ld_intvlsel = QLabel('<h4>Apply pre-processing: </h4>', self)
+        # self.ld_intvlsel = QLabel('<h4>Apply pre-processing: </h4>', self)
 
         lay_process = QFormLayout()
         lay_process.setContentsMargins(0, 0, 0, 0)
@@ -112,15 +112,15 @@ class GetPlotDataWindow(SiriusMainWindow):
         pvs = self.tree.checked_items()
         plot_data[0] = pvs
 
-        process = self.list_prcss.items_data()
-        plot_data[1] = process
+        # process = self.list_prcss.items_data()
+        # plot_data[1] = process
 
         if self.show_intvl_sel:
             t_init = self.dt_init.dateTime().toSecsSinceEpoch()
-            plot_data[2] = t_init
+            plot_data[1] = t_init
 
             t_end = self.dt_end.dateTime().toSecsSinceEpoch()
-            plot_data[3] = t_end
+            plot_data[2] = t_end
 
         self.plotDataSignal.emit(plot_data)
         self.close()
@@ -147,8 +147,8 @@ class GetPlotDataThread(QThread):
             data['unit'] = pvdetails.units
 
             pvdata = PVData(self.pvname)
-            pvdata.timestamp_start = self.t_init
-            pvdata.timestamp_stop = self.t_end
+            pvdata.time_start = self.t_init
+            pvdata.time_stop = self.t_end
             pvdata.update()
             data['timestamp'] = pvdata.timestamp
             data['value'] = pvdata.value
