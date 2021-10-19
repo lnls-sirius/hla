@@ -2,10 +2,10 @@
 import numpy as _np
 
 from qtpy.QtCore import Qt, Slot
-from qtpy.QtGui import QColor, QBrush
+from qtpy.QtGui import QColor, QBrush, QIntValidator
 from qtpy.QtWidgets import QLabel, QPushButton, QGroupBox, QVBoxLayout, \
     QHBoxLayout, QGridLayout, QMenuBar, QSplitter, QTabWidget, QWidget, \
-    QSizePolicy as QSzPol, QCheckBox
+    QSizePolicy as QSzPol, QCheckBox, QDialog, QLineEdit
 import qtawesome as qta
 from pydm.widgets import PyDMLabel, PyDMPushButton, PyDMLineEdit, \
     PyDMWaveformPlot
