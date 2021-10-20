@@ -127,19 +127,62 @@ def get_object(ismenubar=True, parent=None):
         def _create_tool_menu(self):
             menu = LEVEL1('Tools', self)
             menu.setObjectName('ToolMenu')
+
             servconf = LEVEL2A('ConfigDB', menu)
             self.connect_newprocess(servconf, 'sirius-hla-as-ap-configdb.py')
             self.add_object_to_level1(menu, servconf)
+
             procserv = LEVEL2A('ProcServ', menu)
             self.connect_newprocess(
                 procserv, 'sirius-hla-as-ap-pctrl', is_pydm=True)
             self.add_object_to_level1(menu, procserv)
+
             chart = LEVEL2A('TimeChart', menu)
             self.connect_newprocess(chart, 'timechart')
             self.add_object_to_level1(menu, chart)
-            macreport = LEVEL2A('Machine Reports', menu)
+
+            macreport = LEVEL2A('Mach.Rep', menu)
             self.connect_newprocess(macreport, 'sirius-hla-as-ap-macreport.py')
             self.add_object_to_level1(menu, macreport)
+
+            osci = LEVEL2M('Osc.View', menu)
+            asdifctdig = QAction('AS-DI-FCT', osci)
+            util.connect_newprocess(
+                asdifctdig, ['gvncviewer', 'as-di-fctdig'],
+                is_window=False)
+            asdifpmdig = QAction('AS-DI-FPM', osci)
+            util.connect_newprocess(
+                asdifpmdig, ['gvncviewer', 'as-di-fpmdig'],
+                is_window=False)
+            lidiict = QAction('LI-DI-ICT', osci)
+            util.connect_newprocess(
+                lidiict, ['gvncviewer', 'li-di-ictosc'],
+                is_window=False)
+            tbpuinjbo = QAction('TB-PU-InjBO', osci)
+            util.connect_newprocess(
+                tbpuinjbo, ['gvncviewer', 'TB-PU-Osc-InjBO'],
+                is_window=False)
+            tspuejebo = QAction('TS-PU-EjeBO', osci)
+            util.connect_newprocess(
+                tspuejebo, ['gvncviewer', 'TS-PU-Osc-EjeBO'],
+                is_window=False)
+            tspuinjsi = QAction('TS-PU-InjSI', osci)
+            util.connect_newprocess(
+                tspuinjsi, ['gvncviewer', 'TS-PU-Osc-InjSI'],
+                is_window=False)
+            sipuinjsi = QAction('SI-PU-InjSI', osci)
+            util.connect_newprocess(
+                sipuinjsi, ['gvncviewer', 'SI-PU-Osc-InjSI'],
+                is_window=False)
+
+            osci.addAction(asdifctdig)
+            osci.addAction(asdifpmdig)
+            osci.addAction(lidiict)
+            osci.addAction(tbpuinjbo)
+            osci.addAction(tspuejebo)
+            osci.addAction(tspuinjsi)
+            osci.addAction(sipuinjsi)
+            self.add_object_to_level1(menu, osci)
             return menu
 
         def _create_as_menu(self):
