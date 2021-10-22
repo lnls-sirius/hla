@@ -21,7 +21,7 @@ class LIEgunWindow(SiriusMainWindow):
         """Init."""
         super().__init__(parent)
         self.prefix = prefix + ('-' if prefix else '')
-        self.dev_pref = 'IT-Ra' if is_it else 'LI-01'
+        self.dev_pref = 'IT-EGH' if is_it else 'LI-01'
         self.dev_desc = 'Injector Test' if is_it else 'Linac'
         self.setWindowTitle(self.dev_desc+' E-gun Control Window')
         self.sec = self.dev_pref[0:2]
