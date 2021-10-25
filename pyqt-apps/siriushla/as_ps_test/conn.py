@@ -29,8 +29,8 @@ DEFAULT_CAP_BANK_VOLT = {
     'PA-RaPSF07:PS-DCLink-BO': 240,
     'PA-RaPSF08:PS-DCLink-BO': 240,
     'PA-RaPSF09:PS-DCLink-BO': 240,
-    'PA-RaPSC03:PS-DCLink-BO1': 300,
-    'PA-RaPSC03:PS-DCLink-BO2': 300,
+    'PA-RaPSC01:PS-DCLink-BO': 300,
+    'PA-RaPSC02:PS-DCLink-BO': 300,
 }
 
 
