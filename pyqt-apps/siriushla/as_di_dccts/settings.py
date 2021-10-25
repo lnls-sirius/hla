@@ -306,6 +306,13 @@ class DCCTSettingsDetails(QWidget):
         hlay_meastrig.addWidget(self.pydmenumcombobox_MeasTrg)
         hlay_meastrig.addWidget(self.pydmlabel_MeasTrg)
 
+        l_trigmiss = QLabel('Trigger Is Missing?', self)
+        self.led_TrgMiss = SiriusLedAlert(
+            parent=self, init_channel=self.dcct_prefix+'TrgIsMissing-Mon')
+        hlay_trigmiss = QHBoxLayout()
+        hlay_trigmiss.addWidget(self.led_TrgMiss)
+        hlay_trigmiss.setAlignment(Qt.AlignLeft)
+
         l_range = QLabel('Range: ', self)
         self.pydmenumcombobox_Range = PyDMEnumComboBox(
             parent=self, init_channel=self.dcct_prefix+'Range-Sel')
@@ -359,6 +366,7 @@ class DCCTSettingsDetails(QWidget):
         flay_generalsettings.setFormAlignment(Qt.AlignCenter)
         flay_generalsettings.addRow(l_enbl, hlay_enbl)
         flay_generalsettings.addRow(l_meastrig, hlay_meastrig)
+        flay_generalsettings.addRow(l_trigmiss, hlay_trigmiss)
         flay_generalsettings.addRow(l_range, hlay_range)
         flay_generalsettings.addItem(
             QSpacerItem(1, 10, QSzPly.Ignored, QSzPly.Preferred))
