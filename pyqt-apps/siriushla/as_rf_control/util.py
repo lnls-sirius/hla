@@ -125,7 +125,7 @@ SEC_2_CHANNELS = {
             'QErr': 'BR-RF-DLLRF-01:Q:SL:ERR',
             'AErr': 'BR-RF-DLLRF-01:SL:ERR:AMP',
             'PErr': 'BR-RF-DLLRF-01:SL:ERR:PHS',
-            'ASet': 'BR-RF-DLLRF-01:mV:AL:REF',
+            'ASet': ['BR-RF-DLLRF-01:mV:AL:REF', 'RA-RaBO01:RF-LLRF:AmpVCav'],
             'PSet': 'BR-RF-DLLRF-01:PL:REF',
             'AInc': 'BR-RF-DLLRF-01:AMPREF:INCRATE',
             'PInc': 'BR-RF-DLLRF-01:PHSREF:INCRATE',
@@ -148,7 +148,8 @@ SEC_2_CHANNELS = {
              'BO-05D:RF-P5Cav:PwrFwddBm-Mon', 'darkGreen'],
             ['Power Reverse', 'BO-05D:RF-P5Cav:PwrRev-Mon',
              'BO-05D:RF-P5Cav:PwrRevdBm-Mon', 'red'],
-        ]
+        ],
+        'CavVGap': 'BO-05D:RF-P5Cav:AmpVCav-Mon',
     },
     'SI': {
         'Emergency': 'RA-RaSIA02:RF-IntlkCtrl:EStop-Mon',
@@ -297,7 +298,7 @@ SEC_2_CHANNELS = {
             'QErr': 'SR-RF-DLLRF-01:Q:SL:ERR',
             'AErr': 'SR-RF-DLLRF-01:SL:ERR:AMP',
             'PErr': 'SR-RF-DLLRF-01:SL:ERR:PHS',
-            'ASet': 'SR-RF-DLLRF-01:mV:AL:REF',
+            'ASet': ['SR-RF-DLLRF-01:mV:AL:REF', 'RA-RaSIA01:RF-LLRF:AmpVCav'],
             'PSet': 'SR-RF-DLLRF-01:PL:REF',
             'AInc': 'SR-RF-DLLRF-01:AMPREF:INCRATE',
             'PInc': 'SR-RF-DLLRF-01:PHSREF:INCRATE',
@@ -330,6 +331,7 @@ SEC_2_CHANNELS = {
              'RA-ToSIA02:RF-SSAmpTower:PwrRevOutdBm-Mon', 'cyan'],
             ['Circ - Fwd Out', 'RA-TL:RF-Circulator-SIA:PwrFwdOut-Mon',
              'RA-TL:RF-Circulator-SIA:PwrFwdOutdBm-Mon', 'darkCyan'],
-        ]
+        ],
+        'CavVGap': 'SI-02SB:RF-P7Cav:AmpVCav-Mon',
     },
 }
