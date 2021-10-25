@@ -23,6 +23,7 @@ from siriuspy.search import PSSearch
 from siriuspy.pwrsupply.csdev import get_ps_propty_database, get_ps_modules, \
     DEF_WFMSIZE_FBP, DEF_WFMSIZE_OTHERS, PS_LI_INTLK_THRS as _PS_LI_INTLK, \
     ETypes as _PSet
+from siriuspy.devices import PowerSupply
 
 from siriushla import util
 from siriushla.widgets import PyDMStateButton, PyDMLinEditScrollbar, \
@@ -604,6 +605,23 @@ class PSDetailWidget(QWidget):
         self.cycle_auxparam_sp_le = PyDMLineEdit(self, auxparam_sp_ca)
         self.cycle_auxparam_rb_label = PyDMLabel(self, auxparam_rb_ca)
 
+        self.cycle_auxparam_helpbut = QPushButton(
+            qta.icon('mdi.help'), '', self)
+        self.cycle_auxparam_helpbut.setToolTip(
+            'Show AuxParam help message')
+        self.cycle_auxparam_helpbut.setObjectName('help_bt')
+        self.cycle_auxparam_helpbut.setStyleSheet(
+            '#help_bt{min-width:20px;max-width:20px;icon-size:16px;}')
+        self.cycle_auxparam_helpwid = QWidget()
+        self.cycle_auxparam_helpwid.setObjectName(self.parent().objectName())
+        self.cycle_auxparam_helpwid.setWindowTitle('AuxParam Help Message')
+        self.cycle_auxparam_helpbut.clicked.connect(
+            self.cycle_auxparam_helpwid.show)
+        text = getattr(PowerSupply, 'cycle_aux_param').__doc__
+        self.cycle_auxparam_helplab = QLabel(text, self)
+        lay_help = QHBoxLayout(self.cycle_auxparam_helpwid)
+        lay_help.addWidget(self.cycle_auxparam_helplab)
+
         parms = QWidget()
         lay_parms = QGridLayout(parms)
         lay_parms.setAlignment(Qt.AlignTop)
@@ -611,24 +629,25 @@ class PSDetailWidget(QWidget):
         lay_parms.addWidget(self.cycle_enbl_mon_led, 0, 1, Qt.AlignCenter)
         lay_parms.addWidget(self.cycle_type_label, 1, 0, Qt.AlignRight)
         lay_parms.addWidget(self.cycle_type_sp_cb, 1, 1)
-        lay_parms.addWidget(self.cycle_type_rb_label, 1, 2)
+        lay_parms.addWidget(self.cycle_type_rb_label, 1, 2, 1, 2)
         lay_parms.addWidget(self.cycle_nr_label, 2, 0, Qt.AlignRight)
         lay_parms.addWidget(self.cycle_nr_sp_sb, 2, 1)
-        lay_parms.addWidget(self.cycle_nr_rb_label, 2, 2)
+        lay_parms.addWidget(self.cycle_nr_rb_label, 2, 2, 1, 2)
         lay_parms.addWidget(self.cycle_index_label, 3, 0, Qt.AlignRight)
-        lay_parms.addWidget(self.cycle_index_mon_label, 3, 2)
+        lay_parms.addWidget(self.cycle_index_mon_label, 3, 2, 1, 2)
         lay_parms.addWidget(self.cycle_freq_label, 4, 0, Qt.AlignRight)
         lay_parms.addWidget(self.cycle_freq_sp_sb, 4, 1)
-        lay_parms.addWidget(self.cycle_freq_rb_label, 4, 2)
+        lay_parms.addWidget(self.cycle_freq_rb_label, 4, 2, 1, 2)
         lay_parms.addWidget(self.cycle_ampl_label, 5, 0, Qt.AlignRight)
         lay_parms.addWidget(self.cycle_ampl_sp_sb, 5, 1)
-        lay_parms.addWidget(self.cycle_ampl_rb_label, 5, 2)
+        lay_parms.addWidget(self.cycle_ampl_rb_label, 5, 2, 1, 2)
         lay_parms.addWidget(self.cycle_offset_label, 6, 0, Qt.AlignRight)
         lay_parms.addWidget(self.cycle_offset_sp_sb, 6, 1)
-        lay_parms.addWidget(self.cycle_offset_rb_label, 6, 2)
+        lay_parms.addWidget(self.cycle_offset_rb_label, 6, 2, 1, 2)
         lay_parms.addWidget(self.cycle_auxparam_label, 7, 0, Qt.AlignRight)
         lay_parms.addWidget(self.cycle_auxparam_sp_le, 7, 1)
         lay_parms.addWidget(self.cycle_auxparam_rb_label, 7, 2)
+        lay_parms.addWidget(self.cycle_auxparam_helpbut, 7, 3)
 
         # Default Curve
         self._siggen = PSSearch.conv_psname_2_siggenconf(self._psname)
