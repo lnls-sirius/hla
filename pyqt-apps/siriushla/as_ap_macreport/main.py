@@ -117,7 +117,7 @@ class MacReportWindow(SiriusMainWindow):
                 icon-size:20px;}
         """)
 
-        wid = QGroupBox('Select interval', self)
+        wid = QGroupBox('Select interval: ', self)
         lay = QGridLayout(wid)
         lay.addWidget(ld_tstart, 0, 0)
         lay.addWidget(self.dt_start, 0, 1)
@@ -127,21 +127,24 @@ class MacReportWindow(SiriusMainWindow):
         return wid
 
     def _setupUserShiftStatsWidget(self):
-        self.lb_uspi = LbData('')
-        self.lb_usdi = LbData('')
-        self.lb_usti = LbData('')
-        self.lb_usei = LbData('')
+        self.lb_uspt = LbData('')
+        self.lb_usdt = LbData('')
+        self.lb_ustt = LbData('')
+        self.lb_uset = LbData('')
         self.lb_uspc = LbData('')
         self.lb_cav = LbData('')
         self.lb_cbav = LbData('')
         self.lb_ceav = LbData('')
-        self.lb_fi = LbData('')
+        self.lb_tft = LbData('')
         self.lb_bdc = LbData('')
         self.lb_mttr = LbData('')
         self.lb_mtbf = LbData('')
         self.lb_reli = LbData('')
-        self.lb_isti = LbData('')
-        self.lb_ismi = LbData('')
+        self.lb_tsbt = LbData('')
+        self.lb_tubt = LbData('')
+        self.lb_mtbu = LbData('')
+        self.lb_rsbt = LbData('')
+        self.lb_itav = LbData('')
 
         wid = QWidget(self)
         lay = QGridLayout(wid)
@@ -149,15 +152,15 @@ class MacReportWindow(SiriusMainWindow):
         lay.setHorizontalSpacing(0)
         lay.setAlignment(Qt.AlignTop)
         lay.addItem(QSpacerItem(120, 1, QSzPlcy.Fixed, QSzPlcy.Ignored), 0, 0)
-        lay.addWidget(LbHHeader('Programmed User Shift Interval (h)'), 0, 1)
-        lay.addWidget(self.lb_uspi, 0, 2)
-        lay.addWidget(LbHHeader('Delivered User Shift Interval (h)'), 1, 1)
-        lay.addWidget(self.lb_usdi, 1, 2)
-        lay.addWidget(LbHHeader('Total User Shift Interval (h)'), 2, 1)
-        lay.addWidget(self.lb_usti, 2, 2)
-        lay.addWidget(LbHHeader('Extra User Shift Interval (h)'), 3, 1)
-        lay.addWidget(self.lb_usei, 3, 2)
-        lay.addWidget(LbHHeader('# Programmed User Shifts'), 4, 1)
+        lay.addWidget(LbHHeader('Programmed Time (h)'), 0, 1)
+        lay.addWidget(self.lb_uspt, 0, 2)
+        lay.addWidget(LbHHeader('Delivered Time (h)'), 1, 1)
+        lay.addWidget(self.lb_usdt, 1, 2)
+        lay.addWidget(LbHHeader('Total Time (h)'), 2, 1)
+        lay.addWidget(self.lb_ustt, 2, 2)
+        lay.addWidget(LbHHeader('Extra Time (h)'), 3, 1)
+        lay.addWidget(self.lb_uset, 3, 2)
+        lay.addWidget(LbHHeader('# Programmed Shifts'), 4, 1)
         lay.addWidget(self.lb_uspc, 4, 2)
         lay.addWidget(LbHHeader('Current (avg ± std) (mA)'), 5, 1)
         lay.addWidget(self.lb_cav, 5, 2)
@@ -167,8 +170,8 @@ class MacReportWindow(SiriusMainWindow):
         lay.addWidget(LbHHeader(
             'Current at the End of the Shift (avg ± std) (mA)'), 7, 1)
         lay.addWidget(self.lb_ceav, 7, 2)
-        lay.addWidget(LbHHeader('Failures Interval (h)'), 8, 1)
-        lay.addWidget(self.lb_fi, 8, 2)
+        lay.addWidget(LbHHeader('Total Failures Time (h)'), 8, 1)
+        lay.addWidget(self.lb_tft, 8, 2)
         lay.addWidget(LbHHeader('# Beam Dumps'), 9, 1)
         lay.addWidget(self.lb_bdc, 9, 2)
         lay.addWidget(LbHHeader('Time To Recover (avg ± std) (h)'), 10, 1)
@@ -177,39 +180,50 @@ class MacReportWindow(SiriusMainWindow):
         lay.addWidget(self.lb_mtbf, 11, 2)
         lay.addWidget(LbHHeader('Beam Reliability (%)'), 12, 1)
         lay.addWidget(self.lb_reli, 12, 2)
-        lay.addWidget(LbHHeader('Total Injection Shift Interval (h)'), 13, 1)
-        lay.addWidget(self.lb_isti, 13, 2)
+        lay.addWidget(LbHHeader('Total stable beam time (h)'), 13, 1)
+        lay.addWidget(self.lb_tsbt, 13, 2)
+        lay.addWidget(LbHHeader('Total unstable beam time (h)'), 14, 1)
+        lay.addWidget(self.lb_tubt, 14, 2)
         lay.addWidget(LbHHeader(
-            'Injection Shift Interval (avg ± std) (h)'), 14, 1)
-        lay.addWidget(self.lb_ismi, 14, 2)
+            'Time between unstable beams (avg) (h)'), 15, 1)
+        lay.addWidget(self.lb_mtbu, 15, 2)
+        lay.addWidget(LbHHeader('Relative stable beam time (%)'), 16, 1)
+        lay.addWidget(self.lb_rsbt, 16, 2)
+        lay.addWidget(LbHHeader('Injection time (avg ± std) (h)'), 17, 1)
+        lay.addWidget(self.lb_itav, 17, 2)
         lay.addItem(QSpacerItem(120, 1, QSzPlcy.Fixed, QSzPlcy.Ignored), 0, 3)
         return wid
 
     def _updateUserShiftStats(self, setup=False):
         w2r = {
-            'uspi': ['user_shift_progmd_interval', ],
-            'usdi': ['user_shift_delivd_interval', ],
-            'usti': ['user_shift_total_interval', ],
-            'usei': ['user_shift_extra_interval', ],
-            'uspc': ['user_shift_progmd_count', ],
-            'cav': ['user_shift_current_average', 'user_shift_current_stddev'],
-            'cbav': ['user_shift_current_beg_average',
-                     'user_shift_current_beg_stddev'],
-            'ceav': ['user_shift_current_end_average',
-                     'user_shift_current_end_stddev'],
-            'fi': ['failures_interval', ],
-            'bdc': ['beam_dump_count', ],
-            'mttr': ['time_to_recover_average', 'time_to_recover_stddev'],
-            'mtbf': ['time_between_failures_average', ],
-            'reli': ['beam_reliability', ],
-            'isti': ['inj_shift_interval', ],
-            'ismi': ['inj_shift_interval_average',
-                     'inj_shift_interval_stddev']}
+            'uspt': ['usershift_progmd_time', ],
+            'usdt': ['usershift_delivd_time', ],
+            'ustt': ['usershift_total_time', ],
+            'uset': ['usershift_extra_time', ],
+            'uspc': ['usershift_progmd_count', ],
+            'cav': ['usershift_current_average',
+                    'usershift_current_stddev'],
+            'cbav': ['usershift_current_beg_average',
+                     'usershift_current_beg_stddev'],
+            'ceav': ['usershift_current_end_average',
+                     'usershift_current_end_stddev'],
+            'tft': ['usershift_total_failures_time', ],
+            'bdc': ['usershift_beam_dump_count', ],
+            'mttr': ['usershift_time_to_recover_average',
+                     'usershift_time_to_recover_stddev'],
+            'mtbf': ['usershift_time_between_failures_average', ],
+            'reli': ['usershift_beam_reliability', ],
+            'tsbt': ['usershift_total_stable_beam_time', ],
+            'tubt': ['usershift_total_unstable_beam_time', ],
+            'mtbu': ['usershift_time_between_unstable_beams_average'],
+            'rsbt': ['usershift_relative_stable_beam_time'],
+            'itav': ['usershift_injection_time_average',
+                     'usershift_injection_time_stddev']}
 
         for wname, rname in w2r.items():
             wid = getattr(self, 'lb_'+wname)
             items = [getattr(self._macreport, n) for n in rname]
-            if 'interval' in rname[0] or 'time' in rname[0]:
+            if 'time' in rname[0] and 'relative' not in rname[0]:
                 if len(items) == 2:
                     if items[0] not in [None, _np.inf]:
                         hour1 = int(items[0])
@@ -276,13 +290,13 @@ class MacReportWindow(SiriusMainWindow):
         lay.setAlignment(Qt.AlignTop)
         lay.addWidget(LbHHeader(
             'Current (avg ± std) (mA) (MB)'), 1, 0)
-        lay.addWidget(LbHHeader('Interval in MB mode (h)'), 2, 0)
+        lay.addWidget(LbHHeader('Time in MB mode (h)'), 2, 0)
         lay.addWidget(LbHHeader(
             'Current (avg ± std) (mA) (SB)'), 3, 0)
-        lay.addWidget(LbHHeader('Interval in SB mode (h)'), 4, 0)
+        lay.addWidget(LbHHeader('Time in SB mode (h)'), 4, 0)
         lay.addWidget(LbHHeader(
             'Current (avg ± std) (mA) (SB+MB)'), 5, 0)
-        lay.addWidget(LbHHeader('Total Interval (h) (SB+MB)'), 6, 0)
+        lay.addWidget(LbHHeader('Total Time (h) (SB+MB)'), 6, 0)
         lay.addWidget(LbVHeader('Users'), 0, 1)
         lay.addWidget(self.lb_user_mb_avg, 1, 1)
         lay.addWidget(self.lb_user_mb_intvl, 2, 1)
@@ -333,7 +347,7 @@ class MacReportWindow(SiriusMainWindow):
             'tt': 'total'}
         stats = {
             'avg': ['average', 'stddev'],
-            'intvl': ['interval', ]}
+            'intvl': ['time', ]}
 
         for wsht, rsht in shifttype.items():
             for wfm, rfm in fillmode.items():
@@ -342,12 +356,12 @@ class MacReportWindow(SiriusMainWindow):
                     pname = 'current_'+rsht+'_'+rfm+'_'
                     items = [getattr(self._macreport, pname+i)
                              for i in rstt]
-                    if 'interval' in rstt[0] and items[0] is not None:
+                    if 'time' in rstt[0] and items[0] is not None:
                         hour = int(items[0])
                         minu = int((items[0] - hour)*60)
                         items = [hour, minu]
                     str2fmt = getattr(
-                        self, '_fst1' if ('interval' in rstt[0])
+                        self, '_fst1' if ('time' in rstt[0])
                         else '_fs'+str(len(rstt)))
                     text = '' if any([i is None for i in items]) \
                         else str2fmt.format(*items)
@@ -387,18 +401,18 @@ class MacReportWindow(SiriusMainWindow):
         self.lb_user_oper_pcntl = LbData('')
         self.lb_user_total_intvl = LbData('')
         self.lb_user_total_pcntl = LbData('')
-        self.lb_total_intvl = LbHHeader('Total Usage Interval (h): - ')
+        self.lb_total_intvl = LbHHeader('Total Usage Time (h): - ')
 
         wid = QWidget(self)
         lay = QGridLayout(wid)
         lay.setVerticalSpacing(0)
         lay.setHorizontalSpacing(0)
         lay.setAlignment(Qt.AlignTop)
-        lay.addWidget(LbHHeader('Operational Interval (h)'), 1, 0)
+        lay.addWidget(LbHHeader('Operational Time (h)'), 1, 0)
         lay.addWidget(LbHHeader('Operational Percentage (%)'), 2, 0)
-        lay.addWidget(LbHHeader('Failures Interval (h)'), 3, 0)
+        lay.addWidget(LbHHeader('Failures Time (h)'), 3, 0)
         lay.addWidget(LbHHeader('Failures Percentage (%)'), 4, 0)
-        lay.addWidget(LbHHeader('Shift Interval (h)'), 5, 0)
+        lay.addWidget(LbHHeader('Shift Time (h)'), 5, 0)
         lay.addWidget(LbHHeader('Shift Percentage (%)'), 6, 0)
         lay.addWidget(self.lb_total_intvl, 7, 0, 1, 6)
         lay.addWidget(LbVHeader('Users'), 0, 1)
@@ -452,7 +466,7 @@ class MacReportWindow(SiriusMainWindow):
         for wst, rst in shifttype.items():
             for wit, rit in intervaltype.items():
                 widt = getattr(self, 'lb_'+wst+'_'+wit+'_intvl')
-                tname = 'lsusage_'+rst+rit+'_interval'
+                tname = 'lsusage_'+rst+rit+'_time'
                 tval = getattr(self._macreport, tname)
                 if tval is None:
                     text = ''
@@ -472,9 +486,9 @@ class MacReportWindow(SiriusMainWindow):
                 if setup:
                     widp.setToolTip(getattr(MacReport, pname).__doc__)
 
-        text = 'Total Usage Interval (h): '
-        if self._macreport.lsusage_total_interval is not None:
-            val = self._macreport.lsusage_total_interval
+        text = 'Total Usage Time (h): '
+        if self._macreport.lsusage_total_time is not None:
+            val = self._macreport.lsusage_total_time
             hour = int(val)
             minu = int((val - hour)*60)
             text += self._fst1.format(hour, minu)
