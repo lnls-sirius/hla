@@ -9,7 +9,7 @@ from pydm.widgets import PyDMLineEdit, PyDMEnumComboBox, PyDMWaveformPlot, \
     PyDMLabel, PyDMSpinbox
 from siriushla.widgets import SiriusMainWindow, PyDMStateButton, PyDMLed, \
     SiriusLedAlert, SiriusLedState, PyDMLedMultiChannel, SiriusTimePlot, \
-    SiriusConnectionSignal, SiriusPushButton
+    SiriusConnectionSignal, SiriusPushButton, SiriusLabel
 from siriushla.util import connect_window, get_appropriate_color
 from pyqtgraph import InfiniteLine, mkPen
 from .details import TransmLineStatusDetails, CavityStatusDetails, \
@@ -839,10 +839,9 @@ class RFMainControl(SiriusMainWindow):
         self.lb_PwrRevBot.showUnits = True
         self.lb_C3PhsBot = PyDMLabel(self, 'BR-RF-DLLRF-01:BOT:CELL3:PHS')
         self.lb_C3PhsBot.showUnits = True
-        self.lb_CavVGapBot = PyDMLabel(
+        self.lb_CavVGapBot = SiriusLabel(
             self, 'BO-05D:RF-P5Cav:RmpAmpVCavBot-Mon')
         self.lb_CavVGapBot.showUnits = True
-        self.lb_CavVGapBot.setVisible(False)
 
         self.lb_C3PwrTop = PyDMLabel(self, 'BO-05D:RF-P5Cav:Cell3PwrTop-Mon')
         self.lb_C3PwrTop.showUnits = True
@@ -852,10 +851,9 @@ class RFMainControl(SiriusMainWindow):
         self.lb_PwrRevTop.showUnits = True
         self.lb_C3PhsTop = PyDMLabel(self, 'BR-RF-DLLRF-01:TOP:CELL3:PHS')
         self.lb_C3PhsTop.showUnits = True
-        self.lb_CavVGapTop = PyDMLabel(
+        self.lb_CavVGapTop = SiriusLabel(
             self, 'BO-05D:RF-P5Cav:RmpAmpVCavTop-Mon')
         self.lb_CavVGapTop.showUnits = True
-        self.lb_CavVGapTop.setVisible(False)
 
         lay = QGridLayout()
         lay.setVerticalSpacing(15)
@@ -1026,9 +1024,7 @@ class RFMainControl(SiriusMainWindow):
                     self.curves[name+' dBm'].setVisible(False)
 
         self.ld_CavVGap = QLabel('Cav - VGap', self, alignment=Qt.AlignCenter)
-        self.ld_CavVGap.setVisible(False)
-        self.lb_CavVGap = PyDMLabel(self, self.chs['CavVGap'])
-        self.lb_CavVGap.setVisible(False)
+        self.lb_CavVGap = SiriusLabel(self, self.chs['CavVGap'])
         self.lb_CavVGap.showUnits = True
         lay_CavVGap = QHBoxLayout()
         lay_CavVGap.addWidget(self.ld_CavVGap)
@@ -1378,8 +1374,6 @@ class RFMainControl(SiriusMainWindow):
         self.lb_amp1.setVisible(text == '[mV]')
         self.sb_amp2.setVisible(text == '[V]')
         self.lb_amp2.setVisible(text == '[V]')
-        self.ld_CavVGap.setVisible(text == '[V]')
-        self.lb_CavVGap.setVisible(text == '[V]')
 
     def _handle_rmpampl_unit_visibility(self, text):
         self.blockSignals(True)
@@ -1394,6 +1388,4 @@ class RFMainControl(SiriusMainWindow):
         self.le_RmpVoltBot2.setVisible(text == '[V]')
         self.lb_RmpVoltBot2.setVisible(text == '[V]')
         self.lb_VGapDesc.setVisible(text == '[V]')
-        self.lb_CavVGapBot.setVisible(text == '[V]')
-        self.lb_CavVGapTop.setVisible(text == '[V]')
         self.blockSignals(False)
