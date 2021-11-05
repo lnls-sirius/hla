@@ -1023,8 +1023,12 @@ class RFMainControl(SiriusMainWindow):
                 else:
                     self.curves[name+' dBm'].setVisible(False)
 
-        self.ld_CavVGap = QLabel('Cav - VGap', self, alignment=Qt.AlignCenter)
+        self.ld_CavVGap = QLabel(
+            'Gap Voltage:', self, alignment=Qt.AlignCenter)
+        self.ld_CavVGap.setStyleSheet('QLabel{font-size: 15pt;}')
         self.lb_CavVGap = SiriusLabel(self, self.chs['CavVGap'])
+        self.lb_CavVGap.setStyleSheet('QLabel{font-size: 20pt;}')
+
         self.lb_CavVGap.showUnits = True
         lay_CavVGap = QHBoxLayout()
         lay_CavVGap.addWidget(self.ld_CavVGap)
