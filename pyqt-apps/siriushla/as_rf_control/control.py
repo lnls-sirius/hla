@@ -466,6 +466,71 @@ class RFMainControl(SiriusMainWindow):
         lay_tunset.addItem(
             QSpacerItem(10, 0, QSzPlcy.Expanding, QSzPlcy.Ignored), 1, 4)
 
+        # # # FieldFlatness settings
+        pvs = self.chs['FFlat']
+        lb2 = '6' if self.section == 'SI' else '4'
+        lb_fflat = QLabel(
+            '<h3> • Field Flatness</h3>', self, alignment=Qt.AlignLeft)
+        lb_ffsts = QLabel('Acting: ', self, alignment=Qt.AlignRight)
+        self.lb_ffsts = SiriusLedState(self, pvs['Sts'])
+        lb_ffen = QLabel('Enable: ', self, alignment=Qt.AlignRight)
+        self.bt_ffen = PyDMStateButton(self, pvs['Auto']+':S')
+        self.lb_ffen = SiriusLedState(self, pvs['Auto'])
+        lb_ffpos = QLabel('Position: ', self, alignment=Qt.AlignRight)
+        self.bt_ffpos = PyDMStateButton(self, pvs['Pos']+':S')
+        self.lb_ffpos = SiriusLedState(self, pvs['Pos'])
+        lb_ffg1 = QLabel('Gain Cell 2: ', self, alignment=Qt.AlignRight)
+        lb_ffg2 = QLabel(f'Gain Cell {lb2:s}: ', self, alignment=Qt.AlignRight)
+        self.sb_ffg1 = PyDMSpinbox(self, pvs['Gain1']+':S')
+        self.sb_ffg2 = PyDMSpinbox(self, pvs['Gain2']+':S')
+        self.sb_ffg1.showStepExponent = False
+        self.sb_ffg2.showStepExponent = False
+        self.lb_ffg1 = PyDMLabel(self, pvs['Gain1'])
+        self.lb_ffg2 = PyDMLabel(self, pvs['Gain2'])
+        self.lb_ffg1.showUnits = True
+        self.lb_ffg2.showUnits = True
+        lb_ffdb = QLabel('DeadBand: ', self, alignment=Qt.AlignRight)
+        self.sb_ffdb = PyDMSpinbox(self, pvs['Deadband']+':S')
+        self.sb_ffdb.showStepExponent = False
+        self.lb_ffdb = PyDMLabel(self, pvs['Deadband'])
+        self.lb_ffdb.showUnits = True
+        lb_ffcell1 = QLabel('Cell 2: ', self, alignment=Qt.AlignRight)
+        self.lb_ffcell1 = PyDMLabel(self, pvs['Cell1'])
+        self.lb_ffcell1.showUnits = True
+        lb_ffcell2 = QLabel(f'Cell {lb2:s}: ', self, alignment=Qt.AlignRight)
+        self.lb_ffcell2 = PyDMLabel(self, pvs['Cell2'])
+        self.lb_ffcell2.showUnits = True
+        lb_fferr = QLabel('Error: ', self, alignment=Qt.AlignRight)
+        self.lb_fferr = PyDMLabel(self, pvs['Err'])
+        self.lb_fferr.showUnits = True
+        lay_fflat = QGridLayout()
+        lay_fflat.setAlignment(Qt.AlignTop | Qt.AlignHCenter)
+        lay_fflat.setVerticalSpacing(12)
+        lay_fflat.addWidget(lb_fflat, 0, 0)
+        lay_fflat.addWidget(lb_ffen, 1, 0)
+        lay_fflat.addWidget(self.bt_ffen, 1, 1)
+        lay_fflat.addWidget(self.lb_ffen, 1, 2)
+        lay_fflat.addWidget(lb_ffpos, 2, 0)
+        lay_fflat.addWidget(self.bt_ffpos, 2, 1)
+        lay_fflat.addWidget(self.lb_ffpos, 2, 2)
+        lay_fflat.addWidget(lb_ffg1, 3, 0)
+        lay_fflat.addWidget(self.sb_ffg1, 3, 1)
+        lay_fflat.addWidget(self.lb_ffg1, 3, 2)
+        lay_fflat.addWidget(lb_ffg2, 4, 0)
+        lay_fflat.addWidget(self.sb_ffg2, 4, 1)
+        lay_fflat.addWidget(self.lb_ffg2, 4, 2)
+        lay_fflat.addWidget(lb_ffdb, 5, 0)
+        lay_fflat.addWidget(self.sb_ffdb, 5, 1)
+        lay_fflat.addWidget(self.lb_ffdb, 5, 2)
+        lay_fflat.addWidget(lb_ffcell1, 6, 0)
+        lay_fflat.addWidget(self.lb_ffcell1, 6, 1)
+        lay_fflat.addWidget(lb_ffcell2, 7, 0)
+        lay_fflat.addWidget(self.lb_ffcell2, 7, 1)
+        lay_fflat.addWidget(lb_fferr, 8, 0)
+        lay_fflat.addWidget(self.lb_fferr, 8, 1)
+        lay_fflat.addWidget(lb_ffsts, 9, 0)
+        lay_fflat.addWidget(self.lb_ffsts, 9, 1, alignment=Qt.AlignCenter)
+
         # # # Plungers motors
         lb_plg1 = QLabel('Plunger 1')
         lb_plg2 = QLabel('Plunger 2')
@@ -532,6 +597,9 @@ class RFMainControl(SiriusMainWindow):
         lay_plun.addLayout(lay_plunmon, 4, 0)
         lay_plun.addWidget(self.graph_plunmotors, 4, 1, 1, 2)
 
+        wid_fflat = QWidget()
+        wid_fflat.setLayout(lay_fflat)
+
         wid_llrf = QTabWidget(self)
         color = 'green' if self.section == 'BO' else 'blue'
         wid_llrf.setStyleSheet("""
@@ -542,6 +610,7 @@ class RFMainControl(SiriusMainWindow):
             }""")
         wid_llrf.addTab(wid_sl, 'Slow Loop Control')
         wid_llrf.addTab(wid_tun, 'Tuning')
+        wid_llrf.addTab(wid_fflat, 'Field Flatness')
 
         # Layout
         vlay = QVBoxLayout()
