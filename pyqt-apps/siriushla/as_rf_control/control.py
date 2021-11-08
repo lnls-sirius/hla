@@ -829,7 +829,6 @@ class RFMainControl(SiriusMainWindow):
 
         self.lb_VGapDesc = QLabel('<h4>Cavity VGap</h4>', self,
                                   alignment=Qt.AlignCenter)
-        self.lb_VGapDesc.setVisible(False)
 
         self.lb_C3PwrBot = PyDMLabel(self, 'BO-05D:RF-P5Cav:Cell3PwrBot-Mon')
         self.lb_C3PwrBot.showUnits = True
@@ -1391,5 +1390,4 @@ class RFMainControl(SiriusMainWindow):
         self.lb_RmpVoltTop2.setVisible(text == '[V]')
         self.le_RmpVoltBot2.setVisible(text == '[V]')
         self.lb_RmpVoltBot2.setVisible(text == '[V]')
-        self.lb_VGapDesc.setVisible(text == '[V]')
         self.blockSignals(False)
