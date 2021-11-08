@@ -827,8 +827,8 @@ class RFMainControl(SiriusMainWindow):
         self.curve_VGav.setVisible(False)
         self.curve_Pwr.setVisible(False)
 
-        self.lb_VGapDesc = QLabel('<h4>Cavity VGap</h4>', self,
-                                  alignment=Qt.AlignCenter)
+        self.lb_VGapDesc = QLabel(
+            '<h4>Gap Voltage:</h4>', self, alignment=Qt.AlignCenter)
 
         self.lb_C3PwrBot = PyDMLabel(self, 'BO-05D:RF-P5Cav:Cell3PwrBot-Mon')
         self.lb_C3PwrBot.showUnits = True
@@ -856,18 +856,18 @@ class RFMainControl(SiriusMainWindow):
 
         lay = QGridLayout()
         lay.setVerticalSpacing(15)
-        lay.addWidget(QLabel('<h4>Bottom</h4>', self,
-                             alignment=Qt.AlignCenter), 1, 1)
-        lay.addWidget(QLabel('<h4>Top</h4>', self,
-                             alignment=Qt.AlignCenter), 1, 2)
-        lay.addWidget(QLabel('<h4>Cavity Power</h4>', self,
-                             alignment=Qt.AlignCenter), 2, 0)
-        lay.addWidget(QLabel('<h4>Power Fwd.</h4>', self,
-                             alignment=Qt.AlignCenter), 3, 0)
-        lay.addWidget(QLabel('<h4>Power Rev.</h4>', self,
-                             alignment=Qt.AlignCenter), 4, 0)
-        lay.addWidget(QLabel('<h4>Phase</h4>', self,
-                             alignment=Qt.AlignCenter), 5, 0)
+        lay.addWidget(QLabel(
+            '<h4>Bottom</h4>', self, alignment=Qt.AlignCenter), 1, 1)
+        lay.addWidget(QLabel(
+            '<h4>Top</h4>', self, alignment=Qt.AlignCenter), 1, 2)
+        lay.addWidget(QLabel(
+            '<h4>Cavity Power</h4>', self, alignment=Qt.AlignCenter), 2, 0)
+        lay.addWidget(QLabel(
+            '<h4>Power Fwd.</h4>', self, alignment=Qt.AlignCenter), 3, 0)
+        lay.addWidget(QLabel(
+            '<h4>Power Rev.</h4>', self, alignment=Qt.AlignCenter), 4, 0)
+        lay.addWidget(QLabel(
+            '<h4>Phase</h4>', self, alignment=Qt.AlignCenter), 5, 0)
         lay.addWidget(self.lb_VGapDesc, 6, 0)
         lay.addWidget(self.lb_C3PwrBot, 2, 1)
         lay.addWidget(self.lb_PwrFwdBot, 3, 1)
