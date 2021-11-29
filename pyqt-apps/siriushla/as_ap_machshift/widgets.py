@@ -19,13 +19,13 @@ class MachShiftLabel(QWidget):
 
         color_list = [
             SiriusFrame.Yellow,  # Users
-            SiriusFrame.LightBlue,  # Commissioning
+            SiriusFrame.MediumBlue,  # Commissioning
             SiriusFrame.DarkCyan,  # Conditioning
             SiriusFrame.LightSalmon,  # Injection
             SiriusFrame.LightBlue,  # MachineStudy
-            SiriusFrame.LightGreen,  # Maintenance
-            SiriusFrame.Salmon,  # Standby
-            SiriusFrame.Lavender,  # Shutdown
+            SiriusFrame.MediumGreen,  # Maintenance
+            SiriusFrame.LightGray,  # Standby
+            SiriusFrame.DarkGray,  # Shutdown
         ]
         self.frame = SiriusFrame(
             self, prefix+'AS-Glob:AP-MachShift:Mode-Sts',
