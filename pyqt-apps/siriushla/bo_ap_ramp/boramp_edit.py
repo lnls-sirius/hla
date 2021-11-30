@@ -1520,7 +1520,7 @@ class RFRamp(QWidget):
     def _setupGraph(self):
         self.graph.setObjectName('RFGraph')
         self.graph.setStyleSheet("""
-            #RFGraph{min-width:28em;min-height:18em;max-height:18em;}
+            #RFGraph{min-width:30em;min-height:18em;max-height:18em;}
             #toolbar{min-height:2em; max-height:2em;}""")
         self.graph.setSizePolicy(QSzPlcy.MinimumExpanding, QSzPlcy.Preferred)
         self.graph.figure.set_tight_layout({'pad': .0})
@@ -1574,7 +1574,7 @@ class RFRamp(QWidget):
         self.table.setStyleSheet(
             """
             #RFTable{
-                min-width: 28em;
+                min-width: 30em;
                 min-height: 10.5em; max-height: 10.5em;
             }
             QHeaderView::section {
@@ -1644,7 +1644,7 @@ class RFRamp(QWidget):
                                 mini=0, maxi=500, prec=3))
         self.table.setItemDelegateForColumn(
             2, _SpinBoxDelegate(parent=self.table,
-                                mini=0, maxi=1200, prec=3))
+                                mini=0, maxi=1200, prec=6))
         self.table.setItemDelegateForColumn(
             3, _SpinBoxDelegate(parent=self.table,
                                 mini=-180, maxi=180, prec=3))
