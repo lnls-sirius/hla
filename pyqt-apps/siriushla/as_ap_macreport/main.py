@@ -10,7 +10,7 @@ from qtpy.QtWidgets import QWidget, QGridLayout, QGroupBox, QTabWidget, \
 import qtawesome as qta
 
 from siriuspy.clientarch import Time
-from siriuspy.machshift.utils import MacReport
+from siriuspy.machshift.macreport import MacReport
 
 from ..widgets import SiriusMainWindow, MatplotlibWidget
 
