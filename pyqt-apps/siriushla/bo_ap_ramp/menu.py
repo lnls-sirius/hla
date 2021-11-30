@@ -16,8 +16,7 @@ from siriushla import util
 from siriushla.widgets.windows import SiriusDialog
 from siriushla.as_ap_configdb import LoadConfigDialog as _LoadConfigDialog, \
     SaveConfigDialog as _SaveConfigDialog
-from .auxiliary_dialogs import OpticsAdjustSettings as _OpticsAdjustSettings, \
-    AuxiliaryRFVoltConv as _AuxRFVoltConv
+from .auxiliary_dialogs import OpticsAdjustSettings as _OpticsAdjustSettings
 
 
 class Settings(QMenuBar):
@@ -90,9 +89,6 @@ class Settings(QMenuBar):
         self.act_plotstrengths = self.menu_plotunits.addAction('Strengths')
         self.act_plotstrengths.triggered.connect(
             _part(self.plotUnitSignal.emit, 'Strengths'))
-        self.act_rfconv = self.ramp_params_menu.addAction(
-            'RF Voltage Convertion')
-        self.act_rfconv.triggered.connect(self._showRFConvDialog)
 
         self.act_optics = self.addAction('Optics Adjustments Settings')
         self.act_optics.triggered.connect(self._showOpticsSettingsPopup)
@@ -190,10 +186,6 @@ class Settings(QMenuBar):
             self._tunecorr_configname, self._chromcorr_configname, self)
         opticsSettingsPopup.updateSettings.connect(self._emitOpticsSettings)
         opticsSettingsPopup.open()
-
-    def _showRFConvDialog(self):
-        wind = _AuxRFVoltConv(self)
-        wind.open()
 
     @Slot(str, str)
     def _emitOpticsSettings(self, tunecorr_configname, chromcorr_configname):
