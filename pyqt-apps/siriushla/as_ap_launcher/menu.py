@@ -132,11 +132,6 @@ def get_object(ismenubar=True, parent=None):
             self.connect_newprocess(servconf, 'sirius-hla-as-ap-configdb.py')
             self.add_object_to_level1(menu, servconf)
 
-            procserv = LEVEL2A('ProcServ', menu)
-            self.connect_newprocess(
-                procserv, 'sirius-hla-as-ap-pctrl', is_pydm=True)
-            self.add_object_to_level1(menu, procserv)
-
             chart = LEVEL2A('TimeChart', menu)
             self.connect_newprocess(chart, 'timechart')
             self.add_object_to_level1(menu, chart)
