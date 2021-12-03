@@ -9,6 +9,7 @@ import qtawesome as qta
 from pydm.widgets import PyDMLabel
 
 from siriuspy.envars import VACA_PREFIX
+from siriuspy.namesys import SiriusPVName
 from siriuspy.clientarch.time import Time
 from siriushla.widgets import SiriusMainWindow, SiriusTimePlot
 from siriushla.util import get_appropriate_color
@@ -74,7 +75,7 @@ class EfficiencyMonitor(SiriusMainWindow):
 
         for i, data in enumerate(self._eff_list):
             text, pvn, color = data
-            pvname = self._prefix + pvn
+            pvname = SiriusPVName(pvn).substitute(prefix=self._prefix)
 
             self.timeplot.addYChannel(
                 pvname, name=pvname, color=color, lineWidth=2)
