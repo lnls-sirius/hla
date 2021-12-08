@@ -10,7 +10,7 @@ class MPSMonitor(QWidget):
 
     def __init__(self, parent=None, prefix=''):
         super().__init__(parent)
-        self.prefix = prefix
+        self.prefix = prefix + ('-' if prefix else '')
         self.setWindowTitle('Linac MPS Monitor')
         self.setObjectName('LIApp')
         self._setupUi()
@@ -41,7 +41,7 @@ class MPSMonitor(QWidget):
                                 continue
                             aux_col = ch_grp.index(ch)
                             k = (MPS_PREFIX if 'RF' not in ch[0] else '')+ch[0]
-                            ch2vals = {k: ch[1]}
+                            ch2vals = {self.prefix + k: ch[1]}
                             led = PyDMLedMultiChannel(self)
                             led.set_channels2values(ch2vals)
                             grid.addWidget(led, aux_row, aux_col+1,
@@ -51,7 +51,7 @@ class MPSMonitor(QWidget):
                     aux_row = 0
                     for text, ch in status.items():
                         grid.addWidget(QLabel(text, self), aux_row, 0)
-                        ch2vals = {MPS_PREFIX + ch[0]: ch[1]}
+                        ch2vals = {self.prefix + MPS_PREFIX + ch[0]: ch[1]}
                         led = PyDMLedMultiChannel(self)
                         led.set_channels2values(ch2vals)
                         if 'Heartbeat' in text:
@@ -64,7 +64,7 @@ class MPSMonitor(QWidget):
                     aux_row = status.index(ch_grp)
                     for ch in ch_grp:
                         aux_col = ch_grp.index(ch)
-                        ch2vals = {MPS_PREFIX + ch[0]: ch[1]}
+                        ch2vals = {self.prefix + MPS_PREFIX + ch[0]: ch[1]}
                         led = PyDMLedMultiChannel(self)
                         led.set_channels2values(ch2vals)
                         grid.addWidget(led, aux_row, aux_col,
