@@ -40,32 +40,32 @@ class DCCTSettings(QWidget):
         # Measure
         l_reliablemeas = QLabel('Reliability: ')
         self.led_ReliableMeas = SiriusLedAlert(
-            parent=self, init_channel=self.dcct_prefix+'ReliableMeas-Mon')
+            self, self.dcct_prefix.substitute(propty='ReliableMeas-Mon'))
 
         l_curr = QLabel('Current [mA]: ', self, alignment=Qt.AlignRight)
         self.label_current = PyDMLabel(
-            parent=self, init_channel=self.dcct_prefix + 'Current-Mon')
+            self, self.dcct_prefix.substitute(propty='Current-Mon'))
         self.led_StoredEBeam = SiriusLedState(
-            parent=self, init_channel=self.dcct_prefix + 'StoredEBeam-Mon')
+            self, self.dcct_prefix.substitute(propty='StoredEBeam-Mon'))
         hlay_current = QHBoxLayout()
         hlay_current.addWidget(self.label_current)
         hlay_current.addWidget(self.led_StoredEBeam)
 
         l_enbl = QLabel('Enable:', self)
         self.pydmstatebutton_Enbl = PyDMStateButton(
-            parent=self, init_channel=self.dcct_prefix+'Enbl-Sel')
+            self, self.dcct_prefix.substitute(propty='Enbl-Sel'))
         self.pydmstatebutton_Enbl.shape = 1
         self.led_Enbl = SiriusLedState(
-            parent=self, init_channel=self.dcct_prefix+'Enbl-Sts')
+            self, self.dcct_prefix.substitute(propty='Enbl-Sts'))
         hlay_enbl = QHBoxLayout()
         hlay_enbl.addWidget(self.pydmstatebutton_Enbl)
         hlay_enbl.addWidget(self.led_Enbl)
 
         l_meastrig = QLabel('Trigger Source:', self)
         self.pydmenumcombobox_MeasTrg = PyDMEnumComboBox(
-            parent=self, init_channel=self.dcct_prefix+'MeasTrg-Sel')
+            self, self.dcct_prefix.substitute(propty='MeasTrg-Sel'))
         self.pydmlabel_MeasTrg = PyDMLabel(
-            parent=self, init_channel=self.dcct_prefix+'MeasTrg-Sts')
+            self, self.dcct_prefix.substitute(propty='MeasTrg-Sts'))
         hlay_meastrig = QHBoxLayout()
         hlay_meastrig.addWidget(self.pydmenumcombobox_MeasTrg)
         hlay_meastrig.addWidget(self.pydmlabel_MeasTrg)
@@ -73,9 +73,9 @@ class DCCTSettings(QWidget):
         if 'SI' in self.device:
             l_range = QLabel('Range: ', self)
             self.pydmenumcombobox_Range = PyDMEnumComboBox(
-                parent=self, init_channel=self.dcct_prefix+'Range-Sel')
+                self, self.dcct_prefix.substitute(propty='Range-Sel'))
             self.pydmlabel_Range = PyDMLabel(
-                parent=self, init_channel=self.dcct_prefix+'Range-Sts')
+                self, self.dcct_prefix.substitute(propty='Range-Sts'))
             hlay_range = QHBoxLayout()
             hlay_range.addWidget(self.pydmenumcombobox_Range)
             hlay_range.addWidget(self.pydmlabel_Range)
@@ -83,9 +83,9 @@ class DCCTSettings(QWidget):
 
         l_measmode = QLabel('Mode: ', self)
         self.pydmenumcombobox_MeasMode = PyDMEnumComboBox(
-            parent=self, init_channel=self.dcct_prefix+'MeasMode-Sel')
+            self, self.dcct_prefix.substitute(propty='MeasMode-Sel'))
         self.pydmlabel_MeasMode = PyDMLabel(
-            parent=self, init_channel=self.dcct_prefix+'MeasMode-Sts')
+            self, self.dcct_prefix.substitute(propty='MeasMode-Sts'))
         hlay_measmode = QHBoxLayout()
         hlay_measmode.addWidget(self.pydmenumcombobox_MeasMode)
         hlay_measmode.addWidget(self.pydmlabel_MeasMode)
@@ -98,7 +98,7 @@ class DCCTSettings(QWidget):
         glay_mode.addWidget(self.fastmode_widget, 0, 0)
         glay_mode.setContentsMargins(0, 0, 0, 0)
         self.mode_channel = SiriusConnectionSignal(
-            self.dcct_prefix+'MeasMode-Sel')
+            self.dcct_prefix.substitute(propty='MeasMode-Sel'))
         self.mode_channel.new_value_signal.connect(self._showMeasModeSettings)
 
         # Details
@@ -162,25 +162,25 @@ class DCCTSettings(QWidget):
             prefix = self.dcct_prefix
             visible = True
         elif mode == 'Fast':
-            prefix = self.dcct_prefix + mode
+            prefix = self.dcct_prefix.substitute(propty_name=mode)
             visible = False
 
         l_smpcnt = QLabel('Sample Count: ', self)
         spinbox_SampleCnt = PyDMSpinbox(
-            parent=self, init_channel=prefix+'SampleCnt-SP')
+            self, prefix.substitute(propty=prefix.propty_name+'SampleCnt-SP'))
         spinbox_SampleCnt.showStepExponent = False
         label_SampleCnt = PyDMLabel(
-            parent=self, init_channel=prefix+'SampleCnt-RB')
+            self, prefix.substitute(propty=prefix.propty_name+'SampleCnt-RB'))
         hlay_smpcnt = QHBoxLayout()
         hlay_smpcnt.addWidget(spinbox_SampleCnt)
         hlay_smpcnt.addWidget(label_SampleCnt)
 
         l_measperiod = QLabel('Period [s]: ', self)
         spinbox_MeasPeriod = PyDMSpinbox(
-            parent=self, init_channel=prefix+'MeasPeriod-SP')
+            self, prefix.substitute(propty=prefix.propty_name+'MeasPeriod-SP'))
         spinbox_MeasPeriod.showStepExponent = False
         label_MeasPeriod = PyDMLabel(
-            parent=self, init_channel=prefix+'MeasPeriod-RB')
+            self, prefix.substitute(propty=prefix.propty_name+'MeasPeriod-RB'))
         hlay_measperiod = QHBoxLayout()
         hlay_measperiod.addWidget(spinbox_MeasPeriod)
         hlay_measperiod.addWidget(label_MeasPeriod)
@@ -210,12 +210,12 @@ class DCCTSettingsDetails(QWidget):
         """Initialize object."""
         super().__init__(parent)
         self.prefix = prefix
-        self.device = device
+        self.device = _PVName(device)
         if 'BO' in device:
             self.setObjectName('BOApp')
         else:
             self.setObjectName('SIApp')
-        self.dcct_prefix = self.prefix + device + ':'
+        self.dcct_prefix = device.substitute(prefix=self.prefix)
         self._db = get_dcct_database()
         self._setupUi()
 
@@ -234,7 +234,7 @@ class DCCTSettingsDetails(QWidget):
         lay_mode.addWidget(self.gbox_normalmode, 0, 0)
         lay_mode.addWidget(self.gbox_fastmode, 0, 0)
         self.mode_channel = SiriusConnectionSignal(
-            self.dcct_prefix+'MeasMode-Sel')
+            self.dcct_prefix.substitute(propty='MeasMode-Sel'))
         self.mode_channel.new_value_signal.connect(self._showMeasModeSettings)
 
         lay = QGridLayout()
@@ -272,8 +272,8 @@ class DCCTSettingsDetails(QWidget):
         self.relmeas_labels = list()
         for idx in range(relmeas_count):
             led = SiriusLedAlert(
-                parent=self, init_channel=self.dcct_prefix+'ReliableMeas-Mon',
-                bit=idx)
+                parent=self, init_channel=self.dcct_prefix.substitute(
+                    propty='ReliableMeas-Mon'), bit=idx)
             lay_reliablemeas.addWidget(led, idx, 0)
             lbl = QLabel('', self)
             self.relmeas_labels.append(lbl)
@@ -282,7 +282,7 @@ class DCCTSettingsDetails(QWidget):
         lay_reliablemeas.setColumnStretch(1, 10)
 
         self.reliablemeas_channel = _PV(
-            self.dcct_prefix+'ReliableMeasLabels-Cte',
+            self.dcct_prefix.substitute(propty='ReliableMeasLabels-Cte'),
             callback=self._updateReliableMeasLabels)
 
         return gbox_reliablemeas
@@ -292,74 +292,74 @@ class DCCTSettingsDetails(QWidget):
 
         l_enbl = QLabel('Enable:', self)
         self.pydmstatebutton_Enbl = PyDMStateButton(
-            parent=self, init_channel=self.dcct_prefix+'Enbl-Sel')
+            self, self.dcct_prefix.substitute(propty='Enbl-Sel'))
         self.pydmstatebutton_Enbl.shape = 1
         self.led_Enbl = SiriusLedState(
-            parent=self, init_channel=self.dcct_prefix+'Enbl-Sts')
+            self, self.dcct_prefix.substitute(propty='Enbl-Sts'))
         hlay_enbl = QHBoxLayout()
         hlay_enbl.addWidget(self.pydmstatebutton_Enbl)
         hlay_enbl.addWidget(self.led_Enbl)
 
         l_meastrig = QLabel('Trigger Source: ', self)
         self.pydmenumcombobox_MeasTrg = PyDMEnumComboBox(
-            parent=self, init_channel=self.dcct_prefix+'MeasTrg-Sel')
+            self, self.dcct_prefix.substitute(propty='MeasTrg-Sel'))
         self.pydmlabel_MeasTrg = PyDMLabel(
-            parent=self, init_channel=self.dcct_prefix+'MeasTrg-Sts')
+            self, self.dcct_prefix.substitute(propty='MeasTrg-Sts'))
         hlay_meastrig = QHBoxLayout()
         hlay_meastrig.addWidget(self.pydmenumcombobox_MeasTrg)
         hlay_meastrig.addWidget(self.pydmlabel_MeasTrg)
 
         l_trigmiss = QLabel('Trigger Is Missing?', self)
         self.led_TrgMiss = SiriusLedAlert(
-            parent=self, init_channel=self.dcct_prefix+'TrgIsMissing-Mon')
+            self, self.dcct_prefix.substitute(propty='TrgIsMissing-Mon'))
         hlay_trigmiss = QHBoxLayout()
         hlay_trigmiss.addWidget(self.led_TrgMiss)
         hlay_trigmiss.setAlignment(Qt.AlignLeft)
 
         l_range = QLabel('Range: ', self)
         self.pydmenumcombobox_Range = PyDMEnumComboBox(
-            parent=self, init_channel=self.dcct_prefix+'Range-Sel')
+            self, self.dcct_prefix.substitute(propty='Range-Sel'))
         self.pydmlabel_Range = PyDMLabel(
-            parent=self, init_channel=self.dcct_prefix+'Range-Sts')
+            self, self.dcct_prefix.substitute(propty='Range-Sts'))
         hlay_range = QHBoxLayout()
         hlay_range.addWidget(self.pydmenumcombobox_Range)
         hlay_range.addWidget(self.pydmlabel_Range)
 
         l_lowlimenbl = QLabel('Low Beam Current Detection: ', self)
         self.pydmstatebutton_LowLimEnbl = PyDMStateButton(
-            parent=self, init_channel=self.dcct_prefix+'LowLimEnbl-Sel')
+            self, self.dcct_prefix.substitute(propty='LowLimEnbl-Sel'))
         self.pydmstatebutton_LowLimEnbl.shape = 1
         self.pydmlabel_LowLimEnbl = PyDMLabel(
-            parent=self, init_channel=self.dcct_prefix+'LowLimEnbl-Sts')
+            self, self.dcct_prefix.substitute(propty='LowLimEnbl-Sts'))
         hlay_lowlimenbl = QHBoxLayout()
         hlay_lowlimenbl.addWidget(self.pydmstatebutton_LowLimEnbl)
         hlay_lowlimenbl.addWidget(self.pydmlabel_LowLimEnbl)
 
         l_currthold = QLabel('Current Threshold [mA]: ', self)
         self.pydmspinbox_CurrThold = PyDMSpinbox(
-            parent=self, init_channel=self.dcct_prefix+'CurrThold-SP')
+            self, self.dcct_prefix.substitute(propty='CurrThold-SP'))
         self.pydmspinbox_CurrThold.showStepExponent = False
         self.pydmlabel_CurrThold = PyDMLabel(
-            parent=self, init_channel=self.dcct_prefix+'CurrThold-RB')
+            self, self.dcct_prefix.substitute(propty='CurrThold-RB'))
         hlay_currthold = QHBoxLayout()
         hlay_currthold.addWidget(self.pydmspinbox_CurrThold)
         hlay_currthold.addWidget(self.pydmlabel_CurrThold)
 
         l_hfreject = QLabel('High Frequency Rejection: ', self)
         self.pydmstatebutton_HFReject = PyDMStateButton(
-            parent=self, init_channel=self.dcct_prefix+'HFReject-Sel')
+            self, self.dcct_prefix.substitute(propty='HFReject-Sel'))
         self.pydmstatebutton_HFReject.shape = 1
         self.pydmlabel_HFReject = PyDMLabel(
-            parent=self, init_channel=self.dcct_prefix+'HFReject-Sts')
+            self, self.dcct_prefix.substitute(propty='HFReject-Sts'))
         hlay_hfreject = QHBoxLayout()
         hlay_hfreject.addWidget(self.pydmstatebutton_HFReject)
         hlay_hfreject.addWidget(self.pydmlabel_HFReject)
 
         l_measmode = QLabel('Mode: ', self)
         self.pydmenumcombobox_MeasMode = PyDMEnumComboBox(
-            parent=self, init_channel=self.dcct_prefix+'MeasMode-Sel')
+            self, self.dcct_prefix.substitute(propty='MeasMode-Sel'))
         self.pydmlabel_MeasMode = PyDMLabel(
-            parent=self, init_channel=self.dcct_prefix+'MeasMode-Sts')
+            self, self.dcct_prefix.substitute(propty='MeasMode-Sts'))
         hlay_measmode = QHBoxLayout()
         hlay_measmode.addWidget(self.pydmenumcombobox_MeasMode)
         hlay_measmode.addWidget(self.pydmlabel_MeasMode)
@@ -387,68 +387,67 @@ class DCCTSettingsDetails(QWidget):
             prefix = self.dcct_prefix
             visible = True
         elif mode == 'Fast':
-            prefix = self.dcct_prefix + mode
+            prefix = self.dcct_prefix.substitute(propty_name=mode)
             visible = False
 
         gbox_modesettings = QGroupBox(mode+' Measurement Mode Settings', self)
 
         l_smpcnt = QLabel('Sample Count: ', self)
         spinbox_SampleCnt = PyDMSpinbox(
-            parent=self, init_channel=prefix+'SampleCnt-SP')
+            self, prefix.substitute(propty=prefix.propty_name+'SampleCnt-SP'))
         spinbox_SampleCnt.showStepExponent = False
         label_SampleCnt = PyDMLabel(
-            parent=self, init_channel=prefix+'SampleCnt-RB')
+            self, prefix.substitute(propty=prefix.propty_name+'SampleCnt-RB'))
         hlay_smpcnt = QHBoxLayout()
         hlay_smpcnt.addWidget(spinbox_SampleCnt)
         hlay_smpcnt.addWidget(label_SampleCnt)
 
         l_measperiod = QLabel('Period [s]: ', self)
         spinbox_MeasPeriod = PyDMSpinbox(
-            parent=self, init_channel=prefix+'MeasPeriod-SP')
+            self, prefix.substitute(propty=prefix.propty_name+'MeasPeriod-SP'))
         spinbox_MeasPeriod.showStepExponent = False
         label_MeasPeriod = PyDMLabel(
-            parent=self, init_channel=prefix+'MeasPeriod-RB')
+            self, prefix.substitute(propty=prefix.propty_name+'MeasPeriod-RB'))
         hlay_measperiod = QHBoxLayout()
         hlay_measperiod.addWidget(spinbox_MeasPeriod)
         hlay_measperiod.addWidget(label_MeasPeriod)
 
-        measupdateprefix = prefix.replace('Fast', '') \
-            if mode == 'Fast' else prefix
         l_measupdateperiod = QLabel('Measured Period [s]: ', self)
         label_MeasUpdatePeriod = PyDMLabel(
-            parent=self, init_channel=measupdateprefix+'MeasUpdatePeriod-Mon')
+            self, self.dcct_prefix.substitute(propty='MeasUpdatePeriod-Mon'))
 
         l_imped = QLabel('Impedance: ', self)
         enumcombobox_Imped = PyDMEnumComboBox(
-            parent=self, init_channel=prefix+'Imped-Sel')
+            self, prefix.substitute(propty=prefix.propty_name+'Imped-Sel'))
         label_Imped = PyDMLabel(
-            parent=self, init_channel=prefix+'Imped-Sts')
+            self, prefix.substitute(propty=prefix.propty_name+'Imped-Sts'))
         hlay_imped = QHBoxLayout()
         hlay_imped.addWidget(enumcombobox_Imped)
         hlay_imped.addWidget(label_Imped)
 
         l_offset = QLabel('Relative Offset Enable: ', self)
         statebutton_RelEnbl = PyDMStateButton(
-            parent=self, init_channel=prefix+'RelEnbl-Sel')
+            self, prefix.substitute(propty=prefix.propty_name+'RelEnbl-Sel'))
         statebutton_RelEnbl.shape = 1
         statebutton_RelEnbl.setStyleSheet('min-width:6em; max-width:6em;')
         label_RelEnbl = PyDMLabel(
-            parent=self, init_channel=prefix+'RelEnbl-Sts')
+            self, prefix.substitute(propty=prefix.propty_name+'RelEnbl-Sts'))
         hlay_offset = QHBoxLayout()
         hlay_offset.addWidget(statebutton_RelEnbl)
         hlay_offset.addWidget(label_RelEnbl)
 
         l_rellvl = QLabel('Relative Offset Level [V]: ', self)
         spinbox_RelLvl = PyDMSpinbox(
-            parent=self, init_channel=prefix+'RelLvl-SP')
+            self, prefix.substitute(propty=prefix.propty_name+'RelLvl-SP'))
         spinbox_RelLvl.showStepExponent = False
         label_RelLvl = PyDMLabel(
-            parent=self, init_channel=prefix+'RelLvl-RB')
+            self, prefix.substitute(propty=prefix.propty_name+'RelLvl-RB'))
         label_RelLvl.precisionFromPV = False
         label_RelLvl.precision = 9
         pushbutton_RelAcq = PyDMPushButton(
             parent=self, label='Acquire Offset', pressValue=1,
-            init_channel=prefix+'RelAcq-Cmd')
+            init_channel=prefix.substitute(
+                propty=prefix.propty_name+'RelAcq-Cmd'))
         pushbutton_RelAcq.setAutoDefault(False)
         pushbutton_RelAcq.setDefault(False)
         hlay_rellvl = QHBoxLayout()
@@ -468,12 +467,12 @@ class DCCTSettingsDetails(QWidget):
 
         if mode == 'Normal':
             l_linesync = QLabel('Line Synchronization: ', self)
-            statebutton_LineSync = PyDMStateButton(
-                parent=self, init_channel=prefix+'LineSync-Sel')
+            statebutton_LineSync = PyDMStateButton(self, prefix.substitute(
+                propty=prefix.propty_name+'LineSync-Sel'))
             statebutton_LineSync.shape = 1
             statebutton_LineSync.setStyleSheet('min-width:6em; max-width:6em;')
-            label_LineSync = PyDMLabel(
-                parent=self, init_channel=prefix+'LineSync-Sts')
+            label_LineSync = PyDMLabel(self, prefix.substitute(
+                propty=prefix.propty_name+'LineSync-Sts'))
             hlay_linesync = QHBoxLayout()
             hlay_linesync.addWidget(statebutton_LineSync)
             hlay_linesync.addWidget(label_LineSync)
@@ -481,39 +480,40 @@ class DCCTSettingsDetails(QWidget):
             label_avg = QLabel('<h4>Average Filter</h4>', self)
             l_avgenbl = QLabel('Enable: ', self)
             statebutton_AvgFilterEnbl = PyDMStateButton(
-                parent=self, init_channel=prefix+'AvgFilterEnbl-Sel')
+                self, prefix.substitute(
+                    propty=prefix.propty_name+'AvgFilterEnbl-Sel'))
             statebutton_AvgFilterEnbl.shape = 1
-            label_AvgFilterEnbl = PyDMLabel(
-                parent=self, init_channel=prefix+'AvgFilterEnbl-Sts')
+            label_AvgFilterEnbl = PyDMLabel(self, prefix.substitute(
+                propty=prefix.propty_name+'AvgFilterEnbl-Sts'))
             hlay_avgenbl = QHBoxLayout()
             hlay_avgenbl.addWidget(statebutton_AvgFilterEnbl)
             hlay_avgenbl.addWidget(label_AvgFilterEnbl)
 
             l_avgcnt = QLabel('Samples: ', self)
-            spinbox_AvgFilterCount = PyDMSpinbox(
-                parent=self, init_channel=prefix+'AvgFilterCnt-SP')
+            spinbox_AvgFilterCount = PyDMSpinbox(self, prefix.substitute(
+                propty=prefix.propty_name+'AvgFilterCnt-SP'))
             spinbox_AvgFilterCount.showStepExponent = False
-            label_AvgFilterCount = PyDMLabel(
-                parent=self, init_channel=prefix+'AvgFilterCnt-RB')
+            label_AvgFilterCount = PyDMLabel(self, prefix.substitute(
+                propty=prefix.propty_name+'AvgFilterCnt-RB'))
             hlay_avgcnt = QHBoxLayout()
             hlay_avgcnt.addWidget(spinbox_AvgFilterCount)
             hlay_avgcnt.addWidget(label_AvgFilterCount)
 
             l_avgtyp = QLabel('Type: ', self)
             enumcombobox_AvgFilterTyp = PyDMEnumComboBox(
-                parent=self, init_channel=self.dcct_prefix+'AvgFilterTyp-Sel')
+                self, self.dcct_prefix.substitute(propty='AvgFilterTyp-Sel'))
             label_AvgFilterTyp = PyDMLabel(
-                parent=self, init_channel=self.dcct_prefix+'AvgFilterTyp-Sts')
+                self, self.dcct_prefix.substitute(propty='AvgFilterTyp-Sts'))
             hlay_avgtyp = QHBoxLayout()
             hlay_avgtyp.addWidget(enumcombobox_AvgFilterTyp)
             hlay_avgtyp.addWidget(label_AvgFilterTyp)
 
             l_avgwin = QLabel('Noise window size [%]: ', self)
-            spinbox_AvgFilterWind = PyDMSpinbox(
-                parent=self, init_channel=prefix+'AvgFilterWind-SP')
+            spinbox_AvgFilterWind = PyDMSpinbox(self, prefix.substitute(
+                propty=prefix.propty_name+'AvgFilterWind-SP'))
             spinbox_AvgFilterWind.showStepExponent = False
-            label_AvgFilterWind = PyDMLabel(
-                parent=self, init_channel=prefix+'AvgFilterWind-RB')
+            label_AvgFilterWind = PyDMLabel(self, prefix.substitute(
+                propty=prefix.propty_name+'AvgFilterWind-RB'))
             hlay_avgwin = QHBoxLayout()
             hlay_avgwin.addWidget(spinbox_AvgFilterWind)
             hlay_avgwin.addWidget(label_AvgFilterWind)
@@ -538,18 +538,18 @@ class DCCTSettingsDetails(QWidget):
 
     def _setupConfigurationWidget(self):
         statebutton_Test = PyDMStateButton(
-            parent=self, init_channel=self.dcct_prefix+'Test-Sel')
+            self, self.dcct_prefix.substitute(propty='Test-Sel'))
         statebutton_Test.shape = 1
         statebutton_Test.setStyleSheet('min-width:6em; max-width:6em;')
-        label_Test = PyDMLabel(
-            parent=self, init_channel=self.dcct_prefix+'Test-Sts')
+        label_Test = PyDMLabel(self, self.dcct_prefix.substitute(
+            propty='Test-Sts'))
         hlay_test = QHBoxLayout()
         hlay_test.addWidget(statebutton_Test)
         hlay_test.addWidget(label_Test)
 
         self.bt_dl = PyDMPushButton(
-            parent=self, init_channel=self.dcct_prefix+'Download-Cmd',
-            pressValue=1, icon=qta.icon('fa5s.sync'))
+            parent=self, pressValue=1, icon=qta.icon('fa5s.sync'),
+            init_channel=self.dcct_prefix.substitute(propty='Download-Cmd'))
         self.bt_dl.setObjectName('bt_dl')
         self.bt_dl.setStyleSheet(
             '#bt_dl{min-width:25px; max-width:25px; icon-size:20px;}')

@@ -339,10 +339,14 @@ class EffMonitor(QWidget):
         self.section = section
         if self.section == 'BO':
             self._label = 'Booster Ramp'
-            self._pvname = 'BO-Glob:AP-CurrInfo:RampEff-Mon'
+            self._pvname = SiriusPVName(
+                'BO-Glob:AP-CurrInfo:RampEff-Mon').substitute(
+                    prefix=self.prefix)
         else:
             self._label = 'Injection'
-            self._pvname = 'SI-Glob:AP-CurrInfo:InjEff-Mon'
+            self._pvname = SiriusPVName(
+                'SI-Glob:AP-CurrInfo:InjEff-Mon').substitute(
+                    prefix=self.prefix)
         self._wavEff = list()
         self._inj_idx = 0
         self._eje_idx = -1
@@ -384,13 +388,15 @@ class EffMonitor(QWidget):
 
         if self.section == 'BO':
             l_injcurr = QLabel('Injected:', self)
-            self.label_injcurr = PyDMLabel(
-                self, 'BO-Glob:AP-CurrInfo:Current150MeV-Mon')
+            self.label_injcurr = PyDMLabel(self, SiriusPVName(
+                'BO-Glob:AP-CurrInfo:Current150MeV-Mon').substitute(
+                    prefix=self.prefix))
             self.label_injcurr.showUnits = True
 
             l_ejecurr = QLabel('Ejected:', self)
-            self.label_ejecurr = PyDMLabel(
-                self, 'BO-Glob:AP-CurrInfo:Current3GeV-Mon')
+            self.label_ejecurr = PyDMLabel(self, SiriusPVName(
+                'BO-Glob:AP-CurrInfo:Current3GeV-Mon').substitute(
+                    prefix=self.prefix))
             self.label_ejecurr.showUnits = True
 
             hbox_eff.addWidget(l_injcurr)
