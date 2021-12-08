@@ -6,6 +6,7 @@ from qtpy.QtWidgets import QPushButton, QGridLayout, QLabel, QSpacerItem, \
 from pydm.widgets import PyDMLabel, PyDMWaveformTable
 
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
+from siriuspy.namesys import SiriusPVName as _PVName
 
 from siriushla.widgets import SiriusMainWindow
 from .custom_widgets import ConfigLineEdit as _ConfigLineEdit
@@ -29,19 +30,20 @@ class CorrParamsDetailWindow(SiriusMainWindow):
         self._setupUi()
 
     def _setupUi(self):
-        ioc_prefix = self._prefix+self._acc+'-Glob:AP-' + \
-            self._opticsparam+'Corr:'
+        ioc_prefix = _PVName(self._acc+'-Glob:AP-'+self._opticsparam+'Corr')
+        ioc_prefix = ioc_prefix.substitute(prefix=self._prefix)
+
         lay = QGridLayout()
 
         label_configname = QLabel('<h4>Configuration Name</h4>', self,
                                   alignment=Qt.AlignCenter)
         self.pydmlinedit_configname = _ConfigLineEdit(
-            parent=self, init_channel=ioc_prefix+'ConfigName-SP')
+            self, ioc_prefix.substitute(propty='ConfigName-SP'))
         self.pydmlinedit_configname.setStyleSheet(
             """min-width:10em; max-width:10em;""")
 
         self.pydmlabel_configname = PyDMLabel(
-            parent=self, init_channel=ioc_prefix+'ConfigName-RB')
+            self, ioc_prefix.substitute(propty='ConfigName-RB'))
 
         lay.addWidget(label_configname, 10, 1, 1, self._nfam)
         lay.addWidget(self.pydmlinedit_configname, 11, self._nfam//2)
@@ -51,7 +53,8 @@ class CorrParamsDetailWindow(SiriusMainWindow):
 
         label_matrix = QLabel('<h4>Matrix</h4>', self,
                               alignment=Qt.AlignCenter)
-        self.table_matrix = PyDMWaveformTable(self, ioc_prefix+'RespMat-Mon')
+        self.table_matrix = PyDMWaveformTable(
+            self, ioc_prefix.substitute(propty='RespMat-Mon'))
         self.table_matrix.setObjectName('matrix')
         self.table_matrix.setEnabled(False)
         self.table_matrix.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
@@ -84,7 +87,8 @@ class CorrParamsDetailWindow(SiriusMainWindow):
             '<h4>Nominal '+self._intstrength+'s</h4>', self,
             alignment=Qt.AlignCenter)
         self.table_nomintstrength = PyDMWaveformTable(
-            self, ioc_prefix+'Nominal'+self._intstrength+'-Mon')
+            self, ioc_prefix.substitute(
+                propty='Nominal'+self._intstrength+'-Mon'))
         self.table_nomintstrength.setObjectName('nom_strength')
         self.table_nomintstrength.setEnabled(False)
         self.table_nomintstrength.horizontalHeader().setSectionResizeMode(
@@ -120,7 +124,7 @@ class CorrParamsDetailWindow(SiriusMainWindow):
             label_nomchrom = QLabel('<h4>Nominal Chrom</h4>', self,
                                     alignment=Qt.AlignCenter)
             self.pydmlabel_nomchrom = PyDMLabel(
-                parent=self, init_channel=ioc_prefix+'NominalChrom-Mon')
+                self, ioc_prefix.substitute(propty='NominalChrom-Mon'))
             self.pydmlabel_nomchrom.setAlignment(Qt.AlignCenter)
 
             lay.addWidget(label_nomchrom, 19, 1, 1, self._nfam)
