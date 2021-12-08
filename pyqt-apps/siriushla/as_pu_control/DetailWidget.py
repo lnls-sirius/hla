@@ -22,7 +22,7 @@ class PUDetailWidget(QWidget):
         self._devname = _PVName(devname)
         self._section = self._devname.sec
         self._prefix = _VACA_PREFIX
-        self._prefdevname = self._devname.substitute(prefix=self._prefix)
+        self._pdev = self._devname.substitute(prefix=self._prefix)
         self.setObjectName(self._section+'App')
         self.setWindowIcon(qta.icon(
             'mdi.current-ac', color=util.get_appropriate_color(self._section)))
@@ -39,40 +39,41 @@ class PUDetailWidget(QWidget):
 
     def _create_pvs(self):
         """Create variables with pvs that'll be used."""
-        self._voltage_sp_pv = self._prefdevname + ":Voltage-SP"
-        self._voltage_rb_pv = self._prefdevname + ":Voltage-RB"
-        self._voltage_mon_pv = self._prefdevname + ":Voltage-Mon"
-        self._kick_sp_pv = self._prefdevname + ":Kick-SP"
-        self._kick_rb_pv = self._prefdevname + ":Kick-RB"
-        self._kick_mon_pv = self._prefdevname + ":Kick-Mon"
-        self._pwrstate_sel_pv = self._prefdevname + ":PwrState-Sel"
-        self._pwrstate_sts_pv = self._prefdevname + ":PwrState-Sts"
-        self._enablepulses_sel_pv = self._prefdevname + ":Pulse-Sel"
-        self._enablepulses_sts_pv = self._prefdevname + ":Pulse-Sts"
-        self._reset_cmd_pv = self._prefdevname + ":Reset-Cmd"
-        self._intlk1_mon_pv = self._prefdevname + ":Intlk1-Mon"
-        self._intlk2_mon_pv = self._prefdevname + ":Intlk2-Mon"
-        self._intlk3_mon_pv = self._prefdevname + ":Intlk3-Mon"
-        self._intlk4_mon_pv = self._prefdevname + ":Intlk4-Mon"
-        self._intlk5_mon_pv = self._prefdevname + ":Intlk5-Mon"
-        self._intlk6_mon_pv = self._prefdevname + ":Intlk6-Mon"
-        self._intlk7_mon_pv = self._prefdevname + ":Intlk7-Mon"
-        self._intlk1label_cte_pv = self._prefdevname + ":Intlk1Label-Cte"
-        self._intlk2label_cte_pv = self._prefdevname + ":Intlk2Label-Cte"
-        self._intlk3label_cte_pv = self._prefdevname + ":Intlk3Label-Cte"
-        self._intlk4label_cte_pv = self._prefdevname + ":Intlk4Label-Cte"
-        self._intlk5label_cte_pv = self._prefdevname + ":Intlk5Label-Cte"
-        self._intlk6label_cte_pv = self._prefdevname + ":Intlk6Label-Cte"
-        self._intlk7label_cte_pv = self._prefdevname + ":Intlk7Label-Cte"
+        self._voltage_sp_pv = self._pdev.substitute(propty='Voltage-SP')
+        self._voltage_rb_pv = self._pdev.substitute(propty='Voltage-RB')
+        self._voltage_mon_pv = self._pdev.substitute(propty='Voltage-Mon')
+        self._kick_sp_pv = self._pdev.substitute(propty='Kick-SP')
+        self._kick_rb_pv = self._pdev.substitute(propty='Kick-RB')
+        self._kick_mon_pv = self._pdev.substitute(propty='Kick-Mon')
+        self._pwrstate_sel_pv = self._pdev.substitute(propty='PwrState-Sel')
+        self._pwrstate_sts_pv = self._pdev.substitute(propty='PwrState-Sts')
+        self._enablepulses_sel_pv = self._pdev.substitute(propty='Pulse-Sel')
+        self._enablepulses_sts_pv = self._pdev.substitute(propty='Pulse-Sts')
+        self._reset_cmd_pv = self._pdev.substitute(propty='Reset-Cmd')
+        self._intlk1_mon_pv = self._pdev.substitute(propty='Intlk1-Mon')
+        self._intlk2_mon_pv = self._pdev.substitute(propty='Intlk2-Mon')
+        self._intlk3_mon_pv = self._pdev.substitute(propty='Intlk3-Mon')
+        self._intlk4_mon_pv = self._pdev.substitute(propty='Intlk4-Mon')
+        self._intlk5_mon_pv = self._pdev.substitute(propty='Intlk5-Mon')
+        self._intlk6_mon_pv = self._pdev.substitute(propty='Intlk6-Mon')
+        self._intlk7_mon_pv = self._pdev.substitute(propty='Intlk7-Mon')
+        self._intlk1_lbcte_pv = self._pdev.substitute(propty='Intlk1Label-Cte')
+        self._intlk2_lbcte_pv = self._pdev.substitute(propty='Intlk2Label-Cte')
+        self._intlk3_lbcte_pv = self._pdev.substitute(propty='Intlk3Label-Cte')
+        self._intlk4_lbcte_pv = self._pdev.substitute(propty='Intlk4Label-Cte')
+        self._intlk5_lbcte_pv = self._pdev.substitute(propty='Intlk5Label-Cte')
+        self._intlk6_lbcte_pv = self._pdev.substitute(propty='Intlk6Label-Cte')
+        self._intlk7_lbcte_pv = self._pdev.substitute(propty='Intlk7Label-Cte')
         if 'Sept' not in self._devname:
-            self._intlk8_mon_pv = self._prefdevname + ":Intlk8-Mon"
-            self._intlk8label_cte_pv = self._prefdevname+":Intlk8Label-Cte"
-        self._ctrlmode_pv = self._prefdevname + ":CtrlMode-Mon"
+            self._intlk8_mon_pv = self._pdev.substitute(propty='Intlk8-Mon')
+            self._intlk8_lbcte_pv = \
+                self._pdev.substitute(propty='Intlk8Label-Cte')
+        self._ctrlmode_pv = self._pdev.substitute(propty='CtrlMode-Mon')
 
         self._trigname = self._devname.substitute(dis='TI')
 
     def _setup_ui(self):
-        self.header_label = QLabel("<h1>" + self._prefdevname + "</h1>")
+        self.header_label = QLabel("<h1>" + self._devname + "</h1>")
         self.header_label.setObjectName("header_label")
         interlock_box = QGroupBox(parent=self, title="Interlock")
         interlock_box.setObjectName("interlock_box")
@@ -115,7 +116,7 @@ class PUDetailWidget(QWidget):
         intlk_cnt = 8 if 'Sept' not in self._devname else 7
         for i in range(intlk_cnt):
             label = PyDMLabel(
-                self, getattr(self, '_intlk' + str(i+1) + 'label_cte_pv'))
+                self, getattr(self, '_intlk' + str(i+1) + '_lbcte_pv'))
             led = PyDMLed(
                 self, getattr(self, '_intlk' + str(i+1) + '_mon_pv'))
             led.onColor = led.LightGreen
