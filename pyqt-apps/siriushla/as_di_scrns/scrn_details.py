@@ -22,9 +22,9 @@ class ScrnSettingsDetails(SiriusMainWindow):
     def __init__(self, parent=None, device=None, prefix=None):
         """Init."""
         super().__init__(parent=parent)
-        self.prefix = SiriusPVName(prefix)
+        self.prefix = prefix
         self.device = SiriusPVName(device)
-        self.scrn_prefix = SiriusPVName(prefix+device)
+        self.scrn_prefix = self.device.substitute(prefix=prefix)
         self.setWindowTitle('Screen Settings Details')
         self.setObjectName(self.scrn_prefix.sec+'App')
         self.centralwidget = QWidget(self)
@@ -57,13 +57,13 @@ class ScrnSettingsDetails(SiriusMainWindow):
     def _setupGeneralInfoLayout(self):
         label_MtrPrefix = QLabel('Motor Prefix: ', self)
         self.PyDMLabel_MtrPrefix = PyDMLabel(
-            parent=self, init_channel=self.scrn_prefix+':MtrCtrlPrefix-Cte')
+            self, self.scrn_prefix.substitute(propty='MtrCtrlPrefix-Cte'))
         self.PyDMLabel_MtrPrefix.setStyleSheet(
             """max-width:14.20em; max-height:1.29em;""")
 
         label_CamPrefix = QLabel('Camera Prefix: ', self)
         self.PyDMLabel_CamPrefix = PyDMLabel(
-            parent=self, init_channel=self.scrn_prefix+':CamPrefix-Cte')
+            self, self.scrn_prefix.substitute(propty='CamPrefix-Cte'))
         self.PyDMLabel_CamPrefix.setStyleSheet(
             """max-width:14.20em; max-height:1.29em;""")
 

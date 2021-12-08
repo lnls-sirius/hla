@@ -16,8 +16,8 @@ class ScrnCalibrationSettings(SiriusDialog):
         """Init."""
         super().__init__(parent=parent)
         self.prefix = prefix
-        self.device = device
-        self.scrn_prefix = SiriusPVName(self.prefix+self.device)
+        self.device = SiriusPVName(device)
+        self.scrn_prefix = self.device.substitute(prefix=self.prefix)
         self.setWindowTitle('Screen Calibration')
         self.setObjectName(self.scrn_prefix.sec+'App')
         self._setupUi()
