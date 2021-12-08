@@ -11,6 +11,9 @@ from qtpy.QtWidgets import QWidget, QGridLayout, QHBoxLayout, QVBoxLayout, \
     QSizePolicy as QSzPlcy, QFileDialog
 import qtawesome as qta
 from pydm.widgets import PyDMWaveformPlot
+
+from siriuspy.namesys import SiriusPVName as _PVName
+
 from siriushla.widgets import SiriusConnectionSignal
 from .util import marker_color
 
@@ -42,10 +45,12 @@ class TuneSpectraView(PyDMWaveformPlot):
             redraw_mode=2, color='blue', lineWidth=2, lineStyle=Qt.SolidLine)
         self.curveH = self.curveAtIndex(0)
         self.curveH.x_channels = {
-            'Tune': SiriusConnectionSignal(
-                self.prefix+self.section+'-Glob:DI-Tune-H:TuneFracArray-Mon'),
-            'Freq': SiriusConnectionSignal(
-                self.prefix+self.section+'-Glob:DI-Tune-H:FreqArray-Mon')
+            'Tune': SiriusConnectionSignal(_PVName(
+                self.section+'-Glob:DI-Tune-H:TuneFracArray-Mon').substitute(
+                    prefix=self.prefix)),
+            'Freq': SiriusConnectionSignal(_PVName(
+                self.section+'-Glob:DI-Tune-H:FreqArray-Mon').substitute(
+                    prefix=self.prefix))
         }
         self.curveH.setVisible(True)
 
@@ -54,57 +59,66 @@ class TuneSpectraView(PyDMWaveformPlot):
             redraw_mode=2, color='red', lineWidth=2, lineStyle=Qt.SolidLine)
         self.curveV = self.curveAtIndex(1)
         self.curveV.x_channels = {
-            'Tune': SiriusConnectionSignal(
-                self.prefix+self.section+'-Glob:DI-Tune-V:TuneFracArray-Mon'),
-            'Freq': SiriusConnectionSignal(
-                self.prefix+self.section+'-Glob:DI-Tune-V:FreqArray-Mon')
+            'Tune': SiriusConnectionSignal(_PVName(
+                self.section+'-Glob:DI-Tune-V:TuneFracArray-Mon').substitute(
+                    prefix=self.prefix)),
+            'Freq': SiriusConnectionSignal(_PVName(
+                self.section+'-Glob:DI-Tune-V:FreqArray-Mon').substitute(
+                    prefix=self.prefix))
         }
         self.curveV.setVisible(True)
 
         if self.section == 'SI':
             self.maxRedrawRate = 5
-            self.curveH_y_channel = SiriusConnectionSignal(
-                self.prefix+'SI-Glob:DI-TuneProc-H:Trace-Mon')
+            self.curveH_y_channel = SiriusConnectionSignal(_PVName(
+                'SI-Glob:DI-TuneProc-H:Trace-Mon').substitute(
+                    prefix=self.prefix))
             self.curveH_y_channel.new_value_signal[np.ndarray].connect(
                 self.receiveDataH)
-            self.curveV_y_channel = SiriusConnectionSignal(
-                self.prefix+'SI-Glob:DI-TuneProc-V:Trace-Mon')
+            self.curveV_y_channel = SiriusConnectionSignal(_PVName(
+                'SI-Glob:DI-TuneProc-V:Trace-Mon').substitute(
+                    prefix=self.prefix))
             self.curveV_y_channel.new_value_signal[np.ndarray].connect(
                 self.receiveDataV)
-            self.freqrevH_channel = SiriusConnectionSignal(
-                self.prefix+'SI-Glob:DI-Tune-H:FreqRev-Mon')
-            self.freqrevV_channel = SiriusConnectionSignal(
-                self.prefix+'SI-Glob:DI-Tune-V:FreqRev-Mon')
-            self.freqrevnH_channel = SiriusConnectionSignal(
-                self.prefix+'SI-Glob:DI-Tune-H:FreqRevN-Mon')
-            self.freqrevnV_channel = SiriusConnectionSignal(
-                self.prefix+'SI-Glob:DI-Tune-V:FreqRevN-Mon')
-            self.revnH_channel = SiriusConnectionSignal(
-                self.prefix+'SI-Glob:DI-Tune-H:RevN-RB')
-            self.revnV_channel = SiriusConnectionSignal(
-                self.prefix+'SI-Glob:DI-Tune-V:RevN-RB')
+            self.freqrevH_channel = SiriusConnectionSignal(_PVName(
+                'SI-Glob:DI-Tune-H:FreqRev-Mon').substitute(
+                    prefix=self.prefix))
+            self.freqrevV_channel = SiriusConnectionSignal(_PVName(
+                'SI-Glob:DI-Tune-V:FreqRev-Mon').substitute(
+                    prefix=self.prefix))
+            self.freqrevnH_channel = SiriusConnectionSignal(_PVName(
+                'SI-Glob:DI-Tune-H:FreqRevN-Mon').substitute(
+                    prefix=self.prefix))
+            self.freqrevnV_channel = SiriusConnectionSignal(_PVName(
+                'SI-Glob:DI-Tune-V:FreqRevN-Mon').substitute(
+                    prefix=self.prefix))
+            self.revnH_channel = SiriusConnectionSignal(_PVName(
+                'SI-Glob:DI-Tune-H:RevN-RB').substitute(
+                    prefix=self.prefix))
+            self.revnV_channel = SiriusConnectionSignal(_PVName(
+                'SI-Glob:DI-Tune-V:RevN-RB').substitute(
+                    prefix=self.prefix))
 
             self.markers = dict()
             ci = 2
             for ax in ['H', 'V']:
-                pf = self.prefix
                 self.markers[ax] = dict()
                 for mtyp in ['', 'D']:
                     for i in range(1, 5):
                         si = str(i)
                         mark_dict = dict()
-                        ch_enbl = SiriusConnectionSignal(
-                            pf+'SI-Glob:DI-TuneProc-'+ax+':Enbl'+mtyp +
-                            'Mark'+si+'-Sts')
+                        ch_enbl = SiriusConnectionSignal(_PVName(
+                            'SI-Glob:DI-TuneProc-'+ax+':Enbl'+mtyp +
+                            'Mark'+si+'-Sts').substitute(prefix=self.prefix))
                         ch_enbl.orientation = ax
                         ch_enbl.idx = si
                         ch_enbl.new_value_signal[int].connect(
                             self._update_markers_enable)
                         mark_dict['Enbl'] = ch_enbl
 
-                        ch_x = SiriusConnectionSignal(
-                            pf+'SI-Glob:DI-TuneProc-'+ax+':'+mtyp+'MarkX'+si +
-                            'Disp-Mon')
+                        ch_x = SiriusConnectionSignal(_PVName(
+                            'SI-Glob:DI-TuneProc-'+ax+':'+mtyp+'MarkX'+si +
+                            'Disp-Mon').substitute(prefix=self.prefix))
                         ch_x.orientation = ax
                         ch_x.idx = si
                         ch_x.axis = 'X'
@@ -112,9 +126,10 @@ class TuneSpectraView(PyDMWaveformPlot):
                             self._update_markers_value)
                         mark_dict['X'] = ch_x
 
-                        ch_y = SiriusConnectionSignal(
-                            pf+'SI-Glob:DI-TuneProc-'+ax+':'+mtyp+'MarkY'+si +
-                            ('' if mtyp == '' else 'Disp')+'-Mon')
+                        ch_y = SiriusConnectionSignal(_PVName(
+                            'SI-Glob:DI-TuneProc-'+ax+':'+mtyp+'MarkY'+si +
+                            ('' if mtyp == '' else 'Disp')+'-Mon').substitute(
+                                prefix=self.prefix))
                         ch_y.orientation = ax
                         ch_y.idx = si
                         ch_y.axis = 'Y'

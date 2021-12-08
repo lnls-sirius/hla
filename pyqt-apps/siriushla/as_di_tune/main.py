@@ -1,6 +1,6 @@
 from qtpy.QtGui import QColor
 from qtpy.QtCore import Qt
-from qtpy.QtWidgets import QWidget, QGridLayout, QTabWidget, QVBoxLayout, \
+from qtpy.QtWidgets import QWidget, QTabWidget, QVBoxLayout, \
     QLabel, QGroupBox, QHBoxLayout, QPushButton
 import qtawesome as qta
 from siriuspy.envars import VACA_PREFIX
