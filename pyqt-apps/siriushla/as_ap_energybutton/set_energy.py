@@ -1,4 +1,5 @@
 """."""
+from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriuspy.search import PSSearch as _PSSearch
 from siriuspy.namesys import SiriusPVName as _SiriusPVName
 
@@ -57,18 +58,18 @@ def _create_pvs(dipoles, magnets):
     dips = []
     for dipole in dipoles:
         dips.append(dipole['psname'].substitute(
-            propty_name='Energy', propty_suffix='SP'))
+            prefix=_VACA_PREFIX, propty_name='Energy', propty_suffix='SP'))
     mags = set()
     for d in magnets:
         psname = d['psname']
         magf = d['mafunc']
         if 'corrector' in magf:
             mags.add(psname.substitute(
-                propty_name='Kick', propty_suffix='SP'))
+                prefix=_VACA_PREFIX, propty_name='Kick', propty_suffix='SP'))
         elif 'quadrupole' in magf:
             mags.add(psname.substitute(
-                propty_name='KL', propty_suffix='SP'))
+                prefix=_VACA_PREFIX, propty_name='KL', propty_suffix='SP'))
         elif 'sextupole' in magf:
             mags.add(psname.substitute(
-                propty_name='SL', propty_suffix='SP'))
+                prefix=_VACA_PREFIX, propty_name='SL', propty_suffix='SP'))
     return dips, sorted(mags)
