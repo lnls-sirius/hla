@@ -6,6 +6,7 @@ from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, QGroupBox, \
 from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMEnumComboBox
 
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
+from siriuspy.namesys import SiriusPVName as _PVName
 
 from ..widgets import PyDMStateButton
 
@@ -20,8 +21,8 @@ class BbBGPIOWidget(QWidget):
         super().__init__(parent)
         self.setObjectName('SIApp')
         self._prefix = prefix
-        self._device = device
-        self.dev_pref = prefix + device
+        self._device = _PVName(device)
+        self.dev_pref = self._device.substitute(prefix=prefix)
         self._setupUi()
 
     def _setupUi(self):

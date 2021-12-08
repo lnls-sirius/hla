@@ -7,6 +7,7 @@ import qtawesome as qta
 from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMEnumComboBox
 
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
+from siriuspy.namesys import SiriusPVName as _PVName
 
 from ..util import connect_window
 from ..widgets.windows import create_window_from_widget
@@ -31,8 +32,8 @@ class BbBControlWindow(SiriusMainWindow):
         """."""
         super().__init__(parent)
         self.prefix = prefix
-        self.device = device
-        self.dev_pref = prefix + device
+        self.device = _PVName(device)
+        self.dev_pref = self.device.substitute(prefix=prefix)
         self.setWindowTitle(device+' Control Window')
         self.setObjectName('SIApp')
         self.setWindowIcon(get_bbb_icon())
@@ -89,8 +90,8 @@ class BbBMainSettingsWidget(QWidget):
         super().__init__(parent)
         set_bbb_color(self, device)
         self._prefix = prefix
-        self._device = device
-        self.dev_pref = prefix + device
+        self._device = _PVName(device)
+        self.dev_pref = self._device.substitute(prefix=prefix)
         typ2label = {
             'H': 'Horizontal',
             'V': 'Vertical',
@@ -235,8 +236,8 @@ class BbBStatusWidget(QWidget):
         super().__init__(parent)
         self.setObjectName('SIApp')
         self._prefix = prefix
-        self._device = device
-        self.dev_pref = prefix + device
+        self._device = _PVName(device)
+        self.dev_pref = self._device.substitute(prefix=prefix)
         self._is_resumed = resume
         self._setupUi()
 
@@ -328,8 +329,8 @@ class BbBInfoWidget(QGroupBox):
         super().__init__(parent)
         set_bbb_color(self, device)
         self._prefix = prefix
-        self._device = device
-        self.dev_pref = prefix + device
+        self._device = _PVName(device)
+        self.dev_pref = self._device.substitute(prefix=prefix)
         self._setupUi()
 
     def _setupUi(self):

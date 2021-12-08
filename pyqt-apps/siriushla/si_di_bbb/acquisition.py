@@ -10,6 +10,7 @@ from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMEnumComboBox, \
     PyDMLineEdit
 
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
+from siriuspy.namesys import SiriusPVName as _PVName
 
 from ..util import connect_window
 from ..widgets import SiriusFrame, PyDMStateButton, SiriusLedState
@@ -28,9 +29,9 @@ class _BbBModalAnalysis(QWidget):
         """Init."""
         super().__init__(parent)
         self._prefix = prefix
-        self._device = device
+        self._device = _PVName(device)
         self.acq_type = acq_type
-        self.dev_pref = prefix + device
+        self.dev_pref = self._device.substitute(prefix=prefix)
         self.prop_pref = self.dev_pref + f':{acq_type:s}_'
         self.setObjectName('SIApp')
         self._setupUi()
@@ -168,8 +169,8 @@ class _BbBAcqBase(QWidget):
         super().__init__(parent)
         set_bbb_color(self, device)
         self._prefix = prefix
-        self._device = device
-        self.dev_pref = prefix + device
+        self._device = _PVName(device)
+        self.dev_pref = self._device.substitute(prefix=prefix)
         self._setupUi()
 
     def _setupUi(self):
@@ -516,8 +517,8 @@ class BbBAcqSB(QWidget):
         super().__init__(parent)
         set_bbb_color(self, device)
         self._prefix = prefix
-        self._device = device
-        self.dev_pref = prefix + device
+        self._device = _PVName(device)
+        self.dev_pref = self._device.substitute(prefix=prefix)
         self._setupUi()
 
     def _setupUi(self):
