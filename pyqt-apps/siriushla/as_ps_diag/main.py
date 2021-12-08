@@ -27,7 +27,6 @@ from siriuspy.namesys import SiriusPVName as _PVName
 
 from siriushla.util import run_newprocess as _run_newprocess, \
     get_appropriate_color as _get_appropriate_color
-from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets import SiriusMainWindow, SiriusConnectionSignal, \
     PyDMLedMultiChannel, PyDMLed, PyDMLedMultiConnection, QLed
 from siriushla.as_ps_control.detail_widget.custom_widgets import \

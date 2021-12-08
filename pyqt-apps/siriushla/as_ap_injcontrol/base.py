@@ -11,7 +11,7 @@ from pydm.widgets import PyDMLabel, PyDMEnumComboBox
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 
 from siriushla import util
-from siriushla.widgets import SiriusMainWindow, PyDMLed, SiriusLedAlert, \
+from siriushla.widgets import SiriusMainWindow, PyDMLed, \
     SiriusLedState, PyDMLinEditScrollbar
 from siriushla.as_di_scrns import SiriusScrnView
 from siriushla.as_ps_control import PSDetailWindow

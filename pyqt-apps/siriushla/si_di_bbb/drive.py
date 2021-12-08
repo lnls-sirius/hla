@@ -1,11 +1,11 @@
 """BbB Drive Module."""
 
 import os as _os
-from PyQt5.QtWidgets import QHBoxLayout, QWIDGETSIZE_MAX
 
 from qtpy.QtGui import QPixmap, QColor
 from qtpy.QtCore import Qt
-from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, QSpacerItem
+from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, QSpacerItem, \
+    QHBoxLayout
 from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMEnumComboBox, PyDMLineEdit
 
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
