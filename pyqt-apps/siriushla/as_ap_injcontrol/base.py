@@ -140,22 +140,22 @@ class BaseWindow(SiriusMainWindow):
         cb_scrn.setStyleSheet("""
             min-width:6.5em; max-width:6.5em; font-weight:bold;""")
 
-        led_camenbl = SiriusLedState(
-            parent=self, init_channel=self.prefix+scrn_device+':CamEnbl-Sts')
+        led_camenbl = SiriusLedState(self, scrn_device.substitute(
+            prefix=self.prefix, propty='CamEnbl-Sts'))
         led_camenbl.setStyleSheet("min-width:3.2em; max-width:3.2em;")
 
-        cb_scrntype = PyDMEnumComboBox(
-            parent=self, init_channel=self.prefix+scrn_device+':ScrnType-Sel')
+        cb_scrntype = PyDMEnumComboBox(self, scrn_device.substitute(
+            prefix=self.prefix, propty='ScrnType-Sel'))
         cb_scrntype.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Fixed)
         cb_scrntype.setStyleSheet("min-width:4.5em;max-width:4.5em;")
 
-        lb_scrntype = PyDMLabel(
-            parent=self, init_channel=self.prefix+scrn_device+':ScrnType-Sts')
+        lb_scrntype = PyDMLabel(self, scrn_device.substitute(
+            prefix=self.prefix, propty='ScrnType-Sts'))
         lb_scrntype.setStyleSheet("min-width:4.5em; max-width:4.5em;")
         lb_scrntype.setAlignment(Qt.AlignCenter)
 
-        led_scrntype = PyDMLed(
-            parent=self, init_channel=self.prefix+scrn_device+':ScrnType-Sts',
+        led_scrntype = PyDMLed(self, scrn_device.substitute(
+            prefix=self.prefix, propty='ScrnType-Sts'),
             color_list=[PyDMLed.LightGreen, PyDMLed.Red, PyDMLed.Red,
                         PyDMLed.Yellow])
         led_scrntype.shape = 2
@@ -179,85 +179,50 @@ class BaseWindow(SiriusMainWindow):
         lay.setContentsMargins(0, 0, 0, 0)
         lay.setAlignment(Qt.AlignCenter)
 
-        if corr.sec == 'LI':
-            led = SiriusLedAlert(
-                parent=self, init_channel=self.prefix+corr+':PwrState-Sts')
-            led.onColor = SiriusLedAlert.LightGreen
-            led.offColor = SiriusLedAlert.DarkGreen
-            led.alarmSensitiveBorder = False
-            led.setStyleSheet("max-width:1.29em;")
-            lay.addWidget(led, 1, 1)
+        propty_sp = 'Current-SP' if corr.sec == 'LI' else 'Kick-SP'
+        propty_mon = propty_sp.replace('SP', 'Mon')
 
-            lb_corr = QLabel(corr.get_nickname(sec=True, dev=True),
-                             self, alignment=Qt.AlignCenter)
-            lb_corr.setStyleSheet("""
-                max-width:6em; min-width:6em; min-height:1.29em;""")
-            lay.addWidget(lb_corr, 1, 2)
+        led = SiriusLedState(self, corr.substitute(
+            prefix=self.prefix, propty='PwrState-Sts'))
+        led.setStyleSheet("max-width:1.29em;")
+        lay.addWidget(led, 1, 1)
 
-            sp_current = PyDMLinEditScrollbar(
-                parent=self, channel=self.prefix+corr+':Current-SP')
-            sp_current.layout.setContentsMargins(0, 0, 0, 0)
-            sp_current.layout.setSpacing(3)
-            sp_current.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
-            sp_current.sp_lineedit.setStyleSheet("""
-                min-width:4em; max-width:4em; min-height:1.29em;""")
-            sp_current.sp_lineedit.setAlignment(Qt.AlignCenter)
-            sp_current.sp_lineedit.setSizePolicy(
-                QSzPlcy.Ignored, QSzPlcy.Fixed)
-            sp_current.sp_scrollbar.setStyleSheet("""max-width:4em;""")
-            sp_current.sp_scrollbar.limitsFromPV = True
-            lay.addWidget(sp_current, 1, 3, 2, 1)
-
-            lb_current = PyDMLabel(
-                parent=self, init_channel=self.prefix+corr+':Current-Mon')
-            lb_current.unit_changed('A')
-            lb_current.showUnits = True
-            lb_current.setStyleSheet("""
-                min-width:5em; max-width:5em; min-height: 1.29em;""")
-            lb_current.precFromPV = True
-            lb_current.setAlignment(Qt.AlignCenter)
-            lay.addWidget(lb_current, 1, 4)
-
+        nickname = corr.get_nickname(sec=corr.sec == 'LI', dev=True)
+        pb = QPushButton(nickname, self)
+        if corr.dis == 'PU':
+            util.connect_window(
+                pb, PUDetailWindow, parent=self, devname=corr)
         else:
-            led = SiriusLedState(
-                parent=self, init_channel=self.prefix+corr+':PwrState-Sts')
-            led.setStyleSheet("max-width:1.29em;")
-            lay.addWidget(led, 1, 1)
+            util.connect_window(
+                pb, PSDetailWindow, parent=self, psname=corr)
+        pb.setStyleSheet("""
+            min-width:6em; max-width:6em; min-height:1.29em;""")
+        lay.addWidget(pb, 1, 2)
 
-            pb = QPushButton(corr.get_nickname(dev=True), self)
-            if corr.dis == 'PU':
-                util.connect_window(
-                    pb, PUDetailWindow, parent=self, devname=corr)
-            else:
-                util.connect_window(
-                    pb, PSDetailWindow, parent=self, psname=corr)
-            pb.setStyleSheet("""
-                min-width:6em; max-width:6em; min-height:1.29em;""")
-            lay.addWidget(pb, 1, 2)
+        sp_kick = PyDMLinEditScrollbar(
+            parent=self, channel=corr.substitute(
+                prefix=self.prefix, propty=propty_sp))
+        sp_kick.layout.setContentsMargins(0, 0, 0, 0)
+        sp_kick.layout.setSpacing(3)
+        sp_kick.setSizePolicy(QSzPlcy.Fixed, QSzPlcy.Maximum)
+        sp_kick.sp_lineedit.setStyleSheet("""
+            min-width:4em; max-width:4em; min-height:1.29em;""")
+        sp_kick.sp_lineedit.setAlignment(Qt.AlignCenter)
+        sp_kick.sp_lineedit.setSizePolicy(
+            QSzPlcy.Minimum, QSzPlcy.Minimum)
+        sp_kick.sp_lineedit.precisionFromPV = False
+        sp_kick.sp_lineedit.precision = 1
+        sp_kick.sp_scrollbar.setStyleSheet("""max-width:4em;""")
+        sp_kick.sp_scrollbar.limitsFromPV = True
+        lay.addWidget(sp_kick, 1, 3, 2, 1)
 
-            sp_kick = PyDMLinEditScrollbar(
-                parent=self, channel=self.prefix+corr+':Kick-SP')
-            sp_kick.layout.setContentsMargins(0, 0, 0, 0)
-            sp_kick.layout.setSpacing(3)
-            sp_kick.setSizePolicy(QSzPlcy.Fixed, QSzPlcy.Maximum)
-            sp_kick.sp_lineedit.setStyleSheet("""
-                min-width:4em; max-width:4em; min-height:1.29em;""")
-            sp_kick.sp_lineedit.setAlignment(Qt.AlignCenter)
-            sp_kick.sp_lineedit.setSizePolicy(
-                QSzPlcy.Minimum, QSzPlcy.Minimum)
-            sp_kick.sp_lineedit.precisionFromPV = False
-            sp_kick.sp_lineedit.precision = 1
-            sp_kick.sp_scrollbar.setStyleSheet("""max-width:4em;""")
-            sp_kick.sp_scrollbar.limitsFromPV = True
-            lay.addWidget(sp_kick, 1, 3, 2, 1)
-
-            lb_kick = PyDMLabel(
-                parent=self, init_channel=self.prefix+corr+':Kick-Mon')
-            lb_kick.setStyleSheet("""
-                min-width:5em; max-width:5em; min-height:1.29em;""")
-            lb_kick.showUnits = True
-            lb_kick.precisionFromPV = False
-            lb_kick.precision = 1
-            lb_kick.setAlignment(Qt.AlignCenter)
-            lay.addWidget(lb_kick, 1, 4)
+        lb_kick = PyDMLabel(
+            self, corr.substitute(prefix=self.prefix, propty=propty_mon))
+        lb_kick.setStyleSheet("""
+            min-width:5em; max-width:5em; min-height:1.29em;""")
+        lb_kick.showUnits = True
+        lb_kick.precisionFromPV = False
+        lb_kick.precision = 1
+        lb_kick.setAlignment(Qt.AlignCenter)
+        lay.addWidget(lb_kick, 1, 4)
         return wid

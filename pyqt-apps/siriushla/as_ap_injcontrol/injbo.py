@@ -94,7 +94,8 @@ class InjBOControlWindow(BaseWindow):
             lay_corr.addWidget(w, row, col)
 
         # posang
-        posang_prefix = self.prefix + 'TB-Glob:AP-PosAng'
+        posang_prefix = SiriusPVName(
+            'TB-Glob:AP-PosAng').substitute(prefix=self.prefix)
 
         w_posang = QWidget()
         w_posang.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
@@ -114,7 +115,7 @@ class InjBOControlWindow(BaseWindow):
 
         self.pb_update_ref = PyDMPushButton(
             label='Update Reference', parent=self,
-            init_channel=posang_prefix+':SetNewRefKick-Cmd',
+            init_channel=posang_prefix.substitute(propty='SetNewRefKick-Cmd'),
             pressValue=1)
         self.pb_update_ref.setStyleSheet('min-height: 2em;')
         lay_posang.addWidget(self.pb_update_ref, 1, 0, 1, 2)
@@ -124,21 +125,21 @@ class InjBOControlWindow(BaseWindow):
                             alignment=Qt.AlignRight)
             lb_pos.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
             pos_sp = PyDMSpinbox(
-                parent=self, init_channel=posang_prefix+':DeltaPos'+axis+'-SP')
+                self, posang_prefix.substitute(propty='DeltaPos'+axis+'-SP'))
             pos_sp.setObjectName('pos_sp_'+axis.lower())
             pos_sp.showStepExponent = False
             pos_rb = PyDMLabel(
-                parent=self, init_channel=posang_prefix+':DeltaPos'+axis+'-RB')
+                self, posang_prefix.substitute(propty='DeltaPos'+axis+'-RB'))
             pos_rb.setObjectName('pos_rb_'+axis.lower())
             lb_ang = QLabel('<h4>Δ'+axis.lower()+'\'</h4>', self,
                             alignment=Qt.AlignRight)
             lb_ang.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
             ang_sp = PyDMSpinbox(
-                parent=self, init_channel=posang_prefix+':DeltaAng'+axis+'-SP')
+                self, posang_prefix.substitute(propty='DeltaAng'+axis+'-SP'))
             ang_sp.setObjectName('ang_sp_'+axis.lower())
             ang_sp.showStepExponent = False
             ang_rb = PyDMLabel(
-                parent=self, init_channel=posang_prefix+':DeltaAng'+axis+'-RB')
+                self, posang_prefix.substitute(propty='DeltaAng'+axis+'-RB'))
             ang_rb.setObjectName('ang_rb_'+axis.lower())
             gbox_posang = QGroupBox(title, self)
             axlay = QGridLayout(gbox_posang)
@@ -163,10 +164,10 @@ class InjBOControlWindow(BaseWindow):
                                        alignment=Qt.AlignCenter), 0, 0, 1, 7)
         for corr in ('CH1', 'CH2', 'CV1', 'CV2'):
             lb_corr = PyDMLabel(
-                parent=self, init_channel=posang_prefix+':'+corr+'-Cte')
+                self, posang_prefix.substitute(propty=corr+'-Cte'))
             lb_corr.setStyleSheet('font-weight:bold;')
             lb_refkick = PyDMLabel(
-                parent=self, init_channel=posang_prefix+':RefKick'+corr+'-Mon')
+                self, posang_prefix.substitute(propty='RefKick'+corr+'-Mon'))
             lb_refkick.showUnits = True
             col = 1 if 'CH' in corr else 4
             row = 0 if '1' in corr else 1
