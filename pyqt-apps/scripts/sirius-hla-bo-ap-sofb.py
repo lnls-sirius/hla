@@ -31,7 +31,8 @@ if args.matrix:
         icon=qta.icon('fa5s.hammer', color=util.get_appropriate_color('BO')),
         is_main=True)
     app.open_window(
-        window, parent=None, prefix=args.prefix + 'BO-Glob:AP-SOFB:', acc='BO')
+        window, parent=None, device='BO-Glob:AP-SOFB',
+        prefix=args.prefix, acc='BO')
 else:
     app.open_window(MainWindow, parent=None, prefix=args.prefix, acc='BO')
 sys.exit(app.exec_())

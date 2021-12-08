@@ -5,7 +5,7 @@ from qtpy.QtWidgets import QWidget, QDockWidget, QSizePolicy, QVBoxLayout, \
     QPushButton, QHBoxLayout, QMenu, QMenuBar, QAction
 import qtawesome as qta
 
-from siriuspy.envars import VACA_PREFIX as LL_PREF
+from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.sofb.csdev import SOFBFactory
 
 from .. import util as _util
@@ -22,7 +22,9 @@ from .ioc_control import SOFBControl, DriveControl
 class MainWindow(SiriusMainWindow):
     def __init__(self, parent=None, prefix='', acc='SI'):
         super().__init__(parent=parent)
-        self.prefix = prefix + acc + '-Glob:AP-SOFB:'
+        self.prefix = prefix
+        self.device = _PVName(acc + '-Glob:AP-SOFB')
+        self.devpref = self.device.substitute(prefix=prefix)
         self._csorb = SOFBFactory.create(acc)
         self.setupui()
         self.setObjectName(acc+'App')
@@ -62,10 +64,11 @@ class MainWindow(SiriusMainWindow):
 
     def _create_central_widget(self):
         ctrls = self.orb_regtr.get_registers_control()
-        chans, ctr = OrbitWidget.get_default_ctrls(self.prefix, self.acc)
+        chans, ctr = OrbitWidget.get_default_ctrls(
+            self.device, self.prefix, self.acc)
         self._channels = chans
         ctrls.update(ctr)
-        return OrbitWidget(self, self.prefix, ctrls, self.acc)
+        return OrbitWidget(self, self.device, self.prefix, ctrls, self.acc)
 
     def _create_orbit_registers(self):
         # Create Context Menus for Registers and
@@ -81,7 +84,7 @@ class MainWindow(SiriusMainWindow):
         wid.setObjectName('doc_OrbReg')
         wid.setStyleSheet("#doc_OrbReg{min-width:20em; min-height:14em;}")
 
-        wid_cont = OrbitRegisters(self, self.prefix, self.acc, 7)
+        wid_cont = OrbitRegisters(self, self.device, self.prefix, self.acc, 7)
         wid.setWidget(wid_cont)
         self.orb_regtr = wid_cont
         return wid
@@ -97,7 +100,7 @@ class MainWindow(SiriusMainWindow):
         docwid.setAllowedAreas(Qt.AllDockWidgetAreas)
 
         ctrls = self.orb_regtr.get_registers_control()
-        wid = SOFBControl(self, self.prefix, ctrls, self.acc)
+        wid = SOFBControl(self, self.device, ctrls, self.prefix, self.acc)
         docwid.setWidget(wid)
         return docwid
 
@@ -113,7 +116,8 @@ class MainWindow(SiriusMainWindow):
         docwid.setWidget(wid_cont)
         vbl = QVBoxLayout(wid_cont)
         vbl.setContentsMargins(0, 0, 0, 0)
-        pdm_log = PyDMLogLabel(wid_cont, init_channel=self.prefix+'Log-Mon')
+        pdm_log = PyDMLogLabel(
+            wid_cont, init_channel=self.devpref.substitute(propty='Log-Mon'))
         pdm_log.setAlternatingRowColors(True)
         pdm_log.maxCount = 2000
         vbl.addWidget(pdm_log)
@@ -154,14 +158,15 @@ class MainWindow(SiriusMainWindow):
             Window = create_window_from_widget(
                 DriveControl, title='Drive Control')
             _util.connect_window(
-                actdrive, Window,
-                parent=self, prefix=self.prefix, acc=self.acc)
+                actdrive, Window, parent=self, device=self.device,
+                prefix=self.prefix, acc=self.acc)
             menubar.addAction(actdrive)
 
         actbpm = QAction('Show BPM List', menubar)
         Window = create_window_from_widget(SelectBPMs, title='BPM List')
         _util.connect_window(
-            actbpm, Window, self, bpm_list=self._csorb.bpm_names)
+            actbpm, Window, self, prefix=self.prefix,
+            bpm_list=self._csorb.bpm_names)
         menubar.addAction(actbpm)
 
         if self.isring:

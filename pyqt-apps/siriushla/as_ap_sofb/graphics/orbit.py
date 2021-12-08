@@ -10,8 +10,8 @@ from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.sofb.csdev import SOFBFactory
 import siriushla.util as _util
 from siriushla.widgets.windows import create_window_from_widget
-from siriushla.widgets import SiriusSpectrogramView, SiriusConnectionSignal, \
-    SiriusLabel
+from siriushla.widgets import SiriusSpectrogramView, SiriusLabel, \
+    SiriusConnectionSignal as _ConnSig
 
 from .base import BaseWidget, Graph
 from .correctors import CorrectorsWidget
@@ -20,16 +20,16 @@ from .correctors import CorrectorsWidget
 class OrbitWidget(BaseWidget):
     """."""
 
-    def __init__(self, parent, prefix, ctrls=None, acc='SI'):
+    def __init__(self, parent, device, prefix='', ctrls=None, acc='SI'):
         """."""
         self._chans = []
         self._csorb = SOFBFactory.create(acc)
         if not ctrls:
             self._chans, ctrls = self.get_default_ctrls(
-                prefix, acc=acc.upper())
+                device, prefix, acc=acc.upper())
 
         names = ['Line {0:d}'.format(i+1) for i in range(2)]
-        super().__init__(parent, prefix, ctrls, names, True, acc)
+        super().__init__(parent, device, ctrls, names, True, prefix, acc)
 
         txt1, txt2 = 'IOC-SPassOrb', 'IOC-RefOrb'
         if self.acc == 'SI':
@@ -60,7 +60,8 @@ class OrbitWidget(BaseWidget):
         Window = create_window_from_widget(
             CorrectorsWidget, title='Correctors')
         _util.connect_window(
-            btn, Window, self, prefix=self.prefix, acc=self.acc)
+            btn, Window, self, device=self.device,
+            prefix=self.prefix, acc=self.acc)
 
         if self.isring:
             btn = QPushButton('MTurn Orb', grpbx)
@@ -68,16 +69,15 @@ class OrbitWidget(BaseWidget):
             Window = create_window_from_widget(
                 MultiTurnWidget, title='Multi Turn')
             _util.connect_window(
-                btn, Window, self,
-                sigs=self.updater[0].raw_ref_sig, prefix=self.prefix,
-                csorb=self._csorb)
+                btn, Window, self, sigs=self.updater[0].raw_ref_sig,
+                device=self.device, prefix=self.prefix, csorb=self._csorb)
 
             btn = QPushButton('MTurn Sum', grpbx)
             gdl.addWidget(btn, 0, 2)
             Window = create_window_from_widget(
                 MultiTurnSumWidget, title='Multi Turn Sum')
             _util.connect_window(
-                btn, Window, self, prefix=self.prefix,
+                btn, Window, self, device=self.device, prefix=self.prefix,
                 csorb=self._csorb)
 
         btn = QPushButton('SingPass Sum', grpbx)
@@ -85,7 +85,8 @@ class OrbitWidget(BaseWidget):
         Window = create_window_from_widget(
             SinglePassSumWidget, title='Single Pass Sum')
         _util.connect_window(
-            btn, Window, self, prefix=self.prefix, csorb=self._csorb)
+            btn, Window, self, device=self.device, prefix=self.prefix,
+            csorb=self._csorb)
 
     def channels(self):
         """."""
@@ -94,7 +95,7 @@ class OrbitWidget(BaseWidget):
         return chans
 
     @staticmethod
-    def get_default_ctrls(prefix, acc='SI'):
+    def get_default_ctrls(device, prefix='', acc='SI'):
         """."""
         pvs = [
             'SPassOrbX-Mon', 'SPassOrbY-Mon',
@@ -109,7 +110,8 @@ class OrbitWidget(BaseWidget):
             pvs.extend(['MTurnIdxOrbX-Mon', 'MTurnIdxOrbY-Mon'])
             orbs.append('IOC-MTurnOrb')
 
-        chans = [SiriusConnectionSignal(prefix+pv) for pv in pvs]
+        chans = [_ConnSig(device.substitute(prefix=prefix, propty=pv))
+                 for pv in pvs]
         ctrls = dict()
         pvs = iter(chans)
         for orb in orbs:
@@ -128,11 +130,13 @@ class OrbitWidget(BaseWidget):
 class MultiTurnWidget(QWidget):
     """."""
 
-    def __init__(self, parent, sigs, prefix, csorb):
+    def __init__(self, parent, sigs, device, prefix, csorb):
         """."""
         super().__init__(parent)
         self._csorb = csorb
-        self.prefix = _PVName(prefix)
+        self.prefix = prefix
+        self.device = _PVName(device)
+        self.devpref = self.device.substitute(prefix=prefix)
         self.setObjectName(csorb.acc + 'App')
         self.setupui()
         self.sigs = sigs
@@ -157,9 +161,11 @@ class MultiTurnWidget(QWidget):
         """."""
         hbl = QHBoxLayout(self)
         self.spectx = MultiTurnSumWidget(
-            self, self.prefix, orbtype='X', csorb=self._csorb)
+            self, device=self.device, prefix=self.prefix,
+            orbtype='X', csorb=self._csorb)
         self.specty = MultiTurnSumWidget(
-            self, self.prefix, orbtype='Y', csorb=self._csorb)
+            self, device=self.device, prefix=self.prefix,
+            orbtype='Y', csorb=self._csorb)
         hbl.addWidget(self.spectx)
         hbl.addSpacing(50)
         hbl.addWidget(self.specty)
@@ -178,14 +184,17 @@ class MultiTurnSumWidget(QWidget):
     ratio_sum_avg = Signal(str)
     ratio_sum_std = Signal(str)
 
-    def __init__(self, parent, prefix, orbtype='sum', csorb=None):
+    def __init__(self, parent, device, prefix='', orbtype='sum', csorb=None):
         """."""
         super().__init__(parent)
-        self.prefix = _PVName(prefix)
+        self.prefix = prefix
+        self.device = _PVName(device)
+        self.devpref = self.device.substitute(prefix=prefix)
         self.orbtype = orbtype.lower()
         self._csorb = csorb
-        self.setObjectName(self.prefix.sec+'App')
-        self.multiturnidx = SiriusConnectionSignal(self.prefix+'MTurnIdx-SP')
+        self.setObjectName(self.device.sec+'App')
+        self.multiturnidx = _ConnSig(
+            self.devpref.substitute(propty='MTurnIdx-SP'))
         self.setupui()
 
     def setupui(self):
@@ -210,10 +219,11 @@ class MultiTurnSumWidget(QWidget):
 
         self.spect = Spectrogram(
             parent=self,
+            device=self.device,
             prefix=self.prefix,
-            image_channel=self.prefix+img_propty,
-            xaxis_channel=self.prefix+'BPMPosS-Mon',
-            yaxis_channel=self.prefix+'MTurnTime-Mon')
+            image_channel=self.devpref.substitute(propty=img_propty),
+            xaxis_channel=self.devpref.substitute(propty='BPMPosS-Mon'),
+            yaxis_channel=self.devpref.substitute(propty='MTurnTime-Mon'))
         self.spect.new_data_sig.connect(self.update_graph)
         self.spect.normalizeData = True
         self.spect.yaxis.setLabel('Time', units='s')
@@ -250,7 +260,7 @@ class MultiTurnSumWidget(QWidget):
         graph.setLabel('left', text='Avg ' + lbl_text, units=unit)
         opts = dict(
             y_channel='A',
-            x_channel=self.prefix+'MTurnTime-Mon',
+            x_channel=self.devpref.substitute(propty='MTurnTime-Mon'),
             name='',
             color=color,
             redraw_mode=2,
@@ -275,7 +285,7 @@ class MultiTurnSumWidget(QWidget):
             alignment=Qt.AlignRight | Qt.AlignVCenter)
         lab.setStyleSheet("font-weight: bold;")
         pdmlab = SiriusLabel(
-            wid, init_channel=self.prefix+'MTurnIdx-RB')
+            wid, self.devpref.substitute(propty='MTurnIdx-RB'))
         pdmlab.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         pdmlab.setStyleSheet('min-width:4em;')
         wid.setLayout(QHBoxLayout())
@@ -289,8 +299,8 @@ class MultiTurnSumWidget(QWidget):
         graph.setLabel('bottom', text='BPM Position', units='m')
         graph.setLabel('left', text='Sum', units='count')
         opts = dict(
-            y_channel=self.prefix+orb_propty,
-            x_channel=self.prefix+'BPMPosS-Mon',
+            y_channel=self.devpref.substitute(propty=orb_propty),
+            x_channel=self.devpref.substitute(propty='BPMPosS-Mon'),
             name='',
             color=color,
             redraw_mode=2,
@@ -368,14 +378,17 @@ class Spectrogram(SiriusSpectrogramView):
 
     new_data_sig = Signal(_np.ndarray)
 
-    def __init__(self, prefix='', **kwargs):
+    def __init__(self, device, prefix='', **kwargs):
         """."""
         self._reforb = None
         super().__init__(**kwargs)
         self.setObjectName('graph')
         self.setStyleSheet('#graph {min-height: 15em; min-width: 20em;}')
         self.prefix = prefix
-        self.multiturnidx = SiriusConnectionSignal(self.prefix+'MTurnIdx-SP')
+        self.device = _PVName(device)
+        self.devpref = self.device.substitute(prefix=prefix)
+        self.multiturnidx = _ConnSig(
+            self.devpref.substitute(propty='MTurnIdx-SP'))
 
     def channels(self):
         """."""
@@ -407,10 +420,12 @@ class Spectrogram(SiriusSpectrogramView):
 class SinglePassSumWidget(QWidget):
     """."""
 
-    def __init__(self, parent, prefix, csorb):
+    def __init__(self, parent, device, csorb, prefix=''):
         """."""
         super().__init__(parent)
-        self.prefix = _PVName(prefix)
+        self.prefix = prefix
+        self.device = _PVName(device)
+        self.devpref = self.device.substitute(prefix=prefix)
         self.setObjectName(csorb.acc+'App')
         self._csorb = csorb
         self.setupui()
@@ -428,8 +443,8 @@ class SinglePassSumWidget(QWidget):
         graph.setLabel('bottom', text='BPM Position', units='m')
         graph.setLabel('left', text='Sum', units='count')
         opts = dict(
-            y_channel=self.prefix+'SPassSum-Mon',
-            x_channel=self.prefix+'BPMPosS-Mon',
+            y_channel=self.devpref.substitute(propty='SPassSum-Mon'),
+            x_channel=self.devpref.substitute(propty='BPMPosS-Mon'),
             name='',
             color='black',
             redraw_mode=2,

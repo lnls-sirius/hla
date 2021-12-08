@@ -100,8 +100,8 @@ class _PyDMLedList(PyDMWidget, QWidget):
 
 class SelectionMatrix(BaseWidget):
 
-    def __init__(self, parent, prefix, acc='SI'):
-        super().__init__(parent, prefix, acc)
+    def __init__(self, parent, device, prefix='', acc='SI'):
+        super().__init__(parent, device, prefix=prefix, acc=acc)
         tab = QTabWidget(self)
         hbl = QHBoxLayout(self)
         hbl.addWidget(tab)
@@ -109,15 +109,17 @@ class SelectionMatrix(BaseWidget):
 
         for dev in ('BPMX', 'BPMY', 'CH', 'CV'):
             tab.addTab(
-                SingleSelMatrix(tab, dev, self.prefix, acc=self.acc), dev)
+                SingleSelMatrix(
+                    tab, dev, self.device,
+                    prefix=self.prefix, acc=self.acc), dev)
 
 
 class SingleSelMatrix(BaseWidget):
     """Create the Selection Matrices for BPMs and Correctors."""
 
-    def __init__(self, parent, dev, prefix, acc='SI'):
+    def __init__(self, parent, dev, device, prefix='', acc='SI'):
         """Initialize the matrix of the specified dev."""
-        super().__init__(parent, prefix, acc)
+        super().__init__(parent, device, prefix=prefix, acc=acc)
         self.setObjectName(acc.upper()+'App')
         self.dev = dev
         max_rz = self._csorb.MAX_RINGSZ
@@ -139,7 +141,6 @@ class SingleSelMatrix(BaseWidget):
             'CH': (self._csorb.ch_names, self._csorb.ch_nicknames),
             'CV': (self._csorb.cv_names, self._csorb.cv_nicknames)}
         self._get_headers()
-        self.prefix = prefix
         self._setup_ui()
 
     def _get_headers(self):
@@ -209,8 +210,10 @@ class SingleSelMatrix(BaseWidget):
 
         self.pvs = _PyDMLedList(
             parent=scr_ar_wid,
-            init_channel=self.prefix + self.dev + 'EnblList-RB',
-            chan_otpl=self.prefix + self.devotpl[self.dev] + 'EnblList-RB',
+            init_channel=self.devpref.substitute(
+                propty=self.dev+'EnblList-RB'),
+            chan_otpl=self.devpref.substitute(
+                propty=self.devotpl[self.dev]+'EnblList-RB'),
             size=len(self.devnames[self.dev][0]),
             side_headers=self.side_headers_wids,
             top_headers=self.top_headers_wids)

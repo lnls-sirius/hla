@@ -13,7 +13,8 @@ from pydm.widgets import PyDMLabel, PyDMPushButton, PyDMCheckbox
 from siriuspy.sofb.csdev import ConstTLines
 from siriuspy.clientconfigdb import ConfigDBClient, ConfigDBException
 from siriushla.widgets.windows import create_window_from_widget
-from siriushla.widgets import SiriusLedState, SiriusConnectionSignal, \
+from siriushla.widgets import SiriusLedState, \
+    SiriusConnectionSignal as _ConnSig, \
     SiriusLabel, SiriusEnumComboBox
 from siriushla.util import connect_window, get_appropriate_color, \
     connect_newprocess
@@ -28,8 +29,8 @@ class RespMatWidget(BaseWidget):
 
     DEFAULT_DIR = _pathlib.Path.home().as_posix()
 
-    def __init__(self, parent, prefix, acc='SI'):
-        super().__init__(parent, prefix, acc=acc)
+    def __init__(self, parent, device, prefix='', acc='SI'):
+        super().__init__(parent, device, prefix=prefix, acc=acc)
         self.setupui()
         self._config_type = acc.lower() + '_orbcorr_respm'
         self._client = ConfigDBClient(config_type=self._config_type)
@@ -37,8 +38,10 @@ class RespMatWidget(BaseWidget):
         self.EXT_FLT = 'RespMat Files (*.{})'.format(self.EXT)
         self.last_dir = self.DEFAULT_DIR
 
-        self._respmat_sp = SiriusConnectionSignal(prefix+'RespMat-SP')
-        self._respmat_rb = SiriusConnectionSignal(prefix+'RespMat-RB')
+        self._respmat_sp = _ConnSig(
+            self.devpref.substitute(propty='RespMat-SP'))
+        self._respmat_rb = _ConnSig(
+            self.devpref.substitute(propty='RespMat-RB'))
 
     def setupui(self):
         """."""
@@ -95,7 +98,9 @@ class RespMatWidget(BaseWidget):
         btn.setStyleSheet(
             '#btn{min-width:3.8em; max-width:3.8em;\
             min-height:2em; max-height:2em; icon-size:25px;}')
-        connect_window(btn, Window, None, prefix=self.prefix, acc=self.acc)
+        connect_window(
+            btn, Window, None, device=self.device,
+            prefix=self.prefix, acc=self.acc)
         sel_lay.addWidget(btn)
 
         lay = QVBoxLayout()
@@ -105,18 +110,18 @@ class RespMatWidget(BaseWidget):
         hlay = QHBoxLayout()
         lay.addLayout(hlay)
         hlay.addWidget(SiriusEnumComboBox(
-            sel_wid, init_channel=self.prefix+'RespMatMode-Sel'))
+            sel_wid, self.devpref.substitute(propty='RespMatMode-Sel')))
         hlay.addWidget(SiriusLabel(
-            sel_wid, init_channel=self.prefix+'RespMatMode-Sts'))
+            sel_wid, self.devpref.substitute(propty='RespMatMode-Sts')))
 
         if self.acc == 'SI':
             hlay = QHBoxLayout()
             lay.addLayout(hlay)
             pdm_chbx = PyDMCheckbox(
-                sel_wid, init_channel=self.prefix+'RFEnbl-Sel')
+                sel_wid, self.devpref.substitute(propty='RFEnbl-Sel'))
             pdm_chbx.setText('use RF')
             pdm_led = SiriusLedState(
-                sel_wid, init_channel=self.prefix+'RFEnbl-Sts')
+                sel_wid, self.devpref.substitute(propty='RFEnbl-Sts'))
             hlay.addWidget(pdm_chbx)
             hlay.addWidget(pdm_led)
 
@@ -148,7 +153,7 @@ class RespMatWidget(BaseWidget):
 
         lbl = QLabel('Nr Sing Vals')
         lbls = SiriusLabel(
-            svs_wid, init_channel=self.prefix+'NrSingValues-Mon')
+            svs_wid, self.devpref.substitute(propty='NrSingValues-Mon'))
         btn = QPushButton('', svs_wid)
         btn.setToolTip('Check Singular Values')
         btn.setIcon(qta.icon('mdi.chart-line'))
@@ -163,7 +168,8 @@ class RespMatWidget(BaseWidget):
 
         Window = create_window_from_widget(
             SingularValues, title='Check Singular Values')
-        connect_window(btn, Window, svs_wid, prefix=self.prefix)
+        connect_window(
+            btn, Window, svs_wid, device=self.device, prefix=self.prefix)
 
         return svs_wid
 
@@ -174,7 +180,7 @@ class RespMatWidget(BaseWidget):
 
         strt = PyDMPushButton(
             meas_wid,
-            init_channel=self.prefix+"MeasRespMat-Cmd",
+            init_channel=self.devpref.substitute(propty="MeasRespMat-Cmd"),
             pressValue=ConstTLines.MeasRespMatCmd.Start)
         strt.setEnabled(True)
         strt.setToolTip('Start Measurement')
@@ -184,7 +190,7 @@ class RespMatWidget(BaseWidget):
             '#strt{min-width:25px; max-width:25px; icon-size:20px;}')
         stop = PyDMPushButton(
             meas_wid,
-            init_channel=self.prefix+"MeasRespMat-Cmd",
+            init_channel=self.devpref.substitute(propty="MeasRespMat-Cmd"),
             pressValue=ConstTLines.MeasRespMatCmd.Stop)
         stop.setEnabled(True)
         stop.setToolTip('Stop Measurement')
@@ -194,7 +200,7 @@ class RespMatWidget(BaseWidget):
             '#stop{min-width:25px; max-width:25px; icon-size:20px;}')
         rst = PyDMPushButton(
             meas_wid,
-            init_channel=self.prefix+"MeasRespMat-Cmd",
+            init_channel=self.devpref.substitute(propty="MeasRespMat-Cmd"),
             pressValue=ConstTLines.MeasRespMatCmd.Reset)
         rst.setEnabled(True)
         rst.setToolTip('Reset Measurement Status')
@@ -202,7 +208,8 @@ class RespMatWidget(BaseWidget):
         rst.setObjectName('conf')
         rst.setStyleSheet(
             '#conf{min-width:25px; max-width:25px; icon-size:20px;}')
-        lbl = PyDMLabel(meas_wid, init_channel=self.prefix+'MeasRespMat-Mon')
+        lbl = PyDMLabel(
+            meas_wid, self.devpref.substitute(propty='MeasRespMat-Mon'))
         lbl.setAlignment(Qt.AlignCenter)
         hbl = QHBoxLayout()
         hbl.setSpacing(8)
