@@ -31,7 +31,8 @@ class RFKillBeamHandler:
             'SR-RF-DLLRF-01:mV:AL:REF-RB',
             'SR-RF-DLLRF-01:mV:AL:REF-SP'}
         for pvn in pvnames:
-            _pvs[pvn] = _PV(_vaca_prefix+pvn, connection_timeout=0.05)
+            pvname = _vaca_prefix + ('-' if _vaca_prefix else '') + pvn
+            _pvs[pvn] = _PV(pvname, connection_timeout=0.05)
 
         RFKillBeamHandler._pvs.update(_pvs)
 

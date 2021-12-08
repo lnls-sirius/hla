@@ -13,6 +13,7 @@ class CavityStatusDetails(SiriusDialog):
     def __init__(self, parent=None, prefix='', section=''):
         super().__init__(parent)
         self.prefix = prefix
+        self.prefix += ('-' if prefix and not prefix.endswith('-') else '')
         self.section = section.upper()
         self.chs = SEC_2_CHANNELS[self.section]
         self.setObjectName(self.section + 'App')
@@ -33,14 +34,14 @@ class CavityStatusDetails(SiriusDialog):
         tooltip = 'Interlock limits: \nMin: ' + str(lims[0]) + \
             '°C, Max: '+str(lims[1])+'°C'
         for idx, cell in enumerate(self.chs['Cav Sts']['Temp']['Cells']):
-            lb = PyDMLabel(self, cell[0])
+            lb = PyDMLabel(self, self.prefix+cell[0])
             lb.showUnits = True
             lb.setStyleSheet('min-width:3.5em; max-width:3.5em;')
             led = PyDMLedMultiChannel(
                 self,
-                {cell[0]: {'comp': 'wt', 'value': lims},
-                 cell[0].replace('T-Mon', 'TUp-Mon'): 0,
-                 cell[0].replace('T-Mon', 'TDown-Mon'): 0})
+                {self.prefix+cell[0]: {'comp': 'wt', 'value': lims},
+                 self.prefix+cell[0].replace('T-Mon', 'TUp-Mon'): 0,
+                 self.prefix+cell[0].replace('T-Mon', 'TDown-Mon'): 0})
             led.setToolTip(tooltip)
             hb = QHBoxLayout()
             hb.setAlignment(Qt.AlignLeft)
@@ -49,14 +50,14 @@ class CavityStatusDetails(SiriusDialog):
             lay_temp1.addRow('Cell '+str(idx + 1)+': ', hb)
         ch_coup = self.chs['Cav Sts']['Temp']['Coupler'][0]
         lims_coup = self.chs['Cav Sts']['Temp']['Coupler Limits']
-        lb_coup = PyDMLabel(self, ch_coup)
+        lb_coup = PyDMLabel(self, self.prefix+ch_coup)
         lb_coup.setStyleSheet('min-width:3.5em; max-width:3.5em;')
         lb_coup.showUnits = True
         led_coup = PyDMLedMultiChannel(
             self,
-            {ch_coup: {'comp': 'wt', 'value': lims_coup},
-             ch_coup.replace('T-Mon', 'TUp-Mon'): 0,
-             ch_coup.replace('T-Mon', 'TDown-Mon'): 0})
+            {self.prefix+ch_coup: {'comp': 'wt', 'value': lims_coup},
+             self.prefix+ch_coup.replace('T-Mon', 'TUp-Mon'): 0,
+             self.prefix+ch_coup.replace('T-Mon', 'TDown-Mon'): 0})
         led_coup.setToolTip(
             'Interlock limits: \n'
             'Min: '+str(lims_coup[0])+'°C, Max: '+str(lims_coup[1])+'°C')
@@ -78,7 +79,7 @@ class CavityStatusDetails(SiriusDialog):
         for idx, cell in enumerate(self.chs['Cav Sts']['Temp']['Cells']):
             led = SiriusLedAlert(self)
             led.setToolTip('Interlock limits:\nMax: 60°C')
-            led.channel = cell[0].replace('T-Mon', 'Tms-Mon')
+            led.channel = self.prefix+cell[0].replace('T-Mon', 'Tms-Mon')
             lay_temp2.addRow('Cell '+str(idx + 1)+': ', led)
 
         lay_dtemp = QFormLayout()
@@ -93,7 +94,7 @@ class CavityStatusDetails(SiriusDialog):
         for idx, disc in enumerate(self.chs['Cav Sts']['Temp']['Discs']):
             led = SiriusLedAlert(self)
             led.setToolTip('Interlock limits:\nMax: 60°C')
-            led.channel = disc
+            led.channel = self.prefix+disc
             lay_dtemp.addRow('Disc '+str(idx)+': ', led)
 
         self.led_HDFlwRt1 = SiriusLedAlert(
@@ -165,6 +166,7 @@ class TransmLineStatusDetails(SiriusDialog):
     def __init__(self, parent=None, prefix='', section=''):
         super().__init__(parent)
         self.prefix = prefix
+        self.prefix += ('-' if prefix and not prefix.endswith('-') else '')
         self.section = section.upper()
         self.chs = SEC_2_CHANNELS[self.section]
         self.setObjectName(self.section + 'App')
@@ -226,6 +228,7 @@ class LLRFInterlockDetails(SiriusDialog):
         """Init."""
         super().__init__(parent)
         self.prefix = prefix
+        self.prefix += ('-' if prefix and not prefix.endswith('-') else '')
         self.section = section
         self.chs = SEC_2_CHANNELS[self.section]
         self.setObjectName(self.section+'App')
@@ -248,7 +251,7 @@ class LLRFInterlockDetails(SiriusDialog):
             lay_intlk.setVerticalSpacing(9)
             lay_intlk.addWidget(
                 QLabel('<h4>'+name+'</h4>', self), 0, 0, 1, 2)
-            pv = dic['PV']
+            pv = self.prefix+dic['PV']
             labels = dic['Labels']
             for idx, label in enumerate(labels):
                 led = SiriusLedAlert(self, pv, bit=idx)
