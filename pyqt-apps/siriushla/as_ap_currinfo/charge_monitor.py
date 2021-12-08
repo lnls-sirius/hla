@@ -5,6 +5,7 @@ from qtpy.QtWidgets import QWidget, QLabel, QCheckBox, QPushButton, \
     QVBoxLayout, QGridLayout, QApplication
 
 from siriuspy.envars import VACA_PREFIX
+from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.clientarch.time import Time
 from siriushla.widgets import SiriusMainWindow, SiriusConnectionSignal, \
     SiriusTimePlot, QDoubleSpinBoxPlus
@@ -19,7 +20,8 @@ class BOMonitor(SiriusMainWindow):
         self.setWindowTitle('BO Charge Monitor')
 
         self._prefix = prefix
-        self._ioc_prefix = self._prefix + 'BO-Glob:AP-CurrInfo'
+        self._ioc_prefix = _PVName('BO-Glob:AP-CurrInfo').substitute(
+            prefix=prefix)
         self._energies = ['150MeV', '1GeV', '2GeV', '3GeV']
         self._latest_offsets = {e: 0.0 for e in self._energies}  # in nC
         self._latest_charges = {e: 0.0 for e in self._energies}  # in nC
@@ -67,7 +69,7 @@ class BOMonitor(SiriusMainWindow):
         glay_aux.addWidget(
             QLabel('Offset [nC]: ', self), 2, 0, alignment=Qt.AlignCenter)
         for i, e in enumerate(self._energies):
-            pvname = self._ioc_prefix+':Charge'+e+'-Mon'
+            pvname = self._ioc_prefix.substitute(propty='Charge'+e+'-Mon')
             self._channels[e] = SiriusConnectionSignal(address=pvname)
             self._channels[e].new_value_signal[float].connect(
                 self._update_charges)
