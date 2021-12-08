@@ -97,8 +97,7 @@ class KicksConfigWidget(BaseWidget):
             HLTriggerDetailed,
             title='SI-Glob:TI-Mags-Corrs Detailed Settings', is_main=True)
         connect_window(
-            del_det, trg_w, parent=None,
-            prefix='SI-Glob:TI-Mags-Corrs:')
+            del_det, trg_w, parent=None, device='SI-Glob:TI-Mags-Corrs')
         del_lay = QHBoxLayout(del_grp)
         del_lay.addStretch()
         del_lay.addWidget(del_wid)

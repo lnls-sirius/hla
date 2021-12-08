@@ -157,8 +157,7 @@ class MainLauncher(SiriusMainWindow):
         evg_update_sts.setOffColor(evg_update_sts.Red)
         evg_update_sts.setOnColor(evg_update_sts.LightGreen)
 
-        evg_bucket_list = BucketList(
-            self, prefix=self._prefix+evg_name+':', min_size=15)
+        evg_bucket_list = BucketList(self, prefix=self._prefix, min_size=15)
 
         pbt = QPushButton('>', self)
         pbt.clicked.connect(self._toggle_expand_horizontal)

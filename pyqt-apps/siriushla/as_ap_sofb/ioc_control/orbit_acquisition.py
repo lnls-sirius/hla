@@ -46,8 +46,9 @@ class AcqControlWidget(BaseWidget):
 
         tabw = QTabWidget(self)
         self._set_detailed(tabw)
-        pref = self.prefix.prefix + self._csorb.trigger_acq_name
-        grp_bx = _HLTriggerSimple(parent=tabw, prefix=pref, src=True)
+        grp_bx = _HLTriggerSimple(
+            parent=tabw, device=self._csorb.trigger_acq_name,
+            prefix=self.prefix.prefix, src=True)
         tabw.addTab(grp_bx, 'External Trigger')
         grp_bx = self._get_trigdata_params_grpbx()
         tabw.addTab(grp_bx, 'Data-Driven Trigger')

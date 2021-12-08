@@ -8,6 +8,9 @@ from qtpy.QtWidgets import QLabel, QGridLayout, QGroupBox, QFormLayout, \
 
 from pydm.widgets import PyDMTimePlot
 
+from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
+from siriuspy.namesys import SiriusPVName as _PVName
+
 from siriushla.widgets import SiriusSpinbox, PyDMStateButton, SiriusLabel, \
     SiriusLedState, SiriusProcessImage, QSpinBoxPlus
 from siriushla.as_ti_control import HLTriggerSimple
@@ -16,9 +19,10 @@ from siriushla.as_ti_control import HLTriggerSimple
 class EnergyMeasure(QWidget):
     """."""
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, prefix=_VACA_PREFIX):
         """."""
         super().__init__(parent=parent)
+        self.prefix = prefix
         self._setupUi()
         self.setObjectName('LIApp')
 
@@ -119,7 +123,8 @@ class EnergyMeasure(QWidget):
 
         gb_trig = QGroupBox('Trigger', self)
         hbl = QHBoxLayout(gb_trig)
-        hbl.addWidget(HLTriggerSimple(parent=self, prefix='LI-Fam:TI-Scrn'))
+        hbl.addWidget(HLTriggerSimple(
+            parent=self, device='LI-Fam:TI-Scrn', prefix=self.prefix))
         gb_trig.setLayout(hbl)
 
         gl = QGridLayout(self)

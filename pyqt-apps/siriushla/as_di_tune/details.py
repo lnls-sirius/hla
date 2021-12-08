@@ -61,7 +61,7 @@ class TuneDetails(SiriusMainWindow):
             self.trg_gbox.setLayout(QHBoxLayout())
             self.trg_gbox.layout().addWidget(HLTriggerSimple(
                 self.trg_gbox,
-                self.prefix + 'BO-Glob:TI-TuneProc',
+                device='BO-Glob:TI-TuneProc', prefix=self.prefix,
                 duration=True, nrpulses=True))
             # spectrogram view
             self.spec_gbox = QGroupBox('Spectrogram View', self)

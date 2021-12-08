@@ -8,6 +8,7 @@ from pydm.widgets import PyDMPushButton, PyDMLabel
 
 from siriuspy.timesys import csdev as _cstime
 from siriuspy.search import LLTimeSearch, HLTimeSearch
+from siriuspy.namesys import SiriusPVName
 
 from ..util import connect_window, get_appropriate_color, \
     connect_newprocess
@@ -58,52 +59,63 @@ class TimingMain(SiriusMainWindow):
         wid.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Maximum)
         lay = QGridLayout(wid)
 
-        evg_pref = LLTimeSearch.get_device_names({'dev': 'EVG'})[0]
-        evg_pref = self.prefix + evg_pref + ':'
+        evg_dev = SiriusPVName(LLTimeSearch.get_evg_name())
+        evg_pref = evg_dev.substitute(prefix=self.prefix)
         sp = PyDMPushButton(
-            self, init_channel=evg_pref+"UpdateEvt-Cmd", pressValue=1)
+            self, init_channel=evg_pref.substitute(propty='UpdateEvt-Cmd'),
+            pressValue=1)
         sp.setIcon(qta.icon('fa5s.sync'))
         sp.setToolTip('Update Events Table')
         sp.setObjectName('but')
         sp.setStyleSheet(
             '#but{min-width:25px; max-width:25px; icon-size:20px;}')
-        rb = PyDMLed(self, init_channel=evg_pref + "EvtSyncStatus-Mon")
+        rb = PyDMLed(
+            self, init_channel=evg_pref.substitute(propty='EvtSyncStatus-Mon'))
         rb.setOffColor(rb.Red)
         rb.setOnColor(rb.LightGreen)
         lay.addWidget(self._create_prop_widget(
             '<h4>Update Evts</h4>', wid, (sp, rb)), 0, 0)
 
-        sp = PyDMStateButton(self, init_channel=evg_pref + "ContinuousEvt-Sel")
-        rb = PyDMLed(self, init_channel=evg_pref + "ContinuousEvt-Sts")
+        sp = PyDMStateButton(
+            self, init_channel=evg_pref.substitute(propty='ContinuousEvt-Sel'))
+        rb = PyDMLed(
+            self, init_channel=evg_pref.substitute(propty='ContinuousEvt-Sts'))
         lay.addWidget(self._create_prop_widget(
             '<h4>Continuous</h4>', wid, (sp, rb)), 0, 1)
 
-        sp = PyDMStateButton(self, init_channel=evg_pref + "InjectionEvt-Sel")
-        rb = PyDMLed(self, init_channel=evg_pref + "InjectionEvt-Sts")
+        sp = PyDMStateButton(
+            self, init_channel=evg_pref.substitute(propty='InjectionEvt-Sel'))
+        rb = PyDMLed(
+            self, init_channel=evg_pref.substitute(propty='InjectionEvt-Sts'))
         lay.addWidget(self._create_prop_widget(
             '<h4>Injection</h4>', wid, (sp, rb)), 0, 2)
 
-        bucketlist_wid = BucketList(self.centralWidget(), evg_pref)
+        bucketlist_wid = BucketList(
+            self.centralWidget(), evg_dev, self.prefix)
         lay.addWidget(bucketlist_wid, 0, 3, 2, 1)
 
         hlay = QHBoxLayout()
         lab = QLabel('Inj Count:', wid)
-        pydmlab = PyDMLabel(wid, init_channel=evg_pref+'InjCount-Mon')
+        pydmlab = PyDMLabel(
+            wid, init_channel=evg_pref.substitute(propty='InjCount-Mon'))
         pydmlab.setStyleSheet('min-width:5em;')
         pydmlab.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         hlay.addStretch()
         hlay.addWidget(lab)
         hlay.addWidget(pydmlab)
         hlay.addStretch()
-        pydmlab = PyDMLabel(wid, init_channel=evg_pref+'STATEMACHINE')
+        pydmlab = PyDMLabel(
+            wid, init_channel=evg_pref.substitute(propty='STATEMACHINE'))
         pydmlab.setStyleSheet('min-width:10em;')
         hlay.addWidget(pydmlab)
         hlay.addStretch()
-        pydmlab = PyDMLabel(wid, init_channel=evg_pref+'SeqCount-SP')
+        pydmlab = PyDMLabel(
+            wid, init_channel=evg_pref.substitute(propty='SeqCount-SP'))
         pydmlab.rules =\
             '[{"name": "VisibleRule", "property": "Visible", ' +\
             '"expression": "ch[0]==5", "channels": [{"channel": "' +\
-            evg_pref + 'STATEMACHINE", "trigger": true}]}]'
+            evg_pref.substitute(propty_name='STATEMACHINE') +\
+            '", "trigger": true}]}]'
         pydmlab.setStyleSheet('min-width:3em;')
         hlay.addWidget(pydmlab)
         hlay.addStretch()
@@ -112,9 +124,9 @@ class TimingMain(SiriusMainWindow):
 
     def setevents(self):
         props = {'name', 'ext_trig', 'mode', 'delay_type', 'delay'}
-        evg_pref = LLTimeSearch.get_device_names({'dev': 'EVG'})[0] + ':'
+        evg_pref = LLTimeSearch.get_evg_name()
         names = list(map(
-            lambda x: evg_pref + x[1],
+            lambda x: evg_pref.substitute(propty=x[1]),
             sorted(_cstime.Const.EvtLL2HLMap.items())))
         names = [x for x in names if not x.endswith(('Dsbl', 'PsMtn'))]
         evts = _EventList(
@@ -133,42 +145,45 @@ class TimingMain(SiriusMainWindow):
         return trigs
 
     def setupmenus(self):
-        prefix = self.prefix
         main_menu = self.menuBar()
         main_menu.setNativeMenuBar(False)
-
         icon = qta.icon('mdi.timer', color=get_appropriate_color('AS'))
 
         menu = main_menu.addMenu('&Devices')
         action = menu.addAction('EVG')
-        evg = LLTimeSearch.get_device_names(filters={'dev': 'EVG'})[0]
+        evg = SiriusPVName(LLTimeSearch.get_evg_name())
         Window = create_window_from_widget(_EVG, title=evg, icon=icon)
-        connect_window(action, Window, None, prefix=prefix + evg + ':')
+        connect_window(
+            action, Window, None, prefix=self.prefix, device=evg)
 
         menu_evr = menu.addMenu('EVRs')
         for evr in LLTimeSearch.get_device_names(filters={'dev': 'EVR'}):
             action = menu_evr.addAction(evr)
             Window = create_window_from_widget(_EVR, title=evr, icon=icon)
-            connect_window(action, Window, None, prefix=prefix+evr+':')
+            connect_window(
+                action, Window, None, prefix=self.prefix, device=evr)
 
         menu_eve = menu.addMenu('EVEs')
         for eve in LLTimeSearch.get_device_names(filters={'dev': 'EVE'}):
             action = menu_eve.addAction(eve)
             Window = create_window_from_widget(_EVE, title=eve, icon=icon)
-            connect_window(action, Window, None, prefix=prefix + eve + ':')
+            connect_window(
+                action, Window, None, prefix=self.prefix, device=eve)
 
         menu_afc = menu.addMenu('AMCs')
         for afc in LLTimeSearch.get_device_names(
                                     filters={'dev': 'AMCFPGAEVR'}):
             action = menu_afc.addAction(afc)
             Window = create_window_from_widget(_AFC, title=afc, icon=icon)
-            connect_window(action, Window, None, prefix=prefix+afc+':')
+            connect_window(
+                action, Window, None, prefix=self.prefix, device=afc)
 
         menu_fout = menu.addMenu('Fouts')
         for fout in LLTimeSearch.get_device_names(filters={'dev': 'Fout'}):
             action = menu_fout.addAction(fout)
             Window = create_window_from_widget(_FOUT, title=fout, icon=icon)
-            connect_window(action, Window, None, prefix=prefix+fout+':')
+            connect_window(
+                action, Window, None, prefix=self.prefix, device=fout)
 
         action = main_menu.addAction('&Monitor')
         connect_newprocess(

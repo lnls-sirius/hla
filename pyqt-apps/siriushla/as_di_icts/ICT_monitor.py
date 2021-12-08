@@ -289,8 +289,9 @@ class _ICTSettings(SiriusDialog):
         trg_w = create_window_from_widget(
             HLTriggerDetailed, is_main=True,
             title=self.ict_trig_digi_prefix+' Detailed Settings')
-        util.connect_window(self.pb_DigiDetails, trg_w, parent=self,
-                            prefix=self.ict_trig_digi_prefix+':')
+        util.connect_window(
+            self.pb_DigiDetails, trg_w, parent=self,
+            device=self.ict_trig_digi_prefix, prefix=self.prefix)
         l_DigiDelay = QLabel('Delay: ', self)
         self.pydmspinbox_DigiDelay = PyDMSpinbox(
             parent=self, init_channel=self.ict_trig_digi_prefix+':Delay-SP')
@@ -332,8 +333,9 @@ class _ICTSettings(SiriusDialog):
         trg_w = create_window_from_widget(
             HLTriggerDetailed, is_main=True,
             title=self.ict_trig_integ_prefix+' Detailed Settings')
-        util.connect_window(self.pb_IntegDetails, trg_w, parent=self,
-                            prefix=self.ict_trig_integ_prefix+':')
+        util.connect_window(
+            self.pb_IntegDetails, trg_w, parent=self,
+            device=self.ict_trig_integ_prefix, prefix=self.prefix)
         l_IntegDelay = QLabel('Delay: ', self)
         self.pydmspinbox_IntegDelay = PyDMSpinbox(
             parent=self, init_channel=self.ict_trig_digi_prefix+':Delay-SP')

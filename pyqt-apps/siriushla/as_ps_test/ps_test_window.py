@@ -1147,9 +1147,9 @@ class PSTestWindow(SiriusMainWindow):
         name = PVName(index.data())
         if name.dis == 'TI':
             app = QApplication.instance()
-            wind = create_window_from_widget(HLTriggerDetailed, title=name,
-                                             is_main=True)
-            app.open_window(wind, parent=self, **{'prefix': name})
+            wind = create_window_from_widget(
+                HLTriggerDetailed, title=name, is_main=True)
+            app.open_window(wind, parent=self, **{'device': name})
             return
         elif not _re.match('.*-.*:.*-.*', name):
             if index.model().rowCount(index) == 1:

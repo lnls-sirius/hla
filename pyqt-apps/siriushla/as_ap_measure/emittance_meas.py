@@ -22,6 +22,8 @@ from pydm.widgets import PyDMImageView
 from pydm.widgets.logdisplay import PyDMLogDisplay
 
 import mathphys.constants as _consts
+from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
+from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.magnet.factory import NormalizerFactory as _NormFact
 
 from siriushla.widgets import SiriusSpinbox, SiriusLabel, MatplotlibWidget, \
@@ -43,9 +45,10 @@ _log.basicConfig(format='%(levelname)7s ::: %(message)s')
 
 class EmittanceMeasure(QWidget):
 
-    def __init__(self, parent=None, place='LI'):
+    def __init__(self, parent=None, place='LI', prefix=_VACA_PREFIX):
         super().__init__(parent=parent)
         self._place = place or 'LI'
+        self._prefix = prefix
         self.setObjectName(self._place[0:2] + 'App')
         self._select_experimental_setup()
         self.nemitx_tm = []
@@ -606,9 +609,10 @@ class ImageView(PyDMImageView):
 
 
 class ProcessImage(QWidget):
-    def __init__(self, parent=None, place='LI-Energy'):
+    def __init__(self, parent=None, place='LI-Energy', prefix=_VACA_PREFIX):
         super().__init__(parent)
         self._place = place or 'LI-Energy'
+        self._prefix = prefix
         self._select_experimental_setup()
         self.cen_x = None
         self.cen_y = None
@@ -677,7 +681,8 @@ class ProcessImage(QWidget):
         gb_trig = QGroupBox('Trigger', self)
         vl.addWidget(gb_trig)
         gb_trig.setLayout(QVBoxLayout())
-        gb_trig.layout().addWidget(HLTriggerSimple(gb_trig, self.trig_name))
+        gb_trig.layout().addWidget(HLTriggerSimple(
+            gb_trig, device=self.trig_name, prefix=self._prefix))
 
         gb_pos = QGroupBox('Position [mm]', self)
         vl.addWidget(gb_pos)

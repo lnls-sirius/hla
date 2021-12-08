@@ -8,6 +8,8 @@ import qtawesome as qta
 
 from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMEnumComboBox, \
     PyDMPushButton
+
+from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.diagbeam.dcct.csdev import Const as _DCCTc, get_dcct_database
 from siriuspy.epics import PV as _PV
 
@@ -25,8 +27,8 @@ class DCCTSettings(QWidget):
         """Initialize."""
         super().__init__(parent)
         self.prefix = prefix
-        self.device = device
-        self.dcct_prefix = prefix + device + ':'
+        self.device = _PVName(device)
+        self.dcct_prefix = device.substitute(prefix=self.prefix)
         self._setupUi()
 
     def _setupUi(self):
@@ -142,8 +144,9 @@ class DCCTSettings(QWidget):
         # Trigger
         self.trigger_widget = QGroupBox('Trigger')
         hbl = QHBoxLayout(self.trigger_widget)
-        trg_prefix = self.prefix + self.device.replace(':DI', ':TI')
-        hbl.addWidget(HLTriggerSimple(self.trigger_widget, trg_prefix))
+        hbl.addWidget(HLTriggerSimple(
+            self.trigger_widget, device=self.device.substitute(dis='TI'),
+            prefix=self.prefix))
         lay.addWidget(self.trigger_widget)
         lay.setStretch(2, 3)
 
@@ -562,8 +565,9 @@ class DCCTSettingsDetails(QWidget):
     def _setupTriggerWidget(self):
         gbox_trigger = QGroupBox('Trigger', self)
         hbl = QHBoxLayout(gbox_trigger)
-        trg_prefix = self.prefix + self.device.replace(':DI', ':TI')
-        hbl.addWidget(HLTriggerSimple(gbox_trigger, trg_prefix))
+        hbl.addWidget(HLTriggerSimple(
+            gbox_trigger, device=self.device.substitute(dis='TI'),
+            prefix=self.prefix))
         return gbox_trigger
 
     def _updateReliableMeasLabels(self, pvname, value,  **kwargs):

@@ -76,7 +76,8 @@ class Tune(SiriusMainWindow):
             self.trig_gbox.setLayout(QHBoxLayout())
             self.trig_gbox.layout().addWidget(HLTriggerSimple(
                 self.trig_gbox,
-                self.prefix + 'BO-Glob:TI-TuneProc',
+                device='BO-Glob:TI-TuneProc',
+                prefix=self.prefix,
                 duration=True, nrpulses=True))
             vbox_sett.addWidget(self.trig_gbox)
 

@@ -21,7 +21,8 @@ class PUDetailWidget(QWidget):
         super().__init__(parent)
         self._devname = _PVName(devname)
         self._section = self._devname.sec
-        self._prefdevname = self._devname.substitute(prefix=_VACA_PREFIX)
+        self._prefix = _VACA_PREFIX
+        self._prefdevname = self._devname.substitute(prefix=self._prefix)
         self.setObjectName(self._section+'App')
         self.setWindowIcon(qta.icon(
             'mdi.current-ac', color=util.get_appropriate_color(self._section)))
@@ -68,7 +69,7 @@ class PUDetailWidget(QWidget):
             self._intlk8label_cte_pv = self._prefdevname+":Intlk8Label-Cte"
         self._ctrlmode_pv = self._prefdevname + ":CtrlMode-Mon"
 
-        self._preftrigname = self._prefdevname.substitute(dis='TI')
+        self._trigname = self._devname.substitute(dis='TI')
 
     def _setup_ui(self):
         self.header_label = QLabel("<h1>" + self._prefdevname + "</h1>")
@@ -91,7 +92,8 @@ class PUDetailWidget(QWidget):
         timing_box = QGroupBox(parent=self, title='Trigger')
         timing_box.setObjectName('timing_box')
         hbl = QHBoxLayout(timing_box)
-        hbl.addWidget(HLTriggerSimple(timing_box, self._preftrigname))
+        hbl.addWidget(HLTriggerSimple(
+            timing_box, self._trigname, self._prefix))
 
         self.layout = QGridLayout(self)
         self.layout.addWidget(self.header_label, 0, 0, 1, 3)

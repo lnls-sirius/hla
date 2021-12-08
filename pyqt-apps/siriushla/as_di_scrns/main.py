@@ -124,12 +124,13 @@ class SiriusScrnView(QWidget):
 
         self.trigger_groupBox = QGroupBox('Trigger', self)
         if 'TB' in self.device or 'BO' in self.device:
-            trg_prefix = self.prefix + 'AS-Fam:TI-Scrn-TBBO'
+            trg_prefix = 'AS-Fam:TI-Scrn-TBBO'
         elif 'TS' in self.device:
-            trg_prefix = self.prefix + 'TS-Fam:TI-Scrn'
+            trg_prefix = 'TS-Fam:TI-Scrn'
         hbl = QHBoxLayout(self.trigger_groupBox)
         hbl.addWidget(HLTriggerSimple(
-            parent=self.trigger_groupBox, prefix=trg_prefix))
+            parent=self.trigger_groupBox, device=trg_prefix,
+            prefix=self.prefix))
         self.trigger_groupBox.setLayout(hbl)
         self.trigger_groupBox.setStyleSheet("""
             PyDMWidget{
