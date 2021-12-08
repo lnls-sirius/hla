@@ -285,8 +285,8 @@ class StatusAndCommands(QGroupBox):
         c2v = dict()
         for psname in psnames:
             wf = self.ramp_config.ps_waveform_get(psname)
-            c2v[self.prefix + psname + ':WfmRef-Mon'] = {
-                'value': wf.currents, 'comp': 'cl', 'abs_tol': 1e-5}
+            pvn = self.prefix+('-' if self.prefix else '')+psname+':WfmRef-Mon'
+            c2v[pvn] = {'value': wf.currents, 'comp': 'cl', 'abs_tol': 1e-5}
         self.led_ps_apply.set_channels2values(c2v)
 
     def update_rf_params(self):
@@ -296,7 +296,8 @@ class StatusAndCommands(QGroupBox):
         d2c = self.conn_rf.get_propty_2_config_ramp_dict()
         c2v = dict()
         for pv, val in d2c.items():
-            c2v[self.prefix+pv.replace('SP', 'RB')] = {
+            pvn = self.prefix + ('-' if self.prefix else '') + pv
+            c2v[pvn.replace('SP', 'RB')] = {
                 'value': val, 'comp': 'cl', 'rel_tol': 0.001}
         self.led_rf_apply.set_channels2values(c2v)
 
@@ -307,7 +308,7 @@ class StatusAndCommands(QGroupBox):
         conn = self.conn_ti
         c = conn.Const
         r = self.ramp_config
-        p = self.prefix
+        p = self.prefix + ('-' if self.prefix else '')
         c2v = dict()
 
         c2v[p+c.TrgMags_Delay.replace('SP', 'RB')] =  \
@@ -448,7 +449,7 @@ class _createConnectorsThread(QThread):
         self.parent.conn_rf = _ConnRF(prefix=self.prefix)
 
         # Build leds channels
-        pfx = self.prefix
+        pfx = self.prefix + ('-' if self.prefix else '')
 
         # # Connection Leds
         for conn_name in ['conn_ps', 'conn_rf', 'conn_ti']:
