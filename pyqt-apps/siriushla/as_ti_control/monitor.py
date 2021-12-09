@@ -54,7 +54,7 @@ class LLButton(QWidget):
 
         channels2values = dict()
         for i, prop in enumerate(props):
-            pvn = self.device.substitute(propty=prop+suffs[i])
+            pvn = self.device.substitute(prefix=self.prefix, propty=prop+suffs[i])
             channels2values[pvn] = 1 if chng[i] else 0
         led = PyDMLedMultiChannel(
              parent=self, channels2values=channels2values)
@@ -85,7 +85,8 @@ class HLButton(QWidget):
         self.layout().setContentsMargins(0, 0, 0, 0)
         led = SiriusLedAlert(self)
         led.setToolTip(trigger)
-        led.channel = trigger.substitute(propty='Status-Mon')
+        led.channel = trigger.substitute(
+            prefix=self.prefix, propty='Status-Mon')
         self.layout().addWidget(led)
         icon = qta.icon('mdi.timer', color=get_appropriate_color(trigger.sec))
         Window = create_window_from_widget(
@@ -134,7 +135,7 @@ class MonitorLL(QGroupBox):
 
     def _setupui(self):
         evg = PVName(LLTimeSearch.get_evg_name())
-        g1 = LLButton(evg, self.prefix, '', self)
+        g1 = LLButton(evg, '', self.prefix, self)
         self.g1 = g1
 
         downs = LLTimeSearch.get_device_names({'dev': 'Fout'})
