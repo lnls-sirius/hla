@@ -20,7 +20,7 @@ class ModIntlkDetailDialog(SiriusDialog):
         super().__init__(parent)
         self._prefix = prefix
         self._device = _PVName(device)
-        self._mod_prefix = prefix + device
+        self._mod_prefix = self._device.substitute(prefix=prefix)
 
         self.setWindowTitle('Modulator Interlock Details')
         self.setObjectName('LIApp')
@@ -453,7 +453,7 @@ class ModEmerStopDialog(SiriusDialog):
         self.setObjectName('LIApp')
         self._prefix = prefix
         self._device = _PVName(device)
-        self._mod_prefix = prefix + device
+        self._mod_prefix = self._device.substitute(prefix=prefix)
 
         self.setWindowTitle(
             self._device.dev+' '+self._device.idx+' - Emergency Stop')
