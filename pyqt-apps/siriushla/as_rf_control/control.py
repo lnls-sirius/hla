@@ -1364,7 +1364,7 @@ class RFMainControl(SiriusMainWindow):
         led_pinsw = SiriusLedState(self, self.prefix+chs_dict['PinSw'])
         lay_amp.addLayout(self._create_vlay(bt_pinsw, led_pinsw), row, 6)
 
-        lb_drive = PyDMLabel(self, chs_dict['PreDrive'])
+        lb_drive = PyDMLabel(self, self.prefix+chs_dict['PreDrive'])
         lb_drive.showUnits = True
         led_drive = PyDMLedMultiChannel(
             parent=self, channels2values={
