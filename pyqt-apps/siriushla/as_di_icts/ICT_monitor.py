@@ -95,12 +95,13 @@ class ICTMonitoring(SiriusMainWindow):
         super(ICTMonitoring, self).__init__(parent)
         # Set transport line
         self.tl = tl.upper()
+        self.prefix = prefix
         self.icts = TL_2_ICTS[self.tl]
 
         tmp_file = _substitute_in_file(
             _os.path.abspath(_os.path.dirname(__file__))+'/ui_ictmon.ui',
             {'TL': self.tl, 'ICT1': self.icts[0], 'ICT2': self.icts[1],
-             'PREFIX': prefix})
+             'PREFIX': prefix + ('-' if prefix else '')})
         self.setWindowTitle(self.tl+' ICTs Monitor')
         self.centralwidget = loadUi(tmp_file)
         self.setObjectName(self.tl+'App')
@@ -550,8 +551,8 @@ class _ICTCalibration(QWidget):
 
         l_download = QLabel('Download to hardware ', self)
         self.pydmpushbutton_Download = PyDMPushButton(
-            self, self.ict_prefix.substitute(propty='Download-Cmd'),
-            label='', icon=qta.icon('fa5s.download'), pressValue=1)
+            self, label='', icon=qta.icon('fa5s.download'), pressValue=1,
+            init_channel=self.ict_prefix.substitute(propty='Download-Cmd'))
         self.pydmpushbutton_Download.setObjectName('download')
         self.pydmpushbutton_Download.setStyleSheet(
             "#download{min-width:25px; max-width:25px; icon-size:20px;}")
