@@ -535,7 +535,8 @@ def get_object(ismenubar=True, parent=None):
                 BbB.setObjectName(sec.upper()+'App')
 
                 AllBbB = BbB.addAction('All')
-                self.connect_newprocess(AllBbB, 'sirius-hla-si-di-bbb.py')
+                self.connect_newprocess(
+                    AllBbB, ['sirius-hla-si-di-bbb.py', '-dev', 'all'])
 
                 for idc in ['Horizontal', 'Vertical', 'Longitudinal']:
                     dev_pref = 'SI-Glob:DI-BbBProc-'+idc[0]

@@ -6,7 +6,7 @@ from qtpy.QtWidgets import QGridLayout, QLabel, QWidget, QHBoxLayout, \
 
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 
-from ..util import connect_newprocess, connect_window
+from ..util import connect_window
 from ..widgets import SiriusMainWindow
 from ..widgets.windows import create_window_from_widget
 
@@ -57,11 +57,6 @@ class BbBMainWindow(SiriusMainWindow):
 
             wid = BbBMainSettingsWidget(self, self.prefix, dev_pref)
             set_bbb_color(wid, dev_pref)
-            connect_newprocess(
-                wid.pb_detail, [
-                    'sirius-hla-si-di-bbb.py', '-dev', dev_pref, '-p',
-                    self.prefix]
-                )
             lay.addWidget(wid, 1, col)
             self._bbb_widgets.append(wid)
 

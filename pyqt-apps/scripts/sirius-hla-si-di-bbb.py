@@ -14,7 +14,7 @@ parser.add_argument(
     '-p', "--prefix", type=str, default=VACA_PREFIX,
     help="Define the prefix for the PVs in the window.")
 parser.add_argument(
-    '-dev', "--device", type=str, default=VACA_PREFIX,
+    '-dev', "--device", type=str, default='',
     help="Device to control.")
 
 args = parser.parse_args()
@@ -22,7 +22,7 @@ dev = args.device
 
 app = SiriusApplication()
 prefix = args.prefix
-if dev:
+if dev and dev != 'all':
     app.open_window(
         BbBControlWindow, parent=None, prefix=prefix, device=dev)
 else:
