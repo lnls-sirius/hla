@@ -51,6 +51,7 @@ setup(
         'scripts/sirius-hla-as-ap-macreport.py',
         'scripts/sirius-hla-as-ap-magoffconv.py',
         'scripts/sirius-hla-as-ap-monitor.py',
+        'scripts/sirius-hla-as-ap-orbscore.py',
         'scripts/sirius-hla-as-ap-pvsconfigs.py',
         'scripts/sirius-hla-as-ap-pvsconfigs-save.py',
         'scripts/sirius-hla-as-ap-pvsconfigs-load.py',
