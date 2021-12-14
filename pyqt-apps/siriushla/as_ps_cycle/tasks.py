@@ -25,7 +25,7 @@ class BaseTask(QThread):
     updated = Signal(str, bool, bool, bool)
 
     def __init__(self, parent=None, psnames=list(), timing=None,
-                 need_controller=False):
+                 need_controller=False, isadv=False):
         super().__init__(parent)
         self._psnames = psnames
         self._timing = timing
@@ -35,7 +35,8 @@ class BaseTask(QThread):
                 cyclers[ps] = BaseTask._cyclers[ps]
             if not BaseTask._controller:
                 BaseTask._controller = CycleController(
-                    cyclers=cyclers, timing=timing, logger=self)
+                    cyclers=cyclers, timing=timing, logger=self,
+                    isadv=isadv)
             else:
                 BaseTask._controller.cyclers = cyclers
                 BaseTask._controller.timing = timing

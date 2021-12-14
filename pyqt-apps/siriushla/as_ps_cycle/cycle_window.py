@@ -42,7 +42,7 @@ class CycleWindow(SiriusMainWindow):
         self.setWindowIcon(qta.icon('mdi.recycle', color=cor))
         self._is_adv_mode = adv_mode
         # Data structs
-        self._psnames = get_psnames()
+        self._psnames = get_psnames(isadv=self._is_adv_mode)
         self._timing = Timing()
         self._ps2cycle = list()
         self._ps_ready = list()
@@ -339,7 +339,8 @@ class CycleWindow(SiriusMainWindow):
         self.progress_list.clear()
 
         task = task_class(
-            parent=self, psnames=pwrsupplies, timing=self._timing)
+            parent=self, psnames=pwrsupplies, timing=self._timing,
+            isadv=self._is_adv_mode)
         task.updated.connect(self._update_progress)
         duration = task.duration()
 
@@ -520,26 +521,29 @@ class CycleWindow(SiriusMainWindow):
             ps_ch.append(VACA_PREFIX + name + ppty)
         self.psconn_led.set_channels(ps_ch)
 
-        # update buttons and self._prepared dict
-        si_fams = PSSearch.get_psnames(
-            {'sec': 'SI', 'sub': 'Fam', 'dis': 'PS'})
-        has_sifam = False
-        for psn in si_fams:
-            item = self.pwrsupplies_tree._item_map[psn]
-            has_sifam |= item.checkState(0) != 0
+        # update buttons and self._prepared dict if not in advanced mode
+        if not self._is_adv_mode:
+            si_fams = PSSearch.get_psnames(
+                {'sec': 'SI', 'sub': 'Fam', 'dis': 'PS'})
+            has_sifam = False
+            for psn in si_fams:
+                item = self.pwrsupplies_tree._item_map[psn]
+                has_sifam |= item.checkState(0) != 0
 
-        if not has_sifam:
-            self.cycle_bt.setText('8. Cycle')
-            self.restore_timing_bt.setText('9. Restore Timing Initial State')
-            self.cycle_trims_bt.setVisible(False)
-            self.cycle_trims_lb.setVisible(False)
-            self._prepared['trims'] = True
-        else:
-            self.cycle_bt.setText('9. Cycle')
-            self.restore_timing_bt.setText('10. Restore Timing Initial State')
-            self.cycle_trims_bt.setVisible(True)
-            self.cycle_trims_lb.setVisible(True)
-            self._prepared['trims'] = False
+            if not has_sifam:
+                self.cycle_bt.setText('8. Cycle')
+                self.restore_timing_bt.setText(
+                    '9. Restore Timing Initial State')
+                self.cycle_trims_bt.setVisible(False)
+                self.cycle_trims_lb.setVisible(False)
+                self._prepared['trims'] = True
+            else:
+                self.cycle_bt.setText('9. Cycle')
+                self.restore_timing_bt.setText(
+                    '10. Restore Timing Initial State')
+                self.cycle_trims_bt.setVisible(True)
+                self.cycle_trims_lb.setVisible(True)
+                self._prepared['trims'] = False
 
         self._handle_stslabels_content()
         self._handle_buttons_enabled(True)
