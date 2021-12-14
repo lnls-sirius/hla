@@ -47,8 +47,6 @@ class CycleWindow(SiriusMainWindow):
         self._ps2cycle = list()
         self._ps_ready = list()
         self._ps_failed = list()
-        self._ps_selection_changed = True
-        self._last_ps_selected = list()
         self._checked_accs = checked_accs
         # Flags
         self._is_preparing = ''
@@ -67,6 +65,19 @@ class CycleWindow(SiriusMainWindow):
         self._icon_not = qta.icon('fa5s.times')
         self._pixmap_not = self._icon_not.pixmap(
             self._icon_not.actualSize(QSize(16, 16)))
+        # Tasks
+        self._step_2_task = {
+            'save_timing': SaveTiming,
+            'timing': PrepareTiming,
+            'ps_sofbmode': PreparePSSOFBMode,
+            'ps_om_slowref': PreparePSOpModeSlowRef,
+            'ps_current': PreparePSCurrentZero,
+            'ps_params': PreparePSParams,
+            'ps_om_cycle': PreparePSOpModeCycle,
+            'trims': CycleTrims,
+            'cycle': Cycle,
+            'restore_timing': RestoreTiming,
+        }
         # Setup UI
         self._needs_update_setup = False
         self._setup_ui()
@@ -317,36 +328,8 @@ class CycleWindow(SiriusMainWindow):
         if 'ps' in control and not self._verify_ps(pwrsupplies):
             return
 
-        if control == 'save_timing':
-            task_class = SaveTiming
-            create_new_controller = self._ps_selection_changed
-        elif control == 'timing':
-            task_class = PrepareTiming
-            create_new_controller = self._ps_selection_changed
-        elif control == 'ps_sofbmode':
-            task_class = PreparePSSOFBMode
-            create_new_controller = self._ps_selection_changed
-        elif control == 'ps_om_slowref':
-            task_class = PreparePSOpModeSlowRef
-            create_new_controller = self._ps_selection_changed
-        elif control == 'ps_current':
-            task_class = PreparePSCurrentZero
-            create_new_controller = self._ps_selection_changed
-        elif control == 'ps_params':
-            task_class = PreparePSParams
-            create_new_controller = self._ps_selection_changed
-        elif control == 'ps_om_cycle':
-            task_class = PreparePSOpModeCycle
-            create_new_controller = self._ps_selection_changed
-        elif control == 'trims':
-            task_class = CycleTrims
-            create_new_controller = False
-        elif control == 'cycle':
-            task_class = Cycle
-            create_new_controller = False
-        elif control == 'restore_timing':
-            task_class = RestoreTiming
-            create_new_controller = False
+        if control in self._step_2_task:
+            task_class = self._step_2_task[control]
         else:
             raise NotImplementedError(
                 "Task not defined for control '{}'".format(control))
@@ -356,9 +339,7 @@ class CycleWindow(SiriusMainWindow):
         self.progress_list.clear()
 
         task = task_class(
-            parent=self, psnames=pwrsupplies, timing=self._timing,
-            create_new_controller=create_new_controller)
-
+            parent=self, psnames=pwrsupplies, timing=self._timing)
         task.updated.connect(self._update_progress)
         duration = task.duration()
 
@@ -477,9 +458,6 @@ class CycleWindow(SiriusMainWindow):
         if not pwrsupplies:
             QMessageBox.critical(self, 'Message', 'No power supply selected!')
             return False
-
-        self._ps_selection_changed = self._last_ps_selected != pwrsupplies
-        self._last_ps_selected = pwrsupplies
 
         sections = get_sections(pwrsupplies)
         if 'BO' in sections and len(sections) > 1:
