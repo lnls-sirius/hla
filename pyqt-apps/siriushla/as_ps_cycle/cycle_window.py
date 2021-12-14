@@ -434,6 +434,7 @@ class CycleWindow(SiriusMainWindow):
         self.cycle_bt.setEnabled(cycle)
         self.restore_timing_bt.setEnabled(enable)
         self.clearhist_bt.setEnabled(enable)
+        self.pwrsupplies_tree.setEnabled(enable)
 
     def _handle_stslabels_content(self):
         for prep, value in self._prepared.items():
@@ -541,6 +542,7 @@ class CycleWindow(SiriusMainWindow):
             self._prepared['trims'] = False
 
         self._handle_stslabels_content()
+        self._handle_buttons_enabled(True)
 
     # --- auxiliary checks ---
 
