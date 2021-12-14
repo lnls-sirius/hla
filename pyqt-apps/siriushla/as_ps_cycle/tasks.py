@@ -278,7 +278,7 @@ class CycleTrims(BaseTask):
         return self._controller.cycle_trims_max_duration
 
     def function(self):
-        self._controller.cycle_all_trims()
+        self._controller.cycle_trims()
 
 
 class Cycle(BaseTask):
