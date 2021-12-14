@@ -65,6 +65,14 @@ class SpinBoxDelegate(QStyledItemDelegate):
         """Update editor geometry."""
         spinBox.setGeometry(option.rect)
 
+    def displayText(self, value, locale):
+        try:
+            number = float(value)
+        except ValueError:
+            return super().displayText(value, locale)
+        else:
+            return locale.toString(number, format='f', precision=self.prec)
+
 
 class CustomTableWidgetItem(QTableWidgetItem):
     """Auxiliar class to make a table column sortable by numeric data."""
