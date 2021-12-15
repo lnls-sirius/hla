@@ -9,7 +9,7 @@ from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMEnumComboBox
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 from siriuspy.namesys import SiriusPVName as _PVName
 
-from ..util import connect_window
+from ..util import connect_window, connect_newprocess
 from ..widgets.windows import create_window_from_widget
 from ..widgets import SiriusMainWindow, SiriusLedAlert, PyDMStateButton, \
     PyDMLedMultiChannel, DetachableTabWidget, SiriusPushButton
@@ -114,6 +114,10 @@ class BbBMainSettingsWidget(QWidget):
             self.pb_detail.setObjectName('dtls')
             self.pb_detail.setStyleSheet(
                 '#dtls{min-width:20px;max-width:20px;icon-size:15px;}')
+            cmd = ['sirius-hla-si-di-bbb.py', '-dev', self.dev_pref]
+            if self._prefix:
+                cmd.extend(['-p', self._prefix])
+            connect_newprocess(self.pb_detail, cmd, self)
             hbox_label = QHBoxLayout()
             hbox_label.setContentsMargins(0, 0, 0, 0)
             hbox_label.addWidget(led_gensts, alignment=Qt.AlignLeft)
