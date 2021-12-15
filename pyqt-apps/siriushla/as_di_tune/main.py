@@ -1,6 +1,6 @@
 from qtpy.QtGui import QColor
 from qtpy.QtCore import Qt
-from qtpy.QtWidgets import QWidget, QGridLayout, QTabWidget, QVBoxLayout, \
+from qtpy.QtWidgets import QWidget, QTabWidget, QVBoxLayout, \
     QLabel, QGroupBox, QHBoxLayout, QPushButton
 import qtawesome as qta
 from siriuspy.envars import VACA_PREFIX
@@ -76,7 +76,8 @@ class Tune(SiriusMainWindow):
             self.trig_gbox.setLayout(QHBoxLayout())
             self.trig_gbox.layout().addWidget(HLTriggerSimple(
                 self.trig_gbox,
-                self.prefix + 'BO-Glob:TI-TuneProc',
+                device='BO-Glob:TI-TuneProc',
+                prefix=self.prefix,
                 duration=True, nrpulses=True))
             vbox_sett.addWidget(self.trig_gbox)
 

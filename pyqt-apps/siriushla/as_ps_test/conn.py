@@ -5,7 +5,7 @@ import numpy as _np
 from epics import PV as _PV
 
 from siriuspy.util import get_bit
-from siriuspy.namesys import SiriusPVName
+from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.envars import VACA_PREFIX as VACA_PREFIX
 from siriuspy.search import PSSearch
 from siriuspy.pwrsupply.csdev import Const as _PSC, ETypes as _PSE, \
@@ -43,7 +43,7 @@ class _TesterBase:
 
     def __init__(self, device):
         """Init."""
-        self.device = SiriusPVName(device)
+        self.device = _PVName(device)
         self._pvs = dict()
 
     @property
@@ -124,7 +124,7 @@ class TesterDCLinkFBP(_TesterPSBase):
 
         for ppty in self.properties:
             self._pvs[ppty] = _PV(
-                VACA_PREFIX + device + ':' + ppty,
+                _PVName(device).substitute(prefix=VACA_PREFIX, propty=ppty),
                 connection_timeout=TIMEOUT_CONN)
 
     def check_intlk(self):
@@ -181,7 +181,7 @@ class TesterDCLink(_TesterPSBase):
 
         for ppty in self.properties:
             self._pvs[ppty] = _PV(
-                VACA_PREFIX + device + ':' + ppty,
+                _PVName(device).substitute(prefix=VACA_PREFIX, propty=ppty),
                 connection_timeout=TIMEOUT_CONN)
 
     def check_intlk(self):
@@ -239,7 +239,7 @@ class TesterDCLinkRegatron(_TesterBase):
 
         for ppty in self.properties:
             self._pvs[ppty] = _PV(
-                VACA_PREFIX + device + ':' + ppty,
+                _PVName(device).substitute(prefix=VACA_PREFIX, propty=ppty),
                 connection_timeout=TIMEOUT_CONN)
 
     def reset(self):
@@ -314,7 +314,7 @@ class TesterPS(_TesterPSBase):
 
         for ppty in self.properties:
             self._pvs[ppty] = _PV(
-                VACA_PREFIX + device + ':' + ppty,
+                _PVName(device).substitute(prefix=VACA_PREFIX, propty=ppty),
                 connection_timeout=TIMEOUT_CONN)
 
         splims = PSSearch.conv_psname_2_splims(device)
@@ -395,7 +395,7 @@ class TesterPSLinac(_TesterBase):
         super().__init__(device)
         for ppty in TesterPSLinac.properties:
             self._pvs[ppty] = _PV(
-                VACA_PREFIX + device + ':' + ppty,
+                _PVName(device).substitute(prefix=VACA_PREFIX, propty=ppty),
                 connection_timeout=TIMEOUT_CONN)
 
         self.intlkwarn_bit = _PSE.LINAC_INTLCK_WARN.index('LoadI Over Thrs')
@@ -486,7 +486,7 @@ class _TesterPUBase(_TesterBase):
 
         for ppty in self.properties:
             self._pvs[ppty] = _PV(
-                VACA_PREFIX + device + ':' + ppty,
+                _PVName(device).substitute(prefix=VACA_PREFIX, propty=ppty),
                 connection_timeout=TIMEOUT_CONN)
 
         splims = PSSearch.conv_psname_2_splims(device)

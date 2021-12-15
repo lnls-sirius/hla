@@ -6,6 +6,7 @@ from pydm.widgets import PyDMSpinbox, PyDMEnumComboBox
 import qtawesome as qta
 
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
+from siriuspy.namesys import SiriusPVName as _PVName
 
 from ..widgets import SiriusFrame, SiriusLabel, SiriusPushButton
 
@@ -51,8 +52,8 @@ class BbBGeneralSettingsWidget(QWidget):
         super().__init__(parent)
         set_bbb_color(self, device)
         self._prefix = prefix
-        self._device = device
-        self.dev_pref = prefix + device
+        self._device = _PVName(device)
+        self.dev_pref = self._device.substitute(prefix=prefix)
         self._setupUi()
 
     def _setupUi(self):
@@ -220,8 +221,8 @@ class BbBSlowDACsWidget(QWidget):
         super().__init__(parent)
         set_bbb_color(self, device)
         self._prefix = prefix
-        self._device = device
-        self.dev_pref = prefix + device
+        self._device = _PVName(device)
+        self.dev_pref = self._device.substitute(prefix=prefix)
         self._setupUi()
 
     def _setupUi(self):
@@ -338,8 +339,8 @@ class BbBADCWidget(QWidget):
         super().__init__(parent)
         set_bbb_color(self, device)
         self._prefix = prefix
-        self._device = device
-        self.dev_pref = prefix + device
+        self._device = _PVName(device)
+        self.dev_pref = self._device.substitute(prefix=prefix)
         self._setupUi()
 
     def _setupUi(self):
@@ -433,8 +434,8 @@ class BbBInterlock(QWidget):
         super().__init__(parent)
         set_bbb_color(self, device)
         self._prefix = prefix
-        self._device = device
-        self.dev_pref = prefix + device
+        self._device = _PVName(device)
+        self.dev_pref = self._device.substitute(prefix=prefix)
         self._setupUi()
 
     def _setupUi(self):

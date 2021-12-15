@@ -7,7 +7,7 @@ import qtawesome as qta
 from pydm.widgets import PyDMLabel, PyDMPushButton
 
 from siriuspy.envars import VACA_PREFIX
-from siriuspy.namesys import SiriusPVName
+from siriuspy.namesys import SiriusPVName as _PVName
 
 from siriushla.util import get_appropriate_color
 from siriushla.widgets import SiriusMainWindow, SiriusProcessImage, \
@@ -22,8 +22,9 @@ class BeamLineMVS2View(SiriusMainWindow):
         """."""
         super().__init__(parent)
         self._prefix = prefix
-        self._device_analysis = SiriusPVName(device_analysis[:-1])
-        self._device_cam = device_cam[:-1]
+        self._device_analysis = _PVName(
+            device_analysis[:-1]).substitute(prefix=prefix)
+        self._device_cam = prefix + ('-' if prefix else '') + device_cam[:-1]
         self._color = get_appropriate_color('ID')
         self._title = self._device_analysis.dev + ' MVS2 Analysis Window'
         self.setWindowTitle(self._title)

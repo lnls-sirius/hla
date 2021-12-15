@@ -29,7 +29,7 @@ class APUControlWindow(SiriusMainWindow):
         self._prefix = prefix
         self._device = _PVName(device)
         self._beamline = IDSearch.conv_idname_2_beamline(self._device)
-        self.dev_pref = prefix + device
+        self.dev_pref = self._device.substitute(prefix=prefix)
         self.setWindowTitle(device+' Control Window - '+self._beamline)
         self.setObjectName('IDApp')
         self.setWindowIcon(get_id_icon())
@@ -63,41 +63,47 @@ class APUControlWindow(SiriusMainWindow):
 
     def _mainControlsWidget(self):
         self._ld_phs = QLabel('Phase [mm]', self)
-        self._sb_phs = PyDMSpinbox(self, self.dev_pref+':Phase-SP')
+        self._sb_phs = PyDMSpinbox(
+            self, self.dev_pref.substitute(propty='Phase-SP'))
         self._sb_phs.showStepExponent = False
-        self._lb_phs = PyDMLabel(self, self.dev_pref+':Phase-Mon')
+        self._lb_phs = PyDMLabel(
+            self, self.dev_pref.substitute(propty='Phase-Mon'))
 
         self._ld_kx = QLabel('Kx', self)
-        self._sb_kx = PyDMSpinbox(self, self.dev_pref+':Kx-SP')
+        self._sb_kx = PyDMSpinbox(
+            self, self.dev_pref.substitute(propty='Kx-SP'))
         self._sb_kx.showStepExponent = False
-        self._lb_kx = PyDMLabel(self, self.dev_pref+':Kx-Mon')
+        self._lb_kx = PyDMLabel(
+            self, self.dev_pref.substitute(propty='Kx-Mon'))
 
         self._ld_phsspd = QLabel('Phase Speed\n[mm/s]', self)
-        self._sb_phsspd = PyDMSpinbox(self, self.dev_pref+':PhaseSpeed-SP')
+        self._sb_phsspd = PyDMSpinbox(
+            self, self.dev_pref.substitute(propty='PhaseSpeed-SP'))
         self._sb_phsspd.showStepExponent = False
-        self._lb_phsspd = PyDMLabel(self, self.dev_pref+':PhaseSpeed-Mon')
+        self._lb_phsspd = PyDMLabel(
+            self, self.dev_pref.substitute(propty='PhaseSpeed-Mon'))
 
         self._ld_ismov = QLabel('Motion', self)
         self._pb_start = PyDMPushButton(
             self, label='', icon=qta.icon('fa5s.play'))
         self._pb_start.setToolTip(
             'Start automatic motion towards previously entered setpoint.')
-        self._pb_start.channel = self.dev_pref+':DevCtrl-Cmd'  # Start
-        self._pb_start.pressValue = 3
+        self._pb_start.channel = self.dev_pref.substitute(propty='DevCtrl-Cmd')
+        self._pb_start.pressValue = 3  # Start
         self._pb_start.setObjectName('Start')
         self._pb_start.setStyleSheet(
             '#Start{min-width:30px; max-width:30px; icon-size:25px;}')
         self._pb_stop = PyDMPushButton(
             self, label='', icon=qta.icon('fa5s.stop'))
         self._pb_stop.setToolTip('Stop all motion, lock all brakes.')
-        self._pb_stop.channel = self.dev_pref+':DevCtrl-Cmd'  # Stop
-        self._pb_stop.pressValue = 1
+        self._pb_stop.channel = self.dev_pref.substitute(propty='DevCtrl-Cmd')
+        self._pb_stop.pressValue = 1  # Stop
         self._pb_stop.setObjectName('Stop')
         self._pb_stop.setStyleSheet(
             '#Stop{min-width:30px; max-width:30px; icon-size:25px;}')
         self._led_ismov = SiriusLedState(self, self.dev_pref+':Moving-Mon')
         self._led_motenbl = SiriusLedState(
-            self, self.dev_pref+':MotorsEnbld-Mon')
+            self, self.dev_pref.substitute(propty='MotorsEnbld-Mon'))
         hbox_motion = QHBoxLayout()
         hbox_motion.setSpacing(15)
         hbox_motion.addWidget(self._pb_start)
@@ -125,7 +131,8 @@ class APUControlWindow(SiriusMainWindow):
     def _statusWidget(self):
         self._ld_alarm = QLabel(
             'Alarms', self, alignment=Qt.AlignCenter)
-        self._led_alarm = SiriusLedAlert(self, self.dev_pref+':Alarm-Mon')
+        self._led_alarm = SiriusLedAlert(
+            self, self.dev_pref.substitute(propty='Alarm-Mon'))
         self._pb_alarmdetail = QPushButton(
             qta.icon('fa5s.ellipsis-h'), '', self)
         self._pb_alarmdetail.setObjectName('dtl')
@@ -138,9 +145,9 @@ class APUControlWindow(SiriusMainWindow):
         self._ld_intlk = QLabel(
             'Interlocks', self, alignment=Qt.AlignCenter)
         self._led_intlkresume = PyDMLedMultiChannel(
-            self, {self.dev_pref+':IntlkInStop-Mon': 0,
-                   self.dev_pref+':IntlkInEOpnGap-Mon': 0,
-                   self.dev_pref+':IntlkOutPwrEnbld-Mon': 1})
+            self, {self.dev_pref.substitute(propty='IntlkInStop-Mon'): 0,
+                   self.dev_pref.substitute(propty='IntlkInEOpnGap-Mon'): 0,
+                   self.dev_pref.substitute(propty='IntlkOutPwrEnbld-Mon'): 1})
         self._pb_intlkdetail = QPushButton(
             qta.icon('fa5s.ellipsis-h'), '', self)
         self._pb_intlkdetail.setObjectName('dtl')
@@ -154,10 +161,11 @@ class APUControlWindow(SiriusMainWindow):
             'Hardware\n&LowLevel', self, alignment=Qt.AlignCenter)
         self._led_hwsysresume = PyDMLedMultiChannel(
             self,
-            {self.dev_pref+':StateHw-Mon': {'value': [0x4C, 0x3C],
-                                            'comp': 'in'},
-             self.dev_pref+':State-Mon': {'value': [1, 4], 'comp': 'in'},
-             self.dev_pref+':IsOperational-Mon': 1})
+            {self.dev_pref.substitute(propty='StateHw-Mon'): {
+                'value': [0x4C, 0x3C], 'comp': 'in'},
+             self.dev_pref.substitute(propty='State-Mon'): {
+                 'value': [1, 4], 'comp': 'in'},
+             self.dev_pref.substitute(propty='IsOperational-Mon'): 1})
         self._led_hwsysresume.offColor = PyDMLed.Yellow
         self._led_hwsysresume.onColor = PyDMLed.LightGreen
         self._pb_hwsysdetail = QPushButton(
@@ -174,8 +182,8 @@ class APUControlWindow(SiriusMainWindow):
         self._pb_reset = PyDMPushButton(
             self, label='', icon=qta.icon('fa5s.sync'))
         self._pb_reset.setToolTip('Reset active alarms.')
-        self._pb_reset.channel = self.dev_pref+':DevCtrl-Cmd'  # Reset
-        self._pb_reset.pressValue = 2
+        self._pb_reset.channel = self.dev_pref.substitute(propty='DevCtrl-Cmd')
+        self._pb_reset.pressValue = 2  # Reset
         self._pb_reset.setObjectName('Reset')
         self._pb_reset.setStyleSheet(
             '#Reset{min-width:30px; max-width:30px; icon-size:25px;}')
@@ -196,10 +204,12 @@ class APUControlWindow(SiriusMainWindow):
         return gbox_alrmintlk
 
     def _ctrlModeWidget(self):
-        self._led_ctrlmode = PyDMLed(self, self.dev_pref+':IsRemote-Mon')
+        self._led_ctrlmode = PyDMLed(
+            self, self.dev_pref.substitute(propty='IsRemote-Mon'))
         self._led_ctrlmode.offColor = PyDMLed.Red
         self._led_ctrlmode.onColor = PyDMLed.LightGreen
-        self._lb_ctrlmode = PyDMLabel(self, self.dev_pref+':Interface-Mon')
+        self._lb_ctrlmode = PyDMLabel(
+            self, self.dev_pref.substitute(propty='Interface-Mon'))
 
         gbox_ctrlmode = QGroupBox('Control Mode')
         lay_ctrlmode = QHBoxLayout(gbox_ctrlmode)
@@ -211,12 +221,12 @@ class APUControlWindow(SiriusMainWindow):
     def _beamLinesCtrlWidget(self):
         self._ld_blinesenbl = QLabel('Enable', self)
         self._sb_blinesenbl = PyDMStateButton(
-            self, self.dev_pref+':BeamLineCtrlEnbl-Sel')
+            self, self.dev_pref.substitute(propty='BeamLineCtrlEnbl-Sel'))
         self._led_blinesenbl = SiriusLedState(
-            self, self.dev_pref+':BeamLineCtrlEnbl-Sts')
+            self, self.dev_pref.substitute(propty='BeamLineCtrlEnbl-Sts'))
         self._ld_blinesmon = QLabel('Status', self)
         self._led_blinesmon = SiriusLedState(
-            self, self.dev_pref+':BeamLineCtrl-Mon')
+            self, self.dev_pref.substitute(propty='BeamLineCtrl-Mon'))
 
         gbox_blines = QGroupBox('Beam Lines Control', self)
         lay_blines = QGridLayout(gbox_blines)
@@ -230,18 +240,18 @@ class APUControlWindow(SiriusMainWindow):
     def _auxCommandsWidget(self):
         self._ld_speedlim = QLabel('Max Phase Speed\n[mm/s]', self)
         self._sb_speedlim = PyDMSpinbox(
-            self, self.dev_pref+':MaxPhaseSpeed-SP')
+            self, self.dev_pref.substitute(propty='MaxPhaseSpeed-SP'))
         self._sb_speedlim.showStepExponent = False
         self._sb_speedlim.setStyleSheet('max-width:4.5em;')
         self._lb_speedlim = PyDMLabel(
-            self, self.dev_pref+':MaxPhaseSpeed-RB')
+            self, self.dev_pref.substitute(propty='MaxPhaseSpeed-RB'))
 
         self._ld_homeaxis = QLabel('Do homing', self)
         self._pb_home = PyDMPushButton(
             self, label='', icon=qta.icon('mdi.keyboard-return'))
         self._pb_home.setToolTip('Execute homing for selected axis.')
-        self._pb_home.channel = self.dev_pref+':DevCtrl-Cmd'  # Home
-        self._pb_home.pressValue = 10
+        self._pb_home.channel = self.dev_pref.substitute(propty='DevCtrl-Cmd')
+        self._pb_home.pressValue = 10  # Home
         self._pb_home.setObjectName('Home')
         self._pb_home.setStyleSheet(
             '#Home{min-width:30px; max-width:30px; icon-size:25px;}')
@@ -251,15 +261,16 @@ class APUControlWindow(SiriusMainWindow):
             self, label='', icon=qta.icon('mdi.alpha-a-box-outline'))
         self._pb_standby.setToolTip(
             'Enable standby mode for automatic motion.')
-        self._pb_standby.channel = self.dev_pref+':DevCtrl-Cmd'  # Standby
-        self._pb_standby.pressValue = 5
+        self._pb_standby.channel = \
+            self.dev_pref.substitute(propty='DevCtrl-Cmd')
+        self._pb_standby.pressValue = 5  # Standby
         self._pb_standby.setObjectName('Standby')
         self._pb_standby.setStyleSheet(
             '#Standby{min-width:30px; max-width:30px; icon-size:25px;}')
 
         self._ld_lastcomm = QLabel('Last Command', self)
         self._lb_lastcomm = PyDMLabel(
-            self, self.dev_pref+':LastDevCtrlCmd-Mon')
+            self, self.dev_pref.substitute(propty='LastDevCtrlCmd-Mon'))
 
         gbox_auxcmd = QGroupBox('Auxiliary Commands', self)
         lay_auxcmd = QGridLayout(gbox_auxcmd)
@@ -340,7 +351,7 @@ class APUSummaryWidget(APUSummaryBase):
         self._prefix = prefix
         self._device = _PVName(device)
         self._beamline = IDSearch.conv_idname_2_beamline(self._device)
-        self.dev_pref = prefix + device
+        self.dev_pref = self._device.substitute(prefix=prefix)
         self._setupUi()
 
     def _setupUi(self):
@@ -352,23 +363,29 @@ class APUSummaryWidget(APUSummaryBase):
             self._pb_dev,
             ['sirius-hla-si-id-control.py', '-dev', self._device])
 
-        self._sb_phs = PyDMSpinbox(self, self.dev_pref+':Phase-SP')
+        self._sb_phs = PyDMSpinbox(
+            self, self.dev_pref.substitute(propty='Phase-SP'))
         self._sb_phs.showStepExponent = False
-        self._lb_phs = PyDMLabel(self, self.dev_pref+':Phase-Mon')
+        self._lb_phs = PyDMLabel(
+            self, self.dev_pref.substitute(propty='Phase-Mon'))
 
-        self._sb_kx = PyDMSpinbox(self, self.dev_pref+':Kx-SP')
+        self._sb_kx = PyDMSpinbox(
+            self, self.dev_pref.substitute(propty='Kx-SP'))
         self._sb_kx.showStepExponent = False
-        self._lb_kx = PyDMLabel(self, self.dev_pref+':Kx-Mon')
+        self._lb_kx = PyDMLabel(
+            self, self.dev_pref.substitute(propty='Kx-Mon'))
 
-        self._sb_phsspd = PyDMSpinbox(self, self.dev_pref+':PhaseSpeed-SP')
+        self._sb_phsspd = PyDMSpinbox(
+            self, self.dev_pref.substitute(propty='PhaseSpeed-SP'))
         self._sb_phsspd.showStepExponent = False
-        self._lb_phsspd = PyDMLabel(self, self.dev_pref+':PhaseSpeed-Mon')
+        self._lb_phsspd = PyDMLabel(
+            self, self.dev_pref.substitute(propty='PhaseSpeed-Mon'))
 
         self._pb_start = PyDMPushButton(
             self, label='', icon=qta.icon('fa5s.play'))
         self._pb_start.setToolTip(
             'Start automatic motion towards previously entered setpoint.')
-        self._pb_start.channel = self.dev_pref+':DevCtrl-Cmd'
+        self._pb_start.channel = self.dev_pref.substitute(propty='DevCtrl-Cmd')
         self._pb_start.pressValue = 3  # Start
         self._pb_start.setObjectName('Start')
         self._pb_start.setStyleSheet(
@@ -377,29 +394,30 @@ class APUSummaryWidget(APUSummaryBase):
         self._pb_stop = PyDMPushButton(
             self, label='', icon=qta.icon('fa5s.stop'))
         self._pb_stop.setToolTip('Stop all motion, lock all brakes.')
-        self._pb_stop.channel = self.dev_pref+':DevCtrl-Cmd'
+        self._pb_stop.channel = self.dev_pref.substitute(propty='DevCtrl-Cmd')
         self._pb_stop.pressValue = 1  # Stop
         self._pb_stop.setObjectName('Stop')
         self._pb_stop.setStyleSheet(
             '#Stop{min-width:30px; max-width:30px; icon-size:25px;}')
 
-        self._led_ismov = SiriusLedState(self, self.dev_pref+':Moving-Mon')
+        self._led_ismov = SiriusLedState(
+            self, self.dev_pref.substitute(propty='Moving-Mon'))
 
         self._led_status = PyDMLedMultiChannel(
             self,
-            {self.dev_pref+':Alarm-Mon': 0,
-             self.dev_pref+':IntlkInStop-Mon': 0,
-             self.dev_pref+':IntlkInEOpnGap-Mon': 0,
-             self.dev_pref+':IntlkOutPwrEnbld-Mon': 1,
-             self.dev_pref+':IsOperational-Mon': 1})
+            {self.dev_pref.substitute(propty='Alarm-Mon'): 0,
+             self.dev_pref.substitute(propty='IntlkInStop-Mon'): 0,
+             self.dev_pref.substitute(propty='IntlkInEOpnGap-Mon'): 0,
+             self.dev_pref.substitute(propty='IntlkOutPwrEnbld-Mon'): 1,
+             self.dev_pref.substitute(propty='IsOperational-Mon'): 1})
 
         self._sb_blenbl = PyDMStateButton(
-            self, self.dev_pref+':BeamLineCtrlEnbl-Sel')
+            self, self.dev_pref.substitute(propty='BeamLineCtrlEnbl-Sel'))
         self._led_blenbl = SiriusLedState(
-            self, self.dev_pref+':BeamLineCtrlEnbl-Sts')
+            self, self.dev_pref.substitute(propty='BeamLineCtrlEnbl-Sts'))
 
         self._led_blmon = SiriusLedState(
-            self, self.dev_pref+':BeamLineCtrl-Mon')
+            self, self.dev_pref.substitute(propty='BeamLineCtrl-Mon'))
 
         self.widgets = {
             'Beamline': ([self._lb_bl, ], 'v'),

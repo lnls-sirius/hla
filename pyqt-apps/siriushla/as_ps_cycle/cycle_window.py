@@ -93,7 +93,7 @@ class CycleWindow(SiriusMainWindow):
         # commands
         lb_prep_ti = QLabel('<h4>Prepare Timing</h4>', self,
                             alignment=Qt.AlignCenter)
-        ti_ch = [VACA_PREFIX + name
+        ti_ch = [PVName(name).substitute(prefix=VACA_PREFIX)
                  for name in self._timing.get_pvnames_by_psnames()]
         self.ticonn_led = PyDMLedMultiConn(self, channels=ti_ch)
 
@@ -531,14 +531,14 @@ class CycleWindow(SiriusMainWindow):
 
         # update leds
         psnames = self.pwrsupplies_tree.checked_items()
-        ti_ch = [VACA_PREFIX + name
+        ti_ch = [PVName(name).substitute(prefix=VACA_PREFIX)
                  for name in self._timing.get_pvnames_by_psnames(psnames)]
         self.ticonn_led.set_channels(ti_ch)
 
         ps_ch = list()
         for name in psnames:
-            ppty = ':Version-Cte'
-            ps_ch.append(VACA_PREFIX + name + ppty)
+            ps_ch.append(PVName(name).substitute(
+                prefix=VACA_PREFIX, propty='Version-Cte'))
         self.psconn_led.set_channels(ps_ch)
 
         # update buttons and self._prepared dict

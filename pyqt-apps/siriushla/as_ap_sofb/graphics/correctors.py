@@ -1,23 +1,22 @@
 """Control the Correctors Graphic Displnay."""
 
 from pyqtgraph import mkPen
-from qtpy.QtWidgets import QCheckBox, QLabel, \
-    QVBoxLayout, QHBoxLayout, QGroupBox
+from qtpy.QtWidgets import QCheckBox, QLabel, QHBoxLayout, QGroupBox
 from qtpy.QtGui import QColor
 from pydm.widgets import PyDMLabel
-from siriushla.widgets import SiriusConnectionSignal
+from siriushla.widgets import SiriusConnectionSignal as _ConnSig
 from siriushla.as_ap_sofb.graphics.base import BaseWidget, InfLine
 
 
 class CorrectorsWidget(BaseWidget):
 
-    def __init__(self, parent, prefix, ctrls=dict(), acc='SI'):
+    def __init__(self, parent, device, prefix='', ctrls=dict(), acc='SI'):
         self._chans = []
         if not ctrls:
-            self._chans, ctrls = self.get_default_ctrls(prefix)
+            self._chans, ctrls = self.get_default_ctrls(device, prefix)
 
         names = ('DeltaKicks', 'Kicks')
-        super().__init__(parent, prefix, ctrls, names, False, acc)
+        super().__init__(parent, device, ctrls, names, False, prefix, acc)
 
         self.updater[0].some_changed('val', 'Delta Kicks')
         self.updater[0].some_changed('ref', 'Zero')
@@ -37,7 +36,8 @@ class CorrectorsWidget(BaseWidget):
         vbl.addLayout(hbl)
         lbl = QLabel('Frequency', grpbx)
         hbl.addWidget(lbl)
-        lbl = PyDMLabel(grpbx, self.prefix + 'KickRF-Mon')
+        lbl = PyDMLabel(
+            grpbx, self.devpref.substitute(propty='KickRF-Mon'))
         lbl.showUnits = True
         hbl.addWidget(lbl)
 
@@ -45,7 +45,8 @@ class CorrectorsWidget(BaseWidget):
         vbl.addLayout(hbl)
         lbl = QLabel('Delta Freq.', grpbx)
         hbl.addWidget(lbl)
-        lbl = PyDMLabel(grpbx, self.prefix + 'DeltaKickRF-Mon')
+        lbl = PyDMLabel(
+            grpbx, self.devpref.substitute(propty='DeltaKickRF-Mon'))
         lbl.showUnits = True
         hbl.addWidget(lbl)
 
@@ -77,7 +78,8 @@ class CorrectorsWidget(BaseWidget):
                 minkick = InfLine(conv=-1e-6, pos=0.0, pen=pen, angle=0)
                 self.graph[pln].addItem(maxkick)
                 self.graph[pln].addItem(minkick)
-                chan = SiriusConnectionSignal(self.prefix + pvi + corr + '-RB')
+                chan = _ConnSig(
+                    self.devpref.substitute(propty=pvi + corr + '-RB'))
                 self._chans.append(chan)
                 chan.new_value_signal[float].connect(maxkick.setValue)
                 chan.new_value_signal[float].connect(minkick.setValue)
@@ -90,12 +92,13 @@ class CorrectorsWidget(BaseWidget):
         return chans
 
     @staticmethod
-    def get_default_ctrls(prefix):
+    def get_default_ctrls(device, prefix=''):
+        basename = device.substitute(prefix=prefix)
         chans = [
-            SiriusConnectionSignal(prefix+'DeltaKickCH-Mon'),
-            SiriusConnectionSignal(prefix+'DeltaKickCV-Mon'),
-            SiriusConnectionSignal(prefix+'KickCH-Mon'),
-            SiriusConnectionSignal(prefix+'KickCV-Mon')]
+            _ConnSig(basename.substitute(propty='DeltaKickCH-Mon')),
+            _ConnSig(basename.substitute(propty='DeltaKickCV-Mon')),
+            _ConnSig(basename.substitute(propty='KickCH-Mon')),
+            _ConnSig(basename.substitute(propty='KickCV-Mon'))]
         ctrls = {
             'Delta Kicks': {
                 'x': {

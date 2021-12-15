@@ -8,6 +8,7 @@ from qtpy.QtWidgets import QWidget, QGroupBox, QPushButton, QLabel, \
 from pydm.widgets import PyDMPushButton, PyDMLabel
 
 from siriuspy.envars import VACA_PREFIX
+from siriuspy.namesys.implementation import SiriusPVName
 from siriuspy.search import LLTimeSearch as _LLTimeSearch
 
 from siriushla.util import get_appropriate_color
@@ -50,12 +51,11 @@ class MainLauncher(SiriusMainWindow):
         machshift = QGroupBox('Machine Shift')
         machshift.setStyleSheet('min-width: 6em;')
 
-        machshift_mode_sel = SiriusEnumComboBox(
-            parent=self,
-            init_channel=self._prefix+'AS-Glob:AP-MachShift:Mode-Sel')
+        machshift_pvname = SiriusPVName(
+            'AS-Glob:AP-MachShift:Mode-Sel').substitute(prefix=self._prefix)
+        machshift_mode_sel = SiriusEnumComboBox(self, machshift_pvname)
         machshift_mode_sts = PyDMLabel(
-            parent=self,
-            init_channel=self._prefix+'AS-Glob:AP-MachShift:Mode-Sts')
+            self, machshift_pvname.substitute(propty_suffix='Sts'))
         machshift_mode_sts.setAlignment(Qt.AlignCenter)
 
         machshift_lay = QGridLayout(machshift)
@@ -76,10 +76,12 @@ class MainLauncher(SiriusMainWindow):
         egun = QGroupBox('Egun Trigger')
         egun.setStyleSheet('min-width: 5em;')
 
+        egun_dev = SiriusPVName(
+            'LI-01:EG-TriggerPS').substitute(prefix=self._prefix)
         egun_trigger_enable = PyDMStateButton(
-            parent=self, init_channel=self._prefix+'LI-01:EG-TriggerPS:enable')
+            self, egun_dev.substitute(propty_name='enable'))
         egun_trigger_status = SiriusLedAlert(
-            parent=self, init_channel=self._prefix+'LI-01:EG-TriggerPS:status')
+            self, egun_dev.substitute(propty_name='status'))
         egun_trigger_status.setOnColor(SiriusLedAlert.LightGreen)
         egun_trigger_status.setOffColor(SiriusLedAlert.DarkGreen)
 
@@ -104,40 +106,36 @@ class MainLauncher(SiriusMainWindow):
         timing = QGroupBox('EVG Control')
 
         evg_name = _LLTimeSearch.get_evg_name()
+        evg_pref = SiriusPVName(evg_name).substitute(prefix=self._prefix)
         evg_continuous_label = QLabel(
             '<h4>Continuous</h4>', self, alignment=Qt.AlignCenter)
         evg_continuous_sel = PyDMStateButton(
-            parent=self,
-            init_channel=self._prefix+evg_name+':ContinuousEvt-Sel')
+            self, evg_pref.substitute(propty='ContinuousEvt-Sel'))
         color_list = 7*[PyDMLed.LightGreen, ]
         color_list[0] = PyDMLed.DarkGreen  # Initializing
         color_list[1] = PyDMLed.DarkGreen  # Stopped
         color_list[4] = PyDMLed.Yellow  # Preparing Continuous
         color_list[6] = PyDMLed.Yellow  # Restarting Continuous
         evg_continuous_sts = PyDMLed(
-            parent=self,
-            init_channel=self._prefix+evg_name+':STATEMACHINE',
+            self, evg_pref.substitute(propty_name='STATEMACHINE'),
             color_list=color_list)
 
         evg_injection_label = QLabel(
             '<h4>Injection</h4>', self, alignment=Qt.AlignCenter)
         evg_injection_sel = PyDMStateButton(
-            parent=self,
-            init_channel=self._prefix+evg_name+':InjectionEvt-Sel')
+            self, evg_pref.substitute(propty='InjectionEvt-Sel'))
         color_list = 7*[PyDMLed.DarkGreen, ]
         color_list[3] = PyDMLed.LightGreen  # Injection
         color_list[5] = PyDMLed.Yellow  # Preparing Injection
         evg_injection_sts = PyDMLed(
-            parent=self,
-            init_channel=self._prefix+evg_name+':STATEMACHINE',
+            self, evg_pref.substitute(propty_name='STATEMACHINE'),
             color_list=color_list)
         evg_injection_injcnt = PyDMLabel(self)
         evg_injection_injcnt.setToolTip(
             'Count injection pulses when Egun Trigger is enabled.')
-        evg_injection_injcnt.channel = \
-            self._prefix+'AS-Glob:AP-CurrInfo:InjCount-Mon'
-        evg_injection_injcnt.setStyleSheet(
-            'QLabel{max-width: 3.5em;}')
+        evg_injection_injcnt.channel = SiriusPVName(
+            'AS-Glob:AP-CurrInfo:InjCount-Mon').substitute(prefix=self._prefix)
+        evg_injection_injcnt.setStyleSheet('QLabel{max-width: 3.5em;}')
 
         evg_injection_sts_lay = QHBoxLayout()
         evg_injection_sts_lay.addWidget(evg_injection_sts)
@@ -147,21 +145,19 @@ class MainLauncher(SiriusMainWindow):
         evg_update_label = QLabel(
             '<h4>Update</h4>', self, alignment=Qt.AlignCenter)
         evg_update_sel = PyDMPushButton(
-            self,
-            init_channel=self._prefix+evg_name+':UpdateEvt-Cmd', pressValue=1)
+            self, init_channel=evg_pref.substitute(propty='UpdateEvt-Cmd'),
+            pressValue=1)
         evg_update_sel.setIcon(qta.icon('fa5s.sync'))
         evg_update_sel.setToolTip('Update Events Table')
         evg_update_sel.setObjectName('but')
         evg_update_sel.setStyleSheet(
             '#but{min-width:25px; max-width:25px; icon-size:20px;}')
         evg_update_sts = SiriusLedAlert(
-            parent=self,
-            init_channel=self._prefix+evg_name+':EvtSyncStatus-Mon')
+            self, evg_pref.substitute(propty='EvtSyncStatus-Mon'))
         evg_update_sts.setOffColor(evg_update_sts.Red)
         evg_update_sts.setOnColor(evg_update_sts.LightGreen)
 
-        evg_bucket_list = BucketList(
-            self, prefix=self._prefix+evg_name+':', min_size=15)
+        evg_bucket_list = BucketList(self, prefix=self._prefix, min_size=15)
 
         pbt = QPushButton('>', self)
         pbt.clicked.connect(self._toggle_expand_horizontal)

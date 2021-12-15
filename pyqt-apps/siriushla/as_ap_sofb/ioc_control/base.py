@@ -17,11 +17,13 @@ from siriushla.as_ap_configdb import LoadConfigDialog
 class BaseWidget(QWidget):
     """."""
 
-    def __init__(self, parent, prefix, acc='SI'):
+    def __init__(self, parent, device, prefix='', acc='SI'):
         """."""
         super().__init__(parent)
         self.setObjectName(acc.upper()+'App')
-        self.prefix = _PVName(prefix)
+        self.prefix = prefix
+        self.device = _PVName(device)
+        self.devpref = self.device.substitute(prefix=prefix)
         self._csorb = SOFBFactory.create(acc)
 
     @property
@@ -39,18 +41,20 @@ class BaseWidget(QWidget):
         """."""
         return self._csorb.isring
 
-    def create_pair(self, parent, pvname, prefix=None, is_vert=False):
+    def create_pair(self, parent, pvname, device=None, is_vert=False):
         """."""
-        prefix = prefix or self.prefix
+        device = device or self.device
+        basename = _PVName(device).substitute(
+            prefix=self.prefix, propty_name=pvname)
         wid = QWidget(parent)
         if is_vert:
             lay = QVBoxLayout(wid)
         else:
             lay = QHBoxLayout(wid)
         lay.setContentsMargins(0, 0, 0, 0)
-        pdm_spbx = SiriusSpinbox(wid, init_channel=prefix+pvname+'-SP')
+        pdm_spbx = SiriusSpinbox(wid, basename.substitute(propty_suffix='SP'))
         pdm_spbx.showStepExponent = False
-        pdm_lbl = PyDMLabel(wid, init_channel=prefix+pvname+'-RB')
+        pdm_lbl = PyDMLabel(wid, basename.substitute(propty_suffix='RB'))
         pdm_lbl.setAlignment(Qt.AlignCenter)
         lay.addWidget(pdm_spbx)
         lay.addWidget(pdm_lbl)
@@ -58,9 +62,11 @@ class BaseWidget(QWidget):
         wid.rb_wid = pdm_lbl
         return wid
 
-    def create_pair_sel(self, parent, pvname, prefix=None, is_vert=False):
+    def create_pair_sel(self, parent, pvname, device=None, is_vert=False):
         """."""
-        prefix = prefix or self.prefix
+        device = device or self.device
+        basename = _PVName(device).substitute(
+            prefix=self.prefix, propty_name=pvname)
         wid = QWidget(parent)
         if is_vert:
             lay = QVBoxLayout(wid)
@@ -68,8 +74,8 @@ class BaseWidget(QWidget):
             lay = QHBoxLayout(wid)
         lay.setContentsMargins(0, 0, 0, 0)
         pdm_cbbx = PyDMEnumComboBox(
-            wid, init_channel=prefix+pvname+'-Sel')
-        pdm_lbl = PyDMLabel(wid, init_channel=prefix+pvname+'-Sts')
+            wid, basename.substitute(propty_suffix='Sel'))
+        pdm_lbl = PyDMLabel(wid, basename.substitute(propty_suffix='Sts'))
         pdm_lbl.setAlignment(Qt.AlignCenter)
         lay.addWidget(pdm_cbbx)
         lay.addWidget(pdm_lbl)
@@ -77,18 +83,19 @@ class BaseWidget(QWidget):
         wid.rb_wid = pdm_lbl
         return wid
 
-    def create_pair_butled(self, parent, pvname, prefix=None, is_vert=False):
+    def create_pair_butled(self, parent, pvname, device=None, is_vert=False):
         """."""
-        prefix = prefix or self.prefix
+        device = device or self.device
+        basename = _PVName(device).substitute(
+            prefix=self.prefix, propty_name=pvname)
         wid = QWidget(parent)
         if is_vert:
             lay = QVBoxLayout(wid)
         else:
             lay = QHBoxLayout(wid)
         lay.setContentsMargins(0, 0, 0, 0)
-        spnt = PyDMStateButton(
-            wid, init_channel=prefix+pvname+'-Sel')
-        rdb = SiriusLedState(wid, init_channel=prefix+pvname+'-Sts')
+        spnt = PyDMStateButton(wid, basename.substitute(propty_suffix='Sel'))
+        rdb = SiriusLedState(wid, basename.substitute(propty_suffix='Sts'))
         lay.addWidget(spnt)
         lay.addWidget(rdb)
         wid.sp_wid = spnt

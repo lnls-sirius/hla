@@ -23,11 +23,10 @@ from siriuspy.envars import VACA_PREFIX
 from siriuspy.pwrsupply.csdev import Const as _PSConst, \
     ETypes as _PSEnums, PS_LI_INTLK_THRS as _PS_LI_INTLK
 from siriuspy.search import PSSearch
-from siriuspy.namesys import SiriusPVName
+from siriuspy.namesys import SiriusPVName as _PVName
 
 from siriushla.util import run_newprocess as _run_newprocess, \
     get_appropriate_color as _get_appropriate_color
-from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets import SiriusMainWindow, SiriusConnectionSignal, \
     PyDMLedMultiChannel, PyDMLed, PyDMLedMultiConnection, QLed
 from siriushla.as_ps_control.detail_widget.custom_widgets import \
@@ -81,27 +80,27 @@ class PSDiag(SiriusMainWindow):
                         label, panel,
                         alignment=Qt.AlignRight | Qt.AlignVCenter)
                     psnames = PSSearch.get_psnames(filters=filt)
-                    ps_ch2vals = dict()
-                    intlk_ch2vals = dict()
+                    ps_c2v = dict()
+                    ilk_c2v = dict()
                     conn_chs = list()
                     for name in psnames:
-                        pname = self._prefix + name
-                        conn_chs.append(pname+':PwrState-Sts')
-                        ps_ch2vals[pname + ':PwrState-Sts'] = 1
-                        intlk_ch2vals[pname + ':StatusIntlk-Mon'] = \
+                        pvn = _PVName(name).substitute(prefix=self._prefix)
+                        conn_chs.append(pvn.substitute(propty='PwrState-Sts'))
+                        ps_c2v[pvn.substitute(propty='PwrState-Sts')] = 1
+                        ilk_c2v[pvn.substitute(propty='StatusIntlk-Mon')] = \
                             {'value': _PS_LI_INTLK, 'comp': 'lt'}
 
                     f = 'LI-.*:PS-'+filt['dev']
                     conn_led = MyLedMultiConnection(
                         filters=f, parent=panel, channels=conn_chs)
                     ps_led = MyLedMultiChannel(
-                        filters=f, parent=panel, channels2values=ps_ch2vals)
+                        filters=f, parent=panel, channels2values=ps_c2v)
                     if 'Spect' in filt['dev']:
                         intlk_led = LISpectIntlkLed(panel, filters=f)
                     else:
                         intlk_led = MyLedMultiChannel(
                             filters=f, parent=panel,
-                            channels2values=intlk_ch2vals)
+                            channels2values=ilk_c2v)
 
                     suf = sec+filt['dev'].strip('.*')+'_led'
                     conn_led.setObjectName('conn' + suf)
@@ -121,30 +120,34 @@ class PSDiag(SiriusMainWindow):
                     if not psnames:
                         continue
                     psconn_chs = list()
-                    ps_ch2vals = dict()
-                    intlk_ch2vals = dict()
-                    opm_ch2vals = dict()
-                    diff_ch2vlas = dict()
+                    ps_c2v = dict()
+                    ilk_c2v = dict()
+                    opm_c2v = dict()
+                    df_c2v = dict()
                     for name in psnames:
-                        pname = self._prefix + name
-                        ps_ch2vals[pname+':PwrState-Sts'] = _on
+                        pvn = _PVName(name).substitute(prefix=self._prefix)
+                        ps_c2v[pvn.substitute(propty='PwrState-Sts')] = _on
                         if name.dis == 'PS':
-                            psconn_chs.append(pname+':Version-Cte')
-                            intlk_ch2vals[pname+':IntlkSoft-Mon'] = 0
-                            intlk_ch2vals[pname+':IntlkHard-Mon'] = 0
+                            psconn_chs.append(
+                                pvn.substitute(propty='Version-Cte'))
+                            ilk_c2v[pvn.substitute(propty='IntlkSoft-Mon')] = 0
+                            ilk_c2v[pvn.substitute(propty='IntlkHard-Mon')] = 0
+                            opm_pvn = pvn.substitute(propty='OpMode-Sts')
                             if sec == 'BO':
-                                opm_ch2vals[pname+':OpMode-Sts'] = {
+                                opm_c2v[opm_pvn] = {
                                     'value': [_slowref, _rmpwfm], 'comp': 'in'}
                             else:
-                                opm_ch2vals[pname+':OpMode-Sts'] = _slowref
-                            diff_ch2vlas[pname+':DiagStatus-Mon'] = \
+                                opm_c2v[opm_pvn] = _slowref
+                            df_c2v[pvn.substitute(propty='DiagStatus-Mon')] = \
                                 {'value': 0, 'bit': 5}
                         elif name.dis == 'PU':
-                            psconn_chs.append(pname+':PwrState-Sts')
+                            psconn_chs.append(
+                                pvn.substitute(propty='PwrState-Sts'))
                             intlkcount = 7 if 'Sept' in name.dev else 8
                             for idx in range(1, intlkcount+1):
-                                sidx = str(idx)
-                                intlk_ch2vals[pname+':Intlk'+sidx+'-Mon'] = 1
+                                ppty = 'Intlk'+str(idx)+'-Mon'
+                                pvn = pvn.substitute(propty=ppty)
+                                ilk_c2v[pvn] = 1
 
                     f = sec+'-'+filt['sub']+':'+psnames[0].dis+'-'+filt['dev']
                     ps_label = QLabel(
@@ -153,9 +156,9 @@ class PSDiag(SiriusMainWindow):
                     psconn_led = MyLedMultiConnection(
                         filters=f, parent=panel, channels=psconn_chs)
                     ps_led = MyLedMultiChannel(
-                        filters=f, parent=panel, channels2values=ps_ch2vals)
+                        filters=f, parent=panel, channels2values=ps_c2v)
                     intlk_led = MyLedMultiChannel(
-                        filters=f, parent=panel, channels2values=intlk_ch2vals)
+                        filters=f, parent=panel, channels2values=ilk_c2v)
 
                     suf = sec+filt['dev'].strip('.*')+'_led'
                     psconn_led.setObjectName('psconn' + suf)
@@ -170,12 +173,12 @@ class PSDiag(SiriusMainWindow):
                     if psnames[0].dis == 'PS':
                         opm_led = MyLedMultiChannel(
                             filters=f, parent=panel,
-                            channels2values=opm_ch2vals)
+                            channels2values=opm_c2v)
                         opm_led.setOnColor(PyDMLed.LightGreen)
                         opm_led.setOffColor(PyDMLed.Yellow)
                         diff_led = MyLedMultiChannel(
                             filters=f, parent=panel,
-                            channels2values=diff_ch2vlas)
+                            channels2values=df_c2v)
 
                         opm_led.setObjectName('opm' + suf)
                         diff_led.setObjectName('diff' + suf)
@@ -199,9 +202,9 @@ class PSDiag(SiriusMainWindow):
 
         channels = list()
         for ps in PSSearch.get_psnames(filters={'dis': 'PS'}):
-            channels.append(SiriusPVName(ps).substitute(
+            channels.append(_PVName(ps).substitute(
                 prefix=self._prefix, propty='DiagCurrentDiff-Mon'))
-            channels.append(SiriusPVName(ps).substitute(
+            channels.append(_PVName(ps).substitute(
                 prefix=self._prefix, propty='OpMode-Sts'))
         self._status = LogTable(cw, channels, table_label2px, is_status=True)
         self._status.setObjectName('status_table')
@@ -483,7 +486,7 @@ class LogTable(QTreeView, PyDMWidget):
     def alarm_severity_changed(self, new_alarm_severity):
         """Reimplement alarm_severity_changed."""
         if self.sender():
-            pv_diff = SiriusPVName(self.sender().address)
+            pv_diff = _PVName(self.sender().address)
             val_diff = self.address2channels[pv_diff].value
 
             pv_opmd = pv_diff.substitute(
@@ -503,7 +506,7 @@ class LogTable(QTreeView, PyDMWidget):
 
     def _get_newitem_data(self, updated):
         pv, value = updated
-        pv = SiriusPVName(pv)
+        pv = _PVName(pv)
         if isinstance(value, _np.ndarray):
             _log.warning('PSDiag window received a numpy array to ' +
                          pv+' ('+str(value)+')!')
@@ -533,7 +536,7 @@ class LogTable(QTreeView, PyDMWidget):
         """Trigger open PS detail window."""
         idx = self.selectedIndexes()
         text = self._model.data(self._model.index(idx[0].row(), 3))
-        text = SiriusPVName(text)
+        text = _PVName(text)
         if text.dis == 'PS':
             _run_newprocess(['sirius-hla-as-ps-detail.py', text])
         elif text.dis == 'PU':

@@ -3,6 +3,8 @@
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QGridLayout
 
+from siriuspy.namesys import SiriusPVName as _PVName
+
 from ..widgets import SiriusLabel, SiriusFrame
 
 
@@ -13,8 +15,10 @@ class MachShiftLabel(QWidget):
         """Init."""
         super().__init__(parent)
 
-        self.label = SiriusLabel(
-            self, prefix+'AS-Glob:AP-MachShift:Mode-Sts')
+        pvname = _PVName('AS-Glob:AP-MachShift:Mode-Sts')
+        pvname = pvname.substitute(prefix=prefix)
+
+        self.label = SiriusLabel(self, pvname)
         self.label.setAlignment(Qt.AlignCenter)
 
         color_list = [
@@ -28,7 +32,7 @@ class MachShiftLabel(QWidget):
             SiriusFrame.DarkGray,  # Shutdown
         ]
         self.frame = SiriusFrame(
-            self, prefix+'AS-Glob:AP-MachShift:Mode-Sts',
+            self, pvname,
             color_list=color_list, is_float=False)
         self.frame.add_widget(self.label)
 

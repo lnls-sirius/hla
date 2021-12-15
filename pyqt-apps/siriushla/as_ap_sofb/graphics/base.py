@@ -1,20 +1,23 @@
 """Control the Orbit Graphic Displnay."""
 
-import pathlib as _pathlib
 from datetime import datetime as _datetime
 from functools import partial as _part
 import numpy as _np
-from pyqtgraph import mkBrush, mkPen, InfiniteLine, functions
+
 from qtpy.QtWidgets import QWidget, QFileDialog, QLabel, QCheckBox, \
     QVBoxLayout, QHBoxLayout, QSizePolicy, QGroupBox, QPushButton, QComboBox, \
     QToolTip, QGridLayout
 from qtpy.QtCore import Qt, QTimer, QThread, Signal, QObject
 from qtpy.QtGui import QColor
+from pyqtgraph import mkBrush, mkPen, InfiniteLine, functions
 import qtawesome as qta
 
 from pydm.widgets import PyDMWaveformPlot
-from siriushla.widgets import SiriusConnectionSignal
+
+from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.sofb.csdev import SOFBFactory
+
+from siriushla.widgets import SiriusConnectionSignal as _ConnSig
 
 
 class BaseWidget(QWidget):
@@ -22,18 +25,21 @@ class BaseWidget(QWidget):
 
     DEFAULT_DIR = '/home/sirius/mounts/screens-iocs'
 
-    def __init__(self, parent, prefix, ctrls, names, is_orb, acc='SI'):
+    def __init__(self, parent, device, ctrls, names, is_orb, prefix='',
+                 acc='SI'):
         """."""
         super(BaseWidget, self).__init__(parent)
         self.setObjectName(acc.upper()+'App')
         self.EXT = f'.{acc.lower()}dorb'
         self.EXT_FLT = f'Sirius Delta Orbit Files (*.{acc.lower()}dorb)'
         self.line_names = names
+        self.prefix = prefix
+        self.device = _PVName(device)
+        self.devpref = self.device.substitute(prefix=prefix)
         self.controls = ctrls
         self._csorb = SOFBFactory.create(acc)
         self.update_rate = 2.1  # Hz
         self.last_dir = self.DEFAULT_DIR
-        self.prefix = prefix
         self.is_orb = is_orb
         self.timer = QTimer()
         self.thread = QThread()
@@ -50,16 +56,16 @@ class BaseWidget(QWidget):
 
         prefx, prefy = ('BPMX', 'BPMY') if self.is_orb else ('CH', 'CV')
         self.enbl_pvs = {
-            'x': SiriusConnectionSignal(self.prefix+prefx+'EnblList-RB'),
-            'y': SiriusConnectionSignal(self.prefix+prefy+'EnblList-RB')}
+            'x': _ConnSig(self.devpref.substitute(propty=prefx+'EnblList-RB')),
+            'y': _ConnSig(self.devpref.substitute(propty=prefy+'EnblList-RB'))}
         for pln, signal in self.enbl_pvs.items():
             sig = signal.new_value_signal[_np.ndarray]
             for upd in self.updater:
                 sig.connect(_part(upd.set_enbl_list, pln))
 
         self.enbl_pvs_set = {
-            'x': SiriusConnectionSignal(self.prefix+prefx+'EnblList-SP'),
-            'y': SiriusConnectionSignal(self.prefix+prefy+'EnblList-SP')}
+            'x': _ConnSig(self.devpref.substitute(propty=prefx+'EnblList-SP')),
+            'y': _ConnSig(self.devpref.substitute(propty=prefy+'EnblList-SP'))}
 
         self.thread.start()
         self.timer.start(1000/self.update_rate)

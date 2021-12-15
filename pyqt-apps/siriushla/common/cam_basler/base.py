@@ -457,15 +457,13 @@ def create_propty_layout(parent, prefix, propty, propty_type='', cmd=dict(),
 
     if propty_type == 'sprb':
         if use_linedit:
-            setattr(parent, 'PyDMLineEdit_'+propty,
-                    PyDMLineEdit(parent=parent,
-                                 init_channel=prefix+':'+propty+'-SP'))
-            sp = getattr(parent, 'PyDMLineEdit_'+propty)
+            sp = PyDMLineEdit(parent, prefix.substitute(
+                propty_name=propty, propty_suffix='SP'))
+            setattr(parent, 'PyDMLineEdit_'+propty, sp)
         else:
-            setattr(parent, 'PyDMSpinbox_'+propty,
-                    PyDMSpinbox(parent=parent,
-                                init_channel=prefix+':'+propty+'-SP'))
-            sp = getattr(parent, 'PyDMSpinbox_'+propty)
+            sp = PyDMSpinbox(parent, prefix.substitute(
+                propty_name=propty, propty_suffix='SP'))
+            setattr(parent, 'PyDMSpinbox_'+propty, sp)
             sp.showStepExponent = False
         sp.setStyleSheet("""
             min-width:wvalem; max-width:wvalem; min-height:hvalem;
@@ -473,10 +471,9 @@ def create_propty_layout(parent, prefix, propty, propty_type='', cmd=dict(),
             'hval', str(height)))
         sp.setAlignment(Qt.AlignCenter)
         layout.addWidget(sp)
-        setattr(parent, 'PyDMLabel_'+propty,
-                PyDMLabel(parent=parent,
-                          init_channel=prefix+':'+propty+'-RB'))
-        label = getattr(parent, 'PyDMLabel_'+propty)
+        label = PyDMLabel(parent, prefix.substitute(
+            propty_name=propty, propty_suffix='RB'))
+        setattr(parent, 'PyDMLabel_'+propty, label)
         if not cmd:
             label.setStyleSheet("""
             min-width:wvalem; max-width:wvalem; min-height:hvalem;
@@ -485,40 +482,36 @@ def create_propty_layout(parent, prefix, propty, propty_type='', cmd=dict(),
         label.setAlignment(Qt.AlignCenter)
         layout.addWidget(label)
     elif propty_type == 'enbldisabl':
-        setattr(parent, 'PyDMStateButton_'+propty,
-                PyDMStateButton(parent=parent,
-                                init_channel=prefix+':'+propty+'-Sel'))
-        statebutton = getattr(parent, 'PyDMStateButton_'+propty)
+        statebutton = PyDMStateButton(parent, prefix.substitute(
+                propty_name=propty, propty_suffix='Sel'))
+        setattr(parent, 'PyDMStateButton_'+propty, statebutton)
         statebutton.setStyleSheet("""
             min-width:wvalem; max-width:wvalem; min-height:hvalem;
             max-height:hvalem;""".replace('wval', str(width)).replace(
             'hval', str(height)))
         statebutton.shape = 1
         layout.addWidget(statebutton)
-        setattr(parent, 'SiriusLedState_'+propty,
-                SiriusLedState(parent=parent,
-                               init_channel=prefix+':'+propty+'-Sts'))
-        led = getattr(parent, 'SiriusLedState_'+propty)
+        led = SiriusLedState(parent, prefix.substitute(
+            propty_name=propty, propty_suffix='Sts'))
+        setattr(parent, 'SiriusLedState_'+propty, led)
         led.setStyleSheet(
             "min-width:1.29em; max-width:1.29em; "
             "min-height:1.29em; max-height:1.29em;")
         led.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
         layout.addWidget(led)
     elif propty_type == 'offon':
-        setattr(parent, 'PyDMStateButton_'+propty,
-                PyDMStateButton(parent=parent,
-                                init_channel=prefix+':'+propty+'-Sel'))
-        statebutton = getattr(parent, 'PyDMStateButton_'+propty)
+        statebutton = PyDMStateButton(parent, prefix.substitute(
+            propty_name=propty, propty_suffix='Sel'))
+        setattr(parent, 'PyDMStateButton_'+propty, statebutton)
         statebutton.setStyleSheet("""
             min-width:wvalem; max-width:wvalem; min-height:hvalem;
             max-height:hvalem;""".replace('wval', str(width)).replace(
             'hval', str(height)))
         statebutton.shape = 1
         layout.addWidget(statebutton)
-        setattr(parent, 'PyDMLabel_'+propty,
-                PyDMLabel(parent=parent,
-                          init_channel=prefix+':'+propty+'-Sts'))
-        label = getattr(parent, 'PyDMLabel_'+propty)
+        label = PyDMLabel(parent, prefix.substitute(
+            propty_name=propty, propty_suffix='Sts'))
+        setattr(parent, 'PyDMLabel_'+propty, label)
         if not cmd:
             label.setStyleSheet("""
             min-width:wvalem; max-width:wvalem; min-height:hvalem;
@@ -527,19 +520,17 @@ def create_propty_layout(parent, prefix, propty, propty_type='', cmd=dict(),
         label.setAlignment(Qt.AlignCenter)
         layout.addWidget(label)
     elif propty_type == 'enum':
-        setattr(parent, 'PyDMEnumComboBox_'+propty,
-                PyDMEnumComboBox(parent=parent,
-                                 init_channel=prefix+':'+propty+'-Sel'))
-        combobox = getattr(parent, 'PyDMEnumComboBox_'+propty)
+        combobox = PyDMEnumComboBox(parent, prefix.substitute(
+            propty_name=propty, propty_suffix='Sel'))
+        setattr(parent, 'PyDMEnumComboBox_'+propty, combobox)
         combobox.setStyleSheet("""
             min-width:wvalem; max-width:wvalem; min-height:hvalem;
             max-height:hvalem;""".replace('wval', str(width)).replace(
                 'hval', str(height)))
         layout.addWidget(combobox)
-        setattr(parent, 'PyDMLabel_'+propty,
-                PyDMLabel(parent=parent,
-                          init_channel=prefix+':'+propty+'-Sts'))
-        label = getattr(parent, 'PyDMLabel_'+propty)
+        label = PyDMLabel(parent, prefix.substitute(
+            propty_name=propty, propty_suffix='Sts'))
+        setattr(parent, 'PyDMLabel_'+propty, label)
         if not cmd:
             label.setStyleSheet("""
                 min-width:wvalem; max-width:wvalem; min-height:hvalem;
@@ -548,9 +539,9 @@ def create_propty_layout(parent, prefix, propty, propty_type='', cmd=dict(),
         label.setAlignment(Qt.AlignCenter)
         layout.addWidget(label)
     elif propty_type == 'mon':
-        setattr(parent, 'PyDMLabel_'+propty,
-                PyDMLabel(parent=parent,
-                          init_channel=prefix+':'+propty+'-Mon'))
+        label = PyDMLabel(parent, prefix.substitute(
+            propty_name=propty, propty_suffix='Mon'))
+        setattr(parent, 'PyDMLabel_'+propty, label)
         label = getattr(parent, 'PyDMLabel_'+propty)
         label.setStyleSheet("""
             min-width:wvalem; max-width:wvalem; min-height:hvalem;
@@ -559,9 +550,9 @@ def create_propty_layout(parent, prefix, propty, propty_type='', cmd=dict(),
         label.setAlignment(Qt.AlignCenter)
         layout.addWidget(label)
     elif propty_type == 'cte':
-        setattr(parent, 'PyDMLabel_'+propty,
-                PyDMLabel(parent=parent,
-                          init_channel=prefix+':'+propty+'-Cte'))
+        label = PyDMLabel(parent, prefix.substitute(
+            propty_name=propty, propty_suffix='Cte'))
+        setattr(parent, 'PyDMLabel_'+propty, label)
         label = getattr(parent, 'PyDMLabel_'+propty)
         label.setStyleSheet("""
             min-width:wvalem; max-width:wvalem; min-height:hvalem;
@@ -571,16 +562,17 @@ def create_propty_layout(parent, prefix, propty, propty_type='', cmd=dict(),
         layout.addWidget(label)
 
     if cmd:
-        setattr(parent, 'PyDMPushButton_'+propty,
-                PyDMPushButton(parent=parent, label=cmd['label'],
-                               pressValue=cmd['pressValue']))
-        pb = getattr(parent, 'PyDMPushButton_'+propty)
+        pb = PyDMPushButton(
+            parent=parent, label=cmd['label'],
+            pressValue=cmd['pressValue'])
+        setattr(parent, 'PyDMPushButton_'+propty, pb)
         pb.setObjectName('PyDMPushButton_'+propty)
         if 'icon' in cmd.keys():
             pb.setIcon(cmd['icon'])
         if 'toolTip' in cmd.keys():
             pb.setToolTip(cmd['toolTip'])
-        pb.channel = prefix+':'+cmd['name']+'-Cmd'
+        pb.channel = prefix.substitute(
+            propty_name=cmd['name'], propty_suffix='Cmd')
 
         _w = cmd['width']+'px' if 'width' in cmd.keys() else str(width)+'em'
         _h = cmd['height']+'px' if 'height' in cmd.keys() else str(height)+'em'
@@ -592,7 +584,7 @@ def create_propty_layout(parent, prefix, propty, propty_type='', cmd=dict(),
             }""".replace('wval', _w).replace('hval', _h)
         _is = 'icon-size:'+cmd['icon-size']+'px;' \
             if 'icon-size' in cmd.keys() else ''
-        stylesheet.replace('iconsize;',  _is)
+        stylesheet.replace('iconsize;', _is)
         pb.setStyleSheet(stylesheet)
         layout.addWidget(pb)
 

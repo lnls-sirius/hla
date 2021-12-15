@@ -8,6 +8,9 @@ from qtpy.QtWidgets import QLabel, QGridLayout, QGroupBox, QFormLayout, \
 
 from pydm.widgets import PyDMTimePlot
 
+from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
+from siriuspy.namesys import SiriusPVName as _PVName
+
 from siriushla.widgets import SiriusSpinbox, PyDMStateButton, SiriusLabel, \
     SiriusLedState, SiriusProcessImage, QSpinBoxPlus
 from siriushla.as_ti_control import HLTriggerSimple
@@ -16,16 +19,17 @@ from siriushla.as_ti_control import HLTriggerSimple
 class EnergyMeasure(QWidget):
     """."""
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, prefix=_VACA_PREFIX):
         """."""
         super().__init__(parent=parent)
+        self.prefix = prefix
         self._setupUi()
         self.setObjectName('LIApp')
 
     def _setupUi(self):
-        pref = 'LI-Glob:AP-MeasEnergy'
+        pref = _PVName('LI-Glob:AP-MeasEnergy').substitute(prefix=self.prefix)
         self.plt_energy = PyDMTimePlot(
-            self, init_y_channels=[pref+':Energy-Mon'],
+            self, init_y_channels=[pref.substitute(propty='Energy-Mon')],
             background=QColor('white'))
         self.plt_energy.setLabel('left', text='Energy [MeV]')
         self.plt_energy.setShowXGrid(True)
@@ -39,7 +43,7 @@ class EnergyMeasure(QWidget):
         self.plt_energy.setTimeSpan(100)
 
         self.plt_spread = PyDMTimePlot(
-            self, init_y_channels=[pref+':Spread-Mon'],
+            self, init_y_channels=[pref.substitute(propty='Spread-Mon')],
             background=QColor('white'))
         self.plt_spread.setLabel('left', text='Spread [%]')
         self.plt_spread.setShowXGrid(True)
@@ -58,8 +62,10 @@ class EnergyMeasure(QWidget):
         vl = QVBoxLayout()
         wid = QWidget(gb_ctrl)
         wid.setLayout(QHBoxLayout())
-        btn = PyDMStateButton(gb_ctrl, init_channel=pref+':MeasureCtrl-Sel')
-        led = SiriusLedState(gb_ctrl, init_channel=pref+':MeasureCtrl-Sts')
+        btn = PyDMStateButton(
+            gb_ctrl, pref.substitute(propty='MeasureCtrl-Sel'))
+        led = SiriusLedState(
+            gb_ctrl, pref.substitute(propty='MeasureCtrl-Sts'))
         wid.layout().addWidget(btn)
         wid.layout().addWidget(led)
         vl.addWidget(QLabel('Start/Stop Acq.', gb_ctrl))
@@ -69,8 +75,10 @@ class EnergyMeasure(QWidget):
         vl = QVBoxLayout()
         wid = QWidget(gb_ctrl)
         wid.setLayout(QHBoxLayout())
-        spnbox = SiriusSpinbox(wid, init_channel='LI-01:PS-Spect:Current-SP')
-        lbl = SiriusLabel(wid, init_channel='LI-01:PS-Spect:Current-Mon')
+        spnbox = SiriusSpinbox(wid, _PVName(
+            'LI-01:PS-Spect:Current-SP').substitute(prefix=self.prefix))
+        lbl = SiriusLabel(wid, _PVName(
+            'LI-01:PS-Spect:Current-Mon').substitute(prefix=self.prefix))
         spnbox.showStepExponent = False
         wid.layout().addWidget(spnbox)
         wid.layout().addWidget(lbl)
@@ -119,7 +127,8 @@ class EnergyMeasure(QWidget):
 
         gb_trig = QGroupBox('Trigger', self)
         hbl = QHBoxLayout(gb_trig)
-        hbl.addWidget(HLTriggerSimple(parent=self, prefix='LI-Fam:TI-Scrn'))
+        hbl.addWidget(HLTriggerSimple(
+            parent=self, device='LI-Fam:TI-Scrn', prefix=self.prefix))
         gb_trig.setLayout(hbl)
 
         gl = QGridLayout(self)

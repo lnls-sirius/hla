@@ -3,7 +3,7 @@
 
 import os as _os
 import numpy as np
-import epics
+
 from qtpy.uic import loadUi
 from qtpy.QtCore import Slot, Qt
 from qtpy.QtGui import QColor
@@ -11,12 +11,16 @@ from qtpy.QtWidgets import QFormLayout, QGridLayout, QHBoxLayout, QVBoxLayout,\
                            QSizePolicy as QSzPlcy, QLabel, QPushButton,\
                            QSpacerItem, QGroupBox, QWidget
 import qtawesome as qta
+
 from pydm.widgets import PyDMLabel, PyDMEnumComboBox, PyDMSpinbox, \
                          PyDMPushButton, PyDMWaveformPlot
 from pydm.widgets.waveformplot import WaveformCurveItem
 from pydm.utilities.macro import substitute_in_file as _substitute_in_file
+
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
+from siriuspy.epics import PV
+
 from siriushla.widgets import SiriusMainWindow, SiriusDialog, \
     SiriusLedAlert, PyDMStateButton, PyDMLedMultiChannel, QSpinBoxPlus
 from siriushla.widgets.windows import create_window_from_widget
@@ -24,6 +28,10 @@ from siriushla import util
 from siriushla.as_ti_control.hl_trigger import HLTriggerDetailed
 
 POINTS_TO_PLOT = 500
+TL_2_ICTS = {
+    'TB': [_PVName('TB-02:DI-ICT'), _PVName('TB-04:DI-ICT')],
+    'TS': [_PVName('TS-01:DI-ICT'), _PVName('TS-04:DI-ICT')],
+}
 
 
 class ICTSummary(QWidget):
@@ -33,12 +41,7 @@ class ICTSummary(QWidget):
         super().__init__(parent)
         self.prefix = prefix
         self.tl = tl.upper()
-        if self.tl == 'TB':
-            self.ICT1 = 'TB-02:DI-ICT'
-            self.ICT2 = 'TB-04:DI-ICT'
-        else:
-            self.ICT1 = 'TS-01:DI-ICT'
-            self.ICT2 = 'TS-04:DI-ICT'
+        self.icts = TL_2_ICTS[self.tl]
         self._setupUi()
 
     def _setupUi(self):
@@ -46,9 +49,9 @@ class ICTSummary(QWidget):
         lay.setVerticalSpacing(20)
         lay.setHorizontalSpacing(12)
 
+        base_name = _PVName('TL-Glob:AP-CurrInfo:TranspEff-Mon')
         self.lb_transpeff = PyDMLabel(
-            parent=self,
-            init_channel=self.prefix+self.tl+'-Glob:AP-CurrInfo:TranspEff-Mon')
+            self, base_name.substitute(prefix=self.prefix, sec=self.tl))
         self.lb_transpeff.setAlignment(Qt.AlignCenter)
         lay_transpeff = QVBoxLayout()
         lay_transpeff.addWidget(QLabel('<h4>Transport Efficiency [%]</h4>',
@@ -56,16 +59,16 @@ class ICTSummary(QWidget):
         lay_transpeff.addWidget(self.lb_transpeff)
         lay.addLayout(lay_transpeff, 0, 0, 1, 2)
 
-        for col, ict in enumerate([self.ICT1, self.ICT2]):
+        for col, ict in enumerate(self.icts):
             txt_status = QLabel('Status: ', self,
                                 alignment=Qt.AlignRight | Qt.AlignVCenter)
-            led_status = SiriusLedAlert(
-                parent=self, init_channel=self.prefix+ict+':ReliableMeas-Mon')
+            led_status = SiriusLedAlert(self, ict.substitute(
+                prefix=self.prefix, propty='ReliableMeas-Mon'))
             led_status.setObjectName(ict+'_status')
-            txt_charge = QLabel('Charge: ', self,
-                                alignment=Qt.AlignRight | Qt.AlignVCenter)
+            txt_charge = QLabel(
+                'Charge: ', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
             lb_charge = PyDMLabel(
-                parent=self, init_channel=self.prefix+ict+':Charge-Mon')
+                self, ict.substitute(prefix=self.prefix, propty='Charge-Mon'))
             lb_charge.setObjectName(ict+'_charge')
             lb_charge.setStyleSheet('max-width: 10em;')
             lay_ict = QGridLayout()
@@ -91,35 +94,37 @@ class ICTMonitoring(SiriusMainWindow):
         """Create graphs."""
         super(ICTMonitoring, self).__init__(parent)
         # Set transport line
-        if tl.upper() == 'TB':
-            ICT1 = _PVName('TB-02:DI-ICT')
-            ICT2 = _PVName('TB-04:DI-ICT')
-        elif tl.upper() == 'TS':
-            ICT1 = _PVName('TS-01:DI-ICT')
-            ICT2 = _PVName('TS-04:DI-ICT')
+        self.tl = tl.upper()
+        self.prefix = prefix
+        self.icts = TL_2_ICTS[self.tl]
 
         tmp_file = _substitute_in_file(
             _os.path.abspath(_os.path.dirname(__file__))+'/ui_ictmon.ui',
-            {'TL': tl.upper(), 'ICT1': ICT1, 'ICT2': ICT2, 'PREFIX': prefix})
-        self.setWindowTitle(tl.upper()+' ICTs Monitor')
+            {'TL': self.tl, 'ICT1': self.icts[0], 'ICT2': self.icts[1],
+             'PREFIX': prefix + ('-' if prefix else '')})
+        self.setWindowTitle(self.tl+' ICTs Monitor')
         self.centralwidget = loadUi(tmp_file)
-        self.setObjectName(tl.upper()+'App')
-        self.centralwidget.setObjectName(tl.upper()+'App')
+        self.setObjectName(self.tl+'App')
+        self.centralwidget.setObjectName(self.tl+'App')
         self.setCentralWidget(self.centralwidget)
 
         # Add curves accordingly
         self.centralwidget.PyDMTimePlot_Charge.addYChannel(
-            y_channel=prefix+ICT1+':Charge-Mon',
-            name='Charge '+ICT1, color='red', lineWidth=2)
+            y_channel=self.icts[0].substitute(
+                prefix=self.prefix, propty='Charge-Mon'),
+            name='Charge '+self.icts[0], color='red', lineWidth=2)
         self.centralwidget.PyDMTimePlot_Charge.addYChannel(
-            y_channel=prefix+ICT2+':Charge-Mon',
-            name='Charge '+ICT2, color='blue', lineWidth=2)
+            y_channel=self.icts[1].substitute(
+                prefix=self.prefix, propty='Charge-Mon'),
+            name='Charge '+self.icts[1], color='blue', lineWidth=2)
         self.centralwidget.PyDMWaveformPlot_ChargeHstr.addChannel(
-            y_channel=prefix+ICT1+':ChargeHstr-Mon',
-            name='Charge History '+ICT1, color='red', lineWidth=2)
+            y_channel=self.icts[0].substitute(
+                prefix=self.prefix, propty='ChargeHstr-Mon'),
+            name='Charge History '+self.icts[0], color='red', lineWidth=2)
         self.centralwidget.PyDMWaveformPlot_ChargeHstr.addChannel(
-            y_channel=prefix+ICT2+':ChargeHstr-Mon',
-            name='Charge History '+ICT2, color='blue', lineWidth=2)
+            y_channel=self.icts[1].substitute(
+                prefix=self.prefix, propty='ChargeHstr-Mon'),
+            name='Charge History '+self.icts[1], color='blue', lineWidth=2)
 
         # Connect signals to controls curves visibility
         self.centralwidget.checkBox.stateChanged.connect(
@@ -129,12 +134,10 @@ class ICTMonitoring(SiriusMainWindow):
 
         # Add menu
         menu = self.menuBar().addMenu('Settings')
-        act_ICT1settings = menu.addAction(ICT1)
-        util.connect_window(act_ICT1settings, _ICTSettings,
-                            parent=self, prefix=prefix, device=ICT1)
-        act_ICT2settings = menu.addAction(ICT2)
-        util.connect_window(act_ICT2settings, _ICTSettings,
-                            parent=self, prefix=prefix, device=ICT2)
+        for ict in self.icts:
+            act = menu.addAction(ict)
+            util.connect_window(
+                act, _ICTSettings, parent=self, prefix=prefix, device=ict)
 
         self.centralwidget.setStyleSheet("""
             #tabWidget{
@@ -174,7 +177,7 @@ class _ICTSettings(SiriusDialog):
         super().__init__(parent)
         self.prefix = prefix
         self.device = device
-        self.ict_prefix = _PVName(prefix+device)
+        self.ict_prefix = _PVName(device).substitute(prefix=self.prefix)
         self.ict_trig_digi_prefix = self.ict_prefix.substitute(
             sub='Fam', dis='TI', idx='Digit')
         self.ict_trig_integ_prefix = self.ict_prefix.substitute(
@@ -230,8 +233,8 @@ class _ICTSettings(SiriusDialog):
         self.setLayout(lay)
 
     def _setupReliableMeasWidget(self):
-        self.reliablemeas_channel = epics.PV(
-            self.ict_prefix+':ReliableMeasLabels-Cte',
+        self.reliablemeas_channel = PV(
+            self.ict_prefix.substitute(propty='ReliableMeasLabels-Cte'),
             callback=self._updateReliableMeasLabels)
 
         gbox_reliablemeas = QGroupBox('ICT Measure Reliability Status', self)
@@ -239,15 +242,15 @@ class _ICTSettings(SiriusDialog):
 
         self.label_reliablemeas0 = QLabel('', self)
         self.led_ReliableMeas0 = SiriusLedAlert(
-            parent=self, init_channel=self.ict_prefix+':ReliableMeas-Mon',
+            self, self.ict_prefix.substitute(propty='ReliableMeas-Mon'),
             bit=0)
         self.label_reliablemeas1 = QLabel('', self)
         self.led_ReliableMeas1 = SiriusLedAlert(
-            parent=self, init_channel=self.ict_prefix+':ReliableMeas-Mon',
+            self, self.ict_prefix.substitute(propty='ReliableMeas-Mon'),
             bit=1)
         self.label_reliablemeas2 = QLabel('', self)
         self.led_ReliableMeas2 = SiriusLedAlert(
-            parent=self, init_channel=self.ict_prefix+':ReliableMeas-Mon',
+            self, self.ict_prefix.substitute(propty='ReliableMeas-Mon'),
             bit=2)
         lay_reliablemeas = QGridLayout()
         lay_reliablemeas.addWidget(self.led_ReliableMeas0, 0, 0)
@@ -264,9 +267,9 @@ class _ICTSettings(SiriusDialog):
 
         l_sampletrg = QLabel('Trigger Source: ', self)
         self.pydmenumcombobox_SampleTrg = PyDMEnumComboBox(
-            parent=self, init_channel=self.ict_prefix+':SampleTrg-Sel')
+            self, self.ict_prefix.substitute(propty='SampleTrg-Sel'))
         self.pydmlabel_SampleTrg = PyDMLabel(
-            parent=self, init_channel=self.ict_prefix+':SampleTrg-Sts')
+            self, self.ict_prefix.substitute(propty='SampleTrg-Sts'))
         hlay_sampletrg = QHBoxLayout()
         hlay_sampletrg.addWidget(self.pydmenumcombobox_SampleTrg)
         hlay_sampletrg.addWidget(self.pydmlabel_SampleTrg)
@@ -277,8 +280,9 @@ class _ICTSettings(SiriusDialog):
         l_DigiSts = QLabel('Status: ', self)
         self.led_DigiSts = PyDMLedMultiChannel(
             parent=self,
-            channels2values={self.ict_trig_digi_prefix+':State-Sts': 1,
-                             self.ict_trig_digi_prefix+':Status-Mon': 0})
+            channels2values={
+                self.ict_trig_digi_prefix.substitute(propty='State-Sts'): 1,
+                self.ict_trig_digi_prefix.substitute(propty='Status-Mon'): 0})
         self.pb_DigiDetails = QPushButton(
             qta.icon('fa5s.ellipsis-h'), '', self)
         self.pb_DigiDetails.setObjectName('trgdigidtls')
@@ -289,20 +293,21 @@ class _ICTSettings(SiriusDialog):
         trg_w = create_window_from_widget(
             HLTriggerDetailed, is_main=True,
             title=self.ict_trig_digi_prefix+' Detailed Settings')
-        util.connect_window(self.pb_DigiDetails, trg_w, parent=self,
-                            prefix=self.ict_trig_digi_prefix+':')
+        util.connect_window(
+            self.pb_DigiDetails, trg_w, parent=self,
+            device=self.ict_trig_digi_prefix, prefix=self.prefix)
         l_DigiDelay = QLabel('Delay: ', self)
         self.pydmspinbox_DigiDelay = PyDMSpinbox(
-            parent=self, init_channel=self.ict_trig_digi_prefix+':Delay-SP')
+            self, self.ict_trig_digi_prefix.substitute(propty='Delay-SP'))
         self.pydmspinbox_DigiDelay.showStepExponent = False
         self.pydmlabel_DigiDelay = PyDMLabel(
-            parent=self, init_channel=self.ict_trig_digi_prefix+':Delay-RB')
+            self, self.ict_trig_digi_prefix.substitute(propty='Delay-RB'))
         l_DigiDuration = QLabel('Duration: ', self)
         self.pydmspinbox_DigiDuration = PyDMSpinbox(
-            parent=self, init_channel=self.ict_trig_digi_prefix+':Duration-SP')
+            self, self.ict_trig_digi_prefix.substitute(propty='Duration-SP'))
         self.pydmspinbox_DigiDuration.showStepExponent = False
         self.pydmlabel_DigiDuration = PyDMLabel(
-            parent=self, init_channel=self.ict_trig_digi_prefix+':Duration-RB')
+            self, self.ict_trig_digi_prefix.substitute(propty='Duration-RB'))
         lay_Digi = QGridLayout()
         lay_Digi.addWidget(l_DigiSts, 0, 0)
         lay_Digi.addWidget(self.led_DigiSts, 0, 1, alignment=Qt.AlignLeft)
@@ -320,8 +325,9 @@ class _ICTSettings(SiriusDialog):
         l_IntegSts = QLabel('Status: ', self)
         self.led_IntegSts = PyDMLedMultiChannel(
             parent=self,
-            channels2values={self.ict_trig_integ_prefix+':State-Sts': 1,
-                             self.ict_trig_integ_prefix+':Status-Mon': 0})
+            channels2values={
+                self.ict_trig_integ_prefix.substitute(propty='State-Sts'): 1,
+                self.ict_trig_integ_prefix.substitute(propty='Status-Mon'): 0})
         self.pb_IntegDetails = QPushButton(
             qta.icon('fa5s.ellipsis-h'), '', self)
         self.pb_IntegDetails.setObjectName('trgdigidtls')
@@ -332,20 +338,21 @@ class _ICTSettings(SiriusDialog):
         trg_w = create_window_from_widget(
             HLTriggerDetailed, is_main=True,
             title=self.ict_trig_integ_prefix+' Detailed Settings')
-        util.connect_window(self.pb_IntegDetails, trg_w, parent=self,
-                            prefix=self.ict_trig_integ_prefix+':')
+        util.connect_window(
+            self.pb_IntegDetails, trg_w, parent=self,
+            device=self.ict_trig_integ_prefix, prefix=self.prefix)
         l_IntegDelay = QLabel('Delay: ', self)
         self.pydmspinbox_IntegDelay = PyDMSpinbox(
-            parent=self, init_channel=self.ict_trig_digi_prefix+':Delay-SP')
+            self, self.ict_trig_digi_prefix.substitute(propty='Delay-SP'))
         self.pydmspinbox_IntegDelay.showStepExponent = False
         self.pydmlabel_IntegDelay = PyDMLabel(
-            parent=self, init_channel=self.ict_trig_digi_prefix+':Delay-RB')
+            self, self.ict_trig_digi_prefix.substitute(propty='Delay-RB'))
         l_IntegDuration = QLabel('Delay: ', self)
         self.pydmspinbox_IntegDuration = PyDMSpinbox(
-            parent=self, init_channel=self.ict_trig_digi_prefix+':Duration-SP')
+            self, self.ict_trig_digi_prefix.substitute(propty='Duration-SP'))
         self.pydmspinbox_IntegDuration.showStepExponent = False
         self.pydmlabel_IntegDuration = PyDMLabel(
-            parent=self, init_channel=self.ict_trig_digi_prefix+':Duration-RB')
+            self, self.ict_trig_digi_prefix.substitute(propty='Duration-RB'))
         lay_Integ = QGridLayout()
         lay_Integ.addWidget(l_IntegSts, 0, 0)
         lay_Integ.addWidget(self.led_IntegSts, 0, 1, alignment=Qt.AlignLeft)
@@ -359,10 +366,10 @@ class _ICTSettings(SiriusDialog):
 
         l_thold = QLabel('Threshold [nC]: ', self)
         self.pydmspinbox_Threshold = PyDMSpinbox(
-            parent=self, init_channel=self.ict_prefix+':Threshold-SP')
+            self, self.ict_prefix.substitute(propty='Threshold-SP'))
         self.pydmspinbox_Threshold.showStepExponent = False
         self.pydmlabel_Threshold = PyDMLabel(
-            parent=self, init_channel=self.ict_prefix+':Threshold-RB')
+            self, self.ict_prefix.substitute(propty='Threshold-RB'))
         hlay_thold = QHBoxLayout()
         hlay_thold.addWidget(self.pydmspinbox_Threshold)
         hlay_thold.addWidget(self.pydmlabel_Threshold)
@@ -441,111 +448,111 @@ class _ICTCalibration(QWidget):
     def _setupMeasSettingsLayout(self):
         l_thold = QLabel('Charge Threshold [nC]: ', self)
         self.pydmspinbox_Threshold = PyDMSpinbox(
-            parent=self, init_channel=self.ict_prefix+':Threshold-SP')
+            self, self.ict_prefix.substitute(propty='Threshold-SP'))
         self.pydmspinbox_Threshold.showStepExponent = False
         self.pydmlabel_Threshold = PyDMLabel(
-            parent=self, init_channel=self.ict_prefix+':Threshold-RB')
+            self, self.ict_prefix.substitute(propty='Threshold-RB'))
         hlay_thold = QHBoxLayout()
         hlay_thold.addWidget(self.pydmspinbox_Threshold)
         hlay_thold.addWidget(self.pydmlabel_Threshold)
 
         l_hfreject = QLabel('High Frequency Rejection: ', self)
         self.pydmstatebutton_HFReject = PyDMStateButton(
-            parent=self, init_channel=self.ict_prefix+':HFReject-Sel')
+            self, self.ict_prefix.substitute(propty='HFReject-Sel'))
         self.pydmstatebutton_HFReject.shape = 1
         self.pydmlabel_HFReject = PyDMLabel(
-            parent=self, init_channel=self.ict_prefix+':HFReject-Sts')
+            self, self.ict_prefix.substitute(propty='HFReject-Sts'))
         hlay_hfreject = QHBoxLayout()
         hlay_hfreject.addWidget(self.pydmstatebutton_HFReject)
         hlay_hfreject.addWidget(self.pydmlabel_HFReject)
 
         l_2ndreaddy = QLabel('2nd Read Delay [s]: ', self)
         self.pydmspinbox_2ndReadDly = PyDMSpinbox(
-            parent=self, init_channel=self.ict_prefix+':2ndReadDly-SP')
+            self, self.ict_prefix.substitute(propty='2ndReadDly-SP'))
         self.pydmspinbox_2ndReadDly.showStepExponent = False
         self.pydmlabel_2ndReadDly = PyDMLabel(
-            parent=self, init_channel=self.ict_prefix+':2ndReadDly-RB')
+            self, self.ict_prefix.substitute(propty='2ndReadDly-RB'))
         hlay_2ndreaddy = QHBoxLayout()
         hlay_2ndreaddy.addWidget(self.pydmspinbox_2ndReadDly)
         hlay_2ndreaddy.addWidget(self.pydmlabel_2ndReadDly)
 
         l_samplecnt = QLabel('Sample Count: ', self)
         self.pydmspinbox_SampleCnt = PyDMSpinbox(
-            parent=self, init_channel=self.ict_prefix+':SampleCnt-SP')
+            self, self.ict_prefix.substitute(propty='SampleCnt-SP'))
         self.pydmspinbox_SampleCnt.showStepExponent = False
         self.pydmlabel_SampleCnt = PyDMLabel(
-            parent=self, init_channel=self.ict_prefix+':SampleCnt-RB')
+            self, self.ict_prefix.substitute(propty='SampleCnt-RB'))
         hlay_samplecnt = QHBoxLayout()
         hlay_samplecnt.addWidget(self.pydmspinbox_SampleCnt)
         hlay_samplecnt.addWidget(self.pydmlabel_SampleCnt)
 
         l_aperture = QLabel('Aperture [us]: ', self)
         self.pydmspinbox_Aperture = PyDMSpinbox(
-            parent=self, init_channel=self.ict_prefix+':Aperture-SP')
+            self, self.ict_prefix.substitute(propty='Aperture-SP'))
         self.pydmspinbox_Aperture.showStepExponent = False
         self.pydmlabel_Aperture = PyDMLabel(
-            parent=self, init_channel=self.ict_prefix+':Aperture-RB')
+            self, self.ict_prefix.substitute(propty='Aperture-RB'))
         hlay_aperture = QHBoxLayout()
         hlay_aperture.addWidget(self.pydmspinbox_Aperture)
         hlay_aperture.addWidget(self.pydmlabel_Aperture)
 
         l_samplerate = QLabel('Sample Rate [rdgs/s]: ', self)
         self.pydmspinbox_SampleRate = PyDMSpinbox(
-            parent=self, init_channel=self.ict_prefix+':SampleRate-SP')
+            self, self.ict_prefix.substitute(propty='SampleRate-SP'))
         self.pydmspinbox_SampleRate.showStepExponent = False
         self.pydmlabel_SampleRate = PyDMLabel(
-            parent=self, init_channel=self.ict_prefix+':SampleRate-RB')
+            self, self.ict_prefix.substitute(propty='SampleRate-RB'))
         hlay_samplerate = QHBoxLayout()
         hlay_samplerate.addWidget(self.pydmspinbox_SampleRate)
         hlay_samplerate.addWidget(self.pydmlabel_SampleRate)
 
         l_imped = QLabel('Impedance: ', self)
         self.pydmstatebutton_Imped = PyDMEnumComboBox(
-            parent=self, init_channel=self.ict_prefix+':Imped-Sel')
+            self, self.ict_prefix.substitute(propty='Imped-Sel'))
         self.pydmstatebutton_Imped.shape = 1
         self.pydmlabel_Imped = PyDMLabel(
-            parent=self, init_channel=self.ict_prefix+':Imped-Sts')
+            self, self.ict_prefix.substitute(propty='Imped-Sts'))
         hlay_imped = QHBoxLayout()
         hlay_imped.addWidget(self.pydmstatebutton_Imped)
         hlay_imped.addWidget(self.pydmlabel_Imped)
 
         l_bcmrange = QLabel('BCM Range [V]: ', self)
         self.pydmspinbox_BCMRange = PyDMSpinbox(
-            parent=self, init_channel=self.ict_prefix+':BCMRange-SP')
+            self, self.ict_prefix.substitute(propty='BCMRange-SP'))
         self.pydmspinbox_BCMRange.showStepExponent = False
 
         l_range = QLabel('Range: ', self)
         self.pydmenumcombobox_Range = PyDMEnumComboBox(
-            parent=self, init_channel=self.ict_prefix+':Range-Sel')
+            self, self.ict_prefix.substitute(propty='Range-Sel'))
         self.pydmlabel_Range = PyDMLabel(
-            parent=self, init_channel=self.ict_prefix+':Range-Sts')
+            self, self.ict_prefix.substitute(propty='Range-Sts'))
         hlay_range = QHBoxLayout()
         hlay_range.addWidget(self.pydmenumcombobox_Range)
         hlay_range.addWidget(self.pydmlabel_Range)
 
         l_calenbl = QLabel('Calibration Enable: ', self)
         self.pydmstatebutton_CalEnbl = PyDMStateButton(
-            parent=self, init_channel=self.ict_prefix+':CalEnbl-Sel')
+            self, self.ict_prefix.substitute(propty='CalEnbl-Sel'))
         self.pydmstatebutton_CalEnbl.shape = 1
         self.pydmlabel_CalEnbl = PyDMLabel(
-            parent=self, init_channel=self.ict_prefix+':CalEnbl-Sts')
+            self, self.ict_prefix.substitute(propty='CalEnbl-Sts'))
         hlay_calenbl = QHBoxLayout()
         hlay_calenbl.addWidget(self.pydmstatebutton_CalEnbl)
         hlay_calenbl.addWidget(self.pydmlabel_CalEnbl)
 
         l_calcharge = QLabel('Calibration Charge: ', self)
         self.pydmenumcombobox_CalCharge = PyDMEnumComboBox(
-            parent=self, init_channel=self.ict_prefix+':CalCharge-Sel')
+            self, self.ict_prefix.substitute(propty='CalCharge-Sel'))
         self.pydmlabel_CalCharge = PyDMLabel(
-            parent=self, init_channel=self.ict_prefix+':CalCharge-Sts')
+            self, self.ict_prefix.substitute(propty='CalCharge-Sts'))
         hlay_calcharge = QHBoxLayout()
         hlay_calcharge.addWidget(self.pydmenumcombobox_CalCharge)
         hlay_calcharge.addWidget(self.pydmlabel_CalCharge)
 
         l_download = QLabel('Download to hardware ', self)
         self.pydmpushbutton_Download = PyDMPushButton(
-            parent=self, init_channel=self.ict_prefix+':Download-Cmd',
-            label='', icon=qta.icon('fa5s.download'), pressValue=1)
+            self, label='', icon=qta.icon('fa5s.download'), pressValue=1,
+            init_channel=self.ict_prefix.substitute(propty='Download-Cmd'))
         self.pydmpushbutton_Download.setObjectName('download')
         self.pydmpushbutton_Download.setStyleSheet(
             "#download{min-width:25px; max-width:25px; icon-size:20px;}")
@@ -587,11 +594,11 @@ class _ICTCalibration(QWidget):
             #graph_rawread{min-width:36em;\nmin-height:28em;}""")
         graph_rawread.setLabels(left='Raw Readings', bottom='Index')
         graph_rawread.addChannel(
-            y_channel=self.ict_prefix+':RawPulse-Mon', name='RawPulse',
-            color='blue', lineWidth=2, lineStyle=Qt.SolidLine)
+            y_channel=self.ict_prefix.substitute(propty='RawPulse-Mon'),
+            name='RawPulse', color='blue', lineWidth=2, lineStyle=Qt.SolidLine)
         graph_rawread.addChannel(
-            y_channel=self.ict_prefix+':RawNoise-Mon', name='RawNoise',
-            color='red', lineWidth=2, lineStyle=Qt.SolidLine)
+            y_channel=self.ict_prefix.substitute(propty='RawNoise-Mon'),
+            name='RawNoise', color='red', lineWidth=2, lineStyle=Qt.SolidLine)
         leftAxis = graph_rawread.getAxis('left')
         leftAxis.setStyle(autoExpandTextSpace=False, tickTextWidth=25)
         self.curvePulse = graph_rawread.curveAtIndex(0)

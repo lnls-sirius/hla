@@ -23,12 +23,14 @@ class RFMainControl(SiriusMainWindow):
 
     def __init__(self, parent=None, prefix='', section=''):
         super().__init__(parent)
+        self.prefix = prefix
+        self.prefix += ('-' if prefix and not prefix.endswith('-') else '')
         self.section = section.upper()
         self.chs = SEC_2_CHANNELS[self.section]
         for group in ['Coupler', 'Cells']:
             key = group+' Limits PVs'
             for pv in self.chs['Cav Sts']['Temp'][key]:
-                channel = SiriusConnectionSignal(pv)
+                channel = SiriusConnectionSignal(self.prefix+pv)
                 channel.new_value_signal[float].connect(
                     self._update_temp_limits)
 
@@ -138,22 +140,25 @@ class RFMainControl(SiriusMainWindow):
         # # Emergency
         self.ld_emerg = QLabel('Emergency Stop', self, alignment=Qt.AlignRight)
         self.ld_emerg.setStyleSheet('min-width: 6.8em;')
-        self.led_emerg = SiriusLedAlert(self, self.chs['Emergency'])
+        self.led_emerg = SiriusLedAlert(
+            self, self.prefix+self.chs['Emergency'])
 
         # # Sirius Interlock
         self.ld_siriusintlk = QLabel(
             'Sirius Interlock', self, alignment=Qt.AlignRight)
-        self.led_siriusintlk = SiriusLedAlert(self, self.chs['Sirius Intlk'])
+        self.led_siriusintlk = SiriusLedAlert(
+            self, self.prefix+self.chs['Sirius Intlk'])
 
         # # LLRF Interlock
         self.ld_intlk = QLabel('LLRF Interlock', self, alignment=Qt.AlignRight)
-        self.led_intlk = SiriusLedAlert(self, self.chs['LLRF Intlk'])
+        self.led_intlk = SiriusLedAlert(
+            self, self.prefix+self.chs['LLRF Intlk'])
         self.pb_intlkdtls = QPushButton(qta.icon('fa5s.ellipsis-v'), '', self)
         self.pb_intlkdtls.setObjectName('dtls')
         self.pb_intlkdtls.setStyleSheet(
             '#dtls{min-width:18px;max-width:18px;icon-size:20px;}')
         connect_window(self.pb_intlkdtls, LLRFInterlockDetails, parent=self,
-                       section=self.section)
+                       section=self.section, prefix=self.prefix)
         hlay_intlksts = QHBoxLayout()
         hlay_intlksts.addWidget(self.led_intlk)
         hlay_intlksts.addWidget(self.pb_intlkdtls)
@@ -165,13 +170,13 @@ class RFMainControl(SiriusMainWindow):
         # # Status Cavity
         self.ld_cavsts = QLabel('Cavity', self, alignment=Qt.AlignRight)
         self.led_cavsts = PyDMLedMultiChannel(
-            self, {self.chs['Cav Sts']['Geral']: 1})
+            self, {self.prefix+self.chs['Cav Sts']['Geral']: 1})
         self.pb_cavdtls = QPushButton(qta.icon('fa5s.ellipsis-v'), '', self)
         self.pb_cavdtls.setObjectName('dtls')
         self.pb_cavdtls.setStyleSheet(
             '#dtls{min-width:18px;max-width:18px;icon-size:20px;}')
         connect_window(self.pb_cavdtls, CavityStatusDetails, parent=self,
-                       section=self.section)
+                       section=self.section, prefix=self.prefix)
         hlay_cavsts = QHBoxLayout()
         hlay_cavsts.addWidget(self.led_cavsts)
         hlay_cavsts.addWidget(self.pb_cavdtls)
@@ -179,13 +184,13 @@ class RFMainControl(SiriusMainWindow):
         # # Status Transmission Line
         self.ld_tlsts = QLabel('Transm. Line', self, alignment=Qt.AlignRight)
         self.led_tlsts = PyDMLedMultiChannel(
-            self, {self.chs['TL Sts']['Geral']: 1})
+            self, {self.prefix+self.chs['TL Sts']['Geral']: 1})
         self.pb_tldtls = QPushButton(qta.icon('fa5s.ellipsis-v'), '', self)
         self.pb_tldtls.setObjectName('dtls')
         self.pb_tldtls.setStyleSheet(
             '#dtls{min-width:18px;max-width:18px;icon-size:20px;}')
         connect_window(self.pb_tldtls, TransmLineStatusDetails, parent=self,
-                       section=self.section)
+                       section=self.section, prefix=self.prefix)
         hlay_tlsts = QHBoxLayout()
         hlay_tlsts.addWidget(self.led_tlsts)
         hlay_tlsts.addWidget(self.pb_tldtls)
@@ -198,7 +203,7 @@ class RFMainControl(SiriusMainWindow):
             'Reset Global', self, alignment=Qt.AlignRight)
         self.pb_globreset = SiriusPushButton(
             label='', icon=qta.icon('fa5s.sync'),
-            parent=self, init_channel=self.chs['Reset']['Global'])
+            parent=self, init_channel=self.prefix+self.chs['Reset']['Global'])
         self.pb_globreset.setObjectName('pb_globreset')
         self.pb_globreset.setStyleSheet(
             '#pb_globreset{min-width:25px; max-width:25px; icon-size:20px;}')
@@ -207,7 +212,7 @@ class RFMainControl(SiriusMainWindow):
         self.ld_llrfreset = QLabel('Reset LLRF', self, alignment=Qt.AlignRight)
         self.pb_llrfreset = SiriusPushButton(
             label='', icon=qta.icon('fa5s.sync'),
-            parent=self, init_channel=self.chs['Reset']['LLRF'])
+            parent=self, init_channel=self.prefix+self.chs['Reset']['LLRF'])
         self.pb_llrfreset.setObjectName('pb_llrfreset')
         self.pb_llrfreset.setStyleSheet(
             '#pb_llrfreset{min-width:25px; max-width:25px; icon-size:20px;}')
@@ -235,16 +240,20 @@ class RFMainControl(SiriusMainWindow):
     def _rfGenLayout(self):
         # On/Off
         self.ld_genenbl = QLabel('Enable', self, alignment=Qt.AlignCenter)
-        # self.bt_genenbl = PyDMStateButton(self, 'RF-Gen:GeneralRF-Sel')
-        self.lb_genenbl = SiriusLedState(self, 'RF-Gen:GeneralRF-Sts')
+        # self.bt_genenbl = PyDMStateButton(
+        #    self, self.prefix+'RF-Gen:GeneralRF-Sel')
+        self.lb_genenbl = SiriusLedState(
+            self, self.prefix+'RF-Gen:GeneralRF-Sts')
 
         # Frequência
         self.ld_genfreq = QLabel('Frequency', self, alignment=Qt.AlignCenter)
-        self.le_genfreq = PyDMLineEdit(self, 'RF-Gen:GeneralFreq-SP')
+        self.le_genfreq = PyDMLineEdit(
+            self, self.prefix+'RF-Gen:GeneralFreq-SP')
         self.le_genfreq.setStyleSheet('min-width:7em; max-width:7em;')
         self.le_genfreq.precisionFromPV = False
         self.le_genfreq.precision = 2
-        self.lb_genfreq = PyDMLabel(self, 'RF-Gen:GeneralFreq-RB')
+        self.lb_genfreq = PyDMLabel(
+            self, self.prefix+'RF-Gen:GeneralFreq-RB')
         self.lb_genfreq.setStyleSheet(
             'min-width:7em; max-width:7em; qproperty-alignment:AlignLeft;')
         self.lb_genfreq.precisionFromPV = False
@@ -253,8 +262,10 @@ class RFMainControl(SiriusMainWindow):
         # Phase Continuous State
         self.ld_genphscont = QLabel(
             'Phase Cont.', self, alignment=Qt.AlignCenter)
-        # self.bt_genphscont = PyDMStateButton(self, 'RF-Gen:FreqPhsCont-Sel')
-        self.lb_genphscont = SiriusLedState(self, 'RF-Gen:FreqPhsCont-Sts')
+        # self.bt_genphscont = PyDMStateButton(
+        #    self, self.prefix+'RF-Gen:FreqPhsCont-Sel')
+        self.lb_genphscont = SiriusLedState(
+            self, self.prefix+'RF-Gen:FreqPhsCont-Sts')
 
         lay = QVBoxLayout()
         lay.setAlignment(Qt.AlignCenter)
@@ -301,11 +312,13 @@ class RFMainControl(SiriusMainWindow):
 
         # LLRF
         # # Slow Loop Control
-        self.lb_slmode = PyDMLabel(self, self.chs['SL']['Mode'])
+        self.lb_slmode = PyDMLabel(self, self.prefix+self.chs['SL']['Mode'])
         self.led_slmode = PyDMLedMultiChannel(
-            self, {self.chs['SL']['Mode']: 0})
-        self.bt_slenbl = PyDMStateButton(self, self.chs['SL']['Enbl']+':S')
-        self.led_slenbl = SiriusLedState(self, self.chs['SL']['Enbl'])
+            self, {self.prefix+self.chs['SL']['Mode']: 0})
+        self.bt_slenbl = PyDMStateButton(
+            self, self.prefix+self.chs['SL']['Enbl']+':S')
+        self.led_slenbl = SiriusLedState(
+            self, self.prefix+self.chs['SL']['Enbl'])
 
         lay_over = QGridLayout()
         lay_over.setAlignment(Qt.AlignCenter)
@@ -324,23 +337,31 @@ class RFMainControl(SiriusMainWindow):
             'QComboBox{max-width: 3.8em; font-weight: bold;}')
         self.cb_amp.currentTextChanged.connect(
             self._handle_ampl_unit_visibility)
-        self.sb_amp1 = PyDMSpinbox(self, self.chs['SL']['ASet'][0]+'-SP')
+        self.sb_amp1 = PyDMSpinbox(
+            self, self.prefix+self.chs['SL']['ASet'][0]+'-SP')
         self.sb_amp1.showStepExponent = False
-        self.lb_amp1 = PyDMLabel(self, self.chs['SL']['ASet'][0]+'-RB')
-        self.sb_amp2 = PyDMSpinbox(self, self.chs['SL']['ASet'][1]+'-SP')
+        self.lb_amp1 = PyDMLabel(
+            self, self.prefix+self.chs['SL']['ASet'][0]+'-RB')
+        self.sb_amp2 = PyDMSpinbox(
+            self, self.prefix+self.chs['SL']['ASet'][1]+'-SP')
         self.sb_amp2.showStepExponent = False
         self.sb_amp2.setVisible(False)
-        self.lb_amp2 = PyDMLabel(self, self.chs['SL']['ASet'][1]+'-RB')
+        self.lb_amp2 = PyDMLabel(
+            self, self.prefix+self.chs['SL']['ASet'][1]+'-RB')
         self.lb_amp2.setVisible(False)
         self.cb_ampincrate = PyDMEnumComboBox(
-            self, self.chs['SL']['AInc']+':S')
-        self.lb_ampincrate = PyDMLabel(self, self.chs['SL']['AInc'])
-        self.sb_phs = PyDMSpinbox(self, self.chs['SL']['PSet']+':S')
+            self, self.prefix+self.chs['SL']['AInc']+':S')
+        self.lb_ampincrate = PyDMLabel(
+            self, self.prefix+self.chs['SL']['AInc'])
+        self.sb_phs = PyDMSpinbox(
+            self, self.prefix+self.chs['SL']['PSet']+':S')
         self.sb_phs.showStepExponent = False
-        self.lb_phs = PyDMLabel(self, self.chs['SL']['PSet'])
+        self.lb_phs = PyDMLabel(
+            self, self.prefix+self.chs['SL']['PSet'])
         self.cb_phsincrate = PyDMEnumComboBox(
-            self, self.chs['SL']['PInc']+':S')
-        self.lb_phsincrate = PyDMLabel(self, self.chs['SL']['PInc'])
+            self, self.prefix+self.chs['SL']['PInc']+':S')
+        self.lb_phsincrate = PyDMLabel(
+            self, self.prefix+self.chs['SL']['PInc'])
         lay_slctrl = QGridLayout()
         lay_slctrl.setHorizontalSpacing(9)
         lay_slctrl.setVerticalSpacing(9)
@@ -364,29 +385,29 @@ class RFMainControl(SiriusMainWindow):
         lay_slctrl.addWidget(self.cb_phsincrate, 2, 4, alignment=Qt.AlignRight)
         lay_slctrl.addWidget(self.lb_phsincrate, 2, 5, alignment=Qt.AlignLeft)
 
-        self.lb_iref = PyDMLabel(self, self.chs['SL']['IRef'])
+        self.lb_iref = PyDMLabel(self, self.prefix+self.chs['SL']['IRef'])
         self.lb_iref.showUnits = True
-        self.lb_iinp = PyDMLabel(self, self.chs['SL']['IInp'])
+        self.lb_iinp = PyDMLabel(self, self.prefix+self.chs['SL']['IInp'])
         self.lb_iinp.showUnits = True
-        self.lb_ierr = PyDMLabel(self, self.chs['SL']['IErr'])
+        self.lb_ierr = PyDMLabel(self, self.prefix+self.chs['SL']['IErr'])
         self.lb_ierr.showUnits = True
-        self.lb_qref = PyDMLabel(self, self.chs['SL']['QRef'])
+        self.lb_qref = PyDMLabel(self, self.prefix+self.chs['SL']['QRef'])
         self.lb_qref.showUnits = True
-        self.lb_qinp = PyDMLabel(self, self.chs['SL']['QInp'])
+        self.lb_qinp = PyDMLabel(self, self.prefix+self.chs['SL']['QInp'])
         self.lb_qinp.showUnits = True
-        self.lb_qerr = PyDMLabel(self, self.chs['SL']['QErr'])
+        self.lb_qerr = PyDMLabel(self, self.prefix+self.chs['SL']['QErr'])
         self.lb_qerr.showUnits = True
-        self.lb_ampref = PyDMLabel(self, self.chs['SL']['ARef'])
+        self.lb_ampref = PyDMLabel(self, self.prefix+self.chs['SL']['ARef'])
         self.lb_ampref.showUnits = True
-        self.lb_ampinp = PyDMLabel(self, self.chs['SL']['AInp'])
+        self.lb_ampinp = PyDMLabel(self, self.prefix+self.chs['SL']['AInp'])
         self.lb_ampinp.showUnits = True
-        self.lb_amperr = PyDMLabel(self, self.chs['SL']['AErr'])
+        self.lb_amperr = PyDMLabel(self, self.prefix+self.chs['SL']['AErr'])
         self.lb_amperr.showUnits = True
-        self.lb_phsref = PyDMLabel(self, self.chs['SL']['PRef'])
+        self.lb_phsref = PyDMLabel(self, self.prefix+self.chs['SL']['PRef'])
         self.lb_phsref.showUnits = True
-        self.lb_phsinp = PyDMLabel(self, self.chs['SL']['PInp'])
+        self.lb_phsinp = PyDMLabel(self, self.prefix+self.chs['SL']['PInp'])
         self.lb_phsinp.showUnits = True
-        self.lb_phserr = PyDMLabel(self, self.chs['SL']['PErr'])
+        self.lb_phserr = PyDMLabel(self, self.prefix+self.chs['SL']['PErr'])
         self.lb_phserr.showUnits = True
         lay_slmon = QGridLayout()
         lay_slmon.setHorizontalSpacing(9)
@@ -439,16 +460,18 @@ class RFMainControl(SiriusMainWindow):
         # # Tuning
         # # # Tuning settings
         lb_autotun = QLabel('Auto Tuning: ', self, alignment=Qt.AlignRight)
-        self.bt_autotun = PyDMStateButton(self, self.chs['Tun']['Auto']+':S')
-        self.lb_autotun = SiriusLedState(self, self.chs['Tun']['Auto'])
+        self.bt_autotun = PyDMStateButton(
+            self, self.prefix+self.chs['Tun']['Auto']+':S')
+        self.lb_autotun = SiriusLedState(
+            self, self.prefix+self.chs['Tun']['Auto'])
         lb_dtune = QLabel('DTune: ', self, alignment=Qt.AlignRight)
         self.sb_dtune = PyDMSpinbox(
-            self, self.chs['Tun']['DTune'].replace('RB', 'SP'))
+            self, self.prefix+self.chs['Tun']['DTune'].replace('RB', 'SP'))
         self.sb_dtune.showStepExponent = False
-        self.lb_dtune = PyDMLabel(self, self.chs['Tun']['DTune'])
+        self.lb_dtune = PyDMLabel(self, self.prefix+self.chs['Tun']['DTune'])
         self.lb_dtune.showUnits = True
         lb_dphase = QLabel('Dephase: ', self, alignment=Qt.AlignRight)
-        self.lb_dphase = PyDMLabel(self, self.chs['Tun']['DPhase'])
+        self.lb_dphase = PyDMLabel(self, self.prefix+self.chs['Tun']['DPhase'])
         self.lb_dphase.showUnits = True
         lay_tunset = QGridLayout()
         lay_tunset.setAlignment(Qt.AlignTop | Qt.AlignHCenter)
@@ -472,36 +495,36 @@ class RFMainControl(SiriusMainWindow):
         lb_fflat = QLabel(
             '<h3> • Field Flatness</h3>', self, alignment=Qt.AlignLeft)
         lb_ffsts = QLabel('Acting: ', self, alignment=Qt.AlignRight)
-        self.lb_ffsts = SiriusLedState(self, pvs['Sts'])
+        self.lb_ffsts = SiriusLedState(self, self.prefix+pvs['Sts'])
         lb_ffen = QLabel('Enable: ', self, alignment=Qt.AlignRight)
-        self.bt_ffen = PyDMStateButton(self, pvs['Auto']+':S')
-        self.lb_ffen = SiriusLedState(self, pvs['Auto'])
+        self.bt_ffen = PyDMStateButton(self, self.prefix+pvs['Auto']+':S')
+        self.lb_ffen = SiriusLedState(self, self.prefix+pvs['Auto'])
         lb_ffpos = QLabel('Position: ', self, alignment=Qt.AlignRight)
-        self.bt_ffpos = PyDMStateButton(self, pvs['Pos']+':S')
-        self.lb_ffpos = SiriusLedState(self, pvs['Pos'])
+        self.bt_ffpos = PyDMStateButton(self, self.prefix+pvs['Pos']+':S')
+        self.lb_ffpos = SiriusLedState(self, self.prefix+pvs['Pos'])
         lb_ffg1 = QLabel('Gain Cell 2: ', self, alignment=Qt.AlignRight)
         lb_ffg2 = QLabel(f'Gain Cell {lb2:s}: ', self, alignment=Qt.AlignRight)
-        self.sb_ffg1 = PyDMSpinbox(self, pvs['Gain1']+':S')
-        self.sb_ffg2 = PyDMSpinbox(self, pvs['Gain2']+':S')
+        self.sb_ffg1 = PyDMSpinbox(self, self.prefix+pvs['Gain1']+':S')
+        self.sb_ffg2 = PyDMSpinbox(self, self.prefix+pvs['Gain2']+':S')
         self.sb_ffg1.showStepExponent = False
         self.sb_ffg2.showStepExponent = False
-        self.lb_ffg1 = PyDMLabel(self, pvs['Gain1'])
-        self.lb_ffg2 = PyDMLabel(self, pvs['Gain2'])
+        self.lb_ffg1 = PyDMLabel(self, self.prefix+pvs['Gain1'])
+        self.lb_ffg2 = PyDMLabel(self, self.prefix+pvs['Gain2'])
         self.lb_ffg1.showUnits = True
         self.lb_ffg2.showUnits = True
         lb_ffdb = QLabel('DeadBand: ', self, alignment=Qt.AlignRight)
-        self.sb_ffdb = PyDMSpinbox(self, pvs['Deadband']+':S')
+        self.sb_ffdb = PyDMSpinbox(self, self.prefix+pvs['Deadband']+':S')
         self.sb_ffdb.showStepExponent = False
-        self.lb_ffdb = PyDMLabel(self, pvs['Deadband'])
+        self.lb_ffdb = PyDMLabel(self, self.prefix+pvs['Deadband'])
         self.lb_ffdb.showUnits = True
         lb_ffcell1 = QLabel('Cell 2: ', self, alignment=Qt.AlignRight)
-        self.lb_ffcell1 = PyDMLabel(self, pvs['Cell1'])
+        self.lb_ffcell1 = PyDMLabel(self, self.prefix+pvs['Cell1'])
         self.lb_ffcell1.showUnits = True
         lb_ffcell2 = QLabel(f'Cell {lb2:s}: ', self, alignment=Qt.AlignRight)
-        self.lb_ffcell2 = PyDMLabel(self, pvs['Cell2'])
+        self.lb_ffcell2 = PyDMLabel(self, self.prefix+pvs['Cell2'])
         self.lb_ffcell2.showUnits = True
         lb_fferr = QLabel('Error: ', self, alignment=Qt.AlignRight)
-        self.lb_fferr = PyDMLabel(self, pvs['Err'])
+        self.lb_fferr = PyDMLabel(self, self.prefix+pvs['Err'])
         self.lb_fferr.showUnits = True
         lay_fflat = QGridLayout()
         lay_fflat.setAlignment(Qt.AlignTop | Qt.AlignHCenter)
@@ -536,19 +559,23 @@ class RFMainControl(SiriusMainWindow):
         lb_plg2 = QLabel('Plunger 2')
         lb_down = QLabel('Down')
         lb_up = QLabel('Up')
-        self.led_Plg1_Dn = PyDMLed(self, self.chs['Tun']['Pl1Down'])
+        self.led_Plg1_Dn = PyDMLed(
+            self, self.prefix+self.chs['Tun']['Pl1Down'])
         self.led_Plg1_Dn.offColor = QColor(64, 64, 64)
         self.led_Plg1_Dn.onColor = QColor('blue')
         self.led_Plg1_Dn.shape = PyDMLed.ShapeMap.Square
-        self.led_Plg1_Up = PyDMLed(self, self.chs['Tun']['Pl1Up'])
+        self.led_Plg1_Up = PyDMLed(
+            self, self.prefix+self.chs['Tun']['Pl1Up'])
         self.led_Plg1_Up.offColor = QColor(64, 64, 64)
         self.led_Plg1_Up.onColor = QColor('blue')
         self.led_Plg1_Up.shape = PyDMLed.ShapeMap.Square
-        self.led_Plg2_Dn = PyDMLed(self, self.chs['Tun']['Pl2Down'])
+        self.led_Plg2_Dn = PyDMLed(
+            self, self.prefix+self.chs['Tun']['Pl2Down'])
         self.led_Plg2_Dn.offColor = QColor(64, 64, 64)
         self.led_Plg2_Dn.onColor = QColor('blue')
         self.led_Plg2_Dn.shape = PyDMLed.ShapeMap.Square
-        self.led_Plg2_Up = PyDMLed(self, self.chs['Tun']['Pl2Up'])
+        self.led_Plg2_Up = PyDMLed(
+            self, self.prefix+self.chs['Tun']['Pl2Up'])
         self.led_Plg2_Up.offColor = QColor(64, 64, 64)
         self.led_Plg2_Up.onColor = QColor('blue')
         self.led_Plg2_Up.shape = PyDMLed.ShapeMap.Square
@@ -579,10 +606,10 @@ class RFMainControl(SiriusMainWindow):
         self.graph_plunmotors.timeSpan = 1800
         self.graph_plunmotors.maxRedrawRate = 2
         self.graph_plunmotors.addYChannel(
-            y_channel=self.chs['Tun']['PlM1Curr'], color='blue',
+            y_channel=self.prefix+self.chs['Tun']['PlM1Curr'], color='blue',
             name='Motor 1', lineStyle=Qt.SolidLine, lineWidth=1)
         self.graph_plunmotors.addYChannel(
-            y_channel=self.chs['Tun']['PlM2Curr'], color='red',
+            y_channel=self.prefix+self.chs['Tun']['PlM2Curr'], color='red',
             name='Motor 2', lineStyle=Qt.SolidLine, lineWidth=1)
 
         wid_tun = QWidget()
@@ -627,44 +654,58 @@ class RFMainControl(SiriusMainWindow):
     def _rampControlLayout(self):
         ctrls_label = QLabel('<h3> • Controls</h3>', self,
                              alignment=Qt.AlignLeft)
-        self.bt_RmpEnbl = PyDMStateButton(self, 'BR-RF-DLLRF-01:RmpEnbl-Sel')
-        self.lb_RmpEnbl = SiriusLedState(self, 'BR-RF-DLLRF-01:RmpEnbl-Sts')
+        self.bt_RmpEnbl = PyDMStateButton(
+            self, self.prefix+'BR-RF-DLLRF-01:RmpEnbl-Sel')
+        self.lb_RmpEnbl = SiriusLedState(
+            self, self.prefix+'BR-RF-DLLRF-01:RmpEnbl-Sts')
 
         self.led_RmpReady = PyDMLed(
-            parent=self, init_channel='BR-RF-DLLRF-01:RmpReady-Mon')
+            self, self.prefix+'BR-RF-DLLRF-01:RmpReady-Mon')
         self.led_RmpReady.onColor = PyDMLed.LightGreen
         self.led_RmpReady.offColor = PyDMLed.Red
 
         self.led_RmpTrig = PyDMLed(
-            parent=self, init_channel='BR-RF-DLLRF-01:5HZTRIG')
+            self, self.prefix+'BR-RF-DLLRF-01:5HZTRIG')
         self.led_RmpTrig.onColor = PyDMLed.LightGreen
         self.led_RmpTrig.offColor = PyDMLed.Red
 
-        self.cb_RmpIncTs = PyDMSpinbox(self, 'BR-RF-DLLRF-01:RmpIncTs-SP')
+        self.cb_RmpIncTs = PyDMSpinbox(
+            self, self.prefix+'BR-RF-DLLRF-01:RmpIncTs-SP')
         self.cb_RmpIncTs.showStepExponent = False
-        self.lb_RmpIncTs = PyDMLabel(self, 'BR-RF-DLLRF-01:RmpIncTs-RB')
+        self.lb_RmpIncTs = PyDMLabel(
+            self, self.prefix+'BR-RF-DLLRF-01:RmpIncTs-RB')
         self.lb_RmpIncTs.showUnits = True
 
-        self.sb_RmpTs1 = PyDMSpinbox(self, 'BR-RF-DLLRF-01:RmpTs1-SP')
+        self.sb_RmpTs1 = PyDMSpinbox(
+            self, self.prefix+'BR-RF-DLLRF-01:RmpTs1-SP')
         self.sb_RmpTs1.showStepExponent = False
-        self.lb_RmpTs1 = PyDMLabel(self, 'BR-RF-DLLRF-01:RmpTs1-RB')
+        self.lb_RmpTs1 = PyDMLabel(
+            self, self.prefix+'BR-RF-DLLRF-01:RmpTs1-RB')
         self.lb_RmpTs1.showUnits = True
-        self.sb_RmpTs2 = PyDMSpinbox(self, 'BR-RF-DLLRF-01:RmpTs2-SP')
+        self.sb_RmpTs2 = PyDMSpinbox(
+            self, self.prefix+'BR-RF-DLLRF-01:RmpTs2-SP')
         self.sb_RmpTs2.showStepExponent = False
-        self.lb_RmpTs2 = PyDMLabel(self, 'BR-RF-DLLRF-01:RmpTs2-RB')
+        self.lb_RmpTs2 = PyDMLabel(
+            self, self.prefix+'BR-RF-DLLRF-01:RmpTs2-RB')
         self.lb_RmpTs2.showUnits = True
-        self.sb_RmpTs3 = PyDMSpinbox(self, 'BR-RF-DLLRF-01:RmpTs3-SP')
+        self.sb_RmpTs3 = PyDMSpinbox(
+            self, self.prefix+'BR-RF-DLLRF-01:RmpTs3-SP')
         self.sb_RmpTs3.showStepExponent = False
-        self.lb_RmpTs3 = PyDMLabel(self, 'BR-RF-DLLRF-01:RmpTs3-RB')
+        self.lb_RmpTs3 = PyDMLabel(
+            self, self.prefix+'BR-RF-DLLRF-01:RmpTs3-RB')
         self.lb_RmpTs3.showUnits = True
-        self.sb_RmpTs4 = PyDMSpinbox(self, 'BR-RF-DLLRF-01:RmpTs4-SP')
+        self.sb_RmpTs4 = PyDMSpinbox(
+            self, self.prefix+'BR-RF-DLLRF-01:RmpTs4-SP')
         self.sb_RmpTs4.showStepExponent = False
-        self.lb_RmpTs4 = PyDMLabel(self, 'BR-RF-DLLRF-01:RmpTs4-RB')
+        self.lb_RmpTs4 = PyDMLabel(
+            self, self.prefix+'BR-RF-DLLRF-01:RmpTs4-RB')
         self.lb_RmpTs4.showUnits = True
 
-        self.sb_RmpPhsTop = PyDMSpinbox(self, 'BR-RF-DLLRF-01:RmpPhsTop-SP')
+        self.sb_RmpPhsTop = PyDMSpinbox(
+            self, self.prefix+'BR-RF-DLLRF-01:RmpPhsTop-SP')
         self.sb_RmpPhsTop.showStepExponent = False
-        self.lb_RmpPhsTop = PyDMLabel(self, 'BR-RF-DLLRF-01:RmpPhsTop-RB')
+        self.lb_RmpPhsTop = PyDMLabel(
+            self, self.prefix+'BR-RF-DLLRF-01:RmpPhsTop-RB')
         self.lb_RmpPhsTop.showUnits = True
         self.ld_RmpPhsTop = QLabel('Amplitude', self, alignment=Qt.AlignRight)
         self.cb_RmpPhsTop = QComboBox()
@@ -677,21 +718,23 @@ class RFMainControl(SiriusMainWindow):
         lay_RmpPhsTopDesc.addWidget(self.cb_RmpPhsTop)
         lay_RmpPhsTopDesc.setAlignment(Qt.AlignRight)
         self.le_RmpVoltTop1 = PyDMLineEdit(
-            self, 'BR-RF-DLLRF-01:mV:RAMP:AMP:TOP-SP')
+            self, self.prefix+'BR-RF-DLLRF-01:mV:RAMP:AMP:TOP-SP')
         self.lb_RmpVoltTop1 = PyDMLabel(
-            self, 'BR-RF-DLLRF-01:mV:RAMP:AMP:TOP-RB')
+            self, self.prefix+'BR-RF-DLLRF-01:mV:RAMP:AMP:TOP-RB')
         self.lb_RmpVoltTop1.showUnits = True
         self.le_RmpVoltTop2 = PyDMLineEdit(
-            self, 'RA-RaBO01:RF-LLRF:RmpAmpVCavTop-SP')
+            self, self.prefix+'RA-RaBO01:RF-LLRF:RmpAmpVCavTop-SP')
         self.le_RmpVoltTop2.setVisible(False)
         self.lb_RmpVoltTop2 = PyDMLabel(
-            self, 'RA-RaBO01:RF-LLRF:RmpAmpVCavTop-RB')
+            self, self.prefix+'RA-RaBO01:RF-LLRF:RmpAmpVCavTop-RB')
         self.lb_RmpVoltTop2.setVisible(False)
         self.lb_RmpVoltTop2.showUnits = True
 
-        self.sb_RmpPhsBot = PyDMSpinbox(self, 'BR-RF-DLLRF-01:RmpPhsBot-SP')
+        self.sb_RmpPhsBot = PyDMSpinbox(
+            self, self.prefix+'BR-RF-DLLRF-01:RmpPhsBot-SP')
         self.sb_RmpPhsBot.showStepExponent = False
-        self.lb_RmpPhsBot = PyDMLabel(self, 'BR-RF-DLLRF-01:RmpPhsBot-RB')
+        self.lb_RmpPhsBot = PyDMLabel(
+            self, self.prefix+'BR-RF-DLLRF-01:RmpPhsBot-RB')
         self.lb_RmpPhsBot.showUnits = True
         self.ld_RmpPhsBot = QLabel('Amplitude', self, alignment=Qt.AlignRight)
         self.cb_RmpPhsBot = QComboBox()
@@ -704,15 +747,15 @@ class RFMainControl(SiriusMainWindow):
         lay_RmpPhsBotDesc.addWidget(self.cb_RmpPhsBot)
         lay_RmpPhsBotDesc.setAlignment(Qt.AlignRight)
         self.le_RmpVoltBot1 = PyDMLineEdit(
-            self, 'BR-RF-DLLRF-01:mV:RAMP:AMP:BOT-SP')
+            self, self.prefix+'BR-RF-DLLRF-01:mV:RAMP:AMP:BOT-SP')
         self.lb_RmpVoltBot1 = PyDMLabel(
-            self, 'BR-RF-DLLRF-01:mV:RAMP:AMP:BOT-RB')
+            self, self.prefix+'BR-RF-DLLRF-01:mV:RAMP:AMP:BOT-RB')
         self.lb_RmpVoltBot1.showUnits = True
         self.le_RmpVoltBot2 = PyDMLineEdit(
-            self, 'RA-RaBO01:RF-LLRF:RmpAmpVCavBot-SP')
+            self, self.prefix+'RA-RaBO01:RF-LLRF:RmpAmpVCavBot-SP')
         self.le_RmpVoltBot2.setVisible(False)
         self.lb_RmpVoltBot2 = PyDMLabel(
-            self, 'RA-RaBO01:RF-LLRF:RmpAmpVCavBot-RB')
+            self, self.prefix+'RA-RaBO01:RF-LLRF:RmpAmpVCavBot-RB')
         self.lb_RmpVoltBot2.setVisible(False)
         self.lb_RmpVoltBot2.showUnits = True
 
@@ -797,8 +840,8 @@ class RFMainControl(SiriusMainWindow):
         self.ramp_graph.plotItem.getAxis('bottom').setStyle(tickTextOffset=15)
         self.ramp_graph.plotItem.getAxis('left').setStyle(tickTextOffset=5)
         self.ramp_graph.addChannel(
-            y_channel='RA-RF:PowerSensor1:TracData-Mon',
-            x_channel='RA-RF:PowerSensor1:TimeAxis-Mon',
+            y_channel=self.prefix+'RA-RF:PowerSensor1:TracData-Mon',
+            x_channel=self.prefix+'RA-RF:PowerSensor1:TimeAxis-Mon',
             redraw_mode=2, name='Power [W]', color=QColor('blue'))
         self.curve_PwrMtr = self.ramp_graph.curveAtIndex(0)
         self.rb_PwrMtr = QRadioButton('Power Meter Signal', self)
@@ -806,15 +849,15 @@ class RFMainControl(SiriusMainWindow):
         self.rb_PwrMtr.toggled.connect(
             _part(self._handle_rmpwfm_visibility, 0))
         self.ramp_graph.addChannel(
-            y_channel='BR-RF-DLLRF-01:VCavRampWf.AVAL',
-            x_channel='BR-RF-DLLRF-01:DiagWf32Scale.AVAL',
+            y_channel=self.prefix+'BR-RF-DLLRF-01:VCavRampWf.AVAL',
+            x_channel=self.prefix+'BR-RF-DLLRF-01:DiagWf32Scale.AVAL',
             redraw_mode=2, name='VGav kV', color=QColor('blue'))
         self.curve_VGav = self.ramp_graph.curveAtIndex(1)
         self.rb_VGav = QRadioButton('VGav [kV]', self)
         self.rb_VGav.toggled.connect(_part(self._handle_rmpwfm_visibility, 1))
         self.ramp_graph.addChannel(
-            y_channel='BR-RF-DLLRF-01:VCavRampWf:W.AVAL',
-            x_channel='BR-RF-DLLRF-01:DiagWf32Scale.AVAL',
+            y_channel=self.prefix+'BR-RF-DLLRF-01:VCavRampWf:W.AVAL',
+            x_channel=self.prefix+'BR-RF-DLLRF-01:DiagWf32Scale.AVAL',
             redraw_mode=2, name='Power [W]', color=QColor('blue'))
         self.curve_Pwr = self.ramp_graph.curveAtIndex(2)
         self.rb_Pwr = QRadioButton('Power [W]', self)
@@ -830,28 +873,36 @@ class RFMainControl(SiriusMainWindow):
         self.lb_VGapDesc = QLabel(
             '<h4>Gap Voltage:</h4>', self, alignment=Qt.AlignCenter)
 
-        self.lb_C3PwrBot = PyDMLabel(self, 'BO-05D:RF-P5Cav:Cell3PwrBot-Mon')
+        self.lb_C3PwrBot = PyDMLabel(
+            self, self.prefix+'BO-05D:RF-P5Cav:Cell3PwrBot-Mon')
         self.lb_C3PwrBot.showUnits = True
-        self.lb_PwrFwdBot = PyDMLabel(self, 'BO-05D:RF-P5Cav:PwrFwdBot-Mon')
+        self.lb_PwrFwdBot = PyDMLabel(
+            self, self.prefix+'BO-05D:RF-P5Cav:PwrFwdBot-Mon')
         self.lb_PwrFwdBot.showUnits = True
-        self.lb_PwrRevBot = PyDMLabel(self, 'BO-05D:RF-P5Cav:PwrRevBot-Mon')
+        self.lb_PwrRevBot = PyDMLabel(
+            self, self.prefix+'BO-05D:RF-P5Cav:PwrRevBot-Mon')
         self.lb_PwrRevBot.showUnits = True
-        self.lb_C3PhsBot = PyDMLabel(self, 'BR-RF-DLLRF-01:BOT:CELL3:PHS')
+        self.lb_C3PhsBot = PyDMLabel(
+            self, self.prefix+'BR-RF-DLLRF-01:BOT:CELL3:PHS')
         self.lb_C3PhsBot.showUnits = True
         self.lb_CavVGapBot = SiriusLabel(
-            self, 'BO-05D:RF-P5Cav:RmpAmpVCavBot-Mon')
+            self, self.prefix+'BO-05D:RF-P5Cav:RmpAmpVCavBot-Mon')
         self.lb_CavVGapBot.showUnits = True
 
-        self.lb_C3PwrTop = PyDMLabel(self, 'BO-05D:RF-P5Cav:Cell3PwrTop-Mon')
+        self.lb_C3PwrTop = PyDMLabel(
+            self, self.prefix+'BO-05D:RF-P5Cav:Cell3PwrTop-Mon')
         self.lb_C3PwrTop.showUnits = True
-        self.lb_PwrFwdTop = PyDMLabel(self, 'BO-05D:RF-P5Cav:PwrFwdTop-Mon')
+        self.lb_PwrFwdTop = PyDMLabel(
+            self, self.prefix+'BO-05D:RF-P5Cav:PwrFwdTop-Mon')
         self.lb_PwrFwdTop.showUnits = True
-        self.lb_PwrRevTop = PyDMLabel(self, 'BO-05D:RF-P5Cav:PwrRevTop-Mon')
+        self.lb_PwrRevTop = PyDMLabel(
+            self, self.prefix+'BO-05D:RF-P5Cav:PwrRevTop-Mon')
         self.lb_PwrRevTop.showUnits = True
-        self.lb_C3PhsTop = PyDMLabel(self, 'BR-RF-DLLRF-01:TOP:CELL3:PHS')
+        self.lb_C3PhsTop = PyDMLabel(
+            self, self.prefix+'BR-RF-DLLRF-01:TOP:CELL3:PHS')
         self.lb_C3PhsTop.showUnits = True
         self.lb_CavVGapTop = SiriusLabel(
-            self, 'BO-05D:RF-P5Cav:RmpAmpVCavTop-Mon')
+            self, self.prefix+'BO-05D:RF-P5Cav:RmpAmpVCavTop-Mon')
         self.lb_CavVGapTop.showUnits = True
 
         lay = QGridLayout()
@@ -887,34 +938,38 @@ class RFMainControl(SiriusMainWindow):
         return lay
 
     def _autoStartLayout(self):
-        self.bt_autostart = PyDMStateButton(self, 'BR-RF-DLLRF-01:AUTOSTART:S')
-        self.led_autostart = SiriusLedState(self, 'BR-RF-DLLRF-01:AUTOSTART')
+        self.bt_autostart = PyDMStateButton(
+            self, self.prefix+'BR-RF-DLLRF-01:AUTOSTART:S')
+        self.led_autostart = SiriusLedState(
+            self, self.prefix+'BR-RF-DLLRF-01:AUTOSTART')
         hl_autostart = QHBoxLayout()
         hl_autostart.setAlignment(Qt.AlignLeft)
         hl_autostart.addWidget(self.bt_autostart)
         hl_autostart.addWidget(self.led_autostart)
 
-        self.cb_comstart = PyDMEnumComboBox(self, 'BR-RF-DLLRF-01:COMMSTART:S')
+        self.cb_comstart = PyDMEnumComboBox(
+            self, self.prefix+'BR-RF-DLLRF-01:COMMSTART:S')
         self.cb_comstart.setStyleSheet('min-width: 15em; max-width: 15em;')
 
-        self.lb_statestart = PyDMLabel(self, 'BR-RF-DLLRF-01:STATESTART')
+        self.lb_statestart = PyDMLabel(
+            self, self.prefix+'BR-RF-DLLRF-01:STATESTART')
         self.lb_statestart.setStyleSheet(
             'qproperty-alignment: AlignLeft; min-width:15em; max-width:15em;')
 
         self.led_startok = PyDMLedMultiChannel(
-            self, {'BR-RF-DLLRF-01:EPS': 0,
-                   'BR-RF-DLLRF-01:FIM': 0,
-                   'BR-RF-DLLRF-01:TXREADY': 1,
-                   'BR-RF-DLLRF-01:FASTILK': 0})
+            self, {self.prefix+'BR-RF-DLLRF-01:EPS': 0,
+                   self.prefix+'BR-RF-DLLRF-01:FIM': 0,
+                   self.prefix+'BR-RF-DLLRF-01:TXREADY': 1,
+                   self.prefix+'BR-RF-DLLRF-01:FASTILK': 0})
 
         self.led_tuneok = PyDMLedMultiChannel(
-            self, {'BR-RF-DLLRF-01:TUNE:FWDMIN': 1})
+            self, {self.prefix+'BR-RF-DLLRF-01:TUNE:FWDMIN': 1})
 
         self.led_closeloopok = PyDMLedMultiChannel(
-            self, {'BR-RF-DLLRF-01:SL:FWDMIN': 1,
-                   'BR-RF-DLLRF-01:FL:FWDMIN': 1,
-                   'BR-RF-DLLRF-01:AL:FWDMIN': 1,
-                   'BR-RF-DLLRF-01:PL:FWDMIN': 1})
+            self, {self.prefix+'BR-RF-DLLRF-01:SL:FWDMIN': 1,
+                   self.prefix+'BR-RF-DLLRF-01:FL:FWDMIN': 1,
+                   self.prefix+'BR-RF-DLLRF-01:AL:FWDMIN': 1,
+                   self.prefix+'BR-RF-DLLRF-01:PL:FWDMIN': 1})
 
         lay = QFormLayout()
         lay.setLabelAlignment(Qt.AlignRight)
@@ -980,12 +1035,12 @@ class RFMainControl(SiriusMainWindow):
                 'min-height: 1.5em; color:'+color+'; max-width: 8em;'
                 'qproperty-alignment: AlignCenter;')
 
-            lb_dbmpwr = PyDMLabel(self, dbch)
+            lb_dbmpwr = PyDMLabel(self, self.prefix+dbch)
             lb_dbmpwr.showUnits = True
             lb_dbmpwr.setVisible(False)
             self._pm_dBm_labels.add(lb_dbmpwr)
 
-            lb_wpwr = PyDMLabel(self, wch)
+            lb_wpwr = PyDMLabel(self, self.prefix+wch)
             lb_wpwr.showUnits = True
             self._pm_W_labels.add(lb_wpwr)
 
@@ -996,11 +1051,11 @@ class RFMainControl(SiriusMainWindow):
 
             # Graph
             self.pwr_mon_graph.addYChannel(
-                y_channel=dbch, name=name+' dBm', color=color,
+                y_channel=self.prefix+dbch, name=name+' dBm', color=color,
                 lineStyle=Qt.SolidLine, lineWidth=1)
             self.curves[name+' dBm'] = self.pwr_mon_graph.curveAtIndex(2*idx)
             self.pwr_mon_graph.addYChannel(
-                y_channel=wch, name=name+' W', color=color,
+                y_channel=self.prefix+wch, name=name+' W', color=color,
                 lineStyle=Qt.SolidLine, lineWidth=1)
             self.curves[name+' W'] = \
                 self.pwr_mon_graph.curveAtIndex(2*idx+1)
@@ -1010,7 +1065,8 @@ class RFMainControl(SiriusMainWindow):
                 self.curves[name+' dBm'].setVisible(False)
 
             lb_CavPhs = QLabel('Phase', self, alignment=Qt.AlignCenter)
-            self.lb_CavPhs = PyDMLabel(self, 'BR-RF-DLLRF-01:CAV:PHS')
+            self.lb_CavPhs = PyDMLabel(
+                self, self.prefix+'BR-RF-DLLRF-01:CAV:PHS')
             self.lb_CavPhs.showUnits = True
             lay_vals.addWidget(lb_CavPhs, 5, 1, alignment=Qt.AlignCenter)
             lay_vals.addWidget(self.lb_CavPhs, 5, 2)
@@ -1025,7 +1081,7 @@ class RFMainControl(SiriusMainWindow):
         self.ld_CavVGap = QLabel(
             'Gap Voltage:', self, alignment=Qt.AlignCenter)
         self.ld_CavVGap.setStyleSheet('QLabel{font-size: 15pt;}')
-        self.lb_CavVGap = SiriusLabel(self, self.chs['CavVGap'])
+        self.lb_CavVGap = SiriusLabel(self, self.prefix+self.chs['CavVGap'])
         self.lb_CavVGap.setStyleSheet('QLabel{font-size: 20pt;}')
 
         self.lb_CavVGap.showUnits = True
@@ -1090,7 +1146,7 @@ class RFMainControl(SiriusMainWindow):
 
         for idx in range(len(self.chs['Cav Sts']['Temp']['Cells'])):
             cid = 'Cell ' + str(idx + 1)
-            ch = self.chs['Cav Sts']['Temp']['Cells'][idx][0]
+            ch = self.prefix+self.chs['Cav Sts']['Temp']['Cells'][idx][0]
             color = self.chs['Cav Sts']['Temp']['Cells'][idx][1]
 
             self.tempcell_graph.addYChannel(
@@ -1130,7 +1186,7 @@ class RFMainControl(SiriusMainWindow):
         self.tempcoup_graph.maxRedrawRate = 2
 
         self.tempcoup_graph.addYChannel(
-            y_channel=self.chs['Cav Sts']['Temp']['Coupler'][0],
+            y_channel=self.prefix+self.chs['Cav Sts']['Temp']['Coupler'][0],
             color=self.chs['Cav Sts']['Temp']['Coupler'][1],
             name='Coupler', lineStyle=Qt.SolidLine, lineWidth=1)
         self.curves['Coupler'] = self.tempcoup_graph.curveAtIndex(0)
@@ -1156,9 +1212,9 @@ class RFMainControl(SiriusMainWindow):
         lb_tempcirc = QLabel('<h3> • Circulator</h3>', self)
         lims_circ = self.chs['TL Sts']['Circ Limits']
         self.led_tempcircok = PyDMLedMultiChannel(
-            self, {self.chs['TL Sts']['Circ TIn']: {
+            self, {self.prefix+self.chs['TL Sts']['Circ TIn']: {
                     'comp': 'wt', 'value': lims_circ},
-                   self.chs['TL Sts']['Circ TOut']: {
+                   self.prefix+self.chs['TL Sts']['Circ TOut']: {
                     'comp': 'wt', 'value': lims_circ}})
         hbox_tempcirc_state = QHBoxLayout()
         hbox_tempcirc_state.addWidget(lb_tempcirc, alignment=Qt.AlignLeft)
@@ -1175,11 +1231,13 @@ class RFMainControl(SiriusMainWindow):
         self.tempcirc_graph.timeSpan = 1800
         self.tempcirc_graph.maxRedrawRate = 1
         self.tempcirc_graph.addYChannel(
-            y_channel=self.chs['TL Sts']['Circ TIn'], name='CTIn',
-            color='magenta', lineStyle=Qt.SolidLine, lineWidth=1)
+            y_channel=self.prefix+self.chs['TL Sts']['Circ TIn'],
+            name='CTIn', color='magenta',
+            lineStyle=Qt.SolidLine, lineWidth=1)
         self.tempcirc_graph.addYChannel(
-            y_channel=self.chs['TL Sts']['Circ TOut'], name='CTOut',
-            color='darkRed', lineStyle=Qt.SolidLine, lineWidth=1)
+            y_channel=self.prefix+self.chs['TL Sts']['Circ TOut'],
+            name='CTOut', color='darkRed',
+            lineStyle=Qt.SolidLine, lineWidth=1)
 
         self.line_circ_maxlim = InfiniteLine(
             pos=lims_circ[1], angle=0, pen=pen)
@@ -1201,7 +1259,8 @@ class RFMainControl(SiriusMainWindow):
         lb_vacuum = QLabel('<h3>Vacuum: Pressure [mBar]</h3>', self)
         self.led_condrun = PyDMLed(self)
         self.led_condrun.setToolTip('Conditioning acting')
-        self.led_condrun.channel = (self.chs['Cav Sts']['Vac']['Cond'])
+        self.led_condrun.channel = self.prefix + \
+            self.chs['Cav Sts']['Vac']['Cond']
         self.led_condrun.offColor = QColor(128, 77, 0)
         self.led_condrun.onColor = PyDMLed.Yellow
         hbox_vacuum_state = QHBoxLayout()
@@ -1218,8 +1277,8 @@ class RFMainControl(SiriusMainWindow):
         self.vacuum_graph.timeSpan = 1800
         self.vacuum_graph.maxRedrawRate = 1
         self.vacuum_graph.addYChannel(
-            y_channel=self.chs['Cav Sts']['Vac']['Cells'], name='Vacuum',
-            color='black', lineStyle=Qt.SolidLine, lineWidth=1)
+            y_channel=self.prefix+self.chs['Cav Sts']['Vac']['Cells'],
+            name='Vacuum', color='black', lineStyle=Qt.SolidLine, lineWidth=1)
 
         self.vac_wid = QWidget()
         self.vac_wid.setStyleSheet("""
@@ -1248,7 +1307,7 @@ class RFMainControl(SiriusMainWindow):
         return lay
 
     def _create_ssa_wid(self, lay_amp, row, chs_dict):
-        led_sts = SiriusLedState(self, chs_dict['Status'])
+        led_sts = SiriusLedState(self, self.prefix+chs_dict['Status'])
         lay_amp.addWidget(led_sts, row, 1)
 
         lb_name = QLabel('<h4>'+chs_dict['Name']+'</h4>', self,
@@ -1256,7 +1315,7 @@ class RFMainControl(SiriusMainWindow):
         lb_name.setStyleSheet('max-height: 1.29em;')
         lay_amp.addWidget(lb_name, row, 2)
 
-        lb_pwr = PyDMLabel(self, chs_dict['Power'])
+        lb_pwr = PyDMLabel(self, self.prefix+chs_dict['Power'])
         lb_pwr.showUnits = True
         lb_pwr.setStyleSheet('min-width: 6em; max-width: 6em;')
         lay_amp.addWidget(lb_pwr, row, 3)
@@ -1264,47 +1323,55 @@ class RFMainControl(SiriusMainWindow):
         bt_src1 = RFEnblDsblButton(
             parent=self,
             channels={
-                'on': chs_dict['SRC 1']['PV'].replace('-Sts', 'Enbl-Sel'),
-                'off': chs_dict['SRC 1']['PV'].replace('-Sts', 'Dsbl-Sel')})
+                'on': self.prefix+chs_dict['SRC 1']['PV'].replace(
+                    '-Sts', 'Enbl-Sel'),
+                'off': self.prefix+chs_dict['SRC 1']['PV'].replace(
+                    '-Sts', 'Dsbl-Sel')})
         if self.section == 'BO':
             ch2vals = {
-                'BO-ToBO:RF-ACDCPanel:300Vdc-Mon': {'comp': 'gt',
-                                                    'value': 280.0},
-                chs_dict['SRC 1']['PV']: 1}
+                self.prefix+'BO-ToBO:RF-ACDCPanel:300Vdc-Mon': {
+                    'comp': 'gt', 'value': 280.0},
+                self.prefix+chs_dict['SRC 1']['PV']: 1}
             led_src1 = PyDMLedMultiChannel(self, ch2vals)
         else:
-            led_src1 = SiriusLedState(self, chs_dict['SRC 1']['PV'])
+            led_src1 = SiriusLedState(
+                self, self.prefix+chs_dict['SRC 1']['PV'])
         lay_amp.addLayout(self._create_vlay(bt_src1, led_src1), row, 4)
 
         bt_src2 = RFEnblDsblButton(
             parent=self,
             channels={
-                'on': chs_dict['SRC 2']['PV'].replace('-Sts', 'Enbl-Sel'),
-                'off': chs_dict['SRC 2']['PV'].replace('-Sts', 'Dsbl-Sel')})
-        led_src2 = SiriusLedState(self, chs_dict['SRC 2']['PV'])
+                'on': self.prefix+chs_dict['SRC 2']['PV'].replace(
+                    '-Sts', 'Enbl-Sel'),
+                'off': self.prefix+chs_dict['SRC 2']['PV'].replace(
+                    '-Sts', 'Dsbl-Sel')})
+        led_src2 = SiriusLedState(self, self.prefix+chs_dict['SRC 2']['PV'])
         lay_amp.addLayout(self._create_vlay(bt_src2, led_src2), row, 5)
 
         bt_pinsw = RFEnblDsblButton(
             parent=self,
             channels={
-                'on': chs_dict['PinSw'].replace('-Mon', 'Enbl-Cmd'),
-                'off': chs_dict['PinSw'].replace('-Mon', 'Dsbl-Cmd')})
+                'on': self.prefix+chs_dict['PinSw'].replace(
+                    '-Mon', 'Enbl-Cmd'),
+                'off': self.prefix+chs_dict['PinSw'].replace(
+                    '-Mon', 'Dsbl-Cmd')})
         rules = (
             '[{"name": "EnblRule", "property": "Enable", ' +
             '"expression": "ch[0] < 3.0", "channels": [' +
-            '{"channel": "'+chs_dict['PreDrive']+'", "trigger": true}]}]')
+            '{"channel": "'+self.prefix+chs_dict['PreDrive'] +
+            '", "trigger": true}]}]')
         bt_pinsw.pb_on.rules = rules
-        led_pinsw = SiriusLedState(self, chs_dict['PinSw'])
+        led_pinsw = SiriusLedState(self, self.prefix+chs_dict['PinSw'])
         lay_amp.addLayout(self._create_vlay(bt_pinsw, led_pinsw), row, 6)
 
-        lb_drive = PyDMLabel(self, chs_dict['PreDrive'])
+        lb_drive = PyDMLabel(self, self.prefix+chs_dict['PreDrive'])
         lb_drive.showUnits = True
         led_drive = PyDMLedMultiChannel(
             parent=self, channels2values={
-                chs_dict['PreDrive']: {'comp': 'lt', 'value': 3}})
+                self.prefix+chs_dict['PreDrive']: {'comp': 'lt', 'value': 3}})
         lay_amp.addLayout(self._create_vlay(lb_drive, led_drive), row, 7)
 
-        ch_pinsw = SiriusConnectionSignal(chs_dict['PinSw'])
+        ch_pinsw = SiriusConnectionSignal(self.prefix+chs_dict['PinSw'])
         ch_pinsw.new_value_signal[int].connect(
             _part(self._handle_predrive_led_channels, led_drive, chs_dict))
 
@@ -1337,7 +1404,8 @@ class RFMainControl(SiriusMainWindow):
 
     def _handle_predrive_led_channels(self, led_drive, chs_dict, value):
         val = 100 if value == 1 else 3
-        ch2vals = {chs_dict['PreDrive']: {'comp': 'lt', 'value': val}}
+        ch2vals = {self.prefix+chs_dict['PreDrive']: {
+                    'comp': 'lt', 'value': val}}
         led_drive.set_channels2values(ch2vals)
 
     def _handle_rmpwfm_visibility(self, index):
@@ -1354,7 +1422,7 @@ class RFMainControl(SiriusMainWindow):
                 self.chs['Cav Sts']['Temp']['Coupler Limits'][1] = value
 
             lims = self.chs['Cav Sts']['Temp']['Coupler Limits']
-            ch2vals = {self.chs['Cav Sts']['Temp']['Coupler'][0]: {
+            ch2vals = {self.prefix+self.chs['Cav Sts']['Temp']['Coupler'][0]: {
                        'comp': 'wt', 'value': lims}}
             self.led_tempcellok.set_channels2values(ch2vals)
             self.line_coup_minlim.setPos(lims[0])
@@ -1366,7 +1434,7 @@ class RFMainControl(SiriusMainWindow):
                 self.chs['Cav Sts']['Temp']['Cells Limits'][1] = value
 
             lims = self.chs['Cav Sts']['Temp']['Cells Limits']
-            ch2vals = {c[0]: {'comp': 'wt', 'value': lims}
+            ch2vals = {self.prefix+c[0]: {'comp': 'wt', 'value': lims}
                        for c in self.chs['Cav Sts']['Temp']['Cells']}
             self.led_tempcoupok.set_channels2values(ch2vals)
             self.line_cell_minlim.setPos(lims[0])

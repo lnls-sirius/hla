@@ -15,18 +15,16 @@ from ..widgets import SiriusLabel, SiriusSpinbox, SiriusEnumComboBox
 
 class BaseWidget(QWidget):
 
-    def __init__(self, parent=None, prefix=''):
+    def __init__(self, parent=None, device='', prefix=''):
         super().__init__(parent)
-        try:
-            self.prefix = _PVName(prefix)
-        except Exception:
-            self.prefix = prefix
+        self.prefix = prefix
+        self.device = _PVName(device)
 
     def channels(self):
         return self._chans
 
     def get_pvname(self, propty):
-        return self.prefix + ':' + propty
+        return self.device.substitute(prefix=self.prefix, propty=propty)
 
     def _create_formlayout_groupbox(self, title, props):
         grpbx = CustomGroupBox(title, self)
@@ -92,10 +90,7 @@ class BaseList(CustomGroupBox):
                  obj_names=list(), has_search=True, props2search=set()):
         """Initialize object."""
         super().__init__(name, parent)
-        try:
-            self.prefix = _PVName(prefix)
-        except Exception:
-            self.prefix = prefix
+        self.prefix = prefix
         self.props = props or set(self._ALL_PROPS)
         self.has_search = has_search
         self.props2search = set(props2search) or set()
@@ -170,7 +165,7 @@ class BaseList(CustomGroupBox):
         self.lines = dict()
         self.filtered_lines = set()
         for obj_name in self.obj_names:
-            pref = _PVName(self.prefix + obj_name)
+            pref = _PVName(obj_name).substitute(prefix=self.prefix)
             objs = self.getLine(pref)
             self.lines[pref] = objs
             self.filtered_lines.add(pref)
@@ -187,20 +182,20 @@ class BaseList(CustomGroupBox):
                         max-width: {1:.1f}em;}}'.format(
                             name, self._MIN_WIDs[prop]))
 
-    def getLine(self, prefix=None, header=False):
+    def getLine(self, device=None, header=False):
         objects = list()
         for prop in self._ALL_PROPS:
-            item = self.getColumn(prefix, prop, header)
+            item = self.getColumn(device, prop, header)
             if item is not None:
                 objects.append([prop, item])
         return objects
 
-    def getColumn(self, prefix, prop, header):
+    def getColumn(self, device, prop, header):
         lv = QVBoxLayout()
         lv.setSpacing(6)
         lv.setAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
         fun = self._createObjs if not header else self._headerLabel
-        objs = fun(prefix, prop)
+        objs = fun(device, prop)
         visi = prop in self.props
         for i, ob in enumerate(objs):
             lv.addWidget(ob)
@@ -267,11 +262,11 @@ class BaseList(CustomGroupBox):
                         wid.setVisible(False)
         # self.adjustSize()
 
-    def _headerLabel(self, prefix, prop):
+    def _headerLabel(self, device, prop):
         lb = QLabel('<h4>' + self._LABELS[prop] + '</h4>', self)
         lb.setStyleSheet("""min-height:1.55em; max-height:1.55em;""")
         lb.setAlignment(Qt.AlignHCenter)
         return (lb, )
 
-    def _createObjs(self, prefix, prop):
+    def _createObjs(self, device, prop):
         return tuple()  # return tuple of widgets

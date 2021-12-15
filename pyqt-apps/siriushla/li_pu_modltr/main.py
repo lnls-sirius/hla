@@ -39,6 +39,7 @@ class LIModltrWindow(SiriusMainWindow):
         self.setCentralWidget(cw)
         lay = QHBoxLayout(cw)
         for dev in ['LI-01:PU-Modltr-1', 'LI-01:PU-Modltr-2']:
+            dev = _PVName(dev).substitute(prefix=self.prefix)
             lay.addWidget(self._setupModltrWidget(dev))
 
         self.setStyleSheet("""

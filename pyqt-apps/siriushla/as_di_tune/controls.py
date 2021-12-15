@@ -26,8 +26,9 @@ class TuneControls(QWidget):
         self.prefix = prefix
         self.section = section.upper()
         self.orientation = orientation
-        self.device = SiriusPVName(
-            prefix+self.section+'-Glob:DI-Tune-'+orientation)
+        self.device = SiriusPVName('AC-Glob:DI-Tune-O')
+        self.device = self.device.substitute(
+            sec=self.section, idx=self.orientation, prefix=self.prefix)
         if self.section == 'BO':
             self.trigger = SiriusPVName('BO-Glob:TI-TuneProc')
         self.background = background
@@ -46,27 +47,27 @@ class TuneControls(QWidget):
             self.tunefreq_currval = 0.0
             self.freqrevn_currval = 0.0
             self.tunefreq_ch = SiriusConnectionSignal(
-                self.device+':TuneFreq-Mon')
+                self.device.substitute(propty='TuneFreq-Mon'))
             self.tunefreq_ch.new_value_signal[float].connect(
                 self._calc_tunefreq)
             self.freqrevn_ch = SiriusConnectionSignal(
-                self.device+':FreqRevN-Mon')
+                self.device.substitute(propty='FreqRevN-Mon'))
             self.freqrevn_ch.new_value_signal[float].connect(
                 self._calc_tunefreq)
             self.lb_tunefreq.setStyleSheet('min-width:8em;max-width:8em;')
             label_tunefrac = QLabel('Tune Fraction')
             self.lb_tunefrac = PyDMLabel(
-                parent=self, init_channel=self.device+':TuneFrac-Mon')
+                self, self.device.substitute(propty='TuneFrac-Mon'))
             self.lb_tunefrac.precisionFromPV = False
             self.lb_tunefrac.precision = 4
 
         # Acquisition
         lbl_acq = QLabel('Acquisition', self)
         self.bt_acq = PyDMStateButton(
-            parent=self, init_channel=self.device + ':SpecAnaGetSpec-Sel')
+            self, self.device.substitute(propty='SpecAnaGetSpec-Sel'))
         self.bt_acq.shape = 1
         self.led_acq = SiriusLedState(
-            parent=self, init_channel=self.device + ':SpecAnaGetSpec-Sts')
+            self, self.device.substitute(propty='SpecAnaGetSpec-Sts'))
         hbox_acq = QHBoxLayout()
         hbox_acq.addWidget(self.bt_acq)
         hbox_acq.addWidget(self.led_acq)
@@ -74,11 +75,12 @@ class TuneControls(QWidget):
         # Drive Enable
         lbl_drive = QLabel('Excitation', self)
         self.bt_drive = PyDMStateButton(
-            parent=self, init_channel=self.device + ':Enbl-Sel')
+            self, self.device.substitute(propty='Enbl-Sel'))
         self.bt_drive.shape = 1
         value = 0b111 if self.section == 'BO' else 1
         self.led_drive = PyDMLedMultiChannel(
-            parent=self, channels2values={self.device + ':Enbl-Sts': value})
+            parent=self, channels2values={
+                self.device.substitute(propty='Enbl-Sts'): value})
         self.led_drive.setOffColor(PyDMLed.DarkGreen)
         hbox_drive = QHBoxLayout()
         hbox_drive.addWidget(self.bt_drive)
@@ -89,11 +91,12 @@ class TuneControls(QWidget):
             lbl_acqcnt = QLabel('Frame Count', self)
             dev = self.device.substitute(dev='TuneProc')
             self.lb_acqcnt = PyDMLabel(
-                parent=self, init_channel=dev + ':FrameCount-Mon')
+                self, dev.substitute(propty='FrameCount-Mon'))
             self.lb_acqcnt.setAlignment(Qt.AlignCenter)
             self.led_acqcnt = PyDMLedMultiChannel(parent=self)
             self.trigNrPulseChannel = SiriusConnectionSignal(
-                self.prefix+self.trigger+':NrPulses-RB')
+                self.trigger.substitute(
+                    prefix=self.prefix, propty='NrPulses-RB'))
             self.trigNrPulseChannel.new_value_signal[int].connect(
                 self._updateNrAcq)
             hbox_acqcnt = QHBoxLayout()
@@ -126,10 +129,10 @@ class TuneControls(QWidget):
         # Span
         lbl_span = QLabel('Span [kHz]', self)
         self.le_span = PyDMLineEdit(
-            parent=self, init_channel=self.device + ':Span-SP')
+            self, self.device.substitute(propty='Span-SP'))
         self.le_span.precisionFromPV = True
         self.lb_span = PyDMLabel(
-            parent=self, init_channel=self.device + ':Span-RB')
+            self, self.device.substitute(propty='Span-RB'))
         hbox_span = QHBoxLayout()
         hbox_span.addWidget(self.le_span)
         hbox_span.addWidget(self.lb_span)
@@ -138,7 +141,7 @@ class TuneControls(QWidget):
         lbl_rbw = QLabel('RBW', self)
         if self.section == 'BO':
             self.cb_rbw = PyDMEnumComboBox(
-                parent=self, init_channel=self.device + ':SpecAnaRBW-Sel')
+                self, self.device.substitute(propty='SpecAnaRBW-Sel'))
         else:
             items = ['1 Hz', '2 Hz', '3 Hz', '5 Hz',
                      '10 Hz', '20 Hz', '30 Hz', '50 Hz',
@@ -148,10 +151,10 @@ class TuneControls(QWidget):
                      '100 kHz', '200 kHz', '300 kHz', '500 kHz',
                      '1 MHz', '2 MHz', '3 MHz', '5 MHz', '10 MHz']
             self.cb_rbw = SiriusStringComboBox(
-                parent=self, init_channel=self.device + ':SpecAnaRBW-Sel',
+                self, self.device.substitute(propty='SpecAnaRBW-Sel'),
                 items=items)
         self.lb_rbw = PyDMLabel(
-            parent=self, init_channel=self.device + ':SpecAnaRBW-Sts')
+            self, self.device.substitute(propty='SpecAnaRBW-Sts'))
         hbox_rbw = QHBoxLayout()
         hbox_rbw.addWidget(self.cb_rbw)
         hbox_rbw.addWidget(self.lb_rbw)
@@ -159,11 +162,11 @@ class TuneControls(QWidget):
         # Harmonic
         lbl_h = QLabel('Harmonic (n)', self)
         self.sb_h = PyDMSpinbox(
-            parent=self, init_channel=self.device + ':RevN-SP')
+            self, self.device.substitute(propty='RevN-SP'))
         self.sb_h.showStepExponent = False
         self.sb_h.precisionFromPV = True
         self.lb_h = PyDMLabel(
-            parent=self, init_channel=self.device + ':RevN-RB')
+            self, self.device.substitute(propty='RevN-RB'))
         hbox_h = QHBoxLayout()
         hbox_h.addWidget(self.sb_h)
         hbox_h.addWidget(self.lb_h)
@@ -172,16 +175,16 @@ class TuneControls(QWidget):
         lbl_Fh = QLabel('Harm. Freq. [kHz]', self)
         self.lb_Fh = PyDMLabel(parent=self)
         self.lb_Fh.setToolTip('Frf/(h*n)')
-        self.lb_Fh.channel = self.device + ':FreqRevN-Mon'
+        self.lb_Fh.channel = self.device.substitute(propty='FreqRevN-Mon')
 
         # Frequency Offset
         lbl_foff = QLabel('Freq. Offset [kHz]', self)
         self.sb_foff = PyDMSpinbox(
-            parent=self, init_channel=self.device + ':FreqOff-SP')
+            self, self.device.substitute(propty='FreqOff-SP'))
         self.sb_foff.showStepExponent = False
         self.sb_foff.precisionFromPV = True
         self.lb_foff = PyDMLabel(
-            parent=self, init_channel=self.device + ':FreqOff-RB')
+            self, self.device.substitute(propty='FreqOff-RB'))
         hbox_foff = QHBoxLayout()
         hbox_foff.addWidget(self.sb_foff)
         hbox_foff.addWidget(self.lb_foff)
@@ -189,10 +192,10 @@ class TuneControls(QWidget):
         # Center Frequency
         lbl_Fc = QLabel('Center Freq. [MHz]', self)
         self.le_Fc = PyDMLineEdit(
-            parent=self, init_channel=self.device + ':CenterFreq-SP')
+            self, self.device.substitute(propty='CenterFreq-SP'))
         self.le_Fc.precisionFromPV = True
         self.lb_Fc = PyDMLabel(
-            parent=self, init_channel=self.device + ':CenterFreq-RB')
+            self, self.device.substitute(propty='CenterFreq-RB'))
         hbox_Fc = QHBoxLayout()
         hbox_Fc.addWidget(self.le_Fc)
         hbox_Fc.addWidget(self.lb_Fc)
@@ -200,10 +203,10 @@ class TuneControls(QWidget):
         # Lock Center Freq.
         lbl_autoFc = QLabel('Lock Center Freq. ', self)
         self.bt_autoFc = PyDMStateButton(
-            parent=self, init_channel=self.device + ':CenterFreqAuto-Sel')
+            self, self.device.substitute(propty='CenterFreqAuto-Sel'))
         self.bt_autoFc.shape = 1
         self.led_autoFc = SiriusLedState(
-            parent=self, init_channel=self.device + ':CenterFreqAuto-Sts')
+            self, self.device.substitute(propty='CenterFreqAuto-Sts'))
         hbox_autoFc = QHBoxLayout()
         hbox_autoFc.addWidget(self.bt_autoFc)
         hbox_autoFc.addWidget(self.led_autoFc)
@@ -213,10 +216,10 @@ class TuneControls(QWidget):
             # StartX
             lbl_roistartx = QLabel('Start X [MHz]', self)
             self.le_roistartx = PyDMLineEdit(
-                parent=self, init_channel=self.device + ':ROIOffsetX-SP')
+                self, self.device.substitute(propty='ROIOffsetX-SP'))
             self.le_roistartx.precisionFromPV = True
             self.lb_roistartx = PyDMLabel(
-                parent=self, init_channel=self.device + ':ROIOffsetX-RB')
+                self, self.device.substitute(propty='ROIOffsetX-RB'))
             hbox_roistartx = QHBoxLayout()
             hbox_roistartx.addWidget(self.le_roistartx)
             hbox_roistartx.addWidget(self.lb_roistartx)
@@ -224,10 +227,10 @@ class TuneControls(QWidget):
             # Width
             lbl_roiwidth = QLabel('Width [MHz]', self)
             self.le_roiwidth = PyDMLineEdit(
-                parent=self, init_channel=self.device + ':ROIWidth-SP')
+                self, self.device.substitute(propty='ROIWidth-SP'))
             self.le_roiwidth.precisionFromPV = True
             self.lb_roiwidth = PyDMLabel(
-                parent=self, init_channel=self.device + ':ROIWidth-RB')
+                self, self.device.substitute(propty='ROIWidth-RB'))
             hbox_roiwidth = QHBoxLayout()
             hbox_roiwidth.addWidget(self.le_roiwidth)
             hbox_roiwidth.addWidget(self.lb_roiwidth)
@@ -235,10 +238,10 @@ class TuneControls(QWidget):
             # StartY
             lbl_roistarty = QLabel('Start Y [ms]', self)
             self.le_roistarty = PyDMLineEdit(
-                parent=self, init_channel=self.device + ':ROIOffsetY-SP')
+                self, self.device.substitute(propty='ROIOffsetY-SP'))
             self.le_roistarty.precisionFromPV = True
             self.lb_roistarty = PyDMLabel(
-                parent=self, init_channel=self.device + ':ROIOffsetY-RB')
+                self, self.device.substitute(propty='ROIOffsetY-RB'))
             hbox_roistarty = QHBoxLayout()
             hbox_roistarty.addWidget(self.le_roistarty)
             hbox_roistarty.addWidget(self.lb_roistarty)
@@ -246,10 +249,10 @@ class TuneControls(QWidget):
             # Height
             lbl_roiheight = QLabel('Height [ms]', self)
             self.le_roiheight = PyDMLineEdit(
-                parent=self, init_channel=self.device + ':ROIHeight-SP')
+                self, self.device.substitute(propty='ROIHeight-SP'))
             self.le_roiheight.precisionFromPV = True
             self.lb_roiheight = PyDMLabel(
-                parent=self, init_channel=self.device + ':ROIHeight-RB')
+                self, self.device.substitute(propty='ROIHeight-RB'))
             hbox_roiheight = QHBoxLayout()
             hbox_roiheight.addWidget(self.le_roiheight)
             hbox_roiheight.addWidget(self.lb_roiheight)
@@ -257,10 +260,10 @@ class TuneControls(QWidget):
             # Auto adjust
             lbl_roiauto = QLabel('Auto Positioning', self)
             self.bt_roiauto = PyDMStateButton(
-                parent=self, init_channel=self.device + ':ROIAuto-Sel')
+                self, self.device.substitute(propty='ROIAuto-Sel'))
             self.bt_roiauto.shape = 1
             self.led_roiauto = SiriusLedState(
-                parent=self, init_channel=self.device + ':ROIAuto-Sts')
+                self, self.device.substitute(propty='ROIAuto-Sts'))
             hbox_roiauto = QHBoxLayout()
             hbox_roiauto.addWidget(self.bt_roiauto)
             hbox_roiauto.addWidget(self.led_roiauto)
@@ -337,8 +340,8 @@ class TuneControls(QWidget):
                         bt_max, i, 3, alignment=Qt.AlignRight)
                     grid_markers.addWidget(
                         led_max, i, 4, alignment=Qt.AlignLeft)
-                tab_markers.addTab(wid_markers,
-                                   ('Delta' if mtyp else '')+'Markers')
+                tab_markers.addTab(
+                    wid_markers, ('Delta' if mtyp else '')+'Markers')
 
         # Details
         self.pb_details = QPushButton(qta.icon('fa5s.ellipsis-h'), '', self)
@@ -414,7 +417,7 @@ class TuneControls(QWidget):
     def _updateNrAcq(self, new_value):
         dev = self.device.substitute(dev='TuneProc')
         self.led_acqcnt.set_channels2values(
-            {dev + ':FrameCount-Mon': new_value})
+            {dev.substitute(propty='FrameCount-Mon'): new_value})
 
     def _calc_tunefreq(self, val):
         address = self.sender().address
@@ -448,9 +451,8 @@ class SITuneMonitor(QWidget):
         lay_tune = QGridLayout(self)
 
         self.ld_tunefrach = QLabel(self.hdesc, self, alignment=Qt.AlignHCenter)
-        self.lb_tunefrach = PyDMLabel(
-            parent=self,
-            init_channel=self.prefix+'SI-Glob:DI-Tune-H:TuneFrac-Mon')
+        self.lb_tunefrach = PyDMLabel(self, SiriusPVName(
+            'SI-Glob:DI-Tune-H:TuneFrac-Mon').substitute(prefix=self.prefix))
         self.lb_tunefrach.precisionFromPV = False
         self.lb_tunefrach.precision = 4
         self.lb_tunefrach.setAlignment(Qt.AlignHCenter)
@@ -465,9 +467,8 @@ class SITuneMonitor(QWidget):
         lay_tune.addWidget(wid_tuneh, 0, 0)
 
         self.ld_tunefracv = QLabel(self.vdesc, self, alignment=Qt.AlignHCenter)
-        self.lb_tunefracv = PyDMLabel(
-            parent=self,
-            init_channel=self.prefix+'SI-Glob:DI-Tune-V:TuneFrac-Mon')
+        self.lb_tunefracv = PyDMLabel(self, SiriusPVName(
+            'SI-Glob:DI-Tune-V:TuneFrac-Mon').substitute(prefix=self.prefix))
         self.lb_tunefracv.precisionFromPV = False
         self.lb_tunefracv.precision = 4
         self.lb_tunefracv.setAlignment(Qt.AlignHCenter)

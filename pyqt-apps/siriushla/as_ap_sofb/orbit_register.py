@@ -10,46 +10,49 @@ from qtpy.QtCore import Signal, Qt
 from qtpy.QtGui import QDoubleValidator
 import qtawesome as qta
 
+from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.sofb.csdev import SOFBFactory
 from siriuspy.sofb.utils import si_calculate_bump as _calculate_bump
 from siriuspy.clientconfigdb import ConfigDBClient, ConfigDBException
 from siriushla.as_ap_configdb import LoadConfigDialog, SaveConfigDialog
-from siriushla.widgets import SiriusConnectionSignal, QDoubleSpinBoxPlus
+from siriushla.widgets import SiriusConnectionSignal as _ConnSig, \
+    QDoubleSpinBoxPlus
 
 
 class OrbitRegisters(QWidget):
     """."""
 
-    def __init__(self, parent, prefix, acc=None, nr_registers=9):
+    def __init__(self, parent, device, prefix='', acc=None, nr_registers=9):
         """."""
         super(OrbitRegisters, self).__init__(parent)
         self._nr_registers = nr_registers
         self.prefix = prefix
+        self.device = _PVName(device)
+        self.devpref = self.device.substitute(prefix=prefix)
         self.acc = acc.upper()
-        pre = self.prefix
         self._orbits = {
             'ref': [
-                SiriusConnectionSignal(pre + 'RefOrbX-RB'),
-                SiriusConnectionSignal(pre + 'RefOrbY-RB')],
+                _ConnSig(self.devpref.substitute(propty='RefOrbX-RB')),
+                _ConnSig(self.devpref.substitute(propty='RefOrbY-RB'))],
             'sp': [
-                SiriusConnectionSignal(pre + 'SPassOrbX-Mon'),
-                SiriusConnectionSignal(pre + 'SPassOrbY-Mon')],
+                _ConnSig(self.devpref.substitute(propty='SPassOrbX-Mon')),
+                _ConnSig(self.devpref.substitute(propty='SPassOrbY-Mon'))],
             'off': [
-                SiriusConnectionSignal(pre + 'OfflineOrbX-SP'),
-                SiriusConnectionSignal(pre + 'OfflineOrbY-SP')],
+                _ConnSig(self.devpref.substitute(propty='OfflineOrbX-SP')),
+                _ConnSig(self.devpref.substitute(propty='OfflineOrbY-SP'))],
             'bpm': [
-                SiriusConnectionSignal(pre + 'BPMOffsetX-Mon'),
-                SiriusConnectionSignal(pre + 'BPMOffsetY-Mon')],
-            'mat': SiriusConnectionSignal(pre + 'RespMat-RB'),
+                _ConnSig(self.devpref.substitute(propty='BPMOffsetX-Mon')),
+                _ConnSig(self.devpref.substitute(propty='BPMOffsetY-Mon'))],
+            'mat': _ConnSig(self.devpref.substitute(propty='RespMat-RB')),
             }
         if self.acc == 'SI':
             self._orbits['orb'] = [
-                SiriusConnectionSignal(pre + 'SlowOrbX-Mon'),
-                SiriusConnectionSignal(pre + 'SlowOrbY-Mon')]
+                _ConnSig(self.devpref.substitute(propty='SlowOrbX-Mon')),
+                _ConnSig(self.devpref.substitute(propty='SlowOrbY-Mon'))]
         if self.acc in {'SI', 'BO'}:
             self._orbits['mti'] = [
-                SiriusConnectionSignal(pre + 'MTurnIdxOrbX-Mon'),
-                SiriusConnectionSignal(pre + 'MTurnIdxOrbY-Mon')]
+                _ConnSig(self.devpref.substitute(propty='MTurnIdxOrbX-Mon')),
+                _ConnSig(self.devpref.substitute(propty='MTurnIdxOrbY-Mon'))]
         self.setupui()
 
     def channels(self):
@@ -86,7 +89,8 @@ class OrbitRegisters(QWidget):
         self.registers = []
         for i in range(self._nr_registers):
             reg = OrbitRegister(
-                self, self.prefix, self._orbits, i+1, acc=self.acc)
+                self, self.device, self._orbits, i+1,
+                prefix=self.prefix, acc=self.acc)
             vbl.addWidget(reg)
             self.registers.append(reg)
 
@@ -113,11 +117,13 @@ class OrbitRegister(QWidget):
     new_orby_signal = Signal(_np.ndarray)
     new_string_signal = Signal(str)
 
-    def __init__(self, parent, prefix, orbits, idx, acc='SI'):
+    def __init__(self, parent, device, orbits, idx, prefix='', acc='SI'):
         """Initialize the Context Menu."""
         super(OrbitRegister, self).__init__(parent)
         self.idx = idx
         self.prefix = prefix
+        self.device = _PVName(device)
+        self.devpref = self.device.substitute(prefix=prefix)
         text = acc.lower() + 'orb'
         self.setObjectName(text+str(idx))
         self.EXT = (f'.{acc.lower()}orb', f'.{acc.lower()}dorb')
@@ -292,7 +298,8 @@ class OrbitRegister(QWidget):
         pvm = self._orbits.get('mat')
         if pvm is None or not pvm.connected:
             self._update_and_emit(
-                'Error: PV {0:s} not connected.'.format(pvm.pvname))
+                'Error: PV {0:s} not connected.'.format(pvm.address))
+            return
         val = pvm.getvalue()
         orbs = val.reshape(-1, self._csorb.nr_corrs)[:, idx]
         orbx = orbs[:len(orbs)//2] * kick

@@ -6,8 +6,7 @@ from qtpy.QtCore import Qt
 import qtawesome as qta
 from pydm.widgets import PyDMLabel, PyDMPushButton
 from siriushla.util import connect_window
-from siriushla.widgets import SiriusLedAlert, SiriusSpinbox, PyDMStateButton, \
-    SiriusLedState, SiriusLabel
+from siriushla.widgets import SiriusLedAlert, SiriusLabel
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla.as_ti_control import HLTriggerSimple as _HLTriggerSimple
 
@@ -17,8 +16,8 @@ from siriushla.as_ap_sofb.ioc_control.status import StatusWidget
 
 class AcqControlWidget(BaseWidget):
 
-    def __init__(self, parent, prefix, acc='SI'):
-        super().__init__(parent, prefix, acc)
+    def __init__(self, parent, device, prefix='', acc='SI'):
+        super().__init__(parent, device, prefix=prefix, acc=acc)
         self.setupui()
         name = acc + 'App'
         self.setObjectName(name)
@@ -46,8 +45,9 @@ class AcqControlWidget(BaseWidget):
 
         tabw = QTabWidget(self)
         self._set_detailed(tabw)
-        pref = self.prefix.prefix + self._csorb.trigger_acq_name
-        grp_bx = _HLTriggerSimple(parent=tabw, prefix=pref, src=True)
+        grp_bx = _HLTriggerSimple(
+            parent=tabw, device=self._csorb.trigger_acq_name,
+            prefix=self.prefix, src=True)
         tabw.addTab(grp_bx, 'External Trigger')
         grp_bx = self._get_trigdata_params_grpbx()
         tabw.addTab(grp_bx, 'Data-Driven Trigger')
@@ -100,7 +100,7 @@ class AcqControlWidget(BaseWidget):
         lbl = QLabel('Acquisition:', grp_bx, alignment=Qt.AlignCenter)
         strt = PyDMPushButton(
             grp_bx, label='',
-            init_channel=self.prefix+'TrigAcqCtrl-Sel',
+            init_channel=self.devpref.substitute(propty='TrigAcqCtrl-Sel'),
             pressValue=self._csorb.TrigAcqCtrl.Start)
         strt.setToolTip('Start Acquisition')
         strt.setIcon(qta.icon('fa5s.play'))
@@ -109,7 +109,7 @@ class AcqControlWidget(BaseWidget):
             '#strt{min-width:25px; max-width:25px; icon-size:20px;}')
         stop = PyDMPushButton(
             grp_bx, label='',
-            init_channel=self.prefix+'TrigAcqCtrl-Sel',
+            init_channel=self.devpref.substitute(propty='TrigAcqCtrl-Sel'),
             pressValue=self._csorb.TrigAcqCtrl.Stop)
         stop.setToolTip('Stop Acquisition')
         stop.setIcon(qta.icon('fa5s.stop'))
@@ -118,7 +118,7 @@ class AcqControlWidget(BaseWidget):
             '#stop{min-width:25px; max-width:25px; icon-size:20px;}')
         abrt = PyDMPushButton(
             grp_bx, label='',
-            init_channel=self.prefix+'TrigAcqCtrl-Sel',
+            init_channel=self.devpref.substitute(propty='TrigAcqCtrl-Sel'),
             pressValue=self._csorb.TrigAcqCtrl.Abort)
         abrt.setToolTip('Abort Acquisition')
         abrt.setIcon(qta.icon('fa5s.ban'))
@@ -127,7 +127,7 @@ class AcqControlWidget(BaseWidget):
             '#abrt{min-width:25px; max-width:25px; icon-size:20px;}')
 
         pdmlbl = PyDMLabel(
-            grp_bx, init_channel=self.prefix+'TrigAcqCtrl-Sts')
+            grp_bx, self.devpref.substitute(propty='TrigAcqCtrl-Sts'))
         pdmlbl.setObjectName('pdmlbl')
         pdmlbl.setStyleSheet(
             '#pdmlbl{min-width:6em; max-width:6em;}')
@@ -142,7 +142,8 @@ class AcqControlWidget(BaseWidget):
         hbl.addWidget(pdmlbl)
 
         conf = PyDMPushButton(
-            grp_bx, init_channel=self.prefix+'TrigAcqConfig-Cmd', pressValue=1)
+            grp_bx, pressValue=1,
+            init_channel=self.devpref.substitute(propty='TrigAcqConfig-Cmd'))
         conf.setToolTip('Resend Configurations')
         conf.setIcon(qta.icon('fa5s.sync'))
         conf.setObjectName('conf')
@@ -158,10 +159,11 @@ class AcqControlWidget(BaseWidget):
         Window = create_window_from_widget(
             StatusWidget, title='Orbit Status')
         connect_window(
-            sts, Window, grp_bx, prefix=self.prefix, acc=self.acc, is_orb=True)
+            sts, Window, grp_bx, device=self.device,
+            prefix=self.prefix, acc=self.acc, is_orb=True)
 
         pdm_led = SiriusLedAlert(
-            grp_bx, init_channel=self.prefix+'OrbStatus-Mon')
+            grp_bx, self.devpref.substitute(propty='OrbStatus-Mon'))
 
         lbl = QLabel('Status:', grp_bx)
         hbl = QHBoxLayout()
@@ -208,11 +210,13 @@ class AcqControlWidget(BaseWidget):
 
         lbl = QLabel('Index Time', grp_bx, alignment=Qt.AlignCenter)
         wid = QWidget(grp_bx)
-        pdm_lbl = SiriusLabel(wid, init_channel=self.prefix+'MTurnIdxTime-Mon')
+        pdm_lbl = SiriusLabel(
+            wid, self.devpref.substitute(propty='MTurnIdxTime-Mon'))
         pdm_lbl.showUnits = True
         pdm_lbl.setAlignment(Qt.AlignCenter)
         conf = PyDMPushButton(
-            wid, init_channel=self.prefix+'MTurnAcquire-Cmd', pressValue=1)
+            wid, pressValue=1,
+            init_channel=self.devpref.substitute(propty='MTurnAcquire-Cmd'))
         conf.setToolTip('Update MTurn PVs')
         conf.setIcon(qta.icon('fa5s.sync'))
         conf.setObjectName('conf')
@@ -265,12 +269,13 @@ class AcqControlWidget(BaseWidget):
         self._set_detailed(wid)
         hbl = QHBoxLayout(wid)
         pdm_btn1 = PyDMPushButton(
-            init_channel=self.prefix+'SPassBgCtrl-Cmd',
+            init_channel=self.devpref.substitute(propty='SPassBgCtrl-Cmd'),
             pressValue=0, label='Acquire')
         pdm_btn2 = PyDMPushButton(
-            init_channel=self.prefix+'SPassBgCtrl-Cmd',
+            init_channel=self.devpref.substitute(propty='SPassBgCtrl-Cmd'),
             pressValue=1, label='Reset')
-        pdm_lbl = PyDMLabel(wid, init_channel=self.prefix+'SPassBgSts-Mon')
+        pdm_lbl = PyDMLabel(
+            wid, self.devpref.substitute(propty='SPassBgSts-Mon'))
         hbl.addWidget(pdm_btn1)
         hbl.addWidget(pdm_btn2)
         hbl.addWidget(pdm_lbl)

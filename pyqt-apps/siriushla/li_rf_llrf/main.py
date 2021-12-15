@@ -8,6 +8,8 @@ from qtpy.QtWidgets import QGroupBox, QGridLayout, QWidget, QLabel, QHBoxLayout
 from pydm.widgets import PyDMWaveformPlot, PyDMTimePlot
 import qtawesome as _qta
 
+from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
+
 from .. import util as _util
 from ..widgets import SiriusMainWindow
 from ..widgets import SiriusSpinbox, PyDMStateButton, SiriusLedState, \
@@ -33,9 +35,10 @@ class DEVICES(_enum.IntEnum):
 class MainWindow(SiriusMainWindow):
     """."""
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, prefix=_VACA_PREFIX):
         """."""
         super().__init__(parent=parent)
+        self.prefix = prefix
         self.setObjectName('LIApp')
         self.setWindowTitle('LI LLRF')
         self.setWindowIcon(_qta.icon(
@@ -55,10 +58,10 @@ class MainWindow(SiriusMainWindow):
             lay = QGridLayout()
             lay.setContentsMargins(0, 0, 0, 0)
             grbox.setLayout(lay)
-            lay.addWidget(ControlBox(grbox, dev), 0, 0)
-            ivsq = GraphIvsQ(wid, dev)
-            amp = GraphAmpPha(wid, dev)
-            pha = GraphAmpPha(wid, dev, prop='Phase')
+            lay.addWidget(ControlBox(grbox, dev, prefix=self.prefix), 0, 0)
+            ivsq = GraphIvsQ(wid, dev, prefix=self.prefix)
+            amp = GraphAmpPha(wid, dev, prefix=self.prefix)
+            pha = GraphAmpPha(wid, dev, prop='Phase', prefix=self.prefix)
 
             lay.addWidget(ivsq, 0, 1)
             lay.addWidget(amp, 0, 2)
@@ -74,9 +77,10 @@ class MainWindow(SiriusMainWindow):
 class ControlBox(QWidget):
     """."""
 
-    def __init__(self, parent=None, dev=None):
+    def __init__(self, parent=None, dev=None, prefix=''):
         """."""
         super().__init__(parent=parent)
+        self.prefix = prefix
         if dev not in DEVICES:
             dev = DEVICES.Kly1
         self.dev = dev
@@ -84,6 +88,9 @@ class ControlBox(QWidget):
 
     def _setupui(self):
         """."""
+        basename = self.prefix + ('-' if self.prefix else '') + \
+            'LA-RF:LLRF:' + self.dev.pvname
+
         lay1 = QGridLayout()
         self.setLayout(lay1)
 
@@ -99,8 +106,8 @@ class ControlBox(QWidget):
         for name, prop in props:
             row += 1
             lab1 = QLabel(name, self)
-            sppv = 'LA-RF:LLRF:' + self.dev.pvname + ':SET_' + prop
-            rbpv = 'LA-RF:LLRF:' + self.dev.pvname + ':GET_' + prop
+            sppv = basename + ':SET_' + prop
+            rbpv = basename + ':GET_' + prop
             sp1 = PyDMStateButton(self, init_channel=sppv)
             rb1 = SiriusLedState(self, init_channel=rbpv)
             lay1.addWidget(lab1, row, 0)
@@ -113,8 +120,8 @@ class ControlBox(QWidget):
         for name, prop in props:
             row += 1
             laba = QLabel(name, self)
-            sppv = 'LA-RF:LLRF:' + self.dev.pvname + ':SET_' + prop
-            rbpv = 'LA-RF:LLRF:' + self.dev.pvname + ':GET_' + prop
+            sppv = basename + ':SET_' + prop
+            rbpv = basename + ':GET_' + prop
             spa = SiriusSpinbox(self, init_channel=sppv)
             spa.showStepExponent = False
             spa.precisionFromPV = False
@@ -130,7 +137,7 @@ class ControlBox(QWidget):
         hlay = QHBoxLayout()
         if self.dev == DEVICES.SHB:
             labc = QLabel('Phase Diff [°]', self)
-            rbpv = 'LA-RF:LLRF:' + self.dev.pvname + ':GET_PHASE_DIFF'
+            rbpv = basename + ':GET_PHASE_DIFF'
             rbc = SiriusLabel(self, init_channel=rbpv)
             rbc.precisionFromPV = False
             rbc.precision = 2
@@ -138,13 +145,13 @@ class ControlBox(QWidget):
             lay1.addWidget(rbc, row, 2)
             row += 1
         else:
-            rbpv = 'LA-RF:LLRF:' + self.dev.pvname + ':GET_INTERLOCK'
+            rbpv = basename + ':GET_INTERLOCK'
             rb1 = SiriusLedAlert(self, init_channel=rbpv)
             hlay.addWidget(QLabel('Refl. Pow. Intlk'))
             hlay.addWidget(rb1)
 
         hlay.addStretch()
-        rbpv = 'LA-RF:LLRF:' + self.dev.pvname + ':GET_TRIGGER_STATUS'
+        rbpv = basename + ':GET_TRIGGER_STATUS'
         rb2 = SiriusLedAlert(self, init_channel=rbpv)
         rb2.setOnColor(rb2.LightGreen)
         rb2.setOffColor(rb2.Red)
@@ -156,9 +163,10 @@ class ControlBox(QWidget):
 class GraphIvsQ(QWidget):
     """."""
 
-    def __init__(self, parent=None, dev=None):
+    def __init__(self, parent=None, dev=None, prefix=''):
         """."""
         super().__init__(parent=parent)
+        self.prefix = prefix
         if dev not in DEVICES:
             dev = DEVICES.Kly1
         self.dev = dev
@@ -197,9 +205,11 @@ class GraphIvsQ(QWidget):
         axx.setTicks([])
         axx.setHeight(0)
 
+        basename = self.prefix + ('-' if self.prefix else '') + \
+            'LA-RF:LLRF:' + self.dev.pvname
         opts = dict(
-            y_channel='LA-RF:LLRF:' + self.dev.pvname + ':GET_CH1_Q',
-            x_channel='LA-RF:LLRF:' + self.dev.pvname + ':GET_CH1_I',
+            y_channel=basename + ':GET_CH1_Q',
+            x_channel=basename + ':GET_CH1_I',
             name='Data',
             color='red',
             redraw_mode=2,
@@ -209,8 +219,8 @@ class GraphIvsQ(QWidget):
             symbolSize=10)
         graph.addChannel(**opts)
         opts = dict(
-            y_channel='LA-RF:LLRF:' + self.dev.pvname + ':GET_CH1_SETTING_Q',
-            x_channel='LA-RF:LLRF:' + self.dev.pvname + ':GET_CH1_SETTING_I',
+            y_channel=basename + ':GET_CH1_SETTING_Q',
+            x_channel=basename + ':GET_CH1_SETTING_I',
             name='Setpoint',
             color='blue',
             redraw_mode=2,
@@ -226,9 +236,10 @@ class GraphIvsQ(QWidget):
 class GraphAmpPha(QWidget):
     """."""
 
-    def __init__(self, parent=None, dev=None, prop='Amp'):
+    def __init__(self, parent=None, dev=None, prop='Amp', prefix=''):
         """."""
         super().__init__(parent=parent)
+        self.prefix = prefix
         if dev not in DEVICES:
             dev = DEVICES.Kly1
         self.dev = dev
@@ -237,6 +248,8 @@ class GraphAmpPha(QWidget):
 
     def _setupui(self):
         """."""
+        basename = self.prefix + ('-' if self.prefix else '') + \
+            'LA-RF:LLRF:' + self.dev.pvname
         lay1 = QGridLayout()
         self.setLayout(lay1)
 
@@ -262,10 +275,10 @@ class GraphAmpPha(QWidget):
         graph.setUpdateInterval(1/3)
         if self.prop == 'Amp':
             graph.setLabel('left', 'Amplitude')
-            chname = 'LA-RF:LLRF:' + self.dev.pvname + ':GET_CH1_AMP'
+            chname = basename + ':GET_CH1_AMP'
         else:
             graph.setLabel('left', 'Phase')
-            chname = 'LA-RF:LLRF:' + self.dev.pvname + ':GET_CH1_PHASE'
+            chname = basename + ':GET_CH1_PHASE'
 
         opts = dict(
             y_channel=chname,

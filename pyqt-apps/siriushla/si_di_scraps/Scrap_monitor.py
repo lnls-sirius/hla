@@ -13,11 +13,11 @@ class ScraperMonitoring(DiffCtrlDevMonitor):
         """Create connectors to monitor device positions."""
         self._scrap_pospos = 0
         self.conn_scrap_pospos = SiriusConnectionSignal(
-            self.device+':PositiveEdgePos-RB')
+            self.device.substitute(propty='PositiveEdgePos-RB'))
         self.conn_scrap_pospos.new_value_signal[float].connect(self._setDevPos)
         self._scrap_negpos = 0
         self.conn_scrap_negpos = SiriusConnectionSignal(
-            self.device+':NegativeEdgePos-RB')
+            self.device.substitute(propty='NegativeEdgePos-RB'))
         self.conn_scrap_negpos.new_value_signal[float].connect(self._setDevPos)
 
     def _setDevPos(self, new_value):
