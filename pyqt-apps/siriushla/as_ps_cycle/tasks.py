@@ -5,7 +5,8 @@ from datetime import datetime as _datetime
 from qtpy.QtCore import Signal, QThread
 from siriuspy.namesys import SiriusPVName as PVName
 from siriuspy.search import PSSearch
-from siriuspy.cycle import PSCycler, LinacPSCycler, PSCyclerFBP, CycleController
+from siriuspy.cycle import PSCycler, LinacPSCycler, PSCyclerFBP, \
+    CycleController
 
 
 TIMEOUT_CHECK = 10
@@ -24,18 +25,21 @@ class BaseTask(QThread):
     updated = Signal(str, bool, bool, bool)
 
     def __init__(self, parent=None, psnames=list(), timing=None,
-                 need_controller=False, create_new_controller=False):
+                 need_controller=False, isadv=False):
         super().__init__(parent)
         self._psnames = psnames
         self._timing = timing
         if need_controller:
-            if not BaseTask._controller or create_new_controller:
-                cyclers = dict()
-                for ps in psnames:
-                    cyclers[ps] = BaseTask._cyclers[ps]
+            cyclers = dict()
+            for ps in psnames:
+                cyclers[ps] = BaseTask._cyclers[ps]
+            if not BaseTask._controller:
                 BaseTask._controller = CycleController(
-                    cyclers=cyclers, timing=timing, logger=self)
+                    cyclers=cyclers, timing=timing, logger=self,
+                    isadv=isadv)
             else:
+                BaseTask._controller.cyclers = cyclers
+                BaseTask._controller.timing = timing
                 BaseTask._controller.logger = self
         self._quit_task = False
 
@@ -275,7 +279,7 @@ class CycleTrims(BaseTask):
         return self._controller.cycle_trims_max_duration
 
     def function(self):
-        self._controller.cycle_all_trims()
+        self._controller.cycle_trims()
 
 
 class Cycle(BaseTask):
