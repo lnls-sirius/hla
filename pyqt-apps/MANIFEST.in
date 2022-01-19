@@ -8,4 +8,10 @@ include siriushla/widgets/resources/led_shapes/circle.svg
 include siriushla/widgets/resources/led_shapes/round.svg
 include siriushla/widgets/resources/led_shapes/square.svg
 include siriushla/widgets/resources/led_shapes/triangle.svg
+include siriushla/widgets/resources/but_shapes/squared_on.svg
+include siriushla/widgets/resources/but_shapes/squared_off.svg
+include siriushla/widgets/resources/but_shapes/squared_disconn.svg
+include siriushla/widgets/resources/but_shapes/rounded_on.svg
+include siriushla/widgets/resources/but_shapes/rounded_off.svg
+include siriushla/widgets/resources/but_shapes/rounded_disconn.svg
 include siriushla/sirius-hla-style.css
