@@ -8,19 +8,16 @@ EGGLINK=$(DISTPATH)/$(PACKAGE).egg-link
 TMPFOLDER=/tmp/install-$(PACKAGE)
 
 
-install-resources:
-	cd ./resources; pyrcc5 resources.qrc -o ../siriushla/resources.py
-
 install-designer:
 	mkdir -p $(INSTALL_DESIGNER_DIR)
 	cp $(DESIGNER_PLUGIN_FILE) $(INSTALL_DESIGNER_DIR)
 
-install: clean uninstall install-resources
+install: clean uninstall
 	sudo ./setup.py install --single-version-externally-managed --compile --force --record /dev/null
 
 install-all: install install-designer
 
-develop: clean uninstall install-resources
+develop: clean uninstall
 	sudo -H pip-sirius install --no-deps -e ./
 
 uninstall:
