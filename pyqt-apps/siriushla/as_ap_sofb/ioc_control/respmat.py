@@ -114,7 +114,7 @@ class RespMatWidget(BaseWidget):
         hlay.addWidget(SiriusLabel(
             sel_wid, self.devpref.substitute(propty='RespMatMode-Sts')))
 
-        if self.acc == 'SI':
+        if self.acc in {'SI', 'BO'}:
             hlay = QHBoxLayout()
             lay.addLayout(hlay)
             pdm_chbx = PyDMCheckbox(
@@ -229,7 +229,7 @@ class RespMatWidget(BaseWidget):
         lbl = QLabel('CV [urad]', meas_wid)
         wid = self.create_pair(meas_wid, 'MeasRespMatKickCV')
         fml.addRow(lbl, wid)
-        if self.acc == 'SI':
+        if self.acc in {'SI', 'BO'}:
             lbl = QLabel('RF [Hz]', meas_wid)
             wid = self.create_pair(meas_wid, 'MeasRespMatKickRF')
             fml.addRow(lbl, wid)
@@ -278,7 +278,7 @@ class RespMatWidget(BaseWidget):
 
     def _save_respmat_to_file(self, _):
         header = '# ' + _datetime.now().strftime('%Y/%m/%d-%H:%M:%S') + '\n'
-        if self.acc == 'SI':
+        if self.acc in {'SI', 'BO'}:
             header += '# (BPMX, BPMY) [um] x (CH, CV, RF) [urad, Hz]' + '\n'
         else:
             header += '# (BPMX, BPMY) [um] x (CH, CV) [urad]' + '\n'

@@ -291,7 +291,7 @@ class SOFBControl(BaseWidget):
             ('All', self._csorb.ApplyDelta.All),
             ('CH', self._csorb.ApplyDelta.CH),
             ('CV', self._csorb.ApplyDelta.CV)]
-        if self.acc == 'SI':
+        if self.acc in {'SI', 'BO'}:
             lst.append(('RF', self._csorb.ApplyDelta.RF))
         btns = dict()
         for itm, val in lst:
@@ -311,7 +311,7 @@ class SOFBControl(BaseWidget):
         gdl.addWidget(calc, 0, 0, 2, 1)
         gdl.addWidget(btns['CH'], 0, 1)
         gdl.addWidget(btns['CV'], 0, 2)
-        if self.acc == 'SI':
+        if self.acc in {'SI', 'BO'}:
             gdl.addWidget(btns['RF'], 0, 3)
             gdl.addWidget(btns['All'], 1, 1, 1, 3)
         else:
@@ -320,7 +320,7 @@ class SOFBControl(BaseWidget):
 
         grpbx = QWidget(man_wid)
         grpbx.setObjectName('gbx')
-        if self.acc == 'SI':
+        if self.acc in {'SI', 'BO'}:
             planes = ('CH', 'CV', 'RF')
             gdl.addWidget(grpbx, 2, 0, 1, 4)
         else:
@@ -399,12 +399,12 @@ class SOFBControl(BaseWidget):
             pair = self.create_pair(wid, tmpl.format(k, 'CV'), is_vert=True)
             pairs.append(pair)
             gpbx_lay.addWidget(pair, 2, i)
-            if self.acc == 'SI':
+            if self.acc in {'SI', 'BO'}:
                 pair = self.create_pair(
                     wid, tmpl.format(k, 'RF'), is_vert=True)
                 pairs.append(pair)
                 gpbx_lay.addWidget(pair, 3, i)
-        if self.acc == 'SI':
+        if self.acc in {'SI', 'BO'}:
             gpbx_lay.addWidget(QLabel('RF', gpbx), 3, 0)
 
         pbc = QPushButton('SP')
