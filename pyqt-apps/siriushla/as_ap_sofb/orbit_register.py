@@ -257,7 +257,7 @@ class OrbitRegister(QWidget):
         cbbox.setEditable(True)
         cbbox.setMaxVisibleItems(10)
         corrnames = self._csorb.ch_names + self._csorb.cv_names
-        if self._csorb.acc == 'SI':
+        if self._csorb.acc in {'SI', 'BO'}:
             corrnames.append('RF')
         cbbox.addItems(corrnames)
         wid.layout().addWidget(QLabel('Choose the corrector:', wid))
