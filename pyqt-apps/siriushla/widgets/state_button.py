@@ -1,12 +1,16 @@
 """PyDM State Button Class."""
-
+import hashlib as _hashlib
 import logging as _log
+
 import numpy as _np
-from qtpy.QtWidgets import QStyleOption, QFrame
+
+from qtpy.QtWidgets import QStyleOption, QFrame, QMessageBox, QInputDialog, \
+    QLineEdit
 from qtpy.QtGui import QPainter
 from qtpy.QtCore import Property, Q_ENUMS, QByteArray, QRectF, \
-                        QSize, Signal, Qt
+    QSize, Signal, Qt
 from qtpy.QtSvg import QSvgRenderer
+
 from pydm.widgets.base import PyDMWritableWidget
 
 
@@ -1419,6 +1423,7 @@ class PyDMStateButton(QFrame, PyDMWritableWidget):
                                }
 
     clicked = Signal()
+    DEFAULT_CONFIRM_MESSAGE = "Are you sure you want to proceed?"
 
     def __init__(self, parent=None, init_channel=None, invert=False):
         """Initialize all internal states and properties."""
@@ -1435,6 +1440,130 @@ class PyDMStateButton(QFrame, PyDMWritableWidget):
         self.clicked.connect(self.send_value)
         self.shape = 0
         self.renderer = QSvgRenderer()
+
+        self._show_confirm_dialog = False
+        self._confirm_message = PyDMStateButton.DEFAULT_CONFIRM_MESSAGE
+        self._password_protected = False
+        self._password = ""
+        self._protected_password = ""
+
+    @Property(bool)
+    def passwordProtected(self):
+        """
+        Whether or not this button is password protected.
+
+        Returns
+        -------
+        bool
+        """
+        return self._password_protected
+
+    @passwordProtected.setter
+    def passwordProtected(self, value):
+        """
+        Whether or not this button is password protected.
+
+        Parameters
+        ----------
+        value : bool
+        """
+        if self._password_protected != value:
+            self._password_protected = value
+
+    @Property(str)
+    def password(self):
+        """
+        Password to be encrypted using SHA256.
+
+        .. warning::
+            To avoid issues exposing the password this method
+            always returns an empty string.
+
+        Returns
+        -------
+        str
+        """
+        return ""
+
+    @password.setter
+    def password(self, value):
+        """
+        Password to be encrypted using SHA256.
+
+        Parameters
+        ----------
+        value : str
+            The password to be encrypted
+        """
+        if value is not None and value != "":
+            sha = _hashlib.sha256()
+            sha.update(value.encode())
+            # Use the setter as it also checks whether the existing password
+            # is the same with the new one, and only updates if the new
+            # password is different
+            self.protectedPassword = sha.hexdigest()
+
+    @Property(str)
+    def protectedPassword(self):
+        """
+        The encrypted password.
+
+        Returns
+        -------
+        str
+        """
+        return self._protected_password
+
+    @protectedPassword.setter
+    def protectedPassword(self, value):
+        if self._protected_password != value:
+            self._protected_password = value
+
+    @Property(bool)
+    def showConfirmDialog(self):
+        """
+        Wether or not to display a confirmation dialog.
+
+        Returns
+        -------
+        bool
+        """
+        return self._show_confirm_dialog
+
+    @showConfirmDialog.setter
+    def showConfirmDialog(self, value):
+        """
+        Wether or not to display a confirmation dialog.
+
+        Parameters
+        ----------
+        value : bool
+        """
+        if self._show_confirm_dialog != value:
+            self._show_confirm_dialog = value
+
+    @Property(str)
+    def confirmMessage(self):
+        """
+        Message to be displayed at the Confirmation dialog.
+
+        Returns
+        -------
+        str
+        """
+        return self._confirm_message
+
+    @confirmMessage.setter
+    def confirmMessage(self, value):
+        """
+        Message to be displayed at the Confirmation dialog.
+
+        Parameters
+        ----------
+        value : str
+        """
+        if self._confirm_message != value:
+            self._confirm_message = value
 
     def mouseReleaseEvent(self, ev):
         """Deal with mouse clicks. Only accept clicks within the figure."""
@@ -1468,6 +1597,67 @@ class PyDMStateButton(QFrame, PyDMWritableWidget):
         self._bit_val = value
         self.update()
 
+    def confirm_dialog(self):
+        """
+        Show the confirmation dialog with the proper message in case
+        ```showConfirmMessage``` is True.
+
+        Returns
+        -------
+        bool
+            True if the message was confirmed or if ```showCofirmMessage```
+            is False.
+        """
+
+        if not self._show_confirm_dialog:
+            return True
+
+        if self._confirm_message == "":
+            self._confirm_message = PyDMStateButton.DEFAULT_CONFIRM_MESSAGE
+        msg = QMessageBox()
+        msg.setIcon(QMessageBox.Question)
+        msg.setText(self._confirm_message)
+        msg.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+        msg.setDefaultButton(QMessageBox.No)
+        ret = msg.exec_()
+        return not ret == QMessageBox.No
+
+    def validate_password(self):
+        """
+        If the widget is ```passwordProtected```, this method will propmt
+        the user for the correct password.
+
+        Returns
+        -------
+        bool
+            True in case the password was correct of if the widget is not
+            password protected.
+        """
+        if not self._password_protected:
+            return True
+
+        pwd, ok = QInputDialog().getText(
+           None, "Authentication", "Please enter your password:",
+           QLineEdit.Password, "")
+        pwd = str(pwd)
+        if not ok or pwd == "":
+            return False
+
+        sha = _hashlib.sha256()
+        sha.update(pwd.encode())
+        pwd_encrypted = sha.hexdigest()
+        if pwd_encrypted != self._protected_password:
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Critical)
+            msg.setText("Invalid password.")
+            msg.setWindowTitle("Error")
+            msg.setStandardButtons(QMessageBox.Ok)
+            msg.setDefaultButton(QMessageBox.Ok)
+            msg.setEscapeButton(QMessageBox.Ok)
+            msg.exec_()
+            return False
+        return True
+
     def send_value(self):
         """
         Emit a :attr:`send_value_signal` to update channel value.
@@ -1476,7 +1666,12 @@ class PyDMStateButton(QFrame, PyDMWritableWidget):
         the n-th digit of the channel. Otherwise it toggles the whole value.
         """
         if not self._connected:
-            return
+            return None
+        if not self.confirm_dialog():
+            return None
+        if not self.validate_password():
+            return None
+
         checked = not self._bit_val
         val = checked
         if self._bit >= 0:
