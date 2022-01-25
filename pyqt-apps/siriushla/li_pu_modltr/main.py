@@ -164,9 +164,9 @@ class LIModltrWindow(SiriusMainWindow):
             'Turn Off: Only press if you know what you are doing')
         btn_STOP.showConfirmDialog = True
         btn_STOP.confirmMessage = (
-            "This Action will Turn off the Klystron and Thyratron.\n"
-            "<h4>After this operation the system will enter in a 1h ramping"
-            "period when turned on again.</h4>\n"
+            "This Action will Turn off the Klystron and Thyratron."
+            "<h4>After this operation the system will enter in a 1h long "
+            "ramping process when turned on again.</h4>\n"
             "Are you sure you want to proceed?")
         btn_RUN = SiriusPushButton(
             parent=self, init_channel=dev + ':RUN_STOP', pressValue=1,
@@ -174,8 +174,9 @@ class LIModltrWindow(SiriusMainWindow):
         btn_RUN.setToolTip('Turn On')
         gdl_RUN_STOP = QGridLayout()
         gdl_RUN_STOP.addWidget(btn_STOP, 0, 0)
-        gdl_RUN_STOP.addWidget(led_RUN_STOP, 0, 1)
-        gdl_RUN_STOP.addWidget(btn_RUN, 0, 2)
+        gdl_RUN_STOP.addWidget(btn_RUN, 0, 1)
+        gdl_RUN_STOP.addWidget(
+            led_RUN_STOP, 1, 0, 1, 2, alignment=Qt.AlignCenter)
 
         lb_PREHEAT = QLabel(
             '<h4>PREHEAT</h4>', self, alignment=Qt.AlignCenter)
@@ -188,17 +189,23 @@ class LIModltrWindow(SiriusMainWindow):
             'Turn Off: Only press if you know what you are doing')
         btn_PREHEAT_OFF.showConfirmDialog = True
         btn_PREHEAT_OFF.confirmMessage = (
-            "This Action will Turn off the Klystron and Thyratron.\n"
-            "<h4>After this operation the system will enter in a 1h ramping"
-            "period when turned on again.</h4>\n"
+            "This Action will Turn off the Klystron and Thyratron."
+            "<h4>After this operation the system will enter in a 1h long "
+            "ramping process when turned on again.</h4>\n"
             "Are you sure you want to proceed?")
         btn_PREHEAT_ON = SiriusPushButton(
             parent=self, init_channel=dev + ':PREHEAT', pressValue=1,
             icon=qta.icon('mdi.power-on'))
+        btn_PREHEAT_ON.showConfirmDialog = True
+        btn_PREHEAT_ON.confirmMessage = (
+            "If PREHEAT is disabled, this action will <h4>start the 1h long "
+            "ramping process of the Klystron and Thyratron.</h4>\n"
+            "Are you sure you want to proceed?")
         gdl_PREHEAT = QGridLayout()
         gdl_PREHEAT.addWidget(btn_PREHEAT_OFF, 0, 0)
-        gdl_PREHEAT.addWidget(led_PREHEAT, 0, 1)
-        gdl_PREHEAT.addWidget(btn_PREHEAT_ON, 0, 2)
+        gdl_PREHEAT.addWidget(btn_PREHEAT_ON, 0, 1)
+        gdl_PREHEAT.addWidget(
+            led_PREHEAT, 1, 0, 1, 2, alignment=Qt.AlignCenter)
 
         lb_Charge = QLabel(
             '<h4>Charge</h4>', self, alignment=Qt.AlignCenter)
