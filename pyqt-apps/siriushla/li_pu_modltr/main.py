@@ -157,11 +157,48 @@ class LIModltrWindow(SiriusMainWindow):
             '<h4>RUN_STOP</h4>', self, alignment=Qt.AlignCenter)
         led_RUN_STOP = SiriusLedState(self, dev + ':RUN_STOP')
         led_RUN_STOP.offColor = SiriusLedState.Red
+        btn_STOP = SiriusPushButton(
+            parent=self, init_channel=dev + ':RUN_STOP', pressValue=0,
+            icon=qta.icon('mdi.power-off'))
+        btn_STOP.setToolTip(
+            'Turn Off: Only press if you know what you are doing')
+        btn_STOP.showConfirmDialog = True
+        btn_STOP.confirmMessage = (
+            "This Action will Turn off the Klystron and Thyratron.\n"
+            "<h4>After this operation the system will enter in a 1h ramping"
+            "period when turned on again.</h4>\n"
+            "Are you sure you want to proceed?")
+        btn_RUN = SiriusPushButton(
+            parent=self, init_channel=dev + ':RUN_STOP', pressValue=1,
+            icon=qta.icon('mdi.power-on'))
+        btn_RUN.setToolTip('Turn On')
+        gdl_RUN_STOP = QGridLayout()
+        gdl_RUN_STOP.addWidget(btn_STOP, 0, 0)
+        gdl_RUN_STOP.addWidget(led_RUN_STOP, 0, 1)
+        gdl_RUN_STOP.addWidget(btn_RUN, 0, 2)
 
         lb_PREHEAT = QLabel(
             '<h4>PREHEAT</h4>', self, alignment=Qt.AlignCenter)
         led_PREHEAT = SiriusLedState(self, dev + ':PREHEAT')
         led_PREHEAT.offColor = SiriusLedState.Red
+        btn_PREHEAT_OFF = SiriusPushButton(
+            parent=self, init_channel=dev + ':PREHEAT', pressValue=0,
+            icon=qta.icon('mdi.power-off'))
+        btn_PREHEAT_OFF.setToolTip(
+            'Turn Off: Only press if you know what you are doing')
+        btn_PREHEAT_OFF.showConfirmDialog = True
+        btn_PREHEAT_OFF.confirmMessage = (
+            "This Action will Turn off the Klystron and Thyratron.\n"
+            "<h4>After this operation the system will enter in a 1h ramping"
+            "period when turned on again.</h4>\n"
+            "Are you sure you want to proceed?")
+        btn_PREHEAT_ON = SiriusPushButton(
+            parent=self, init_channel=dev + ':PREHEAT', pressValue=1,
+            icon=qta.icon('mdi.power-on'))
+        gdl_PREHEAT = QGridLayout()
+        gdl_PREHEAT.addWidget(btn_PREHEAT_OFF, 0, 0)
+        gdl_PREHEAT.addWidget(led_PREHEAT, 0, 1)
+        gdl_PREHEAT.addWidget(btn_PREHEAT_ON, 0, 2)
 
         lb_Charge = QLabel(
             '<h4>Charge</h4>', self, alignment=Qt.AlignCenter)
@@ -180,9 +217,9 @@ class LIModltrWindow(SiriusMainWindow):
         lay.setAlignment(Qt.AlignCenter)
         lay.setHorizontalSpacing(30)
         lay.addWidget(lb_RUN_STOP, 0, 0)
-        lay.addWidget(led_RUN_STOP, 1, 0, alignment=Qt.AlignCenter)
+        lay.addLayout(gdl_RUN_STOP, 1, 0, alignment=Qt.AlignCenter)
         lay.addWidget(lb_PREHEAT, 0, 1)
-        lay.addWidget(led_PREHEAT, 1, 1, alignment=Qt.AlignCenter)
+        lay.addLayout(gdl_PREHEAT, 1, 1, alignment=Qt.AlignCenter)
         lay.addWidget(lb_Charge, 0, 2)
         lay.addWidget(pb_Charge, 1, 2)
         lay.addWidget(lb_TrigOut, 0, 3)
