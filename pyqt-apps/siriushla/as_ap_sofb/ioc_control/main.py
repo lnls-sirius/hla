@@ -227,18 +227,20 @@ class SOFBControl(BaseWidget):
         corr_wid = QGroupBox('Correction', parent)
         corr_wid.setLayout(QVBoxLayout())
 
-        lbl = QLabel('Auto Correction State:', corr_wid)
-        wid = self.create_pair_butled(corr_wid, 'LoopState')
-        hbl = QHBoxLayout()
-        hbl.addWidget(lbl)
-        hbl.addWidget(wid)
-        corr_wid.layout().addLayout(hbl)
+        if self.acc != 'BO':
+            lbl = QLabel('Auto Correction State:', corr_wid)
+            wid = self.create_pair_butled(corr_wid, 'LoopState')
+            hbl = QHBoxLayout()
+            hbl.addWidget(lbl)
+            hbl.addWidget(wid)
+            corr_wid.layout().addLayout(hbl)
 
         corr_tab = QTabWidget(corr_wid)
         corr_wid.layout().addWidget(corr_tab)
 
-        auto_wid = self.get_auto_correction_widget(corr_tab)
-        corr_tab.addTab(auto_wid, 'Automatic')
+        if self.acc != 'BO':
+            auto_wid = self.get_auto_correction_widget(corr_tab)
+            corr_tab.addTab(auto_wid, 'Automatic')
 
         man_wid = self.get_manual_correction_widget(corr_tab)
         corr_tab.addTab(man_wid, 'Manual')
@@ -247,8 +249,9 @@ class SOFBControl(BaseWidget):
             parent, self.device, prefix=self.prefix, acc=self.acc)
         corr_tab.addTab(kicks_wid, 'Kicks Config')
 
-        hbl = kicks_wid.get_status_widget(corr_wid)
-        corr_wid.layout().addLayout(hbl)
+        if self.acc != 'BO':
+            hbl = kicks_wid.get_status_widget(corr_wid)
+            corr_wid.layout().addLayout(hbl)
         return corr_wid
 
     def get_manual_correction_widget(self, parent):
@@ -275,6 +278,14 @@ class SOFBControl(BaseWidget):
             '", "trigger": true}]}]')
         calc.rules = rules
 
+        if self.acc == 'BO':
+            gdl.addWidget(calc, 1, 1)
+            gdl.setColumnStretch(0, 2)
+            gdl.setColumnStretch(2, 2)
+            gdl.setRowStretch(0, 2)
+            gdl.setRowStretch(2, 2)
+            return man_wid
+
         exp = 'ch[0] in (1, 2, 3)'
         ch = ''
         if self.isring:
@@ -291,7 +302,7 @@ class SOFBControl(BaseWidget):
             ('All', self._csorb.ApplyDelta.All),
             ('CH', self._csorb.ApplyDelta.CH),
             ('CV', self._csorb.ApplyDelta.CV)]
-        if self.acc == 'SI':
+        if self.acc in {'SI', 'BO'}:
             lst.append(('RF', self._csorb.ApplyDelta.RF))
         btns = dict()
         for itm, val in lst:
@@ -306,12 +317,14 @@ class SOFBControl(BaseWidget):
                 min-height: 25px; min-width: 45px;\
                 max-height: 25px;\
                 icon-size: 20px;}')
+            if self.acc == 'BO':
+                btn.setVisible(False)
             btns[itm] = btn
 
         gdl.addWidget(calc, 0, 0, 2, 1)
         gdl.addWidget(btns['CH'], 0, 1)
         gdl.addWidget(btns['CV'], 0, 2)
-        if self.acc == 'SI':
+        if self.acc in {'SI', 'BO'}:
             gdl.addWidget(btns['RF'], 0, 3)
             gdl.addWidget(btns['All'], 1, 1, 1, 3)
         else:
@@ -320,7 +333,7 @@ class SOFBControl(BaseWidget):
 
         grpbx = QWidget(man_wid)
         grpbx.setObjectName('gbx')
-        if self.acc == 'SI':
+        if self.acc in {'SI', 'BO'}:
             planes = ('CH', 'CV', 'RF')
             gdl.addWidget(grpbx, 2, 0, 1, 4)
         else:
@@ -334,6 +347,9 @@ class SOFBControl(BaseWidget):
             wid = self.create_pair(grpbx, 'ManCorrGain'+pln)
             wid.setObjectName('wid')
             wid.setStyleSheet('#wid{min-height:1.2em;}')
+            if self.acc == 'BO':
+                lbl.setVisible(False)
+                wid.setVisible(False)
             fbl.addRow(lbl, wid)
 
         vlay = QVBoxLayout()
@@ -399,12 +415,12 @@ class SOFBControl(BaseWidget):
             pair = self.create_pair(wid, tmpl.format(k, 'CV'), is_vert=True)
             pairs.append(pair)
             gpbx_lay.addWidget(pair, 2, i)
-            if self.acc == 'SI':
+            if self.acc in {'SI', 'BO'}:
                 pair = self.create_pair(
                     wid, tmpl.format(k, 'RF'), is_vert=True)
                 pairs.append(pair)
                 gpbx_lay.addWidget(pair, 3, i)
-        if self.acc == 'SI':
+        if self.acc in {'SI', 'BO'}:
             gpbx_lay.addWidget(QLabel('RF', gpbx), 3, 0)
 
         pbc = QPushButton('SP')

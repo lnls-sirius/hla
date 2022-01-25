@@ -23,7 +23,7 @@ class CorrectorsWidget(BaseWidget):
         self.updater[1].some_changed('val', 'Kicks')
         self.updater[1].some_changed('ref', 'Zero')
 
-        if acc == 'SI':
+        if acc in {'SI', 'BO'}:
             self.add_RF_kicks()
         self.add_kicklimits_curves()
 

@@ -29,7 +29,7 @@ class KicksConfigWidget(BaseWidget):
         pvnames = ('MaxKick', 'MaxDeltaKick')
         unitss = (('[urad]', '[urad]'), ('[urad]', '[urad]'))
         planes = ('CH', 'CV')
-        if self.acc == 'SI':
+        if self.acc in {'SI', 'BO'}:
             unitss = (
                 ('[urad]', '[urad]', None),
                 ('[urad]', '[urad]', '[Hz]'), )

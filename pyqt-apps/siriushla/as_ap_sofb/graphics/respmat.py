@@ -80,10 +80,9 @@ class ShowMatrixWidget(QWidget):
     def _show_tooltip(self, pos):
         names = self._csorb.bpm_nicknames
         cname = self._csorb.ch_nicknames + self._csorb.cv_nicknames
-        if self._csorb.acc == 'SI':
+        if self._csorb.isring:
             cname += ['RF', ]
         posi = self._csorb.bpm_pos
-        unit = 'count'
 
         graph = self.graph
         curve = graph.curveAtIndex(0)
@@ -95,7 +94,7 @@ class ShowMatrixWidget(QWidget):
 
         indy = int(posy // self.spbox.value())
         indy = max(min(indy, len(cname)-1), 0)
-        sca, prf = functions.siScale(posy)
+        # sca, prf = functions.siScale(posy)
         txt = 'BPM = {0:s}, Corr = {1:s}'.format(names[ind], cname[indy])
         QToolTip.showText(
             graph.mapToGlobal(pos.toPoint()),
