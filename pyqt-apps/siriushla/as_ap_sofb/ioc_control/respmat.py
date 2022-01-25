@@ -59,8 +59,9 @@ class RespMatWidget(BaseWidget):
         svs_wid = self.get_singular_values_widget(tabw)
         tabw.addTab(svs_wid, 'SVs')
 
-        meas_wid = self.get_measurement_widget(tabw)
-        tabw.addTab(meas_wid, 'Meas')
+        if self.acc != 'BO':
+            meas_wid = self.get_measurement_widget(tabw)
+            tabw.addTab(meas_wid, 'Meas')
 
     def get_main_widget(self, parent):
         main_wid = QWidget(parent)
