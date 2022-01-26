@@ -285,7 +285,7 @@ class BbBPwrAmpsWidget(QWidget):
             '<h3>AR Amplifier</h3>', self, alignment=Qt.AlignCenter)
 
         conf = SiriusPushButton(
-            self, init_channel=pref+':Rst-Cmd', pressValue=1)
+            self, init_channel=pref+':Rst-Cmd', pressValue=1, releaseValue=0)
         conf.setText('Reset')
         conf.setToolTip('Reset State')
         conf.setIcon(qta.icon('fa5s.sync'))

@@ -469,7 +469,8 @@ class BbBInterlock(QWidget):
         fr_sts.borderWidth = 2
         fr_sts.add_widget(lb_sts)
         pb_rst = SiriusPushButton(
-            self, init_channel=self.dev_pref+':ILOCK_RESET', pressValue=1)
+            self, init_channel=self.dev_pref+':ILOCK_RESET', pressValue=1,
+            releaseValue=0)
         pb_rst.setText('Reset')
         pb_rst.setToolTip('Reset Counts')
         pb_rst.setIcon(qta.icon('fa5s.sync'))
@@ -510,14 +511,16 @@ class BbBInterlock(QWidget):
         sb_thr.showUnits = True
 
         pb_upt = SiriusPushButton(
-            self, init_channel=self.dev_pref+':ILOCK_UPDATE', pressValue=1)
+            self, init_channel=self.dev_pref+':ILOCK_UPDATE', pressValue=1,
+            releaseValue=0)
         pb_upt.setText('Update Filter')
         pb_upt.setToolTip('Update Filter Config')
         pb_upt.setIcon(qta.icon('mdi.sync'))
         pb_upt.setStyleSheet("icon-size:20px;")
 
         pb_ld = SiriusPushButton(
-            self, init_channel=self.dev_pref+':BO_CPCOEFF', pressValue=1)
+            self, init_channel=self.dev_pref+':BO_CPCOEFF', pressValue=1,
+            releaseValue=0)
         pb_ld.setText('Apply Filter')
         pb_ld.setToolTip('Apply Filter Config to Feedback')
         pb_ld.setIcon(qta.icon('mdi.upload'))

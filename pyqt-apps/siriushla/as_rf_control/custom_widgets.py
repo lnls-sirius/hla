@@ -10,10 +10,12 @@ class RFEnblDsblButton(QWidget):
     def __init__(self, parent=None, channels=dict()):
         super().__init__(parent)
         self.pb_off = SiriusPushButton(
-            parent=self, label='Off', init_channel=channels['off'])
+            parent=self, label='Off', init_channel=channels['off'],
+            releaseValue=0)
         self.pb_off.setStyleSheet('min-width:1.4em; max-width:1.4em;')
         self.pb_on = SiriusPushButton(
-            parent=self, label='On', init_channel=channels['on'])
+            parent=self, label='On', init_channel=channels['on'],
+            releaseValue=0)
         self.pb_on.setStyleSheet('min-width:1.4em; max-width:1.4em;')
         lay = QHBoxLayout(self)
         lay.setContentsMargins(0, 0, 0, 0)
