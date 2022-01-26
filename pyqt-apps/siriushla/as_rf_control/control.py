@@ -202,7 +202,7 @@ class RFMainControl(SiriusMainWindow):
         self.ld_globreset = QLabel(
             'Reset Global', self, alignment=Qt.AlignRight)
         self.pb_globreset = SiriusPushButton(
-            label='', icon=qta.icon('fa5s.sync'),
+            label='', icon=qta.icon('fa5s.sync'), releaseValue=0,
             parent=self, init_channel=self.prefix+self.chs['Reset']['Global'])
         self.pb_globreset.setObjectName('pb_globreset')
         self.pb_globreset.setStyleSheet(
@@ -211,7 +211,7 @@ class RFMainControl(SiriusMainWindow):
         # # Reset LLRF
         self.ld_llrfreset = QLabel('Reset LLRF', self, alignment=Qt.AlignRight)
         self.pb_llrfreset = SiriusPushButton(
-            label='', icon=qta.icon('fa5s.sync'),
+            label='', icon=qta.icon('fa5s.sync'), releaseValue=0,
             parent=self, init_channel=self.prefix+self.chs['Reset']['LLRF'])
         self.pb_llrfreset.setObjectName('pb_llrfreset')
         self.pb_llrfreset.setStyleSheet(

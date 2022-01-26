@@ -273,7 +273,8 @@ class BbBStatusWidget(QWidget):
         ld_intvl = QLabel('Interval [s]', alignment=Qt.AlignCenter)
         lb_intvl = PyDMLabel(self, self.dev_pref+':RST_COUNT')
         pb_intvl = SiriusPushButton(
-            self, init_channel=self.dev_pref+':CNTRST', pressValue=1)
+            self, init_channel=self.dev_pref+':CNTRST', pressValue=1,
+            releaseValue=0)
         pb_intvl.setText('Reset')
         pb_intvl.setToolTip('Reset Counts')
         pb_intvl.setIcon(qta.icon('fa5s.sync'))

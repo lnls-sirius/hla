@@ -90,8 +90,7 @@ class LIModltrWindow(SiriusMainWindow):
         # Reset
         pb_reset = SiriusPushButton(
             self, label='Reset', icon=qta.icon('fa5s.sync'),
-            pressValue=1, releaseValue=0,
-            init_channel=dev+':RESET')
+            pressValue=1, releaseValue=0, init_channel=dev+':RESET')
         pb_reset.setObjectName('reset')
         pb_reset.setStyleSheet("""
             #reset{
