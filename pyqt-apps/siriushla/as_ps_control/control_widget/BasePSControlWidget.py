@@ -488,6 +488,9 @@ class BasePSControlWidget(QWidget):
         self.wfmupdate_off_act.triggered.connect(
             lambda: self._set_wfmupdate(False))
         self.wfmupdate_off_act.setEnabled(False)
+        self.updparms_act = QAction("Update Parameters", self)
+        self.updparms_act.triggered.connect(self._update_params)
+        self.updparms_act.setEnabled(False)
 
     def _enable_actions(self):
         if 'state' in self.visible_props and \
@@ -507,6 +510,9 @@ class BasePSControlWidget(QWidget):
                 not self.wfmupdate_on_act.isEnabled():
             self.wfmupdate_on_act.setEnabled(True)
             self.wfmupdate_off_act.setEnabled(True)
+        if 'updparms' in self.visible_props and \
+                not self.updparms_act.isEnabled():
+            self.updparms_act.setEnabled(True)
 
     @Slot(bool)
     def _set_pwrstate(self, state):
@@ -571,6 +577,16 @@ class BasePSControlWidget(QWidget):
                 except TypeError:
                     pass
 
+    @Slot()
+    def _update_params(self):
+        """Update parameters."""
+        for key, widget in self.ps_widgets_dict.items():
+            if key in self.filtered_widgets:
+                try:
+                    widget.update_params()
+                except TypeError:
+                    pass
+
     # Overloaded method
     def contextMenuEvent(self, event):
         """Show a custom context menu."""
@@ -583,6 +599,7 @@ class BasePSControlWidget(QWidget):
         menu.addAction(self.reset_act)
         menu.addAction(self.wfmupdate_on_act)
         menu.addAction(self.wfmupdate_off_act)
+        menu.addAction(self.updparms_act)
         menu.addSeparator()
         action = menu.addAction('Show Connections...')
         action.triggered.connect(self.show_connections)

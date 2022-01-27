@@ -1586,7 +1586,19 @@ class PSParamsWidget(SiriusDialog):
         scr_area.setWidget(scr_area_wid)
         flay = QFormLayout(scr_area_wid)
         flay.setLabelAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        for idx, param in enumerate(self.params):
+
+        # Update
+        text = 'Update Command'
+        wid = PyDMPushButton(
+            parent=self, icon=qta.icon('fa5s.redo-alt'), pressValue=1,
+            init_channel=self._prefixed_psname + ":ParamUpdate-Cmd")
+        wid.setObjectName('updt_bt')
+        wid.setStyleSheet(
+            '#updt_bt{min-width:25px; max-width:25px; icon-size:20px;}')
+        flay.addRow(text, wid)
+
+        # Params
+        for param in self.params:
             pvname = self._prefixed_psname + ':' + param
             text = param.split('-')[0].split('Param')[1]
             if 'Intlk' in pvname or 'Analog' in pvname:

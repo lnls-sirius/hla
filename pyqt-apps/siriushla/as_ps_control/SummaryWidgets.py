@@ -98,6 +98,7 @@ def get_prop2width(psname):
                 'ctrlmode': '6',
                 'ctrlloop': '8',
                 'wfmupdate': '8',
+                'updparms': '6',
             })
     else:
         dic['conn'] = '5'
@@ -141,6 +142,7 @@ def get_prop2label(psname):
                 'ctrlmode': 'Control Mode',
                 'ctrlloop': 'Control Loop',
                 'wfmupdate': 'Wfm Update',
+                'updparms': 'Upd.Params',
             })
     else:
         dic['conn'] = 'Connected'
@@ -160,9 +162,9 @@ def get_prop2label(psname):
 def sort_propties(labels):
     default_order = (
         'detail', 'bbb', 'udc', 'opmode', 'ctrlmode', 'state', 'pulse',
-        'intlk', 'reset', 'conn', 'ctrlloop', 'wfmupdate', 'setpoint',
-        'readback', 'monitor', 'strength_sp', 'strength_rb', 'strength_mon',
-        'trim')
+        'intlk', 'reset', 'conn', 'ctrlloop', 'wfmupdate', 'updparms',
+        'setpoint', 'readback', 'monitor', 'strength_sp', 'strength_rb',
+        'strength_mon', 'trim')
     idcs = list()
     for lbl in labels:
         idcs.append(default_order.index(lbl))
@@ -285,6 +287,10 @@ class SummaryWidget(QWidget):
                 self.wfmupdate_wid = self._build_widget(name='wfmupdate')
                 self._widgets_dict['wfmupdate'] = self.wfmupdate_wid
                 lay.addWidget(self.wfmupdate_wid)
+
+                self.updparms_wid = self._build_widget(name='updparms')
+                self._widgets_dict['updparms'] = self.updparms_wid
+                lay.addWidget(self.updparms_wid)
 
         self.setpoint_wid = self._build_widget(
             name='setpoint', orientation='v')
@@ -442,6 +448,8 @@ class SummaryWidget(QWidget):
                     propty='WfmUpdateAuto-Sel')
                 self._wfmupdate_sts = self._prefixed_name.substitute(
                     propty='WfmUpdateAuto-Sts')
+                self._updparms_cmd = self._prefixed_name.substitute(
+                    propty='ParamUpdate-Cmd')
 
         if self._is_pulsed:
             self._pulse_sel = self._prefixed_name.substitute(
@@ -547,6 +555,14 @@ class SummaryWidget(QWidget):
             self.wfmupdate_led = SiriusLedState(self, self._wfmupdate_sts)
             self.wfmupdate_wid.layout().addWidget(self.wfmupdate_bt)
             self.wfmupdate_wid.layout().addWidget(self.wfmupdate_led)
+        elif name == 'updparms' and not self._is_reg_slave:
+            self.updparms_bt = PyDMPushButton(
+                parent=self, init_channel=self._updparms_cmd, pressValue=1)
+            self.updparms_bt.setIcon(qta.icon('fa5s.redo-alt'))
+            self.updparms_bt.setObjectName('updparms_bt')
+            self.updparms_bt.setStyleSheet(
+                '#updparms_bt{min-width:25px;max-width:25px;icon-size:20px;}')
+            self.updparms_wid.layout().addWidget(self.updparms_bt)
         elif name == 'setpoint' and not self._is_reg_slave:
             self.setpoint = PyDMLinEditScrollbar(self._analog_sp, self)
             self.setpoint.sp_scrollbar.setTracking(False)
@@ -641,6 +657,12 @@ class SummaryWidget(QWidget):
         if hasattr(self, 'reset_bt'):
             if self.reset_bt.isEnabled():
                 self.reset_bt.sendValue()
+
+    def update_params(self):
+        """Update power supply parameters."""
+        if hasattr(self, 'updparms_bt'):
+            if self.updparms_bt.isEnabled():
+                self.updparms_bt.sendValue()
 
 
 class SummaryHeader(QWidget):
