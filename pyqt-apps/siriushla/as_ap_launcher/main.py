@@ -4,12 +4,11 @@ import qtawesome as qta
 
 from qtpy.QtCore import Qt, Slot, Signal, QEvent
 from qtpy.QtWidgets import QWidget, QGroupBox, QPushButton, QLabel, \
-    QGridLayout, QApplication, QHBoxLayout, QVBoxLayout
+    QGridLayout, QApplication, QHBoxLayout
 from pydm.widgets import PyDMPushButton, PyDMLabel
 
 from siriuspy.envars import VACA_PREFIX
 from siriuspy.namesys.implementation import SiriusPVName
-from siriuspy.search import LLTimeSearch as _LLTimeSearch
 from siriuspy.injctrl.csdev import Const as _InjConst
 
 from ..util import get_appropriate_color, connect_newprocess
