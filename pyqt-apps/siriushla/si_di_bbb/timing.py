@@ -52,7 +52,8 @@ class BbBTimingWidget(QWidget):
         # Timing Control
         ld_clkrst = QLabel('Clock Reset', self)
         pb_clkrst = SiriusPushButton(
-            self, init_channel=self.dev_pref+':CLKRST', pressValue=1)
+            self, init_channel=self.dev_pref+':CLKRST', pressValue=1,
+            releaseValue=0)
         pb_clkrst.setText('Reset')
         pb_clkrst.setToolTip('Reset Clock')
         pb_clkrst.setIcon(qta.icon('fa5s.sync'))
