@@ -13,7 +13,8 @@ from siriuspy.injctrl.csdev import Const as _InjConst
 
 from ..util import get_appropriate_color, connect_newprocess
 from ..widgets import SiriusMainWindow, PyDMStateButton, SiriusLabel, \
-    SiriusEnumComboBox, SiriusLedState, PyDMLogLabel, SiriusConnectionSignal
+    SiriusEnumComboBox, SiriusLedState, PyDMLogLabel, SiriusConnectionSignal, \
+    SiriusSpinbox
 from ..as_ti_control import BucketList, EVGInjectionLed, EVGInjectionButton
 from ..as_ap_machshift import MachShiftLabel
 from ..as_ap_injection import InjSysStbyControlWidget, InjDiagLed, \
@@ -116,9 +117,15 @@ class MainLauncher(SiriusMainWindow):
             self._handle_injmode_settings_vis)
 
         # # Settings
-        label_injsett = QLabel(
+        label_sett = QLabel(
             '<h4>Sett.</h4>', self, alignment=Qt.AlignCenter)
-        led_injsett = InjDiagLed(self)
+        led_sett = InjDiagLed(self)
+        self.wid_injsett = QWidget()
+        lay_injsett = QGridLayout(self.wid_injsett)
+        lay_injsett.setContentsMargins(0, 0, 0, 0)
+        lay_injsett.setAlignment(Qt.AlignTop)
+        lay_injsett.addWidget(label_sett, 0, 0)
+        lay_injsett.addWidget(led_sett, 1, 0)
 
         # # Auto Stop
         self.label_injauto = QLabel(
@@ -132,6 +139,7 @@ class MainLauncher(SiriusMainWindow):
         self.wid_injauto.setStyleSheet("#wid{min-width: 8em; max-width: 8em;}")
         lay_injauto = QGridLayout(self.wid_injauto)
         lay_injauto.setContentsMargins(0, 0, 0, 0)
+        lay_injauto.setAlignment(Qt.AlignTop)
         lay_injauto.addWidget(self.label_injauto, 0, 0)
         lay_injauto.addWidget(self.but_injauto, 1, 0)
         lay_injauto.addWidget(self.led_injauto, 2, 0)
@@ -157,6 +165,7 @@ class MainLauncher(SiriusMainWindow):
         self.wid_tusts.setStyleSheet("#wid{min-width: 8em; max-width: 8em;}")
         lay_tusts = QGridLayout(self.wid_tusts)
         lay_tusts.setContentsMargins(0, 0, 0, 0)
+        lay_tusts.setAlignment(Qt.AlignTop)
         lay_tusts.addWidget(label_tusts, 0, 0, 1, 2)
         lay_tusts.addWidget(QLabel('Now:', self), 1, 0)
         lay_tusts.addWidget(label_tunow, 1, 1)
@@ -185,36 +194,77 @@ class MainLauncher(SiriusMainWindow):
         label_injcnt.setStyleSheet('QLabel{max-width: 3.5em;}')
         lay_inject_sts = QHBoxLayout()
         lay_inject_sts.setContentsMargins(0, 0, 0, 0)
+        lay_inject_sts.setAlignment(Qt.AlignTop)
         lay_inject_sts.addWidget(led_injsts)
         lay_inject_sts.addWidget(label_injcnt)
+        self.wid_injctrl = QWidget()
+        lay_injctrl = QGridLayout(self.wid_injctrl)
+        lay_injctrl.setContentsMargins(0, 0, 0, 0)
+        lay_injctrl.setAlignment(Qt.AlignTop)
+        lay_injctrl.addWidget(label_inj, 0, 2, alignment=Qt.AlignCenter)
+        lay_injctrl.addLayout(lay_inject_sel, 1, 2, alignment=Qt.AlignCenter)
+        lay_injctrl.addLayout(lay_inject_sts, 2, 2, alignment=Qt.AlignCenter)
+
+        # # Injection Auxiliary section
+        self.wid_injlog = QGroupBox('Injection Log')
+        label_injlog = PyDMLogLabel(
+            self, injctrl_dev.substitute(propty='Log-Mon'),
+            replace=['Remaining time', ])
+        lay_injlog = QGridLayout(self.wid_injlog)
+        lay_injlog.addWidget(label_injlog, 0, 0)
+        self.wid_injlog.setVisible(False)
+
+        self.wid_mon = MonitorSummaryWidget(self, self._prefix)
+        self.wid_mon.setVisible(False)
+
+        # # Target Current
+        self._ld_currtgt = QLabel(
+            '<h4>Target Curr.</h4>', self, alignment=Qt.AlignCenter)
+        self._sb_currtgt = SiriusSpinbox(
+            self, injctrl_dev.substitute(propty='TargetCurrent-SP'))
+        self._sb_currtgt.showStepExponent = False
+        self._lb_currtgt = PyDMLabel(
+            self, injctrl_dev.substitute(propty='TargetCurrent-RB'))
+        self._lb_currtgt.showUnits = True
+        self._wid_tcurr = QWidget()
+        lay_tcurr = QGridLayout(self._wid_tcurr)
+        lay_tcurr.setContentsMargins(0, 0, 0, 0)
+        lay_tcurr.setAlignment(Qt.AlignTop)
+        lay_tcurr.addWidget(self._ld_currtgt, 0, 0)
+        lay_tcurr.addWidget(self._sb_currtgt, 1, 0)
+        lay_tcurr.addWidget(self._lb_currtgt, 2, 0)
 
         # # Bucket List
         self._bucket_list = BucketList(self, prefix=self._prefix, min_size=15)
-        self._bucket_list.setVisible(False)
 
-        pbt_aux = QPushButton('^', self)
-        pbt_aux.setToolTip('Hide Injection Auxiliary section.')
+        self.wid_fill = QWidget()
+        lay_fill = QGridLayout(self.wid_fill)
+        lay_fill.setContentsMargins(0, 0, 0, 0)
+        lay_fill.setHorizontalSpacing(9)
+        lay_fill.addWidget(self._wid_tcurr, 0, 0)
+        lay_fill.addWidget(self._bucket_list, 0, 1)
+        self.wid_fill.setVisible(False)
+
+        pbt_aux = QPushButton('v', self)
+        pbt_aux.setToolTip('Show Injection Auxiliary section.')
         pbt_aux.clicked.connect(self._toggle_show_injaux)
         pbt_aux.setStyleSheet('QPushButton{max-width: 0.8em;}')
         pbt_bl = QPushButton('>', self)
-        pbt_bl.setToolTip('Show bucket list controls.')
+        pbt_bl.setToolTip('Show bucket list and target current controls.')
         pbt_bl.clicked.connect(self._toggle_show_bucketlist)
         pbt_bl.setStyleSheet('QPushButton{max-width: 0.8em;}')
 
         lay_inj = QGridLayout(self.wid_inject)
-        lay_inj.setAlignment(Qt.AlignCenter)
+        lay_inj.setAlignment(Qt.AlignTop)
         lay_inj.setVerticalSpacing(5)
         lay_inj.setHorizontalSpacing(12)
-        lay_inj.addWidget(label_injsett, 0, 0)
-        lay_inj.addWidget(led_injsett, 1, 0)
-        lay_inj.addWidget(self.wid_injauto, 0, 1, 3, 1)
-        lay_inj.addWidget(self.wid_tusts, 0, 1, 3, 1)
-        lay_inj.addWidget(label_inj, 0, 2, alignment=Qt.AlignCenter)
-        lay_inj.addLayout(lay_inject_sel, 1, 2, alignment=Qt.AlignCenter)
-        lay_inj.addLayout(lay_inject_sts, 2, 2, alignment=Qt.AlignCenter)
-        lay_inj.addWidget(pbt_bl, 0, 3, alignment=Qt.AlignBottom)
-        lay_inj.addWidget(pbt_aux, 2, 3, alignment=Qt.AlignBottom)
-        lay_inj.addWidget(self._bucket_list, 0, 4, 3, 1)
+        lay_inj.addWidget(self.wid_injsett, 0, 0, 2, 1)
+        lay_inj.addWidget(self.wid_injauto, 0, 1, 2, 1)
+        lay_inj.addWidget(self.wid_tusts, 0, 1, 2, 1)
+        lay_inj.addWidget(self.wid_injctrl, 0, 2, 2, 1)
+        lay_inj.addWidget(pbt_bl, 0, 3, alignment=Qt.AlignTop)
+        lay_inj.addWidget(pbt_aux, 1, 3, alignment=Qt.AlignBottom)
+        lay_inj.addWidget(self.wid_fill, 0, 4, 2, 1)
 
         # Current
         curr_pvname = SiriusPVName(
@@ -236,15 +286,6 @@ class MainLauncher(SiriusMainWindow):
         rfkill_bt = RFKillBeamButton(self)
         rfkill_lay = QGridLayout(self.wid_rfkill)
         rfkill_lay.addWidget(rfkill_bt)
-
-        self.wid_injlog = QGroupBox('Injection Log')
-        label_injlog = PyDMLogLabel(
-            self, injctrl_dev.substitute(propty='Log-Mon'),
-            replace=['Remaining time', ])
-        lay_injlog = QGridLayout(self.wid_injlog)
-        lay_injlog.addWidget(label_injlog, 0, 0)
-
-        self.wid_mon = MonitorSummaryWidget(self, self._prefix)
 
         # menu buttons
         self.wid_pbt = QPushButton('v', self)
@@ -286,8 +327,8 @@ class MainLauncher(SiriusMainWindow):
         self.adjustSize()
 
     def _toggle_show_bucketlist(self):
-        show = self._bucket_list.isHidden()
-        self._bucket_list.setVisible(show)
+        show = self.wid_fill.isHidden()
+        self.wid_fill.setVisible(show)
         text = '<' if show else '>'
         tooltip = ('Hide' if show else 'Show')+' bucket list controls.'
         self.sender().setText(text)
