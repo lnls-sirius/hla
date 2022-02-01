@@ -10,6 +10,7 @@ import qtawesome as qta
 from pydm.widgets import PyDMPushButton
 
 from siriuspy.envars import VACA_PREFIX
+from siriuspy.namesys import SiriusPVName
 from siriuspy.devices import InjSysStandbyHandler
 from siriuspy.clientarch import Time as _Time
 from siriuspy.injctrl.csdev import get_status_labels, Const as _Const
@@ -27,7 +28,8 @@ class MonitorSummaryWidget(QWidget):
         """Init."""
         super().__init__(parent)
         self.prefix = prefix
-        self._inj_prefix = prefix + 'AS-Glob:AP-InjCtrl'
+        self._inj_dev = SiriusPVName('AS-Glob:AP-InjCtrl')
+        self._inj_prefix = self._inj_dev.substitute(prefix=prefix)
         self._setupUi()
 
     def _setupUi(self):
@@ -63,12 +65,14 @@ class MonitorSummaryWidget(QWidget):
                     continue
                 bit = lbls.index(sub)
                 led = SiriusLedAlert(
-                    self, self._inj_prefix + ':DiagStatus'+sec+'-Mon', bit=bit)
+                    self, self._inj_prefix.substitute(
+                        propty='DiagStatus'+sec+'-Mon'), bit=bit)
                 glay.addWidget(led, row+1, col+1)
 
             bit = sec_lbls.index(sec)
             led = SiriusLedAlert(
-                self, self._inj_prefix + ':DiagStatus-Mon', bit=bit)
+                self, self._inj_prefix.substitute(
+                    propty='DiagStatus-Mon'), bit=bit)
             glay.addWidget(led, row+3, col+1)
 
         lay = QHBoxLayout(self)
@@ -80,7 +84,8 @@ class InjDiagLed(SiriusLedAlert):
     """InjDiag Status Led."""
 
     def __init__(self, parent, prefix=VACA_PREFIX, **kws):
-        init_channel = prefix+'AS-Glob:AP-InjCtrl:InjStatus-Mon'
+        init_channel = SiriusPVName(
+            'AS-Glob:AP-InjCtrl:InjStatus-Mon').substitute(prefix=prefix)
         self.labels = get_status_labels('Inj')
         super().__init__(parent, init_channel, **kws)
         self.offColor = self.LightGreen
@@ -158,7 +163,8 @@ class InjSysStbyControlWidget(QWidget):
         """Init."""
         super().__init__(parent)
         self.prefix = prefix
-        self._inj_prefix = prefix + 'AS-Glob:AP-InjCtrl'
+        self._inj_prefix = SiriusPVName(
+            'AS-Glob:AP-InjCtrl').substitute(prefix=prefix)
         self._is_summary = is_summary
         self._last_comm = None
 
@@ -182,19 +188,19 @@ class InjSysStbyControlWidget(QWidget):
             self._setupFull()
 
         self._ch_cmdsts = SiriusConnectionSignal(
-            self._inj_prefix + ':InjSysCmdSts-Mon')
+            self._inj_prefix.substitute(propty='InjSysCmdSts-Mon'))
 
         self._ch_off_order_sp = SiriusConnectionSignal(
-            self._inj_prefix + ':InjSysTurnOffOrder-SP')
+            self._inj_prefix.substitute(propty='InjSysTurnOffOrder-SP'))
         self._ch_off_order_rb = SiriusConnectionSignal(
-            self._inj_prefix + ':InjSysTurnOffOrder-RB')
+            self._inj_prefix.substitute(propty='InjSysTurnOffOrder-RB'))
         self._ch_on_order_sp = SiriusConnectionSignal(
-            self._inj_prefix + ':InjSysTurnOnOrder-SP')
+            self._inj_prefix.substitute(propty='InjSysTurnOnOrder-SP'))
         self._ch_on_order_rb = SiriusConnectionSignal(
-            self._inj_prefix + ':InjSysTurnOnOrder-RB')
+            self._inj_prefix.substitute(propty='InjSysTurnOnOrder-RB'))
         if not is_summary:
             self._ch_cmdone = SiriusConnectionSignal(
-                self._inj_prefix + ':InjSysCmdDone-Mon')
+                self._inj_prefix.substitute(propty='InjSysCmdDone-Mon'))
 
         self._ch_cmdsts.new_value_signal[int].connect(
             self._handle_cmdsts_buttons_enbl)
@@ -215,14 +221,16 @@ class InjSysStbyControlWidget(QWidget):
     def _setupSummary(self):
         self._pb_off = PyDMPushButton(
             self, label='', icon=self._icon_off,
-            init_channel=self._inj_prefix + ':InjSysTurnOff-Cmd',
+            init_channel=self._inj_prefix.substitute(
+                propty='InjSysTurnOff-Cmd'),
             pressValue=0)
         self._pb_off.setObjectName('bt')
         self._pb_off.setStyleSheet(
             '#bt{min-width:25px; max-width:25px; icon-size:20px;}')
         self._pb_on = PyDMPushButton(
             self, label='', icon=self._icon_on,
-            init_channel=self._inj_prefix + ':InjSysTurnOn-Cmd',
+            init_channel=self._inj_prefix.substitute(
+                propty='InjSysTurnOn-Cmd'),
             pressValue=0)
         self._pb_on.setObjectName('bt')
         self._pb_on.setStyleSheet(
@@ -285,14 +293,16 @@ class InjSysStbyControlWidget(QWidget):
 
         self._pb_off = PyDMPushButton(
             self, label='', icon=self._icon_off,
-            init_channel=self._inj_prefix + ':InjSysTurnOff-Cmd',
+            init_channel=self._inj_prefix.substitute(
+                propty='InjSysTurnOff-Cmd'),
             pressValue=0)
         self._pb_off.setObjectName('bt')
         self._pb_off.setStyleSheet(
             '#bt{min-width:25px; max-width:25px; icon-size:20px;}')
         self._pb_on = PyDMPushButton(
             self, label='', icon=self._icon_on,
-            init_channel=self._inj_prefix + ':InjSysTurnOn-Cmd',
+            init_channel=self._inj_prefix.substitute(
+                propty='InjSysTurnOn-Cmd'),
             pressValue=0)
         self._pb_on.setObjectName('bt')
         self._pb_on.setStyleSheet(
