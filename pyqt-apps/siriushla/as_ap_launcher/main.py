@@ -302,8 +302,8 @@ class MainLauncher(SiriusMainWindow):
         hlay1.addWidget(self.wid_injsys)
         hlay1.addWidget(self.wid_egun)
         hlay1.addWidget(self.wid_inject)
-        hlay1.addWidget(self.wid_rfkill)
         hlay1.addWidget(self.wid_curr)
+        hlay1.addWidget(self.wid_rfkill)
 
         hlay2 = QHBoxLayout()
         hlay2.setContentsMargins(0, 0, 0, 0)
