@@ -1,20 +1,18 @@
 """List with power supplies cycling status."""
-from qtpy.QtCore import Qt
-from qtpy.QtWidgets import QListView, QApplication, QDialog, QVBoxLayout, \
+
+from qtpy.QtWidgets import QListWidget, QApplication, QDialog, QVBoxLayout, \
     QLabel, QPushButton
-from qtpy.QtGui import QStandardItemModel, QStandardItem
 
 from siriushla.as_ps_control.PSDetailWindow import PSDetailWindow
 
 
-class PSList(QListView):
+class PSList(QListWidget):
     """PS List."""
 
     def __init__(self, pwrsupplies=set(), parent=None):
         """Constructor."""
         super().__init__(parent)
         self._pwrsupplies = pwrsupplies
-        self._model = None
         self._setup_ui()
         self.doubleClicked.connect(self._open_detail)
 
@@ -29,13 +27,8 @@ class PSList(QListView):
         self._setup_ui()
 
     def _setup_ui(self):
-        self._model = QStandardItemModel(self)
-        for ps in self._pwrsupplies:
-            text = QStandardItem()
-            text.setData(ps, Qt.DisplayRole)
-            self._model.appendRow(text)
-
-        self.setModel(self._model)
+        self.clear()
+        self.addItems(self._pwrsupplies)
 
     def _open_detail(self, index):
         app = QApplication.instance()
