@@ -4,10 +4,9 @@
 
 import sys
 from siriushla.sirius_application import SiriusApplication
-from siriushla.as_ap_injection import InjectionController, InjectionWindow
+from siriushla.as_ap_injection import InjCtrlWindow
 
 
 app = SiriusApplication(None, sys.argv)
-ctlr = InjectionController()
-app.open_window(InjectionWindow, parent=None, controller=ctlr)
+app.open_window(InjCtrlWindow, parent=None)
 sys.exit(app.exec_())

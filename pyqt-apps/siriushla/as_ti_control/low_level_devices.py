@@ -17,7 +17,7 @@ from siriuspy.timesys import csdev as _cstime
 
 from ..widgets import PyDMLed, PyDMStateButton, SiriusLedState, \
     SiriusEnumComboBox as _MyComboBox, SiriusLedAlert, SiriusLabel, \
-    SiriusSpinbox
+    SiriusSpinbox, SiriusDialog
 from ..widgets.windows import create_window_from_widget
 from ..util import connect_window, get_appropriate_color
 
@@ -487,7 +487,8 @@ class BucketList(BaseWidget):
         lab = QLabel('SP : ', wid)
         pushbtn = QPushButton(wid)
         pushbtn.setIcon(qta.icon('mdi.basket-fill'))
-        pushbtn.clicked.connect(self._set_bucket_list)
+        self._wid_fill = self._setup_bucket_list_fill()
+        pushbtn.clicked.connect(self._wid_fill.open)
         lay_sp = QHBoxLayout()
         lay_sp.addWidget(lab)
         lay_sp.addWidget(sp)
@@ -562,71 +563,49 @@ class BucketList(BaseWidget):
             graph = BucketListGraph(self, self.device, self.prefix)
             lay.addWidget(graph, 1, 0, 1, 4)
 
-    def _set_bucket_list(self):
+    def _setup_bucket_list_fill(self):
+        inj_prefix = 'AS-Glob:AP-InjCtrl:'
 
-        wid = QDialog(self)
+        wid = SiriusDialog(self)
+        wid.setFocus(True)
+        wid.setFocusPolicy(Qt.StrongFocus)
         wid.setObjectName('ASApp')
-        lay = QGridLayout()
-        wid.setLayout(lay)
 
-        row = 0
-        lay.addWidget(QLabel('Start', wid), row, 0)
-        start = QLineEdit(wid)
-        val = QIntValidator()
-        val.setRange(1, 864)
-        start.setValidator(val)
-        start.setText('1')
-        start.setAlignment(Qt.AlignCenter)
-        start.setStyleSheet('max-width:5em;')
-        lay.addWidget(start, row, 1)
+        self._sb_start = SiriusSpinbox(wid, inj_prefix+'BucketListStart-SP')
+        self._sb_start.setAlignment(Qt.AlignCenter)
+        self._sb_start.setStyleSheet('max-width:5em;')
+        self._sb_start.showStepExponent = False
+        self._lb_start = SiriusLabel(wid, inj_prefix+'BucketListStart-RB')
 
-        row += 1
-        lay.addWidget(QLabel('Stop', wid), row, 0)
-        stop = QLineEdit(wid)
-        val = QIntValidator()
-        val.setRange(1, 864)
-        stop.setValidator(val)
-        stop.setText('864')
-        stop.setAlignment(Qt.AlignCenter)
-        stop.setStyleSheet('max-width:5em;')
-        lay.addWidget(stop, row, 1)
+        self._sb_stop = SiriusSpinbox(wid, inj_prefix+'BucketListStop-SP')
+        self._sb_stop.setAlignment(Qt.AlignCenter)
+        self._sb_stop.setStyleSheet('max-width:5em;')
+        self._sb_stop.showStepExponent = False
+        self._lb_stop = SiriusLabel(wid, inj_prefix+'BucketListStop-RB')
 
-        row += 1
-        lay.addWidget(QLabel('Step', wid), row, 0)
-        step = QLineEdit(wid)
-        val = QIntValidator()
-        val.setRange(1, 863)
-        step.setValidator(val)
-        step.setText('50')
-        step.setAlignment(Qt.AlignCenter)
-        step.setStyleSheet('max-width:5em;')
-        lay.addWidget(step, row, 1)
+        self._sb_step = SiriusSpinbox(wid, inj_prefix+'BucketListStep-SP')
+        self._sb_step.setAlignment(Qt.AlignCenter)
+        self._sb_step.setStyleSheet('max-width:5em;')
+        self._sb_step.showStepExponent = False
+        self._lb_step = SiriusLabel(wid, inj_prefix+'BucketListStep-RB')
 
-        row += 1
-        hlay = QHBoxLayout()
-        cancel = QPushButton('Cancel', wid)
-        confirm = QPushButton('Ok', wid)
-        confirm.setDefault(True)
-        cancel.clicked.connect(wid.reject)
-        confirm.clicked.connect(wid.accept)
-        hlay.addStretch()
-        hlay.addWidget(cancel)
-        hlay.addStretch()
-        hlay.addWidget(confirm)
-        hlay.addStretch()
-        wid.layout().addItem(hlay, row, 0, 1, 2)
-        res = wid.exec_()
-        if res != QDialog.Accepted:
-            return
+        self._pb_ok = QPushButton('Ok', wid)
+        self._pb_ok.setDefault(True)
+        self._pb_ok.clicked.connect(wid.accept)
 
-        start_ = int(start.text())
-        stop_ = int(stop.text())
-        step_ = int(step.text())
-        lst = list(range(start_, stop_, step_))
-        if lst:
-            txt = ' '.join(str(i) for i in lst)
-            self.bucket_ledit.setText(txt)
-            self.bucket_ledit.returnPressed.emit()
+        lay = QGridLayout(wid)
+        lay.addWidget(QLabel('Start:', wid), 0, 0)
+        lay.addWidget(self._sb_start, 0, 1)
+        lay.addWidget(self._lb_start, 0, 2)
+        lay.addWidget(QLabel('Stop:', wid), 1, 0)
+        lay.addWidget(self._sb_stop, 1, 1)
+        lay.addWidget(self._lb_stop, 1, 2)
+        lay.addWidget(QLabel('Step:', wid), 2, 0)
+        lay.addWidget(self._sb_step, 2, 1)
+        lay.addWidget(self._lb_step, 2, 2)
+        lay.addWidget(self._pb_ok, 3, 1)
+
+        return wid
 
 
 class EventList(BaseList):

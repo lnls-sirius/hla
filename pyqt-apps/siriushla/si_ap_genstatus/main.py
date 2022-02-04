@@ -14,13 +14,12 @@ from pydm.widgets import PyDMLabel
 from siriuspy.envars import VACA_PREFIX
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.clientarch.time import Time
-from siriuspy.devices import InjSysStandbyHandler
 
 from ..util import get_appropriate_color
 from ..widgets import SiriusMainWindow, SiriusTimePlot, SiriusFrame, \
     SiriusLedState, SiriusLedAlert, SiriusConnectionSignal, PyDMLedMultiChannel
 from ..as_di_tune.controls import SITuneMonitor
-from ..as_ap_launcher.standby_widgets import InjSysStandbyStatusLed
+from ..as_ap_injection import InjSysStbyLed
 from ..as_ap_machshift import MachShiftLabel
 
 
@@ -58,8 +57,7 @@ class SIGenStatusWindow(SiriusMainWindow):
         self._gbox_siriusintlk = self._create_groupbox(
             'Sirius Interlock', self._led_siriusintlk)
 
-        self._led_injsyssts = InjSysStandbyStatusLed(
-            InjSysStandbyHandler(), self)
+        self._led_injsyssts = InjSysStbyLed(self)
         self._led_injsyssts.setStyleSheet(
             'QLed{min-width:3em;min-height:3em;max-width:3em;max-height:3em;}')
         self._gbox_injsyssts = self._create_groupbox(
