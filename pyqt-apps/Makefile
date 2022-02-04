@@ -1,38 +1,31 @@
 DESIGNER_PLUGIN_FILE = designer_plugin.py
 INSTALL_DESIGNER_DIR ?= /usr/local/share/Qt/designer
 
-DISTPATH=$(shell python-sirius -c "import site; print(site.getsitepackages())" | cut -f2 -d"'")
 PACKAGE=siriushla
-ISINST=$(shell sudo pip-sirius show $(PACKAGE) | wc -l )
-EGGLINK=$(DISTPATH)/$(PACKAGE).egg-link
-TMPFOLDER=/tmp/install-$(PACKAGE)
-
-
-install-resources:
-	cd ./resources; pyrcc5 resources.qrc -o ../siriushla/resources.py
+PREFIX=
+PIP=pip
+ifeq ($(CONDA_PREFIX),)
+	PREFIX=sudo -H
+	PIP=pip-sirius
+endif
 
 install-designer:
 	mkdir -p $(INSTALL_DESIGNER_DIR)
 	cp $(DESIGNER_PLUGIN_FILE) $(INSTALL_DESIGNER_DIR)
 
-install: clean uninstall install-resources
-	sudo ./setup.py install --single-version-externally-managed --compile --force --record /dev/null
+install: clean uninstall
+	$(PREFIX) $(PIP) install --no-deps --compile ./
+
+uninstall:
+	$(PREFIX) $(PIP) uninstall -y $(PACKAGE)
 
 install-all: install install-designer
 
-develop: clean uninstall install-resources
-	sudo -H pip-sirius install --no-deps -e ./
+develop-install: clean develop-uninstall
+	$(PIP) install --no-deps -e ./
 
-uninstall:
-ifneq (,$(wildcard $(EGGLINK)))
-	sudo rm -r $(EGGLINK)
-endif
-ifneq ($(ISINST),0)
-	sudo -H pip-sirius uninstall -y $(PACKAGE)
-	sudo sed -i '/pyqt-apps/d' $(DISTPATH)/easy-install.pth
-else
-	echo 'already uninstalled $(PACKAGE)'
-endif
+develop-uninstall:
+	$(PIP) uninstall -y $(PACKAGE)
 
 clean:
 	git clean -fdX

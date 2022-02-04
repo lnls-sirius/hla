@@ -39,7 +39,8 @@ class PyDMLogLabel(QListWidget, TextFormatter, PyDMWidget, DisplayFormat):
         self._date_time_fmt = '%Y/%m/%d-%H:%M:%S'
         self._replace = list() if replace is None else replace
 
-        self._plugin_conns = plugin_for_address(init_channel).connections
+        channel = '' if init_channel is None else init_channel
+        self._plugin_conns = plugin_for_address(channel).connections
 
     def value_changed(self, new_value):
         """
