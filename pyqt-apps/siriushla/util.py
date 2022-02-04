@@ -1,7 +1,6 @@
 """Util module."""
 import os as _os
 import time as _time
-import pathlib as _pathlib
 import subprocess as _subprocess
 import pkg_resources as _pkg_resources
 from functools import partial as _part
@@ -12,7 +11,6 @@ from qtpy.QtWidgets import QPushButton, QAction, QApplication, QDialog, \
     QHBoxLayout, QLabel
 import qtawesome as qta
 from pydm.utilities.stylesheet import _get_style_data as pydm_get_style_data
-import siriushla.resources as _resources
 
 
 THREAD = None
@@ -32,17 +30,11 @@ def get_monitor_icon(icon_name, color=None):
         dict(scale_factor=1.4, color=color, offset=(0.0, 0.00))])
 
 
-def set_style(app, force_default=False):
+def set_style(app):
     """Implement sirius-hla-style.css as default Qt resource file HLA."""
-    if force_default:
-        stream = _QFile(':/sirius-hla-style.css')
-    else:
-        fname = str(_os.path.join(_pathlib.Path.home(),
-                    '.sirius-hla-style.css'))
-        fpath = _pathlib.Path(fname)
-        if not fpath.is_file():
-            fname = ':/sirius-hla-style.css'
-        stream = _QFile(fname)
+    abspath = _os.path.abspath(_os.path.dirname(__file__))
+    fname = _os.path.join(abspath, 'sirius-hla-style.css')
+    stream = _QFile(fname)
     if stream.open(_QFile.ReadOnly):
         style = str(stream.readAll(), 'utf-8')
         stream.close()
@@ -50,7 +42,6 @@ def set_style(app, force_default=False):
         app.setStyleSheet(style + '\n' + pydm_style)
     else:
         print('set_style: "{0}": {1}'.format(fname, stream.errorString()))
-    _resources.qCleanupResources()
 
 
 def get_window_id(w_class, **kwargs):

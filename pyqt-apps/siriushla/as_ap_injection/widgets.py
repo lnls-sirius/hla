@@ -130,20 +130,20 @@ class InjSysStbyLed(PyDMLedMultiChannel):
     def mouseDoubleClickEvent(self, ev):
         pv_groups, texts = list(), list()
         pvs_err, pvs_und = set(), set()
-        for k, v in self._address2status.items():
-            if not v:
-                pvs_err.add(k)
-        if pvs_err:
-            pv_groups.append(pvs_err)
-            texts.append(
-                'The following PVs have value\n'
-                'equivalent to off status!')
         for k, v in self._address2conn.items():
             if not v:
                 pvs_und.add(k)
         if pvs_und:
             pv_groups.append(pvs_und)
             texts.append('There are disconnected PVs!')
+        for k, v in self._address2status.items():
+            if not v and k not in pvs_und:
+                pvs_err.add(k)
+        if pvs_err:
+            pv_groups.append(pvs_err)
+            texts.append(
+                'The following PVs have value\n'
+                'equivalent to off status!')
 
         if pv_groups:
             msg = MultiChannelStatusDialog(

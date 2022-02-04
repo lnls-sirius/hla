@@ -1,5 +1,6 @@
-from qtpy.QtGui import QStandardItemModel, QStandardItem
-from qtpy.QtWidgets import QListView, QVBoxLayout, QLabel, QPushButton, \
+"""Led widgets."""
+
+from qtpy.QtWidgets import QListWidget, QVBoxLayout, QLabel, QPushButton, \
     QGridLayout, QCheckBox
 from qtpy.QtCore import Qt
 from copy import deepcopy as _dcopy
@@ -359,20 +360,21 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
     def mouseDoubleClickEvent(self, ev):
         pv_groups, texts = list(), list()
         pvs_err, pvs_und = set(), set()
-        for k, v in self._address2status.items():
-            if not v:
-                pvs_err.add(k)
-        if pvs_err:
-            pv_groups.append(pvs_err)
-            texts.append(
-                'There are PVs with values different\n'
-                'from the desired ones!')
         for k, v in self._address2conn.items():
             if not v:
                 pvs_und.add(k)
         if pvs_und:
             pv_groups.append(pvs_und)
             texts.append('There are disconnected PVs!')
+
+        for k, v in self._address2status.items():
+            if not v and k not in pvs_und:
+                pvs_err.add(k)
+        if pvs_err:
+            pv_groups.append(pvs_err)
+            texts.append(
+                'There are PVs with values different\n'
+                'from the desired ones!')
 
         if pv_groups:
             msg = MultiChannelStatusDialog(
@@ -513,7 +515,7 @@ class MultiChannelStatusDialog(SiriusDialog):
         lay.addWidget(self._ok_bt)
 
 
-class _PVList(QListView):
+class _PVList(QListWidget):
     """PV List."""
 
     clicked_item_data = Signal(str)
@@ -521,12 +523,7 @@ class _PVList(QListView):
     def __init__(self, pvs=set(), parent=None):
         """Constructor."""
         super().__init__(parent)
-        self._model = QStandardItemModel(self)
-        for pv in pvs:
-            text = QStandardItem()
-            text.setData(pv, Qt.DisplayRole)
-            self._model.appendRow(text)
-        self.setModel(self._model)
+        self.addItems(pvs)
         self.doubleClicked.connect(self.emit_item_data)
 
     def emit_item_data(self, index):
