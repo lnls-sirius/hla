@@ -2,10 +2,10 @@
 import numpy as _np
 
 from qtpy.QtCore import Qt, Slot
-from qtpy.QtGui import QColor, QBrush, QIntValidator
+from qtpy.QtGui import QColor, QBrush
 from qtpy.QtWidgets import QLabel, QPushButton, QGroupBox, QVBoxLayout, \
     QHBoxLayout, QGridLayout, QMenuBar, QSplitter, QTabWidget, QWidget, \
-    QSizePolicy as QSzPol, QCheckBox, QDialog, QLineEdit
+    QSizePolicy as QSzPol, QCheckBox
 import qtawesome as qta
 from pydm.widgets import PyDMLabel, PyDMPushButton, PyDMLineEdit, \
     PyDMWaveformPlot
@@ -386,6 +386,9 @@ class BucketListGraph(BaseWidget):
         self.graph.setMaxYRange(1.1)
         self.graph.plotItem.showButtons()
         self.graph.setAxisColor(QColor(0, 0, 0))
+        self.graph.setObjectName('graph')
+        self.graph.setStyleSheet('#graph{min-height: 5em;}')
+        self.graph.setSizePolicy(QSzPol.Expanding, QSzPol.Expanding)
 
         self._curves = dict()
         self.graph.addChannel(
@@ -417,12 +420,17 @@ class BucketListGraph(BaseWidget):
         self.show_mn.setChecked(True)
         self.show_mn.setStyleSheet('color: green;')
         self.show_mn.stateChanged.connect(self._curves['Mon'].setVisible)
+        wid_show = QWidget()
+        lay_show = QVBoxLayout(wid_show)
+        lay_show.setContentsMargins(0, 0, 0, 0)
+        lay_show.addWidget(self.show_sp)
+        lay_show.addWidget(self.show_rb)
+        lay_show.addWidget(self.show_mn)
 
-        lay = QGridLayout(self)
-        lay.addWidget(self.graph, 0, 0, 3, 1)
-        lay.addWidget(self.show_sp, 0, 1)
-        lay.addWidget(self.show_rb, 1, 1)
-        lay.addWidget(self.show_mn, 2, 1)
+        lay = QHBoxLayout(self)
+        lay.setContentsMargins(0, 0, 0, 0)
+        lay.addWidget(self.graph)
+        lay.addWidget(wid_show)
 
         self._ch_sp = SiriusConnectionSignal(
             self.get_pvname(propty='BucketList-SP'))

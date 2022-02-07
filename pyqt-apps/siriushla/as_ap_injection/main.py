@@ -2,7 +2,7 @@
 
 from qtpy.QtCore import Qt, Slot, Signal, QEvent
 from qtpy.QtWidgets import QWidget, QLabel, QGridLayout, QGroupBox, \
-    QHBoxLayout, QVBoxLayout
+    QHBoxLayout, QVBoxLayout, QSizePolicy as QSzPlcy
 
 import qtawesome as qta
 
@@ -50,25 +50,33 @@ class InjCtrlWindow(SiriusMainWindow):
         self.title.setStyleSheet('QLabel{max-height:1.6em;}')
 
         self.wid_comm = self._setupMainBarWidget()
+        self.wid_comm.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Fixed)
 
         self.wid_sett = self._setupSettingsWidget()
+        self.wid_sett.setSizePolicy(
+            QSzPlcy.Preferred, QSzPlcy.MinimumExpanding)
 
         self.wid_mon = self._setupMonitorWidget()
         self.wid_log = self._setupLogWidget()
+        wid_row = QWidget()
+        wid_row.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Fixed)
+        hbox_row = QHBoxLayout(wid_row)
+        hbox_row.setContentsMargins(0, 0, 0, 0)
+        hbox_row.setStretch(0, 3)
+        hbox_row.setStretch(1, 5)
+        hbox_row.addWidget(self.wid_mon)
+        hbox_row.addWidget(self.wid_log)
 
         wid = QWidget(self)
-        lay = QGridLayout(wid)
-        lay.addWidget(self.title, 0, 0, 1, 2)
-        lay.addWidget(self.wid_comm, 1, 0, 1, 2)
-        lay.addWidget(self.wid_comm, 1, 0, 1, 2)
-        lay.addWidget(self.wid_sett, 2, 0, 1, 2)
-        lay.addWidget(self.wid_mon, 3, 0)
-        lay.addWidget(self.wid_log, 3, 1)
-        lay.setColumnStretch(0, 3)
-        lay.setColumnStretch(1, 5)
-        lay.setRowStretch(1, 1)
-        lay.setRowStretch(2, 3)
-        lay.setRowStretch(3, 2)
+        lay = QVBoxLayout(wid)
+        lay.addWidget(self.title)
+        lay.addWidget(self.wid_comm)
+        lay.addWidget(self.wid_comm)
+        lay.addWidget(self.wid_sett)
+        lay.addWidget(wid_row)
+        lay.setStretch(1, 1)
+        lay.setStretch(2, 3)
+        lay.setStretch(3, 2)
         self.setCentralWidget(wid)
 
         self._ch_injmode = SiriusConnectionSignal(
@@ -329,8 +337,10 @@ class InjCtrlWindow(SiriusMainWindow):
         # Bucket list
         self._wid_bl = BucketList(
             self, prefix=self._prefix, min_size=15, show_graph=True)
+        self._wid_bl.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.MinimumExpanding)
 
         wid1 = QWidget()
+        wid1.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Fixed)
         glay1 = QGridLayout(wid1)
         glay1.setAlignment(Qt.AlignTop)
         glay1.addWidget(self._ld_injmode, 0, 0)
@@ -346,6 +356,7 @@ class InjCtrlWindow(SiriusMainWindow):
         glay1.setColumnStretch(2, 2)
 
         wid2 = QWidget()
+        wid2.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Fixed)
         glay2 = QGridLayout(wid2)
         glay2.setAlignment(Qt.AlignTop)
         glay2.addWidget(self._ld_injset, 0, 0)
@@ -371,8 +382,8 @@ class InjCtrlWindow(SiriusMainWindow):
 
         wid = QGroupBox('Settings')
         lay = QGridLayout(wid)
-        lay.addWidget(wid1, 0, 0)
-        lay.addWidget(wid2, 0, 1)
+        lay.addWidget(wid1, 0, 0, alignment=Qt.AlignTop)
+        lay.addWidget(wid2, 0, 1, alignment=Qt.AlignTop)
         lay.addWidget(self._wid_bl, 1, 0, 1, 2)
         return wid
 
