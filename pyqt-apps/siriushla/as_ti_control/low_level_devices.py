@@ -452,11 +452,11 @@ class BucketListGraph(BaseWidget):
                 curve = self._curves[k]
                 break
 
-        org_bunch = _np.arange(1, 864)
+        org_bunch = _np.arange(1, 864) - 0.5
         org_curve = _np.zeros(864)
         org_curve[new_array-1] = 1
 
-        new_bunch = _np.linspace(1, 864, 10000)
+        new_bunch = _np.linspace(1, 864, 10000) - 0.5
         new_bunch_indices = _np.searchsorted(
             _np.nextafter(org_bunch, -_np.inf), new_bunch, side='left')
         new_bunch_indices = new_bunch_indices.clip(
