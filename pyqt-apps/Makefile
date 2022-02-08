@@ -2,8 +2,8 @@ DESIGNER_PLUGIN_FILE = designer_plugin.py
 INSTALL_DESIGNER_DIR ?= /usr/local/share/Qt/designer
 
 PACKAGE=siriushla
-PREFIX=
-PIP=pip
+PREFIX ?=
+PIP ?= pip
 ifeq ($(CONDA_PREFIX),)
 	PREFIX=sudo -H
 	PIP=pip-sirius
