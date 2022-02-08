@@ -575,30 +575,37 @@ class BucketList(BaseWidget):
             lay.addWidget(graph, 1, 0, 1, 4)
 
     def _setup_bucket_list_fill(self):
-        inj_prefix = 'AS-Glob:AP-InjCtrl:'
+        inj_prefix = _PVName('AS-Glob:AP-InjCtrl').substitute(
+            prefix=self.prefix)
 
         wid = SiriusDialog(self)
         wid.setFocus(True)
         wid.setFocusPolicy(Qt.StrongFocus)
         wid.setObjectName('ASApp')
 
-        self._sb_start = SiriusSpinbox(wid, inj_prefix+'BucketListStart-SP')
+        self._sb_start = SiriusSpinbox(
+            wid, inj_prefix.substitute(propty='BucketListStart-SP'))
         self._sb_start.setAlignment(Qt.AlignCenter)
         self._sb_start.setStyleSheet('max-width:5em;')
         self._sb_start.showStepExponent = False
-        self._lb_start = SiriusLabel(wid, inj_prefix+'BucketListStart-RB')
+        self._lb_start = SiriusLabel(
+            wid, inj_prefix.substitute(propty='BucketListStart-RB'))
 
-        self._sb_stop = SiriusSpinbox(wid, inj_prefix+'BucketListStop-SP')
+        self._sb_stop = SiriusSpinbox(
+            wid, inj_prefix.substitute(propty='BucketListStop-SP'))
         self._sb_stop.setAlignment(Qt.AlignCenter)
         self._sb_stop.setStyleSheet('max-width:5em;')
         self._sb_stop.showStepExponent = False
-        self._lb_stop = SiriusLabel(wid, inj_prefix+'BucketListStop-RB')
+        self._lb_stop = SiriusLabel(
+            wid, inj_prefix.substitute(propty='BucketListStop-RB'))
 
-        self._sb_step = SiriusSpinbox(wid, inj_prefix+'BucketListStep-SP')
+        self._sb_step = SiriusSpinbox(
+            wid, inj_prefix.substitute(propty='BucketListStep-SP'))
         self._sb_step.setAlignment(Qt.AlignCenter)
         self._sb_step.setStyleSheet('max-width:5em;')
         self._sb_step.showStepExponent = False
-        self._lb_step = SiriusLabel(wid, inj_prefix+'BucketListStep-RB')
+        self._lb_step = SiriusLabel(
+            wid, inj_prefix.substitute(propty='BucketListStep-RB'))
 
         self._pb_ok = QPushButton('Ok', wid)
         self._pb_ok.setDefault(True)
