@@ -434,21 +434,24 @@ class BucketListGraph(BaseWidget):
 
         self._ch_sp = SiriusConnectionSignal(
             self.get_pvname(propty='BucketList-SP'))
-        self._ch_sp.new_value_signal[_np.ndarray].connect(
-            self._update_curves)
+        self._ch_sp.new_value_signal[_np.ndarray].connect(self._update_curves)
+        self._ch_sp.new_value_signal[int].connect(self._update_curves)
         self._ch_rb = SiriusConnectionSignal(
             self.get_pvname(propty='BucketList-RB'))
-        self._ch_rb.new_value_signal[_np.ndarray].connect(
-            self._update_curves)
+        self._ch_rb.new_value_signal[_np.ndarray].connect(self._update_curves)
+        self._ch_rb.new_value_signal[int].connect(self._update_curves)
         self._ch_mn = SiriusConnectionSignal(
             self.get_pvname(propty='BucketList-Mon'))
-        self._ch_mn.new_value_signal[_np.ndarray].connect(
-            self._update_curves)
+        self._ch_mn.new_value_signal[_np.ndarray].connect(self._update_curves)
+        self._ch_mn.new_value_signal[int].connect(self._update_curves)
 
+    @Slot(int)
     @Slot(_np.ndarray)
     def _update_curves(self, new_array):
+        new_array = _np.asarray(new_array)
+
         for k in self._curves:
-            if k in self.sender().address:
+            if self.sender().address.endswith(k):
                 curve = self._curves[k]
                 break
 
