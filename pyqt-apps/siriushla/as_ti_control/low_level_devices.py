@@ -608,9 +608,17 @@ class BucketList(BaseWidget):
             wid, inj_prefix.substitute(propty='BucketListStep-RB'))
 
         self._pb_ok = QPushButton('Ok', wid)
-        self._pb_ok.setDefault(True)
         self._pb_ok.clicked.connect(self._sb_start.send_value)
         self._pb_ok.clicked.connect(wid.accept)
+
+        self._pb_cancel = QPushButton('Cancel', wid)
+        self._pb_cancel.setDefault(True)
+        self._pb_cancel.clicked.connect(wid.reject)
+
+        lay_pbrow = QHBoxLayout()
+        lay_pbrow.setContentsMargins(0, 0, 0, 0)
+        lay_pbrow.addWidget(self._pb_cancel)
+        lay_pbrow.addWidget(self._pb_ok)
 
         lay = QGridLayout(wid)
         lay.addWidget(QLabel('Start:', wid), 0, 0)
@@ -622,7 +630,7 @@ class BucketList(BaseWidget):
         lay.addWidget(QLabel('Step:', wid), 2, 0)
         lay.addWidget(self._sb_step, 2, 1)
         lay.addWidget(self._lb_step, 2, 2)
-        lay.addWidget(self._pb_ok, 3, 1)
+        lay.addLayout(lay_pbrow, 3, 0, 1, 3)
 
         return wid
 
