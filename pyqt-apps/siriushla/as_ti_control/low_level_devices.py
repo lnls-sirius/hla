@@ -609,6 +609,7 @@ class BucketList(BaseWidget):
 
         self._pb_ok = QPushButton('Ok', wid)
         self._pb_ok.setDefault(True)
+        self._pb_ok.clicked.connect(self._sb_start.send_value)
         self._pb_ok.clicked.connect(wid.accept)
 
         lay = QGridLayout(wid)
