@@ -124,7 +124,9 @@ class IDControl(SiriusMainWindow):
 
     def _handle_moving_vis(self, value):
         """Handle visualization of moving state label."""
-        show = any([ch.value != 0 for ch in self._channels_mov])
+        show = any([
+            ch.connected and ch.value != 0
+            for ch in self._channels_mov])
         self.label_mov1.setVisible(show)
         self.label_mov2.setVisible(show)
         if show:
