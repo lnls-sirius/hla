@@ -16,6 +16,7 @@ from ..widgets import SiriusMainWindow
 from ..widgets import SiriusSpinbox, PyDMStateButton, SiriusLedState, \
     SiriusLabel, SiriusLedAlert
 from .details import DeviceParamSettingWindow
+from .widgets import DeltaIQPhaseCorrButton
 
 
 class DEVICES(_enum.IntEnum):
@@ -127,24 +128,34 @@ class ControlBox(QWidget):
             lay1.addWidget(sp1, row, 1)
             lay1.addWidget(rb1, row, 2)
 
-        props = [('Amp [%]', 'AMP'), ('Phase [°]', 'PHASE')]
+        props = [('Amp [%]', 'AMP'), ('Phase [°]', 'PHASE'),
+                 ('↳ ΔPhase (IQ Corr)', '')]
         if self.dev != DEVICES.SHB:
             props.append(('Refl. Pow. [MW]', 'REFL_POWER_LIMIT'))
         for name, prop in props:
             row += 1
             laba = QLabel(name, self)
-            sppv = basename + ':SET_' + prop
-            rbpv = basename + ':GET_' + prop
-            spa = SiriusSpinbox(self, init_channel=sppv)
-            spa.showStepExponent = False
-            spa.precisionFromPV = False
-            spa.precision = 2
-            rba = SiriusLabel(self, init_channel=rbpv)
-            rba.precisionFromPV = False
-            rba.precision = 2
-            lay1.addWidget(laba, row, 0)
-            lay1.addWidget(spa, row, 1)
-            lay1.addWidget(rba, row, 2)
+            if 'IQ Corr' in name:
+                dniqc = DeltaIQPhaseCorrButton(
+                    self, self.dev, prefix=self.prefix, delta=-90)
+                dpiqc = DeltaIQPhaseCorrButton(
+                    self, self.dev, prefix=self.prefix, delta=90)
+                lay1.addWidget(laba, row, 0)
+                lay1.addWidget(dniqc, row, 1, alignment=Qt.AlignCenter)
+                lay1.addWidget(dpiqc, row, 2, alignment=Qt.AlignCenter)
+            else:
+                sppv = basename + ':SET_' + prop
+                rbpv = basename + ':GET_' + prop
+                spa = SiriusSpinbox(self, init_channel=sppv)
+                spa.showStepExponent = False
+                spa.precisionFromPV = False
+                spa.precision = 2
+                rba = SiriusLabel(self, init_channel=rbpv)
+                rba.precisionFromPV = False
+                rba.precision = 2
+                lay1.addWidget(laba, row, 0)
+                lay1.addWidget(spa, row, 1)
+                lay1.addWidget(rba, row, 2)
 
         row += 1
         hlay = QHBoxLayout()
@@ -171,6 +182,9 @@ class ControlBox(QWidget):
         hlay.addWidget(QLabel('Trig. Stts'))
         hlay.addWidget(rb2)
         lay1.addLayout(hlay, row, 0, 1, 3)
+
+        self.setStyleSheet(
+            "DeltaIQPhaseCorrButton{max-width: 3em;}")
 
 
 class GraphIvsQ(QWidget):

@@ -5,6 +5,7 @@ from qtpy.QtWidgets import QLabel, QFrame, QGridLayout, QGroupBox, QWidget
 
 from ..widgets import SiriusMainWindow, PyDMStateButton, SiriusLedState, \
     SiriusSpinbox, SiriusLabel
+from .widgets import DeltaIQPhaseCorrButton
 
 
 class DeviceParamSettingWindow(SiriusMainWindow):
@@ -186,35 +187,55 @@ class DeviceParamSettingWindow(SiriusMainWindow):
         row = 0
         lb_sett = QLabel('<h4>Settings</h4>', self, alignment=Qt.AlignCenter)
         lb_actl = QLabel('<h4>Actual</h4>', self, alignment=Qt.AlignCenter)
-        lay.addWidget(lb_sett, row, 1)
-        lay.addWidget(lb_actl, row, 2)
+        lay.addWidget(lb_sett, row, 2)
+        lay.addWidget(lb_actl, row, 4)
 
         row += 1
-        lb_lim = QLabel('-180.0~+180.0(Deg)', self, alignment=Qt.AlignCenter)
-        lay.addWidget(lb_lim, row, 1, 1, 2)
+        lb_lim = QLabel('-180.0°~+180.0°', self, alignment=Qt.AlignCenter)
+        lay.addWidget(lb_lim, row, 2, 1, 3)
 
         for name, prop in props:
             row += 1
             laba = QLabel(name, self)
+            lay.addWidget(laba, row, 0)
+
             sppv = self.devpref + ':SET_' + prop
             rbpv = self.devpref + ':GET_' + prop
             spa = SiriusSpinbox(self, init_channel=sppv)
             spa.showStepExponent = False
             spa.precisionFromPV = False
             spa.precision = 2
+            lay.addWidget(spa, row, 2)
+            if prop == 'CH1_PHASE_CORR':
+                dniqc = DeltaIQPhaseCorrButton(
+                    self, self.dev, prefix=self.prefix,
+                    delta=-90, show_label=False)
+                dpiqc = DeltaIQPhaseCorrButton(
+                    self, self.dev, prefix=self.prefix,
+                    delta=90, show_label=False)
+                lay.addWidget(dniqc, row, 1)
+                lay.addWidget(dpiqc, row, 3)
+
             rba = SiriusLabel(self, init_channel=rbpv)
             rba.precisionFromPV = False
             rba.precision = 2
-            lay.addWidget(laba, row, 0)
-            lay.addWidget(spa, row, 1)
-            lay.addWidget(rba, row, 2)
+            lay.addWidget(rba, row, 4)
 
             if name == 'VM Cal Phase':
                 row += 1
                 line = QFrame(self)
                 line.setFrameShape(QFrame.HLine)
                 line.setFrameShadow(QFrame.Sunken)
-                lay.addWidget(line, row, 0, 1, 3)
+                lay.addWidget(line, row, 0, 1, 5)
+
+        lay.setColumnStretch(0, 5)
+        lay.setColumnStretch(1, 1)
+        lay.setColumnStretch(2, 4)
+        lay.setColumnStretch(3, 1)
+        lay.setColumnStretch(4, 4)
+
+        self.setStyleSheet(
+            "DeltaIQPhaseCorrButton{max-width: 1.2em;}")
 
         return wid
 
