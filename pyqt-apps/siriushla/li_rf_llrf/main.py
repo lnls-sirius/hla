@@ -4,7 +4,8 @@ import enum as _enum
 
 from qtpy.QtCore import Qt
 from qtpy.QtGui import QColor
-from qtpy.QtWidgets import QGroupBox, QGridLayout, QWidget, QLabel, QHBoxLayout
+from qtpy.QtWidgets import QGroupBox, QGridLayout, QWidget, QLabel, \
+    QHBoxLayout, QPushButton
 from pydm.widgets import PyDMWaveformPlot, PyDMTimePlot
 import qtawesome as _qta
 
@@ -14,21 +15,23 @@ from .. import util as _util
 from ..widgets import SiriusMainWindow
 from ..widgets import SiriusSpinbox, PyDMStateButton, SiriusLedState, \
     SiriusLabel, SiriusLedAlert
+from .details import DeviceParamSettingWindow
 
 
 class DEVICES(_enum.IntEnum):
     """."""
 
-    SHB = (0, 'Sub-harmonic Buncher', 'BUN1')
-    Kly1 = (1, 'Klystron 1', 'KLY1')
-    Kly2 = (2, 'Klystron 2', 'KLY2')
+    SHB = (0, 'Sub-harmonic Buncher', 'BUN1', 'SHB')
+    Kly1 = (1, 'Klystron 1', 'KLY1', 'K1')
+    Kly2 = (2, 'Klystron 2', 'KLY2', 'K2')
 
-    def __new__(cls, value, label, pvname):
+    def __new__(cls, value, label, pvname, nickname):
         """."""
         self = int.__new__(cls, value)
         self._value_ = value
         self.label = label
         self.pvname = pvname
+        self.nickname = nickname
         return self
 
 
@@ -99,6 +102,16 @@ class ControlBox(QWidget):
         labc = QLabel('Readback', self)
         lay1.addWidget(labb, row, 1, alignment=Qt.AlignCenter)
         lay1.addWidget(labc, row, 2, alignment=Qt.AlignCenter)
+
+        pb_param = QPushButton(_qta.icon('fa5s.ellipsis-h'), '', self)
+        pb_param.setToolTip('Open Parameter Setting Window')
+        pb_param.setObjectName('detail')
+        pb_param.setStyleSheet(
+            "#detail{min-width:25px; max-width:25px; icon-size:20px;}")
+        _util.connect_window(
+            pb_param, DeviceParamSettingWindow, parent=self,
+            device=self.dev, prefix=self.prefix)
+        lay1.addWidget(pb_param, row, 3)
 
         props = (
             ('State', 'STREAM'), ('Trigger', 'EXTERNAL_TRIGGER_ENABLE'),
