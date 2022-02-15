@@ -1,6 +1,5 @@
 """SiriusScrnView widget."""
 
-import sys
 import os
 import time
 from threading import Thread
@@ -42,25 +41,25 @@ class SiriusScrnView(QWidget):
         """Initialize object."""
         QWidget.__init__(self, parent=parent)
         self.prefix = prefix
-        self.device = device
-        self.scrn_prefix = SiriusPVName(self.prefix+self.device)
+        self.device = SiriusPVName(device)
+        self.scrn_prefix = self.device.substitute(prefix=prefix)
         self._receivedData = False
         self.setObjectName(self.scrn_prefix.sec+'App')
 
         self.screen_type_conn = SiriusConnectionSignal(
-            self.scrn_prefix+':ScrnType-Sts')
+            self.scrn_prefix.substitute(propty='ScrnType-Sts'))
         self.screen_type_conn.new_value_signal.connect(
             self.updateCalibrationGridFlag)
         self._calibrationgrid_flag = self.screen_type_conn.getvalue()
         self.save_files.connect(self._saveGridLocalFiles)
         self.ch_ImgROIHeight = SiriusConnectionSignal(
-            self.scrn_prefix+':ImgROIHeight-RB')
+            self.scrn_prefix.substitute(propty='ImgROIHeight-RB'))
         self.ch_ImgROIWidth = SiriusConnectionSignal(
-            self.scrn_prefix+':ImgROIWidth-RB')
+            self.scrn_prefix.substitute(propty='ImgROIWidth-RB'))
         self.ch_ImgROIOffsetX = SiriusConnectionSignal(
-            self.scrn_prefix+':ImgROIOffsetX-RB')
+            self.scrn_prefix.substitute(propty='ImgROIOffsetX-RB'))
         self.ch_ImgROIOffsetY = SiriusConnectionSignal(
-            self.scrn_prefix+':ImgROIOffsetY-RB')
+            self.scrn_prefix.substitute(propty='ImgROIOffsetY-RB'))
 
         self._setupUi()
         self.setFocus(True)
@@ -124,12 +123,13 @@ class SiriusScrnView(QWidget):
 
         self.trigger_groupBox = QGroupBox('Trigger', self)
         if 'TB' in self.device or 'BO' in self.device:
-            trg_prefix = self.prefix + 'AS-Fam:TI-Scrn-TBBO'
+            trg_prefix = 'AS-Fam:TI-Scrn-TBBO'
         elif 'TS' in self.device:
-            trg_prefix = self.prefix + 'TS-Fam:TI-Scrn'
+            trg_prefix = 'TS-Fam:TI-Scrn'
         hbl = QHBoxLayout(self.trigger_groupBox)
         hbl.addWidget(HLTriggerSimple(
-            parent=self.trigger_groupBox, prefix=trg_prefix))
+            parent=self.trigger_groupBox, device=trg_prefix,
+            prefix=self.prefix))
         self.trigger_groupBox.setLayout(hbl)
         self.trigger_groupBox.setStyleSheet("""
             PyDMWidget{
@@ -156,12 +156,18 @@ class SiriusScrnView(QWidget):
         label.setAlignment(Qt.AlignCenter)
         self.image_view = _SiriusImageView(
             parent=self,
-            image_channel=self.scrn_prefix+':ImgData-Mon',
-            width_channel=self.scrn_prefix+':ImgROIWidth-RB',
-            offsetx_channel=self.scrn_prefix+':ImgROIOffsetX-RB',
-            offsety_channel=self.scrn_prefix+':ImgROIOffsetY-RB',
-            maxwidth_channel=self.scrn_prefix+':ImgMaxWidth-Cte',
-            maxheight_channel=self.scrn_prefix+':ImgMaxHeight-Cte')
+            image_channel=self.scrn_prefix.substitute(
+                propty='ImgData-Mon'),
+            width_channel=self.scrn_prefix.substitute(
+                propty='ImgROIWidth-RB'),
+            offsetx_channel=self.scrn_prefix.substitute(
+                propty='ImgROIOffsetX-RB'),
+            offsety_channel=self.scrn_prefix.substitute(
+                propty='ImgROIOffsetY-RB'),
+            maxwidth_channel=self.scrn_prefix.substitute(
+                propty='ImgMaxWidth-Cte'),
+            maxheight_channel=self.scrn_prefix.substitute(
+                propty='ImgMaxHeight-Cte'))
         self.image_view.setObjectName('ScrnView')
         self.image_view.normalizeData = True
         self.image_view.readingOrder = self.image_view.Clike
@@ -278,7 +284,7 @@ class SiriusScrnView(QWidget):
         self.pb_autogain = PyDMPushButton(
             label='', icon=qta.icon('mdi.auto-fix'),
             parent=self, pressValue=1,
-            init_channel=self.scrn_prefix+':CamAutoGain-Cmd')
+            init_channel=self.scrn_prefix.substitute(propty='CamAutoGain-Cmd'))
         self.pb_autogain.setObjectName('autog')
         self.pb_autogain.setStyleSheet(
             "#autog{min-width:25px; max-width:25px; icon-size:20px;}")
@@ -287,7 +293,8 @@ class SiriusScrnView(QWidget):
         label_Reset = QLabel('Reset: ', self)
         self.pb_dtl = PyDMPushButton(
             label='', icon=qta.icon('fa5s.sync'),
-            parent=self, pressValue=1, init_channel=cam_prefix+':Rst-Cmd')
+            parent=self, pressValue=1,
+            init_channel=cam_prefix.substitute(propty='Rst-Cmd'))
         self.pb_dtl.setObjectName('reset')
         self.pb_dtl.setStyleSheet(
             "#reset{min-width:25px; max-width:25px; icon-size:20px;}")
@@ -336,21 +343,25 @@ class SiriusScrnView(QWidget):
         label_Centroid.setStyleSheet("min-width:7em;")
         label_i_Center = QLabel('(', self)
         self.PyDMLabel_CenterXDimFei = PyDMLabel(
-            parent=self, init_channel=self.scrn_prefix+':CenterXDimFei-Mon')
+            parent=self, init_channel=self.scrn_prefix.substitute(
+                propty='CenterXDimFei-Mon'))
         self.PyDMLabel_CenterXDimFei.setStyleSheet(
             'min-width:4em; max-width:4em;')
         self.PyDMLabel_CenterXNDStats = PyDMLabel(
-            parent=self, init_channel=self.scrn_prefix+':CenterXNDStats-Mon')
+            parent=self, init_channel=self.scrn_prefix.substitute(
+                propty='CenterXNDStats-Mon'))
         self.PyDMLabel_CenterXNDStats.setStyleSheet(
             'min-width:4em; max-width:4em;')
         self.PyDMLabel_CenterXNDStats.setVisible(False)
         label_m_Center = QLabel(',', self)
         self.PyDMLabel_CenterYDimFei = PyDMLabel(
-            parent=self, init_channel=self.scrn_prefix+':CenterYDimFei-Mon')
+            parent=self, init_channel=self.scrn_prefix.substitute(
+                propty='CenterYDimFei-Mon'))
         self.PyDMLabel_CenterYDimFei.setStyleSheet(
             'min-width:4em; max-width:4em;')
         self.PyDMLabel_CenterYNDStats = PyDMLabel(
-            parent=self, init_channel=self.scrn_prefix+':CenterYNDStats-Mon')
+            parent=self, init_channel=self.scrn_prefix.substitute(
+                propty='CenterYNDStats-Mon'))
         self.PyDMLabel_CenterYNDStats.setStyleSheet(
             'min-width:4em; max-width:4em;')
         self.PyDMLabel_CenterYNDStats.setVisible(False)
@@ -361,21 +372,25 @@ class SiriusScrnView(QWidget):
         label_Sigma.setStyleSheet("min-width:7em;")
         label_i_Sigma = QLabel('(', self)
         self.PyDMLabel_SigmaXDimFei = PyDMLabel(
-            parent=self, init_channel=self.scrn_prefix+':SigmaXDimFei-Mon')
+            parent=self, init_channel=self.scrn_prefix.substitute(
+                propty='SigmaXDimFei-Mon'))
         self.PyDMLabel_SigmaXDimFei.setStyleSheet(
             'min-width:4em; max-width:4em;')
         self.PyDMLabel_SigmaXNDStats = PyDMLabel(
-            parent=self, init_channel=self.scrn_prefix+':SigmaXNDStats-Mon')
+            parent=self, init_channel=self.scrn_prefix.substitute(
+                propty='SigmaXNDStats-Mon'))
         self.PyDMLabel_SigmaXNDStats.setStyleSheet(
             'min-width:4em; max-width:4em;')
         self.PyDMLabel_SigmaXNDStats.setVisible(False)
         label_m_Sigma = QLabel(',', self)
         self.PyDMLabel_SigmaYDimFei = PyDMLabel(
-            parent=self, init_channel=self.scrn_prefix+':SigmaYDimFei-Mon')
+            parent=self, init_channel=self.scrn_prefix.substitute(
+                propty='SigmaYDimFei-Mon'))
         self.PyDMLabel_SigmaYDimFei.setStyleSheet(
             'min-width:4em; max-width:4em;')
         self.PyDMLabel_SigmaYNDStats = PyDMLabel(
-            parent=self, init_channel=self.scrn_prefix+':SigmaYNDStats-Mon')
+            parent=self, init_channel=self.scrn_prefix.substitute(
+                propty='SigmaYNDStats-Mon'))
         self.PyDMLabel_SigmaYNDStats.setStyleSheet(
             'min-width:4em; max-width:4em;')
         self.PyDMLabel_SigmaYNDStats.setVisible(False)
@@ -386,10 +401,12 @@ class SiriusScrnView(QWidget):
         label_Theta.setStyleSheet("min-width:7em;")
         label_i_Theta = QLabel('(', self)
         self.PyDMLabel_ThetaDimFei = PyDMLabel(
-            parent=self, init_channel=self.scrn_prefix+':ThetaDimFei-Mon')
+            parent=self, init_channel=self.scrn_prefix.substitute(
+                propty='ThetaDimFei-Mon'))
         self.PyDMLabel_ThetaDimFei.setStyleSheet("max-width:12em;")
         self.PyDMLabel_ThetaNDStats = PyDMLabel(
-            parent=self, init_channel=self.scrn_prefix+':ThetaNDStats-Mon')
+            parent=self, init_channel=self.scrn_prefix.substitute(
+                propty='ThetaNDStats-Mon'))
         self.PyDMLabel_ThetaNDStats.setStyleSheet("max-width:12em;")
         self.PyDMLabel_ThetaNDStats.setVisible(False)
         label_f_Theta = QLabel(')', self)
@@ -586,17 +603,18 @@ class IndividualScrn(QWidget):
         super().__init__(parent=parent)
         self._prefix = prefix
         self._scrn = SiriusPVName(scrn)
+        self._scrn_pref = self._scrn.substitute(prefix=prefix)
         self.setObjectName(self._scrn.sec+'App')
         self._setupUi()
 
     def _setupUi(self):
         self.scrn_view = SiriusScrnView(prefix=self._prefix, device=self._scrn)
         self.cb_scrntype = PyDMEnumComboBox(
-            parent=self, init_channel=self._prefix+self._scrn+':ScrnType-Sel')
+            self, self._scrn_pref.substitute(propty='ScrnType-Sel'))
         self.l_scrntype = PyDMLabel(
-            parent=self, init_channel=self._prefix+self._scrn+':ScrnType-Sts')
+            self, self._scrn_pref.substitute(propty='ScrnType-Sts'))
         self.led_scrntype = PyDMLed(
-            parent=self, init_channel=self._prefix+self._scrn+':ScrnType-Sts',
+            self, self._scrn_pref.substitute(propty='ScrnType-Sts'),
             color_list=[PyDMLed.LightGreen, PyDMLed.Red, PyDMLed.Red,
                         PyDMLed.Yellow])
         self.led_scrntype.shape = 2

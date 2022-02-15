@@ -42,13 +42,11 @@ class CycleWindow(SiriusMainWindow):
         self.setWindowIcon(qta.icon('mdi.recycle', color=cor))
         self._is_adv_mode = adv_mode
         # Data structs
-        self._psnames = get_psnames()
+        self._psnames = get_psnames(isadv=self._is_adv_mode)
         self._timing = Timing()
         self._ps2cycle = list()
         self._ps_ready = list()
         self._ps_failed = list()
-        self._ps_selection_changed = True
-        self._last_ps_selected = list()
         self._checked_accs = checked_accs
         # Flags
         self._is_preparing = ''
@@ -67,6 +65,19 @@ class CycleWindow(SiriusMainWindow):
         self._icon_not = qta.icon('fa5s.times')
         self._pixmap_not = self._icon_not.pixmap(
             self._icon_not.actualSize(QSize(16, 16)))
+        # Tasks
+        self._step_2_task = {
+            'save_timing': SaveTiming,
+            'timing': PrepareTiming,
+            'ps_sofbmode': PreparePSSOFBMode,
+            'ps_om_slowref': PreparePSOpModeSlowRef,
+            'ps_current': PreparePSCurrentZero,
+            'ps_params': PreparePSParams,
+            'ps_om_cycle': PreparePSOpModeCycle,
+            'trims': CycleTrims,
+            'cycle': Cycle,
+            'restore_timing': RestoreTiming,
+        }
         # Setup UI
         self._needs_update_setup = False
         self._setup_ui()
@@ -93,7 +104,7 @@ class CycleWindow(SiriusMainWindow):
         # commands
         lb_prep_ti = QLabel('<h4>Prepare Timing</h4>', self,
                             alignment=Qt.AlignCenter)
-        ti_ch = [VACA_PREFIX + name
+        ti_ch = [PVName(name).substitute(prefix=VACA_PREFIX)
                  for name in self._timing.get_pvnames_by_psnames()]
         self.ticonn_led = PyDMLedMultiConn(self, channels=ti_ch)
 
@@ -317,36 +328,8 @@ class CycleWindow(SiriusMainWindow):
         if 'ps' in control and not self._verify_ps(pwrsupplies):
             return
 
-        if control == 'save_timing':
-            task_class = SaveTiming
-            create_new_controller = self._ps_selection_changed
-        elif control == 'timing':
-            task_class = PrepareTiming
-            create_new_controller = self._ps_selection_changed
-        elif control == 'ps_sofbmode':
-            task_class = PreparePSSOFBMode
-            create_new_controller = self._ps_selection_changed
-        elif control == 'ps_om_slowref':
-            task_class = PreparePSOpModeSlowRef
-            create_new_controller = self._ps_selection_changed
-        elif control == 'ps_current':
-            task_class = PreparePSCurrentZero
-            create_new_controller = self._ps_selection_changed
-        elif control == 'ps_params':
-            task_class = PreparePSParams
-            create_new_controller = self._ps_selection_changed
-        elif control == 'ps_om_cycle':
-            task_class = PreparePSOpModeCycle
-            create_new_controller = self._ps_selection_changed
-        elif control == 'trims':
-            task_class = CycleTrims
-            create_new_controller = False
-        elif control == 'cycle':
-            task_class = Cycle
-            create_new_controller = False
-        elif control == 'restore_timing':
-            task_class = RestoreTiming
-            create_new_controller = False
+        if control in self._step_2_task:
+            task_class = self._step_2_task[control]
         else:
             raise NotImplementedError(
                 "Task not defined for control '{}'".format(control))
@@ -357,8 +340,7 @@ class CycleWindow(SiriusMainWindow):
 
         task = task_class(
             parent=self, psnames=pwrsupplies, timing=self._timing,
-            create_new_controller=create_new_controller)
-
+            isadv=self._is_adv_mode)
         task.updated.connect(self._update_progress)
         duration = task.duration()
 
@@ -453,6 +435,7 @@ class CycleWindow(SiriusMainWindow):
         self.cycle_bt.setEnabled(cycle)
         self.restore_timing_bt.setEnabled(enable)
         self.clearhist_bt.setEnabled(enable)
+        self.pwrsupplies_tree.setEnabled(enable)
 
     def _handle_stslabels_content(self):
         for prep, value in self._prepared.items():
@@ -477,9 +460,6 @@ class CycleWindow(SiriusMainWindow):
         if not pwrsupplies:
             QMessageBox.critical(self, 'Message', 'No power supply selected!')
             return False
-
-        self._ps_selection_changed = self._last_ps_selected != pwrsupplies
-        self._last_ps_selected = pwrsupplies
 
         sections = get_sections(pwrsupplies)
         if 'BO' in sections and len(sections) > 1:
@@ -531,38 +511,42 @@ class CycleWindow(SiriusMainWindow):
 
         # update leds
         psnames = self.pwrsupplies_tree.checked_items()
-        ti_ch = [VACA_PREFIX + name
+        ti_ch = [PVName(name).substitute(prefix=VACA_PREFIX)
                  for name in self._timing.get_pvnames_by_psnames(psnames)]
         self.ticonn_led.set_channels(ti_ch)
 
         ps_ch = list()
         for name in psnames:
-            ppty = ':Version-Cte'
-            ps_ch.append(VACA_PREFIX + name + ppty)
+            ps_ch.append(PVName(name).substitute(
+                prefix=VACA_PREFIX, propty='Version-Cte'))
         self.psconn_led.set_channels(ps_ch)
 
-        # update buttons and self._prepared dict
-        si_fams = PSSearch.get_psnames(
-            {'sec': 'SI', 'sub': 'Fam', 'dis': 'PS'})
-        has_sifam = False
-        for psn in si_fams:
-            item = self.pwrsupplies_tree._item_map[psn]
-            has_sifam |= item.checkState(0) != 0
+        # update buttons and self._prepared dict if not in advanced mode
+        if not self._is_adv_mode:
+            si_fams = PSSearch.get_psnames(
+                {'sec': 'SI', 'sub': 'Fam', 'dis': 'PS'})
+            has_sifam = False
+            for psn in si_fams:
+                item = self.pwrsupplies_tree._item_map[psn]
+                has_sifam |= item.checkState(0) != 0
 
-        if not has_sifam:
-            self.cycle_bt.setText('8. Cycle')
-            self.restore_timing_bt.setText('9. Restore Timing Initial State')
-            self.cycle_trims_bt.setVisible(False)
-            self.cycle_trims_lb.setVisible(False)
-            self._prepared['trims'] = True
-        else:
-            self.cycle_bt.setText('9. Cycle')
-            self.restore_timing_bt.setText('10. Restore Timing Initial State')
-            self.cycle_trims_bt.setVisible(True)
-            self.cycle_trims_lb.setVisible(True)
-            self._prepared['trims'] = False
+            if not has_sifam:
+                self.cycle_bt.setText('8. Cycle')
+                self.restore_timing_bt.setText(
+                    '9. Restore Timing Initial State')
+                self.cycle_trims_bt.setVisible(False)
+                self.cycle_trims_lb.setVisible(False)
+                self._prepared['trims'] = True
+            else:
+                self.cycle_bt.setText('9. Cycle')
+                self.restore_timing_bt.setText(
+                    '10. Restore Timing Initial State')
+                self.cycle_trims_bt.setVisible(True)
+                self.cycle_trims_lb.setVisible(True)
+                self._prepared['trims'] = False
 
         self._handle_stslabels_content()
+        self._handle_buttons_enabled(True)
 
     # --- auxiliary checks ---
 

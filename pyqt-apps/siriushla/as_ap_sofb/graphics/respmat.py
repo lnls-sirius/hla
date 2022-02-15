@@ -9,23 +9,25 @@ from qtpy.QtCore import Qt
 from qtpy.QtGui import QColor
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.sofb.csdev import SOFBFactory
-from siriushla.widgets import SiriusConnectionSignal, QSpinBoxPlus
+from siriushla.widgets import SiriusConnectionSignal as _ConnSig, QSpinBoxPlus
 from .base import Graph, InfLine
 
 
 class ShowMatrixWidget(QWidget):
 
-    def __init__(self, parent, prefix, acc):
+    def __init__(self, parent, device, acc, prefix=''):
         super().__init__(parent)
         self.prefix = prefix
+        self.device = _PVName(device)
+        self.devpref = self.device.substitute(prefix=prefix)
         self.acc = acc.upper()
         self.setObjectName(self.acc+'App')
         self._csorb = SOFBFactory.create(acc)
         self._inflines = []
         self.setupui()
-        self.mat = SiriusConnectionSignal(prefix+'RespMat-Mon')
+        self.mat = _ConnSig(self.devpref.substitute(propty='RespMat-Mon'))
         self.mat.new_value_signal[_np.ndarray].connect(self._update_graph)
-        self.rsize = SiriusConnectionSignal(prefix+'RingSize-RB')
+        self.rsize = _ConnSig(self.devpref.substitute(propty='RingSize-RB'))
         self.rsize.new_value_signal[int].connect(self._update_horizontal)
         self._update_horizontal(None)
         self._update_graph(None)
@@ -63,7 +65,7 @@ class ShowMatrixWidget(QWidget):
                 color = 'black'
             opts = dict(
                 y_channel='',
-                x_channel='',  # self.prefix+'BPMPosS-Mon',
+                x_channel='',  # self.devpref.substitute(propty='BPMPosS-Mon'),
                 name='',
                 color=color,
                 redraw_mode=2,
@@ -78,10 +80,9 @@ class ShowMatrixWidget(QWidget):
     def _show_tooltip(self, pos):
         names = self._csorb.bpm_nicknames
         cname = self._csorb.ch_nicknames + self._csorb.cv_nicknames
-        if self._csorb.acc == 'SI':
+        if self._csorb.isring:
             cname += ['RF', ]
         posi = self._csorb.bpm_pos
-        unit = 'count'
 
         graph = self.graph
         curve = graph.curveAtIndex(0)
@@ -93,7 +94,7 @@ class ShowMatrixWidget(QWidget):
 
         indy = int(posy // self.spbox.value())
         indy = max(min(indy, len(cname)-1), 0)
-        sca, prf = functions.siScale(posy)
+        # sca, prf = functions.siScale(posy)
         txt = 'BPM = {0:s}, Corr = {1:s}'.format(names[ind], cname[indy])
         QToolTip.showText(
             graph.mapToGlobal(pos.toPoint()),
@@ -135,11 +136,14 @@ class ShowMatrixWidget(QWidget):
 
 class SingularValues(QWidget):
 
-    def __init__(self, parent, prefix):
+    def __init__(self, parent, device, prefix=''):
         super().__init__(parent)
-        self.prefix = _PVName(prefix)
-        self.setObjectName(self.prefix.sec+'App')
-        self._chan = SiriusConnectionSignal(self.prefix+'NrSingValues-Mon')
+        self.prefix = prefix
+        self.device = _PVName(device)
+        self.devpref = self.device.substitute(prefix=prefix)
+        self.setObjectName(self.device.sec+'App')
+        self._chan = _ConnSig(
+            self.devpref.substitute(propty='NrSingValues-Mon'))
         self.setupui()
 
     def setupui(self):
@@ -157,7 +161,7 @@ class SingularValues(QWidget):
         vbl.addWidget(graph)
         opts = dict(
             name='Processed',
-            y_channel=self.prefix+'SingValues-Mon',
+            y_channel=self.devpref.substitute(propty='SingValues-Mon'),
             color='black',
             redraw_mode=2,
             lineStyle=1,
@@ -170,7 +174,7 @@ class SingularValues(QWidget):
 
         opts = dict(
             name='Raw',
-            y_channel=self.prefix+'SingValuesRaw-Mon',
+            y_channel=self.devpref.substitute(propty='SingValuesRaw-Mon'),
             color='blue',
             redraw_mode=2,
             lineStyle=1,

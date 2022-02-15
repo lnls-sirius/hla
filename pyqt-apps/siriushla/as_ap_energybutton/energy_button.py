@@ -7,6 +7,7 @@ from qtpy.QtGui import QPalette, QColor
 from pydm.widgets import PyDMLabel
 
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
+from siriuspy.namesys import SiriusPVName as _PVName
 from siriushla.common.epics.task import EpicsConnector, EpicsSetter, \
     EpicsChecker, EpicsGetter, EpicsWait
 from siriushla.widgets.dialog import ReportDialog, ProgressDialog
@@ -43,15 +44,16 @@ class EnergyButton(QWidget):
         self.energy_value.setDecimals(4)
 
         if self.section == 'tb':
-            sp_channel = _VACA_PREFIX + 'TB-Fam:PS-B:Energy-RB'
+            sp_channel = 'TB-Fam:PS-B:Energy-RB'
         elif self.section == 'bo':
-            sp_channel = _VACA_PREFIX + 'BO-Fam:PS-B-1:Energy-RB'
+            sp_channel = 'BO-Fam:PS-B-1:Energy-RB'
         elif self.section == 'ts':
-            sp_channel = _VACA_PREFIX + 'TS-Fam:PS-B:Energy-RB'
+            sp_channel = 'TS-Fam:PS-B:Energy-RB'
         elif self.section == 'si':
-            sp_channel = _VACA_PREFIX + 'SI-Fam:PS-B1B2-1:Energy-RB'
+            sp_channel = 'SI-Fam:PS-B1B2-1:Energy-RB'
         else:
             raise RuntimeError
+        sp_channel = _PVName(sp_channel).substitute(prefix=_VACA_PREFIX)
         self.energy_sp = PyDMLabel(self)
         self.energy_sp.channel = sp_channel
         self.energy_sp.showUnits = True

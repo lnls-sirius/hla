@@ -7,8 +7,9 @@ import qtawesome as qta
 from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMEnumComboBox
 
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
+from siriuspy.namesys import SiriusPVName as _PVName
 
-from ..util import connect_window
+from ..util import connect_window, connect_newprocess
 from ..widgets.windows import create_window_from_widget
 from ..widgets import SiriusMainWindow, SiriusLedAlert, PyDMStateButton, \
     PyDMLedMultiChannel, DetachableTabWidget, SiriusPushButton
@@ -31,8 +32,8 @@ class BbBControlWindow(SiriusMainWindow):
         """."""
         super().__init__(parent)
         self.prefix = prefix
-        self.device = device
-        self.dev_pref = prefix + device
+        self.device = _PVName(device)
+        self.dev_pref = self.device.substitute(prefix=prefix)
         self.setWindowTitle(device+' Control Window')
         self.setObjectName('SIApp')
         self.setWindowIcon(get_bbb_icon())
@@ -89,8 +90,8 @@ class BbBMainSettingsWidget(QWidget):
         super().__init__(parent)
         set_bbb_color(self, device)
         self._prefix = prefix
-        self._device = device
-        self.dev_pref = prefix + device
+        self._device = _PVName(device)
+        self.dev_pref = self._device.substitute(prefix=prefix)
         typ2label = {
             'H': 'Horizontal',
             'V': 'Vertical',
@@ -113,6 +114,10 @@ class BbBMainSettingsWidget(QWidget):
             self.pb_detail.setObjectName('dtls')
             self.pb_detail.setStyleSheet(
                 '#dtls{min-width:20px;max-width:20px;icon-size:15px;}')
+            cmd = ['sirius-hla-si-di-bbb.py', '-dev', self.dev_pref]
+            if self._prefix:
+                cmd.extend(['-p', self._prefix])
+            connect_newprocess(self.pb_detail, cmd, self)
             hbox_label = QHBoxLayout()
             hbox_label.setContentsMargins(0, 0, 0, 0)
             hbox_label.addWidget(led_gensts, alignment=Qt.AlignLeft)
@@ -235,8 +240,8 @@ class BbBStatusWidget(QWidget):
         super().__init__(parent)
         self.setObjectName('SIApp')
         self._prefix = prefix
-        self._device = device
-        self.dev_pref = prefix + device
+        self._device = _PVName(device)
+        self.dev_pref = self._device.substitute(prefix=prefix)
         self._is_resumed = resume
         self._setupUi()
 
@@ -268,7 +273,8 @@ class BbBStatusWidget(QWidget):
         ld_intvl = QLabel('Interval [s]', alignment=Qt.AlignCenter)
         lb_intvl = PyDMLabel(self, self.dev_pref+':RST_COUNT')
         pb_intvl = SiriusPushButton(
-            self, init_channel=self.dev_pref+':CNTRST', pressValue=1)
+            self, init_channel=self.dev_pref+':CNTRST', pressValue=1,
+            releaseValue=0)
         pb_intvl.setText('Reset')
         pb_intvl.setToolTip('Reset Counts')
         pb_intvl.setIcon(qta.icon('fa5s.sync'))
@@ -328,8 +334,8 @@ class BbBInfoWidget(QGroupBox):
         super().__init__(parent)
         set_bbb_color(self, device)
         self._prefix = prefix
-        self._device = device
-        self.dev_pref = prefix + device
+        self._device = _PVName(device)
+        self.dev_pref = self._device.substitute(prefix=prefix)
         self._setupUi()
 
     def _setupUi(self):

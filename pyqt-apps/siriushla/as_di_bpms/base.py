@@ -18,7 +18,7 @@ class BaseWidget(QWidget):
 
     def __init__(self, parent=None, prefix='', bpm='', data_prefix=''):
         super().__init__(parent)
-        self.prefix = _PVName(prefix)
+        self.prefix = prefix
         self.bpm = _PVName(bpm)
         self.setObjectName(self.bpm.sec+'App')
         self.data_prefix = data_prefix
@@ -29,9 +29,9 @@ class BaseWidget(QWidget):
         return self._chans
 
     def get_pvname(self, propty, is_data=True):
-        addr = self.prefix + self.bpm + ':'
-        addr += self.data_prefix if is_data else ''
-        addr += propty
+        addr = self.bpm.substitute(
+            prefix=self.prefix,
+            propty=(self.data_prefix if is_data else '')+propty)
         return addr
 
     def _create_formlayout_groupbox(self, title, props):

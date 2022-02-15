@@ -10,7 +10,7 @@ class DiffCtrlDetails(SiriusDialog):
     def __init__(self, parent=None, prefix='', device=''):
         """Init."""
         super(DiffCtrlDetails, self).__init__(parent)
-        self.dev_prefix = _PVName(prefix + device)
+        self.dev_prefix = _PVName(device).substitute(prefix=prefix)
         self.setObjectName(self.dev_prefix.sec+'App')
         self._setupUi()
 
@@ -47,13 +47,13 @@ class DiffCtrlDetails(SiriusDialog):
     def _setupGeneralInfoLayout(self):
         label_NegMtrCtrlPrefix = QLabel('Negative Motion Control: ', self)
         self.PyDMLabel_NegMtrCtrlPrefix = PyDMLabel(
-            self, self.dev_prefix+':NegativeMotionCtrl-Cte')
+            self, self.dev_prefix.substitute(propty='NegativeMotionCtrl-Cte'))
         self.PyDMLabel_NegMtrCtrlPrefix.setStyleSheet("""
             max-width:14.20em; max-height:1.29em;""")
 
         label_PosMtrCtrlPrefix = QLabel('Positive Motion Control: ', self)
         self.PyDMLabel_PosMtrCtrlPrefix = PyDMLabel(
-            self, self.dev_prefix+':PositiveMotionCtrl-Cte')
+            self, self.dev_prefix.substitute(propty='PositiveMotionCtrl-Cte'))
         self.PyDMLabel_PosMtrCtrlPrefix.setStyleSheet("""
             max-width:14.20em; max-height:1.29em;""")
 
@@ -67,14 +67,16 @@ class DiffCtrlDetails(SiriusDialog):
     def _setupDetailedStatusLayout(self):
         label_NegDoneMov = QLabel('Negative Edge Motor Finished Move? ', self)
         self.PyDMLed_NegDoneMov = PyDMLed(
-            parent=self, init_channel=self.dev_prefix+':NegativeDoneMov-Mon',
+            parent=self, init_channel=self.dev_prefix.substitute(
+                propty='NegativeDoneMov-Mon'),
             color_list=[PyDMLed.Red, PyDMLed.LightGreen])
         self.PyDMLed_NegDoneMov.setStyleSheet("""
             max-width:7.10em; max-height:1.29em;""")
 
         label_PosDoneMov = QLabel('Positive Edge Motor Finished Move? ', self)
         self.PyDMLed_PosDoneMov = PyDMLed(
-            parent=self, init_channel=self.dev_prefix+':PositiveDoneMov-Mon',
+            parent=self, init_channel=self.dev_prefix.substitute(
+                propty='PositiveDoneMov-Mon'),
             color_list=[PyDMLed.Red, PyDMLed.LightGreen])
         self.PyDMLed_PosDoneMov.setStyleSheet("""
             max-width:7.10em; max-height:1.29em;""")
@@ -82,7 +84,8 @@ class DiffCtrlDetails(SiriusDialog):
         label_ConvOk = QLabel('Convertion from virtual to measured'
                               '\ncoordanates was succesfully done? ', self)
         self.PyDMLed_ConvOk = PyDMLed(
-            parent=self, init_channel=self.dev_prefix+':CoordConvErr-Mon',
+            parent=self, init_channel=self.dev_prefix.substitute(
+                propty='CoordConvErr-Mon'),
             color_list=[PyDMLed.LightGreen, PyDMLed.Red])
         self.PyDMLed_ConvOk.setStyleSheet("""
             max-width:7.10em; max-height:1.29em;""")
@@ -102,15 +105,18 @@ class DiffCtrlDetails(SiriusDialog):
 
         self.PyDMPushButton_NegDoneMov = PyDMPushButton(
             parent=self, label='Force Negative Edge Position', pressValue=1,
-            init_channel=self.dev_prefix+':ForceNegativeEdgePos-Cmd')
+            init_channel=self.dev_prefix.substitute(
+                propty='ForceNegativeEdgePos-Cmd'))
 
         self.PyDMPushButton_PosDoneMov = PyDMPushButton(
             parent=self, label='Force Positive Edge Position', pressValue=1,
-            init_channel=self.dev_prefix+':ForcePositiveEdgePos-Cmd')
+            init_channel=self.dev_prefix.substitute(
+                propty='ForcePositiveEdgePos-Cmd'))
 
         label_ForceComplete = QLabel('Force Commands Completed? ', self)
         self.PyDMLed_ForceComplete = PyDMLed(
-            parent=self, init_channel=self.dev_prefix+':ForceComplete-Mon',
+            parent=self, init_channel=self.dev_prefix.substitute(
+                propty='ForceComplete-Mon'),
             color_list=[PyDMLed.Red, PyDMLed.LightGreen])
         self.PyDMLed_ForceComplete.setStyleSheet("""
             max-width:7.10em; max-height:1.29em;""")
@@ -126,25 +132,25 @@ class DiffCtrlDetails(SiriusDialog):
 
     def _setupLimitsLayout(self):
         self.sb_PosEdgeInnerLim = PyDMSpinbox(
-            self, self.dev_prefix+':PosEdgeInnerLim-SP')
+            self, self.dev_prefix.substitute(propty='PosEdgeInnerLim-SP'))
         self.sb_PosEdgeInnerLim.showStepExponent = False
         self.lb_PosEdgeInnerLim = PyDMLabel(
-            self, self.dev_prefix+':PosEdgeInnerLim-RB')
+            self, self.dev_prefix.substitute(propty='PosEdgeInnerLim-RB'))
         self.sb_NegEdgeInnerLim = PyDMSpinbox(
-            self, self.dev_prefix+':NegEdgeInnerLim-SP')
+            self, self.dev_prefix.substitute(propty='NegEdgeInnerLim-SP'))
         self.sb_NegEdgeInnerLim.showStepExponent = False
         self.lb_NegEdgeInnerLim = PyDMLabel(
-            self, self.dev_prefix+':NegEdgeInnerLim-RB')
+            self, self.dev_prefix.substitute(propty='NegEdgeInnerLim-RB'))
         self.sb_LowOuterLim = PyDMSpinbox(
-            self, self.dev_prefix+':LowOuterLim-SP')
+            self, self.dev_prefix.substitute(propty='LowOuterLim-SP'))
         self.sb_LowOuterLim.showStepExponent = False
         self.lb_LowOuterLim = PyDMLabel(
-            self, self.dev_prefix+':LowOuterLim-RB')
+            self, self.dev_prefix.substitute(propty='LowOuterLim-RB'))
         self.sb_HighOuterLim = PyDMSpinbox(
-            self, self.dev_prefix+':HighOuterLim-SP')
+            self, self.dev_prefix.substitute(propty='HighOuterLim-SP'))
         self.sb_HighOuterLim.showStepExponent = False
         self.lb_HighOuterLim = PyDMLabel(
-            self, self.dev_prefix+':HighOuterLim-RB')
+            self, self.dev_prefix.substitute(propty='HighOuterLim-RB'))
 
         lay = QGridLayout()
         lay.setVerticalSpacing(15)

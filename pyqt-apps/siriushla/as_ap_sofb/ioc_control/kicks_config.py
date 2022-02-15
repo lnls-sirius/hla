@@ -2,7 +2,6 @@
 
 from qtpy.QtWidgets import QFormLayout, QHBoxLayout, QLabel, QVBoxLayout, \
     QGroupBox, QPushButton, QWidget, QTabWidget, QGridLayout
-from qtpy.QtCore import Qt
 import qtawesome as qta
 
 from pydm.widgets import PyDMPushButton
@@ -18,8 +17,8 @@ from .status import StatusWidget
 
 class KicksConfigWidget(BaseWidget):
 
-    def __init__(self, parent, prefix, acc='SI'):
-        super().__init__(parent, prefix, acc=acc)
+    def __init__(self, parent, device, prefix='', acc='SI'):
+        super().__init__(parent, device, prefix=prefix, acc=acc)
         self.setupui()
 
     def setupui(self):
@@ -30,7 +29,7 @@ class KicksConfigWidget(BaseWidget):
         pvnames = ('MaxKick', 'MaxDeltaKick')
         unitss = (('[urad]', '[urad]'), ('[urad]', '[urad]'))
         planes = ('CH', 'CV')
-        if self.acc == 'SI':
+        if self.acc in {'SI', 'BO'}:
             unitss = (
                 ('[urad]', '[urad]', None),
                 ('[urad]', '[urad]', '[Hz]'), )
@@ -87,7 +86,7 @@ class KicksConfigWidget(BaseWidget):
 
         del_grp = QGroupBox('Trigger Delay', det_wid)
         del_wid = self.create_pair(
-            del_grp, 'Delay', prefix='SI-Glob:TI-Mags-Corrs:', is_vert=False)
+            del_grp, 'Delay', device='SI-Glob:TI-Mags-Corrs', is_vert=False)
         del_det = QPushButton(qta.icon('fa5s.ellipsis-h'), '', del_grp)
         del_det.setToolTip('Open details')
         del_det.setObjectName('detail')
@@ -97,8 +96,8 @@ class KicksConfigWidget(BaseWidget):
             HLTriggerDetailed,
             title='SI-Glob:TI-Mags-Corrs Detailed Settings', is_main=True)
         connect_window(
-            del_det, trg_w, parent=None,
-            prefix='SI-Glob:TI-Mags-Corrs:')
+            del_det, trg_w, parent=None, device='SI-Glob:TI-Mags-Corrs',
+            prefix=self.prefix)
         del_lay = QHBoxLayout(del_grp)
         del_lay.addStretch()
         del_lay.addWidget(del_wid)
@@ -115,8 +114,8 @@ class KicksConfigWidget(BaseWidget):
     def get_status_widget(self, parent):
         """."""
         conf = PyDMPushButton(
-            parent,
-            init_channel=self.prefix+'CorrConfig-Cmd', pressValue=1)
+            parent, pressValue=1,
+            init_channel=self.devpref.substitute(propty='CorrConfig-Cmd'))
         conf.setToolTip('Refresh Configurations')
         conf.setIcon(qta.icon('fa5s.sync'))
         conf.setObjectName('conf')
@@ -132,10 +131,11 @@ class KicksConfigWidget(BaseWidget):
         Window = create_window_from_widget(
             StatusWidget, title='Correctors Status')
         connect_window(
-            sts, Window, self, prefix=self.prefix, acc=self.acc, is_orb=False)
+            sts, Window, self, device=self.device,
+            prefix=self.prefix, acc=self.acc, is_orb=False)
 
         pdm_led = SiriusLedAlert(
-            parent, init_channel=self.prefix+'CorrStatus-Mon')
+            parent, self.devpref.substitute(propty='CorrStatus-Mon'))
 
         lbl = QLabel('Correctors Status:', parent)
         hbl = QHBoxLayout()

@@ -9,9 +9,12 @@ from qtpy.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, \
 
 from pydm.widgets import PyDMWaveformPlot
 
+from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
+from siriuspy.namesys import SiriusPVName as _PVName
+
 from siriuspy.search import PSSearch
-from siriushla.widgets import SiriusConnectionSignal, SiriusMainWindow, \
-    QSpinBoxPlus, QDoubleSpinBoxPlus
+from siriushla.widgets import SiriusConnectionSignal as _ConnSig, \
+    SiriusMainWindow, QSpinBoxPlus, QDoubleSpinBoxPlus
 
 
 class Graph(PyDMWaveformPlot):
@@ -61,7 +64,8 @@ class GraphWidget(QWidget):
         self.setupui()
         self.setFocus(True)
         self.setFocusPolicy(Qt.StrongFocus)
-        self.chans = [SiriusConnectionSignal(ps+':Wfm-Mon') for ps in pslist]
+        self.chans = [_ConnSig(_PVName(ps).substitute(
+            prefix=_VACA_PREFIX, propty='Wfm-Mon')) for ps in pslist]
         for idx, chan in enumerate(self.chans):
             chan.new_value_signal[_np.ndarray].connect(
                 _part(self._update_curve, idx))
@@ -143,6 +147,7 @@ class PlotWfmErrorWindow(SiriusMainWindow):
     def __init__(self, parent=None):
         super().__init__(parent=parent)
         self.setObjectName('BOApp')
+        self.setWindowTitle('BO Wfm Error Monitor')
         self.setupui()
 
     def setupui(self):

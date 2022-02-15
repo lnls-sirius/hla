@@ -11,9 +11,9 @@ from . import BaseWidget
 class DriveControl(BaseWidget):
     """."""
 
-    def __init__(self, parent, prefix, acc='SI'):
+    def __init__(self, parent, device, prefix='', acc='SI'):
         """."""
-        super().__init__(parent, prefix, acc=acc)
+        super().__init__(parent, device, prefix=prefix, acc=acc)
         self.setupui()
 
     def setupui(self):
@@ -58,10 +58,10 @@ class DriveControl(BaseWidget):
         hlay = QHBoxLayout()
         hlay.addWidget(QLabel('Frequency [Hz]: '))
         hlay.addWidget(PyDMLabel(
-            init_channel=self.prefix+'DriveFrequency-Mon'))
+            self, self.devpref.substitute(propty='DriveFrequency-Mon')))
         hlay.addStretch()
         hlay.addWidget(QLabel('Duration [s]: '))
         hlay.addWidget(PyDMLabel(
-            init_channel=self.prefix+'DriveDuration-Mon'))
+            self, self.devpref.substitute(propty='DriveDuration-Mon')))
         gpbx_lay.addLayout(hlay)
         return gpbx

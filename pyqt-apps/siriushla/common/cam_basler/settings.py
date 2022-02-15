@@ -15,9 +15,9 @@ class BaslerCamSettings(QTabWidget):
 
     def __init__(self, parent=None, device='', prefix=''):
         super().__init__(parent)
-        self.device = SiriusPVName(device)
-        self.prefix = SiriusPVName(prefix)
-        self.cam_prefix = SiriusPVName(prefix + device)
+        self.prefix = prefix
+        self.device = SiriusPVName(device).substitute(prefix=prefix)
+        self.cam_prefix = self.device.substitute(prefix=prefix)
         self.setObjectName(self.device.sec + 'App')
         self._setupUi()
 
@@ -95,14 +95,14 @@ class BaslerCamSettings(QTabWidget):
 
         label_Temp = QLabel('Temperature State:', self)
         self.lb_Temp = PyDMLabel(
-            parent=self, init_channel=self.cam_prefix+':Temp-Mon')
+            self, self.cam_prefix.substitute(propty='Temp-Mon'))
         self.lb_Temp.setStyleSheet('min-width:7.1em; max-width:7.1em;')
         self.lb_Temp.setAlignment(Qt.AlignCenter)
         self.led_TempState = SiriusLedAlert(
-            parent=self, init_channel=self.cam_prefix+':TempState-Mon')
+            self, self.cam_prefix.substitute(propty='TempState-Mon'))
         self.led_TempState.setStyleSheet('min-width:1.29em; max-width:1.29em;')
         self.lb_TempState = PyDMLabel(
-            parent=self, init_channel=self.cam_prefix+':TempState-Mon')
+            self, self.cam_prefix.substitute(propty='TempState-Mon'))
         self.lb_TempState.setStyleSheet('min-width:2.5em; max-width:2.5em;')
         hbox_Temp = QHBoxLayout()
         hbox_Temp.addWidget(self.lb_Temp)
@@ -119,7 +119,8 @@ class BaslerCamSettings(QTabWidget):
         label_Reset = QLabel('Reset Camera:', self)
         self.pb_dtl = PyDMPushButton(
             label='', icon=qta.icon('fa5s.sync'),
-            parent=self, pressValue=1, init_channel=self.cam_prefix+':Rst-Cmd')
+            parent=self, pressValue=1,
+            init_channel=self.cam_prefix.substitute(propty='Rst-Cmd'))
         self.pb_dtl.setObjectName('reset')
         self.pb_dtl.setStyleSheet(
             "#reset{min-width:25px; max-width:25px; icon-size:20px;}")
@@ -297,13 +298,13 @@ class BaslerCamSettings(QTabWidget):
     def _ROIWidget(self):
         label_MaxWidth = QLabel('Maximum Width [pixels]:', self)
         self.PyDMLabel_MaxWidth = PyDMLabel(
-            parent=self, init_channel=self.cam_prefix+':SensorWidth-Cte')
+            self, self.cam_prefix.substitute(propty='SensorWidth-Cte'))
         self.PyDMLabel_MaxWidth.setStyleSheet(
             """max-width:7.10em; max-height:1.29em;""")
 
         label_MaxHeight = QLabel('Maximum Height [pixels]:', self)
         self.PyDMLabel_MaxHeight = PyDMLabel(
-            parent=self, init_channel=self.cam_prefix+':SensorHeight-Cte')
+            self, self.cam_prefix.substitute(propty='SensorHeight-Cte'))
         self.PyDMLabel_MaxHeight.setStyleSheet(
             """max-width:7.10em; max-height:1.29em;""")
 
@@ -356,14 +357,14 @@ class BaslerCamAcqAdvSettings(QWidget):
 
     def __init__(self, parent=None, device='', prefix=''):
         super().__init__(parent)
+        self.prefix = prefix
         self.device = SiriusPVName(device)
-        self.prefix = SiriusPVName(prefix)
-        self.cam_prefix = SiriusPVName(prefix + device)
+        self.cam_prefix = self.device.substitute(propty=self.prefix)
         self.setObjectName(self.device.sec + 'App')
         self._setupUi()
 
     def _setupUi(self):
-        label = QLabel('<h3>'+self.device +
+        label = QLabel('<h3>' + self.device +
                        ' Advanced Acquisition Settings</h3>',
                        self, alignment=Qt.AlignHCenter)
         label.setStyleSheet('max-height:1.29em;')

@@ -11,8 +11,8 @@ from siriushla.as_ap_sofb.ioc_control.base import BaseWidget
 
 class StatusWidget(BaseWidget):
 
-    def __init__(self, parent, prefix, acc='SI', is_orb=False):
-        super().__init__(parent, prefix, acc)
+    def __init__(self, parent, device, prefix='', acc='SI', is_orb=False):
+        super().__init__(parent, device, prefix=prefix, acc=acc)
         self.is_orb = is_orb
         self.setupui()
 
@@ -22,7 +22,8 @@ class StatusWidget(BaseWidget):
         tip = 'Configure ' + ('Acquisition' if self.is_orb else 'Correctors')
         pv = 'TrigAcqConfig-Cmd' if self.is_orb else 'CorrConfig-Cmd'
         conf = PyDMPushButton(
-            self, init_channel=self.prefix + pv, pressValue=1)
+            self, init_channel=self.devpref.substitute(propty=pv),
+            pressValue=1)
         conf.setToolTip(tip)
         conf.setIcon(qta.icon('fa5s.sync'))
         conf.setObjectName('conf')
@@ -32,7 +33,7 @@ class StatusWidget(BaseWidget):
 
         pv = 'Orb' if self.is_orb else 'Corr'
         pdm_led = SiriusLedAlert(
-            self, init_channel=self.prefix + pv + 'Status-Mon')
+            self, self.devpref.substitute(propty=pv+'Status-Mon'))
 
         hbl = QHBoxLayout()
         hbl.setSpacing(9)
@@ -54,7 +55,7 @@ class StatusWidget(BaseWidget):
         else:
             items = self._csorb.StsLblsCorr._fields
             name = 'Corr'
-        channel = self.prefix + name + 'Status-Mon'
+        channel = self.devpref.substitute(propty=name + 'Status-Mon')
         for bit, label in enumerate(items):
             led = SiriusLedAlert(self, channel, bit)
             lab = QLabel(label, self)

@@ -22,6 +22,8 @@ from pydm.widgets import PyDMImageView
 from pydm.widgets.logdisplay import PyDMLogDisplay
 
 import mathphys.constants as _consts
+from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
+from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.magnet.factory import NormalizerFactory as _NormFact
 
 from siriushla.widgets import SiriusSpinbox, SiriusLabel, MatplotlibWidget, \
@@ -43,9 +45,10 @@ _log.basicConfig(format='%(levelname)7s ::: %(message)s')
 
 class EmittanceMeasure(QWidget):
 
-    def __init__(self, parent=None, place='LI'):
+    def __init__(self, parent=None, place='LI', prefix=_VACA_PREFIX):
         super().__init__(parent=parent)
         self._place = place or 'LI'
+        self._prefix = prefix
         self.setObjectName(self._place[0:2] + 'App')
         self._select_experimental_setup()
         self.nemitx_tm = []
@@ -73,24 +76,33 @@ class EmittanceMeasure(QWidget):
 
     def _select_experimental_setup(self):
         if self._place.lower().startswith('li'):
-            self.plt_image = ProcessImage(self, place='LI-Emittance')
+            self.plt_image = ProcessImage(
+                self, place='LI-Emittance', prefix=self._prefix)
             self.conv2kl = _NormFact.create('LI-01:MA-QF3')
-            self.quad_I_sp = PV('LI-01:PS-QF3:Current-SP')
-            self.quad_I_rb = PV('LI-01:PS-QF3:Current-Mon')
+            self.quad_I_sp = PV(_PVName(
+                'LI-01:PS-QF3:Current-SP').substitute(prefix=self._prefix))
+            self.quad_I_rb = PV(_PVName(
+                'LI-01:PS-QF3:Current-Mon').substitute(prefix=self._prefix))
             self.DIST = 2.8775
             self.QUAD_L = 0.112
         if self._place.lower().startswith('tb-qd2a'):
-            self.plt_image = ProcessImage(self, place='TB-Emittance')
+            self.plt_image = ProcessImage(
+                self, place='TB-Emittance', prefix=self._prefix)
             self.conv2kl = _NormFact.create('TB-02:MA-QD2A')
-            self.quad_I_sp = PV('TB-02:PS-QD2A:Current-SP')
-            self.quad_I_rb = PV('TB-02:PS-QD2A:Current-RB')
+            self.quad_I_sp = PV(_PVName(
+                'TB-02:PS-QD2A:Current-SP').substitute(prefix=self._prefix))
+            self.quad_I_rb = PV(_PVName(
+                'TB-02:PS-QD2A:Current-RB').substitute(prefix=self._prefix))
             self.DIST = 6.904
             self.QUAD_L = 0.1
         if self._place.lower().startswith('tb-qf2a'):
-            self.plt_image = ProcessImage(self, place='TB-Emittance')
+            self.plt_image = ProcessImage(
+                self, place='TB-Emittance', prefix=self._prefix)
             self.conv2kl = _NormFact.create('TB-02:MA-QF2A')
-            self.quad_I_sp = PV('TB-02:PS-QF2A:Current-SP')
-            self.quad_I_rb = PV('TB-02:PS-QF2A:Current-RB')
+            self.quad_I_sp = PV(_PVName(
+                'TB-02:PS-QF2A:Current-SP').substitute(prefix=self._prefix))
+            self.quad_I_rb = PV(_PVName(
+                'TB-02:PS-QF2A:Current-RB').substitute(prefix=self._prefix))
             self.DIST = 6.534
             self.QUAD_L = 0.1
 
@@ -320,8 +332,12 @@ class EmittanceMeasure(QWidget):
         gb = QGroupBox('QF3 Current [A]', self)
         measlay.addWidget(gb)
         gb.setLayout(QHBoxLayout())
-        spnbox = SiriusSpinbox(gb, init_channel='LI-01:PS-QF3:Current-SP')
-        lbl = SiriusLabel(gb, init_channel='LI-01:PS-QF3:Current-Mon')
+        spnbox = SiriusSpinbox(
+            gb, _PVName('LI-01:PS-QF3:Current-SP').substitute(
+                prefix=self._prefix))
+        lbl = SiriusLabel(
+            gb, _PVName('LI-01:PS-QF3:Current-Mon').substitute(
+                prefix=self._prefix))
         spnbox.showStepExponent = False
         gb.layout().addWidget(spnbox)
         gb.layout().addWidget(lbl)
@@ -606,9 +622,10 @@ class ImageView(PyDMImageView):
 
 
 class ProcessImage(QWidget):
-    def __init__(self, parent=None, place='LI-Energy'):
+    def __init__(self, parent=None, place='LI-Energy', prefix=_VACA_PREFIX):
         super().__init__(parent)
         self._place = place or 'LI-Energy'
+        self._prefix = prefix
         self._select_experimental_setup()
         self.cen_x = None
         self.cen_y = None
@@ -620,27 +637,28 @@ class ProcessImage(QWidget):
         self._setupUi()
 
     def _select_experimental_setup(self):
+        pref = self._prefix
         if self._place.lower().startswith('li-ene'):
-            prof = 'LA-BI:PRF4'
+            prof = pref + ('-' if pref else '') + 'LA-BI:PRF4'
             self.conv_coefx = PV(prof + ':X:Gauss:Coef')
             self.conv_coefy = PV(prof + ':Y:Gauss:Coef')
             self.image_channel = prof + ':RAW:ArrayData'
             self.width_channel = prof + ':ROI:MaxSizeX_RBV'
             self.trig_name = 'LI-Fam:TI-Scrn'
         elif self._place.lower().startswith('li-emit'):
-            prof = 'LA-BI:PRF5'
+            prof = pref + ('-' if pref else '') + 'LA-BI:PRF5'
             self.conv_coefx = PV(prof + ':X:Gauss:Coef')
             self.conv_coefy = PV(prof + ':Y:Gauss:Coef')
             self.image_channel = prof + ':RAW:ArrayData'
             self.width_channel = prof + ':ROI:MaxSizeX_RBV'
             self.trig_name = 'LI-Fam:TI-Scrn'
         elif self._place.lower().startswith('tb-emit'):
-            prof = 'TB-02:DI-ScrnCam-2'
-            self.conv_coefx = PV(prof + ':ImgScaleFactorX-RB')
-            self.conv_coefy = PV(prof + ':ImgScaleFactorY-RB')
-            prof = 'TB-02:DI-Scrn-2'
-            self.image_channel = prof + ':ImgData-Mon'
-            self.width_channel = prof + ':ImgROIWidth-RB'
+            prof = _PVName('TB-02:DI-ScrnCam-2').substitute(prefix=pref)
+            self.conv_coefx = PV(prof.substitute(propty='ImgScaleFactorX-RB'))
+            self.conv_coefy = PV(prof.substitute(propty='ImgScaleFactorY-RB'))
+            prof = _PVName('TB-02:DI-Scrn-2').substitute(prefix=pref)
+            self.image_channel = prof.substitute(propty='ImgData-Mon')
+            self.width_channel = prof.substitute(propty='ImgROIWidth-RB')
             self.trig_name = 'TB-Fam:TI-Scrn'
         else:
             raise Exception('Wrong value for "place".')
@@ -677,7 +695,8 @@ class ProcessImage(QWidget):
         gb_trig = QGroupBox('Trigger', self)
         vl.addWidget(gb_trig)
         gb_trig.setLayout(QVBoxLayout())
-        gb_trig.layout().addWidget(HLTriggerSimple(gb_trig, self.trig_name))
+        gb_trig.layout().addWidget(HLTriggerSimple(
+            gb_trig, device=self.trig_name, prefix=self._prefix))
 
         gb_pos = QGroupBox('Position [mm]', self)
         vl.addWidget(gb_pos)

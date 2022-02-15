@@ -2,10 +2,10 @@
 import numpy as _np
 
 from qtpy.QtCore import Qt, Slot
-from qtpy.QtGui import QColor, QBrush
+from qtpy.QtGui import QColor, QBrush, QIntValidator
 from qtpy.QtWidgets import QLabel, QPushButton, QGroupBox, QVBoxLayout, \
     QHBoxLayout, QGridLayout, QMenuBar, QSplitter, QTabWidget, QWidget, \
-    QSizePolicy as QSzPol, QCheckBox
+    QSizePolicy as QSzPol, QCheckBox, QDialog, QLineEdit
 import qtawesome as qta
 from pydm.widgets import PyDMLabel, PyDMPushButton, PyDMLineEdit, \
     PyDMWaveformPlot
@@ -17,7 +17,7 @@ from siriuspy.timesys import csdev as _cstime
 
 from ..widgets import PyDMLed, PyDMStateButton, SiriusLedState, \
     SiriusEnumComboBox as _MyComboBox, SiriusLedAlert, SiriusLabel, \
-    SiriusSpinbox
+    SiriusSpinbox, SiriusDialog
 from ..widgets.windows import create_window_from_widget
 from ..util import connect_window, get_appropriate_color
 
@@ -51,9 +51,10 @@ class BucketListLabel(SiriusLabel):
 class EVG(BaseWidget):
     """Template for control of High Level Triggers."""
 
-    def __init__(self, parent=None, prefix=''):
+    def __init__(self, parent=None, prefix='', device=''):
         """Initialize object."""
         super().__init__(parent, prefix=prefix)
+        self.device = _PVName(device or LLTimeSearch.get_evg_name())
         self.setupui()
         self.setObjectName('ASApp')
 
@@ -64,7 +65,7 @@ class EVG(BaseWidget):
 
         mylayout.addWidget(self._setupmenus(), 0, 0, 1, 2)
 
-        lab = QLabel('<h1>' + self.prefix.device_name + '</h1>', self)
+        lab = QLabel('<h1>' + self.device.device_name + '</h1>', self)
         mylayout.addWidget(lab, 1, 0, 1, 2)
         mylayout.setAlignment(lab, Qt.AlignCenter)
 
@@ -72,7 +73,7 @@ class EVG(BaseWidget):
         mylayout.addWidget(self.configs_wid, 2, 0)
         self._setup_configs_wid()
 
-        bucketlist_wid = BucketList(self, self.prefix)
+        bucketlist_wid = BucketList(self, self.device, self.prefix)
         mylayout.addWidget(bucketlist_wid, 3, 0)
 
         self.status_wid = QGroupBox('Status', self)
@@ -84,19 +85,21 @@ class EVG(BaseWidget):
         splitter.setHandleWidth(20)
         mylayout.addWidget(splitter, 4, 0, 1, 2)
 
+        obj_names = [self.device.substitute(propty=dev) for dev in
+                     sorted(_cstime.Const.EvtLL._fields[1:])]
         self.events_wid = EventList(
             name='Events', parent=self, prefix=self.prefix,
-            obj_names=sorted(_cstime.Const.EvtLL._fields[1:]))
+            obj_names=obj_names)
         self.events_wid.setObjectName('events_wid')
         self.events_wid.setStyleSheet("events_wid{min-width:40em;}")
         splitter.addWidget(self.events_wid)
 
+        obj_names = [self.device.substitute(propty=dev) for dev in
+                     sorted(_cstime.Const.ClkLL._fields)]
         self.clocks_wid = ClockList(
             name='Clocks', parent=self, prefix=self.prefix,
             props={'name', 'mux_enbl', 'frequency'},
-            obj_names=sorted(_cstime.Const.ClkLL._fields),
-            has_search=True,
-            )
+            obj_names=obj_names, has_search=True)
         splitter.addWidget(self.clocks_wid)
 
     def _setupmenus(self):
@@ -115,12 +118,10 @@ class EVG(BaseWidget):
             action = menu.addAction(out + ' --> ' + down)
             icon = qta.icon('mdi.timer', color=get_appropriate_color('AS'))
             Win = create_window_from_widget(FOUT, title=down, icon=icon)
-            connect_window(action, Win, None, prefix=down + ':')
+            connect_window(action, Win, None, device=down, prefix=self.prefix)
         return main_menu
 
     def _setup_configs_wid(self):
-        prefix = self.prefix
-
         suplay = QVBoxLayout(self.configs_wid)
         configlayout = QHBoxLayout()
         suplay.addItem(configlayout)
@@ -130,14 +131,18 @@ class EVG(BaseWidget):
         configlayout.addLayout(layrow)
         configlayout.addStretch()
 
-        sp = PyDMStateButton(self, init_channel=prefix + "DevEnbl-Sel")
-        rb = PyDMLed(self, init_channel=prefix + "DevEnbl-Sts")
+        pvname = self.get_pvname(propty='DevEnbl-Sel')
+        sp = PyDMStateButton(self, init_channel=pvname)
+        pvname = self.get_pvname(propty='DevEnbl-Sts')
+        rb = PyDMLed(self, init_channel=pvname)
         layrow.addWidget(self._create_prop_widget(
                         'Dev Enable', self.configs_wid, (sp, rb)))
 
-        sp = SiriusSpinbox(self, init_channel=prefix + "RFDiv-SP")
+        pvname = self.get_pvname(propty='RFDiv-SP')
+        sp = SiriusSpinbox(self, init_channel=pvname)
         sp.showStepExponent = False
-        rb = PyDMLabel(self, init_channel=prefix + "RFDiv-RB")
+        pvname = self.get_pvname(propty='RFDiv-RB')
+        rb = PyDMLabel(self, init_channel=pvname)
         layrow.addWidget(self._create_prop_widget(
                         'RF Divisor', self.configs_wid, (sp, rb)))
 
@@ -146,26 +151,28 @@ class EVG(BaseWidget):
         configlayout.addLayout(layrow)
         configlayout.addStretch()
 
-        sp = PyDMPushButton(
-            self, init_channel=prefix+"RFReset-Cmd", pressValue=1)
+        pvname = self.get_pvname(propty='RFReset-Cmd')
+        sp = PyDMPushButton(self, init_channel=pvname, pressValue=1)
         sp.setIcon(qta.icon('fa5s.sync'))
         sp.setToolTip('Reset RF Status')
         sp.setObjectName('but')
         sp.setStyleSheet(
             '#but{min-width:25px; max-width:25px; icon-size:20px;}')
-        rb = SiriusLedState(self, init_channel=prefix + "RFStatus-Mon")
+        pvname = self.get_pvname(propty='RFStatus-Mon')
+        rb = SiriusLedState(self, init_channel=pvname)
         rb.offColor = rb.Red
         layrow.addWidget(self._create_prop_widget(
                         'RF Status', self.configs_wid, (sp, rb)))
 
-        sp = PyDMPushButton(
-            self, init_channel=prefix+"UpdateEvt-Cmd", pressValue=1)
+        pvname = self.get_pvname(propty='UpdateEvt-Cmd')
+        sp = PyDMPushButton(self, init_channel=pvname, pressValue=1)
         sp.setIcon(qta.icon('fa5s.sync'))
         sp.setToolTip('Update Events Table')
         sp.setObjectName('but')
         sp.setStyleSheet(
             '#but{min-width:25px; max-width:25px; icon-size:20px;}')
-        rb = SiriusLedState(self, init_channel=prefix + "EvtSyncStatus-Mon")
+        pvname = self.get_pvname(propty='EvtSyncStatus-Mon')
+        rb = SiriusLedState(self, init_channel=pvname)
         rb.offColor = rb.Red
         layrow.addWidget(self._create_prop_widget(
                         'Update Evts', self.configs_wid, (sp, rb)))
@@ -175,12 +182,15 @@ class EVG(BaseWidget):
         configlayout.addLayout(layrow)
         configlayout.addStretch()
 
-        sp = PyDMStateButton(self, init_channel=prefix + "ACEnbl-Sel")
-        rb = SiriusLedState(self, init_channel=prefix + "ACEnbl-Sts")
+        pvname = self.get_pvname(propty='ACEnbl-Sel')
+        sp = PyDMStateButton(self, init_channel=pvname)
+        pvname = self.get_pvname(propty='ACEnbl-Sts')
+        rb = SiriusLedState(self, init_channel=pvname)
         layrow.addWidget(self._create_prop_widget(
                         'AC Enable', self.configs_wid, (sp, rb)))
 
-        mon = SiriusLedState(self, init_channel=prefix + "ACStatus-Mon")
+        pvname = self.get_pvname(propty='ACStatus-Mon')
+        mon = SiriusLedState(self, init_channel=pvname)
         mon.offColor = rb.Red
         layrow.addWidget(self._create_prop_widget(
                         'AC Status', self.configs_wid, (mon,)))
@@ -190,14 +200,18 @@ class EVG(BaseWidget):
         configlayout.addLayout(layrow)
         configlayout.addStretch()
 
-        sp = SiriusSpinbox(self, init_channel=prefix + "InjRate-SP")
+        pvname = self.get_pvname(propty='InjRate-SP')
+        sp = SiriusSpinbox(self, init_channel=pvname)
         sp.showStepExponent = False
-        rb = PyDMLabel(self, init_channel=prefix + "InjRate-RB")
+        pvname = self.get_pvname(propty='InjRate-RB')
+        rb = PyDMLabel(self, init_channel=pvname)
         layrow.addWidget(self._create_prop_widget(
                         'Pulse Rate [Hz]', self.configs_wid, (sp, rb)))
 
-        sp = _MyComboBox(self, init_channel=prefix + "ACSrc-Sel")
-        rb = PyDMLabel(self, init_channel=prefix + "ACSrc-Sts")
+        pvname = self.get_pvname(propty='ACSrc-Sel')
+        sp = _MyComboBox(self, init_channel=pvname)
+        pvname = self.get_pvname(propty='ACSrc-Sts')
+        rb = PyDMLabel(self, init_channel=pvname)
         layrow.addWidget(self._create_prop_widget(
                         'AC Source', self.configs_wid, (sp, rb)))
 
@@ -206,24 +220,29 @@ class EVG(BaseWidget):
         configlayout.addLayout(layrow)
         configlayout.addStretch()
 
-        sp = PyDMStateButton(self, init_channel=prefix + "ContinuousEvt-Sel")
-        rb = SiriusLedState(self, init_channel=prefix + "ContinuousEvt-Sts")
+        pvname = self.get_pvname(propty='ContinuousEvt-Sel')
+        sp = PyDMStateButton(self, init_channel=pvname)
+        pvname = self.get_pvname(propty='ContinuousEvt-Sts')
+        rb = SiriusLedState(self, init_channel=pvname)
         layrow.addWidget(self._create_prop_widget(
                         'Continuous', self.configs_wid, (sp, rb)))
 
-        sp = PyDMStateButton(self, init_channel=prefix + "InjectionEvt-Sel")
-        rb = SiriusLedState(self, init_channel=prefix + "InjectionEvt-Sts")
+        pvname = self.get_pvname(propty='InjectionEvt-Sel')
+        sp = PyDMStateButton(self, init_channel=pvname)
+        pvname = self.get_pvname(propty='InjectionEvt-Sts')
+        rb = SiriusLedState(self, init_channel=pvname)
         layrow.addWidget(self._create_prop_widget(
                         'Injection', self.configs_wid, (sp, rb)))
 
     def _setup_status_wid(self):
-        prefix = self.prefix
         status_layout = QGridLayout(self.status_wid)
         status_layout.setHorizontalSpacing(30)
         status_layout.setVerticalSpacing(5)
 
-        rb1 = PyDMLabel(self.status_wid, init_channel=prefix + 'STATEMACHINE')
-        rb2 = PyDMLabel(self.status_wid, init_channel=prefix + 'DevStatus-Mon')
+        pvname = self.get_pvname(propty='STATEMACHINE')
+        rb1 = PyDMLabel(self.status_wid, init_channel=pvname)
+        pvname = self.get_pvname(propty='DevStatus-Mon')
+        rb2 = PyDMLabel(self.status_wid, init_channel=pvname)
         hlay = QHBoxLayout()
         hlay.addStretch()
         hlay.addWidget(rb1)
@@ -237,12 +256,12 @@ class EVG(BaseWidget):
         wid = QWidget(self.status_wid)
         wid.setLayout(QHBoxLayout())
         wid.layout().setContentsMargins(0, 0, 0, 0)
-        pydmlab1 = PyDMLabel(
-            self.status_wid, init_channel=prefix+'TotalInjCount-Mon')
+        pvname = self.get_pvname(propty='TotalInjCount-Mon')
+        pydmlab1 = PyDMLabel(self.status_wid, init_channel=pvname)
         pydmlab1.setStyleSheet('min-width:5em;')
         pydmlab1.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        pydmlab2 = PyDMLabel(
-            self.status_wid, init_channel=prefix+'InjCount-Mon')
+        pvname = self.get_pvname(propty='InjCount-Mon')
+        pydmlab2 = PyDMLabel(self.status_wid, init_channel=pvname)
         pydmlab2.setAlignment(Qt.AlignCenter)
         lab1 = QLabel(
             '(', self.status_wid, alignment=Qt.AlignRight | Qt.AlignVCenter)
@@ -260,11 +279,11 @@ class EVG(BaseWidget):
         wid = QWidget(self.status_wid)
         wid.setLayout(QHBoxLayout())
         wid.layout().setContentsMargins(0, 0, 0, 0)
-        pydmlab1 = PyDMLabel(
-            self.status_wid, init_channel=prefix+'SeqStatus-Mon')
+        pvname = self.get_pvname(propty='SeqStatus-Mon')
+        pydmlab1 = PyDMLabel(self.status_wid, init_channel=pvname)
         pydmlab1.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        pydmlab2 = PyDMLabel(
-            self.status_wid, init_channel=prefix+'SeqCount-SP')
+        pvname = self.get_pvname(propty='SeqCount-SP')
+        pydmlab2 = PyDMLabel(self.status_wid, init_channel=pvname)
         lab1 = QLabel(
             '(', self.status_wid, alignment=Qt.AlignRight | Qt.AlignVCenter)
         lab2 = QLabel(
@@ -280,13 +299,15 @@ class EVG(BaseWidget):
         status_layout.addItem(hlay, 1, 0, 1, 3)
 
         lb = QLabel("<b>Alive</b>")
-        rb = PyDMLabel(self, init_channel=prefix + "Alive-Mon")
+        pvname = self.get_pvname(propty='Alive-Mon')
+        rb = PyDMLabel(self, init_channel=pvname)
         gb = self._create_small_GB('', self.status_wid, (lb, rb))
         gb.setStyleSheet('border: 2px solid transparent;')
         status_layout.addWidget(gb, 2, 0)
 
         lb = QLabel("<b>Network</b>")
-        rb = SiriusLedAlert(self, init_channel=prefix + "Network-Mon")
+        pvname = self.get_pvname(propty='Network-Mon')
+        rb = SiriusLedAlert(self, init_channel=pvname)
         on_c, off_c = rb.onColor, rb.offColor
         rb.offColor = on_c
         rb.onColor = off_c
@@ -295,7 +316,8 @@ class EVG(BaseWidget):
         status_layout.addWidget(gb, 2, 1)
 
         lb = QLabel("<b>RF Sts</b>")
-        rb = SiriusLedAlert(self, init_channel=prefix + "RFStatus-Mon")
+        pvname = self.get_pvname(propty='RFStatus-Mon')
+        rb = SiriusLedAlert(self, init_channel=pvname)
         on_c, off_c = rb.onColor, rb.offColor
         rb.offColor = on_c
         rb.onColor = off_c
@@ -307,17 +329,16 @@ class EVG(BaseWidget):
         conn = LLTimeSearch.get_connections_from_evg()
         conn = {int(dev.propty[-1]) for dev in conn if dev.dev == 'EVG'}
         for i in range(8):
+            pvname = self.get_pvname(propty='Los-Mon')
             if i in conn:
-                rb = SiriusLedAlert(
-                    self, init_channel=prefix + "Los-Mon", bit=i)
+                rb = SiriusLedAlert(self, init_channel=pvname, bit=i)
             else:
-                rb = SiriusLedState(
-                    self, init_channel=prefix + "Los-Mon", bit=i)
+                rb = SiriusLedState(self, init_channel=pvname, bit=i)
                 rb.onColor = rb.DarkGreen
                 rb.offColor = rb.LightGreen
             wids.append(rb)
         gb = self._create_small_GB(
-                'Down Connection', self.status_wid, wids, align_ver=False)
+            'Down Connection', self.status_wid, wids, align_ver=False)
         status_layout.addWidget(gb, 3, 0, 1, 3)
 
     def _create_small_GB(self, name, parent, wids, align_ver=True):
@@ -343,12 +364,13 @@ class EVG(BaseWidget):
         return pwid
 
 
-class BucketListGraph(QWidget):
+class BucketListGraph(BaseWidget):
     """Bucket List Graph."""
 
-    def __init__(self, parent=None, prefix=''):
-        super().__init__(parent)
-        self._prefix = prefix
+    def __init__(self, parent=None, device='', prefix=''):
+        if not device:
+            device = LLTimeSearch.get_evg_name()
+        super().__init__(parent, device, prefix)
         self._setupUi()
 
     def _setupUi(self):
@@ -403,15 +425,15 @@ class BucketListGraph(QWidget):
         lay.addWidget(self.show_mn, 2, 1)
 
         self._ch_sp = SiriusConnectionSignal(
-            self._prefix+'BucketList-SP')
+            self.get_pvname(propty='BucketList-SP'))
         self._ch_sp.new_value_signal[_np.ndarray].connect(
             self._update_curves)
         self._ch_rb = SiriusConnectionSignal(
-            self._prefix+'BucketList-RB')
+            self.get_pvname(propty='BucketList-RB'))
         self._ch_rb.new_value_signal[_np.ndarray].connect(
             self._update_curves)
         self._ch_mn = SiriusConnectionSignal(
-            self._prefix+'BucketList-Mon')
+            self.get_pvname(propty='BucketList-Mon'))
         self._ch_mn.new_value_signal[_np.ndarray].connect(
             self._update_curves)
 
@@ -439,8 +461,11 @@ class BucketListGraph(QWidget):
 
 class BucketList(BaseWidget):
 
-    def __init__(self, parent=None, prefix='', min_size=38, show_graph=False):
-        super().__init__(parent, prefix=prefix)
+    def __init__(self, parent=None, device='', prefix='', min_size=38,
+                 show_graph=False):
+        if not device:
+            device = LLTimeSearch.get_evg_name()
+        super().__init__(parent, device, prefix)
         self.setObjectName('ASApp')
         self._min_size = min_size
         self._show_graph = show_graph
@@ -452,29 +477,32 @@ class BucketList(BaseWidget):
         self.layout().addWidget(wid)
         self.layout().setContentsMargins(0, 0, 0, 0)
         lay = QGridLayout(wid)
-        prefix = self.prefix
 
         tm = 'min-width:{0:d}em; max-width:{0:d}em; max-height:1.15em;'
-        sp = BucketListLineEdit(wid, init_channel=prefix + "BucketList-SP")
+        pvname = self.get_pvname("BucketList-SP")
+        sp = BucketListLineEdit(wid, init_channel=pvname)
         self.bucket_ledit = sp
         sp.setStyleSheet(tm.format(self._min_size-1))
         sp.setSizePolicy(QSzPol.Maximum, QSzPol.Maximum)
         lab = QLabel('SP : ', wid)
         pushbtn = QPushButton(wid)
         pushbtn.setIcon(qta.icon('mdi.basket-fill'))
-        pushbtn.clicked.connect(self._set_bucket_list)
+        self._wid_fill = self._setup_bucket_list_fill()
+        pushbtn.clicked.connect(self._wid_fill.open)
         lay_sp = QHBoxLayout()
         lay_sp.addWidget(lab)
         lay_sp.addWidget(sp)
         lay_sp.addWidget(pushbtn)
-        rb = BucketListLabel(wid, init_channel=prefix + "BucketList-RB")
+        pvname = self.get_pvname("BucketList-RB")
+        rb = BucketListLabel(wid, init_channel=pvname)
         rb.setStyleSheet(tm.format(self._min_size))
         rb.setSizePolicy(QSzPol.Maximum, QSzPol.Maximum)
         lab = QLabel('RB : ', wid)
         lay_rb = QHBoxLayout()
         lay_rb.addWidget(lab)
         lay_rb.addWidget(rb)
-        mn = BucketListLabel(wid, init_channel=prefix + "BucketList-Mon")
+        pvname = self.get_pvname("BucketList-Mon")
+        mn = BucketListLabel(wid, init_channel=pvname)
         mn.setStyleSheet(tm.format(self._min_size))
         mn.setSizePolicy(QSzPol.Maximum, QSzPol.Maximum)
         lab = QLabel('Mon: ', wid)
@@ -488,7 +516,8 @@ class BucketList(BaseWidget):
         vlay.addLayout(lay_mn)
         lay.addLayout(vlay, 0, 0)
 
-        rb = PyDMLed(wid, init_channel=prefix + "BucketListSyncStatus-Mon")
+        pvname = self.get_pvname("BucketListSyncStatus-Mon")
+        rb = PyDMLed(wid, init_channel=pvname)
         rb.setOffColor(rb.Red)
         rb.setOnColor(rb.LightGreen)
         lab = QLabel('Sync', wid)
@@ -500,7 +529,7 @@ class BucketList(BaseWidget):
         vlay.addWidget(rb)
         lay.addLayout(vlay, 0, 1)
 
-        rb = PyDMLabel(wid, init_channel=prefix + "BucketListLen-Mon")
+        rb = PyDMLabel(wid, init_channel=self.get_pvname("BucketListLen-Mon"))
         rb.setStyleSheet("min-width:4em; max-height:1.15em;")
         rb.setAlignment(Qt.AlignCenter)
         lab = QLabel('Size', wid)
@@ -512,9 +541,11 @@ class BucketList(BaseWidget):
         vlay.addWidget(rb)
         lay.addLayout(vlay, 0, 2)
 
-        sp = SiriusSpinbox(wid, init_channel=prefix + "RepeatBucketList-SP")
+        pvname = self.get_pvname("RepeatBucketList-SP")
+        sp = SiriusSpinbox(wid, init_channel=pvname)
         sp.showStepExponent = False
-        rb = PyDMLabel(wid, init_channel=prefix + "RepeatBucketList-RB")
+        pvname = self.get_pvname("RepeatBucketList-RB")
+        rb = PyDMLabel(wid, init_channel=pvname)
         rb.setStyleSheet("min-width:2.5em; max-height:1.15em;")
         rb.setStyleSheet("min-width:4em; max-height:1.15em;")
         lab = QLabel('Repeat', wid, alignment=Qt.AlignCenter)
@@ -529,74 +560,52 @@ class BucketList(BaseWidget):
         lay.addLayout(vlay, 0, 3)
 
         if self._show_graph:
-            graph = BucketListGraph(self, prefix)
+            graph = BucketListGraph(self, self.device, self.prefix)
             lay.addWidget(graph, 1, 0, 1, 4)
 
-    def _set_bucket_list(self):
+    def _setup_bucket_list_fill(self):
+        inj_prefix = 'AS-Glob:AP-InjCtrl:'
 
-        wid = QDialog(self)
+        wid = SiriusDialog(self)
+        wid.setFocus(True)
+        wid.setFocusPolicy(Qt.StrongFocus)
         wid.setObjectName('ASApp')
-        lay = QGridLayout()
-        wid.setLayout(lay)
 
-        row = 0
-        lay.addWidget(QLabel('Start', wid), row, 0)
-        start = QLineEdit(wid)
-        val = QIntValidator()
-        val.setRange(1, 864)
-        start.setValidator(val)
-        start.setText('1')
-        start.setAlignment(Qt.AlignCenter)
-        start.setStyleSheet('max-width:5em;')
-        lay.addWidget(start, row, 1)
+        self._sb_start = SiriusSpinbox(wid, inj_prefix+'BucketListStart-SP')
+        self._sb_start.setAlignment(Qt.AlignCenter)
+        self._sb_start.setStyleSheet('max-width:5em;')
+        self._sb_start.showStepExponent = False
+        self._lb_start = SiriusLabel(wid, inj_prefix+'BucketListStart-RB')
 
-        row += 1
-        lay.addWidget(QLabel('Stop', wid), row, 0)
-        stop = QLineEdit(wid)
-        val = QIntValidator()
-        val.setRange(1, 864)
-        stop.setValidator(val)
-        stop.setText('864')
-        stop.setAlignment(Qt.AlignCenter)
-        stop.setStyleSheet('max-width:5em;')
-        lay.addWidget(stop, row, 1)
+        self._sb_stop = SiriusSpinbox(wid, inj_prefix+'BucketListStop-SP')
+        self._sb_stop.setAlignment(Qt.AlignCenter)
+        self._sb_stop.setStyleSheet('max-width:5em;')
+        self._sb_stop.showStepExponent = False
+        self._lb_stop = SiriusLabel(wid, inj_prefix+'BucketListStop-RB')
 
-        row += 1
-        lay.addWidget(QLabel('Step', wid), row, 0)
-        step = QLineEdit(wid)
-        val = QIntValidator()
-        val.setRange(1, 863)
-        step.setValidator(val)
-        step.setText('50')
-        step.setAlignment(Qt.AlignCenter)
-        step.setStyleSheet('max-width:5em;')
-        lay.addWidget(step, row, 1)
+        self._sb_step = SiriusSpinbox(wid, inj_prefix+'BucketListStep-SP')
+        self._sb_step.setAlignment(Qt.AlignCenter)
+        self._sb_step.setStyleSheet('max-width:5em;')
+        self._sb_step.showStepExponent = False
+        self._lb_step = SiriusLabel(wid, inj_prefix+'BucketListStep-RB')
 
-        row += 1
-        hlay = QHBoxLayout()
-        cancel = QPushButton('Cancel', wid)
-        confirm = QPushButton('Ok', wid)
-        confirm.setDefault(True)
-        cancel.clicked.connect(wid.reject)
-        confirm.clicked.connect(wid.accept)
-        hlay.addStretch()
-        hlay.addWidget(cancel)
-        hlay.addStretch()
-        hlay.addWidget(confirm)
-        hlay.addStretch()
-        wid.layout().addItem(hlay, row, 0, 1, 2)
-        res = wid.exec_()
-        if res != QDialog.Accepted:
-            return
+        self._pb_ok = QPushButton('Ok', wid)
+        self._pb_ok.setDefault(True)
+        self._pb_ok.clicked.connect(wid.accept)
 
-        start_ = int(start.text())
-        stop_ = int(stop.text())
-        step_ = int(step.text())
-        lst = list(range(start_, stop_, step_))
-        if lst:
-            txt = ' '.join(str(i) for i in lst)
-            self.bucket_ledit.setText(txt)
-            self.bucket_ledit.returnPressed.emit()
+        lay = QGridLayout(wid)
+        lay.addWidget(QLabel('Start:', wid), 0, 0)
+        lay.addWidget(self._sb_start, 0, 1)
+        lay.addWidget(self._lb_start, 0, 2)
+        lay.addWidget(QLabel('Stop:', wid), 1, 0)
+        lay.addWidget(self._sb_stop, 1, 1)
+        lay.addWidget(self._lb_stop, 1, 2)
+        lay.addWidget(QLabel('Step:', wid), 2, 0)
+        lay.addWidget(self._sb_step, 2, 1)
+        lay.addWidget(self._lb_step, 2, 2)
+        lay.addWidget(self._pb_ok, 3, 1)
+
+        return wid
 
 
 class EventList(BaseList):
@@ -620,12 +629,12 @@ class EventList(BaseList):
         super().__init__(**kwargs)
         self.setObjectName('ASApp')
 
-    def _createObjs(self, prefix, prop):
+    def _createObjs(self, device, prop):
         sp = rb = None
         if prop == 'ext_trig':
+            pvname = device.substitute(propty=device.propty+'ExtTrig-Cmd')
             sp = QWidget(self)
-            but = PyDMPushButton(
-                sp, init_channel=prefix+'ExtTrig-Cmd', pressValue=1)
+            but = PyDMPushButton(sp, init_channel=pvname, pressValue=1)
             but.setIcon(qta.icon('fa5s.step-forward'))
             but.setObjectName('but')
             but.setStyleSheet(
@@ -634,26 +643,37 @@ class EventList(BaseList):
             hbl = QHBoxLayout(sp)
             hbl.addWidget(but)
         elif prop == 'name':
-            sp = QLabel(prefix.propty, self, alignment=Qt.AlignCenter)
+            sp = QLabel(device.propty, self, alignment=Qt.AlignCenter)
         elif prop == 'mode':
-            sp = _MyComboBox(self, init_channel=prefix + "Mode-Sel")
-            rb = PyDMLabel(self, init_channel=prefix + "Mode-Sts")
+            pvname = device.substitute(propty=device.propty+'Mode-Sel')
+            sp = _MyComboBox(self, init_channel=pvname)
+            pvname = device.substitute(propty=device.propty+'Mode-Sts')
+            rb = PyDMLabel(self, init_channel=pvname)
         elif prop == 'delay_type':
-            sp = _MyComboBox(self, init_channel=prefix+"DelayType-Sel")
-            rb = PyDMLabel(self, init_channel=prefix+"DelayType-Sts")
+            pvname = device.substitute(propty=device.propty+'DelayType-Sel')
+            sp = _MyComboBox(self, init_channel=pvname)
+            pvname = device.substitute(propty=device.propty+'DelayType-Sts')
+            rb = PyDMLabel(self, init_channel=pvname)
         elif prop == 'delay':
-            sp = SiriusSpinbox(self, init_channel=prefix + "Delay-SP")
+            pvname = device.substitute(propty=device.propty+'Delay-SP')
+            sp = SiriusSpinbox(self, init_channel=pvname)
             sp.showStepExponent = False
-            rb = PyDMLabel(self, init_channel=prefix + "Delay-RB")
+            pvname = device.substitute(propty=device.propty+'Delay-RB')
+            rb = PyDMLabel(self, init_channel=pvname)
         elif prop == 'delayraw':
-            sp = SiriusSpinbox(self, init_channel=prefix + "DelayRaw-SP")
+            pvname = device.substitute(propty=device.propty+'DelayRaw-SP')
+            sp = SiriusSpinbox(self, init_channel=pvname)
             sp.showStepExponent = False
-            rb = PyDMLabel(self, init_channel=prefix + "DelayRaw-RB")
+            pvname = device.substitute(propty=device.propty+'DelayRaw-RB')
+            rb = PyDMLabel(self, init_channel=pvname)
         elif prop == 'description':
-            sp = PyDMLineEdit(self, init_channel=prefix + 'Desc-SP')
-            rb = PyDMLabel(self, init_channel=prefix + 'Desc-RB')
+            pvname = device.substitute(propty=device.propty+'Desc-SP')
+            sp = PyDMLineEdit(self, init_channel=pvname)
+            pvname = device.substitute(propty=device.propty+'Desc-RB')
+            rb = PyDMLabel(self, init_channel=pvname)
         elif prop == 'code':
-            sp = PyDMLabel(self, init_channel=prefix+'Code-Mon')
+            pvname = device.substitute(propty=device.propty+'Code-Mon')
+            sp = PyDMLabel(self, init_channel=pvname)
             sp.setAlignment(Qt.AlignCenter)
         if rb is None:
             return (sp, )
@@ -686,22 +706,28 @@ class ClockList(BaseList):
             props2search={'name', 'mux_enbl'})
         self.setObjectName('ASApp')
 
-    def _createObjs(self, prefix, prop):
+    def _createObjs(self, device, prop):
         if prop == 'frequency':
-            sp = SiriusSpinbox(self, init_channel=prefix + "Freq-SP")
+            pvname = device.substitute(propty=device.propty+'Freq-SP')
+            sp = SiriusSpinbox(self, init_channel=pvname)
             sp.showStepExponent = False
-            rb = PyDMLabel(self, init_channel=prefix + "Freq-RB")
+            pvname = device.substitute(propty=device.propty+'Freq-RB')
+            rb = PyDMLabel(self, init_channel=pvname)
         elif prop == 'name':
-            rb = QLabel(prefix.propty, self)
+            rb = QLabel(device.propty, self)
             rb.setAlignment(Qt.AlignCenter)
             return (rb, )
         elif prop == 'mux_enbl':
-            sp = PyDMStateButton(self, init_channel=prefix + "MuxEnbl-Sel")
-            rb = PyDMLed(self, init_channel=prefix + "MuxEnbl-Sts")
+            pvname = device.substitute(propty=device.propty+'MuxEnbl-Sel')
+            sp = PyDMStateButton(self, init_channel=pvname)
+            pvname = device.substitute(propty=device.propty+'MuxEnbl-Sts')
+            rb = PyDMLed(self, init_channel=pvname)
         elif prop == 'mux_div':
-            sp = SiriusSpinbox(self, init_channel=prefix + "MuxDiv-SP")
+            pvname = device.substitute(propty=device.propty+'MuxDiv-SP')
+            sp = SiriusSpinbox(self, init_channel=pvname)
             sp.showStepExponent = False
-            rb = PyDMLabel(self, init_channel=prefix + "MuxDiv-RB")
+            pvname = device.substitute(propty=device.propty+'MuxDiv-RB')
+            rb = PyDMLabel(self, init_channel=pvname)
         return sp, rb
 
 
@@ -709,9 +735,9 @@ class ClockList(BaseList):
 class FOUT(BaseWidget):
     """Template for control of High Level Triggers."""
 
-    def __init__(self, parent=None, prefix=''):
+    def __init__(self, parent=None, device='', prefix=''):
         """Initialize object."""
-        super().__init__(parent, prefix)
+        super().__init__(parent, device, prefix)
         self._setupUi()
         self.setObjectName('ASApp')
 
@@ -722,7 +748,7 @@ class FOUT(BaseWidget):
 
         self.my_layout.addWidget(self._setupmenus(), 0, 0)
 
-        lab = QLabel('<h1>' + self.prefix.device_name + '</h1>', self)
+        lab = QLabel('<h1>' + self.device.device_name + '</h1>', self)
         self.my_layout.addWidget(lab, 1, 0)
         self.my_layout.setAlignment(lab, Qt.AlignCenter)
 
@@ -731,13 +757,13 @@ class FOUT(BaseWidget):
         self._setup_status_wid()
 
     def _setupmenus(self):
-        prefix = self.prefix
         main_menu = QMenuBar()
         main_menu.setNativeMenuBar(False)
         menu = main_menu.addMenu('&Downlinks')
 
         icon = qta.icon('mdi.timer', color=get_appropriate_color('AS'))
-        downs = LLTimeSearch.get_fout2trigsrc_mapping()[prefix.device_name]
+        mapping = LLTimeSearch.get_fout2trigsrc_mapping()
+        downs = mapping[self.device.device_name]
         downs = sorted([(ou, dwn) for ou, dwn in downs.items()])
         for out, dwn in downs:
             dev, down = dwn.dev, dwn.device_name
@@ -749,38 +775,41 @@ class FOUT(BaseWidget):
                 devt = AFC
             action = menu.addAction(out + ' --> ' + down)
             Win = create_window_from_widget(devt, title=down, icon=icon)
-            connect_window(action, Win, None, prefix=down + ':')
+            connect_window(action, Win, None, device=down, prefix=self.prefix)
 
         menu = main_menu.addMenu('&Uplink')
-        link = list(LLTimeSearch.In2OutMap[prefix.dev])[0]
+        link = list(LLTimeSearch.In2OutMap[self.device.dev])[0]
         evg = LLTimeSearch.get_evg_channel(
-            prefix.device_name.substitute(propty=link))
+            self.device.device_name.substitute(propty=link))
         action = menu.addAction(evg)
         Win = create_window_from_widget(EVG, title=evg.device_name, icon=icon)
-        connect_window(action, Win, None, prefix=evg.device_name + ':')
+        connect_window(
+            action, Win, None, device=evg.device_name, prefix=self.prefix)
         return main_menu
 
     def _setup_status_wid(self):
-        prefix = self.prefix
         status_layout = QGridLayout(self.status_wid)
         status_layout.setHorizontalSpacing(30)
         status_layout.setVerticalSpacing(30)
 
-        sp = PyDMStateButton(self, init_channel=prefix + "DevEnbl-Sel")
-        rb = PyDMLed(self, init_channel=prefix + "DevEnbl-Sts")
+        pvname = self.get_pvname(propty='DevEnbl-Sel')
+        sp = PyDMStateButton(self, init_channel=pvname)
+        pvname = self.get_pvname(propty='DevEnbl-Sts')
+        rb = PyDMLed(self, init_channel=pvname)
         gb = self._create_small_GB(
             'Enabled', self.status_wid, (sp, rb), align_ver=False
             )
         status_layout.addWidget(gb, 0, 0)
 
         lb = QLabel("<b>Alive</b>")
-        rb = PyDMLabel(self, init_channel=prefix + "Alive-Mon")
+        rb = PyDMLabel(self, init_channel=self.get_pvname(propty='Alive-Mon'))
         gb = self._create_small_GB('', self.status_wid, (lb, rb))
         gb.setStyleSheet('border: 2px solid transparent;')
         status_layout.addWidget(gb, 0, 1)
 
         lb = QLabel("<b>Network</b>")
-        rb = SiriusLedAlert(self, init_channel=prefix + "Network-Mon")
+        pvname = self.get_pvname(propty='Network-Mon')
+        rb = SiriusLedAlert(self, init_channel=pvname)
         on_c, off_c = rb.onColor, rb.offColor
         rb.offColor = on_c
         rb.onColor = off_c
@@ -789,7 +818,8 @@ class FOUT(BaseWidget):
         status_layout.addWidget(gb, 0, 2)
 
         lb = QLabel("<b>UP Link</b>")
-        rb = SiriusLedAlert(self, init_channel=prefix + "LinkStatus-Mon")
+        pvname = self.get_pvname(propty='LinkStatus-Mon')
+        rb = SiriusLedAlert(self, init_channel=pvname)
         on_c, off_c = rb.onColor, rb.offColor
         rb.offColor = on_c
         rb.onColor = off_c
@@ -798,20 +828,19 @@ class FOUT(BaseWidget):
         status_layout.addWidget(gb, 0, 3)
 
         wids = list()
-        conn = LLTimeSearch.get_fout2trigsrc_mapping()[prefix.device_name]
+        conn = LLTimeSearch.get_fout2trigsrc_mapping()[self.device.device_name]
         conn = {int(dev[-1]) for dev in conn}
         for i in range(8):
+            pvname = self.get_pvname(propty='Los-Mon')
             if i in conn:
-                rb = SiriusLedAlert(
-                    self, init_channel=prefix + "Los-Mon", bit=i)
+                rb = SiriusLedAlert(self, init_channel=pvname, bit=i)
             else:
-                rb = SiriusLedState(
-                    self, init_channel=prefix + "Los-Mon", bit=i)
+                rb = SiriusLedState(self, init_channel=pvname, bit=i)
                 rb.onColor = rb.DarkGreen
                 rb.offColor = rb.LightGreen
             wids.append(rb)
         gb = self._create_small_GB(
-                'Down Connection', self.status_wid, wids, align_ver=False)
+            'Down Connection', self.status_wid, wids, align_ver=False)
         status_layout.addWidget(gb, 1, 0, 1, 4)
 
     def _create_small_GB(self, name, parent, wids, align_ver=True):
@@ -827,10 +856,9 @@ class FOUT(BaseWidget):
 class AFC(BaseWidget):
     """Template for control of High Level Triggers."""
 
-    def __init__(self, parent=None, prefix=''):
+    def __init__(self, parent=None, device='', prefix=''):
         """Initialize object."""
-        super().__init__(parent, prefix=prefix)
-        self.prefix = _PVName(prefix)
+        super().__init__(parent, device, prefix)
         self._setupUi()
         self.setObjectName('ASApp')
 
@@ -841,7 +869,7 @@ class AFC(BaseWidget):
 
         self.my_layout.addWidget(self._setupmenus(), 0, 0)
 
-        lab = QLabel('<h1>' + self.prefix.device_name + '</h1>', self)
+        lab = QLabel('<h1>' + self.device.device_name + '</h1>', self)
         self.my_layout.addWidget(lab, 1, 0)
         self.my_layout.setAlignment(lab, Qt.AlignCenter)
 
@@ -856,7 +884,9 @@ class AFC(BaseWidget):
             'name', 'state', 'event', 'source', 'width', 'polarity', 'pulses',
             'delay', 'timestamp'}
         set_ = LLTimeSearch.In2OutMap['AMCFPGAEVR']['SFP8']
+
         obj_names = sorted([out for out in set_ if out.startswith('FMC')])
+        obj_names = [self.device.substitute(propty_name=o) for o in obj_names]
         self.fmcs_wid = AFCOUTList(
             name='', parent=self, props=props,
             prefix=self.prefix, obj_names=obj_names)
@@ -865,6 +895,7 @@ class AFC(BaseWidget):
         tab.addTab(self.fmcs_wid, 'FMC Outputs')
 
         obj_names = sorted([out for out in set_ if out.startswith('CRT')])
+        obj_names = [self.device.substitute(propty_name=o) for o in obj_names]
         self.crts_wid = AFCOUTList(
             name='', parent=self, props=props,
             prefix=self.prefix, obj_names=obj_names)
@@ -873,46 +904,51 @@ class AFC(BaseWidget):
         tab.addTab(self.crts_wid, 'CRT Outputs')
 
     def _setupmenus(self):
-        prefix = self.prefix
         main_menu = QMenuBar()
         main_menu.setNativeMenuBar(False)
         menu = main_menu.addMenu('&Uplink')
 
-        fout = LLTimeSearch.get_fout_channel(prefix + 'CRT0')
+        fout = LLTimeSearch.get_fout_channel(
+            self.device.substitute(propty='CRT0'))
         action = menu.addAction(fout)
         icon = qta.icon('mdi.timer', color=get_appropriate_color('AS'))
         Win = create_window_from_widget(
             FOUT, title=fout.device_name, icon=icon)
-        connect_window(action, Win, None, prefix=fout.device_name+':')
+        connect_window(
+            action, Win, None, device=fout.device_name, prefix=self.prefix)
         return main_menu
 
     def _setup_status_wid(self):
-        prefix = self.prefix
         status_layout = QGridLayout(self.status_wid)
         status_layout.setHorizontalSpacing(30)
         status_layout.setVerticalSpacing(30)
 
-        sp = PyDMStateButton(self, init_channel=prefix + "DevEnbl-Sel")
-        rb = PyDMLed(self, init_channel=prefix + "DevEnbl-Sts")
+        pvname = self.get_pvname('DevEnbl-Sel')
+        sp = PyDMStateButton(self, init_channel=pvname)
+        pvname = self.get_pvname('DevEnbl-Sts')
+        rb = PyDMLed(self, init_channel=pvname)
         gb = self._create_small_GB(
             'Enabled', self.status_wid, (sp, rb), align_ver=False)
         status_layout.addWidget(gb, 0, 0)
 
         lb = QLabel("<b>Alive</b>")
-        rb = PyDMLabel(self, init_channel=prefix + "Alive-Mon")
+        pvname = self.get_pvname('Alive-Mon')
+        rb = PyDMLabel(self, init_channel=pvname)
         gb = self._create_small_GB('', self.status_wid, (lb, rb))
         gb.setStyleSheet('border: 2px solid transparent;')
         status_layout.addWidget(gb, 0, 1)
 
         lb = QLabel("<b>Locked</b>")
-        rb = SiriusLedAlert(self, init_channel=prefix + "RefClkLocked-Mon")
+        pvname = self.get_pvname('RefClkLocked-Mon')
+        rb = SiriusLedAlert(self, init_channel=pvname)
         rb.offColor, rb.onColor = rb.onColor, rb.offColor
         gb = self._create_small_GB('', self.status_wid, (lb, rb))
         gb.setStyleSheet('border: 2px solid transparent;')
         status_layout.addWidget(gb, 0, 2)
 
         lb = QLabel("<b>UP Link</b>")
-        rb = SiriusLedAlert(self, init_channel=prefix + "LinkStatus-Mon")
+        pvname = self.get_pvname('LinkStatus-Mon')
+        rb = SiriusLedAlert(self, init_channel=pvname)
         rb.offColor, rb.onColor = rb.onColor, rb.offColor
         gb = self._create_small_GB('', self.status_wid, (lb, rb))
         gb.setStyleSheet('border: 2px solid transparent;')
@@ -930,10 +966,10 @@ class AFC(BaseWidget):
 class _EVR_EVE(BaseWidget):
     """Template for control of High Level Triggers."""
 
-    def __init__(self, parent=None, prefix='', device='EVR'):
+    def __init__(self, parent=None, device='', prefix=''):
         """Initialize object."""
-        super().__init__(parent, prefix)
-        self.device_type = device
+        super().__init__(parent, device, prefix)
+        self.device_type = _PVName(device).dev
         self.setupui()
         self.setObjectName('ASApp')
 
@@ -944,7 +980,7 @@ class _EVR_EVE(BaseWidget):
 
         self.my_layout.addWidget(self.setupmenus(), 0, 0, 1, 2)
 
-        lab = QLabel('<h1>' + self.prefix.device_name + '</h1>', self)
+        lab = QLabel('<h1>' + self.device.device_name + '</h1>', self)
         self.my_layout.addWidget(lab, 1, 0, 1, 2)
         self.my_layout.setAlignment(lab, Qt.AlignCenter)
 
@@ -960,9 +996,11 @@ class _EVR_EVE(BaseWidget):
         props = {
             'name', 'state', 'event', 'widthraw', 'polarity', 'pulses',
             'delayraw', 'timestamp'}
+        obj_names = ['OTP{0:02d}'.format(i) for i in range(24)]
+        obj_names = [self.device.substitute(propty=o) for o in obj_names]
         self.otps_wid = OTPList(
             name='Internal Trigger (OTP)', parent=self, prefix=self.prefix,
-            props=props, obj_names=['OTP{0:02d}'.format(i) for i in range(24)])
+            props=props, obj_names=obj_names)
         self.otps_wid.setObjectName('otps_wid')
         self.otps_wid.setStyleSheet("""#otps_wid{min-width:60em;}""")
         splitter.addWidget(self.otps_wid)
@@ -970,54 +1008,61 @@ class _EVR_EVE(BaseWidget):
         props = {
             'name', 'source', 'trigger', 'rf_delayraw', 'rf_delay_type',
             'fine_delayraw'}
+        obj_names = ['OUT{0:d}'.format(i) for i in range(8)]
+        obj_names = [self.device.substitute(propty=o) for o in obj_names]
         self.outs_wid = OUTList(
-            name='OUT', parent=self, prefix=self.prefix, props=props,
-            obj_names=['OUT{0:d}'.format(i) for i in range(8)])
+            name='OUT', parent=self, prefix=self.prefix,
+            props=props, obj_names=obj_names)
         self.outs_wid.setObjectName('outs_wid')
         self.outs_wid.setStyleSheet("""#outs_wid{min-width:44em;}""")
         splitter.addWidget(self.outs_wid)
 
     def setupmenus(self):
-        prefix = self.prefix
         main_menu = QMenuBar()
         main_menu.setNativeMenuBar(False)
         menu = main_menu.addMenu('&Uplink')
 
-        fout = LLTimeSearch.get_fout_channel(prefix + 'OTP0')
+        fout = LLTimeSearch.get_fout_channel(
+            self.device.substitute(propty='OTP0'))
         action = menu.addAction(fout)
         icon = qta.icon('mdi.timer', color=get_appropriate_color('AS'))
         Win = create_window_from_widget(
             FOUT, title=fout.device_name, icon=icon)
-        connect_window(action, Win, None, prefix=fout.device_name+':')
+        connect_window(
+            action, Win, None, device=fout.device_name, prefix=self.prefix)
         return main_menu
 
     def _setup_status_wid(self):
-        prefix = self.prefix
         status_layout = QGridLayout(self.status_wid)
         status_layout.setHorizontalSpacing(30)
         status_layout.setVerticalSpacing(30)
 
-        sp = PyDMStateButton(self, init_channel=prefix + "DevEnbl-Sel")
-        rb = PyDMLed(self, init_channel=prefix + "DevEnbl-Sts")
+        pvname = self.get_pvname('DevEnbl-Sel')
+        sp = PyDMStateButton(self, init_channel=pvname)
+        pvname = self.get_pvname('DevEnbl-Sts')
+        rb = PyDMLed(self, init_channel=pvname)
         gb = self._create_small_GB(
             'Enabled', self.status_wid, (sp, rb), align_ver=False)
         status_layout.addWidget(gb, 0, 0)
 
         lb = QLabel("<b>Alive</b>")
-        rb = PyDMLabel(self, init_channel=prefix + "Alive-Mon")
+        pvname = self.get_pvname('Alive-Mon')
+        rb = PyDMLabel(self, init_channel=pvname)
         gb = self._create_small_GB('', self.status_wid, (lb, rb))
         gb.setStyleSheet('border: 2px solid transparent;')
         status_layout.addWidget(gb, 0, 1)
 
         lb = QLabel("<b>Network</b>")
-        rb = SiriusLedAlert(self, init_channel=prefix + "Network-Mon")
+        pvname = self.get_pvname('Network-Mon')
+        rb = SiriusLedAlert(self, init_channel=pvname)
         rb.offColor, rb.onColor = rb.onColor, rb.offColor
         gb = self._create_small_GB('', self.status_wid, (lb, rb))
         gb.setStyleSheet('border: 2px solid transparent;')
         status_layout.addWidget(gb, 0, 2)
 
         lb = QLabel("<b>UP Link</b>")
-        rb = SiriusLedAlert(self, init_channel=prefix + "LinkStatus-Mon")
+        pvname = self.get_pvname('LinkStatus-Mon')
+        rb = SiriusLedAlert(self, init_channel=pvname)
         on_c, off_c = rb.onColor, rb.offColor
         rb.offColor = on_c
         rb.onColor = off_c
@@ -1026,13 +1071,15 @@ class _EVR_EVE(BaseWidget):
         status_layout.addWidget(gb, 0, 3)
 
         lb = QLabel("<b>Interlock Status</b>")
-        rb = SiriusLedAlert(self, init_channel=prefix + "IntlkStatus-Mon")
+        pvname = self.get_pvname('IntlkStatus-Mon')
+        rb = SiriusLedAlert(self, init_channel=pvname)
         gb = self._create_small_GB('', self.status_wid, (lb, rb))
         gb.setStyleSheet('border: 2px solid transparent;')
         status_layout.addWidget(gb, 0, 4)
 
         lb = QLabel("<b>Interlock Enabled</b>")
-        rb = SiriusLedState(self, init_channel=prefix + "IntlkEnbl-Mon")
+        pvname = self.get_pvname('IntlkEnbl-Mon')
+        rb = SiriusLedState(self, init_channel=pvname)
         gb = self._create_small_GB('', self.status_wid, (lb, rb))
         gb.setStyleSheet('border: 2px solid transparent;')
         status_layout.addWidget(gb, 0, 5)
@@ -1042,23 +1089,22 @@ class _EVR_EVE(BaseWidget):
             conn = LLTimeSearch.get_connections_from_evg()
             conn = {
                 dev.propty for dev in conn
-                if dev.device_name == self.prefix.device_name}
+                if dev.device_name == self.device.device_name}
             conn = {int(p[-1]) for p in conn if p.startswith('OUT')}
             for i in range(8):
+                pvname = self.get_pvname('Los-Mon')
                 if i in conn:
-                    rb = SiriusLedAlert(
-                        self, init_channel=prefix + "Los-Mon", bit=i)
+                    rb = SiriusLedAlert(self, init_channel=pvname, bit=i)
                 else:
-                    rb = SiriusLedState(
-                        self, init_channel=prefix + "Los-Mon", bit=i)
+                    rb = SiriusLedState(self, init_channel=pvname, bit=i)
                     rb.onColor = rb.DarkGreen
                     rb.offColor = rb.LightGreen
                 wids.append(rb)
             gb = self._create_small_GB(
-                    'Down Connection', self.status_wid, wids, align_ver=False)
+                'Down Connection', self.status_wid, wids, align_ver=False)
         else:
-            sp = _MyComboBox(self, init_channel=prefix + "RFOut-Sel")
-            rb = PyDMLabel(self, init_channel=prefix + "RFOut-Sts")
+            sp = _MyComboBox(self, init_channel=self.get_pvname('RFOut-Sel'))
+            rb = PyDMLabel(self, init_channel=self.get_pvname('RFOut-Sts'))
             gb = self._create_small_GB('RF Output', self.status_wid, (sp, rb))
         status_layout.addWidget(gb, 0, 6)
 
@@ -1073,14 +1119,18 @@ class _EVR_EVE(BaseWidget):
 
 class EVR(_EVR_EVE):
 
-    def __init__(self, parent=None, prefix=''):
-        super().__init__(parent, prefix, device='EVR')
+    def __init__(self, parent=None, device='', prefix=''):
+        if 'EVR' not in device:
+            raise ValueError('device has to be an EVR')
+        super().__init__(parent, device, prefix)
 
 
 class EVE(_EVR_EVE):
 
-    def __init__(self, parent=None, prefix=''):
-        super().__init__(parent, prefix, device='EVE')
+    def __init__(self, parent=None, device='', prefix=''):
+        if 'EVE' not in device:
+            raise ValueError('device has to be an EVE')
+        super().__init__(parent, device, prefix)
 
 
 # ###################### Triggers ######################
@@ -1146,9 +1196,9 @@ class LLTriggerList(BaseList):
         kwargs['props2search'] = srch
         super().__init__(**kwargs)
 
-    def _createObjs(self, prefix, prop):
-        intlb = LLTimeSearch.get_channel_internal_trigger_pvname(prefix)
-        outlb = LLTimeSearch.get_channel_output_port_pvname(prefix)
+    def _createObjs(self, device, prop):
+        intlb = LLTimeSearch.get_channel_internal_trigger_pvname(device)
+        outlb = LLTimeSearch.get_channel_output_port_pvname(device)
         sp = rb = None
         if prop == 'device':
             devt = outlb.dev
@@ -1164,18 +1214,19 @@ class LLTriggerList(BaseList):
             icon = qta.icon('mdi.timer', color=get_appropriate_color('AS'))
             Win = create_window_from_widget(
                 devt, title=outlb.device_name, icon=icon)
-            connect_window(sp, Win, None, prefix=outlb.device_name + ':')
+            connect_window(
+                sp, Win, None, device=outlb.device_name, prefix=self.prefix)
         elif prop == 'name':
             sp = QLabel(outlb.propty, self)
             sp.setAlignment(Qt.AlignCenter)
         elif prop == 'hl_trigger':
-            trig = HLTimeSearch.get_hl_from_ll_triggers(prefix)
+            trig = HLTimeSearch.get_hl_from_ll_triggers(device)
             sp = QLabel(trig, self)
             sp.setAlignment(Qt.AlignCenter)
         elif prop == 'state':
-            pvname = intlb.substitute(propty=intlb.propty+"State-Sel")
+            pvname = intlb.substitute(propty=intlb.propty+'State-Sel')
             sp = PyDMStateButton(self, init_channel=pvname)
-            pvname = intlb.substitute(propty=intlb.propty+"State-Sts")
+            pvname = intlb.substitute(propty=intlb.propty+'State-Sts')
             rb = PyDMLed(self, init_channel=pvname)
         elif prop == 'event':
             pvname = intlb.substitute(propty=intlb.propty+'Evt-SP')
@@ -1185,102 +1236,102 @@ class LLTriggerList(BaseList):
             rb = PyDMLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'widthraw':
-            pvname = intlb.substitute(propty=intlb.propty+"WidthRaw-SP")
+            pvname = intlb.substitute(propty=intlb.propty+'WidthRaw-SP')
             sp = SiriusSpinbox(self, init_channel=pvname)
             sp.showStepExponent = False
-            pvname = intlb.substitute(propty=intlb.propty+"WidthRaw-RB")
+            pvname = intlb.substitute(propty=intlb.propty+'WidthRaw-RB')
             rb = PyDMLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'width':
-            pvname = intlb.substitute(propty=intlb.propty+"Width-SP")
+            pvname = intlb.substitute(propty=intlb.propty+'Width-SP')
             sp = SiriusSpinbox(self, init_channel=pvname)
             sp.showStepExponent = False
-            pvname = intlb.substitute(propty=intlb.propty+"Width-RB")
+            pvname = intlb.substitute(propty=intlb.propty+'Width-RB')
             rb = PyDMLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'polarity':
-            pvname = intlb.substitute(propty=intlb.propty+"Polarity-Sel")
+            pvname = intlb.substitute(propty=intlb.propty+'Polarity-Sel')
             sp = _MyComboBox(self, init_channel=pvname)
-            pvname = intlb.substitute(propty=intlb.propty+"Polarity-Sts")
+            pvname = intlb.substitute(propty=intlb.propty+'Polarity-Sts')
             rb = PyDMLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'pulses':
-            pvname = intlb.substitute(propty=intlb.propty+"NrPulses-SP")
+            pvname = intlb.substitute(propty=intlb.propty+'NrPulses-SP')
             sp = SiriusSpinbox(self, init_channel=pvname)
             sp.showStepExponent = False
-            pvname = intlb.substitute(propty=intlb.propty+"NrPulses-RB")
+            pvname = intlb.substitute(propty=intlb.propty+'NrPulses-RB')
             rb = PyDMLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'delayraw':
-            pvname = intlb.substitute(propty=intlb.propty+"DelayRaw-SP")
+            pvname = intlb.substitute(propty=intlb.propty+'DelayRaw-SP')
             sp = SiriusSpinbox(self, init_channel=pvname)
             sp.showStepExponent = False
-            pvname = intlb.substitute(propty=intlb.propty+"DelayRaw-RB")
+            pvname = intlb.substitute(propty=intlb.propty+'DelayRaw-RB')
             rb = PyDMLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'delay':
-            pvname = intlb.substitute(propty=intlb.propty+"Delay-SP")
+            pvname = intlb.substitute(propty=intlb.propty+'Delay-SP')
             sp = SiriusSpinbox(self, init_channel=pvname)
             sp.showStepExponent = False
-            pvname = intlb.substitute(propty=intlb.propty+"Delay-RB")
+            pvname = intlb.substitute(propty=intlb.propty+'Delay-RB')
             rb = PyDMLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'timestamp':
-            pvname = intlb.substitute(propty=intlb.propty+"Log-Sel")
+            pvname = intlb.substitute(propty=intlb.propty+'Log-Sel')
             sp = PyDMStateButton(self, init_channel=pvname)
-            pvname = intlb.substitute(propty=intlb.propty+"Log-Sts")
+            pvname = intlb.substitute(propty=intlb.propty+'Log-Sts')
             rb = PyDMLed(self, init_channel=pvname)
         elif prop == 'source':
-            pvname = outlb.substitute(propty=outlb.propty+"Src-Sel")
+            pvname = outlb.substitute(propty=outlb.propty+'Src-Sel')
             sp = _MyComboBox(self, init_channel=pvname)
-            pvname = outlb.substitute(propty=outlb.propty+"Src-Sts")
+            pvname = outlb.substitute(propty=outlb.propty+'Src-Sts')
             rb = PyDMLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'trigger':
-            pvname = outlb.substitute(propty=outlb.propty+"SrcTrig-SP")
+            pvname = outlb.substitute(propty=outlb.propty+'SrcTrig-SP')
             sp = SiriusSpinbox(self, init_channel=pvname)
             sp.showStepExponent = False
-            pvname = outlb.substitute(propty=outlb.propty+"SrcTrig-RB")
+            pvname = outlb.substitute(propty=outlb.propty+'SrcTrig-RB')
             rb = PyDMLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'rf_delayraw':
-            pvname = outlb.substitute(propty=outlb.propty+"RFDelayRaw-SP")
+            pvname = outlb.substitute(propty=outlb.propty+'RFDelayRaw-SP')
             sp = SiriusSpinbox(self, init_channel=pvname)
             sp.showStepExponent = False
-            pvname = outlb.substitute(propty=outlb.propty+"RFDelayRaw-RB")
+            pvname = outlb.substitute(propty=outlb.propty+'RFDelayRaw-RB')
             rb = PyDMLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'rf_delay':
-            pvname = outlb.substitute(propty=outlb.propty+"RFDelay-SP")
+            pvname = outlb.substitute(propty=outlb.propty+'RFDelay-SP')
             sp = SiriusSpinbox(self, init_channel=pvname)
             sp.showStepExponent = False
-            pvname = outlb.substitute(propty=outlb.propty+"RFDelay-RB")
+            pvname = outlb.substitute(propty=outlb.propty+'RFDelay-RB')
             rb = PyDMLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'rf_delay_type':
-            pvname = outlb.substitute(propty=outlb.propty+"RFDelayType-Sel")
+            pvname = outlb.substitute(propty=outlb.propty+'RFDelayType-Sel')
             sp = _MyComboBox(self, init_channel=pvname)
-            pvname = outlb.substitute(propty=outlb.propty+"RFDelayType-Sts")
+            pvname = outlb.substitute(propty=outlb.propty+'RFDelayType-Sts')
             rb = PyDMLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'fine_delayraw':
-            pvname = outlb.substitute(propty=outlb.propty+"FineDelayRaw-SP")
+            pvname = outlb.substitute(propty=outlb.propty+'FineDelayRaw-SP')
             sp = SiriusSpinbox(self, init_channel=pvname)
             sp.showStepExponent = False
-            pvname = outlb.substitute(propty=outlb.propty+"FineDelayRaw-RB")
+            pvname = outlb.substitute(propty=outlb.propty+'FineDelayRaw-RB')
             rb = PyDMLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'fine_delay':
-            pvname = outlb.substitute(propty=outlb.propty+"FineDelay-SP")
+            pvname = outlb.substitute(propty=outlb.propty+'FineDelay-SP')
             sp = SiriusSpinbox(self, init_channel=pvname)
             sp.showStepExponent = False
-            pvname = outlb.substitute(propty=outlb.propty+"FineDelay-RB")
+            pvname = outlb.substitute(propty=outlb.propty+'FineDelay-RB')
             rb = PyDMLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'dir':
-            pvname = intlb.substitute(propty=intlb.propty+"Dir-Sel")
+            pvname = intlb.substitute(propty=intlb.propty+'Dir-Sel')
             sp = _MyComboBox(self, init_channel=pvname)
-            pvname = intlb.substitute(propty=intlb.propty+"Dir-Sts")
+            pvname = intlb.substitute(propty=intlb.propty+'Dir-Sts')
             rb = PyDMLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'evtcnt':

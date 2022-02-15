@@ -8,6 +8,7 @@ from pydm.widgets import PyDMLabel, PyDMPushButton, PyDMEnumComboBox, \
     PyDMSpinbox, PyDMLineEdit
 
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
+from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.opticscorr.csdev import Const as _Const
 
 from siriushla import util as _hlautil
@@ -27,8 +28,9 @@ class OpticsCorrWindow(SiriusMainWindow):
         self.prefix = prefix
         self.acc = acc.upper()
         self.param = opticsparam
-        self.ioc_prefix = self.prefix + self.acc + '-Glob:AP-' + \
-            self.param.title() + 'Corr'
+        self.ioc_prefix = _PVName(
+            self.acc+'-Glob:AP-'+self.param.title()+'Corr')
+        self.ioc_prefix = self.ioc_prefix.substitute(prefix=self.prefix)
         self.title = self.acc + ' ' + self.param.title() + ' Correction'
 
         if self.param == 'tune':
@@ -73,7 +75,7 @@ class OpticsCorrWindow(SiriusMainWindow):
         if self.param == 'tune':
             self.pb_updref = PyDMPushButton(
                 self, label='Update Reference', pressValue=1,
-                init_channel=self.ioc_prefix+':SetNewRefKL-Cmd')
+                init_channel=self.ioc_prefix.substitute(propty='SetNewRefKL-Cmd'))
             self.pb_updref.setStyleSheet('min-height:2.4em; max-height:2.4em;')
             lay_optics.addWidget(self.pb_updref, 0, 0, 1, 2)
             lay_optics.addWidget(self.gb_optprm, 1, 0)
@@ -126,7 +128,7 @@ class OpticsCorrWindow(SiriusMainWindow):
 
     def _setupStatusLayout(self):
         self.log_label = PyDMLogLabel(
-            self, self.ioc_prefix+':Log-Mon')
+            self, self.ioc_prefix.substitute(propty='Log-Mon'))
 
         lay = QVBoxLayout()
         lay.addWidget(self.log_label)
@@ -140,26 +142,27 @@ class OpticsCorrWindow(SiriusMainWindow):
         self.lb_mon = QLabel(
             '<h4>Estimative</h4>', self, alignment=Qt.AlignCenter)
 
-        self.sb_paramx = PyDMSpinbox(
-            self, self.ioc_prefix+':'+self.param_pv.format('X', 'SP'))
+        self.sb_paramx = PyDMSpinbox(self, self.ioc_prefix.substitute(
+            propty=self.param_pv.format('X', 'SP')))
         self.sb_paramx.showStepExponent = False
-        self.sb_paramy = PyDMSpinbox(
-            self, self.ioc_prefix+':'+self.param_pv.format('Y', 'SP'))
+        self.sb_paramy = PyDMSpinbox(self, self.ioc_prefix.substitute(
+            propty=self.param_pv.format('Y', 'SP')))
         self.sb_paramy.showStepExponent = False
 
-        self.lb_paramx = PyDMLabel(
-            self, self.ioc_prefix+':'+self.param_pv.format('X', 'RB'))
-        self.lb_paramy = PyDMLabel(
-            self, self.ioc_prefix+':'+self.param_pv.format('Y', 'RB'))
+        self.lb_paramx = PyDMLabel(self, self.ioc_prefix.substitute(
+            propty=self.param_pv.format('X', 'RB')))
+        self.lb_paramy = PyDMLabel(self, self.ioc_prefix.substitute(
+            propty=self.param_pv.format('Y', 'RB')))
 
-        self.lb_prmmonx = PyDMLabel(
-            self, self.ioc_prefix+':'+self.param_pv.format('X', 'Mon'))
-        self.lb_prmmony = PyDMLabel(
-            self, self.ioc_prefix+':'+self.param_pv.format('Y', 'Mon'))
+        self.lb_prmmonx = PyDMLabel(self, self.ioc_prefix.substitute(
+            propty=self.param_pv.format('X', 'Mon')))
+        self.lb_prmmony = PyDMLabel(self, self.ioc_prefix.substitute(
+            propty=self.param_pv.format('Y', 'Mon')))
 
         self.bt_apply = PyDMPushButton(
             self, label='Apply', pressValue=1,
-            init_channel=self.ioc_prefix+':ApplyDelta-Cmd')
+            init_channel=self.ioc_prefix.substitute(
+                propty='ApplyDelta-Cmd'))
 
         lay = QGridLayout()
         lay.addWidget(self.lb_sp, 0, 1)
@@ -191,20 +194,20 @@ class OpticsCorrWindow(SiriusMainWindow):
             self.pb_change_sp.clicked.connect(self._change_chrom_sp)
 
             self.sb_paramx_delta = PyDMSpinbox(
-                self, self.ioc_prefix+':DeltaChromX-SP')
+                self, self.ioc_prefix.substitute(propty='DeltaChromX-SP'))
             self.sb_paramx_delta.showStepExponent = False
             self.sb_paramx_delta.setVisible(False)
 
             self.sb_paramy_delta = PyDMSpinbox(
-                self, self.ioc_prefix+':DeltaChromY-SP')
+                self, self.ioc_prefix.substitute(propty='DeltaChromY-SP'))
             self.sb_paramy_delta.showStepExponent = False
             self.sb_paramy_delta.setVisible(False)
 
             self.lb_paramx_delta = PyDMLabel(
-                self, self.ioc_prefix+':DeltaChromX-RB')
+                self, self.ioc_prefix.substitute(propty='DeltaChromX-RB'))
             self.lb_paramx_delta.setVisible(False)
             self.lb_paramy_delta = PyDMLabel(
-                self, self.ioc_prefix+':DeltaChromY-RB')
+                self, self.ioc_prefix.substitute(propty='DeltaChromY-RB'))
             self.lb_paramy_delta.setVisible(False)
 
             self.lb_mon.setText('Implem.\nEstimative')
@@ -214,9 +217,9 @@ class OpticsCorrWindow(SiriusMainWindow):
             self.lb_calcmon.setStyleSheet('font-weight: bold;')
 
             self.lb_prmcalcmonx = PyDMLabel(
-                self, self.ioc_prefix+':CalcChromX-Mon')
+                self, self.ioc_prefix.substitute(propty='CalcChromX-Mon'))
             self.lb_prmcalcmony = PyDMLabel(
-                self, self.ioc_prefix+':CalcChromY-Mon')
+                self, self.ioc_prefix.substitute(propty='CalcChromY-Mon'))
 
             lay.addWidget(self.pb_change_sp, 0, 0)
             lay.addWidget(self.sb_paramx_delta, 1, 1)
@@ -268,7 +271,8 @@ class OpticsCorrWindow(SiriusMainWindow):
 
         row = 1
         for fam in self.fams:
-            dev_name = self.acc+'-Fam:PS-'+fam
+            dev_name = _PVName(self.acc+'-Fam:PS-'+fam)
+            pref_name = dev_name.substitute(prefix=self.prefix)
 
             pbt = QPushButton(qta.icon('fa5s.list-ul'), '', self)
             pbt.setObjectName('pbt')
@@ -284,17 +288,17 @@ class OpticsCorrWindow(SiriusMainWindow):
             lb_name = QLabel(fam, self, alignment=Qt.AlignCenter)
             lay.addWidget(lb_name, row, 1)
 
-            lb_rb = PyDMLabel(
-                self, self.prefix+dev_name+':'+self.intstrength+'-RB')
+            lb_rb = PyDMLabel(self, pref_name.substitute(
+                propty=self.intstrength+'-RB'))
             lay.addWidget(lb_rb, row, 2)
 
             if self.param == 'tune':
-                lb_ref = PyDMLabel(
-                    self, self.ioc_prefix+':RefKL'+fam+'-Mon')
+                lb_ref = PyDMLabel(self, self.ioc_prefix.substitute(
+                    propty='RefKL'+fam+'-Mon'))
                 lay.addWidget(lb_ref, row, 3)
 
-            lb_calc = PyDMLabel(
-                self, self.ioc_prefix+':'+self.intstrength_calcpv.format(fam))
+            lb_calc = PyDMLabel(self, self.ioc_prefix.substitute(
+                propty=self.intstrength_calcpv.format(fam)))
             lay.addWidget(lb_calc, row, 4)
             row += 1
         return lay
@@ -303,7 +307,8 @@ class OpticsCorrWindow(SiriusMainWindow):
         lay = QGridLayout()
 
         lb_sts = QLabel('<h4>Status</h4>', self)
-        self.led_sts = _StatusLed(self, self.ioc_prefix+':Status-Mon')
+        self.led_sts = _StatusLed(self, self.ioc_prefix.substitute(
+            propty='Status-Mon'))
         lay.addWidget(lb_sts, 0, 0)
         lay.addWidget(self.led_sts, 0, 1, alignment=Qt.AlignLeft)
 
@@ -318,8 +323,10 @@ class OpticsCorrWindow(SiriusMainWindow):
 
         lb_cname = QLabel('Name', self)
         self.le_cname = _ConfigLineEdit(
-            self, self.ioc_prefix+':ConfigName-SP')
-        self.lb_cname = PyDMLabel(self, self.ioc_prefix+':ConfigName-RB')
+            self, self.ioc_prefix.substitute(
+                propty='ConfigName-SP'))
+        self.lb_cname = PyDMLabel(self, self.ioc_prefix.substitute(
+            propty='ConfigName-RB'))
         lay.addWidget(lb_cname, 3, 0)
         lay.addWidget(self.le_cname, 3, 1, 1, 2)
         lay.addWidget(self.lb_cname, 4, 1, 1, 2)
@@ -336,30 +343,36 @@ class OpticsCorrWindow(SiriusMainWindow):
 
                 lb_meas_chrom_dfRF = QLabel('ΔFreq RF [Hz]', self)
                 self.sb_meas_chrom_dfRF = PyDMSpinbox(
-                    self, self.ioc_prefix+':MeasChromDeltaFreqRF-SP')
+                    self, self.ioc_prefix.substitute(
+                        propty='MeasChromDeltaFreqRF-SP'))
                 self.sb_meas_chrom_dfRF.showStepExponent = False
                 self.lb_meas_chrom_dfRF = PyDMLabel(
-                    self, self.ioc_prefix+':MeasChromDeltaFreqRF-RB')
+                    self, self.ioc_prefix.substitute(
+                        propty='MeasChromDeltaFreqRF-RB'))
                 lay.addWidget(lb_meas_chrom_dfRF, 7, 0)
                 lay.addWidget(self.sb_meas_chrom_dfRF, 7, 1)
                 lay.addWidget(self.lb_meas_chrom_dfRF, 7, 2)
 
                 lb_meas_chrom_wait = QLabel('Wait Tune [s]', self)
                 self.sb_meas_chrom_wait = PyDMSpinbox(
-                    self, self.ioc_prefix+':MeasChromWaitTune-SP')
+                    self, self.ioc_prefix.substitute(
+                        propty='MeasChromWaitTune-SP'))
                 self.sb_meas_chrom_wait.showStepExponent = False
                 self.lb_meas_chrom_wait = PyDMLabel(
-                    self, self.ioc_prefix+':MeasChromWaitTune-RB')
+                    self, self.ioc_prefix.substitute(
+                        propty='MeasChromWaitTune-RB'))
                 lay.addWidget(lb_meas_chrom_wait, 8, 0)
                 lay.addWidget(self.sb_meas_chrom_wait, 8, 1)
                 lay.addWidget(self.lb_meas_chrom_wait, 8, 2)
 
                 lb_meas_chrom_nrsteps = QLabel('Nr Steps', self)
                 self.sb_meas_chrom_nrsteps = PyDMSpinbox(
-                    self, self.ioc_prefix+':MeasChromNrSteps-SP')
+                    self, self.ioc_prefix.substitute(
+                        propty='MeasChromNrSteps-SP'))
                 self.sb_meas_chrom_nrsteps.showStepExponent = False
                 self.lb_meas_chrom_nrsteps = PyDMLabel(
-                    self, self.ioc_prefix+':MeasChromNrSteps-RB')
+                    self, self.ioc_prefix.substitute(
+                        propty='MeasChromNrSteps-RB'))
                 lay.addWidget(lb_meas_chrom_nrsteps, 9, 0)
                 lay.addWidget(self.sb_meas_chrom_nrsteps, 9, 1)
                 lay.addWidget(self.lb_meas_chrom_nrsteps, 9, 2)
@@ -369,13 +382,15 @@ class OpticsCorrWindow(SiriusMainWindow):
 
                 lb_meas_chrom_x = QLabel('Meas. Chrom X', self)
                 self.lb_meas_chrom_x = PyDMLabel(
-                    self, self.ioc_prefix+':MeasChromX-Mon')
+                    self, self.ioc_prefix.substitute(
+                        propty='MeasChromX-Mon'))
                 lay.addWidget(lb_meas_chrom_x, 11, 0)
                 lay.addWidget(self.lb_meas_chrom_x, 11, 1)
 
                 lb_meas_chrom_y = QLabel('Meas. Chrom Y', self)
                 self.lb_meas_chrom_y = PyDMLabel(
-                    self, self.ioc_prefix+':MeasChromY-Mon')
+                    self, self.ioc_prefix.substitute(
+                        propty='MeasChromY-Mon'))
                 lay.addWidget(lb_meas_chrom_y, 12, 0)
                 lay.addWidget(self.lb_meas_chrom_y, 12, 1)
 
@@ -383,24 +398,28 @@ class OpticsCorrWindow(SiriusMainWindow):
                     QSpacerItem(1, 20, QSzPly.Ignored, QSzPly.Fixed), 13, 0)
 
                 self.lb_meas_chrom_sts = PyDMLabel(
-                    self, self.ioc_prefix+':MeasChromStatus-Mon')
+                    self, self.ioc_prefix.substitute(
+                        propty='MeasChromStatus-Mon'))
                 self.bt_meas_chrom_start = PyDMPushButton(
                     self, icon=qta.icon('fa5s.play'), label='',
-                    init_channel=self.ioc_prefix+':MeasChrom-Cmd',
+                    init_channel=self.ioc_prefix.substitute(
+                        propty='MeasChrom-Cmd'),
                     pressValue=_Const.MeasCmd.Start)
                 self.bt_meas_chrom_start.setObjectName('start')
                 self.bt_meas_chrom_start.setStyleSheet(
                     '#start{min-width:25px; max-width:25px; icon-size:20px;}')
                 self.bt_meas_chrom_stop = PyDMPushButton(
                     self, icon=qta.icon('fa5s.stop'), label='',
-                    init_channel=self.ioc_prefix+':MeasChrom-Cmd',
+                    init_channel=self.ioc_prefix.substitute(
+                        propty='MeasChrom-Cmd'),
                     pressValue=_Const.MeasCmd.Stop)
                 self.bt_meas_chrom_stop.setObjectName('stop')
                 self.bt_meas_chrom_stop.setStyleSheet(
                     '#stop{min-width:25px; max-width:25px; icon-size:20px;}')
                 self.bt_meas_chrom_rst = PyDMPushButton(
                     self, icon=qta.icon('fa5s.sync'), label='',
-                    init_channel=self.ioc_prefix+':MeasChrom-Cmd',
+                    init_channel=self.ioc_prefix.substitute(
+                        propty='MeasChrom-Cmd'),
                     pressValue=_Const.MeasCmd.Reset)
                 self.bt_meas_chrom_rst.setObjectName('rst')
                 self.bt_meas_chrom_rst.setStyleSheet(
@@ -426,12 +445,14 @@ class OpticsCorrWindow(SiriusMainWindow):
             lb_meas_conf_dfamF = QLabel(
                 'Fam. Δ'+self.intstrength+' '+mag_type+'F '+unit, self)
             self.sb_meas_conf_dfamF = PyDMSpinbox(
-                self, self.ioc_prefix+':MeasConfigDelta' +
-                self.intstrength+'Fam'+mag_type+'F-SP')
+                self, self.ioc_prefix.substitute(
+                    propty='MeasConfigDelta'+self.intstrength +
+                           'Fam'+mag_type+'F-SP'))
             self.sb_meas_conf_dfamF.showStepExponent = False
             self.lb_meas_conf_dfamF = PyDMLabel(
-                self, self.ioc_prefix+':MeasConfigDelta' +
-                self.intstrength+'Fam'+mag_type+'F-RB')
+                self, self.ioc_prefix.substitute(
+                    propty='MeasConfigDelta'+self.intstrength +
+                           'Fam'+mag_type+'F-RB'))
             lay.addWidget(lb_meas_conf_dfamF, row+2, 0)
             lay.addWidget(self.sb_meas_conf_dfamF, row+2, 1)
             lay.addWidget(self.lb_meas_conf_dfamF, row+2, 2)
@@ -439,31 +460,33 @@ class OpticsCorrWindow(SiriusMainWindow):
             lb_meas_conf_dfamD = QLabel(
                 'Fam. Δ'+self.intstrength+' '+mag_type+'D '+unit, self)
             self.sb_meas_conf_dfamD = PyDMSpinbox(
-                self, self.ioc_prefix+':MeasConfigDelta' +
-                self.intstrength+'Fam'+mag_type+'D-SP')
+                self, self.ioc_prefix.substitute(
+                    propty='MeasConfigDelta'+self.intstrength +
+                           'Fam'+mag_type+'D-SP'))
             self.sb_meas_conf_dfamD.showStepExponent = False
             self.lb_meas_conf_dfamD = PyDMLabel(
-                self, self.ioc_prefix+':MeasConfigDelta' +
-                self.intstrength+'Fam'+mag_type+'D-RB')
+                self, self.ioc_prefix.substitute(
+                    propty='MeasConfigDelta'+self.intstrength +
+                           'Fam'+mag_type+'D-RB'))
             lay.addWidget(lb_meas_conf_dfamD, row+3, 0)
             lay.addWidget(self.sb_meas_conf_dfamD, row+3, 1)
             lay.addWidget(self.lb_meas_conf_dfamD, row+3, 2)
 
             lb_meas_conf_wait = QLabel('Wait [s]', self)
             self.sb_meas_conf_wait = PyDMSpinbox(
-                self, self.ioc_prefix+':MeasConfigWait-SP')
+                self, self.ioc_prefix.substitute(propty='MeasConfigWait-SP'))
             self.sb_meas_conf_wait.showStepExponent = False
             self.lb_meas_conf_wait = PyDMLabel(
-                self, self.ioc_prefix+':MeasConfigWait-RB')
+                self, self.ioc_prefix.substitute(propty='MeasConfigWait-RB'))
             lay.addWidget(lb_meas_conf_wait, row+4, 0)
             lay.addWidget(self.sb_meas_conf_wait, row+4, 1)
             lay.addWidget(self.lb_meas_conf_wait, row+4, 2)
 
             lb_meas_conf_cname = QLabel('Name to save', self)
             self.le_meas_conf_name = PyDMLineEdit(
-                self, self.ioc_prefix+':MeasConfigName-SP')
+                self, self.ioc_prefix.substitute(propty='MeasConfigName-SP'))
             self.lb_meas_conf_name = PyDMLabel(
-                self, self.ioc_prefix+':MeasConfigName-RB')
+                self, self.ioc_prefix.substitute(propty='MeasConfigName-RB'))
             lay.addWidget(lb_meas_conf_cname, row+5, 0)
             lay.addWidget(self.le_meas_conf_name, row+5, 1, 1, 2)
             lay.addWidget(self.lb_meas_conf_name, row+6, 1, 1, 2)
@@ -471,7 +494,8 @@ class OpticsCorrWindow(SiriusMainWindow):
             lb_meas_conf_save = QLabel('Force Save', self)
             self.bt_meas_conf_save = PyDMPushButton(
                 self, icon=qta.icon('mdi.content-save'), label='',
-                init_channel=self.ioc_prefix+':MeasConfigSave-Cmd',
+                init_channel=self.ioc_prefix.substitute(
+                    propty='MeasConfigSave-Cmd'),
                 pressValue=1)
             self.bt_meas_conf_save.setObjectName('save')
             self.bt_meas_conf_save.setStyleSheet(
@@ -484,24 +508,28 @@ class OpticsCorrWindow(SiriusMainWindow):
                 QSpacerItem(1, 20, QSzPly.Ignored, QSzPly.Fixed), row+8, 0)
 
             self.lb_meas_conf_sts = PyDMLabel(
-                self, self.ioc_prefix+':MeasConfigStatus-Mon')
+                self, self.ioc_prefix.substitute(
+                    propty='MeasConfigStatus-Mon'))
             self.bt_meas_conf_start = PyDMPushButton(
                 self, icon=qta.icon('fa5s.play'), label='',
-                init_channel=self.ioc_prefix+':MeasConfig-Cmd',
+                init_channel=self.ioc_prefix.substitute(
+                    propty='MeasConfig-Cmd'),
                 pressValue=_Const.MeasCmd.Start)
             self.bt_meas_conf_start.setObjectName('start')
             self.bt_meas_conf_start.setStyleSheet(
                 '#start{min-width:25px; max-width:25px; icon-size:20px;}')
             self.bt_meas_conf_stop = PyDMPushButton(
                 self, icon=qta.icon('fa5s.stop'), label='',
-                init_channel=self.ioc_prefix+':MeasConfig-Cmd',
+                init_channel=self.ioc_prefix.substitute(
+                    propty='MeasConfig-Cmd'),
                 pressValue=_Const.MeasCmd.Stop)
             self.bt_meas_conf_stop.setObjectName('stop')
             self.bt_meas_conf_stop.setStyleSheet(
                 '#stop{min-width:25px; max-width:25px; icon-size:20px;}')
             self.bt_meas_conf_rst = PyDMPushButton(
                 self, icon=qta.icon('fa5s.sync'), label='',
-                init_channel=self.ioc_prefix+':MeasConfig-Cmd',
+                init_channel=self.ioc_prefix.substitute(
+                    propty='MeasConfig-Cmd'),
                 pressValue=_Const.MeasCmd.Reset)
             self.bt_meas_conf_rst.setObjectName('rst')
             self.bt_meas_conf_rst.setStyleSheet(
@@ -522,16 +550,18 @@ class OpticsCorrWindow(SiriusMainWindow):
 
             lb_meth = QLabel('Method', self)
             self.cb_method = PyDMEnumComboBox(
-                self, self.ioc_prefix+':CorrMeth-Sel')
-            self.lb_method = PyDMLabel(self, self.ioc_prefix+':CorrMeth-Sts')
+                self, self.ioc_prefix.substitute(propty='CorrMeth-Sel'))
+            self.lb_method = PyDMLabel(
+                self, self.ioc_prefix.substitute(propty='CorrMeth-Sts'))
             lay.addWidget(lb_meth, row+12, 0)
             lay.addWidget(self.cb_method, row+12, 1)
             lay.addWidget(self.lb_method, row+12, 2)
 
             lb_grp = QLabel('Grouping', self)
             self.cb_group = PyDMEnumComboBox(
-                self, self.ioc_prefix+':CorrGroup-Sel')
-            self.lb_group = PyDMLabel(self, self.ioc_prefix+':CorrGroup-Sts')
+                self, self.ioc_prefix.substitute(propty='CorrGroup-Sel'))
+            self.lb_group = PyDMLabel(
+                self, self.ioc_prefix.substitute(propty='CorrGroup-Sts'))
             lay.addWidget(lb_grp, row+13, 0)
             lay.addWidget(self.cb_group, row+13, 1)
             lay.addWidget(self.lb_group, row+13, 2)
@@ -539,9 +569,10 @@ class OpticsCorrWindow(SiriusMainWindow):
             if self.param == 'tune':
                 lb_sync = QLabel('Sync', self)
                 self.bt_sync = PyDMStateButton(
-                    self, self.ioc_prefix+':SyncCorr-Sel')
+                    self, self.ioc_prefix.substitute(propty='SyncCorr-Sel'))
                 self.bt_sync.shape = 1
-                self.lb_sync = PyDMLabel(self, self.ioc_prefix+':SyncCorr-Sts')
+                self.lb_sync = PyDMLabel(
+                    self, self.ioc_prefix.substitute(propty='SyncCorr-Sts'))
                 lay.addWidget(lb_sync, row+14, 0)
                 lay.addWidget(self.bt_sync, row+14, 1)
                 lay.addWidget(self.lb_sync, row+14, 2)

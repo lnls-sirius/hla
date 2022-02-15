@@ -27,6 +27,7 @@ class DiffCtrlDevMonitor(QWidget):
         else:
             self.prefix = prefix
         self.device = _PVName(device)
+        self.device = self.device.substitute(prefix=self.prefix)
         self.section = self.device.sec
         self.orientation = self.device.dev[-1]
         self.setObjectName(self.section+'App')
@@ -44,9 +45,10 @@ class DiffCtrlDevMonitor(QWidget):
         # status
         label_status = QLabel(
             'Status: ', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
-        channels2values = {self.device+':ForceComplete-Mon': 1,
-                           self.device+':NegativeDoneMov-Mon': 1,
-                           self.device+':PositiveDoneMov-Mon': 1}
+        channels2values = {
+            self.device.substitute(propty='ForceComplete-Mon'): 1,
+            self.device.substitute(propty='NegativeDoneMov-Mon'): 1,
+            self.device.substitute(propty='PositiveDoneMov-Mon'): 1}
         self.multiled_status = PyDMLedMultiChannel(self, channels2values)
         self.multiled_status.setStyleSheet('max-width: 1.29em;')
 
@@ -71,7 +73,7 @@ class DiffCtrlDevMonitor(QWidget):
 
         self.pb_open = PyDMPushButton(
             parent=self, label='Open', pressValue=1,
-            init_channel=self.device+':Home-Cmd')
+            init_channel=self.device.substitute(propty='Home-Cmd'))
 
         tmp_file = _substitute_in_file(
             _os.path.abspath(_os.path.dirname(__file__))+'/ui_as_ap_dev' +

@@ -75,11 +75,11 @@ class IDControl(SiriusMainWindow):
                   'SI-08SB:ID-APU22', 'SI-09SA:ID-APU22',
                   'SI-11SP:ID-APU58']
         for idname in idlist:
-            idname = _PVName(idname)
             apu_wid = APUSummaryWidget(self, self._prefix, idname)
             lay.addWidget(apu_wid)
             self._apu_widgets.append(apu_wid)
-            ch_mov = SiriusConnectionSignal(idname+':Moving-Mon')
+            ch_mov = SiriusConnectionSignal(_PVName(idname).substitute(
+                prefix=self._prefix, propty='Moving-Mon'))
             ch_mov.new_value_signal[float].connect(self._handle_moving_vis)
             self._channels_mov.append(ch_mov)
 

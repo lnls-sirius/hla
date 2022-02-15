@@ -1,14 +1,15 @@
 """BbB Drive Module."""
 
 import os as _os
-from PyQt5.QtWidgets import QHBoxLayout, QWIDGETSIZE_MAX
 
 from qtpy.QtGui import QPixmap, QColor
 from qtpy.QtCore import Qt
-from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, QSpacerItem
+from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, QSpacerItem, \
+    QHBoxLayout
 from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMEnumComboBox, PyDMLineEdit
 
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
+from siriuspy.namesys import SiriusPVName as _PVName
 
 from ..widgets import PyDMStateButton, SiriusFrame, SiriusLabel
 
@@ -26,8 +27,8 @@ class BbBSingleDriveSettingsWidget(QWidget):
         set_bbb_color(self, device)
         self._driver_num = dr_num
         self._prefix = prefix
-        self._device = device
-        self.dev_pref = prefix + device
+        self._device = _PVName(device)
+        self.dev_pref = self._device.substitute(prefix=prefix)
         if self._driver_num is not None:
             self.dev_pref += f':DRIVE{dr_num:d}_'
         else:

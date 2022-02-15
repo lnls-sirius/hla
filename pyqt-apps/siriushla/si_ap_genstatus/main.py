@@ -12,16 +12,15 @@ import qtawesome as qta
 from pydm.widgets import PyDMLabel
 
 from siriuspy.envars import VACA_PREFIX
+from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.clientarch.time import Time
-from siriuspy.devices import InjSysStandbyHandler
 
 from ..util import get_appropriate_color
 from ..widgets import SiriusMainWindow, SiriusTimePlot, SiriusFrame, \
     SiriusLedState, SiriusLedAlert, SiriusConnectionSignal, PyDMLedMultiChannel
 from ..as_di_tune.controls import SITuneMonitor
-from ..as_ap_launcher.standby_widgets import InjSysStandbyStatusLed
+from ..as_ap_injection import InjSysStbyLed
 from ..as_ap_machshift import MachShiftLabel
-
 
 
 class SIGenStatusWindow(SiriusMainWindow):
@@ -42,7 +41,7 @@ class SIGenStatusWindow(SiriusMainWindow):
         # controls
         self.ld_machsht = QLabel(
             '<h3>Shift: </h3>', self, alignment=Qt.AlignCenter)
-        self.lb_machsht = MachShiftLabel()
+        self.lb_machsht = MachShiftLabel(self, prefix=self.prefix)
         self.lb_machsht.label.setStyleSheet('QLabel{font-size: 45pt;}')
         box_mach = QHBoxLayout()
         box_mach.addWidget(self.ld_machsht)
@@ -50,41 +49,43 @@ class SIGenStatusWindow(SiriusMainWindow):
         box_mach.setStretch(0, 1)
         box_mach.setStretch(1, 4)
 
-        self._led_siriusintlk = SiriusLedAlert(
-            self, self.prefix+'RA-RaSIA02:RF-IntlkCtrl:IntlkSirius-Mon')
+        pvname = _PVName('RA-RaSIA02:RF-IntlkCtrl:IntlkSirius-Mon')
+        pvname = pvname.substitute(prefix=self.prefix)
+        self._led_siriusintlk = SiriusLedAlert(self, pvname)
         self._led_siriusintlk.setStyleSheet(
             'QLed{min-width:3em;min-height:3em;max-width:3em;max-height:3em;}')
         self._gbox_siriusintlk = self._create_groupbox(
             'Sirius Interlock', self._led_siriusintlk)
 
-        self._led_injsyssts = InjSysStandbyStatusLed(
-            InjSysStandbyHandler(), self)
+        self._led_injsyssts = InjSysStbyLed(self)
         self._led_injsyssts.setStyleSheet(
             'QLed{min-width:3em;min-height:3em;max-width:3em;max-height:3em;}')
         self._gbox_injsyssts = self._create_groupbox(
             'Injection System', self._led_injsyssts)
 
-        self._led_sofbloop = SiriusLedState(
-            self, self.prefix+'SI-Glob:AP-SOFB:LoopState-Sts')
+        pvname = _PVName('SI-Glob:AP-SOFB:LoopState-Sts')
+        pvname = pvname.substitute(prefix=self.prefix)
+        self._led_sofbloop = SiriusLedState(self, pvname)
         self._led_sofbloop.setStyleSheet(
             'QLed{min-width:3em;min-height:3em;max-width:3em;max-height:3em;}')
         self._led_sofbloop.offColor = SiriusLedState.Red
         self._gbox_sofbloop = self._create_groupbox(
             'SOFB Loop', self._led_sofbloop)
 
-        bbbdev_pref = 'SI-Glob:DI-BbBProc-L'
+        bbbdev_pref = _PVName('SI-Glob:DI-BbBProc-L')
+        bbbdev_pref = bbbdev_pref.substitute(prefix=self.prefix)
         self._led_bbbloop = SiriusLedState(
-            self, self.prefix+bbbdev_pref+':FBCTRL')
+            self, bbbdev_pref.substitute(propty_name='FBCTRL'))
         self._led_bbbloop.setStyleSheet(
             'QLed{min-width:3em;min-height:3em;max-width:3em;max-height:3em;}')
         self._led_bbbloop.offColor = SiriusLedState.Red
         chs2vals = {
-            bbbdev_pref+':CLKMISS': 0,
-            bbbdev_pref+':PLL_UNLOCK': 0,
-            bbbdev_pref+':DCM_UNLOCK': 0,
-            bbbdev_pref+':ADC_OVR': 0,
-            bbbdev_pref+':SAT': 0,
-            bbbdev_pref+':FID_ERR': 0}
+            bbbdev_pref.substitute(propty_name='CLKMISS'): 0,
+            bbbdev_pref.substitute(propty_name='PLL_UNLOCK'): 0,
+            bbbdev_pref.substitute(propty_name='DCM_UNLOCK'): 0,
+            bbbdev_pref.substitute(propty_name='ADC_OVR'): 0,
+            bbbdev_pref.substitute(propty_name='SAT'): 0,
+            bbbdev_pref.substitute(propty_name='FID_ERR'): 0}
         self._led_bbbsts = PyDMLedMultiChannel(self, chs2vals)
         self._led_bbbsts.setStyleSheet(
             'QLed{min-width:3em;min-height:3em;max-width:3em;max-height:3em;}')
@@ -96,13 +97,16 @@ class SIGenStatusWindow(SiriusMainWindow):
         self.ld_curr = QLabel(
             '<h3>Current [mA]</h3>', self, alignment=Qt.AlignCenter)
         self.ld_curr.setStyleSheet('max-height: 2em;')
-        self.lb_curr = PyDMLabel(
-            self, self.prefix+'SI-Glob:AP-CurrInfo:Current-Mon')
+        pvname = _PVName('SI-Glob:AP-CurrInfo:Current-Mon')
+        pvname = pvname.substitute(prefix=self.prefix)
+        self.lb_curr = PyDMLabel(self, pvname)
         self.lb_curr.setAlignment(Qt.AlignCenter)
         self.lb_curr.setStyleSheet(
             'QLabel{background-color: '+self.app_color+';font-size: 45pt;}')
+        pvname = _PVName('SI-Glob:AP-CurrInfo:StoredEBeam-Mon')
+        pvname = pvname.substitute(prefix=self.prefix)
         self.frm_curr = SiriusFrame(
-            self, self.prefix+'SI-Glob:AP-CurrInfo:StoredEBeam-Mon',
+            self, pvname,
             color_list=[SiriusFrame.DarkGreen, SiriusFrame.LightGreen],
             is_float=False)
         self.frm_curr.borderWidth = 5
@@ -118,8 +122,9 @@ class SIGenStatusWindow(SiriusMainWindow):
         self.ld_lifetime.setStyleSheet('max-height: 2em;')
         self.lb_lifetime = QLabel('0:00:00', self, alignment=Qt.AlignCenter)
         self.lb_lifetime.setStyleSheet('QLabel{font-size: 45pt;}')
-        self.ch_lifetime = SiriusConnectionSignal(
-            self.prefix+'SI-Glob:AP-CurrInfo:Lifetime-Mon')
+        pvname = _PVName('SI-Glob:AP-CurrInfo:Lifetime-Mon')
+        pvname = pvname.substitute(prefix=self.prefix)
+        self.ch_lifetime = SiriusConnectionSignal(pvname)
         self.ch_lifetime.new_value_signal[float].connect(
             self.formatLifetimeLabel)
         box_lt = QWidget()
@@ -152,7 +157,8 @@ class SIGenStatusWindow(SiriusMainWindow):
         self.curr_graph.plotItem.getAxis('left').setStyle(
             tickTextOffset=5, autoExpandTextSpace=False,
             tickTextWidth=50, tickFont=font)
-        curr_pvname = self.prefix+'SI-Glob:AP-CurrInfo:Current-Mon'
+        curr_pvname = _PVName('SI-Glob:AP-CurrInfo:Current-Mon')
+        curr_pvname = curr_pvname.substitute(prefix=self.prefix)
         self.curr_graph.addYChannel(
             y_channel=curr_pvname, name='Current',
             color='blue', lineStyle=Qt.SolidLine, lineWidth=2)

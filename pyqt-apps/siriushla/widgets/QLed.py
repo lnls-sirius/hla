@@ -13,11 +13,6 @@ from qtpy.QtCore import Signal, Qt, QSize, QTimer, QByteArray, \
                         QRectF, Property, Q_ENUMS, QFile
 from qtpy.QtSvg import QSvgRenderer
 
-# This line is necessary for correct imports in designer-qt
-import siriushla.resources
-
-__path__ = _os.path.dirname(__file__)
-
 
 class ShapeMap:
     """Shape enum mapping class."""
@@ -34,20 +29,21 @@ class QLed(QFrame, ShapeMap):
     ShapeMap = ShapeMap
     Q_ENUMS(ShapeMap)
 
+    abspath = _os.path.abspath(_os.path.dirname(__file__))
     shapesdict = dict()
-    f = QFile(':/led_shapes/circle.svg')
+    f = QFile(_os.path.join(abspath, 'resources/led_shapes/circle.svg'))
     if f.open(QFile.ReadOnly):
         shapesdict[ShapeMap.Circle] = str(f.readAll(), 'utf-8')
     f.close()
-    f = QFile(':/led_shapes/round.svg')
+    f = QFile(_os.path.join(abspath, 'resources/led_shapes/round.svg'))
     if f.open(QFile.ReadOnly):
         shapesdict[ShapeMap.Round] = str(f.readAll(), 'utf-8')
     f.close()
-    f = QFile(':/led_shapes/square.svg')
+    f = QFile(_os.path.join(abspath, 'resources/led_shapes/square.svg'))
     if f.open(QFile.ReadOnly):
         shapesdict[ShapeMap.Square] = str(f.readAll(), 'utf-8')
     f.close()
-    f = QFile(':/led_shapes/triangle.svg')
+    f = QFile(_os.path.join(abspath, 'resources/led_shapes/triangle.svg'))
     if f.open(QFile.ReadOnly):
         shapesdict[ShapeMap.Triangle] = str(f.readAll(), 'utf-8')
     f.close()

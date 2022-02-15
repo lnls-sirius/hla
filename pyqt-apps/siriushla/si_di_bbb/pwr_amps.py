@@ -8,6 +8,7 @@ import qtawesome as qta
 from pydm.widgets import PyDMLabel, PyDMLineEdit
 
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
+from siriuspy.namesys import SiriusPVName as _PVName
 
 from ..widgets import PyDMStateButton, SiriusLedState, SiriusSpinbox, \
     SiriusLabel, PyDMLed, SiriusPushButton
@@ -24,8 +25,8 @@ class BbBPwrAmpsWidget(QWidget):
         super().__init__(parent)
         set_bbb_color(self, device)
         self._prefix = prefix
-        self._device = device
-        self.dev_pref = prefix + device
+        self._device = _PVName(device)
+        self.dev_pref = self._device.substitute(prefix=prefix)
         self._setupUi()
 
     def _setupUi(self):
@@ -278,13 +279,13 @@ class BbBPwrAmpsWidget(QWidget):
         return wid
 
     def _setupTransverse(self):
-        pref = 'SI-Glob:DI-BbBAmp' + self.dev_pref[-1]
+        pref = self.dev_pref.substitute(dev='BbBAmp'+self._device.idx, idx='')
 
         ld_main = QLabel(
             '<h3>AR Amplifier</h3>', self, alignment=Qt.AlignCenter)
 
         conf = SiriusPushButton(
-            self, init_channel=pref+':Rst-Cmd', pressValue=1)
+            self, init_channel=pref+':Rst-Cmd', pressValue=1, releaseValue=0)
         conf.setText('Reset')
         conf.setToolTip('Reset State')
         conf.setIcon(qta.icon('fa5s.sync'))

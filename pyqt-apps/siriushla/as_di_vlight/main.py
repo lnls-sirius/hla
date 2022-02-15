@@ -5,6 +5,8 @@ from pydm.widgets import PyDMPushButton
 import qtawesome as qta
 
 from siriuspy.envars import VACA_PREFIX
+from siriuspy.namesys import SiriusPVName as _PVName
+
 from siriushla import util
 from siriushla.common.cam_basler import SiriusImageView, create_propty_layout,\
     BaslerCamSettings
@@ -19,9 +21,10 @@ class VLightCamView(QWidget):
         super().__init__(parent)
         self.prefix = prefix
         self.section = section.upper()
-        self.device = \
-            ('BO-50U' if self.section == 'BO' else 'SI-01C2FE')+':DI-VLightCam'
-        self.cam_prefix = prefix + self.device
+        self.device = _PVName(
+            ('BO-50U' if self.section == 'BO' else 'SI-01C2FE') +
+            ':DI-VLightCam')
+        self.cam_prefix = self.device.substitute(prefix=prefix)
         self.setObjectName(self.section + 'App')
         self.setWindowTitle(self.device + ' View')
         self._setupUi()
@@ -32,12 +35,14 @@ class VLightCamView(QWidget):
 
         self.cam_viewer = SiriusImageView(
             parent=self,
-            image_channel=self.cam_prefix+':Data-Mon',
-            width_channel=self.cam_prefix+':AOIWidth-RB',
-            offsetx_channel=self.cam_prefix+':AOIOffsetX-RB',
-            offsety_channel=self.cam_prefix+':AOIOffsetY-RB',
-            maxwidth_channel=self.cam_prefix+':SensorWidth-Cte',
-            maxheight_channel=self.cam_prefix+':SensorHeight-Cte')
+            image_channel=self.cam_prefix.substitute(propty='Data-Mon'),
+            width_channel=self.cam_prefix.substitute(propty='AOIWidth-RB'),
+            offsetx_channel=self.cam_prefix.substitute(propty='AOIOffsetX-RB'),
+            offsety_channel=self.cam_prefix.substitute(propty='AOIOffsetY-RB'),
+            maxwidth_channel=self.cam_prefix.substitute(
+                propty='SensorWidth-Cte'),
+            maxheight_channel=self.cam_prefix.substitute(
+                propty='SensorHeight-Cte'))
         self.cam_viewer.setObjectName('camview')
         self.cam_viewer.setStyleSheet("""
             #camview{min-width:42em; min-height:32em;}""")
@@ -69,7 +74,8 @@ class VLightCamView(QWidget):
         label_Reset = QLabel('Reset Camera:', self)
         self.pb_dtl = PyDMPushButton(
             label='', icon=qta.icon('fa5s.sync'),
-            parent=self, pressValue=1, init_channel=self.cam_prefix+':Rst-Cmd')
+            parent=self, pressValue=1,
+            init_channel=self.cam_prefix.substitute(propty='Rst-Cmd'))
         self.pb_dtl.setObjectName('reset')
         self.pb_dtl.setStyleSheet(
             "#reset{min-width:25px; max-width:25px; icon-size:20px;}")

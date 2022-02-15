@@ -19,50 +19,52 @@ from .hl_trigger import HLTriggerDetailed
 
 class LLButton(QWidget):
 
-    def __init__(self, prefix, link, parent=None):
+    def __init__(self, device, link, prefix='', parent=None):
         super().__init__(parent)
-        self.prefix = PVName(prefix)
+        self.device = PVName(device)
         self.link = link
+        self.prefix = prefix
         self._dic = {
             'EVG': EVG, 'EVR': EVR, 'EVE': EVE, 'AMCFPGAEVR': AFC,
             'Fout': FOUT}
         self.setupui()
 
     def setupui(self):
-        name = self.prefix.sub + '-'
-        if self.prefix.dev == 'AMCFPGAEVR':
+        name = self.device.sub + '-'
+        if self.device.dev == 'AMCFPGAEVR':
             name += 'AMC'
         else:
-            name += self.prefix.dev
-        if self.prefix.idx:
-            name += '-' + self.prefix.idx
-        clss = self._dic[self.prefix.dev]
+            name += self.device.dev
+        if self.device.idx:
+            name += '-' + self.device.idx
+        clss = self._dic[self.device.dev]
 
         props = ['DevEnbl', 'Network', 'LinkStatus', 'IntlkStatus']
         suffs = ['-Sts', '-Mon', '-Mon', '-Mon']
         chng = [True, True, True, False]
-        if self.prefix.dev == 'EVG':
+        if self.device.dev == 'EVG':
             props[2] = 'RFStatus'
             props[3] = 'ACStatus'
             chng[3] = True
-        elif self.prefix.dev == 'AMCFPGAEVR':
+        elif self.device.dev == 'AMCFPGAEVR':
             props[1] = 'RefClkLocked'
             props = props[:-1]
-        elif self.prefix.dev == 'Fout':
+        elif self.device.dev == 'Fout':
             props = props[:-1]
 
         channels2values = dict()
         for i, prop in enumerate(props):
-            pvn = self.prefix.substitute(propty=prop+suffs[i])
+            pvn = self.device.substitute(prefix=self.prefix, propty=prop+suffs[i])
             channels2values[pvn] = 1 if chng[i] else 0
         led = PyDMLedMultiChannel(
              parent=self, channels2values=channels2values)
-        led.setToolTip(self.prefix)
+        led.setToolTip(self.device)
         icon = qta.icon('mdi.timer', color=get_appropriate_color('AS'))
         Window = create_window_from_widget(
-            clss, title=self.prefix.device_name, icon=icon)
+            clss, title=self.device.device_name, icon=icon)
         connect_window(
-            led, Window, None, signal=led.clicked, prefix=self.prefix + ':')
+            led, Window, None, signal=led.clicked,
+            device=self.device, prefix=self.prefix)
 
         lay = QVBoxLayout(self)
         lay.setContentsMargins(4, 4, 4, 4)
@@ -74,27 +76,30 @@ class LLButton(QWidget):
 
 class HLButton(QWidget):
 
-    def __init__(self, trigger, parent=None):
+    def __init__(self, trigger, prefix='', parent=None):
         super().__init__(parent=parent)
+        self.trigger = trigger
+        self.prefix = prefix
         hl = QHBoxLayout()
         self.setLayout(hl)
         self.layout().setContentsMargins(0, 0, 0, 0)
         led = SiriusLedAlert(self)
         led.setToolTip(trigger)
-        led.channel = trigger.substitute(propty='Status-Mon')
+        led.channel = trigger.substitute(
+            prefix=self.prefix, propty='Status-Mon')
         self.layout().addWidget(led)
         icon = qta.icon('mdi.timer', color=get_appropriate_color(trigger.sec))
         Window = create_window_from_widget(
             HLTriggerDetailed, title=trigger, icon=icon)
         led.clicked.connect(lambda: QApplication.instance().open_window(
-            Window, parent=None, prefix=trigger + ':'))
+            Window, parent=None, device=trigger, prefix=prefix))
 
 
 class MonitorHL(QGroupBox):
 
     def __init__(self, parent=None, prefix=''):
-        self.prefix = prefix
         super().__init__('High Level Monitor', parent=parent)
+        self.prefix = prefix
         self._setupui()
         self.setObjectName('ASApp')
 
@@ -116,7 +121,7 @@ class MonitorHL(QGroupBox):
             for i, trig in enumerate(sorted(secs[sec])):
                 if i and not i % nrcols:
                     row = lay.rowCount()
-                but = HLButton(trig, self)
+                but = HLButton(trig, self.prefix, self)
                 lay.addWidget(but, row, i % nrcols)
 
 
@@ -129,8 +134,8 @@ class MonitorLL(QGroupBox):
         self.setObjectName('ASApp')
 
     def _setupui(self):
-        evg = LLTimeSearch.get_device_names({'dev': 'EVG'})
-        g1 = LLButton(self.prefix+evg[0], '', self)
+        evg = PVName(LLTimeSearch.get_evg_name())
+        g1 = LLButton(evg, '', self.prefix, self)
         self.g1 = g1
 
         downs = LLTimeSearch.get_device_names({'dev': 'Fout'})
@@ -165,7 +170,7 @@ class MonitorLL(QGroupBox):
                 lay.addWidget(g, j+2, i)
 
     def setupdown(self, down):
-        return [LLButton(self.prefix+pre, lnk, self) for lnk, pre in down]
+        return [LLButton(pre, lnk, self.prefix, self) for lnk, pre in down]
 
     def paintEvent(self, event):
         super().paintEvent(event)
@@ -208,8 +213,8 @@ class MonitorLL(QGroupBox):
 class MonitorWindow(QWidget):
 
     def __init__(self, parent=None, prefix=''):
-        self.prefix = prefix
         super().__init__(parent=parent)
+        self.prefix = prefix
         self._setupui()
         self.setObjectName('ASApp')
 

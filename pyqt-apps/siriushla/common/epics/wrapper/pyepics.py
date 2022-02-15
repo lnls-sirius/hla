@@ -20,7 +20,8 @@ class PyEpicsWrapper:
 
     def __init__(self, pv):
         """Create PV object."""
-        self._pv = epics.get_pv(_VACA_PREFIX + pv)
+        pvn = _VACA_PREFIX + ('-' if _VACA_PREFIX else '') + pv
+        self._pv = epics.get_pv(pvn)
 
     @property
     def pvname(self):

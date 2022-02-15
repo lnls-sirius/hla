@@ -9,16 +9,20 @@ class SiriusFrame(PyDMFrame):
     """Sirius Frame."""
 
     LightGreen = (0, 255, 0)
+    MediumGreen = (25, 156, 109)
     DarkGreen = (20, 80, 10)
-    Yellow = (255, 255, 77)
+    Yellow = (255, 254, 122)
     Red = (255, 0, 0)
-    LightBlue = (179, 229, 255)
+    MediumBlue = (15, 102, 255)
+    LightBlue = (142, 183, 255)
     LightViolet = (204, 179, 255)
     LightSalmon = (255, 179, 179)
     Salmon = (255, 105, 97)
     Lavender = (151, 122, 196)
     DarkCyan = (95, 131, 184)
+    LightGray = (229, 228, 226)
     Gray = (90, 90, 90)
+    DarkGray = (132, 136, 132)
     default_colorlist = [LightGreen, Red]
 
     def __init__(self, parent=None, init_channel=None, use_border=True,

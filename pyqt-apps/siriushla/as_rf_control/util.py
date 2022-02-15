@@ -125,7 +125,7 @@ SEC_2_CHANNELS = {
             'QErr': 'BR-RF-DLLRF-01:Q:SL:ERR',
             'AErr': 'BR-RF-DLLRF-01:SL:ERR:AMP',
             'PErr': 'BR-RF-DLLRF-01:SL:ERR:PHS',
-            'ASet': 'BR-RF-DLLRF-01:mV:AL:REF',
+            'ASet': ['BR-RF-DLLRF-01:mV:AL:REF', 'RA-RaBO01:RF-LLRF:AmpVCav'],
             'PSet': 'BR-RF-DLLRF-01:PL:REF',
             'AInc': 'BR-RF-DLLRF-01:AMPREF:INCRATE',
             'PInc': 'BR-RF-DLLRF-01:PHSREF:INCRATE',
@@ -141,6 +141,17 @@ SEC_2_CHANNELS = {
             'PlM1Curr': 'RA-RaBO01:RF-CavPlDrivers:Dr1Current-Mon',
             'PlM2Curr': 'RA-RaBO01:RF-CavPlDrivers:Dr2Current-Mon',
         },
+        'FFlat': {
+            'Sts': 'BR-RF-DLLRF-01:FF:ON',
+            'Auto': 'BR-RF-DLLRF-01:FF',
+            'Pos': 'BR-RF-DLLRF-01:FF:POS',
+            'Gain1': 'BR-RF-DLLRF-01:FF:GAIN:CELL2',
+            'Gain2': 'BR-RF-DLLRF-01:FF:GAIN:CELL4',
+            'Cell1': 'BR-RF-DLLRF-01:FF:CELL2',
+            'Cell2': 'BR-RF-DLLRF-01:FF:CELL4',
+            'Deadband': 'BR-RF-DLLRF-01:FF:DEADBAND',
+            'Err': 'BR-RF-DLLRF-01:FF:ERR',
+        },
         'PwrMtr': [
             ['Cavity Power', 'BO-05D:RF-P5Cav:Cell3Pwr-Mon',
              'BO-05D:RF-P5Cav:Cell3PwrdBm-Mon', 'blue'],
@@ -148,7 +159,8 @@ SEC_2_CHANNELS = {
              'BO-05D:RF-P5Cav:PwrFwddBm-Mon', 'darkGreen'],
             ['Power Reverse', 'BO-05D:RF-P5Cav:PwrRev-Mon',
              'BO-05D:RF-P5Cav:PwrRevdBm-Mon', 'red'],
-        ]
+        ],
+        'CavVGap': 'BO-05D:RF-P5Cav:AmpVCav-Mon',
     },
     'SI': {
         'Emergency': 'RA-RaSIA02:RF-IntlkCtrl:EStop-Mon',
@@ -297,7 +309,7 @@ SEC_2_CHANNELS = {
             'QErr': 'SR-RF-DLLRF-01:Q:SL:ERR',
             'AErr': 'SR-RF-DLLRF-01:SL:ERR:AMP',
             'PErr': 'SR-RF-DLLRF-01:SL:ERR:PHS',
-            'ASet': 'SR-RF-DLLRF-01:mV:AL:REF',
+            'ASet': ['SR-RF-DLLRF-01:mV:AL:REF', 'RA-RaSIA01:RF-LLRF:AmpVCav'],
             'PSet': 'SR-RF-DLLRF-01:PL:REF',
             'AInc': 'SR-RF-DLLRF-01:AMPREF:INCRATE',
             'PInc': 'SR-RF-DLLRF-01:PHSREF:INCRATE',
@@ -312,6 +324,17 @@ SEC_2_CHANNELS = {
             'Pl2Up': 'SR-RF-DLLRF-01:PLG2:MOVE:UP',
             'PlM1Curr': 'RA-RaSIA01:RF-CavPlDrivers:Dr1Current-Mon',
             'PlM2Curr': 'RA-RaSIA01:RF-CavPlDrivers:Dr2Current-Mon',
+        },
+        'FFlat': {
+            'Sts': 'SR-RF-DLLRF-01:FF:ON',
+            'Auto': 'SR-RF-DLLRF-01:FF',
+            'Pos': 'SR-RF-DLLRF-01:FF:POS',
+            'Gain1': 'SR-RF-DLLRF-01:FF:GAIN:CELL2',
+            'Gain2': 'SR-RF-DLLRF-01:FF:GAIN:CELL4',
+            'Cell1': 'SR-RF-DLLRF-01:FF:CELL2',
+            'Cell2': 'SR-RF-DLLRF-01:FF:CELL4',
+            'Deadband': 'SR-RF-DLLRF-01:FF:DEADBAND',
+            'Err': 'SR-RF-DLLRF-01:FF:ERR',
         },
         'PwrMtr': [
             ['Cav - Cell 4', 'SI-02SB:RF-P7Cav:PwrCell4-Mon',
@@ -330,6 +353,7 @@ SEC_2_CHANNELS = {
              'RA-ToSIA02:RF-SSAmpTower:PwrRevOutdBm-Mon', 'cyan'],
             ['Circ - Fwd Out', 'RA-TL:RF-Circulator-SIA:PwrFwdOut-Mon',
              'RA-TL:RF-Circulator-SIA:PwrFwdOutdBm-Mon', 'darkCyan'],
-        ]
+        ],
+        'CavVGap': 'SI-02SB:RF-P7Cav:AmpVCav-Mon',
     },
 }

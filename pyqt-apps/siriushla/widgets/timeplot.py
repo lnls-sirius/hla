@@ -83,9 +83,9 @@ class SiriusTimePlot(PyDMTimePlot):
             if chan:
                 chan.connect()
 
-    def addYChannel(self, y_channel=None, name=None, color=None,
-                    lineStyle=None, lineWidth=None, symbol=None,
-                    symbolSize=None, axis='left'):
+    def addYChannel(
+            self, y_channel=None, name=None, color=None, lineStyle=None,
+            lineWidth=None, symbol=None, symbolSize=None, axis='left'):
         """Reimplement to use SiriusTimePlotItem and right axis."""
         plot_opts = dict()
         plot_opts['symbol'] = symbol
@@ -141,25 +141,24 @@ class SiriusTimePlot(PyDMTimePlot):
         self.vb2.setGeometry(self.plotItem.vb.sceneBoundingRect())
         self.vb2.linkedViewChanged(self.plotItem.vb, self.vb2.XAxis)
 
-    def _get_value_from_arch(self, pvname, t_init, t_end,
-                             process_type, process_bin_intvl):
+    def _get_value_from_arch(
+            self, pvname, t_init, t_end, process_type, process_bin_intvl):
         """Get values from archiver."""
         if self.carch is None:
             self.carch = ClientArchiver()
         self.carch.timeout = 30
-        data = self.carch.getData(pvname, t_init, t_end,
-                                  process_type, process_bin_intvl)
+        data = self.carch.getData(
+            pvname, t_init, t_end, process_type, process_bin_intvl)
         if not data:
             return
-        timestamp, value, _, _ = data
-        return timestamp, value
+        return data['timestamp'], data['value']
 
-    def fill_curve_with_archdata(self, curve, pvname, t_init, t_end,
-                                 factor=None, process_type='',
-                                 process_bin_intvl=None):
+    def fill_curve_with_archdata(
+            self, curve, pvname, t_init, t_end, factor=None, process_type='',
+            process_bin_intvl=None):
         """Fill curve with archiver data."""
-        data = self._get_value_from_arch(pvname, t_init, t_end,
-                                         process_type, process_bin_intvl)
+        data = self._get_value_from_arch(
+            pvname, t_init, t_end, process_type, process_bin_intvl)
         if not data:
             return
         datax, datay = data

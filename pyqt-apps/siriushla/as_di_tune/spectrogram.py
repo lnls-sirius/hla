@@ -24,14 +24,17 @@ class BOTuneSpectrogram(SiriusSpectrogramView):
         """Init."""
         self.prefix = prefix
         self.orientation = orientation
-        self.device = SiriusPVName(prefix + 'BO-Glob:DI-Tune-' + orientation)
-        image_channel = self.device.substitute(dev='TuneProc')+':SpecArray-Mon'
-        xaxis_channel = self.device + ':TuneFracArray-Mon'
-        yaxis_channel = self.device + ':TimeArray-Mon'
-        roioffx_channel = self.device + ':ROIOffXConv-RB'
-        roioffy_channel = self.device + ':ROIOffYConv-RB'
-        roiwidth_channel = self.device + ':ROIWidthConv-RB'
-        roiheight_channel = self.device + ':ROIHeightConv-RB'
+        self.device = SiriusPVName('BO-Glob:DI-Tune-O')
+        self.device = self.device.substitute(
+            prefix=self.prefix, idx=orientation)
+        image_channel = self.device.substitute(
+            dev='TuneProc', propty='SpecArray-Mon')
+        xaxis_channel = self.device.substitute(propty='TuneFracArray-Mon')
+        yaxis_channel = self.device.substitute(propty='TimeArray-Mon')
+        roioffx_channel = self.device.substitute(propty='ROIOffXConv-RB')
+        roioffy_channel = self.device.substitute(propty='ROIOffYConv-RB')
+        roiwidth_channel = self.device.substitute(propty='ROIWidthConv-RB')
+        roiheight_channel = self.device.substitute(propty='ROIHeightConv-RB')
         super().__init__(parent=parent,
                          image_channel=image_channel,
                          xaxis_channel=xaxis_channel,
@@ -99,12 +102,12 @@ class BOTuneSpectrogram(SiriusSpectrogramView):
     def toggleXChannel(self):
         """Toggle X channel between FreqArray and TuneFracArray."""
         if 'TuneFracArray' in self._xaxischannel.address:
-            new_ch = ':FreqArray-Mon'
+            new_ch = 'FreqArray-Mon'
         elif 'FreqArray' in self._xaxischannel.address:
-            new_ch = ':TuneFracArray-Mon'
+            new_ch = 'TuneFracArray-Mon'
         # TODO: remove this command when bug in Tune is resolved
         self.resetBuffer()
-        self.xAxisChannel = self.prefix + self.device + new_ch
+        self.xAxisChannel = self.device.substitute(propty=new_ch)
 
     def setBufferSize(self, new_size):
         """Set number of averages, or, buffer size."""
