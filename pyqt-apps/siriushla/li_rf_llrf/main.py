@@ -112,7 +112,7 @@ class ControlBox(QWidget):
         _util.connect_window(
             pb_param, DeviceParamSettingWindow, parent=self,
             device=self.dev, prefix=self.prefix)
-        lay1.addWidget(pb_param, row, 3)
+        lay1.addWidget(pb_param, row, 0, alignment=Qt.AlignLeft)
 
         props = (
             ('State', 'STREAM'), ('Trigger', 'EXTERNAL_TRIGGER_ENABLE'),
