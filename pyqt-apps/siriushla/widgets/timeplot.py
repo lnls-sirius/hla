@@ -10,7 +10,7 @@ from pydm import utilities
 from pydm.widgets.timeplot import TimePlotCurveItem, PyDMTimePlot, \
     DEFAULT_X_MIN
 
-from siriuspy.clientarch import ClientArchiver
+from siriuspy.clientarch import ClientArchiver, Time
 
 
 class SiriusTimePlotItem(TimePlotCurveItem):
@@ -50,6 +50,7 @@ class SiriusTimePlot(PyDMTimePlot):
     def __init__(self, *args, **kws):
         super().__init__(*args, **kws)
         self._min_time = time.time()
+        self._filled_with_arch_data = dict()
 
         self.vb2 = ViewBox()
         self.plotItem.scene().addItem(self.vb2)
@@ -146,7 +147,7 @@ class SiriusTimePlot(PyDMTimePlot):
         """Get values from archiver."""
         if self.carch is None:
             self.carch = ClientArchiver()
-        self.carch.timeout = 30
+        self.carch.timeout = 120
         data = self.carch.getData(
             pvname, t_init, t_end, process_type, process_bin_intvl)
         if not data:
@@ -163,6 +164,10 @@ class SiriusTimePlot(PyDMTimePlot):
             return
         datax, datay = data
         self.fill_curve_buffer(curve, datax, datay, factor)
+
+        self._filled_with_arch_data[pvname] = dict(
+            curve=curve, factor=factor, process_type=process_type,
+            process_bin_intvl=process_bin_intvl)
 
     def fill_curve_buffer(self, curve, datax, datay, factor=None):
         """Fill curve buffer."""
@@ -215,5 +220,17 @@ class SiriusTimePlot(PyDMTimePlot):
     def _changeTimeSpan(self):
         new_time_span, ok = QInputDialog.getInt(
             self, 'Input', 'Set new time span value [s]: ')
-        if ok:
-            self.timeSpan = new_time_span
+        if not ok:
+            return
+
+        if new_time_span > self.timeSpan:
+            t_end = Time.now()
+            t_init = t_end - new_time_span
+            for pvname, info in self._filled_with_arch_data.items():
+                self.fill_curve_with_archdata(
+                    info['curve'], pvname,
+                    t_init.get_iso8601(), t_end.get_iso8601(),
+                    info['factor'], info['process_type'],
+                    info['process_bin_intvl'])
+
+        self.timeSpan = new_time_span
