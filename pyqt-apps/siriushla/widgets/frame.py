@@ -40,14 +40,14 @@ class _BaseFrame(PyDMFrame):
         lay.setContentsMargins(4, 4, 4, 4)
         self.setObjectName('frame')
 
-    @Property(bool)
+    @Property(int)
     def borderWidth(self):
         """
         Border width in pixels.
 
         Returns
         -------
-        use : bool
+        use : int
             The width in use
         """
         return self._border_width
@@ -59,7 +59,7 @@ class _BaseFrame(PyDMFrame):
 
         Parameters
         ----------
-        new_val : bool
+        new_val : int
             The new width to use
         """
         if self._border_width != new_val:
@@ -67,14 +67,14 @@ class _BaseFrame(PyDMFrame):
             self.layout().setContentsMargins(
                 new_val, new_val, new_val, new_val)
 
-    @Property(tuple)
+    @Property(QColor)
     def offColor(self):
         """
         Border off color.
 
         Returns
         -------
-        color : string
+        color : QColor
             The color in use
         """
         return self._stateColors[0]
@@ -86,21 +86,21 @@ class _BaseFrame(PyDMFrame):
 
         Parameters
         ----------
-        new_val : string
+        new_val : QColor
             The new color to use
         """
         if self._stateColors[0] != new_val:
             self._stateColors[0] = new_val
             self._update_border_color()
 
-    @Property(tuple)
+    @Property(QColor)
     def onColor(self):
         """
         Border on color.
 
         Returns
         -------
-        color : string
+        color : QColor
             The color in use
         """
         return self._stateColors[1]
@@ -112,7 +112,7 @@ class _BaseFrame(PyDMFrame):
 
         Parameters
         ----------
-        new_val : string
+        new_val : QColor
             The new color to use
         """
         if self._stateColors[1] != new_val:
@@ -121,12 +121,26 @@ class _BaseFrame(PyDMFrame):
 
     @Property(list)
     def stateColors(self):
-        """Color list property getter."""
+        """
+        State color list property.
+
+        Returns
+        -------
+        use : list of QColors
+            State colors in use
+        """
         return list(self._stateColors)
 
     @stateColors.setter
     def stateColors(self, new_colors):
-        """Color list property setter."""
+        """
+        State color list property.
+
+        Parameters
+        ----------
+        new_colors : list of QColors
+            The new state colors to use
+        """
         if not isinstance(new_colors, (list, tuple)) or len(new_colors) < 2:
             return
         self._stateColors = list(new_colors)
