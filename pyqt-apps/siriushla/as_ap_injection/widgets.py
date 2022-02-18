@@ -98,7 +98,7 @@ class InjDiagLed(SiriusLedAlert):
                 parent=self.parent(), pvname=self.channel,
                 labels=self.labels, title='Injection Status')
             self.msg.open()
-        super().mousePressEvent(event)
+        super().mouseDoubleClickEvent(event)
 
 
 class InjSysStbyLed(PyDMLedMultiChannel):
