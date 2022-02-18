@@ -2,9 +2,9 @@
 
 import numpy as _np
 
-from qtpy.QtCore import Qt
+from qtpy.QtCore import Qt, QTimer
 from qtpy.QtGui import QPalette
-from qtpy.QtWidgets import QToolTip
+from qtpy.QtWidgets import QLabel
 
 from pyqtgraph import mkBrush
 
@@ -18,6 +18,14 @@ class MyTimePlot(SiriusTimePlot):
     """Reimplement mouseMoveEvent."""
 
     def mouseMoveEvent(self, ev):
+        # create label tooltip, if needed
+        if not hasattr(self, 'label_tooltip'):
+            self.label_tooltip = QLabel(self, Qt.ToolTip)
+            self.timer_tooltip = QTimer(self)
+            self.timer_tooltip.timeout.connect(self.label_tooltip.hide)
+            self.timer_tooltip.setInterval(1000)
+
+        # get event pos
         pos = ev.pos()
 
         # find nearest curve point
@@ -46,16 +54,20 @@ class MyTimePlot(SiriusTimePlot):
             txt += f'{curve.name()}: {valy:.3f}'
             font = SiriusApplication.instance().font()
             font.setPointSize(font.pointSize() - 10)
-            QToolTip.setFont(font)
             palette = QPalette()
-            palette.setColor(QPalette.ToolTipText, curve.color)
-            palette.setColor(QPalette.ToolTipBase, Qt.darkGray)
-            QToolTip.setPalette(palette)
-            QToolTip.showText(
-                self.mapToGlobal(pos), txt, self, self.geometry(), 1000)
+            palette.setColor(QPalette.WindowText, curve.color)
+            palette.setColor(QPalette.Window, Qt.darkGray)
+            self.label_tooltip.setText(txt)
+            self.label_tooltip.setFont(font)
+            self.label_tooltip.setPalette(palette)
+            self.label_tooltip.move(self.mapToGlobal(pos))
+            self.label_tooltip.show()
+            self.timer_tooltip.start()
             curve.scatter.setData(
                 pos=[(valx, valy), ], symbol='o', size=15,
                 brush=mkBrush(curve.color))
             curve.scatter.show()
+        else:
+            self.label_tooltip.hide()
 
         super().mouseMoveEvent(ev)
