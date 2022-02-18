@@ -4,7 +4,8 @@ import enum as _enum
 
 from qtpy.QtCore import Qt
 from qtpy.QtGui import QColor
-from qtpy.QtWidgets import QGroupBox, QGridLayout, QWidget, QLabel, QHBoxLayout
+from qtpy.QtWidgets import QGroupBox, QGridLayout, QWidget, QLabel, \
+    QHBoxLayout, QPushButton
 from pydm.widgets import PyDMWaveformPlot, PyDMTimePlot
 import qtawesome as _qta
 
@@ -14,21 +15,24 @@ from .. import util as _util
 from ..widgets import SiriusMainWindow
 from ..widgets import SiriusSpinbox, PyDMStateButton, SiriusLedState, \
     SiriusLabel, SiriusLedAlert
+from .details import DeviceParamSettingWindow
+from .widgets import DeltaIQPhaseCorrButton
 
 
 class DEVICES(_enum.IntEnum):
     """."""
 
-    SHB = (0, 'Sub-harmonic Buncher', 'BUN1')
-    Kly1 = (1, 'Klystron 1', 'KLY1')
-    Kly2 = (2, 'Klystron 2', 'KLY2')
+    SHB = (0, 'Sub-harmonic Buncher', 'BUN1', 'SHB')
+    Kly1 = (1, 'Klystron 1', 'KLY1', 'K1')
+    Kly2 = (2, 'Klystron 2', 'KLY2', 'K2')
 
-    def __new__(cls, value, label, pvname):
+    def __new__(cls, value, label, pvname, nickname):
         """."""
         self = int.__new__(cls, value)
         self._value_ = value
         self.label = label
         self.pvname = pvname
+        self.nickname = nickname
         return self
 
 
@@ -100,6 +104,16 @@ class ControlBox(QWidget):
         lay1.addWidget(labb, row, 1, alignment=Qt.AlignCenter)
         lay1.addWidget(labc, row, 2, alignment=Qt.AlignCenter)
 
+        pb_param = QPushButton(_qta.icon('fa5s.ellipsis-h'), '', self)
+        pb_param.setToolTip('Open Parameter Setting Window')
+        pb_param.setObjectName('detail')
+        pb_param.setStyleSheet(
+            "#detail{min-width:25px; max-width:25px; icon-size:20px;}")
+        _util.connect_window(
+            pb_param, DeviceParamSettingWindow, parent=self,
+            device=self.dev, prefix=self.prefix)
+        lay1.addWidget(pb_param, row, 0, alignment=Qt.AlignLeft)
+
         props = (
             ('State', 'STREAM'), ('Trigger', 'EXTERNAL_TRIGGER_ENABLE'),
             ('Integral', 'INTEGRAL_ENABLE'), ('Feedback', 'FB_MODE'))
@@ -114,24 +128,34 @@ class ControlBox(QWidget):
             lay1.addWidget(sp1, row, 1)
             lay1.addWidget(rb1, row, 2)
 
-        props = [('Amp [%]', 'AMP'), ('Phase [°]', 'PHASE')]
+        props = [('Amp [%]', 'AMP'), ('Phase [°]', 'PHASE'),
+                 ('↳ ΔPhase (IQ Corr)', '')]
         if self.dev != DEVICES.SHB:
             props.append(('Refl. Pow. [MW]', 'REFL_POWER_LIMIT'))
         for name, prop in props:
             row += 1
             laba = QLabel(name, self)
-            sppv = basename + ':SET_' + prop
-            rbpv = basename + ':GET_' + prop
-            spa = SiriusSpinbox(self, init_channel=sppv)
-            spa.showStepExponent = False
-            spa.precisionFromPV = False
-            spa.precision = 2
-            rba = SiriusLabel(self, init_channel=rbpv)
-            rba.precisionFromPV = False
-            rba.precision = 2
-            lay1.addWidget(laba, row, 0)
-            lay1.addWidget(spa, row, 1)
-            lay1.addWidget(rba, row, 2)
+            if 'IQ Corr' in name:
+                dniqc = DeltaIQPhaseCorrButton(
+                    self, self.dev, prefix=self.prefix, delta=-90)
+                dpiqc = DeltaIQPhaseCorrButton(
+                    self, self.dev, prefix=self.prefix, delta=90)
+                lay1.addWidget(laba, row, 0)
+                lay1.addWidget(dniqc, row, 1, alignment=Qt.AlignCenter)
+                lay1.addWidget(dpiqc, row, 2, alignment=Qt.AlignCenter)
+            else:
+                sppv = basename + ':SET_' + prop
+                rbpv = basename + ':GET_' + prop
+                spa = SiriusSpinbox(self, init_channel=sppv)
+                spa.showStepExponent = False
+                spa.precisionFromPV = False
+                spa.precision = 2
+                rba = SiriusLabel(self, init_channel=rbpv)
+                rba.precisionFromPV = False
+                rba.precision = 2
+                lay1.addWidget(laba, row, 0)
+                lay1.addWidget(spa, row, 1)
+                lay1.addWidget(rba, row, 2)
 
         row += 1
         hlay = QHBoxLayout()
@@ -158,6 +182,9 @@ class ControlBox(QWidget):
         hlay.addWidget(QLabel('Trig. Stts'))
         hlay.addWidget(rb2)
         lay1.addLayout(hlay, row, 0, 1, 3)
+
+        self.setStyleSheet(
+            "DeltaIQPhaseCorrButton{max-width: 3em;}")
 
 
 class GraphIvsQ(QWidget):
