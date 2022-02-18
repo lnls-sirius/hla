@@ -15,9 +15,8 @@ from pydm.widgets import PyDMLabel
 
 from siriuspy.envars import VACA_PREFIX
 from siriuspy.clientarch.time import Time
-from ..widgets import SiriusAlarmFrame
+from ..widgets import SiriusAlarmFrame, SiriusTimePlot
 from ..util import get_appropriate_color
-from .custom_widgets import MyTimePlot
 
 
 class RadTotDoseMonitor(QWidget):
@@ -89,7 +88,8 @@ class RadTotDoseMonitor(QWidget):
             'QLabel{font-size: 52pt; font-weight: bold;}')
 
         timespan = 30*60  # [s]
-        self.timeplot = MyTimePlot(parent=self, background='w')
+        self.timeplot = SiriusTimePlot(
+            parent=self, background='w', show_tooltip=True)
         self.timeplot.timeSpan = timespan
         self.timeplot.bufferSize = 4*60*60*10
         self.timeplot.autoRangeY = True

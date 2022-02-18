@@ -1,10 +1,11 @@
 import numpy as _np
 import time
 
-from qtpy.QtCore import Qt, Slot
-from qtpy.QtWidgets import QMenu, QInputDialog
+from qtpy.QtCore import Qt, Slot, QTimer, Property
+from qtpy.QtGui import QPalette
+from qtpy.QtWidgets import QMenu, QInputDialog, QLabel, QApplication
 
-from pyqtgraph import ViewBox
+from pyqtgraph import ViewBox, mkBrush
 
 from pydm import utilities
 from pydm.widgets.timeplot import TimePlotCurveItem, PyDMTimePlot, \
@@ -45,12 +46,13 @@ class SiriusTimePlotItem(TimePlotCurveItem):
 
 
 class SiriusTimePlot(PyDMTimePlot):
-    """Reimplementation of PyDMTimePlot."""
+    """PyDMTimePlot with some extra features."""
 
-    def __init__(self, *args, **kws):
+    def __init__(self, *args, show_tooltip=False, **kws):
         super().__init__(*args, **kws)
         self._min_time = time.time()
         self._filled_with_arch_data = dict()
+        self._show_tooltip = show_tooltip
 
         self.vb2 = ViewBox()
         self.plotItem.scene().addItem(self.vb2)
@@ -62,6 +64,30 @@ class SiriusTimePlot(PyDMTimePlot):
         self.carch = None
 
         self.plotItem.showButtons()
+
+    @Property(bool)
+    def showToolTip(self):
+        """
+        Whether to show or not tooltip with curve values.
+
+        Returns
+        -------
+        use : bool
+            Tooltip enable status in use
+        """
+        return self._show_tooltip
+
+    @showToolTip.setter
+    def showToolTip(self, new_show):
+        """
+        Whether to show or not tooltip with curve values.
+
+        Parameters
+        ----------
+        new_show : bool
+            The new tooltip enable status to use
+        """
+        self._show_tooltip = new_show
 
     def addCurve(self, plot_item, axis='left', curve_color=None):
         """Reimplement to use right axis."""
@@ -234,3 +260,61 @@ class SiriusTimePlot(PyDMTimePlot):
                     info['process_bin_intvl'])
 
         self.timeSpan = new_time_span
+
+    def mouseMoveEvent(self, ev):
+        if not self._show_tooltip:
+            super().mouseMoveEvent(ev)
+            return
+
+        # create label tooltip, if needed
+        if not hasattr(self, 'label_tooltip'):
+            self.label_tooltip = QLabel(self, Qt.ToolTip)
+            self.timer_tooltip = QTimer(self)
+            self.timer_tooltip.timeout.connect(self.label_tooltip.hide)
+            self.timer_tooltip.setInterval(1000)
+
+        # get event pos
+        pos = ev.pos()
+
+        # find nearest curve point
+        nearest = (self._curves[0], _np.inf, None, None)
+        for idx, curve in enumerate(self._curves):
+            if not curve.isVisible():
+                continue
+            mappos = curve.mapFromScene(pos)
+            posx, posy = mappos.x(), mappos.y()
+            xData, yData = curve.curve.xData, curve.curve.yData
+            if not xData.size:
+                continue
+            diffx = xData - posx
+            idx = _np.argmin(_np.abs(diffx))
+            if diffx[idx] < 0.5:
+                valx, valy = xData[idx], yData[idx]
+                diffy = abs(valy - posy)
+                if diffy < nearest[1]:
+                    nearest = (curve, diffy, valx, valy)
+
+        # show tooltip
+        curve, diffy, valx, valy = nearest
+        ylimts = self.getViewBox().state['viewRange'][1]
+        ydelta = ylimts[1] - ylimts[0]
+        if diffy < 1e-2*ydelta:
+            txt = Time(timestamp=valx).get_iso8601()+'\n'
+            txt += f'{curve.name()}: {valy:.3f}'
+            font = QApplication.instance().font()
+            font.setPointSize(font.pointSize() - 10)
+            palette = QPalette()
+            palette.setColor(QPalette.WindowText, curve.color)
+            palette.setColor(QPalette.Window, Qt.darkGray)
+            self.label_tooltip.setText(txt)
+            self.label_tooltip.setFont(font)
+            self.label_tooltip.setPalette(palette)
+            self.label_tooltip.move(self.mapToGlobal(pos))
+            self.label_tooltip.show()
+            self.timer_tooltip.start()
+            curve.scatter.setData(
+                pos=[(valx, valy), ], symbol='o', size=15,
+                brush=mkBrush(curve.color))
+            curve.scatter.show()
+
+        super().mouseMoveEvent(ev)
