@@ -54,6 +54,7 @@ setup(
         'scripts/sirius-hla-as-ap-pvsconfigs.py',
         'scripts/sirius-hla-as-ap-pvsconfigs-save.py',
         'scripts/sirius-hla-as-ap-pvsconfigs-load.py',
+        'scripts/sirius-hla-as-ap-radmon.py',
         'scripts/sirius-hla-as-di-bpm.py',
         'scripts/sirius-hla-as-di-dcct.py',
         'scripts/sirius-hla-as-di-scrn.py',

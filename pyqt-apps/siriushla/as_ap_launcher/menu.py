@@ -261,6 +261,10 @@ def get_object(ismenubar=True, parent=None):
             vacuum.addAction(mks)
             vacuum.addAction(gamma)
 
+            radmon = LEVEL2A('RAD', menu)
+            radmon.setIcon(qta.icon('fa5s.radiation'))
+            self.connect_newprocess(radmon, 'sirius-hla-as-ap-radmon.py')
+
             termo = LEVEL2A('Temp', menu)
             termo.setIcon(qta.icon('fa5s.thermometer-half'))
             self.connect_newprocess(
@@ -285,6 +289,7 @@ def get_object(ismenubar=True, parent=None):
             self.add_object_to_level1(menu, pulsedps)
             self.add_object_to_level1(menu, termo)
             self.add_object_to_level1(menu, vacuum)
+            self.add_object_to_level1(menu, radmon)
             self.add_object_to_level1(menu, optics)
             return menu
 
