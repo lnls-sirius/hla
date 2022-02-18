@@ -2,10 +2,10 @@
 import numpy as _np
 
 from qtpy.QtCore import Qt, Slot
-from qtpy.QtGui import QColor, QBrush, QIntValidator
+from qtpy.QtGui import QColor, QBrush
 from qtpy.QtWidgets import QLabel, QPushButton, QGroupBox, QVBoxLayout, \
     QHBoxLayout, QGridLayout, QMenuBar, QSplitter, QTabWidget, QWidget, \
-    QSizePolicy as QSzPol, QCheckBox, QDialog, QLineEdit
+    QSizePolicy as QSzPol, QCheckBox
 import qtawesome as qta
 from pydm.widgets import PyDMLabel, PyDMPushButton, PyDMLineEdit, \
     PyDMWaveformPlot
@@ -386,6 +386,9 @@ class BucketListGraph(BaseWidget):
         self.graph.setMaxYRange(1.1)
         self.graph.plotItem.showButtons()
         self.graph.setAxisColor(QColor(0, 0, 0))
+        self.graph.setObjectName('graph')
+        self.graph.setStyleSheet('#graph{min-height: 5em;}')
+        self.graph.setSizePolicy(QSzPol.Expanding, QSzPol.Expanding)
 
         self._curves = dict()
         self.graph.addChannel(
@@ -417,38 +420,46 @@ class BucketListGraph(BaseWidget):
         self.show_mn.setChecked(True)
         self.show_mn.setStyleSheet('color: green;')
         self.show_mn.stateChanged.connect(self._curves['Mon'].setVisible)
+        wid_show = QWidget()
+        lay_show = QVBoxLayout(wid_show)
+        lay_show.setContentsMargins(0, 0, 0, 0)
+        lay_show.addWidget(self.show_sp)
+        lay_show.addWidget(self.show_rb)
+        lay_show.addWidget(self.show_mn)
 
-        lay = QGridLayout(self)
-        lay.addWidget(self.graph, 0, 0, 3, 1)
-        lay.addWidget(self.show_sp, 0, 1)
-        lay.addWidget(self.show_rb, 1, 1)
-        lay.addWidget(self.show_mn, 2, 1)
+        lay = QHBoxLayout(self)
+        lay.setContentsMargins(0, 0, 0, 0)
+        lay.addWidget(self.graph)
+        lay.addWidget(wid_show)
 
         self._ch_sp = SiriusConnectionSignal(
             self.get_pvname(propty='BucketList-SP'))
-        self._ch_sp.new_value_signal[_np.ndarray].connect(
-            self._update_curves)
+        self._ch_sp.new_value_signal[_np.ndarray].connect(self._update_curves)
+        self._ch_sp.new_value_signal[int].connect(self._update_curves)
         self._ch_rb = SiriusConnectionSignal(
             self.get_pvname(propty='BucketList-RB'))
-        self._ch_rb.new_value_signal[_np.ndarray].connect(
-            self._update_curves)
+        self._ch_rb.new_value_signal[_np.ndarray].connect(self._update_curves)
+        self._ch_rb.new_value_signal[int].connect(self._update_curves)
         self._ch_mn = SiriusConnectionSignal(
             self.get_pvname(propty='BucketList-Mon'))
-        self._ch_mn.new_value_signal[_np.ndarray].connect(
-            self._update_curves)
+        self._ch_mn.new_value_signal[_np.ndarray].connect(self._update_curves)
+        self._ch_mn.new_value_signal[int].connect(self._update_curves)
 
+    @Slot(int)
     @Slot(_np.ndarray)
     def _update_curves(self, new_array):
+        new_array = _np.asarray(new_array)
+
         for k in self._curves:
-            if k in self.sender().address:
+            if self.sender().address.endswith(k):
                 curve = self._curves[k]
                 break
 
-        org_bunch = _np.arange(1, 864)
+        org_bunch = _np.arange(1, 864) - 0.5
         org_curve = _np.zeros(864)
         org_curve[new_array-1] = 1
 
-        new_bunch = _np.linspace(1, 864, 10000)
+        new_bunch = _np.linspace(1, 864, 10000) - 0.5
         new_bunch_indices = _np.searchsorted(
             _np.nextafter(org_bunch, -_np.inf), new_bunch, side='left')
         new_bunch_indices = new_bunch_indices.clip(
@@ -564,34 +575,50 @@ class BucketList(BaseWidget):
             lay.addWidget(graph, 1, 0, 1, 4)
 
     def _setup_bucket_list_fill(self):
-        inj_prefix = 'AS-Glob:AP-InjCtrl:'
+        inj_prefix = _PVName('AS-Glob:AP-InjCtrl').substitute(
+            prefix=self.prefix)
 
         wid = SiriusDialog(self)
         wid.setFocus(True)
         wid.setFocusPolicy(Qt.StrongFocus)
         wid.setObjectName('ASApp')
 
-        self._sb_start = SiriusSpinbox(wid, inj_prefix+'BucketListStart-SP')
+        self._sb_start = SiriusSpinbox(
+            wid, inj_prefix.substitute(propty='BucketListStart-SP'))
         self._sb_start.setAlignment(Qt.AlignCenter)
         self._sb_start.setStyleSheet('max-width:5em;')
         self._sb_start.showStepExponent = False
-        self._lb_start = SiriusLabel(wid, inj_prefix+'BucketListStart-RB')
+        self._lb_start = SiriusLabel(
+            wid, inj_prefix.substitute(propty='BucketListStart-RB'))
 
-        self._sb_stop = SiriusSpinbox(wid, inj_prefix+'BucketListStop-SP')
+        self._sb_stop = SiriusSpinbox(
+            wid, inj_prefix.substitute(propty='BucketListStop-SP'))
         self._sb_stop.setAlignment(Qt.AlignCenter)
         self._sb_stop.setStyleSheet('max-width:5em;')
         self._sb_stop.showStepExponent = False
-        self._lb_stop = SiriusLabel(wid, inj_prefix+'BucketListStop-RB')
+        self._lb_stop = SiriusLabel(
+            wid, inj_prefix.substitute(propty='BucketListStop-RB'))
 
-        self._sb_step = SiriusSpinbox(wid, inj_prefix+'BucketListStep-SP')
+        self._sb_step = SiriusSpinbox(
+            wid, inj_prefix.substitute(propty='BucketListStep-SP'))
         self._sb_step.setAlignment(Qt.AlignCenter)
         self._sb_step.setStyleSheet('max-width:5em;')
         self._sb_step.showStepExponent = False
-        self._lb_step = SiriusLabel(wid, inj_prefix+'BucketListStep-RB')
+        self._lb_step = SiriusLabel(
+            wid, inj_prefix.substitute(propty='BucketListStep-RB'))
 
         self._pb_ok = QPushButton('Ok', wid)
-        self._pb_ok.setDefault(True)
+        self._pb_ok.clicked.connect(self._sb_start.send_value)
         self._pb_ok.clicked.connect(wid.accept)
+
+        self._pb_cancel = QPushButton('Cancel', wid)
+        self._pb_cancel.setDefault(True)
+        self._pb_cancel.clicked.connect(wid.reject)
+
+        lay_pbrow = QHBoxLayout()
+        lay_pbrow.setContentsMargins(0, 0, 0, 0)
+        lay_pbrow.addWidget(self._pb_cancel)
+        lay_pbrow.addWidget(self._pb_ok)
 
         lay = QGridLayout(wid)
         lay.addWidget(QLabel('Start:', wid), 0, 0)
@@ -603,7 +630,7 @@ class BucketList(BaseWidget):
         lay.addWidget(QLabel('Step:', wid), 2, 0)
         lay.addWidget(self._sb_step, 2, 1)
         lay.addWidget(self._lb_step, 2, 2)
-        lay.addWidget(self._pb_ok, 3, 1)
+        lay.addLayout(lay_pbrow, 3, 0, 1, 3)
 
         return wid
 
