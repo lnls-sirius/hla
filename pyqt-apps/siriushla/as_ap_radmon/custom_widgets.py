@@ -38,18 +38,19 @@ class MyTimePlot(SiriusTimePlot):
             xData, yData = curve.curve.xData, curve.curve.yData
             if not xData.size:
                 continue
-            idx = _np.argmin(_np.abs(xData-posx))
-            if idx.size:
+            diffx = xData - posx
+            idx = _np.argmin(_np.abs(diffx))
+            if diffx[idx] < 0.5:
                 valx, valy = xData[idx], yData[idx]
-                diff = abs(valy - posy)
-                if diff < nearest[1]:
-                    nearest = (curve, diff, valx, valy)
+                diffy = abs(valy - posy)
+                if diffy < nearest[1]:
+                    nearest = (curve, diffy, valx, valy)
 
         # show tooltip
-        curve, diff, valx, valy = nearest
+        curve, diffy, valx, valy = nearest
         ylimts = self.getViewBox().state['viewRange'][1]
         ydelta = ylimts[1] - ylimts[0]
-        if diff < 2e-2*ydelta:
+        if diffy < 1e-2*ydelta:
             txt = _Time(timestamp=valx).get_iso8601()+'\n'
             txt += f'{curve.name()}: {valy:.3f}'
             font = SiriusApplication.instance().font()
