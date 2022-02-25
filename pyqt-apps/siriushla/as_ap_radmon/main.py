@@ -108,6 +108,8 @@ class RadTotDoseMonitor(QWidget):
         self.timeplot.setObjectName('timeplot')
         self.timeplot.setStyleSheet(
             '#timeplot{min-width:12em; min-height: 10em;}')
+        self.timeplot.bufferReset.connect(self._fill_refline)
+        self.timeplot.timeSpanChanged.connect(self._fill_refline)
         t_end = Time.now()
         t_init = t_end - timespan
 
@@ -198,11 +200,7 @@ class RadTotDoseMonitor(QWidget):
         self.timeplot.addYChannel(
             'Reference', color='black', lineWidth=6, lineStyle=Qt.DashLine)
         self.refline = self.timeplot.curveAtIndex(-1)
-        basecurve = self.timeplot.curveAtIndex(0)
-        timebuffer = basecurve.data_buffer[0]
-        valuebuffer = [RadTotDoseMonitor.REF_TOT_DOSE]*timebuffer.size
-        self.timeplot.fill_curve_buffer(
-            self.refline, timebuffer, valuebuffer)
+        self._fill_refline()
 
         lay = QGridLayout(self)
         lay.setSpacing(20)
@@ -246,6 +244,18 @@ class RadTotDoseMonitor(QWidget):
                     'font-size:'+str(fontsize - 18)+'pt;}')
 
             self.ensurePolished()
+
+    def _fill_refline(self):
+        basecurve = self.timeplot.curveAtIndex(0)
+        timebuffer = basecurve.data_buffer[0]
+        firstvalid = (timebuffer != 0).argmax()
+        if timebuffer[firstvalid] == 0:
+            timebuffer = np.array([Time.now().timestamp(), ])
+        else:
+            timebuffer = timebuffer[firstvalid:]
+        valuebuffer = [RadTotDoseMonitor.REF_TOT_DOSE]*timebuffer.size
+        self.timeplot.fill_curve_buffer(
+            self.refline, timebuffer, valuebuffer)
 
     def _update_graph_ref(self):
         self.refline.receiveNewValue(RadTotDoseMonitor.REF_TOT_DOSE)
