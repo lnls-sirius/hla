@@ -18,7 +18,9 @@ class SiriusTimePlotItem(TimePlotCurveItem):
     """Reimplement to do not receive inf values."""
 
     def setBufferSize(self, value, initialize_buffer=False):
-        """Reimplement."""
+        """
+        Reimplement setBufferSize to fill buffer with points accumulated.
+        """
         if self._bufferSize == int(value):
             return
         self._bufferSize = max(int(value), 2)
@@ -41,6 +43,9 @@ class SiriusTimePlotItem(TimePlotCurveItem):
     @Slot(float)
     @Slot(int)
     def receiveNewValue(self, new_value):
+        """
+        Rederive receiveNewValue to aviod infinit values.
+        """
         if not _np.isinf(new_value):
             super().receiveNewValue(new_value)
 
@@ -221,7 +226,7 @@ class SiriusTimePlot(PyDMTimePlot):
         curve.latest_value = datay[-1]
 
     def mouseReleaseEvent(self, ev):
-        """Reimplement context menu."""
+        """Show context menu at mouse release."""
         if ev.button() == Qt.RightButton:
             menu = QMenu(self)
             pi = self.plotItem
@@ -266,6 +271,7 @@ class SiriusTimePlot(PyDMTimePlot):
         self.timeSpan = new_time_span
 
     def mouseMoveEvent(self, ev):
+        """Show tooltip at mouse move."""
         if not self._show_tooltip:
             super().mouseMoveEvent(ev)
             return
