@@ -17,6 +17,11 @@ from siriuspy.clientarch import ClientArchiver, Time
 class SiriusTimePlotItem(TimePlotCurveItem):
     """Reimplement to do not receive inf values."""
 
+    def __init__(self, parent, *args, **kwargs):
+        """Init and create parent attribute."""
+        super().__init__(*args, **kwargs)
+        self.parent = parent
+
     def setBufferSize(self, value, initialize_buffer=False):
         """
         Reimplement setBufferSize to fill buffer with points accumulated.
@@ -49,6 +54,37 @@ class SiriusTimePlotItem(TimePlotCurveItem):
         if not _np.isinf(new_value):
             super().receiveNewValue(new_value)
 
+    @Slot()
+    def redrawCurve(self):
+        """
+        Rederive redrawCurve to use data only refered to timespan.
+        """
+        try:
+            now = Time.now().timestamp()
+            xmin = now - self.parent.timeSpan
+            idcs = _np.where(self.data_buffer[0] >= xmin)[0]
+            x = self.data_buffer[0, idcs].astype(_np.float)
+            y = self.data_buffer[1, idcs].astype(_np.float)
+
+            if not self._plot_by_timestamps:
+                x -= now
+
+            self.setData(y=y, x=x)
+        except (ZeroDivisionError, OverflowError):
+            # Solve an issue with pyqtgraph and initial downsampling
+            pass
+
+    def initialize_buffer(self):
+        """
+        Rederive initialize_buffer to avoid filling the entire buffer
+        with plot-eligible data.
+        """
+        self.points_accumulated = 0
+
+        # If you don't specify dtype=float, you don't have enough
+        # resolution for the timestamp data.
+        self.data_buffer = _np.zeros((2, self._bufferSize),
+                                     order='f', dtype=float)
 
 class SiriusTimePlot(PyDMTimePlot):
     """PyDMTimePlot with some extra features."""
@@ -58,7 +94,6 @@ class SiriusTimePlot(PyDMTimePlot):
 
     def __init__(self, *args, show_tooltip=False, **kws):
         super().__init__(*args, **kws)
-        self._min_time = time.time()
         self._filled_with_arch_data = dict()
         self._show_tooltip = show_tooltip
 
@@ -133,7 +168,7 @@ class SiriusTimePlot(PyDMTimePlot):
 
         # Add curve
         new_curve = SiriusTimePlotItem(
-            y_channel,
+            self, y_channel,
             plot_by_timestamps=self._plot_by_timestamps,
             name=name, color=color, **plot_opts)
         new_curve.setUpdatesAsynchronously(self.updatesAsynchronously)
@@ -158,9 +193,12 @@ class SiriusTimePlot(PyDMTimePlot):
             else:
                 maxrange = time.time()
 
-            mini = self._min_time
+            mini = Time.now().timestamp()
             for curve in self._curves:
-                mini = min(mini, curve.data_buffer[0, 0])
+                firstvalid = (curve.data_buffer[0] != 0).argmax()
+                if curve.data_buffer[0, firstvalid] == 0:
+                    continue
+                mini = min(mini, curve.data_buffer[0, firstvalid])
             minrange = max(maxrange - self._time_span, mini)
 
             self.plotItem.setXRange(
