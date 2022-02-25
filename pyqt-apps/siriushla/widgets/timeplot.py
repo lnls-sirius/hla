@@ -1,7 +1,7 @@
 import numpy as _np
 import time
 
-from qtpy.QtCore import Qt, Slot, QTimer, Property
+from qtpy.QtCore import Qt, Signal, Slot, QTimer, Property
 from qtpy.QtGui import QPalette
 from qtpy.QtWidgets import QMenu, QInputDialog, QLabel, QApplication
 
@@ -47,6 +47,9 @@ class SiriusTimePlotItem(TimePlotCurveItem):
 
 class SiriusTimePlot(PyDMTimePlot):
     """PyDMTimePlot with some extra features."""
+
+    bufferReset = Signal()
+    timeSpanChanged = Signal()
 
     def __init__(self, *args, show_tooltip=False, **kws):
         super().__init__(*args, **kws)
@@ -241,7 +244,7 @@ class SiriusTimePlot(PyDMTimePlot):
     def _resetBuffers(self):
         for curve in self._curves:
             curve.initialize_buffer()
-            self._min_time = time.time()
+        self.bufferReset.emit()
 
     def _changeTimeSpan(self):
         new_time_span, ok = QInputDialog.getInt(
@@ -258,6 +261,7 @@ class SiriusTimePlot(PyDMTimePlot):
                     t_init.get_iso8601(), t_end.get_iso8601(),
                     info['factor'], info['process_type'],
                     info['process_bin_intvl'])
+            self.timeSpanChanged.emit()
 
         self.timeSpan = new_time_span
 
