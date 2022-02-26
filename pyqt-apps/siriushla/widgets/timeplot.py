@@ -3,7 +3,7 @@ import time
 
 from qtpy.QtCore import Qt, Signal, Slot, QTimer, Property
 from qtpy.QtGui import QPalette
-from qtpy.QtWidgets import QMenu, QInputDialog, QLabel, QApplication
+from qtpy.QtWidgets import QInputDialog, QLabel, QApplication, QAction
 
 from pyqtgraph import ViewBox, mkBrush
 
@@ -106,7 +106,18 @@ class SiriusTimePlot(PyDMTimePlot):
 
         self.carch = None
 
+        # show auto adjust button
         self.plotItem.showButtons()
+
+        # connect sigMouseMoved
+        self.plotItem.scene().sigMouseMoved.connect(self._handle_mouse_moved)
+
+        # add new actions to menu
+        rst_act = QAction("Clear buffers")
+        rst_act.triggered.connect(self._resetBuffers)
+        tsp_act = QAction("Change time span")
+        tsp_act.triggered.connect(self._changeTimeSpan)
+        self.plotItem.scene().contextMenu.extend([rst_act, tsp_act])
 
     @Property(bool)
     def showToolTip(self):
@@ -263,27 +274,6 @@ class SiriusTimePlot(PyDMTimePlot):
         curve._max_y_value = max(datay)
         curve.latest_value = datay[-1]
 
-    def mouseReleaseEvent(self, ev):
-        """Show context menu at mouse release."""
-        if ev.button() == Qt.RightButton:
-            menu = QMenu(self)
-            pi = self.plotItem
-            vb = pi.getViewBox()
-            sc = vb.scene()
-            for act in vb.menu.actions():
-                menu.addAction(act)
-            menu.addSeparator()
-            menu.addMenu(pi.ctrlMenu)
-            menu.addAction(sc.contextMenu[0])
-            menu.addSeparator()
-            rst_act = menu.addAction("Clear buffers")
-            rst_act.triggered.connect(self._resetBuffers)
-            tsp_act = menu.addAction("Change time span")
-            tsp_act.triggered.connect(self._changeTimeSpan)
-            menu.exec_(self.mapToGlobal(ev.pos()))
-        else:
-            super().mouseReleaseEvent(ev)
-
     def _resetBuffers(self):
         for curve in self._curves:
             curve.initialize_buffer()
@@ -308,10 +298,9 @@ class SiriusTimePlot(PyDMTimePlot):
 
         self.timeSpan = new_time_span
 
-    def mouseMoveEvent(self, ev):
+    def _handle_mouse_moved(self, pos):
         """Show tooltip at mouse move."""
         if not self._show_tooltip:
-            super().mouseMoveEvent(ev)
             return
 
         # create label tooltip, if needed
@@ -320,9 +309,6 @@ class SiriusTimePlot(PyDMTimePlot):
             self.timer_tooltip = QTimer(self)
             self.timer_tooltip.timeout.connect(self.label_tooltip.hide)
             self.timer_tooltip.setInterval(1000)
-
-        # get event pos
-        pos = ev.pos()
 
         # find nearest curve point
         nearest = (self._curves[0], _np.inf, None, None)
@@ -357,12 +343,10 @@ class SiriusTimePlot(PyDMTimePlot):
             self.label_tooltip.setText(txt)
             self.label_tooltip.setFont(font)
             self.label_tooltip.setPalette(palette)
-            self.label_tooltip.move(self.mapToGlobal(pos))
+            self.label_tooltip.move(self.mapToGlobal(pos.toPoint()))
             self.label_tooltip.show()
             self.timer_tooltip.start()
             curve.scatter.setData(
                 pos=[(valx, valy), ], symbol='o', size=15,
                 brush=mkBrush(curve.color))
             curve.scatter.show()
-
-        super().mouseMoveEvent(ev)
