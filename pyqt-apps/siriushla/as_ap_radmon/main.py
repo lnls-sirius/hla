@@ -218,7 +218,7 @@ class RadTotDoseMonitor(QWidget):
 
         self._timer = QTimer()
         self._timer.timeout.connect(self._update_graph_ref)
-        self._timer.setInterval(5000)
+        self._timer.setInterval(2000)
         self._timer.start()
 
     def changeEvent(self, event):
