@@ -6,13 +6,11 @@ from qtpy.QtGui import QColor
 from qtpy.QtWidgets import QLabel, QGridLayout, QGroupBox, QFormLayout, \
     QWidget, QVBoxLayout, QHBoxLayout, QPushButton
 
-from pydm.widgets import PyDMTimePlot
-
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriuspy.namesys import SiriusPVName as _PVName
 
 from siriushla.widgets import SiriusSpinbox, PyDMStateButton, SiriusLabel, \
-    SiriusLedState, SiriusProcessImage, QSpinBoxPlus
+    SiriusLedState, SiriusProcessImage, QSpinBoxPlus, SiriusTimePlot
 from siriushla.as_ti_control import HLTriggerSimple
 
 
@@ -28,7 +26,7 @@ class EnergyMeasure(QWidget):
 
     def _setupUi(self):
         pref = _PVName('LI-Glob:AP-MeasEnergy').substitute(prefix=self.prefix)
-        self.plt_energy = PyDMTimePlot(
+        self.plt_energy = SiriusTimePlot(
             self, init_y_channels=[pref.substitute(propty='Energy-Mon')],
             background=QColor('white'))
         self.plt_energy.setLabel('left', text='Energy [MeV]')
@@ -42,7 +40,7 @@ class EnergyMeasure(QWidget):
         c.data_changed.connect(self._update_energy_stats)
         self.plt_energy.setTimeSpan(100)
 
-        self.plt_spread = PyDMTimePlot(
+        self.plt_spread = SiriusTimePlot(
             self, init_y_channels=[pref.substitute(propty='Spread-Mon')],
             background=QColor('white'))
         self.plt_spread.setLabel('left', text='Spread [%]')
