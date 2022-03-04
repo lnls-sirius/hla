@@ -49,7 +49,7 @@ class SiriusTimePlotItem(TimePlotCurveItem):
     @Slot(int)
     def receiveNewValue(self, new_value):
         """
-        Rederive receiveNewValue to aviod infinit values.
+        Rederive receiveNewValue to avoid infinit values.
         """
         if not _np.isinf(new_value):
             super().receiveNewValue(new_value)
@@ -108,6 +108,9 @@ class SiriusTimePlot(PyDMTimePlot):
 
         # show auto adjust button
         self.plotItem.showButtons()
+
+        # use pan mouse mode (3-button)
+        self.plotItem.getViewBox().setMouseMode(ViewBox.PanMode)
 
         # connect sigMouseMoved
         self.plotItem.scene().sigMouseMoved.connect(self._handle_mouse_moved)
@@ -294,9 +297,9 @@ class SiriusTimePlot(PyDMTimePlot):
                     t_init.get_iso8601(), t_end.get_iso8601(),
                     info['factor'], info['process_type'],
                     info['process_bin_intvl'])
-            self.timeSpanChanged.emit()
 
         self.timeSpan = new_time_span
+        self.timeSpanChanged.emit()
 
     def _handle_mouse_moved(self, pos):
         """Show tooltip at mouse move."""
