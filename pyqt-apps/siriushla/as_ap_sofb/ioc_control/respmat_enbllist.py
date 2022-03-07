@@ -1,126 +1,266 @@
 """Create the Selection Matrices for BPMs and Correctors."""
 
 from functools import partial as _part
+
 import numpy as np
-from qtpy.QtWidgets import QGridLayout, QHBoxLayout, QVBoxLayout, QLabel, \
+
+from qtpy.QtWidgets import QGridLayout, QHBoxLayout, QLabel, \
     QSizePolicy, QScrollArea, QWidget, QPushButton, QDialog, QTabWidget
-from qtpy.QtCore import Qt, QRect, QPoint
+from qtpy.QtCore import Qt, QRect, QPoint, Signal
 from qtpy.QtGui import QBrush, QColor, QPainter
-from siriushla.widgets import SiriusLedAlert, SiriusConnectionSignal
+
 from pydm.widgets.base import PyDMWidget
-from siriushla.as_ap_sofb.ioc_control.base import BaseWidget
+
+from siriushla.widgets import SiriusLedAlert, QLed, \
+    SiriusConnectionSignal as _ConnSignal
+from siriushla.as_ap_sofb.ioc_control.base import BaseObject, BaseWidget
 
 
-class Led(SiriusLedAlert):
+class SelectionWidget(QWidget):
+    """Widget to perform component selection.
 
-    def mouseReleaseEvent(self, _):
-        self.toggle()
+    Parameters
+    ----------
+    title: str, optional
+        Selection widget title.
+    has_bothplanes: bool, optional
+        Whether to show button to send sendBothPlanes signal. Default: False.
+    parent : QWidget, optional
+        The parent widget for the SelectionWidget.
 
-    def toggle(self):
-        self.setSelected(not self.isSelected())
+    Signals
+    -------
+    applyChangesClicked:
+        emitted when "Apply Changes" button is clicked
+    applyBothPlanesClicked:
+        emitted when "Apply Both Planes" button is clicked
+    """
 
+    applyChangesClicked = Signal()
+    applyBothPlanesClicked = Signal()
 
-class _PyDMLedList(PyDMWidget, QWidget):
+    def __init__(self, parent=None, title='', has_bothplanes=False):
+        """Init."""
+        super().__init__(parent)
 
-    def __init__(
-            self, parent=None, init_channel=None, chan_otpl=None, size=0,
-            side_headers=[], top_headers=[]):
-        self.side_headers_wids = side_headers
-        self.top_headers_wids = top_headers
-        QWidget.__init__(self, parent=parent)
-        PyDMWidget.__init__(self, init_channel=init_channel)
-        self.pv_sp = SiriusConnectionSignal(init_channel.replace('-RB', '-SP'))
-        self.pv_otpl = SiriusConnectionSignal(chan_otpl.replace('-RB', '-SP'))
-        self.setVisible(False)
-        self.btn_send = QPushButton('Apply Changes')
-        self.btn_send.clicked.connect(self.send_value)
-        self.btn_send_otpl = QPushButton('Apply Both Planes')
-        self.btn_send_otpl.clicked.connect(_part(self.send_value, other=True))
-        self.btn_enbl_all = QPushButton('Enable All')
-        self.btn_enbl_all.clicked.connect(_part(self.toogle_all, True))
-        self.btn_dsbl_all = QPushButton('Disable All')
-        self.btn_dsbl_all.clicked.connect(_part(self.toogle_all, False))
+        self.title = title
+        self.has_bothplanes = has_bothplanes
+
+        self.begin = QPoint()
+        self.end = QPoint()
+
+        self._top_headers, self._side_headers = self.get_headers()
+        self._widgets = self.get_widgets()
+        self._positions = self.get_positions()
+        self._top_header_wids, self._side_header_wids = list(), list()
+        self._setupUi()
+
+    def _setupUi(self):
+        lay = QGridLayout(self)
+
+        lab = QLabel(self.title, self, alignment=Qt.AlignCenter)
+        lab.setStyleSheet("font-weight: bold;")
+        lay.addWidget(lab, 0, 0, 1, 1)
+
+        # scroll area + widgets matrix
+        scr_ar = QScrollArea(self)
+        scr_ar_wid = QWidget()
+        scr_ar_wid.setObjectName('scrollarea')
+        scr_ar_wid.setStyleSheet(
+            '#scrollarea {background-color: transparent;}')
+        scr_ar.setWidgetResizable(True)
+        scr_ar.setWidget(scr_ar_wid)
+        lay.addWidget(scr_ar, 1, 0, 1, 1)
+
+        glay = QGridLayout(scr_ar_wid)
+        glay.setContentsMargins(0, 0, 0, 0)
+        for i, head in enumerate(self._top_headers):
+            head_wid = QPushButton(head, self)
+            head_wid.setStyleSheet('min-width:2em;')
+            head_wid.clicked.connect(
+                _part(self.selectWidgetsAt, i, isrow=False))
+            self._top_header_wids.append(head_wid)
+            glay.addWidget(head_wid, 0, i+1)
+        for i, head in enumerate(self._side_headers):
+            head_wid = QPushButton(head, self)
+            head_wid.setStyleSheet('min-width:2em;')
+            head_wid.clicked.connect(
+                _part(self.selectWidgetsAt, i, isrow=True))
+            self._side_header_wids.append(head_wid)
+            glay.addWidget(head_wid, i+1, 0)
+        for i, wid in enumerate(self._widgets):
+            pos = self._positions[i]
+            glay.addWidget(wid, pos[0]+1, pos[1]+1)
+
+        # action buttons
         self.btn_unsel_all = QPushButton('Undo Selection')
-        self.btn_unsel_all.clicked.connect(self.undo_selection)
+        self.btn_unsel_all.clicked.connect(self.undoItemsSelection)
+        self.btn_dsbl_all = QPushButton('Disable All')
+        self.btn_dsbl_all.clicked.connect(_part(self.toogleAllItems, False))
+        self.btn_enbl_all = QPushButton('Enable All')
+        self.btn_enbl_all.clicked.connect(_part(self.toogleAllItems, True))
+        self.btn_send = QPushButton('Apply Changes')
+        self.btn_send.clicked.connect(self.applyChangesClicked.emit)
+        if self.has_bothplanes:
+            self.btn_send_otpl = QPushButton('Apply Both Planes')
+            self.btn_send_otpl.clicked.connect(
+                self.applyBothPlanesClicked.emit)
 
-        self.led_list = []
-        sz_polc = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-        for _ in range(size):
-            led = Led()
-            led.setSizePolicy(sz_polc)
-            self.led_list.append(led)
+        hlay = QHBoxLayout()
+        hlay.addStretch()
+        hlay.addWidget(self.btn_unsel_all)
+        hlay.addStretch()
+        hlay.addWidget(self.btn_dsbl_all)
+        hlay.addStretch()
+        hlay.addWidget(self.btn_enbl_all)
+        hlay.addStretch()
+        hlay.addWidget(self.btn_send)
+        hlay.addStretch()
+        if self.has_bothplanes:
+            hlay.addWidget(self.btn_send_otpl)
+        lay.addLayout(hlay, 2, 0, 1, 1)
 
-    def undo_selection(self, _):
-        for led in self.led_list:
+        lay.setSizeConstraint(lay.SetMinimumSize)
+
+    def paintEvent(self, _):
+        """Paint event to draw selection rectangle."""
+        if self.begin == self.end:
+            return
+        qp = QPainter(self)
+        br = QBrush(QColor(100, 10, 10, 40))
+        qp.setBrush(br)
+        qp.drawRect(QRect(self.begin, self.end))
+
+    def mousePressEvent(self, event):
+        """Mouse press event."""
+        self.begin = event.pos()
+        self.end = event.pos()
+        self.update()
+
+    def mouseMoveEvent(self, event):
+        """Mouse move event."""
+        self.end = event.pos()
+        self.update()
+
+    def mouseReleaseEvent(self, event):
+        """Mouse release event."""
+        self.end = event.pos()
+        self.selectItems()
+        self.begin = event.pos()
+        self.update()
+
+    def selectItems(self):
+        """Select items."""
+        for i, wid in enumerate(self._widgets):
+            if not wid.isVisible():
+                continue
+            led = wid.findChild(QLed)
+            if not led:
+                continue
+            pos = led.mapTo(self, led.pos())
+            sz = led.size()
+            x1 = pos.x()+sz.width()/2 > self.begin.x()
+            x2 = pos.x()+sz.width()/2 > self.end.x()
+            y1 = pos.y()+sz.height()/2 > self.begin.y()
+            y2 = pos.y()+sz.height()/2 > self.end.y()
+            if x1 != x2 and y1 != y2:
+                led.toggleSelected()
+
+    def undoItemsSelection(self):
+        for wid in self._widgets:
+            led = wid.findChild(QLed)
+            if not led:
+                continue
             led.setSelected(False)
 
-    def toogle_all(self, value):
-        for led in self.led_list:
+    def toogleAllItems(self, value):
+        for wid in self._widgets:
+            led = wid.findChild(QLed)
+            if not led:
+                continue
             if not (bool(led.state) != value):
                 led.setSelected(True)
 
-    def send_value(self, other=False):
-        if self.value is None:
-            return
-        value = self.value.copy()
-        for i in range(value.size):
-            led = self.led_list[i]
-            if led.isSelected():
-                value[i] = not value[i]
-                led.setSelected(False)
-        self.pv_sp.send_value_signal[np.ndarray].emit(value)
-        if other:
-            self.pv_otpl.send_value_signal[np.ndarray].emit(value)
+    def selectWidgetsAt(self, idx, isrow=False):
+        for i, wid in enumerate(self._widgets):
+            row, col = self._positions[i]
+            led = wid.findChild(QLed)
+            if not led:
+                continue
+            if isrow and row == idx:
+                led.toggleSelected()
+            if not isrow and col == idx:
+                led.toggleSelected()
 
-    def value_changed(self, new_val):
-        super(_PyDMLedList, self).value_changed(new_val)
-        for i, led in enumerate(self.led_list):
-            if i < self.value.size:
-                led.setVisible(True)
-                led.state = not self.value[i]
-            else:
-                led.setVisible(False)
-        rsize = self.value.size / len(self.led_list)
-        ini = int(len(self.side_headers_wids) * rsize)
-        for i, head in enumerate(self.side_headers_wids):
-            head.setVisible(i < ini)
-        self.adjustSize()
-        parent = self.parent()
-        while parent is not None:
-            parent.adjustSize()
-            if isinstance(parent, QDialog):
-                break
-            parent = parent.parent()
+    # --- properties ---
 
-    def connection_changed(self, new_val):
-        super(_PyDMLedList, self).connection_changed(new_val)
-        for led in self.led_list:
-            led.setEnabled(new_val)
+    @property
+    def headers(self):
+        """Return top and side header text lists, respectively."""
+        return self._top_headers, self._side_headers
+
+    @property
+    def header_widgets(self):
+        """Return top and side header widget lists, respectively."""
+        return self._top_header_wids, self._side_header_wids
+
+    @property
+    def widgets(self):
+        """Return widget list."""
+        return self._widgets
+
+    @property
+    def positions(self):
+        """Return widget position list."""
+        return self._positions
+
+    # --- specific methods, should be implemented in derivation ---
+
+    def get_headers(self):
+        """
+        Should be implemented in class derivation.
+
+        Return
+        ------
+        top_headers: tuple or list
+            A list of strings for top headers of the selection matrix widget.
+        side_headers: tuple or list
+            A list of strings for side headers of the selection matrix widget.
+        """
+        raise NotImplementedError
+
+    def get_widgets(self):
+        """
+        Should be implemented in class derivation.
+
+        Return
+        ------
+        widgets: tuple or list
+            A tuple or list of widgets to be put in matrix.
+        """
+        raise NotImplementedError
+
+    def get_positions(self):
+        """
+        Should be implemented in class derivation.
+
+        Return
+        ------
+        positions: tuple or list
+            A tuple or list of layout positions for each widget
+            returned by get_widgets.
+        """
+        raise NotImplementedError
 
 
-class SelectionMatrix(BaseWidget):
-
-    def __init__(self, parent, device, prefix='', acc='SI'):
-        super().__init__(parent, device, prefix=prefix, acc=acc)
-        tab = QTabWidget(self)
-        hbl = QHBoxLayout(self)
-        hbl.addWidget(tab)
-        hbl.setContentsMargins(0, 0, 0, 0)
-
-        for dev in ('BPMX', 'BPMY', 'CH', 'CV'):
-            tab.addTab(
-                SingleSelMatrix(
-                    tab, dev, self.device,
-                    prefix=self.prefix, acc=self.acc), dev)
-
-
-class SingleSelMatrix(BaseWidget):
+class SingleSelMatrix(BaseObject, SelectionWidget, PyDMWidget):
     """Create the Selection Matrices for BPMs and Correctors."""
 
     def __init__(self, parent, dev, device, prefix='', acc='SI'):
-        """Initialize the matrix of the specified dev."""
-        super().__init__(parent, device, prefix=prefix, acc=acc)
-        self.setObjectName(acc.upper()+'App')
+        """Initialize the matrix data of the specified dev."""
+
+        # initialize BaseObject
+        BaseObject.__init__(self, device, prefix=prefix, acc=acc)
         self.dev = dev
         max_rz = self._csorb.MAX_RINGSZ
         bpms = np.array(self._csorb.bpm_pos)
@@ -140,10 +280,27 @@ class SingleSelMatrix(BaseWidget):
             'BPMY': (bpm_name, bpm_nknm),
             'CH': (self._csorb.ch_names, self._csorb.ch_nicknames),
             'CV': (self._csorb.cv_names, self._csorb.cv_nicknames)}
-        self._get_headers()
-        self._setup_ui()
 
-    def _get_headers(self):
+        # initialize SelectionWidget
+        SelectionWidget.__init__(
+            self, parent=parent, title=dev + "List",
+            has_bothplanes=dev.lower().startswith('bpm'))
+
+        # initialize PyDMWidget
+        init_channel = self.devpref.substitute(propty=self.dev+'EnblList-RB')
+        PyDMWidget.__init__(self, init_channel=init_channel)
+
+        self.pv_sp = _ConnSignal(init_channel.replace('-RB', '-SP'))
+        self.pv_otpl = _ConnSignal(self.devpref.substitute(
+            propty=self.devotpl[self.dev]+'EnblList-SP'))
+
+        # connect signals and slots
+        self.applyChangesClicked.connect(self.send_value)
+        self.applyBothPlanesClicked.connect(_part(self.send_value, other=True))
+
+    # --- SelectionWidget specific methods ---
+
+    def get_headers(self):
         _, nicks = self.devnames[self.dev]
         if self.acc == 'BO':
             top_headers = ['{0:02d}'.format(i) for i in range(1, 11)]
@@ -161,178 +318,111 @@ class SingleSelMatrix(BaseWidget):
         else:
             top_headers = nicks
             side_headers = [' ']
-        self.top_headers = top_headers
-        self.side_headers = side_headers
         if self.dev.lower().startswith('bpm'):
-            self.side_headers *= self._csorb.MAX_RINGSZ
+            side_headers *= self._csorb.MAX_RINGSZ
+        return top_headers, side_headers
 
-        side_headers_wids = []
-        top_headers_wids = []
-        for i, head in enumerate(self.top_headers):
-            head_wid = QPushButton(head)
-            head_wid.setStyleSheet('min-width:2em;')
-            head_wid.clicked.connect(_part(self._sel_wids_at, i, isrow=False))
-            top_headers_wids.append(head_wid)
-        for i, head in enumerate(self.side_headers):
-            head_wid = QPushButton(head)
-            head_wid.setStyleSheet('min-width:2em;')
-            head_wid.clicked.connect(_part(self._sel_wids_at, i, isrow=True))
-            side_headers_wids.append(head_wid)
-        self.top_headers_wids = top_headers_wids
-        self.side_headers_wids = side_headers_wids
-
-    def _sel_wids_at(self, idx, isrow=False):
-        for i, led in enumerate(self.pvs.led_list):
-            row, col = self._get_position(i)
-            if isrow and row == idx:
-                led.toggle()
-            if not isrow and col == idx:
-                led.toggle()
-
-    def _setup_ui(self):
-        name = self.dev + "List"
-        grid_l = QGridLayout(self)
-
-        lab = QLabel(name, self, alignment=Qt.AlignCenter)
-        lab.setStyleSheet("font-weight: bold;")
-        grid_l.addWidget(lab, 0, 0, 1, 1)
-
-        scr_ar = QScrollArea(self)
-        grid_l.addWidget(scr_ar, 1, 0, 1, 1)
-        scr_ar.setWidgetResizable(True)
-        scr_ar_wid = QWidget()
-        scr_ar_wid.setObjectName('scrollarea')
-        scr_ar_wid.setStyleSheet(
-            '#scrollarea {background-color: transparent;}')
-        scr_ar.setWidget(scr_ar_wid)
-        vbl = QVBoxLayout(scr_ar_wid)
-        vbl.setContentsMargins(0, 0, 0, 0)
-
-        self.pvs = _PyDMLedList(
-            parent=scr_ar_wid,
-            init_channel=self.devpref.substitute(
-                propty=self.dev+'EnblList-RB'),
-            chan_otpl=self.devpref.substitute(
-                propty=self.devotpl[self.dev]+'EnblList-RB'),
-            size=len(self.devnames[self.dev][0]),
-            side_headers=self.side_headers_wids,
-            top_headers=self.top_headers_wids)
-        wid = self._create_matrix(scr_ar_wid)
-        vbl.addWidget(wid)
-
-        wid = QWidget(self)
-        wid.setObjectName('scrollarea')
-        grid_l.addWidget(wid, 2, 0, 1, 1)
-        hbl = QHBoxLayout(wid)
-        hbl.addStretch()
-        hbl.addWidget(self.pvs.btn_unsel_all)
-        hbl.addStretch()
-        hbl.addWidget(self.pvs.btn_dsbl_all)
-        hbl.addStretch()
-        hbl.addWidget(self.pvs.btn_enbl_all)
-        hbl.addStretch()
-        hbl.addWidget(self.pvs.btn_send)
-        hbl.addStretch()
-        if self.dev.lower().startswith('bpm'):
-            hbl.addWidget(self.pvs.btn_send_otpl)
-        grid_l.setSizeConstraint(grid_l.SetMinimumSize)
-
-    def _create_matrix(self, parent):
-        wid = MyWidget(self.pvs.led_list, parent)
-        self.pvs.setParent(wid)
-        gdl = QGridLayout(wid)
-
-        for i, head in enumerate(self.top_headers_wids):
-            head.setParent(wid)
-            gdl.addWidget(head, 0, i+1)
-        for i, head in enumerate(self.side_headers_wids):
-            head.setParent(wid)
-            gdl.addWidget(head, i+1, 0)
+    def get_widgets(self):
+        widgets = list()
+        sz_polc = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         for idx in range(len(self.devnames[self.dev][0])):
-            wid2 = self._make_unit(wid, idx)
-            i, j = self._get_position(idx)
-            gdl.addWidget(wid2, i+1, j+1)
-        return wid
+            wid = QWidget(self.parent())
+            led = SiriusLedAlert()
+            led.setParent(wid)
+            led.setSizePolicy(sz_polc)
+            led.clicked.connect(led.toggleSelected)
+            tooltip = self.devnames[self.dev][1][idx]
+            tooltip += '; Pos = {0:5.1f} m'.format(self.devpos[self.dev][idx])
+            led.setToolTip(tooltip)
+            hbl = QHBoxLayout(wid)
+            hbl.addWidget(led)
+            widgets.append(wid)
+        return widgets
 
-    def _get_position(self, idx):
-        _, nicks = self.devnames[self.dev]
-        rsize, hsize, i = len(nicks), len(self.side_headers), 0
-        if self.dev.lower().startswith('bpm'):
-            rsize //= self._csorb.MAX_RINGSZ
-            hsize //= self._csorb.MAX_RINGSZ
-            i = (idx // rsize) * hsize
-        if self.acc == 'BO':
-            sec = int(nicks[idx][:2])
-            j = ((sec-1) % 10) + 1
-            j = self.top_headers.index('{0:02d}'.format(j))
-            if not (idx+1) % rsize and sec == 1:
-                i += hsize - 1
+    def get_positions(self):
+        top_headers, side_headers = self.headers
+        positions = list()
+        for idx in range(len(self.devnames[self.dev][0])):
+            _, nicks = self.devnames[self.dev]
+            rsize, hsize, i = len(nicks), len(side_headers), 0
+            if self.dev.lower().startswith('bpm'):
+                rsize //= self._csorb.MAX_RINGSZ
+                hsize //= self._csorb.MAX_RINGSZ
+                i = (idx // rsize) * hsize
+            if self.acc == 'BO':
+                sec = int(nicks[idx][:2])
+                j = ((sec-1) % 10) + 1
+                j = top_headers.index('{0:02d}'.format(j))
+                if not (idx+1) % rsize and sec == 1:
+                    i += hsize - 1
+                else:
+                    i += (sec-1) // 10
+            elif self.acc == 'SI':
+                j = top_headers.index(nicks[idx][2:])
+                if not (idx+1) % rsize:
+                    i += hsize-1
+                else:
+                    i += ((idx % rsize) + 1) // len(top_headers)
             else:
-                i += (sec-1) // 10
-        elif self.acc == 'SI':
-            j = self.top_headers.index(nicks[idx][2:])
-            if not (idx+1) % rsize:
-                i += hsize-1
-            else:
-                i += ((idx % rsize) + 1) // len(self.top_headers)
-        else:
-            j = idx
-        return i, j
+                j = idx
+            positions.append((i, j))
+        return positions
 
-    def _make_unit(self, parent, index):
-        label = self.devnames[self.dev][1][index]
-        label += '; Pos = {0:5.1f} m'.format(self.devpos[self.dev][index])
-        wid = QWidget(parent)
-        hbl = QHBoxLayout(wid)
-        led = self.pvs.led_list[index]
-        led.setParent(wid)
-        led.setToolTip(label)
-        hbl.addWidget(led)
-        return wid
+    # --- PyDMWidget specific methods ---
 
-
-class MyWidget(QWidget):
-    def __init__(self, led_list, parent=None):
-        super().__init__(parent)
-        self.led_list = led_list
-        self.begin = QPoint()
-        self.end = QPoint()
-
-    def _paint(self):
-        if self.begin == self.end:
+    def send_value(self, other=False):
+        if self.value is None:
             return
-        qp = QPainter(self)
-        br = QBrush(QColor(100, 10, 10, 40))
-        qp.setBrush(br)
-        qp.drawRect(QRect(self.begin, self.end))
+        value = self.value.copy()
+        for i in range(value.size):
+            wid = self.widgets[i]
+            led = wid.findChild(QLed)
+            if led.isSelected():
+                value[i] = not value[i]
+                led.setSelected(False)
+        self.pv_sp.send_value_signal[np.ndarray].emit(value)
+        if other:
+            self.pv_otpl.send_value_signal[np.ndarray].emit(value)
 
-    def paintEvent(self, _):
-        self._paint()
+    def value_changed(self, new_val):
+        super(SingleSelMatrix, self).value_changed(new_val)
+        _, side_header_wids = self.header_widgets
+        for i, wid in enumerate(self.widgets):
+            led = wid.findChild(QLed)
+            if i < self.value.size:
+                led.setVisible(True)
+                led.state = not self.value[i]
+            else:
+                led.setVisible(False)
+        rsize = self.value.size / len(self.widgets)
+        ini = int(len(side_header_wids) * rsize)
+        for i, head in enumerate(side_header_wids):
+            head.setVisible(i < ini)
+        self.adjustSize()
+        parent = self.parent()
+        while parent is not None:
+            parent.adjustSize()
+            if isinstance(parent, QDialog):
+                break
+            parent = parent.parent()
 
-    def mousePressEvent(self, event):
-        self.begin = event.pos()
-        self.end = event.pos()
-        self.update()
+    def connection_changed(self, new_conn):
+        super(SingleSelMatrix, self).connection_changed(new_conn)
+        for wid in self.widgets:
+            led = wid.findChild(QLed)
+            led.setEnabled(new_conn)
 
-    def mouseMoveEvent(self, event):
-        self.end = event.pos()
-        self.update()
 
-    def mouseReleaseEvent(self, event):
-        self.end = event.pos()
-        self.selectitems()
-        self.begin = event.pos()
-        self.update()
+class SelectionMatrix(BaseWidget):
 
-    def selectitems(self):
-        for i, led in enumerate(self.led_list):
-            if not led.isVisible():
-                continue
-            pos = led.mapTo(self, led.pos())
-            sz = led.size()
-            x1 = pos.x()+sz.width()/2 > self.begin.x()
-            x2 = pos.x()+sz.width()/2 > self.end.x()
-            y1 = pos.y()+sz.height()/2 > self.begin.y()
-            y2 = pos.y()+sz.height()/2 > self.end.y()
-            if x1 != x2 and y1 != y2:
-                led.toggle()
+    def __init__(self, parent, device, prefix='', acc='SI'):
+        super().__init__(parent, device, prefix=prefix, acc=acc)
+        tab = QTabWidget(self)
+        hbl = QHBoxLayout(self)
+        hbl.addWidget(tab)
+        hbl.setContentsMargins(0, 0, 0, 0)
+
+        for dev in ('BPMX', 'BPMY', 'CH', 'CV'):
+            wid = SingleSelMatrix(
+                tab, dev, self.device, prefix=self.prefix, acc=self.acc)
+            tab.addTab(wid, dev)
