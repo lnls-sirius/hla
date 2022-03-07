@@ -91,6 +91,10 @@ class SelectionWidget(QWidget):
         for i, wid in enumerate(self._widgets):
             pos = self._positions[i]
             glay.addWidget(wid, pos[0]+1, pos[1]+1)
+            led = wid.findChild(QLed)
+            if not led:
+                continue
+            led.clicked.connect(led.toggleSelected)
 
         # action buttons
         self.btn_unsel_all = QPushButton('Undo Selection')
@@ -330,7 +334,6 @@ class SingleSelMatrix(BaseObject, SelectionWidget, PyDMWidget):
             led = SiriusLedAlert()
             led.setParent(wid)
             led.setSizePolicy(sz_polc)
-            led.clicked.connect(led.toggleSelected)
             tooltip = self.devnames[self.dev][1][idx]
             tooltip += '; Pos = {0:5.1f} m'.format(self.devpos[self.dev][idx])
             led.setToolTip(tooltip)
