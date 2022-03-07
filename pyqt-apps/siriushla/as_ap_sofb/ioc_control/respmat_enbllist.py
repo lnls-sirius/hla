@@ -21,12 +21,13 @@ class SelectionWidget(QWidget):
 
     Parameters
     ----------
-    title: str, optional
-        Selection widget title.
-    has_bothplanes: bool, optional
-        Whether to show button to send sendBothPlanes signal. Default: False.
     parent : QWidget, optional
-        The parent widget for the SelectionWidget.
+        The parent widget for the SelectionMatrixWidget.
+    title: str, optional
+        Widget title.
+    has_bothplanes: bool, optional
+        Whether to show button to send applyBothPlanesClicked signal.
+        Default: False.
 
     Signals
     -------
