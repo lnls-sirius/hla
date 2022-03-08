@@ -389,7 +389,11 @@ class SingleSelMatrix(BaseObject, SelectionWidget, PyDMWidget):
             self.pv_otpl.send_value_signal[np.ndarray].emit(value)
 
     def value_changed(self, new_val):
+        if not isinstance(new_val, np.ndarray):
+            return
+
         super(SingleSelMatrix, self).value_changed(new_val)
+
         _, side_header_wids = self.header_widgets
         for i, wid in enumerate(self.widgets):
             led = wid.findChild(QLed)
