@@ -1,75 +1,81 @@
 from re import S
 import sys
 import json
+from epics import PV 
 from PyQt5.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QLabel, QGridLayout, QGroupBox, QHBoxLayout, QVBoxLayout
-from pydm import PyDMApplication
 from pydm.widgets import PyDMLabel, PyDMLineEdit, enum_button
 from siriushla.as_di_bpms.base import GraphWave
 
 # Digital Beam Position Processor
 class DigBeamPosProc(QWidget): 
     
-    prefix = "LA-BI:BPM2"
+
+    def __init__(self, parent=None): 
+        """Init."""
         
-    radio_buttons = []
-    wave_graph = False
+        super().__init__(parent)
 
-    graph_data = {
-        "title": "Hilbert Amplitude",
-        "labelX": "Waveform Index",
-        "unitX": "",
-        "labelY": "ADC Value",
-        "unitY": "count"
-    }
+        self.prefix = "LA-BI:BPM2"
+            
+        self.radio_buttons = []
+        self.wave_graph = False
 
-    radio_data = '''
-        [
-            {
-                "text" : "Trigger Mode",
-                "channel" : "ACQ_TRIGGER"
-            },
-            {
-                "text" : "Position Algorithm",
-                "channel" : "POS_ALG"
-            },
-            {
-                "text" : "Orientation",
-                "channel" : "BPM_STRIP"
-            },
-            {
-                "text" : "Display",
-                "channel" : "OPI:SEL"
-            }
-        ]
+        self.graph_data = {
+            "title": "Hilbert Amplitude",
+            "labelX": "Waveform Index",
+            "unitX": "",
+            "labelY": "ADC Value",
+            "unitY": "count"
+        }
+
+        self.radio_data = '''
+            [
+                {
+                    "text" : "Trigger Mode",
+                    "channel" : "ACQ_TRIGGER"
+                },
+                {
+                    "text" : "Position Algorithm",
+                    "channel" : "POS_ALG"
+                },
+                {
+                    "text" : "Orientation",
+                    "channel" : "BPM_STRIP"
+                },
+                {
+                    "text" : "Display",
+                    "channel" : "OPI:SEL"
+                }
+            ]
+            '''
+
+        self.channels_data = '''
+            [
+                {
+                    "path": "CH1_HIB_AMP_WAVEFORM",
+                    "name": "AntA",
+                    "color": "#0000FF"
+                },
+                {
+                    "path": "CH2_HIB_AMP_WAVEFORM",
+                    "name": "AntB",
+                    "color": "#FF0000"
+                },
+                {
+                    "path": "CH3_HIB_AMP_WAVEFORM",
+                    "name": "AntC",
+                    "color": "#008800"
+                },
+                {
+                    "path": "CH4_HIB_AMP_WAVEFORM",
+                    "name": "AntD",
+                    "color": "#FF00FF"
+                }
+            ]
         '''
 
-    channels_data = '''
-        [
-            {
-                "path": "CH1_HIB_AMP_WAVEFORM",
-                "name": "AntA",
-                "color": "#0000FF"
-            },
-            {
-                "path": "CH2_HIB_AMP_WAVEFORM",
-                "name": "AntB",
-                "color": "#FF0000"
-            },
-            {
-                "path": "CH3_HIB_AMP_WAVEFORM",
-                "name": "AntC",
-                "color": "#008800"
-            },
-            {
-                "path": "CH4_HIB_AMP_WAVEFORM",
-                "name": "AntD",
-                "color": "#FF00FF"
-            }
-        ]
-    '''
-
-    data_bpm = '''
+        self.data_bpm = '''
         [
             {
                 "text" : "Max ADC",
@@ -100,6 +106,10 @@ class DigBeamPosProc(QWidget):
                 }
             },
             {
+                "text" : " ",
+                "info" : " "
+            },
+            {
                 "text" : "Sum",
                 "info" : "POS_S"
             },
@@ -117,6 +127,14 @@ class DigBeamPosProc(QWidget):
                 {
                     "Center" : "FFT_CENTER",
                     "Width" : "FFT_WIDTH"
+                }
+            },
+            {
+                "text" : "Hilbert",
+                "info" : 
+                {
+                    "Center" : "HIB_CENTER",
+                    "Width" : "HIB_WIDTH"
                 }
             },
             {
@@ -146,23 +164,9 @@ class DigBeamPosProc(QWidget):
             {
                 "text" : "ADC Threshold",
                 "info" : "ADC_THD"
-            },
-            {
-                "text" : "Hilbert",
-                "info" : 
-                {
-                    "Center" : "HIB_CENTER",
-                    "Width" : "HIB_WIDTH"
-                }
             }
         ]
     '''
-
-
-    def __init__(self, parent=None): 
-        """Init."""
-
-        super().__init__(parent)
         
         self.setWindowTitle(self.prefix)
 
@@ -263,7 +267,9 @@ class DigBeamPosProc(QWidget):
         
         for bpm in bpm_info:
             
-            if (bpm["text"] == "Max ADC" 
+            if(bpm["text"] == " "):
+                contx += 1
+            elif (bpm["text"] == "Max ADC" 
                 or bpm["text"] == "V"
                 or bpm["text"] == "Position"
                 or bpm["text"] == "FFT"
@@ -276,7 +282,7 @@ class DigBeamPosProc(QWidget):
                 self.display(bpm["text"], bpm["info"], lay, contx, conty, 1)
                 contx += 1
             
-            if(contx > 5): 
+            if(contx > 6): 
                 contx = 0
                 conty += 2
         
@@ -284,22 +290,32 @@ class DigBeamPosProc(QWidget):
 
         return lay
 
+    def selectionItem(self, channel, title):
+            group = QGroupBox()
+            lay = QVBoxLayout()
+
+            selection1 = enum_button.PyDMEnumButton(self, self.prefix + ":" + channel)
+            selection1.widgetType = 0
+            selection1.setMinimumWidth(150)
+            
+            lay.addWidget(selection1)
+
+            group.setTitle(title)
+            group.setAlignment(Qt.AlignCenter)
+            group.setLayout(lay)
+
+            return group
+
     def display_section3(self):
 
         layV = QVBoxLayout()
-        
-        cont = 0
 
         selection_data = json.loads(self.radio_data)
 
         for selection in selection_data:
-            selection0 = QLabel(selection["text"])
-            layV.addWidget(selection0, cont)
-
-            selection1 = enum_button.PyDMEnumButton(self, self.prefix + ":" + selection["channel"])
-            selection1.setMinimumWidth(200)
-            selection1.setBaseSize(200,150)
-            layV.addWidget(selection1, cont)
-            cont += 1
+            # pv = PV(self.prefix+":"+selection["channel"])
+            # pv.connect
+            # print(pv.value)
+            layV.addWidget(self.selectionItem(selection["channel"], selection["text"]))
 
         return layV

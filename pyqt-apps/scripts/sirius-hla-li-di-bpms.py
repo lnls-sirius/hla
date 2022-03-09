@@ -1,3 +1,5 @@
+#!/usr/bin/env python-sirius
+
 import sys
 from siriushla.li_di_bpms import DigBeamPosProc
 from siriushla.sirius_application import SiriusApplication
