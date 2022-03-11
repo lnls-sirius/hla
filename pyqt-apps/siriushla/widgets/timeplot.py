@@ -1,9 +1,9 @@
 import numpy as _np
 import time
 
-from qtpy.QtCore import Qt, Slot, QTimer, Property
+from qtpy.QtCore import Qt, Signal, Slot, QTimer, Property
 from qtpy.QtGui import QPalette
-from qtpy.QtWidgets import QMenu, QInputDialog, QLabel, QApplication
+from qtpy.QtWidgets import QInputDialog, QLabel, QApplication, QAction
 
 from pyqtgraph import ViewBox, mkBrush
 
@@ -17,8 +17,15 @@ from siriuspy.clientarch import ClientArchiver, Time
 class SiriusTimePlotItem(TimePlotCurveItem):
     """Reimplement to do not receive inf values."""
 
+    def __init__(self, parent, *args, **kwargs):
+        """Init and create parent attribute."""
+        super().__init__(*args, **kwargs)
+        self.parent = parent
+
     def setBufferSize(self, value, initialize_buffer=False):
-        """Reimplement."""
+        """
+        Reimplement setBufferSize to fill buffer with points accumulated.
+        """
         if self._bufferSize == int(value):
             return
         self._bufferSize = max(int(value), 2)
@@ -41,16 +48,52 @@ class SiriusTimePlotItem(TimePlotCurveItem):
     @Slot(float)
     @Slot(int)
     def receiveNewValue(self, new_value):
+        """
+        Rederive receiveNewValue to avoid infinit values.
+        """
         if not _np.isinf(new_value):
             super().receiveNewValue(new_value)
 
+    @Slot()
+    def redrawCurve(self):
+        """
+        Rederive redrawCurve to use data only refered to timespan.
+        """
+        try:
+            now = Time.now().timestamp()
+            xmin = now - self.parent.timeSpan
+            idcs = _np.where(self.data_buffer[0] >= xmin)[0]
+            x = self.data_buffer[0, idcs].astype(_np.float)
+            y = self.data_buffer[1, idcs].astype(_np.float)
+
+            if not self._plot_by_timestamps:
+                x -= now
+
+            self.setData(y=y, x=x)
+        except (ZeroDivisionError, OverflowError):
+            # Solve an issue with pyqtgraph and initial downsampling
+            pass
+
+    def initialize_buffer(self):
+        """
+        Rederive initialize_buffer to avoid filling the entire buffer
+        with plot-eligible data.
+        """
+        self.points_accumulated = 0
+
+        # If you don't specify dtype=float, you don't have enough
+        # resolution for the timestamp data.
+        self.data_buffer = _np.zeros((2, self._bufferSize),
+                                     order='f', dtype=float)
 
 class SiriusTimePlot(PyDMTimePlot):
     """PyDMTimePlot with some extra features."""
 
+    bufferReset = Signal()
+    timeSpanChanged = Signal()
+
     def __init__(self, *args, show_tooltip=False, **kws):
         super().__init__(*args, **kws)
-        self._min_time = time.time()
         self._filled_with_arch_data = dict()
         self._show_tooltip = show_tooltip
 
@@ -63,7 +106,21 @@ class SiriusTimePlot(PyDMTimePlot):
 
         self.carch = None
 
+        # show auto adjust button
         self.plotItem.showButtons()
+
+        # use pan mouse mode (3-button)
+        self.plotItem.getViewBox().setMouseMode(ViewBox.PanMode)
+
+        # connect sigMouseMoved
+        self.plotItem.scene().sigMouseMoved.connect(self._handle_mouse_moved)
+
+        # add new actions to menu
+        rst_act = QAction("Clear buffers")
+        rst_act.triggered.connect(self._resetBuffers)
+        tsp_act = QAction("Change time span")
+        tsp_act.triggered.connect(self._changeTimeSpan)
+        self.plotItem.scene().contextMenu.extend([rst_act, tsp_act])
 
     @Property(bool)
     def showToolTip(self):
@@ -125,7 +182,7 @@ class SiriusTimePlot(PyDMTimePlot):
 
         # Add curve
         new_curve = SiriusTimePlotItem(
-            y_channel,
+            self, y_channel,
             plot_by_timestamps=self._plot_by_timestamps,
             name=name, color=color, **plot_opts)
         new_curve.setUpdatesAsynchronously(self.updatesAsynchronously)
@@ -150,9 +207,12 @@ class SiriusTimePlot(PyDMTimePlot):
             else:
                 maxrange = time.time()
 
-            mini = self._min_time
+            mini = Time.now().timestamp()
             for curve in self._curves:
-                mini = min(mini, curve.data_buffer[0, 0])
+                firstvalid = (curve.data_buffer[0] != 0).argmax()
+                if curve.data_buffer[0, firstvalid] == 0:
+                    continue
+                mini = min(mini, curve.data_buffer[0, firstvalid])
             minrange = max(maxrange - self._time_span, mini)
 
             self.plotItem.setXRange(
@@ -217,31 +277,10 @@ class SiriusTimePlot(PyDMTimePlot):
         curve._max_y_value = max(datay)
         curve.latest_value = datay[-1]
 
-    def mouseReleaseEvent(self, ev):
-        """Reimplement context menu."""
-        if ev.button() == Qt.RightButton:
-            menu = QMenu(self)
-            pi = self.plotItem
-            vb = pi.getViewBox()
-            sc = vb.scene()
-            for act in vb.menu.actions():
-                menu.addAction(act)
-            menu.addSeparator()
-            menu.addMenu(pi.ctrlMenu)
-            menu.addAction(sc.contextMenu[0])
-            menu.addSeparator()
-            rst_act = menu.addAction("Clear buffers")
-            rst_act.triggered.connect(self._resetBuffers)
-            tsp_act = menu.addAction("Change time span")
-            tsp_act.triggered.connect(self._changeTimeSpan)
-            menu.exec_(self.mapToGlobal(ev.pos()))
-        else:
-            super().mouseReleaseEvent(ev)
-
     def _resetBuffers(self):
         for curve in self._curves:
             curve.initialize_buffer()
-            self._min_time = time.time()
+        self.bufferReset.emit()
 
     def _changeTimeSpan(self):
         new_time_span, ok = QInputDialog.getInt(
@@ -260,10 +299,11 @@ class SiriusTimePlot(PyDMTimePlot):
                     info['process_bin_intvl'])
 
         self.timeSpan = new_time_span
+        self.timeSpanChanged.emit()
 
-    def mouseMoveEvent(self, ev):
+    def _handle_mouse_moved(self, pos):
+        """Show tooltip at mouse move."""
         if not self._show_tooltip:
-            super().mouseMoveEvent(ev)
             return
 
         # create label tooltip, if needed
@@ -272,9 +312,6 @@ class SiriusTimePlot(PyDMTimePlot):
             self.timer_tooltip = QTimer(self)
             self.timer_tooltip.timeout.connect(self.label_tooltip.hide)
             self.timer_tooltip.setInterval(1000)
-
-        # get event pos
-        pos = ev.pos()
 
         # find nearest curve point
         nearest = (self._curves[0], _np.inf, None, None)
@@ -309,12 +346,10 @@ class SiriusTimePlot(PyDMTimePlot):
             self.label_tooltip.setText(txt)
             self.label_tooltip.setFont(font)
             self.label_tooltip.setPalette(palette)
-            self.label_tooltip.move(self.mapToGlobal(pos))
+            self.label_tooltip.move(self.mapToGlobal(pos.toPoint()))
             self.label_tooltip.show()
             self.timer_tooltip.start()
             curve.scatter.setData(
                 pos=[(valx, valy), ], symbol='o', size=15,
                 brush=mkBrush(curve.color))
             curve.scatter.show()
-
-        super().mouseMoveEvent(ev)
