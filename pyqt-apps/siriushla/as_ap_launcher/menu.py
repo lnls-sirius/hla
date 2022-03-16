@@ -60,7 +60,7 @@ def get_object(ismenubar=True, parent=None):
             id_apps = self._create_id_menu()
             bl_apps = self._create_bl_menu()
             tool_apps = self._create_tool_menu()
-            it_apps = self._create_section_menu('IT', 'IT')
+            it_apps = self._create_it_menu()
 
             self.add_object_to_level0(config)
             self.add_object_to_level0(as_apps)
@@ -354,13 +354,6 @@ def get_object(ismenubar=True, parent=None):
             PS.setIcon(qta.icon('mdi.car-battery'))
             self.add_object_to_level1(menu, PS)
 
-            if sec == 'it':
-                egun = LEVEL2A('Egun', menu)
-                egun.setIcon(qta.icon('mdi.spotlight-beam'))
-                self.connect_newprocess(egun, 'sirius-hla-it-eg-control.py')
-                self.add_object_to_level1(menu, egun)
-                return menu
-
             if sec in {'bo', 'si'}:
                 PU = self._set_pu_menu(sec)
                 PU.setIcon(qta.icon('mdi.current-ac'))
@@ -414,6 +407,21 @@ def get_object(ismenubar=True, parent=None):
             self.connect_newprocess(
                 Manaca, ['sirius-hla-si-ap-manaca.py'])
             self.add_object_to_level1(menu, Manaca)
+
+            return menu
+
+        def _create_it_menu(self):
+            menu = LEVEL1('IT', self)
+            menu.setObjectName('ITApp')
+
+            PS = self._set_ps_menu('it')
+            PS.setIcon(qta.icon('mdi.car-battery'))
+            self.add_object_to_level1(menu, PS)
+
+            egun = LEVEL2A('Egun', menu)
+            egun.setIcon(qta.icon('mdi.spotlight-beam'))
+            self.connect_newprocess(egun, 'sirius-hla-it-eg-control.py')
+            self.add_object_to_level1(menu, egun)
 
             return menu
 
