@@ -3,7 +3,7 @@ import logging
 
 from qtpy.QtCore import Qt, Slot, Signal
 from qtpy.QtWidgets import QWidget, QComboBox, QLabel, QPushButton, \
-    QHBoxLayout, QVBoxLayout, QSplitter
+    QHBoxLayout, QVBoxLayout, QSplitter, QMessageBox
 
 import qtawesome as qta
 
@@ -95,6 +95,13 @@ class SelectAndApplyPVsWidget(QWidget):
                 if pvo.endswith('-Cmd'):
                     self.logger.warning('{} being checked'.format(pvo))
                 check_pvs_tuple.append((pvo, value, delay))
+
+        # if nothing selected, show message and abort
+        if not set_pvs_tuple:
+            msg = 'No PV selected!'
+            self.logger.warning(msg)
+            QMessageBox.warning(self, 'Warning', msg)
+            return
 
         # Create thread
         failed_items = []
