@@ -376,6 +376,14 @@ def get_object(ismenubar=True, parent=None):
             VA = self._set_va_menu(sec)
             self.add_object_to_level1(menu, VA)
 
+            if sec == 'si':
+                INTLK = LEVEL2A('Orb.Intlk', menu)
+                INTLK.setIcon(qta.icon(
+                    'mdi.currency-sign', 'mdi.alarm-light',
+                    options=[dict(scale_factor=1.1), dict(scale_factor=0.5)]))
+                self.connect_newprocess(INTLK, 'sirius-hla-si-ap-orbintlk.py')
+                self.add_object_to_level1(menu, INTLK)
+
             OPT = self._set_optics_menu(sec)
             self.add_object_to_level1(menu, OPT)
 
