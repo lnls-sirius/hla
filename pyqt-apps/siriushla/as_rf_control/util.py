@@ -260,7 +260,7 @@ SEC_2_CHANNELS = {
             'Circ FlwRt': 'RA-TLSIA:RF-Circulator:FlwRt-Mon',
             'Load FlwRt': 'RA-TLSIA:RF-Load:FlwRt-Mon',
             'Circ Intlk': 'RA-TLSIA:RF-Circulator:IntlkOp-Mon',
-            'Circ Limits': (18.0, 25.0),
+            'Circ Limits': (19.0, 23.0),
         },
         'SSA': {
             '1': {
