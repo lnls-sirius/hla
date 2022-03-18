@@ -58,8 +58,8 @@ class RadTotDoseMonitor(QWidget):
             ('Thermo14', '(SI-14, hall eixo 55)'),
             ('Thermo4', '(SI-14-IA-14, eixo 57)'),
             ('Thermo6', '(SI-15, hall eixo 59)'),
-            ('Thermo5', '(SI-17, hall eixo 04)'),
-            ('Thermo3', '(SI-19, hall eixo 10)'),
+            ('Thermo3', '(SI-17, hall eixo 04)'),
+            ('Thermo5', '(SI-19, hall eixo 10)'),
             ('Thermo11', '(SI-20, hall eixo 14)'),
         )
         self._colors = cm.jet(np.linspace(0, 1, len(self._sensor_list)))*255
