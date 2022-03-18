@@ -3,7 +3,7 @@
 import time as _time
 import numpy as _np
 
-from qtpy.QtCore import Qt, Signal, Slot
+from qtpy.QtCore import Qt, Signal, Slot, QSize
 from qtpy.QtWidgets import QPushButton, QComboBox, QSizePolicy as QSzPlcy, \
     QWidget, QHBoxLayout, QCheckBox, QLabel, QGridLayout, QSpinBox, QGroupBox,\
     QDoubleSpinBox
@@ -148,6 +148,10 @@ class _BPMSelectionWidget(BaseObject, SelectionMatrixWidget):
         SelectionMatrixWidget.__init__(
             self, parent=parent, title=title, **kwargs)
 
+    def sizeHint(self):
+        """Return the base size of the widget."""
+        return QSize(500, 1200)
+
     def get_headers(self):
         nicks = self.BPM_NICKNAMES
         top_headers = sorted({nick[2:] for nick in nicks})
@@ -195,8 +199,7 @@ class BPMIntlkEnblWidget(_BPMSelectionWidget):
     def __init__(self, parent=None, propty='', title='', prefix=''):
         """Init."""
         super().__init__(
-            parent=parent, propty=propty, title=title,
-            use_scroll=False, prefix=prefix)
+            parent=parent, propty=propty, title=title, prefix=prefix)
 
         # initialize auxiliary attributes
         self.propty = propty
@@ -209,7 +212,7 @@ class BPMIntlkEnblWidget(_BPMSelectionWidget):
 
         self.setObjectName('SIApp')
         self.setStyleSheet(
-            '#SIApp{min-width: 25em; max-width: 25em;}')
+            '#SIApp{min-width: 27em; max-width: 27em;}')
 
         # connect signals and slots
         self.applyChangesClicked.connect(self.send_value)
@@ -279,6 +282,7 @@ class BPMIntlkLimSPWidget(BaseObject, QWidget):
     def _setupUi(self):
         title = QLabel(self.title, self, alignment=Qt.AlignCenter)
         title.setStyleSheet("font-weight: bold;")
+        title.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
 
         # limit setpoints
         self._wid_lims = QGroupBox('Select Limits: ')
@@ -376,12 +380,10 @@ class BPMIntlkLimSPWidget(BaseObject, QWidget):
         groupsel = QGroupBox('Select BPMs:')
         groupsel.setObjectName('groupsel')
         groupsel.setStyleSheet(
-            '#groupsel{min-width: 25em; max-width: 25em;}')
-        groupsel.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
+            '#groupsel{min-width: 27em; max-width: 27em;}')
         self._bpm_sel = _BPMSelectionWidget(
             self, show_toggle_all_true=False,
-            toggle_all_false_text='Select All',
-            use_scroll=False, prefix=self.prefix)
+            toggle_all_false_text='Select All', prefix=self.prefix)
         lay_groupsel = QGridLayout(groupsel)
         lay_groupsel.addWidget(self._bpm_sel)
 

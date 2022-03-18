@@ -4,6 +4,7 @@ from functools import partial as _part
 
 import numpy as np
 
+from qtpy.QtCore import QSize
 from qtpy.QtWidgets import QHBoxLayout, \
     QSizePolicy, QWidget, QDialog, QTabWidget
 
@@ -59,6 +60,10 @@ class SingleSelMatrix(BaseObject, SelectionWidget, PyDMWidget):
         # connect signals and slots
         self.applyChangesClicked.connect(self.send_value)
         self.applyBothPlanesClicked.connect(_part(self.send_value, other=True))
+
+    def sizeHint(self):
+        """Return the base size of the widget."""
+        return QSize(500, 1200)
 
     # --- SelectionWidget specific methods ---
 
