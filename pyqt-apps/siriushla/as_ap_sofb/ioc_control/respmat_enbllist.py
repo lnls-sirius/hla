@@ -156,10 +156,10 @@ class SingleSelMatrix(BaseObject, SelectionWidget, PyDMWidget):
         for i, wid in enumerate(self.widgets):
             led = wid.findChild(QLed)
             if i < self.value.size:
-                led.setVisible(True)
+                wid.setVisible(True)
                 led.state = not self.value[i]
             else:
-                led.setVisible(False)
+                wid.setVisible(False)
         rsize = self.value.size / len(self.widgets)
         ini = int(len(side_header_wids) * rsize)
         for i, head in enumerate(side_header_wids):
