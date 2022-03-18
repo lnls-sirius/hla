@@ -285,7 +285,7 @@ class BPMIntlkLimSPWidget(BaseObject, QWidget):
         title.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
 
         # limit setpoints
-        self._wid_lims = QGroupBox('Select Limits: ')
+        self._wid_lims = QGroupBox('Select Thresholds: ')
         lay_lims = QGridLayout(self._wid_lims)
         lay_lims.setAlignment(Qt.AlignTop)
 
