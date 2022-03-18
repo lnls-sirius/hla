@@ -140,7 +140,7 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
         return lay
 
     def _setupIntlkTypeLayout(self, intlk):
-        unit = 'rad.nm' if 'ang' in intlk.lower() else 'nm'
+        unit = 'nm'
 
         ld_enbl = QLabel(
             'Enable: ', self, alignment=Qt.AlignRight | Qt.AlignBottom)

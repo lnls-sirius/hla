@@ -323,7 +323,8 @@ class BPMIntlkLimSPWidget(BaseObject, QWidget):
             self._spins, self._checks = dict(), dict()
             for lsp in self.lim_sp:
                 row += 1
-                label = QLabel(lsp.split('-')[0].split('Lmt')[1], self)
+                text = lsp.split('-')[0].split('Lmt')[1]+' [nm]: '
+                label = QLabel(text, self, alignment=Qt.AlignRight)
                 lay_lims.addWidget(label, row, 0)
                 spin = QSpinBox(self)
                 self._spins[lsp] = spin

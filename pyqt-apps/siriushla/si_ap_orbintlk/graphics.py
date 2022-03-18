@@ -312,7 +312,7 @@ class Graph(BaseObject, PyDMWaveformPlot):
             ylabel, yunit = 'Translation', 'm'
         elif 'Ang' in intlktype:
             self.title = 'Angulation '+intlktype[-1]
-            ylabel, yunit = 'Angulation', 'm.rad'
+            ylabel, yunit = 'Angulation', 'm'
         self.plotItem.setLabel('left', ylabel, units=yunit)
 
         self._tooltips = [
