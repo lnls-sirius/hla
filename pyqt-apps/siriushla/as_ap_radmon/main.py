@@ -7,7 +7,7 @@ from matplotlib import cm
 from qtpy.QtCore import Qt, QEvent, QTimer
 from qtpy.QtGui import QColor, QPalette
 from qtpy.QtWidgets import QWidget, QLabel, QCheckBox, QGridLayout, \
-    QApplication, QVBoxLayout, QHBoxLayout, QSizePolicy as QSzPol
+    QApplication, QVBoxLayout, QSizePolicy as QSzPol
 
 import qtawesome as qta
 
@@ -128,7 +128,7 @@ class RadTotDoseMonitor(QWidget):
             'QLabel{font-size: 52pt; font-weight: bold;}')
 
         widgrid = QWidget()
-        widgrid.setSizePolicy(QSzPol.Minimum, QSzPol.Expanding)
+        widgrid.setSizePolicy(QSzPol.Maximum, QSzPol.Expanding)
         laygrid = QGridLayout(widgrid)
         laygrid.setHorizontalSpacing(10)
         laygrid.setVerticalSpacing(10)
@@ -155,6 +155,7 @@ class RadTotDoseMonitor(QWidget):
             cb = QCheckBox(self)
             cb.setChecked(True)
             cb.stateChanged.connect(curve.setVisible)
+            cb.setSizePolicy(QSzPol.Maximum, QSzPol.Maximum)
             pal = cb.palette()
             pal.setColor(QPalette.Base, coloro)
             pal.setColor(QPalette.Text, Qt.white)
@@ -167,13 +168,9 @@ class RadTotDoseMonitor(QWidget):
             lb.showUnits = True
             self._pvs_labels[pvn] = lb
 
-            widfr = QWidget()
-            widfrlay = QHBoxLayout(widfr)
-            widfrlay.setContentsMargins(0, 0, 0, 0)
-            widfrlay.addWidget(cb)
-            widfrlay.addWidget(lb)
             frame = SiriusAlarmFrame(self, pvname + ':Dose')
-            frame.add_widget(widfr)
+            frame.add_widget(cb)
+            frame.add_widget(lb)
 
             desc = QLabel(pvn + ' ' + local, self, alignment=Qt.AlignCenter)
             desc.setStyleSheet(
