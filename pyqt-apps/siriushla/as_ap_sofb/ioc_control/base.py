@@ -14,13 +14,11 @@ from siriushla.widgets import SiriusSpinbox, PyDMStateButton, SiriusLedState
 from siriushla.as_ap_configdb import LoadConfigDialog
 
 
-class BaseWidget(QWidget):
-    """."""
+class BaseObject:
+    """Base object."""
 
-    def __init__(self, parent, device, prefix='', acc='SI'):
-        """."""
-        super().__init__(parent)
-        self.setObjectName(acc.upper()+'App')
+    def __init__(self, device, prefix='', acc='SI'):
+        """Init."""
         self.prefix = prefix
         self.device = _PVName(device)
         self.devpref = self.device.substitute(prefix=prefix)
@@ -28,18 +26,28 @@ class BaseWidget(QWidget):
 
     @property
     def acc(self):
-        """."""
+        """Accelerator."""
         return self._csorb.acc
 
     @property
     def acc_idx(self):
-        """."""
+        """Accelerator index."""
         return self._csorb.acc_idx
 
     @property
     def isring(self):
-        """."""
+        """Whether accelerator is a ring."""
         return self._csorb.isring
+
+
+class BaseWidget(BaseObject, QWidget):
+    """Base widget."""
+
+    def __init__(self, parent, device, prefix='', acc='SI'):
+        """Init."""
+        BaseObject.__init__(self, device, prefix, acc)
+        QWidget.__init__(self, parent)
+        self.setObjectName(acc.upper()+'App')
 
     def create_pair(self, parent, pvname, device=None, is_vert=False):
         """."""

@@ -10,6 +10,7 @@ from siriushla.as_di_bpms.multiturn_data import MultiTurnData
 from siriushla.as_di_bpms.singlepass_data import SinglePassData
 from siriushla.as_di_bpms.trig_acq_config import ACQTrigConfigs
 from siriushla.as_di_bpms.monit import MonitData
+from siriushla.si_ap_orbintlk import BPMOrbIntlkDetailWindow
 
 
 class BPMMain(BaseWidget):
@@ -93,6 +94,20 @@ class BPMMain(BaseWidget):
         self.layoutv.addWidget(grpbx)
         self.layoutv.addSpacing(20)
         self.layoutv.addStretch()
+
+        if 'SI' in self.bpm:
+            grpbx = CustomGroupBox('Orbit Interlock', self)
+            hbl = QHBoxLayout(grpbx)
+            pbt = QPushButton('Open Interlock Settings', grpbx)
+            util.connect_window(
+                pbt, BPMOrbIntlkDetailWindow, parent=grpbx,
+                prefix=self.prefix, device=self.bpm)
+            hbl.addStretch()
+            hbl.addWidget(pbt)
+            hbl.addStretch()
+            self.layoutv.addWidget(grpbx)
+            self.layoutv.addSpacing(20)
+            self.layoutv.addStretch()
 
 
 class TriggeredAcquisition(BaseWidget):
