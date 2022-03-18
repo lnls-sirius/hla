@@ -353,7 +353,7 @@ class BPMIntlkLimSPWidget(BaseObject, QWidget):
             if 'trans' in self.metric:
                 text = '\n\nBPM calculation consider the translation\n' \
                     'estimative:' \
-                    '\n\n(pos @downstream+pos @upstream)/2\n\n' \
+                    '\n\n(pos@downstream+pos@upstream)/2\n\n' \
                     'where the pairs upstream/downstream\nfolow:\n' \
                     '    - M1/M2\n' \
                     '    - C1-1/C1-2\n' \
@@ -362,7 +362,7 @@ class BPMIntlkLimSPWidget(BaseObject, QWidget):
             elif 'ang' in self.metric:
                 text = '\n\nBPM calculation consider the angulation\n' \
                     'estimative:' \
-                    '\n\n(pos @downstream - pos @upstream)\n\n' \
+                    '\n\n(pos@downstream - pos@upstream)\n\n' \
                     'where the pairs upstream/downstream\nfolow:\n' \
                     '    - M1/M2\n' \
                     '    - C1-1/C1-2\n' \
