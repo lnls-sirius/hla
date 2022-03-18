@@ -15,8 +15,6 @@ from pyqtgraph import mkPen, mkBrush
 from pydm.widgets import PyDMWaveformPlot
 
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
-from siriuspy.epics import PV as _PV
-from siriuspy.namesys import SiriusPVName
 
 from siriushla.util import run_newprocess
 
@@ -308,7 +306,7 @@ class Graph(BaseObject, PyDMWaveformPlot):
         self._intlktype = intlktype
         if 'Sum' in intlktype:
             self.title = 'Min.Sum. Threshold'
-            ylabel, yunit = 'Min.Sum. Threshold', 'count'
+            ylabel, yunit = 'Sum', 'count'
         elif 'Trans' in intlktype:
             self.title = 'Translation '+intlktype[-1]
             ylabel, yunit = 'Translation', 'm'
@@ -509,7 +507,7 @@ class _BaseGraphWidget(BaseObject, QWidget):
     refOrbChanged = Signal(_np.ndarray)
 
     def __init__(self, parent=None, prefix=_vaca_prefix):
-        BaseObject.__init__(self)
+        BaseObject.__init__(self, prefix)
         QWidget.__init__(self, parent)
 
         self._prefix = prefix
@@ -583,13 +581,12 @@ class _UpdateGraphThread(BaseObject, QThread):
     """Update Graph Thread."""
 
     dataChanged = Signal(list)
-    _pvs = dict()
 
     def __init__(self, intlktype, meas_data, meas_symb,
                  min_data, min_symb, max_data, max_symb,
                  propintlktype, propcomptype, reforb,
                  prefix='', parent=None):
-        BaseObject.__init__(self)
+        BaseObject.__init__(self, prefix)
         QThread.__init__(self, parent)
 
         self.intlktype = intlktype
@@ -660,11 +657,14 @@ class _UpdateGraphThread(BaseObject, QThread):
             if isinstance(self.meas_data, dict):
                 values = _np.array(self._get_values(data_propty))
                 values -= self._reforb
-                data_values = self.get_intlk_metric(
-                    values, operation=self.meas_data['op'])
+                data_values = _np.array(self.calc_intlk_metric(
+                    values, operation=self.meas_data['op']), dtype=float)
             else:
-                data_values = self._get_values(data_propty)
-            data_values = _np.array(data_values, dtype=float)
+                # sum case
+                _av = self.CONV_POLY_MONIT1_2_MONIT[0, :]
+                _bv = self.CONV_POLY_MONIT1_2_MONIT[1, :]
+                vals = _np.array(self._get_values(data_propty), dtype=float)
+                data_values = (vals - _bv)/_av
 
             y_data_meas = list(data_values * self.CONV_NM2M)
 
@@ -712,35 +712,6 @@ class _UpdateGraphThread(BaseObject, QThread):
 
             self.dataChanged.emit(['max', symbols_max, y_data_max])
 
-    # --- pv handler methods ---
-
-    def _create_pvs(self, propty):
-        new_pvs = dict()
-        for psn in self.BPM_NAMES:
-            pvname = SiriusPVName(psn).substitute(
-                prefix=self._prefix, propty=propty)
-            if pvname in self._pvs:
-                continue
-            new_pvs[pvname] = _PV(pvname, connection_timeout=0.01)
-        self._pvs.update(new_pvs)
-
-    def _get_values(self, propty):
-        for psn in self.BPM_NAMES:
-            pvname = SiriusPVName(psn).substitute(
-                prefix=self._prefix, propty=propty)
-            self._pvs[pvname].wait_for_connection()
-
-        values = list()
-        for psn in self.BPM_NAMES:
-            pvname = SiriusPVName(psn).substitute(
-                prefix=self._prefix, propty=propty)
-            val = self._pvs[pvname].get()
-            if val is None:
-                val = 0
-            elif propty.startswith('Intlk') and propty.endswith('-Mon'):
-                val = 1 if val == 0 else 0
-            values.append(val)
-        return values
 
 
 class MinSumGraphWidget(_BaseGraphWidget):

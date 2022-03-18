@@ -1,10 +1,12 @@
 """BPM Interlock Buttons."""
 
+import time as _time
 import numpy as _np
 
 from qtpy.QtCore import Qt, Signal, Slot
 from qtpy.QtWidgets import QPushButton, QComboBox, QSizePolicy as QSzPlcy, \
-    QWidget, QHBoxLayout, QCheckBox, QLabel, QGridLayout, QSpinBox, QGroupBox
+    QWidget, QHBoxLayout, QCheckBox, QLabel, QGridLayout, QSpinBox, QGroupBox,\
+    QDoubleSpinBox
 
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 from siriuspy.namesys import SiriusPVName
@@ -23,7 +25,7 @@ class FamBPMButton(BaseObject, QPushButton):
     def __init__(self, parent=None, prefix=_vaca_prefix,
                  propty='', text='', value=1):
         """Init."""
-        BaseObject.__init__(self)
+        BaseObject.__init__(self, prefix)
         QPushButton.__init__(self, text, parent)
 
         self.prefix = prefix
@@ -138,7 +140,7 @@ class _BPMSelectionWidget(BaseObject, SelectionMatrixWidget):
 
     def __init__(self, parent=None, title='', propty='', prefix='', **kwargs):
         """Init."""
-        BaseObject.__init__(self)
+        BaseObject.__init__(self, prefix)
 
         self.propty = propty
         self.prefix = prefix
@@ -193,7 +195,8 @@ class BPMIntlkEnblWidget(_BPMSelectionWidget):
     def __init__(self, parent=None, propty='', title='', prefix=''):
         """Init."""
         super().__init__(
-            parent=parent, propty=propty, title=title, prefix=prefix)
+            parent=parent, propty=propty, title=title,
+            use_scroll=False, prefix=prefix)
 
         # initialize auxiliary attributes
         self.propty = propty
@@ -205,6 +208,8 @@ class BPMIntlkEnblWidget(_BPMSelectionWidget):
                 bpm.substitute(prefix=self.prefix, propty=propty))
 
         self.setObjectName('SIApp')
+        self.setStyleSheet(
+            '#SIApp{min-width: 25em; max-width: 25em;}')
 
         # connect signals and slots
         self.applyChangesClicked.connect(self.send_value)
@@ -225,31 +230,31 @@ class BPMIntlkLimSPWidget(BaseObject, QWidget):
 
     def __init__(self, parent=None, metric='', prefix=''):
         """Init."""
-        BaseObject.__init__(self)
+        BaseObject.__init__(self, prefix)
         QWidget.__init__(self, parent)
 
         # initialize auxiliary attributes
         self.metric = metric.lower()
         if 'sum' in self.metric:
             self.lim_sp = ['IntlkLmtMinSum-SP', ]
-            self.has_reforb = False
             self.title = 'Min.Sum. Thresholds'
         elif 'trans' in self.metric:
             self.lim_sp = [
                 'IntlkLmtTransMinX-SP', 'IntlkLmtTransMaxX-SP',
                 'IntlkLmtTransMinY-SP', 'IntlkLmtTransMaxY-SP']
-            self.has_reforb = True
             self.title = 'Translation Thresholds'
         elif 'ang' in self.metric:
             self.lim_sp = [
                 'IntlkLmtAngMinX-SP', 'IntlkLmtAngMaxX-SP',
                 'IntlkLmtAngMinY-SP', 'IntlkLmtAngMaxY-SP']
-            self.has_reforb = True
             self.title = 'Angulation Thresholds'
         else:
             raise ValueError(metric)
 
-        if self.has_reforb:
+        if 'sum' in self.metric:
+            self._create_pvs('Sum-Mon')
+            self._summon = _np.zeros(len(self.BPM_NAMES))
+        else:
             self._reforb = dict()
             self._reforb['x'] = _np.zeros(len(self.BPM_NAMES))
             self._reforb['y'] = _np.zeros(len(self.BPM_NAMES))
@@ -281,32 +286,58 @@ class BPMIntlkLimSPWidget(BaseObject, QWidget):
         lay_lims.setAlignment(Qt.AlignTop)
 
         row = 0
-        self._head_value = QLabel('Value', self, alignment=Qt.AlignCenter)
-        lay_lims.addWidget(self._head_value, 0, 1)
-        self._head_send = QLabel('Apply', self, alignment=Qt.AlignCenter)
-        lay_lims.addWidget(self._head_send, 0, 2)
-        if len(self.pvs_sp) == 1:
-            self._head_send.setVisible(False)
+        if 'sum' in self.metric:
+            text = '\nThresholds must be set in Monit1 rate\n'\
+                'counts. Here we make available you \n'\
+                'to read Sum-Mon values, in Monit rate\n'\
+                'counts, and convert them to Monit1\n'\
+                'rate counts using calibration curves.\n'\
+                'You can also apply a scale factor to\n'\
+                'the values read.\n\n'
+            self._label_help = QLabel(text, self)
+            lay_lims.addWidget(self._label_help, row, 0, 1, 2)
 
-        self._spins, self._checks = dict(), dict()
-        for lsp in self.lim_sp:
             row += 1
-            label = QLabel(lsp.split('-')[0].split('Lmt')[1], self)
-            lay_lims.addWidget(label, row, 0)
-            spin = QSpinBox(self)
-            self._spins[lsp] = spin
-            spin.setValue(0)
-            spin.setMinimum(-1e9)
-            spin.setMaximum(1e9)
-            lay_lims.addWidget(spin, row, 1)
-            check = QCheckBox(self)
-            self._checks[lsp] = check
-            lay_lims.addWidget(check, row, 2, alignment=Qt.AlignCenter)
-            if len(self.pvs_sp) == 1:
-                check.setChecked(True)
-                check.setVisible(False)
+            self._pb_get = QPushButton('Get current Sum-Mon', self)
+            self._pb_get.released.connect(self._get_new_sum)
+            lay_lims.addWidget(self._pb_get, row, 0, 1, 2)
+            row += 1
+            self._label_getsts = QLabel('\n', self)
+            lay_lims.addWidget(self._label_getsts, row, 0, 1, 2)
 
-        if self.has_reforb:
+            row += 1
+            self._label_scl = QLabel('Scale: ', self)
+            lay_lims.addWidget(self._label_scl, row, 0)
+            self._spin_scl = QDoubleSpinBox(self)
+            self._spin_scl.setDecimals(2)
+            self._spin_scl.setValue(1.00)
+            self._spin_scl.setMinimum(-100.00)
+            self._spin_scl.setMaximum(+100.00)
+            lay_lims.addWidget(self._spin_scl, row, 1)
+        else:
+            self._head_value = QLabel('Value', self, alignment=Qt.AlignCenter)
+            lay_lims.addWidget(self._head_value, 0, 1)
+            self._head_send = QLabel('Apply', self, alignment=Qt.AlignCenter)
+            lay_lims.addWidget(self._head_send, 0, 2)
+
+            self._spins, self._checks = dict(), dict()
+            for lsp in self.lim_sp:
+                row += 1
+                label = QLabel(lsp.split('-')[0].split('Lmt')[1], self)
+                lay_lims.addWidget(label, row, 0)
+                spin = QSpinBox(self)
+                self._spins[lsp] = spin
+                spin.setValue(0)
+                spin.setMinimum(-1e9)
+                spin.setMaximum(1e9)
+                lay_lims.addWidget(spin, row, 1)
+                check = QCheckBox(self)
+                self._checks[lsp] = check
+                lay_lims.addWidget(check, row, 2, alignment=Qt.AlignCenter)
+                if len(self.pvs_sp) == 1:
+                    check.setChecked(True)
+                    check.setVisible(False)
+
             row += 1
             self._label_reforb = QLabel(
                 '\nChoose Ref.Orb. to calculate reference\n' +
@@ -318,11 +349,38 @@ class BPMIntlkLimSPWidget(BaseObject, QWidget):
             self._cb_reforb.refOrbChanged.connect(self._set_ref_orb)
             lay_lims.addWidget(self._cb_reforb, row, 0, 1, 3)
 
+            if 'trans' in self.metric:
+                text = '\n\nBPM calculation consider the translation\n' \
+                    'estimative:' \
+                    '\n\n(pos @downstream+pos @upstream)/2\n\n' \
+                    'where the pairs downstream/upstream\nfolow:\n' \
+                    '    - M1/M2\n' \
+                    '    - C1-1/C1-2\n' \
+                    '    - C2/C3-1\n' \
+                    '    - C3-2/C4\n'
+            elif 'ang' in self.metric:
+                text = '\n\nBPM calculation consider the angulation\n' \
+                    'estimative:' \
+                    '\n\n(pos @downstream - pos @upstream)\n\n' \
+                    'where the pairs downstream/upstream\nfolow:\n' \
+                    '    - M1/M2\n' \
+                    '    - C1-1/C1-2\n' \
+                    '    - C2/C3-1\n' \
+                    '    - C3-2/C4\n'
+            row += 1
+            self._label_help = QLabel(text, self)
+            lay_lims.addWidget(self._label_help, row, 0, 1, 3)
+
         # BPM selection
         groupsel = QGroupBox('Select BPMs:')
+        groupsel.setObjectName('groupsel')
+        groupsel.setStyleSheet(
+            '#groupsel{min-width: 25em; max-width: 25em;}')
+        groupsel.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
         self._bpm_sel = _BPMSelectionWidget(
             self, show_toggle_all_true=False,
-            toggle_all_false_text='Select All', prefix=self.prefix)
+            toggle_all_false_text='Select All',
+            use_scroll=False, prefix=self.prefix)
         lay_groupsel = QGridLayout(groupsel)
         lay_groupsel.addWidget(self._bpm_sel)
 
@@ -343,6 +401,12 @@ class BPMIntlkLimSPWidget(BaseObject, QWidget):
             self._reforb['x'] = _np.array(data['x']) * self.CONV_UM2NM
             self._reforb['y'] = _np.array(data['y']) * self.CONV_UM2NM
 
+    def _get_new_sum(self):
+        self._summon = _np.array(self._get_values('Sum-Mon'))
+        text = 'Read at ' + _time.strftime(
+            '%d/%m/%Y %H:%M:%S\n', _time.localtime(_time.time()))
+        self._label_getsts.setText(text)
+
     def send_value(self):
         """Send new value."""
         selected = list()
@@ -355,18 +419,25 @@ class BPMIntlkLimSPWidget(BaseObject, QWidget):
         if not selected:
             return
 
-        for lsp in self.lim_sp:
-            if not self._checks[lsp].isChecked():
-                continue
-            lval = self._spins[lsp].value()
-            if self.has_reforb:
+        if 'sum' in self.metric:
+            _av = self.CONV_POLY_MONIT1_2_MONIT[0, :]
+            _bv = self.CONV_POLY_MONIT1_2_MONIT[1, :]
+            value = self._spin_scl.value() * (self._summon - _bv)/_av
+            print(value == self._summon)
+            for name in selected:
+                idx = self.BPM_NAMES.index(name)
+                self.pvs_sp[self.lim_sp[0]][name].send_value_signal[int].emit(
+                    round(value[idx]))
+        else:
+            for lsp in self.lim_sp:
+                if not self._checks[lsp].isChecked():
+                    continue
+                lval = self._spins[lsp].value()
                 plan = 'x' if 'x' in lsp.lower() else 'y'
                 ref = self._reforb[plan]
                 metric = self.get_intlk_metric(ref, metric=self.metric)
                 value = _np.array(metric) + lval
-            else:
-                value = _np.ones(len(self.BPM_NAMES)) * lval
-            for name in selected:
-                idx = self.BPM_NAMES.index(name)
-                self.pvs_sp[lsp][name].send_value_signal[int].emit(
-                    round(value[idx]))
+                for name in selected:
+                    idx = self.BPM_NAMES.index(name)
+                    self.pvs_sp[lsp][name].send_value_signal[int].emit(
+                        round(value[idx]))
