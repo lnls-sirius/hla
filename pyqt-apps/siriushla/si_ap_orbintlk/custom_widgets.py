@@ -172,6 +172,7 @@ class _BPMSelectionWidget(BaseObject, SelectionMatrixWidget):
             else:
                 led.state = 1
             hbl = QHBoxLayout(wid)
+            hbl.setContentsMargins(0, 0, 0, 0)
             hbl.addWidget(led)
             widgets.append(wid)
         return widgets

@@ -96,6 +96,7 @@ class SingleSelMatrix(BaseObject, SelectionWidget, PyDMWidget):
             tooltip += '; Pos = {0:5.1f} m'.format(self.devpos[self.dev][idx])
             led.setToolTip(tooltip)
             hbl = QHBoxLayout(wid)
+            hbl.setContentsMargins(0, 0, 0, 0)
             hbl.addWidget(led)
             widgets.append(wid)
         return widgets
@@ -176,7 +177,6 @@ class SingleSelMatrix(BaseObject, SelectionWidget, PyDMWidget):
         for wid in self.widgets:
             led = wid.findChild(QLed)
             led.setEnabled(new_conn)
-
 
 class SelectionMatrix(BaseWidget):
 
