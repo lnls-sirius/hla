@@ -74,7 +74,7 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
             self, self.devpref.substitute(propty='IntlkEn-Sts'))
 
         self._ld_genclr = QLabel(
-            'Clear: ', self, alignment=Qt.AlignRight | Qt.AlignBottom)
+            'Reset: ', self, alignment=Qt.AlignRight | Qt.AlignBottom)
         self._bt_genclr = PyDMPushButton(
             self,
             init_channel=self.devpref.substitute(propty='IntlkClr-Sel'),
@@ -150,7 +150,7 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
             self, self.devpref.substitute(propty='Intlk'+intlk+'En-Sts'))
 
         ld_clr = QLabel(
-            'Clear: ', self, alignment=Qt.AlignRight | Qt.AlignBottom)
+            'Reset: ', self, alignment=Qt.AlignRight | Qt.AlignBottom)
         bt_clr = PyDMPushButton(
             self, init_channel=self.devpref.substitute(
                 propty='Intlk'+intlk+'Clr-Sel'), pressValue=1)

@@ -137,7 +137,7 @@ class BPMOrbIntlkMainWindow(BaseObject, SiriusMainWindow):
         if 'Sum' not in intlktype:
             row += 1
             ld_clr = QLabel(
-                'Clear All: ', self, alignment=Qt.AlignRight | Qt.AlignBottom)
+                'Reset All: ', self, alignment=Qt.AlignRight | Qt.AlignBottom)
             lay.addWidget(ld_clr, row, 0)
 
             bt_clr = FamBPMButton(
