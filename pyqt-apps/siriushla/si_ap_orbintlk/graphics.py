@@ -5,7 +5,7 @@ import numpy as _np
 
 from qtpy.QtCore import Qt, Slot, Signal, QSize, QThread
 from qtpy.QtGui import QColor
-from qtpy.QtWidgets import QGridLayout, QWidget, QLabel, \
+from qtpy.QtWidgets import QGridLayout, QWidget, QLabel, QHBoxLayout, \
     QComboBox, QToolTip, QSizePolicy as QSzPlcy, QTabWidget
 
 import qtawesome as qta
@@ -54,55 +54,64 @@ class GraphMonitorWidget(QWidget):
         wid = QWidget()
         lay = QGridLayout(wid)
         lay.setAlignment(Qt.AlignTop)
-        lay.setVerticalSpacing(9)
 
         label = QLabel(
             '<h3>'+intlktype+'</h3>', self, alignment=Qt.AlignCenter)
         lay.addWidget(label, 0, 0)
 
         if intlktype == 'Min.Sum. Threshold':
-            self.graph = MinSumGraphWidget(self, self._prefix)
-            lay.addWidget(self.graph, 2, 0)
+            graph = MinSumGraphWidget(self, self._prefix)
+            lay.addWidget(graph, 2, 0)
         elif intlktype == 'Translation':
-            self.graphx_t = TransXGraphWidget(self, self._prefix)
-            lay.addWidget(self.graphx_t, 2, 0)
-            self.graphy_t = TransYGraphWidget(self, self._prefix)
-            lay.addWidget(self.graphy_t, 3, 0)
-
             propty_sel = GraphProptySelWidget(self)
             lay.addWidget(propty_sel, 1, 0)
+
+            graphx = TransXGraphWidget(self, self._prefix)
+            lay.addWidget(graphx, 2, 0)
+            legx = GraphLegendWidget(self, 'Trans', 'X')
+            lay.addWidget(legx, 3, 0)
+            graphy = TransYGraphWidget(self, self._prefix)
+            lay.addWidget(graphy, 4, 0)
+            legy = GraphLegendWidget(self, 'Trans', 'Y')
+            lay.addWidget(legy, 5, 0)
+
             propty_sel.propty_intlk_changed.connect(
-                self.graphx_t.update_propty_intlktype)
+                graphx.update_propty_intlktype)
             propty_sel.propty_reforb_changed.connect(
-                self.graphx_t.update_propty_reforb)
+                graphx.update_propty_reforb)
             propty_sel.propty_comp_changed.connect(
-                self.graphx_t.update_propty_comptype)
+                graphx.update_propty_comptype)
             propty_sel.propty_intlk_changed.connect(
-                self.graphy_t.update_propty_intlktype)
+                graphy.update_propty_intlktype)
             propty_sel.propty_reforb_changed.connect(
-                self.graphy_t.update_propty_reforb)
+                graphy.update_propty_reforb)
             propty_sel.propty_comp_changed.connect(
-                self.graphy_t.update_propty_comptype)
+                graphy.update_propty_comptype)
         elif intlktype == 'Angulation':
-            self.graphx_a = AngXGraphWidget(self, self._prefix)
-            lay.addWidget(self.graphx_a, 2, 0)
-            self.graphy_a = AngYGraphWidget(self, self._prefix)
-            lay.addWidget(self.graphy_a, 3, 0)
-
             propty_sel = GraphProptySelWidget(self)
             lay.addWidget(propty_sel, 1, 0)
+
+            graphx = AngXGraphWidget(self, self._prefix)
+            lay.addWidget(graphx, 2, 0)
+            legx = GraphLegendWidget(self, 'Ang', 'X')
+            lay.addWidget(legx, 3, 0)
+            graphy = AngYGraphWidget(self, self._prefix)
+            lay.addWidget(graphy, 4, 0)
+            legy = GraphLegendWidget(self, 'Ang', 'Y')
+            lay.addWidget(legy, 5, 0)
+
             propty_sel.propty_intlk_changed.connect(
-                self.graphx_a.update_propty_intlktype)
+                graphx.update_propty_intlktype)
             propty_sel.propty_reforb_changed.connect(
-                self.graphx_a.update_propty_reforb)
+                graphx.update_propty_reforb)
             propty_sel.propty_comp_changed.connect(
-                self.graphx_a.update_propty_comptype)
+                graphx.update_propty_comptype)
             propty_sel.propty_intlk_changed.connect(
-                self.graphy_a.update_propty_intlktype)
+                graphy.update_propty_intlktype)
             propty_sel.propty_reforb_changed.connect(
-                self.graphy_a.update_propty_reforb)
+                graphy.update_propty_reforb)
             propty_sel.propty_comp_changed.connect(
-                self.graphy_a.update_propty_comptype)
+                graphy.update_propty_comptype)
 
         return wid
 
@@ -163,38 +172,6 @@ class GraphProptySelWidget(QWidget):
         self._cb_reforb = RefOrbComboBox(self)
         self._cb_reforb.refOrbChanged.connect(self.propty_reforb_changed.emit)
 
-        self._label_leg = QLabel('Legend: ', self)
-        self._label_leg.setStyleSheet(
-            'min-width: 8em; max-width: 8em;')
-
-        self._label_legsym0 = QLabel('', self, alignment=Qt.AlignRight)
-        icon_nok = qta.icon(
-            'mdi.cards-diamond', 'mdi.cards-diamond-outline',
-            'mdi.circle', 'mdi.circle-outline',
-            options=[
-                dict(scale_factor=0.8, offset=(-0.3, 0), color='red'),
-                dict(scale_factor=0.8, offset=(-0.3, 0)),
-                dict(scale_factor=0.65, offset=(+0.3, 0), color='red'),
-                dict(scale_factor=0.65, offset=(+0.3, 0)),
-            ])
-        pixmap_nok = icon_nok.pixmap(icon_nok.actualSize(QSize(30, 25)))
-        self._label_legsym0.setPixmap(pixmap_nok)
-        self._label_leglab0 = QLabel('Interlock On (Limit exceeded)')
-        self._label_legsym1 = QLabel()
-        icon_ok = qta.icon(
-            'mdi.cards-diamond', 'mdi.cards-diamond-outline',
-            'mdi.circle', 'mdi.circle-outline',
-            options=[
-                dict(scale_factor=0.8, offset=(-0.3, 0), color='#00d900'),
-                dict(scale_factor=0.8, offset=(-0.3, 0)),
-                dict(scale_factor=0.65, offset=(+0.3, 0), color='#00d900'),
-                dict(scale_factor=0.65, offset=(+0.3, 0)),
-            ])
-
-        pixmap_ok = icon_ok.pixmap(icon_ok.actualSize(QSize(30, 25)))
-        self._label_legsym1.setPixmap(pixmap_ok)
-        self._label_leglab1 = QLabel('Interlock Off (All ok)')
-
         lay = QGridLayout(self)
         lay.setContentsMargins(0, 0, 0, 0)
         lay.addWidget(self._label_prop, 0, 0)
@@ -204,11 +181,6 @@ class GraphProptySelWidget(QWidget):
         lay.addWidget(self._cb_comp, 0, 4)
         lay.addWidget(self._label_reforb, 0, 5)
         lay.addWidget(self._cb_reforb, 0, 6)
-        lay.addWidget(self._label_leg, 1, 0)
-        lay.addWidget(self._label_legsym0, 1, 1)
-        lay.addWidget(self._label_leglab0, 1, 2)
-        lay.addWidget(self._label_legsym1, 1, 3)
-        lay.addWidget(self._label_leglab1, 1, 4)
 
     def _set_plotopt_items(self, key):
         self._cb_comp.currentTextChanged.disconnect()
@@ -225,6 +197,93 @@ class GraphProptySelWidget(QWidget):
             self.propty_comp_changed.emit)
 
 
+class GraphLegendWidget(QWidget):
+    """Graph Legend Widget."""
+
+    def __init__(self, parent=None, metric='', plan=''):
+        super().__init__(parent)
+        self._metric = metric
+        self._plan = plan.upper()
+
+        self._setupUi()
+
+    def _setupUi(self):
+        self._label_leg = QLabel('Legend: ', self)
+
+        self._label_symcur = QLabel('', self, alignment=Qt.AlignRight)
+        icon_cur = qta.icon(
+            'fa5s.window-minimize', offset=(0.0, -0.4), rotated=-45,
+            color='red' if self._plan == 'Y' else 'blue')
+        pixmap_cur = icon_cur.pixmap(icon_cur.actualSize(QSize(20, 20)))
+        self._label_symcur.setPixmap(pixmap_cur)
+        self._label_symcur.setSizePolicy(QSzPlcy.Fixed, QSzPlcy.Fixed)
+        self._label_labcur = QLabel(self._metric + self._plan)
+
+        self._label_symlim = QLabel()
+        icon_lim = qta.icon(
+            'fa5s.window-minimize', 'fa5s.window-minimize',
+            options=[
+                dict(scale_factor=0.4, offset=(-0.1, 0.0),
+                     rotated=-45, color='black'),
+                dict(scale_factor=0.4, offset=(0.3, 0.0),
+                     rotated=-45, color='black')])
+        pixmap_lim = icon_lim.pixmap(icon_lim.actualSize(QSize(20, 20)))
+        self._label_symlim.setPixmap(pixmap_lim)
+        self._label_symlim.setSizePolicy(QSzPlcy.Fixed, QSzPlcy.Fixed)
+        self._label_lablim = QLabel(self._plan+' Thres RB')
+
+        self._label_sym0 = QLabel('', self, alignment=Qt.AlignRight)
+        icon_s0 = qta.icon('mdi.cards-diamond-outline')
+        pixmap = icon_s0.pixmap(icon_s0.actualSize(QSize(20, 20)))
+        self._label_sym0.setPixmap(pixmap)
+        self._label_sym0.setSizePolicy(QSzPlcy.Fixed, QSzPlcy.Fixed)
+        self._label_lab0 = QLabel(self._plan+' Min/Max Intlk Mon')
+
+        self._label_sym1 = QLabel('', self, alignment=Qt.AlignRight)
+        icon_s1 = qta.icon('mdi.circle-outline')
+        pixmap = icon_s1.pixmap(icon_s1.actualSize(QSize(20, 20)))
+        self._label_sym1.setPixmap(pixmap)
+        self._label_sym0.setSizePolicy(QSzPlcy.Fixed, QSzPlcy.Fixed)
+        self._label_lab1 = QLabel('X | Y Intlk Mon')
+
+        self._label_symnok = QLabel('', self, alignment=Qt.AlignRight)
+        icon_nok = qta.icon('mdi.square', color='red')
+        pixmap_nok = icon_nok.pixmap(icon_nok.actualSize(QSize(20, 20)))
+        self._label_symnok.setPixmap(pixmap_nok)
+        self._label_symnok.setSizePolicy(QSzPlcy.Fixed, QSzPlcy.Fixed)
+        self._label_labnok = QLabel('Intlk On (Limit exceeded)')
+
+        self._label_symok = QLabel()
+        icon_ok = qta.icon('mdi.square', color='#00d900')
+        pixmap_ok = icon_ok.pixmap(icon_ok.actualSize(QSize(20, 20)))
+        self._label_symok.setPixmap(pixmap_ok)
+        self._label_symok.setSizePolicy(QSzPlcy.Fixed, QSzPlcy.Fixed)
+        self._label_labok = QLabel('Intlk Off (All ok)')
+
+        lay = QHBoxLayout(self)
+        lay.setAlignment(Qt.AlignTop)
+        lay.setContentsMargins(0, 0, 0, 0)
+        lay.addWidget(self._label_leg)
+        lay.addStretch()
+        lay.addWidget(self._label_symcur)
+        lay.addWidget(self._label_labcur)
+        lay.addStretch()
+        lay.addWidget(self._label_symlim)
+        lay.addWidget(self._label_lablim)
+        lay.addStretch()
+        lay.addWidget(self._label_sym0)
+        lay.addWidget(self._label_lab0)
+        lay.addStretch()
+        lay.addWidget(self._label_sym1)
+        lay.addWidget(self._label_lab1)
+        lay.addStretch()
+        lay.addWidget(self._label_symnok)
+        lay.addWidget(self._label_labnok)
+        lay.addStretch()
+        lay.addWidget(self._label_symok)
+        lay.addWidget(self._label_labok)
+
+
 class Graph(BaseObject, PyDMWaveformPlot):
     """BPM orbit interlock data graph."""
 
@@ -237,7 +296,6 @@ class Graph(BaseObject, PyDMWaveformPlot):
         self.setAutoRangeY(True)
         self.setShowXGrid(True)
         self.setShowYGrid(True)
-        self.setShowLegend(True)
         self.plotItem.showButtons()
         self.plotItem.setLabel('bottom', 's', units='m')
         self._nok_pen = mkPen(QColor('black'))
@@ -505,6 +563,7 @@ class _BaseGraphWidget(BaseObject, QWidget):
         self.graph.setObjectName('graph')
 
         lay = QGridLayout(self)
+        lay.setContentsMargins(0, 6, 0, 0)
         lay.addWidget(self.graph, 0, 0)
 
         self.setStyleSheet('#graph{min-width:60em;min-height:12em;}')
