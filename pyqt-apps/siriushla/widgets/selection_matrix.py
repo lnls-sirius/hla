@@ -3,7 +3,7 @@
 from functools import partial as _part
 
 from qtpy.QtWidgets import QGridLayout, QHBoxLayout, QLabel, \
-    QScrollArea, QWidget, QPushButton
+    QScrollArea, QWidget, QPushButton, QSizePolicy as QSzPol
 from qtpy.QtCore import Qt, QRect, QPoint, Signal
 from qtpy.QtGui import QBrush, QColor, QPainter
 
@@ -36,6 +36,9 @@ class SelectionMatrixWidget(QWidget):
     show_toggle_all_true: bool, optional
         Whether to show button to send toggleAllItems to True.
         Default: True.
+    use_scroll: bool, optional
+        Whether to use or not QScrollArea.
+        Default: True.
 
     Signals
     -------
@@ -51,7 +54,8 @@ class SelectionMatrixWidget(QWidget):
     def __init__(
             self, parent=None, title='', has_bothplanes=False,
             toggle_all_false_text='Disable All', show_toggle_all_false=True,
-            toggle_all_true_text='Enable All', show_toggle_all_true=True):
+            toggle_all_true_text='Enable All', show_toggle_all_true=True,
+            use_scroll=True):
         """Init."""
         super().__init__(parent)
 
@@ -61,6 +65,7 @@ class SelectionMatrixWidget(QWidget):
         self.show_toggle_all_false = show_toggle_all_false
         self.toggle_all_true_text = toggle_all_true_text
         self.show_toggle_all_true = show_toggle_all_true
+        self.use_scroll = use_scroll
 
         self.begin = QPoint()
         self.end = QPoint()
@@ -80,15 +85,19 @@ class SelectionMatrixWidget(QWidget):
             lay.addWidget(lab, 0, 0, 1, 1)
 
         # scroll area + widgets matrix
-        scr_ar = QScrollArea(self)
         scr_ar_wid = QWidget()
         scr_ar_wid.setObjectName('scrollarea')
         scr_ar_wid.setStyleSheet(
             '#scrollarea {background-color: transparent;}')
-        scr_ar.setWidget(scr_ar_wid)
-        scr_ar.setWidgetResizable(True)
-        scr_ar.setSizeAdjustPolicy(scr_ar.AdjustToContents)
-        lay.addWidget(scr_ar, 1, 0, 1, 1)
+        if self.use_scroll:
+            scr_ar = QScrollArea(self)
+            scr_ar.setWidget(scr_ar_wid)
+            scr_ar.setWidgetResizable(True)
+            scr_ar.setSizeAdjustPolicy(scr_ar.AdjustToContents)
+            lay.addWidget(scr_ar, 1, 0, 1, 1)
+        else:
+            scr_ar_wid.setSizePolicy(QSzPol.Maximum, QSzPol.Maximum)
+            lay.addWidget(scr_ar_wid, 1, 0, 1, 1)
 
         glay = QGridLayout(scr_ar_wid)
         glay.setContentsMargins(0, 0, 0, 0)
