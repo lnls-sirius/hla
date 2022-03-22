@@ -93,7 +93,7 @@ SEC_2_CHANNELS = {
             'Circ FlwRt': 'RA-TLBO:RF-Circulator:FlwRt-Mon',
             'Load FlwRt': 'RA-TLBO:RF-Load:FlwRt-Mon',
             'Circ Intlk': 'RA-TLBO:RF-Circulator:IntlkOp-Mon',
-            'Circ Limits': (18.0, 25.0),
+            'Circ Limits': (19.0, 23.0),
         },
         'SSA': {
             'Name': 'SSA',
