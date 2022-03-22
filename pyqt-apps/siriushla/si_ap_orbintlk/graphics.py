@@ -553,7 +553,6 @@ class _BaseGraphWidget(BaseObject, QWidget):
         elif self._plan:
             data = self.get_ref_orb(text)
             self._reforb = _np.array(data[self._plan], dtype=float)
-        self._reforb *= self.CONV_UM2NM
         self.refOrbChanged.emit(self._reforb)
 
     def _setupUi(self):

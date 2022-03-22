@@ -10,7 +10,6 @@ from qtpy.QtWidgets import QPushButton, QComboBox, QSizePolicy as QSzPlcy, \
 
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 from siriuspy.namesys import SiriusPVName
-from siriuspy.clientconfigdb import ConfigDBClient
 
 from ..widgets import SiriusConnectionSignal as _ConnSignal, \
     PyDMLedMultiChannel, PyDMLed, SiriusLedState, QLed, SelectionMatrixWidget
@@ -259,10 +258,7 @@ class BPMIntlkLimSPWidget(BaseObject, QWidget):
             self._create_pvs('Sum-Mon')
             self._summon = _np.zeros(len(self.BPM_NAMES))
         else:
-            self._reforb = dict()
-            self._reforb['x'] = _np.zeros(len(self.BPM_NAMES))
-            self._reforb['y'] = _np.zeros(len(self.BPM_NAMES))
-            self._client = ConfigDBClient(config_type='si_orbit')
+            self._set_ref_orb('Zero')
 
         self.prefix = prefix
 
@@ -397,13 +393,14 @@ class BPMIntlkLimSPWidget(BaseObject, QWidget):
         lay.addWidget(groupsel, 1, 1)
 
     def _set_ref_orb(self, text):
+        self._reforb = dict()
         if text.lower() == 'zero':
-            self._reforb['x'] = _np.zeros(len(self.BPM_NAMES))
-            self._reforb['y'] = _np.zeros(len(self.BPM_NAMES))
+            self._reforb['x'] = _np.zeros(len(self.BPM_NAMES), dtype=float)
+            self._reforb['y'] = _np.zeros(len(self.BPM_NAMES), dtype=float)
         else:
             data = self.get_ref_orb(text)
-            self._reforb['x'] = _np.array(data['x']) * self.CONV_UM2NM
-            self._reforb['y'] = _np.array(data['y']) * self.CONV_UM2NM
+            self._reforb['x'] = data['x']
+            self._reforb['y'] = data['y']
 
     def _get_new_sum(self):
         self._summon = _np.array(self._get_values('Sum-Mon'))

@@ -1,5 +1,6 @@
 """Base Object."""
 
+import numpy as _np
 from siriuspy.epics import PV as _PV
 from siriuspy.envars import VACA_PREFIX
 from siriuspy.namesys import SiriusPVName
@@ -31,7 +32,16 @@ class BaseObject(BaseOrbitIntlk):
         Returns:
             si_orbit: si orbit configuration value from ConfigDB
         """
-        return self._client.get_config_value(configname)
+        try:
+            configvalue = self._client.get_config_value(configname)
+            value = dict()
+            value['x'] = _np.array(configvalue['x']) * self.CONV_UM2NM
+            value['y'] = _np.array(configvalue['y']) * self.CONV_UM2NM
+        except:
+            value = dict()
+            value['x'] = _np.zeros(len(self.BPM_NAMES), dtype=float)
+            value['y'] = _np.zeros(len(self.BPM_NAMES), dtype=float)
+        return value
 
     # --- pv handler methods ---
 
