@@ -589,6 +589,7 @@ class _UpdateGraphThread(BaseObject, QThread):
         QThread.__init__(self, parent)
 
         self.intlktype = intlktype
+        self.metric = intlktype[:-1].lower()
         self.meas_data = meas_data
         self.meas_symb = meas_symb
         self.min_data = min_data
@@ -650,22 +651,20 @@ class _UpdateGraphThread(BaseObject, QThread):
                 symbols_meas = None
 
             # data meas
-            data_propty = self.meas_data['var'] if isinstance(
-                self.meas_data, dict) else self.meas_data
-            self._create_pvs(data_propty)
-            if isinstance(self.meas_data, dict):
-                values = _np.array(self._get_values(data_propty))
-                values -= self._reforb
-                data_values = _np.array(self.calc_intlk_metric(
-                    values, operation=self.meas_data['op']), dtype=float)
+            self._create_pvs(self.meas_data)
+            if self.metric in ['trans', 'ang']:
+                vals = _np.array(self._get_values(self.meas_data), dtype=float)
+                vals -= self._reforb
+                vals = _np.array(self.calc_intlk_metric(
+                    vals, metric=self.metric), dtype=float)
             else:
                 # sum case
                 _av = self.CONV_POLY_MONIT1_2_MONIT[0, :]
                 _bv = self.CONV_POLY_MONIT1_2_MONIT[1, :]
-                vals = _np.array(self._get_values(data_propty), dtype=float)
-                data_values = (vals - _bv)/_av
+                vals = _np.array(self._get_values(self.meas_data), dtype=float)
+                vals = (vals - _bv)/_av
 
-            y_data_meas = list(data_values * self.CONV_NM2M)
+            y_data_meas = list(vals * self.CONV_NM2M)
 
             self.dataChanged.emit(['meas', symbols_meas, y_data_meas])
 
@@ -683,10 +682,10 @@ class _UpdateGraphThread(BaseObject, QThread):
                 symbols_min = None
 
             # data min
-            data_values = _np.array(
-                self._get_values(self.min_data), dtype=float)
-            data_values -= self._reforb
-            y_data_min = list(data_values * self.CONV_NM2M)
+            vals = _np.array(self._get_values(self.min_data), dtype=float)
+            ref = self.calc_intlk_metric(self._reforb, metric=self.metric)
+            vals -= ref
+            y_data_min = list(vals * self.CONV_NM2M)
 
             self.dataChanged.emit(['min', symbols_min, y_data_min])
 
@@ -704,13 +703,12 @@ class _UpdateGraphThread(BaseObject, QThread):
                 symbols_max = None
 
             # data max
-            data_values = _np.array(
-                self._get_values(self.max_data), dtype=float)
-            data_values -= self._reforb
-            y_data_max = list(data_values * self.CONV_NM2M)
+            vals = _np.array(self._get_values(self.max_data), dtype=float)
+            ref = self.calc_intlk_metric(self._reforb, metric=self.metric)
+            vals -= ref
+            y_data_max = list(vals * self.CONV_NM2M)
 
             self.dataChanged.emit(['max', symbols_max, y_data_max])
-
 
 
 class MinSumGraphWidget(_BaseGraphWidget):
@@ -729,7 +727,7 @@ class TransXGraphWidget(_BaseGraphWidget):
     """Translation Graph Widget."""
 
     INTLKTYPE = 'TransX'
-    PROPTY_MEAS_DATA = {'var': 'PosX-Mon', 'op': 'mean'}
+    PROPTY_MEAS_DATA = 'PosX-Mon'
     PROPTY_MEAS_SYMB = {
         'Instantaneous': {
             'General': 'Intlk-Mon',
@@ -769,7 +767,7 @@ class TransYGraphWidget(_BaseGraphWidget):
     """Translation Graph Widget."""
 
     INTLKTYPE = 'TransY'
-    PROPTY_MEAS_DATA = {'var': 'PosY-Mon', 'op': 'mean'}
+    PROPTY_MEAS_DATA = 'PosY-Mon'
     PROPTY_MEAS_SYMB = {
         'Instantaneous': {
             'General': 'Intlk-Mon',
@@ -811,7 +809,7 @@ class AngXGraphWidget(_BaseGraphWidget):
     """Angulation Graph Widget."""
 
     INTLKTYPE = 'AngX'
-    PROPTY_MEAS_DATA = {'var': 'PosX-Mon', 'op': 'diff'}
+    PROPTY_MEAS_DATA = 'PosX-Mon'
     PROPTY_MEAS_SYMB = {
         'Instantaneous': {
             'General': 'Intlk-Mon',
@@ -853,7 +851,7 @@ class AngYGraphWidget(_BaseGraphWidget):
     """Angulation Graph Widget."""
 
     INTLKTYPE = 'AngY'
-    PROPTY_MEAS_DATA = {'var': 'PosY-Mon', 'op': 'diff'}
+    PROPTY_MEAS_DATA = 'PosY-Mon'
     PROPTY_MEAS_SYMB = {
         'Instantaneous': {
             'General': 'Intlk-Mon',

@@ -261,7 +261,7 @@ class BPMIntlkLimSPWidget(BaseObject, QWidget):
 
         if 'sum' in self.metric:
             self._create_pvs('Sum-Mon')
-            self._summon = _np.zeros(len(self.BPM_NAMES))
+            self._summon = _np.zeros(len(self.BPM_NAMES), dtype=float)
         else:
             self._set_ref_orb('Zero')
 
@@ -427,7 +427,7 @@ class BPMIntlkLimSPWidget(BaseObject, QWidget):
                 if not self._checks[lsp].isChecked():
                     continue
                 lval = self._spins[lsp].value()
-                plan = 'x' if 'x' in lsp.lower() else 'y'
+                plan = 'y' if 'y' in lsp.lower() else 'x'
                 metric = self.calc_intlk_metric(
                     self._reforb[plan], metric=self.metric)
                 allvals = _np.round(_np.array(metric) + lval)
