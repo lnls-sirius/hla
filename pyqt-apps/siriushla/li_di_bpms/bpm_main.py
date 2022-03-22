@@ -3,11 +3,13 @@ import sys
 import json
 from epics import PV 
 from PyQt5.QtCore import Qt
-from qtpy.QtWidgets import QWidget, QLabel, QGridLayout, QGroupBox, QHBoxLayout, QVBoxLayout
-from pydm.widgets import PyDMLabel, PyDMLineEdit, enum_button
+from qtpy.QtWidgets import QWidget, QLabel, QGridLayout, QGroupBox, QVBoxLayout, QTabWidget
+from pydm.widgets import PyDMLabel, PyDMLineEdit, enum_button, PyDMEnumComboBox
+from ..widgets import SiriusLedState
 from siriushla.as_di_bpms.base import GraphWave
 
-# Digital Beam Position Processor
+# Class Digital Beam Position Processor
+
 class DigBeamPosProc(QWidget): 
     
 
@@ -16,235 +18,393 @@ class DigBeamPosProc(QWidget):
         
         super().__init__(parent)
 
-        self.prefix = "LA-BI:BPM2"
-            
-        self.radio_buttons = []
-        self.wave_graph = False
+        self.setObjectName('LIApp')
+
+        self.device_name = "LA-BI:BPM2"
 
         self.graph_data = {
-            "title": "Hilbert Amplitude",
-            "labelX": "Waveform Index",
-            "unitX": "",
-            "labelY": "ADC Value",
-            "unitY": "count"
+            "Hilbert":{
+                "Amplitude":{
+                    "title": "Hilbert Amplitude",
+                    "labelX": "Waveform Index",
+                    "unitX": "",
+                    "labelY": "Amplitude Value",
+                    "unitY": "count",
+                    "channels":{
+                        "CH1":{
+                            "path": "CH1_HIB_AMP_WAVEFORM",
+                            "name": "AntA",
+                            "color": "#0000FF"
+                        },
+                        "CH2":{
+                            "path": "CH2_HIB_AMP_WAVEFORM",
+                            "name": "AntB",
+                            "color": "#FF0000"
+                        },
+                        "CH3":{
+                            "path": "CH3_HIB_AMP_WAVEFORM",
+                            "name": "AntC",
+                            "color": "#008800"
+                        },
+                        "CH4":{
+                            "path": "CH4_HIB_AMP_WAVEFORM",
+                            "name": "AntD",
+                            "color": "#FF00FF"
+                        }
+                    }
+                },
+                "Phase":{
+                    "title": "Hilbert Phase",
+                    "labelX": "Waveform Index",
+                    "unitX": "",
+                    "labelY": "Phase Value",
+                    "unitY": "count",
+                    "channels":{
+                        "CH1":{
+                            "path": "CH1_HIB_PH_WAVEFORM",
+                            "name": "AntA",
+                            "color": "#0000FF"
+                        },
+                        "CH2":{
+                            "path": "CH2_HIB_PH_WAVEFORM",
+                            "name": "AntB",
+                            "color": "#FF0000"
+                        },
+                        "CH3":{
+                            "path": "CH3_HIB_PH_WAVEFORM",
+                            "name": "AntC",
+                            "color": "#008800"
+                        },
+                        "CH4":{
+                            "path": "CH4_HIB_PH_WAVEFORM",
+                            "name": "AntD",
+                            "color": "#FF00FF"
+                        }
+                    }
+                }
+            },
+            "FFT":{
+                "Amplitude":{
+                    "title": "FFT Amplitude",
+                    "labelX": "Waveform Index",
+                    "unitX": "",
+                    "labelY": "Amplitude Value",
+                    "unitY": "count",
+                    "channels":{
+                        "CH1":{
+                            "path": "CH1_FFT_AMP_WAVEFORM",
+                            "name": "AntA",
+                            "color": "#0000FF"
+                        },
+                        "CH2":{
+                            "path": "CH2_FFT_AMP_WAVEFORM",
+                            "name": "AntB",
+                            "color": "#FF0000"
+                        },
+                        "CH3":{
+                            "path": "CH3_FFT_AMP_WAVEFORM",
+                            "name": "AntC",
+                            "color": "#008800"
+                        },
+                        "CH4":{
+                            "path": "CH4_FFT_AMP_WAVEFORM",
+                            "name": "AntD",
+                            "color": "#FF00FF"
+                        }
+                    }
+                },
+                "Phase":{
+                    "title": "FFT Phase",
+                    "labelX": "Waveform Index",
+                    "unitX": "",
+                    "labelY": "Phase Value",
+                    "unitY": "count",
+                    "channels":{
+                        "CH1":{
+                            "path": "CH1_FFT_PH_WAVEFORM",
+                            "name": "AntA",
+                            "color": "#0000FF"
+                        },
+                        "CH2":{
+                            "path": "CH2_FFT_PH_WAVEFORM",
+                            "name": "AntB",
+                            "color": "#FF0000"
+                        },
+                        "CH3":{
+                            "path": "CH3_FFT_PH_WAVEFORM",
+                            "name": "AntC",
+                            "color": "#008800"
+                        },
+                        "CH4":{
+                            "path": "CH4_FFT_PH_WAVEFORM",
+                            "name": "AntD",
+                            "color": "#FF00FF"
+                        }
+                    }
+                }
+            },
+            "ADC Raw Waveform":{
+                "title": "ADC Raw Waveform",
+                "labelX": "Waveform Index",
+                "unitX": "",
+                "labelY": "ADC Value",
+                "unitY": "count",
+                "channels":{
+                    "CH1":{
+                        "path": "CH1_ADX_WAVEFORM",
+                        "name": "AntA",
+                        "color": "#0000FF"
+                    },
+                    "CH2":{
+                        "path": "CH2_ADX_WAVEFORM",
+                        "name": "AntB",
+                        "color": "#FF0000"
+                    },
+                    "CH3":{
+                        "path": "CH3_ADX_WAVEFORM",
+                        "name": "AntC",
+                        "color": "#008800"
+                    },
+                    "CH4":{
+                        "path": "CH4_ADX_WAVEFORM",
+                        "name": "AntD",
+                        "color": "#FF00FF"
+                    }
+                }
+            }
         }
 
-        self.radio_data = '''
+        self.bpm_relData = '''
             [
                 {
-                    "text" : "Trigger Mode",
-                    "channel" : "ACQ_TRIGGER"
+                    "text" : "Max ADC",
+                    "info" :
+                    {
+                            "A" : "CH1_MAXADC", 
+                            "B" : "CH2_MAXADC", 
+                            "C" : "CH3_MAXADC", 
+                            "D" : "CH4_MAXADC"
+                    }
                 },
                 {
-                    "text" : "Position Algorithm",
-                    "channel" : "POS_ALG"
+                    "text" : "Position",
+                    "info" : 
+                    {
+                        "X" : "POS_X", 
+                        "Y" : "POS_Y",
+                        "S" : "POS_S"
+                    }
                 },
                 {
-                    "text" : "Orientation",
-                    "channel" : "BPM_STRIP"
+                    "text" : "V",
+                    "info" :
+                    {
+                        "A" : "POS_VA", 
+                        "B" : "POS_VB", 
+                        "C" : "POS_VC", 
+                        "D" : "POS_VD"
+                    }
                 },
                 {
-                    "text" : "Display",
-                    "channel" : "OPI:SEL"
-                }
-            ]
-            '''
-
-        self.channels_data = '''
-            [
-                {
-                    "path": "CH1_HIB_AMP_WAVEFORM",
-                    "name": "AntA",
-                    "color": "#0000FF"
+                    "text" : "Trigger Cnt",
+                    "info" : "TRIGGER_CNT"
                 },
                 {
-                    "path": "CH2_HIB_AMP_WAVEFORM",
-                    "name": "AntB",
-                    "color": "#FF0000"
+                    "text" : "Cycle",
+                    "info" : "ACQ_TIME_USED"
                 },
                 {
-                    "path": "CH3_HIB_AMP_WAVEFORM",
-                    "name": "AntC",
-                    "color": "#008800"
+                    "text" : "FFT",
+                    "info" : 
+                    {
+                        "Center" : "FFT_CENTER",
+                        "Width" : "FFT_WIDTH"
+                    }
                 },
                 {
-                    "path": "CH4_HIB_AMP_WAVEFORM",
-                    "name": "AntD",
-                    "color": "#FF00FF"
+                    "text" : "Hilbert",
+                    "info" : 
+                    {
+                        "Center" : "HIB_CENTER",
+                        "Width" : "HIB_WIDTH"
+                    }
+                },
+                {
+                    "text" : "Gain",
+                    "info" : 
+                    {
+                        "X" : "POS_KX",
+                        "Y" : "POS_KY",
+                        "S" : "POS_KS"
+                    }
+                },
+                {
+                    "text" : "Offset",
+                    "info" : 
+                    {  
+                        "X" : "POS_OX",
+                        "Y" : "POS_OY"
+                    }
                 }
             ]
         '''
-
-        self.data_bpm = '''
-        [
-            {
-                "text" : "Max ADC",
-                "info" :
-                {
-                        "A" : "CH1_MAXADC", 
-                        "B" : "CH2_MAXADC", 
-                        "C" : "CH3_MAXADC", 
-                        "D" : "CH4_MAXADC"
-                }
-            },
-            {
-                "text" : "V",
-                "info" :
-                {
-                    "A" : "POS_VA", 
-                    "B" : "POS_VB", 
-                    "C" : "POS_VC", 
-                    "D" : "POS_VD"
-                }
-            },
-            {
-                "text" : "Position",
-                "info" : 
-                {
-                    "X" : "POS_X", 
-                    "Y" : "POS_Y"
-                }
-            },
-            {
-                "text" : " ",
-                "info" : " "
-            },
-            {
-                "text" : "Sum",
-                "info" : "POS_S"
-            },
-            {
-                "text" : "Trigger Cnt",
-                "info" : "TRIGGER_CNT"
-            },
-            {
-                "text" : "Cycle",
-                "info" : "ACQ_TIME_USED"
-            },
-            {
-                "text" : "FFT",
-                "info" : 
-                {
-                    "Center" : "FFT_CENTER",
-                    "Width" : "FFT_WIDTH"
-                }
-            },
-            {
-                "text" : "Hilbert",
-                "info" : 
-                {
-                    "Center" : "HIB_CENTER",
-                    "Width" : "HIB_WIDTH"
-                }
-            },
-            {
-                "text" : "K",
-                "info" : 
-                {
-                    "X" : "POS_KX",
-                    "Y" : "POS_KY"
-                }
-            },
-            {
-                "text" : "Offset",
-                "info" : 
-                {  
-                    "X" : "POS_OX",
-                    "Y" : "POS_OY"
-                }
-            },
-            {
-                "text" : "Ks" ,
-                "info" : "POS_KS"
-            },
-            {
-                "text" : "Attenuator",
-                "info" : "FE_ATTEN_SP"
-            },
-            {
-                "text" : "ADC Threshold",
-                "info" : "ADC_THD"
-            }
-        ]
-    '''
         
-        self.setWindowTitle(self.prefix)
+        self.bpm_OthData = {
+                "Attenuator": "FE_ATTEN_SP",
+                "ADC Threshold" : "ADC_THD",
+                "Orientation" : "BPM_STRIP"
+            }
+                    
+        self.selectors_data = '''
+            [
+                {
+                    "text" : "Trigger Mode",
+                    "info" : "ACQ_TRIGGER"
+                },
+                {
+                    "text" : "Position Algorithm",
+                    "info" : "POS_ALG"
+                }
+            ]'''
 
-        lay = QHBoxLayout()
-        lay.addWidget(self.display_section1(), 0)
-        lay.addLayout(self.display_section2(), 1)
-        lay.addLayout(self.display_section3(), 2)
+        self._setupUi()
+
+    def _setupUi(self):
+
+        self.setWindowTitle(self.device_name)
+
+        lay = QGridLayout()
+        lay.addLayout(self.display_header(), 0, 0, 1, 3)
+        lay.addLayout(self.display_graph(), 1, 0, 2, 1)
+        lay.addLayout(self.display_bpm_relData(), 1, 1, 1, 1)
+        lay.addLayout(self.display_selectors(), 1, 2, 1, 1)
+        lay.setAlignment(Qt.AlignTop)
+        lay.setColumnStretch(0, 10)
         self.setLayout(lay)
 
-    def createGraph(self):
+    def display_header(self):
+        
+        layGrid = QGridLayout()
 
-        if(self.wave_graph == False):
-            self.wave_graph = GraphWave()
+        trig_led = SiriusLedState(init_channel = self.device_name + ':' + "TRIGGER_STATUS")
+        trig_led.setFixedSize(30, 30)
+        layGrid.addWidget(trig_led, 0, 0, 1, 1)
 
-            self.wave_graph.setLabel('left', text = self.graph_data.get("labelY"), units = self.graph_data.get("unitY"))
-            self.wave_graph.setLabel('bottom', text = self.graph_data.get("labelX"), units = self.graph_data.get("unitX"))
-           
-        channels_info = json.loads(self.channels_data)
-        for channel in channels_info:
-            self.wave_graph.addChannel(
-                y_channel = self.prefix + ':' + channel['path'],
-                name = channel['name'], 
-                color = channel['color'], 
+        trig_label = QLabel("Trigger")
+        trig_label.setAlignment(Qt.AlignCenter)
+        layGrid.addWidget(trig_label, 1, 0, 1, 1)
+
+        ioc_led = SiriusLedState(init_channel = self.device_name + ':' + 'HEART_BEAT')
+        ioc_led.autoFillBackground()
+        ioc_led.setFixedSize(30, 30)
+        layGrid.addWidget(ioc_led, 0, 1, 1, 1)
+
+        ioc_label = QLabel("IOC")
+        ioc_label.setAlignment(Qt.AlignCenter)
+        layGrid.addWidget(ioc_label, 1, 1, 1, 1)
+
+        title_label = QLabel("DIGITAL BEAM POSITION PROCESSOR")
+        title_label.setStyleSheet('''
+               font-weight: bold;
+               font-size: 20px;
+            ''')
+        title_label.setAlignment(Qt.AlignCenter)
+        layGrid.addWidget(title_label, 0, 2, 2, 1)
+
+        layGrid.setAlignment(Qt.AlignCenter)
+
+        return layGrid
+
+    def display_graph(self):
+
+        mainlay = QVBoxLayout()
+        tab = QTabWidget()
+
+        graph_names = [
+            "ADC Raw Waveform",
+            "FFT",
+            "Hilbert"
+        ]
+
+        for count in range(0, 3):
+            vlay = QVBoxLayout()
+            tab_content = QWidget()
+
+            graph_data = self.graph_data.get(graph_names[count])
+
+            if(len(graph_data.items()) != 2):
+                vlay.addWidget(self.createGraph(graph_data), 10)
+                tab_content.setLayout(vlay)
+            else:
+                county = 0 
+                for data in graph_data:
+                    title_label = QLabel(graph_data.get(data).get("title"))
+                    title_label.setAlignment(Qt.AlignCenter)
+                    title_label.setFixedHeight(15)
+                    vlay.addWidget(title_label, 1)
+
+                    vlay.addWidget(self.createGraph(graph_data.get(data)), 10)
+                    county += 1
+                tab_content.setLayout(vlay)
+            tab.addTab(tab_content, graph_names[count])
+
+        mainlay.addWidget(tab)
+
+        return mainlay
+
+    def createGraph(self, graph_data):
+        graph = GraphWave()
+
+        graph.setLabel('left', text = graph_data.get("labelY"), units = graph_data.get("unitY"))
+        graph.setLabel('bottom', text = graph_data.get("labelX"), units = graph_data.get("unitX"))
+
+        for channel in graph_data.get("channels"):
+    
+            channel_data = graph_data.get("channels").get(channel)
+            graph.addChannel(
+                y_channel = self.device_name + ':' + channel_data.get('path'),
+                name = channel_data.get('name'), 
+                color = channel_data.get('color'), 
                 lineWidth= 1)
 
-        self.wave_graph.setMinimumWidth(600)
+        graph.setMinimumWidth(600)
+        graph.setMinimumHeight(250)
 
-    def display_section1(self):
-
-        hlay = QHBoxLayout()
-        group = QGroupBox()
-
-        contx = 0
-
-        self.createGraph()
-        hlay.addWidget(self.wave_graph, 1)
-        hlay.setStretch(20, 1)
-
-        contx += 1
-        
-        group.setTitle(self.graph_data.get("title"))
-        group.setAlignment(Qt.AlignCenter)
-        group.setLayout(hlay)
-        return group
+        return graph
 
     def data(self, channel, type):
         if(type == 0):
             channelInfo = PyDMLabel(
                 parent=self,
-                init_channel= self.prefix + ':' + channel)
-        elif(type == 2 or type == 4):
+                init_channel= self.device_name + ':' + channel)
+        elif(type == 1 or type == 2 or type == 4):
             channelInfo = PyDMLineEdit(
                 parent=self,
-                init_channel= self.prefix + ':' + channel)
+                init_channel= self.device_name + ':' + channel)
         else:
             channelInfo = QLabel("Error", self) 
         
         return channelInfo
 
-    def display(self, title, info, lay, x, y, type):
+    def display(self, title, info, x, y, type):
         
         layG = QGridLayout()
         group = QGroupBox()
 
-        contx = 0
-        conty = 0
+        countx = 0
+        county = 0
 
         if(type == 0):
             for text, channel in info.items():
                 
                 text_label = QLabel(text, self)
-                layG.addWidget(text_label, contx, conty)
+                layG.addWidget(text_label, countx, county)
 
                 channel_label = self.data(channel, y)
                 channel_label.showUnits = True
-                layG.addWidget(channel_label, contx, conty+1)
+                layG.addWidget(channel_label, countx, county+1)
 
-                contx += 1
+                countx += 1
         else:
             channel_label = self.data(info, y)
             channel_label.showUnits = True
@@ -255,67 +415,93 @@ class DigBeamPosProc(QWidget):
         group.setTitle(title)
         group.setLayout(layG)
 
-        lay.addWidget(group, x, y)
+        return group
 
-    def display_section2(self):
-        contx = 0
-        conty = 0
+    def display_bpm_relData(self):
+        countx = 0
+        county = 0
 
         lay = QGridLayout()
         
-        bpm_info = json.loads(self.data_bpm)
+        bpm_info = json.loads(self.bpm_relData)
         
         for bpm in bpm_info:
             
             if(bpm["text"] == " "):
-                contx += 1
+                countx += 1
             elif (bpm["text"] == "Max ADC" 
                 or bpm["text"] == "V"
                 or bpm["text"] == "Position"
                 or bpm["text"] == "FFT"
                 or bpm["text"] == "Hilbert"
-                or bpm["text"] == "K"
+                or bpm["text"] == "Gain"
                 or bpm["text"] == "Offset"):
-                self.display(bpm["text"], bpm["info"], lay, contx, conty, 0)
-                contx += 1; 
+                lay.addWidget(self.display(bpm["text"], bpm["info"], countx, county, 0), countx, county, 2, 1)
+                countx += 2; 
             else:
-                self.display(bpm["text"], bpm["info"], lay, contx, conty, 1)
-                contx += 1
+                lay.addWidget(self.display(bpm["text"], bpm["info"], countx, county, 1), countx, county, 1, 1)
+                countx += 1
             
-            if(contx > 6): 
-                contx = 0
-                conty += 2
+            if(countx > 7): 
+                countx = 0
+                county += 2
         
         lay.setAlignment(Qt.AlignCenter)
 
         return lay
 
-    def selectionItem(self, channel, title):
+    def display_OthData(self):
+        
+        group = QGroupBox()
+        lay = QGridLayout()
+
+        countx = 0
+        for text, channel in self.bpm_OthData.items():
+        
+            if(text!="Orientation"):
+                text_label = QLabel(text, self)
+                lay.addWidget(text_label, countx, 0, 1, 1)
+
+                channel_label = self.data(channel, 1)
+                channel_label.showUnits = True
+                lay.addWidget(channel_label, countx, 1, 1, 1)
+            else:
+                text_label = QLabel(text, self)
+                text_label.setAlignment(Qt.AlignCenter)
+                lay.addWidget(text_label, countx, 0, 1, 2)
+                selection = PyDMEnumComboBox(init_channel = self.device_name + ":" + channel)
+                lay.addWidget(selection, countx+1, 0, 1, 2)
+            countx += 1
+
+        lay.setAlignment(Qt.AlignTop)
+        group.setLayout(lay)
+
+        return group
+
+    def selectionItem(self, title, channel, orientation):
             group = QGroupBox()
             lay = QVBoxLayout()
-
-            selection1 = enum_button.PyDMEnumButton(self, self.prefix + ":" + channel)
-            selection1.widgetType = 0
-            selection1.setMinimumWidth(150)
             
-            lay.addWidget(selection1)
-
-            group.setTitle(title)
-            group.setAlignment(Qt.AlignCenter)
+            selection1 = enum_button.PyDMEnumButton(init_channel = self.device_name + ":" + channel)
+            selection1.widgetType = 0
+            selection1.orientation = orientation
+            lay.addWidget(selection1, 0)
+    
             group.setLayout(lay)
+            group.setTitle(title)
 
             return group
 
-    def display_section3(self):
+    def display_selectors(self):
 
         layV = QVBoxLayout()
 
-        selection_data = json.loads(self.radio_data)
-
+        selection_data = json.loads(self.selectors_data)
+        count = 0
         for selection in selection_data:
-            # pv = PV(self.prefix+":"+selection["channel"])
-            # pv.connect
-            # print(pv.value)
-            layV.addWidget(self.selectionItem(selection["channel"], selection["text"]))
+            layV.addWidget(self.selectionItem(selection["text"], selection["info"], 2), 1)
+            count += 1
+
+        layV.addWidget(self.display_OthData(), 0)
 
         return layV

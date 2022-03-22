@@ -9,9 +9,11 @@ wid = DigBeamPosProc()
 wid.setStyleSheet('''
                     *{
                         font-size: 12px;
-                        background-color: #f3d2d5;
                     }
-                    PyDMLineEdit{
+                    QGridLayout{
+                        margin: 100px;
+                    }
+                    PyDMLineEdit, PyDMEnumComboBox, PyDMPushButton{
                         border: 1px solid #000000;
                         background-color: #FFFFFF;
                         width: 40px;
