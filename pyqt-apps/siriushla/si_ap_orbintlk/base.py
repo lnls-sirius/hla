@@ -52,7 +52,8 @@ class BaseObject(BaseOrbitIntlk):
                 prefix=self._prefix, propty=propty)
             if pvname in self._pvs:
                 continue
-            new_pvs[pvname] = _PV(pvname, connection_timeout=0.01)
+            new_pvs[pvname] = _PV(
+                pvname, auto_monitor=False, connection_timeout=0.01)
         self._pvs.update(new_pvs)
 
     def _get_values(self, propty):
