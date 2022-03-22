@@ -165,21 +165,22 @@ class _BPMSelectionWidget(BaseObject, SelectionMatrixWidget):
         sz_polc = QSzPlcy(QSzPlcy.Fixed, QSzPlcy.Fixed)
         for idx, name in enumerate(self.BPM_NAMES):
             wid = QWidget(self.parent())
-            led = SiriusLedState(self)
-            led.setParent(wid)
-            led.setSizePolicy(sz_polc)
             tooltip = '{0}; Pos = {1:5.1f} m'.format(
                 self.BPM_NICKNAMES[idx], self.BPM_POS[idx])
-            led.setToolTip(tooltip)
             if self.propty:
+                item = SiriusLedState(self)
+                item.setParent(wid)
+                item.setSizePolicy(sz_polc)
+                item.setToolTip(tooltip)
                 pvname = SiriusPVName.from_sp2rb(
                     name.substitute(prefix=self.prefix, propty=self.propty))
-                led.channel = pvname
+                item.channel = pvname
             else:
-                led.state = 1
+                item = QCheckBox(self)
+                item.setSizePolicy(sz_polc)
             hbl = QHBoxLayout(wid)
             hbl.setContentsMargins(0, 0, 0, 0)
-            hbl.addWidget(led)
+            hbl.addWidget(item)
             widgets.append(wid)
         return widgets
 
@@ -382,8 +383,8 @@ class BPMIntlkLimSPWidget(BaseObject, QWidget):
         groupsel.setStyleSheet(
             '#groupsel{min-width: 27em; max-width: 27em;}')
         self._bpm_sel = _BPMSelectionWidget(
-            self, show_toggle_all_true=False,
-            toggle_all_false_text='Select All', prefix=self.prefix)
+            self, show_toggle_all_false=False,
+            toggle_all_true_text='Select All', prefix=self.prefix)
         lay_groupsel = QGridLayout(groupsel)
         lay_groupsel.addWidget(self._bpm_sel)
 
