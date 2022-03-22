@@ -573,8 +573,19 @@ class _BaseGraphWidget(BaseObject, QWidget):
 
     def closeEvent(self, ev):
         self._thread.exit_task()
+        self._wait_thread()
         self._thread.deleteLater()
         super().closeEvent(ev)
+
+    def _wait_thread(self):
+        init = _time.time()
+        try:
+            while self._thread.isRunning():
+                _time.sleep(0.1)
+                if _time.time() - init > 10:
+                    raise Exception('Thread will not leave')
+        except RuntimeError:
+            pass
 
 
 class _UpdateGraphThread(BaseObject, QThread):
