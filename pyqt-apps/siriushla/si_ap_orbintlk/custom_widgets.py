@@ -408,11 +408,11 @@ class BPMIntlkLimSPWidget(BaseObject, QWidget):
         idxsel, namesel = list(), list()
         for idx, wid in enumerate(self._bpm_sel.widgets):
             name = self.BPM_NAMES[idx]
-            led = wid.findChild(QLed)
-            if led.isSelected():
+            check = wid.findChild(QCheckBox)
+            if check.isChecked():
                 idxsel.append(idx)
                 namesel.append(name)
-                led.setSelected(False)
+                check.setChecked(False)
         if not namesel:
             return
 
