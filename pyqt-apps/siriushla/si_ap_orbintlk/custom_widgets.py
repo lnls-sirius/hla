@@ -118,6 +118,7 @@ class RefOrbComboBox(QComboBox):
             'Zero', 'ref_orb', 'bba_orb', 'other...']
         for item in self._choose_reforb:
             self.addItem(item)
+        self.setCurrentText('ref_orb')
         self.activated.connect(self._add_reforb_entry)
 
     @Slot(int)
@@ -263,7 +264,7 @@ class BPMIntlkLimSPWidget(BaseObject, QWidget):
             self._create_pvs('Sum-Mon')
             self._summon = _np.zeros(len(self.BPM_NAMES), dtype=float)
         else:
-            self._set_ref_orb('Zero')
+            self._set_ref_orb('ref_orb')
 
         self.prefix = prefix
 

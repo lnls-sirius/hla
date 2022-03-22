@@ -517,6 +517,7 @@ class _BaseGraphWidget(BaseObject, QWidget):
         self._plan = '' if 'Sum' in self.INTLKTYPE else self.INTLKTYPE[-1]
         self._plan = self._plan.lower()
         self._reforb = _np.zeros(len(self.BPM_NAMES), dtype=float)
+        self.update_propty_reforb('ref_orb')
 
         self._setupUi()
 
