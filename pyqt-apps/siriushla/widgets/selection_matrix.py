@@ -2,7 +2,7 @@
 
 from functools import partial as _part
 
-from qtpy.QtWidgets import QGridLayout, QHBoxLayout, QLabel, \
+from qtpy.QtWidgets import QGridLayout, QHBoxLayout, QLabel, QCheckBox,\
     QScrollArea, QWidget, QPushButton, QSizePolicy as QSzPol
 from qtpy.QtCore import Qt, QRect, QPoint, Signal
 from qtpy.QtGui import QBrush, QColor, QPainter
@@ -196,50 +196,60 @@ class SelectionMatrixWidget(QWidget):
             if not wid.isVisible():
                 continue
             led = wid.findChild(QLed)
-            if not led:
-                continue
-            pos = led.mapTo(self, led.pos())
-            _sz = led.size()
-            _x1 = pos.x()+_sz.width()/2 > self.begin.x()
-            _x2 = pos.x()+_sz.width()/2 > self.end.x()
-            _y1 = pos.y()+_sz.height()/2 > self.begin.y()
-            _y2 = pos.y()+_sz.height()/2 > self.end.y()
-            if _x1 != _x2 and _y1 != _y2:
+            if led and self._is_within_area(led):
                 led.toggleSelected()
+            check = wid.findChild(QCheckBox)
+            if check and self._is_within_area(check):
+                check.toggle()
+
+    def _is_within_area(self, wid):
+        pos = wid.mapTo(self, wid.pos())
+        _sz = wid.size()
+        _x1 = pos.x()+_sz.width()/2 > self.begin.x()
+        _x2 = pos.x()+_sz.width()/2 > self.end.x()
+        _y1 = pos.y()+_sz.height()/2 > self.begin.y()
+        _y2 = pos.y()+_sz.height()/2 > self.end.y()
+        if _x1 != _x2 and _y1 != _y2:
+            return True
+        return False
 
     def undoItemsSelection(self):
         """Undo items selection."""
         for wid in self._widgets:
             led = wid.findChild(QLed)
-            if not led:
-                continue
-            led.setSelected(False)
+            if led:
+                led.setSelected(False)
+            check = wid.findChild(QCheckBox)
+            if check:
+                check.setChecked(False)
 
     def toggleAllItems(self, value):
         """Toggle all items."""
         for wid in self._widgets:
             led = wid.findChild(QLed)
-            if not led:
-                continue
-            new_sel = (bool(led.state) != value)
-            if isinstance(led, SiriusLedAlert):
-                if not new_sel:
-                    led.setSelected(True)
-            else:
-                if new_sel:
-                    led.setSelected(True)
+            if led:
+                new_sel = (bool(led.state) != value)
+                if isinstance(led, SiriusLedAlert):
+                    if not new_sel:
+                        led.setSelected(True)
+                else:
+                    if new_sel:
+                        led.setSelected(True)
+            check = wid.findChild(QCheckBox)
+            if check:
+                check.setChecked(value)
 
     def selectWidgetsAt(self, idx, isrow=False):
         """Select widgets at idx (row or column)."""
         for i, wid in enumerate(self._widgets):
             row, col = self._positions[i]
-            led = wid.findChild(QLed)
-            if not led:
-                continue
-            if isrow and row == idx:
-                led.toggleSelected()
-            if not isrow and col == idx:
-                led.toggleSelected()
+            if (isrow and row == idx) or (not isrow and col == idx):
+                led = wid.findChild(QLed)
+                if led:
+                    led.toggleSelected()
+                check = wid.findChild(QCheckBox)
+                if check:
+                    check.toggle()
 
     # --- properties ---
 
