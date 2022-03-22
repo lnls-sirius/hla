@@ -8,12 +8,16 @@ from qtpy.QtWidgets import QPushButton, QComboBox, QSizePolicy as QSzPlcy, \
     QWidget, QHBoxLayout, QCheckBox, QLabel, QGridLayout, QSpinBox, QGroupBox,\
     QDoubleSpinBox
 
+from siriuspy.epics import PV as _PV
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 from siriuspy.namesys import SiriusPVName
 
-from ..widgets import SiriusConnectionSignal as _ConnSignal, \
-    PyDMLedMultiChannel, PyDMLed, SiriusLedState, QLed, SelectionMatrixWidget
+from ..widgets import PyDMLedMultiChannel, PyDMLed, SiriusLedState, QLed, \
+    SelectionMatrixWidget
 from ..widgets.led import MultiChannelStatusDialog
+from ..widgets.dialog import ReportDialog, ProgressDialog
+from ..common.epics.task import EpicsConnector, EpicsSetter, \
+    EpicsChecker, EpicsWait
 from ..as_ap_configdb import LoadConfigDialog
 from .base import BaseObject
 
@@ -30,26 +34,23 @@ class FamBPMButton(BaseObject, QPushButton):
         self.prefix = prefix
         self.propty = propty
         self.value = value
-        _chs, _conns = dict(), dict()
+        self.pvs, self.pvs2conn = dict(), dict()
         for bpm in self.BPM_NAMES:
             pvname = bpm.substitute(prefix=self.prefix, propty=self.propty)
-            channel = _ConnSignal(pvname)
-            channel.connection_state_signal.connect(self._connection_changed)
-            _chs[pvname] = channel
-            _conns[pvname] = None
-        self.channels = _chs
-        self.channel2conn = _conns
+            self.pvs2conn[pvname] = None
+            self.pvs[pvname] = _PV(
+                pvname, connection_callback=self._connection_changed,
+                connection_timeout=0.05)
         self.released.connect(self._send_value)
 
     def _send_value(self):
-        for chn in self.channels.values():
-            chn.send_value_signal[int].emit(self.value)
+        for pvo in self.pvs.values():
+            if pvo.wait_for_connection():
+                pvo.put(self.value)
 
-    def _connection_changed(self, conn):
-        address = self.sender().address
-        self.channel2conn[address] = conn
-
-        connstate = all(self.channel2conn.values())
+    def _connection_changed(self, pvname, conn, **kws):
+        self.pvs2conn[pvname] = conn
+        connstate = all(self.pvs2conn.values())
         self.setEnabled(connstate)
 
 
@@ -59,7 +60,8 @@ class FamBPMIntlkEnblStateLed(PyDMLedMultiChannel):
     def __init__(self, parent=None, channels2values=dict()):
         super().__init__(parent, channels2values)
         self.stateColors = [
-            PyDMLed.DarkGreen, PyDMLed.LightGreen, PyDMLed.Yellow, PyDMLed.Gray]
+            PyDMLed.DarkGreen, PyDMLed.LightGreen,
+            PyDMLed.Yellow, PyDMLed.Gray]
 
     def _update_statuses(self):
         if not self._connected:
@@ -207,8 +209,9 @@ class BPMIntlkEnblWidget(_BPMSelectionWidget):
         # create channels
         self.pvs_sel = dict()
         for bpm in self.BPM_NAMES:
-            self.pvs_sel[bpm] = _ConnSignal(
-                bpm.substitute(prefix=self.prefix, propty=propty))
+            self.pvs_sel[bpm] = _PV(
+                bpm.substitute(prefix=self.prefix, propty=propty),
+                connection_timeout=0.05)
 
         self.setObjectName('SIApp')
         self.setStyleSheet(
@@ -224,8 +227,10 @@ class BPMIntlkEnblWidget(_BPMSelectionWidget):
             led = wid.findChild(QLed)
             if led.isSelected():
                 new_state = int(not led.state)
-                self.pvs_sel[name].send_value_signal[int].emit(new_state)
-                led.setSelected(False)
+                pvo = self.pvs_sel[name]
+                if pvo.wait_for_connection():
+                    pvo.put(int(new_state))
+                    led.setSelected(False)
 
 
 class BPMIntlkLimSPWidget(BaseObject, QWidget):
@@ -261,14 +266,6 @@ class BPMIntlkLimSPWidget(BaseObject, QWidget):
             self._set_ref_orb('Zero')
 
         self.prefix = prefix
-
-        # create channels
-        self.pvs_sp = dict()
-        for lsp in self.lim_sp:
-            self.pvs_sp[lsp] = dict()
-            for bpm in self.BPM_NAMES:
-                self.pvs_sp[lsp][bpm] = _ConnSignal(
-                    bpm.substitute(prefix=self.prefix, propty=lsp))
 
         # initialize super
         self.setObjectName('SIApp')
@@ -336,9 +333,6 @@ class BPMIntlkLimSPWidget(BaseObject, QWidget):
                 check = QCheckBox(self)
                 self._checks[lsp] = check
                 lay_lims.addWidget(check, row, 2, alignment=Qt.AlignCenter)
-                if len(self.pvs_sp) == 1:
-                    check.setChecked(True)
-                    check.setVisible(False)
 
             row += 1
             self._label_reforb = QLabel(
@@ -410,35 +404,62 @@ class BPMIntlkLimSPWidget(BaseObject, QWidget):
 
     def send_value(self):
         """Send new value."""
-        selected = list()
+        idxsel, namesel = list(), list()
         for idx, wid in enumerate(self._bpm_sel.widgets):
             name = self.BPM_NAMES[idx]
             led = wid.findChild(QLed)
             if led.isSelected():
-                selected.append(name)
+                idxsel.append(idx)
+                namesel.append(name)
                 led.setSelected(False)
-        if not selected:
+        if not namesel:
             return
 
         if 'sum' in self.metric:
             _av = self.CONV_POLY_MONIT1_2_MONIT[0, :]
             _bv = self.CONV_POLY_MONIT1_2_MONIT[1, :]
-            value = self._spin_scl.value() * (self._summon - _bv)/_av
-            print(value == self._summon)
-            for name in selected:
-                idx = self.BPM_NAMES.index(name)
-                self.pvs_sp[self.lim_sp[0]][name].send_value_signal[int].emit(
-                    round(value[idx]))
+            allvals = self._spin_scl.value() * (self._summon - _bv)/_av
+            values = allvals[_np.array(idxsel)]
+            pvs = [b.substitute(propty=self.lim_sp[0]) for b in namesel]
         else:
+            pvs, values = list(), list()
             for lsp in self.lim_sp:
                 if not self._checks[lsp].isChecked():
                     continue
                 lval = self._spins[lsp].value()
                 plan = 'x' if 'x' in lsp.lower() else 'y'
-                ref = self._reforb[plan]
-                metric = self.get_intlk_metric(ref, metric=self.metric)
-                value = _np.array(metric) + lval
-                for name in selected:
-                    idx = self.BPM_NAMES.index(name)
-                    self.pvs_sp[lsp][name].send_value_signal[int].emit(
-                        round(value[idx]))
+                metric = self.calc_intlk_metric(
+                    self._reforb[plan], metric=self.metric)
+                allvals = _np.round(_np.array(metric) + lval)
+                allvals = allvals[_np.array(idxsel)]
+                values.extend(allvals)
+                pvs.extend([b.substitute(propty=lsp) for b in namesel])
+
+        delays = [0.0, ] * len(pvs)
+
+        self._items_success = list()
+        self._items_fail = list()
+        conn = EpicsConnector(pvs, parent=self)
+        task_set = EpicsSetter(pvs, values, delays, parent=self)
+        task_sleep = EpicsWait([None, ]*10, wait_time=2.0, parent=self)
+        task_check = EpicsChecker(pvs, values, delays, parent=self)
+        task_check.itemChecked.connect(self._check_status)
+
+        dlg = ProgressDialog(
+            ['Connecting...', 'Setting...', 'Waiting...', 'Checking...'],
+            [conn, task_set, task_sleep, task_check], parent=self)
+        ret = dlg.exec_()
+        if ret == dlg.Rejected:
+            return
+
+        if self._items_fail:
+            report = ReportDialog(self._items_fail, self)
+            report.exec_()
+            return
+
+    @Slot(str, bool)
+    def _check_status(self, item, status):
+        if status:
+            self._items_success.append((item, True))
+        else:
+            self._items_fail.append(item)
