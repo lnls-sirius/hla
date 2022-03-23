@@ -1,6 +1,7 @@
 """Base Object."""
 
 import numpy as _np
+from epics.ca import ChannelAccessException
 from siriuspy.epics import PV as _PV
 from siriuspy.envars import VACA_PREFIX
 from siriuspy.namesys import SiriusPVName
@@ -66,7 +67,10 @@ class BaseObject(BaseOrbitIntlk):
         for psn in self.BPM_NAMES:
             pvname = SiriusPVName(psn).substitute(
                 prefix=self._prefix, propty=propty)
-            val = self._pvs[pvname].get()
+            try:
+                val = self._pvs[pvname].get()
+            except ChannelAccessException:
+                val = None
             if val is None:
                 val = 0
             elif propty.startswith('Intlk') and propty.endswith('-Mon'):
