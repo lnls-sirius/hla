@@ -1,7 +1,5 @@
 from re import S
-import sys
 import json
-from epics import PV 
 from PyQt5.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QLabel, QGridLayout, QGroupBox, QVBoxLayout, QTabWidget
 from pydm.widgets import PyDMLabel, PyDMLineEdit, enum_button, PyDMEnumComboBox
@@ -10,22 +8,58 @@ from siriushla.as_di_bpms.base import GraphWave
 
 # Class Digital Beam Position Processor
 
-class DigBeamPosProc(QWidget): 
-    
 
-    def __init__(self, parent=None): 
+class DigBeamPosProc(QWidget):
+
+
+    #Contain all the graphic interface data
+    def __init__(self, parent=None):
         """Init."""
-        
+
         super().__init__(parent)
 
         self.setObjectName('LIApp')
 
         self.device_name = "LA-BI:BPM2"
 
-        self.graph_data = {
+        self.header = {
+            "Trigger": "TRIGGER_STATUS",
+            "IOC": "HEART_BEAT"
+        }
+
+        self.graph_allData = {
+            "ADC Raw Waveform":{
+                "title": "ADC",
+                "labelX": "Waveform Index",
+                "unitX": "",
+                "labelY": "ADC Value",
+                "unitY": "count",
+                "channels":{
+                    "CH1":{
+                        "path": "CH1_ADX_WAVEFORM",
+                        "name": "AntA",
+                        "color": "#0000FF"
+                    },
+                    "CH2" :{
+                        "path": "CH2_ADX_WAVEFORM",
+                        "name": "AntB",
+                        "color": "#FF0000"
+                    },
+                    "CH3":{
+                        "path": "CH3_ADX_WAVEFORM",
+                        "name": "AntC",
+                        "color": "#008800"
+                    },
+                    "CH4":{
+                        "path": "CH4_ADX_WAVEFORM",
+                        "name": "AntD",
+                        "color": "#FF00FF"
+                    }
+                }
+            },
             "Hilbert":{
                 "Amplitude":{
-                    "title": "Hilbert Amplitude",
+                    "title": "Amplitude",
                     "labelX": "Waveform Index",
                     "unitX": "",
                     "labelY": "Amplitude Value",
@@ -54,7 +88,7 @@ class DigBeamPosProc(QWidget):
                     }
                 },
                 "Phase":{
-                    "title": "Hilbert Phase",
+                    "title": "Phase",
                     "labelX": "Waveform Index",
                     "unitX": "",
                     "labelY": "Phase Value",
@@ -85,7 +119,7 @@ class DigBeamPosProc(QWidget):
             },
             "FFT":{
                 "Amplitude":{
-                    "title": "FFT Amplitude",
+                    "title": "Amplitude",
                     "labelX": "Waveform Index",
                     "unitX": "",
                     "labelY": "Amplitude Value",
@@ -114,7 +148,7 @@ class DigBeamPosProc(QWidget):
                     }
                 },
                 "Phase":{
-                    "title": "FFT Phase",
+                    "title": "Phase",
                     "labelX": "Waveform Index",
                     "unitX": "",
                     "labelY": "Phase Value",
@@ -142,55 +176,26 @@ class DigBeamPosProc(QWidget):
                         }
                     }
                 }
-            },
-            "ADC Raw Waveform":{
-                "title": "ADC Raw Waveform",
-                "labelX": "Waveform Index",
-                "unitX": "",
-                "labelY": "ADC Value",
-                "unitY": "count",
-                "channels":{
-                    "CH1":{
-                        "path": "CH1_ADX_WAVEFORM",
-                        "name": "AntA",
-                        "color": "#0000FF"
-                    },
-                    "CH2":{
-                        "path": "CH2_ADX_WAVEFORM",
-                        "name": "AntB",
-                        "color": "#FF0000"
-                    },
-                    "CH3":{
-                        "path": "CH3_ADX_WAVEFORM",
-                        "name": "AntC",
-                        "color": "#008800"
-                    },
-                    "CH4":{
-                        "path": "CH4_ADX_WAVEFORM",
-                        "name": "AntD",
-                        "color": "#FF00FF"
-                    }
-                }
             }
         }
 
-        self.bpm_relData = '''
+        self.bpm_mainData = '''
             [
                 {
                     "text" : "Max ADC",
                     "info" :
                     {
-                            "A" : "CH1_MAXADC", 
-                            "B" : "CH2_MAXADC", 
-                            "C" : "CH3_MAXADC", 
+                            "A" : "CH1_MAXADC",
+                            "B" : "CH2_MAXADC",
+                            "C" : "CH3_MAXADC",
                             "D" : "CH4_MAXADC"
                     }
                 },
                 {
                     "text" : "Position",
-                    "info" : 
+                    "info" :
                     {
-                        "X" : "POS_X", 
+                        "X" : "POS_X",
                         "Y" : "POS_Y",
                         "S" : "POS_S"
                     }
@@ -199,9 +204,9 @@ class DigBeamPosProc(QWidget):
                     "text" : "V",
                     "info" :
                     {
-                        "A" : "POS_VA", 
-                        "B" : "POS_VB", 
-                        "C" : "POS_VC", 
+                        "A" : "POS_VA",
+                        "B" : "POS_VB",
+                        "C" : "POS_VC",
                         "D" : "POS_VD"
                     }
                 },
@@ -215,7 +220,7 @@ class DigBeamPosProc(QWidget):
                 },
                 {
                     "text" : "FFT",
-                    "info" : 
+                    "info" :
                     {
                         "Center" : "FFT_CENTER",
                         "Width" : "FFT_WIDTH"
@@ -223,7 +228,7 @@ class DigBeamPosProc(QWidget):
                 },
                 {
                     "text" : "Hilbert",
-                    "info" : 
+                    "info" :
                     {
                         "Center" : "HIB_CENTER",
                         "Width" : "HIB_WIDTH"
@@ -231,7 +236,7 @@ class DigBeamPosProc(QWidget):
                 },
                 {
                     "text" : "Gain",
-                    "info" : 
+                    "info" :
                     {
                         "X" : "POS_KX",
                         "Y" : "POS_KY",
@@ -240,21 +245,21 @@ class DigBeamPosProc(QWidget):
                 },
                 {
                     "text" : "Offset",
-                    "info" : 
-                    {  
+                    "info" :
+                    {
                         "X" : "POS_OX",
                         "Y" : "POS_OY"
                     }
                 }
             ]
         '''
-        
-        self.bpm_OthData = {
+
+        self.bpm_secData = {
                 "Attenuator": "FE_ATTEN_SP",
                 "ADC Threshold" : "ADC_THD",
                 "Orientation" : "BPM_STRIP"
             }
-                    
+
         self.selectors_data = '''
             [
                 {
@@ -269,110 +274,100 @@ class DigBeamPosProc(QWidget):
 
         self._setupUi()
 
+    # Build the graphic interface
     def _setupUi(self):
 
         self.setWindowTitle(self.device_name)
 
-        lay = QGridLayout()
-        lay.addLayout(self.display_header(), 0, 0, 1, 3)
-        lay.addLayout(self.display_graph(), 1, 0, 2, 1)
-        lay.addLayout(self.display_bpm_relData(), 1, 1, 1, 1)
-        lay.addLayout(self.display_selectors(), 1, 2, 1, 1)
-        lay.setAlignment(Qt.AlignTop)
-        lay.setColumnStretch(0, 10)
-        self.setLayout(lay)
+        ifGlay = QGridLayout()
+        ifGlay.addLayout(self.display_header(), 0, 0, 1, 3)
+        ifGlay.addLayout(self.display_graph(), 1, 0, 2, 1)
+        ifGlay.addLayout(self.display_mainData(), 1, 1, 1, 1)
+        ifGlay.addLayout(self.display_selectors(), 1, 2, 1, 1)
+        ifGlay.setAlignment(Qt.AlignTop)
+        ifGlay.setColumnStretch(0, 10)
+        self.setLayout(ifGlay)
 
+    # Display the header of the interface
     def display_header(self):
-        
-        layGrid = QGridLayout()
 
-        trig_led = SiriusLedState(init_channel = self.device_name + ':' + "TRIGGER_STATUS")
-        trig_led.setFixedSize(30, 30)
-        layGrid.addWidget(trig_led, 0, 0, 1, 1)
+        hdGlay = QGridLayout()
 
-        trig_label = QLabel("Trigger")
-        trig_label.setAlignment(Qt.AlignCenter)
-        layGrid.addWidget(trig_label, 1, 0, 1, 1)
-
-        ioc_led = SiriusLedState(init_channel = self.device_name + ':' + 'HEART_BEAT')
-        ioc_led.autoFillBackground()
-        ioc_led.setFixedSize(30, 30)
-        layGrid.addWidget(ioc_led, 0, 1, 1, 1)
-
-        ioc_label = QLabel("IOC")
-        ioc_label.setAlignment(Qt.AlignCenter)
-        layGrid.addWidget(ioc_label, 1, 1, 1, 1)
-
-        title_label = QLabel("DIGITAL BEAM POSITION PROCESSOR")
-        title_label.setStyleSheet('''
+        title_lb = QLabel("DIGITAL BEAM POSITION PROCESSOR")
+        title_lb.setStyleSheet('''
                font-weight: bold;
                font-size: 20px;
             ''')
-        title_label.setAlignment(Qt.AlignCenter)
-        layGrid.addWidget(title_label, 0, 2, 2, 1)
+        title_lb.setAlignment(Qt.AlignCenter)
+        hdGlay.addWidget(title_lb, 0, 2, 2, 1)
 
-        layGrid.setAlignment(Qt.AlignCenter)
+        countx = 0
 
-        return layGrid
+        for led_lb, led_channel in self.header.items():
+            trig_led = SiriusLedState(init_channel = self.device_name + ':' + led_channel)
+            trig_led.setFixedSize(30, 30)
+            hdGlay.addWidget(trig_led, 0, countx, 1, 1)
 
-    def display_graph(self):
+            trig_lb = QLabel(led_lb)
+            trig_lb.setAlignment(Qt.AlignCenter)
+            hdGlay.addWidget(trig_lb, 1, countx, 1, 1)
 
-        mainlay = QVBoxLayout()
-        tab = QTabWidget()
+            countx += 1
 
-        graph_names = [
-            "ADC Raw Waveform",
-            "FFT",
-            "Hilbert"
-        ]
+        hdGlay.setAlignment(Qt.AlignCenter)
 
-        for count in range(0, 3):
-            vlay = QVBoxLayout()
-            tab_content = QWidget()
+        return hdGlay
 
-            graph_data = self.graph_data.get(graph_names[count])
-
-            if(len(graph_data.items()) != 2):
-                vlay.addWidget(self.createGraph(graph_data), 10)
-                tab_content.setLayout(vlay)
-            else:
-                county = 0 
-                for data in graph_data:
-                    title_label = QLabel(graph_data.get(data).get("title"))
-                    title_label.setAlignment(Qt.AlignCenter)
-                    title_label.setFixedHeight(15)
-                    vlay.addWidget(title_label, 1)
-
-                    vlay.addWidget(self.createGraph(graph_data.get(data)), 10)
-                    county += 1
-                tab_content.setLayout(vlay)
-            tab.addTab(tab_content, graph_names[count])
-
-        mainlay.addWidget(tab)
-
-        return mainlay
-
+    # Build a graph widget
     def createGraph(self, graph_data):
-        graph = GraphWave()
+        graphPlot = GraphWave()
 
-        graph.setLabel('left', text = graph_data.get("labelY"), units = graph_data.get("unitY"))
-        graph.setLabel('bottom', text = graph_data.get("labelX"), units = graph_data.get("unitX"))
+        graphPlot.graph.title = graph_data.get("title")
+        graphPlot.setLabel('left', text = graph_data.get("labelY"), units = graph_data.get("unitY"))
+        graphPlot.setLabel('bottom', text = graph_data.get("labelX"), units = graph_data.get("unitX"))
 
         for channel in graph_data.get("channels"):
-    
+
             channel_data = graph_data.get("channels").get(channel)
-            graph.addChannel(
+            graphPlot.addChannel(
                 y_channel = self.device_name + ':' + channel_data.get('path'),
-                name = channel_data.get('name'), 
-                color = channel_data.get('color'), 
+                name = channel_data.get('name'),
+                color = channel_data.get('color'),
                 lineWidth= 1)
 
-        graph.setMinimumWidth(600)
-        graph.setMinimumHeight(250)
+        graphPlot.setMinimumWidth(600)
+        graphPlot.setMinimumHeight(250)
 
-        return graph
+        return graphPlot
 
-    def data(self, channel, type):
+    # Display the graph tabs and all their contents
+    def display_graph(self):
+
+        gpVlay = QVBoxLayout()
+        tab = QTabWidget()
+
+        for graph_name in self.graph_allData:
+            tablay = QVBoxLayout()
+            tab_content = QWidget()
+
+            graph_item = self.graph_allData.get(graph_name)
+
+            if(len(graph_item.items()) != 2):
+                tablay.addWidget(self.createGraph(graph_item), 10)
+                tab_content.setLayout(tablay)
+            else:
+                for data in graph_item:
+                    tablay.addWidget(self.createGraph(graph_item.get(data)), 10)
+
+                tab_content.setLayout(tablay)
+            tab.addTab(tab_content, graph_name)
+
+        gpVlay.addWidget(tab)
+
+        return gpVlay
+
+    # Get data channel info
+    def dataItem(self, channel, type):
         if(type == 0):
             channelInfo = PyDMLabel(
                 parent=self,
@@ -382,13 +377,14 @@ class DigBeamPosProc(QWidget):
                 parent=self,
                 init_channel= self.device_name + ':' + channel)
         else:
-            channelInfo = QLabel("Error", self) 
-        
+            channelInfo = QLabel("Error", self)
+
         return channelInfo
 
-    def display(self, title, info, x, y, type):
-        
-        layG = QGridLayout()
+    # Build a data widget
+    def display_data(self, title, info, x, y, type):
+
+        layGrid = QGridLayout()
         group = QGroupBox()
 
         countx = 0
@@ -396,112 +392,116 @@ class DigBeamPosProc(QWidget):
 
         if(type == 0):
             for text, channel in info.items():
-                
-                text_label = QLabel(text, self)
-                layG.addWidget(text_label, countx, county)
 
-                channel_label = self.data(channel, y)
-                channel_label.showUnits = True
-                layG.addWidget(channel_label, countx, county+1)
+                text_lb = QLabel(text, self)
+                layGrid.addWidget(text_lb, countx, county)
+
+                channel_lb = self.dataItem(channel, y)
+                channel_lb.showUnits = True
+                layGrid.addWidget(channel_lb, countx, county+1)
 
                 countx += 1
         else:
-            channel_label = self.data(info, y)
-            channel_label.showUnits = True
-            layG.addWidget(channel_label, x, y)       
-        
-        layG.setAlignment(Qt.AlignCenter)
-        
+            channel_lb = self.dataItem(info, y)
+            channel_lb.showUnits = True
+            layGrid.addWidget(channel_lb, x, y)
+
+        layGrid.setAlignment(Qt.AlignCenter)
+
         group.setTitle(title)
-        group.setLayout(layG)
+        group.setLayout(layGrid)
 
         return group
 
-    def display_bpm_relData(self):
+    # Display all main data widgets
+    def display_mainData(self):
         countx = 0
         county = 0
 
-        lay = QGridLayout()
-        
-        bpm_info = json.loads(self.bpm_relData)
-        
+        mdGlay = QGridLayout()
+
+        bpm_info = json.loads(self.bpm_mainData)
+
         for bpm in bpm_info:
-            
+
             if(bpm["text"] == " "):
                 countx += 1
-            elif (bpm["text"] == "Max ADC" 
+            elif (bpm["text"] == "Max ADC"
                 or bpm["text"] == "V"
                 or bpm["text"] == "Position"
                 or bpm["text"] == "FFT"
                 or bpm["text"] == "Hilbert"
                 or bpm["text"] == "Gain"
                 or bpm["text"] == "Offset"):
-                lay.addWidget(self.display(bpm["text"], bpm["info"], countx, county, 0), countx, county, 2, 1)
-                countx += 2; 
+                mdGlay.addWidget(self.display_data(bpm["text"], bpm["info"], countx, county, 0), countx, county, 2, 1)
+                countx += 2
             else:
-                lay.addWidget(self.display(bpm["text"], bpm["info"], countx, county, 1), countx, county, 1, 1)
+                mdGlay.addWidget(self.display_data(bpm["text"], bpm["info"], countx, county, 1), countx, county, 1, 1)
                 countx += 1
-            
-            if(countx > 7): 
+
+            if(countx > 7):
                 countx = 0
                 county += 2
-        
-        lay.setAlignment(Qt.AlignCenter)
 
-        return lay
+        mdGlay.setAlignment(Qt.AlignCenter)
 
-    def display_OthData(self):
-        
+        return mdGlay
+
+    # Build the secondary data widget
+    def display_secData(self):
+
         group = QGroupBox()
-        lay = QGridLayout()
+        scGlay = QGridLayout()
 
         countx = 0
-        for text, channel in self.bpm_OthData.items():
-        
-            if(text!="Orientation"):
-                text_label = QLabel(text, self)
-                lay.addWidget(text_label, countx, 0, 1, 1)
+        for text, channel in self.bpm_secData.items():
 
-                channel_label = self.data(channel, 1)
-                channel_label.showUnits = True
-                lay.addWidget(channel_label, countx, 1, 1, 1)
+            if(text!="Orientation"):
+                text_lb = QLabel(text, self)
+                scGlay.addWidget(text_lb, countx, 0, 1, 1)
+
+                channel_lb = self.dataItem(channel, 1)
+                channel_lb.showUnits = True
+                scGlay.addWidget(channel_lb, countx, 1, 1, 1)
             else:
-                text_label = QLabel(text, self)
-                text_label.setAlignment(Qt.AlignCenter)
-                lay.addWidget(text_label, countx, 0, 1, 2)
+                text_lb = QLabel(text, self)
+                text_lb.setAlignment(Qt.AlignCenter)
+                scGlay.addWidget(text_lb, countx, 0, 1, 2)
                 selection = PyDMEnumComboBox(init_channel = self.device_name + ":" + channel)
-                lay.addWidget(selection, countx+1, 0, 1, 2)
+                scGlay.addWidget(selection, countx+1, 0, 1, 2)
             countx += 1
 
-        lay.setAlignment(Qt.AlignTop)
-        group.setLayout(lay)
+        scGlay.setAlignment(Qt.AlignTop)
+        group.setLayout(scGlay)
 
         return group
 
+    # Build a selection widget
     def selectionItem(self, title, channel, orientation):
-            group = QGroupBox()
-            lay = QVBoxLayout()
-            
-            selection1 = enum_button.PyDMEnumButton(init_channel = self.device_name + ":" + channel)
-            selection1.widgetType = 0
-            selection1.orientation = orientation
-            lay.addWidget(selection1, 0)
-    
-            group.setLayout(lay)
-            group.setTitle(title)
+        group = QGroupBox()
+        lay = QVBoxLayout()
 
-            return group
+        selector = enum_button.PyDMEnumButton(init_channel = self.device_name + ":" + channel)
+        selector.widgetType = 0
+        selector.orientation = orientation
+        lay.addWidget(selector, 0)
 
+        group.setLayout(lay)
+        group.setTitle(title)
+
+        return group
+
+    # Display the selector and the secondary data
     def display_selectors(self):
 
-        layV = QVBoxLayout()
+        slVlay = QVBoxLayout()
 
         selection_data = json.loads(self.selectors_data)
         count = 0
-        for selection in selection_data:
-            layV.addWidget(self.selectionItem(selection["text"], selection["info"], 2), 1)
+        for selector in selection_data:
+            slVlay.addWidget(self.selectionItem(selector["text"], selector["info"], 2), 1)
             count += 1
 
-        layV.addWidget(self.display_OthData(), 0)
+        slVlay.addWidget(self.display_secData(), 0)
 
-        return layV
+        return slVlay
