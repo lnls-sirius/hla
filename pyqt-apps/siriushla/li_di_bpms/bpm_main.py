@@ -1,18 +1,19 @@
-from re import S
+''' Diagnostic Interface of the LINAC's BPM'''
+
 import json
 from PyQt5.QtCore import Qt
-from qtpy.QtWidgets import QWidget, QLabel, QGridLayout, QGroupBox, QVBoxLayout, QTabWidget
-from pydm.widgets import PyDMLabel, PyDMLineEdit, enum_button, PyDMEnumComboBox
-from ..widgets import SiriusLedState
+from qtpy.QtWidgets import QGroupBox, QVBoxLayout, QTabWidget
+from qtpy.QtWidgets import QWidget, QLabel, QGridLayout
+from pydm.widgets import PyDMLabel, enum_button, PyDMEnumComboBox, PyDMSpinbox
 from siriushla.as_di_bpms.base import GraphWave
+from ..widgets import SiriusLedState
 
 # Class Digital Beam Position Processor
 
 
 class DigBeamPosProc(QWidget):
 
-
-    #Contain all the graphic interface data
+    # Contain all the graphic interface data
     def __init__(self, parent=None):
         """Init."""
 
@@ -28,88 +29,88 @@ class DigBeamPosProc(QWidget):
         }
 
         self.graph_allData = {
-            "ADC Raw Waveform":{
+            "ADC Raw Waveform": {
                 "title": "ADC",
                 "labelX": "Waveform Index",
                 "unitX": "",
                 "labelY": "ADC Value",
                 "unitY": "count",
-                "channels":{
-                    "CH1":{
+                "channels": {
+                    "CH1": {
                         "path": "CH1_ADX_WAVEFORM",
                         "name": "AntA",
                         "color": "#0000FF"
                     },
-                    "CH2" :{
+                    "CH2": {
                         "path": "CH2_ADX_WAVEFORM",
                         "name": "AntB",
                         "color": "#FF0000"
                     },
-                    "CH3":{
+                    "CH3": {
                         "path": "CH3_ADX_WAVEFORM",
                         "name": "AntC",
                         "color": "#008800"
                     },
-                    "CH4":{
+                    "CH4": {
                         "path": "CH4_ADX_WAVEFORM",
                         "name": "AntD",
                         "color": "#FF00FF"
                     }
                 }
             },
-            "Hilbert":{
-                "Amplitude":{
+            "Hilbert": {
+                "Amplitude": {
                     "title": "Amplitude",
                     "labelX": "Waveform Index",
                     "unitX": "",
                     "labelY": "Amplitude Value",
                     "unitY": "count",
-                    "channels":{
-                        "CH1":{
+                    "channels": {
+                        "CH1": {
                             "path": "CH1_HIB_AMP_WAVEFORM",
                             "name": "AntA",
                             "color": "#0000FF"
                         },
-                        "CH2":{
+                        "CH2": {
                             "path": "CH2_HIB_AMP_WAVEFORM",
                             "name": "AntB",
                             "color": "#FF0000"
                         },
-                        "CH3":{
+                        "CH3": {
                             "path": "CH3_HIB_AMP_WAVEFORM",
                             "name": "AntC",
                             "color": "#008800"
                         },
-                        "CH4":{
+                        "CH4": {
                             "path": "CH4_HIB_AMP_WAVEFORM",
                             "name": "AntD",
                             "color": "#FF00FF"
                         }
                     }
                 },
-                "Phase":{
+                "Phase": {
                     "title": "Phase",
                     "labelX": "Waveform Index",
                     "unitX": "",
                     "labelY": "Phase Value",
                     "unitY": "count",
-                    "channels":{
-                        "CH1":{
+                    "channels": {
+                        "CH1": {
                             "path": "CH1_HIB_PH_WAVEFORM",
                             "name": "AntA",
                             "color": "#0000FF"
                         },
-                        "CH2":{
+                        "CH2": {
                             "path": "CH2_HIB_PH_WAVEFORM",
                             "name": "AntB",
                             "color": "#FF0000"
                         },
-                        "CH3":{
+                        "CH3": {
                             "path": "CH3_HIB_PH_WAVEFORM",
                             "name": "AntC",
                             "color": "#008800"
                         },
-                        "CH4":{
+                        "CH4": {
                             "path": "CH4_HIB_PH_WAVEFORM",
                             "name": "AntD",
                             "color": "#FF00FF"
@@ -117,59 +118,59 @@ class DigBeamPosProc(QWidget):
                     }
                 }
             },
-            "FFT":{
-                "Amplitude":{
+            "FFT": {
+                "Amplitude": {
                     "title": "Amplitude",
                     "labelX": "Waveform Index",
                     "unitX": "",
                     "labelY": "Amplitude Value",
                     "unitY": "count",
-                    "channels":{
-                        "CH1":{
+                    "channels": {
+                        "CH1": {
                             "path": "CH1_FFT_AMP_WAVEFORM",
                             "name": "AntA",
                             "color": "#0000FF"
                         },
-                        "CH2":{
+                        "CH2": {
                             "path": "CH2_FFT_AMP_WAVEFORM",
                             "name": "AntB",
                             "color": "#FF0000"
                         },
-                        "CH3":{
+                        "CH3": {
                             "path": "CH3_FFT_AMP_WAVEFORM",
                             "name": "AntC",
                             "color": "#008800"
                         },
-                        "CH4":{
+                        "CH4": {
                             "path": "CH4_FFT_AMP_WAVEFORM",
                             "name": "AntD",
                             "color": "#FF00FF"
                         }
                     }
                 },
-                "Phase":{
+                "Phase": {
                     "title": "Phase",
                     "labelX": "Waveform Index",
                     "unitX": "",
                     "labelY": "Phase Value",
                     "unitY": "count",
-                    "channels":{
-                        "CH1":{
+                    "channels": {
+                        "CH1": {
                             "path": "CH1_FFT_PH_WAVEFORM",
                             "name": "AntA",
                             "color": "#0000FF"
                         },
-                        "CH2":{
+                        "CH2": {
                             "path": "CH2_FFT_PH_WAVEFORM",
                             "name": "AntB",
                             "color": "#FF0000"
                         },
-                        "CH3":{
+                        "CH3": {
                             "path": "CH3_FFT_PH_WAVEFORM",
                             "name": "AntC",
                             "color": "#008800"
                         },
-                        "CH4":{
+                        "CH4": {
                             "path": "CH4_FFT_PH_WAVEFORM",
                             "name": "AntD",
                             "color": "#FF00FF"
@@ -256,8 +257,8 @@ class DigBeamPosProc(QWidget):
 
         self.bpm_secData = {
                 "Attenuator": "FE_ATTEN_SP",
-                "ADC Threshold" : "ADC_THD",
-                "Orientation" : "BPM_STRIP"
+                "ADC Threshold": "ADC_THD",
+                "Orientation": "BPM_STRIP"
             }
 
         self.selectors_data = '''
@@ -271,7 +272,6 @@ class DigBeamPosProc(QWidget):
                     "info" : "POS_ALG"
                 }
             ]'''
-
         self._setupUi()
 
     # Build the graphic interface
@@ -304,7 +304,8 @@ class DigBeamPosProc(QWidget):
         countx = 0
 
         for led_lb, led_channel in self.header.items():
-            trig_led = SiriusLedState(init_channel = self.device_name + ':' + led_channel)
+            trig_led = SiriusLedState(
+                init_channel=self.device_name + ':' + led_channel)
             trig_led.setFixedSize(30, 30)
             hdGlay.addWidget(trig_led, 0, countx, 1, 1)
 
@@ -323,17 +324,23 @@ class DigBeamPosProc(QWidget):
         graphPlot = GraphWave()
 
         graphPlot.graph.title = graph_data.get("title")
-        graphPlot.setLabel('left', text = graph_data.get("labelY"), units = graph_data.get("unitY"))
-        graphPlot.setLabel('bottom', text = graph_data.get("labelX"), units = graph_data.get("unitX"))
+        graphPlot.setLabel(
+            'left',
+            text=graph_data.get("labelY"),
+            units=graph_data.get("unitY"))
+        graphPlot.setLabel(
+            'bottom',
+            text=graph_data.get("labelX"),
+            units=graph_data.get("unitX"))
 
         for channel in graph_data.get("channels"):
 
             channel_data = graph_data.get("channels").get(channel)
             graphPlot.addChannel(
-                y_channel = self.device_name + ':' + channel_data.get('path'),
-                name = channel_data.get('name'),
-                color = channel_data.get('color'),
-                lineWidth= 1)
+                y_channel=self.device_name + ':' + channel_data.get('path'),
+                name=channel_data.get('name'),
+                color=channel_data.get('color'),
+                lineWidth=1)
 
         graphPlot.setMinimumWidth(600)
         graphPlot.setMinimumHeight(250)
@@ -357,7 +364,8 @@ class DigBeamPosProc(QWidget):
                 tab_content.setLayout(tablay)
             else:
                 for data in graph_item:
-                    tablay.addWidget(self.createGraph(graph_item.get(data)), 10)
+                    tablay.addWidget(
+                        self.createGraph(graph_item.get(data)), 10)
 
                 tab_content.setLayout(tablay)
             tab.addTab(tab_content, graph_name)
@@ -367,22 +375,22 @@ class DigBeamPosProc(QWidget):
         return gpVlay
 
     # Get data channel info
-    def dataItem(self, channel, type):
-        if(type == 0):
+    def dataItem(self, channel, style):
+        if(style == 0):
             channelInfo = PyDMLabel(
                 parent=self,
-                init_channel= self.device_name + ':' + channel)
-        elif(type == 1 or type == 2 or type == 4):
-            channelInfo = PyDMLineEdit(
+                init_channel=self.device_name + ':' + channel)
+        elif(style == 1 or style == 2 or style == 4):
+            channelInfo = PyDMSpinbox(
                 parent=self,
-                init_channel= self.device_name + ':' + channel)
+                init_channel=self.device_name + ':' + channel)
         else:
             channelInfo = QLabel("Error", self)
 
         return channelInfo
 
     # Build a data widget
-    def display_data(self, title, info, x, y, type):
+    def display_data(self, title, info, x, y, style):
 
         layGrid = QGridLayout()
         group = QGroupBox()
@@ -390,7 +398,7 @@ class DigBeamPosProc(QWidget):
         countx = 0
         county = 0
 
-        if(type == 0):
+        if(style == 0):
             for text, channel in info.items():
 
                 text_lb = QLabel(text, self)
@@ -427,16 +435,26 @@ class DigBeamPosProc(QWidget):
             if(bpm["text"] == " "):
                 countx += 1
             elif (bpm["text"] == "Max ADC"
-                or bpm["text"] == "V"
-                or bpm["text"] == "Position"
-                or bpm["text"] == "FFT"
-                or bpm["text"] == "Hilbert"
-                or bpm["text"] == "Gain"
-                or bpm["text"] == "Offset"):
-                mdGlay.addWidget(self.display_data(bpm["text"], bpm["info"], countx, county, 0), countx, county, 2, 1)
+                    or bpm["text"] == "V"
+                    or bpm["text"] == "Position"
+                    or bpm["text"] == "FFT"
+                    or bpm["text"] == "Hilbert"
+                    or bpm["text"] == "Gain"
+                    or bpm["text"] == "Offset"):
+                mdGlay.addWidget(
+                    self.display_data(
+                        bpm["text"], bpm["info"],
+                        countx, county, 0),
+                    countx, county,
+                    2, 1)
                 countx += 2
             else:
-                mdGlay.addWidget(self.display_data(bpm["text"], bpm["info"], countx, county, 1), countx, county, 1, 1)
+                mdGlay.addWidget(
+                    self.display_data(
+                        bpm["text"], bpm["info"],
+                        countx, county, 1),
+                    countx, county,
+                    1, 1)
                 countx += 1
 
             if(countx > 7):
@@ -456,7 +474,8 @@ class DigBeamPosProc(QWidget):
         countx = 0
         for text, channel in self.bpm_secData.items():
 
-            if(text!="Orientation"):
+            if (text != "Orientation"):
+
                 text_lb = QLabel(text, self)
                 scGlay.addWidget(text_lb, countx, 0, 1, 1)
 
@@ -467,7 +486,8 @@ class DigBeamPosProc(QWidget):
                 text_lb = QLabel(text, self)
                 text_lb.setAlignment(Qt.AlignCenter)
                 scGlay.addWidget(text_lb, countx, 0, 1, 2)
-                selection = PyDMEnumComboBox(init_channel = self.device_name + ":" + channel)
+                selection = PyDMEnumComboBox(
+                    init_channel=self.device_name+":"+channel)
                 scGlay.addWidget(selection, countx+1, 0, 1, 2)
             countx += 1
 
@@ -481,7 +501,8 @@ class DigBeamPosProc(QWidget):
         group = QGroupBox()
         lay = QVBoxLayout()
 
-        selector = enum_button.PyDMEnumButton(init_channel = self.device_name + ":" + channel)
+        selector = enum_button.PyDMEnumButton(
+            init_channel=self.device_name+":"+channel)
         selector.widgetType = 0
         selector.orientation = orientation
         lay.addWidget(selector, 0)
@@ -495,11 +516,11 @@ class DigBeamPosProc(QWidget):
     def display_selectors(self):
 
         slVlay = QVBoxLayout()
-
         selection_data = json.loads(self.selectors_data)
         count = 0
         for selector in selection_data:
-            slVlay.addWidget(self.selectionItem(selector["text"], selector["info"], 2), 1)
+            slVlay.addWidget(
+                self.selectionItem(selector["text"], selector["info"], 2), 1)
             count += 1
 
         slVlay.addWidget(self.display_secData(), 0)
