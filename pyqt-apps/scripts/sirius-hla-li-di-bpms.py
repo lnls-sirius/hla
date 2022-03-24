@@ -8,7 +8,7 @@ from siriushla.li_di_bpms import DigBeamPosProc
 from siriushla.sirius_application import SiriusApplication
 
 parser = argparse.ArgumentParser(
-    description="Run Interface of Specified Screen.")
+    description="Run Interface of Specified BPM.")
 parser.add_argument('device', type=str, help='Select a device.')
 parser.add_argument('-p', "--prefix", type=str, default=VACA_PREFIX,
     help="Define the prefix for the PVs in the window.")

@@ -17,7 +17,6 @@ class DigBeamPosProc(SiriusMainWindow):
         '''Contain all the graphic interface data'''
 
         super().__init__(parent)
-
         self.prefix = prefix
         self.device_name = device_name
         self.prefix = prefix + ('-' if prefix else '')
