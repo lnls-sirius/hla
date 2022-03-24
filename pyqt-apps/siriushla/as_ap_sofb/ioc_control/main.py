@@ -378,7 +378,7 @@ class SOFBControl(BaseWidget):
         wid = self.create_pair(gpbx, 'LoopFreq')
         fbl.addRow(lbl, wid)
 
-        lbl = QLabel('Max. Orb. Distortion', gpbx)
+        lbl = QLabel('Max. Orb. Distortion [um]', gpbx)
         wid = self.create_pair(gpbx, 'LoopMaxOrbDistortion')
         fbl.addRow(lbl, wid)
 
