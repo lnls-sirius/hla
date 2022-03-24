@@ -16,7 +16,6 @@ class DigBeamPosProc(SiriusMainWindow):
     def __init__(self, device_name, prefix='', parent=None):
         '''Contain all the graphic interface data'''
         super().__init__(parent)
-        self.prefix = prefix
         self.device_name = device_name
         self.prefix = prefix + ('-' if prefix else '')
 
@@ -337,7 +336,7 @@ class DigBeamPosProc(SiriusMainWindow):
             channel_info = PyDMLabel(
                 parent=self,
                 init_channel=self.prefix + self.device_name + ':' + channel)
-        elif style == 1 or style == 2 or style == 4:
+        elif style in [1, 2, 4]:
             channel_info = PyDMSpinbox(
                 parent=self,
                 init_channel=self.prefix + self.device_name + ':' + channel)
@@ -387,7 +386,7 @@ class DigBeamPosProc(SiriusMainWindow):
 
         for title, info in self.bpm_main_data.items():
 
-            if title == "Trigger Cnt" or title == "Cycle":
+            if title in ["Trigger Cnt", "Cycle"]:
                 md_glay.addWidget(
                     self.display_data(
                         title, info,
