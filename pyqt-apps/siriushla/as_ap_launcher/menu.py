@@ -303,6 +303,21 @@ def get_object(ismenubar=True, parent=None):
             PS = self._set_ps_menu('li')
             PS.setIcon(qta.icon('mdi.car-battery'))
 
+            DIG = LEVEL2M('DI', self)
+            DIG.setObjectName('LIApp')
+
+            bpms_menu = DIG.addMenu('BPMs')
+            bpms_menu.setObjectName('LIApp')
+
+            bpm2 = QAction('BPM2', bpms_menu)
+            self.connect_newprocess(
+                bpm2, ["sirius-hla-li-di-bpms.py", 'LA-BI:BPM2'])
+            bpms_menu.addAction(bpm2)
+            bpm3 = QAction('BPM3', bpms_menu)
+            self.connect_newprocess(
+                bpm3, ["sirius-hla-li-di-bpms.py", 'LA-BI:BPM3'])
+            bpms_menu.addAction(bpm3)
+
             mps = LEVEL2M('MPS', menu)
             mps.setObjectName('LIApp')
             mpsmon = QAction('Monitor', mps)
@@ -337,6 +352,7 @@ def get_object(ismenubar=True, parent=None):
             optics.addAction(emit)
 
             self.add_object_to_level1(menu, PS)
+            self.add_object_to_level1(menu, DIG)
             self.add_object_to_level1(menu, mps)
             self.add_object_to_level1(menu, egun)
             self.add_object_to_level1(menu, mod)

@@ -1,45 +1,19 @@
 #!/usr/bin/env python-sirius
 
+import argparse
 import sys
+from siriuspy.envars import VACA_PREFIX
 from siriushla.li_di_bpms import DigBeamPosProc
 from siriushla.sirius_application import SiriusApplication
 
+parser = argparse.ArgumentParser(
+    description="Run Interface of Specified Screen.")
+parser.add_argument('device', type=str, help='Select a device.')
+parser.add_argument('-p', "--prefix", type=str, default=VACA_PREFIX,
+    help="Define the prefix for the PVs in the window.")
+args = parser.parse_args()
+
 app = SiriusApplication()
-wid = DigBeamPosProc()
-wid.setStyleSheet('''
-                    *{
-                        font-size: 12px;
-                    }
-                    QGridLayout{
-                        margin: 100px;
-                    }
-                    PyDMLineEdit, PyDMEnumComboBox, PyDMPushButton{
-                        border: 1px solid #000000;
-                        background-color: #FFFFFF;
-                        width: 40px;
-                        padding-left: 5px;
-                        padding-right: 5px;
-                        border-radius: 5px;
-                    }
-                    QGroupBox{
-                        border: 2px solid #b0b0b0;
-                        padding-left: 5px;
-                        padding-right: 5px;
-                        padding-top: 5px;
-                        margin: 3px;
-                        font-weight: bold;
-                    }
-                    QGroupBox::title{
-                        font-size: 15;
-                        position: relative;
-                        bottom: 5px;
-                    }
-                    QLabel{
-                        padding-right: 5px;
-                    }
-                    GraphWave{
-                        background-color:#000000
-                    }
-                    ''')
+wid = DigBeamPosProc(args.device, args.prefix)
 wid.show()
 sys.exit(app.exec_())
