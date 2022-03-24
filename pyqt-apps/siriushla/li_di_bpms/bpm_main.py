@@ -15,7 +15,6 @@ class DigBeamPosProc(SiriusMainWindow):
 
     def __init__(self, device_name, prefix='', parent=None):
         '''Contain all the graphic interface data'''
-
         super().__init__(parent)
         self.prefix = prefix
         self.device_name = device_name
@@ -238,7 +237,6 @@ class DigBeamPosProc(SiriusMainWindow):
 
     def _setupUi(self):
         '''Build the graphic interface'''
-
         wid = QWidget(self)
         if_glay = QGridLayout()
 
@@ -254,7 +252,6 @@ class DigBeamPosProc(SiriusMainWindow):
 
     def display_header(self):
         '''Display the header of the interface'''
-
         hd_glay = QGridLayout()
 
         title_lb = QLabel('<h2>'+ self.device_name +' - POSITION MONITOR </h2>', self)
@@ -281,7 +278,6 @@ class DigBeamPosProc(SiriusMainWindow):
 
     def createGraph(self, graph_data):
         '''Build a graph widget'''
-
         graph_plot = GraphWave()
 
         graph_plot.graph.title = graph_data.get("title")
@@ -310,7 +306,6 @@ class DigBeamPosProc(SiriusMainWindow):
 
     def display_graph(self):
         '''Display the graph tabs and all their contents'''
-
         gp_vlay = QVBoxLayout()
         tab = QTabWidget()
         tab.setObjectName("LITab")
@@ -338,12 +333,11 @@ class DigBeamPosProc(SiriusMainWindow):
 
     def dataItem(self, channel, style):
         '''Get data channel info'''
-
         if style == 0:
             channel_info = PyDMLabel(
                 parent=self,
                 init_channel=self.prefix + self.device_name + ':' + channel)
-        elif(style == 1 or style == 2 or style == 4):
+        elif style == 1 or style == 2 or style == 4:
             channel_info = PyDMSpinbox(
                 parent=self,
                 init_channel=self.prefix + self.device_name + ':' + channel)
@@ -355,7 +349,6 @@ class DigBeamPosProc(SiriusMainWindow):
 
     def display_data(self, title, info, pos_x, pos_y, style):
         '''Build a data widget'''
-
         glay = QGridLayout()
         group = QGroupBox()
 
@@ -387,7 +380,6 @@ class DigBeamPosProc(SiriusMainWindow):
 
     def display_mainData(self):
         '''Display all main data widgets'''
-
         countx = 0
         county = 0
 
@@ -395,8 +387,7 @@ class DigBeamPosProc(SiriusMainWindow):
 
         for title, info in self.bpm_main_data.items():
 
-            if (title == "Trigger Cnt"
-                  or title == "Cycle"):
+            if title == "Trigger Cnt" or title == "Cycle":
                 md_glay.addWidget(
                     self.display_data(
                         title, info,
@@ -454,7 +445,6 @@ class DigBeamPosProc(SiriusMainWindow):
 
     def selectionItem(self, title, channel, orientation):
         '''Build a selection widget'''
-
         group = QGroupBox()
         lay = QVBoxLayout()
 
@@ -471,7 +461,6 @@ class DigBeamPosProc(SiriusMainWindow):
 
     def display_selectors(self):
         '''Display the selector and the secondary data'''
-
         sl_vlay = QVBoxLayout()
         for title, channel in self.selectors_data.items():
             sl_vlay.addWidget(
