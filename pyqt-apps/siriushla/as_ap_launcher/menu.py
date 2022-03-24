@@ -307,6 +307,7 @@ def get_object(ismenubar=True, parent=None):
             DIG.setObjectName('LIApp')
 
             bpms_menu = DIG.addMenu('BPMs')
+            bpms_menu.setIcon(qta.icon('mdi.currency-sign'))
             bpms_menu.setObjectName('LIApp')
 
             bpm2 = QAction('BPM2', bpms_menu)

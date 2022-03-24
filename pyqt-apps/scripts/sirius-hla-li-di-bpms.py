@@ -2,6 +2,7 @@
 
 import argparse
 import sys
+
 from siriuspy.envars import VACA_PREFIX
 from siriushla.li_di_bpms import DigBeamPosProc
 from siriushla.sirius_application import SiriusApplication
@@ -14,6 +15,6 @@ parser.add_argument('-p', "--prefix", type=str, default=VACA_PREFIX,
 args = parser.parse_args()
 
 app = SiriusApplication()
-wid = DigBeamPosProc(args.device, args.prefix)
-wid.show()
+app.open_window(
+    DigBeamPosProc, parent=None, device_name=args.device, prefix=args.prefix)
 sys.exit(app.exec_())

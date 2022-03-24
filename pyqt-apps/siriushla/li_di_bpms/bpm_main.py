@@ -1,15 +1,16 @@
 ''' Diagnostic Interface of the LINAC's BPM'''
-import sys
-import json
-from PyQt5.QtCore import Qt
-from qtpy.QtWidgets import QGroupBox, QVBoxLayout, QTabWidget
-from qtpy.QtWidgets import QWidget, QLabel, QGridLayout
+from qtpy.QtCore import Qt
+from qtpy.QtWidgets import QGroupBox, QVBoxLayout, QTabWidget, \
+    QWidget, QLabel, QGridLayout
+import qtawesome as qta
 from pydm.widgets import PyDMLabel, enum_button, PyDMEnumComboBox, PyDMSpinbox
-from siriushla.as_di_bpms.base import GraphWave
-from ..widgets import SiriusLedState
+
+from ..util import get_appropriate_color
+from ..widgets import SiriusMainWindow, SiriusLedState
+from ..as_di_bpms.base import GraphWave
 
 
-class DigBeamPosProc(QWidget):
+class DigBeamPosProc(SiriusMainWindow):
     ''' Class Digital Beam Position Processor '''
 
     def __init__(self, device_name, prefix='', parent=None):
@@ -17,10 +18,15 @@ class DigBeamPosProc(QWidget):
 
         super().__init__(parent)
 
-        self.setObjectName('LIApp')
-
         self.prefix = prefix
         self.device_name = device_name
+        self.prefix = prefix + ('-' if prefix else '')
+
+        color = get_appropriate_color('LI')
+        self.setWindowIcon(qta.icon('mdi.currency-sign', color=color))
+        self.setObjectName('LIApp')
+
+        self.setWindowTitle(self.device_name)
 
         self.header = {
             "Trigger": "TRIGGER_STATUS",
@@ -230,63 +236,29 @@ class DigBeamPosProc(QWidget):
             }
 
         self._setupUi()
-        self.setStyleSheet('''
-                    QGridLayout{
-                        margin: 100px;
-                    }
-                    PyDMLineEdit, PyDMEnumComboBox, PyDMPushButton{
-                        border: 1px solid #000000;
-                        background-color: #FFFFFF;
-                        width: 40px;
-                        padding-left: 5px;
-                        padding-right: 5px;
-                        border-radius: 5px;
-                    }
-                    QGroupBox{
-                        border: 2px solid #b0b0b0;
-                        padding-left: 5px;
-                        padding-right: 5px;
-                        padding-top: 5px;
-                        margin: 3px;
-                        font-weight: bold;
-                    }
-                    QGroupBox::title{
-                        font-size: 15;
-                        position: relative;
-                        bottom: 5px;
-                    }
-                    QLabel{
-                        padding-right: 5px;
-                    }
-                    GraphWave{
-                        background-color:#000000
-                    }
-                    ''')
 
     def _setupUi(self):
         '''Build the graphic interface'''
 
-        self.setWindowTitle(self.device_name)
-
+        wid = QWidget(self)
         if_glay = QGridLayout()
+
         if_glay.addLayout(self.display_header(), 0, 0, 1, 3)
         if_glay.addLayout(self.display_graph(), 1, 0, 2, 1)
         if_glay.addLayout(self.display_mainData(), 1, 1, 1, 1)
         if_glay.addLayout(self.display_selectors(), 1, 2, 1, 1)
         if_glay.setAlignment(Qt.AlignTop)
         if_glay.setColumnStretch(0, 10)
-        self.setLayout(if_glay)
+
+        wid.setLayout(if_glay)
+        self.setCentralWidget(wid)
 
     def display_header(self):
         '''Display the header of the interface'''
 
         hd_glay = QGridLayout()
 
-        title_lb = QLabel("DIGITAL BEAM POSITION PROCESSOR")
-        title_lb.setStyleSheet('''
-               font-weight: bold;
-               font-size: 20px;
-            ''')
+        title_lb = QLabel('<h2>'+ self.device_name +' - POSITION MONITOR </h2>', self)
         title_lb.setAlignment(Qt.AlignCenter)
         hd_glay.addWidget(title_lb, 0, 2, 2, 1)
 
@@ -294,7 +266,7 @@ class DigBeamPosProc(QWidget):
 
         for led_lb, led_channel in self.header.items():
             trig_led = SiriusLedState(
-                init_channel=self.device_name + ':' + led_channel)
+                init_channel=self.prefix + self.device_name + ':' + led_channel)
             trig_led.setFixedSize(30, 30)
             hd_glay.addWidget(trig_led, 0, countx, 1, 1)
 
@@ -327,7 +299,7 @@ class DigBeamPosProc(QWidget):
 
             channel_data = graph_data.get("channels").get(channel)
             graph_plot.addChannel(
-                y_channel=self.device_name + ':' + channel_data.get('path'),
+                y_channel=self.prefix + self.device_name + ':' + channel_data.get('path'),
                 name=channel_data.get('name'),
                 color=channel_data.get('color'),
                 lineWidth=1)
@@ -342,6 +314,7 @@ class DigBeamPosProc(QWidget):
 
         gp_vlay = QVBoxLayout()
         tab = QTabWidget()
+        tab.setObjectName("LITab")
 
         for graph_name in self.graph_all_data:
             tablay = QVBoxLayout()
@@ -370,11 +343,12 @@ class DigBeamPosProc(QWidget):
         if style == 0:
             channel_info = PyDMLabel(
                 parent=self,
-                init_channel=self.device_name + ':' + channel)
+                init_channel=self.prefix + self.device_name + ':' + channel)
         elif(style == 1 or style == 2 or style == 4):
             channel_info = PyDMSpinbox(
                 parent=self,
-                init_channel=self.device_name + ':' + channel)
+                init_channel=self.prefix + self.device_name + ':' + channel)
+            channel_info.showStepExponent = False
         else:
             channel_info = QLabel("Error", self)
 
@@ -470,7 +444,7 @@ class DigBeamPosProc(QWidget):
                 text_lb.setAlignment(Qt.AlignCenter)
                 sc_glay.addWidget(text_lb, countx, 0, 1, 2)
                 selection = PyDMEnumComboBox(
-                    init_channel=self.device_name+":"+channel)
+                    init_channel=self.prefix + self.device_name+":"+channel)
                 sc_glay.addWidget(selection, countx+1, 0, 1, 2)
             countx += 1
 
@@ -486,7 +460,7 @@ class DigBeamPosProc(QWidget):
         lay = QVBoxLayout()
 
         selector = enum_button.PyDMEnumButton(
-            init_channel=self.device_name+":"+channel)
+            init_channel=self.prefix + self.device_name+":"+channel)
         selector.widgetType = 0
         selector.orientation = orientation
         lay.addWidget(selector, 0)
