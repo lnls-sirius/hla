@@ -477,6 +477,10 @@ class RFMainControl(SiriusMainWindow):
         lb_dphase = QLabel('Dephase: ', self, alignment=Qt.AlignRight)
         self.lb_dphase = PyDMLabel(self, self.prefix+self.chs['Tun']['DPhase'])
         self.lb_dphase.showUnits = True
+        lb_tunact = QLabel(
+            'Acting: ', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+        self.led_tunact = SiriusLedState(
+            self, self.prefix+self.chs['Tun']['Acting'])
         lay_tunset = QGridLayout()
         lay_tunset.setAlignment(Qt.AlignTop | Qt.AlignHCenter)
         lay_tunset.setVerticalSpacing(12)
@@ -490,6 +494,8 @@ class RFMainControl(SiriusMainWindow):
         lay_tunset.addWidget(self.lb_dtune, 2, 3)
         lay_tunset.addWidget(lb_dphase, 3, 1)
         lay_tunset.addWidget(self.lb_dphase, 3, 2)
+        lay_tunset.addWidget(lb_tunact, 4, 1)
+        lay_tunset.addWidget(self.led_tunact, 4, 2, alignment=Qt.AlignCenter)
         lay_tunset.addItem(
             QSpacerItem(10, 0, QSzPlcy.Expanding, QSzPlcy.Ignored), 1, 4)
 
