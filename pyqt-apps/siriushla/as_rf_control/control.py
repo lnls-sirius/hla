@@ -995,7 +995,7 @@ class RFMainControl(SiriusMainWindow):
         lay_vals.addWidget(
             QLabel('<h4>Channel</h4>', self, alignment=Qt.AlignCenter), 0, 1)
         self.cb_units = QComboBox(self)
-        self.cb_units.addItems(['W', 'dBm'])
+        self.cb_units.addItems(['W', 'dBm', 'mV'])
         self.cb_units.setStyleSheet(
             'QComboBox{max-width: 3.5em; font-weight: bold;}')
         self.cb_units.currentTextChanged.connect(
@@ -1016,19 +1016,23 @@ class RFMainControl(SiriusMainWindow):
 
         data = self.chs['PwrMtr']
 
-        self._pm_dBm_labels = set()
-        self._pm_W_labels = set()
-        for idx, curve_data in enumerate(data):
-            name, wch, dbch, color = curve_data
+        self._pm_labels = dict()
+        self._pm_labels['dBm'] = list()
+        self._pm_labels['W'] = list()
+        self._pm_labels['mV'] = list()
+        idx = 0
+        for name, dic in data.items():
+            wch, dbch, mvch = dic['W'], dic['dBm'], dic['mV']
+            color = dic['color']
             row = idx+1
 
             # Table
-            cb = QCheckBox(self)
+            cbx = QCheckBox(self)
             cond = True if self.section == 'BO' else 'Coup' in name
-            cb.setChecked(cond)
-            cb.setObjectName(name)
-            cb.setStyleSheet('color:'+color+'; max-width: 1.2em;')
-            cb.stateChanged.connect(self._handle_curves_visibility)
+            cbx.setChecked(cond)
+            cbx.setObjectName(name)
+            cbx.setStyleSheet('color:'+color+'; max-width: 1.2em;')
+            cbx.stateChanged.connect(self._handle_curves_visibility)
 
             lb_desc = QLabel(name, self)
             lb_desc.setStyleSheet(
@@ -1038,31 +1042,43 @@ class RFMainControl(SiriusMainWindow):
             lb_dbmpwr = PyDMLabel(self, self.prefix+dbch)
             lb_dbmpwr.showUnits = True
             lb_dbmpwr.setVisible(False)
-            self._pm_dBm_labels.add(lb_dbmpwr)
+            self._pm_labels['dBm'].append(lb_dbmpwr)
 
             lb_wpwr = PyDMLabel(self, self.prefix+wch)
             lb_wpwr.showUnits = True
-            self._pm_W_labels.add(lb_wpwr)
+            self._pm_labels['W'].append(lb_wpwr)
 
-            lay_vals.addWidget(cb, row, 0)
+            lb_mvpwr = PyDMLabel(self, self.prefix+mvch)
+            lb_mvpwr.showUnits = True
+            lb_mvpwr.setVisible(False)
+            self._pm_labels['mV'].append(lb_mvpwr)
+
+            lay_vals.addWidget(cbx, row, 0)
             lay_vals.addWidget(lb_desc, row, 1)
             lay_vals.addWidget(lb_dbmpwr, row, 2)
             lay_vals.addWidget(lb_wpwr, row, 2)
+            lay_vals.addWidget(lb_mvpwr, row, 2)
 
             # Graph
             self.pwr_mon_graph.addYChannel(
                 y_channel=self.prefix+dbch, name=name+' dBm', color=color,
                 lineStyle=Qt.SolidLine, lineWidth=1)
-            self.curves[name+' dBm'] = self.pwr_mon_graph.curveAtIndex(2*idx)
+            self.curves[name+' dBm'] = self.pwr_mon_graph.curveAtIndex(3*idx)
             self.pwr_mon_graph.addYChannel(
                 y_channel=self.prefix+wch, name=name+' W', color=color,
                 lineStyle=Qt.SolidLine, lineWidth=1)
-            self.curves[name+' W'] = \
-                self.pwr_mon_graph.curveAtIndex(2*idx+1)
+            self.curves[name+' W'] = self.pwr_mon_graph.curveAtIndex(3*idx+1)
+            self.pwr_mon_graph.addYChannel(
+                y_channel=self.prefix+mvch, name=name+' mV', color=color,
+                lineStyle=Qt.SolidLine, lineWidth=1)
+            self.curves[name+' mV'] = self.pwr_mon_graph.curveAtIndex(3*idx+2)
+
+            idx += 1
 
         if self.section == 'BO':
-            for name, _, _, _ in data:
+            for name in data:
                 self.curves[name+' dBm'].setVisible(False)
+                self.curves[name+' mV'].setVisible(False)
 
             lb_CavPhs = QLabel('Phase', self, alignment=Qt.AlignCenter)
             self.lb_CavPhs = PyDMLabel(
@@ -1071,12 +1087,10 @@ class RFMainControl(SiriusMainWindow):
             lay_vals.addWidget(lb_CavPhs, 5, 1, alignment=Qt.AlignCenter)
             lay_vals.addWidget(self.lb_CavPhs, 5, 2)
         else:
-            for name, _, _, _ in data:
-                if 'Coup' not in name:
-                    self.curves[name+' dBm'].setVisible(False)
-                    self.curves[name+' W'].setVisible(False)
-                else:
-                    self.curves[name+' dBm'].setVisible(False)
+            for name in data:
+                self.curves[name+' W'].setVisible('Coup' in name)
+                self.curves[name+' dBm'].setVisible(False)
+                self.curves[name+' mV'].setVisible(False)
 
         self.ld_CavVGap = QLabel(
             'Gap Voltage:', self, alignment=Qt.AlignCenter)
@@ -1376,29 +1390,24 @@ class RFMainControl(SiriusMainWindow):
             _part(self._handle_predrive_led_channels, led_drive, chs_dict))
 
     def _handle_pwrdata_visibility(self, text):
-        for lb in self._pm_dBm_labels:
-            lb.setVisible(text == 'dBm')
-        for lb in self._pm_W_labels:
-            lb.setVisible(text == 'W')
+        for group, labels in self._pm_labels.items():
+            for lbl in labels:
+                lbl.setVisible(text == group)
 
-        pwr_names = [data[0] for data in self.chs['PwrMtr']]
-        for name in pwr_names:
-            cb = self.findChild(QCheckBox, name)
-            visi = cb.isChecked()
-            curvedBm = self.curves[name + ' dBm']
-            curveW = self.curves[name + ' W']
-            if text == 'dBm':
-                curvedBm.setVisible(visi)
-                curveW.setVisible(False)
-            else:
-                curvedBm.setVisible(False)
-                curveW.setVisible(visi)
+        for name in self.chs['PwrMtr']:
+            cbx = self.findChild(QCheckBox, name)
+            visi = cbx.isChecked()
+            curvew = self.curves[name + ' W']
+            curvew.setVisible(text == 'W' and visi)
+            curvedbm = self.curves[name + ' dBm']
+            curvedbm.setVisible(text == 'dBm' and visi)
+            curvemv = self.curves[name + ' mV']
+            curvemv.setVisible(text == 'mV' and visi)
 
     def _handle_curves_visibility(self, state):
         name = self.sender().objectName()
-        pwr_names = [data[0] for data in self.chs['PwrMtr']]
-        if name in pwr_names:
-            name += (' W' if self.cb_units.currentText() == 'W' else ' dBm')
+        if name in self.chs['PwrMtr']:
+            name += ' ' + self.cb_units.currentText()
         curve = self.curves[name]
         curve.setVisible(state)
 
