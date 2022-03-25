@@ -36,20 +36,20 @@ class CavityStatusDetails(SiriusDialog):
         tooltip = 'Interlock limits: \nMin: ' + str(lims[0]) + \
             '°C, Max: '+str(lims[1])+'°C'
         for idx, cell in enumerate(self.chs['Cav Sts']['Temp']['Cells']):
-            lb = PyDMLabel(self, self.prefix+cell[0])
-            lb.showUnits = True
-            lb.setStyleSheet('min-width:3.5em; max-width:3.5em;')
+            lbl = PyDMLabel(self, self.prefix+cell[0])
+            lbl.showUnits = True
+            lbl.setStyleSheet('min-width:3.5em; max-width:3.5em;')
             led = PyDMLedMultiChannel(
                 self,
                 {self.prefix+cell[0]: {'comp': 'wt', 'value': lims},
                  self.prefix+cell[0].replace('T-Mon', 'TUp-Mon'): 0,
                  self.prefix+cell[0].replace('T-Mon', 'TDown-Mon'): 0})
             led.setToolTip(tooltip)
-            hb = QHBoxLayout()
-            hb.setAlignment(Qt.AlignLeft)
-            hb.addWidget(lb)
-            hb.addWidget(led)
-            lay_temp1.addRow('Cell '+str(idx + 1)+': ', hb)
+            hbox = QHBoxLayout()
+            hbox.setAlignment(Qt.AlignLeft)
+            hbox.addWidget(lbl)
+            hbox.addWidget(led)
+            lay_temp1.addRow('Cell '+str(idx + 1)+': ', hbox)
         ch_coup = self.chs['Cav Sts']['Temp']['Coupler'][0]
         lims_coup = self.chs['Cav Sts']['Temp']['Coupler Limits']
         lb_coup = PyDMLabel(self, self.prefix+ch_coup)
@@ -99,11 +99,11 @@ class CavityStatusDetails(SiriusDialog):
             led.channel = self.prefix+disc
             lay_dtemp.addRow('Disc '+str(idx)+': ', led)
 
-        self.led_HDFlwRt1 = SiriusLedAlert(
+        self.led_hdflwrt1 = SiriusLedAlert(
             self, self.prefix+self.chs['Cav Sts']['FlwRt'][0])
-        self.led_HDFlwRt2 = SiriusLedAlert(
+        self.led_hdflwrt2 = SiriusLedAlert(
             self, self.prefix+self.chs['Cav Sts']['FlwRt'][1])
-        self.led_HDFlwRt3 = SiriusLedAlert(
+        self.led_hdflwrt3 = SiriusLedAlert(
             self, self.prefix+self.chs['Cav Sts']['FlwRt'][2])
         lay_flwrt = QFormLayout()
         lay_flwrt.setHorizontalSpacing(9)
@@ -114,15 +114,15 @@ class CavityStatusDetails(SiriusDialog):
         lb_flwrf.setStyleSheet(
             'font-weight:bold; qproperty-alignment:AlignCenter;')
         lay_flwrt.addRow(lb_flwrf)
-        lay_flwrt.addRow('Flow Switch 1: ', self.led_HDFlwRt1)
-        lay_flwrt.addRow('Flow Switch 2: ', self.led_HDFlwRt2)
-        lay_flwrt.addRow('Flow Switch 3: ', self.led_HDFlwRt3)
+        lay_flwrt.addRow('Flow Switch 1: ', self.led_hdflwrt1)
+        lay_flwrt.addRow('Flow Switch 2: ', self.led_hdflwrt2)
+        lay_flwrt.addRow('Flow Switch 3: ', self.led_hdflwrt3)
 
-        self.led_CoupPressure = SiriusLedAlert(
+        self.led_couppressure = SiriusLedAlert(
             self, self.prefix+self.chs['Cav Sts']['Vac']['Coupler ok'])
-        self.led_Pressure = SiriusLedAlert(self)
-        self.led_Pressure.setToolTip('Interlock limits:\nMax: 5e-7mBar')
-        self.led_Pressure.channel = \
+        self.led_pressure = SiriusLedAlert(self)
+        self.led_pressure.setToolTip('Interlock limits:\nMax: 5e-7mBar')
+        self.led_pressure.channel = \
             self.prefix+self.chs['Cav Sts']['Vac']['Cells ok']
         lay_vac = QFormLayout()
         lay_vac.setHorizontalSpacing(9)
@@ -133,16 +133,16 @@ class CavityStatusDetails(SiriusDialog):
         lb_vac.setStyleSheet(
             'font-weight:bold; qproperty-alignment:AlignCenter;')
         lay_flwrt.addRow(lb_vac)
-        lay_vac.addRow('Pressure Sensor: ', self.led_CoupPressure)
-        lay_vac.addRow('Vacuum: ', self.led_Pressure)
+        lay_vac.addRow('Pressure Sensor: ', self.led_couppressure)
+        lay_vac.addRow('Vacuum: ', self.led_pressure)
 
-        lb = QLabel('Cavity - Detailed Status', self)
-        lb.setStyleSheet(
+        lbl = QLabel('Cavity - Detailed Status', self)
+        lbl.setStyleSheet(
             'font-weight:bold; qproperty-alignment:AlignCenter;')
         lay = QGridLayout(self)
         lay.setHorizontalSpacing(30)
         lay.setVerticalSpacing(20)
-        lay.addWidget(lb, 0, 0, 1, 4)
+        lay.addWidget(lbl, 0, 0, 1, 4)
         lay.addLayout(lay_temp1, 1, 0, 2, 1)
         lay.addLayout(lay_temp2, 1, 1, 2, 1)
         lay.addLayout(lay_dtemp, 1, 2, 2, 1)
@@ -176,39 +176,39 @@ class TransmLineStatusDetails(SiriusDialog):
         self._setupUi()
 
     def _setupUi(self):
-        self.lb_CircTin = PyDMLabel(
+        self.lb_circtin = PyDMLabel(
             self, self.prefix+self.chs['TL Sts']['Circ TIn'])
-        self.lb_CircTin.showUnits = True
-        self.lb_CircTin.setStyleSheet('qproperty-alignment: AlignLeft;')
-        self.lb_CircTout = PyDMLabel(
+        self.lb_circtin.showUnits = True
+        self.lb_circtin.setStyleSheet('qproperty-alignment: AlignLeft;')
+        self.lb_circtout = PyDMLabel(
             self, self.prefix+self.chs['TL Sts']['Circ TOut'])
-        self.lb_CircTout.showUnits = True
-        self.lb_CircTout.setStyleSheet('qproperty-alignment: AlignLeft;')
-        self.led_CircArc = SiriusLedAlert(
+        self.lb_circtout.showUnits = True
+        self.lb_circtout.setStyleSheet('qproperty-alignment: AlignLeft;')
+        self.led_circarc = SiriusLedAlert(
             self, self.prefix+self.chs['TL Sts']['Circ Arc'])
         if self.section == 'SI':
-            self.led_LoadArc = SiriusLedAlert(
+            self.led_loadarc = SiriusLedAlert(
                 self, self.prefix+self.chs['TL Sts']['Load Arc'])
-        self.led_CircFlwRt = SiriusLedAlert(
+        self.led_circflwrt = SiriusLedAlert(
             self, self.prefix+self.chs['TL Sts']['Circ FlwRt'])
-        self.led_LoadFlwRt = SiriusLedAlert(
+        self.led_loadflwrt = SiriusLedAlert(
             self, self.prefix+self.chs['TL Sts']['Load FlwRt'])
-        self.led_CircIntlkOp = SiriusLedAlert(
+        self.led_circintlkop = SiriusLedAlert(
             self, self.prefix+self.chs['TL Sts']['Circ Intlk'])
 
         lay = QFormLayout(self)
         lay.setLabelAlignment(Qt.AlignRight)
         lay.addRow(QLabel('<h4>Transm. Line - Detailed Status</h4>'))
         lay.addItem(QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed))
-        lay.addRow('Circulator T In: ', self.lb_CircTin)
-        lay.addRow('Circulator T Out: ', self.lb_CircTout)
+        lay.addRow('Circulator T In: ', self.lb_circtin)
+        lay.addRow('Circulator T Out: ', self.lb_circtout)
         lay.addItem(QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed))
-        lay.addRow('Circulator Arc Detector: ', self.led_CircArc)
+        lay.addRow('Circulator Arc Detector: ', self.led_circarc)
         if self.section == 'SI':
-            lay.addRow('Load Arc Detector: ', self.led_LoadArc)
-        lay.addRow('Circulator Flow: ', self.led_CircFlwRt)
-        lay.addRow('Load Flow: ', self.led_LoadFlwRt)
-        lay.addRow('Circulator Intlk: ', self.led_CircIntlkOp)
+            lay.addRow('Load Arc Detector: ', self.led_loadarc)
+        lay.addRow('Circulator Flow: ', self.led_circflwrt)
+        lay.addRow('Load Flow: ', self.led_loadflwrt)
+        lay.addRow('Circulator Intlk: ', self.led_circintlkop)
 
         self.setStyleSheet("""
             PyDMLabel{
