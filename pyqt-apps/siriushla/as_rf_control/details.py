@@ -1,6 +1,8 @@
+"""Detail windows."""
+
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QFormLayout, QLabel, QSpacerItem, \
-    QSizePolicy as QSzPlcy, QGridLayout, QHBoxLayout
+    QSizePolicy as QSzPlcy, QGridLayout, QHBoxLayout, QGroupBox
 from pydm.widgets import PyDMLabel
 from siriushla.widgets import SiriusDialog, SiriusLedAlert, \
     PyDMLedMultiChannel
@@ -241,21 +243,56 @@ class LLRFInterlockDetails(SiriusDialog):
         lay.setHorizontalSpacing(25)
         lay.setVerticalSpacing(15)
 
-        lay.addWidget(
-            QLabel('<h4>LLRF Interlock Details</h4>', self,
-                   alignment=Qt.AlignCenter), 0, 0, 1, 2)
-        for col, item in enumerate(self.chs['Intlk Details'].items()):
-            name, dic = item
-            lay_intlk = QGridLayout()
+        self.title = QLabel(
+            '<h4>LLRF Interlock Details</h4>', self,
+            alignment=Qt.AlignCenter)
+        lay.addWidget(self.title, 0, 0, 1, 3)
+
+        # inputs
+        col = 0
+        for name, dic in self.chs['LLRF Intlk Details']['Inputs'].items():
+            gbox = QGroupBox(name, self)
+            lay_intlk = QGridLayout(gbox)
+            lay_intlk.setAlignment(Qt.AlignTop)
             lay_intlk.setHorizontalSpacing(9)
-            lay_intlk.setVerticalSpacing(9)
-            lay_intlk.addWidget(
-                QLabel('<h4>'+name+'</h4>', self), 0, 0, 1, 2)
-            pv = self.prefix+dic['PV']
+            lay_intlk.setVerticalSpacing(0)
+
+            icol = 0
+            for key in dic['Status']:
+                desc = QLabel(key, self, alignment=Qt.AlignCenter)
+                desc.setStyleSheet('QLabel{min-width:1em; max-width:2.5em;}')
+                lay_intlk.addWidget(desc, 0, icol)
+                icol += 1
+
             labels = dic['Labels']
             for idx, label in enumerate(labels):
-                led = SiriusLedAlert(self, pv, bit=idx)
-                lb = QLabel(label)
-                lay_intlk.addWidget(led, idx+1, 0)
-                lay_intlk.addWidget(lb, idx+1, 1)
-            lay.addLayout(lay_intlk, 1, col)
+                irow, icol = idx+1, 0
+                for key, pvn in dic['Status'].items():
+                    led = SiriusLedAlert(self, self.prefix+pvn, bit=idx)
+                    led.shape = led.Square
+                    if key != 'Mon':
+                        led.offColor = led.DarkRed
+                    lay_intlk.addWidget(led, irow, icol)
+                    icol += 1
+                lbl = QLabel(label, self)
+                lbl.setStyleSheet('QLabel{min-width:12em;}')
+                lay_intlk.addWidget(lbl, irow, icol)
+
+            lay.addWidget(gbox, 1, col)
+            col += 1
+
+        # timestamps
+        gbox_time = QGroupBox('Timestamps', self)
+        lay_time = QGridLayout(gbox_time)
+        lay_time.setAlignment(Qt.AlignTop)
+        lay_time.setHorizontalSpacing(9)
+        lay_time.setVerticalSpacing(9)
+        for idx, pvn in self.chs['LLRF Intlk Details']['Timestamps'].items():
+            irow = int(idx)-1
+            desc = QLabel('Interlock '+idx, self, alignment=Qt.AlignCenter)
+            desc.setStyleSheet('QLabel{min-width:6em;}')
+            lbl = PyDMLabel(self, self.prefix+pvn)
+            lbl.showUnits = True
+            lay_time.addWidget(desc, irow, 0)
+            lay_time.addWidget(lbl, irow, 1)
+        lay.addWidget(gbox_time, 1, col)
