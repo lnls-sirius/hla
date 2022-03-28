@@ -1,11 +1,16 @@
 """Detail windows."""
 
-from qtpy.QtCore import Qt
-from qtpy.QtWidgets import QFormLayout, QLabel, QSpacerItem, \
+from qtpy.QtCore import Qt, QTimer
+from qtpy.QtWidgets import QFormLayout, QLabel, QSpacerItem, QTabWidget, \
     QSizePolicy as QSzPlcy, QGridLayout, QHBoxLayout, QGroupBox
+
+from pyqtgraph import PlotWidget, TextItem, BarGraphItem
+
 from pydm.widgets import PyDMLabel
-from siriushla.widgets import SiriusDialog, SiriusLedAlert, \
-    PyDMLedMultiChannel
+
+from ..widgets import SiriusDialog, SiriusLedAlert, \
+    PyDMLedMultiChannel, SiriusConnectionSignal as _ConnSignal, \
+    DetachableTabWidget
 from .util import SEC_2_CHANNELS
 
 
@@ -296,3 +301,99 @@ class LLRFInterlockDetails(SiriusDialog):
             lay_time.addWidget(desc, irow, 0)
             lay_time.addWidget(lbl, irow, 1)
         lay.addWidget(gbox_time, 1, col)
+
+
+class BarGraph(PlotWidget):
+    """Bar Graph."""
+
+    def __init__(self, channels=list(), xLabels=list(), yLabel='', title=''):
+        """Init."""
+        super().__init__()
+        self._channels = list()
+        for chn in channels:
+            self._channels.append(_ConnSignal(chn))
+        self._xLabels = xLabels
+        self._yLabel = yLabel
+
+        self.showGrid(x=True, y=True)
+        self.setBackground('w')
+        self.setXRange(min=-0.5, max=len(xLabels)-0.5)
+        self.setTitle(title)
+        self.setLabel('left', text=self._yLabel)
+        self.getAxis('bottom').setStyle(showValues=False)
+        self.getAxis('left').setStyle(
+            autoExpandTextSpace=False, tickTextWidth=30)
+
+        self._baritems = dict()
+        for idx, lbl in enumerate(self._xLabels):
+            textitem = TextItem(lbl, color=(0, 0, 0))
+            self.addItem(textitem)
+            textitem.setPos(idx-0.25, -1)
+
+            baritem = BarGraphItem(
+                x=[idx, ], width=1, height=0, brush='b')
+            self.addItem(baritem)
+            self._baritems[idx] = baritem
+
+        self._timer = QTimer()
+        self._timer.timeout.connect(self._update_graph)
+        self._timer.setInterval(500)  # ms
+        self._timer.start()
+
+    def _update_graph(self):
+        wave = list()
+        for idx, chn in enumerate(self._channels):
+            value = chn.value if chn.value is not None else 0
+            wave.append(value)
+            self._baritems[idx].setOpts(height=value)
+
+
+class WaterTempMonitor(SiriusDialog):
+    """Water Temperature Profile Monitor."""
+
+    def __init__(self, parent=None, prefix='', section=''):
+        """Init."""
+        super().__init__(parent)
+        self.prefix = prefix
+        self.prefix += ('-' if prefix and not prefix.endswith('-') else '')
+        self.section = section
+        self.chs = SEC_2_CHANNELS[self.section]
+        self.setObjectName(self.section+'App')
+        self.setWindowTitle('RF Water Temperature Monitor')
+        self._setupUi()
+
+    def _setupUi(self):
+        lay = QGridLayout(self)
+        lay.setAlignment(Qt.AlignTop)
+        lay.setHorizontalSpacing(25)
+        lay.setVerticalSpacing(15)
+
+        dettab = DetachableTabWidget(self)
+        dettab.setObjectName(self.section+'Tab')
+
+        self.title = QLabel(
+            '<h3>RF Water Temperature Monitor</h3>', self,
+            alignment=Qt.AlignCenter)
+        lay.addWidget(self.title, 0, 0)
+
+        for dettabtitle, dtcontent in self.chs['WaterTemp'].items():
+            if dettabtitle == 'Power':
+                labels = list(dtcontent.keys())
+                channels = [self.prefix+ch for ch in dtcontent.values()]
+                wid = BarGraph(
+                    channels=channels, xLabels=labels, yLabel='Power [kW]',
+                    title=dettabtitle)
+            else:
+                wid = QTabWidget()
+                for tabtitle, content in dtcontent.items():
+                    labels = list(content.keys())
+                    channels = [self.prefix+ch for ch in content.values()]
+                    ylabel = 'Temperature [°C]' \
+                        if 'temp' in dettabtitle.lower() \
+                        else 'Diss. Power [kW]'
+                    tabwid = BarGraph(
+                        channels=channels, xLabels=labels,
+                        yLabel=ylabel, title=dettabtitle)
+                    wid.addTab(tabwid, tabtitle)
+            dettab.addTab(wid, dettabtitle)
+        lay.addWidget(dettab, 1, 0)
