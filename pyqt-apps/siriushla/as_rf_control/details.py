@@ -4,7 +4,7 @@ from qtpy.QtCore import Qt, QTimer
 from qtpy.QtWidgets import QFormLayout, QLabel, QSpacerItem, QTabWidget, \
     QSizePolicy as QSzPlcy, QGridLayout, QHBoxLayout, QGroupBox
 
-from pyqtgraph import PlotWidget, TextItem, BarGraphItem
+from pyqtgraph import PlotWidget, BarGraphItem
 
 from pydm.widgets import PyDMLabel
 
@@ -348,8 +348,8 @@ class BarGraph(PlotWidget):
             self._baritems[idx].setOpts(height=value)
 
 
-class WaterTempMonitor(SiriusDialog):
-    """Water Temperature Profile Monitor."""
+class TempMonitor(SiriusDialog):
+    """Temperature Profile Monitor."""
 
     def __init__(self, parent=None, prefix='', section=''):
         """Init."""
@@ -359,7 +359,7 @@ class WaterTempMonitor(SiriusDialog):
         self.section = section
         self.chs = SEC_2_CHANNELS[self.section]
         self.setObjectName(self.section+'App')
-        self.setWindowTitle('RF Water Temperature Monitor')
+        self.setWindowTitle('RF Temperature Monitor')
         self._setupUi()
 
     def _setupUi(self):
@@ -368,15 +368,17 @@ class WaterTempMonitor(SiriusDialog):
         lay.setHorizontalSpacing(25)
         lay.setVerticalSpacing(15)
 
-        dettab = DetachableTabWidget(self)
-        dettab.setObjectName(self.section+'Tab')
-
         self.title = QLabel(
-            '<h3>RF Water Temperature Monitor</h3>', self,
+            '<h3>RF Temperature Monitor</h3>', self,
             alignment=Qt.AlignCenter)
         lay.addWidget(self.title, 0, 0)
 
-        for dettabtitle, dtcontent in self.chs['WaterTemp'].items():
+        if len(self.chs['TempMon']) == 1:
+            dettab = QTabWidget(self)
+        else:
+            dettab = DetachableTabWidget(self)
+        dettab.setObjectName(self.section+'Tab')
+        for dettabtitle, dtcontent in self.chs['TempMon'].items():
             if dettabtitle == 'Power':
                 labels = list(dtcontent.keys())
                 channels = [self.prefix+ch for ch in dtcontent.values()]

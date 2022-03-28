@@ -17,7 +17,7 @@ from ..widgets import SiriusMainWindow, PyDMStateButton, PyDMLed, \
     SiriusConnectionSignal, SiriusPushButton, SiriusLabel
 from ..util import connect_window, get_appropriate_color
 from .details import TransmLineStatusDetails, CavityStatusDetails, \
-    LLRFInterlockDetails, WaterTempMonitor
+    LLRFInterlockDetails, TempMonitor
 from .custom_widgets import RFEnblDsblButton
 from .util import SEC_2_CHANNELS
 
@@ -1137,21 +1137,18 @@ class RFMainControl(SiriusMainWindow):
         """)
 
         lb_temp = QLabel('<h3>Temperatures [°C]</h3>', self)
+        self.pb_wattemp = QPushButton('Temp. Monitor', self)
+        connect_window(
+            self.pb_wattemp, TempMonitor, parent=self,
+            prefix=self.prefix, section=self.section)
         self.temp_tab = QTabWidget(self)
         self.temp_tab.setObjectName(self.section+'Tab')
         self.temp_tab.setContentsMargins(0, 0, 0, 0)
 
-        if self.section == 'SI':
-            self.pb_wattemp = QPushButton('Water Temp.', self)
-            connect_window(
-                self.pb_wattemp, WaterTempMonitor, parent=self,
-                prefix=self.prefix, section=self.section)
-
         lay_temp = QGridLayout(self.temp_wid)
         lay_temp.setSpacing(4)
         lay_temp.addWidget(lb_temp, 0, 0)
-        if self.section == 'SI':
-            lay_temp.addWidget(self.pb_wattemp, 0, 1)
+        lay_temp.addWidget(self.pb_wattemp, 0, 1)
         lay_temp.addWidget(self.temp_tab, 1, 0, 1, 2)
         lay_temp.setRowStretch(0, 1)
         lay_temp.setRowStretch(1, 10)

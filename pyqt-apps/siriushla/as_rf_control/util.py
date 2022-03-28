@@ -207,6 +207,17 @@ SEC_2_CHANNELS = {
             },
         },
         'CavVGap': 'BO-05D:RF-P5Cav:AmpVCav-Mon',
+        'TempMon': {
+            'Temp.': {
+                'Cells': {
+                    'Cell 1': 'BO-05D:RF-P5Cav:Cylin1T-Mon',
+                    'Cell 2': 'BO-05D:RF-P5Cav:Cylin2T-Mon',
+                    'Cell 3': 'BO-05D:RF-P5Cav:Cylin3T-Mon',
+                    'Cell 4': 'BO-05D:RF-P5Cav:Cylin4T-Mon',
+                    'Cell 5': 'BO-05D:RF-P5Cav:Cylin5T-Mon',
+                },
+            },
+        },
     },
     'SI': {
         'Emergency': 'RA-RaSIA02:RF-IntlkCtrl:EStop-Mon',
@@ -477,8 +488,19 @@ SEC_2_CHANNELS = {
             },
         },
         'CavVGap': 'SI-02SB:RF-P7Cav:AmpVCav-Mon',
-        'WaterTemp': {
-            'Temperatures': {
+        'TempMon': {
+            'Temp.': {
+                'Cells': {
+                    'Cell 1': 'SI-02SB:RF-P7Cav:Cylin1T-Mon',
+                    'Cell 2': 'SI-02SB:RF-P7Cav:Cylin2T-Mon',
+                    'Cell 3': 'SI-02SB:RF-P7Cav:Cylin3T-Mon',
+                    'Cell 4': 'SI-02SB:RF-P7Cav:Cylin4T-Mon',
+                    'Cell 5': 'SI-02SB:RF-P7Cav:Cylin5T-Mon',
+                    'Cell 6': 'SI-02SB:RF-P7Cav:Cylin6T-Mon',
+                    'Cell 7': 'SI-02SB:RF-P7Cav:Cylin7T-Mon',
+                },
+            },
+            'Water Temp.': {
                 'Cells': {
                     'Cell 1': 'SI-02SB:RF-P7Cav:Cylin1WT-Mon',
                     'Cell 2': 'SI-02SB:RF-P7Cav:Cylin2WT-Mon',
@@ -505,7 +527,7 @@ SEC_2_CHANNELS = {
                     'Coupler': 'SI-02SB:RF-P7Cav:CoupWT-Mon',
                 },
             },
-            'dTemperatures': {
+            'Water dTemp.': {
                 'Cells': {
                     'Cell 1': 'SI-02SB:RF-P7Cav:Cylin1WdT-Mon',
                     'Cell 2': 'SI-02SB:RF-P7Cav:Cylin2WdT-Mon',
@@ -526,7 +548,7 @@ SEC_2_CHANNELS = {
                     'Disc 8': 'SI-02SB:RF-P7Cav:Disc8WdT-Mon',
                 },
             },
-            'Dissip Power': {
+            'Dissip. Power': {
                 'Cells': {
                     'Cell 1': 'SI-02SB:RF-P7Cav:PwrDissCell1-Mon',
                     'Cell 2': 'SI-02SB:RF-P7Cav:PwrDissCell2-Mon',
