@@ -320,16 +320,13 @@ class BarGraph(PlotWidget):
         self.setXRange(min=-0.5, max=len(xLabels)-0.5)
         self.setTitle(title)
         self.setLabel('left', text=self._yLabel)
-        self.getAxis('bottom').setStyle(showValues=False)
         self.getAxis('left').setStyle(
             autoExpandTextSpace=False, tickTextWidth=30)
+        self.getAxis('bottom').setTicks(
+            [[(i, l) for i, l in enumerate(self._xLabels)]])
 
         self._baritems = dict()
         for idx, lbl in enumerate(self._xLabels):
-            textitem = TextItem(lbl, color=(0, 0, 0))
-            self.addItem(textitem)
-            textitem.setPos(idx-0.25, -1)
-
             baritem = BarGraphItem(
                 x=[idx, ], width=1, height=0, brush='b')
             self.addItem(baritem)
