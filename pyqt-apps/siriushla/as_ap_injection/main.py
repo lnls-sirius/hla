@@ -536,16 +536,15 @@ class InjCtrlWindow(SiriusMainWindow):
     def mouseDoubleClickEvent(self, event):
         """Implement mouseDoubleClickEvent."""
         if event.button() == Qt.LeftButton:
-            point = event.pos()
-            if self.wid_curr.geometry().contains(point):
+            if self.wid_curr.underMouse():
                 self.showStatus.emit()
-            elif self.wid_shift.geometry().contains(point):
+            elif self.wid_shift.underMouse():
                 self.showStatus.emit()
-            elif self.wid_egun.geometry().contains(point):
+            elif self.wid_egun.underMouse():
                 self.showEgun.emit()
-            elif self.wid_mon.geometry().contains(point):
+            elif self.wid_mon.underMouse():
                 self.showMonitor.emit()
-        return super().mouseDoubleClickEvent(event)
+        super().mouseDoubleClickEvent(event)
 
     def changeEvent(self, event):
         """Implement changeEvent."""
