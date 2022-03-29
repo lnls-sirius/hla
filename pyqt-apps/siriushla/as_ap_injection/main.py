@@ -103,7 +103,7 @@ class InjCtrlWindow(SiriusMainWindow):
         self._lb_shift = MachShiftLabel(self, prefix=self._prefix)
         self._lb_shift.setStyleSheet(
             'QLabel{max-height: 2em; min-width: 7em;}')
-        self.wid_shift = QGroupBox('Mach.Shift')
+        self.wid_shift = QGroupBox('Mach.Shift', self)
         lay_shift = QVBoxLayout(self.wid_shift)
         lay_shift.addWidget(self._cb_shift)
         lay_shift.addWidget(self._lb_shift)
@@ -161,7 +161,7 @@ class InjCtrlWindow(SiriusMainWindow):
         hbox_injsts.setContentsMargins(0, 0, 0, 0)
         hbox_injsts.addWidget(self._led_injti)
         hbox_injsts.addWidget(self._lb_injcnt)
-        self.wid_inj = QGroupBox('Injection')
+        self.wid_inj = QGroupBox('Injection', self)
         lay_inj = QGridLayout(self.wid_inj)
         lay_inj.setAlignment(Qt.AlignCenter)
         lay_inj.addWidget(self._pb_tiinj, 0, 0)
@@ -178,7 +178,7 @@ class InjCtrlWindow(SiriusMainWindow):
                 font-size: 18pt; qproperty-alignment: AlignCenter;
                 min-width: 5.5em; max-width: 5.5em;
         }""")
-        self.wid_curr = QGroupBox('Current')
+        self.wid_curr = QGroupBox('Current', self)
         lay_curr = QHBoxLayout(self.wid_curr)
         lay_curr.addWidget(self._lb_curr)
 
@@ -466,7 +466,7 @@ class InjCtrlWindow(SiriusMainWindow):
     def _setupMonitorWidget(self):
         self.wid_mon = MonitorSummaryWidget(self)
 
-        wid = QWidget()
+        wid = QWidget(self)
         lay = QGridLayout(wid)
         lay.setContentsMargins(0, 0, 0, 0)
         lay.addWidget(self.wid_mon, 0, 0)
