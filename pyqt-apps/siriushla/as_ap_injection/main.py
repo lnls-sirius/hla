@@ -276,6 +276,9 @@ class InjCtrlWindow(SiriusMainWindow):
         self._lb_injtype = PyDMLabel(
             self, self._inj_prefix.substitute(propty='Type-Sts'))
         labelsmon.append(self._lb_injtype)
+        self._lb_injtype_mon = PyDMLabel(
+            self, self._inj_prefix.substitute(propty='Type-Mon'))
+        labelsmon.append(self._lb_injtype_mon)
         self._ch_injtype = SiriusConnectionSignal(
             self._inj_prefix.substitute(propty='Type-Sel'))
         self._ch_injtype.new_value_signal[int].connect(
@@ -306,6 +309,13 @@ class InjCtrlWindow(SiriusMainWindow):
         self._lb_mbbias.showUnits = True
         labelsmon.append(self._lb_mbbias)
 
+        # bias voltage mon
+        ch_bias_mon = SiriusPVName('LI-01:EG-BiasPS').substitute(
+            prefix=self._prefix, propty_name='voltinsoft')
+        self._lb_bias_mon = PyDMLabel(self, ch_bias_mon)
+        self._lb_bias_mon.showUnits = True
+        labelsmon.append(self._lb_bias_mon)
+
         # Filament current op value
         self._ld_filaopcurr = QLabel('Fila.Op. Curr.', self)
         labelsdesc.append(self._ld_filaopcurr)
@@ -316,6 +326,11 @@ class InjCtrlWindow(SiriusMainWindow):
             self, self._inj_prefix.substitute(propty='FilaOpCurr-RB'))
         self._lb_filaopcurr.showUnits = True
         labelsmon.append(self._lb_filaopcurr)
+        ch_filacurr_mon = SiriusPVName('LI-01:EG-FilaPS').substitute(
+            prefix=self._prefix, propty_name='currentinsoft')
+        self._lb_filaopcurr_mon = PyDMLabel(self, ch_filacurr_mon)
+        self._lb_filaopcurr_mon.showUnits = True
+        labelsmon.append(self._lb_filaopcurr_mon)
 
         # High voltage op value
         self._ld_hvopvolt = QLabel('HV.Op. Volt.', self)
@@ -327,6 +342,16 @@ class InjCtrlWindow(SiriusMainWindow):
             self, self._inj_prefix.substitute(propty='HVOpVolt-RB'))
         self._lb_hvopvolt.showUnits = True
         labelsmon.append(self._lb_hvopvolt)
+        ch_hvvolt_mon = SiriusPVName('LI-01:EG-HVPS').substitute(
+            prefix=self._prefix, propty_name='voltinsoft')
+        self._lb_hvopvolt_mon = PyDMLabel(self, ch_hvvolt_mon)
+        self._lb_hvopvolt_mon.showUnits = True
+        labelsmon.append(self._lb_hvopvolt_mon)
+
+        # header
+        ld_sp = QLabel('<h4>SP</h4>', self, alignment=Qt.AlignCenter)
+        ld_rb = QLabel('<h4>RB</h4>', self, alignment=Qt.AlignCenter)
+        ld_mon = QLabel('<h4>Mon</h4>', self, alignment=Qt.AlignCenter)
 
         # Bucket list
         self._wid_bl = BucketList(
@@ -337,14 +362,16 @@ class InjCtrlWindow(SiriusMainWindow):
         wid1.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Fixed)
         glay1 = QGridLayout(wid1)
         glay1.setAlignment(Qt.AlignTop)
-        glay1.addWidget(self._ld_injmode, 0, 0)
-        glay1.addWidget(self._cb_injmode, 0, 1)
-        glay1.addWidget(self._lb_injmode, 0, 2)
-        glay1.addWidget(self._ld_currtgt, 1, 0)
-        glay1.addWidget(self._sb_currtgt, 1, 1)
-        glay1.addWidget(self._lb_currtgt, 1, 2)
-        glay1.addWidget(self.wid_tudtls, 2, 0, 2, 3)
-        glay1.addWidget(self.wid_dcdtls, 2, 0, 2, 3)
+        glay1.addWidget(self._ld_injset, 0, 0)
+        glay1.addWidget(self._led_injset, 0, 1)
+        glay1.addWidget(self._ld_injmode, 1, 0)
+        glay1.addWidget(self._cb_injmode, 1, 1)
+        glay1.addWidget(self._lb_injmode, 1, 2)
+        glay1.addWidget(self._ld_currtgt, 2, 0)
+        glay1.addWidget(self._sb_currtgt, 2, 1)
+        glay1.addWidget(self._lb_currtgt, 2, 2)
+        glay1.addWidget(self.wid_tudtls, 3, 0, 2, 3)
+        glay1.addWidget(self.wid_dcdtls, 3, 0, 2, 3)
         glay1.setColumnStretch(0, 3)
         glay1.setColumnStretch(1, 2)
         glay1.setColumnStretch(2, 2)
@@ -353,32 +380,40 @@ class InjCtrlWindow(SiriusMainWindow):
         wid2.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Fixed)
         glay2 = QGridLayout(wid2)
         glay2.setAlignment(Qt.AlignTop)
-        glay2.addWidget(self._ld_injset, 0, 0)
-        glay2.addWidget(self._led_injset, 0, 1)
+        glay2.addWidget(ld_sp, 0, 1)
+        glay2.addWidget(ld_rb, 0, 2)
+        glay2.addWidget(ld_mon, 0, 3)
         glay2.addWidget(self._ld_injtype, 1, 0)
         glay2.addWidget(self._cb_injtype, 1, 1)
         glay2.addWidget(self._lb_injtype, 1, 2)
+        glay2.addWidget(self._lb_injtype_mon, 1, 3)
         glay2.addWidget(self._ld_sbbias, 2, 0)
         glay2.addWidget(self._sb_sbbias, 2, 1)
         glay2.addWidget(self._lb_sbbias, 2, 2)
-        glay2.addWidget(self._ld_mbbias, 3, 0)
-        glay2.addWidget(self._sb_mbbias, 3, 1)
-        glay2.addWidget(self._lb_mbbias, 3, 2)
+        glay2.addWidget(self._ld_mbbias, 2, 0)
+        glay2.addWidget(self._sb_mbbias, 2, 1)
+        glay2.addWidget(self._lb_mbbias, 2, 2)
+        glay2.addWidget(self._lb_bias_mon, 2, 3)
         glay2.addWidget(self._ld_filaopcurr, 4, 0)
         glay2.addWidget(self._sb_filaopcurr, 4, 1)
         glay2.addWidget(self._lb_filaopcurr, 4, 2)
+        glay2.addWidget(self._lb_filaopcurr_mon, 4, 3)
         glay2.addWidget(self._ld_hvopvolt, 5, 0)
         glay2.addWidget(self._sb_hvopvolt, 5, 1)
         glay2.addWidget(self._lb_hvopvolt, 5, 2)
+        glay2.addWidget(self._lb_hvopvolt_mon, 5, 3)
         glay2.setColumnStretch(0, 3)
         glay2.setColumnStretch(1, 2)
         glay2.setColumnStretch(2, 2)
+        glay2.setColumnStretch(3, 2)
 
         wid = QGroupBox('Settings')
         lay = QGridLayout(wid)
         lay.addWidget(wid1, 0, 0, alignment=Qt.AlignTop)
         lay.addWidget(wid2, 0, 1, alignment=Qt.AlignTop)
         lay.addWidget(self._wid_bl, 1, 0, 1, 2)
+        lay.setColumnStretch(0, 3)
+        lay.setColumnStretch(1, 4)
 
         for lbl in labelsdesc:
             lbl.setStyleSheet("""
@@ -484,7 +519,7 @@ class InjCtrlWindow(SiriusMainWindow):
 
     @Slot(int)
     def _handle_injtype_settings_vis(self, new_type):
-        is_sb = new_type == _Const.InjTypeSel.SingleBunch
+        is_sb = new_type == _Const.InjType.SingleBunch
         self._ld_sbbias.setVisible(is_sb)
         self._sb_sbbias.setVisible(is_sb)
         self._lb_sbbias.setVisible(is_sb)
