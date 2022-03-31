@@ -19,7 +19,7 @@ from ..as_ti_control import BucketList, EVGInjectionLed, EVGInjectionButton
 from ..as_ap_machshift import MachShiftLabel
 from ..as_ap_injection import InjSysStbyControlWidget, InjDiagLed, \
     MonitorSummaryWidget, ClockLabel
-from ..as_rf_control import RFKillBeamButton
+from ..as_ap_injection import RFKillBeamButton
 from .menu import get_object
 
 
