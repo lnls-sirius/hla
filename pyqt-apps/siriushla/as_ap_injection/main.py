@@ -188,11 +188,11 @@ class InjCtrlWindow(SiriusMainWindow):
         self._lb_tusts.setAlignment(Qt.AlignCenter)
         self._lb_tusts.setStyleSheet('QLabel{max-height:2em;}')
         self._ld_tunow = QLabel(
-            'Now:', self, alignment=Qt.AlignRight | Qt.AlignCenter)
+            'Now:', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         self._lb_tunow = ClockLabel(self)
         self._lb_tunow.setStyleSheet('QLabel{max-height:2em;}')
         self._ld_tunxt = QLabel(
-            'Next:', self, alignment=Qt.AlignRight | Qt.AlignCenter)
+            'Next:', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         self._lb_tunxt = SiriusLabel(
             self, self._inj_prefix.substitute(propty='TopUpNextInj-Mon'))
         self._lb_tunxt.displayFormat = SiriusLabel.DisplayFormat.Time
@@ -234,28 +234,29 @@ class InjCtrlWindow(SiriusMainWindow):
         return wid
 
     def _setupSettingsWidget(self):
+        # group of labels to set the same stylesheet
+        labelsdesc, labelsmon = list(), list()
+
         # Mode
-        self._ld_injmode = QLabel(
-            'Mode', self, alignment=Qt.AlignRight | Qt.AlignCenter)
-        self._ld_injmode.setStyleSheet(
-            'QLabel{min-width: 6.5em; max-width: 6.5em; min-height: 1em;}')
+        self._ld_injmode = QLabel('Mode', self)
+        labelsdesc.append(self._ld_injmode)
         self._cb_injmode = SiriusEnumComboBox(
             self, self._inj_prefix.substitute(propty='Mode-Sel'))
         self._lb_injmode = PyDMLabel(
             self, self._inj_prefix.substitute(propty='Mode-Sts'))
         self._lb_injmode.showUnits = True
+        labelsmon.append(self._lb_injmode)
 
         # Target current
-        self._ld_currtgt = QLabel(
-            'Target Curr.', self, alignment=Qt.AlignRight | Qt.AlignCenter)
-        self._ld_currtgt.setStyleSheet(
-            'QLabel{min-width: 6.5em; max-width: 6.5em; min-height: 1em;}')
+        self._ld_currtgt = QLabel('Target Curr.', self)
+        labelsdesc.append(self._ld_currtgt)
         self._sb_currtgt = SiriusSpinbox(
             self, self._inj_prefix.substitute(propty='TargetCurrent-SP'))
         self._sb_currtgt.showStepExponent = False
         self._lb_currtgt = PyDMLabel(
             self, self._inj_prefix.substitute(propty='TargetCurrent-RB'))
         self._lb_currtgt.showUnits = True
+        labelsmon.append(self._lb_currtgt)
 
         # mode specific configurations
         self.wid_dcdtls = self._setupDecayModeWidget()
@@ -263,77 +264,69 @@ class InjCtrlWindow(SiriusMainWindow):
         self.wid_tudtls.setVisible(False)
 
         # Mon
-        self._ld_injset = QLabel(
-            'Setup ok', self, alignment=Qt.AlignRight | Qt.AlignCenter)
-        self._ld_injset.setStyleSheet(
-            'QLabel{min-width: 6.5em; max-width: 6.5em; min-height: 1em;}')
+        self._ld_injset = QLabel('Setup ok', self)
+        labelsdesc.append(self._ld_injset)
         self._led_injset = InjDiagLed(self)
 
         # Type
-        self._ld_injtype = QLabel(
-            'Type', self, alignment=Qt.AlignRight | Qt.AlignCenter)
-        self._ld_injtype.setStyleSheet(
-            'QLabel{min-width: 6.5em; max-width: 6.5em; min-height: 1em;}')
+        self._ld_injtype = QLabel('Type', self)
+        labelsdesc.append(self._ld_injtype)
         self._cb_injtype = SiriusEnumComboBox(
             self, self._inj_prefix.substitute(propty='Type-Sel'))
         self._lb_injtype = PyDMLabel(
             self, self._inj_prefix.substitute(propty='Type-Sts'))
-        self._lb_injtype.showUnits = True
+        labelsmon.append(self._lb_injtype)
         self._ch_injtype = SiriusConnectionSignal(
             self._inj_prefix.substitute(propty='Type-Sel'))
         self._ch_injtype.new_value_signal[int].connect(
             self._handle_injtype_settings_vis)
 
         # Single bunch bias voltage
-        self._ld_sbbias = QLabel(
-            'SB Bias Voltage', self, alignment=Qt.AlignRight | Qt.AlignCenter)
-        self._ld_sbbias.setStyleSheet(
-            'QLabel{min-width: 6.5em; max-width: 6.5em; min-height: 1em;}')
+        self._ld_sbbias = QLabel('SB Bias Voltage', self)
+        labelsdesc.append(self._ld_sbbias)
         self._sb_sbbias = SiriusSpinbox(
             self, self._inj_prefix.substitute(propty='SglBunBiasVolt-SP'))
         self._sb_sbbias.showStepExponent = False
         self._lb_sbbias = PyDMLabel(
             self, self._inj_prefix.substitute(propty='SglBunBiasVolt-RB'))
         self._lb_sbbias.showUnits = True
+        labelsmon.append(self._lb_sbbias)
         self._ld_sbbias.setVisible(False)
         self._sb_sbbias.setVisible(False)
         self._lb_sbbias.setVisible(False)
 
         # Multi bunch bias voltage
-        self._ld_mbbias = QLabel(
-            'MB Bias Volt.', self, alignment=Qt.AlignRight | Qt.AlignCenter)
-        self._ld_mbbias.setStyleSheet(
-            'QLabel{min-width: 6.5em; max-width: 6.5em; min-height: 1em;}')
+        self._ld_mbbias = QLabel('MB Bias Volt.', self)
+        labelsdesc.append(self._ld_mbbias)
         self._sb_mbbias = SiriusSpinbox(
             self, self._inj_prefix.substitute(propty='MultBunBiasVolt-SP'))
         self._sb_mbbias.showStepExponent = False
         self._lb_mbbias = PyDMLabel(
             self, self._inj_prefix.substitute(propty='MultBunBiasVolt-RB'))
         self._lb_mbbias.showUnits = True
+        labelsmon.append(self._lb_mbbias)
 
         # Filament current op value
-        self._ld_filaopcurr = QLabel(
-            'Fila.Op. Curr.', self, alignment=Qt.AlignRight | Qt.AlignCenter)
-        self._ld_filaopcurr.setStyleSheet(
-            'QLabel{min-width: 6.5em; max-width: 6.5em; min-height: 1em;}')
+        self._ld_filaopcurr = QLabel('Fila.Op. Curr.', self)
+        labelsdesc.append(self._ld_filaopcurr)
         self._sb_filaopcurr = SiriusSpinbox(
             self, self._inj_prefix.substitute(propty='FilaOpCurr-SP'))
         self._sb_filaopcurr.showStepExponent = False
         self._lb_filaopcurr = PyDMLabel(
             self, self._inj_prefix.substitute(propty='FilaOpCurr-RB'))
         self._lb_filaopcurr.showUnits = True
+        labelsmon.append(self._lb_filaopcurr)
 
         # High voltage op value
-        self._ld_hvopvolt = QLabel(
-            'HV.Op. Volt.', self, alignment=Qt.AlignRight | Qt.AlignCenter)
-        self._ld_hvopvolt.setStyleSheet(
-            'QLabel{min-width: 6.5em; max-width: 6.5em; min-height: 1em;}')
+        self._ld_hvopvolt = QLabel('HV.Op. Volt.', self)
+        labelsdesc.append(self._ld_hvopvolt)
         self._sb_hvopvolt = SiriusSpinbox(
             self, self._inj_prefix.substitute(propty='HVOpVolt-SP'))
         self._sb_hvopvolt.showStepExponent = False
         self._lb_hvopvolt = PyDMLabel(
             self, self._inj_prefix.substitute(propty='HVOpVolt-RB'))
         self._lb_hvopvolt.showUnits = True
+        labelsmon.append(self._lb_hvopvolt)
 
         # Bucket list
         self._wid_bl = BucketList(
@@ -386,11 +379,20 @@ class InjCtrlWindow(SiriusMainWindow):
         lay.addWidget(wid1, 0, 0, alignment=Qt.AlignTop)
         lay.addWidget(wid2, 0, 1, alignment=Qt.AlignTop)
         lay.addWidget(self._wid_bl, 1, 0, 1, 2)
+
+        for lbl in labelsdesc:
+            lbl.setStyleSheet("""
+                QLabel{
+                    min-width: 6.5em; max-width: 6.5em; min-height: 1.5em;
+                    qproperty-alignment: 'AlignRight | AlignVCenter';
+                }""")
+        for lbl in labelsmon:
+            lbl.setStyleSheet("PyDMLabel{qproperty-alignment: AlignCenter;}")
+
         return wid
 
     def _setupTopUpModeWidget(self):
-        self._ld_tuperd = QLabel(
-            'Period', self, alignment=Qt.AlignRight | Qt.AlignCenter)
+        self._ld_tuperd = QLabel('Period', self)
         self._sb_tuperd = SiriusSpinbox(
             self, self._inj_prefix.substitute(propty='TopUpPeriod-SP'))
         self._sb_tuperd.showStepExponent = False
@@ -398,8 +400,7 @@ class InjCtrlWindow(SiriusMainWindow):
             self, self._inj_prefix.substitute(propty='TopUpPeriod-RB'))
         self._lb_tuperd.showUnits = True
 
-        self._ld_tumaxpu = QLabel(
-            'Max.Nr.Pulses', self, alignment=Qt.AlignRight | Qt.AlignCenter)
+        self._ld_tumaxpu = QLabel('Max.Nr.Pulses', self)
         self._sb_tumaxpu = SiriusSpinbox(
             self, self._inj_prefix.substitute(propty='TopUpMaxNrPulses-SP'))
         self._sb_tumaxpu.showStepExponent = False
@@ -423,13 +424,16 @@ class InjCtrlWindow(SiriusMainWindow):
 
         wid.setStyleSheet("""
             .QLabel{
-                min-width: 6.5em; max-width: 6.5em; min-height: 1em;
+                min-width: 6.5em; max-width: 6.5em; min-height: 1.5em;
+                qproperty-alignment: 'AlignRight | AlignVCenter';
+            }
+            PyDMLabel{
+                qproperty-alignment: AlignCenter;
             }""")
         return wid
 
     def _setupDecayModeWidget(self):
-        self._ld_autostop = QLabel(
-            'Auto Stop', self, alignment=Qt.AlignRight | Qt.AlignCenter)
+        self._ld_autostop = QLabel('Auto Stop', self)
         self._cb_autostop = PyDMStateButton(
             self, self._inj_prefix.substitute(propty='AutoStop-Sel'))
         self._cb_autostop.shape = 1
@@ -442,14 +446,18 @@ class InjCtrlWindow(SiriusMainWindow):
         lay.setContentsMargins(0, 6, 0, 0)
         lay.addWidget(self._ld_autostop, 0, 0)
         lay.addWidget(self._cb_autostop, 0, 1)
-        lay.addWidget(self._led_autostop, 0, 2, alignment=Qt.AlignLeft)
+        lay.addWidget(self._led_autostop, 0, 2)
         lay.setColumnStretch(0, 3)
         lay.setColumnStretch(1, 2)
         lay.setColumnStretch(2, 2)
 
         wid.setStyleSheet("""
             .QLabel{
-                min-width: 6.5em; max-width: 6.5em; min-height: 1em;
+                min-width: 6.5em; max-width: 6.5em; min-height: 1.5em;
+                qproperty-alignment: 'AlignRight | AlignVCenter';
+            }
+            PyDMLabel{
+                qproperty-alignment: AlignCenter;
             }""")
         return wid
 
@@ -533,6 +541,8 @@ class InjCtrlWindow(SiriusMainWindow):
                 hbox_aux.addWidget(wid)
             lay.addLayout(hbox_aux)
         return box
+
+    # ---- events ----
 
     def mouseDoubleClickEvent(self, event):
         """Implement mouseDoubleClickEvent."""
