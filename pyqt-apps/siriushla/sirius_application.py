@@ -45,7 +45,7 @@ def excepthook(exctype, excvalue, tracebackobj):
     notice = \
         'An unhandled exception occurred. Please report the problem '\
         'via email to <{}>.\nA log has {{}}been written to "{}".\n\n'\
-        'Error information:\n'.format("fernando.sa@lnls.br", LOGFILE)
+        'Error information:\n'.format("ana.clara@lnls.br", LOGFILE)
     timestring = time.strftime("%Y-%m-%d, %H:%M:%S") + '\n'
 
     tbinfofile = StringIO()

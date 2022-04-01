@@ -173,6 +173,7 @@ class RadTotDoseMonitor(QWidget):
             frame.add_widget(lb)
 
             desc = QLabel(pvn + ' ' + local, self, alignment=Qt.AlignCenter)
+            desc.setSizePolicy(QSzPol.Preferred, QSzPol.Maximum)
             desc.setStyleSheet(
                 'QLabel{background-color:black; color:white;font-size:26pt;}')
             self._desc_labels[pvn] = desc

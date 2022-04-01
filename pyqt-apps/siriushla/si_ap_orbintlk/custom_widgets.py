@@ -8,13 +8,16 @@ from qtpy.QtWidgets import QPushButton, QComboBox, QSizePolicy as QSzPlcy, \
     QWidget, QHBoxLayout, QCheckBox, QLabel, QGridLayout, QSpinBox, QGroupBox,\
     QDoubleSpinBox
 
+from siriuspy.epics import PV as _PV
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 from siriuspy.namesys import SiriusPVName
-from siriuspy.clientconfigdb import ConfigDBClient
 
-from ..widgets import SiriusConnectionSignal as _ConnSignal, \
-    PyDMLedMultiChannel, PyDMLed, SiriusLedState, QLed, SelectionMatrixWidget
+from ..widgets import PyDMLedMultiChannel, PyDMLed, SiriusLedState, QLed, \
+    SelectionMatrixWidget
 from ..widgets.led import MultiChannelStatusDialog
+from ..widgets.dialog import ReportDialog, ProgressDialog
+from ..common.epics.task import EpicsConnector, EpicsSetter, \
+    EpicsChecker, EpicsWait
 from ..as_ap_configdb import LoadConfigDialog
 from .base import BaseObject
 
@@ -31,26 +34,23 @@ class FamBPMButton(BaseObject, QPushButton):
         self.prefix = prefix
         self.propty = propty
         self.value = value
-        _chs, _conns = dict(), dict()
+        self.pvs, self.pvs2conn = dict(), dict()
         for bpm in self.BPM_NAMES:
             pvname = bpm.substitute(prefix=self.prefix, propty=self.propty)
-            channel = _ConnSignal(pvname)
-            channel.connection_state_signal.connect(self._connection_changed)
-            _chs[pvname] = channel
-            _conns[pvname] = None
-        self.channels = _chs
-        self.channel2conn = _conns
+            self.pvs2conn[pvname] = None
+            self.pvs[pvname] = _PV(
+                pvname, connection_callback=self._connection_changed,
+                connection_timeout=0.05)
         self.released.connect(self._send_value)
 
     def _send_value(self):
-        for chn in self.channels.values():
-            chn.send_value_signal[int].emit(self.value)
+        for pvo in self.pvs.values():
+            if pvo.wait_for_connection():
+                pvo.put(self.value)
 
-    def _connection_changed(self, conn):
-        address = self.sender().address
-        self.channel2conn[address] = conn
-
-        connstate = all(self.channel2conn.values())
+    def _connection_changed(self, pvname, conn, **kws):
+        self.pvs2conn[pvname] = conn
+        connstate = all(self.pvs2conn.values())
         self.setEnabled(connstate)
 
 
@@ -60,7 +60,8 @@ class FamBPMIntlkEnblStateLed(PyDMLedMultiChannel):
     def __init__(self, parent=None, channels2values=dict()):
         super().__init__(parent, channels2values)
         self.stateColors = [
-            PyDMLed.DarkGreen, PyDMLed.LightGreen, PyDMLed.Yellow, PyDMLed.Gray]
+            PyDMLed.DarkGreen, PyDMLed.LightGreen,
+            PyDMLed.Yellow, PyDMLed.Gray]
 
     def _update_statuses(self):
         if not self._connected:
@@ -78,17 +79,18 @@ class FamBPMIntlkEnblStateLed(PyDMLedMultiChannel):
                 state = 1
         self.setState(state)
 
-    def mouseDoubleClickEvent(self, ev):
+    def mouseDoubleClickEvent(self, _):
+        """Reimplement mouseDoubleClick."""
         pv_groups, texts = list(), list()
         pvs_err, pvs_und = set(), set()
-        for k, v in self._address2conn.items():
-            if not v:
+        for k, val in self._address2conn.items():
+            if not val:
                 pvs_und.add(k)
         if pvs_und:
             pv_groups.append(pvs_und)
             texts.append('There are disconnected PVs!')
-        for k, v in self._address2status.items():
-            if not v and k not in pvs_und:
+        for k, val in self._address2status.items():
+            if not val and k not in pvs_und:
                 pvs_err.add(k)
         if pvs_err:
             pv_groups.append(pvs_err)
@@ -117,6 +119,7 @@ class RefOrbComboBox(QComboBox):
             'Zero', 'ref_orb', 'bba_orb', 'other...']
         for item in self._choose_reforb:
             self.addItem(item)
+        self.setCurrentText('ref_orb')
         self.activated.connect(self._add_reforb_entry)
 
     @Slot(int)
@@ -165,21 +168,22 @@ class _BPMSelectionWidget(BaseObject, SelectionMatrixWidget):
         sz_polc = QSzPlcy(QSzPlcy.Fixed, QSzPlcy.Fixed)
         for idx, name in enumerate(self.BPM_NAMES):
             wid = QWidget(self.parent())
-            led = SiriusLedState(self)
-            led.setParent(wid)
-            led.setSizePolicy(sz_polc)
             tooltip = '{0}; Pos = {1:5.1f} m'.format(
                 self.BPM_NICKNAMES[idx], self.BPM_POS[idx])
-            led.setToolTip(tooltip)
             if self.propty:
+                item = SiriusLedState(self)
+                item.setParent(wid)
+                item.setSizePolicy(sz_polc)
+                item.setToolTip(tooltip)
                 pvname = SiriusPVName.from_sp2rb(
                     name.substitute(prefix=self.prefix, propty=self.propty))
-                led.channel = pvname
+                item.channel = pvname
             else:
-                led.state = 1
+                item = QCheckBox(self)
+                item.setSizePolicy(sz_polc)
             hbl = QHBoxLayout(wid)
             hbl.setContentsMargins(0, 0, 0, 0)
-            hbl.addWidget(led)
+            hbl.addWidget(item)
             widgets.append(wid)
         return widgets
 
@@ -207,8 +211,9 @@ class BPMIntlkEnblWidget(_BPMSelectionWidget):
         # create channels
         self.pvs_sel = dict()
         for bpm in self.BPM_NAMES:
-            self.pvs_sel[bpm] = _ConnSignal(
-                bpm.substitute(prefix=self.prefix, propty=propty))
+            self.pvs_sel[bpm] = _PV(
+                bpm.substitute(prefix=self.prefix, propty=propty),
+                connection_timeout=0.05)
 
         self.setObjectName('SIApp')
         self.setStyleSheet(
@@ -224,8 +229,10 @@ class BPMIntlkEnblWidget(_BPMSelectionWidget):
             led = wid.findChild(QLed)
             if led.isSelected():
                 new_state = int(not led.state)
-                self.pvs_sel[name].send_value_signal[int].emit(new_state)
-                led.setSelected(False)
+                pvo = self.pvs_sel[name]
+                if pvo.wait_for_connection():
+                    pvo.put(int(new_state))
+                    led.setSelected(False)
 
 
 class BPMIntlkLimSPWidget(BaseObject, QWidget):
@@ -256,22 +263,11 @@ class BPMIntlkLimSPWidget(BaseObject, QWidget):
 
         if 'sum' in self.metric:
             self._create_pvs('Sum-Mon')
-            self._summon = _np.zeros(len(self.BPM_NAMES))
+            self._summon = _np.zeros(len(self.BPM_NAMES), dtype=float)
         else:
-            self._reforb = dict()
-            self._reforb['x'] = _np.zeros(len(self.BPM_NAMES))
-            self._reforb['y'] = _np.zeros(len(self.BPM_NAMES))
-            self._client = ConfigDBClient(config_type='si_orbit')
+            self._set_ref_orb('ref_orb')
 
         self.prefix = prefix
-
-        # create channels
-        self.pvs_sp = dict()
-        for lsp in self.lim_sp:
-            self.pvs_sp[lsp] = dict()
-            for bpm in self.BPM_NAMES:
-                self.pvs_sp[lsp][bpm] = _ConnSignal(
-                    bpm.substitute(prefix=self.prefix, propty=lsp))
 
         # initialize super
         self.setObjectName('SIApp')
@@ -339,9 +335,6 @@ class BPMIntlkLimSPWidget(BaseObject, QWidget):
                 check = QCheckBox(self)
                 self._checks[lsp] = check
                 lay_lims.addWidget(check, row, 2, alignment=Qt.AlignCenter)
-                if len(self.pvs_sp) == 1:
-                    check.setChecked(True)
-                    check.setVisible(False)
 
             row += 1
             self._label_reforb = QLabel(
@@ -382,8 +375,8 @@ class BPMIntlkLimSPWidget(BaseObject, QWidget):
         groupsel.setStyleSheet(
             '#groupsel{min-width: 27em; max-width: 27em;}')
         self._bpm_sel = _BPMSelectionWidget(
-            self, show_toggle_all_true=False,
-            toggle_all_false_text='Select All', prefix=self.prefix)
+            self, show_toggle_all_false=False,
+            toggle_all_true_text='Select All', prefix=self.prefix)
         lay_groupsel = QGridLayout(groupsel)
         lay_groupsel.addWidget(self._bpm_sel)
 
@@ -396,51 +389,79 @@ class BPMIntlkLimSPWidget(BaseObject, QWidget):
         lay.addWidget(groupsel, 1, 1)
 
     def _set_ref_orb(self, text):
+        self._reforb = dict()
         if text.lower() == 'zero':
-            self._reforb['x'] = _np.zeros(len(self.BPM_NAMES))
-            self._reforb['y'] = _np.zeros(len(self.BPM_NAMES))
+            self._reforb['x'] = _np.zeros(len(self.BPM_NAMES), dtype=float)
+            self._reforb['y'] = _np.zeros(len(self.BPM_NAMES), dtype=float)
         else:
             data = self.get_ref_orb(text)
-            self._reforb['x'] = _np.array(data['x']) * self.CONV_UM2NM
-            self._reforb['y'] = _np.array(data['y']) * self.CONV_UM2NM
+            self._reforb['x'] = data['x']
+            self._reforb['y'] = data['y']
 
     def _get_new_sum(self):
-        self._summon = _np.array(self._get_values('Sum-Mon'))
+        self._summon = _np.array(self._get_values('Sum-Mon'), dtype=float)
         text = 'Read at ' + _time.strftime(
             '%d/%m/%Y %H:%M:%S\n', _time.localtime(_time.time()))
         self._label_getsts.setText(text)
 
     def send_value(self):
         """Send new value."""
-        selected = list()
+        idxsel, namesel = list(), list()
         for idx, wid in enumerate(self._bpm_sel.widgets):
             name = self.BPM_NAMES[idx]
-            led = wid.findChild(QLed)
-            if led.isSelected():
-                selected.append(name)
-                led.setSelected(False)
-        if not selected:
+            check = wid.findChild(QCheckBox)
+            if check.isChecked():
+                idxsel.append(idx)
+                namesel.append(name)
+                check.setChecked(False)
+        if not namesel:
             return
 
         if 'sum' in self.metric:
             _av = self.CONV_POLY_MONIT1_2_MONIT[0, :]
             _bv = self.CONV_POLY_MONIT1_2_MONIT[1, :]
-            value = self._spin_scl.value() * (self._summon - _bv)/_av
-            print(value == self._summon)
-            for name in selected:
-                idx = self.BPM_NAMES.index(name)
-                self.pvs_sp[self.lim_sp[0]][name].send_value_signal[int].emit(
-                    round(value[idx]))
+            allvals = self._spin_scl.value() * (self._summon - _bv)/_av
+            values = allvals[_np.array(idxsel)]
+            pvs = [b.substitute(propty=self.lim_sp[0]) for b in namesel]
         else:
+            pvs, values = list(), list()
             for lsp in self.lim_sp:
                 if not self._checks[lsp].isChecked():
                     continue
                 lval = self._spins[lsp].value()
-                plan = 'x' if 'x' in lsp.lower() else 'y'
-                ref = self._reforb[plan]
-                metric = self.get_intlk_metric(ref, metric=self.metric)
-                value = _np.array(metric) + lval
-                for name in selected:
-                    idx = self.BPM_NAMES.index(name)
-                    self.pvs_sp[lsp][name].send_value_signal[int].emit(
-                        round(value[idx]))
+                plan = 'y' if 'y' in lsp.lower() else 'x'
+                metric = self.calc_intlk_metric(
+                    self._reforb[plan], metric=self.metric)
+                allvals = _np.round(_np.array(metric) + lval)
+                allvals = allvals[_np.array(idxsel)]
+                values.extend(allvals)
+                pvs.extend([b.substitute(propty=lsp) for b in namesel])
+
+        delays = [0.0, ] * len(pvs)
+
+        self._items_success = list()
+        self._items_fail = list()
+        conn = EpicsConnector(pvs, parent=self)
+        task_set = EpicsSetter(pvs, values, delays, parent=self)
+        task_sleep = EpicsWait([None, ]*10, wait_time=2.0, parent=self)
+        task_check = EpicsChecker(pvs, values, delays, parent=self)
+        task_check.itemChecked.connect(self._check_status)
+
+        dlg = ProgressDialog(
+            ['Connecting...', 'Setting...', 'Waiting...', 'Checking...'],
+            [conn, task_set, task_sleep, task_check], parent=self)
+        ret = dlg.exec_()
+        if ret == dlg.Rejected:
+            return
+
+        if self._items_fail:
+            report = ReportDialog(self._items_fail, self)
+            report.exec_()
+            return
+
+    @Slot(str, bool)
+    def _check_status(self, item, status):
+        if status:
+            self._items_success.append((item, True))
+        else:
+            self._items_fail.append(item)
