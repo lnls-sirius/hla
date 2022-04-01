@@ -74,7 +74,7 @@ class MainLauncher(SiriusMainWindow):
         machshift_pvname = SiriusPVName(
             'AS-Glob:AP-MachShift:Mode-Sel').substitute(prefix=self._prefix)
         cbox_shift_mode = SiriusEnumComboBox(self, machshift_pvname)
-        label_shift_mode = MachShiftLabel()
+        label_shift_mode = MachShiftLabel(self, self._prefix)
         label_shift_mode.label.setStyleSheet(
             'QLabel{max-height: 2em; min-width: 7em;}')
         lay_shift = QGridLayout(self.wid_shift)

@@ -28,7 +28,7 @@ class InjCtrlWindow(SiriusMainWindow):
     showStatus = Signal()
     showEgun = Signal()
 
-    def __init__(self, prefix='', parent=None):
+    def __init__(self, parent=None, prefix=''):
         """Init."""
         super().__init__(parent)
         self._prefix = prefix
@@ -100,7 +100,7 @@ class InjCtrlWindow(SiriusMainWindow):
         machshift_pvname = SiriusPVName(
             'AS-Glob:AP-MachShift:Mode-Sel').substitute(prefix=self._prefix)
         self._cb_shift = SiriusEnumComboBox(self, machshift_pvname)
-        self._lb_shift = MachShiftLabel()
+        self._lb_shift = MachShiftLabel(self, prefix=self._prefix)
         self._lb_shift.setStyleSheet(
             'QLabel{max-height: 2em; min-width: 7em;}')
         self.wid_shift = QGroupBox('Mach.Shift')
@@ -153,8 +153,9 @@ class InjCtrlWindow(SiriusMainWindow):
         self._lb_injcnt = PyDMLabel(self)
         self._lb_injcnt.setToolTip(
             'Count injection pulses when Egun Trigger is enabled.')
-        self._lb_injcnt.channel = \
-            'AS-Glob:AP-CurrInfo:InjCount-Mon'
+        ch_injcnt = SiriusPVName(
+            'AS-Glob:AP-CurrInfo:InjCount-Mon').substitute(prefix=self._prefix)
+        self._lb_injcnt.channel = ch_injcnt
         self._lb_injcnt.setStyleSheet('QLabel{max-width: 3.5em;}')
         hbox_injsts = QHBoxLayout()
         hbox_injsts.setContentsMargins(0, 0, 0, 0)
