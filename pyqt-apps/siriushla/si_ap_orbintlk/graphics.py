@@ -571,11 +571,12 @@ class _BaseGraphWidget(BaseObject, QWidget):
         setattr(self.graph, 'symbols_'+curve, symb)
         setattr(self.graph, 'y_data_'+curve, data)
 
-    def closeEvent(self, ev):
+    def closeEvent(self, event):
+        """Finish thread on close."""
         self._thread.exit_task()
         self._wait_thread()
         self._thread.deleteLater()
-        super().closeEvent(ev)
+        super().closeEvent(event)
 
     def _wait_thread(self):
         init = _time.time()

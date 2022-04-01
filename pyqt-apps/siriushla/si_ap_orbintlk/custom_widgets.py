@@ -79,17 +79,18 @@ class FamBPMIntlkEnblStateLed(PyDMLedMultiChannel):
                 state = 1
         self.setState(state)
 
-    def mouseDoubleClickEvent(self, ev):
+    def mouseDoubleClickEvent(self, _):
+        """Reimplement mouseDoubleClick."""
         pv_groups, texts = list(), list()
         pvs_err, pvs_und = set(), set()
-        for k, v in self._address2conn.items():
-            if not v:
+        for k, val in self._address2conn.items():
+            if not val:
                 pvs_und.add(k)
         if pvs_und:
             pv_groups.append(pvs_und)
             texts.append('There are disconnected PVs!')
-        for k, v in self._address2status.items():
-            if not v and k not in pvs_und:
+        for k, val in self._address2status.items():
+            if not val and k not in pvs_und:
                 pvs_err.add(k)
         if pvs_err:
             pv_groups.append(pvs_err)
