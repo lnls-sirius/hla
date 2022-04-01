@@ -283,7 +283,7 @@ class MainLauncher(SiriusMainWindow):
         # RF Kill Beam
         self.wid_rfkill = QGroupBox('RF Kill Beam')
         self.wid_rfkill.setObjectName('RFKillBeam')
-        rfkill_bt = RFKillBeamButton(self)
+        rfkill_bt = RFKillBeamButton(self, self._prefix)
         rfkill_lay = QGridLayout(self.wid_rfkill)
         rfkill_lay.addWidget(rfkill_bt)
 
