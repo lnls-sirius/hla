@@ -398,7 +398,7 @@ class BPMIntlkLimSPWidget(BaseObject, QWidget):
             self._reforb['y'] = data['y']
 
     def _get_new_sum(self):
-        self._summon = _np.array(self._get_values('Sum-Mon'))
+        self._summon = _np.array(self._get_values('Sum-Mon'), dtype=float)
         text = 'Read at ' + _time.strftime(
             '%d/%m/%Y %H:%M:%S\n', _time.localtime(_time.time()))
         self._label_getsts.setText(text)

@@ -669,14 +669,14 @@ class _UpdateGraphThread(BaseObject, QThread):
                 vals -= self._reforb
                 vals = _np.array(self.calc_intlk_metric(
                     vals, metric=self.metric), dtype=float)
+                vals = vals * self.CONV_NM2M
             else:
                 # sum case
                 _av = self.CONV_POLY_MONIT1_2_MONIT[0, :]
                 _bv = self.CONV_POLY_MONIT1_2_MONIT[1, :]
                 vals = _np.array(self._get_values(self.meas_data), dtype=float)
                 vals = (vals - _bv)/_av
-
-            y_data_meas = list(vals * self.CONV_NM2M)
+            y_data_meas = list(vals)
 
             self.dataChanged.emit(['meas', symbols_meas, y_data_meas])
 
@@ -695,9 +695,11 @@ class _UpdateGraphThread(BaseObject, QThread):
 
             # data min
             vals = _np.array(self._get_values(self.min_data), dtype=float)
-            ref = self.calc_intlk_metric(self._reforb, metric=self.metric)
-            vals -= ref
-            y_data_min = list(vals * self.CONV_NM2M)
+            if self.metric in ['trans', 'ang']:
+                ref = self.calc_intlk_metric(self._reforb, metric=self.metric)
+                vals -= ref
+                vals = vals * self.CONV_NM2M
+            y_data_min = list(vals)
 
             self.dataChanged.emit(['min', symbols_min, y_data_min])
 
@@ -716,9 +718,11 @@ class _UpdateGraphThread(BaseObject, QThread):
 
             # data max
             vals = _np.array(self._get_values(self.max_data), dtype=float)
-            ref = self.calc_intlk_metric(self._reforb, metric=self.metric)
-            vals -= ref
-            y_data_max = list(vals * self.CONV_NM2M)
+            if self.metric in ['trans', 'ang']:
+                ref = self.calc_intlk_metric(self._reforb, metric=self.metric)
+                vals -= ref
+                vals = vals * self.CONV_NM2M
+            y_data_max = list(vals)
 
             self.dataChanged.emit(['max', symbols_max, y_data_max])
 
