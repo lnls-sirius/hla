@@ -2,7 +2,7 @@
 
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QLabel, QCheckBox, QGridLayout, \
-    QApplication
+    QApplication, QVBoxLayout
 
 import qtawesome as qta
 
@@ -36,7 +36,7 @@ class EfficiencyMonitor(SiriusMainWindow):
         )
         self._app = QApplication.instance()
         font = self._app.font()
-        font.setPointSize(22)
+        font.setPointSize(32)
         self._app.setFont(font)
         self._setupUi()
 
@@ -69,9 +69,8 @@ class EfficiencyMonitor(SiriusMainWindow):
         self._cb_show = dict()
         self._pvs_labels = dict()
 
-        glay_aux = QGridLayout()
-        glay_aux.setHorizontalSpacing(10)
-        glay_aux.setVerticalSpacing(10)
+        lay_lbls = QVBoxLayout()
+        lay_lbls.setSpacing(10)
 
         for i, data in enumerate(self._eff_list):
             text, pvn, color = data
@@ -92,16 +91,20 @@ class EfficiencyMonitor(SiriusMainWindow):
             self._cb_show[pvn] = cb
 
             lb = PyDMLabel(self, pvname)
-            lb.setStyleSheet(
-                'QLabel{font-weight: bold; min-width: 6em; max-width: 6em;}')
+            lb.setStyleSheet("""
+                QLabel{
+                    font-weight: bold; min-width: 6em; max-width: 6em;
+                    qproperty-alignment: AlignCenter;
+                }""")
             lb.showUnits = True
             self._pvs_labels[pvn] = lb
 
-            glay_aux.addWidget(cb, i+1, 0, alignment=Qt.AlignLeft)
-            glay_aux.addWidget(lb, i+1, 1, alignment=Qt.AlignCenter)
+            lay_lbls.addWidget(cb, alignment=Qt.AlignLeft)
+            lay_lbls.addWidget(lb, alignment=Qt.AlignCenter)
+            lay_lbls.addStretch()
 
         lay = QGridLayout(cw)
         lay.setSpacing(20)
         lay.addWidget(label, 0, 0, 1, 2)
         lay.addWidget(self.timeplot, 1, 0)
-        lay.addLayout(glay_aux, 1, 1)
+        lay.addLayout(lay_lbls, 1, 1)
