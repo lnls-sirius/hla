@@ -448,6 +448,11 @@ def get_object(ismenubar=True, parent=None):
             self.connect_newprocess(egun, 'sirius-hla-it-eg-control.py')
             self.add_object_to_level1(menu, egun)
 
+            TI = LEVEL2A('Timing', menu)
+            TI.setIcon(qta.icon('mdi.timer'))
+            self.connect_newprocess(TI, 'sirius-hla-it-ti-control.py')
+            self.add_object_to_level1(menu, TI)
+
             return menu
 
         def _set_optics_menu(self, sec):
