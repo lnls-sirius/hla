@@ -248,11 +248,11 @@ class BPMIntlkLimSPWidget(BaseObject, QWidget):
         if 'sum' in self.metric:
             self.lim_sp = ['IntlkLmtMinSum-SP', ]
             self.title = 'Min.Sum. Thresholds'
-        elif 'trans' in self.metric:
+        elif 'pos' in self.metric:
             self.lim_sp = [
-                'IntlkLmtTransMinX-SP', 'IntlkLmtTransMaxX-SP',
-                'IntlkLmtTransMinY-SP', 'IntlkLmtTransMaxY-SP']
-            self.title = 'Translation Thresholds'
+                'IntlkLmtPosMinX-SP', 'IntlkLmtPosMaxX-SP',
+                'IntlkLmtPosMinY-SP', 'IntlkLmtPosMaxY-SP']
+            self.title = 'Position Thresholds'
         elif 'ang' in self.metric:
             self.lim_sp = [
                 'IntlkLmtAngMinX-SP', 'IntlkLmtAngMaxX-SP',
@@ -347,8 +347,8 @@ class BPMIntlkLimSPWidget(BaseObject, QWidget):
             self._cb_reforb.refOrbChanged.connect(self._set_ref_orb)
             lay_lims.addWidget(self._cb_reforb, row, 0, 1, 3)
 
-            if 'trans' in self.metric:
-                text = '\n\nBPM calculation consider the translation\n' \
+            if 'pos' in self.metric:
+                text = '\n\nBPM calculation consider the position\n' \
                     'estimative:' \
                     '\n\n(pos@downstream+pos@upstream)/2\n\n' \
                     'where the pairs upstream/downstream\nfolow:\n' \

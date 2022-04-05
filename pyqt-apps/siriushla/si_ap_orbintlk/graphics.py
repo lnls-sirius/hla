@@ -40,7 +40,7 @@ class GraphMonitorWidget(QWidget):
                 border-left: 2px solid gray;
             }""")
         tab.addTab(self._setupTab('Min.Sum. Threshold'), 'Min.Sum. Threshold')
-        tab.addTab(self._setupTab('Translation'), 'Translation')
+        tab.addTab(self._setupTab('Position'), 'Position')
         tab.addTab(self._setupTab('Angulation'), 'Angulation')
 
         lay = QGridLayout(self)
@@ -59,17 +59,17 @@ class GraphMonitorWidget(QWidget):
         if intlktype == 'Min.Sum. Threshold':
             graph = MinSumGraphWidget(self, self._prefix)
             lay.addWidget(graph, 2, 0)
-        elif intlktype == 'Translation':
+        elif intlktype == 'Position':
             propty_sel = GraphProptySelWidget(self)
             lay.addWidget(propty_sel, 1, 0)
 
-            graphx = TransXGraphWidget(self, self._prefix)
+            graphx = PosXGraphWidget(self, self._prefix)
             lay.addWidget(graphx, 2, 0)
-            legx = GraphLegendWidget(self, 'Trans', 'X')
+            legx = GraphLegendWidget(self, 'Pos', 'X')
             lay.addWidget(legx, 3, 0)
-            graphy = TransYGraphWidget(self, self._prefix)
+            graphy = PosYGraphWidget(self, self._prefix)
             lay.addWidget(graphy, 4, 0)
-            legy = GraphLegendWidget(self, 'Trans', 'Y')
+            legy = GraphLegendWidget(self, 'Pos', 'Y')
             lay.addWidget(legy, 5, 0)
 
             propty_sel.propty_intlk_changed.connect(
@@ -125,11 +125,9 @@ class GraphProptySelWidget(QWidget):
 
         self._choose_plotopt = {
             'Instantaneous': [
-                'General', 'Bigger', 'Smaller', 'Bigger | Smaller'],
+                'General', 'Upper', 'Lower', 'Upper | Lower'],
             'Latch': [
-                'General', 'Bigger', 'Smaller', 'Bigger | Smaller'],
-            'Masked by Enable': [
-                'Bigger', 'Smaller', 'Bigger | Smaller'],
+                'General', 'Upper', 'Lower', 'Upper | Lower'],
         }
         self._init_intlkval = 'Latch'
 
@@ -305,9 +303,9 @@ class Graph(BaseObject, SiriusWaveformPlot):
         if 'Sum' in intlktype:
             self.title = 'Min.Sum. Threshold'
             ylabel, yunit = 'Sum', 'count'
-        elif 'Trans' in intlktype:
-            self.title = 'Translation '+intlktype[-1]
-            ylabel, yunit = 'Translation', 'm'
+        elif 'Pos' in intlktype:
+            self.title = 'Position '+intlktype[-1]
+            ylabel, yunit = 'Position', 'm'
         elif 'Ang' in intlktype:
             self.title = 'Angulation '+intlktype[-1]
             ylabel, yunit = 'Angulation', 'm'
@@ -663,7 +661,7 @@ class _UpdateGraphThread(BaseObject, QThread):
 
             # data meas
             self._create_pvs(self.meas_data)
-            if self.metric in ['trans', 'ang']:
+            if self.metric in ['pos', 'ang']:
                 vals = _np.array(self._get_values(self.meas_data), dtype=float)
                 vals -= self._reforb
                 vals = _np.array(self.calc_intlk_metric(
@@ -694,7 +692,7 @@ class _UpdateGraphThread(BaseObject, QThread):
 
             # data min
             vals = _np.array(self._get_values(self.min_data), dtype=float)
-            if self.metric in ['trans', 'ang']:
+            if self.metric in ['pos', 'ang']:
                 ref = self.calc_intlk_metric(self._reforb, metric=self.metric)
                 vals -= ref
                 vals = vals * self.CONV_NM2M
@@ -717,7 +715,7 @@ class _UpdateGraphThread(BaseObject, QThread):
 
             # data max
             vals = _np.array(self._get_values(self.max_data), dtype=float)
-            if self.metric in ['trans', 'ang']:
+            if self.metric in ['pos', 'ang']:
                 ref = self.calc_intlk_metric(self._reforb, metric=self.metric)
                 vals -= ref
                 vals = vals * self.CONV_NM2M
@@ -738,85 +736,71 @@ class MinSumGraphWidget(_BaseGraphWidget):
     PROPTY_MAX_SYMB = ''
 
 
-class TransXGraphWidget(_BaseGraphWidget):
-    """Translation Graph Widget."""
+class PosXGraphWidget(_BaseGraphWidget):
+    """Position Graph Widget."""
 
-    INTLKTYPE = 'TransX'
+    INTLKTYPE = 'PosX'
     PROPTY_MEAS_DATA = 'PosX-Mon'
     PROPTY_MEAS_SYMB = {
         'Instantaneous': {
             'General': 'Intlk-Mon',
-            'Bigger': 'IntlkTransBiggerAny-Mon',
-            'Smaller': 'IntlkTransSmallerAny-Mon',
-            'Bigger | Smaller': {
-                'var': ['IntlkTransBiggerAny-Mon', 'IntlkTransSmallerAny-Mon'],
+            'Upper': 'IntlkPosUpper-Mon',
+            'Lower': 'IntlkPosLower-Mon',
+            'Upper | Lower': {
+                'var': ['IntlkPosUpper-Mon', 'IntlkPosLower-Mon'],
                 'op': 'or'},
         },
         'Latch': {
             'General': 'IntlkLtc-Mon',
-            'Bigger': 'IntlkTransBiggerLtc-Mon',
-            'Smaller': 'IntlkTransSmallerLtc-Mon',
-            'Bigger | Smaller': {
-                'var': ['IntlkTransBiggerLtc-Mon', 'IntlkTransSmallerLtc-Mon'],
+            'Upper': 'IntlkPosUpperLtc-Mon',
+            'Lower': 'IntlkPosLowerLtc-Mon',
+            'Upper | Lower': {
+                'var': ['IntlkPosUpperLtc-Mon', 'IntlkPosLowerLtc-Mon'],
                 'op': 'or'},
         },
-        'Masked by Enable': {
-            'Bigger': 'IntlkTransBigger-Mon',
-            'Smaller': 'IntlkTransSmaller-Mon',
-            'Bigger | Smaller': {
-                'var': ['IntlkTransBigger-Mon', 'IntlkTransSmaller-Mon'],
-                'op': 'or'},
-        }
     }
-    PROPTY_MIN_DATA = 'IntlkLmtTransMinX-RB'
+    PROPTY_MIN_DATA = 'IntlkLmtPosMinX-RB'
     PROPTY_MIN_SYMB = {
-        'Instantaneous': 'IntlkTransSmallerX-Mon',
-        'Latch': 'IntlkTransSmallerLtcX-Mon'}
-    PROPTY_MAX_DATA = 'IntlkLmtTransMaxX-RB'
+        'Instantaneous': 'IntlkPosLowerX-Mon',
+        'Latch': 'IntlkPosLowerLtcX-Mon'}
+    PROPTY_MAX_DATA = 'IntlkLmtPosMaxX-RB'
     PROPTY_MAX_SYMB = {
-        'Instantaneous': 'IntlkTransBiggerX-Mon',
-        'Latch': 'IntlkTransBiggerLtcX-Mon'}
+        'Instantaneous': 'IntlkPosUpperX-Mon',
+        'Latch': 'IntlkPosUpperLtcX-Mon'}
 
 
-class TransYGraphWidget(_BaseGraphWidget):
-    """Translation Graph Widget."""
+class PosYGraphWidget(_BaseGraphWidget):
+    """Position Graph Widget."""
 
-    INTLKTYPE = 'TransY'
+    INTLKTYPE = 'PosY'
     PROPTY_MEAS_DATA = 'PosY-Mon'
     PROPTY_MEAS_SYMB = {
         'Instantaneous': {
             'General': 'Intlk-Mon',
-            'Bigger': 'IntlkTransBiggerAny-Mon',
-            'Smaller': 'IntlkTransSmallerAny-Mon',
-            'Bigger | Smaller': {
-                'var': ['IntlkTransBiggerAny-Mon', 'IntlkTransSmallerAny-Mon'],
+            'Upper': 'IntlkPosUpper-Mon',
+            'Lower': 'IntlkPosLower-Mon',
+            'Upper | Lower': {
+                'var': ['IntlkPosUpper-Mon', 'IntlkPosLower-Mon'],
                 'op': 'or'},
         },
         'Latch': {
             'General': 'IntlkLtc-Mon',
-            'Bigger': 'IntlkTransBiggerLtc-Mon',
-            'Smaller': 'IntlkTransSmallerLtc-Mon',
-            'Bigger | Smaller': {
-                'var': ['IntlkTransBiggerLtc-Mon', 'IntlkTransSmallerLtc-Mon'],
-                'op': 'or'},
-        },
-        'Masked by Enable': {
-            'Bigger': 'IntlkTransBigger-Mon',
-            'Smaller': 'IntlkTransSmaller-Mon',
-            'Bigger | Smaller': {
-                'var': ['IntlkTransBigger-Mon', 'IntlkTransSmaller-Mon'],
+            'Upper': 'IntlkPosUpperLtc-Mon',
+            'Lower': 'IntlkPosLowerLtc-Mon',
+            'Upper | Lower': {
+                'var': ['IntlkPosUpperLtc-Mon', 'IntlkPosLowerLtc-Mon'],
                 'op': 'or'},
         },
     }
-    PROPTY_MIN_DATA = 'IntlkLmtTransMinY-RB'
+    PROPTY_MIN_DATA = 'IntlkLmtPosMinY-RB'
     PROPTY_MIN_SYMB = {
-        'Instantaneous': 'IntlkTransSmallerY-Mon',
-        'Latch': 'IntlkTransSmallerLtcY-Mon',
+        'Instantaneous': 'IntlkPosLowerY-Mon',
+        'Latch': 'IntlkPosLowerLtcY-Mon',
     }
-    PROPTY_MAX_DATA = 'IntlkLmtTransMaxY-RB'
+    PROPTY_MAX_DATA = 'IntlkLmtPosMaxY-RB'
     PROPTY_MAX_SYMB = {
-        'Instantaneous': 'IntlkTransBiggerY-Mon',
-        'Latch': 'IntlkTransBiggerLtcY-Mon',
+        'Instantaneous': 'IntlkPosUpperY-Mon',
+        'Latch': 'IntlkPosUpperLtcY-Mon',
     }
 
 
@@ -828,37 +812,30 @@ class AngXGraphWidget(_BaseGraphWidget):
     PROPTY_MEAS_SYMB = {
         'Instantaneous': {
             'General': 'Intlk-Mon',
-            'Bigger': 'IntlkAngBiggerAny-Mon',
-            'Smaller': 'IntlkAngSmallerAny-Mon',
-            'Bigger | Smaller': {
-                'var': ['IntlkAngBiggerAny-Mon', 'IntlkAngSmallerAny-Mon'],
+            'Upper': 'IntlkAngUpper-Mon',
+            'Lower': 'IntlkAngLower-Mon',
+            'Upper | Lower': {
+                'var': ['IntlkAngUpper-Mon', 'IntlkAngLower-Mon'],
                 'op': 'or'},
         },
         'Latch': {
             'General': 'IntlkLtc-Mon',
-            'Bigger': 'IntlkAngBiggerLtc-Mon',
-            'Smaller': 'IntlkAngSmallerLtc-Mon',
-            'Bigger | Smaller': {
-                'var': ['IntlkAngBiggerLtc-Mon', 'IntlkAngSmallerLtc-Mon'],
-                'op': 'or'},
-        },
-        'Masked by Enable': {
-            'Bigger': 'IntlkAngBigger-Mon',
-            'Smaller': 'IntlkAngSmaller-Mon',
-            'Bigger | Smaller': {
-                'var': ['IntlkAngBigger-Mon', 'IntlkAngSmaller-Mon'],
+            'Upper': 'IntlkAngUpperLtc-Mon',
+            'Lower': 'IntlkAngLowerLtc-Mon',
+            'Upper | Lower': {
+                'var': ['IntlkAngUpperLtc-Mon', 'IntlkAngLowerLtc-Mon'],
                 'op': 'or'},
         },
     }
     PROPTY_MIN_DATA = 'IntlkLmtAngMinX-RB'
     PROPTY_MIN_SYMB = {
-        'Instantaneous': 'IntlkAngSmallerX-Mon',
-        'Latch': 'IntlkAngSmallerLtcX-Mon',
+        'Instantaneous': 'IntlkAngLowerX-Mon',
+        'Latch': 'IntlkAngLowerLtcX-Mon',
     }
     PROPTY_MAX_DATA = 'IntlkLmtAngMaxX-RB'
     PROPTY_MAX_SYMB = {
-        'Instantaneous': 'IntlkAngBiggerX-Mon',
-        'Latch': 'IntlkAngBiggerLtcX-Mon',
+        'Instantaneous': 'IntlkAngUpperX-Mon',
+        'Latch': 'IntlkAngUpperLtcX-Mon',
     }
 
 
@@ -870,35 +847,28 @@ class AngYGraphWidget(_BaseGraphWidget):
     PROPTY_MEAS_SYMB = {
         'Instantaneous': {
             'General': 'Intlk-Mon',
-            'Bigger': 'IntlkAngBiggerAny-Mon',
-            'Smaller': 'IntlkAngSmallerAny-Mon',
-            'Bigger | Smaller': {
-                'var': ['IntlkAngBiggerAny-Mon', 'IntlkAngSmallerAny-Mon'],
+            'Upper': 'IntlkAngUpper-Mon',
+            'Lower': 'IntlkAngLower-Mon',
+            'Upper | Lower': {
+                'var': ['IntlkAngUpper-Mon', 'IntlkAngLower-Mon'],
                 'op': 'or'},
         },
         'Latch': {
             'General': 'IntlkLtc-Mon',
-            'Bigger': 'IntlkAngBiggerLtc-Mon',
-            'Smaller': 'IntlkAngSmallerLtc-Mon',
-            'Bigger | Smaller': {
-                'var': ['IntlkAngBiggerLtc-Mon', 'IntlkAngSmallerLtc-Mon'],
-                'op': 'or'},
-        },
-        'Masked by Enable': {
-            'Bigger': 'IntlkAngBigger-Mon',
-            'Smaller': 'IntlkAngSmaller-Mon',
-            'Bigger | Smaller': {
-                'var': ['IntlkAngBigger-Mon', 'IntlkAngSmaller-Mon'],
+            'Upper': 'IntlkAngUpperLtc-Mon',
+            'Lower': 'IntlkAngLowerLtc-Mon',
+            'Upper | Lower': {
+                'var': ['IntlkAngUpperLtc-Mon', 'IntlkAngLowerLtc-Mon'],
                 'op': 'or'},
         },
     }
     PROPTY_MIN_DATA = 'IntlkLmtAngMinY-RB'
     PROPTY_MIN_SYMB = {
-        'Instantaneous': 'IntlkAngSmallerY-Mon',
-        'Latch': 'IntlkAngSmallerLtcY-Mon',
+        'Instantaneous': 'IntlkAngLowerY-Mon',
+        'Latch': 'IntlkAngLowerLtcY-Mon',
     }
     PROPTY_MAX_DATA = 'IntlkLmtAngMaxY-RB'
     PROPTY_MAX_SYMB = {
-        'Instantaneous': 'IntlkAngBiggerY-Mon',
-        'Latch': 'IntlkAngBiggerLtcY-Mon',
+        'Instantaneous': 'IntlkAngUpperY-Mon',
+        'Latch': 'IntlkAngUpperLtcY-Mon',
     }

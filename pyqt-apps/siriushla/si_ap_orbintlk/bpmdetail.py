@@ -49,10 +49,10 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
         lay_gen = self._setupIntlkGenLayout()
         self._gb_gen.setLayout(lay_gen)
 
-        # Translation Interlock
-        self._gb_trans = QGroupBox('Translation Interlock')
-        lay_trans = self._setupIntlkTypeLayout('Trans')
-        self._gb_trans.setLayout(lay_trans)
+        # Position Interlock
+        self._gb_pos = QGroupBox('Position Interlock')
+        lay_pos = self._setupIntlkTypeLayout('Pos')
+        self._gb_pos.setLayout(lay_pos)
 
         # Angulation Interlock
         self._gb_ang = QGroupBox('Angulation Interlock')
@@ -62,7 +62,7 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
         lay = QGridLayout(wid)
         lay.addWidget(title, 0, 0, 1, 2)
         lay.addWidget(self._gb_gen, 1, 0, 1, 2)
-        lay.addWidget(self._gb_trans, 2, 0)
+        lay.addWidget(self._gb_pos, 2, 0)
         lay.addWidget(self._gb_ang, 2, 1)
 
     def _setupIntlkGenLayout(self):
@@ -77,7 +77,7 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
             'Reset: ', self, alignment=Qt.AlignRight | Qt.AlignBottom)
         self._bt_genclr = PyDMPushButton(
             self,
-            init_channel=self.devpref.substitute(propty='IntlkClr-Sel'),
+            init_channel=self.devpref.substitute(propty='IntlkClr-Cmd'),
             pressValue=1)
         self._bt_genclr.setIcon(qta.icon('fa5s.sync'))
         self._bt_genclr.setObjectName('clr')
@@ -152,7 +152,7 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
             'Reset: ', self, alignment=Qt.AlignRight | Qt.AlignBottom)
         bt_clr = PyDMPushButton(
             self, init_channel=self.devpref.substitute(
-                propty='Intlk'+intlk+'Clr-Sel'), pressValue=1)
+                propty='Intlk'+intlk+'Clr-Cmd'), pressValue=1)
         bt_clr.setIcon(qta.icon('fa5s.sync'))
         bt_clr.setObjectName('clr')
         bt_clr.setStyleSheet(
@@ -203,41 +203,30 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
             self, self.devpref.substitute(propty='IntlkLmt'+intlk+'MaxY-RB'))
 
         ld_leglow = QLabel(
-            'Smaller', self, alignment=Qt.AlignCenter)
+            'Lower', self, alignment=Qt.AlignCenter)
         ld_leghigh = QLabel(
-            'Bigger', self, alignment=Qt.AlignCenter)
-
-        ld_legmask = QLabel(
-            '<h4>Masked By Enable</h4>', self, alignment=Qt.AlignCenter)
-        ld_legmask_any = QLabel(
-            'X or Y', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
-        led_mask_anylow = SiriusLedAlert(
-            self, self.devpref.substitute(propty='Intlk'+intlk+'Smaller-Mon'))
-        led_mask_anyhigh = SiriusLedAlert(
-            self, self.devpref.substitute(propty='Intlk'+intlk+'Bigger-Mon'))
+            'Upper', self, alignment=Qt.AlignCenter)
 
         ld_leginst = QLabel(
             '<h4>Instantaneous</h4>', self, alignment=Qt.AlignCenter)
         ld_leginst_any = QLabel(
             'X or Y', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         led_inst_anylow = SiriusLedAlert(
-            self, self.devpref.substitute(
-                propty='Intlk'+intlk+'SmallerAny-Mon'))
+            self, self.devpref.substitute(propty='Intlk'+intlk+'Lower-Mon'))
         led_inst_anyhigh = SiriusLedAlert(
-            self, self.devpref.substitute(
-                propty='Intlk'+intlk+'BiggerAny-Mon'))
+            self, self.devpref.substitute(propty='Intlk'+intlk+'Upper-Mon'))
         ld_leginst_x = QLabel(
             'X', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         led_inst_xlow = SiriusLedAlert(
-            self, self.devpref.substitute(propty='Intlk'+intlk+'SmallerX-Mon'))
+            self, self.devpref.substitute(propty='Intlk'+intlk+'LowerX-Mon'))
         led_inst_xhigh = SiriusLedAlert(
-            self, self.devpref.substitute(propty='Intlk'+intlk+'BiggerX-Mon'))
+            self, self.devpref.substitute(propty='Intlk'+intlk+'UpperX-Mon'))
         ld_leginst_y = QLabel(
             'Y', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         led_inst_ylow = SiriusLedAlert(
-            self, self.devpref.substitute(propty='Intlk'+intlk+'SmallerY-Mon'))
+            self, self.devpref.substitute(propty='Intlk'+intlk+'LowerY-Mon'))
         led_inst_yhigh = SiriusLedAlert(
-            self, self.devpref.substitute(propty='Intlk'+intlk+'BiggerY-Mon'))
+            self, self.devpref.substitute(propty='Intlk'+intlk+'UpperY-Mon'))
 
         ld_legltc = QLabel(
             '<h4>Latch</h4>', self, alignment=Qt.AlignCenter)
@@ -245,55 +234,51 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
             'X or Y', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         led_ltc_anylow = SiriusLedAlert(
             self, self.devpref.substitute(
-                propty='Intlk'+intlk+'SmallerLtc-Mon'))
+                propty='Intlk'+intlk+'LowerLtc-Mon'))
         led_ltc_anyhigh = SiriusLedAlert(
             self, self.devpref.substitute(
-                propty='Intlk'+intlk+'BiggerLtc-Mon'))
+                propty='Intlk'+intlk+'UpperLtc-Mon'))
         ld_legltc_x = QLabel(
             'X', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         led_ltc_xlow = SiriusLedAlert(
             self, self.devpref.substitute(
-                propty='Intlk'+intlk+'SmallerLtcX-Mon'))
+                propty='Intlk'+intlk+'LowerLtcX-Mon'))
         led_ltc_xhigh = SiriusLedAlert(
             self, self.devpref.substitute(
-                propty='Intlk'+intlk+'BiggerLtcX-Mon'))
+                propty='Intlk'+intlk+'UpperLtcX-Mon'))
         ld_legltc_y = QLabel(
             'Y', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         led_ltc_ylow = SiriusLedAlert(
             self, self.devpref.substitute(
-                propty='Intlk'+intlk+'SmallerLtcY-Mon'))
+                propty='Intlk'+intlk+'LowerLtcY-Mon'))
         led_ltc_yhigh = SiriusLedAlert(
             self, self.devpref.substitute(
-                propty='Intlk'+intlk+'BiggerLtcY-Mon'))
+                propty='Intlk'+intlk+'UpperLtcY-Mon'))
 
         lay_mon = QGridLayout()
         lay_mon.setAlignment(Qt.AlignCenter)
         lay_mon.addWidget(ld_leglow, 0, 1)
         lay_mon.addWidget(ld_leghigh, 0, 2)
-        lay_mon.addWidget(ld_legmask, 1, 0)
-        lay_mon.addWidget(ld_legmask_any, 2, 0)
-        lay_mon.addWidget(led_mask_anylow, 2, 1)
-        lay_mon.addWidget(led_mask_anyhigh, 2, 2)
-        lay_mon.addWidget(ld_leginst, 3, 0)
-        lay_mon.addWidget(ld_leginst_any, 4, 0)
-        lay_mon.addWidget(led_inst_anylow, 4, 1)
-        lay_mon.addWidget(led_inst_anyhigh, 4, 2)
-        lay_mon.addWidget(ld_leginst_x, 5, 0)
-        lay_mon.addWidget(led_inst_xlow, 5, 1)
-        lay_mon.addWidget(led_inst_xhigh, 5, 2)
-        lay_mon.addWidget(ld_leginst_y, 6, 0)
-        lay_mon.addWidget(led_inst_ylow, 6, 1)
-        lay_mon.addWidget(led_inst_yhigh, 6, 2)
-        lay_mon.addWidget(ld_legltc, 7, 0)
-        lay_mon.addWidget(ld_legltc_any, 8, 0)
-        lay_mon.addWidget(led_ltc_anylow, 8, 1)
-        lay_mon.addWidget(led_ltc_anyhigh, 8, 2)
-        lay_mon.addWidget(ld_legltc_x, 9, 0)
-        lay_mon.addWidget(led_ltc_xlow, 9, 1)
-        lay_mon.addWidget(led_ltc_xhigh, 9, 2)
-        lay_mon.addWidget(ld_legltc_y, 10, 0)
-        lay_mon.addWidget(led_ltc_ylow, 10, 1)
-        lay_mon.addWidget(led_ltc_yhigh, 10, 2)
+        lay_mon.addWidget(ld_leginst, 1, 0)
+        lay_mon.addWidget(ld_leginst_any, 2, 0)
+        lay_mon.addWidget(led_inst_anylow, 2, 1)
+        lay_mon.addWidget(led_inst_anyhigh, 2, 2)
+        lay_mon.addWidget(ld_leginst_x, 3, 0)
+        lay_mon.addWidget(led_inst_xlow, 3, 1)
+        lay_mon.addWidget(led_inst_xhigh, 3, 2)
+        lay_mon.addWidget(ld_leginst_y, 4, 0)
+        lay_mon.addWidget(led_inst_ylow, 4, 1)
+        lay_mon.addWidget(led_inst_yhigh, 4, 2)
+        lay_mon.addWidget(ld_legltc, 5, 0)
+        lay_mon.addWidget(ld_legltc_any, 6, 0)
+        lay_mon.addWidget(led_ltc_anylow, 6, 1)
+        lay_mon.addWidget(led_ltc_anyhigh, 6, 2)
+        lay_mon.addWidget(ld_legltc_x, 7, 0)
+        lay_mon.addWidget(led_ltc_xlow, 7, 1)
+        lay_mon.addWidget(led_ltc_xhigh, 7, 2)
+        lay_mon.addWidget(ld_legltc_y,8, 0)
+        lay_mon.addWidget(led_ltc_ylow,8, 1)
+        lay_mon.addWidget(led_ltc_yhigh,8, 2)
 
         lay = QGridLayout()
         lay.setAlignment(Qt.AlignTop)
