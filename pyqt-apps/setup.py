@@ -84,6 +84,7 @@ setup(
         'scripts/sirius-hla-it-ps-control.py',
         'scripts/sirius-hla-li-ap-emittance.py',
         'scripts/sirius-hla-li-ap-energy.py',
+        'scripts/sirius-hla-li-ap-mpscon.py',
         'scripts/sirius-hla-li-ap-mpsmon.py',
         'scripts/sirius-hla-li-di-bpms.py',
         'scripts/sirius-hla-li-eg-control.py',

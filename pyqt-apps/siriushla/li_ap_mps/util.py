@@ -63,7 +63,7 @@ SEC_2_STATUS = {
         'K1':      [('IP11Warn_L', 0), ('CCG7Warn_L', 0),  ('CCG7Alarm_L', 0),
                     ('PRG4Warn_L', 0)],
         'A3WG':    [('IP12Warn_L', 0), '', '', ''],
-        'K2-A3WG': [('IP13Warn_L', 0), ('CCG8Warn_L', 0),  ('CCG8Warn_L', 0),
+        'K2-A3WG': [('IP13Warn_L', 0), ('CCG8Warn_L', 0),  ('CCG8Alarm_L', 0),
                     ''],
         'A4WG':    [('IP14Warn_L', 0), ('CCG9Warn_L', 0),  ('CCG9Alarm_L', 0),
                     ''],
@@ -82,4 +82,67 @@ SEC_2_STATUS = {
         [('WFS9_L', 0), ('WFS10_L', 0), ('WFS11_L', 0), ('WFS12_L', 0)],
         [('WFS13_L', 0), ('WFS14_L', 0), ('WFS15_L', 0), ('WFS16_L', 0)]
     ],
+}
+
+PV_MPS = {
+    'General Status': [
+        1,
+        ['HeartBeat', 'LAWarn', 'LAAlarm'],
+        '', [0, 1, 1], False
+    ],
+    'Modulator Status': [
+        2, 'Mod', 'Permit', 1, False
+    ],
+    'Egun': [
+        1, 'Gun',
+        ['Permit', 'VacState', 'GvalState'],
+        [0, 0, 0], False
+    ],
+    'Klystrons': [
+        2, ['K', 'K', 'K', 'LA-RF:LLRF:KLY'],
+        ['PsState_L', 'TempState1', 'TempState2', ':GET_INTERLOCK'],
+        [0, 1, 1], False
+    ],
+    'Compressed Air': [
+        1, 'GPS', '', 0, True
+    ],
+    'Water Conductivity': [
+        1, 'WaterState', '', 0, True
+    ],
+    'Modulator Control': [
+        2, 'Mod', 'State', 0, True
+    ],
+    'General Control': [
+        2, ['Emergency', 'BSState', 'PPState'], '',
+        [0, 0, 0], True
+    ],
+    'VA': [
+        [16, 10, 10, 5],
+        ['IP', 'CCG', 'CCG', 'PRG'],
+        ['Warn', 'Warn', 'Alarm', 'Warn'],
+        0, True
+    ],
+    'Water': [
+        16, 'WFS', '', 0, True
+    ]
+}
+
+GROUP_POS = {
+    'General Status': [0, 1, 1, 1],
+    'General Control': [1, 0, 3, 2],
+    'Modulator Status': [0, 2, 1, 1],
+    'Modulator Control': [1, 2, 1, 2],
+    'Egun': [0, 3, 1, 1],
+    'Klystrons': [0, 0, 1, 1],
+    'Compressed Air': [2, 2, 1, 2],
+    'Water Conductivity': [3, 2, 1, 2],
+    'VA': [0, 4, 5, 1],
+    'Water': [4, 0, 1, 4]
+}
+
+CTRL_TYPE = {
+    'Status': '_I',
+    'Byspass': '_B',
+    'Latch': '_L',
+    'Reset': '_R'
 }
