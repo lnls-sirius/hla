@@ -128,16 +128,16 @@ PV_MPS = {
 }
 
 GROUP_POS = {
-    'General Status': [0, 1, 1, 1],
-    'General Control': [1, 0, 3, 2],
-    'Modulator Status': [0, 2, 1, 1],
-    'Modulator Control': [1, 2, 1, 2],
-    'Egun': [0, 3, 1, 1],
     'Klystrons': [0, 0, 1, 1],
-    'Compressed Air': [2, 2, 1, 2],
-    'Water Conductivity': [3, 2, 1, 2],
-    'VA': [0, 4, 5, 1],
-    'Water': [4, 0, 1, 4]
+    'General Status': [0, 1, 1, 1],
+    'Modulator Status': [0, 2, 1, 1],
+    'Egun': [0, 3, 1, 1],
+    'General Control': [1, 0, 2, 2],
+    'Modulator Control': [1, 2, 1, 2],
+    'Compressed Air': [2, 2, 1, 1],
+    'Water Conductivity': [2, 3, 1, 1],
+    'Water': [3, 0, 4, 4],
+    'VA': [0, 4, 7, 1]
 }
 
 CTRL_TYPE = {
@@ -145,4 +145,43 @@ CTRL_TYPE = {
     'Byspass': '_B',
     'Latch': '_L',
     'Reset': '_R'
+}
+
+LBL_MPS = {
+    'Klystrons': [
+        ['1', '2'],
+        ['Status', 'Oil-tank\nWT Alarm', 'Focus-coil\nWT Alarm', 'Refl. PW\nIntlk']
+    ],
+    'General Status':[
+        ['Heart Beat', 'MPS Warn', 'MPS Alarm'], ''
+    ],
+    'Modulator Status': [
+        ['1', '2'], ''
+    ],
+    'Egun': [
+        ['Trigger Permit', 'Vaccum Alarm', 'Gate Valve'], ''
+    ],
+    'General Control': [
+        ['1 (Gate)', '2 (Dose)'], ['Emergency', 'Vaccum Alarm', 'Gate Valve']
+    ],
+    'Modulator Control': [
+        '', ['1', '2']
+    ],
+    'VA': [
+        ['EGUN', 'SBUN', 'A4END', 'BEND', 'A0WG', 'K1-A0WG',
+            'A1WG', 'K1-A1WG', 'A2WG', 'K1-A2WG', 'K1', 'A3WG',
+            'K2-A3WG', 'A4WG', 'K2-A4WG', 'K2'],
+        ['IP\nWarn', 'CCG\nWarn', 'CCG\nAlarm', 'PRG\nWarn']
+    ]
+}
+
+LBL_WATER = {
+    'WFS1': 'Sub Buncher', 'WFS2': 'Buncher A0',
+    'WFS3': 'Tube A1', 'WFS4': 'Tube A2',
+    'WFS5': 'Tube A3', 'WFS6': 'Tube A4',
+    'WFS7': 'Waveguide 1', 'WFS8': 'Waveguide 2',
+    'WFS9':  'Waveguide 3,4', 'WFS10':  'Waveguide 5',
+    'WFS11':  'Waveguide 6,7', 'WFS12':  'Load A0',
+    'WFS13': 'Load A1', 'WFS14': 'Load A2',
+    'WFS15': 'Load A3', 'WFS16': 'Load A4'
 }
