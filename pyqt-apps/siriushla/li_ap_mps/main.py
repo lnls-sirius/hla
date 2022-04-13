@@ -1,24 +1,24 @@
 ''' Diagnostic Interface of the LINAC's BPM'''
 from qtpy.QtCore import Qt, QEvent
 from qtpy.QtWidgets import QWidget, QGroupBox, QHBoxLayout, \
-    QVBoxLayout, QGridLayout, QLabel
+    QVBoxLayout, QGridLayout, QLabel, QTabWidget
 import qtawesome as qta
 
 from .util import PV_MPS, MPS_PREFIX, CTRL_TYPE, GROUP_POS, LBL_MPS, LBL_WATER
 from ..util import get_appropriate_color
-from ..widgets import SiriusMainWindow, PyDMLedMultiChannel, PyDMLed, SiriusPushButton
+from ..widgets import SiriusMainWindow, PyDMLedMultiChannel,\
+     PyDMLed, SiriusPushButton
 from .custom_widget import BypassBtn
 
 
 class MPSController(SiriusMainWindow):
     ''' Monitor Protection System Controller Interface '''
 
-
     def __init__(self, prefix='', parent=None):
         '''Contain all the graphic interface data'''
         super().__init__(parent)
         self.prefix = prefix + ('-' if prefix else '')
-        self.pvObj = {}
+        self.pv_obj = {}
         self.clicked = False
 
         color = get_appropriate_color('LI')
@@ -35,7 +35,7 @@ class MPSController(SiriusMainWindow):
                 child.widget().deleteLater()
         return lay
 
-    def controlWidget(self, pv_name, lay):
+    def controlWidget(self, pv_name, lay, config):
         widget = QWidget()
         vlay = QVBoxLayout()
 
@@ -43,12 +43,13 @@ class MPSController(SiriusMainWindow):
             vlay.addWidget(
                 self.setPvLbl(pv_name))
 
-        control_layout = self.controlHiddenBox(pv_name, lay)
+        control_layout = self.controlHiddenBox(pv_name, lay, config)
         widget.setLayout(control_layout)
-        self.pvObj.update(
+        self.pv_obj.update(
             {widget: {
                 "name": pv_name,
-                "layout": control_layout
+                "layout": control_layout,
+                "config": config
             }})
         widget.installEventFilter(self)
         widget.setObjectName('Container')
@@ -61,7 +62,7 @@ class MPSController(SiriusMainWindow):
         vlay.addWidget(widget)
         return vlay
 
-    def controlBox(self, pv_name, lay):
+    def controlBox(self, pv_name, lay, config):
         lay = self.clearLayout(lay)
         pos = [1, 0]
         self.clicked = True
@@ -69,10 +70,10 @@ class MPSController(SiriusMainWindow):
             lb_title = QLabel(control_name)
             lay.addWidget(lb_title, pos[0], pos[1], 1, 1)
             ctrl_widget = self.getCtrlWidget(
-                pv_name, CTRL_TYPE.get(control_name))
+                pv_name, CTRL_TYPE.get(control_name), config)
             lay.addWidget(ctrl_widget, pos[0]+1, pos[1], 1, 1)
             pos[1] += 1
-            if(pos[1]>=2):
+            if pos[1] >= 2:
                 pos[1] = 0
                 pos[0] += 2
         return lay
@@ -83,8 +84,7 @@ class MPSController(SiriusMainWindow):
         lb_titleWid.setAlignment(Qt.AlignCenter)
         return lb_titleWid
 
-
-    def controlHiddenBox(self, pv_name, cb_glay):
+    def controlHiddenBox(self, pv_name, cb_glay, config):
         '''Display the box for the control Interface'''
 
         if cb_glay == '':
@@ -92,22 +92,22 @@ class MPSController(SiriusMainWindow):
         else:
             cb_glay = self.clearLayout(cb_glay)
 
-        widget = self.getCtrlWidget(pv_name, '_L')
+        widget = self.getCtrlWidget(pv_name, '_L', config)
         widget.clicked.connect(
-            lambda: self.controlBox(pv_name, cb_glay))
+            lambda: self.controlBox(pv_name, cb_glay, config))
         cb_glay.addWidget(widget, 1, 0, 1, 1)
 
         return cb_glay
 
     def eventFilter(self, ob, event):
-        obj = self.pvObj.get(ob)
+        obj = self.pv_obj.get(ob)
         # if event.type() == QEvent.Enter:
         #     self.controlBox(obj.get("name"), obj.get("layout"))
         #     self.stop = True
         #     return True
         if event.type() == QEvent.Leave:
-            if self.clicked == True:
-                self.controlHiddenBox(obj.get("name"), obj.get("layout"))
+            if self.clicked:
+                self.controlHiddenBox(obj.get("name"), obj.get("layout"), obj.get("config"))
                 self.stop = False
         return False
 
@@ -118,11 +118,12 @@ class MPSController(SiriusMainWindow):
             device_name = MPS_PREFIX
         return device_name
 
-    def getCtrlWidget(self, pv_name, ctrl_type):
+    def getCtrlWidget(self, pv_name, ctrl_type, config):
         device_name = self.getDeviceName(pv_name)
         if ctrl_type in ['_I', '_L', '']:
-            #edit
-            ch2vals = {device_name + pv_name + ctrl_type: 0}
+            # edit
+            ch2vals = {
+                device_name + pv_name + ctrl_type: config}
             widget = PyDMLedMultiChannel(self)
             widget.set_channels2values(ch2vals)
             if pv_name == 'HeartBeat':
@@ -130,15 +131,14 @@ class MPSController(SiriusMainWindow):
         elif ctrl_type == '_B':
             widget = BypassBtn(
                 self,
-                init_channel = device_name + pv_name + ctrl_type)
+                init_channel=device_name + pv_name + ctrl_type)
         elif ctrl_type == '_R':
             widget = SiriusPushButton(
                 self,
-                init_channel = device_name + pv_name + ctrl_type,
-                label = 'Reset',
-                pressValue = 1,
-                releaseValue = 0
-            )
+                init_channel=device_name + pv_name + ctrl_type,
+                label='Reset',
+                pressValue=1,
+                releaseValue=0)
         return widget
 
     def getListSize(self, pv_data):
@@ -147,10 +147,10 @@ class MPSController(SiriusMainWindow):
                 return len(item)
         return 1
 
-    def statusBox(self, pv_name):
+    def statusBox(self, pv_name, config):
         sb_hlay = QHBoxLayout()
         sb_hlay.addWidget(
-            self.getCtrlWidget(pv_name, ''), 1)
+            self.getCtrlWidget(pv_name, '', config), 1)
         return sb_hlay
 
     def genStringPV(self, prefix, suffix, num):
@@ -170,44 +170,65 @@ class MPSController(SiriusMainWindow):
         else:
             return loopQuant+1
 
+    def getPvConfig(self, config, index):
+        if type(config) == list:
+            return config[index]
+        else:
+            return config
+
     def getPVComplement(self, string, index):
         if type(string) == list:
             return string[index]
         else:
             return string
 
+    def countWater(self, count):
+        if count[1] >= 4:
+            count[0] += 1
+            count[1] = 1
+        else:
+            count[1] += 1
+        return count
+
+    def countKGM(self, count, title):
+        val = 2
+        if title == 'Modulator Status':
+            val = 1
+        if count[0] >= val:
+            count[1] += 1
+            count[0] = 1
+        else:
+            count[0] += 1
+        return count
+
+    def countVA(self, count):
+        if count in [
+            [7, 2], [9, 2], [12, 2], [14, 2],
+            [7, 3], [9, 3], [12, 3], [14, 3],
+            [7, 4], [14, 4]]:
+            count[0] += 1
+        elif count in [[3, 2], [3, 3]]:
+            count[0] += 2
+        elif count == [1, 4]:
+            count[0] += 5
+        elif count == [9, 4]:
+            count[0] += 4
+
+        count[0] += 1
+
+        if count[0] >= 17:
+            count[1] += 1
+            count[0] = 1
+        return count
+
     def updateCount(self, count, title):
         if title in ['Water']:
-            if count[1] >= 4:
-                count[0] += 1
-                count[1] = 1
-            else:
-                count[1] += 1
-        elif title in ['Klystrons', 'General Control', 'Modulator Control']:
-            val = 2
-            if title == 'Modulator Control':
-                val = 1
-            if count[0] >= val:
-                count[1] += 1
-                count[0] = 1
-            else:
-                count[0] += 1
+            count = self.countWater(count)
+        elif title in ['Klystrons', 'General Control', 'Modulator Status']:
+            count = self.countKGM(count, title)
         else:
-            if count in [
-                [7, 2], [9, 2], [12, 2], [14, 2],
-                [7, 3], [9, 3], [12, 3], [14, 3],
-                [7, 4], [14, 4]]:
-                count[0] += 1
-            elif count in [[3, 2], [3, 3]]:
-                count[0] += 2
-            elif count == [1, 4]:
-                count[0] += 5
-            elif count == [9, 4]:
-                count[0] += 4
-            count[0] += 1
-            if count[0] >= 17:
-                count[1] += 1
-                count[0] = 1
+            count = self.countVA(count)
+
         return count
 
     def setTitleLabel(self, item, axis, layout):
@@ -241,11 +262,14 @@ class MPSController(SiriusMainWindow):
                     counter)
                 if pv_data[4]:
                     dg_glay.addLayout(
-                        self.controlWidget(pv_name, ''),
+                        self.controlWidget(
+                            pv_name, '',
+                            self.getPvConfig(pv_data[3], index)),
                         count[0], count[1], 1, 1)
                 else:
                     dg_glay.addLayout(
-                        self.statusBox(pv_name),
+                        self.statusBox(pv_name,
+                        self.getPvConfig(pv_data[3], index)),
                         count[0], count[1], 1, 1)
 
                 count = self.updateCount(count, title)
@@ -267,8 +291,7 @@ class MPSController(SiriusMainWindow):
 
         return dm_glay
 
-    def _setupUi(self):
-
+    def displayControlMPS(self):
         wid = QWidget(self)
         if_glay = QGridLayout()
         if_glay.addLayout(self.displayMpsGroups(), 0, 0, 1, 1)
@@ -276,4 +299,12 @@ class MPSController(SiriusMainWindow):
         if_glay.setAlignment(Qt.AlignTop)
 
         wid.setLayout(if_glay)
-        self.setCentralWidget(wid)
+        return wid
+
+    def _setupUi(self):
+
+        tab = QTabWidget()
+        tab.setObjectName("LITab")
+        tab.addTab(self.displayControlMPS(), "MPS Controller")
+
+        self.setCentralWidget(tab)

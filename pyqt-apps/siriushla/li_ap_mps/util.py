@@ -90,7 +90,7 @@ PV_MPS = {
         ['HeartBeat', 'LAWarn', 'LAAlarm'],
         '', [0, 1, 1], False
     ],
-    'Modulator Status': [
+    'Modulator Trigger Permit': [
         2, 'Mod', 'Permit', 1, False
     ],
     'Egun': [
@@ -101,7 +101,7 @@ PV_MPS = {
     'Klystrons': [
         2, ['K', 'K', 'K', 'LA-RF:LLRF:KLY'],
         ['PsState_L', 'TempState1', 'TempState2', ':GET_INTERLOCK'],
-        [0, 1, 1], False
+        [0, 1, 1, 0], False
     ],
     'Compressed Air': [
         1, 'GPS', '', 0, True
@@ -109,7 +109,7 @@ PV_MPS = {
     'Water Conductivity': [
         1, 'WaterState', '', 0, True
     ],
-    'Modulator Control': [
+    'Modulator Status': [
         2, 'Mod', 'State', 0, True
     ],
     'General Control': [
@@ -127,13 +127,21 @@ PV_MPS = {
     ]
 }
 
+# ,
+#     'Gate Valve':[
+#         2,
+#         ['Gval', 'ShutGval', 'UOpenGval', 'Gval', 'ShutGval', 'UCloseGval'],
+#         ['Opened', 'Opened', '', 'Closed', 'Closed', ''],
+#         0, False
+#     ]
+
 GROUP_POS = {
     'Klystrons': [0, 0, 1, 1],
     'General Status': [0, 1, 1, 1],
-    'Modulator Status': [0, 2, 1, 1],
+    'Modulator Trigger Permit': [0, 2, 1, 1],
     'Egun': [0, 3, 1, 1],
     'General Control': [1, 0, 2, 2],
-    'Modulator Control': [1, 2, 1, 2],
+    'Modulator Status': [1, 2, 1, 2],
     'Compressed Air': [2, 2, 1, 1],
     'Water Conductivity': [2, 3, 1, 1],
     'Water': [3, 0, 4, 4],
@@ -155,7 +163,7 @@ LBL_MPS = {
     'General Status':[
         ['Heart Beat', 'MPS Warn', 'MPS Alarm'], ''
     ],
-    'Modulator Status': [
+    'Modulator Trigger Permit': [
         ['1', '2'], ''
     ],
     'Egun': [
@@ -164,7 +172,7 @@ LBL_MPS = {
     'General Control': [
         ['1 (Gate)', '2 (Dose)'], ['Emergency', 'Vaccum Alarm', 'Gate Valve']
     ],
-    'Modulator Control': [
+    'Modulator Status': [
         '', ['1', '2']
     ],
     'VA': [
