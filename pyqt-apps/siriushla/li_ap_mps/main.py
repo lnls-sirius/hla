@@ -3,11 +3,11 @@ from qtpy.QtCore import Qt, QEvent
 from qtpy.QtWidgets import QWidget, QGroupBox, QHBoxLayout, \
     QVBoxLayout, QGridLayout, QLabel
 import qtawesome as qta
-from pydm.widgets import PyDMPushButton
 
 from .util import PV_MPS, MPS_PREFIX, CTRL_TYPE, GROUP_POS, LBL_MPS, LBL_WATER
 from ..util import get_appropriate_color
-from ..widgets import SiriusMainWindow, SiriusLedState
+from ..widgets import SiriusMainWindow, PyDMLedMultiChannel, PyDMLed, SiriusPushButton
+from .custom_widget import BypassBtn
 
 
 class MPSController(SiriusMainWindow):
@@ -19,9 +19,11 @@ class MPSController(SiriusMainWindow):
         super().__init__(parent)
         self.prefix = prefix + ('-' if prefix else '')
         self.pvObj = {}
+        self.clicked = False
 
         color = get_appropriate_color('LI')
         self.setObjectName('LIApp')
+        self.setWindowIcon(qta.icon('mdi.monitor-dashboard', color=color))
 
         self.setWindowTitle('LI MPS Controller')
         self._setupUi()
@@ -35,6 +37,11 @@ class MPSController(SiriusMainWindow):
 
     def controlWidget(self, pv_name, lay):
         widget = QWidget()
+        vlay = QVBoxLayout()
+
+        if pv_name.find('WFS') != -1:
+            vlay.addWidget(
+                self.setPvLbl(pv_name))
 
         control_layout = self.controlHiddenBox(pv_name, lay)
         widget.setLayout(control_layout)
@@ -44,12 +51,20 @@ class MPSController(SiriusMainWindow):
                 "layout": control_layout
             }})
         widget.installEventFilter(self)
-        return widget
+        widget.setObjectName('Container')
+        widget.setStyleSheet('''
+            #Container::hover{
+                background-color: #ff8b98;
+                border-radius: 5px;
+            }
+        ''')
+        vlay.addWidget(widget)
+        return vlay
 
     def controlBox(self, pv_name, lay):
         lay = self.clearLayout(lay)
-        pos = [0, 0]
-
+        pos = [1, 0]
+        self.clicked = True
         for control_name in CTRL_TYPE:
             lb_title = QLabel(control_name)
             lay.addWidget(lb_title, pos[0], pos[1], 1, 1)
@@ -77,10 +92,6 @@ class MPSController(SiriusMainWindow):
         else:
             cb_glay = self.clearLayout(cb_glay)
 
-        if pv_name.find('WFS') != -1:
-            cb_glay.addWidget(
-                self.setPvLbl(pv_name), 0, 0, 1, 1)
-
         widget = self.getCtrlWidget(pv_name, '_L')
         widget.clicked.connect(
             lambda: self.controlBox(pv_name, cb_glay))
@@ -95,8 +106,9 @@ class MPSController(SiriusMainWindow):
         #     self.stop = True
         #     return True
         if event.type() == QEvent.Leave:
-            self.controlHiddenBox(obj.get("name"), obj.get("layout"))
-            self.stop = False
+            if self.clicked == True:
+                self.controlHiddenBox(obj.get("name"), obj.get("layout"))
+                self.stop = False
         return False
 
     def getDeviceName(self, pv_name):
@@ -109,19 +121,24 @@ class MPSController(SiriusMainWindow):
     def getCtrlWidget(self, pv_name, ctrl_type):
         device_name = self.getDeviceName(pv_name)
         if ctrl_type in ['_I', '_L', '']:
-            widget = SiriusLedState(
-                init_channel = device_name + pv_name + ctrl_type)
+            #edit
+            ch2vals = {device_name + pv_name + ctrl_type: 0}
+            widget = PyDMLedMultiChannel(self)
+            widget.set_channels2values(ch2vals)
+            if pv_name == 'HeartBeat':
+                widget.setOffColor(PyDMLed.Yellow)
         elif ctrl_type == '_B':
-            #Change this widget for '_R' and '_B' for value on btn down and up
-            #edit: Label -> Active if off and Byspass if
-            widget = PyDMPushButton(
-                init_channel = device_name + pv_name + ctrl_type,
-                label = 'Active')
+            widget = BypassBtn(
+                self,
+                init_channel = device_name + pv_name + ctrl_type)
         elif ctrl_type == '_R':
-            widget = PyDMPushButton(
+            widget = SiriusPushButton(
+                self,
                 init_channel = device_name + pv_name + ctrl_type,
-                label = 'Reset')
-
+                label = 'Reset',
+                pressValue = 1,
+                releaseValue = 0
+            )
         return widget
 
     def getListSize(self, pv_data):
@@ -223,7 +240,7 @@ class MPSController(SiriusMainWindow):
                     self.getPVComplement(pv_data[2], index),
                     counter)
                 if pv_data[4]:
-                    dg_glay.addWidget(
+                    dg_glay.addLayout(
                         self.controlWidget(pv_name, ''),
                         count[0], count[1], 1, 1)
                 else:
@@ -244,7 +261,6 @@ class MPSController(SiriusMainWindow):
             pv_data = PV_MPS.get(group)
             pv_size = self.getListSize(pv_data)
             group_pos = GROUP_POS.get(group)
-
             dm_glay.addWidget(
                 self.displayGroup(pv_data, pv_size, group),
                 group_pos[0], group_pos[1], group_pos[2], group_pos[3])
@@ -256,6 +272,7 @@ class MPSController(SiriusMainWindow):
         wid = QWidget(self)
         if_glay = QGridLayout()
         if_glay.addLayout(self.displayMpsGroups(), 0, 0, 1, 1)
+
         if_glay.setAlignment(Qt.AlignTop)
 
         wid.setLayout(if_glay)
