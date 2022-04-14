@@ -124,28 +124,27 @@ PV_MPS = {
     ],
     'Water': [
         16, 'WFS', '', 0, True
+    ],
+    'Gate Valve': [
+        2,
+        ['ShutGval', 'Gval', 'UOpenGval', 'Gval', 'UCloseGval'],
+        ['', 'Opened', '', 'Closed', ''],
+        [1, 1, 0, 0, 0], False
     ]
 }
-
-# ,
-#     'Gate Valve':[
-#         2,
-#         ['Gval', 'ShutGval', 'UOpenGval', 'Gval', 'ShutGval', 'UCloseGval'],
-#         ['Opened', 'Opened', '', 'Closed', 'Closed', ''],
-#         0, False
-#     ]
 
 GROUP_POS = {
     'Klystrons': [0, 0, 1, 1],
     'General Status': [0, 1, 1, 1],
     'Modulator Trigger Permit': [0, 2, 1, 1],
     'Egun': [0, 3, 1, 1],
-    'General Control': [1, 0, 2, 2],
-    'Modulator Status': [1, 2, 1, 2],
-    'Compressed Air': [2, 2, 1, 1],
-    'Water Conductivity': [2, 3, 1, 1],
-    'Water': [3, 0, 4, 4],
-    'VA': [0, 4, 7, 1]
+    'Gate Valve': [1, 0, 1, 4],
+    'General Control': [2, 0, 2, 2],
+    'Modulator Status': [2, 2, 1, 2],
+    'Compressed Air': [3, 2, 1, 1],
+    'Water Conductivity': [3, 3, 1, 1],
+    'Water': [4, 0, 4, 4],
+    'VA': [0, 4, 8, 1]
 }
 
 CTRL_TYPE = {
@@ -180,6 +179,11 @@ LBL_MPS = {
             'A1WG', 'K1-A1WG', 'A2WG', 'K1-A2WG', 'K1', 'A3WG',
             'K2-A3WG', 'A4WG', 'K2-A4WG', 'K2'],
         ['IP\nWarn', 'CCG\nWarn', 'CCG\nAlarm', 'PRG\nWarn']
+    ],
+    'Gate Valve':
+    [
+        ['1', '2'],
+        ['Control', 'Opened', '', 'Closed', '']
     ]
 }
 

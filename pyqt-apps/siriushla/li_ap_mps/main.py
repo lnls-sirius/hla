@@ -8,7 +8,8 @@ from .util import PV_MPS, MPS_PREFIX, CTRL_TYPE, GROUP_POS, LBL_MPS, LBL_WATER
 from ..util import get_appropriate_color
 from ..widgets import SiriusMainWindow, PyDMLedMultiChannel,\
      PyDMLed, SiriusPushButton
-from .custom_widget import BypassBtn
+from .bypass_btn import BypassBtn
+# from .hover_btn import HoverBtn
 
 
 class MPSController(SiriusMainWindow):
@@ -60,6 +61,7 @@ class MPSController(SiriusMainWindow):
             }
         ''')
         vlay.addWidget(widget)
+        #vlay.addWidget(HoverBtn(self, self.controlHiddenBox, self.controlWidget))
         return vlay
 
     def controlBox(self, pv_name, lay, config):
@@ -121,7 +123,6 @@ class MPSController(SiriusMainWindow):
     def getCtrlWidget(self, pv_name, ctrl_type, config):
         device_name = self.getDeviceName(pv_name)
         if ctrl_type in ['_I', '_L', '']:
-            # edit
             ch2vals = {
                 device_name + pv_name + ctrl_type: config}
             widget = PyDMLedMultiChannel(self)
@@ -224,7 +225,8 @@ class MPSController(SiriusMainWindow):
     def updateCount(self, count, title):
         if title in ['Water']:
             count = self.countWater(count)
-        elif title in ['Klystrons', 'General Control', 'Modulator Status']:
+        elif title in ['Klystrons', 'General Control',
+            'Modulator Status', 'Gate Valve']:
             count = self.countKGM(count, title)
         else:
             count = self.countVA(count)
@@ -240,12 +242,32 @@ class MPSController(SiriusMainWindow):
         return layout
 
     def getSingleTitle(self, title, layout):
-        pos = [0, 0]
         if title in LBL_MPS:
             lbl_item = LBL_MPS.get(title)
             layout = self.setTitleLabel(lbl_item[0], 0, layout)
             layout = self.setTitleLabel(lbl_item[1], 1, layout)
         return layout
+
+    def gateValve(self, pv_name, config):
+        device_name = self.getDeviceName(pv_name)
+        if pv_name.find('U') != -1:
+
+            if pv_name.find('Open') != -1:
+                name = 'Open'
+            else:
+                name = 'Close'
+
+            pb_lay = QHBoxLayout()
+            pb_lay.addWidget(
+                SiriusPushButton(
+                    self,
+                    init_channel=device_name + pv_name,
+                    label=name,
+                    pressValue=1,
+                    releaseValue=0))
+            return pb_lay
+        else:
+            return self.statusBox(pv_name, config)
 
     def displayGroup(self, pv_data, pv_size, title):
         dg_glay = QGridLayout()
@@ -260,18 +282,23 @@ class MPSController(SiriusMainWindow):
                     self.getPVComplement(pv_data[1], index),
                     self.getPVComplement(pv_data[2], index),
                     counter)
-                if pv_data[4]:
-                    dg_glay.addLayout(
-                        self.controlWidget(
-                            pv_name, '',
-                            self.getPvConfig(pv_data[3], index)),
-                        count[0], count[1], 1, 1)
+                if title != 'Gate Valve':
+                    if pv_data[4]:
+                        dg_glay.addLayout(
+                            self.controlWidget(
+                                pv_name, '',
+                                self.getPvConfig(pv_data[3], index)),
+                            count[0], count[1], 1, 1)
+                    else:
+                        dg_glay.addLayout(
+                            self.statusBox(pv_name,
+                                self.getPvConfig(pv_data[3], index)),
+                            count[0], count[1], 1, 1)
                 else:
                     dg_glay.addLayout(
-                        self.statusBox(pv_name,
-                        self.getPvConfig(pv_data[3], index)),
-                        count[0], count[1], 1, 1)
-
+                        self.gateValve(pv_name,
+                                self.getPvConfig(pv_data[3], index)),
+                            count[0], count[1], 1, 1)
                 count = self.updateCount(count, title)
 
         group.setTitle(title)
