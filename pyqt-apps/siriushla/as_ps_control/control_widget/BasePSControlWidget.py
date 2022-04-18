@@ -262,10 +262,7 @@ class BasePSControlWidget(QWidget):
         else:
             self.all_props = get_prop2label(self._dev_list[0])
 
-        visible_props = self._getVisibleProps()
-        self.visible_props = visible_props if visible_props is not None else\
-            ['detail', 'state', 'intlk', 'setpoint', 'monitor',
-             'strength_sp', 'strength_mon']
+        self.visible_props = self._getVisibleProps()
         if 'trim' in self.all_props:
             self.visible_props.append('trim')
         self.visible_props = sort_propties(self.visible_props)
@@ -398,8 +395,9 @@ class BasePSControlWidget(QWidget):
             return QSplitter(Qt.Vertical)
 
     def _getVisibleProps(self):
-        """Reimplement in derived classes."""
-        return None
+        """Default visible properties."""
+        return ['detail', 'state', 'intlk', 'setpoint', 'monitor',
+                'strength_sp', 'strength_mon']
 
     def _filter_pwrsupplies(self, text):
         """Filter power supply widgets based on text inserted at line edit."""
@@ -594,12 +592,13 @@ class BasePSControlWidget(QWidget):
         menu = QMenu("Actions", self)
         menu.addAction(self.turn_on_act)
         menu.addAction(self.turn_off_act)
-        menu.addAction(self.set_slowref_act)
         menu.addAction(self.set_current_sp_act)
-        menu.addAction(self.reset_act)
-        menu.addAction(self.wfmupdate_on_act)
-        menu.addAction(self.wfmupdate_off_act)
-        menu.addAction(self.updparms_act)
+        if not self._dev_list[0].dev in ('FCH', 'FCV'):
+            menu.addAction(self.set_slowref_act)
+            menu.addAction(self.reset_act)
+            menu.addAction(self.wfmupdate_on_act)
+            menu.addAction(self.wfmupdate_off_act)
+            menu.addAction(self.updparms_act)
         menu.addSeparator()
         action = menu.addAction('Show Connections...')
         action.triggered.connect(self.show_connections)

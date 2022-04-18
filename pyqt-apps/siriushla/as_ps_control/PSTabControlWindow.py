@@ -18,7 +18,6 @@ class PSTabControlWindow(PSControlWindow):
                "skew-quadrupole"],
         "TS": ["dipole", "quadrupole", "corrector-slow"],
         "SI": ["dipole", "quadrupole", "sextupole"],
-        #      "corrector-slow", "trim-quadrupole", "skew-quadrupole"]}
         "IT": ["lens", ]}
 
     TabName = {"dipole": "Dipoles",
@@ -27,6 +26,7 @@ class PSTabControlWindow(PSControlWindow):
                "sextupole": "Sextupoles",
                "solenoid": "Solenoids",
                "corrector-slow": "Slow Correctors",
+               "corrector-fast": "Fast Correctors",
                "skew-quadrupole": "Quadrupoles Skew",
                "trim-quadrupole": "Trims",
                "lens": "Lens",
