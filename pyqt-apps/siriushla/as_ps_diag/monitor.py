@@ -95,32 +95,34 @@ class PSMonitor(QWidget):
             grid.setVerticalSpacing(6)
             grid.setHorizontalSpacing(6)
             if sec == 'BO' and label in ['CH', 'CV']:
-                grid.addWidget(QLabel(label, self), 0, 0)
+                desc = QLabel(label, self, alignment=Qt.AlignRight)
+                grid.addWidget(desc, 0, 0)
                 for i in range(5):
                     lbh = QLabel('{0:02d}'.format(i*2+1),
-                                 self, alignment=Qt.AlignCenter)
+                                 self, alignment=Qt.AlignRight)
+                    lbh.setStyleSheet("QLabel{max-width:2em;}")
                     grid.addWidget(lbh, 0, i+1)
                     lbv = QLabel('{0:02d}'.format(i*10),
-                                 self, alignment=Qt.AlignCenter)
+                                 self, alignment=Qt.AlignRight)
+                    lbv.setStyleSheet("QLabel{max-width:2em;}")
                     grid.addWidget(lbv, i+1, 0)
                 aux_row, aux_col, offset = 1, 1, 1
                 if label == 'CV':
                     aux = devices.pop(-1)
                     devices.insert(0, aux)
             elif sec == 'SI':
-                if 'ID' not in label:
-                    aux = devices.pop(-1)
-                    devices.insert(0, aux)
+                aux = devices.pop(-1)
+                devices.insert(0, aux)
                 if label == 'Trims':
                     aux = devices.pop(-1)
                     devices.insert(0, aux)
-                aux_row, aux_col, offset = 2, 0, 0
-                if label in ['QS', 'Trims']:
-                    aux_col, offset = 1, (1 if label == 'QS' else 0)
+                if label in ['QS', 'FCV']:
                     for i in range(1, 21):
                         lb = QLabel('{0:02d}'.format(i), self)
-                        grid.addWidget(lb, i+1, (0 if label == 'QS' else 15))
-                if label in ['QS', 'CH', 'CV', 'Trims']:
+                        grid.addWidget(lb, i+1, (0 if label == 'QS' else 5))
+                if label in ['QS', 'CH', 'CV', 'Trims', 'FCH', 'FCV']:
+                    aux_row, aux_col = 2, (1 if label == 'QS' else 0)
+                    offset = (1 if label == 'QS' else 0)
                     i = 0
                     for text in self.get_dev2sub_labels(label):
                         lbh = QLabel(text, self, alignment=Qt.AlignCenter)
@@ -148,19 +150,13 @@ class PSMonitor(QWidget):
                                  alignment=Qt.AlignTop)
 
         if sec == 'LI':
-            status_lay.setColumnStretch(0, 1)
+            status_lay.setColumnStretch(0, 2)
             status_lay.setColumnStretch(1, 5)
-            status_lay.setColumnStretch(2, 5)
+            status_lay.setColumnStretch(2, 7)
             status_lay.setColumnStretch(3, 3)
-            status_lay.setVerticalSpacing(14)
-            status_lay.setHorizontalSpacing(20)
-        elif sec == 'BO':
-            status_lay.setColumnStretch(0, 3)
-            status_lay.setColumnStretch(1, 3)
-            status_lay.setColumnStretch(2, 6)
-            status_lay.setColumnStretch(3, 6)
-            status_lay.setVerticalSpacing(14)
-            status_lay.setHorizontalSpacing(20)
+            status_lay.setColumnStretch(4, 2)
+            status_lay.setVerticalSpacing(12)
+            status_lay.setHorizontalSpacing(16)
         elif sec == 'SI':
             status_lay.setColumnStretch(0, 1)
             status_lay.setColumnStretch(1, 2)
@@ -170,10 +166,12 @@ class PSMonitor(QWidget):
             status_lay.setColumnStretch(5, 8)
             status_lay.setColumnStretch(6, 14)
             status_lay.setColumnStretch(7, 3)
+            status_lay.setColumnStretch(8, 4)
+            status_lay.setColumnStretch(9, 4)
             status_lay.setVerticalSpacing(12)
             status_lay.setHorizontalSpacing(12)
         else:
-            status_lay.setVerticalSpacing(14)
+            status_lay.setVerticalSpacing(12)
             status_lay.setHorizontalSpacing(16)
 
         return status

@@ -23,8 +23,8 @@ def get_label2devices(sec):
 def get_sec2dev_laypos(sec, label):
     SEC2LABEL2SECPOS['LI'].update({
         'Egun': (0, 3, 1, 1),
-        'RF': (1, 3, 1, 1),
-        'PU': (2, 3, 1, 1)})
+        'PU': (0, 4, 1, 1),
+        'RF': (1, 3, 1, 1)})
     SEC2LABEL2SECPOS['BO'].update({
         'RF': (2, 1, 1, 1)})
     SEC2LABEL2SECPOS['SI'].update({

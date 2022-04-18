@@ -77,9 +77,9 @@ SEC_2_STATUS = {
     'Compressed Air': [[('GPS1_L', 0), ], ],
     'Water Conductivity': [[('WaterState_L', 0), ], ],
     'Water': [
-        [('WFS1_L', 0), ('WFS2_L', 0), ('WFS3_L', 0), ('WFS4_L', 0)],
-        [('WFS5_L', 0), ('WFS6_L', 0), ('WFS7_L', 0), ('WFS8_L', 0)],
-        [('WFS9_L', 0), ('WFS10_L', 0), ('WFS11_L', 0), ('WFS12_L', 0)],
-        [('WFS13_L', 0), ('WFS14_L', 0), ('WFS15_L', 0), ('WFS16_L', 0)]
+        [('WFS1_L', 0), ('WFS2_L', 0), ('WFS3_L', 0), ('WFS4_L', 0),
+         ('WFS5_L', 0), ('WFS6_L', 0), ('WFS7_L', 0), ('WFS8_L', 0)],
+        [('WFS9_L', 0), ('WFS10_L', 0), ('WFS11_L', 0), ('WFS12_L', 0),
+         ('WFS13_L', 0), ('WFS14_L', 0), ('WFS15_L', 0), ('WFS16_L', 0)]
     ],
 }

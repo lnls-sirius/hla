@@ -39,6 +39,7 @@ class PSGraphMonWindow(SiriusMainWindow):
             self.setObjectName(filters['sec']+'App')
         self._psnames = _PSSearch.get_psnames(filters)
         self._magfunc = _PSSearch.conv_psname_2_magfunc(self._psnames[0])
+        self._pstype = _PSSearch.conv_psname_2_pstype(self._psnames[0])
         self._setupUi()
 
     def _setupUi(self):
@@ -48,7 +49,7 @@ class PSGraphMonWindow(SiriusMainWindow):
                              self, alignment=Qt.AlignCenter)
 
         self.propty_sel = PSGraphProptySelWidget(self)
-        self.propty_sel.change_matype(self._magfunc)
+        self.propty_sel.change_matype(self._magfunc, self._pstype)
 
         self.graph = PSGraphMonWidget(
             self, self._prefix, self._psnames)
@@ -97,7 +98,7 @@ class PSGraphDevicesSelWidget(QWidget):
     """Power supply selection widget."""
 
     psnames_changed = Signal(list)
-    matype_changed = Signal(str)
+    matype_changed = Signal(str, str)
 
     def __init__(self, parent, psnames):
         super().__init__(parent)
@@ -118,9 +119,11 @@ class PSGraphDevicesSelWidget(QWidget):
             ['QS', 'QFA', 'QFB', 'QFP', 'QF.*',
              'QDA', 'QDB1', 'QDB2', 'QDP1', 'QDP2', 'QD.*',
              'Q1', 'Q2', 'Q3', 'Q4', 'Q[1-4]',
-             'Q(D|F).*', 'Q(F|D|[1-4]).*'])
+             'Q(D|F).*', 'Q(F|D|[1-4]).*',
+             'FCH', 'FCV', 'FC(H|V)'])
 
         self.magfunc = _PSSearch.conv_psname_2_magfunc(self._psnames[0])
+        self.pytype = _PSSearch.conv_psname_2_pstype(self._psnames[0])
 
         self._setupUi()
 
@@ -182,7 +185,8 @@ class PSGraphDevicesSelWidget(QWidget):
 
         if self._psnames and self.sender() == self.cb_dev[sec]:
             self.magfunc = _PSSearch.conv_psname_2_magfunc(self._psnames[0])
-            self.matype_changed.emit(self.magfunc)
+            self.pytype = _PSSearch.conv_psname_2_pstype(self._psnames[0])
+            self.matype_changed.emit(self.magfunc, self.pytype)
 
         self.psnames_changed.emit(self._psnames)
 
@@ -199,23 +203,32 @@ class PSGraphProptySelWidget(QWidget):
     propty_symb_changed = Signal(str)
     propty_line_changed = Signal(str)
 
+    PROP_SYMB_DEFAULT = [
+        'DiagStatus-Mon', 'IntlkSoft-Mon', 'IntlkHard-Mon',
+        'PwrState-Sel', 'PwrState-Sts', 'OpMode-Sel', 'OpMode-Sts',
+        'CtrlMode-Mon', 'CtrlLoop-Sel', 'CtrlLoop-Sts', 'CycleEnbl-Mon']
+    PROP_LINE_DEFAULT = [
+        'Current-Mon', 'Current-SP', 'Current-RB', 'CurrentRef-Mon',
+        'DiagCurrentDiff-Mon', 'WfmSyncPulseCount-Mon',
+        'PRUCtrlQueueSize-Mon']
+    PROP_SYMB_FASTCORR = [
+        'DiagStatus-Mon',
+        'PwrState-Sel', 'PwrState-Sts',
+        'CtrlLoop-Sel', 'CtrlLoop-Sts']
+    PROP_LINE_FASTCORR = [
+        'Current-SP', 'Current-RB',
+        'DiagCurrentDiff-Mon']
+
     def __init__(self, parent):
         super().__init__(parent)
 
         self._magfunc = None
+        self._pstype = None
         self._intstr_propty = ''
         self._intstr_suffix = ['-Mon', '-SP', '-RB', 'Ref-Mon']
 
-        self._choose_prop_symb = [
-            'DiagStatus-Mon', 'IntlkSoft-Mon', 'IntlkHard-Mon',
-            'PwrState-Sel', 'PwrState-Sts', 'OpMode-Sel', 'OpMode-Sts',
-            'CtrlMode-Mon', 'CtrlLoop-Sel', 'CtrlLoop-Sts', 'CycleEnbl-Mon']
-        self._choose_prop_line = [
-            'Current-Mon', 'Current-SP', 'Current-RB', 'CurrentRef-Mon',
-            'DiagCurrentDiff-Mon', 'WfmSyncPulseCount-Mon',
-            'PRUCtrlQueueSize-Mon']
-        for suf in self._intstr_suffix:
-            self._choose_prop_line.append(self._intstr_propty+suf)
+        self._choose_prop_symb = PSGraphProptySelWidget.PROP_SYMB_DEFAULT
+        self._choose_prop_line = PSGraphProptySelWidget.PROP_LINE_DEFAULT
 
         self._setupUi()
 
@@ -235,8 +248,7 @@ class PSGraphProptySelWidget(QWidget):
         self.cb_prop_symb.setSizePolicy(
             QSzPlcy.Expanding, QSzPlcy.Preferred)
         self.cb_prop_symb.setMaxVisibleItems(10)
-        for item in self._choose_prop_symb:
-            self.cb_prop_symb.addItem(item)
+        self.cb_prop_symb.addItems(self._choose_prop_symb)
         hbox_prop_symb = QHBoxLayout()
         hbox_prop_symb.addWidget(self._label_symb)
         hbox_prop_symb.addWidget(self.cb_prop_symb)
@@ -252,8 +264,7 @@ class PSGraphProptySelWidget(QWidget):
         self.cb_prop_line.setSizePolicy(
             QSzPlcy.Expanding, QSzPlcy.Preferred)
         self.cb_prop_line.setMaxVisibleItems(10)
-        for item in self._choose_prop_line:
-            self.cb_prop_line.addItem(item)
+        self.cb_prop_line.addItems(self._choose_prop_line)
         hbox_prop_line = QHBoxLayout()
         hbox_prop_line.addWidget(self._label_line)
         hbox_prop_line.addWidget(self.cb_prop_line)
@@ -264,18 +275,29 @@ class PSGraphProptySelWidget(QWidget):
         lay.addLayout(hbox_prop_symb, 0, 1)
         lay.addLayout(hbox_prop_line, 0, 2)
 
-    def change_matype(self, magfunc):
+    def change_matype(self, magfunc, pstype):
         currindex = self.cb_prop_line.currentIndex()
-        for suf in self._intstr_suffix:
-            index = self.cb_prop_line.findText(self._intstr_propty+suf)
-            self.cb_prop_line.removeItem(index)
-
         self._magfunc = magfunc
+        self._pstype = pstype
+        if self._pstype in ('si-corrector-fch', 'si-corrector-fcv'):
+            self._choose_prop_symb = PSGraphProptySelWidget.PROP_SYMB_FASTCORR
+            self._choose_prop_line = PSGraphProptySelWidget.PROP_LINE_FASTCORR
+        else:
+            self._choose_prop_symb = PSGraphProptySelWidget.PROP_SYMB_DEFAULT
+            self._choose_prop_line = PSGraphProptySelWidget.PROP_LINE_DEFAULT
 
-        self._intstr_propty = get_strength_label(self._magfunc)
-        for suf in self._intstr_suffix:
-            self.cb_prop_line.addItem(self._intstr_propty+suf)
-        self.cb_prop_line.setCurrentIndex(currindex)
+        self.cb_prop_symb.clear()
+        self.cb_prop_symb.addItems(self._choose_prop_symb)
+        self.cb_prop_line.clear()
+        self.cb_prop_line.addItems(self._choose_prop_line)
+        if self._pstype not in ('si-corrector-fch', 'si-corrector-fcv'):
+            self._intstr_propty = get_strength_label(self._magfunc)
+            for suf in self._intstr_suffix:
+                self.cb_prop_line.addItem(self._intstr_propty+suf)
+        try:
+            self.cb_prop_line.setCurrentIndex(currindex)
+        except Exception as e:
+            pass
 
 
 class PSGraph(PyDMWaveformPlot):
@@ -440,6 +462,27 @@ class PSGraphMonWidget(QWidget):
 
     _pvs = dict()
 
+    PROPSYMB_2_DEFVAL_DEF = {
+        'DiagStatus-Mon': 0,
+        'IntlkSoft-Mon': 0,
+        'IntlkHard-Mon': 0,
+        'PwrState-Sel': _PSConst.PwrStateSel.On,
+        'PwrState-Sts': _PSConst.PwrStateSts.On,
+        'OpMode-Sel': _PSConst.OpMode.SlowRef,
+        'OpMode-Sts': _PSConst.States.SlowRef,
+        'CtrlMode-Mon': _PSConst.Interface.Remote,
+        'CtrlLoop-Sel': _PSConst.OpenLoop.Closed,
+        'CtrlLoop-Sts': _PSConst.OpenLoop.Closed,
+        'CycleEnbl-Mon': _PSConst.DsblEnbl.Enbl
+    }
+    PROPSYMB_2_DEFVAL_FCS = {
+        'DiagStatus-Mon': 0,
+        'PwrState-Sel': _PSConst.PwrStateSel.On,
+        'PwrState-Sts': _PSConst.PwrStateSts.On,
+        'CtrlLoop-Sel': _PSConst.OffOn.On,
+        'CtrlLoop-Sts': _PSConst.OffOn.On,
+    }
+
     def __init__(self, parent=None, prefix=_vaca_prefix, psnames=''):
         super().__init__(parent)
 
@@ -448,18 +491,7 @@ class PSGraphMonWidget(QWidget):
         self._property_line = 'Current-Mon'
         self._property_symb = 'DiagStatus-Mon'
 
-        self.propsymb_2_defval = {
-            'DiagStatus-Mon': 0,
-            'IntlkSoft-Mon': 0,
-            'IntlkHard-Mon': 0,
-            'PwrState-Sel': _PSConst.PwrStateSel.On,
-            'PwrState-Sts': _PSConst.PwrStateSts.On,
-            'OpMode-Sel': _PSConst.OpMode.SlowRef,
-            'OpMode-Sts': _PSConst.States.SlowRef,
-            'CtrlMode-Mon': _PSConst.Interface.Remote,
-            'CtrlLoop-Sel': _PSConst.OpenLoop.Closed,
-            'CtrlLoop-Sts': _PSConst.OpenLoop.Closed,
-            'CycleEnbl-Mon': _PSConst.DsblEnbl.Enbl}
+        self.propsymb_2_defval = PSGraphMonWidget.PROPSYMB_2_DEFVAL_DEF
 
         self._setupUi()
         self._create_commands()
@@ -481,6 +513,10 @@ class PSGraphMonWidget(QWidget):
 
     def update_psnames(self, psnames):
         self._psnames = _dcopy(psnames)
+        if SiriusPVName(self._psnames[0]).dev in ('FCH', 'FCV'):
+            self.propsymb_2_defval = PSGraphMonWidget.PROPSYMB_2_DEFVAL_FCS
+        else:
+            self.propsymb_2_defval = PSGraphMonWidget.PROPSYMB_2_DEFVAL_DEF
         self._update_graph()
 
     @Slot(str)
