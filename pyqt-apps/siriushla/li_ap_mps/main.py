@@ -4,10 +4,11 @@ from qtpy.QtWidgets import QWidget, QGroupBox, QHBoxLayout, \
     QVBoxLayout, QGridLayout, QLabel, QTabWidget
 import qtawesome as qta
 
-from .util import PV_MPS, MPS_PREFIX, CTRL_TYPE, GROUP_POS, LBL_MPS, LBL_WATER
+from .util import PV_MPS, MPS_PREFIX, CTRL_TYPE, GROUP_POS, \
+    LBL_MPS, LBL_WATER, PV_TEMP_MPS, TEMP_TYPE
 from ..util import get_appropriate_color
 from ..widgets import SiriusMainWindow, PyDMLedMultiChannel,\
-     PyDMLed, SiriusPushButton
+     PyDMLed, PyDMLabel, SiriusPushButton
 from .bypass_btn import BypassBtn
 # from .hover_btn import HoverBtn
 
@@ -142,6 +143,13 @@ class MPSController(SiriusMainWindow):
                 releaseValue=0)
         return widget
 
+    def getTempWidget(self, pv_name, ctrl_type, config):
+        device_name = self.getDeviceName(pv_name)
+        widget = PyDMLabel(
+            device_name
+        )
+        return widget
+
     def getListSize(self, pv_data):
         for item in pv_data:
             if type(item) == list:
@@ -222,12 +230,27 @@ class MPSController(SiriusMainWindow):
             count[0] = 1
         return count
 
+    def countTemp(self, count, title):
+        if title == 'WT':
+            orient = [1, 0, 6]
+        else:
+            orient = [0, 1, 2]
+
+        if count[orient[1]] >= orient[2]:
+            count[orient[0]] += 1
+            count[orient[1]] = 1
+        else:
+            count[orient[1]] += 1
+        return count
+
     def updateCount(self, count, title):
         if title in ['Water']:
             count = self.countWater(count)
         elif title in ['Klystrons', 'General Control',
             'Modulator Status', 'Gate Valve']:
             count = self.countKGM(count, title)
+        elif title in ['T', 'WT']:
+            self.countTemp(count, title)
         else:
             count = self.countVA(count)
 
@@ -297,12 +320,35 @@ class MPSController(SiriusMainWindow):
                 else:
                     dg_glay.addLayout(
                         self.gateValve(pv_name,
-                                self.getPvConfig(pv_data[3], index)),
-                            count[0], count[1], 1, 1)
+                            self.getPvConfig(pv_data[3], index)),
+                        count[0], count[1], 1, 1)
                 count = self.updateCount(count, title)
 
         group.setTitle(title)
         group.setLayout(dg_glay)
+
+        return group
+
+    def genStringTempPV(self, name, cP, cT):
+        return name + str(cP) + 'Temp' + str(cT)
+
+    def displayTempGroup(self, pv_data, title):
+        dtg_glay = QGridLayout()
+        group = QGroupBox()
+        count = [1, 1]
+
+        dtg_glay = self.getSingleTitle(title, dtg_glay)
+        for counterPrefix in range(1, pv_data[0][0]+1):
+            for counterName in range(1, pv_data[0][1]+1):
+                pv_name = self.genStringTempPV(
+                    pv_data[1], counterPrefix, counterName)
+                dtg_glay.addWidget(
+                    QLabel(pv_name),
+                    count[0], count[1], 1, 1)
+                count = self.updateCount(count, title)
+
+        group.setTitle(title)
+        group.setLayout(dtg_glay)
 
         return group
 
@@ -318,10 +364,25 @@ class MPSController(SiriusMainWindow):
 
         return dm_glay
 
-    def displayControlMPS(self):
+    def displayTempGroups(self):
+        dt_glay = QGridLayout()
+        for group in PV_TEMP_MPS:
+            pv_data = PV_TEMP_MPS.get(group)
+            group_pos = GROUP_POS.get(group)
+            dt_glay.addWidget(
+                self.displayTempGroup(pv_data, group),
+                group_pos[0], group_pos[1], group_pos[2], group_pos[3])
+
+        return dt_glay
+
+    def displayControlMPS(self, tab_type):
         wid = QWidget(self)
         if_glay = QGridLayout()
-        if_glay.addLayout(self.displayMpsGroups(), 0, 0, 1, 1)
+
+        if tab_type == 0:
+            if_glay.addLayout(self.displayMpsGroups(), 0, 0, 1, 1)
+        else:
+            if_glay.addLayout(self.displayTempGroups(), 0, 0, 1, 1)
 
         if_glay.setAlignment(Qt.AlignTop)
 
@@ -332,6 +393,7 @@ class MPSController(SiriusMainWindow):
 
         tab = QTabWidget()
         tab.setObjectName("LITab")
-        tab.addTab(self.displayControlMPS(), "MPS Controller")
+        tab.addTab(self.displayControlMPS(1), "MPS Controller")
+        tab.addTab(self.displayControlMPS(1), "Temperature")
 
         self.setCentralWidget(tab)

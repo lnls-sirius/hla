@@ -144,7 +144,9 @@ GROUP_POS = {
     'Compressed Air': [3, 2, 1, 1],
     'Water Conductivity': [3, 3, 1, 1],
     'Water': [4, 0, 4, 4],
-    'VA': [0, 4, 8, 1]
+    'VA': [0, 4, 8, 1],
+    'WT': [0, 0, 1, 1],
+    'T': [0, 1, 1, 1]
 }
 
 CTRL_TYPE = {
@@ -159,7 +161,7 @@ LBL_MPS = {
         ['1', '2'],
         ['Status', 'Oil-tank\nWT Alarm', 'Focus-coil\nWT Alarm', 'Refl. PW\nIntlk']
     ],
-    'General Status':[
+    'General Status': [
         ['Heart Beat', 'MPS Warn', 'MPS Alarm'], ''
     ],
     'Modulator Trigger Permit': [
@@ -196,4 +198,19 @@ LBL_WATER = {
     'WFS11':  'Waveguide 6,7', 'WFS12':  'Load A0',
     'WFS13': 'Load A1', 'WFS14': 'Load A2',
     'WFS15': 'Load A3', 'WFS16': 'Load A4'
+}
+
+PV_TEMP_MPS = {
+    'WT': [
+        [2, 6], 'K'
+    ],
+    'T': [
+        [4, 2], 'A'
+    ]
+}
+
+TEMP_TYPE = {
+    'Value': '',
+    'Set': 'Thrd',
+    'Setpoint Readback': 'Thrd_BR'
 }
