@@ -1,7 +1,8 @@
 ''' Diagnostic Interface of the LINAC's BPM'''
-from qtpy.QtCore import Qt, QEvent
+from qtpy.QtCore import Qt, QEvent, QSize
 from qtpy.QtWidgets import QWidget, QGroupBox, QHBoxLayout, \
-    QVBoxLayout, QGridLayout, QLabel, QTabWidget
+    QVBoxLayout, QGridLayout, QLabel, QTabWidget, \
+    QStyleOptionTabWidgetFrame, QStackedLayout
 import qtawesome as qta
 from pydm.widgets import PyDMLabel
 from .util import PV_MPS, MPS_PREFIX, CTRL_TYPE, GROUP_POS, \
@@ -10,8 +11,42 @@ from ..util import get_appropriate_color
 from ..widgets import SiriusMainWindow, PyDMLedMultiChannel,\
      PyDMLed, SiriusPushButton
 from .bypass_btn import BypassBtn
-# from .hover_btn import HoverBtn
 
+class TabWidget(QTabWidget):
+    '''Tab Class to handle window size change'''
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.currentChanged.connect(self.updateGeometry)
+
+    def minimumSizeHint(self):
+        return self.sizeHint()
+
+    def sizeHint(self):
+        '''Change window size'''
+
+        lc = QSize(0, 0)
+        rc = QSize(0, 0)
+        opt = QStyleOptionTabWidgetFrame()
+        self.initStyleOption(opt)
+        if self.cornerWidget(Qt.TopLeftCorner):
+            lc = self.cornerWidget(Qt.TopLeftCorner).sizeHint()
+        if self.cornerWidget(Qt.TopRightCorner):
+            rc = self.cornerWidget(Qt.TopRightCorner).sizeHint()
+        layout = self.findChild(QStackedLayout)
+        layoutHint = layout.currentWidget().sizeHint()
+        tabHint = self.tabBar().sizeHint()
+        if self.tabPosition() in (self.North, self.South):
+            size = QSize(
+                max(layoutHint.width(), tabHint.width() + rc.width() + lc.width()),
+                layoutHint.height() + max(rc.height(), max(lc.height(), tabHint.height()))
+            )
+        else:
+            size = QSize(
+                layoutHint.width() + max(rc.width(), max(lc.width(), tabHint.width())),
+                max(layoutHint.height(), tabHint.height() + rc.height() + lc.height())
+            )
+        return size
 
 class MPSController(SiriusMainWindow):
     ''' Monitor Protection System Controller Interface '''
@@ -19,6 +54,7 @@ class MPSController(SiriusMainWindow):
     def __init__(self, prefix='', parent=None):
         '''Contain all the graphic interface data'''
         super().__init__(parent)
+
         self.prefix = prefix + ('-' if prefix else '')
         self.pv_obj = {}
         self.clicked = False
@@ -30,14 +66,110 @@ class MPSController(SiriusMainWindow):
         self.setWindowTitle('LI MPS Controller')
         self._setupUi()
 
+    def eventFilter(self, ob, event):
+        ''' Hover listener with hover function'''
+        obj = self.pv_obj.get(ob)
+        # if event.type() == QEvent.Enter:
+        #     self.controlBox(obj.get("name"), obj.get("layout"))
+        #     self.stop = True
+        #     return True
+        if event.type() == QEvent.Leave:
+            if self.clicked:
+                self.controlHiddenBox(obj.get("name"), obj.get("layout"), obj.get("config"))
+                self.stop = False
+        return False
+
+    def getDeviceName(self, pv_name):
+        ''' Set device name '''
+        if pv_name.find('LA-RF:LLRF:KLY') != -1:
+            device_name = ''
+        else:
+            device_name = MPS_PREFIX
+        return device_name
+
+    def getCtrlWidget(self, pv_name, ctrl_type, config):
+        '''Display the specific control widget'''
+        device_name = self.getDeviceName(pv_name)
+        if ctrl_type in ['_I', '_L', '']:
+            ch2vals = {
+                device_name + pv_name + ctrl_type: config}
+            widget = PyDMLedMultiChannel(self)
+            widget.set_channels2values(ch2vals)
+            if pv_name == 'HeartBeat':
+                widget.setOffColor(PyDMLed.Yellow)
+        elif ctrl_type == '_B':
+            widget = BypassBtn(
+                self,
+                init_channel=device_name + pv_name + ctrl_type)
+        elif ctrl_type == '_R':
+            widget = SiriusPushButton(
+                self,
+                init_channel=device_name + pv_name + ctrl_type,
+                label='Reset',
+                pressValue=1,
+                releaseValue=0)
+        return widget
+
+    def statusBox(self, pv_name, config):
+        ''' Display the status widget'''
+        sb_hlay = QHBoxLayout()
+        sb_hlay.addWidget(
+            self.getCtrlWidget(pv_name, '', config), 1)
+        return sb_hlay
+
+    def getTempWidget(self, pv_name, temp_type):
+        ''' Display the temperature label widget '''
+        device_name = self.getDeviceName(pv_name)
+        widget = PyDMLabel(
+            parent=self,
+            init_channel= device_name + pv_name + temp_type
+        )
+        return widget
+
     def clearLayout(self, lay):
+        '''Erase the layout's content'''
         while lay.count():
             child = lay.takeAt(0)
             if child.widget():
                 child.widget().deleteLater()
         return lay
 
+    def controlHiddenBox(self, pv_name, cb_glay, config):
+        '''Display the status of the PV - Hidden control Box'''
+
+        if cb_glay == '':
+            cb_glay = QGridLayout()
+        else:
+            cb_glay = self.clearLayout(cb_glay)
+
+        widget = self.getCtrlWidget(pv_name, '_L', config)
+        widget.clicked.connect(
+            lambda: self.controlBox(pv_name, cb_glay, config))
+        cb_glay.addWidget(widget, 1, 0, 1, 1)
+
+        return cb_glay
+
+    def controlBox(self, pv_name, lay, config):
+        ''' Display the control features - Open control Box'''
+        lay = self.clearLayout(lay)
+        pos = [0, 0]
+        self.clicked = True
+        for control_name in CTRL_TYPE:
+            lb_title = QLabel(control_name)
+            lay.addWidget(lb_title, pos[0], pos[1], 1, 1)
+            ctrl_widget = self.getCtrlWidget(
+                pv_name, CTRL_TYPE.get(control_name), config)
+            lay.addWidget(ctrl_widget, pos[0]+1, pos[1], 1, 1)
+            pos[1] += 1
+            if pos[1] >= 2:
+                pos[1] = 0
+                pos[0] += 2
+        return lay
+
     def controlWidget(self, pv_name, lay, config):
+        '''Create the control widget with opening and closing functions'''
+        '''Default - closed'''
+
         widget = QWidget()
         vlay = QVBoxLayout()
 
@@ -64,251 +196,8 @@ class MPSController(SiriusMainWindow):
         vlay.addWidget(widget)
         return vlay
 
-    def controlBox(self, pv_name, lay, config):
-        lay = self.clearLayout(lay)
-        pos = [0, 0]
-        self.clicked = True
-        for control_name in CTRL_TYPE:
-            lb_title = QLabel(control_name)
-            lay.addWidget(lb_title, pos[0], pos[1], 1, 1)
-            ctrl_widget = self.getCtrlWidget(
-                pv_name, CTRL_TYPE.get(control_name), config)
-            lay.addWidget(ctrl_widget, pos[0]+1, pos[1], 1, 1)
-            pos[1] += 1
-            if pos[1] >= 2:
-                pos[1] = 0
-                pos[0] += 2
-        return lay
-
-    def monitorTempBox(self, pv_name):
-        lay = QHBoxLayout()
-        for temp_name in TEMP_TYPE:
-            ctrl_widget = self.getTempWidget(
-                pv_name, TEMP_TYPE.get(temp_name))
-            lay.addWidget(ctrl_widget, 1)
-            ctrl_widget.setAlignment(Qt.AlignCenter)
-        return lay
-
-    def setPvLbl(self, pv_name):
-        pvLbl = LBL_WATER.get(pv_name)
-        lb_titleWid = QLabel(pvLbl)
-        lb_titleWid.setAlignment(Qt.AlignCenter)
-        return lb_titleWid
-
-    def controlHiddenBox(self, pv_name, cb_glay, config):
-        '''Display the box for the control Interface'''
-
-        if cb_glay == '':
-            cb_glay = QGridLayout()
-        else:
-            cb_glay = self.clearLayout(cb_glay)
-
-        widget = self.getCtrlWidget(pv_name, '_L', config)
-        widget.clicked.connect(
-            lambda: self.controlBox(pv_name, cb_glay, config))
-        cb_glay.addWidget(widget, 1, 0, 1, 1)
-
-        return cb_glay
-
-    def eventFilter(self, ob, event):
-        obj = self.pv_obj.get(ob)
-        # if event.type() == QEvent.Enter:
-        #     self.controlBox(obj.get("name"), obj.get("layout"))
-        #     self.stop = True
-        #     return True
-        if event.type() == QEvent.Leave:
-            if self.clicked:
-                self.controlHiddenBox(obj.get("name"), obj.get("layout"), obj.get("config"))
-                self.stop = False
-        return False
-
-    def getDeviceName(self, pv_name):
-        if pv_name.find('LA-RF:LLRF:KLY') != -1:
-            device_name = ''
-        else:
-            device_name = MPS_PREFIX
-        return device_name
-
-    def getCtrlWidget(self, pv_name, ctrl_type, config):
-        device_name = self.getDeviceName(pv_name)
-        if ctrl_type in ['_I', '_L', '']:
-            ch2vals = {
-                device_name + pv_name + ctrl_type: config}
-            widget = PyDMLedMultiChannel(self)
-            widget.set_channels2values(ch2vals)
-            if pv_name == 'HeartBeat':
-                widget.setOffColor(PyDMLed.Yellow)
-        elif ctrl_type == '_B':
-            widget = BypassBtn(
-                self,
-                init_channel=device_name + pv_name + ctrl_type)
-        elif ctrl_type == '_R':
-            widget = SiriusPushButton(
-                self,
-                init_channel=device_name + pv_name + ctrl_type,
-                label='Reset',
-                pressValue=1,
-                releaseValue=0)
-        return widget
-
-    def getTempWidget(self, pv_name, temp_type):
-        device_name = self.getDeviceName(pv_name)
-        widget = PyDMLabel(
-            parent=self,
-            init_channel= device_name + pv_name + temp_type
-        )
-        return widget
-
-    def getListSize(self, pv_data):
-        for item in pv_data:
-            if type(item) == list:
-                return len(item)
-        return 1
-
-    def statusBox(self, pv_name, config):
-        sb_hlay = QHBoxLayout()
-        sb_hlay.addWidget(
-            self.getCtrlWidget(pv_name, '', config), 1)
-        return sb_hlay
-
-    def genStringPV(self, prefix, suffix, num):
-
-        if prefix in ['HeartBeat', 'LAWarn', 'LAAlarm', 'Gun', 'WaterState']:
-            pv_name = str(prefix)+str(suffix)
-        elif prefix == 'PPState':
-            pv_name = str(prefix)+str(num+6)+str(suffix)
-        else:
-            pv_name = str(prefix)+str(num)+str(suffix)
-
-        return pv_name
-
-    def getLoopQuant(self, loopQuant, index):
-        if type(loopQuant) == list:
-            return loopQuant[index]+1
-        else:
-            return loopQuant+1
-
-    def getPvConfig(self, config, index):
-        if type(config) == list:
-            return config[index]
-        else:
-            return config
-
-    def getPVComplement(self, string, index):
-        if type(string) == list:
-            return string[index]
-        else:
-            return string
-
-    def countWater(self, count):
-        if count[1] >= 4:
-            count[0] += 1
-            count[1] = 1
-        else:
-            count[1] += 1
-        return count
-
-    def countKGM(self, count, title):
-        val = 2
-        if title == 'Modulator Status':
-            val = 1
-        if count[0] >= val:
-            count[1] += 1
-            count[0] = 1
-        else:
-            count[0] += 1
-        return count
-
-    def countVA(self, count):
-        if count in [
-            [7, 2], [9, 2], [12, 2], [14, 2],
-            [7, 3], [9, 3], [12, 3], [14, 3],
-            [7, 4], [14, 4]]:
-            count[0] += 1
-        elif count in [[3, 2], [3, 3]]:
-            count[0] += 2
-        elif count == [1, 4]:
-            count[0] += 5
-        elif count == [9, 4]:
-            count[0] += 4
-
-        count[0] += 1
-
-        if count[0] >= 17:
-            count[1] += 1
-            count[0] = 1
-        return count
-
-    def countTemp(self, count, title):
-        if title == 'WT':
-            orient = [1, 0, 6]
-        else:
-            orient = [0, 1, 2]
-
-        if count[orient[1]] >= orient[2]:
-            count[orient[0]] += 1
-            count[orient[1]] = 1
-        else:
-            count[orient[1]] += 1
-        return count
-
-    def updateCount(self, count, title):
-        if title in ['Water']:
-            count = self.countWater(count)
-        elif title in ['Klystrons', 'General Control',
-            'Modulator Status', 'Gate Valve']:
-            count = self.countKGM(count, title)
-        elif title in ['Tube', 'WT']:
-            self.countTemp(count, title)
-        else:
-            count = self.countVA(count)
-
-        return count
-
-    def setTitleLabel(self, item, axis, layout):
-        pos = [0, 0]
-        for pos[axis] in range(1, len(item)+1):
-            lbl_header = QLabel(item[pos[axis]-1])
-            lbl_header.setAlignment(Qt.AlignCenter)
-            layout.addWidget(lbl_header, pos[0], pos[1], 1, 1)
-        return layout
-
-    def setParamLabel(self, layout):
-        pos = 0
-        for times in range(0, 2):
-            for item in TEMP_TYPE:
-                lbl_param = QLabel(item)
-                lbl_param.setStyleSheet('color:#353535;')
-                layout.addWidget(lbl_param, 1, pos, 1, 1)
-                pos += 1
-        return layout
-
-    def setTempHeader(self, itemList, layout):
-        widget = QWidget()
-        hd_glay = QGridLayout()
-        pos = 0
-        for item in itemList:
-            lbl_header = QLabel(item)
-            lbl_header.setAlignment(Qt.AlignCenter)
-            hd_glay.addWidget(lbl_header, 0, pos, 1, 3)
-            pos+=3
-
-        hd_glay = self.setParamLabel(hd_glay)
-        widget.setLayout(hd_glay)
-        layout.addWidget(widget, 0, 1, 1, 6)
-        return layout
-
-    def getSingleTitle(self, title, layout):
-        if title in LBL_MPS:
-            lbl_item = LBL_MPS.get(title)
-            layout = self.setTitleLabel(lbl_item[0], 0, layout)
-            if title not in ['WT', 'Tube']:
-                layout = self.setTitleLabel(lbl_item[1], 1, layout)
-            else:
-                layout = self.setTempHeader(lbl_item[1], layout)
-        return layout
-
     def gateValve(self, pv_name, config):
+        ''' Display the gate valves widget '''
         device_name = self.getDeviceName(pv_name)
         if pv_name.find('U') != -1:
 
@@ -329,7 +218,187 @@ class MPSController(SiriusMainWindow):
         else:
             return self.statusBox(pv_name, config)
 
+    def tempMonBox(self, pv_name):
+        ''' Display the status features for the temperature monitor'''
+        lay = QHBoxLayout()
+        for temp_name in TEMP_TYPE:
+            ctrl_widget = self.getTempWidget(
+                pv_name, TEMP_TYPE.get(temp_name))
+            lay.addWidget(ctrl_widget, 1)
+            ctrl_widget.setAlignment(Qt.AlignCenter)
+        return lay
+
+    def getListSize(self, pv_data):
+        ''' Get size of the biggest array in a list'''
+        for item in pv_data:
+            if type(item) == list:
+                return len(item)
+        return 1
+
+    def genStringPV(self, prefix, suffix, num):
+        ''' Generate MPS PV name '''
+        if prefix in ['HeartBeat', 'LAWarn', 'LAAlarm', 'Gun', 'WaterState']:
+            pv_name = str(prefix)+str(suffix)
+        elif prefix == 'PPState':
+            pv_name = str(prefix)+str(num+6)+str(suffix)
+        else:
+            pv_name = str(prefix)+str(num)+str(suffix)
+
+        return pv_name
+
+    def genStringTempPV(self, name, cP, cT):
+        ''' Generate Temperature PV name '''
+        return name + str(cP) + 'Temp' + str(cT)
+
+    def getLoopQuant(self, loopQuant, index):
+        ''' Get list sizes'''
+
+        if type(loopQuant) == list:
+            return loopQuant[index]+1
+        else:
+            return loopQuant+1
+
+    def getPvConfig(self, config, index):
+        ''' Get if the PV is controllable or just status'''
+
+        if type(config) == list:
+            return config[index]
+        else:
+            return config
+
+    def getPVComplement(self, string, index):
+        ''' Get PV string complement '''
+        if type(string) == list:
+            return string[index]
+        else:
+            return string
+
+    def countWater(self, count):
+        ''' Counter for water data positioning '''
+        if count[1] >= 4:
+            count[0] += 1
+            count[1] = 1
+        else:
+            count[1] += 1
+        return count
+
+    def countKGM(self, count, title):
+        ''' Counter for klystrons, general control and modulator data positioning '''
+        val = 2
+        if title == 'Modulator Status':
+            val = 1
+        if count[0] >= val:
+            count[1] += 1
+            count[0] = 1
+        else:
+            count[0] += 1
+        return count
+
+    def countVA(self, count):
+        ''' Counter for vaccum data positioning '''
+        if count in [
+            [7, 2], [9, 2], [12, 2], [14, 2],
+            [7, 3], [9, 3], [12, 3], [14, 3],
+            [7, 4], [14, 4]]:
+            count[0] += 1
+        elif count in [[3, 2], [3, 3]]:
+            count[0] += 2
+        elif count == [1, 4]:
+            count[0] += 5
+        elif count == [9, 4]:
+            count[0] += 4
+
+        count[0] += 1
+
+        if count[0] >= 17:
+            count[1] += 1
+            count[0] = 1
+        return count
+
+    def countTemp(self, count, title):
+        ''' Counter for temperature data positioning '''
+        if title == 'WT':
+            orient = [1, 0, 6]
+        else:
+            orient = [0, 1, 2]
+
+        if count[orient[1]] >= orient[2]:
+            count[orient[0]] += 1
+            count[orient[1]] = 1
+        else:
+            count[orient[1]] += 1
+        return count
+
+    def updateCount(self, count, title):
+        ''' Update counter for data positioning '''
+        if title in ['Water']:
+            count = self.countWater(count)
+        elif title in ['Klystrons', 'General Control',
+            'Modulator Status', 'Gate Valve']:
+            count = self.countKGM(count, title)
+        elif title in ['Tube', 'WT']:
+            self.countTemp(count, title)
+        else:
+            count = self.countVA(count)
+
+        return count
+
+    def setTitleLabel(self, item, axis, layout):
+        ''' Display title labels '''
+        pos = [0, 0]
+        for pos[axis] in range(1, len(item)+1):
+            lbl_header = QLabel(item[pos[axis]-1])
+            lbl_header.setAlignment(Qt.AlignCenter)
+            layout.addWidget(lbl_header, pos[0], pos[1], 1, 1)
+        return layout
+
+    def setPvLbl(self, pv_name):
+        ''' Display the water title label'''
+        pvLbl = LBL_WATER.get(pv_name)
+        lb_titleWid = QLabel(pvLbl)
+        lb_titleWid.setAlignment(Qt.AlignCenter)
+        return lb_titleWid
+
+    def setParamLabel(self, layout):
+        ''' Display Temperature parameters labels '''
+        pos = 0
+        for times in range(0, 2):
+            for item in TEMP_TYPE:
+                lbl_param = QLabel(item)
+                lbl_param.setStyleSheet('color:#353535;')
+                layout.addWidget(lbl_param, 1, pos, 1, 1)
+                pos += 1
+        return layout
+
+    def setTempHeader(self, itemList, layout):
+        ''' Display Temperature header labels '''
+        widget = QWidget()
+        hd_glay = QGridLayout()
+        pos = 0
+        for item in itemList:
+            lbl_header = QLabel(item)
+            lbl_header.setAlignment(Qt.AlignCenter)
+            hd_glay.addWidget(lbl_header, 0, pos, 1, 3)
+            pos+=3
+
+        hd_glay = self.setParamLabel(hd_glay)
+        widget.setLayout(hd_glay)
+        layout.addWidget(widget, 0, 1, 1, 6)
+        return layout
+
+    def getSingleTitle(self, title, layout):
+        ''' Display a single Title '''
+        if title in LBL_MPS:
+            lbl_item = LBL_MPS.get(title)
+            layout = self.setTitleLabel(lbl_item[0], 0, layout)
+            if title not in ['WT', 'Tube']:
+                layout = self.setTitleLabel(lbl_item[1], 1, layout)
+            else:
+                layout = self.setTempHeader(lbl_item[1], layout)
+        return layout
+
     def displayGroup(self, pv_data, pv_size, title):
+        ''' Display one MPS group '''
         dg_glay = QGridLayout()
         group = QGroupBox()
         count = [1, 1]
@@ -366,10 +435,8 @@ class MPSController(SiriusMainWindow):
 
         return group
 
-    def genStringTempPV(self, name, cP, cT):
-        return name + str(cP) + 'Temp' + str(cT)
-
     def displayTempGroup(self, pv_data, title):
+        ''' Display one temperature group'''
         dtg_glay = QGridLayout()
         group = QGroupBox()
         count = [1, 1]
@@ -381,16 +448,18 @@ class MPSController(SiriusMainWindow):
                     pv_data[1], counterPrefix, counterName)
 
                 dtg_glay.addLayout(
-                    self.monitorTempBox(pv_name),
+                    self.tempMonBox(pv_name),
                     count[0], count[1], 1, 1)
                 count = self.updateCount(count, title)
 
         group.setTitle(title)
         group.setLayout(dtg_glay)
+        group.setMinimumWidth(400)
 
         return group
 
     def displayMpsGroups(self):
+        ''' Display all the MPS groups'''
         dm_glay = QGridLayout()
         for group in PV_MPS:
             pv_data = PV_MPS.get(group)
@@ -403,6 +472,7 @@ class MPSController(SiriusMainWindow):
         return dm_glay
 
     def displayTempGroups(self):
+        ''' Display all the temperatures groups'''
         dt_glay = QGridLayout()
         for group in PV_TEMP_MPS:
             pv_data = PV_TEMP_MPS.get(group)
@@ -410,10 +480,10 @@ class MPSController(SiriusMainWindow):
             dt_glay.addWidget(
                 self.displayTempGroup(pv_data, group),
                 group_pos[0], group_pos[1], group_pos[2], group_pos[3])
-
         return dt_glay
 
     def displayControlMPS(self, tab_type):
+        ''' Display the desired tab widget '''
         wid = QWidget(self)
         if_glay = QGridLayout()
 
@@ -423,15 +493,16 @@ class MPSController(SiriusMainWindow):
             if_glay.addLayout(self.displayTempGroups(), 0, 0, 1, 1)
 
         if_glay.setAlignment(Qt.AlignTop)
-
         wid.setLayout(if_glay)
+
         return wid
 
     def _setupUi(self):
-
-        tab = QTabWidget()
+        ''' Display the tabs of the graphic interface '''
+        tab = TabWidget()
         tab.setObjectName("LITab")
         tab.addTab(self.displayControlMPS(0), "MPS Controller")
         tab.addTab(self.displayControlMPS(1), "Temperature")
+        tab.currentChanged.connect(self.adjustSize)
 
         self.setCentralWidget(tab)
