@@ -146,7 +146,7 @@ GROUP_POS = {
     'Water': [4, 0, 4, 4],
     'VA': [0, 4, 8, 1],
     'WT': [0, 0, 1, 1],
-    'T': [0, 1, 1, 1]
+    'Tube': [0, 1, 1, 1]
 }
 
 CTRL_TYPE = {
@@ -186,6 +186,16 @@ LBL_MPS = {
     [
         ['1', '2'],
         ['Control', 'Opened', '', 'Closed', '']
+    ],
+    'Tube':
+    [
+        ['A1', 'A2', 'A3', 'A4'],
+        ['1', '2']
+    ],
+    'WT':
+    [
+        ['Body', 'Waveguide', 'Oil-tank', 'Focus-coil', 'In', 'Test-load'],
+        ['K1', 'K2']
     ]
 }
 
@@ -204,7 +214,7 @@ PV_TEMP_MPS = {
     'WT': [
         [2, 6], 'K'
     ],
-    'T': [
+    'Tube': [
         [4, 2], 'A'
     ]
 }
@@ -212,5 +222,5 @@ PV_TEMP_MPS = {
 TEMP_TYPE = {
     'Value': '',
     'Set': 'Thrd',
-    'Setpoint Readback': 'Thrd_BR'
+    'Setpoint\nReadback': 'Thrd_RB'
 }

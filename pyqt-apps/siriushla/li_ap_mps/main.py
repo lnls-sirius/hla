@@ -3,12 +3,12 @@ from qtpy.QtCore import Qt, QEvent
 from qtpy.QtWidgets import QWidget, QGroupBox, QHBoxLayout, \
     QVBoxLayout, QGridLayout, QLabel, QTabWidget
 import qtawesome as qta
-
+from pydm.widgets import PyDMLabel
 from .util import PV_MPS, MPS_PREFIX, CTRL_TYPE, GROUP_POS, \
     LBL_MPS, LBL_WATER, PV_TEMP_MPS, TEMP_TYPE
 from ..util import get_appropriate_color
 from ..widgets import SiriusMainWindow, PyDMLedMultiChannel,\
-     PyDMLed, PyDMLabel, SiriusPushButton
+     PyDMLed, SiriusPushButton
 from .bypass_btn import BypassBtn
 # from .hover_btn import HoverBtn
 
@@ -62,12 +62,11 @@ class MPSController(SiriusMainWindow):
             }
         ''')
         vlay.addWidget(widget)
-        #vlay.addWidget(HoverBtn(self, self.controlHiddenBox, self.controlWidget))
         return vlay
 
     def controlBox(self, pv_name, lay, config):
         lay = self.clearLayout(lay)
-        pos = [1, 0]
+        pos = [0, 0]
         self.clicked = True
         for control_name in CTRL_TYPE:
             lb_title = QLabel(control_name)
@@ -79,6 +78,15 @@ class MPSController(SiriusMainWindow):
             if pos[1] >= 2:
                 pos[1] = 0
                 pos[0] += 2
+        return lay
+
+    def monitorTempBox(self, pv_name):
+        lay = QHBoxLayout()
+        for temp_name in TEMP_TYPE:
+            ctrl_widget = self.getTempWidget(
+                pv_name, TEMP_TYPE.get(temp_name))
+            lay.addWidget(ctrl_widget, 1)
+            ctrl_widget.setAlignment(Qt.AlignCenter)
         return lay
 
     def setPvLbl(self, pv_name):
@@ -143,10 +151,11 @@ class MPSController(SiriusMainWindow):
                 releaseValue=0)
         return widget
 
-    def getTempWidget(self, pv_name, ctrl_type, config):
+    def getTempWidget(self, pv_name, temp_type):
         device_name = self.getDeviceName(pv_name)
         widget = PyDMLabel(
-            device_name
+            parent=self,
+            init_channel= device_name + pv_name + temp_type
         )
         return widget
 
@@ -249,7 +258,7 @@ class MPSController(SiriusMainWindow):
         elif title in ['Klystrons', 'General Control',
             'Modulator Status', 'Gate Valve']:
             count = self.countKGM(count, title)
-        elif title in ['T', 'WT']:
+        elif title in ['Tube', 'WT']:
             self.countTemp(count, title)
         else:
             count = self.countVA(count)
@@ -264,11 +273,39 @@ class MPSController(SiriusMainWindow):
             layout.addWidget(lbl_header, pos[0], pos[1], 1, 1)
         return layout
 
+    def setParamLabel(self, layout):
+        pos = 0
+        for times in range(0, 2):
+            for item in TEMP_TYPE:
+                lbl_param = QLabel(item)
+                lbl_param.setStyleSheet('color:#353535;')
+                layout.addWidget(lbl_param, 1, pos, 1, 1)
+                pos += 1
+        return layout
+
+    def setTempHeader(self, itemList, layout):
+        widget = QWidget()
+        hd_glay = QGridLayout()
+        pos = 0
+        for item in itemList:
+            lbl_header = QLabel(item)
+            lbl_header.setAlignment(Qt.AlignCenter)
+            hd_glay.addWidget(lbl_header, 0, pos, 1, 3)
+            pos+=3
+
+        hd_glay = self.setParamLabel(hd_glay)
+        widget.setLayout(hd_glay)
+        layout.addWidget(widget, 0, 1, 1, 6)
+        return layout
+
     def getSingleTitle(self, title, layout):
         if title in LBL_MPS:
             lbl_item = LBL_MPS.get(title)
             layout = self.setTitleLabel(lbl_item[0], 0, layout)
-            layout = self.setTitleLabel(lbl_item[1], 1, layout)
+            if title not in ['WT', 'Tube']:
+                layout = self.setTitleLabel(lbl_item[1], 1, layout)
+            else:
+                layout = self.setTempHeader(lbl_item[1], layout)
         return layout
 
     def gateValve(self, pv_name, config):
@@ -342,8 +379,9 @@ class MPSController(SiriusMainWindow):
             for counterName in range(1, pv_data[0][1]+1):
                 pv_name = self.genStringTempPV(
                     pv_data[1], counterPrefix, counterName)
-                dtg_glay.addWidget(
-                    QLabel(pv_name),
+
+                dtg_glay.addLayout(
+                    self.monitorTempBox(pv_name),
                     count[0], count[1], 1, 1)
                 count = self.updateCount(count, title)
 
@@ -393,7 +431,7 @@ class MPSController(SiriusMainWindow):
 
         tab = QTabWidget()
         tab.setObjectName("LITab")
-        tab.addTab(self.displayControlMPS(1), "MPS Controller")
+        tab.addTab(self.displayControlMPS(0), "MPS Controller")
         tab.addTab(self.displayControlMPS(1), "Temperature")
 
         self.setCentralWidget(tab)
