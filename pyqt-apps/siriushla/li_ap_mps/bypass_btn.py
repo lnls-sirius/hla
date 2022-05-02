@@ -17,6 +17,7 @@ class BypassBtn(SiriusPushButton):
             pal.setColor(QPalette.Button, QColor('blue'))
             pal.setColor(QPalette.ButtonText, QColor('white'))
             self.setPalette(pal)
+            self.setChecked(True)
             self.pressValue = 0
         else:
             #Active
@@ -25,6 +26,7 @@ class BypassBtn(SiriusPushButton):
             pal.setColor(QPalette.Button, QColor('#efefef'))
             pal.setColor(QPalette.ButtonText, QColor('black'))
             self.setPalette(pal)
+            self.setChecked(False)
             self.pressValue = 1
 
         return super().value_changed(new_value)
