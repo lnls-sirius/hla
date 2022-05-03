@@ -12,42 +12,6 @@ from ..widgets import SiriusMainWindow, PyDMLedMultiChannel,\
      PyDMLed, SiriusPushButton
 from .bypass_btn import BypassBtn
 
-# class TabWidget(QTabWidget):
-#     '''Tab Class to handle window size change'''
-
-#     def __init__(self, *args, **kwargs):
-#         super().__init__(*args, **kwargs)
-#         self.currentChanged.connect(self.updateGeometry)
-
-#     def minimumSizeHint(self):
-#         return self.sizeHint()
-
-#     def sizeHint(self):
-#         '''Change window size'''
-
-#         lc = QSize(0, 0)
-#         rc = QSize(0, 0)
-#         opt = QStyleOptionTabWidgetFrame()
-#         self.initStyleOption(opt)
-#         if self.cornerWidget(Qt.TopLeftCorner):
-#             lc = self.cornerWidget(Qt.TopLeftCorner).sizeHint()
-#         if self.cornerWidget(Qt.TopRightCorner):
-#             rc = self.cornerWidget(Qt.TopRightCorner).sizeHint()
-#         layout = self.findChild(QStackedLayout)
-#         layoutHint = layout.currentWidget().sizeHint()
-#         tabHint = self.tabBar().sizeHint()
-#         if self.tabPosition() in (self.North, self.South):
-#             size = QSize(
-#                 max(layoutHint.width(), tabHint.width() + rc.width() + lc.width()),
-#                 layoutHint.height() + max(rc.height(), max(lc.height(), tabHint.height()))
-#             )
-#         else:
-#             size = QSize(
-#                 layoutHint.width() + max(rc.width(), max(lc.width(), tabHint.width())),
-#                 max(layoutHint.height(), tabHint.height() + rc.height() + lc.height())
-#             )
-#         return size
-
 class MPSControl(QWidget):
     ''' Monitor Protection System Controller Interface '''
 
@@ -70,10 +34,6 @@ class MPSControl(QWidget):
     def eventFilter(self, ob, event):
         ''' Hover listener with hover function'''
         obj = self.pv_obj.get(ob)
-        # if event.type() == QEvent.Enter:
-        #     self.controlBox(obj.get("name"), obj.get("layout"))
-        #     self.stop = True
-        #     return True
         if event.type() == QEvent.Leave:
             if self.ledClicked:
                 self.controlHiddenBox(obj.get("name"), obj.get("layout"), obj.get("config"))
@@ -128,7 +88,7 @@ class MPSControl(QWidget):
         device_name = self.getDeviceName(pv_name)
         widget = PyDMLabel(
             parent=self,
-            init_channel= device_name + pv_name + temp_type
+            init_channel = device_name + pv_name + temp_type
         )
         widget.showUnits = True
         return widget
@@ -156,7 +116,7 @@ class MPSControl(QWidget):
 
         return cb_glay
 
-    def controlBox(self, pv_name, lay, config, hasTitle):
+    def controlBox(self, pv_name, lay, config, has_title):
         ''' Display the control features - Open control Box'''
 
         if lay != '':
@@ -166,7 +126,7 @@ class MPSControl(QWidget):
         pos = [0, 0]
         self.ledClicked = True
         for control_name in CTRL_TYPE:
-            if hasTitle:
+            if has_title:
                 lb_title = QLabel(control_name)
                 lb_title.setAlignment(Qt.AlignCenter)
                 lay.addWidget(lb_title, pos[0], pos[1], 1, 1)
@@ -211,9 +171,9 @@ class MPSControl(QWidget):
     def gateValve(self, pv_name, config):
         ''' Display the gate valves widget '''
         device_name = self.getDeviceName(pv_name)
-        if pv_name.find('U') != -1:
+        if 'U' in pv_name:
 
-            if pv_name.find('Open') != -1:
+            if 'Open' in pv_name:
                 name = 'Open'
             else:
                 name = 'Close'
@@ -330,6 +290,7 @@ class MPSControl(QWidget):
         pos = [0, 0]
         for pos[axis] in range(1, len(item)+1):
             lbl_header = QLabel('<h4>'+item[pos[axis]-1]+'</h4>')
+            lbl_header.setStyleSheet('''text-align:center;''')
             lbl_header.setAlignment(Qt.AlignCenter)
             lbl_header.setMaximumWidth(70)
             layout.addWidget(lbl_header, pos[0], pos[1], 1, 1)

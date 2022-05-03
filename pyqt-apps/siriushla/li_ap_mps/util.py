@@ -211,14 +211,14 @@ GROUP_POS = {
 }
 
 GROUP_POSALL = {
-    'VA': [0, 0, 7, 1],
-    'Klystrons': [6, 1, 1, 2],
-    'Gate Valve': [4, 1, 2, 2],
-    'General': [2, 1, 2, 1],
-    'Modulator': [0, 1, 2, 1],
-    'Compressed Air': [2, 2, 1, 1],
-    'Water Conductivity': [3, 2, 1, 1],
-    'Egun': [0, 2, 2, 1],
+    'Modulator': [1, 1, 1, 1],
+    'Egun': [0, 1, 1, 1],
+    'VA': [0, 2, 7, 1],
+    'Klystrons': [3, 0, 2, 2],
+    'Gate Valve': [5, 0, 2, 2],
+    'General': [0, 0, 2, 1],
+    'Water Conductivity': [2, 0, 1, 1],
+    'Compressed Air': [2, 1, 1, 1],
     'Water': [7, 0, 2, 3],
     'Water Temperature': [3, 0, 1, 1],
     'Temperature': [1, 0, 1, 1]
