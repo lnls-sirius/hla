@@ -16,11 +16,12 @@ from siriuspy.timesys import csdev as _cstime
 from ..util import connect_window, get_appropriate_color
 from ..widgets import PyDMLed, SiriusLedAlert, PyDMStateButton, \
     SiriusLabel, SiriusSpinbox, PyDMLedMultiChannel, \
-    SiriusEnumComboBox as _MyComboBox, SiriusLedState
+    SiriusEnumComboBox, SiriusLedState
 from ..widgets.windows import create_window_from_widget
 
 from .base import BaseList, BaseWidget
-from .low_level_devices import LLTriggerList, OTPList, OUTList, AFCOUTList
+from .low_level_devices import LLTriggerList, \
+    EVREVEOTPList, EVREVEOUTList, AFCOUTList
 
 
 class HLTriggerSimple(BaseWidget):
@@ -156,14 +157,14 @@ class HLTriggerDetailed(BaseWidget):
         ll_list_layout.addWidget(gb, 1, 1)
 
         init_channel = self.get_pvname('Polarity-Sel')
-        sp = _MyComboBox(self, init_channel=init_channel)
+        sp = SiriusEnumComboBox(self, init_channel=init_channel)
         init_channel = self.get_pvname('Polarity-Sts')
         rb = PyDMLabel(self, init_channel=init_channel)
         gb = self._create_small_group('Polarity', self.ll_list_wid, (sp, rb))
         ll_list_layout.addWidget(gb, 2, 0)
 
         init_channel = self.get_pvname('Src-Sel')
-        sp = _MyComboBox(self, init_channel=init_channel)
+        sp = SiriusEnumComboBox(self, init_channel=init_channel)
         init_channel = self.get_pvname('Src-Sts')
         rb = PyDMLabel(self, init_channel=init_channel)
         gb = self._create_small_group('Source', self.ll_list_wid, (sp, rb))
@@ -224,7 +225,7 @@ class HLTriggerDetailed(BaseWidget):
 
         if HLTimeSearch.has_delay_type(self.device.device_name):
             init_channel = self.get_pvname('RFDelayType-Sel')
-            sp = _MyComboBox(self, init_channel=init_channel)
+            sp = SiriusEnumComboBox(self, init_channel=init_channel)
             init_channel = self.get_pvname('RFDelayType-Sts')
             rb = PyDMLabel(self, init_channel=init_channel)
             gb = self._create_small_group(
@@ -341,7 +342,7 @@ class LLTriggers(QWidget):
             elif 'OUT' in name.propty_name:
                 out_list.add(name)
         if amc_list:
-            props = set(AFCOUTList()._ALL_PROPS)
+            props = set(AFCOUTList._ALL_PROPS)
             props.discard('widthraw')
             props.discard('delayraw')
             props.add('device')
@@ -351,7 +352,7 @@ class LLTriggers(QWidget):
             amc_wid.setObjectName('amc_wid')
             vl.addWidget(amc_wid)
         if otp_list:
-            props = set(OTPList()._ALL_PROPS)
+            props = set(EVREVEOTPList._ALL_PROPS)
             props.discard('width')
             props.discard('delay')
             props.add('device')
@@ -361,8 +362,8 @@ class LLTriggers(QWidget):
             otp_wid.setObjectName('otp_wid')
             vl.addWidget(otp_wid)
         if out_list:
-            props = set(OTPList()._ALL_PROPS)
-            props.update(OUTList()._ALL_PROPS)
+            props = set(EVREVEOTPList._ALL_PROPS)
+            props.update(EVREVEOUTList._ALL_PROPS)
             props.discard('width')
             props.discard('delay')
             props.discard('fine_delay')
@@ -455,7 +456,7 @@ class HLTriggerList(BaseList):
             rb = PyDMLed(self, init_channel=init_channel)
         elif prop == 'source':
             init_channel = device.substitute(propty='Src-Sel')
-            sp = _MyComboBox(self, init_channel=init_channel)
+            sp = SiriusEnumComboBox(self, init_channel=init_channel)
             init_channel = device.substitute(propty='Src-Sts')
             rb = PyDMLabel(self, init_channel=init_channel)
         elif prop == 'pulses':
@@ -472,12 +473,12 @@ class HLTriggerList(BaseList):
             rb = PyDMLabel(self, init_channel=init_channel)
         elif prop == 'polarity':
             init_channel = device.substitute(propty='Polarity-Sel')
-            sp = _MyComboBox(self, init_channel=init_channel)
+            sp = SiriusEnumComboBox(self, init_channel=init_channel)
             init_channel = device.substitute(propty='Polarity-Sts')
             rb = PyDMLabel(self, init_channel=init_channel)
         elif prop == 'delay_type':
             init_channel = device.substitute(propty='RFDelayType-Sel')
-            sp = _MyComboBox(self, init_channel=init_channel)
+            sp = SiriusEnumComboBox(self, init_channel=init_channel)
             init_channel = device.substitute(propty='RFDelayType-Sts')
             rb = PyDMLabel(self, init_channel=init_channel)
         elif prop == 'delay':

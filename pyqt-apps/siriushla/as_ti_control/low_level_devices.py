@@ -9,16 +9,15 @@ from qtpy.QtWidgets import QLabel, QPushButton, QGroupBox, QVBoxLayout, \
 import qtawesome as qta
 from pydm.widgets import PyDMLabel, PyDMPushButton, PyDMLineEdit, \
     PyDMWaveformPlot
-from siriushla.widgets.signal_channel import SiriusConnectionSignal
 
 from siriuspy.search import LLTimeSearch, HLTimeSearch
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.timesys import csdev as _cstime
 
 from ..widgets import PyDMLed, PyDMStateButton, SiriusLedState, \
-    SiriusEnumComboBox as _MyComboBox, SiriusLedAlert, SiriusLabel, \
-    SiriusSpinbox, SiriusDialog
-from ..widgets.windows import create_window_from_widget
+    SiriusEnumComboBox, SiriusLedAlert, SiriusLabel, \
+    SiriusSpinbox, SiriusConnectionSignal
+from ..widgets.windows import create_window_from_widget, SiriusDialog
 from ..util import connect_window, get_appropriate_color
 
 from .base import BaseList, BaseWidget
@@ -207,7 +206,7 @@ class EVG(BaseWidget):
                         'Pulse Rate [Hz]', self.configs_wid, (sp, rb)))
 
         pvname = self.get_pvname(propty='ACSrc-Sel')
-        sp = _MyComboBox(self, init_channel=pvname)
+        sp = SiriusEnumComboBox(self, init_channel=pvname)
         pvname = self.get_pvname(propty='ACSrc-Sts')
         rb = PyDMLabel(self, init_channel=pvname)
         layrow.addWidget(self._create_prop_widget(
@@ -666,12 +665,12 @@ class EventList(BaseList):
             sp = QLabel(device.propty, self, alignment=Qt.AlignCenter)
         elif prop == 'mode':
             pvname = device.substitute(propty=device.propty+'Mode-Sel')
-            sp = _MyComboBox(self, init_channel=pvname)
+            sp = SiriusEnumComboBox(self, init_channel=pvname)
             pvname = device.substitute(propty=device.propty+'Mode-Sts')
             rb = PyDMLabel(self, init_channel=pvname)
         elif prop == 'delay_type':
             pvname = device.substitute(propty=device.propty+'DelayType-Sel')
-            sp = _MyComboBox(self, init_channel=pvname)
+            sp = SiriusEnumComboBox(self, init_channel=pvname)
             pvname = device.substitute(propty=device.propty+'DelayType-Sts')
             rb = PyDMLabel(self, init_channel=pvname)
         elif prop == 'delay':
@@ -995,7 +994,7 @@ class _EVR_EVE(BaseWidget):
             'delayraw', 'timestamp'}
         obj_names = ['OTP{0:02d}'.format(i) for i in range(24)]
         obj_names = [self.device.substitute(propty=o) for o in obj_names]
-        self.otps_wid = OTPList(
+        self.otps_wid = EVREVEOTPList(
             name='Internal Trigger (OTP)', parent=self, prefix=self.prefix,
             props=props, obj_names=obj_names)
         self.otps_wid.setObjectName('otps_wid')
@@ -1006,7 +1005,7 @@ class _EVR_EVE(BaseWidget):
             'fine_delayraw'}
         obj_names = ['OUT{0:d}'.format(i) for i in range(8)]
         obj_names = [self.device.substitute(propty=o) for o in obj_names]
-        self.outs_wid = OUTList(
+        self.outs_wid = EVREVEOUTList(
             name='OUT', parent=self, prefix=self.prefix,
             props=props, obj_names=obj_names)
         self.outs_wid.setObjectName('outs_wid')
@@ -1093,7 +1092,8 @@ class _EVR_EVE(BaseWidget):
             gb = self._create_small_group(
                 'Down Connection', self.status_wid, wids, align_ver=False)
         else:
-            sp = _MyComboBox(self, init_channel=self.get_pvname('RFOut-Sel'))
+            sp = SiriusEnumComboBox(
+                self, init_channel=self.get_pvname('RFOut-Sel'))
             rb = PyDMLabel(self, init_channel=self.get_pvname('RFOut-Sts'))
             gb = self._create_small_group('RF Output', self.status_wid, (sp, rb))
         status_layout.addWidget(gb, 0, 6)
@@ -1234,7 +1234,7 @@ class LLTriggerList(BaseList):
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'polarity':
             pvname = intlb.substitute(propty=intlb.propty+'Polarity-Sel')
-            sp = _MyComboBox(self, init_channel=pvname)
+            sp = SiriusEnumComboBox(self, init_channel=pvname)
             pvname = intlb.substitute(propty=intlb.propty+'Polarity-Sts')
             rb = PyDMLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
@@ -1266,7 +1266,7 @@ class LLTriggerList(BaseList):
             rb = PyDMLed(self, init_channel=pvname)
         elif prop == 'source':
             pvname = outlb.substitute(propty=outlb.propty+'Src-Sel')
-            sp = _MyComboBox(self, init_channel=pvname)
+            sp = SiriusEnumComboBox(self, init_channel=pvname)
             pvname = outlb.substitute(propty=outlb.propty+'Src-Sts')
             rb = PyDMLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
@@ -1293,7 +1293,7 @@ class LLTriggerList(BaseList):
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'rf_delay_type':
             pvname = outlb.substitute(propty=outlb.propty+'RFDelayType-Sel')
-            sp = _MyComboBox(self, init_channel=pvname)
+            sp = SiriusEnumComboBox(self, init_channel=pvname)
             pvname = outlb.substitute(propty=outlb.propty+'RFDelayType-Sts')
             rb = PyDMLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
@@ -1313,7 +1313,7 @@ class LLTriggerList(BaseList):
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'dir':
             pvname = intlb.substitute(propty=intlb.propty+'Dir-Sel')
-            sp = _MyComboBox(self, init_channel=pvname)
+            sp = SiriusEnumComboBox(self, init_channel=pvname)
             pvname = intlb.substitute(propty=intlb.propty+'Dir-Sts')
             rb = PyDMLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
@@ -1334,7 +1334,7 @@ class LLTriggerList(BaseList):
         return sp, rb
 
 
-class OTPList(LLTriggerList):
+class EVREVEOTPList(LLTriggerList):
     """Template for control of Timing devices Internal Triggers."""
 
     _ALL_PROPS = (
@@ -1342,7 +1342,7 @@ class OTPList(LLTriggerList):
         'delayraw', 'delay', 'evtcnt', 'evtcntrst', 'timestamp', 'hl_trigger')
 
 
-class OUTList(LLTriggerList):
+class EVREVEOUTList(LLTriggerList):
     """Template for control of Timing Devices Output Channels."""
 
     _ALL_PROPS = (
