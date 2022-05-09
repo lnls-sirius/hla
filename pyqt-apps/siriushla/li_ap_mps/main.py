@@ -23,7 +23,7 @@ class MPSControl(QWidget):
         self.prefix = prefix + ('-' if prefix else '')
         self.pv_obj = {}
         self.led_clicked = False
-        self.all_clicked = True
+        self.all_clicked = False
         self.stop = False
 
         color = get_appropriate_color('LI')
@@ -61,7 +61,6 @@ class MPSControl(QWidget):
             widget.set_channels2values(ch2vals)
             if pv_name == 'HeartBeat':
                 widget.setOffColor(PyDMLed.Yellow)
-            widget.setMaximumWidth(50)
         elif ctrl_type == '_B':
             widget = BypassBtn(
                 self,
@@ -120,12 +119,12 @@ class MPSControl(QWidget):
 
         widget = self.getCtrlWidget(pv_name, '_L', config)
         widget.clicked.connect(
-            lambda: self.controlBox(pv_name, cb_glay, config, True))
+            lambda: self.controlBox(pv_name, cb_glay, config, True, 0))
         cb_glay.addWidget(widget, 1, 0, 1, 1)
 
         return cb_glay
 
-    def controlBox(self, pv_name, lay, config, has_title):
+    def controlBox(self, pv_name, lay, config, has_title, wid_type):
         ''' Display the control features - Open control Box'''
 
         if lay != '':
@@ -135,7 +134,7 @@ class MPSControl(QWidget):
         pos = [0, 0]
         self.led_clicked = True
         for control_name in CTRL_TYPE:
-            if has_title:
+            if self.getParamAll(has_title, pv_name, wid_type):
                 lb_title = QLabel(control_name)
                 lb_title.setAlignment(Qt.AlignCenter)
                 lay.addWidget(lb_title, pos[0], pos[1], 1, 1)
@@ -152,10 +151,10 @@ class MPSControl(QWidget):
         '''Default - closed'''
 
         widget = QWidget()
-        vlay = QVBoxLayout()
+        hlay = QHBoxLayout()
 
         if pv_name.find('WFS') != -1:
-            vlay.addWidget(
+            hlay.addWidget(
                 self.setPvLbl(pv_name))
 
         control_layout = self.controlHiddenBox(pv_name, lay, config)
@@ -174,8 +173,8 @@ class MPSControl(QWidget):
                 border-radius: 5px;
             }
         ''')
-        vlay.addWidget(widget)
-        return vlay
+        hlay.addWidget(widget)
+        return hlay
 
     def gateValve(self, pv_name, config):
         ''' Display the gate valves widget '''
@@ -302,8 +301,9 @@ class MPSControl(QWidget):
         for pos[axis] in range(1, len(item)+1):
             lbl_header = QLabel('<h4>'+item[pos[axis]-1]+'</h4>')
             lbl_header.setAlignment(Qt.AlignCenter)
-            lbl_header.setMaximumWidth(70)
             layout.addWidget(lbl_header, pos[0], pos[1], 1, 1)
+            if axis == 0:
+                lbl_header.setMaximumWidth(50)
         return layout
 
     def setPvLbl(self, pv_name):
@@ -351,6 +351,15 @@ class MPSControl(QWidget):
                 layout = self.setTempHeader(lbl_item[1], layout)
         return layout
 
+    def getParamAll(self, has_title, pv_name, wid_type):
+        if wid_type == 0 or pv_name in ['PPState7',
+                'Mod1State', 'GPS1', 'WaterState', 'K1PsState',
+                'IP1Warn', 'CCG1Warn', 'CCG1Alarm', 'PRG1Warn',
+                'WFS1', 'WFS2', 'WFS3', 'WFS4', 'WFS5', 'WFS6']:
+            return has_title
+        else:
+            return False
+
     def dispayHiddenControls(self, pv_name, control, config):
         if control:
             return self.controlWidget(
@@ -362,14 +371,14 @@ class MPSControl(QWidget):
     def dispayAllControls(self, pv_name, control, config):
         if control:
             widget = QWidget()
-            vlay = QVBoxLayout()
+            hlay = QHBoxLayout()
             if pv_name.find('WFS') != -1:
-                vlay.addWidget(
+                hlay.addWidget(
                     self.setPvLbl(pv_name))
-            control_layout = self.controlBox(pv_name, '', config, False)
+            control_layout = self.controlBox(pv_name, '', config, control, 1)
             widget.setLayout(control_layout)
-            vlay.addWidget(widget)
-            return vlay
+            hlay.addWidget(widget)
+            return hlay
         else:
             return self.statusBox(pv_name, config)
 
@@ -504,7 +513,7 @@ class MPSControl(QWidget):
         lbl_title.setAlignment(Qt.AlignCenter)
         hd_hlay.addWidget(lbl_title, 10)
 
-        btn_all = QPushButton("Show All")
+        btn_all = QPushButton("Hide/Show All")
         btn_all.clicked.connect(
             lambda: self.changeWid(self.mps_glay))
         hd_hlay.addWidget(btn_all, 1)

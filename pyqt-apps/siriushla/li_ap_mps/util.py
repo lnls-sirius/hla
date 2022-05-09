@@ -200,12 +200,12 @@ GROUP_POS = {
     'General': [0, 0, 2, 1],
     'Egun': [0, 1, 1, 1],
     'Modulator': [1, 1, 1, 1],
-    'VA': [0, 3, 11, 1],
+    'VA': [0, 2, 7, 1],
     'Compressed Air': [2, 1, 1, 1],
     'Water Conductivity': [2, 0, 1, 1],
     'Klystrons': [3, 0, 2, 2],
     'Gate Valve': [5, 0, 2, 2],
-    'Water': [7, 0, 4, 2],
+    'Water': [7, 0, 1, 3],
     'Water Temperature': [3, 0, 1, 1],
     'Temperature': [1, 0, 1, 1]
 }
@@ -280,9 +280,9 @@ LBL_MPS = {
 }
 
 LBL_WATER = {
-    'WFS1': 'Sub Buncher', 'WFS2': 'Buncher A0',
-    'WFS3': 'Tube A1', 'WFS4': 'Tube A2',
-    'WFS5': 'Tube A3', 'WFS6': 'Tube A4',
+    'WFS1': 'Sub<br>Buncher', 'WFS2': 'Buncher<br>A0',
+    'WFS3': 'Tube<br>A1', 'WFS4': 'Tube<br>A2',
+    'WFS5': 'Tube<br>A3', 'WFS6': 'Tube<br>A4',
     'WFS7': '1', 'WFS8': '2',
     'WFS9':  '3,4', 'WFS10':  '5',
     'WFS11':  '6,7', 'WFS12':  'A0',
