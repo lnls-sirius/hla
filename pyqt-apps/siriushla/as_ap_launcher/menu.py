@@ -326,6 +326,10 @@ def get_object(ismenubar=True, parent=None):
             self.connect_newprocess(mpsmon, 'sirius-hla-li-ap-mpsmon.py')
             mps.addAction(mpsmon)
 
+            mpscon = QAction('Control', mps)
+            self.connect_newprocess(mpscon, 'sirius-hla-li-ap-mpscon.py')
+            mps.addAction(mpscon)
+
             egun = LEVEL2A('Egun', menu)
             egun.setIcon(qta.icon('mdi.spotlight-beam'))
             self.connect_newprocess(egun, 'sirius-hla-li-eg-control.py')
