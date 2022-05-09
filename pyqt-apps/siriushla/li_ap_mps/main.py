@@ -4,7 +4,7 @@ from qtpy.QtWidgets import QWidget, QGroupBox, QHBoxLayout, \
     QVBoxLayout, QGridLayout, QLabel, QTabWidget, \
     QPushButton
 import qtawesome as qta
-from pydm.widgets import PyDMLabel, PyDMLineEdit
+from pydm.widgets import PyDMLabel, PyDMSpinbox
 from .util import PV_MPS, MPS_PREFIX, CTRL_TYPE, GROUP_POS, \
     GROUP_POSALL, LBL_MPS, LBL_WATER, PV_TEMP_MPS, TEMP_TYPE
 from ..util import get_appropriate_color
@@ -89,10 +89,11 @@ class MPSControl(QWidget):
         ''' Display the temperature label widget '''
         device_name = self.getDeviceName(pv_name)
         if temp_type == 'Thrd':
-            widget = PyDMLineEdit(
+            widget = PyDMSpinbox(
                 parent=self,
                 init_channel=device_name + pv_name + temp_type
             )
+            widget.showStepExponent = False
         else:
             widget = PyDMLabel(
                 parent=self,
