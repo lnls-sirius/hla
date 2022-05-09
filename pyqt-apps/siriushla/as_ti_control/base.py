@@ -23,8 +23,9 @@ class BaseWidget(QWidget):
     def channels(self):
         return self._chans
 
-    def get_pvname(self, propty):
-        return self.device.substitute(prefix=self.prefix, propty=propty)
+    def get_pvname(self, propty, field=''):
+        return self.device.substitute(
+            prefix=self.prefix, propty=propty, field=field)
 
     def _create_formlayout_groupbox(self, title, props):
         grpbx = CustomGroupBox(title, self)
