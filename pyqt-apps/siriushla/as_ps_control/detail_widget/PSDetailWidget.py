@@ -1662,7 +1662,7 @@ class CustomLabel(PyDMLabel):
             try:
                 self.setText(self.enum_strings[int(new_value)])
             except IndexError:
-                self.setText("**INVALID**")
+                self.setText(f'Index Overflow [{new_value}]')
             return
         elif self.enum_strings is not None and \
                 isinstance(new_value, _np.ndarray):
