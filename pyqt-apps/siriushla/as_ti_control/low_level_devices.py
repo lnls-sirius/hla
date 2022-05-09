@@ -104,14 +104,8 @@ class EVG(BaseWidget):
         main_menu.setNativeMenuBar(False)
         menu = main_menu.addMenu('&Downlinks')
 
-        downs = LLTimeSearch.get_device_names({'dev': 'Fout'})
-        link = list(LLTimeSearch.In2OutMap[downs[0].dev])[0]
-        downs2 = list()
-        for down in downs:
-            out = LLTimeSearch.get_evg_channel(down.substitute(propty=link))
-            downs2.append((out.propty, down.device_name))
-
-        for out, down in sorted(downs2):
+        fouts = LLTimeSearch.get_evg2fout_mapping()
+        for out, down in sorted(fouts.items()):
             action = menu.addAction(out + ' --> ' + down)
             icon = qta.icon('mdi.timer', color=get_appropriate_color('AS'))
             Win = create_window_from_widget(FOUT, title=down, icon=icon)

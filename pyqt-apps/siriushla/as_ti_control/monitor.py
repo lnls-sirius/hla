@@ -158,19 +158,15 @@ class MonitorLL(QGroupBox):
         g1 = LLButton(evg, '', self.prefix, self)
         self.g1 = g1
 
-        downs = LLTimeSearch.get_device_names({'dev': 'Fout'})
-        link = list(LLTimeSearch.In2OutMap[downs[0].dev])[0]
-        downs2 = list()
-        for down in downs:
-            out = LLTimeSearch.get_evg_channel(down.substitute(propty=link))
-            downs2.append((out.propty, down.device_name))
+        fouts = LLTimeSearch.get_evg2fout_mapping()
+        fouts = [(out, down) for out, down in fouts.items()]
 
-        g2 = self.setupdown(downs2)
+        g2 = self.setupdown(fouts)
         self.g2 = g2
 
         g3 = list()
         trgsrcs = LLTimeSearch.get_fout2trigsrc_mapping()
-        for _, down in downs2:
+        for _, down in fouts:
             downs = trgsrcs[down.device_name]
             downs = sorted([(ou, dwn) for ou, dwn in downs.items()])
             g3.append(self.setupdown(downs))
