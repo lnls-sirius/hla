@@ -347,7 +347,7 @@ class LLTriggers(QWidget):
             props.add('device')
             amc_wid = LLTriggerList(
                 name='AMCs', parent=self, props=props,
-                prefix=prefix, obj_names=amc_list)
+                prefix=prefix, obj_names=sorted(amc_list))
             amc_wid.setObjectName('amc_wid')
             vl.addWidget(amc_wid)
         if otp_list:
@@ -357,7 +357,7 @@ class LLTriggers(QWidget):
             props.add('device')
             otp_wid = LLTriggerList(
                 name='OTPs', parent=self, props=props,
-                prefix=prefix, obj_names=otp_list)
+                prefix=prefix, obj_names=sorted(otp_list))
             otp_wid.setObjectName('otp_wid')
             vl.addWidget(otp_wid)
         if out_list:
@@ -370,7 +370,7 @@ class LLTriggers(QWidget):
             props.add('device')
             out_wid = LLTriggerList(
                 name='OUTs', parent=self, props=props,
-                prefix=prefix, obj_names=out_list)
+                prefix=prefix, obj_names=sorted(out_list))
             out_wid.setObjectName('out_wid')
             vl.addWidget(out_wid)
 
