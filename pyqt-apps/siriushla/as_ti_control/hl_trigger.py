@@ -355,7 +355,6 @@ class LLTriggers(QWidget):
                 name='AMCs', parent=self, props=props,
                 prefix=prefix, obj_names=amc_list)
             amc_wid.setObjectName('amc_wid')
-            amc_wid.setStyleSheet("""#amc_wid{min-width:90em;}""")
             vl.addWidget(amc_wid)
         if otp_list:
             props = set(OTPList()._ALL_PROPS)
@@ -366,7 +365,6 @@ class LLTriggers(QWidget):
                 name='OTPs', parent=self, props=props,
                 prefix=prefix, obj_names=otp_list)
             otp_wid.setObjectName('otp_wid')
-            otp_wid.setStyleSheet("""#otp_wid{min-width:56em;}""")
             vl.addWidget(otp_wid)
         if out_list:
             props = set(OTPList()._ALL_PROPS)
@@ -380,7 +378,6 @@ class LLTriggers(QWidget):
                 name='OUTs', parent=self, props=props,
                 prefix=prefix, obj_names=out_list)
             out_wid.setObjectName('out_wid')
-            out_wid.setStyleSheet("""#out_wid{min-width:110em;}""")
             vl.addWidget(out_wid)
 
 

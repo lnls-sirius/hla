@@ -90,8 +90,6 @@ class EVG(BaseWidget):
         self.events_wid = EventList(
             name='Events', parent=self, prefix=self.prefix,
             obj_names=obj_names)
-        self.events_wid.setObjectName('events_wid')
-        self.events_wid.setStyleSheet("events_wid{min-width:40em;}")
         splitter.addWidget(self.events_wid)
 
         obj_names = [self.device.substitute(propty=dev) for dev in
@@ -472,7 +470,7 @@ class BucketListGraph(BaseWidget):
 
 class BucketList(BaseWidget):
 
-    def __init__(self, parent=None, device='', prefix='', min_size=38,
+    def __init__(self, parent=None, device='', prefix='', min_size=25,
                  show_graph=False):
         if not device:
             device = LLTimeSearch.get_evg_name()
@@ -489,14 +487,18 @@ class BucketList(BaseWidget):
         self.layout().setContentsMargins(0, 0, 0, 0)
         lay = QGridLayout(wid)
 
-        tm = 'min-width:{0:d}em; max-width:{0:d}em; max-height:1.15em;'
+        tm = 'min-width:{0:d}em; max-height:1.15em;'
         pvname = self.get_pvname("BucketList-SP")
         sp = BucketListLineEdit(wid, init_channel=pvname)
         self.bucket_ledit = sp
         sp.setStyleSheet(tm.format(self._min_size-1))
-        sp.setSizePolicy(QSzPol.Maximum, QSzPol.Maximum)
+        sp.setSizePolicy(QSzPol.MinimumExpanding, QSzPol.Maximum)
         lab = QLabel('SP : ', wid)
+        lab.setSizePolicy(QSzPol.Maximum, QSzPol.Maximum)
         pushbtn = QPushButton(wid)
+        pushbtn.setObjectName('but')
+        pushbtn.setStyleSheet(
+            '#but{min-width:25px; max-width:25px; icon-size:20px;}')
         pushbtn.setIcon(qta.icon('mdi.basket-fill'))
         self._wid_fill = self._setup_bucket_list_fill()
         pushbtn.clicked.connect(self._wid_fill.open)
@@ -507,16 +509,18 @@ class BucketList(BaseWidget):
         pvname = self.get_pvname("BucketList-RB")
         rb = BucketListLabel(wid, init_channel=pvname)
         rb.setStyleSheet(tm.format(self._min_size))
-        rb.setSizePolicy(QSzPol.Maximum, QSzPol.Maximum)
+        rb.setSizePolicy(QSzPol.MinimumExpanding, QSzPol.Maximum)
         lab = QLabel('RB : ', wid)
+        lab.setSizePolicy(QSzPol.Maximum, QSzPol.Maximum)
         lay_rb = QHBoxLayout()
         lay_rb.addWidget(lab)
         lay_rb.addWidget(rb)
         pvname = self.get_pvname("BucketList-Mon")
         mn = BucketListLabel(wid, init_channel=pvname)
         mn.setStyleSheet(tm.format(self._min_size))
-        mn.setSizePolicy(QSzPol.Maximum, QSzPol.Maximum)
+        mn.setSizePolicy(QSzPol.MinimumExpanding, QSzPol.Maximum)
         lab = QLabel('Mon: ', wid)
+        lab.setSizePolicy(QSzPol.Maximum, QSzPol.Maximum)
         lay_mn = QHBoxLayout()
         lay_mn.addWidget(lab)
         lay_mn.addWidget(mn)
@@ -557,7 +561,6 @@ class BucketList(BaseWidget):
         sp.showStepExponent = False
         pvname = self.get_pvname("RepeatBucketList-RB")
         rb = PyDMLabel(wid, init_channel=pvname)
-        rb.setStyleSheet("min-width:2.5em; max-height:1.15em;")
         rb.setStyleSheet("min-width:4em; max-height:1.15em;")
         lab = QLabel('Repeat', wid, alignment=Qt.AlignCenter)
         hlay = QHBoxLayout()
@@ -639,7 +642,7 @@ class EventList(BaseList):
     """Template for control of Events."""
 
     _MIN_WIDs = {
-        'ext_trig': 3, 'mode': 6.6, 'delay_type': 4.2, 'delay': 5.2,
+        'ext_trig': 4, 'mode': 6.6, 'delay_type': 4.2, 'delay': 5.2,
         'delayraw': 5.2, 'description': 9.7, 'code': 3.2, 'name': 4.8,
         }
     _LABELS = {
@@ -713,7 +716,7 @@ class ClockList(BaseList):
     _MIN_WIDs = {
         'name': 3.8,
         'frequency': 4.8,
-        'mux_div': 4.8,
+        'mux_div': 6,
         'mux_enbl': 4.8,
         }
     _LABELS = {
@@ -918,7 +921,6 @@ class AFC(BaseWidget):
             name='', parent=self, props=props,
             prefix=self.prefix, obj_names=obj_names)
         self.fmcs_wid.setObjectName('fmcs_wid')
-        self.fmcs_wid.setStyleSheet("""#fmcs_wid{min-width:60em;}""")
         tab.addTab(self.fmcs_wid, 'FMC Outputs')
 
         obj_names = sorted([out for out in set_ if out.startswith('CRT')])
@@ -927,7 +929,6 @@ class AFC(BaseWidget):
             name='', parent=self, props=props,
             prefix=self.prefix, obj_names=obj_names)
         self.crts_wid.setObjectName('crts_wid')
-        self.crts_wid.setStyleSheet("""#crts_wid{min-width:60em;}""")
         tab.addTab(self.crts_wid, 'CRT Outputs')
 
     def _setupmenus(self):
@@ -1165,8 +1166,8 @@ class LLTriggerList(BaseList):
     """Template for control of High Level Triggers."""
 
     _MIN_WIDs = {
-        'name': 3.2,
-        'device': 12,
+        'name': 4.5,
+        'device': 14,
         'state': 5.8,
         'event': 4.8,
         'widthraw': 4.8,
@@ -1184,7 +1185,7 @@ class LLTriggerList(BaseList):
         'fine_delay': 6.5,
         'rf_delay_type': 6.5,
         'hl_trigger': 10,
-        'dir': 4,
+        'dir': 4.5,
         'evtcnt': 5,
         'evtcntrst': 4,
         }
@@ -1401,5 +1402,3 @@ class AFCOUTList(LLTriggerList):
         'name', 'state', 'event', 'source', 'widthraw', 'width', 'polarity',
         'pulses', 'delayraw', 'delay', 'dir', 'evtcnt', 'evtcntrst',
         'timestamp', 'hl_trigger')
-    _MIN_WIDs = LLTriggerList._MIN_WIDs
-    _MIN_WIDs['name'] = 3.7
