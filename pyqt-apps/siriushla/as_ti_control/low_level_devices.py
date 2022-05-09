@@ -724,6 +724,9 @@ class ClockList(BaseList):
             pvname = device.substitute(propty=device.propty+'Freq-SP')
             sp = SiriusSpinbox(self, init_channel=pvname)
             sp.showStepExponent = False
+            sp.limitsFromChannel = False
+            sp.setMinimum(1)
+            sp.setMaximum(2**31 - 1)
             pvname = device.substitute(propty=device.propty+'Freq-RB')
             rb = PyDMLabel(self, init_channel=pvname)
         elif prop == 'name':
@@ -1209,6 +1212,9 @@ class LLTriggerList(BaseList):
             pvname = intlb.substitute(propty=intlb.propty+'Evt-SP')
             sp = SiriusSpinbox(self, init_channel=pvname)
             sp.showStepExponent = False
+            sp.limitsFromChannel = False
+            sp.setMinimum(0)
+            sp.setMaximum(255)
             pvname = intlb.substitute(propty=intlb.propty+'Evt-RB')
             rb = PyDMLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
@@ -1216,6 +1222,9 @@ class LLTriggerList(BaseList):
             pvname = intlb.substitute(propty=intlb.propty+'WidthRaw-SP')
             sp = SiriusSpinbox(self, init_channel=pvname)
             sp.showStepExponent = False
+            sp.limitsFromChannel = False
+            sp.setMinimum(1)
+            sp.setMaximum(2**31 - 1)
             pvname = intlb.substitute(propty=intlb.propty+'WidthRaw-RB')
             rb = PyDMLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
@@ -1236,6 +1245,9 @@ class LLTriggerList(BaseList):
             pvname = intlb.substitute(propty=intlb.propty+'NrPulses-SP')
             sp = SiriusSpinbox(self, init_channel=pvname)
             sp.showStepExponent = False
+            sp.limitsFromChannel = False
+            sp.setMinimum(1)
+            sp.setMaximum(2**31 - 1)
             pvname = intlb.substitute(propty=intlb.propty+'NrPulses-RB')
             rb = PyDMLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
@@ -1243,6 +1255,9 @@ class LLTriggerList(BaseList):
             pvname = intlb.substitute(propty=intlb.propty+'DelayRaw-SP')
             sp = SiriusSpinbox(self, init_channel=pvname)
             sp.showStepExponent = False
+            sp.limitsFromChannel = False
+            sp.setMinimum(0)
+            sp.setMaximum(2**31 - 1)
             pvname = intlb.substitute(propty=intlb.propty+'DelayRaw-RB')
             rb = PyDMLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
