@@ -105,7 +105,7 @@ class HLTriggerDetailed(BaseWidget):
 
         init_channel = self.get_pvname('InInjTable-Mon')
         rb = SiriusLedState(self, init_channel=init_channel)
-        gbinjtab = self._create_small_GB('In Injection Table?', self, (rb, ))
+        gbinjtab = self._create_small_group('In Injection Table?', self, (rb,))
         self.my_layout.addWidget(gbinjtab, 2, 0)
 
         self.ll_list_wid = QGroupBox('Configs', self)
@@ -144,7 +144,7 @@ class HLTriggerDetailed(BaseWidget):
         sp = PyDMStateButton(self, init_channel=init_channel)
         init_channel = self.get_pvname('LowLvlLock-Sts')
         rb = PyDMLed(self, init_channel=init_channel)
-        gb = self._create_small_GB(
+        gb = self._create_small_group(
             'Lock Low Level', self.ll_list_wid, (sp, rb))
         ll_list_layout.addWidget(gb, 1, 0)
 
@@ -152,21 +152,21 @@ class HLTriggerDetailed(BaseWidget):
         sp = PyDMStateButton(self, init_channel=init_channel)
         init_channel = self.get_pvname('State-Sts')
         rb = PyDMLed(self, init_channel=init_channel)
-        gb = self._create_small_GB('Enabled', self.ll_list_wid, (sp, rb))
+        gb = self._create_small_group('Enabled', self.ll_list_wid, (sp, rb))
         ll_list_layout.addWidget(gb, 1, 1)
 
         init_channel = self.get_pvname('Polarity-Sel')
         sp = _MyComboBox(self, init_channel=init_channel)
         init_channel = self.get_pvname('Polarity-Sts')
         rb = PyDMLabel(self, init_channel=init_channel)
-        gb = self._create_small_GB('Polarity', self.ll_list_wid, (sp, rb))
+        gb = self._create_small_group('Polarity', self.ll_list_wid, (sp, rb))
         ll_list_layout.addWidget(gb, 2, 0)
 
         init_channel = self.get_pvname('Src-Sel')
         sp = _MyComboBox(self, init_channel=init_channel)
         init_channel = self.get_pvname('Src-Sts')
         rb = PyDMLabel(self, init_channel=init_channel)
-        gb = self._create_small_GB('Source', self.ll_list_wid, (sp, rb))
+        gb = self._create_small_group('Source', self.ll_list_wid, (sp, rb))
         ll_list_layout.addWidget(gb, 2, 1)
 
         init_channel = self.get_pvname('NrPulses-SP')
@@ -174,7 +174,7 @@ class HLTriggerDetailed(BaseWidget):
         sp.showStepExponent = False
         init_channel = self.get_pvname('NrPulses-RB')
         rb = PyDMLabel(self, init_channel=init_channel)
-        gb = self._create_small_GB('Nr Pulses', self.ll_list_wid, (sp, rb))
+        gb = self._create_small_group('Nr Pulses', self.ll_list_wid, (sp, rb))
         ll_list_layout.addWidget(gb, 3, 0)
 
         init_channel = self.get_pvname('Duration-SP')
@@ -182,7 +182,8 @@ class HLTriggerDetailed(BaseWidget):
         sp.showStepExponent = False
         init_channel = self.get_pvname('Duration-RB')
         rb = PyDMLabel(self, init_channel=init_channel)
-        gb = self._create_small_GB('Duration [us]', self.ll_list_wid, (sp, rb))
+        gb = self._create_small_group(
+            'Duration [us]', self.ll_list_wid, (sp, rb))
         ll_list_layout.addWidget(gb, 3, 1)
 
         init_channel = self.get_pvname('Delay-SP')
@@ -190,22 +191,22 @@ class HLTriggerDetailed(BaseWidget):
         sp.showStepExponent = False
         init_channel = self.get_pvname('Delay-RB')
         rb = PyDMLabel(self, init_channel=init_channel)
-        gbdel = self._create_small_GB('[us]', self.ll_list_wid, (sp, rb))
+        gbdel = self._create_small_group('[us]', self.ll_list_wid, (sp, rb))
 
         init_channel = self.get_pvname('DelayRaw-SP')
         sp = SiriusSpinbox(self, init_channel=init_channel)
         sp.showStepExponent = False
         init_channel = self.get_pvname('DelayRaw-RB')
         rb = PyDMLabel(self, init_channel=init_channel)
-        gbdelr = self._create_small_GB('Raw', self.ll_list_wid, (sp, rb))
+        gbdelr = self._create_small_group('Raw', self.ll_list_wid, (sp, rb))
 
         init_channel = self.get_pvname('TotalDelay-Mon')
         rb = PyDMLabel(self, init_channel=init_channel)
-        gbtdel = self._create_small_GB('[us]', self.ll_list_wid, (rb, ))
+        gbtdel = self._create_small_group('[us]', self.ll_list_wid, (rb, ))
 
         init_channel = self.get_pvname('TotalDelayRaw-Mon')
         rb = PyDMLabel(self, init_channel=init_channel)
-        gbtdelr = self._create_small_GB('Raw', self.ll_list_wid, (rb, ))
+        gbtdelr = self._create_small_group('Raw', self.ll_list_wid, (rb, ))
 
         widd = QWidget(self.ll_list_wid)
         widd.setLayout(QHBoxLayout())
@@ -226,7 +227,7 @@ class HLTriggerDetailed(BaseWidget):
             sp = _MyComboBox(self, init_channel=init_channel)
             init_channel = self.get_pvname('RFDelayType-Sts')
             rb = PyDMLabel(self, init_channel=init_channel)
-            gb = self._create_small_GB(
+            gb = self._create_small_group(
                 'Delay Type', self.ll_list_wid, (sp, rb))
             ll_list_layout.addWidget(gb, 4, 0)
             ll_list_layout.addWidget(tabdel, 4, 1)
@@ -271,13 +272,6 @@ class HLTriggerDetailed(BaseWidget):
             lay.addWidget(lbl, idx, 2)
         sc_area.setSizeAdjustPolicy(QScrollArea.AdjustToContentsOnFirstShow)
         sc_area.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
-        return gb
-
-    def _create_small_GB(self, name, parent, wids):
-        gb = QGroupBox(name, parent)
-        lv = QVBoxLayout(gb)
-        for wid in wids:
-            lv.addWidget(wid)
         return gb
 
 

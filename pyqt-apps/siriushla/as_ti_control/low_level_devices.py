@@ -299,8 +299,7 @@ class EVG(BaseWidget):
         lb = QLabel("<b>Alive</b>")
         pvname = self.get_pvname(propty='Alive-Mon')
         rb = PyDMLabel(self, init_channel=pvname)
-        gb = self._create_small_GB('', self.status_wid, (lb, rb))
-        gb.setStyleSheet('border: 2px solid transparent;')
+        gb = self._create_small_group('', self.status_wid, (lb, rb))
         status_layout.addWidget(gb, 2, 0)
 
         lb = QLabel("<b>Network</b>")
@@ -309,8 +308,7 @@ class EVG(BaseWidget):
         on_c, off_c = rb.onColor, rb.offColor
         rb.offColor = on_c
         rb.onColor = off_c
-        gb = self._create_small_GB('', self.status_wid, (lb, rb))
-        gb.setStyleSheet('border: 2px solid transparent;')
+        gb = self._create_small_group('', self.status_wid, (lb, rb))
         status_layout.addWidget(gb, 2, 1)
 
         lb = QLabel("<b>RF Sts</b>")
@@ -319,8 +317,7 @@ class EVG(BaseWidget):
         on_c, off_c = rb.onColor, rb.offColor
         rb.offColor = on_c
         rb.onColor = off_c
-        gb = self._create_small_GB('', self.status_wid, (lb, rb))
-        gb.setStyleSheet('border: 2px solid transparent;')
+        gb = self._create_small_group('', self.status_wid, (lb, rb))
         status_layout.addWidget(gb, 2, 2)
 
         wids = list()
@@ -339,18 +336,11 @@ class EVG(BaseWidget):
             'Down Connection', self.status_wid, wids, align_ver=False)
         status_layout.addWidget(gb, 3, 0, 1, 3)
 
-    def _create_small_GB(self, name, parent, wids, align_ver=True):
-        gb = QGroupBox(name, parent)
-        lv = QVBoxLayout(gb) if align_ver else QHBoxLayout(gb)
-        for wid in wids:
-            lv.addWidget(wid)
-            lv.setAlignment(wid, Qt.AlignCenter)
-        return gb
 
     def _create_prop_widget(self, name, parent, wids, align_ver=True):
         pwid = QWidget(parent)
         vbl = QVBoxLayout(pwid)
-        lab = QLabel(name)
+        lab = QLabel('<b>' + name + '</b>')
         lab.setAlignment(Qt.AlignCenter)
         vbl.addWidget(lab)
         hbl = QHBoxLayout()
@@ -826,15 +816,13 @@ class FOUT(BaseWidget):
         sp = PyDMStateButton(self, init_channel=pvname)
         pvname = self.get_pvname(propty='DevEnbl-Sts')
         rb = PyDMLed(self, init_channel=pvname)
-        gb = self._create_small_GB(
-            'Enabled', self.status_wid, (sp, rb), align_ver=False
-            )
+        gb = self._create_small_group(
+            'Enabled', self.status_wid, (sp, rb), align_ver=False)
         status_layout.addWidget(gb, 0, 0)
 
         lb = QLabel("<b>Alive</b>")
         rb = PyDMLabel(self, init_channel=self.get_pvname(propty='Alive-Mon'))
-        gb = self._create_small_GB('', self.status_wid, (lb, rb))
-        gb.setStyleSheet('border: 2px solid transparent;')
+        gb = self._create_small_group('', self.status_wid, (lb, rb))
         status_layout.addWidget(gb, 0, 1)
 
         lb = QLabel("<b>Network</b>")
@@ -843,8 +831,7 @@ class FOUT(BaseWidget):
         on_c, off_c = rb.onColor, rb.offColor
         rb.offColor = on_c
         rb.onColor = off_c
-        gb = self._create_small_GB('', self.status_wid, (lb, rb))
-        gb.setStyleSheet('border: 2px solid transparent;')
+        gb = self._create_small_group('', self.status_wid, (lb, rb))
         status_layout.addWidget(gb, 0, 2)
 
         lb = QLabel("<b>UP Link</b>")
@@ -853,8 +840,7 @@ class FOUT(BaseWidget):
         on_c, off_c = rb.onColor, rb.offColor
         rb.offColor = on_c
         rb.onColor = off_c
-        gb = self._create_small_GB('', self.status_wid, (lb, rb))
-        gb.setStyleSheet('border: 2px solid transparent;')
+        gb = self._create_small_group('', self.status_wid, (lb, rb))
         status_layout.addWidget(gb, 0, 3)
 
         wids = list()
@@ -869,17 +855,10 @@ class FOUT(BaseWidget):
                 rb.onColor = rb.DarkGreen
                 rb.offColor = rb.LightGreen
             wids.append(rb)
-        gb = self._create_small_GB(
+        gb = self._create_small_group(
             'Down Connection', self.status_wid, wids, align_ver=False)
         status_layout.addWidget(gb, 1, 0, 1, 4)
 
-    def _create_small_GB(self, name, parent, wids, align_ver=True):
-        gb = QGroupBox(name, parent)
-        lv = QVBoxLayout(gb) if align_ver else QHBoxLayout(gb)
-        for wid in wids:
-            lv.addWidget(wid)
-            lv.setAlignment(wid, Qt.AlignCenter)
-        return gb
 
 
 # ###################### Event Receivers ######################
@@ -955,40 +934,30 @@ class AFC(BaseWidget):
         sp = PyDMStateButton(self, init_channel=pvname)
         pvname = self.get_pvname('DevEnbl-Sts')
         rb = PyDMLed(self, init_channel=pvname)
-        gb = self._create_small_GB(
+        gb = self._create_small_group(
             'Enabled', self.status_wid, (sp, rb), align_ver=False)
         status_layout.addWidget(gb, 0, 0)
 
         lb = QLabel("<b>Alive</b>")
         pvname = self.get_pvname('Alive-Mon')
         rb = PyDMLabel(self, init_channel=pvname)
-        gb = self._create_small_GB('', self.status_wid, (lb, rb))
-        gb.setStyleSheet('border: 2px solid transparent;')
+        gb = self._create_small_group('', self.status_wid, (lb, rb))
         status_layout.addWidget(gb, 0, 1)
 
         lb = QLabel("<b>Locked</b>")
         pvname = self.get_pvname('RefClkLocked-Mon')
         rb = SiriusLedAlert(self, init_channel=pvname)
         rb.offColor, rb.onColor = rb.onColor, rb.offColor
-        gb = self._create_small_GB('', self.status_wid, (lb, rb))
-        gb.setStyleSheet('border: 2px solid transparent;')
+        gb = self._create_small_group('', self.status_wid, (lb, rb))
         status_layout.addWidget(gb, 0, 2)
 
         lb = QLabel("<b>UP Link</b>")
         pvname = self.get_pvname('LinkStatus-Mon')
         rb = SiriusLedAlert(self, init_channel=pvname)
         rb.offColor, rb.onColor = rb.onColor, rb.offColor
-        gb = self._create_small_GB('', self.status_wid, (lb, rb))
-        gb.setStyleSheet('border: 2px solid transparent;')
+        gb = self._create_small_group('', self.status_wid, (lb, rb))
         status_layout.addWidget(gb, 0, 3)
 
-    def _create_small_GB(self, name, parent, wids, align_ver=True):
-        gb = QGroupBox(name, parent)
-        lv = QVBoxLayout(gb) if align_ver else QHBoxLayout(gb)
-        for wid in wids:
-            lv.addWidget(wid)
-            lv.setAlignment(Qt.AlignCenter)
-        return gb
 
 
 class _EVR_EVE(BaseWidget):
@@ -1030,7 +999,6 @@ class _EVR_EVE(BaseWidget):
             name='Internal Trigger (OTP)', parent=self, prefix=self.prefix,
             props=props, obj_names=obj_names)
         self.otps_wid.setObjectName('otps_wid')
-        self.otps_wid.setStyleSheet("""#otps_wid{min-width:60em;}""")
         splitter.addWidget(self.otps_wid)
 
         props = {
@@ -1042,7 +1010,6 @@ class _EVR_EVE(BaseWidget):
             name='OUT', parent=self, prefix=self.prefix,
             props=props, obj_names=obj_names)
         self.outs_wid.setObjectName('outs_wid')
-        self.outs_wid.setStyleSheet("""#outs_wid{min-width:44em;}""")
         splitter.addWidget(self.outs_wid)
 
     def setupmenus(self):
@@ -1069,23 +1036,21 @@ class _EVR_EVE(BaseWidget):
         sp = PyDMStateButton(self, init_channel=pvname)
         pvname = self.get_pvname('DevEnbl-Sts')
         rb = PyDMLed(self, init_channel=pvname)
-        gb = self._create_small_GB(
+        gb = self._create_small_group(
             'Enabled', self.status_wid, (sp, rb), align_ver=False)
         status_layout.addWidget(gb, 0, 0)
 
         lb = QLabel("<b>Alive</b>")
         pvname = self.get_pvname('Alive-Mon')
         rb = PyDMLabel(self, init_channel=pvname)
-        gb = self._create_small_GB('', self.status_wid, (lb, rb))
-        gb.setStyleSheet('border: 2px solid transparent;')
+        gb = self._create_small_group('', self.status_wid, (lb, rb))
         status_layout.addWidget(gb, 0, 1)
 
         lb = QLabel("<b>Network</b>")
         pvname = self.get_pvname('Network-Mon')
         rb = SiriusLedAlert(self, init_channel=pvname)
         rb.offColor, rb.onColor = rb.onColor, rb.offColor
-        gb = self._create_small_GB('', self.status_wid, (lb, rb))
-        gb.setStyleSheet('border: 2px solid transparent;')
+        gb = self._create_small_group('', self.status_wid, (lb, rb))
         status_layout.addWidget(gb, 0, 2)
 
         lb = QLabel("<b>UP Link</b>")
@@ -1094,22 +1059,19 @@ class _EVR_EVE(BaseWidget):
         on_c, off_c = rb.onColor, rb.offColor
         rb.offColor = on_c
         rb.onColor = off_c
-        gb = self._create_small_GB('', self.status_wid, (lb, rb))
-        gb.setStyleSheet('border: 2px solid transparent;')
+        gb = self._create_small_group('', self.status_wid, (lb, rb))
         status_layout.addWidget(gb, 0, 3)
 
         lb = QLabel("<b>Interlock Status</b>")
         pvname = self.get_pvname('IntlkStatus-Mon')
         rb = SiriusLedAlert(self, init_channel=pvname)
-        gb = self._create_small_GB('', self.status_wid, (lb, rb))
-        gb.setStyleSheet('border: 2px solid transparent;')
+        gb = self._create_small_group('', self.status_wid, (lb, rb))
         status_layout.addWidget(gb, 0, 4)
 
         lb = QLabel("<b>Interlock Enabled</b>")
         pvname = self.get_pvname('IntlkEnbl-Mon')
         rb = SiriusLedState(self, init_channel=pvname)
-        gb = self._create_small_GB('', self.status_wid, (lb, rb))
-        gb.setStyleSheet('border: 2px solid transparent;')
+        gb = self._create_small_group('', self.status_wid, (lb, rb))
         status_layout.addWidget(gb, 0, 5)
 
         if self.device_type == 'EVR':
@@ -1128,21 +1090,14 @@ class _EVR_EVE(BaseWidget):
                     rb.onColor = rb.DarkGreen
                     rb.offColor = rb.LightGreen
                 wids.append(rb)
-            gb = self._create_small_GB(
+            gb = self._create_small_group(
                 'Down Connection', self.status_wid, wids, align_ver=False)
         else:
             sp = _MyComboBox(self, init_channel=self.get_pvname('RFOut-Sel'))
             rb = PyDMLabel(self, init_channel=self.get_pvname('RFOut-Sts'))
-            gb = self._create_small_GB('RF Output', self.status_wid, (sp, rb))
+            gb = self._create_small_group('RF Output', self.status_wid, (sp, rb))
         status_layout.addWidget(gb, 0, 6)
 
-    def _create_small_GB(self, name, parent, wids, align_ver=True):
-        gb = QGroupBox(name, parent)
-        lv = QVBoxLayout(gb) if align_ver else QHBoxLayout(gb)
-        for wid in wids:
-            lv.addWidget(wid)
-            lv.setAlignment(wid, Qt.AlignCenter)
-        return gb
 
 
 class EVR(_EVR_EVE):

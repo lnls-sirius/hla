@@ -2,7 +2,7 @@
 import re
 
 from qtpy.QtCore import Qt
-from qtpy.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QFormLayout, \
+from qtpy.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, \
     QScrollArea, QGroupBox, QLabel, QSizePolicy as QSzPol, QFrame, QMenu, \
     QLineEdit, QPushButton
 import qtawesome as qta
@@ -26,19 +26,6 @@ class BaseWidget(QWidget):
     def get_pvname(self, propty, field=''):
         return self.device.substitute(
             prefix=self.prefix, propty=propty, field=field)
-
-    def _create_formlayout_groupbox(self, title, props):
-        grpbx = CustomGroupBox(title, self)
-        fbl = QFormLayout(grpbx)
-        grpbx.layoutf = fbl
-        fbl.setLabelAlignment(Qt.AlignVCenter)
-        for pv1, txt in props:
-            hbl = self._create_propty_layout(pv1)
-            lab = QLabel(txt)
-            lab.setObjectName(pv1.split('-')[0])
-            lab.setStyleSheet("""min-width:7em;""")
-            fbl.addRow(lab, hbl)
-        return grpbx
 
     def _create_propty_layout(self, propty, width=6.0):
         """Return layout that handles a property according to 'propty_type'."""
@@ -70,6 +57,19 @@ class BaseWidget(QWidget):
 
         layout.setAlignment(Qt.AlignVCenter)
         return layout
+
+    def _create_small_group(
+            self, name, parent, wids, align_ver=True, no_marg=False):
+        group = QGroupBox(name, parent) if name else QWidget(parent)
+        lay = QVBoxLayout(group) if align_ver else QHBoxLayout(group)
+        if align_ver:
+            lay.setAlignment(Qt.AlignCenter)
+        for wid in wids:
+            lay.addWidget(wid)
+            lay.setAlignment(wid, Qt.AlignCenter)
+        if no_marg:
+            lay.setContentsMargins(0, 0, 0, 0)
+        return group
 
 
 class CustomGroupBox(QGroupBox, PyDMPrimitiveWidget):
