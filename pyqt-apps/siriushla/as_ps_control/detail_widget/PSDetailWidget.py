@@ -1,7 +1,8 @@
-"""MagnetDetailWidget definition."""
+"""PS Detail Widget."""
+
 import re
-import numpy as _np
 from datetime import datetime as _datetime
+import numpy as _np
 
 from qtpy.QtCore import Qt, QRegExp
 from qtpy.QtGui import QRegExpValidator
