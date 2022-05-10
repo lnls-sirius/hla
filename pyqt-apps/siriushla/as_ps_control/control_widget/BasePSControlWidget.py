@@ -469,6 +469,14 @@ class BasePSControlWidget(QWidget):
         self.turn_off_act = QAction("Turn Off", self)
         self.turn_off_act.triggered.connect(lambda: self._set_pwrstate(False))
         self.turn_off_act.setEnabled(False)
+        self.ctrlloop_close_act = QAction("Close Control Loop", self)
+        self.ctrlloop_close_act.triggered.connect(
+            lambda: self._set_ctrlloop(True))
+        self.ctrlloop_close_act.setEnabled(False)
+        self.ctrlloop_open_act = QAction("Open Control Loop", self)
+        self.ctrlloop_open_act.triggered.connect(
+            lambda: self._set_ctrlloop(False))
+        self.ctrlloop_open_act.setEnabled(False)
         self.set_slowref_act = QAction("Set OpMode to SlowRef", self)
         self.set_slowref_act.triggered.connect(self._set_slowref)
         self.set_slowref_act.setEnabled(False)
@@ -495,6 +503,10 @@ class BasePSControlWidget(QWidget):
                 not self.turn_on_act.isEnabled():
             self.turn_on_act.setEnabled(True)
             self.turn_off_act.setEnabled(True)
+        if 'ctrlloop' in self.visible_props and \
+                not self.ctrlloop_close_act.isEnabled():
+            self.ctrlloop_close_act.setEnabled(True)
+            self.ctrlloop_open_act.setEnabled(True)
         if 'opmode' in self.visible_props and \
                 not self.set_slowref_act.isEnabled():
             self.set_slowref_act.setEnabled(True)
@@ -522,6 +534,19 @@ class BasePSControlWidget(QWidget):
                         widget.turn_on()
                     else:
                         widget.turn_off()
+                except TypeError:
+                    pass
+
+    @Slot(bool)
+    def _set_ctrlloop(self, state):
+        """Execute close/open control loop actions."""
+        for key, widget in self.ps_widgets_dict.items():
+            if key in self.filtered_widgets:
+                try:
+                    if state:
+                        widget.ctrlloop_close()
+                    else:
+                        widget.ctrlloop_open()
                 except TypeError:
                     pass
 
@@ -592,6 +617,8 @@ class BasePSControlWidget(QWidget):
         menu = QMenu("Actions", self)
         menu.addAction(self.turn_on_act)
         menu.addAction(self.turn_off_act)
+        menu.addAction(self.ctrlloop_close_act)
+        menu.addAction(self.ctrlloop_open_act)
         menu.addAction(self.set_current_sp_act)
         if not self._dev_list[0].dev in ('FCH', 'FCV'):
             menu.addAction(self.set_slowref_act)

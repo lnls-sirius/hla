@@ -683,6 +683,20 @@ class SummaryWidget(QWidget):
                 if self.state_bt.value:
                     self.state_bt.send_value()
 
+    def ctrlloop_close(self):
+        """Close control loop."""
+        if hasattr(self, 'ctrlloop_bt'):
+            if self.ctrlloop_bt.isEnabled():
+                if not self.ctrlloop_bt.value:
+                    self.ctrlloop_bt.send_value()
+
+    def ctrlloop_open(self):
+        """Open control loop."""
+        if hasattr(self, 'ctrlloop_bt'):
+            if self.ctrlloop_bt.isEnabled():
+                if self.ctrlloop_bt.value:
+                    self.ctrlloop_bt.send_value()
+
     def pulse_on(self):
         """Turn power supply on."""
         if hasattr(self, 'pulse_bt'):
