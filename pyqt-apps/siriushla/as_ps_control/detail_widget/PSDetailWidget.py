@@ -1523,7 +1523,7 @@ class FastCorrPSDetailWidget(PSDetailWidget):
         self.current_sp = SiriusSpinbox(
             self, self._prefixed_psname + ":Current-SP")
         self.current_sp.precisionFromPV = False
-        self.current_sp.precision = 8
+        self.current_sp.precision = 5
         self.current_sp.limitsFromChannel = False
         self.current_sp.setMinimum(-1.0)
         self.current_sp.setMaximum(+1.0)
@@ -1531,7 +1531,7 @@ class FastCorrPSDetailWidget(PSDetailWidget):
         self.current_rb = PyDMLabel(
             self, self._prefixed_psname+":Current-RB")
         self.current_rb.precisionFromPV = False
-        self.current_rb.precision = 8
+        self.current_rb.precision = 5
         self.current_rb.showUnits = True
 
         layout = QGridLayout()
