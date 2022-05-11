@@ -18,6 +18,7 @@ from ..SummaryWidgets import SummaryWidget, SummaryHeader, \
 
 
 class PSContainer(QWidget):
+    """PSContainer."""
 
     def __init__(self, widget, parent=None):
         super().__init__(parent)
@@ -332,7 +333,7 @@ class BasePSControlWidget(QWidget):
 
             # Loop power supply to create all the widgets of a groupbox
             group_widgets = list()
-            for n, psname in enumerate(pwrsupplies):
+            for psname in pwrsupplies:
                 ps_widget = SummaryWidget(
                     name=psname, visible_props=self.visible_props, parent=self)
                 pscontainer = PSContainer(ps_widget, self)
@@ -370,7 +371,7 @@ class BasePSControlWidget(QWidget):
         w_lay = QVBoxLayout(scr_area_wid)
         w_lay.setSpacing(0)
         w_lay.setContentsMargins(0, 0, 0, 0)
-        for line, widget in enumerate(widget_group):
+        for widget in widget_group:
             w_lay.addWidget(widget, alignment=Qt.AlignLeft)
         w_lay.addStretch()
 
@@ -634,8 +635,8 @@ class BasePSControlWidget(QWidget):
     def show_connections(self, checked):
         """."""
         _ = checked
-        c = ConnectionInspector(self)
-        c.show()
+        conn = ConnectionInspector(self)
+        conn.show()
 
     def get_summary_widgets(self):
         """Return Summary Widgets."""

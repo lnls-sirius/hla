@@ -63,8 +63,8 @@ class PSGraphMonWindow(SiriusMainWindow):
             self.dev_sel.matype_changed.connect(self.propty_sel.change_matype)
             self.dev_sel.psnames_changed.connect(self.graph.update_psnames)
 
-        cw = QWidget()
-        lay = QGridLayout(cw)
+        cwid = QWidget()
+        lay = QGridLayout(cwid)
         lay.setVerticalSpacing(9)
         lay.addWidget(self._label, 0, 0, 1, 2)
         if not self._filters:
@@ -77,7 +77,7 @@ class PSGraphMonWindow(SiriusMainWindow):
         lay.addWidget(self.graph, 3, 0, 1, 2)
         lay.setColumnStretch(0, 1)
         lay.setColumnStretch(1, 1)
-        self.setCentralWidget(cw)
+        self.setCentralWidget(cwid)
 
     def contextMenuEvent(self, event):
         point = event.pos()
@@ -90,8 +90,8 @@ class PSGraphMonWindow(SiriusMainWindow):
     def show_connections(self, checked):
         """."""
         _ = checked
-        c = ConnectionInspector(self)
-        c.show()
+        conn = ConnectionInspector(self)
+        conn.show()
 
 
 class PSGraphDevicesSelWidget(QWidget):
@@ -276,6 +276,7 @@ class PSGraphProptySelWidget(QWidget):
         lay.addLayout(hbox_prop_line, 0, 2)
 
     def change_matype(self, magfunc, pstype):
+        """Change MA type."""
         currindex = self.cb_prop_line.currentIndex()
         self._magfunc = magfunc
         self._pstype = pstype
@@ -521,10 +522,12 @@ class PSGraphMonWidget(QWidget):
 
     @Slot(str)
     def update_property_line(self, text):
+        """Update property line."""
         self._property_line = text
 
     @Slot(str)
     def update_property_symb(self, text):
+        """Update property symbol."""
         self._property_symb = text
 
     def _update_graph(self):
