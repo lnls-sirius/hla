@@ -1,9 +1,11 @@
 """PS Graph Monitor."""
+import time as _time
 from copy import deepcopy as _dcopy
+from concurrent.futures import ThreadPoolExecutor
 import numpy as _np
 from epics import PV as _PV
 
-from qtpy.QtCore import Qt, QSize, QTimer, Slot, Signal
+from qtpy.QtCore import Qt, QSize, Slot, Signal, QThread
 from qtpy.QtGui import QColor
 from qtpy.QtWidgets import QGridLayout, QWidget, QLabel, QHBoxLayout, \
     QComboBox, QToolTip, QSpacerItem, QSizePolicy as QSzPlcy, QInputDialog, \
@@ -217,6 +219,7 @@ class PSGraphProptySelWidget(QWidget):
         'CtrlLoop-Sel', 'CtrlLoop-Sts']
     PROP_LINE_FASTCORR = [
         'Current-SP', 'Current-RB',
+        'Current-Mon (from Array)',
         'DiagCurrentDiff-Mon']
 
     def __init__(self, parent):
@@ -468,6 +471,140 @@ class PSGraph(PyDMWaveformPlot):
 class PSGraphMonWidget(QWidget):
     """Power supply graph monitor widget."""
 
+    propLineChanged = Signal(str)
+    propSymbChanged = Signal(str)
+    psnamesChanged = Signal(list)
+
+    def __init__(self, parent=None, prefix=_vaca_prefix, psnames=''):
+        super().__init__(parent)
+
+        self._prefix = prefix
+        self._psnames = psnames
+        self._property_line = 'Current-Mon'
+        self._property_symb = 'DiagStatus-Mon'
+
+        self._pvhandler = _PVHandler(self._psnames, self._prefix, self)
+
+        self._setupUi()
+        self._create_commands()
+
+        self._thread = _UpdateGraphThread(
+            self._property_line, self._property_symb, self._pvhandler,
+            parent=self)
+        self.propLineChanged.connect(self._thread.set_property_line)
+        self.propSymbChanged.connect(self._thread.set_property_symb)
+        self._thread.dataChanged.connect(self._update_graph)
+        self._thread.start()
+
+    def _setupUi(self):
+        self.graph = PSGraph(self, self._psnames)
+        self.graph.setObjectName('graph')
+
+        lay = QGridLayout(self)
+        lay.addWidget(self.graph, 0, 0)
+
+        self.setStyleSheet('#graph{min-width:60em;min-height:12em;}')
+
+    def update_psnames(self, psnames):
+        """Update psnames."""
+        self.graph.psnames = _dcopy(psnames)
+        self._psnames = self.graph.psnames
+        self._pvhandler.set_psnames(self._psnames)
+
+    @Slot(str)
+    def update_property_line(self, text):
+        """Update property line."""
+        self._property_line = text
+        self.propLineChanged.emit(text)
+
+    @Slot(str)
+    def update_property_symb(self, text):
+        """Update property symbol."""
+        self._property_symb = text
+        self.propSymbChanged.emit(text)
+
+    def _update_graph(self, symbols, y_data):
+        if len(self._psnames) != len(symbols):
+            return
+        self.graph.symbols = symbols
+        self.graph.y_data = y_data
+
+    def _create_commands(self):
+        self.cmd_turnon_act = QAction("Turn On", self)
+        self.cmd_turnon_act.triggered.connect(
+            self._pvhandler.cmd_turn_on)
+
+        self.cmd_turnoff_act = QAction("Turn Off", self)
+        self.cmd_turnoff_act.triggered.connect(
+            self._pvhandler.cmd_turn_off)
+
+        self.cmd_ctrlloopclose_act = QAction("Close Control Loop", self)
+        self.cmd_ctrlloopclose_act.triggered.connect(
+            self._pvhandler.cmd_ctrlloop_close)
+
+        self.cmd_ctrlloopopen_act = QAction("Open Control Loop", self)
+        self.cmd_ctrlloopopen_act.triggered.connect(
+            self._pvhandler.cmd_ctrlloop_open)
+
+        self.cmd_setslowref_act = QAction("Set OpMode to SlowRef", self)
+        self.cmd_setslowref_act.triggered.connect(
+            self._pvhandler.cmd_set_opmode_slowref)
+
+        self.cmd_setcurrent_act = QAction("Set Current SP", self)
+        self.cmd_setcurrent_act.triggered.connect(
+            self._pvhandler.cmd_set_current)
+
+        self.cmd_reset_act = QAction("Reset Interlocks", self)
+        self.cmd_reset_act.triggered.connect(
+            self._pvhandler.cmd_reset)
+
+        self.cmd_acqtrigrep_act = QAction(
+            "Set ACQTriggerRep to repetitive", self)
+        self.cmd_acqtrigrep_act.triggered.connect(
+            self._pvhandler.cmd_acqtrigrep_repetitive)
+
+        self.cmd_acqtrigstart_act = QAction(
+            "Set ACQTriggerEvent to start", self)
+        self.cmd_acqtrigstart_act.triggered.connect(
+            self._pvhandler.cmd_acqtrigevt_start)
+
+        self.cmd_acqtrigstop_act = QAction(
+            "Set ACQTriggerEvent to stop", self)
+        self.cmd_acqtrigstop_act.triggered.connect(
+            self._pvhandler.cmd_acqtrigevt_stop)
+
+        self.cmd_acqtrigabort_act = QAction(
+            "Set ACQTriggerEvent to abort", self)
+        self.cmd_acqtrigabort_act.triggered.connect(
+            self._pvhandler.cmd_acqtrigevt_abort)
+
+    def contextMenuEvent(self, event, return_menu=False):
+        """Show a custom context menu."""
+        point = event.pos()
+        if not self.graph.geometry().contains(point) or return_menu:
+            menu = QMenu("Actions", self)
+            menu.addAction(self.cmd_turnon_act)
+            menu.addAction(self.cmd_turnoff_act)
+            menu.addAction(self.cmd_ctrlloopclose_act)
+            menu.addAction(self.cmd_ctrlloopopen_act)
+            if SiriusPVName(self._psnames[0]).dev in ('FCH', 'FCV'):
+                menu.addAction(self.cmd_acqtrigrep_act)
+                menu.addAction(self.cmd_acqtrigstart_act)
+                menu.addAction(self.cmd_acqtrigstop_act)
+                menu.addAction(self.cmd_acqtrigabort_act)
+            else:
+                menu.addAction(self.cmd_setslowref_act)
+                menu.addAction(self.cmd_setcurrent_act)
+                menu.addAction(self.cmd_reset_act)
+
+            if return_menu:
+                return menu
+            menu.popup(self.mapToGlobal(point))
+
+
+class _PVHandler:
+    """PV Handler."""
+
     _pvs = dict()
 
     PROPSYMB_2_DEFVAL_DEF = {
@@ -490,157 +627,207 @@ class PSGraphMonWidget(QWidget):
         'CtrlLoop-Sel': _PSConst.OffOn.On,
         'CtrlLoop-Sts': _PSConst.OffOn.On,
     }
+    CONV_FASTCORR2CHANNEL = {
+        'M1-FCH': 0,
+        'M1-FCV': 1,
+        'M2-FCH': 2,
+        'M2-FCV': 3,
+        'C2-FCH': 4,
+        'C2-FCV': 5,
+        'C3-FCH': 6,
+        'C3-FCV': 7,
+    }
 
-    def __init__(self, parent=None, prefix=_vaca_prefix, psnames=''):
-        super().__init__(parent)
-
-        self._prefix = prefix
+    def __init__(self, psnames=list(), prefix=_vaca_prefix, parent=None):
+        """Init."""
         self._psnames = psnames
-        self._property_line = 'Current-Mon'
-        self._property_symb = 'DiagStatus-Mon'
+        self._propsymb_2_defval = _PVHandler.PROPSYMB_2_DEFVAL_DEF
+        self._prefix = prefix
+        self._parent = parent
 
-        self.propsymb_2_defval = PSGraphMonWidget.PROPSYMB_2_DEFVAL_DEF
-
-        self._setupUi()
-        self._create_commands()
-
-        self._timer = QTimer()
-        self._timer.timeout.connect(self._update_graph)
-        self._timer.setInterval(250)
-        self._timer.start()
-
-    def _setupUi(self):
-        self.graph = PSGraph(self)
-        self.graph.setObjectName('graph')
-        self._update_graph()
-
-        lay = QGridLayout(self)
-        lay.addWidget(self.graph, 0, 0)
-
-        self.setStyleSheet('#graph{min-width:60em;min-height:12em;}')
-
-    def update_psnames(self, psnames):
+    def set_psnames(self, psnames):
+        """Set psnames."""
         self._psnames = _dcopy(psnames)
         if SiriusPVName(self._psnames[0]).dev in ('FCH', 'FCV'):
-            self.propsymb_2_defval = PSGraphMonWidget.PROPSYMB_2_DEFVAL_FCS
+            self._propsymb_2_defval = _PVHandler.PROPSYMB_2_DEFVAL_FCS
         else:
-            self.propsymb_2_defval = PSGraphMonWidget.PROPSYMB_2_DEFVAL_DEF
-        self._update_graph()
+            self._propsymb_2_defval = _PVHandler.PROPSYMB_2_DEFVAL_DEF
 
-    @Slot(str)
-    def update_property_line(self, text):
-        """Update property line."""
-        self._property_line = text
-
-    @Slot(str)
-    def update_property_symb(self, text):
-        """Update property symbol."""
-        self._property_symb = text
-
-    def _update_graph(self):
-        self._create_pvs(self._property_line)
-        self._create_pvs(self._property_symb)
-        self.graph.psnames = _dcopy(self._psnames)
-        self._psnames = self.graph.psnames
-        self.graph.symbols = self._get_values(self._property_symb)
-        self.graph.y_data = self._get_values(self._property_line)
-
-    # ---------- pv handler methods ----------
-
-    def _create_pvs(self, propty):
-        new_pvs = dict()
-        for psn in self._psnames:
-            pvname = SiriusPVName(psn).substitute(
-                prefix=self._prefix, propty=propty)
-            if pvname in PSGraphMonWidget._pvs:
-                continue
-            new_pvs[pvname] = _PV(pvname, connection_timeout=0.05)
-        PSGraphMonWidget._pvs.update(new_pvs)
-
-    def _get_values(self, propty):
+    def get_values(self, propty):
+        """Get PV values."""
         if not self._psnames:
             return []
 
-        for psn in self._psnames:
-            pvname = SiriusPVName(psn).substitute(
-                prefix=self._prefix, propty=propty)
-            PSGraphMonWidget._pvs[pvname].wait_for_connection()
+        psnames = list(self._psnames)
+        self._create_pvs(psnames, propty)
 
         values = list()
-        for psn in self._psnames:
-            pvname = SiriusPVName(psn).substitute(
-                prefix=self._prefix, propty=propty)
-            val = PSGraphMonWidget._pvs[pvname].get()
-            val = val if val is not None else 0
-            if propty in self.propsymb_2_defval.keys():
-                defval = self.propsymb_2_defval[propty]
-                val = 1 if val == defval else 0
-            values.append(val)
+        if '(from Array)' in propty:
+            self._vals_read = dict()
+            with ThreadPoolExecutor(max_workers=100) as executor:
+                for psn in psnames:
+                    self._vals_read[psn] = None
+                    executor.submit(self._get_fc_currentmon_value, psn)
+            while not all([v is not None for v in self._vals_read.values()]):
+                _time.sleep(0.1)
+            for psn in psnames:
+                values.append(self._vals_read[psn])
+        else:
+            for psn in psnames:
+                pvname = self._get_pvname(psn, propty)
+                _PVHandler._pvs[pvname].wait_for_connection()
+
+            for psn in psnames:
+                pvname = self._get_pvname(psn, propty)
+                val = _PVHandler._pvs[pvname].get()
+                val = val if val is not None else 0
+                if propty in self._propsymb_2_defval.keys():
+                    defval = self._propsymb_2_defval[propty]
+                    val = 1 if val == defval else 0
+                values.append(val)
         return values
 
-    def _set_values(self, propty, value):
-        for psn in self._psnames:
-            pvname = SiriusPVName(psn).substitute(
-                prefix=self._prefix, propty=propty)
-            pv = PSGraphMonWidget._pvs[pvname]
-            if pv.wait_for_connection():
-                pv.put(value)
-
-    def _cmd_set_opmode_slowref(self):
-        """Set power supplies OpMode to SlowRef."""
-        self._create_pvs('OpMode-Sel')
-        self._set_values('OpMode-Sel', _PSConst.OpMode.SlowRef)
-
-    def _cmd_turn_on(self):
-        """Turn power supplies on."""
-        self._create_pvs('PwrState-Sel')
-        self._set_values('PwrState-Sel', _PSConst.PwrStateSel.On)
-
-    def _cmd_turn_off(self):
-        """Turn power supplies off."""
-        self._create_pvs('PwrState-Sel')
-        self._set_values('PwrState-Sel', _PSConst.PwrStateSel.Off)
-
-    def _cmd_set_current(self):
-        """Set power supplies current."""
-        self._create_pvs('Current-SP')
-        value, ok = QInputDialog.getDouble(
-            self, "Insert current setpoint", "Value")
-        if ok:
-            self._set_values('Current-SP', value)
-
-    def _cmd_reset(self):
-        """Reset power supplies."""
-        self._create_pvs('Reset-Cmd')
-        self._set_values('Reset-Cmd', 1)
-
-    def _create_commands(self):
-        self.cmd_turnon_act = QAction("Turn On", self)
-        self.cmd_turnon_act.triggered.connect(self._cmd_turn_on)
-
-        self.cmd_turnoff_act = QAction("Turn Off", self)
-        self.cmd_turnoff_act.triggered.connect(self._cmd_turn_off)
-
-        self.cmd_setslowref_act = QAction("Set OpMode to SlowRef", self)
-        self.cmd_setslowref_act.triggered.connect(self._cmd_set_opmode_slowref)
-
-        self.cmd_setcurrent_act = QAction("Set Current SP", self)
-        self.cmd_setcurrent_act.triggered.connect(self._cmd_set_current)
-
-        self.cmd_reset_act = QAction("Reset Interlocks", self)
-        self.cmd_reset_act.triggered.connect(self._cmd_reset)
-
-    def contextMenuEvent(self, event, return_menu=False):
-        """Show a custom context menu."""
-        point = event.pos()
-        if not self.graph.geometry().contains(point) or return_menu:
-            menu = QMenu("Actions", self)
-            menu.addAction(self.cmd_turnon_act)
-            menu.addAction(self.cmd_turnoff_act)
-            menu.addAction(self.cmd_setslowref_act)
-            menu.addAction(self.cmd_setcurrent_act)
-            menu.addAction(self.cmd_reset_act)
-            if return_menu:
-                return menu
+    def _get_pvname(self, psname, propty):
+        """Get PV name for psname and propty."""
+        psname = SiriusPVName(psname)
+        if psname.dev in ('FCH', 'FCV'):
+            fofbctl = SiriusPVName('IA-'+psname.sub[:2]+'RaBPM:BS-FOFBCtrl')
+            if propty in ['ACQTriggerRep-Sel', 'ACQTriggerEvent-Sel']:
+                pvname = fofbctl.substitute(prefix=self._prefix, propty=propty)
+            elif 'Current-Mon' in propty:
+                nick = psname.sub[2:] + '-' + psname.dev
+                channel = _PVHandler.CONV_FASTCORR2CHANNEL[nick]
+                propty = 'GENConvArrayDataCH'+str(channel)
+                pvname = fofbctl.substitute(prefix=self._prefix, propty=propty)
             else:
-                menu.popup(self.mapToGlobal(point))
+                pvname = psname.substitute(prefix=self._prefix, propty=propty)
+        else:
+            pvname = psname.substitute(prefix=self._prefix, propty=propty)
+        return pvname
+
+    def _create_pvs(self, psnames, propty):
+        """Create PVs."""
+        new_pvs = dict()
+        for psn in psnames:
+            pvname = self._get_pvname(psn, propty)
+            auto_monitor = '(from Array)' not in propty
+            if pvname in _PVHandler._pvs:
+                continue
+            new_pvs[pvname] = _PV(
+                pvname, auto_monitor=auto_monitor, connection_timeout=0.05)
+        _PVHandler._pvs.update(new_pvs)
+
+    def _get_fc_currentmon_value(self, psname):
+        pvname = self._get_pvname(psname, 'Current-Mon')
+        pvobj = _PVHandler._pvs[pvname]
+        pvobj.wait_for_connection()
+        value = pvobj.get()
+        value = value.mean() if value is not None else 0
+        value = value if not _np.isnan(value) else 0
+        self._vals_read[psname] = value
+
+    def set_values(self, propty, value):
+        """Set PV values."""
+        for psn in self._psnames:
+            pvname = self._get_pvname(psn, propty)
+            _PVHandler._pvs[pvname].wait_for_connection()
+
+        for psn in self._psnames:
+            pvname = self._get_pvname(psn, propty)
+            _PVHandler._pvs[pvname].put(value)
+
+    def cmd_set_opmode_slowref(self):
+        """Set power supplies OpMode to SlowRef."""
+        self.set_values('OpMode-Sel', _PSConst.OpMode.SlowRef)
+
+    def cmd_turn_on(self):
+        """Turn power supplies on."""
+        self.set_values('PwrState-Sel', _PSConst.PwrStateSel.On)
+
+    def cmd_turn_off(self):
+        """Turn power supplies off."""
+        self.set_values('PwrState-Sel', _PSConst.PwrStateSel.Off)
+
+    def cmd_ctrlloop_close(self):
+        """Close power supplies control loop."""
+        value = _PSConst.OffOn.On \
+            if SiriusPVName(self._psnames[0]).dev in ('FCH', 'FCV') \
+            else _PSConst.CloseOpen.Closed
+        self.set_values('CtrlLoop-Sel', value)
+
+    def cmd_ctrlloop_open(self):
+        """Open power supplies control loop."""
+        value = _PSConst.OffOn.Off \
+            if SiriusPVName(self._psnames[0]).dev in ('FCH', 'FCV') \
+            else _PSConst.CloseOpen.Open
+        self.set_values('CtrlLoop-Sel', value)
+
+    def cmd_set_current(self):
+        """Set power supplies current."""
+        value, res = QInputDialog.getDouble(
+            self._parent, "Insert current setpoint", "Value")
+        if res:
+            self.set_values('Current-SP', value)
+
+    def cmd_reset(self):
+        """Reset power supplies."""
+        self.set_values('Reset-Cmd', 1)
+
+    def cmd_acqtrigrep_repetitive(self):
+        """Set acquisition trigger repitition to repetitive."""
+        self.set_values('ACQTriggerRep-Sel', 1)
+
+    def cmd_acqtrigevt_start(self):
+        """Set acquisition trigger evento to start."""
+        self.set_values('ACQTriggerEvent-Sel', 0)
+
+    def cmd_acqtrigevt_stop(self):
+        """Set acquisition trigger evento to stop."""
+        self.set_values('ACQTriggerEvent-Sel', 1)
+
+    def cmd_acqtrigevt_abort(self):
+        """Set acquisition trigger evento to abort."""
+        self.set_values('ACQTriggerEvent-Sel', 2)
+
+
+class _UpdateGraphThread(QThread):
+    """Update Graph Thread."""
+
+    dataChanged = Signal(list, list)
+
+    def __init__(self, property_line, property_symb, pvhandler, parent=None):
+        super().__init__(parent)
+
+        self._property_line = property_line
+        self._property_symb = property_symb
+        self._pvhandler = pvhandler
+
+        self._quit_task = False
+
+    def set_property_line(self, new):
+        """Update property line."""
+        self._property_line = new
+
+    def set_property_symb(self, new):
+        """Update property symbol."""
+        self._property_symb = new
+
+    def exit_task(self):
+        """Set flag to quit thread."""
+        self._quit_task = True
+
+    def run(self):
+        """Run task."""
+        while not self._quit_task:
+            _t0 = _time.time()
+            self._update_data()
+            _dt = _time.time() - _t0
+
+            sleep = 0.25 - _dt
+            if sleep > 0:
+                _time.sleep(sleep)
+
+    def _update_data(self):
+        symbols = self._pvhandler.get_values(self._property_symb)
+        y_data = self._pvhandler.get_values(self._property_line)
+        self.dataChanged.emit(symbols, y_data)
