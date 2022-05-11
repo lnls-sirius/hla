@@ -1669,14 +1669,6 @@ class _EVR_EVE(BaseWidget):
         self.outs_wid.setObjectName('outs_wid')
         splitter.addWidget(self.outs_wid)
 
-        props = {'name', 'state', 'event', 'timestamp'}
-        obj_names = [self.device.substitute(idx=str(i)) for i in range(3)]
-        self.dis_wid = EVREVEDIList(
-            name='Digital Inputs (DI)', parent=self, prefix=self.prefix,
-            props=props, obj_names=obj_names)
-        self.dis_wid.setObjectName('dis_wid')
-        splitter.addWidget(self.dis_wid)
-
         splitter.setSizePolicy(QSzPol.Preferred, QSzPol.MinimumExpanding)
 
     def setupmenus(self):
@@ -1697,7 +1689,6 @@ class _EVR_EVE(BaseWidget):
     def _setup_status_wid(self):
         status_wid = QWidget(self)
         status_lay = QGridLayout(status_wid)
-        status_lay.setHorizontalSpacing(20)
         status_lay.setVerticalSpacing(30)
 
         pvname = self.get_pvname('DevEnbl-Sel')
@@ -1768,7 +1759,7 @@ class _EVR_EVE(BaseWidget):
         status_lay.addWidget(gb, 0, 6)
 
         but = QPushButton(self)
-        but.setToolTip('Open Timestamp and Log Controls')
+        but.setToolTip('Open Timestamp, Log and\nDigital Input Controls')
         but.setIcon(qta.icon('fa5s.ellipsis-v'))
         but.setDefault(False)
         but.setAutoDefault(False)
@@ -1777,7 +1768,7 @@ class _EVR_EVE(BaseWidget):
             '#but{min-width:25px; max-width:25px;\
             min-height:25px; max-height:25px;\
             icon-size:20px;}')
-        but.clicked.connect(self._open_tstamplog_dialog)
+        but.clicked.connect(self._open_detail_dialog)
         status_lay.addWidget(but, 0, 7, alignment=Qt.AlignTop)
 
         return status_wid
@@ -1857,7 +1848,7 @@ class _EVR_EVE(BaseWidget):
 
         return info_wid
 
-    def _create_tstamplog_dialog(self):
+    def _create_detail_dialog(self):
         dialog = SiriusDialog()
         dialog.setObjectName('ASApp')
         dialog.setWindowTitle(self.device + ' Timestamp and Log Control')
@@ -2007,11 +1998,25 @@ class _EVR_EVE(BaseWidget):
         lay_logbuf.addWidget(gb_bufsub, 1, 2, 1, 2)
         lay_logbuf.addWidget(gb_bufevt, 1, 4, 1, 2)
 
-        # layout
-        lay = QGridLayout(dialog)
-        lay.addWidget(gbox_tim)
-        lay.addWidget(gbox_log)
-        lay.addWidget(gbox_buf)
+        wid_timlog = QWidget()
+        lay_timlog = QVBoxLayout(wid_timlog)
+        lay_timlog.addWidget(gbox_tim)
+        lay_timlog.addWidget(gbox_log)
+        lay_timlog.addWidget(gbox_buf)
+
+        # Digital Inputs
+        obj_names = [self.device.substitute(idx=str(i)) for i in range(3)]
+        self.dis_wid = EVREVEDIList(
+            name='', parent=self, prefix=self.prefix, obj_names=obj_names)
+        self.dis_wid.setObjectName('dis_wid')
+
+        # tab and layout
+        tab = QTabWidget()
+        tab.addTab(wid_timlog, 'Timestamp && Log')
+        tab.addTab(self.dis_wid, 'Digital Inputs (DI)')
+
+        lay = QVBoxLayout(dialog)
+        lay.addWidget(tab)
 
         return dialog
 
@@ -2030,12 +2035,12 @@ class _EVR_EVE(BaseWidget):
         table.setSizePolicy(QSzPol.MinimumExpanding, QSzPol.Preferred)
         return table
 
-    def _open_tstamplog_dialog(self):
-        if not hasattr(self, 'tstamp_wind'):
-            self.tstamp_wind = self._create_tstamplog_dialog()
-            self.tstamp_wind.show()
+    def _open_detail_dialog(self):
+        if not hasattr(self, 'detail_wind'):
+            self.detail_wind = self._create_detail_dialog()
+            self.detail_wind.show()
         else:
-            self.tstamp_wind.showNormal()
+            self.detail_wind.showNormal()
 
 
 class EVR(_EVR_EVE):
