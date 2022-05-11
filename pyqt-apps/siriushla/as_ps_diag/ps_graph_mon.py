@@ -277,7 +277,9 @@ class PSGraphProptySelWidget(QWidget):
 
     def change_matype(self, magfunc, pstype):
         """Change MA type."""
-        currindex = self.cb_prop_line.currentIndex()
+        currline = self.cb_prop_line.currentText()
+        currlineidx = self.cb_prop_line.currentIndex()
+        currsymb = self.cb_prop_symb.currentText()
         self._magfunc = magfunc
         self._pstype = pstype
         if self._pstype in ('si-corrector-fch', 'si-corrector-fcv'):
@@ -295,10 +297,13 @@ class PSGraphProptySelWidget(QWidget):
             self._intstr_propty = get_strength_label(self._magfunc)
             for suf in self._intstr_suffix:
                 self.cb_prop_line.addItem(self._intstr_propty+suf)
-        try:
-            self.cb_prop_line.setCurrentIndex(currindex)
-        except Exception as e:
-            pass
+
+        if currline in self._choose_prop_line:
+            self.cb_prop_line.setCurrentText(currline)
+        elif currlineidx <= self.cb_prop_line.count():
+            self.cb_prop_line.setCurrentIndex(currlineidx)
+        if currsymb in self._choose_prop_symb:
+            self.cb_prop_symb.setCurrentText(currsymb)
 
 
 class PSGraph(PyDMWaveformPlot):
