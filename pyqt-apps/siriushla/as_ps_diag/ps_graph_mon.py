@@ -334,6 +334,8 @@ class PSGraph(PyDMWaveformPlot):
             lineWidth=2, symbol='o', symbolSize=10)
         self.curve = self.curveAtIndex(1)
 
+        self.redraw_timer.stop()
+
         self.psnames = psnames
         self.symbols = symbols
         self.y_data = y_data
