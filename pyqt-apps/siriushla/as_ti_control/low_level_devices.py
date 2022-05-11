@@ -1767,6 +1767,19 @@ class _EVR_EVE(BaseWidget):
             gb = self._create_small_group('RF Output', status_wid, (sp, rb))
         status_lay.addWidget(gb, 0, 6)
 
+        but = QPushButton(self)
+        but.setToolTip('Open Timestamp and Log Controls')
+        but.setIcon(qta.icon('fa5s.ellipsis-v'))
+        but.setDefault(False)
+        but.setAutoDefault(False)
+        but.setObjectName('but')
+        but.setStyleSheet(
+            '#but{min-width:25px; max-width:25px;\
+            min-height:25px; max-height:25px;\
+            icon-size:20px;}')
+        but.clicked.connect(self._open_tstamplog_dialog)
+        status_lay.addWidget(but, 0, 7, alignment=Qt.AlignTop)
+
         return status_wid
 
     def _setup_info_wid(self):
@@ -1841,17 +1854,6 @@ class _EVR_EVE(BaseWidget):
             '', info_wid, (lb, frma, frmb, frmc))
         gb.layout().setSpacing(3)
         info_lay.addWidget(gb, 0, 7, alignment=Qt.AlignTop)
-
-        but = QPushButton(self)
-        but.setToolTip('Open Timestamp and Log Controls')
-        but.setIcon(qta.icon('fa5s.ellipsis-v'))
-        but.setObjectName('but')
-        but.setStyleSheet(
-            '#but{min-width:25px; max-width:25px;\
-            min-height:25px; max-height:25px;\
-            icon-size:20px;}')
-        but.clicked.connect(self._open_tstamplog_dialog)
-        info_lay.addWidget(but, 0, 8, alignment=Qt.AlignTop)
 
         return info_wid
 
