@@ -220,6 +220,7 @@ class HLTriggerDetailed(BaseWidget):
         widt.layout().addWidget(gbtdelr)
 
         tabdel = QTabWidget(self)
+        tabdel.setObjectName(self.device.sec + 'Tab')
         tabdel.addTab(widd, 'Delay')
         tabdel.addTab(widt, 'Total Delay')
 

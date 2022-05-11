@@ -75,12 +75,14 @@ class EVG(BaseWidget):
 
         # configurations
         conftab = QTabWidget(self)
+        conftab.setObjectName('ASTab')
         conftab.setSizePolicy(QSzPol.Preferred, QSzPol.Maximum)
         mylayout.addWidget(conftab, 2, 1)
 
         confwid = QWidget()
         conflay = QVBoxLayout(confwid)
         maintab = QTabWidget(self)
+        maintab.setObjectName('ASTab')
         maintab.setStyleSheet("""
             QTabWidget::pane{
                 border-left: 2px solid gray;
@@ -1068,6 +1070,7 @@ class FOUT(BaseWidget):
         self.my_layout.setAlignment(lab, Qt.AlignCenter)
 
         stattab = QTabWidget(self)
+        stattab.setObjectName('ASTab')
         stattab.setStyleSheet("""
             QTabWidget::pane{
                 border-left: 2px solid gray;
@@ -1286,6 +1289,7 @@ class AFC(BaseWidget):
 
         # status
         stattab = QTabWidget(self)
+        stattab.setObjectName('ASTab')
         stattab.setStyleSheet("""
             QTabWidget::pane{
                 border-left: 2px solid gray;
@@ -1302,6 +1306,7 @@ class AFC(BaseWidget):
         # frequency feadback
         self.freqff_wid = QGroupBox('Frequency feadback', self)
         freqtab = QTabWidget(self)
+        freqtab.setObjectName('ASTab')
         afcfrefb_wid = self._setup_freqfb_wid('AFC')
         freqtab.addTab(afcfrefb_wid, 'AFC')
         rtmfreqfb_wid = self._setup_freqfb_wid('RTM')
@@ -1314,6 +1319,7 @@ class AFC(BaseWidget):
 
         # output tabs
         outtab = QTabWidget(self)
+        outtab.setObjectName('ASTab')
         self.my_layout.addWidget(outtab, 4, 0)
 
         props = {
@@ -1628,6 +1634,7 @@ class _EVR_EVE(BaseWidget):
 
         # status
         stattab = QTabWidget(self)
+        stattab.setObjectName('ASTab')
         stattab.setStyleSheet("""
             QTabWidget::pane{
                 border-left: 2px solid gray;
@@ -2012,6 +2019,7 @@ class _EVR_EVE(BaseWidget):
 
         # tab and layout
         tab = QTabWidget()
+        tab.setObjectName('ASTab')
         tab.addTab(wid_timlog, 'Timestamp && Log')
         tab.addTab(self.dis_wid, 'Digital Inputs (DI)')
 
