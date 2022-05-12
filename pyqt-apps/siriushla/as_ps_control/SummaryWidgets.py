@@ -65,8 +65,6 @@ def get_strength_name(psname):
         return "KL"
     elif Sextupole.match(psname) and not IsLinac.match(psname):
         return "SL"
-    elif FastCorrector.match(psname):
-        return
     elif Corrector.match(psname) and not IsLinac.match(psname):
         return "Kick"
     elif IsPulsed.match(psname):
@@ -111,9 +109,9 @@ def get_prop2width(psname):
     if get_strength_name(psname):
         dic.update({
             'strength_sp': '6',
-            'strength_rb': '6',
-            'strength_mon': '8'
-        })
+            'strength_rb': '6'})
+        if psmodel != 'FOFB_PS':
+            dic.update({'strength_mon': '8'})
     if psname.dis == 'PU':
         dic.update({'pulse': '8'})
     if HasTrim.match(psname):
@@ -159,8 +157,9 @@ def get_prop2label(psname):
     if strength:
         dic.update({
             'strength_sp': strength + '-SP',
-            'strength_rb': strength + '-RB',
-            'strength_mon': strength + '-Mon'})
+            'strength_rb': strength + '-RB'})
+        if psmodel != 'FOFB_PS':
+            dic.update({'strength_mon': strength + '-Mon'})
     if psname.dis == 'PU':
         dic.update({'pulse': 'Pulse'})
     if HasTrim.match(psname):
@@ -229,6 +228,7 @@ class SummaryWidget(QWidget):
         self._has_analmon = not self._is_fofb
         self._has_strength = bool(
             self._strength_name and not self._li_has_not_strength)
+        self._has_strength_mon = self._has_strength and not self._is_fofb
         self._has_trim = HasTrim.match(self._name)
 
         self._create_pvs()
@@ -348,6 +348,7 @@ class SummaryWidget(QWidget):
             self._widgets_dict['strength_rb'] = self.strength_rb_wid
             lay.addWidget(self.strength_rb_wid)
 
+        if self._has_strength_mon:
             self.strength_mon_wid = self._build_widget(
                 name='strength_mon', orientation='v')
             self._widgets_dict['strength_mon'] = self.strength_mon_wid
@@ -500,6 +501,7 @@ class SummaryWidget(QWidget):
                 propty='{}-SP'.format(st))
             self._strength_rb = self._prefixed_name.substitute(
                 propty='{}-RB'.format(st))
+        if self._has_strength_mon:
             self._strength_mon = self._prefixed_name.substitute(
                 propty='{}-Mon'.format(st))
 
@@ -642,7 +644,7 @@ class SummaryWidget(QWidget):
                 parent=self, init_channel=self._strength_rb)
             self.strength_rb_lb.showUnits = True
             self.strength_rb_wid.layout().addWidget(self.strength_rb_lb)
-        elif name == 'strength_mon' and self._has_strength:
+        elif name == 'strength_mon' and self._has_strength_mon:
             self.strength_mon_lb = PyDMLabel(
                 parent=self, init_channel=self._strength_mon)
             self.strength_mon_lb.showUnits = True

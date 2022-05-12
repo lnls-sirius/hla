@@ -132,12 +132,9 @@ class PSDetailWidget(QWidget):
         except ValueError:
             self._metric = ''
 
-        try:
-            self._db = get_ps_propty_database(self._psmodel, self._pstype)
-            self._mods = get_ps_modules(psmodel=self._psmodel)
-        except ValueError:
-            self._db = dict()
-            self._mods = set()
+        self._db = get_ps_propty_database(self._psmodel, self._pstype)
+        self._mods = get_ps_modules(psmodel=self._psmodel)
+
         if self._mods:
             self._mod2db = {
                 mod: [
@@ -1404,18 +1401,24 @@ class FastCorrPSDetailWidget(PSDetailWidget):
         # Group boxes that compose the widget
         self.opmode_box = QGroupBox('OpMode')
         self.opmode_box.setObjectName('operation_mode')
-        self.pwrstate_box = QGroupBox("PwrState")
-        self.pwrstate_box.setObjectName("power_state")
+        self.pwrstate_box = QGroupBox('PwrState')
+        self.pwrstate_box.setObjectName('power_state')
         self.ctrlloop_box = QGroupBox('Control Loop')
         self.ctrlloop_box.setObjectName('ctrlloop_box')
-        self.interlock_box = QGroupBox("Interlock")
-        self.interlock_box.setObjectName("interlock")
+        self.interlock_box = QGroupBox('Interlock')
+        self.interlock_box.setObjectName('interlock')
         self.params_box = QGroupBox('Params')
         self.params_box.setObjectName('params_box')
-        self.current_a_box = QGroupBox("Current [A]")
-        self.current_a_box.setObjectName("current")
-        self.current_raw_box = QGroupBox("Current [Raw]")
-        self.current_raw_box.setObjectName("current")
+        self.currtab = QTabWidget()
+        self.currtab.setObjectName('SITab')
+        self.current_a_box = QWidget()
+        self.current_a_box.setObjectName('current')
+        self.currtab.addTab(self.current_a_box, 'Current [A]')
+        self.current_raw_box = QWidget()
+        self.current_raw_box.setObjectName('current')
+        self.currtab.addTab(self.current_raw_box, 'Current [Raw]')
+        self.metric_box = QGroupBox(self._metric)
+        self.metric_box.setObjectName('metric')
         self.waveform_box = self._wfmWidget()
 
         # Set group boxes layouts
@@ -1426,6 +1429,7 @@ class FastCorrPSDetailWidget(PSDetailWidget):
         self.params_box.setLayout(self._paramsLayout())
         self.current_a_box.setLayout(self._currentALayout())
         self.current_raw_box.setLayout(self._currentRawLayout())
+        self.metric_box.setLayout(self._metricLayout())
 
         # Add group boxes to laytout
         self.layout = self._setWidgetLayout()
@@ -1440,8 +1444,8 @@ class FastCorrPSDetailWidget(PSDetailWidget):
         boxes_layout.addWidget(self.ctrlloop_box, 1, 0)
         boxes_layout.addWidget(self.interlock_box, 1, 1)
         boxes_layout.addWidget(self.params_box, 2, 0, 1, 2)
-        boxes_layout.addWidget(self.current_a_box, 0, 2)
-        boxes_layout.addWidget(self.current_raw_box, 1, 2)
+        boxes_layout.addWidget(self.currtab, 0, 2)
+        boxes_layout.addWidget(self.metric_box, 1, 2)
         boxes_layout.addWidget(self.waveform_box, 2, 2)
 
         layout = QVBoxLayout()
@@ -1558,6 +1562,28 @@ class FastCorrPSDetailWidget(PSDetailWidget):
         layout.addWidget(self.current_sp, 0, 1)
         layout.addWidget(current_rb_label, 1, 0, Qt.AlignRight)
         layout.addWidget(self.current_rb, 1, 1)
+        layout.setColumnStretch(2, 1)
+        return layout
+
+    def _metricLayout(self):
+        metric_sp_label = QLabel('Setpoint')
+        metric_rb_label = QLabel('Readback')
+
+        self.metric_sp = SiriusSpinbox(
+            self, self._prefixed_psname+':'+self._metric+'-SP')
+        self.metric_sp.showStepExponent = False
+        self.metric_rb = PyDMLabel(
+            self, self._prefixed_psname+':'+self._metric+'-RB')
+        self.metric_rb.precisionFromPV = False
+        self.metric_rb.precision = 6
+        self.metric_rb.showUnits = True
+
+        layout = QGridLayout()
+        layout.setAlignment(Qt.AlignTop)
+        layout.addWidget(metric_sp_label, 0, 0, Qt.AlignRight)
+        layout.addWidget(self.metric_sp, 0, 1)
+        layout.addWidget(metric_rb_label, 1, 0, Qt.AlignRight)
+        layout.addWidget(self.metric_rb, 1, 1)
         layout.setColumnStretch(2, 1)
         return layout
 

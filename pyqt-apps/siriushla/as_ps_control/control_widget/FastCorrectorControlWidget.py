@@ -22,4 +22,6 @@ class SIFastCorrectorControlWidget(BasePSControlWidget):
                 ('Vertical Fast Corretors', '-FCV')]
 
     def _getVisibleProps(self):
-        return ['detail', 'state', 'ctrlloop', 'intlk', 'setpoint', 'readback']
+        return [
+            'detail', 'state', 'intlk', 'setpoint', 'readback',
+            'strength_sp', 'strength_rb']

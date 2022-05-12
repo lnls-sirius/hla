@@ -296,8 +296,11 @@ class PSGraphProptySelWidget(QWidget):
         self.cb_prop_symb.addItems(self._choose_prop_symb)
         self.cb_prop_line.clear()
         self.cb_prop_line.addItems(self._choose_prop_line)
-        if self._pstype not in ('si-corrector-fch', 'si-corrector-fcv'):
-            self._intstr_propty = get_strength_label(self._magfunc)
+        self._intstr_propty = get_strength_label(self._magfunc)
+        if self._pstype in ('si-corrector-fch', 'si-corrector-fcv'):
+            for suf in ['-SP', '-RB']:
+                self.cb_prop_line.addItem(self._intstr_propty+suf)
+        else:
             for suf in self._intstr_suffix:
                 self.cb_prop_line.addItem(self._intstr_propty+suf)
 
