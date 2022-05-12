@@ -49,7 +49,7 @@ class PSControlWindow(SiriusMainWindow):
         self.setWindowTitle(
             sec2label[section] +
             (dev2label[device] if device else '') +
-            'Power Supplies ' +
+            ' Power Supplies ' +
             ('- Subsection '+subsection if subsection else ''))
 
     def _setup_ui(self):
