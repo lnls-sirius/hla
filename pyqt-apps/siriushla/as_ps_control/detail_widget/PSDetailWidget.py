@@ -1,10 +1,10 @@
-"""MagnetDetailWidget definition."""
+"""PS Detail Widget."""
+
 import re
 import numpy as _np
 from datetime import datetime as _datetime
 
-from qtpy.QtCore import Qt, QRegExp
-from qtpy.QtGui import QRegExpValidator
+from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QGroupBox, QPushButton, QLabel, \
     QGridLayout, QVBoxLayout, QHBoxLayout, QFormLayout, QTabWidget, \
     QSizePolicy as QSzPlcy, QCheckBox, QHeaderView, QAbstractItemView, \
@@ -25,10 +25,11 @@ from siriuspy.pwrsupply.csdev import get_ps_propty_database, get_ps_modules, \
     ETypes as _PSet
 from siriuspy.devices import PowerSupply
 
-from siriushla import util
-from siriushla.widgets import PyDMStateButton, PyDMLinEditScrollbar, \
+from ... import util
+from ...widgets import PyDMStateButton, PyDMLinEditScrollbar, \
     SiriusConnectionSignal, SiriusLedState, SiriusLedAlert, \
-    PyDMLedMultiChannel, SiriusDialog, SiriusWaveformTable, SiriusSpinbox
+    PyDMLedMultiChannel, SiriusDialog, SiriusWaveformTable, SiriusSpinbox, \
+    SiriusHexaSpinbox
 from .InterlockWindow import InterlockWindow, LIInterlockWindow
 from .custom_widgets import LISpectIntlkLed
 
@@ -898,7 +899,7 @@ class PSDetailWidget(QWidget):
         dur_rb = self._prefixed_psname + ':ScopeDuration-RB'
 
         self.scope_src_label = QLabel('Source', self)
-        self.scope_src_sp_sb = CustomSpinBox(self, src_sp)
+        self.scope_src_sp_sb = SiriusHexaSpinbox(self, src_sp)
         self.scope_src_sp_sb.showStepExponent = False
         self.scope_src_rb_lb = PyDMLabel(self, src_rb)
         self.scope_src_rb_lb.displayFormat = PyDMLabel.DisplayFormat.Hex
@@ -1039,7 +1040,8 @@ class LIPSDetailWidget(PSDetailWidget):
 
         self.tstamp_update_label = QLabel('IOC Update')
         self.tstamp_update_label.setObjectName("tstampupdate_label")
-        self.tstamp_update_label.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
+        self.tstamp_update_label.setSizePolicy(
+            QSzPlcy.Minimum, QSzPlcy.Maximum)
         self.tstamp_update_mon = PyDMLabel(
             self, self._prefixed_psname + ":TimestampUpdate-Mon")
         self.tstamp_update_mon.setObjectName("tstampupdate_mon_label")
@@ -1645,7 +1647,7 @@ class PSParamsWidget(SiriusDialog):
 class CustomLabel(PyDMLabel):
 
     def value_changed(self, new_value):
-        super(PyDMLabel, self).value_changed(new_value)
+        super(CustomLabel, self).value_changed(new_value)
         new_value = parse_value_for_display(
             value=new_value, precision=self.precision,
             display_format_type=self._display_format_type,
@@ -1660,7 +1662,7 @@ class CustomLabel(PyDMLabel):
             try:
                 self.setText(self.enum_strings[int(new_value)])
             except IndexError:
-                self.setText("**INVALID**")
+                self.setText(f'Index Overflow [{new_value}]')
             return
         elif self.enum_strings is not None and \
                 isinstance(new_value, _np.ndarray):
@@ -1673,38 +1675,3 @@ class CustomLabel(PyDMLabel):
             self.setText(self.format_string.format(new_value))
             return
         self.setText(str(new_value))
-
-
-class CustomSpinBox(SiriusSpinbox):
-
-    def valueFromText(self, text):
-        return int(str(text), 16)
-
-    def textFromValue(self, value):
-        return hex(int(value))
-
-    def validate(self, text, pos):
-        regex = QRegExp("0x[0-9A-Fa-f]{1,8}")
-        regex.setCaseSensitivity(Qt.CaseInsensitive)
-        return QRegExpValidator(regex, self).validate(text, pos)
-
-    def update_step_size(self):
-        """Reimplement to use hexa base."""
-        self.setSingleStep(16 ** self.step_exponent)
-        self.update_format_string()
-
-    def update_format_string(self):
-        """Reimplement to use hexa base."""
-        if self._show_units:
-            units = " {}".format(self._unit)
-        else:
-            units = ""
-
-        if self._show_step_exponent:
-            self.setSuffix(
-                '{0} Step: 16**{1}'.format(units, self.step_exponent))
-            self.lineEdit().setToolTip("")
-        else:
-            self.setSuffix(units)
-            self.lineEdit().setToolTip(
-                'Step: 16**{0:+d}'.format(self.step_exponent))

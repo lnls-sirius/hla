@@ -2,7 +2,7 @@
 
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, \
-    QGridLayout, QLabel, QSplitter, QSizePolicy
+    QGridLayout, QLabel, QSplitter, QSizePolicy as QSzPol
 import qtawesome as qta
 from pydm.widgets import PyDMPushButton, PyDMLabel
 
@@ -40,23 +40,21 @@ class TimingMain(SiriusMainWindow):
         gridlayout.setVerticalSpacing(20)
 
         globpars = self.setglobalparameters()
-        gridlayout.addWidget(globpars, 0, 0, 1, 2)
+        gridlayout.addWidget(globpars, 0, 0)
 
         splitter = QSplitter(Qt.Horizontal)
-        gridlayout.addWidget(splitter, 1, 0, 1, 2)
+        gridlayout.addWidget(splitter, 1, 0)
         events = self.setevents()
         events.setObjectName('events')
-        events.setStyleSheet('#events{min-width:30em;}')
         splitter.addWidget(events)
 
         triggers = self.settriggers()
         triggers.setObjectName('triggers')
-        triggers.setStyleSheet('#triggers{min-width:55em;}')
         splitter.addWidget(triggers)
 
     def setglobalparameters(self):
         wid = QWidget(self.centralWidget())
-        wid.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Maximum)
+        wid.setSizePolicy(QSzPol.Preferred, QSzPol.Maximum)
         lay = QGridLayout(wid)
 
         evg_dev = SiriusPVName(LLTimeSearch.get_evg_name())
@@ -92,6 +90,7 @@ class TimingMain(SiriusMainWindow):
 
         bucketlist_wid = BucketList(
             self.centralWidget(), evg_dev, self.prefix)
+        bucketlist_wid.setSizePolicy(QSzPol.MinimumExpanding, QSzPol.Preferred)
         lay.addWidget(bucketlist_wid, 0, 3, 2, 1)
 
         hlay = QHBoxLayout()

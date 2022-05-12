@@ -16,11 +16,12 @@ from siriuspy.timesys import csdev as _cstime
 from ..util import connect_window, get_appropriate_color
 from ..widgets import PyDMLed, SiriusLedAlert, PyDMStateButton, \
     SiriusLabel, SiriusSpinbox, PyDMLedMultiChannel, \
-    SiriusEnumComboBox as _MyComboBox, SiriusLedState
+    SiriusEnumComboBox, SiriusLedState
 from ..widgets.windows import create_window_from_widget
 
 from .base import BaseList, BaseWidget
-from .low_level_devices import LLTriggerList, OTPList, OUTList, AFCOUTList
+from .low_level_devices import LLTriggerList, \
+    EVREVEOTPList, EVREVEOUTList, AFCOUTList
 
 
 class HLTriggerSimple(BaseWidget):
@@ -105,7 +106,7 @@ class HLTriggerDetailed(BaseWidget):
 
         init_channel = self.get_pvname('InInjTable-Mon')
         rb = SiriusLedState(self, init_channel=init_channel)
-        gbinjtab = self._create_small_GB('In Injection Table?', self, (rb, ))
+        gbinjtab = self._create_small_group('In Injection Table?', self, (rb,))
         self.my_layout.addWidget(gbinjtab, 2, 0)
 
         self.ll_list_wid = QGroupBox('Configs', self)
@@ -144,7 +145,7 @@ class HLTriggerDetailed(BaseWidget):
         sp = PyDMStateButton(self, init_channel=init_channel)
         init_channel = self.get_pvname('LowLvlLock-Sts')
         rb = PyDMLed(self, init_channel=init_channel)
-        gb = self._create_small_GB(
+        gb = self._create_small_group(
             'Lock Low Level', self.ll_list_wid, (sp, rb))
         ll_list_layout.addWidget(gb, 1, 0)
 
@@ -152,21 +153,21 @@ class HLTriggerDetailed(BaseWidget):
         sp = PyDMStateButton(self, init_channel=init_channel)
         init_channel = self.get_pvname('State-Sts')
         rb = PyDMLed(self, init_channel=init_channel)
-        gb = self._create_small_GB('Enabled', self.ll_list_wid, (sp, rb))
+        gb = self._create_small_group('Enabled', self.ll_list_wid, (sp, rb))
         ll_list_layout.addWidget(gb, 1, 1)
 
         init_channel = self.get_pvname('Polarity-Sel')
-        sp = _MyComboBox(self, init_channel=init_channel)
+        sp = SiriusEnumComboBox(self, init_channel=init_channel)
         init_channel = self.get_pvname('Polarity-Sts')
         rb = PyDMLabel(self, init_channel=init_channel)
-        gb = self._create_small_GB('Polarity', self.ll_list_wid, (sp, rb))
+        gb = self._create_small_group('Polarity', self.ll_list_wid, (sp, rb))
         ll_list_layout.addWidget(gb, 2, 0)
 
         init_channel = self.get_pvname('Src-Sel')
-        sp = _MyComboBox(self, init_channel=init_channel)
+        sp = SiriusEnumComboBox(self, init_channel=init_channel)
         init_channel = self.get_pvname('Src-Sts')
         rb = PyDMLabel(self, init_channel=init_channel)
-        gb = self._create_small_GB('Source', self.ll_list_wid, (sp, rb))
+        gb = self._create_small_group('Source', self.ll_list_wid, (sp, rb))
         ll_list_layout.addWidget(gb, 2, 1)
 
         init_channel = self.get_pvname('NrPulses-SP')
@@ -174,7 +175,7 @@ class HLTriggerDetailed(BaseWidget):
         sp.showStepExponent = False
         init_channel = self.get_pvname('NrPulses-RB')
         rb = PyDMLabel(self, init_channel=init_channel)
-        gb = self._create_small_GB('Nr Pulses', self.ll_list_wid, (sp, rb))
+        gb = self._create_small_group('Nr Pulses', self.ll_list_wid, (sp, rb))
         ll_list_layout.addWidget(gb, 3, 0)
 
         init_channel = self.get_pvname('Duration-SP')
@@ -182,7 +183,8 @@ class HLTriggerDetailed(BaseWidget):
         sp.showStepExponent = False
         init_channel = self.get_pvname('Duration-RB')
         rb = PyDMLabel(self, init_channel=init_channel)
-        gb = self._create_small_GB('Duration [us]', self.ll_list_wid, (sp, rb))
+        gb = self._create_small_group(
+            'Duration [us]', self.ll_list_wid, (sp, rb))
         ll_list_layout.addWidget(gb, 3, 1)
 
         init_channel = self.get_pvname('Delay-SP')
@@ -190,22 +192,22 @@ class HLTriggerDetailed(BaseWidget):
         sp.showStepExponent = False
         init_channel = self.get_pvname('Delay-RB')
         rb = PyDMLabel(self, init_channel=init_channel)
-        gbdel = self._create_small_GB('[us]', self.ll_list_wid, (sp, rb))
+        gbdel = self._create_small_group('[us]', self.ll_list_wid, (sp, rb))
 
         init_channel = self.get_pvname('DelayRaw-SP')
         sp = SiriusSpinbox(self, init_channel=init_channel)
         sp.showStepExponent = False
         init_channel = self.get_pvname('DelayRaw-RB')
         rb = PyDMLabel(self, init_channel=init_channel)
-        gbdelr = self._create_small_GB('Raw', self.ll_list_wid, (sp, rb))
+        gbdelr = self._create_small_group('Raw', self.ll_list_wid, (sp, rb))
 
         init_channel = self.get_pvname('TotalDelay-Mon')
         rb = PyDMLabel(self, init_channel=init_channel)
-        gbtdel = self._create_small_GB('[us]', self.ll_list_wid, (rb, ))
+        gbtdel = self._create_small_group('[us]', self.ll_list_wid, (rb, ))
 
         init_channel = self.get_pvname('TotalDelayRaw-Mon')
         rb = PyDMLabel(self, init_channel=init_channel)
-        gbtdelr = self._create_small_GB('Raw', self.ll_list_wid, (rb, ))
+        gbtdelr = self._create_small_group('Raw', self.ll_list_wid, (rb, ))
 
         widd = QWidget(self.ll_list_wid)
         widd.setLayout(QHBoxLayout())
@@ -218,15 +220,16 @@ class HLTriggerDetailed(BaseWidget):
         widt.layout().addWidget(gbtdelr)
 
         tabdel = QTabWidget(self)
+        tabdel.setObjectName(self.device.sec + 'Tab')
         tabdel.addTab(widd, 'Delay')
         tabdel.addTab(widt, 'Total Delay')
 
         if HLTimeSearch.has_delay_type(self.device.device_name):
             init_channel = self.get_pvname('RFDelayType-Sel')
-            sp = _MyComboBox(self, init_channel=init_channel)
+            sp = SiriusEnumComboBox(self, init_channel=init_channel)
             init_channel = self.get_pvname('RFDelayType-Sts')
             rb = PyDMLabel(self, init_channel=init_channel)
-            gb = self._create_small_GB(
+            gb = self._create_small_group(
                 'Delay Type', self.ll_list_wid, (sp, rb))
             ll_list_layout.addWidget(gb, 4, 0)
             ll_list_layout.addWidget(tabdel, 4, 1)
@@ -271,13 +274,6 @@ class HLTriggerDetailed(BaseWidget):
             lay.addWidget(lbl, idx, 2)
         sc_area.setSizeAdjustPolicy(QScrollArea.AdjustToContentsOnFirstShow)
         sc_area.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
-        return gb
-
-    def _create_small_GB(self, name, parent, wids):
-        gb = QGroupBox(name, parent)
-        lv = QVBoxLayout(gb)
-        for wid in wids:
-            lv.addWidget(wid)
         return gb
 
 
@@ -347,30 +343,28 @@ class LLTriggers(QWidget):
             elif 'OUT' in name.propty_name:
                 out_list.add(name)
         if amc_list:
-            props = set(AFCOUTList()._ALL_PROPS)
+            props = set(AFCOUTList._ALL_PROPS)
             props.discard('widthraw')
             props.discard('delayraw')
             props.add('device')
             amc_wid = LLTriggerList(
                 name='AMCs', parent=self, props=props,
-                prefix=prefix, obj_names=amc_list)
+                prefix=prefix, obj_names=sorted(amc_list))
             amc_wid.setObjectName('amc_wid')
-            amc_wid.setStyleSheet("""#amc_wid{min-width:90em;}""")
             vl.addWidget(amc_wid)
         if otp_list:
-            props = set(OTPList()._ALL_PROPS)
+            props = set(EVREVEOTPList._ALL_PROPS)
             props.discard('width')
             props.discard('delay')
             props.add('device')
             otp_wid = LLTriggerList(
                 name='OTPs', parent=self, props=props,
-                prefix=prefix, obj_names=otp_list)
+                prefix=prefix, obj_names=sorted(otp_list))
             otp_wid.setObjectName('otp_wid')
-            otp_wid.setStyleSheet("""#otp_wid{min-width:56em;}""")
             vl.addWidget(otp_wid)
         if out_list:
-            props = set(OTPList()._ALL_PROPS)
-            props.update(OUTList()._ALL_PROPS)
+            props = set(EVREVEOTPList._ALL_PROPS)
+            props.update(EVREVEOUTList._ALL_PROPS)
             props.discard('width')
             props.discard('delay')
             props.discard('fine_delay')
@@ -378,9 +372,8 @@ class LLTriggers(QWidget):
             props.add('device')
             out_wid = LLTriggerList(
                 name='OUTs', parent=self, props=props,
-                prefix=prefix, obj_names=out_list)
+                prefix=prefix, obj_names=sorted(out_list))
             out_wid.setObjectName('out_wid')
-            out_wid.setStyleSheet("""#out_wid{min-width:110em;}""")
             vl.addWidget(out_wid)
 
 
@@ -464,7 +457,7 @@ class HLTriggerList(BaseList):
             rb = PyDMLed(self, init_channel=init_channel)
         elif prop == 'source':
             init_channel = device.substitute(propty='Src-Sel')
-            sp = _MyComboBox(self, init_channel=init_channel)
+            sp = SiriusEnumComboBox(self, init_channel=init_channel)
             init_channel = device.substitute(propty='Src-Sts')
             rb = PyDMLabel(self, init_channel=init_channel)
         elif prop == 'pulses':
@@ -481,12 +474,12 @@ class HLTriggerList(BaseList):
             rb = PyDMLabel(self, init_channel=init_channel)
         elif prop == 'polarity':
             init_channel = device.substitute(propty='Polarity-Sel')
-            sp = _MyComboBox(self, init_channel=init_channel)
+            sp = SiriusEnumComboBox(self, init_channel=init_channel)
             init_channel = device.substitute(propty='Polarity-Sts')
             rb = PyDMLabel(self, init_channel=init_channel)
         elif prop == 'delay_type':
             init_channel = device.substitute(propty='RFDelayType-Sel')
-            sp = _MyComboBox(self, init_channel=init_channel)
+            sp = SiriusEnumComboBox(self, init_channel=init_channel)
             init_channel = device.substitute(propty='RFDelayType-Sts')
             rb = PyDMLabel(self, init_channel=init_channel)
         elif prop == 'delay':
