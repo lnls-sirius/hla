@@ -623,13 +623,13 @@ class SummaryWidget(QWidget):
             self.setpoint.sp_scrollbar.setTracking(False)
             if self._is_fofb:
                 self.setpoint.sp_lineedit.precisionFromPV = False
-                self.setpoint.sp_lineedit.precision = 5
+                self.setpoint.sp_lineedit.precision = 6
             self.setpoint_wid.layout().addWidget(self.setpoint)
         elif name == 'readback' and self._has_analrb:
             self.readback = PyDMLabel(self, self._analog_rb)
             if self._is_fofb:
                 self.readback.precisionFromPV = False
-                self.readback.precision = 5
+                self.readback.precision = 6
             self.readback_wid.layout().addWidget(self.readback)
         elif name == 'monitor' and self._has_analmon:
             self.monitor = PyDMLabel(self, self._analog_mon)
