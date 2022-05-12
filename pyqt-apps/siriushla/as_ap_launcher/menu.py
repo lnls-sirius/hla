@@ -453,6 +453,11 @@ def get_object(ismenubar=True, parent=None):
             self.connect_newprocess(TI, 'sirius-hla-it-ti-control.py')
             self.add_object_to_level1(menu, TI)
 
+            Cam = LEVEL2A('Cam', menu)
+            Cam.setIcon(qta.icon('mdi.camera-outline'))
+            self.connect_newprocess(Cam, 'sirius-hla-it-di-vlight.py')
+            self.add_object_to_level1(menu, Cam)
+
             VA = self._set_va_menu('it')
             self.add_object_to_level1(menu, VA)
 

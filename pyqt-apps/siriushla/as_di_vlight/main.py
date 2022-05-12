@@ -1,3 +1,5 @@
+"""VLightCam Widget."""
+
 from qtpy.QtWidgets import QWidget, QLabel, QVBoxLayout, QHBoxLayout, \
     QGroupBox, QFormLayout, QSizePolicy as QSzPlcy, QPushButton
 from qtpy.QtCore import Qt
@@ -13,6 +15,17 @@ from siriushla.common.cam_basler import SiriusImageView, create_propty_layout,\
 from siriushla.widgets.windows import create_window_from_widget
 
 
+def conv_sec_2_device(sec):
+    if sec == 'BO':
+        return 'BO-50U:DI-VLightCam'
+    elif sec == 'SI':
+        return 'SI-01C2FE:DI-VLightCam'
+    elif sec == 'IT':
+        return 'IT-EGH:DI-Cam'
+    else:
+        raise ValueError('device not defined for section {}'.format(sec))
+
+
 class VLightCamView(QWidget):
     """VLight Cam Viewer."""
 
@@ -21,9 +34,7 @@ class VLightCamView(QWidget):
         super().__init__(parent)
         self.prefix = prefix
         self.section = section.upper()
-        self.device = _PVName(
-            ('BO-50U' if self.section == 'BO' else 'SI-01C2FE') +
-            ':DI-VLightCam')
+        self.device = _PVName(conv_sec_2_device(self.section))
         self.cam_prefix = self.device.substitute(prefix=prefix)
         self.setObjectName(self.section + 'App')
         self.setWindowTitle(self.device + ' View')
