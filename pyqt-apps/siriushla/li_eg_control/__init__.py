@@ -1,1 +1,1 @@
-from .main import LIEgunWindow
+from .main import LIEgunWindow, ITTIWidget
