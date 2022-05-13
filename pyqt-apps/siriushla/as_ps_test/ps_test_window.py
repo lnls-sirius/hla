@@ -1164,7 +1164,8 @@ class PSTestWindow(SiriusMainWindow):
                         dcl_typ = PSSearch.conv_psname_2_pstype(dcl)
                         if dcl_typ == 'as-dclink-regatron-master':
                             alldclinks.add(dcl)
-        return list(alldclinks)
+        alldclinks = [PVName(dev) for dev in alldclinks]
+        return alldclinks
 
     def _open_detail(self, index):
         name = PVName(index.data())
