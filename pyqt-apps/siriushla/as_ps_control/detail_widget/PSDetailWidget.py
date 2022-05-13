@@ -1528,9 +1528,6 @@ class FastCorrPSDetailWidget(PSDetailWidget):
             self, self._prefixed_psname + ":Current-SP")
         self.current_sp.precisionFromPV = False
         self.current_sp.precision = 6
-        self.current_sp.limitsFromChannel = False
-        self.current_sp.setMinimum(-1.0)
-        self.current_sp.setMaximum(+1.0)
         self.current_sp.showStepExponent = False
         self.current_rb = PyDMLabel(
             self, self._prefixed_psname+":Current-RB")
@@ -1551,17 +1548,18 @@ class FastCorrPSDetailWidget(PSDetailWidget):
         current_sp_label = QLabel("Setpoint")
         current_rb_label = QLabel("Readback")
 
-        self.current_sp = PyDMLineEdit(
+        self.current_raw_sp = SiriusSpinbox(
             self, self._prefixed_psname + ":CurrentRaw-SP")
-        self.current_rb = PyDMLabel(
+        self.current_raw_sp.showStepExponent = False
+        self.current_raw_rb = PyDMLabel(
             self, self._prefixed_psname+":CurrentRaw-RB")
 
         layout = QGridLayout()
         layout.setAlignment(Qt.AlignTop)
         layout.addWidget(current_sp_label, 0, 0, Qt.AlignRight)
-        layout.addWidget(self.current_sp, 0, 1)
+        layout.addWidget(self.current_raw_sp, 0, 1)
         layout.addWidget(current_rb_label, 1, 0, Qt.AlignRight)
-        layout.addWidget(self.current_rb, 1, 1)
+        layout.addWidget(self.current_raw_rb, 1, 1)
         layout.setColumnStretch(2, 1)
         return layout
 
@@ -1606,53 +1604,83 @@ class FastCorrPSDetailWidget(PSDetailWidget):
         return layout
 
     def _paramsLayout(self):
-        ctlkp_lb = QLabel('CtrlLoopKp', self, alignment=Qt.AlignRight)
-        self.ctlkp_sp = PyDMLineEdit(
+        ctlkp_lb = QLabel(
+            'CtrlLoopKp', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+        self.ctlkp_sp = SiriusSpinbox(
             self, self._prefixed_psname + ':CtrlLoopKp-SP')
+        self.ctlkp_sp.limitsFromChannel = False
+        self.ctlkp_sp.setMinimum(0.0)
+        self.ctlkp_sp.setMaximum(2**31 - 1)
+        self.ctlkp_sp.showStepExponent = False
         self.ctlkp_rb = PyDMLabel(
             self, self._prefixed_psname + ':CtrlLoopKp-RB')
 
-        ctlti_lb = QLabel('CtrlLoopTi', self, alignment=Qt.AlignRight)
-        self.ctlti_sp = PyDMLineEdit(
+        ctlti_lb = QLabel(
+            'CtrlLoopTi', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+        self.ctlti_sp = SiriusSpinbox(
             self, self._prefixed_psname + ':CtrlLoopTi-SP')
+        self.ctlti_sp.limitsFromChannel = False
+        self.ctlti_sp.setMinimum(0.0)
+        self.ctlti_sp.setMaximum(2**31 - 1)
+        self.ctlti_sp.showStepExponent = False
         self.ctlti_rb = PyDMLabel(
             self, self._prefixed_psname + ':CtrlLoopTi-RB')
 
-        cgain_lb = QLabel('CurrGain', self, alignment=Qt.AlignRight)
-        self.cgain_sp = PyDMLineEdit(
+        cgain_lb = QLabel(
+            'CurrGain', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+        self.cgain_sp = SiriusSpinbox(
             self, self._prefixed_psname + ':CurrGain-SP')
         self.cgain_sp.precisionFromPV = False
         self.cgain_sp.precision = 8
+        self.cgain_sp.limitsFromChannel = False
+        self.cgain_sp.setMinimum(-1)
+        self.cgain_sp.setMaximum(+1)
+        self.cgain_sp.showStepExponent = False
         self.cgain_rb = PyDMLabel(
             self, self._prefixed_psname + ':CurrGain-RB')
         self.cgain_rb.precisionFromPV = False
         self.cgain_rb.precision = 8
 
-        coffs_lb = QLabel('CurrOffset', self, alignment=Qt.AlignRight)
-        self.coffs_sp = PyDMLineEdit(
+        coffs_lb = QLabel(
+            'CurrOffset', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+        self.coffs_sp = SiriusSpinbox(
             self, self._prefixed_psname + ':CurrOffset-SP')
         self.coffs_sp.precisionFromPV = False
         self.coffs_sp.precision = 8
+        self.coffs_sp.limitsFromChannel = False
+        self.coffs_sp.setMinimum(-100)
+        self.coffs_sp.setMaximum(+100)
+        self.coffs_sp.showStepExponent = False
         self.coffs_rb = PyDMLabel(
             self, self._prefixed_psname + ':CurrOffset-RB')
         self.coffs_rb.precisionFromPV = False
         self.coffs_rb.precision = 8
 
-        vgain_lb = QLabel('VoltGain', self, alignment=Qt.AlignRight)
-        self.vgain_sp = PyDMLineEdit(
+        vgain_lb = QLabel(
+            'VoltGain', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+        self.vgain_sp = SiriusSpinbox(
             self, self._prefixed_psname + ':VoltGain-SP')
         self.vgain_sp.precisionFromPV = False
         self.vgain_sp.precision = 8
+        self.vgain_sp.limitsFromChannel = False
+        self.vgain_sp.setMinimum(-1)
+        self.vgain_sp.setMaximum(+1)
+        self.vgain_sp.showStepExponent = False
         self.vgain_rb = PyDMLabel(
             self, self._prefixed_psname + ':VoltGain-RB')
         self.vgain_rb.precisionFromPV = False
         self.vgain_rb.precision = 8
 
-        voffs_lb = QLabel('VoltOffset', self, alignment=Qt.AlignRight)
-        self.voffs_sp = PyDMLineEdit(
+        voffs_lb = QLabel(
+            'VoltOffset', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+        self.voffs_sp = SiriusSpinbox(
             self, self._prefixed_psname + ':VoltOffset-SP')
         self.voffs_sp.precisionFromPV = False
         self.voffs_sp.precision = 8
+        self.voffs_sp.limitsFromChannel = False
+        self.voffs_sp.setMinimum(-100)
+        self.voffs_sp.setMaximum(+100)
+        self.voffs_sp.showStepExponent = False
         self.voffs_rb = PyDMLabel(
             self, self._prefixed_psname + ':VoltOffset-RB')
         self.voffs_rb.precisionFromPV = False
