@@ -285,7 +285,7 @@ class PSGraphProptySelWidget(QWidget):
         currsymb = self.cb_prop_symb.currentText()
         self._magfunc = magfunc
         self._pstype = pstype
-        if self._pstype in ('si-corrector-fch', 'si-corrector-fcv'):
+        if 'si-corrector-fc' in self._pstype:
             self._choose_prop_symb = PSGraphProptySelWidget.PROP_SYMB_FASTCORR
             self._choose_prop_line = PSGraphProptySelWidget.PROP_LINE_FASTCORR
         else:
@@ -297,7 +297,7 @@ class PSGraphProptySelWidget(QWidget):
         self.cb_prop_line.clear()
         self.cb_prop_line.addItems(self._choose_prop_line)
         self._intstr_propty = get_strength_label(self._magfunc)
-        if self._pstype in ('si-corrector-fch', 'si-corrector-fcv'):
+        if 'si-corrector-fc' in self._pstype:
             for suf in ['-SP', '-RB']:
                 self.cb_prop_line.addItem(self._intstr_propty+suf)
         else:
