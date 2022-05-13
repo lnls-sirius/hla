@@ -664,6 +664,7 @@ def get_object(ismenubar=True, parent=None):
             self.connect_newprocess(all_dev, scr)
             psmenu.addAction(all_dev)
 
+            # dips
             if sec != 'li':
                 dip = QAction('Dipoles', psmenu)
                 self.connect_newprocess(dip, [scr, '--device', 'dipole'])
@@ -674,138 +675,126 @@ def get_object(ismenubar=True, parent=None):
                     spect, [scr, '--device', 'spectrometer'])
                 psmenu.addAction(spect)
 
+            # quads
             quad = QAction('Quadrupoles', psmenu)
             self.connect_newprocess(quad, [scr, '--device', 'quadrupole'])
             psmenu.addAction(quad)
 
+            # sext
             if sec in {'bo', 'si'}:
                 sext = QAction('Sextupoles', psmenu)
                 self.connect_newprocess(sext, [scr, '--device', 'sextupole'])
                 psmenu.addAction(sext)
 
-                if sec == 'bo':
-                    skew = QAction('Skew Quadrupoles', psmenu)
-                    self.connect_newprocess(
-                        skew, [scr, '--device', 'skew-quadrupole'])
-                    psmenu.addAction(skew)
-                else:
-                    skew_menu = psmenu.addMenu('Skew Quadrupoles')
-                    skew_menu.setObjectName('SIApp')
+            ps_indiv = {
+                'Correctors': {
+                    'device': 'corrector-slow',
+                    'graphs': {'All': 'C(H|V)', 'CH': 'CH', 'CV': 'CV'},
+                },
+                'Trims': {
+                    'device': 'trim-quadrupole',
+                    'graphs': {'All': 'Q(F|D|[1-4]).*', 'QF': 'QF.*',
+                               'QD': 'QD.*', 'Q1,Q2,Q3&&Q4': 'Q[1-4].*'},
+                },
+                'Skew Quadrupoles': {
+                    'device': 'skew-quadrupole',
+                    'graphs': {'All': 'QS'},
+                },
+                'Fast Correctors': {
+                    'device': 'corrector-fast',
+                    'graphs': {'All': 'FC(H|V)', 'FCH': 'FCH', 'FCV': 'FCV'},
+                },
+            }
+            if sec != 'li':
+                for pstype, data in ps_indiv.items():
+                    type_menu = psmenu.addMenu(pstype)
+                    type_menu.setObjectName(sec.upper()+'App')
 
-                    skew_all_menu = skew_menu.addMenu('All')
-                    skew_all_menu.setObjectName('SIApp')
-                    skew_all_lst_act = QAction('List', skew_all_menu)
-                    self.connect_newprocess(
-                        skew_all_lst_act, [scr, '--device', 'skew-quadrupole'])
-                    skew_all_menu.addAction(skew_all_lst_act)
-                    skew_all_gph_act = QAction('Graph', skew_all_menu)
-                    self.connect_newprocess(
-                        skew_all_gph_act,
-                        ['sirius-hla-as-ps-graphmon.py',
-                         '--section', 'SI', '--device', 'QS'])
-                    skew_all_menu.addAction(skew_all_gph_act)
+                    if sec == 'si':
+                        all_menu = type_menu.addMenu('All')
+                        all_menu.setObjectName(sec.upper()+'App')
+                    elif pstype == 'Correctors':
+                        all_menu = type_menu
 
-                    skew_sec_menu = skew_menu.addMenu('Subsectors')
-                    skew_sec_menu.setObjectName('SIApp')
-                    for i in range(20):
-                        act = skew_sec_menu.addAction('SI-{:02d}'.format(i+1))
+                    # list
+                    all_lst_act = QAction('List', all_menu)
+                    self.connect_newprocess(
+                        all_lst_act, [scr, '--device', data['device']])
+                    all_menu.addAction(all_lst_act)
+
+                    # graphs
+                    if len(data['graphs']) > 1:
+                        all_gph_menu = all_menu.addMenu('Graph')
+                        all_gph_menu.setObjectName(sec.upper()+'App')
+                        for label, filt in data['graphs'].items():
+                            act = QAction(label, all_gph_menu)
+                            self.connect_newprocess(
+                                act, ['sirius-hla-as-ps-graphmon.py',
+                                      '--section', sec.upper(), '--device', filt])
+                            all_gph_menu.addAction(act)
+                    else:
+                        all_gph_act = QAction('Graph', all_menu)
                         self.connect_newprocess(
-                            act, [scr, '--device', 'skew-quadrupole',
+                            all_gph_act,
+                            ['sirius-hla-as-ps-graphmon.py',
+                             '--section', sec.upper(), '--device',
+                             data['graphs']['All']])
+                        all_menu.addAction(all_gph_act)
+
+                    if sec != 'si':
+                        break
+
+                    # subsectors
+                    sec_menu = type_menu.addMenu('Subsectors')
+                    sec_menu.setObjectName('SIApp')
+                    for i in range(20):
+                        act = sec_menu.addAction('SI-{:02d}'.format(i+1))
+                        self.connect_newprocess(
+                            act, [scr, '--device', data['device'],
                                   '--subsection', '{:02d}.*'.format(i+1)])
 
-            corrs_menu = psmenu.addMenu('Correctors')
-            corrs_menu.setObjectName(sec.upper()+'App')
+                    # trims fams
+                    if pstype != 'Trims':
+                        continue
 
-            if sec == 'si':
-                corrs_all_menu = corrs_menu.addMenu('All')
-                corrs_all_menu.setObjectName(sec.upper()+'App')
+                    fam_all_menu = type_menu.addMenu('Families')
+                    fam_all_menu.setObjectName('SIApp')
+                    fams = PSSearch.get_psnames(
+                        {'sec': 'SI', 'sub': 'Fam', 'dev': 'Q(D|F|[1-4]).*'})
+                    for fam in fams:
+                        fam = SiriusPVName(fam)
+                        fam_menu = fam_all_menu.addMenu(fam.dev)
+                        fam_menu.setObjectName('SIApp')
+                        act1 = QAction('List', fam_menu)
+                        self.connect_newprocess(
+                            act1, [scr, '--device', fam, '-istrim'])
+                        fam_menu.addAction(act1)
+                        act2 = QAction('Graph', fam_menu)
+                        self.connect_newprocess(
+                            act2, ['sirius-hla-as-ps-graphmon.py',
+                                   '--section', 'SI', '--device', fam.dev])
+                        fam_menu.addAction(act2)
             else:
-                corrs_all_menu = corrs_menu
-
-            corrs_all_lst_act = QAction('List', corrs_all_menu)
-            self.connect_newprocess(
-                corrs_all_lst_act, [scr, '--device', 'corrector-slow'])
-            corrs_all_menu.addAction(corrs_all_lst_act)
-
-            corrs_all_gph_menu = corrs_all_menu.addMenu('Graph')
-            corrs_all_gph_menu.setObjectName(sec.upper()+'App')
-            label2filt = {
-                'All': 'C(H|V)', 'All CH': 'CH', 'All CV': 'CV'}
-            for label, filt in label2filt.items():
-                act = QAction(label, corrs_all_gph_menu)
+                corrs = QAction('Correctors', psmenu)
                 self.connect_newprocess(
-                    act, ['sirius-hla-as-ps-graphmon.py',
-                          '--section', sec.upper(), '--device', filt])
-                corrs_all_gph_menu.addAction(act)
-
-            if sec == 'si':
-                corrs_sec_menu = corrs_menu.addMenu('Subsectors')
-                corrs_sec_menu.setObjectName('SIApp')
-                for i in range(20):
-                    act = corrs_sec_menu.addAction('SI-{:02d}'.format(i+1))
-                    self.connect_newprocess(
-                        act, [scr, '--device', 'corrector-slow',
-                              '--subsection', '{:02d}.*'.format(i+1)])
-
-                trims_menu = psmenu.addMenu('Trims')
-                trims_menu.setObjectName('SIApp')
-
-                trims_all_menu = trims_menu.addMenu('All')
-                trims_all_menu.setObjectName('SIApp')
-                trims_all_act = QAction('List', trims_all_menu)
-                self.connect_newprocess(
-                    trims_all_act, [scr, '--device', 'trim-quadrupole'])
-                trims_all_menu.addAction(trims_all_act)
-
-                trims_all_gph_menu = trims_all_menu.addMenu('Graph')
-                trims_all_gph_menu.setObjectName(sec.upper()+'App')
-                label2filt = {
-                    'All': 'Q(F|D|[1-4]).*', 'All QF': 'QF.*',
-                    'All QD': 'QD.*', 'All Q1,Q2,Q3&&Q4': 'Q[1-4].*'}
-                for label, filt in label2filt.items():
-                    act = QAction(label, trims_all_gph_menu)
-                    self.connect_newprocess(
-                        act, ['sirius-hla-as-ps-graphmon.py',
-                              '--section', 'SI', '--device', filt])
-                    trims_all_gph_menu.addAction(act)
-
-                trims_sec_menu = trims_menu.addMenu('Subsectors')
-                trims_sec_menu.setObjectName('SIApp')
-                for i in range(1, 21):
-                    act = trims_sec_menu.addAction('SI-{:02d}'.format(i))
-                    self.connect_newprocess(
-                        act, [scr, '--device', 'trim-quadrupole',
-                              '--subsection', '{:02d}.*'.format(i)])
-                trims_fam_menu = trims_menu.addMenu('Families')
-                trims_fam_menu.setObjectName('SIApp')
-                fams = PSSearch.get_psnames(
-                    {'sec': 'SI', 'sub': 'Fam', 'dev': 'Q(D|F|[1-4]).*'})
-                for fam in fams:
-                    fam = SiriusPVName(fam)
-                    fam_menu = trims_fam_menu.addMenu(fam.dev)
-                    fam_menu.setObjectName('SIApp')
-                    act1 = QAction('List', fam_menu)
-                    self.connect_newprocess(
-                        act1, [scr, '--device', fam, '-istrim'])
-                    fam_menu.addAction(act1)
-                    act2 = QAction('Graph', fam_menu)
-                    self.connect_newprocess(
-                        act2, ['sirius-hla-as-ps-graphmon.py',
-                               '--section', 'SI', '--device', fam.dev])
-                    fam_menu.addAction(act2)
-
-            elif sec == 'bo':
-                wfmerr = QAction('Waveform Error', psmenu)
-                self.connect_newprocess(wfmerr, 'sirius-hla-bo-ps-wfmerror.py')
-                psmenu.addAction(wfmerr)
-
-            elif sec == 'li':
+                    corrs, [scr, '--device', 'corrector-slow'])
+                psmenu.addAction(corrs)
                 lens = QAction('Lens', psmenu)
                 self.connect_newprocess(lens, [scr, '--device', 'lens'])
                 psmenu.addAction(lens)
                 slnd = QAction('Solenoids', psmenu)
                 self.connect_newprocess(slnd, [scr, '--device', 'solenoid'])
                 psmenu.addAction(slnd)
+
+            if sec == 'bo':
+                skew = QAction('Skew Quadrupoles', psmenu)
+                self.connect_newprocess(
+                    skew, [scr, '--device', 'skew-quadrupole'])
+                psmenu.addAction(skew)
+
+                wfmerr = QAction('Waveform Error', psmenu)
+                self.connect_newprocess(wfmerr, 'sirius-hla-bo-ps-wfmerror.py')
+                psmenu.addAction(wfmerr)
 
             return psmenu
 
