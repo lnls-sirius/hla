@@ -111,7 +111,7 @@ class SiriusLabel(QLabel, TextFormatter, PyDMWidget, DisplayFormat):
             try:
                 self.setText(self.enum_strings[int(new_value)])
             except IndexError:
-                self.setText("**INVALID**")
+                self.setText(f'Index Overflow [{new_value}]')
             return
         # If the value is a number (float or int), display it using a
         # format string if necessary.

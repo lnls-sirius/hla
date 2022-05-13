@@ -448,6 +448,19 @@ def get_object(ismenubar=True, parent=None):
             self.connect_newprocess(egun, 'sirius-hla-it-eg-control.py')
             self.add_object_to_level1(menu, egun)
 
+            TI = LEVEL2A('Timing', menu)
+            TI.setIcon(qta.icon('mdi.timer'))
+            self.connect_newprocess(TI, 'sirius-hla-it-ti-control.py')
+            self.add_object_to_level1(menu, TI)
+
+            Cam = LEVEL2A('Cam', menu)
+            Cam.setIcon(qta.icon('mdi.camera-outline'))
+            self.connect_newprocess(Cam, 'sirius-hla-it-di-vlight.py')
+            self.add_object_to_level1(menu, Cam)
+
+            VA = self._set_va_menu('it')
+            self.add_object_to_level1(menu, VA)
+
             return menu
 
         def _set_optics_menu(self, sec):
@@ -830,20 +843,21 @@ def get_object(ismenubar=True, parent=None):
             menu = LEVEL2M('VA', self)
             menu.setObjectName(sec.upper()+'App')
 
-            agilent = QAction('Agilent', menu)
-            self.connect_newprocess(
-                agilent,
-                'sirius-hla-'+secl+'-va-agilent4uhv-overview',
-                is_pydm=True)
+            if sec != 'it':
+                agilent = QAction('Agilent', menu)
+                self.connect_newprocess(
+                    agilent,
+                    'sirius-hla-'+secl+'-va-agilent4uhv-overview',
+                    is_pydm=True)
+                menu.addAction(agilent)
 
             mks = QAction('MKS', menu)
             self.connect_newprocess(
                 mks,
                 'sirius-hla-'+secl+'-va-mks937b-overview',
                 is_pydm=True)
-
-            menu.addAction(agilent)
             menu.addAction(mks)
+
             return menu
 
         def connect_newprocess(self, button, cmd, is_pydm=False):
