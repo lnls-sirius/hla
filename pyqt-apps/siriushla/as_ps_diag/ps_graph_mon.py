@@ -731,11 +731,14 @@ class _PVHandler:
 
     def set_values(self, propty, value):
         """Set PV values."""
-        for psn in self._psnames:
+        psnames = self._psnames
+        self._create_pvs(psnames, propty)
+
+        for psn in psnames:
             pvname = self._get_pvname(psn, propty)
             _PVHandler._pvs[pvname].wait_for_connection()
 
-        for psn in self._psnames:
+        for psn in psnames:
             pvname = self._get_pvname(psn, propty)
             _PVHandler._pvs[pvname].put(value)
 
