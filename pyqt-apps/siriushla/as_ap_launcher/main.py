@@ -19,7 +19,7 @@ from ..as_ti_control import BucketList, EVGInjectionLed, EVGInjectionButton
 from ..as_ap_machshift import MachShiftLabel
 from ..as_ap_injection import InjSysStbyControlWidget, InjDiagLed, \
     MonitorSummaryWidget, ClockLabel
-from ..as_rf_control import RFKillBeamButton
+from ..as_ap_injection import RFKillBeamButton
 from .menu import get_object
 
 
@@ -74,7 +74,7 @@ class MainLauncher(SiriusMainWindow):
         machshift_pvname = SiriusPVName(
             'AS-Glob:AP-MachShift:Mode-Sel').substitute(prefix=self._prefix)
         cbox_shift_mode = SiriusEnumComboBox(self, machshift_pvname)
-        label_shift_mode = MachShiftLabel()
+        label_shift_mode = MachShiftLabel(self, self._prefix)
         label_shift_mode.label.setStyleSheet(
             'QLabel{max-height: 2em; min-width: 7em;}')
         lay_shift = QGridLayout(self.wid_shift)
@@ -283,7 +283,7 @@ class MainLauncher(SiriusMainWindow):
         # RF Kill Beam
         self.wid_rfkill = QGroupBox('RF Kill Beam')
         self.wid_rfkill.setObjectName('RFKillBeam')
-        rfkill_bt = RFKillBeamButton(self)
+        rfkill_bt = RFKillBeamButton(self, self._prefix)
         rfkill_lay = QGridLayout(self.wid_rfkill)
         rfkill_lay.addWidget(rfkill_bt)
 
@@ -362,16 +362,15 @@ class MainLauncher(SiriusMainWindow):
     def mouseDoubleClickEvent(self, event):
         """Implement mouseDoubleClickEvent."""
         if event.button() == Qt.LeftButton:
-            point = event.pos()
-            if self.wid_curr.geometry().contains(point):
+            if self.wid_curr.underMouse():
                 self.showStatus.emit()
-            elif self.wid_shift.geometry().contains(point):
+            elif self.wid_shift.underMouse():
                 self.showStatus.emit()
-            elif self.wid_egun.geometry().contains(point):
+            elif self.wid_egun.underMouse():
                 self.showEgun.emit()
-            elif self.wid_mon.geometry().contains(point):
+            elif self.wid_mon.underMouse():
                 self.showMonitor.emit()
-        return super().mouseDoubleClickEvent(event)
+        super().mouseDoubleClickEvent(event)
 
     def changeEvent(self, event):
         """Implement changeEvent."""

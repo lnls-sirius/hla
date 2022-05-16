@@ -45,7 +45,7 @@ def excepthook(exctype, excvalue, tracebackobj):
     notice = \
         'An unhandled exception occurred. Please report the problem '\
         'via email to <{}>.\nA log has {{}}been written to "{}".\n\n'\
-        'Error information:\n'.format("fernando.sa@lnls.br", LOGFILE)
+        'Error information:\n'.format("ana.clara@lnls.br", LOGFILE)
     timestring = time.strftime("%Y-%m-%d, %H:%M:%S") + '\n'
 
     tbinfofile = StringIO()
@@ -124,16 +124,9 @@ class SiriusApplication(PyDMApplication):
 
     def _create_and_show(self, wid, w_class, parent, **kwargs):
         with data_plugins.connection_queue():
-            try:
-                window = w_class(parent=parent, **kwargs)
-            except ValueError as e:
-                QMessageBox.critical(
-                    self.activeWindow(),
-                    'Could not open window',
-                    'Failed to open window: {}'.format(e))
-            else:
-                self._windows[wid] = window
-                self._windows[wid].show()
+            window = w_class(parent=parent, **kwargs)
+            self._windows[wid] = window
+            self._windows[wid].show()
 
     def _get_desktop_geometry(self):
         screen = self.primaryScreen()

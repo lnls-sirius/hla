@@ -38,6 +38,8 @@ class LIEgunWindow(SiriusMainWindow):
 
         wid_sysstatus = self._setupSysStatusWidget()
         wid_hvps = self._setupHVPSWidget()
+        if self.sec == 'IT':
+            wid_timing = ITTIWidget(self, self.prefix)
         wid_trigger = self._setupTriggerWidget()
         wid_filaps = self._setupFilaPSWidget()
         wid_biasps = self._setupBiasPSWidget()
@@ -48,13 +50,25 @@ class LIEgunWindow(SiriusMainWindow):
         layout.setVerticalSpacing(12)
         layout.setHorizontalSpacing(12)
         layout.addWidget(self.title, 0, 0, 1, 6)
-        layout.addWidget(wid_sysstatus, 1, 0, 1, 1)
-        layout.addWidget(wid_hvps, 1, 1, 1, 4)
-        layout.addWidget(wid_trigger, 1, 5)
-        layout.addWidget(wid_filaps, 2, 0, 1, 6)
-        layout.addWidget(wid_biasps, 3, 0, 1, 6)
-        layout.addWidget(wid_pulseps, 4, 0, 1, 3)
-        layout.addWidget(wid_multipulseps, 4, 3, 1, 3)
+        if self.sec == 'IT':
+            layout.addWidget(wid_sysstatus, 1, 0, 2, 1)
+            layout.addWidget(wid_hvps, 1, 1, 2, 4)
+            layout.addWidget(wid_timing, 1, 5)
+            layout.addWidget(wid_trigger, 2, 5)
+            layout.addWidget(wid_filaps, 3, 0, 1, 6)
+            layout.addWidget(wid_biasps, 4, 0, 1, 6)
+            layout.addWidget(wid_pulseps, 5, 0, 1, 3)
+            layout.addWidget(wid_multipulseps, 5, 3, 1, 3)
+            layout.setRowStretch(1, 1)
+            layout.setRowStretch(2, 3)
+        else:
+            layout.addWidget(wid_sysstatus, 1, 0, 1, 1)
+            layout.addWidget(wid_hvps, 1, 1, 1, 4)
+            layout.addWidget(wid_trigger, 1, 5)
+            layout.addWidget(wid_filaps, 2, 0, 1, 6)
+            layout.addWidget(wid_biasps, 3, 0, 1, 6)
+            layout.addWidget(wid_pulseps, 4, 0, 1, 3)
+            layout.addWidget(wid_multipulseps, 4, 3, 1, 3)
         layout.setColumnStretch(0, 3)
         layout.setColumnStretch(1, 2)
         layout.setColumnStretch(2, 2)
@@ -64,6 +78,7 @@ class LIEgunWindow(SiriusMainWindow):
 
         self.setStyleSheet("""
             QLabel{
+                max-height: 2em;
                 qproperty-alignment: AlignCenter;
             }""")
 
@@ -327,3 +342,38 @@ class LIEgunWindow(SiriusMainWindow):
         lay.addWidget(self._ld_mpulspwrrb, 0, 1)
         lay.addWidget(self._lb_mpulspwrrb, 1, 1)
         return wid
+
+
+class ITTIWidget(QWidget):
+    """IT Timing control widget."""
+
+    def __init__(self, parent=None, prefix='', is_main=False):
+        """Init."""
+        super().__init__(parent)
+        self.setObjectName('ITApp')
+
+        ld_tienbl = QLabel('Enable Pulses', self, alignment=Qt.AlignCenter)
+        bt_tienblsel = PyDMStateButton(
+            self, prefix+'IT-EGH:TI-TrigGen:ChanOut-Sel')
+        led_tienblsts = SiriusLedState(
+            self, prefix+'IT-EGH:TI-TrigGen:ChanOut-Sts')
+
+        lay = QGridLayout(self)
+        lay.setAlignment(Qt.AlignCenter)
+        lay.setContentsMargins(0, 0, 0, 0)
+
+        glay = QGridLayout()
+        glay.addWidget(ld_tienbl, 0, 0, 1, 2)
+        glay.addWidget(bt_tienblsel, 1, 0)
+        glay.addWidget(led_tienblsts, 1, 1)
+        if not is_main:
+            gbox = QGroupBox('Timing', self)
+            gbox.setLayout(glay)
+            lay.addWidget(gbox)
+        else:
+            lb_title = QLabel(
+                '<h3>IT - Timing</h3>', self, alignment=Qt.AlignCenter)
+            lay.setHorizontalSpacing(15)
+            lay.setVerticalSpacing(15)
+            lay.addWidget(lb_title, 0, 0)
+            lay.addLayout(glay, 1, 0)

@@ -1,10 +1,10 @@
-"""MagnetDetailWidget definition."""
-import re
-import numpy as _np
-from datetime import datetime as _datetime
+"""PS Detail Widget."""
 
-from qtpy.QtCore import Qt, QRegExp
-from qtpy.QtGui import QRegExpValidator
+import re
+from datetime import datetime as _datetime
+import numpy as _np
+
+from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QGroupBox, QPushButton, QLabel, \
     QGridLayout, QVBoxLayout, QHBoxLayout, QFormLayout, QTabWidget, \
     QSizePolicy as QSzPlcy, QCheckBox, QHeaderView, QAbstractItemView, \
@@ -17,6 +17,7 @@ from pydm.widgets import PyDMLabel, PyDMEnumComboBox, PyDMPushButton, \
     PyDMLineEdit, PyDMWaveformPlot
 from pydm.widgets.display_format import parse_value_for_display
 
+from siriuspy.util import get_strength_label
 from siriuspy.namesys import SiriusPVName
 from siriuspy.envars import VACA_PREFIX
 from siriuspy.search import PSSearch
@@ -25,10 +26,11 @@ from siriuspy.pwrsupply.csdev import get_ps_propty_database, get_ps_modules, \
     ETypes as _PSet
 from siriuspy.devices import PowerSupply
 
-from siriushla import util
-from siriushla.widgets import PyDMStateButton, PyDMLinEditScrollbar, \
-    SiriusConnectionSignal, SiriusLedState, SiriusLedAlert, \
-    PyDMLedMultiChannel, SiriusDialog, SiriusWaveformTable, SiriusSpinbox
+from ... import util
+from ...widgets import PyDMStateButton, PyDMLinEditScrollbar, SiriusTimePlot, \
+    SiriusConnectionSignal, SiriusLedState, SiriusLedAlert, PyDMLed, \
+    PyDMLedMultiChannel, SiriusDialog, SiriusWaveformTable, SiriusSpinbox, \
+    SiriusHexaSpinbox
 from .InterlockWindow import InterlockWindow, LIInterlockWindow
 from .custom_widgets import LISpectIntlkLed
 
@@ -76,12 +78,6 @@ class PSDetailWidget(QWidget):
             min-height: 1.5em;
             max-height: 1.5em;
         }
-        PyDMWaveformPlot {
-            min-width: 18em;
-            max-width: 18em;
-            min-height: 14.4em;
-            max-height: 14.4em;
-        }
     """
 
     AuxDev2ModDict = {
@@ -126,37 +122,49 @@ class PSDetailWidget(QWidget):
     def __init__(self, psname, parent=None):
         """Class constructor."""
         super(PSDetailWidget, self).__init__(parent)
-        self._VACA_PREFIX = VACA_PREFIX
+        self._prefix = VACA_PREFIX
         self._psname = SiriusPVName(psname)
         self._psmodel = PSSearch.conv_psname_2_psmodel(psname)
         self._pstype = PSSearch.conv_psname_2_pstype(self._psname)
-        self._metric = self._getElementMetric()
+        try:
+            self._metric = get_strength_label(
+                PSSearch.conv_psname_2_magfunc(self._psname))
+        except ValueError:
+            self._metric = ''
 
         self._db = get_ps_propty_database(self._psmodel, self._pstype)
         self._mods = get_ps_modules(psmodel=self._psmodel)
+
         if self._mods:
-            self._mod2db = {mod: [pv for pv in self._db
-                                  if 'Mod'+mod in pv and 'IIB' in pv and
-                                  'Intlk' not in pv and 'Alarm' not in pv]
-                            for mod in self._mods}
+            self._mod2db = {
+                mod: [
+                    pv for pv in self._db
+                    if 'Mod'+mod in pv and 'IIB' in pv and
+                    'Intlk' not in pv and 'Alarm' not in pv
+                ] for mod in self._mods
+            }
         else:
-            self._mod2db = {'main': [pv for pv in self._db if 'IIB' in pv and
-                                     'Intlk' not in pv and 'Alarm' not in pv]}
-        self._auxmeasures = [pv for pv in self._db
-                             if pv not in self.BasicParams and
-                             'Intlk' not in pv and 'Alarm' not in pv and
-                             (self._metric not in pv if self._metric else True) and
-                             'IIB' not in pv and 'Param' not in pv]
-        self._params = [prm for prm in self._db
-                        if 'Param' in prm and '-Cte' in prm]
+            self._mod2db = {
+                'main': [
+                    pv for pv in self._db if 'IIB' in pv and
+                    'Intlk' not in pv and 'Alarm' not in pv
+                ]
+            }
+        self._auxmeasures = [
+            pv for pv in self._db if pv not in self.BasicParams and
+            'Intlk' not in pv and 'Alarm' not in pv and
+            (self._metric not in pv if self._metric else True) and
+            'IIB' not in pv and 'Param' not in pv
+        ]
+        self._params = [
+            prm for prm in self._db if 'Param' in prm and '-Cte' in prm]
 
         self._auxdev = ['', ]
         self._auxdev2mod = self.AuxDev2ModDict
         if self._psname in self._auxdev2mod:
             self._auxdev = ['', 'a', 'b', 'c']
 
-        self._prefixed_psname = self._psname.substitute(
-            prefix=self._VACA_PREFIX)
+        self._prefixed_psname = self._psname.substitute(prefix=self._prefix)
 
         self.setObjectName(parent.objectName())
 
@@ -898,7 +906,7 @@ class PSDetailWidget(QWidget):
         dur_rb = self._prefixed_psname + ':ScopeDuration-RB'
 
         self.scope_src_label = QLabel('Source', self)
-        self.scope_src_sp_sb = CustomSpinBox(self, src_sp)
+        self.scope_src_sp_sb = SiriusHexaSpinbox(self, src_sp)
         self.scope_src_sp_sb.showStepExponent = False
         self.scope_src_rb_lb = PyDMLabel(self, src_rb)
         self.scope_src_rb_lb.displayFormat = PyDMLabel.DisplayFormat.Hex
@@ -928,32 +936,6 @@ class PSDetailWidget(QWidget):
         layout.addWidget(self.scope_dur_sp_sb, 2, 1)
         layout.addWidget(self.scope_dur_rb_label, 2, 2)
         return layout
-
-    def _getElementMetric(self):
-        dipole = re.compile("(SI|TS|BO|TB)-(Fam|\w{2,4}):PS-B.*$")
-        quadrupole = re.compile("(SI|TS|BO|TB)-(Fam|\w{2,4}):PS-Q\w+")
-        liquad = re.compile("LI-(Fam|\w{2,4}):PS-Q(?!(F|D)1)")
-        lispect = re.compile("LI-01:PS-Spect")
-        sextupole = re.compile("(SI|TS|BO|TB)-(Fam|\w{2,4}):PS-S(?!lnd)\w+$")
-        slow_corrector = re.compile("(SI|TS|BO|TB|LI)-(Fam|\w{2,4}):PS-(CH|CV)(-|\w)*")
-        fast_corrector = re.compile(
-            "(SI|BO|TS|TB)-(Fam|\w{2,4}):PS-(FCH|FCV)(-|\w)*")
-        skew_quad = re.compile("(SI|TS|BO|TB)-(Fam|\w{2,4}):PS-QS")
-
-        if dipole.match(self._psname):
-            return "Energy"
-        elif quadrupole.match(self._psname) or \
-                skew_quad.match(self._psname) or \
-                liquad.match(self._psname):
-            return "KL"
-        elif sextupole.match(self._psname):
-            return "SL"
-        elif slow_corrector.match(self._psname) or \
-                fast_corrector.match(self._psname) or \
-                lispect.match(self._psname):
-            return "Kick"
-        else:
-            return ""
 
 
 class LIPSDetailWidget(PSDetailWidget):
@@ -1039,7 +1021,8 @@ class LIPSDetailWidget(PSDetailWidget):
 
         self.tstamp_update_label = QLabel('IOC Update')
         self.tstamp_update_label.setObjectName("tstampupdate_label")
-        self.tstamp_update_label.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
+        self.tstamp_update_label.setSizePolicy(
+            QSzPlcy.Minimum, QSzPlcy.Maximum)
         self.tstamp_update_mon = PyDMLabel(
             self, self._prefixed_psname + ":TimestampUpdate-Mon")
         self.tstamp_update_mon.setObjectName("tstampupdate_mon_label")
@@ -1402,6 +1385,418 @@ class FACDCLinkDetailWidget(DCLinkDetailWidget):
         return layout
 
 
+class FastCorrPSDetailWidget(PSDetailWidget):
+
+    CONV_CORR2CHANNEL = {
+        'M1-FCH': 0,
+        'M1-FCV': 1,
+        'M2-FCH': 2,
+        'M2-FCV': 3,
+        'C2-FCH': 4,
+        'C2-FCV': 5,
+        'C3-FCH': 6,
+        'C3-FCV': 7,
+    }
+
+    def _setup_ui(self):
+        # Group boxes that compose the widget
+        self.opmode_box = QGroupBox('OpMode')
+        self.opmode_box.setObjectName('operation_mode')
+        self.pwrstate_box = QGroupBox('PwrState')
+        self.pwrstate_box.setObjectName('power_state')
+        self.ctrlloop_box = QGroupBox('Control Loop')
+        self.ctrlloop_box.setObjectName('ctrlloop_box')
+        self.interlock_box = QGroupBox('Interlock')
+        self.interlock_box.setObjectName('interlock')
+        self.params_box = QGroupBox('Params')
+        self.params_box.setObjectName('params_box')
+        self.currtab = QTabWidget()
+        self.currtab.setObjectName('SITab')
+        self.current_a_box = QWidget()
+        self.current_a_box.setObjectName('current')
+        self.currtab.addTab(self.current_a_box, 'Current [A]')
+        self.current_raw_box = QWidget()
+        self.current_raw_box.setObjectName('current')
+        self.currtab.addTab(self.current_raw_box, 'Current [Raw]')
+        self.metric_box = QGroupBox(self._metric)
+        self.metric_box.setObjectName('metric')
+        self.waveform_box = self._wfmWidget()
+
+        # Set group boxes layouts
+        self.opmode_box.setLayout(self._opModeLayout())
+        self.pwrstate_box.setLayout(self._powerStateLayout())
+        self.ctrlloop_box.setLayout(self._ctrlLoopLayout())
+        self.interlock_box.setLayout(self._interlockLayout())
+        self.params_box.setLayout(self._paramsLayout())
+        self.current_a_box.setLayout(self._currentALayout())
+        self.current_raw_box.setLayout(self._currentRawLayout())
+        self.metric_box.setLayout(self._metricLayout())
+
+        # Add group boxes to laytout
+        self.layout = self._setWidgetLayout()
+
+        # Set widget layout
+        self.setLayout(self.layout)
+
+    def _setWidgetLayout(self):
+        boxes_layout = QGridLayout()
+        boxes_layout.addWidget(self.opmode_box, 0, 0)
+        boxes_layout.addWidget(self.pwrstate_box, 0, 1)
+        boxes_layout.addWidget(self.ctrlloop_box, 1, 0)
+        boxes_layout.addWidget(self.interlock_box, 1, 1)
+        boxes_layout.addWidget(self.params_box, 2, 0, 1, 2)
+        boxes_layout.addWidget(self.currtab, 0, 2)
+        boxes_layout.addWidget(self.metric_box, 1, 2)
+        boxes_layout.addWidget(self.waveform_box, 2, 2)
+
+        layout = QVBoxLayout()
+        layout.addWidget(QLabel("<h2>" + self._psname + "</h2>", self))
+        layout.addLayout(boxes_layout)
+        return layout
+
+    def _powerStateLayout(self):
+        self.state_button = PyDMStateButton(
+            parent=self, init_channel=self._prefixed_psname + ':PwrState-Sel')
+        self.pwrstate_led = SiriusLedState(
+            parent=self, init_channel=self._prefixed_psname + ':PwrState-Sts')
+
+        layout = QVBoxLayout()
+        layout.setAlignment(Qt.AlignCenter)
+        layout.addWidget(self.state_button)
+        layout.addWidget(self.pwrstate_led)
+        return layout
+
+    def _opModeLayout(self):
+        test_lb = QLabel('Tests', self)
+
+        oltriang_lb = QLabel('Open/Triang', self)
+        self.oltriang_sb = PyDMStateButton(
+            self, self._prefixed_psname + ':TestOpenLoopTriang-Sel')
+        self.oltriang_rb = SiriusLedState(
+            self, self._prefixed_psname + ':TestOpenLoopTriang-Sts')
+
+        olsquare_lb = QLabel('Open/Square', self)
+        self.olsquare_sb = PyDMStateButton(
+            self, self._prefixed_psname + ':TestOpenLoopSquare-Sel')
+        self.olsquare_rb = SiriusLedState(
+            self, self._prefixed_psname + ':TestOpenLoopSquare-Sts')
+
+        clsquare_lb = QLabel('Closed/Square', self)
+        self.clsquare_sb = PyDMStateButton(
+            self, self._prefixed_psname + ':TestClosedLoopSquare-Sel')
+        self.clsquare_rb = SiriusLedState(
+            self, self._prefixed_psname + ':TestClosedLoopSquare-Sts')
+
+        layout = QGridLayout()
+        layout.setAlignment(Qt.AlignCenter)
+        layout.setHorizontalSpacing(4)
+        layout.addWidget(test_lb, 0, 0, 1, 3, Qt.AlignHCenter)
+        layout.addWidget(oltriang_lb, 1, 0, Qt.AlignHCenter)
+        layout.addWidget(self.oltriang_sb, 1, 1, Qt.AlignRight)
+        layout.addWidget(self.oltriang_rb, 1, 2, Qt.AlignLeft)
+        layout.addWidget(olsquare_lb, 2, 0, Qt.AlignHCenter)
+        layout.addWidget(self.olsquare_sb, 2, 1, Qt.AlignRight)
+        layout.addWidget(self.olsquare_rb, 2, 2, Qt.AlignLeft)
+        layout.addWidget(clsquare_lb, 3, 0, Qt.AlignHCenter)
+        layout.addWidget(self.clsquare_sb, 3, 1, Qt.AlignRight)
+        layout.addWidget(self.clsquare_rb, 3, 2, Qt.AlignLeft)
+        return layout
+
+    def _ctrlLoopLayout(self):
+        self.ctrlloop_btn = PyDMStateButton(
+            parent=self, init_channel=self._prefixed_psname + ":CtrlLoop-Sel")
+        self.ctrlloop_label = PyDMLabel(
+            parent=self, init_channel=self._prefixed_psname + ":CtrlLoop-Sts")
+        self.ctrlloop_label.setObjectName('ctrlloop_label')
+        self.ctrlloop_led = SiriusLedState(
+            parent=self, init_channel=self._prefixed_psname + ":CtrlLoop-Sts")
+
+        lay_sts = QHBoxLayout()
+        lay_sts.addWidget(self.ctrlloop_led)
+        lay_sts.addWidget(self.ctrlloop_label)
+
+        layout = QGridLayout()
+        layout.setAlignment(Qt.AlignCenter)
+        layout.addWidget(self.ctrlloop_btn, 0, 0, Qt.AlignHCenter)
+        layout.addLayout(lay_sts, 1, 0)
+        return layout
+
+    def _currentALayout(self):
+        current_sp_label = QLabel("Setpoint")
+        current_rb_label = QLabel("Readback")
+
+        self.current_sp = SiriusSpinbox(
+            self, self._prefixed_psname + ":Current-SP")
+        self.current_sp.precisionFromPV = False
+        self.current_sp.precision = 6
+        self.current_sp.showStepExponent = False
+        self.current_rb = PyDMLabel(
+            self, self._prefixed_psname+":Current-RB")
+        self.current_rb.precisionFromPV = False
+        self.current_rb.precision = 6
+        self.current_rb.showUnits = True
+
+        layout = QGridLayout()
+        layout.setAlignment(Qt.AlignTop)
+        layout.addWidget(current_sp_label, 0, 0, Qt.AlignRight)
+        layout.addWidget(self.current_sp, 0, 1)
+        layout.addWidget(current_rb_label, 1, 0, Qt.AlignRight)
+        layout.addWidget(self.current_rb, 1, 1)
+        layout.setColumnStretch(2, 1)
+        return layout
+
+    def _currentRawLayout(self):
+        current_sp_label = QLabel("Setpoint")
+        current_rb_label = QLabel("Readback")
+
+        self.current_raw_sp = SiriusSpinbox(
+            self, self._prefixed_psname + ":CurrentRaw-SP")
+        self.current_raw_sp.showStepExponent = False
+        self.current_raw_rb = PyDMLabel(
+            self, self._prefixed_psname+":CurrentRaw-RB")
+
+        layout = QGridLayout()
+        layout.setAlignment(Qt.AlignTop)
+        layout.addWidget(current_sp_label, 0, 0, Qt.AlignRight)
+        layout.addWidget(self.current_raw_sp, 0, 1)
+        layout.addWidget(current_rb_label, 1, 0, Qt.AlignRight)
+        layout.addWidget(self.current_raw_rb, 1, 1)
+        layout.setColumnStretch(2, 1)
+        return layout
+
+    def _metricLayout(self):
+        metric_sp_label = QLabel('Setpoint')
+        metric_rb_label = QLabel('Readback')
+
+        self.metric_sp = SiriusSpinbox(
+            self, self._prefixed_psname+':'+self._metric+'-SP')
+        self.metric_sp.showStepExponent = False
+        self.metric_rb = PyDMLabel(
+            self, self._prefixed_psname+':'+self._metric+'-RB')
+        self.metric_rb.precisionFromPV = False
+        self.metric_rb.precision = 6
+        self.metric_rb.showUnits = True
+
+        layout = QGridLayout()
+        layout.setAlignment(Qt.AlignTop)
+        layout.addWidget(metric_sp_label, 0, 0, Qt.AlignRight)
+        layout.addWidget(self.metric_sp, 0, 1)
+        layout.addWidget(metric_rb_label, 1, 0, Qt.AlignRight)
+        layout.addWidget(self.metric_rb, 1, 1)
+        layout.setColumnStretch(2, 1)
+        return layout
+
+    def _interlockLayout(self):
+        alarms = [
+            'PSAmpOverCurrFlagL-Sts',
+            'PSAmpOverCurrFlagR-Sts',
+            'PSAmpOverTempFlagL-Sts',
+            'PSAmpOverTempFlagR-Sts',
+        ]
+        layout = QGridLayout()
+        layout.setAlignment(Qt.AlignCenter)
+        for i, alm in enumerate(alarms):
+            led = PyDMLed(self, self._prefixed_psname + ':' + alm)
+            led.onColor = led.LightGreen
+            led.offColor = led.Red
+            label = QLabel(alm.split('-')[0].split('PSAmp')[1], self)
+            layout.addWidget(led, i, 0)
+            layout.addWidget(label, i, 1)
+        return layout
+
+    def _paramsLayout(self):
+        ctlkp_lb = QLabel(
+            'CtrlLoopKp', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+        self.ctlkp_sp = SiriusSpinbox(
+            self, self._prefixed_psname + ':CtrlLoopKp-SP')
+        self.ctlkp_sp.limitsFromChannel = False
+        self.ctlkp_sp.setMinimum(0.0)
+        self.ctlkp_sp.setMaximum(2**31 - 1)
+        self.ctlkp_sp.showStepExponent = False
+        self.ctlkp_rb = PyDMLabel(
+            self, self._prefixed_psname + ':CtrlLoopKp-RB')
+
+        ctlti_lb = QLabel(
+            'CtrlLoopTi', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+        self.ctlti_sp = SiriusSpinbox(
+            self, self._prefixed_psname + ':CtrlLoopTi-SP')
+        self.ctlti_sp.limitsFromChannel = False
+        self.ctlti_sp.setMinimum(0.0)
+        self.ctlti_sp.setMaximum(2**31 - 1)
+        self.ctlti_sp.showStepExponent = False
+        self.ctlti_rb = PyDMLabel(
+            self, self._prefixed_psname + ':CtrlLoopTi-RB')
+
+        cgain_lb = QLabel(
+            'CurrGain', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+        self.cgain_sp = SiriusSpinbox(
+            self, self._prefixed_psname + ':CurrGain-SP')
+        self.cgain_sp.precisionFromPV = False
+        self.cgain_sp.precision = 8
+        self.cgain_sp.limitsFromChannel = False
+        self.cgain_sp.setMinimum(-1)
+        self.cgain_sp.setMaximum(+1)
+        self.cgain_sp.showStepExponent = False
+        self.cgain_rb = PyDMLabel(
+            self, self._prefixed_psname + ':CurrGain-RB')
+        self.cgain_rb.precisionFromPV = False
+        self.cgain_rb.precision = 8
+
+        coffs_lb = QLabel(
+            'CurrOffset', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+        self.coffs_sp = SiriusSpinbox(
+            self, self._prefixed_psname + ':CurrOffset-SP')
+        self.coffs_sp.precisionFromPV = False
+        self.coffs_sp.precision = 8
+        self.coffs_sp.limitsFromChannel = False
+        self.coffs_sp.setMinimum(-100)
+        self.coffs_sp.setMaximum(+100)
+        self.coffs_sp.showStepExponent = False
+        self.coffs_rb = PyDMLabel(
+            self, self._prefixed_psname + ':CurrOffset-RB')
+        self.coffs_rb.precisionFromPV = False
+        self.coffs_rb.precision = 8
+
+        vgain_lb = QLabel(
+            'VoltGain', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+        self.vgain_sp = SiriusSpinbox(
+            self, self._prefixed_psname + ':VoltGain-SP')
+        self.vgain_sp.precisionFromPV = False
+        self.vgain_sp.precision = 8
+        self.vgain_sp.limitsFromChannel = False
+        self.vgain_sp.setMinimum(-1)
+        self.vgain_sp.setMaximum(+1)
+        self.vgain_sp.showStepExponent = False
+        self.vgain_rb = PyDMLabel(
+            self, self._prefixed_psname + ':VoltGain-RB')
+        self.vgain_rb.precisionFromPV = False
+        self.vgain_rb.precision = 8
+
+        voffs_lb = QLabel(
+            'VoltOffset', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+        self.voffs_sp = SiriusSpinbox(
+            self, self._prefixed_psname + ':VoltOffset-SP')
+        self.voffs_sp.precisionFromPV = False
+        self.voffs_sp.precision = 8
+        self.voffs_sp.limitsFromChannel = False
+        self.voffs_sp.setMinimum(-100)
+        self.voffs_sp.setMaximum(+100)
+        self.voffs_sp.showStepExponent = False
+        self.voffs_rb = PyDMLabel(
+            self, self._prefixed_psname + ':VoltOffset-RB')
+        self.voffs_rb.precisionFromPV = False
+        self.voffs_rb.precision = 8
+
+        layout = QGridLayout()
+        layout.addWidget(ctlkp_lb, 0, 0, Qt.AlignRight)
+        layout.addWidget(self.ctlkp_sp, 0, 1)
+        layout.addWidget(self.ctlkp_rb, 0, 2)
+        layout.addWidget(ctlti_lb, 1, 0, Qt.AlignRight)
+        layout.addWidget(self.ctlti_sp, 1, 1)
+        layout.addWidget(self.ctlti_rb, 1, 2)
+        layout.addWidget(cgain_lb, 2, 0, Qt.AlignRight)
+        layout.addWidget(self.cgain_sp, 2, 1)
+        layout.addWidget(self.cgain_rb, 2, 2)
+        layout.addWidget(coffs_lb, 3, 0, Qt.AlignRight)
+        layout.addWidget(self.coffs_sp, 3, 1)
+        layout.addWidget(self.coffs_rb, 3, 2)
+        layout.addWidget(vgain_lb, 4, 0, Qt.AlignRight)
+        layout.addWidget(self.vgain_sp, 4, 1)
+        layout.addWidget(self.vgain_rb, 4, 2)
+        layout.addWidget(voffs_lb, 5, 0, Qt.AlignRight)
+        layout.addWidget(self.voffs_sp, 5, 1)
+        layout.addWidget(self.voffs_rb, 5, 2)
+        return layout
+
+    def _wfmWidget(self):
+        fofbctrl = SiriusPVName('IA-99RaBPM:BS-FOFBCtrl')
+        subnum = self._prefixed_psname.sub[:2]
+        subnam = self._prefixed_psname.sub[2:]
+        dev = self._prefixed_psname.dev
+        fofbctrl = fofbctrl.replace('99', subnum)
+        # fofbctrl = fofbctrl.replace('IA-'+subnum, 'XX-99SL01')  # comment
+        chn = FastCorrPSDetailWidget.CONV_CORR2CHANNEL[subnam+'-'+dev]
+
+        self.graph_curr = PyDMWaveformPlot()
+        # self.graph_curr.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
+        self.graph_curr.autoRangeX = True
+        self.graph_curr.autoRangeY = True
+        self.graph_curr.showXGrid = True
+        self.graph_curr.showYGrid = True
+        self.graph_curr.title = 'Current'
+        self.graph_curr.setLabel("left", text='Current [A]')
+        self.graph_curr.setLabel("bottom", text='Index')
+        self.graph_curr.plotItem.showButtons()
+        self.graph_curr.setBackgroundColor(QColor(255, 255, 255))
+        self.graph_curr.addChannel(
+            y_channel=fofbctrl.substitute(
+                propty='GENConvArrayDataCH'+str(chn)),
+            name='Current', color='blue', lineWidth=2)
+
+        self.graph_volt = PyDMWaveformPlot()
+        # self.graph_volt.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
+        self.graph_volt.autoRangeX = True
+        self.graph_volt.autoRangeY = True
+        self.graph_volt.showXGrid = True
+        self.graph_volt.showYGrid = True
+        self.graph_volt.title = 'Voltage'
+        self.graph_volt.setLabel("left", text='Voltage [V]')
+        self.graph_volt.setLabel("bottom", text='Index')
+        self.graph_volt.plotItem.showButtons()
+        self.graph_volt.setBackgroundColor(QColor(255, 255, 255))
+        self.graph_volt.addChannel(
+            y_channel=fofbctrl.substitute(
+                propty='GENConvArrayDataCH'+str(chn+12)),
+            name='Voltage', color='blue', lineWidth=2)
+
+        self.graph_chist = SiriusTimePlot()
+        self.graph_chist.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
+        self.graph_chist.autoRangeX = True
+        self.graph_chist.autoRangeY = True
+        self.graph_chist.showXGrid = True
+        self.graph_chist.showYGrid = True
+        self.graph_chist.title = 'Current Mean History'
+        self.graph_chist.setLabel("left", text='Current [A]')
+        self.graph_chist.showLegend = True
+        timespan = 5*60  # 5min
+        self.graph_chist.timeSpan = timespan  # [s]
+        self.graph_chist.bufferSize = 5*timespan  # [max 5 samples/s]
+        self.graph_chist.plotItem.showButtons()
+        self.graph_chist.setBackgroundColor(QColor(255, 255, 255))
+        self.graph_chist.addYChannel(
+            y_channel=self._prefixed_psname.substitute(propty='Current-SP'),
+            name='SP', color='red', lineWidth=2)
+        self.graph_chist.addYChannel(
+            y_channel=self._prefixed_psname.substitute(propty='Current-RB'),
+            name='RB', color='blue', lineWidth=2)
+        self.chn_chist = SiriusConnectionSignal(fofbctrl.substitute(
+            propty='GENConvArrayDataCH'+str(chn)))
+        self.chn_chist.new_value_signal[_np.ndarray].connect(
+            self._plot_currhist)
+        self.graph_chist.addYChannel(
+            y_channel='FAKE:CurrentHistory',
+            name='Mon', color='black', lineWidth=2)
+        self.curve_chist = self.graph_chist.curveAtIndex(2)
+
+        tab = QTabWidget(self)
+        tab.setObjectName('SITab')
+        tab.addTab(self.graph_curr, 'Curr.')
+        tab.addTab(self.graph_volt, 'Volt.')
+        tab.addTab(self.graph_chist, 'Curr.Hist.')
+        tab.setCurrentIndex(2)
+        tab.setStyleSheet("""
+            #SITab::pane {
+                border-left: 2px solid gray;
+                border-bottom: 2px solid gray;
+                border-right: 2px solid gray;
+            }""")
+        return tab
+
+    def _plot_currhist(self, new_array):
+        mean = _np.mean(new_array)
+        self.curve_chist.receiveNewValue(mean)
+
+
 class PSAuxMeasWidget(SiriusDialog):
     """PS Modules Detail Widget."""
 
@@ -1551,9 +1946,8 @@ class PSParamsWidget(SiriusDialog):
         """Init."""
         super().__init__(parent)
         self._psname = SiriusPVName(psname)
-        self._VACA_PREFIX = VACA_PREFIX
-        self._prefixed_psname = self._psname.substitute(
-            prefix=self._VACA_PREFIX)
+        self._prefix = VACA_PREFIX
+        self._prefixed_psname = self._psname.substitute(prefix=self._prefix)
 
         self.params = params
 
@@ -1645,7 +2039,7 @@ class PSParamsWidget(SiriusDialog):
 class CustomLabel(PyDMLabel):
 
     def value_changed(self, new_value):
-        super(PyDMLabel, self).value_changed(new_value)
+        super(CustomLabel, self).value_changed(new_value)
         new_value = parse_value_for_display(
             value=new_value, precision=self.precision,
             display_format_type=self._display_format_type,
@@ -1660,7 +2054,7 @@ class CustomLabel(PyDMLabel):
             try:
                 self.setText(self.enum_strings[int(new_value)])
             except IndexError:
-                self.setText("**INVALID**")
+                self.setText(f'Index Overflow [{new_value}]')
             return
         elif self.enum_strings is not None and \
                 isinstance(new_value, _np.ndarray):
@@ -1673,38 +2067,3 @@ class CustomLabel(PyDMLabel):
             self.setText(self.format_string.format(new_value))
             return
         self.setText(str(new_value))
-
-
-class CustomSpinBox(SiriusSpinbox):
-
-    def valueFromText(self, text):
-        return int(str(text), 16)
-
-    def textFromValue(self, value):
-        return hex(int(value))
-
-    def validate(self, text, pos):
-        regex = QRegExp("0x[0-9A-Fa-f]{1,8}")
-        regex.setCaseSensitivity(Qt.CaseInsensitive)
-        return QRegExpValidator(regex, self).validate(text, pos)
-
-    def update_step_size(self):
-        """Reimplement to use hexa base."""
-        self.setSingleStep(16 ** self.step_exponent)
-        self.update_format_string()
-
-    def update_format_string(self):
-        """Reimplement to use hexa base."""
-        if self._show_units:
-            units = " {}".format(self._unit)
-        else:
-            units = ""
-
-        if self._show_step_exponent:
-            self.setSuffix(
-                '{0} Step: 16**{1}'.format(units, self.step_exponent))
-            self.lineEdit().setToolTip("")
-        else:
-            self.setSuffix(units)
-            self.lineEdit().setToolTip(
-                'Step: 16**{0:+d}'.format(self.step_exponent))

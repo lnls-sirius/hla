@@ -7,7 +7,7 @@ from matplotlib import cm
 from qtpy.QtCore import Qt, QEvent, QTimer
 from qtpy.QtGui import QColor, QPalette
 from qtpy.QtWidgets import QWidget, QLabel, QCheckBox, QGridLayout, \
-    QApplication, QVBoxLayout, QHBoxLayout, QSizePolicy as QSzPol
+    QApplication, QVBoxLayout, QSizePolicy as QSzPol
 
 import qtawesome as qta
 
@@ -58,8 +58,8 @@ class RadTotDoseMonitor(QWidget):
             ('Thermo14', '(SI-14, hall eixo 55)'),
             ('Thermo4', '(SI-14-IA-14, eixo 57)'),
             ('Thermo6', '(SI-15, hall eixo 59)'),
-            ('Thermo5', '(SI-17, hall eixo 04)'),
-            ('Thermo3', '(SI-19, hall eixo 10)'),
+            ('Thermo3', '(SI-17, hall eixo 04)'),
+            ('Thermo5', '(SI-19, hall eixo 10)'),
             ('Thermo11', '(SI-20, hall eixo 14)'),
         )
         self._colors = cm.jet(np.linspace(0, 1, len(self._sensor_list)))*255
@@ -108,6 +108,8 @@ class RadTotDoseMonitor(QWidget):
         self.timeplot.setObjectName('timeplot')
         self.timeplot.setStyleSheet(
             '#timeplot{min-width:12em; min-height: 10em;}')
+        self.timeplot.bufferReset.connect(self._fill_refline)
+        self.timeplot.timeSpanChanged.connect(self._fill_refline)
         t_end = Time.now()
         t_init = t_end - timespan
 
@@ -126,7 +128,7 @@ class RadTotDoseMonitor(QWidget):
             'QLabel{font-size: 52pt; font-weight: bold;}')
 
         widgrid = QWidget()
-        widgrid.setSizePolicy(QSzPol.Minimum, QSzPol.Expanding)
+        widgrid.setSizePolicy(QSzPol.Maximum, QSzPol.Expanding)
         laygrid = QGridLayout(widgrid)
         laygrid.setHorizontalSpacing(10)
         laygrid.setVerticalSpacing(10)
@@ -153,6 +155,7 @@ class RadTotDoseMonitor(QWidget):
             cb = QCheckBox(self)
             cb.setChecked(True)
             cb.stateChanged.connect(curve.setVisible)
+            cb.setSizePolicy(QSzPol.Maximum, QSzPol.Maximum)
             pal = cb.palette()
             pal.setColor(QPalette.Base, coloro)
             pal.setColor(QPalette.Text, Qt.white)
@@ -165,15 +168,12 @@ class RadTotDoseMonitor(QWidget):
             lb.showUnits = True
             self._pvs_labels[pvn] = lb
 
-            widfr = QWidget()
-            widfrlay = QHBoxLayout(widfr)
-            widfrlay.setContentsMargins(0, 0, 0, 0)
-            widfrlay.addWidget(cb)
-            widfrlay.addWidget(lb)
             frame = SiriusAlarmFrame(self, pvname + ':Dose')
-            frame.add_widget(widfr)
+            frame.add_widget(cb)
+            frame.add_widget(lb)
 
             desc = QLabel(pvn + ' ' + local, self, alignment=Qt.AlignCenter)
+            desc.setSizePolicy(QSzPol.Preferred, QSzPol.Maximum)
             desc.setStyleSheet(
                 'QLabel{background-color:black; color:white;font-size:26pt;}')
             self._desc_labels[pvn] = desc
@@ -198,11 +198,7 @@ class RadTotDoseMonitor(QWidget):
         self.timeplot.addYChannel(
             'Reference', color='black', lineWidth=6, lineStyle=Qt.DashLine)
         self.refline = self.timeplot.curveAtIndex(-1)
-        basecurve = self.timeplot.curveAtIndex(0)
-        timebuffer = basecurve.data_buffer[0]
-        valuebuffer = [RadTotDoseMonitor.REF_TOT_DOSE]*timebuffer.size
-        self.timeplot.fill_curve_buffer(
-            self.refline, timebuffer, valuebuffer)
+        self._fill_refline()
 
         lay = QGridLayout(self)
         lay.setSpacing(20)
@@ -220,7 +216,7 @@ class RadTotDoseMonitor(QWidget):
 
         self._timer = QTimer()
         self._timer.timeout.connect(self._update_graph_ref)
-        self._timer.setInterval(5000)
+        self._timer.setInterval(2000)
         self._timer.start()
 
     def changeEvent(self, event):
@@ -246,6 +242,18 @@ class RadTotDoseMonitor(QWidget):
                     'font-size:'+str(fontsize - 18)+'pt;}')
 
             self.ensurePolished()
+
+    def _fill_refline(self):
+        basecurve = self.timeplot.curveAtIndex(0)
+        timebuffer = basecurve.data_buffer[0]
+        firstvalid = (timebuffer != 0).argmax()
+        if timebuffer[firstvalid] == 0:
+            timebuffer = np.array([Time.now().timestamp(), ])
+        else:
+            timebuffer = timebuffer[firstvalid:]
+        valuebuffer = [RadTotDoseMonitor.REF_TOT_DOSE]*timebuffer.size
+        self.timeplot.fill_curve_buffer(
+            self.refline, timebuffer, valuebuffer)
 
     def _update_graph_ref(self):
         self.refline.receiveNewValue(RadTotDoseMonitor.REF_TOT_DOSE)

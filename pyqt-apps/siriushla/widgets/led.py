@@ -35,6 +35,7 @@ class PyDMLed(QLed, PyDMWidget):
     LightGreen = QColor(0, 140, 0)
     Yellow = QColor(210, 205, 0)
     Red = QColor(207, 0, 0)
+    DarkRed = QColor(120, 0, 0)
     default_colorlist = [DarkGreen, LightGreen, Yellow, Red]
 
     def __init__(self, parent=None, init_channel=None, bit=-1,

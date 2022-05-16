@@ -18,6 +18,7 @@ from ..SummaryWidgets import SummaryWidget, SummaryHeader, \
 
 
 class PSContainer(QWidget):
+    """PSContainer."""
 
     def __init__(self, widget, parent=None):
         super().__init__(parent)
@@ -262,10 +263,7 @@ class BasePSControlWidget(QWidget):
         else:
             self.all_props = get_prop2label(self._dev_list[0])
 
-        visible_props = self._getVisibleProps()
-        self.visible_props = visible_props if visible_props is not None else\
-            ['detail', 'state', 'intlk', 'setpoint', 'monitor',
-             'strength_sp', 'strength_mon']
+        self.visible_props = self._getVisibleProps()
         if 'trim' in self.all_props:
             self.visible_props.append('trim')
         self.visible_props = sort_propties(self.visible_props)
@@ -335,7 +333,7 @@ class BasePSControlWidget(QWidget):
 
             # Loop power supply to create all the widgets of a groupbox
             group_widgets = list()
-            for n, psname in enumerate(pwrsupplies):
+            for psname in pwrsupplies:
                 ps_widget = SummaryWidget(
                     name=psname, visible_props=self.visible_props, parent=self)
                 pscontainer = PSContainer(ps_widget, self)
@@ -373,7 +371,7 @@ class BasePSControlWidget(QWidget):
         w_lay = QVBoxLayout(scr_area_wid)
         w_lay.setSpacing(0)
         w_lay.setContentsMargins(0, 0, 0, 0)
-        for line, widget in enumerate(widget_group):
+        for widget in widget_group:
             w_lay.addWidget(widget, alignment=Qt.AlignLeft)
         w_lay.addStretch()
 
@@ -398,8 +396,9 @@ class BasePSControlWidget(QWidget):
             return QSplitter(Qt.Vertical)
 
     def _getVisibleProps(self):
-        """Reimplement in derived classes."""
-        return None
+        """Default visible properties."""
+        return ['detail', 'state', 'intlk', 'setpoint', 'monitor',
+                'strength_sp', 'strength_mon']
 
     def _filter_pwrsupplies(self, text):
         """Filter power supply widgets based on text inserted at line edit."""
@@ -471,6 +470,14 @@ class BasePSControlWidget(QWidget):
         self.turn_off_act = QAction("Turn Off", self)
         self.turn_off_act.triggered.connect(lambda: self._set_pwrstate(False))
         self.turn_off_act.setEnabled(False)
+        self.ctrlloop_close_act = QAction("Close Control Loop", self)
+        self.ctrlloop_close_act.triggered.connect(
+            lambda: self._set_ctrlloop(True))
+        self.ctrlloop_close_act.setEnabled(False)
+        self.ctrlloop_open_act = QAction("Open Control Loop", self)
+        self.ctrlloop_open_act.triggered.connect(
+            lambda: self._set_ctrlloop(False))
+        self.ctrlloop_open_act.setEnabled(False)
         self.set_slowref_act = QAction("Set OpMode to SlowRef", self)
         self.set_slowref_act.triggered.connect(self._set_slowref)
         self.set_slowref_act.setEnabled(False)
@@ -497,6 +504,10 @@ class BasePSControlWidget(QWidget):
                 not self.turn_on_act.isEnabled():
             self.turn_on_act.setEnabled(True)
             self.turn_off_act.setEnabled(True)
+        if 'ctrlloop' in self.visible_props and \
+                not self.ctrlloop_close_act.isEnabled():
+            self.ctrlloop_close_act.setEnabled(True)
+            self.ctrlloop_open_act.setEnabled(True)
         if 'opmode' in self.visible_props and \
                 not self.set_slowref_act.isEnabled():
             self.set_slowref_act.setEnabled(True)
@@ -524,6 +535,19 @@ class BasePSControlWidget(QWidget):
                         widget.turn_on()
                     else:
                         widget.turn_off()
+                except TypeError:
+                    pass
+
+    @Slot(bool)
+    def _set_ctrlloop(self, state):
+        """Execute close/open control loop actions."""
+        for key, widget in self.ps_widgets_dict.items():
+            if key in self.filtered_widgets:
+                try:
+                    if state:
+                        widget.ctrlloop_close()
+                    else:
+                        widget.ctrlloop_open()
                 except TypeError:
                     pass
 
@@ -594,12 +618,15 @@ class BasePSControlWidget(QWidget):
         menu = QMenu("Actions", self)
         menu.addAction(self.turn_on_act)
         menu.addAction(self.turn_off_act)
-        menu.addAction(self.set_slowref_act)
+        menu.addAction(self.ctrlloop_close_act)
+        menu.addAction(self.ctrlloop_open_act)
         menu.addAction(self.set_current_sp_act)
-        menu.addAction(self.reset_act)
-        menu.addAction(self.wfmupdate_on_act)
-        menu.addAction(self.wfmupdate_off_act)
-        menu.addAction(self.updparms_act)
+        if not self._dev_list[0].dev in ('FCH', 'FCV'):
+            menu.addAction(self.set_slowref_act)
+            menu.addAction(self.reset_act)
+            menu.addAction(self.wfmupdate_on_act)
+            menu.addAction(self.wfmupdate_off_act)
+            menu.addAction(self.updparms_act)
         menu.addSeparator()
         action = menu.addAction('Show Connections...')
         action.triggered.connect(self.show_connections)
@@ -608,8 +635,8 @@ class BasePSControlWidget(QWidget):
     def show_connections(self, checked):
         """."""
         _ = checked
-        c = ConnectionInspector(self)
-        c.show()
+        conn = ConnectionInspector(self)
+        conn.show()
 
     def get_summary_widgets(self):
         """Return Summary Widgets."""

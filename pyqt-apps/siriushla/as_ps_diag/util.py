@@ -1,11 +1,12 @@
 """Util module."""
-from copy import deepcopy as _dcopy
+
 from siriuspy.search import PSSearch
 
 # Constants
 
 lips2filters = {'Lens': {'sec': 'LI', 'sub': '.*', 'dev': 'Lens.*'},
-                'CH/CV': {'sec': 'LI', 'sub': '.*', 'dev': '(CH|CV).*'},
+                'CH': {'sec': 'LI', 'sub': '.*', 'dev': 'CH'},
+                'CV': {'sec': 'LI', 'sub': '.*', 'dev': 'CV'},
                 'Slnd': {'sec': 'LI', 'sub': '.*', 'dev': 'Slnd.*'},
                 'Q': {'sec': 'LI', 'sub': '.*', 'dev': '(QF|QD).*'},
                 'Spect': {'sec': 'LI', 'sub': '.*', 'dev': 'Spect.*'},
@@ -15,14 +16,10 @@ asps2filters = {'B': {'sub': '.*', 'dev': 'B.*'},
                 'Q': {'sub': '.*', 'dev': 'Q(F|D|[1-4]).*'},
                 'QS': {'sub': '.*', 'dev': 'QS.*'},
                 'S': {'sub': '.*', 'dev': 'S.*'},
-                'CH/CV': {'sub': '.*', 'dev': 'C(H|V).*'},
+                'CH': {'sub': '.*', 'dev': 'CH'},
+                'CV': {'sub': '.*', 'dev': 'CV'},
                 'PM': {'sub': '.*', 'dev': '(Inj|Eje).*'},
                 }
-
-bops2filters = _dcopy(asps2filters)
-bops2filters.pop('CH/CV')
-bops2filters['CH'] = {'sub': '.*', 'dev': 'CH.*'}
-bops2filters['CV'] = {'sub': '.*', 'dev': 'CV.*'}
 
 sips2filters = {'B': {'sec': 'SI', 'sub': '.*', 'dev': 'B.*'},
                 'Q': {'sec': 'SI', 'sub': 'Fam', 'dev': 'Q(F|D|[1-4]).*'},
@@ -33,8 +30,8 @@ sips2filters = {'B': {'sec': 'SI', 'sub': '.*', 'dev': 'B.*'},
                           'dev': 'Q(F|D|[1-4]).*'},
                 'QS': {'sec': 'SI', 'sub': '[0-2][0-9].*', 'dev': 'QS'},
                 'PM': {'sec': 'SI', 'sub': '.*', 'dev': '(Inj|Eje).*'},
-                # 'FCV ': {'sec': 'SI', 'sub': '.*', 'dev': 'FCV.*'},
-                # 'FCH ': {'sec': 'SI', 'sub': '.*', 'dev': 'FCH.*'},
+                'FCH': {'sec': 'SI', 'sub': '.*', 'dev': 'FCH'},
+                'FCV': {'sec': 'SI', 'sub': '.*', 'dev': 'FCV'},
                 }
 
 
@@ -42,8 +39,6 @@ def get_label2devices(sec):
     data = dict()
     if sec == 'LI':
         ps2filt = lips2filters
-    elif sec == 'BO':
-        ps2filt = bops2filters
     elif sec == 'SI':
         ps2filt = sips2filters
     else:
@@ -60,14 +55,16 @@ SEC2LABEL2SECPOS = {
         'Spect': (0, 0, 1, 1),
         'Q': (0, 1, 1, 1),
         'Lens': (0, 2, 1, 1),
-        'Slnd': (1, 0, 1, 3),
-        'CH/CV': (2, 0, 1, 3),
+        'CH': (1, 0, 1, 2),
+        'CV': (1, 2, 1, 1),
+        'Slnd': (2, 0, 1, 5),
     },
     'TB': {
         'B': (0, 0, 1, 2),
         'Q': (1, 0, 1, 4),
         'PM': (0, 2, 1, 2),
-        'CH/CV': (2, 0, 1, 4),
+        'CH': (2, 0, 1, 2),
+        'CV': (2, 2, 1, 2),
     },
     'BO': {
         'B': (0, 0, 1, 1),
@@ -75,14 +72,15 @@ SEC2LABEL2SECPOS = {
         'S': (1, 0, 1, 1),
         'QS': (1, 1, 1, 1),
         'PM': (2, 0, 1, 1),
-        'CH': (0, 2, 3, 3),
-        'CV': (0, 5, 3, 3),
+        'CH': (0, 2, 3, 2),
+        'CV': (0, 4, 3, 2),
     },
     'TS': {
         'B': (0, 0, 1, 2),
-        'Q': (1, 0, 1, 4),
-        'PM': (0, 2, 1, 2),
-        'CH/CV': (2, 0, 1, 4),
+        'Q': (1, 0, 1, 5),
+        'PM': (0, 2, 1, 3),
+        'CH': (2, 0, 1, 2),
+        'CV': (2, 2, 1, 3),
     },
     'SI': {
         'B': (0, 1, 1, 1),
@@ -93,6 +91,8 @@ SEC2LABEL2SECPOS = {
         'CH': (1, 2, 1, 2),
         'CV': (1, 4, 1, 1),
         'Trims': (1, 5, 1, 1),
+        'FCH': (1, 6, 1, 1),
+        'FCV': (1, 7, 1, 1),
     },
 }
 
@@ -105,21 +105,19 @@ def get_col2dev_count(sec, label):
     if label == 'QS':
         return 5
     elif label == 'CH':
-        return 5 if sec != 'SI' else 6
+        return 6 if sec == 'SI' else 5 if sec == 'BO' else 7
     elif label == 'CV':
-        return 5 if sec != 'SI' else 8
+        return 8 if sec == 'SI' else 5 if sec == 'BO' else 10
     elif 'Trims' in label:
         return 14
+    elif 'FC' in label:
+        return 4
     elif label == 'S':
         return 11
     elif label == 'Q':
         return 10 if sec != 'SI' else 6
-    elif label == 'CH/CV':
-        return 20 if sec == 'BO' else 14
     elif label == 'Slnd':
-        return 11
-    elif label in ['ID-CH', 'ID-CV']:
-        return 2
+        return 21
     else:
         return 10
 
@@ -128,7 +126,10 @@ def get_dev2sub_labels(label):
     sub2labels = {
         'QS': ('M1', 'M2', 'C1', 'C2', 'C3'),
         'CH': ('M1', 'M2', 'C1', 'C2', 'C3', 'C4'),
-        'CV': ('M1', 'M2', 'C1', 'C2', ' ', 'C3', ' ', 'C4'),
-        'Trims': ('M1', ' ', ' ', 'M2', ' ', ' ', 'C1', ' ',
-                  'C2', ' ', 'C3', ' ', 'C4', ' ')}
+        'CV': ('M1', 'M2', 'C1', 'C2', 'C2', 'C3', 'C3', 'C4'),
+        'Trims': ('M1', 'M1', 'M1', 'M2', 'M2', 'M2', 'C1', 'C1',
+                  'C2', 'C2', 'C3', 'C3', 'C4', 'C4'),
+        'FCH': ('M1', 'M2', 'C2', 'C3'),
+        'FCV': ('M1', 'M2', 'C2', 'C3'),
+    }
     return sub2labels[label]

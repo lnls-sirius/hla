@@ -5,7 +5,7 @@ from datetime import datetime as _datetime
 from qtpy.QtCore import Signal, QThread
 from siriuspy.namesys import SiriusPVName as PVName
 from siriuspy.search import PSSearch
-from siriuspy.cycle import PSCycler, LinacPSCycler, PSCyclerFBP, \
+from siriuspy.cycle import PSCycler, LinacPSCycler, PSCyclerFBP, FOFBPSCycler,\
     CycleController
 
 
@@ -122,6 +122,8 @@ class CreateCyclers(BaseTask):
             if psname not in BaseTask._cyclers:
                 if PVName(psname).sec == 'LI':
                     c = LinacPSCycler(psname)
+                elif PSSearch.conv_psname_2_psmodel(psname) == 'FOFB_PS':
+                    c = FOFBPSCycler(psname)
                 elif PSSearch.conv_psname_2_psmodel(psname) == 'FBP':
                     c = PSCyclerFBP(psname)
                 else:
@@ -141,7 +143,7 @@ class VerifyPS(BaseTask):
         return 2*len(self._psnames)
 
     def function(self):
-        """Set power supplies to cycling."""
+        """Verify if PS is ready for cycle."""
         self._check(method='check_on')
         self._check(method='check_intlks')
 

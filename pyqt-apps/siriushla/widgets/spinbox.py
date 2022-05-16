@@ -1,4 +1,7 @@
-from qtpy.QtCore import Property, Qt
+"""Sirius Spinbox."""
+
+from qtpy.QtCore import Property, Qt, QRegExp
+from qtpy.QtGui import QRegExpValidator
 from pydm.widgets import PyDMSpinbox
 from pydm.widgets.base import PyDMWritableWidget, TextFormatter
 
@@ -158,3 +161,42 @@ class SiriusSpinbox(PyDMSpinbox):
             event.ignore()
         else:
             super().wheelEvent(event)
+
+
+class SiriusHexaSpinbox(SiriusSpinbox):
+    """Custom Hexa Spinbox."""
+
+    def valueFromText(self, text):
+        """Convert value from text in hexa base."""
+        return int(str(text), 16)
+
+    def textFromValue(self, value):
+        """Convert text from value in hexa base."""
+        return hex(int(value))
+
+    def validate(self, text, pos):
+        """Validate input in hexa base."""
+        regex = QRegExp("0x[0-9A-Fa-f]{1,8}")
+        regex.setCaseSensitivity(Qt.CaseInsensitive)
+        return QRegExpValidator(regex, self).validate(text, pos)
+
+    def update_step_size(self):
+        """Reimplement to use hexa base."""
+        self.setSingleStep(16 ** self.step_exponent)
+        self.update_format_string()
+
+    def update_format_string(self):
+        """Reimplement to use hexa base."""
+        if self._show_units:
+            units = " {}".format(self._unit)
+        else:
+            units = ""
+
+        if self._show_step_exponent:
+            self.setSuffix(
+                '{0} Step: 16**{1}'.format(units, self.step_exponent))
+            self.lineEdit().setToolTip("")
+        else:
+            self.setSuffix(units)
+            self.lineEdit().setToolTip(
+                'Step: 16**{0:+d}'.format(self.step_exponent))

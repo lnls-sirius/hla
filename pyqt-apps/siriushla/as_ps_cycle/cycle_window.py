@@ -16,12 +16,12 @@ from siriuspy.namesys import Filter, SiriusPVName as PVName
 from siriuspy.cycle import get_psnames, Timing, get_sections
 from siriuspy.search import PSSearch
 
-from siriushla.util import get_appropriate_color, run_newprocess
-from siriushla.widgets import SiriusMainWindow, \
+from ..util import get_appropriate_color, run_newprocess
+from ..widgets import SiriusMainWindow, \
     PyDMLedMultiConnection as PyDMLedMultiConn
-from siriushla.widgets.pvnames_tree import PVNameTree
-from siriushla.widgets.dialog import ProgressDialog, PSStatusDialog
-from siriushla.as_ps_cycle.tasks import CreateCyclers, VerifyPS, \
+from ..widgets.pvnames_tree import PVNameTree
+from ..widgets.dialog import ProgressDialog, PSStatusDialog
+from .tasks import CreateCyclers, VerifyPS, \
     SaveTiming, PrepareTiming, RestoreTiming, \
     PreparePSSOFBMode, PreparePSOpModeSlowRef, PreparePSCurrentZero, \
     PreparePSParams, PreparePSOpModeCycle, Cycle, CycleTrims
@@ -411,6 +411,8 @@ class CycleWindow(SiriusMainWindow):
                 self.progress_bar.setValue(self.progress_bar.maximum())
                 if self._is_preparing == 'cycle':
                     self._prepared = {k: False for k in self._prepared.keys()}
+                    if not self.cycle_trims_bt.isVisible():
+                        self._prepared['trims'] = True
                     cycle = False
                 else:
                     if self._is_preparing in self._prepared.keys():
@@ -485,10 +487,12 @@ class CycleWindow(SiriusMainWindow):
                 self._psnames, filters={'sec': 'SI'})
             psname2check.remove(psname)
             state2set = item.checkState(0)
+            self.pwrsupplies_tree.tree.blockSignals(True)
             for psn in psname2check:
                 item2check = self.pwrsupplies_tree._item_map[psn]
                 if item2check.checkState(0) != state2set:
-                    item2check.setCheckState(0, state2set)
+                    item2check.setData(0, Qt.CheckStateRole, state2set)
+            self.pwrsupplies_tree.tree.blockSignals(False)
         else:
             if (psname.sec in ['BO', 'SI'] and psname.dev in ['B', 'B1B2']):
                 psname2check = PSSearch.get_psnames(
@@ -499,7 +503,9 @@ class CycleWindow(SiriusMainWindow):
                 state2set = item.checkState(0)
                 state2change = item2check.checkState(0)
                 if state2change != state2set:
-                    item2check.setCheckState(0, state2set)
+                    self.pwrsupplies_tree.tree.blockSignals(True)
+                    item2check.setData(0, Qt.CheckStateRole, state2set)
+                    self.pwrsupplies_tree.tree.blockSignals(False)
 
         self._prepared.update(self._prepared_init_vals)
         self._needs_update_setup = True
@@ -518,19 +524,19 @@ class CycleWindow(SiriusMainWindow):
         ps_ch = list()
         for name in psnames:
             ps_ch.append(PVName(name).substitute(
-                prefix=VACA_PREFIX, propty='Version-Cte'))
+                prefix=VACA_PREFIX, propty='PwrState-Sts'))
         self.psconn_led.set_channels(ps_ch)
 
         # update buttons and self._prepared dict if not in advanced mode
         if not self._is_adv_mode:
-            si_fams = PSSearch.get_psnames(
-                {'sec': 'SI', 'sub': 'Fam', 'dis': 'PS'})
-            has_sifam = False
-            for psn in si_fams:
+            has_si = False
+            for psn in PSSearch.get_psnames({'sec': 'SI', 'dis': 'PS'}):
+                if psn not in self.pwrsupplies_tree._item_map:
+                    continue
                 item = self.pwrsupplies_tree._item_map[psn]
-                has_sifam |= item.checkState(0) != 0
+                has_si |= item.checkState(0) != 0
 
-            if not has_sifam:
+            if not has_si:
                 self.cycle_bt.setText('8. Cycle')
                 self.restore_timing_bt.setText(
                     '9. Restore Timing Initial State')

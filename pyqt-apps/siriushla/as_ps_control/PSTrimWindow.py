@@ -26,7 +26,7 @@ class PSTrimWindow(SiriusMainWindow):
         self.central_widget.layout = QVBoxLayout()
         self.central_widget.setLayout(self.central_widget.layout)
         self.setCentralWidget(self.central_widget)
-        # Create family MagnetWidget
+        # Create family SummaryWidget
         self.fam_widget = SummaryWidget(
             name=self._devname, parent=self,
             visible_props=[
@@ -36,14 +36,14 @@ class PSTrimWindow(SiriusMainWindow):
         # Connect family detail window
         fam_button = self.fam_widget.get_detail_button()
         connect_window(fam_button, PSDetailWindow, self, psname=self._devname)
-        # Create TrimWidget
+        # Create SITrimFamControlWidget
         device = self._devname.split("-")[-1]
         self.trim_widget = SITrimFamControlWidget(
             trim=device, parent=self,
             orientation=SITrimFamControlWidget.HORIZONTAL)
         # Connect Trim detail buttons
         self._connect_buttons(self.trim_widget)
-        # Add to leyout
+        # Add to layout
         self.central_widget.layout.addWidget(self.fam_widget)
         self.central_widget.layout.addWidget(self.trim_widget)
 

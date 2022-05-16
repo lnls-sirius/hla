@@ -125,7 +125,7 @@ class CurrLTWindow(SiriusMainWindow):
         self.graph.setObjectName('graph')
         self.graph.setStyleSheet('#graph{min-width:40em;min-height:32em;}')
         self.graph.bufferSize = 60*60*10
-        self._set_graph_timespan(30*60)
+        self.graph.timeSpan = 30*60
 
         t_end = Time.now()
         t_init = t_end - 30*60
@@ -555,15 +555,6 @@ class CurrLTWindow(SiriusMainWindow):
         self._cb_ltfrom.currentTextChanged.connect(
             self._handle_lifetime_type_sel)
 
-        self._lb_timespan = QLabel(
-            'Time Span [s]:', self,
-            alignment=Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
-        self._sb_timespan = QSpinBoxPlus()
-        self._sb_timespan.setMinimum(1)
-        self._sb_timespan.setMaximum(1000000)
-        self._sb_timespan.setValue(2000)
-        self._sb_timespan.valueChanged.connect(self._set_graph_timespan)
-
         self._ld_showsmpl = QLabel(
             'Show samples: ', self,
             alignment=Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
@@ -582,13 +573,8 @@ class CurrLTWindow(SiriusMainWindow):
         lay.addItem(
             QSpacerItem(1, 1, QSzPlcy.Minimum, QSzPlcy.Expanding),
             1, 1, 1, 2)
-        lay.addWidget(self._lb_timespan, 2, 1)
-        lay.addWidget(self._sb_timespan, 2, 2)
-        lay.addItem(
-            QSpacerItem(1, 1, QSzPlcy.Minimum, QSzPlcy.Expanding),
-            3, 1, 1, 2)
-        lay.addWidget(self._ld_showsmpl, 4, 1)
-        lay.addWidget(self._cb_showsmpl, 4, 2)
+        lay.addWidget(self._ld_showsmpl, 2, 1)
+        lay.addWidget(self._cb_showsmpl, 2, 2)
         return gbox
 
     # ---------- auxiliar methods ----------
@@ -686,11 +672,6 @@ class CurrLTWindow(SiriusMainWindow):
         self.sender().parent().adjustSize()
         self.centralWidget().adjustSize()
         self.adjustSize()
-
-    @Slot(int)
-    def _set_graph_timespan(self, value):
-        """Set graph time span."""
-        self.graph.setTimeSpan(float(value))
 
     def _update_first_time(self):
         """Update first sample time to current timestamp."""

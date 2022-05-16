@@ -13,7 +13,7 @@ from .line_edit import SiriusLineEdit
 from .loading_dialog import LoadingDialog
 from .signal_channel import SiriusConnectionSignal
 from .QSpinBoxPlus import QSpinBoxPlus, QDoubleSpinBoxPlus
-from .spinbox import SiriusSpinbox
+from .spinbox import SiriusSpinbox, SiriusHexaSpinbox
 from .widget_factory import pydmwidget_factory
 from .spectrogram_view import SiriusSpectrogramView
 from .label import SiriusLabel
@@ -26,3 +26,4 @@ from .process_image import SiriusProcessImage
 from .detachable_tabwidget import DetachableTabWidget
 from .pushbutton import SiriusPushButton
 from .waveformtable import SiriusWaveformTable
+from .selection_matrix import SelectionMatrixWidget

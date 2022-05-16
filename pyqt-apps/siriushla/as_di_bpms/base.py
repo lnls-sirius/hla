@@ -4,12 +4,12 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QCheckBox, \
     QFormLayout, QGroupBox, QLabel
 from qtpy.QtGui import QColor
-from pydm.widgets import PyDMWaveformPlot, PyDMTimePlot, PyDMEnumComboBox
+from pydm.widgets import PyDMWaveformPlot, PyDMEnumComboBox
 from pydm.widgets.base import PyDMPrimitiveWidget
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.diagbeam.bpm.csdev import Const as _csbpm
 from siriushla.widgets import SiriusConnectionSignal, SiriusLabel, \
-    SiriusSpinbox
+    SiriusSpinbox, SiriusTimePlot
 
 _BPMDB = _csbpm.get_bpm_database()
 
@@ -179,7 +179,7 @@ class GraphWave(BaseGraph):
 
 
 class GraphTime(BaseGraph):
-    CLASS = get_custom_widget_class(PyDMTimePlot)
+    CLASS = get_custom_widget_class(SiriusTimePlot)
     DATA_CLASS = float
 
     def __init__(self, *args, **kwargs):
