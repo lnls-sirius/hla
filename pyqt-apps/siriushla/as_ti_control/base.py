@@ -2,7 +2,7 @@
 import re
 
 from qtpy.QtCore import Qt
-from qtpy.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QFormLayout, \
+from qtpy.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, \
     QScrollArea, QGroupBox, QLabel, QSizePolicy as QSzPol, QFrame, QMenu, \
     QLineEdit, QPushButton
 import qtawesome as qta
@@ -23,21 +23,9 @@ class BaseWidget(QWidget):
     def channels(self):
         return self._chans
 
-    def get_pvname(self, propty):
-        return self.device.substitute(prefix=self.prefix, propty=propty)
-
-    def _create_formlayout_groupbox(self, title, props):
-        grpbx = CustomGroupBox(title, self)
-        fbl = QFormLayout(grpbx)
-        grpbx.layoutf = fbl
-        fbl.setLabelAlignment(Qt.AlignVCenter)
-        for pv1, txt in props:
-            hbl = self._create_propty_layout(pv1)
-            lab = QLabel(txt)
-            lab.setObjectName(pv1.split('-')[0])
-            lab.setStyleSheet("""min-width:7em;""")
-            fbl.addRow(lab, hbl)
-        return grpbx
+    def get_pvname(self, propty, field=''):
+        return self.device.substitute(
+            prefix=self.prefix, propty=propty, field=field)
 
     def _create_propty_layout(self, propty, width=6.0):
         """Return layout that handles a property according to 'propty_type'."""
@@ -45,9 +33,8 @@ class BaseWidget(QWidget):
         not_enum = propty.endswith('-SP')
         pv2 = propty.replace('-SP', '-RB').replace('-Sel', '-Sts')
 
-        style = """
-        min-width:wvalem; max-width:wvalem;
-        min-height:1.29em;""".replace('wval', str(width))
+        style = 'min-width:{0}em; max-width:{0}em;\
+            min-height:1.29em;'.format(str(width))
 
         if pv2 != propty:
             chan1 = self.get_pvname(propty)
@@ -70,6 +57,19 @@ class BaseWidget(QWidget):
 
         layout.setAlignment(Qt.AlignVCenter)
         return layout
+
+    def _create_small_group(
+            self, name, parent, wids, align_ver=True, no_marg=False):
+        group = QGroupBox(name, parent) if name else QWidget(parent)
+        lay = QVBoxLayout(group) if align_ver else QHBoxLayout(group)
+        if align_ver:
+            lay.setAlignment(Qt.AlignCenter)
+        for wid in wids:
+            lay.addWidget(wid)
+            lay.setAlignment(wid, Qt.AlignCenter)
+        if no_marg:
+            lay.setContentsMargins(0, 0, 0, 0)
+        return group
 
 
 class CustomGroupBox(QGroupBox, PyDMPrimitiveWidget):
@@ -100,11 +100,11 @@ class BaseList(CustomGroupBox):
     def setupUi(self):
         self.my_layout = QVBoxLayout(self)
         self.my_layout.setContentsMargins(6, 10, 6, 0)
-        self.my_layout.setSpacing(15)
 
         if self.has_search:
             hbl = QHBoxLayout()
-            self.my_layout.addItem(hbl)
+            hbl.setSpacing(0)
+            self.my_layout.addLayout(hbl)
             # Create search bar
             self.search_lineedit = QLineEdit(parent=self)
             hbl.addWidget(self.search_lineedit)
@@ -115,10 +115,12 @@ class BaseList(CustomGroupBox):
             pbt.setToolTip('Choose which columns to show')
             pbt.setObjectName('but')
             pbt.setIcon(qta.icon('mdi.view-column'))
-            pbt.setStyleSheet(
-                '#but{min-width:35px; max-width:35px;\
-                min-height:25px; max-height:25px;\
-                icon-size:25px;}')
+            pbt.setStyleSheet("""
+                #but{
+                    min-width:35px; max-width:35px;
+                    min-height:25px; max-height:25px;
+                    icon-size:25px;
+                }""")
             hbl.addWidget(pbt)
             self.search_menu = QMenu(pbt)
             self.search_menu.triggered.connect(self.filter_lines)
@@ -130,37 +132,37 @@ class BaseList(CustomGroupBox):
                 act.toggled.connect(self.filter_columns)
 
         # Create header
-        headerlay = QHBoxLayout()
+        header = QWidget()
+        headerlay = QHBoxLayout(header)
         headerlay.setContentsMargins(0, 0, 0, 0)
-        self.my_layout.addLayout(headerlay)
+        self.my_layout.addWidget(header, alignment=Qt.AlignLeft)
         objs = self.getLine(header=True)
         for prop, obj in objs:
-            headerlay.addLayout(obj)
-            for idx in range(obj.count()):
-                wid = obj.itemAt(idx).widget()
-                name = wid.objectName() or 'obj'
-                wid.setObjectName(name)
-                wid.setStyleSheet(
-                    '#{0:s}{{min-width:{1:.1f}em;\
-                    max-width: {1:.1f}em;}}'.format(
-                        name, self._MIN_WIDs[prop]))
+            name = obj.objectName()
+            obj.setStyleSheet("""
+                #{0:s}{{
+                    min-width:{1:.1f}em; max-width: {1:.1f}em;
+                    min-height:1.8em; max-height:1.8em;
+                }}""".format(name, self._MIN_WIDs[prop]))
+            headerlay.addWidget(obj)
 
         # Create scrollarea
         sc_area = QScrollArea()
+        sc_area.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        sc_area.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
         sc_area.setWidgetResizable(True)
         sc_area.setFrameShape(QFrame.NoFrame)
         self.my_layout.addWidget(sc_area)
 
         # ScrollArea Widget
         wid = QWidget()
-        sc_area.setWidget(wid)
         wid.setObjectName('wid')
         wid.setStyleSheet('#wid {background-color: transparent;}')
-        lay = QVBoxLayout()
-        lay.setSpacing(15)
+        lay = QVBoxLayout(wid)
+        lay.setSpacing(0)
         lay.setContentsMargins(0, 0, 0, 0)
         lay.setAlignment(Qt.AlignTop)
-        wid.setLayout(lay)
+        sc_area.setWidget(wid)
 
         self.lines = dict()
         self.filtered_lines = set()
@@ -169,45 +171,45 @@ class BaseList(CustomGroupBox):
             objs = self.getLine(pref)
             self.lines[pref] = objs
             self.filtered_lines.add(pref)
-            hlay = QHBoxLayout()
-            lay.addLayout(hlay)
+            lwid = QWidget()
+            hlay = QHBoxLayout(lwid)
+            hlay.setContentsMargins(0, 0, 0, 0)
             for prop, obj in objs:
-                hlay.addLayout(obj)
-                for idx in range(obj.count()):
-                    wid = obj.itemAt(idx).widget()
-                    name = wid.objectName() or 'obj'
-                    wid.setObjectName(name)
-                    wid.setStyleSheet(
-                        '#{0:s}{{min-width:{1:.1f}em;\
-                        max-width: {1:.1f}em;}}'.format(
-                            name, self._MIN_WIDs[prop]))
+                name = obj.objectName()
+                obj.setStyleSheet("""
+                    #{0:s}{{
+                        min-width:{1:.1f}em; max-width: {1:.1f}em;
+                    }}""".format(name, self._MIN_WIDs[prop]))
+                hlay.addWidget(obj)
+            lay.addWidget(lwid, alignment=Qt.AlignLeft)
 
     def getLine(self, device=None, header=False):
         objects = list()
         for prop in self._ALL_PROPS:
-            item = self.getColumn(device, prop, header)
-            if item is not None:
-                objects.append([prop, item])
+            widget = self.getColumn(device, prop, header)
+            if widget is not None:
+                objects.append([prop, widget])
         return objects
 
     def getColumn(self, device, prop, header):
-        lv = QVBoxLayout()
-        lv.setSpacing(6)
-        lv.setAlignment(Qt.AlignVCenter | Qt.AlignHCenter)
+        widget = QWidget(self)
+        widget.setObjectName(prop)
+        widget.setVisible(prop in self.props)
+        widget.setSizePolicy(QSzPol.Fixed, QSzPol.Fixed)
+        lay = QVBoxLayout(widget)
+        lay.setSpacing(6)
+        lay.setContentsMargins(0, 6, 0, 6)
+        lay.setAlignment(Qt.AlignCenter)
         fun = self._createObjs if not header else self._headerLabel
-        objs = fun(device, prop)
-        visi = prop in self.props
-        for i, ob in enumerate(objs):
-            lv.addWidget(ob)
-            ob.setVisible(visi)
-            ob.setObjectName(prop)
-            ob.setSizePolicy(QSzPol.MinimumExpanding, QSzPol.Maximum)
-        return lv
+        for obj in fun(device, prop):
+            lay.addWidget(obj)
+            obj.setSizePolicy(QSzPol.MinimumExpanding, QSzPol.Maximum)
+        return widget
 
     def filter_columns(self):
         txt = self.sender().text()
         visi = self.sender().isChecked()
-        objs = self.findChildren(QWidget, txt, Qt.FindDirectChildrenOnly)
+        objs = self.findChildren(QWidget, txt)
         for obj in objs:
             objname = obj.objectName()
             if objname.startswith(txt):
@@ -224,14 +226,14 @@ class BaseList(CustomGroupBox):
         self.filtered_lines.clear()
         for line, objs in self.lines.items():
             keep = False
-            for prop, lay in objs:
+            for prop, obj in objs:
                 if keep:
                     self.filtered_lines.add(line)
                     break
                 if prop not in self.props2search:
                     continue
-                cnt = lay.count()
-                wid = lay.itemAt(cnt-1).widget()
+                cnt = obj.layout().count()
+                wid = obj.layout().itemAt(cnt-1).widget()
                 if hasattr(wid, 'text'):
                     keep |= bool(pattern.search(wid.text()))
                     continue
@@ -251,22 +253,16 @@ class BaseList(CustomGroupBox):
             a.text() for a in self.search_menu.actions() if a.isChecked()}
         for key, objs in self.lines.items():
             if key in self.filtered_lines:
-                for _, layout in objs:
-                    for idx in range(layout.count()):
-                        wid = layout.itemAt(idx).widget()
-                        wid.setVisible(wid.objectName() in props)
+                for _, wid in objs:
+                    wid.setVisible(wid.objectName() in props)
             else:
-                for _, layout in objs:
-                    for idx in range(layout.count()):
-                        wid = layout.itemAt(idx).widget()
-                        wid.setVisible(False)
-        # self.adjustSize()
+                for _, wid in objs:
+                    wid.setVisible(False)
 
     def _headerLabel(self, device, prop):
-        lb = QLabel('<h4>' + self._LABELS[prop] + '</h4>', self)
-        lb.setStyleSheet("""min-height:1.55em; max-height:1.55em;""")
-        lb.setAlignment(Qt.AlignHCenter)
-        return (lb, )
+        lbl = QLabel('<h4>' + self._LABELS[prop] + '</h4>', self)
+        lbl.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
+        return (lbl, )
 
     def _createObjs(self, device, prop):
         return tuple()  # return tuple of widgets

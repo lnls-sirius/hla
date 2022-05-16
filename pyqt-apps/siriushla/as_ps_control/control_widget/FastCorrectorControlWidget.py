@@ -6,7 +6,10 @@ class SIFastCorrectorControlWidget(BasePSControlWidget):
     """Storage ring fast correctors."""
 
     def _getFilter(self, subsection=None):
-        return {"sec": "SI", "sub": "\w{4}", "dev": "(FCH|FCV).*"}
+        filt = {"sec": "SI", "sub": "\w{4}", "dev": "(FCH|FCV).*"}
+        if subsection:
+            filt.update({'sub': subsection})
+        return filt
 
     def _hasTrimButton(self):
         return False
@@ -17,3 +20,8 @@ class SIFastCorrectorControlWidget(BasePSControlWidget):
     def _getGroups(self):
         return [('Horizontal Fast Correctors', '-FCH'),
                 ('Vertical Fast Corretors', '-FCV')]
+
+    def _getVisibleProps(self):
+        return [
+            'detail', 'state', 'intlk', 'setpoint', 'readback',
+            'strength_sp', 'strength_rb']

@@ -13,12 +13,12 @@ from siriuspy.search import PSSearch
 from siriuspy.namesys import SiriusPVName as PVName
 from siriuspy.pwrsupply.csdev import Const as _PSC, ETypes as _PSE
 
-from siriushla.util import get_appropriate_color, connect_newprocess, \
+from ..util import get_appropriate_color, connect_newprocess, \
     run_newprocess
-from siriushla.widgets import SiriusMainWindow, PVNameTree
-from siriushla.widgets.windows import create_window_from_widget
-from siriushla.widgets.dialog import ProgressDialog
-from siriushla.as_ti_control import HLTriggerDetailed
+from ..widgets import SiriusMainWindow, PVNameTree
+from ..widgets.windows import create_window_from_widget
+from ..widgets.dialog import ProgressDialog
+from ..as_ti_control import HLTriggerDetailed
 
 from .tasks import CreateTesters, \
     CheckComm, CheckStatus, \
@@ -27,7 +27,7 @@ from .tasks import CreateTesters, \
     SetOpMode, CheckOpMode, \
     SetPwrState, CheckPwrState, CheckInitOk, \
     SetPulse, CheckPulse, \
-    CheckCtrlLoop, \
+    SetCtrlLoop, CheckCtrlLoop, \
     SetCapBankVolt, CheckCapBankVolt, \
     SetCurrent, CheckCurrent, \
     SetVoltage, CheckVoltage, \
@@ -45,10 +45,14 @@ class PSTestWindow(SiriusMainWindow):
         cor = get_appropriate_color(section='AS')
         self.setWindowIcon(qta.icon('mdi.test-tube', color=cor))
 
-        # auxiliar data for initializing PS
+        # auxiliar data for initializing SI Fam PS
         self._is_adv_mode = adv_mode
         self._si_fam_psnames = PSSearch.get_psnames(
             filters={'sec': 'SI', 'sub': 'Fam', 'dis': 'PS'})
+
+        # auxiliary data for SI fast correctors
+        self._si_fastcorrs = PSSearch.get_psnames(
+            filters={'sec': 'SI', 'dis': 'PS', 'dev': 'FC.*'})
 
         self._needs_update_setup = False
         self._setup_ui()
@@ -134,7 +138,7 @@ class PSTestWindow(SiriusMainWindow):
         self.setsofbmode_ps_bt = QPushButton('Turn Off SOFBMode', self)
         self.setsofbmode_ps_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
         self.setsofbmode_ps_bt.clicked.connect(
-            _part(self._set_check_fbp_sofmode, 'off'))
+            _part(self._set_check_fbp_sofbmode, 'off'))
 
         self.setslowref_ps_bt = QPushButton(
             'Set PS and DCLinks to SlowRef', self)
@@ -171,7 +175,7 @@ class PSTestWindow(SiriusMainWindow):
         self.checkctrlloop_dcl_bt.clicked.connect(
             _part(self._set_lastcomm, 'PS'))
         self.checkctrlloop_dcl_bt.clicked.connect(
-            _part(self._check_ctrlloop, 'dclink'))
+            _part(self._set_check_ctrlloop, 'dclink'))
 
         self.setvolt_dcl_bt = QPushButton('Set DCLinks Voltage', self)
         self.setvolt_dcl_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
@@ -183,11 +187,11 @@ class PSTestWindow(SiriusMainWindow):
         self.turnon_ps_bt.clicked.connect(
             _part(self._set_check_pwrstate, 'PS', 'on', True))
 
-        self.checkctrlloop_ps_bt = QPushButton('Check PS CtrlLoop', self)
-        self.checkctrlloop_ps_bt.clicked.connect(
+        self.setcheckctrlloop_ps_bt = QPushButton('Check PS CtrlLoop', self)
+        self.setcheckctrlloop_ps_bt.clicked.connect(
             _part(self._set_lastcomm, 'PS'))
-        self.checkctrlloop_ps_bt.clicked.connect(
-            _part(self._check_ctrlloop, 'pwrsupply'))
+        self.setcheckctrlloop_ps_bt.clicked.connect(
+            _part(self._set_check_ctrlloop, 'pwrsupply'))
 
         self.test_ps_bt = QPushButton('Set PS Current to test value', self)
         self.test_ps_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
@@ -234,7 +238,7 @@ class PSTestWindow(SiriusMainWindow):
         lay_ps_comm.addWidget(QLabel('<h4>Test</h4>', self,
                                      alignment=Qt.AlignCenter))
         lay_ps_comm.addWidget(self.turnon_ps_bt)
-        lay_ps_comm.addWidget(self.checkctrlloop_ps_bt)
+        lay_ps_comm.addWidget(self.setcheckctrlloop_ps_bt)
         lay_ps_comm.addWidget(self.test_ps_bt)
         lay_ps_comm.addWidget(self.currzero_ps_bt2)
         lay_ps_comm.addWidget(QLabel(''))
@@ -556,10 +560,12 @@ class PSTestWindow(SiriusMainWindow):
             if not devices:
                 return
             dev_label = 'PU'
-        devices_wth_li = {dev for dev in devices if 'LI' not in dev}
+        devices_not_rst = {
+            dev for dev in devices if dev.sec != 'LI' and
+            dev.dev not in ('FCH', 'FCV')}
 
         task0 = CreateTesters(devices, parent=self)
-        task1 = ResetIntlk(devices_wth_li, parent=self)
+        task1 = ResetIntlk(devices_not_rst, parent=self)
         task2 = CheckIntlk(devices, parent=self)
         task2.itemDone.connect(self._log)
         tasks = [task0, task1, task2]
@@ -576,7 +582,7 @@ class PSTestWindow(SiriusMainWindow):
         self.nok_ps.clear()
         if isinstance(dev_type, list):
             devices = list(dev_type)
-            dev_type = PVName(devices[0]).dis
+            dev_type = devices[0].dis
         else:
             if dev_type == 'PS':
                 devices = self._get_selected_ps()
@@ -826,25 +832,35 @@ class PSTestWindow(SiriusMainWindow):
         dlg = ProgressDialog(labels, tasks, self)
         dlg.exec_()
 
-    def _check_ctrlloop(self, dev_type='pwrsupply'):
+    def _set_check_ctrlloop(self, dev_type='pwrsupply'):
         self.ok_ps.clear()
         self.nok_ps.clear()
         pwrsupplies = self._get_selected_ps()
         if not pwrsupplies:
             return
+        devices_set = {}
         if dev_type == 'pwrsupply':
             devices = {dev for dev in pwrsupplies if 'LI' not in dev}
+            devices_set = {dev for dev in devices if dev.dev in ('FCH', 'FCV')}
         else:
             devices = self._get_related_dclinks(pwrsupplies)
         if not devices:
             return
 
-        task0 = CreateTesters(devices, parent=self)
-        task1 = CheckCtrlLoop(devices, parent=self)
-        task1.itemDone.connect(self._log)
-        labels = ['Connecting to devices...',
-                  'Checking CtrlLoop state...']
-        tasks = [task0, task1]
+        tasks = [CreateTesters(devices, parent=self), ]
+        labels = ['Connecting to devices...', ]
+        if devices_set:
+            task1 = SetCtrlLoop(devices_set, parent=self)
+            task2 = CheckCtrlLoop(devices, parent=self)
+            task2.itemDone.connect(self._log)
+            tasks.extend([task1, task2])
+            labels.extend([
+                'Setting CtrlLoop...', 'Checking CtrlLoop state...'])
+        else:
+            task1 = CheckCtrlLoop(devices, parent=self)
+            task1.itemDone.connect(self._log)
+            tasks.append(task1)
+            labels.append('Checking CtrlLoop state...')
         dlg = ProgressDialog(labels, tasks, self)
         dlg.exec_()
 
@@ -873,7 +889,7 @@ class PSTestWindow(SiriusMainWindow):
         dlg = ProgressDialog(labels, tasks, self)
         dlg.exec_()
 
-    def _set_check_fbp_sofmode(self, state):
+    def _set_check_fbp_sofbmode(self, state):
         self.ok_ps.clear()
         self.nok_ps.clear()
         devices = self._get_selected_ps()
@@ -965,9 +981,11 @@ class PSTestWindow(SiriusMainWindow):
         self.ok_ps.clear()
         self.nok_ps.clear()
         devices = self._get_selected_ps()
+        devices = [
+            dev for dev in devices if dev.sec != 'LI' and
+            dev.dev not in ('FCH', 'FCV')]
         if not devices:
             return
-        devices = [dev for dev in devices if 'LI-' not in dev]
 
         state, ok = QInputDialog.getItem(
             self, "OpMode Input", "Select OpMode: ",
@@ -1102,6 +1120,9 @@ class PSTestWindow(SiriusMainWindow):
         # add SI QSkews
         psnames.extend(PSSearch.get_psnames(
             {'sec': 'SI', 'dis': 'PS', 'dev': 'QS'}))
+        # add SI Fast Corrs
+        psnames.extend(PSSearch.get_psnames(
+            {'sec': 'SI', 'dis': 'PS', 'dev': 'FC.*'}))
         return psnames
 
     def _get_pu_tree_names(self):
@@ -1114,6 +1135,7 @@ class PSTestWindow(SiriusMainWindow):
         if not devices:
             QMessageBox.critical(self, 'Message', 'No power supply selected!')
             return False
+        devices = [PVName(dev) for dev in devices]
         return devices
 
     def _get_selected_pu(self):
@@ -1122,6 +1144,7 @@ class PSTestWindow(SiriusMainWindow):
             QMessageBox.critical(
                 self, 'Message', 'No pulsed power supply selected!')
             return False
+        devices = [PVName(dev) for dev in devices]
         return devices
 
     def _get_related_dclinks(self, psnames, include_regatrons=False):
@@ -1169,6 +1192,7 @@ class PSTestWindow(SiriusMainWindow):
             return
         state2set = item.checkState(0)
 
+        # ensure power supplies that share dclinks are checked together
         if devname in self._si_fam_psnames and not self._is_adv_mode:
             dclinks = PSSearch.conv_psname_2_dclink(devname)
             if dclinks:
@@ -1177,10 +1201,12 @@ class PSTestWindow(SiriusMainWindow):
                     relps = PSSearch.conv_dclink_2_psname(dcl)
                     relps.remove(devname)
                     psname2check.update(relps)
+                self.ps_tree.tree.blockSignals(True)
                 for psn in psname2check:
                     item2check = self.ps_tree._item_map[psn]
                     if item2check.checkState(0) != state2set:
-                        item2check.setCheckState(0, state2set)
+                        item2check.setData(0, Qt.CheckStateRole, state2set)
+                self.ps_tree.tree.blockSignals(False)
 
         self._needs_update_setup = True
 
@@ -1189,6 +1215,7 @@ class PSTestWindow(SiriusMainWindow):
             return
         self._needs_update_setup = False
 
+        # show/hide buttons to initialize SI Fam PS
         has_sifam = False
         for psn in self._si_fam_psnames:
             item = self.ps_tree._item_map[psn]
@@ -1197,3 +1224,13 @@ class PSTestWindow(SiriusMainWindow):
         self.prep_sidclink_bt.setVisible(has_sifam)
         self.init_sips_bt.setVisible(has_sifam)
         self.aux_label.setVisible(has_sifam)
+
+        # set CtrlLoop button label
+        has_fast = False
+        for psn in self._si_fastcorrs:
+            item = self.ps_tree._item_map[psn]
+            has_fast |= item.checkState(0) != 0
+
+        text = 'Set(FC) and Check PS CtrlLoop' \
+            if has_fast else 'Check PS CtrlLoop'
+        self.setcheckctrlloop_ps_bt.setText(text)

@@ -13,19 +13,17 @@ install-designer:
 	mkdir -p $(INSTALL_DESIGNER_DIR)
 	cp $(DESIGNER_PLUGIN_FILE) $(INSTALL_DESIGNER_DIR)
 
-install: clean uninstall
+install: uninstall
 	$(PREFIX) $(PIP) install --no-deps --compile ./
+	$(PREFIX) git clean -fdX
 
 uninstall:
 	$(PREFIX) $(PIP) uninstall -y $(PACKAGE)
 
 install-all: install install-designer
 
-develop-install: clean develop-uninstall
+develop-install: develop-uninstall
 	$(PIP) install --no-deps -e ./
 
 develop-uninstall:
 	$(PIP) uninstall -y $(PACKAGE)
-
-clean:
-	git clean -fdX

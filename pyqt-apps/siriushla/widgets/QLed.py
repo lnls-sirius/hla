@@ -234,8 +234,8 @@ class QLed(QFrame, ShapeMap):
             self.clicked.emit()
         super().mouseReleaseEvent(event)
 
-    def toggleValue(self):
-        """Toggle value property."""
+    def toggleState(self):
+        """Toggle state property."""
         self.m_state = 0 if self.m_state else 1
         self.update()
 
@@ -248,6 +248,10 @@ class QLed(QFrame, ShapeMap):
         self._isselected = bool(sel)
         self.selected.emit(self._isselected)
         self.update()
+
+    def toggleSelected(self):
+        """Toggle isSelected property."""
+        self.setSelected(not self.isSelected())
 
 
 if __name__ == "__main__":
@@ -287,7 +291,7 @@ if __name__ == "__main__":
         def toggleLeds(self):
             """Toggle leds state."""
             for led in self.leds:
-                led.toggleValue()
+                led.toggleState()
             QTimer.singleShot(1000, self.toggleLeds)
 
     a = QApplication(argv)

@@ -30,13 +30,34 @@ class LLButton(QWidget):
         self.setupui()
 
     def setupui(self):
-        name = self.device.sub + '-'
-        if self.device.dev == 'AMCFPGAEVR':
-            name += 'AMC'
+        if self.device.dev == 'Fout':
+            name = self.device.dev + (
+                '-' + self.device.idx if self.device.idx else '')
+        elif self.device.dev == 'AMCFPGAEVR':
+            name = 'AMC-' + (
+                'TL' if 'TL' in self.device.sub else self.device.sub[:2])
+        elif self.device.sec == 'LA':
+            if 'RaCtrl' in self.device.sub:
+                name = 'PS-TL'
+            elif 'BIH01' in self.device.sub:
+                name = 'LI-Diag'
+            else:
+                name = 'LI-Glob'
+        elif self.device.sec == 'PA':
+            name = 'PS-' + ('BO' if self.device.idx == '1' else 'SI')
+        elif self.device.sec == 'RA':
+            name = 'RF-' + ('BO' if 'BO' in self.device.sub else 'SI')
+        elif 'RaInj' in self.device.sub:
+            name = 'PU'
+        elif 'BbB' in self.device.sub:
+            name = 'DI-BbB'
+        elif 'Diag' in self.device.sub:
+            name = 'DI-' + (
+                'DCCT' if self.device.sub[:2] == '14' else
+                'Tune' if self.device.sub[:2] == '18' else
+                'TL' if self.device.sub[:2] == '20' else '?')
         else:
-            name += self.device.dev
-        if self.device.idx:
-            name += '-' + self.device.idx
+            name = self.device.dev
         clss = self._dic[self.device.dev]
 
         props = ['DevEnbl', 'Network', 'LinkStatus', 'IntlkStatus']
@@ -67,10 +88,9 @@ class LLButton(QWidget):
             device=self.device, prefix=self.prefix)
 
         lay = QVBoxLayout(self)
-        lay.setContentsMargins(4, 4, 4, 4)
+        lay.setContentsMargins(0, 2, 0, 2)
         lay.setSpacing(4)
-        if self.link:
-            lay.addWidget(QLabel(self.link, self))
+        lay.addWidget(QLabel(name, self, alignment=Qt.AlignCenter))
         lay.addWidget(led, alignment=Qt.AlignCenter)
 
 
@@ -138,25 +158,21 @@ class MonitorLL(QGroupBox):
         g1 = LLButton(evg, '', self.prefix, self)
         self.g1 = g1
 
-        downs = LLTimeSearch.get_device_names({'dev': 'Fout'})
-        link = list(LLTimeSearch.In2OutMap[downs[0].dev])[0]
-        downs2 = list()
-        for down in downs:
-            out = LLTimeSearch.get_evg_channel(down.substitute(propty=link))
-            downs2.append((out.propty, down.device_name))
+        fouts = LLTimeSearch.get_evg2fout_mapping()
+        fouts = [(out, down) for out, down in fouts.items()]
 
-        g2 = self.setupdown(downs2)
+        g2 = self.setupdown(fouts)
         self.g2 = g2
 
         g3 = list()
         trgsrcs = LLTimeSearch.get_fout2trigsrc_mapping()
-        for _, down in downs2:
+        for _, down in fouts:
             downs = trgsrcs[down.device_name]
             downs = sorted([(ou, dwn) for ou, dwn in downs.items()])
             g3.append(self.setupdown(downs))
 
         lay = QGridLayout(self)
-        lay.setHorizontalSpacing(16)
+        lay.setHorizontalSpacing(12)
         lay.setVerticalSpacing(20)
         align = Qt.AlignHCenter | Qt.AlignTop
         lay.addWidget(g1, 0, 0, 1, len(g3), align)

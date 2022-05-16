@@ -28,10 +28,10 @@ class PSControlWindow(SiriusMainWindow):
         self._setup_ui()
 
         sec2label = {
-            'LI': 'Linac',
-            'TB': 'LTB ',
+            'LI': 'Linac ',
+            'TB': 'Linac to Booster ',
             'BO': 'Booster ',
-            'TS': 'BTS ',
+            'TS': 'Booster to Storage Ring ',
             'SI': 'Storage Ring ',
             'IT': 'Injector Test '}
         dev2label = {
@@ -41,6 +41,7 @@ class PSControlWindow(SiriusMainWindow):
             "sextupole": "Sextupoles",
             "solenoid": "Solenoids",
             "corrector-slow": "Slow Correctors",
+            "corrector-fast": "Fast Correctors",
             "skew-quadrupole": "Quadrupoles Skew",
             "trim-quadrupole": "Trims",
             "lens": "Lens",
@@ -48,7 +49,7 @@ class PSControlWindow(SiriusMainWindow):
         self.setWindowTitle(
             sec2label[section] +
             (dev2label[device] if device else '') +
-            'Power Supplies ' +
+            ' Power Supplies ' +
             ('- Subsection '+subsection if subsection else ''))
 
     def _setup_ui(self):

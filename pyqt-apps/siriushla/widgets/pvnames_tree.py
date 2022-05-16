@@ -281,7 +281,7 @@ class PVNameTree(QWidget):
         elif re.match('^QS.*$', name.dev):
             return 'Quadrupole Skew'
         elif re.match('^Spect.*$', name.dev):
-            return 'Spetrometer'
+            return 'Spectrometer'
         elif re.match('^Slnd.*$', name.dev):
             return 'Solenoid'
         elif re.match('^S\w*(-[0-9])?$', name.dev):
