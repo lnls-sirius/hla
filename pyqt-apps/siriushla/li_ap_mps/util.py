@@ -237,6 +237,12 @@ TEMP_TYPE = {
     'Setpoint<br>Readback': 'Thrd_RB'
 }
 
+LBL_ALL = [
+    'PPState7', 'Mod1State', 'GPS1', 'WaterState',
+    'K1PsState', 'IP1Warn', 'CCG1Warn', 'CCG1Alarm',
+    'PRG1Warn', 'WFS1', 'WFS2', 'WFS3', 'WFS4', 'WFS5', 'WFS6'
+]
+
 LBL_MPS = {
     'Klystrons': [
         ['Kly 1', 'Kly 2'],

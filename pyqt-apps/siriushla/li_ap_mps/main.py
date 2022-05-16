@@ -1,14 +1,14 @@
 ''' Diagnostic Interface of the LINAC's BPM'''
 from qtpy.QtCore import Qt, QEvent
 from qtpy.QtWidgets import QWidget, QGroupBox, QHBoxLayout, \
-    QVBoxLayout, QGridLayout, QLabel, QTabWidget, \
+    QGridLayout, QLabel, QTabWidget, \
     QPushButton
 import qtawesome as qta
 from pydm.widgets import PyDMLabel, PyDMSpinbox
 from .util import PV_MPS, MPS_PREFIX, CTRL_TYPE, GROUP_POS, \
-    GROUP_POSALL, LBL_MPS, LBL_WATER, PV_TEMP_MPS, TEMP_TYPE
+    GROUP_POSALL, LBL_MPS, LBL_WATER, PV_TEMP_MPS, TEMP_TYPE, LBL_ALL
 from ..util import get_appropriate_color
-from ..widgets import SiriusMainWindow, PyDMLedMultiChannel,\
+from ..widgets import PyDMLedMultiChannel,\
      PyDMLed, SiriusPushButton
 from .bypass_btn import BypassBtn
 
@@ -45,7 +45,7 @@ class MPSControl(QWidget):
 
     def getDeviceName(self, pv_name):
         ''' Set device name '''
-        if pv_name.find('LA-RF:LLRF:KLY') != -1:
+        if 'LA-RF:LLRF:KLY' in pv_name:
             device_name = ''
         else:
             device_name = MPS_PREFIX
@@ -73,8 +73,8 @@ class MPSControl(QWidget):
                 pressValue=1,
                 releaseValue=0)
         widget.setStyleSheet('''
-            max-width: 50px;
-            max-height: 20px;
+            min-width: 3.2em; max-width: 4.2em;
+            min-height: 1.29em; max-height: 1.29em;
         ''')
         return widget
 
@@ -141,8 +141,6 @@ class MPSControl(QWidget):
                 lay.addWidget(lb_title, pos[0], pos[1], 1, 1)
             ctrl_widget = self.getCtrlWidget(
                 pv_name, CTRL_TYPE.get(control_name), config)
-            ctrl_widget.setMaximumWidth(100)
-            ctrl_widget.setMaximumHeight(60)
             lay.addWidget(ctrl_widget, pos[0]+1, pos[1], 1, 1)
             pos[1] += 1
         return lay
@@ -154,7 +152,7 @@ class MPSControl(QWidget):
         widget = QWidget()
         hlay = QHBoxLayout()
 
-        if pv_name.find('WFS') != -1:
+        if 'WFS' in pv_name:
             hlay.addWidget(
                 self.setPvLbl(pv_name))
 
@@ -171,7 +169,7 @@ class MPSControl(QWidget):
         widget.setStyleSheet('''
             #Container::hover{
                 background-color: #ff8b98;
-                border-radius: 5px;
+                border-radius: 1em;
             }
         ''')
         hlay.addWidget(widget)
@@ -188,13 +186,17 @@ class MPSControl(QWidget):
                 name = 'Close'
 
             pb_lay = QHBoxLayout()
-            pb_lay.addWidget(
-                SiriusPushButton(
-                    self,
-                    init_channel=device_name + pv_name,
-                    label=name,
-                    pressValue=1,
-                    releaseValue=0))
+            widget = SiriusPushButton(
+                        self,
+                        init_channel=device_name + pv_name,
+                        label=name,
+                        pressValue=1,
+                        releaseValue=0)
+            widget.setStyleSheet('''
+                min-width: 3.2em; max-width: 4.2em;
+                min-height: 1.29em; max-height: 1.29em;
+            ''')
+            pb_lay.addWidget(widget)
             return pb_lay
         else:
             return self.statusBox(pv_name, config)
@@ -216,18 +218,16 @@ class MPSControl(QWidget):
     def getPVConfig(self, config, index):
         ''' Get if the PV has configuration 1 or 0'''
 
-        if type(config) == list:
+        if isinstance(config, list):
             return config[index]
-        else:
-            return config
+        return config
 
     def getPVControl(self, is_control, index):
         ''' Get if the PV is a control or a status'''
 
-        if type(is_control) == list:
+        if isinstance(is_control, list):
             return is_control[index]
-        else:
-            return is_control
+        return is_control
 
     def countGen(self, count, val):
         ''' Counter for water data positioning '''
@@ -304,7 +304,8 @@ class MPSControl(QWidget):
             lbl_header.setAlignment(Qt.AlignCenter)
             layout.addWidget(lbl_header, pos[0], pos[1], 1, 1)
             if axis == 0:
-                lbl_header.setMaximumWidth(50)
+                lbl_header.setStyleSheet(
+                    'QLabel{min-width:6em; max-width:6em;}')
         return layout
 
     def setPvLbl(self, pv_name):
@@ -317,7 +318,7 @@ class MPSControl(QWidget):
     def setParamLabel(self, layout):
         ''' Display Temperature parameters labels '''
         pos = 0
-        for times in range(0, 2):
+        for _ in range(0, 2):
             for item in TEMP_TYPE:
                 lbl_param = QLabel(item)
                 lbl_param.setAlignment(Qt.AlignCenter)
@@ -337,6 +338,7 @@ class MPSControl(QWidget):
             pos += 3
 
         hd_glay = self.setParamLabel(hd_glay)
+        hd_glay.setContentsMargins(0, 0, 0, 0)
         widget.setLayout(hd_glay)
         layout.addWidget(widget, 0, 1, 1, 6)
         return layout
@@ -353,27 +355,22 @@ class MPSControl(QWidget):
         return layout
 
     def getParamAll(self, has_title, pv_name, wid_type):
-        if wid_type == 0 or pv_name in ['PPState7',
-                'Mod1State', 'GPS1', 'WaterState', 'K1PsState',
-                'IP1Warn', 'CCG1Warn', 'CCG1Alarm', 'PRG1Warn',
-                'WFS1', 'WFS2', 'WFS3', 'WFS4', 'WFS5', 'WFS6']:
+        if wid_type == 0 or pv_name in LBL_ALL:
             return has_title
-        else:
-            return False
+        return False
 
     def dispayHiddenControls(self, pv_name, control, config):
         if control:
             return self.controlWidget(
                 pv_name, '',
                 config)
-        else:
-            return self.statusBox(pv_name, config)
+        return self.statusBox(pv_name, config)
 
     def dispayAllControls(self, pv_name, control, config):
         if control:
             widget = QWidget()
             hlay = QHBoxLayout()
-            if pv_name.find('WFS') != -1:
+            if 'WFS' in pv_name:
                 hlay.addWidget(
                     self.setPvLbl(pv_name))
             control_layout = self.controlBox(pv_name, '', config, control, 1)
@@ -423,6 +420,7 @@ class MPSControl(QWidget):
     def displayTempGroup(self, pv_data, title):
         ''' Display one temperature group'''
         dtg_glay = QGridLayout()
+        dtg_glay.setHorizontalSpacing(0)
         group = QGroupBox()
         count = [1, 1]
 
