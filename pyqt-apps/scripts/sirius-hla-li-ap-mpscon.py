@@ -19,7 +19,7 @@ args = parser.parse_args()
 app = SiriusApplication()
 window = create_window_from_widget(
     MPSControl, title='LI MPS Control', is_main=True,
-    withscroll=True, min_width=50)
+    withscroll=True, min_width=67)
 app.open_window(
     window, parent=None, prefix=args.prefix)
 sys.exit(app.exec_())
