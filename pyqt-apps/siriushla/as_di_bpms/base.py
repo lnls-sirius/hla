@@ -124,6 +124,7 @@ class BaseGraph(BaseWidget):
         graph.setMinXRange(0.0)
         graph.setMaxXRange(1.0)
         graph.setAxisColor(QColor(0, 0, 0))
+        graph.plotItem.showButtons()
         graph.plotItem.getAxis('bottom').setStyle(tickTextOffset=15)
         graph.plotItem.getAxis('left').setStyle(
             tickTextOffset=5, autoExpandTextSpace=False, tickTextWidth=30)
