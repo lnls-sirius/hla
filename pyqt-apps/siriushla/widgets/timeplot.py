@@ -161,7 +161,7 @@ class SiriusTimePlot(PyDMTimePlot):
             self.vb2.addItem(plot_item)
         else:
             raise ValueError('Choose a valid axis!')
-        self.redraw_timer.start()
+
         # Connect channels
         for chan in plot_item.channels():
             if chan:
