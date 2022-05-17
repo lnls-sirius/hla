@@ -1,6 +1,7 @@
 """QDoubleScrollBar module."""
 
 import logging
+import numpy as _np
 
 from qtpy.QtWidgets import QInputDialog, QScrollBar, QMenu, QToolTip
 from qtpy.QtCore import Qt, Signal, Slot, Property, QPoint
@@ -92,6 +93,8 @@ class QDoubleScrollBar(QScrollBar):
 
     def setMinimum(self, value):
         """Set minimum value."""
+        if _np.isnan(value):
+            value = 0
         try:
             mini = round(value*self._scale)
             mini = min(mini, 2**31-1)
@@ -108,6 +111,8 @@ class QDoubleScrollBar(QScrollBar):
 
     def setMaximum(self, value):
         """Set maximum value."""
+        if _np.isnan(value):
+            value = 0
         try:
             maxi = round(value*self._scale)
             maxi = min(maxi, 2**31-1)
