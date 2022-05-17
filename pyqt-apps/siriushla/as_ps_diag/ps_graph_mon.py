@@ -3,7 +3,7 @@ import time as _time
 from copy import deepcopy as _dcopy
 from concurrent.futures import ThreadPoolExecutor
 import numpy as _np
-from epics import PV as _PV
+import epics
 
 from qtpy.QtCore import Qt, QSize, Slot, Signal, QThread
 from qtpy.QtGui import QColor
@@ -345,7 +345,7 @@ class PSGraph(PyDMWaveformPlot):
             lineWidth=2, symbol='o', symbolSize=10)
         self.curve = self.curveAtIndex(1)
 
-        self.redraw_timer.stop()
+        self.redraw_timer.timeout.disconnect()
 
         self.psnames = psnames
         self.symbols = symbols
@@ -491,6 +491,7 @@ class PSGraphMonWidget(QWidget):
         self._setupUi()
         self._create_commands()
 
+        epics.ca.use_initial_context()
         self._thread = _UpdateGraphThread(
             self._property_line, self._property_symb, self._pvhandler,
             parent=self)
@@ -682,7 +683,10 @@ class _PVHandler:
 
             for psn in psnames:
                 pvname = self._get_pvname(psn, propty)
-                val = _PVHandler._pvs[pvname].get()
+                try:
+                    val = _PVHandler._pvs[pvname].get()
+                except epics.ca.ChannelAccessException:
+                    val = None
                 val = val if val is not None else 0
                 if propty in self._propsymb_2_defval.keys():
                     defval = self._propsymb_2_defval[propty]
@@ -716,11 +720,12 @@ class _PVHandler:
             auto_monitor = '(from Array)' not in propty
             if pvname in _PVHandler._pvs:
                 continue
-            new_pvs[pvname] = _PV(
+            new_pvs[pvname] = epics.PV(
                 pvname, auto_monitor=auto_monitor, connection_timeout=0.05)
         _PVHandler._pvs.update(new_pvs)
 
     def _get_fc_currentmon_value(self, psname):
+        epics.ca.create_context()
         pvname = self._get_pvname(psname, 'Current-Mon')
         pvobj = _PVHandler._pvs[pvname]
         pvobj.wait_for_connection()
@@ -728,6 +733,7 @@ class _PVHandler:
         value = value.mean() if value is not None else 0
         value = value if not _np.isnan(value) else 0
         self._vals_read[psname] = value
+        epics.ca.destroy_context()
 
     def set_values(self, propty, value):
         """Set PV values."""
@@ -824,6 +830,7 @@ class _UpdateGraphThread(QThread):
 
     def run(self):
         """Run task."""
+        epics.ca.use_initial_context()
         while not self._quit_task:
             _t0 = _time.time()
             self._update_data()
