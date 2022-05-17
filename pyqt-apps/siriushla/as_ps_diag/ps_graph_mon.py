@@ -218,8 +218,8 @@ class PSGraphProptySelWidget(QWidget):
         'PwrState-Sel', 'PwrState-Sts',
         'CtrlLoop-Sel', 'CtrlLoop-Sts']
     PROP_LINE_FASTCORR = [
-        'Current-SP', 'Current-RB',
         'Current-Mon (from Array)',
+        'Current-SP', 'Current-RB',
         'DiagCurrentDiff-Mon']
 
     def __init__(self, parent):
@@ -484,6 +484,8 @@ class PSGraphMonWidget(QWidget):
         self._prefix = prefix
         self._psnames = psnames
         self._property_line = 'Current-Mon'
+        self._property_line += ' (from Array)'\
+            if SiriusPVName(psnames[0]).dev in ('FCH', 'FCV') else ''
         self._property_symb = 'DiagStatus-Mon'
 
         self._pvhandler = _PVHandler(self._psnames, self._prefix, self)
