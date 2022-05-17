@@ -253,7 +253,7 @@ class DigBeamPosProc(SiriusMainWindow):
         '''Display the header of the interface'''
         hd_glay = QGridLayout()
 
-        title_lb = QLabel('<h2>'+ self.device_name +' - POSITION MONITOR </h2>', self)
+        title_lb = QLabel('<h2>' + self.device_name + ' - POSITION MONITOR </h2>', self)
         title_lb.setAlignment(Qt.AlignCenter)
         hd_glay.addWidget(title_lb, 0, 2, 2, 1)
 
