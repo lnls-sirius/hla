@@ -1,4 +1,4 @@
-''' Diagnostic Interface of the LINAC's BPM'''
+''' Monitor Protection System Controller Interface '''
 from qtpy.QtCore import Qt, QEvent
 from qtpy.QtWidgets import QWidget, QGroupBox, QHBoxLayout, \
     QGridLayout, QLabel, QTabWidget, \
