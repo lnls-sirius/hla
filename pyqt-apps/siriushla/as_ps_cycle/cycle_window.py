@@ -482,9 +482,10 @@ class CycleWindow(SiriusMainWindow):
         if not _re.match('.*-.*:.*-.*', psname):
             return
 
-        if not self._is_adv_mode and psname.sec == 'SI':
+        if not self._is_adv_mode and psname.sec == 'SI' and \
+                not psname.dev.startswith('FC'):
             psname2check = Filter.process_filters(
-                self._psnames, filters={'sec': 'SI'})
+                self._psnames, filters={'sec': 'SI', 'dev': '(?!FC)'})
             psname2check.remove(psname)
             state2set = item.checkState(0)
             self.pwrsupplies_tree.tree.blockSignals(True)
