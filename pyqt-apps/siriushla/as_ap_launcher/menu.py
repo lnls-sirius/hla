@@ -821,7 +821,7 @@ def get_object(ismenubar=True, parent=None):
                 self.connect_newprocess(pmag, [script, '-s', 'EjeBO'])
                 pumenu.addAction(pmag)
             elif sec == 'as':
-                pmag = QAction('InjBO, EjeBO && InjSI', pumenu)
+                pmag = QAction('InjBO, EjeBO, InjSI && Ping', pumenu)
                 self.connect_newprocess(
                     pmag, 'sirius-hla-as-pu-control.py')
                 pumenu.addAction(pmag)
