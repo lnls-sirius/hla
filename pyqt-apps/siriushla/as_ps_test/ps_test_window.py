@@ -6,7 +6,8 @@ from functools import partial as _part
 from qtpy.QtCore import Qt, QTimer
 from qtpy.QtWidgets import QFrame, QGridLayout, QVBoxLayout, QHBoxLayout, \
     QSizePolicy, QGroupBox, QPushButton, QListWidget, QLabel, QApplication, \
-    QMessageBox, QTabWidget, QWidget, QInputDialog
+    QMessageBox, QTabWidget, QWidget, QInputDialog, QAbstractItemView
+from qtpy.QtGui import QKeySequence
 import qtawesome as qta
 
 from siriuspy.search import PSSearch
@@ -362,9 +363,15 @@ class PSTestWindow(SiriusMainWindow):
         self.ok_ps = QListWidget(self)
         self.ok_ps.setObjectName('OkList')
         self.ok_ps.doubleClicked.connect(self._open_detail)
+        self.ok_ps.setSelectionMode(QAbstractItemView.MultiSelection)
+        self.ok_ps.setToolTip(
+            'Select rows and press Ctrl+C to copy and Esc to deselect.')
         self.nok_ps = QListWidget(self)
         self.nok_ps.setObjectName('NokList')
         self.nok_ps.doubleClicked.connect(self._open_detail)
+        self.nok_ps.setSelectionMode(QAbstractItemView.MultiSelection)
+        self.nok_ps.setToolTip(
+            'Select rows and press Ctrl+C to copy and Esc to deselect.')
         self.clearlists_bt = QPushButton('Clear', self)
         self.clearlists_bt.clicked.connect(self._clear_lastcomm)
         self.ok_ps_aux_list = list()
@@ -1235,3 +1242,21 @@ class PSTestWindow(SiriusMainWindow):
         text = 'Set(FC) and Check PS CtrlLoop' \
             if has_fast else 'Check PS CtrlLoop'
         self.setcheckctrlloop_ps_bt.setText(text)
+
+    # ---------- events ----------
+
+    def keyPressEvent(self, evt):
+        """Implement keyPressEvent."""
+        if evt.matches(QKeySequence.Copy):
+            if self.ok_ps.underMouse():
+                items = self.ok_ps.selectedItems()
+            elif self.nok_ps.underMouse():
+                items = self.nok_ps.selectedItems()
+            items = '\n'.join([i.text() for i in items])
+            QApplication.clipboard().setText(items)
+        if evt.key() == Qt.Key_Escape:
+            if self.ok_ps.underMouse():
+                items = self.ok_ps.clearSelection()
+            elif self.nok_ps.underMouse():
+                items = self.nok_ps.clearSelection()
+        super().keyPressEvent(evt)

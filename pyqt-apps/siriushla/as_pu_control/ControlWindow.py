@@ -83,7 +83,7 @@ class PUControlWindow(SiriusMainWindow):
         elif sec == 'InjSI':
             devices = PSSearch.get_psnames(
                 {'sec': '(TS|SI)', 'dis': 'PU', 'dev': 'Inj'})
-        elif sec == 'Ping':
+        elif sec == 'PingSI':
             devices = PSSearch.get_psnames(
                 {'sec': 'SI', 'dis': 'PU', 'dev': 'Ping'})
 

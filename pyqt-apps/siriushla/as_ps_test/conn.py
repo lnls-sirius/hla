@@ -35,7 +35,6 @@ DEFAULT_CAP_BANK_VOLT = {
 
 
 TIMEOUT_CONN = 0.05
-TEST_TOLERANCE = 1e-1
 
 
 class _TesterBase:
@@ -402,10 +401,9 @@ class TesterPSLinac(_TesterBase):
 
         self.intlkwarn_bit = _PSE.LINAC_INTLCK_WARN.index('LoadI Over Thrs')
 
-        splims = PSSearch.conv_pstype_2_splims(
-            PSSearch.conv_psname_2_pstype(device))
-        self.test_current = splims['HIGH']/2.0
-        self.test_tol = TEST_TOLERANCE
+        splims = PSSearch.conv_psname_2_splims(device)
+        self.test_current = splims['TSTV']
+        self.test_tol = splims['TSTR']
 
     def check_intlk(self):
         """Check interlocks."""
