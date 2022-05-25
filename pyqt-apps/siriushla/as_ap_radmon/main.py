@@ -1,15 +1,17 @@
 """Rad Monitor."""
 
+from functools import partial as _part
 import numpy as np
 
 from qtpy.QtCore import Qt, QEvent, QTimer
 from qtpy.QtGui import QColor, QPalette
 from qtpy.QtWidgets import QWidget, QLabel, QCheckBox, QGridLayout, \
-    QApplication, QVBoxLayout, QSizePolicy as QSzPol
+    QApplication, QVBoxLayout, QSizePolicy as QSzPol, QMenu
 
 import qtawesome as qta
 
 from pydm.widgets import PyDMLabel
+from pydm.connection_inspector import ConnectionInspector
 
 from siriuspy.envars import VACA_PREFIX
 from siriuspy.clientarch.time import Time
@@ -137,6 +139,7 @@ class RadTotDoseMonitor(QWidget):
 
         widgrid = QWidget()
         widgrid.setSizePolicy(QSzPol.Maximum, QSzPol.Expanding)
+        self.pannel = widgrid
         laygrid = QGridLayout(widgrid)
         laygrid.setHorizontalSpacing(10)
         laygrid.setVerticalSpacing(10)
@@ -160,25 +163,25 @@ class RadTotDoseMonitor(QWidget):
                 self._curves[pvn], pvname,
                 t_init=t_init.get_iso8601(), t_end=t_end.get_iso8601())
 
-            cb = QCheckBox(self)
-            cb.setChecked(True)
-            cb.stateChanged.connect(curve.setVisible)
-            cb.setSizePolicy(QSzPol.Maximum, QSzPol.Maximum)
-            pal = cb.palette()
+            cbx = QCheckBox(self)
+            cbx.setChecked(True)
+            cbx.stateChanged.connect(curve.setVisible)
+            cbx.setSizePolicy(QSzPol.Maximum, QSzPol.Maximum)
+            pal = cbx.palette()
             pal.setColor(QPalette.Base, coloro)
             pal.setColor(QPalette.Text, Qt.white)
-            cb.setPalette(pal)
-            self._cb_show[pvn] = cb
+            cbx.setPalette(pal)
+            self._cb_show[pvn] = cbx
 
-            lb = PyDMLabel(self, pvname + ':Dose')
-            lb.alarmSensitiveBorder = False
-            lb.setStyleSheet('QLabel{font-size: 52pt;}')
-            lb.showUnits = True
-            self._pvs_labels[pvn] = lb
+            lbl = PyDMLabel(self, pvname + ':Dose')
+            lbl.alarmSensitiveBorder = False
+            lbl.setStyleSheet('QLabel{font-size: 52pt;}')
+            lbl.showUnits = True
+            self._pvs_labels[pvn] = lbl
 
             frame = SiriusAlarmFrame(self, pvname + ':Dose')
-            frame.add_widget(cb)
-            frame.add_widget(lb)
+            frame.add_widget(cbx)
+            frame.add_widget(lbl)
 
             desc = QLabel(pvn + ' ' + local, self, alignment=Qt.AlignCenter)
             desc.setSizePolicy(QSzPol.Preferred, QSzPol.Maximum)
@@ -227,7 +230,10 @@ class RadTotDoseMonitor(QWidget):
         self._timer.setInterval(2000)
         self._timer.start()
 
+    # ---------- events ----------
+
     def changeEvent(self, event):
+        """Implement change event to get font size changes."""
         if event.type() == QEvent.FontChange and self._pvs_labels:
             fontsize = self.app.font().pointSize()
 
@@ -240,8 +246,8 @@ class RadTotDoseMonitor(QWidget):
                 'pt; font-weight: bold;}')
 
             # labels
-            for lb in self._pvs_labels.values():
-                lb.setStyleSheet(
+            for lbl in self._pvs_labels.values():
+                lbl.setStyleSheet(
                     'QLabel{font-size: '+str(fontsize + 8) +
                     'pt; min-width: 7em;}')
             for desc in self._desc_labels.values():
@@ -250,6 +256,22 @@ class RadTotDoseMonitor(QWidget):
                     'font-size:'+str(fontsize - 18)+'pt;}')
 
             self.ensurePolished()
+
+    def contextMenuEvent(self, event):
+        """Implement context menu to add auxiliary actions."""
+        pos = self.mapToGlobal(event.pos())
+        if not self.pannel.underMouse():
+            return
+        menu = QMenu(self)
+        show = menu.addAction('Show all curves')
+        show.triggered.connect(_part(self._set_checkbox_state, True))
+        hide = menu.addAction('Hide all curves')
+        hide.triggered.connect(_part(self._set_checkbox_state, False))
+        conn = menu.addAction('Show Connections...')
+        conn.triggered.connect(self._show_connections)
+        menu.popup(pos)
+
+    # ---------- private methods ----------
 
     def _fill_refline(self):
         basecurve = self.timeplot.curveAtIndex(0)
@@ -266,3 +288,13 @@ class RadTotDoseMonitor(QWidget):
     def _update_graph_ref(self):
         self.refline.receiveNewValue(RadTotDoseMonitor.REF_TOT_DOSE)
         self.refline.redrawCurve()
+
+    def _show_connections(self, checked):
+        """Show connections action."""
+        _ = checked
+        conn = ConnectionInspector(self)
+        conn.show()
+
+    def _set_checkbox_state(self, state):
+        for cbx in self._cb_show.values():
+            cbx.setChecked(state)
