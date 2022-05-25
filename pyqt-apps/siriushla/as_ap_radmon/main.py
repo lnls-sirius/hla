@@ -2,8 +2,6 @@
 
 import numpy as np
 
-from matplotlib import cm
-
 from qtpy.QtCore import Qt, QEvent, QTimer
 from qtpy.QtGui import QColor, QPalette
 from qtpy.QtWidgets import QWidget, QLabel, QCheckBox, QGridLayout, \
@@ -62,7 +60,17 @@ class RadTotDoseMonitor(QWidget):
             ('Thermo5', '(SI-19, hall eixo 10)'),
             ('Thermo11', '(SI-20, hall eixo 14)'),
         )
-        self._colors = cm.jet(np.linspace(0, 1, len(self._sensor_list)))*255
+        cmap = {
+            'x': np.linspace(0, 1, 12),
+            'r': [1.0, 0.6, 0.0, 0.0, 0.0, 0.0, 0.8, 0.2, 0.5, 1.0, 1.0, 1.0],
+            'g': [0.0, 0.0, 0.0, 0.4, 1.0, 0.2, 0.8, 0.2, 0.0, 0.0, 0.5, 1.0],
+            'b': [1.0, 0.6, 0.3, 1.0, 1.0, 0.0, 0.8, 0.2, 0.0, 0.0, 0.0, 0.0],
+        }
+        xeval = np.linspace(0, 1, len(self._sensor_list))
+        reval = np.interp(xeval, cmap['x'], cmap['r'])*255
+        geval = np.interp(xeval, cmap['x'], cmap['g'])*255
+        beval = np.interp(xeval, cmap['x'], cmap['b'])*255
+        self._colors = [(r, g, b) for r, g, b in zip(reval, geval, beval)]
 
         # define app font size
         self.app = QApplication.instance()
