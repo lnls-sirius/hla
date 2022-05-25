@@ -575,6 +575,7 @@ def get_object(ismenubar=True, parent=None):
                 diag.addAction(VLight)
             if 'si' not in sec:
                 Scrns = QMenu('Screens', diag)
+                Scrns.setIcon(qta.icon('mdi.camera-metering-center'))
                 Scrns.setObjectName(sec.upper()+'App')
                 for dev in get_scrn_list(sec.upper()):
                     act_dev = Scrns.addAction(dev)

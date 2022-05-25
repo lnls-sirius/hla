@@ -3,8 +3,10 @@
 from qtpy.QtWidgets import QWidget, QLabel, QPushButton, \
     QVBoxLayout, QHBoxLayout
 from qtpy.QtCore import Qt
+import qtawesome as qta
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriushla import util
+from ..util import get_appropriate_color
 
 
 def get_scrn_list(sec):
@@ -53,6 +55,8 @@ class SelectScrns(QWidget):
         self._sec = sec
         self.scrn_list = get_scrn_list(self._sec)
         self.setObjectName(sec+'App')
+        color = get_appropriate_color(sec)
+        self.setWindowIcon(qta.icon('mdi.camera-metering-center', color=color))
         self._setupUi()
 
     def _setupUi(self):

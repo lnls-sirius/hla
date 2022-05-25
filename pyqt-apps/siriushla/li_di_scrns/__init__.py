@@ -1,1 +1,1 @@
-from .scrns_main import LiBeamProfile
+from .main import LiBeamProfile
