@@ -25,7 +25,6 @@ from siriushla.as_di_scrns.scrn_details import \
     ScrnSettingsDetails as _ScrnSettingsDetails
 from siriushla.as_ti_control import HLTriggerSimple
 
-from ..util import get_appropriate_color
 
 class SiriusScrnView(QWidget):
     """
@@ -606,9 +605,6 @@ class IndividualScrn(QWidget):
         self._scrn = SiriusPVName(scrn)
         self._scrn_pref = self._scrn.substitute(prefix=prefix)
         self.setObjectName(self._scrn.sec+'App')
-        color = get_appropriate_color(self._scrn.sec)
-        self.setWindowIcon(qta.icon('mdi.camera-metering-center', color=color))
-
         self._setupUi()
 
     def _setupUi(self):
