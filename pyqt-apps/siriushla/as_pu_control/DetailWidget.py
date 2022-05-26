@@ -9,7 +9,7 @@ from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriushla import util
 from siriushla.widgets import SiriusLedState, SiriusLedAlert, PyDMLed, \
-    PyDMStateButton, PyDMLinEditScrollbar
+    PyDMStateButton, PyDMSpinboxScrollbar
 from siriushla.as_ti_control.hl_trigger import HLTriggerSimple
 
 
@@ -163,14 +163,12 @@ class PUDetailWidget(QWidget):
     def _voltage_layout(self):
         voltage_layout = QVBoxLayout()
 
-        self.voltage_sp_widget = PyDMLinEditScrollbar(
-            parent=self, channel=self._voltage_sp_pv)
-        self.voltage_rb_label = PyDMLabel(
-            parent=self, init_channel=self._voltage_rb_pv)
-        self.voltage_rb_label .showUnits = True
+        self.voltage_sp_widget = PyDMSpinboxScrollbar(
+            self, self._voltage_sp_pv)
+        self.voltage_rb_label = PyDMLabel(self, self._voltage_rb_pv)
+        self.voltage_rb_label.showUnits = True
         self.voltage_rb_label.precisionFromPV = True
-        self.voltage_mon_label = PyDMLabel(
-            parent=self, init_channel=self._voltage_mon_pv)
+        self.voltage_mon_label = PyDMLabel(self, self._voltage_mon_pv)
         self.voltage_mon_label.showUnits = True
         self.voltage_mon_label.precisionFromPV = True
 
@@ -184,14 +182,11 @@ class PUDetailWidget(QWidget):
         return voltage_layout
 
     def _kick_layout(self):
-        self.kick_sp_widget = PyDMLinEditScrollbar(
-            parent=self, channel=self._kick_sp_pv)
-        self.kick_rb_label = PyDMLabel(
-            parent=self, init_channel=self._kick_rb_pv)
+        self.kick_sp_widget = PyDMSpinboxScrollbar(self, self._kick_sp_pv)
+        self.kick_rb_label = PyDMLabel(self, self._kick_rb_pv)
         self.kick_rb_label.showUnits = True
         self.kick_rb_label.precisionFromPV = True
-        self.kick_mon_label = PyDMLabel(
-            parent=self, init_channel=self._kick_mon_pv)
+        self.kick_mon_label = PyDMLabel(self, self._kick_mon_pv)
         self.kick_mon_label.showUnits = True
         self.kick_mon_label.precisionFromPV = True
 

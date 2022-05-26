@@ -12,7 +12,7 @@ from siriuspy.namesys import SiriusPVName as PVName
 from siriuspy.search import PSSearch
 from siriuspy.pwrsupply.csdev import PS_LI_INTLK_THRS as _PS_LI_INTLK
 from siriushla.widgets import PyDMStateButton, SiriusLedState, \
-    SiriusLedAlert, PyDMLinEditScrollbar, PyDMLedMultiChannel, \
+    SiriusLedAlert, PyDMSpinboxScrollbar, PyDMLedMultiChannel, \
     SiriusEnumComboBox
 from .detail_widget.custom_widgets import LISpectIntlkLed
 
@@ -513,7 +513,7 @@ class SummaryWidget(QWidget):
         else:
             lay = QVBoxLayout(widget)
         lay.setSpacing(0)
-        lay.setContentsMargins(0, 0, 0, 0)
+        lay.setContentsMargins(0, 3, 0, 3)
         return widget
 
     def fillWidget(self, name):
@@ -619,11 +619,10 @@ class SummaryWidget(QWidget):
                 '#updparms_bt{min-width:25px;max-width:25px;icon-size:20px;}')
             self.updparms_wid.layout().addWidget(self.updparms_bt)
         elif name == 'setpoint' and self._has_analsp:
-            self.setpoint = PyDMLinEditScrollbar(self._analog_sp, self)
-            self.setpoint.sp_scrollbar.setTracking(False)
+            self.setpoint = PyDMSpinboxScrollbar(self, self._analog_sp)
             if self._is_fofb:
-                self.setpoint.sp_lineedit.precisionFromPV = False
-                self.setpoint.sp_lineedit.precision = 6
+                self.setpoint.spinbox.precisionFromPV = False
+                self.setpoint.spinbox.precision = 6
             self.setpoint_wid.layout().addWidget(self.setpoint)
         elif name == 'readback' and self._has_analrb:
             self.readback = PyDMLabel(self, self._analog_rb)
@@ -635,9 +634,7 @@ class SummaryWidget(QWidget):
             self.monitor = PyDMLabel(self, self._analog_mon)
             self.monitor_wid.layout().addWidget(self.monitor)
         elif name == 'strength_sp' and self._has_strength:
-            self.strength_sp_le = PyDMLinEditScrollbar(
-                parent=self, channel=self._strength_sp)
-            self.strength_sp_le.sp_scrollbar.setTracking(False)
+            self.strength_sp_le = PyDMSpinboxScrollbar(self, self._strength_sp)
             self.strength_sp_wid.layout().addWidget(self.strength_sp_le)
         elif name == 'strength_rb' and self._has_strength:
             self.strength_rb_lb = PyDMLabel(

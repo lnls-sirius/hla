@@ -1,29 +1,39 @@
 """Defines PyDM widget with a line edit and a double scrollbar."""
-from qtpy.QtWidgets import QWidget, QVBoxLayout, QStyle, QStyleOption
+
+from qtpy.QtCore import Qt
+from qtpy.QtWidgets import QWidget, QGridLayout, QStyle, QStyleOption, \
+    QSizePolicy as QSzPol
 from qtpy.QtGui import QPainter
-from siriushla.widgets.scrollbar import PyDMScrollBar
-from siriushla.widgets.line_edit import SiriusLineEdit
+from .scrollbar import PyDMScrollBar
+from .line_edit import SiriusLineEdit
 
 
 class PyDMLinEditScrollbar(QWidget):
-    """Widget to set the setpoint of a float PV."""
+    """Composition of a LineEdit and a Scrollbar to set a float PV."""
 
-    def __init__(self, channel, parent=None):
-        """Constructor sets channel name."""
+    def __init__(self, parent=None, init_channel=None):
+        """Init."""
         super().__init__(parent)
-        self._channel = channel
-        self._setup_ui()
+        self._init_channel = init_channel
 
-    def _setup_ui(self):
-        self.layout = QVBoxLayout()
-        self.sp_lineedit = SiriusLineEdit(
-            parent=self, init_channel=self._channel)
-        self.sp_scrollbar = PyDMScrollBar(
-            parent=self, init_channel=self._channel)
-        self.sp_scrollbar.wheelEvent = lambda event: event.ignore()
-        self.layout.addWidget(self.sp_lineedit)
-        self.layout.addWidget(self.sp_scrollbar)
-        self.setLayout(self.layout)
+        layout = QGridLayout(self)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(2)
+
+        self.lineedit = SiriusLineEdit(
+            parent=self, init_channel=init_channel)
+        self.lineedit.setAlignment(Qt.AlignCenter)
+        self.lineedit.setStyleSheet("SiriusLineEdit{min-height:1.29em;}")
+        self.lineedit.setSizePolicy(QSzPol.Expanding, QSzPol.Preferred)
+
+        self.scrollbar = PyDMScrollBar(
+            parent=self, init_channel=init_channel)
+        self.scrollbar.wheelEvent = lambda event: event.ignore()
+        self.scrollbar.setTracking(False)
+        self.scrollbar.setStyleSheet("PyDMScrollBar{max-height:0.7em;}")
+
+        layout.addWidget(self.lineedit, 0, 0, 2, 1)
+        layout.addWidget(self.scrollbar, 2, 0, 1, 1)
 
     def paintEvent(self, event):
         """Need to override paintEvent in order to apply CSS."""

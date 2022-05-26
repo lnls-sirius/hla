@@ -12,7 +12,7 @@ from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 
 from siriushla import util
 from siriushla.widgets import SiriusMainWindow, PyDMLed, \
-    SiriusLedState, PyDMLinEditScrollbar
+    SiriusLedState, PyDMSpinboxScrollbar
 from siriushla.as_di_scrns import SiriusScrnView
 from siriushla.as_ps_control import PSDetailWindow
 from siriushla.as_pu_control import PUDetailWindow
@@ -199,21 +199,14 @@ class BaseWindow(SiriusMainWindow):
             min-width:6em; max-width:6em; min-height:1.29em;""")
         lay.addWidget(pb, 1, 2)
 
-        sp_kick = PyDMLinEditScrollbar(
-            parent=self, channel=corr.substitute(
-                prefix=self.prefix, propty=propty_sp))
-        sp_kick.layout.setContentsMargins(0, 0, 0, 0)
-        sp_kick.layout.setSpacing(3)
-        sp_kick.setSizePolicy(QSzPlcy.Fixed, QSzPlcy.Maximum)
-        sp_kick.sp_lineedit.setStyleSheet("""
-            min-width:4em; max-width:4em; min-height:1.29em;""")
-        sp_kick.sp_lineedit.setAlignment(Qt.AlignCenter)
-        sp_kick.sp_lineedit.setSizePolicy(
-            QSzPlcy.Minimum, QSzPlcy.Minimum)
-        sp_kick.sp_lineedit.precisionFromPV = False
-        sp_kick.sp_lineedit.precision = 1
-        sp_kick.sp_scrollbar.setStyleSheet("""max-width:4em;""")
-        sp_kick.sp_scrollbar.limitsFromPV = True
+        sp_kick = PyDMSpinboxScrollbar(
+            self, corr.substitute(prefix=self.prefix, propty=propty_sp))
+        sp_kick.setStyleSheet(
+            "QDoubleSpinBox{min-width:4em; max-width:4em; }"
+            "QScrollBar{max-width:4em;}")
+        sp_kick.spinbox.precisionFromPV = False
+        sp_kick.spinbox.precision = 1
+        sp_kick.scrollbar.limitsFromPV = True
         lay.addWidget(sp_kick, 1, 3, 2, 1)
 
         lb_kick = PyDMLabel(
