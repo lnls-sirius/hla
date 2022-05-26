@@ -342,7 +342,6 @@ class SiriusTimePlot(PyDMTimePlot):
             font.setPointSize(font.pointSize() - 10)
             palette = QPalette()
             palette.setColor(QPalette.WindowText, curve.color)
-            palette.setColor(QPalette.Window, Qt.darkGray)
             self.label_tooltip.setText(txt)
             self.label_tooltip.setFont(font)
             self.label_tooltip.setPalette(palette)
