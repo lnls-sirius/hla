@@ -1,12 +1,14 @@
 """Rad Monitor."""
 
+import re as _re
+import time as _time
 from functools import partial as _part
 import numpy as np
 
 from qtpy.QtCore import Qt, QEvent, QTimer
 from qtpy.QtGui import QColor, QPalette
 from qtpy.QtWidgets import QWidget, QLabel, QCheckBox, QGridLayout, \
-    QApplication, QVBoxLayout, QSizePolicy as QSzPol, QMenu
+    QApplication, QVBoxLayout, QSizePolicy as QSzPol, QMenu, QHBoxLayout
 
 import qtawesome as qta
 
@@ -15,6 +17,7 @@ from pydm.connection_inspector import ConnectionInspector
 
 from siriuspy.envars import VACA_PREFIX
 from siriuspy.clientarch.time import Time
+from siriuspy.epics import PV
 from ..widgets import SiriusAlarmFrame, SiriusTimePlot
 from ..util import get_appropriate_color
 
@@ -23,6 +26,14 @@ class RadTotDoseMonitor(QWidget):
     """RAD Total Dose Rate Monitor."""
 
     REF_TOT_DOSE = 0.5  # µSv/h
+    SENSOR_LIST = (
+        'Thermo12', 'ELSE', 'Thermo8',
+        'Thermo10', 'Berthold', 'Thermo9',
+        'Thermo13', 'Thermo7', 'Thermo16',
+        'Thermo2', 'Thermo1', 'Thermo15',
+        'Thermo14', 'Thermo4', 'Thermo6',
+        'Thermo3', 'Thermo5', 'Thermo11',
+    )
 
     def __init__(self, parent=None, prefix=VACA_PREFIX):
         super().__init__(parent)
@@ -42,33 +53,32 @@ class RadTotDoseMonitor(QWidget):
         self.setWindowIcon(qta.icon('fa5s.radiation', color=color))
 
         # define data
-        self._sensor_list = (
-            ('Thermo12', '(SI-01, hall eixo 16)'),
-            ('ELSE', '(SI-01, hall eixo 17)'),
-            ('Thermo8', '(SI-01, hall eixo 18)'),
-            ('Thermo10', '(SI-01, chicane 1)'),
-            ('Berthold', '(corr. de serviço, eixo 19)'),
-            ('Thermo9', '(SI-02, hall eixo 20)'),
-            ('Thermo13', '(SI-06, hall eixo 31)'),
-            ('Thermo7', '(SI-08-IA-08, eixo 37)'),
-            ('Thermo16', '(SI-08, hall eixo 38)'),
-            ('Thermo2', '(SI-09-IA-09, eixo 40)'),
-            ('Thermo1', '(SI-10, hall eixo 43)'),
-            ('Thermo15', '(SI-12, hall eixo 50)'),
-            ('Thermo14', '(SI-14, hall eixo 55)'),
-            ('Thermo4', '(SI-14-IA-14, eixo 57)'),
-            ('Thermo6', '(SI-15, hall eixo 59)'),
-            ('Thermo3', '(SI-17, hall eixo 04)'),
-            ('Thermo5', '(SI-19, hall eixo 10)'),
-            ('Thermo11', '(SI-20, hall eixo 14)'),
-        )
+        self._mon2loco, self._locn2mon, self._mon2pos = dict(), dict(), dict()
+        self._mon2locv = {m: None for m in self.SENSOR_LIST}
+        for mon in self.SENSOR_LIST:
+            pvname = self._prefix + ('-' if self._prefix else '')
+            pvname += 'RAD:' + mon + ':Location-Cte.VAL$'
+            self._mon2loco[mon] = PV(pvname, callback=self._update_location)
+            self._locn2mon[pvname] = mon
+
+        _t0 = _time.time()
+        while _time.time() - _t0 < 10:  # wait location to be read
+            _time.sleep(0.1)
+            if all([v is not None for v in self._mon2locv.values()]):
+                break
+        else:
+            raise TimeoutError('could not read RAD Monitor Locations')
+
+        self._mon_order = [
+            m[0] for m in sorted(self._mon2pos.items(), key=lambda x: x[1])]
+
         cmap = {
             'x': np.linspace(0, 1, 12),
             'r': [1.0, 0.6, 0.0, 0.0, 0.0, 0.0, 0.8, 0.2, 0.5, 1.0, 1.0, 1.0],
             'g': [0.0, 0.0, 0.0, 0.4, 1.0, 0.2, 0.8, 0.2, 0.0, 0.0, 0.5, 1.0],
             'b': [1.0, 0.6, 0.3, 1.0, 1.0, 0.0, 0.8, 0.2, 0.0, 0.0, 0.0, 0.0],
         }
-        xeval = np.linspace(0, 1, len(self._sensor_list))
+        xeval = np.linspace(0, 1, len(self.SENSOR_LIST))
         reval = np.interp(xeval, cmap['x'], cmap['r'])*255
         geval = np.interp(xeval, cmap['x'], cmap['g'])*255
         beval = np.interp(xeval, cmap['x'], cmap['b'])*255
@@ -136,6 +146,12 @@ class RadTotDoseMonitor(QWidget):
             'Integrated Dose in 4h [µSv]', self, alignment=Qt.AlignCenter)
         self.title_grid.setStyleSheet(
             'QLabel{font-size: 52pt; font-weight: bold;}')
+        self.lb_warn = QLabel('Restart\nwindow')
+        self.lb_warn.setStyleSheet('color: red; border: 0.1em solid red;')
+        self.lb_warn.setVisible(False)
+        laytitle = QHBoxLayout()
+        laytitle.addWidget(self.title_grid, 6)
+        laytitle.addWidget(self.lb_warn, 1)
 
         widgrid = QWidget()
         widgrid.setSizePolicy(QSzPol.Maximum, QSzPol.Expanding)
@@ -144,13 +160,13 @@ class RadTotDoseMonitor(QWidget):
         laygrid.setHorizontalSpacing(10)
         laygrid.setVerticalSpacing(10)
         colnum = 3
-        laygrid.addWidget(self.title_grid, 0, 0, 1, colnum)
+        laygrid.addLayout(laytitle, 0, 0, 1, colnum)
 
-        for i, data in enumerate(self._sensor_list):
-            pvn, local = data
+        for i, mon in enumerate(self._mon_order):
+            local = self._mon2locv[mon]
             color = self._colors[i]
             pvname = self._prefix + ('-' if self._prefix else '')
-            pvname += 'RAD:' + pvn + ':TotalDoseRate'
+            pvname += 'RAD:' + mon + ':TotalDoseRate'
             row, col = i // colnum + 1, i % colnum
 
             coloro = QColor(color) if isinstance(color, str) \
@@ -158,9 +174,9 @@ class RadTotDoseMonitor(QWidget):
             self.timeplot.addYChannel(
                 pvname, name=pvname, color=coloro, lineWidth=6)
             curve = self.timeplot.curveAtIndex(-1)
-            self._curves[pvn] = curve
+            self._curves[mon] = curve
             self.timeplot.fill_curve_with_archdata(
-                self._curves[pvn], pvname,
+                self._curves[mon], pvname,
                 t_init=t_init.get_iso8601(), t_end=t_end.get_iso8601())
 
             cbx = QCheckBox(self)
@@ -171,23 +187,23 @@ class RadTotDoseMonitor(QWidget):
             pal.setColor(QPalette.Base, coloro)
             pal.setColor(QPalette.Text, Qt.white)
             cbx.setPalette(pal)
-            self._cb_show[pvn] = cbx
+            self._cb_show[mon] = cbx
 
             lbl = PyDMLabel(self, pvname + ':Dose')
             lbl.alarmSensitiveBorder = False
             lbl.setStyleSheet('QLabel{font-size: 52pt;}')
             lbl.showUnits = True
-            self._pvs_labels[pvn] = lbl
+            self._pvs_labels[mon] = lbl
 
             frame = SiriusAlarmFrame(self, pvname + ':Dose')
             frame.add_widget(cbx)
             frame.add_widget(lbl)
 
-            desc = QLabel(pvn + ' ' + local, self, alignment=Qt.AlignCenter)
+            desc = QLabel(local, self, alignment=Qt.AlignCenter)
             desc.setSizePolicy(QSzPol.Preferred, QSzPol.Maximum)
             desc.setStyleSheet(
                 'QLabel{background-color:black; color:white;font-size:26pt;}')
-            self._desc_labels[pvn] = desc
+            self._desc_labels[mon] = desc
 
             wid = QWidget()
             wid.setObjectName('wid')
@@ -298,3 +314,17 @@ class RadTotDoseMonitor(QWidget):
     def _set_checkbox_state(self, state):
         for cbx in self._cb_show.values():
             cbx.setChecked(state)
+
+    def _update_location(self, pvname, value, **kws):
+        value = bytes(value).decode('utf-8')
+        value = value.replace('corredor', 'corr.')  # abbreviations
+        mon = self._locn2mon[pvname]
+        if self._mon2locv[mon] is not None and self._mon2locv[mon] != value:
+            self.lb_warn.setVisible(True)
+            return
+        self._mon2locv[mon] = value
+        sec = 1 if 'corr.' in value.split(',')[0]\
+            else float(_re.findall(r'SI-(\d+)', value)[0])
+        axi = 18.5 if 'chicane 1' in value.split(',')[-1]\
+            else float(_re.findall(r'eixo (\d+)', value)[0])
+        self._mon2pos[mon] = 100*sec+axi
