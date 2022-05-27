@@ -6,14 +6,14 @@ from qtpy.QtWidgets import QWidget, QGridLayout, QLabel, \
 
 import qtawesome as qta
 
-from pydm.widgets import PyDMLabel
+from pydm.widgets import PyDMLabel, PyDMPushButton
 
 from siriuspy.envars import VACA_PREFIX
 from siriuspy.namesys import SiriusPVName as _PVName
 
 from ..util import connect_window, get_appropriate_color
 from ..widgets import SiriusMainWindow, SiriusLedState, SiriusSpinbox, \
-    SiriusPushButton, PyDMStateButton
+    PyDMStateButton
 from .auxiliary_dialogs import ModIntlkDetailDialog, ModEmerStopDialog
 
 
@@ -88,9 +88,10 @@ class LIModltrWindow(SiriusMainWindow):
         led_output = SiriusLedState(self, dev+':OutPut_Status')
 
         # Reset
-        pb_reset = SiriusPushButton(
+        pb_reset = PyDMPushButton(
             self, label='Reset', icon=qta.icon('fa5s.sync'),
             pressValue=1, releaseValue=0, init_channel=dev+':RESET')
+        pb_reset.writeWhenRelease = True
         pb_reset.setObjectName('reset')
         pb_reset.setStyleSheet("""
             #reset{
@@ -156,7 +157,7 @@ class LIModltrWindow(SiriusMainWindow):
             '<h4>RUN_STOP</h4>', self, alignment=Qt.AlignCenter)
         led_RUN_STOP = SiriusLedState(self, dev + ':RUN_STOP')
         led_RUN_STOP.offColor = SiriusLedState.Red
-        btn_STOP = SiriusPushButton(
+        btn_STOP = PyDMPushButton(
             parent=self, init_channel=dev + ':RUN_STOP', pressValue=0,
             icon=qta.icon('mdi.power-off'))
         btn_STOP.setToolTip(
@@ -167,7 +168,7 @@ class LIModltrWindow(SiriusMainWindow):
             "<h4>After this operation the system will enter in a 1h long "
             "ramping process when turned on again.</h4>\n"
             "Are you sure you want to proceed?")
-        btn_RUN = SiriusPushButton(
+        btn_RUN = PyDMPushButton(
             parent=self, init_channel=dev + ':RUN_STOP', pressValue=1,
             icon=qta.icon('mdi.power-on'))
         btn_RUN.setToolTip('Turn On')
@@ -181,7 +182,7 @@ class LIModltrWindow(SiriusMainWindow):
             '<h4>PREHEAT</h4>', self, alignment=Qt.AlignCenter)
         led_PREHEAT = SiriusLedState(self, dev + ':PREHEAT')
         led_PREHEAT.offColor = SiriusLedState.Red
-        btn_PREHEAT_OFF = SiriusPushButton(
+        btn_PREHEAT_OFF = PyDMPushButton(
             parent=self, init_channel=dev + ':PREHEAT', pressValue=0,
             icon=qta.icon('mdi.power-off'))
         btn_PREHEAT_OFF.setToolTip(
@@ -192,7 +193,7 @@ class LIModltrWindow(SiriusMainWindow):
             "<h4>After this operation the system will enter in a 1h long "
             "ramping process when turned on again.</h4>\n"
             "Are you sure you want to proceed?")
-        btn_PREHEAT_ON = SiriusPushButton(
+        btn_PREHEAT_ON = PyDMPushButton(
             parent=self, init_channel=dev + ':PREHEAT', pressValue=1,
             icon=qta.icon('mdi.power-on'))
         btn_PREHEAT_ON.showConfirmDialog = True

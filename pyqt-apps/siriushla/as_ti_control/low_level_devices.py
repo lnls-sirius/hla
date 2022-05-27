@@ -8,7 +8,7 @@ from qtpy.QtWidgets import QLabel, QPushButton, QGroupBox, QVBoxLayout, \
     QHBoxLayout, QGridLayout, QMenuBar, QSplitter, QTabWidget, QWidget, \
     QSizePolicy as QSzPol, QCheckBox, QFrame, QAbstractItemView, QHeaderView
 import qtawesome as qta
-from pydm.widgets import PyDMLabel, PyDMLineEdit
+from pydm.widgets import PyDMLabel, PyDMLineEdit, PyDMPushButton
 
 from siriuspy.search import LLTimeSearch, HLTimeSearch
 from siriuspy.namesys import SiriusPVName as _PVName
@@ -17,7 +17,7 @@ from siriuspy.timesys import csdev as _cstime
 from ..widgets import PyDMLed, PyDMStateButton, SiriusLedState, \
     SiriusEnumComboBox, SiriusLedAlert, SiriusLabel, \
     SiriusSpinbox, SiriusConnectionSignal, SiriusWaveformTable, \
-    SiriusPushButton, SiriusHexaSpinbox, SiriusWaveformPlot
+    SiriusHexaSpinbox, SiriusWaveformPlot
 from ..widgets.windows import create_window_from_widget, SiriusDialog
 from ..util import connect_window, get_appropriate_color
 
@@ -153,7 +153,7 @@ class EVG(BaseWidget):
         lay.addWidget(pg, 0, 0, alignment=Qt.AlignCenter)
 
         pvname = self.get_pvname(propty='UpdateEvt-Cmd')
-        sp = SiriusPushButton(self, init_channel=pvname, pressValue=1)
+        sp = PyDMPushButton(self, init_channel=pvname, pressValue=1)
         sp.setIcon(qta.icon('fa5s.sync'))
         sp.setToolTip('Update Events Table')
         sp.setObjectName('but')
@@ -210,7 +210,7 @@ class EVG(BaseWidget):
 
         # rf configs
         pvname = self.get_pvname(propty='RFReset-Cmd')
-        sp = SiriusPushButton(self, init_channel=pvname, pressValue=1)
+        sp = PyDMPushButton(self, init_channel=pvname, pressValue=1)
         sp.setIcon(qta.icon('fa5s.sync'))
         sp.setToolTip('Reset RF Status')
         sp.setObjectName('but')
@@ -383,15 +383,16 @@ class EVG(BaseWidget):
 
         lb = QLabel("<b>Download</b>")
         pvname = self.get_pvname('Download-Cmd')
-        sp = SiriusPushButton(
+        sp = PyDMPushButton(
             self, label='', icon=qta.icon('fa5s.download'),
             pressValue=1, releaseValue=0, init_channel=pvname)  # ?
+        sp.writeWhenRelease = True
         gb = self._create_small_group('', info_wid, (lb, sp))
         lay.addWidget(gb, 1, 0, alignment=Qt.AlignHCenter)
 
         lb = QLabel("<b>Save Settings</b>")
         pvname = self.get_pvname('Save-Cmd')
-        sp = SiriusPushButton(
+        sp = PyDMPushButton(
             self, label='Save', init_channel=pvname, pressValue=1)  # ?
         gb = self._create_small_group('', info_wid, (lb, sp))
         lay.addWidget(gb, 1, 1, alignment=Qt.AlignHCenter)
@@ -570,7 +571,7 @@ class EVG(BaseWidget):
 
         lb = QLabel('<b>Get UTC</b>')
         pvname = self.get_pvname('GetUTC-Cmd')
-        sp = SiriusPushButton(
+        sp = PyDMPushButton(
             self, label='Get UTC', init_channel=pvname,
             pressValue=1)  # ?
         gb = self._create_small_group('', gbox, (lb, sp))
@@ -960,7 +961,7 @@ class EventList(BaseList):
         if prop == 'ext_trig':
             pvname = device.substitute(propty=device.propty+'ExtTrig-Cmd')
             sp = QWidget(self)
-            but = SiriusPushButton(sp, init_channel=pvname, pressValue=1)
+            but = PyDMPushButton(sp, init_channel=pvname, pressValue=1)
             but.setIcon(qta.icon('fa5s.step-forward'))
             but.setObjectName('but')
             but.setStyleSheet(
@@ -1222,15 +1223,16 @@ class FOUT(BaseWidget):
 
         lb = QLabel("<b>Download</b>")
         pvname = self.get_pvname('Download-Cmd')
-        sp = SiriusPushButton(
+        sp = PyDMPushButton(
             self, label='', icon=qta.icon('fa5s.download'),
             pressValue=1, releaseValue=0, init_channel=pvname)  # ?
+        sp.writeWhenRelease = True
         gb = self._create_small_group('', info_wid, (lb, sp))
         info_lay.addWidget(gb, 1, 0, alignment=Qt.AlignTop)
 
         lb = QLabel("<b>Save Settings</b>")
         pvname = self.get_pvname('Save-Cmd')
-        sp = SiriusPushButton(
+        sp = PyDMPushButton(
             self, label='Save', init_channel=pvname, pressValue=1)  # ?
         gb = self._create_small_group('', info_wid, (lb, sp))
         info_lay.addWidget(gb, 1, 1, alignment=Qt.AlignTop)
@@ -1413,7 +1415,7 @@ class AFC(BaseWidget):
 
         lb = QLabel("<b>Save Settings</b>")
         pvname = self.get_pvname('Save-Cmd')
-        sp = SiriusPushButton(
+        sp = PyDMPushButton(
             self, label='Save', init_channel=pvname, pressValue=1)
         gb = self._create_small_group('', info_wid, (lb, sp))
         info_lay.addWidget(gb, 0, 0)
@@ -1821,15 +1823,16 @@ class _EVR_EVE(BaseWidget):
 
         lb = QLabel("<b>Download</b>")
         pvname = self.get_pvname('Download-Cmd')
-        sp = SiriusPushButton(
+        sp = PyDMPushButton(
             self, label='', icon=qta.icon('fa5s.download'),
             pressValue=1, releaseValue=0, init_channel=pvname)  # ?
+        sp.writeWhenRelease = True
         gb = self._create_small_group('', info_wid, (lb, sp))
         info_lay.addWidget(gb, 0, 3, alignment=Qt.AlignTop)
 
         lb = QLabel("<b>Save Settings</b>")
         pvname = self.get_pvname('Save-Cmd')
-        sp = SiriusPushButton(
+        sp = PyDMPushButton(
             self, label='Save', init_channel=pvname, pressValue=1)
         gb = self._create_small_group('', info_wid, (lb, sp))
         info_lay.addWidget(gb, 0, 4, alignment=Qt.AlignTop)
@@ -1919,9 +1922,10 @@ class _EVR_EVE(BaseWidget):
             '', gbox_log, (ld_logrst, self.sb_logrst, self.led_logrst))
 
         ld_logpul = QLabel('<b>Pull</b>', self)
-        self.bt_logpul = SiriusPushButton(
+        self.bt_logpul = PyDMPushButton(
             parent=self, init_channel=self.get_pvname('pull'),
             pressValue=1, releaseValue=0)  # ?
+        self.bt_logpul.writeWhenRelease = True
         self.bt_logpul.setIcon(qta.icon('fa5s.arrow-down'))
         self.bt_logpul.setObjectName('bt')
         self.bt_logpul.setStyleSheet(
@@ -1985,9 +1989,10 @@ class _EVR_EVE(BaseWidget):
             '', gbox_buf, (ld_bufcnt, self.lb_bufcnt))
 
         ld_bufrst = QLabel('<b>Reset</b>', self)
-        self.bt_bufrst = SiriusPushButton(
+        self.bt_bufrst = PyDMPushButton(
             parent=self, init_channel=self.get_pvname('rstSoftBuff'),
             pressValue=1, releaseValue=0)  # ?
+        self.bt_bufrst.writeWhenRelease = True
         self.bt_bufrst.setIcon(qta.icon('fa5s.sync'))
         self.bt_bufrst.setObjectName('bt')
         self.bt_bufrst.setStyleSheet(
@@ -2399,7 +2404,7 @@ class LLTriggerList(BaseList):
             sp.setAlignment(Qt.AlignCenter)
         elif prop == 'evtcntrst':
             pvname = intlb.substitute(propty=intlb.propty+'EvtCntRst-Cmd')
-            sp = SiriusPushButton(
+            sp = PyDMPushButton(
                 self, icon=qta.icon('fa5s.sync'), label='',
                 init_channel=pvname, pressValue=1)
             sp.setObjectName('rst')

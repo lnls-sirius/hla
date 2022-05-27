@@ -10,11 +10,11 @@ import qtawesome as qta
 from pyqtgraph import InfiniteLine, mkPen
 
 from pydm.widgets import PyDMLineEdit, PyDMEnumComboBox, \
-    PyDMLabel, PyDMSpinbox
+    PyDMLabel, PyDMSpinbox, PyDMPushButton
 
 from ..widgets import SiriusMainWindow, PyDMStateButton, PyDMLed, \
     SiriusLedAlert, SiriusLedState, PyDMLedMultiChannel, SiriusTimePlot, \
-    SiriusConnectionSignal, SiriusPushButton, SiriusLabel, SiriusWaveformPlot
+    SiriusConnectionSignal, SiriusLabel, SiriusWaveformPlot
 from ..util import connect_window, get_appropriate_color
 from .details import TransmLineStatusDetails, CavityStatusDetails, \
     LLRFInterlockDetails, TempMonitor
@@ -205,18 +205,20 @@ class RFMainControl(SiriusMainWindow):
         # # Reset Global
         self.ld_globreset = QLabel(
             'Reset Global', self, alignment=Qt.AlignRight)
-        self.pb_globreset = SiriusPushButton(
-            label='', icon=qta.icon('fa5s.sync'), releaseValue=0,
+        self.pb_globreset = PyDMPushButton(
+            label='', icon=qta.icon('fa5s.sync'), pressValue=1, releaseValue=0,
             parent=self, init_channel=self.prefix+self.chs['Reset']['Global'])
+        self.pb_globreset.writeWhenRelease = True
         self.pb_globreset.setObjectName('pb_globreset')
         self.pb_globreset.setStyleSheet(
             '#pb_globreset{min-width:25px; max-width:25px; icon-size:20px;}')
 
         # # Reset LLRF
         self.ld_llrfreset = QLabel('Reset LLRF', self, alignment=Qt.AlignRight)
-        self.pb_llrfreset = SiriusPushButton(
-            label='', icon=qta.icon('fa5s.sync'), releaseValue=0,
+        self.pb_llrfreset = PyDMPushButton(
+            label='', icon=qta.icon('fa5s.sync'), pressValue=1, releaseValue=0,
             parent=self, init_channel=self.prefix+self.chs['Reset']['LLRF'])
+        self.pb_llrfreset.writeWhenRelease = True
         self.pb_llrfreset.setObjectName('pb_llrfreset')
         self.pb_llrfreset.setStyleSheet(
             '#pb_llrfreset{min-width:25px; max-width:25px; icon-size:20px;}')

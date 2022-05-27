@@ -2,13 +2,13 @@
 
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, QGroupBox, QHBoxLayout
-from pydm.widgets import PyDMSpinbox, PyDMEnumComboBox
 import qtawesome as qta
+from pydm.widgets import PyDMSpinbox, PyDMEnumComboBox, PyDMPushButton
 
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 from siriuspy.namesys import SiriusPVName as _PVName
 
-from ..widgets import SiriusFrame, SiriusLabel, SiriusPushButton
+from ..widgets import SiriusFrame, SiriusLabel
 
 from .custom_widgets import MyScaleIndicator
 from .util import set_bbb_color
@@ -468,9 +468,10 @@ class BbBInterlock(QWidget):
         fr_sts = SiriusFrame(self, pvn, is_float=True)
         fr_sts.borderWidth = 2
         fr_sts.add_widget(lb_sts)
-        pb_rst = SiriusPushButton(
+        pb_rst = PyDMPushButton(
             self, init_channel=self.dev_pref+':ILOCK_RESET', pressValue=1,
             releaseValue=0)
+        pb_rst.writeWhenRelease = True
         pb_rst.setText('Reset')
         pb_rst.setToolTip('Reset Counts')
         pb_rst.setIcon(qta.icon('fa5s.sync'))
@@ -510,17 +511,19 @@ class BbBInterlock(QWidget):
         sb_thr.showStepExponent = False
         sb_thr.showUnits = True
 
-        pb_upt = SiriusPushButton(
+        pb_upt = PyDMPushButton(
             self, init_channel=self.dev_pref+':ILOCK_UPDATE', pressValue=1,
             releaseValue=0)
+        pb_upt.writeWhenRelease = True
         pb_upt.setText('Update Filter')
         pb_upt.setToolTip('Update Filter Config')
         pb_upt.setIcon(qta.icon('mdi.sync'))
         pb_upt.setStyleSheet("icon-size:20px;")
 
-        pb_ld = SiriusPushButton(
+        pb_ld = PyDMPushButton(
             self, init_channel=self.dev_pref+':BO_CPCOEFF', pressValue=1,
             releaseValue=0)
+        pb_ld.writeWhenRelease = True
         pb_ld.setText('Apply Filter')
         pb_ld.setToolTip('Apply Filter Config to Feedback')
         pb_ld.setIcon(qta.icon('mdi.upload'))
