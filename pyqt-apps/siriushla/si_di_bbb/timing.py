@@ -4,12 +4,12 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, \
     QGroupBox
 import qtawesome as qta
-from pydm.widgets import PyDMLabel, PyDMSpinbox
+from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMPushButton
 
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 from siriuspy.namesys import SiriusPVName as _PVName
 
-from ..widgets import SiriusFrame, SiriusSpinbox, SiriusPushButton
+from ..widgets import SiriusFrame, SiriusSpinbox
 from .util import set_bbb_color
 
 
@@ -51,9 +51,10 @@ class BbBTimingWidget(QWidget):
 
         # Timing Control
         ld_clkrst = QLabel('Clock Reset', self)
-        pb_clkrst = SiriusPushButton(
+        pb_clkrst = PyDMPushButton(
             self, init_channel=self.dev_pref+':CLKRST', pressValue=1,
             releaseValue=0)
+        pb_clkrst.writeWhenRelease = True
         pb_clkrst.setText('Reset')
         pb_clkrst.setToolTip('Reset Clock')
         pb_clkrst.setIcon(qta.icon('fa5s.sync'))
