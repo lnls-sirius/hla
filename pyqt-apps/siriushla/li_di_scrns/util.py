@@ -6,12 +6,110 @@ DEVICES = [
     "PRF5"
 ]
 
-MOTORS_PV = {
-    "title": "Motors Panel",
-    "labels":[
-        "Devices", "Motor Selected", "Busy"
+SCREENS_PANEL = {
+    "title": "Screens Panel",
+    "labels": [
+        "Devices", "Selected", "Busy"
     ],
     "content": [
         "POS_R", "BUSY"
     ]
+}
+
+SCREENS_INFO = {
+    "title": "Screen Information",
+    "content": {
+        "Limit Top": "IS_B",
+        "LimitBottom": "IS_A",
+        "Limit Mode": "MODE",
+        "Motor Status": "BUSY",
+        "Motor Code": "AL"
+    },
+    "special_content": [
+        {
+            "selected": "POS_R",
+            "labels": [
+                "OUT", "CAL", "AL203",
+                "YAG", "OTR"
+            ],
+            "content": [
+                "POS1.PROC", "POS2.PROC", "POS3.PROC",
+                "POS4.PROC", "POS5.PROC"
+            ]
+        },
+        {
+            "title": "Zero Operation",
+            "content": {
+                "Zero": "UP-O.PROC",
+                "Zero (!Expert)": "UP-M.PROC"
+            }
+        }
+    ]
+}
+
+HEADER = {
+    "All Motor Out": "OUT",
+    "All Motor Zero": "UP"
+}
+
+GRAPH = {
+    "Horizontal": {
+        "labelX": "Points",
+        "labelY": "Projection",
+        "channel": {
+            "centroid": "CAL:ProfileCentroidX_RBV",
+            "data": "X:Gauss:Data"
+        },
+        "info": {
+            "Center": "X:Gauss:Peak",
+            "Sigma": "X:Gauss:Sigma",
+            "Coefficient": "X:Gauss:Coef"
+        }
+    },
+    "Vertical": {
+        "labelX": "Points",
+        "labelY": "Projection",
+        "channel": {
+            "centroid": "CAL:ProfileCentroidY_RBV",
+            "data": "Y:Gauss:Data"
+        },
+        "info": {
+            "Center": "Y:Gauss:Peak",
+            "Sigma": "Y:Gauss:Sigma",
+            "Coefficient": "Y:Gauss:Coef"
+        }
+    },
+    "ROI": {
+        "Resolution": [
+            "MaxSizeX_RBV", "MaxSizeY_RBV"],
+        "Size": [
+            "SizeX_RBV", "SizeY_RBV"],
+        "X Start": [
+            "MinX_", "MinX_RBV"],
+        "Y Start": [
+            "MinY_", "MinY_RBV"]
+    }
+}
+
+SCREEN = {
+    "Screen": {
+        "data": "RAW:ArrayData",
+        "width": "RAW:ArraySize0_RBV"
+    },
+    "info": {
+        "LED": [
+            "LED",
+            "CMD"
+        ],
+        "Counter": "CAM:ArrayCounter_RBV",
+        "Expouse": [
+            "CAM:AcquireTime",
+            "CAM:AcquireTime_RBV"
+        ],
+        "Gain": [
+            "CAM:Gain",
+            "CAM:Gain_RBV"
+        ],
+        "Centroid Threshold": "CAL:CentroidThreshold"
+    }
 }
