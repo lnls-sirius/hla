@@ -91,6 +91,12 @@ GRAPH = {
     }
 }
 
+SCREEN_CONFIG = {
+    "CCD Reconnect": "RESET.PROC",
+    "Connection": "CONNECTION.SEVR",
+    "Acquire": "Acquire"
+}
+
 SCREEN = {
     "Screen": {
         "data": "RAW:ArrayData",

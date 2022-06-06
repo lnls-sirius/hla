@@ -5,12 +5,12 @@ from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets  import QGroupBox, QHBoxLayout, QVBoxLayout, \
     QWidget, QFrame, QLabel, QGridLayout, QRadioButton, QStackedWidget
 from pydm.widgets import PyDMEnumComboBox, PyDMLabel, PyDMPushButton, \
-    PyDMWaveformPlot, PyDMSpinbox, PyDMImageView
+    PyDMWaveformPlot, PyDMSpinbox, PyDMImageView, PyDMLineEdit
 import qtawesome as qta
 from ..util import get_appropriate_color
 from ..widgets import SiriusMainWindow, PyDMLedMultiChannel, PyDMStateButton
 from .util import DEVICES, SCREENS_PANEL, SCREENS_INFO, HEADER, \
-    GRAPH, SCREEN
+    GRAPH, SCREEN, SCREEN_CONFIG
 
 class LiBeamProfile(SiriusMainWindow):
     ''' Linac Profile Screen '''
@@ -66,7 +66,7 @@ class LiBeamProfile(SiriusMainWindow):
             self.pixmap.scaled(
                 self.image_container.width(),
                 self.image_container.height()))
-        self.image_container.setMinimumSize(750, 250)
+        self.image_container.setMinimumSize(500, 250)
         self.image_container.setMaximumSize(1500, 250)
         self.image_container.setAlignment(Qt.AlignCenter)
         return self.image_container
@@ -92,6 +92,10 @@ class LiBeamProfile(SiriusMainWindow):
             widget = PyDMSpinbox(
                 init_channel=pvName)
             widget.showStepExponent = False
+        elif widType == 4:
+            widget = PyDMLineEdit(
+                init_channel=pvName)
+            widget.setAlignment(Qt.AlignCenter)
         # elif widType == 4:
         #     widget = PyDMStateButton(
         #         init_channel=pvName)
@@ -201,11 +205,12 @@ class LiBeamProfile(SiriusMainWindow):
         ''' Set one screen basic information '''
         bi_hlay = QHBoxLayout()
         bi_hlay.addWidget(
-            QLabel(label))
+            QLabel(label),
+            alignment=Qt.AlignCenter)
         if label in ['Limit Mode', 'Motor Code', 'Counter']:
             widType = 0
         elif label == "Centroid Threshold":
-            widType = 3
+            widType = 4
         else:
             widType = 1
         bi_hlay.addWidget(
@@ -309,7 +314,10 @@ class LiBeamProfile(SiriusMainWindow):
         for item in range(0, 2):
             pvName = pv_prefix + pv_name[item]
             if 'RBV' not in pvName:
-                widType = 3
+                if label in ['Gain', 'Exposure']:
+                    widType = 4
+                else:
+                    widType = 3
             else:
                 widType = 0
             widget = self.setWidgetType(widType, device, pvName, False)
@@ -377,6 +385,18 @@ class LiBeamProfile(SiriusMainWindow):
         self.saveStack(stack, stackType)
         return stack
 
+    def setScreenConfig(self, device):
+        sc_hlay = QHBoxLayout()
+        for title, item in SCREEN_CONFIG.items():
+            if(item == "RESET.PROC"):
+                sc_hlay.addWidget(
+                    self.setWidgetType(2, device, item, title))
+            else:
+                sc_hlay.addLayout(
+                    self.screenBasicInfo(device, title, "CAM:"+item))
+        return sc_hlay
+
+
     def setScreenInfo(self, device):
         si_hlay = QHBoxLayout()
         for title, item in SCREEN['info'].items():
@@ -399,12 +419,12 @@ class LiBeamProfile(SiriusMainWindow):
             PyDMImageView(
                 image_channel=self.getPvName(device, SCREEN['Screen']['data']),
                 width_channel=self.getPvName(device, SCREEN['Screen']['width'])))
-
+        ss_vlay.addLayout(
+            self.setScreenConfig(device))
         ss_vlay.addLayout(
             self.setScreenInfo(device))
 
         group.setLayout(ss_vlay)
-        # group.setTitle(SCREEN[0])
         return group
 
     def _setupUi(self):
@@ -412,12 +432,12 @@ class LiBeamProfile(SiriusMainWindow):
         wid = QWidget(self)
         if_glay = QGridLayout()
 
-        if_glay.addLayout(self.header(), 0, 0, 1, 12)
+        if_glay.addLayout(self.header(), 0, 0, 1, 10)
         if_glay.addWidget(self.buildStacks(0), 1, 2, 3, 2)
-        if_glay.addWidget(self.imageViewer(), 1, 4, 3, 8)
+        if_glay.addWidget(self.imageViewer(), 1, 4, 3, 6)
         if_glay.addWidget(self.screenPanel(), 1, 0, 3, 2)
-        if_glay.addWidget(self.buildStacks(2), 4, 0, 3, 6)
-        if_glay.addWidget(self.buildStacks(1), 4, 6, 3, 6)
+        if_glay.addWidget(self.buildStacks(2), 4, 0, 3, 5)
+        if_glay.addWidget(self.buildStacks(1), 4, 5, 3, 5)
 
         wid.setLayout(if_glay)
         self.setCentralWidget(wid)
