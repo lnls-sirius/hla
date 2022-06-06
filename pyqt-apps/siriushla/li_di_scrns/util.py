@@ -20,7 +20,7 @@ SCREENS_INFO = {
     "title": "Screen Information",
     "content": {
         "Limit Top": "IS_B",
-        "LimitBottom": "IS_A",
+        "Limit Bottom": "IS_A",
         "Limit Mode": "MODE",
         "Motor Status": "BUSY",
         "Motor Code": "AL"

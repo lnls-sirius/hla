@@ -8,9 +8,10 @@ from pydm.widgets import PyDMEnumComboBox, PyDMLabel, PyDMPushButton, \
     PyDMWaveformPlot, PyDMSpinbox, PyDMImageView, PyDMLineEdit
 import qtawesome as qta
 from ..util import get_appropriate_color
-from ..widgets import SiriusMainWindow, PyDMLedMultiChannel, PyDMStateButton
+from ..widgets import SiriusMainWindow, PyDMLedMultiChannel
 from .util import DEVICES, SCREENS_PANEL, SCREENS_INFO, HEADER, \
     GRAPH, SCREEN, SCREEN_CONFIG
+from .motorBtn import MotorBtn
 
 class LiBeamProfile(SiriusMainWindow):
     ''' Linac Profile Screen '''
@@ -96,11 +97,9 @@ class LiBeamProfile(SiriusMainWindow):
             widget = PyDMLineEdit(
                 init_channel=pvName)
             widget.setAlignment(Qt.AlignCenter)
-        # elif widType == 4:
-        #     widget = PyDMStateButton(
-        #         init_channel=pvName)
-        #     widget._on = 'IL1'
-        #     widget._off = 'IH1'
+        elif widType == 5:
+            widget = MotorBtn(
+                init_channel=pvName)
         else:
             widget = QLabel("Error: Unknown device")
         return widget
@@ -236,7 +235,7 @@ class LiBeamProfile(SiriusMainWindow):
         lo_hlay.addWidget(
             self.setWidgetType(1, device, "MOTOR:"+pvList[0], False))
         lo_hlay.addWidget(
-            self.setWidgetType(4, device, "MOTOR:"+pvList[1], False))
+            self.setWidgetType(5, device, "MOTOR:"+pvList[1], False))
         return lo_hlay
 
     def singleScreenInfo(self, device):
@@ -285,8 +284,7 @@ class LiBeamProfile(SiriusMainWindow):
             y_channel=self.getPvName(device, graph_data['channel']['data']),
             color="#ff0000",
             lineWidth=1)
-        graph_plot.setMinimumWidth(100)
-        graph_plot.setMinimumHeight(100)
+        graph_plot.setMinimumSize(50, 100)
 
         return graph_plot
 
@@ -321,6 +319,7 @@ class LiBeamProfile(SiriusMainWindow):
             else:
                 widType = 0
             widget = self.setWidgetType(widType, device, pvName, False)
+            widget.setMaximumWidth(75)
             if item == 0:
                 rbv_hlay.addWidget(
                         widget,
@@ -374,6 +373,7 @@ class LiBeamProfile(SiriusMainWindow):
             self.stackScreens = stack
         elif stackType == 1:
             self.stackGraphs = stack
+            self.stackGraphs.setMaximumWidth(1250)
         elif stackType == 2:
             self.stackScreen = stack
 
@@ -390,7 +390,7 @@ class LiBeamProfile(SiriusMainWindow):
         for title, item in SCREEN_CONFIG.items():
             if(item == "RESET.PROC"):
                 sc_hlay.addWidget(
-                    self.setWidgetType(2, device, item, title))
+                    self.setWidgetType(2, device, "CAM:"+item, title))
             else:
                 sc_hlay.addLayout(
                     self.screenBasicInfo(device, title, "CAM:"+item))
@@ -436,8 +436,7 @@ class LiBeamProfile(SiriusMainWindow):
         if_glay.addWidget(self.buildStacks(0), 1, 2, 3, 2)
         if_glay.addWidget(self.imageViewer(), 1, 4, 3, 6)
         if_glay.addWidget(self.screenPanel(), 1, 0, 3, 2)
-        if_glay.addWidget(self.buildStacks(2), 4, 0, 3, 5)
-        if_glay.addWidget(self.buildStacks(1), 4, 5, 3, 5)
-
+        if_glay.addWidget(self.buildStacks(2), 4, 0, 3, 7)
+        if_glay.addWidget(self.buildStacks(1), 4, 7, 3, 3)
         wid.setLayout(if_glay)
         self.setCentralWidget(wid)
