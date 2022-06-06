@@ -85,9 +85,9 @@ GRAPH = {
         "Size": [
             "SizeX_RBV", "SizeY_RBV"],
         "X Start": [
-            "MinX_", "MinX_RBV"],
+            "MinX_RBV", "MinX_"],
         "Y Start": [
-            "MinY_", "MinY_RBV"]
+            "MinY_RBV", "MinY_"]
     }
 }
 
@@ -102,13 +102,13 @@ SCREEN = {
             "CMD"
         ],
         "Counter": "CAM:ArrayCounter_RBV",
-        "Expouse": [
-            "CAM:AcquireTime",
-            "CAM:AcquireTime_RBV"
+        "Exposure": [
+            "AcquireTime_RBV",
+            "AcquireTime"
         ],
         "Gain": [
-            "CAM:Gain",
-            "CAM:Gain_RBV"
+            "Gain_RBV",
+            "Gain"
         ],
         "Centroid Threshold": "CAL:CentroidThreshold"
     }

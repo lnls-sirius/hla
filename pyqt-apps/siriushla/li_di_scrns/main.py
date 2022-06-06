@@ -41,7 +41,6 @@ class LiBeamProfile(SiriusMainWindow):
 
     def resizeEvent(self, event):
         ''' Resize Image'''
-        self.image_container.setMinimumSize(750, 250)
         self.image_container.setPixmap(
             self.pixmap.scaled(
                 self.image_container.width(),
@@ -66,8 +65,10 @@ class LiBeamProfile(SiriusMainWindow):
         self.image_container.setPixmap(
             self.pixmap.scaled(
                 self.image_container.width(),
-                self.image_container.height())
-        )
+                self.image_container.height()))
+        self.image_container.setMinimumSize(750, 250)
+        self.image_container.setMaximumSize(1500, 250)
+        self.image_container.setAlignment(Qt.AlignCenter)
         return self.image_container
 
     def setWidgetType(self, widType, device, pv_name, label):
@@ -196,20 +197,20 @@ class LiBeamProfile(SiriusMainWindow):
         widget.setLayout(ms_vlay)
         return widget
 
-    def screenBasicInfo(self, device, label, pv_name, pos, sm_glay):
+    def screenBasicInfo(self, device, label, pv_name):
         ''' Set one screen basic information '''
-        pv_name = 'MOTOR:'+pv_name
-        sm_glay.addWidget(
-            QLabel(label),
-            pos[0], pos[1])
-        if pv_name in ['MOTOR:MODE', 'MOTOR:AL']:
-            sm_glay.addWidget(
-                self.setWidgetType(0, device, pv_name, False),
-                pos[0], pos[1]+1)
+        bi_hlay = QHBoxLayout()
+        bi_hlay.addWidget(
+            QLabel(label))
+        if label in ['Limit Mode', 'Motor Code', 'Counter']:
+            widType = 0
+        elif label == "Centroid Threshold":
+            widType = 3
         else:
-            sm_glay.addWidget(
-                self.setWidgetType(1, device, pv_name, False),
-                pos[0], pos[1]+1)
+            widType = 1
+        bi_hlay.addWidget(
+            self.setWidgetType(widType, device, pv_name, False))
+        return bi_hlay
 
     def setZeroOpt(self, item, device):
         ''' Display Zero Operation Component'''
@@ -239,7 +240,9 @@ class LiBeamProfile(SiriusMainWindow):
         sm_glay = QGridLayout()
         pos = [0, 0]
         for label, channel in SCREENS_INFO.get('content').items():
-            self.screenBasicInfo(device, label, channel, pos, sm_glay)
+            sm_glay.addLayout(
+                self.screenBasicInfo(device, label, 'MOTOR:'+channel),
+                pos[0], pos[1])
             pos[0]+=1
 
         sm_glay.addLayout(
@@ -298,17 +301,18 @@ class LiBeamProfile(SiriusMainWindow):
                     alignment=Qt.AlignCenter)
         return gi_hlay
 
-    def setRBVWidget(self, device, pv_name, label):
+    def setRBVObj(self, device, pv_name, label, pv_prefix):
         rbv_hlay = QHBoxLayout()
         rbv_hlay.addWidget(
             QLabel(label),
             alignment=Qt.AlignRight)
         for item in range(0, 2):
-            pvName = "ROI:" + pv_name[item]
-            if 'Min' in pvName and 'RBV' in pvName:
-                widget = self.setWidgetType(3, device, pvName, False)
+            pvName = pv_prefix + pv_name[item]
+            if 'RBV' not in pvName:
+                widType = 3
             else:
-                widget = self.setWidgetType(0, device, pvName, False)
+                widType = 0
+            widget = self.setWidgetType(widType, device, pvName, False)
             if item == 0:
                 rbv_hlay.addWidget(
                         widget,
@@ -329,7 +333,7 @@ class LiBeamProfile(SiriusMainWindow):
         ri_hlay = QHBoxLayout()
         for label, channel in roi_data.items():
             ri_hlay.addLayout(
-                self.setRBVWidget(device, channel, label))
+                self.setRBVObj(device, channel, label, 'ROI:'))
 
         group.setLayout(ri_hlay)
         group.setTitle(title)
@@ -373,6 +377,20 @@ class LiBeamProfile(SiriusMainWindow):
         self.saveStack(stack, stackType)
         return stack
 
+    def setScreenInfo(self, device):
+        si_hlay = QHBoxLayout()
+        for title, item in SCREEN['info'].items():
+            if title == 'LED':
+                si_hlay.addLayout(
+                    self.setLightOpt(device, item, title))
+            elif title in ['Gain', 'Exposure']:
+                si_hlay.addLayout(
+                    self.setRBVObj(device, item, title, 'CAM:'))
+            else:
+                si_hlay.addLayout(
+                    self.screenBasicInfo(device, title, item))
+        return si_hlay
+
     def singleScreen(self, device):
         group = QGroupBox()
         ss_vlay = QVBoxLayout()
@@ -382,12 +400,8 @@ class LiBeamProfile(SiriusMainWindow):
                 image_channel=self.getPvName(device, SCREEN['Screen']['data']),
                 width_channel=self.getPvName(device, SCREEN['Screen']['width'])))
 
-        for title, item in SCREEN['info'].items():
-            if title == 'LED':
-                ss_vlay.addLayout(
-                    self.setLightOpt(device, item, title))
-            # elif title == 'Counter':
-
+        ss_vlay.addLayout(
+            self.setScreenInfo(device))
 
         group.setLayout(ss_vlay)
         # group.setTitle(SCREEN[0])
@@ -399,8 +413,8 @@ class LiBeamProfile(SiriusMainWindow):
         if_glay = QGridLayout()
 
         if_glay.addLayout(self.header(), 0, 0, 1, 12)
-        if_glay.addWidget(self.imageViewer(), 1, 4, 3, 8)
         if_glay.addWidget(self.buildStacks(0), 1, 2, 3, 2)
+        if_glay.addWidget(self.imageViewer(), 1, 4, 3, 8)
         if_glay.addWidget(self.screenPanel(), 1, 0, 3, 2)
         if_glay.addWidget(self.buildStacks(2), 4, 0, 3, 6)
         if_glay.addWidget(self.buildStacks(1), 4, 6, 3, 6)
