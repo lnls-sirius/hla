@@ -319,6 +319,11 @@ def get_object(ismenubar=True, parent=None):
                 bpm3, ["sirius-hla-li-di-bpms.py", 'LA-BI:BPM3'])
             bpms_menu.addAction(bpm3)
 
+            scrns = DIG.addAction('Screens')
+            scrns.setIcon(qta.icon('mdi.camera-metering-center'))
+            self.connect_newprocess(scrns, 'sirius-hla-li-di-scrns.py')
+            scrns.setObjectName('LIApp')
+
             mps = LEVEL2M('MPS', menu)
             mps.setObjectName('LIApp')
             mpsmon = QAction('Monitor', mps)
