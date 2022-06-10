@@ -746,12 +746,9 @@ class BucketListGraph(BaseWidget):
             org_curve[new_array-1] = 1
         except IndexError:
             _log.warning(
-                'BucketListGraph._update_curves: Received array for '
+                'IndexError: Received array for '
                 f'{self.sender().address} with values out of [1, 864]')
-            _log.warning(
-                f'BucketListGraph._update_curves: org_curve: {org_curve}')
-            _log.warning(
-                f'BucketListGraph._update_curves: new_array: {new_array}')
+            _log.warning(f'IndexError: new_array: {new_array}')
 
         new_bunch = _np.linspace(1, 864, 10000) - 0.5
         new_bunch_indices = _np.searchsorted(
