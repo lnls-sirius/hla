@@ -89,6 +89,8 @@ class LiBeamProfile(SiriusMainWindow):
                 init_channel=pvName)
         else:
             widget = QLabel("Error: Unknown device")
+        widget.setMinimumWidth(60)
+        widget.setFixedHeight(20)
         return widget
 
     def getRadioBtn(self, device):
@@ -176,16 +178,15 @@ class LiBeamProfile(SiriusMainWindow):
     def setSingleScrn(self, device):
         ''' Build a single screen Component '''
         group = QGroupBox()
-        ss_vlay = QVBoxLayout()
+        ss_vlay = QHBoxLayout()
 
         ss_vlay.addWidget(
             PyDMImageView(
                 image_channel=self.getPvName(device, SCREEN['Screen']['data']),
-                width_channel=self.getPvName(device, SCREEN['Screen']['width'])))
+                width_channel=self.getPvName(device, SCREEN['Screen']['width'])),
+            5)
         ss_vlay.addLayout(
-            self.setScrnConfig(device))
-        ss_vlay.addLayout(
-            self.setScrnInfo(device))
+            self.setScrnConfig(device), 1)
 
         group.setLayout(ss_vlay)
         return group
@@ -326,12 +327,12 @@ class LiBeamProfile(SiriusMainWindow):
     def setRoiInfo(self, device, roi_data, title):
         ''' Build the ROI information '''
         group = QGroupBox()
-        ri_hlay = QHBoxLayout()
+        ri_vlay = QVBoxLayout()
         for label, channel in roi_data.items():
-            ri_hlay.addLayout(
+            ri_vlay.addLayout(
                 self.setRBVObj(device, channel, label, 'ROI:'))
 
-        group.setLayout(ri_hlay)
+        group.setLayout(ri_vlay)
         group.setTitle(title)
         return group
 
@@ -365,7 +366,6 @@ class LiBeamProfile(SiriusMainWindow):
             self.stackScreens = stack
         elif stackType == 1:
             self.stackGraphs = stack
-            self.stackGraphs.setMaximumWidth(1250)
         elif stackType == 2:
             self.stackScreen = stack
 
@@ -380,30 +380,30 @@ class LiBeamProfile(SiriusMainWindow):
 
     def setScrnConfig(self, device):
         ''' Build the screen configuration Component'''
-        sc_hlay = QHBoxLayout()
+        sc_vlay = QVBoxLayout()
+        sc_vlay = self.setScrnInfo(device, sc_vlay)
         for title, item in SCREEN_CONFIG.items():
             if(item == "RESET.PROC"):
-                sc_hlay.addWidget(
+                sc_vlay.addWidget(
                     self.setWidgetType(2, device, "CAM:"+item, title))
             else:
-                sc_hlay.addLayout(
+                sc_vlay.addLayout(
                     self.setBasicInfo(device, title, "CAM:"+item))
-        return sc_hlay
+        return sc_vlay
 
-    def setScrnInfo(self, device):
+    def setScrnInfo(self, device, si_vlay):
         ''' Build the screen information Component'''
-        si_hlay = QHBoxLayout()
         for title, item in SCREEN['info'].items():
             if title == 'LED':
-                si_hlay.addLayout(
+                si_vlay.addLayout(
                     self.setLight(device, item, title))
             elif title in ['Gain', 'Exposure']:
-                si_hlay.addLayout(
+                si_vlay.addLayout(
                     self.setRBVObj(device, item, title, 'CAM:'))
             else:
-                si_hlay.addLayout(
+                si_vlay.addLayout(
                     self.setBasicInfo(device, title, item))
-        return si_hlay
+        return si_vlay
 
     def header(self):
         ''' Build the header'''
@@ -437,7 +437,7 @@ class LiBeamProfile(SiriusMainWindow):
         if_glay.addWidget(self.buildStacks(0), 1, 2, 3, 2)
         if_glay.addWidget(self.imageViewer(), 1, 4, 3, 6)
         if_glay.addWidget(self.setScrnPanel(), 1, 0, 3, 2)
-        if_glay.addWidget(self.buildStacks(2), 4, 0, 3, 7)
-        if_glay.addWidget(self.buildStacks(1), 4, 7, 3, 3)
+        if_glay.addWidget(self.buildStacks(2), 4, 0, 3, 8)
+        if_glay.addWidget(self.buildStacks(1), 4, 8, 3, 2)
         wid.setLayout(if_glay)
         self.setCentralWidget(wid)

@@ -92,9 +92,9 @@ GRAPH = {
 }
 
 SCREEN_CONFIG = {
-    "CCD Reconnect": "RESET.PROC",
     "Connection": "CONNECTION.SEVR",
-    "Acquire": "Acquire"
+    "Acquire": "Acquire",
+    "CCD Reconnect": "RESET.PROC"
 }
 
 SCREEN = {
