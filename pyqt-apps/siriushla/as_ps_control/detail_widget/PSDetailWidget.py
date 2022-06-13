@@ -27,7 +27,7 @@ from siriuspy.pwrsupply.csdev import get_ps_propty_database, get_ps_modules, \
 from siriuspy.devices import PowerSupply
 
 from ... import util
-from ...widgets import PyDMStateButton, PyDMLinEditScrollbar, SiriusTimePlot, \
+from ...widgets import PyDMStateButton, PyDMSpinboxScrollbar, SiriusTimePlot, \
     SiriusConnectionSignal, SiriusLedState, SiriusLedAlert, PyDMLed, \
     PyDMLedMultiChannel, SiriusDialog, SiriusWaveformTable, SiriusSpinbox, \
     SiriusHexaSpinbox
@@ -497,10 +497,8 @@ class PSDetailWidget(QWidget):
         self.current_ref_label = QLabel("Ref Mon")
         self.current_mon_label = QLabel("Mon")
 
-        self.current_sp_widget = PyDMLinEditScrollbar(
-            parent=self, channel=self._prefixed_psname + ":Current-SP")
-        self.current_sp_widget.layout.setContentsMargins(0, 0, 0, 0)
-        self.current_sp_widget.sp_scrollbar.setTracking(False)
+        self.current_sp_widget = PyDMSpinboxScrollbar(
+            self, self._prefixed_psname + ":Current-SP")
         self.current_rb_val = PyDMLabel(
             parent=self, init_channel=self._prefixed_psname+":Current-RB")
         self.current_rb_val.showUnits = True
@@ -537,10 +535,7 @@ class PSDetailWidget(QWidget):
         self.metric_ref_label = QLabel("Ref Mon")
         self.metric_mon_label = QLabel("Mon")
 
-        self.metric_sp_widget = PyDMLinEditScrollbar(
-            parent=self, channel=metric_sp_ch)
-        self.metric_sp_widget.layout.setContentsMargins(0, 0, 0, 0)
-        self.metric_sp_widget.sp_scrollbar.setTracking(False)
+        self.metric_sp_widget = PyDMSpinboxScrollbar(self, metric_sp_ch)
         self.metric_rb_val = PyDMLabel(
             parent=self, init_channel=metric_rb_ch)
         self.metric_rb_val.showUnits = True
@@ -1064,10 +1059,8 @@ class LIPSDetailWidget(PSDetailWidget):
         self.current_rb_label = QLabel("Readback")
         self.current_mon_label = QLabel("Mon")
 
-        self.current_sp_widget = PyDMLinEditScrollbar(
-            parent=self, channel=self._prefixed_psname + ":Current-SP")
-        self.current_sp_widget.layout.setContentsMargins(0, 0, 0, 0)
-        self.current_sp_widget.sp_scrollbar.setTracking(False)
+        self.current_sp_widget = PyDMSpinboxScrollbar(
+            self, self._prefixed_psname + ":Current-SP")
         self.current_rb_val = PyDMLabel(
             parent=self, init_channel=self._prefixed_psname+":Current-RB")
         self.current_rb_val.showUnits = True
@@ -1096,10 +1089,7 @@ class LIPSDetailWidget(PSDetailWidget):
         self.metric_rb_label = QLabel("Readback")
         self.metric_mon_label = QLabel("Mon")
 
-        self.metric_sp_widget = PyDMLinEditScrollbar(
-            parent=self, channel=metric_sp_ch)
-        self.metric_sp_widget.layout.setContentsMargins(0, 0, 0, 0)
-        self.metric_sp_widget.sp_scrollbar.setTracking(False)
+        self.metric_sp_widget = PyDMSpinboxScrollbar(self, metric_sp_ch)
         self.metric_rb_val = PyDMLabel(
             parent=self, init_channel=metric_rb_ch)
         self.metric_rb_val.showUnits = True
@@ -1261,19 +1251,16 @@ class FBPDCLinkDetailWidget(DCLinkDetailWidget):
         self.current_ref_label = QLabel("Ref Mon")
         self.current_mon_label = QLabel("Mon")
 
-        self.current_sp_widget = PyDMLinEditScrollbar(
-            parent=self, channel=self._prefixed_psname + ":Voltage-SP")
-        self.current_sp_widget.layout.setContentsMargins(0, 0, 0, 0)
-        self.current_sp_widget.sp_lineedit.showUnits = False
-        self.current_sp_widget.sp_scrollbar.setTracking(False)
+        self.current_sp_widget = PyDMSpinboxScrollbar(
+            self, self._prefixed_psname + ":Voltage-SP")
         self.current_rb_val = PyDMLabel(
-            parent=self, init_channel=self._prefixed_psname+":Voltage-RB")
+            self, self._prefixed_psname+":Voltage-RB")
         self.current_rb_val.precFromPV = True
         self.current_ref_val = PyDMLabel(
-            parent=self, init_channel=self._prefixed_psname+":VoltageRef-Mon")
+            self, self._prefixed_psname+":VoltageRef-Mon")
         self.current_ref_val.precFromPV = True
         self.current_mon_val = PyDMLabel(
-            parent=self, init_channel=self._prefixed_psname+":Voltage-Mon")
+            self, self._prefixed_psname+":Voltage-Mon")
         self.current_mon_val.precFromPV = True
 
         layout = QGridLayout()
@@ -1329,10 +1316,8 @@ class FACDCLinkDetailWidget(DCLinkDetailWidget):
         self.cap_bank_ref_label = QLabel("Ref Mon")
         self.cap_bank_mon_label = QLabel("Mon")
 
-        self.cap_bank_sp_widget = PyDMLinEditScrollbar(
+        self.cap_bank_sp_widget = PyDMSpinboxScrollbar(
             self._prefixed_psname + ":CapacitorBankVoltage-SP", self)
-        self.cap_bank_sp_widget.sp_lineedit.showUnits = False
-        self.cap_bank_sp_widget.sp_scrollbar.setTracking(False)
         self.cap_bank_rb_val = PyDMLabel(
             self,
             self._prefixed_psname + ":CapacitorBankVoltage-RB")
@@ -1525,11 +1510,10 @@ class FastCorrPSDetailWidget(PSDetailWidget):
         current_sp_label = QLabel("Setpoint")
         current_rb_label = QLabel("Readback")
 
-        self.current_sp = SiriusSpinbox(
+        self.current_sp = PyDMSpinboxScrollbar(
             self, self._prefixed_psname + ":Current-SP")
-        self.current_sp.precisionFromPV = False
-        self.current_sp.precision = 6
-        self.current_sp.showStepExponent = False
+        self.current_sp.spinbox.precisionFromPV = False
+        self.current_sp.spinbox.precision = 6
         self.current_rb = PyDMLabel(
             self, self._prefixed_psname+":Current-RB")
         self.current_rb.precisionFromPV = False
@@ -1549,9 +1533,8 @@ class FastCorrPSDetailWidget(PSDetailWidget):
         current_sp_label = QLabel("Setpoint")
         current_rb_label = QLabel("Readback")
 
-        self.current_raw_sp = SiriusSpinbox(
+        self.current_raw_sp = PyDMSpinboxScrollbar(
             self, self._prefixed_psname + ":CurrentRaw-SP")
-        self.current_raw_sp.showStepExponent = False
         self.current_raw_rb = PyDMLabel(
             self, self._prefixed_psname+":CurrentRaw-RB")
 
@@ -1568,9 +1551,8 @@ class FastCorrPSDetailWidget(PSDetailWidget):
         metric_sp_label = QLabel('Setpoint')
         metric_rb_label = QLabel('Readback')
 
-        self.metric_sp = SiriusSpinbox(
+        self.metric_sp = PyDMSpinboxScrollbar(
             self, self._prefixed_psname+':'+self._metric+'-SP')
-        self.metric_sp.showStepExponent = False
         self.metric_rb = PyDMLabel(
             self, self._prefixed_psname+':'+self._metric+'-RB')
         self.metric_rb.precisionFromPV = False

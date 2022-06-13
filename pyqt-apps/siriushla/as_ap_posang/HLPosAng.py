@@ -18,7 +18,7 @@ from siriuspy.namesys import SiriusPVName as _PVName
 
 from siriushla import util as _hlautil
 from siriushla.widgets import SiriusMainWindow, PyDMLogLabel, SiriusLedAlert, \
-    PyDMLinEditScrollbar, PyDMLedMultiChannel, SiriusConnectionSignal
+    PyDMSpinboxScrollbar, PyDMLedMultiChannel, SiriusConnectionSignal
 from siriushla.as_ps_control import PSDetailWindow as _PSDetailWindow
 from siriushla.as_pu_control import PUDetailWindow as _PUDetailWindow
 from siriushla.as_ap_configdb import LoadConfigDialog as _LoadConfigDialog
@@ -156,7 +156,7 @@ class PosAngCorr(SiriusMainWindow):
             PyDMSpinbox{
                 min-width: 5em; max-width: 5em;
             }
-            PyDMLabel, PyDMLinEditScrollbar{
+            PyDMLabel, PyDMSpinboxScrollbar{
                 min-width: 6em; max-width: 6em;
             }
             QPushButton{
@@ -236,16 +236,10 @@ class PosAngCorr(SiriusMainWindow):
                 _hlautil.connect_window(
                     pbt, _PSDetailWindow, self, psname=corr)
             lb_name = QLabel(corr, self)
-            le_sp = PyDMLinEditScrollbar(
-                corr.substitute(prefix=self._prefix, propty='Kick-SP'), self)
-            le_sp.layout.setContentsMargins(0, 0, 0, 0)
-            le_sp.layout.setSpacing(3)
-            le_sp.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
-            le_sp.sp_lineedit.setStyleSheet("min-height:1.29em;")
-            le_sp.sp_lineedit.setAlignment(Qt.AlignCenter)
-            le_sp.sp_lineedit.setSizePolicy(QSzPlcy.Ignored, QSzPlcy.Fixed)
-            le_sp.sp_scrollbar.setStyleSheet("max-height:0.7em;")
-            le_sp.sp_scrollbar.limitsFromPV = True
+            le_sp = PyDMSpinboxScrollbar(
+                self, corr.substitute(prefix=self._prefix, propty='Kick-SP'))
+            le_sp.spinbox.setAlignment(Qt.AlignCenter)
+            le_sp.scrollbar.limitsFromPV = True
             lb_rb = PyDMLabel(self, corr.substitute(
                 prefix=self._prefix, propty='Kick-RB'))
             lb_ref = PyDMLabel(self, self.posang_prefix.substitute(
@@ -269,21 +263,13 @@ class PosAngCorr(SiriusMainWindow):
             lay.addWidget(label_voltrb, idx+2, 3)
 
             lb_kly2_name = QLabel('Klystron 2', self)
-            le_kly2_sp = PyDMLinEditScrollbar(
-                pref+'LA-RF:LLRF:KLY2:SET_AMP', self)
-            le_kly2_sp.layout.setContentsMargins(0, 0, 0, 0)
-            le_kly2_sp.layout.setSpacing(3)
-            le_kly2_sp.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
-            le_kly2_sp.sp_lineedit.setStyleSheet("min-height:1.29em;")
-            le_kly2_sp.sp_lineedit.precisionFromPV = False
-            le_kly2_sp.sp_lineedit.precision = 2
-            le_kly2_sp.sp_lineedit.setAlignment(Qt.AlignCenter)
-            le_kly2_sp.sp_lineedit.setSizePolicy(
-                QSzPlcy.Ignored, QSzPlcy.Fixed)
-            le_kly2_sp.sp_scrollbar.setStyleSheet("max-height:0.7em;")
-            le_kly2_sp.sp_scrollbar.limitsFromPV = True
-            lb_kly2_rb = PyDMLabel(
-                self, pref+'LA-RF:LLRF:KLY2:GET_AMP')
+            le_kly2_sp = PyDMSpinboxScrollbar(
+                self, pref+'LA-RF:LLRF:KLY2:SET_AMP')
+            le_kly2_sp.spinbox.precisionFromPV = False
+            le_kly2_sp.spinbox.precision = 2
+            le_kly2_sp.spinbox.setAlignment(Qt.AlignCenter)
+            le_kly2_sp.scrollbar.limitsFromPV = True
+            lb_kly2_rb = PyDMLabel(self, pref+'LA-RF:LLRF:KLY2:GET_AMP')
             lb_kly2_rb.precisionFromPV = False
             lb_kly2_rb.precision = 2
             lay.addWidget(lb_kly2_name, idx+3, 1,
@@ -311,17 +297,10 @@ class PosAngCorr(SiriusMainWindow):
         lb_kckr_name = QLabel(self._kckr_name, self)
         _hlautil.connect_window(
             pb_kckr, _PUDetailWindow, self, devname=self._kckr_name)
-        lb_kckr_sp = PyDMLinEditScrollbar(
-            self._kckr_name.substitute(
-                prefix=self._prefix, propty='Voltage-SP'), self)
-        lb_kckr_sp.layout.setContentsMargins(0, 0, 0, 0)
-        lb_kckr_sp.layout.setSpacing(3)
-        lb_kckr_sp.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
-        lb_kckr_sp.sp_lineedit.setStyleSheet("min-height:1.29em;")
-        lb_kckr_sp.sp_lineedit.setAlignment(Qt.AlignCenter)
-        lb_kckr_sp.sp_lineedit.setSizePolicy(QSzPlcy.Ignored, QSzPlcy.Fixed)
-        lb_kckr_sp.sp_scrollbar.setStyleSheet("max-height:0.7em;")
-        lb_kckr_sp.sp_scrollbar.limitsFromPV = True
+        lb_kckr_sp = PyDMSpinboxScrollbar(
+            self, self._kckr_name.substitute(
+                prefix=self._prefix, propty='Voltage-SP'))
+        lb_kckr_sp.scrollbar.limitsFromPV = True
         lb_kckr_rb = PyDMLabel(self, self._kckr_name.substitute(
             prefix=self._prefix, propty='Voltage-RB'))
         lay.addWidget(pb_kckr, idx+5, 0, alignment=Qt.AlignTop)
