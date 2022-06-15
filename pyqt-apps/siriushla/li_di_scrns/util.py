@@ -6,6 +6,15 @@ DEVICES = [
     "PRF5"
 ]
 
+WID_DICT = {
+    0: 'label',
+    1: 'led',
+    2: 'pushBtn',
+    3: 'spinBox',
+    4: 'lineEdit',
+    5: 'motorBtn'
+}
+
 SCREENS_PANEL = {
     "title": "Screens Panel",
     "labels": [
@@ -92,6 +101,10 @@ GRAPH = {
 }
 
 SCREEN_CONFIG = {
+    "LED": [
+        "LED",
+        "CMD"
+    ],
     "Connection": "CONNECTION.SEVR",
     "Acquire": "Acquire",
     "CCD Reconnect": "RESET.PROC"
@@ -103,10 +116,6 @@ SCREEN = {
         "width": "RAW:ArraySize0_RBV"
     },
     "info": {
-        "LED": [
-            "LED",
-            "CMD"
-        ],
         "Counter": "CAM:ArrayCounter_RBV",
         "Exposure": [
             "AcquireTime_RBV",
