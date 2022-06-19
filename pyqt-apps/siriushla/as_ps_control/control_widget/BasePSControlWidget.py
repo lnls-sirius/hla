@@ -199,6 +199,8 @@ class PSContainer(QWidget):
     def contextMenuEvent(self, event):
         """Overload to create a custom context menu."""
         widget = self.childAt(event.pos())
+        if not widget:
+            return
         parent = widget.parent()
         grand_parent = parent.parent()
         if widget.objectName() == 'DCLinkContainer' or \
