@@ -567,12 +567,12 @@ class PSTestWindow(SiriusMainWindow):
             if not devices:
                 return
             dev_label = 'PU'
-        devices_not_rst = {
+        devices_rst = {
             dev for dev in devices if dev.sec != 'LI' and
             dev.dev not in ('FCH', 'FCV')}
 
         task0 = CreateTesters(devices, parent=self)
-        task1 = ResetIntlk(devices_not_rst, parent=self)
+        task1 = ResetIntlk(devices_rst, parent=self)
         task2 = CheckIntlk(devices, parent=self)
         task2.itemDone.connect(self._log)
         tasks = [task0, task1, task2]
