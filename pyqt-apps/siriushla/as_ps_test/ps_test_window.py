@@ -444,7 +444,7 @@ class PSTestWindow(SiriusMainWindow):
         lay.setHorizontalSpacing(15)
         lay.setVerticalSpacing(5)
         lay.addWidget(QLabel(
-            '<h3>Power Supplies Test</h3>', self, alignment=Qt.AlignCenter),
+            '<h3>Power Supply Test</h3>', self, alignment=Qt.AlignCenter),
             0, 0, 1, 3)
         lay.addWidget(self.tab, 1, 0)
         lay.addLayout(list_layout, 1, 1)
