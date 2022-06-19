@@ -206,8 +206,7 @@ class TesterDCLink(_TesterPSBase):
                          DEFAULT_CAP_BANK_VOLT[self.device])
 
     def check_status(self):
-        status = True
-        status &= self.check_intlk()
+        status = self.check_intlk()
         if self.check_pwrstate():
             status &= self._cmp(
                 self._pvs['CapacitorBankVoltage-Mon'].value,
@@ -280,8 +279,7 @@ class TesterDCLinkRegatron(_TesterBase):
                            rtol=0.05)
 
     def check_status(self):
-        status = True
-        status &= self.check_intlk()
+        status = self.check_intlk()
         if self.check_pwrstate():
             status &= self.check_capvolt()
         return status
@@ -348,8 +346,7 @@ class TesterPS(_TesterPSBase):
 
     def check_status(self):
         """Check Status."""
-        status = True
-        status &= self.check_intlk()
+        status = self.check_intlk()
         if self.check_pwrstate():
             status &= self._cmp(
                 self._pvs['Current-Mon'].value,
@@ -451,8 +448,7 @@ class TesterPSLinac(_TesterBase):
 
     def check_status(self):
         """Check Status."""
-        status = True
-        status &= self.check_intlk()
+        status = self.check_intlk()
         if self.check_pwrstate():
             status &= self._cmp(
                 self._pvs['Current-SP'].value,
@@ -672,8 +668,7 @@ class _TesterPUBase(_TesterBase):
         return status
 
     def check_status(self):
-        status = True
-        status &= self.check_intlk()
+        status = self.check_intlk()
         if self.check_pwrstate():
             status &= self._cmp(
                 self._pvs['Voltage-Mon'].value,
