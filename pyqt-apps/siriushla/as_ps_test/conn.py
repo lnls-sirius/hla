@@ -451,8 +451,8 @@ class TesterPSLinac(_TesterBase):
         status = self.check_intlk()
         if self.check_pwrstate():
             status &= self._cmp(
-                self._pvs['Current-SP'].value,
-                self._pvs['Current-Mon'].value)
+                self._pvs['Current-Mon'].value,
+                self._pvs['Current-SP'].value)
         return status
 
     def check_comm(self):
