@@ -86,32 +86,29 @@ def get_prop2width(psname):
     }
     if psmodel != 'REGATRON_DCLink':
         dic.update({'readback': '6'})
+    dic.update({'monitor': '6'})
     if psmodel != 'FOFB_PS':
-        dic.update({'monitor': '6'})
-    else:
         dic.update({'ctrlloop': '8'})
     if psname.sec == 'LI':
         dic['conn'] = '5'
-    elif psmodel != 'FOFB_PS':
-        dic.update({
-            'opmode': '8',
-            'reset': '4',
-        })
-        if psmodel != 'REGATRON_DCLink':
-            dic.update({
-                'bbb': 10,
-                'udc': 10,
-                'ctrlmode': '6',
-                'ctrlloop': '8',
-                'wfmupdate': '8',
-                'updparms': '6',
-            })
+    else:
+        dic.update({'opmode': '8'})
+        if psmodel != 'FOFB_PS':
+            dic.update({'reset': '4'})
+            if psmodel != 'REGATRON_DCLink':
+                dic.update({
+                    'bbb': 10,
+                    'udc': 10,
+                    'ctrlmode': '6',
+                    'ctrlloop': '8',
+                    'wfmupdate': '8',
+                    'updparms': '6',
+                })
     if get_strength_name(psname):
         dic.update({
             'strength_sp': '6',
-            'strength_rb': '6'})
-        if psmodel != 'FOFB_PS':
-            dic.update({'strength_mon': '8'})
+            'strength_rb': '6',
+            'strength_mon': '8'})
     if psname.dis == 'PU':
         dic.update({'pulse': '8'})
     if HasTrim.match(psname):
@@ -133,33 +130,30 @@ def get_prop2label(psname):
     }
     if psmodel != 'REGATRON_DCLink':
         dic.update({'readback': analog + '-RB'})
+    dic.update({'monitor': analog + '-Mon'})
     if psmodel != 'FOFB_PS':
-        dic.update({'monitor': analog + '-Mon'})
-    else:
         dic.update({'ctrlloop': 'Control Loop'})
     if psname.sec == 'LI':
         dic['conn'] = 'Connected'
-    elif psmodel != 'FOFB_PS':
-        dic.update({
-            'opmode': 'OpMode',
-            'reset': 'Reset',
-        })
-        if psmodel != 'REGATRON_DCLink':
-            dic.update({
-                'bbb': 'Beagle Bone',
-                'udc': 'UDC',
-                'ctrlmode': 'Control Mode',
-                'ctrlloop': 'Control Loop',
-                'wfmupdate': 'Wfm Update',
-                'updparms': 'Upd.Params',
-            })
+    else:
+        dic.update({'opmode': 'OpMode'})
+        if psmodel != 'FOFB_PS':
+            dic.update({'reset': 'Reset'})
+            if psmodel != 'REGATRON_DCLink':
+                dic.update({
+                    'bbb': 'Beagle Bone',
+                    'udc': 'UDC',
+                    'ctrlmode': 'Control Mode',
+                    'ctrlloop': 'Control Loop',
+                    'wfmupdate': 'Wfm Update',
+                    'updparms': 'Upd.Params',
+                })
     strength = get_strength_name(psname)
     if strength:
         dic.update({
             'strength_sp': strength + '-SP',
-            'strength_rb': strength + '-RB'})
-        if psmodel != 'FOFB_PS':
-            dic.update({'strength_mon': strength + '-Mon'})
+            'strength_rb': strength + '-RB',
+            'strength_mon': strength + '-Mon'})
     if psname.dis == 'PU':
         dic.update({'pulse': 'Pulse'})
     if HasTrim.match(psname):
@@ -211,24 +205,21 @@ class SummaryWidget(QWidget):
                 not self._is_regatron and not self._is_fofb:
             self._bbb_name = PSSearch.conv_psname_2_bbbname(self._name)
             self._udc_name = PSSearch.conv_psname_2_udc(self._name)
-        self._has_opmode = not self._is_linac and not self._is_pulsed\
-            and not self._is_fofb
+        self._has_opmode = not self._is_linac and not self._is_pulsed
         self._has_ctrlmode = not self._is_regatron and not self._is_linac\
             and not self._is_fofb
         self._has_pwrstate = not self._is_reg_slave
         self._has_reset = not self._is_linac and not self._is_fofb\
             and not self._is_reg_slave
         self._has_ctrlloop = not self._is_linac and not self._is_pulsed\
-            and not self._is_regatron
+            and not self._is_regatron and not self._is_fofb
         self._has_parmupdt = not self._is_linac and not self._is_regatron\
             and not self._is_fofb
         self._has_wfmupdt = self._has_parmupdt and not self._is_dclink
         self._has_analsp = not self._is_reg_slave
         self._has_analrb = not self._is_regatron
-        self._has_analmon = not self._is_fofb
         self._has_strength = bool(
             self._strength_name and not self._li_has_not_strength)
-        self._has_strength_mon = self._has_strength and not self._is_fofb
         self._has_trim = HasTrim.match(self._name)
 
         self._create_pvs()
@@ -331,11 +322,10 @@ class SummaryWidget(QWidget):
             self._widgets_dict['readback'] = self.readback_wid
             lay.addWidget(self.readback_wid)
 
-        if self._has_analmon:
-            self.monitor_wid = self._build_widget(
-                name='monitor', orientation='v')
-            self._widgets_dict['monitor'] = self.monitor_wid
-            lay.addWidget(self.monitor_wid)
+        self.monitor_wid = self._build_widget(
+            name='monitor', orientation='v')
+        self._widgets_dict['monitor'] = self.monitor_wid
+        lay.addWidget(self.monitor_wid)
 
         if self._has_strength:
             self.strength_sp_wid = self._build_widget(
@@ -348,7 +338,6 @@ class SummaryWidget(QWidget):
             self._widgets_dict['strength_rb'] = self.strength_rb_wid
             lay.addWidget(self.strength_rb_wid)
 
-        if self._has_strength_mon:
             self.strength_mon_wid = self._build_widget(
                 name='strength_mon', orientation='v')
             self._widgets_dict['strength_mon'] = self.strength_mon_wid
@@ -438,16 +427,8 @@ class SummaryWidget(QWidget):
                 self._genwrn = self._prefixed_name.substitute(
                     propty='GenWarn-Mon')
         elif self._is_fofb:
-            self._intlk = [
-                self._prefixed_name.substitute(
-                    propty='PSAmpOverCurrFlagL-Sts'),
-                self._prefixed_name.substitute(
-                    propty='PSAmpOverCurrFlagR-Sts'),
-                self._prefixed_name.substitute(
-                    propty='PSAmpOverTempFlagL-Sts'),
-                self._prefixed_name.substitute(
-                    propty='PSAmpOverTempFlagR-Sts'),
-            ]
+            self._intlk = self._prefixed_name.substitute(
+                propty='AlarmsAmp-Mon')
         else:
             self._soft_intlk = self._prefixed_name.substitute(
                 propty='IntlkSoft-Mon')
@@ -486,13 +467,12 @@ class SummaryWidget(QWidget):
         if self._has_analrb:
             self._analog_rb = self._prefixed_name.substitute(
                 propty='{}-RB'.format(sp))
-        if self._has_analmon:
-            if self._is_reg_slave:
-                self._analog_mon = self._prefixed_name.substitute(
-                    propty='ModOutVolt-Mon')
-            else:
-                self._analog_mon = self._prefixed_name.substitute(
-                    propty='{}-Mon'.format(sp))
+        if self._is_reg_slave:
+            self._analog_mon = self._prefixed_name.substitute(
+                propty='ModOutVolt-Mon')
+        else:
+            self._analog_mon = self._prefixed_name.substitute(
+                propty='{}-Mon'.format(sp))
 
         # strength
         if self._has_strength:
@@ -501,7 +481,6 @@ class SummaryWidget(QWidget):
                 propty='{}-SP'.format(st))
             self._strength_rb = self._prefixed_name.substitute(
                 propty='{}-RB'.format(st))
-        if self._has_strength_mon:
             self._strength_mon = self._prefixed_name.substitute(
                 propty='{}-Mon'.format(st))
 
@@ -534,14 +513,11 @@ class SummaryWidget(QWidget):
             self.udc_lb = QLabel(self._udc_name, self)
             self.udc_wid.layout().addWidget(self.udc_lb)
         elif name == 'opmode' and self._has_opmode:
-            opmode_list = list()
             if 'Voltage' not in self._analog_name:
                 self.opmode_cb = SiriusEnumComboBox(self, self._opmode_sel)
-                opmode_list.append(self.opmode_cb)
+                self.opmode_wid.layout().addWidget(self.opmode_cb)
             self.opmode_lb = PyDMLabel(self, self._opmode_sts)
-            opmode_list.append(self.opmode_lb)
-            for wid in opmode_list:
-                self.opmode_wid.layout().addWidget(wid)
+            self.opmode_wid.layout().addWidget(self.opmode_lb)
         elif name == 'ctrlmode' and self._has_ctrlmode:
             self.ctrlmode_lb = PyDMLabel(self, self._ctrlmode_sts)
             self.ctrlmode_wid.layout().addWidget(self.ctrlmode_lb)
@@ -576,8 +552,7 @@ class SummaryWidget(QWidget):
                     self.intlk_wid.layout().addWidget(self.generr_led)
                     self.intlk_wid.layout().addWidget(self.genwrn_led)
             elif self._is_fofb:
-                self.intlk_led = PyDMLedMultiChannel(
-                    self, channels2values={ch: 1 for ch in self._intlk})
+                self.intlk_led = SiriusLedAlert(self, self._intlk)
                 self.intlk_wid.layout().addWidget(self.intlk_led)
             else:
                 self.soft_intlk_led = SiriusLedAlert(self, self._soft_intlk)
@@ -597,11 +572,8 @@ class SummaryWidget(QWidget):
                 '#reset_bt{min-width:25px; max-width:25px; icon-size:20px;}')
             self.reset_wid.layout().addWidget(self.reset_bt)
         elif name == 'ctrlloop' and self._has_ctrlloop:
-            if self._is_fofb:
-                self.ctrlloop_bt = PyDMStateButton(self, self._ctrlloop_sel)
-            else:
-                self.ctrlloop_bt = PyDMStateButton(
-                    self, self._ctrlloop_sel, invert=True)
+            self.ctrlloop_bt = PyDMStateButton(
+                self, self._ctrlloop_sel, invert=True)
             self.ctrlloop_lb = PyDMLabel(self, self._ctrlloop_sts)
             self.ctrlloop_wid.layout().addWidget(self.ctrlloop_bt)
             self.ctrlloop_wid.layout().addWidget(self.ctrlloop_lb)
@@ -630,8 +602,11 @@ class SummaryWidget(QWidget):
                 self.readback.precisionFromPV = False
                 self.readback.precision = 6
             self.readback_wid.layout().addWidget(self.readback)
-        elif name == 'monitor' and self._has_analmon:
+        elif name == 'monitor':
             self.monitor = PyDMLabel(self, self._analog_mon)
+            if self._is_fofb:
+                self.monitor.precisionFromPV = False
+                self.monitor.precision = 6
             self.monitor_wid.layout().addWidget(self.monitor)
         elif name == 'strength_sp' and self._has_strength:
             self.strength_sp_le = PyDMSpinboxScrollbar(self, self._strength_sp)
@@ -641,7 +616,7 @@ class SummaryWidget(QWidget):
                 parent=self, init_channel=self._strength_rb)
             self.strength_rb_lb.showUnits = True
             self.strength_rb_wid.layout().addWidget(self.strength_rb_lb)
-        elif name == 'strength_mon' and self._has_strength_mon:
+        elif name == 'strength_mon' and self._has_strength:
             self.strength_mon_lb = PyDMLabel(
                 parent=self, init_channel=self._strength_mon)
             self.strength_mon_lb.showUnits = True
@@ -666,6 +641,8 @@ class SummaryWidget(QWidget):
         if hasattr(self, 'opmode_cb'):
             if self.opmode_cb.isEnabled():
                 index = self.opmode_cb.findText('SlowRef')
+                if index == -1:
+                    return
                 self.opmode_cb.internal_combo_box_activated_int(index)
 
     def turn_on(self):

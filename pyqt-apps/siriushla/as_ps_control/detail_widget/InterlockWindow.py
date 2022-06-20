@@ -64,7 +64,7 @@ class InterlockWindow(SiriusMainWindow):
 
     def __init__(self, parent=None, devname='', interlock=None, auxdev=list(),
                  auxdev2mod=dict()):
-        """."""
+        """Init."""
         super().__init__(parent)
         self._devname = _PVName(devname)
         self._auxdev = auxdev
@@ -92,6 +92,9 @@ class InterlockWindow(SiriusMainWindow):
             self._intlktype = 'IIB'
             if 'Alarms' in self._interlock[0]:
                 auxlabel = 'Alarms'
+        elif self._devname.dev in ['FCH', 'FCV']:
+            self._intlktype = 'Amp'
+            auxlabel = 'Alarms'
 
         self._intlkname = self._intlktype + ' ' + auxlabel
         self.setWindowTitle(self._devname + ' - ' + self._intlkname)

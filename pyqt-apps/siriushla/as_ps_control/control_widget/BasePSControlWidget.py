@@ -620,10 +620,10 @@ class BasePSControlWidget(QWidget):
         menu = QMenu("Actions", self)
         menu.addAction(self.turn_on_act)
         menu.addAction(self.turn_off_act)
-        menu.addAction(self.ctrlloop_close_act)
-        menu.addAction(self.ctrlloop_open_act)
         menu.addAction(self.set_current_sp_act)
         if not self._dev_list[0].dev in ('FCH', 'FCV'):
+            menu.addAction(self.ctrlloop_close_act)
+            menu.addAction(self.ctrlloop_open_act)
             menu.addAction(self.set_slowref_act)
             menu.addAction(self.reset_act)
             menu.addAction(self.wfmupdate_on_act)
