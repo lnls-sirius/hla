@@ -28,7 +28,7 @@ from .tasks import CreateTesters, \
     SetOpMode, CheckOpMode, \
     SetPwrState, CheckPwrState, CheckInitOk, \
     SetPulse, CheckPulse, \
-    SetCtrlLoop, CheckCtrlLoop, \
+    CheckCtrlLoop, \
     SetCapBankVolt, CheckCapBankVolt, \
     SetCurrent, CheckCurrent, \
     SetVoltage, CheckVoltage, \
@@ -176,7 +176,7 @@ class PSTestWindow(SiriusMainWindow):
         self.checkctrlloop_dcl_bt.clicked.connect(
             _part(self._set_lastcomm, 'PS'))
         self.checkctrlloop_dcl_bt.clicked.connect(
-            _part(self._set_check_ctrlloop, 'dclink'))
+            _part(self._check_ctrlloop, 'dclink'))
 
         self.setvolt_dcl_bt = QPushButton('Set DCLinks Voltage', self)
         self.setvolt_dcl_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
@@ -188,11 +188,11 @@ class PSTestWindow(SiriusMainWindow):
         self.turnon_ps_bt.clicked.connect(
             _part(self._set_check_pwrstate, 'PS', 'on', True))
 
-        self.setcheckctrlloop_ps_bt = QPushButton('Check PS CtrlLoop', self)
-        self.setcheckctrlloop_ps_bt.clicked.connect(
+        self.checkctrlloop_ps_bt = QPushButton('Check PS CtrlLoop', self)
+        self.checkctrlloop_ps_bt.clicked.connect(
             _part(self._set_lastcomm, 'PS'))
-        self.setcheckctrlloop_ps_bt.clicked.connect(
-            _part(self._set_check_ctrlloop, 'pwrsupply'))
+        self.checkctrlloop_ps_bt.clicked.connect(
+            _part(self._check_ctrlloop, 'pwrsupply'))
 
         self.test_ps_bt = QPushButton('Set PS Current to test value', self)
         self.test_ps_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
@@ -239,7 +239,7 @@ class PSTestWindow(SiriusMainWindow):
         lay_ps_comm.addWidget(QLabel('<h4>Test</h4>', self,
                                      alignment=Qt.AlignCenter))
         lay_ps_comm.addWidget(self.turnon_ps_bt)
-        lay_ps_comm.addWidget(self.setcheckctrlloop_ps_bt)
+        lay_ps_comm.addWidget(self.checkctrlloop_ps_bt)
         lay_ps_comm.addWidget(self.test_ps_bt)
         lay_ps_comm.addWidget(self.currzero_ps_bt2)
         lay_ps_comm.addWidget(QLabel(''))
@@ -839,35 +839,27 @@ class PSTestWindow(SiriusMainWindow):
         dlg = ProgressDialog(labels, tasks, self)
         dlg.exec_()
 
-    def _set_check_ctrlloop(self, dev_type='pwrsupply'):
+    def _check_ctrlloop(self, dev_type='pwrsupply'):
         self.ok_ps.clear()
         self.nok_ps.clear()
         pwrsupplies = self._get_selected_ps()
         if not pwrsupplies:
             return
-        devices_set = {}
         if dev_type == 'pwrsupply':
-            devices = {dev for dev in pwrsupplies if 'LI' not in dev}
-            devices_set = {dev for dev in devices if dev.dev in ('FCH', 'FCV')}
+            devices = {
+                dev for dev in pwrsupplies if dev.sec != 'LI' and
+                dev.dev not in ('FCH', 'FCV')}
         else:
             devices = self._get_related_dclinks(pwrsupplies)
         if not devices:
             return
 
-        tasks = [CreateTesters(devices, parent=self), ]
-        labels = ['Connecting to devices...', ]
-        if devices_set:
-            task1 = SetCtrlLoop(devices_set, parent=self)
-            task2 = CheckCtrlLoop(devices, parent=self)
-            task2.itemDone.connect(self._log)
-            tasks.extend([task1, task2])
-            labels.extend([
-                'Setting CtrlLoop...', 'Checking CtrlLoop state...'])
-        else:
-            task1 = CheckCtrlLoop(devices, parent=self)
-            task1.itemDone.connect(self._log)
-            tasks.append(task1)
-            labels.append('Checking CtrlLoop state...')
+        task0 = CreateTesters(devices, parent=self)
+        task1 = CheckCtrlLoop(devices, parent=self)
+        task1.itemDone.connect(self._log)
+        labels = ['Connecting to devices...',
+                  'Checking CtrlLoop state...']
+        tasks = [task0, task1]
         dlg = ProgressDialog(labels, tasks, self)
         dlg.exec_()
 
@@ -1108,7 +1100,7 @@ class PSTestWindow(SiriusMainWindow):
             else:
                 self.nok_ps_aux_list.append(name)
 
-    # ---------- devices control ----------
+    # ---------- device control ----------
 
     def _get_ps_tree_names(self):
         # add LI, TB, BO, TS
@@ -1232,16 +1224,6 @@ class PSTestWindow(SiriusMainWindow):
         self.prep_sidclink_bt.setVisible(has_sifam)
         self.init_sips_bt.setVisible(has_sifam)
         self.aux_label.setVisible(has_sifam)
-
-        # set CtrlLoop button label
-        has_fast = False
-        for psn in self._si_fastcorrs:
-            item = self.ps_tree._item_map[psn]
-            has_fast |= item.checkState(0) != 0
-
-        text = 'Set(FC) and Check PS CtrlLoop' \
-            if has_fast else 'Check PS CtrlLoop'
-        self.setcheckctrlloop_ps_bt.setText(text)
 
     # ---------- events ----------
 
