@@ -88,7 +88,7 @@ GRAPH = {
         }
     },
     "ROI": {
-        "Resolution": [
+        "CCD Resolution": [
             "MaxSizeX_RBV", "MaxSizeY_RBV"],
         "Size": [
             "SizeX_RBV", "SizeY_RBV"],

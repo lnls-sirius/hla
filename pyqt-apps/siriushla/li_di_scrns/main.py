@@ -25,9 +25,10 @@ class LiBeamProfile(SiriusMainWindow):
         color = get_appropriate_color('LI')
 
         self.device_name = 'LA-BI'
+        self.windowTitle = "Linac Screen View"
 
         self.setWindowIcon(qta.icon('mdi.camera-metering-center', color=color))
-        self.setWindowTitle(self.device_name)
+        self.setWindowTitle(self.windowTitle)
         self.image_container = QLabel()
         self.pixmap = QPixmap(_os.path.join(
                 _os.path.abspath(_os.path.dirname(__file__)), "linac.png"))
@@ -71,6 +72,8 @@ class LiBeamProfile(SiriusMainWindow):
             ch2vals = {pvName: value}
             widget = PyDMLedMultiChannel(self)
             widget.set_channels2values(ch2vals)
+            if value == 1:
+                widget.shape = widget.ShapeMap.Round
         elif widType == 'pushBtn':
             widget = PyDMPushButton(self,
                 init_channel=pvName,
@@ -125,9 +128,10 @@ class LiBeamProfile(SiriusMainWindow):
     def setRBVObj(self, device, pv_name, label, pv_prefix):
         ''' Build formatted RBV Component'''
         rbv_hlay = QHBoxLayout()
-        rbv_hlay.addWidget(
-            QLabel(label),
-            alignment=Qt.AlignCenter)
+        title = QLabel(label)
+        title.setMinimumWidth(75)
+        title.setAlignment(Qt.AlignCenter)
+        rbv_hlay.addWidget(title)
         for item in range(1, -1, -1):
             pvName = pv_prefix + pv_name[item]
             if 'RBV' not in pvName:
@@ -303,7 +307,8 @@ class LiBeamProfile(SiriusMainWindow):
         ''' Build Zero Operation Component'''
         zo_hlay = QHBoxLayout()
         zo_hlay.addWidget(
-            QLabel(item["title"]))
+            QLabel(item["title"]),
+            alignment=Qt.AlignCenter)
         count = 0
         for label, pv_name in item["content"].items():
             widget = self.setWidgetType('pushBtn', device, "MOTOR:"+pv_name, label)
@@ -321,9 +326,9 @@ class LiBeamProfile(SiriusMainWindow):
         lo_hlay.addWidget(
             QLabel(title))
         lo_hlay.addWidget(
-            self.setWidgetType('led', device, "MOTOR:"+pvList[0]))
-        lo_hlay.addWidget(
             self.setWidgetType('motorBtn', device, "MOTOR:"+pvList[1]))
+        lo_hlay.addWidget(
+            self.setWidgetType('led', device, "MOTOR:"+pvList[0]))
         return lo_hlay
 
     def setSingleScrnInfo(self, device):
@@ -356,9 +361,11 @@ class LiBeamProfile(SiriusMainWindow):
     def setGraphInfo(self, device, graph_info):
         ''' Build the basic graph information '''
         gi_hlay = QHBoxLayout()
+        gi_hlay.addStretch()
         for label, channel in graph_info.items():
             gi_hlay.addLayout(
                 self.setBasicInfo(device, label, channel))
+            gi_hlay.addStretch()
         return gi_hlay
 
     def setRoiInfo(self, device, roi_data, title):
@@ -423,23 +430,27 @@ class LiBeamProfile(SiriusMainWindow):
             if title in ['Gain', 'Exposure']:
                 si_glay.addLayout(
                     self.setRBVObj(device, item, title, 'CAM:'),
-                    counter[0], counter[1])
+                    counter[0], counter[1],
+                    alignment=Qt.AlignHCenter)
             elif title == 'LED':
                 si_glay.addLayout(
                     self.setLight(device, item, title),
-                    counter[0], counter[1])
+                    counter[0], counter[1],
+                    alignment=Qt.AlignHCenter)
             elif item == "RESET.PROC":
                 si_glay.addWidget(
                     self.setWidgetType('pushBtn', device, 'CAM:' + item, title),
-                    counter[0], counter[1])
+                    counter[0], counter[1],
+                    alignment=Qt.AlignHCenter)
             else:
                 si_glay.addLayout(
                     self.setBasicInfo(device, title, item),
-                    counter[0], counter[1])
+                    counter[0], counter[1],
+                    alignment=Qt.AlignHCenter)
 
-            si_glay.setColumnStretch(counter[1], 10)
             counter[0] += 1
             if counter[0] >= 2:
+                si_glay.setColumnStretch(counter[1], 30)
                 counter[1] += 1
                 counter[0] = 0
 
@@ -448,7 +459,7 @@ class LiBeamProfile(SiriusMainWindow):
     def header(self):
         ''' Build the header'''
         hd_hlay = QHBoxLayout()
-        title = QLabel("<h2>Linac Screen View</h2>")
+        title = QLabel("<h2>"+self.windowTitle+"</h2>")
         hd_hlay.addWidget(title, alignment=Qt.AlignCenter)
         return hd_hlay
 
