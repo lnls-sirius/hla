@@ -6,19 +6,10 @@ DEVICES = [
     "PRF5"
 ]
 
-WID_DICT = {
-    0: 'label',
-    1: 'led',
-    2: 'pushBtn',
-    3: 'spinBox',
-    4: 'lineEdit',
-    5: 'motorBtn'
-}
-
 SCREENS_PANEL = {
     "title": "Screens Panel",
     "labels": [
-        "Devices", "Selected", "Busy"
+        "Devices", "Selected", "Busy", "Beam Path"
     ],
     "content": [
         "POS_R", "BUSY"
@@ -26,7 +17,7 @@ SCREENS_PANEL = {
 }
 
 SCREENS_INFO = {
-    "title": "Screen Information",
+    "title": "Screen Motor",
     "content": {
         "Limit Top": "IS_B",
         "Limit Bottom": "IS_A",
@@ -37,14 +28,22 @@ SCREENS_INFO = {
     "special_content": [
         {
             "selected": "POS_R",
-            "labels": [
-                "OUT", "CAL", "AL203",
-                "YAG", "OTR"
-            ],
-            "content": [
-                "POS1.PROC", "POS2.PROC", "POS3.PROC",
-                "POS4.PROC", "POS5.PROC"
-            ]
+            "content": {
+                "POS5.PROC": {
+                    "GEN": '',
+                    "PRF5": "YAG"
+                },
+                "POS4.PROC": {
+                    "GEN": "YAG",
+                    "PRF5": "OTR"
+                },
+                "POS3.PROC": {
+                    "GEN": "AL203",
+                    "PRF4": "OTR"
+                },
+                "POS2.PROC": "CAL",
+                "POS1.PROC": "OUT"
+            }
         },
         {
             "title": "Zero Operation",
@@ -100,23 +99,20 @@ GRAPH = {
     }
 }
 
-SCREEN_CONFIG = {
-    "LED": [
-        "LED",
-        "CMD"
-    ],
-    "Connection": "CONNECTION.SEVR",
-    "Acquire": "Acquire",
-    "CCD Reconnect": "RESET.PROC"
-}
-
 SCREEN = {
+    "title": "Screen Camera",
     "Screen": {
         "data": "RAW:ArrayData",
         "width": "RAW:ArraySize0_RBV"
     },
     "info": {
-        "Counter": "CAM:ArrayCounter_RBV",
+        "Connection": "CAM:CONNECTION.SEVR",
+        "Acquire": "CAM:Acquire",
+        "LED": [
+            "LED",
+            "CMD"
+        ],
+        "Centroid Threshold": "CAL:CentroidThreshold",
         "Exposure": [
             "AcquireTime_RBV",
             "AcquireTime"
@@ -125,6 +121,7 @@ SCREEN = {
             "Gain_RBV",
             "Gain"
         ],
-        "Centroid Threshold": "CAL:CentroidThreshold"
+        "Counter": "CAM:ArrayCounter_RBV",
+        "CCD Reconnect": "RESET.PROC"
     }
 }

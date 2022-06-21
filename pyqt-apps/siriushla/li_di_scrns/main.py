@@ -10,7 +10,7 @@ import qtawesome as qta
 from ..util import get_appropriate_color
 from ..widgets import SiriusMainWindow, PyDMLedMultiChannel
 from .util import DEVICES, SCREENS_PANEL, SCREENS_INFO, HEADER, \
-    GRAPH, SCREEN, SCREEN_CONFIG, WID_DICT
+    GRAPH, SCREEN
 from .motorBtn import MotorBtn
 
 class LiBeamProfile(SiriusMainWindow):
@@ -59,9 +59,8 @@ class LiBeamProfile(SiriusMainWindow):
         ''' Build PV name '''
         return self.device_name + ':' + device + ":" + pv_name
 
-    def setWidgetType(self, widTypeNum, device, pv_name, label):
+    def setWidgetType(self, widType, device, pv_name, label='', value=0):
         ''' Get widget type '''
-        widType = WID_DICT[widTypeNum]
         pvName = self.getPvName(device, pv_name)
         if widType == 'label':
             widget = PyDMLabel(self,
@@ -69,14 +68,14 @@ class LiBeamProfile(SiriusMainWindow):
             widget.showUnits = True
             widget.setAlignment(Qt.AlignCenter)
         elif widType == 'led':
-            ch2vals = {pvName: 0}
+            ch2vals = {pvName: value}
             widget = PyDMLedMultiChannel(self)
             widget.set_channels2values(ch2vals)
         elif widType == 'pushBtn':
             widget = PyDMPushButton(self,
-                        init_channel=pvName,
-                        label=label,
-                        pressValue=0)
+                init_channel=pvName,
+                label=label,
+                pressValue=value)
         elif widType == 'spinBox':
             widget = PyDMSpinbox(
                 init_channel=pvName)
@@ -112,15 +111,15 @@ class LiBeamProfile(SiriusMainWindow):
             QLabel(label),
             alignment=Qt.AlignCenter)
         if label in ['Limit Mode', 'Motor Code', 'Counter', 'Sigma', 'Center']:
-            widType = 0
+            widType = 'label'
         elif label == "Coefficient":
-            widType = 3
+            widType = 'spinBox'
         elif label == "Centroid Threshold":
-            widType = 4
+            widType = 'lineEdit'
         else:
-            widType = 1
+            widType = 'led'
         bi_hlay.addWidget(
-            self.setWidgetType(widType, device, pv_name, False))
+            self.setWidgetType(widType, device, pv_name))
         return bi_hlay
 
     def setRBVObj(self, device, pv_name, label, pv_prefix):
@@ -128,17 +127,17 @@ class LiBeamProfile(SiriusMainWindow):
         rbv_hlay = QHBoxLayout()
         rbv_hlay.addWidget(
             QLabel(label),
-            alignment=Qt.AlignRight)
+            alignment=Qt.AlignCenter)
         for item in range(1, -1, -1):
             pvName = pv_prefix + pv_name[item]
             if 'RBV' not in pvName:
                 if label in ['Gain', 'Exposure']:
-                    widType = 4
+                    widType = 'lineEdit'
                 else:
-                    widType = 3
+                    widType = 'spinBox'
             else:
-                widType = 0
-            widget = self.setWidgetType(widType, device, pvName, False)
+                widType = 'label'
+            widget = self.setWidgetType(widType, device, pvName)
             widget.setMaximumWidth(75)
             if item != 0:
                 rbv_hlay.addWidget(
@@ -190,102 +189,114 @@ class LiBeamProfile(SiriusMainWindow):
         imageWid.setMinimumSize(500, 100)
 
         ss_vlay.addWidget(
-            imageWid,
-            5)
-        ss_vlay.addLayout(
-            self.setScrnConfig(device), 1)
+            imageWid, 5)
         ss_vlay.addLayout(
             self.setScrnInfo(device), 1)
 
-        group.setTitle("Screen " + device)
+        group.setTitle(SCREEN['title'] + " " + device)
         group.setLayout(ss_vlay)
         return group
 
-    def setScrnHeader(self, device):
+    def setScrnHeader(self, device, layout):
         ''' Build the screen panel header '''
-        mi_hlay = QHBoxLayout()
+        count = 0
         for text in SCREENS_PANEL.get('labels'):
-            label = QLabel('<h4>'+text+'</h4>')
-            label.setMinimumWidth(60)
-            mi_hlay.addWidget(label, alignment=Qt.AlignRight)
-        return mi_hlay
+            layout.addWidget(
+                QLabel(text),
+                0, count,
+                alignment=Qt.AlignCenter)
+            count += 1
+        return layout
 
-    def setPanelInfo(self, device):
+    def setPanelInfo(self, device, layout, row):
         ''' Build the information of one screen in screen panel '''
-        mi_hlay = QHBoxLayout()
         pvList = SCREENS_PANEL.get('content')
         pv_name = 'MOTOR'+":"
+        count = 0
 
-        mi_hlay.addWidget(
-            self.getRadioBtn(device), alignment=Qt.AlignCenter)
+        layout.addWidget(
+            self.getRadioBtn(device),
+            row, count, alignment=Qt.AlignCenter)
 
+        count += 1
         for item in range(0, len(pvList)):
-            mi_hlay.addWidget(
-                self.setWidgetType(item, device, pv_name+pvList[item], False),
+            if item == 0:
+                widType = 'label'
+            else:
+                widType = 'led'
+
+            layout.addWidget(
+                self.setWidgetType(
+                    widType, device, pv_name+pvList[item]),
+                row, count,
+                alignment=Qt.AlignCenter)
+            count+=1
+
+        layout.addWidget(
+                self.setWidgetType('led', device, pv_name+pvList[0], value=1),
+                row, count,
                 alignment=Qt.AlignCenter)
 
-        return mi_hlay
+        return layout
 
     def setMotorsConfig(self):
         ''' Build the Motor Control Buttons'''
         mc_hlay = QHBoxLayout()
         for label, channel in HEADER.items():
             mc_hlay.addWidget(
-                self.setWidgetType(2, "PRF:MOTOR", channel, label),
-                alignment=Qt.AlignRight)
+                self.setWidgetType('pushBtn', "PRF:MOTOR", channel, label),
+                alignment=Qt.AlignCenter)
         return mc_hlay
 
     def setScrnPanel(self):
         ''' Build the Screens Panel Component'''
         group = QGroupBox()
-        am_vlay = QVBoxLayout()
-        am_vlay.addLayout(self.setScrnHeader(SCREENS_PANEL.get('title')))
-        for device in DEVICES:
-            am_vlay.addLayout(self.setPanelInfo(device))
+        am_glay = QGridLayout()
 
-        am_vlay.addLayout(
-            self.setMotorsConfig())
+        am_glay = self.setScrnHeader(
+            SCREENS_PANEL.get('title'), am_glay)
+
+        row = 1
+        for device in DEVICES:
+            am_glay = self.setPanelInfo(
+                device, am_glay, row)
+            row += 1
+
+        am_glay.addLayout(
+            self.setMotorsConfig(),
+            row, 0, 1, 4)
 
         group.setTitle(SCREENS_PANEL.get('title'))
-        group.setLayout(am_vlay)
+        group.setLayout(am_glay)
         return group
 
-    def getScrnSelBtns(self, device, pv_name, labels, counter):
+    def getScrnSelBtns(self, device, label):
         ''' Get the button label for the position of the screen '''
-        if pv_name == 'POS5.PROC' and device != 'PRF5':
-            return False
-        elif device == 'PRF5':
-            if pv_name == 'POS4.PROC':
-                return labels[counter+1]
-            if pv_name == 'POS5.PROC':
-                return labels[counter-1]
-        elif pv_name == 'POS3.PROC':
-            if device == 'PRF4':
-                return labels[counter+2]
-        return labels[counter]
+        if isinstance(label, dict):
+            if device in label.keys():
+                return label[device]
+            return label["GEN"]
+        return label
 
     def setScrnSelection(self, selectionInfo, device):
         ''' Build the screen position selection menu '''
-        widget = QFrame()
+        widget = QGroupBox()
         ms_vlay = QVBoxLayout()
         ms_vlay.addWidget(
             PyDMLabel(
                 init_channel=self.getPvName(
-                                        device, 'MOTOR:' + selectionInfo.get('selected'))),
+                    device, 'MOTOR:' + selectionInfo.get('selected'))),
             alignment=Qt.AlignCenter)
-        for counter in range(0, len(selectionInfo.get('content'))):
-            pv_name = selectionInfo.get('content')[counter]
-            labels = selectionInfo.get('labels')
-            label = self.getScrnSelBtns(device, pv_name, labels, counter)
-            if label != False:
+
+        for pv_name, label in selectionInfo.get('content').items():
+            label = self.getScrnSelBtns(device, label)
+            if label:
                 ms_vlay.addWidget(
                     PyDMPushButton(
                         init_channel=self.getPvName(device, 'MOTOR:' + pv_name),
                         label=label))
-        widget.setStyleSheet('''QFrame{
-                border-radius: 0.5em;
-                border: 0.1em solid #ff8b98;}''')
         widget.setLayout(ms_vlay)
+        widget.setTitle("Position")
         return widget
 
     def setZeroOpt(self, item, device):
@@ -295,10 +306,12 @@ class LiBeamProfile(SiriusMainWindow):
             QLabel(item["title"]))
         count = 0
         for label, pv_name in item["content"].items():
-            widget = self.setWidgetType(2, device, "MOTOR:"+pv_name, label)
+            widget = self.setWidgetType('pushBtn', device, "MOTOR:"+pv_name, label)
             if count == 1:
                 widget.setStyleSheet("background-color:#ffff00;")
-            zo_hlay.addWidget(widget)
+            zo_hlay.addWidget(
+                widget,
+                alignment=Qt.AlignCenter)
             count += 1
         return zo_hlay
 
@@ -308,9 +321,9 @@ class LiBeamProfile(SiriusMainWindow):
         lo_hlay.addWidget(
             QLabel(title))
         lo_hlay.addWidget(
-            self.setWidgetType(1, device, "MOTOR:"+pvList[0], False))
+            self.setWidgetType('led', device, "MOTOR:"+pvList[0]))
         lo_hlay.addWidget(
-            self.setWidgetType(5, device, "MOTOR:"+pvList[1], False))
+            self.setWidgetType('motorBtn', device, "MOTOR:"+pvList[1]))
         return lo_hlay
 
     def setSingleScrnInfo(self, device):
@@ -346,7 +359,6 @@ class LiBeamProfile(SiriusMainWindow):
         for label, channel in graph_info.items():
             gi_hlay.addLayout(
                 self.setBasicInfo(device, label, channel))
-            gi_hlay.addStretch()
         return gi_hlay
 
     def setRoiInfo(self, device, roi_data, title):
@@ -403,32 +415,35 @@ class LiBeamProfile(SiriusMainWindow):
         self.saveStack(stack, stackType)
         return stack
 
-    def setScrnConfig(self, device):
-        ''' Build the screen configuration Component'''
-        sc_hlay = QHBoxLayout()
-        for title, item in SCREEN_CONFIG.items():
-            if title == 'LED':
-                sc_hlay.addLayout(
-                    self.setLight(device, item, title))
-            elif item == "RESET.PROC":
-                sc_hlay.addWidget(
-                    self.setWidgetType(2, device, "CAM:"+item, title))
-            else:
-                sc_hlay.addLayout(
-                    self.setBasicInfo(device, title, "CAM:"+item))
-        return sc_hlay
-
     def setScrnInfo(self, device):
         ''' Build the screen information Component'''
-        si_hlay = QHBoxLayout()
+        si_glay = QGridLayout()
+        counter = [0, 0]
         for title, item in SCREEN['info'].items():
             if title in ['Gain', 'Exposure']:
-                si_hlay.addLayout(
-                    self.setRBVObj(device, item, title, 'CAM:'))
+                si_glay.addLayout(
+                    self.setRBVObj(device, item, title, 'CAM:'),
+                    counter[0], counter[1])
+            elif title == 'LED':
+                si_glay.addLayout(
+                    self.setLight(device, item, title),
+                    counter[0], counter[1])
+            elif item == "RESET.PROC":
+                si_glay.addWidget(
+                    self.setWidgetType('pushBtn', device, 'CAM:' + item, title),
+                    counter[0], counter[1])
             else:
-                si_hlay.addLayout(
-                    self.setBasicInfo(device, title, item))
-        return si_hlay
+                si_glay.addLayout(
+                    self.setBasicInfo(device, title, item),
+                    counter[0], counter[1])
+
+            si_glay.setColumnStretch(counter[1], 10)
+            counter[0] += 1
+            if counter[0] >= 2:
+                counter[1] += 1
+                counter[0] = 0
+
+        return si_glay
 
     def header(self):
         ''' Build the header'''
