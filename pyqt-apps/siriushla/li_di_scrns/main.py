@@ -32,8 +32,6 @@ class LiBeamProfile(SiriusMainWindow):
         self.setWindowIcon(qta.icon('mdi.camera-metering-center', color=color))
         self.setWindowTitle(self.window_title)
         self.image_container = QLabel()
-        self.image_container.setScaledContents(True)
-        self.image_container.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Ignored)
         self.pixmap = QPixmap(_os.path.join(
             _os.path.abspath(_os.path.dirname(__file__)), "linac.png"))
         self.selected_device = ''
@@ -117,7 +115,7 @@ class LiBeamProfile(SiriusMainWindow):
             self.setWidgetType(wid_type, device, pv_name))
         return bi_hlay
 
-    def setRBVObj(self, device, pv_name, label, pv_prefix):
+    def setRBVObj(self, device, channel, label, pv_prefix):
         ''' Build formatted RBV Component'''
         rbv_hlay = QHBoxLayout()
         title = QLabel(label)
@@ -125,7 +123,7 @@ class LiBeamProfile(SiriusMainWindow):
         title.setAlignment(Qt.AlignCenter)
         rbv_hlay.addWidget(title)
         for item in range(1, -1, -1):
-            pv_name = pv_prefix + pv_name[item]
+            pv_name = pv_prefix + channel[item]
             if 'RBV' not in pv_name:
                 if label in ['Gain', 'Exposure']:
                     wid_type = 'lineEdit'
@@ -139,7 +137,7 @@ class LiBeamProfile(SiriusMainWindow):
                 rbv_hlay.addWidget(
                     widget,
                     alignment=Qt.AlignRight)
-                if 'Size' in pv_name[0]:
+                if 'Size' in channel[0]:
                     sep_label = QLabel("X")
                     sep_label.setFixedWidth(10)
                     rbv_hlay.addWidget(
@@ -460,6 +458,8 @@ class LiBeamProfile(SiriusMainWindow):
     def imageViewer(self):
         ''' Build the image'''
         self.image_container.setPixmap(self.pixmap)
+        self.image_container.setScaledContents(True)
+        self.image_container.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Ignored)
         return self.image_container
 
     def _setupUi(self):
