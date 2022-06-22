@@ -50,13 +50,13 @@ class LiBeamProfile(SiriusMainWindow):
             self.stack_screen.setCurrentIndex(device_index)
             self.stack_graphs.setCurrentIndex(device_index)
 
-    def getpv_name(self, device, pv_name):
+    def getPvName(self, device, pv_name):
         ''' Build PV name '''
         return self.device_name + ':' + device + ":" + pv_name
 
     def setWidgetType(self, wid_type, device, pv_name, label='', value=0):
         ''' Get widget type '''
-        pv_name = self.getpv_name(device, pv_name)
+        pv_name = self.getPvName(device, pv_name)
         if wid_type == 'label':
             widget = PyDMLabel(self, init_channel=pv_name)
             widget.showUnits = True
@@ -119,7 +119,7 @@ class LiBeamProfile(SiriusMainWindow):
         ''' Build formatted RBV Component'''
         rbv_hlay = QHBoxLayout()
         title = QLabel(label)
-        title.setMinimumWidth(75)
+        title.setMinimumWidth(50)
         title.setAlignment(Qt.AlignCenter)
         rbv_hlay.addWidget(title)
         for item in range(1, -1, -1):
@@ -137,7 +137,7 @@ class LiBeamProfile(SiriusMainWindow):
                 rbv_hlay.addWidget(
                     widget,
                     alignment=Qt.AlignRight)
-                if 'Size' in channel[0]:
+                if 'MaxSize' in channel[0]:
                     sep_label = QLabel("X")
                     sep_label.setFixedWidth(10)
                     rbv_hlay.addWidget(
@@ -160,12 +160,12 @@ class LiBeamProfile(SiriusMainWindow):
             'bottom',
             text=graph_data.get("labelX"))
         graph_plot.addChannel(
-            y_channel=self.getpv_name(
+            y_channel=self.getPvName(
                 device, graph_data['channel']['centroid']),
             color="#ff8b98",
             lineWidth=1)
         graph_plot.addChannel(
-            y_channel=self.getpv_name(
+            y_channel=self.getPvName(
                 device, graph_data['channel']['data']),
             color="#ff0000",
             lineWidth=1)
@@ -179,8 +179,8 @@ class LiBeamProfile(SiriusMainWindow):
         ss_vlay = QVBoxLayout()
 
         image_wid = PyDMImageView(
-            image_channel=self.getpv_name(device, SCREEN['Screen']['data']),
-            width_channel=self.getpv_name(device, SCREEN['Screen']['width']))
+            image_channel=self.getPvName(device, SCREEN['Screen']['data']),
+            width_channel=self.getPvName(device, SCREEN['Screen']['width']))
         image_wid.setMinimumSize(500, 100)
 
         ss_vlay.addWidget(image_wid, 5)
@@ -274,7 +274,7 @@ class LiBeamProfile(SiriusMainWindow):
         ms_vlay = QVBoxLayout()
         ms_vlay.addWidget(
             PyDMLabel(
-                init_channel=self.getpv_name(
+                init_channel=self.getPvName(
                     device, 'MOTOR:' + selection_info.get('selected'))),
             alignment=Qt.AlignCenter)
 
@@ -283,7 +283,7 @@ class LiBeamProfile(SiriusMainWindow):
             if label:
                 ms_vlay.addWidget(
                     PyDMPushButton(
-                        init_channel=self.getpv_name(
+                        init_channel=self.getPvName(
                             device, 'MOTOR:' + pv_name),
                         label=label))
         widget.setLayout(ms_vlay)
@@ -359,12 +359,20 @@ class LiBeamProfile(SiriusMainWindow):
     def setRoiInfo(self, device, roi_data, title):
         ''' Build the ROI information '''
         group = QGroupBox()
-        ri_vlay = QVBoxLayout()
+        ri_glay = QGridLayout()
+        counter = [0, 0]
+        col_span = 2
         for label, channel in roi_data.items():
-            ri_vlay.addLayout(
-                self.setRBVObj(device, channel, label, 'ROI:'))
+            ri_glay.addLayout(
+                self.setRBVObj(device, channel, label, 'ROI:'),
+                counter[0], counter[1], 1, col_span)
+            if counter[0] == 2:
+                counter[0] = 0
+                counter[1] = 1
+            counter[0] += 1
+            col_span = 1
 
-        group.setLayout(ri_vlay)
+        group.setLayout(ri_glay)
         group.setTitle(title)
         return group
 

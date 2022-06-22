@@ -89,11 +89,13 @@ GRAPH = {
     },
     "ROI": {
         "CCD Resolution": [
-            "MaxSizeX_RBV", "MaxSizeY_RBV"],
-        "Size": [
-            "SizeX_RBV", "SizeY_RBV"],
+            "MaxSizeY_RBV", "MaxSizeX_RBV"],
+        "X Size": [
+            "SizeX_RBV", "SizeX"],
         "X Start": [
             "MinX_RBV", "MinX_"],
+        "Y Size": [
+            "SizeY_RBV", "SizeY"],
         "Y Start": [
             "MinY_RBV", "MinY_"]
     }
