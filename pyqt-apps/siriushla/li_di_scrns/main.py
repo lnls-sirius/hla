@@ -3,7 +3,8 @@ import os as _os
 from qtpy.QtCore import Qt
 from qtpy.QtGui import QPixmap
 from qtpy.QtWidgets import QGroupBox, QHBoxLayout, QVBoxLayout, \
-    QWidget, QLabel, QGridLayout, QRadioButton, QStackedWidget
+    QWidget, QLabel, QGridLayout, QRadioButton, QStackedWidget, \
+    QSizePolicy
 from pydm.widgets import PyDMLabel, PyDMPushButton, \
     PyDMWaveformPlot, PyDMSpinbox, PyDMImageView, PyDMLineEdit
 import qtawesome as qta
@@ -31,6 +32,8 @@ class LiBeamProfile(SiriusMainWindow):
         self.setWindowIcon(qta.icon('mdi.camera-metering-center', color=color))
         self.setWindowTitle(self.window_title)
         self.image_container = QLabel()
+        self.image_container.setScaledContents(True)
+        self.image_container.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Ignored)
         self.pixmap = QPixmap(_os.path.join(
             _os.path.abspath(_os.path.dirname(__file__)), "linac.png"))
         self.selected_device = ''
@@ -38,15 +41,6 @@ class LiBeamProfile(SiriusMainWindow):
         self.stack_screen = QStackedWidget()
         self.stack_graphs = QStackedWidget()
         self._setupUi()
-
-    def resizeEvent(self, event):
-        ''' Resize Image'''
-        self.image_container.setPixmap(
-            self.pixmap.scaled(
-                self.image_container.width(),
-                self.image_container.height())
-        )
-        SiriusMainWindow.resizeEvent(self, event)
 
     def radioBtnClick(self):
         ''' Action on radio button change '''
@@ -465,13 +459,7 @@ class LiBeamProfile(SiriusMainWindow):
 
     def imageViewer(self):
         ''' Build the image'''
-        self.image_container.setPixmap(
-            self.pixmap.scaled(
-                self.image_container.width(),
-                self.image_container.height()))
-        self.image_container.setMinimumSize(700, 250)
-        self.image_container.setMaximumHeight(250)
-        self.image_container.setAlignment(Qt.AlignCenter)
+        self.image_container.setPixmap(self.pixmap)
         return self.image_container
 
     def _setupUi(self):
