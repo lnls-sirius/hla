@@ -24,7 +24,7 @@ class MacReportWindow(SiriusMainWindow):
         self._macreport = MacReport()
         self._macreport.connector.timeout = 5*60
 
-        self.setWindowIcon(qta.icon('fa.book', color='gray'))
+        self.setWindowIcon(qta.icon('fa5s.book', color='gray'))
         self.setWindowTitle('Machine Reports')
 
         self._fsi = '{:8d}'
