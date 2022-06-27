@@ -83,24 +83,23 @@ class InterlockWindow(SiriusMainWindow):
         else:
             self.setObjectName('ASApp')
 
-        auxlabel = 'Interlocks'
-        if 'Soft' in self._interlock[0]:
+        self._intlktype = ''
+        auxlabel = 'Alarms' if 'Alarm' in self._interlock[0] else 'Interlocks'
+        if 'IntlkSoft' in self._interlock[0]:
             self._intlktype = 'Soft'
-        elif 'Hard' in self._interlock[0]:
+        elif 'IntlkHard' in self._interlock[0]:
             self._intlktype = 'Hard'
-        elif 'IIB' in self._interlock[0]:
+        elif 'IntlkIIB' in self._interlock[0]:
             self._intlktype = 'IIB'
-            if 'Alarms' in self._interlock[0]:
-                auxlabel = 'Alarms'
 
         self._intlkname = self._intlktype + ' ' + auxlabel
         self.setWindowTitle(self._devname + ' - ' + self._intlkname)
         self._setup_ui()
 
     def _setup_ui(self):
-        self.cw = QWidget(parent=self)
-        self.setCentralWidget(self.cw)
-        lay = QVBoxLayout(self.cw)
+        self.cwid = QWidget(parent=self)
+        self.setCentralWidget(self.cwid)
+        lay = QVBoxLayout(self.cwid)
         lay.addWidget(QLabel("<h1>" + self._devname + "</h1>"))
         lay.addWidget(QLabel("<h3>" + self._intlkname + "</h3>"))
 
@@ -111,15 +110,20 @@ class InterlockWindow(SiriusMainWindow):
         else:
             self._tab_widget = QTabWidget(self)
             for aux in self._auxdev:
+                devaux = self._devname + aux
                 for intlk in self._interlock:
-                    tab_lbl = intlk.replace(self._intlktype, '').replace(
-                        'Alarms', '').replace('Intlk', '')
-                    if self._devname+aux in self._auxdev2mod:
-                        tab_lbl = 'Mod' + self._auxdev2mod[
-                            self._devname+aux][tab_lbl.split('Mod')[1]]
+                    name = intlk.replace('Alarms', '').replace('Intlk', '')
+                    if 'Mod' in name:
+                        mod = name.split('Mod')[1]
+                        tab_lbl = 'IIB Mod'.replace(self._intlktype, '')
+                        tab_lbl += self._auxdev2mod[devaux][mod] \
+                            if devaux in self._auxdev2mod else mod
+                    else:
+                        tab_lbl = 'IIB' if 'IIB' in intlk else 'Main'
+                    if tab_lbl == 'Main' and aux:
+                        continue
                     wid = InterlockListWidget(
-                        parent=self, devname=self._devname+aux,
-                        interlock=intlk)
+                        parent=self, devname=devaux, interlock=intlk)
                     self._tab_widget.addTab(wid, tab_lbl)
             lay.addWidget(self._tab_widget)
 
