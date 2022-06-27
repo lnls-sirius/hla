@@ -78,6 +78,10 @@ class PSDetailWidget(QWidget):
             min-height: 1.5em;
             max-height: 1.5em;
         }
+        #auxmeaslabel {
+            min-width: 7.5em;
+            qproperty-alignment: AlignCenter;
+        }
     """
 
     AuxDev2ModDict = {
@@ -1894,6 +1898,7 @@ class PSAuxMeasWidget(SiriusDialog):
                 lbl = PyDMLabel(
                     self, self._prefixed_psname.substitute(propty=pv))
                 lbl.showUnits = True
+                lbl.setObjectName('auxmeaslabel')
                 flay.addRow(text, lbl)
         return wid
 
@@ -1916,6 +1921,7 @@ class PSAuxMeasWidget(SiriusDialog):
             text = pv.split('Mod'+mod)[0].split('IIB')[0]
             lbl = PyDMLabel(self, psname + ':' + pv)
             lbl.showUnits = True
+            lbl.setObjectName('auxmeaslabel')
             flay.addRow(text, lbl)
         lay.addLayout(flay)
 
