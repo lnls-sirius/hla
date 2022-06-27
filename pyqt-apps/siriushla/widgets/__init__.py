@@ -8,12 +8,13 @@ from .scrollbar import PyDMScrollBar
 from .matplotlib import MatplotlibWidget
 from .state_button import PyDMStateButton
 from .windows import SiriusMainWindow, SiriusDialog
-from .ledit_scrollbar import PyDMLinEditScrollbar
 from .line_edit import SiriusLineEdit
+from .ledit_scrollbar import PyDMLinEditScrollbar
 from .loading_dialog import LoadingDialog
 from .signal_channel import SiriusConnectionSignal
 from .QSpinBoxPlus import QSpinBoxPlus, QDoubleSpinBoxPlus
 from .spinbox import SiriusSpinbox, SiriusHexaSpinbox
+from .spinbox_scrollbar import PyDMSpinboxScrollbar
 from .widget_factory import pydmwidget_factory
 from .spectrogram_view import SiriusSpectrogramView
 from .label import SiriusLabel
