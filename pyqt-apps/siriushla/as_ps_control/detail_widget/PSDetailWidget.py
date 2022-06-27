@@ -1317,7 +1317,7 @@ class FACDCLinkDetailWidget(DCLinkDetailWidget):
         self.cap_bank_mon_label = QLabel("Mon")
 
         self.cap_bank_sp_widget = PyDMSpinboxScrollbar(
-            self._prefixed_psname + ":CapacitorBankVoltage-SP", self)
+            self, self._prefixed_psname + ":CapacitorBankVoltage-SP")
         self.cap_bank_rb_val = PyDMLabel(
             self,
             self._prefixed_psname + ":CapacitorBankVoltage-RB")
