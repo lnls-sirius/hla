@@ -171,27 +171,24 @@ class LIInterlockWindow(SiriusMainWindow):
         self._setup_ui()
 
     def _setup_ui(self):
-        self.cw = QWidget(parent=self)
-        self.setCentralWidget(self.cw)
-        lay = QGridLayout(self.cw)
+        self.cwid = QWidget(parent=self)
+        self.setCentralWidget(self.cwid)
+        lay = QGridLayout(self.cwid)
         lay.setHorizontalSpacing(20)
 
         self.label_warn = QLabel('Warn Status')
         self.grid_warn = QGridLayout()
-        i = 0
         for bit, text in self.BIT_MAPS['IntlkWarn-Mon'].items():
-            led = PyDMLed(self, self._devname+':IntlkWarn-Mon', bit=i)
+            led = PyDMLed(self, self._devname+':IntlkWarn-Mon', bit=bit)
             led.setOnColor(self.COLOR_MAPS['IntlkWarn-Mon']['on'])
             led.setOffColor(self.COLOR_MAPS['IntlkWarn-Mon']['off'])
             lbl = QLabel(text, self)
-            self.grid_warn.addWidget(led, i, 0)
-            self.grid_warn.addWidget(lbl, i, 1)
-            i += 1
+            self.grid_warn.addWidget(led, bit, 0)
+            self.grid_warn.addWidget(lbl, bit, 1)
 
         self.label_digin = QLabel('Digital Input')
         self.label_digout = QLabel('Digital Output')
         for typ in ['In', 'Out']:
-            i = 0
             gridname = 'grid_dig'+typ.lower()
             setattr(self, gridname, QGridLayout())
             grd = getattr(self, gridname)
@@ -199,17 +196,16 @@ class LIInterlockWindow(SiriusMainWindow):
             sgch = 'IntlkSignal'+typ+'-Mon'
             mskch = 'IntlkRdSignal'+typ+'Mask-Mon'
             for bit, text in self.BIT_MAPS[sgch].items():
-                led = PyDMLed(self, self._devname+':'+sgch, bit=i)
+                led = PyDMLed(self, self._devname+':'+sgch, bit=bit)
                 led.setOnColor(self.COLOR_MAPS[sgch]['on'])
                 led.setOffColor(self.COLOR_MAPS[sgch]['off'])
                 lbl = QLabel(text, self)
-                led_msk = PyDMLed(self, self._devname+':'+mskch, bit=i)
+                led_msk = PyDMLed(self, self._devname+':'+mskch, bit=bit)
                 led_msk.setOnColor(self.COLOR_MAPS[mskch]['on'])
                 led_msk.setOffColor(self.COLOR_MAPS[mskch]['off'])
-                grd.addWidget(led, i, 0)
-                grd.addWidget(lbl, i, 1)
-                grd.addWidget(led_msk, i, 2)
-                i += 1
+                grd.addWidget(led, bit, 0)
+                grd.addWidget(lbl, bit, 1)
+                grd.addWidget(led_msk, bit, 2)
 
         lay.addWidget(QLabel("<h1>" + self._devname + "</h1>"), 0, 0, 1, 3)
         lay.addWidget(QLabel("<h3>Interlocks</h3>"), 1, 0, 1, 3)
