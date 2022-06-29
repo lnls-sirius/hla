@@ -89,6 +89,7 @@ setup(
         'scripts/sirius-hla-li-ap-mpscon.py',
         'scripts/sirius-hla-li-ap-mpsmon.py',
         'scripts/sirius-hla-li-di-bpms.py',
+        'scripts/sirius-hla-li-di-scrns.py',
         'scripts/sirius-hla-li-eg-control.py',
         'scripts/sirius-hla-li-ps-control.py',
         'scripts/sirius-hla-li-pu-modltr.py',

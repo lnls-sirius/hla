@@ -319,6 +319,11 @@ def get_object(ismenubar=True, parent=None):
                 bpm3, ["sirius-hla-li-di-bpms.py", 'LA-BI:BPM3'])
             bpms_menu.addAction(bpm3)
 
+            scrns = DIG.addAction('Screens')
+            scrns.setIcon(qta.icon('mdi.camera-metering-center'))
+            self.connect_newprocess(scrns, 'sirius-hla-li-di-scrns.py')
+            scrns.setObjectName('LIApp')
+
             mps = LEVEL2M('MPS', menu)
             mps.setObjectName('LIApp')
             mpsmon = QAction('Monitor', mps)
@@ -575,6 +580,7 @@ def get_object(ismenubar=True, parent=None):
                 diag.addAction(VLight)
             if 'si' not in sec:
                 Scrns = QMenu('Screens', diag)
+                Scrns.setIcon(qta.icon('mdi.camera-metering-center'))
                 Scrns.setObjectName(sec.upper()+'App')
                 for dev in get_scrn_list(sec.upper()):
                     act_dev = Scrns.addAction(dev)
