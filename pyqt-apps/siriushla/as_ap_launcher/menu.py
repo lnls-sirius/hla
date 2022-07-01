@@ -169,11 +169,11 @@ def get_object(ismenubar=True, parent=None):
                 is_window=False)
             tspuinjsi = QAction('TS-PU-InjSI', osci)
             util.connect_newprocess(
-                tspuinjsi, ['gvncviewer', 'TS-PU-Osc-InjSI'],
+                tspuinjsi, ['gvncviewer', Scopes.TS_PU_OSC_INJSI],
                 is_window=False)
             sipuinjsi = QAction('SI-PU-InjSI', osci)
             util.connect_newprocess(
-                sipuinjsi, ['gvncviewer', 'SI-PU-Osc-InjSI'],
+                sipuinjsi, ['gvncviewer', Scopes.SI_PU_OSC_INJSI],
                 is_window=False)
 
             osci.addAction(asdifctdig)
