@@ -21,6 +21,7 @@ class InterlockWidget(QWidget):
         self.led = SiriusLedAlert(self, init_channel, bit)
         self.label = QLabel(label, self)
         lay = QHBoxLayout()
+        lay.setAlignment(Qt.AlignLeft)
         lay.addWidget(self.led)
         lay.addWidget(self.label)
         self.setLayout(lay)

@@ -1390,8 +1390,6 @@ class FastCorrPSDetailWidget(PSDetailWidget):
         self.opmode_box.setObjectName('operation_mode')
         self.pwrstate_box = QGroupBox('PwrState')
         self.pwrstate_box.setObjectName('power_state')
-        self.status_box = QGroupBox('Status')
-        self.status_box.setObjectName('status')
         self.interlock_box = QGroupBox('Interlock')
         self.interlock_box.setObjectName('interlock')
         self.paramstab = QTabWidget()
@@ -1423,7 +1421,6 @@ class FastCorrPSDetailWidget(PSDetailWidget):
         # Set group boxes layouts
         self.opmode_box.setLayout(self._opModeLayout())
         self.pwrstate_box.setLayout(self._powerStateLayout())
-        self.status_box.setLayout(self._statusLayout())
         self.interlock_box.setLayout(self._interlockLayout())
         self.params_box.setLayout(self._paramsLayout())
         self.testconf_box.setLayout(self._testConfLayout())
@@ -1450,8 +1447,7 @@ class FastCorrPSDetailWidget(PSDetailWidget):
         boxes_layout = QGridLayout()
         boxes_layout.addWidget(self.opmode_box, 0, 0)
         boxes_layout.addWidget(self.pwrstate_box, 0, 1)
-        boxes_layout.addWidget(self.status_box, 1, 0)
-        boxes_layout.addWidget(self.interlock_box, 1, 1)
+        boxes_layout.addWidget(self.interlock_box, 1, 0, 1, 2)
         boxes_layout.addWidget(self.paramstab, 2, 0, 1, 2)
         boxes_layout.addWidget(self.analogtab, 0, 2)
         boxes_layout.addWidget(self.metric_box, 1, 2)
@@ -1634,18 +1630,6 @@ class FastCorrPSDetailWidget(PSDetailWidget):
         layout.addWidget(self.alarm_bt, 0, 0)
         layout.addWidget(self.alarm_label, 0, 1)
         layout.addWidget(self.alarm_led, 0, 2)
-        return layout
-
-    def _statusLayout(self):
-        psstatus_label = QLabel('Value: ', self)
-        self.psstatus_mon = PyDMLabel(
-            self, self._prefixed_psname + ":PSStatus-Mon")
-        self.psstatus_mon.setObjectName("psstatus_mon")
-
-        layout = QGridLayout()
-        layout.setAlignment(Qt.AlignCenter)
-        layout.addWidget(psstatus_label, 0, 0, Qt.AlignRight)
-        layout.addWidget(self.psstatus_mon, 0, 1, Qt.AlignLeft)
         return layout
 
     def _paramsLayout(self):
