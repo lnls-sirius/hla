@@ -490,13 +490,14 @@ class TesterPSFOFB(_TesterBase):
         """Set manual mode."""
         if state != _PSC.OpMode.SlowRef:
             return
-        self._pvs['OpMode-Sel'].value = _PSC.OpModeFOFB.CL_MANUAL
+        self._pvs['OpMode-Sel'].value = _PSC.OpModeFOFB.closed_loop_manual
 
     def check_opmode(self, state):
         """Check whether power supply is in manual mode."""
         if state != _PSC.OpMode.SlowRef:
             return True
-        return self._pvs['OpMode-Sts'].value == _PSC.OpModeFOFB.CL_MANUAL
+        return self._pvs['OpMode-Sts'].value == \
+            _PSC.OpModeFOFB.closed_loop_manual
 
     def check_intlk(self):
         """Check interlocks."""
