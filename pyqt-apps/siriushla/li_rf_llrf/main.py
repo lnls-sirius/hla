@@ -1,12 +1,11 @@
 """Main module of the Application Interface."""
 
 import enum as _enum
-
+import os as _os
 from qtpy.QtCore import Qt
-from qtpy.QtGui import QColor
+from qtpy.QtGui import QPixmap
 from qtpy.QtWidgets import QGroupBox, QGridLayout, QWidget, QLabel, \
-    QHBoxLayout, QPushButton
-from pydm.widgets import PyDMWaveformPlot
+    QHBoxLayout, QPushButton, QSizePolicy, QWidget
 import qtawesome as _qta
 
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
@@ -14,9 +13,9 @@ from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from .. import util as _util
 from ..widgets import SiriusMainWindow
 from ..widgets import SiriusSpinbox, PyDMStateButton, SiriusLedState, \
-    SiriusLabel, SiriusLedAlert, SiriusTimePlot
+    SiriusLabel, SiriusLedAlert
 from .details import DeviceParamSettingWindow
-from .widgets import DeltaIQPhaseCorrButton
+from .widgets import DeltaIQPhaseCorrButton, GraphAmpPha, GraphIvsQ, RelativeWidget
 
 
 class DEVICES(_enum.IntEnum):
@@ -35,7 +34,6 @@ class DEVICES(_enum.IntEnum):
         self.nickname = nickname
         return self
 
-
 class MainWindow(SiriusMainWindow):
     """."""
 
@@ -47,8 +45,44 @@ class MainWindow(SiriusMainWindow):
         self.setWindowTitle('LI LLRF')
         self.setWindowIcon(_qta.icon(
             'mdi.waves', color=_util.get_appropriate_color('LI')))
+        self.image_container = QLabel()
+        self.pixmap = QPixmap(_os.path.join(
+            _os.path.abspath(_os.path.dirname(__file__)), "llrf.png"))
+        self.relativeWidgets = []
 
         self._setupui()
+
+    def resizeEvent(self, event):
+        for relativeItem in self.relativeWidgets:
+            relativeItem.relativeResize(event)
+
+    def imageViewer(self):
+        ''' Build the image'''
+        self.image_container.setPixmap(self.pixmap)
+        self.image_container.setScaledContents(True)
+        self.image_container.setSizePolicy(
+            QSizePolicy.Ignored, QSizePolicy.Ignored)
+        self.image_container.setMinimumSize(750, 500)
+        return self.image_container
+
+    def getWidType(self, wid_type=None, pv_name=None):
+        ''' Get widget type '''
+        # pv_name = self.getPvName(device, pv_name)
+        if wid_type == 'spinBox':
+            widget = PyDMSpinbox(init_channel=pv_name)
+            widget.showStepExponent = False
+        elif wid_type == 'pushButton':
+            widget = QPushButton()
+        return widget
+
+    def baseWidget(self, title=None, widType=None, hasUnit=False):
+        bw_hlay = QHBoxLayout()
+        bw_hlay.addWidget(QLabel(title))
+
+        widget = self.getWidType(widType)
+        if hasUnit:
+            widget.showUnits = True
+        bw_hlay.addWidget(widget)
 
     def _setupui(self):
         """."""
@@ -57,37 +91,71 @@ class MainWindow(SiriusMainWindow):
         lay1 = QGridLayout()
         wid.setLayout(lay1)
 
-        for dev in DEVICES:
-            grbox = QGroupBox(dev.label, wid)
-            lay = QGridLayout()
-            lay.setContentsMargins(0, 0, 0, 0)
-            grbox.setLayout(lay)
-            lay.addWidget(ControlBox(grbox, dev, prefix=self.prefix), 0, 0)
-            ivsq = GraphIvsQ(wid, dev, prefix=self.prefix)
-            amp = GraphAmpPha(wid, dev, prefix=self.prefix)
-            pha = GraphAmpPha(wid, dev, prop='Phase', prefix=self.prefix)
+        lay1.addWidget(self.imageViewer(), 0, 0)
 
-            lay.addWidget(ivsq, 0, 1)
-            lay.addWidget(amp, 0, 2)
-            lay.addWidget(pha, 0, 3)
-            lay.setColumnStretch(0, 1)
-            lay.setColumnStretch(1, 1)
-            lay.setColumnStretch(2, 1)
-            lay.setColumnStretch(3, 1)
+        hlay = QHBoxLayout()
+        label = QLabel("123123", self.image_container)
+        label.setStyleSheet("background-color: #00ff00;")
+        hlay.addWidget(label)
+        position=[50, 20, 10, 10]
+        relWid = RelativeWidget(
+            parent=self.image_container,
+            lay=hlay,
+            relativePos=position)
+        self.relativeWidgets.append(relWid)
 
-            lay1.addWidget(grbox, dev.value, 0)
+        # for dev in DEVICES:
+        #     devSHB = False
+        #     grbox = QGroupBox(dev.label, wid)
+        #     lay = QGridLayout()
+        #     lay.setContentsMargins(0, 0, 0, 0)
+        #     grbox.setLayout(lay)
+        #     if(dev == DEVICES.SHB):
+        #         devSHB = True
+        #     lay.addWidget(
+        #         ControlBox(
+        #             grbox, dev, prefix=self.prefix, is_shb=devSHB), 0, 0)
+        #     lay.addWidget(
+        #         GraphsWidget(
+        #             wid, dev, prefix=self.prefix), 0, 1)
+        #     lay.setColumnStretch(0, 1)
+        #     lay.setColumnStretch(1, 3)
+        #     lay1.addWidget(grbox, dev.value, 0)
+
+
+class GraphsWidget(QWidget):
+    """."""
+
+    def __init__(self, parent=None, dev=None, prefix=_VACA_PREFIX):
+        """."""
+        super().__init__(parent=parent)
+        self.prefix = prefix
+        self.dev = dev
+        self._setupui()
+
+    def _setupui(self):
+        """."""
+        lay = QGridLayout()
+        self.setLayout(lay)
+
+        ivsq = GraphIvsQ(self, self.dev, prefix=self.prefix)
+        amp = GraphAmpPha(self, self.dev, prefix=self.prefix)
+        pha = GraphAmpPha(self, self.dev, prop='Phase', prefix=self.prefix)
+
+        lay.addWidget(ivsq, 0, 1)
+        lay.addWidget(amp, 0, 2)
+        lay.addWidget(pha, 0, 3)
 
 
 class ControlBox(QWidget):
     """."""
 
-    def __init__(self, parent=None, dev=None, prefix=''):
+    def __init__(self, parent=None, dev=None, prefix='', is_shb=False):
         """."""
         super().__init__(parent=parent)
         self.prefix = prefix
-        if dev not in DEVICES:
-            dev = DEVICES.Kly1
         self.dev = dev
+        self.is_shb = is_shb
         self._setupui()
 
     def _setupui(self):
@@ -130,7 +198,7 @@ class ControlBox(QWidget):
 
         props = [('Amp [%]', 'AMP'), ('Phase [°]', 'PHASE'),
                  ('↳ ΔPhase (IQ Corr)', '')]
-        if self.dev != DEVICES.SHB:
+        if not self.is_shb:
             props.append(('Refl. Pow. [MW]', 'REFL_POWER_LIMIT'))
         for name, prop in props:
             row += 1
@@ -159,7 +227,7 @@ class ControlBox(QWidget):
 
         row += 1
         hlay = QHBoxLayout()
-        if self.dev == DEVICES.SHB:
+        if self.is_shb:
             labc = QLabel('Phase Diff [°]', self)
             rbpv = basename + ':GET_PHASE_DIFF'
             rbc = SiriusLabel(self, init_channel=rbpv)
@@ -185,134 +253,3 @@ class ControlBox(QWidget):
 
         self.setStyleSheet(
             "DeltaIQPhaseCorrButton{max-width: 3em;}")
-
-
-class GraphIvsQ(QWidget):
-    """."""
-
-    def __init__(self, parent=None, dev=None, prefix=''):
-        """."""
-        super().__init__(parent=parent)
-        self.prefix = prefix
-        if dev not in DEVICES:
-            dev = DEVICES.Kly1
-        self.dev = dev
-        self._setupui()
-
-    def _setupui(self):
-        """."""
-        lay1 = QGridLayout()
-        self.setLayout(lay1)
-
-        graph = PyDMWaveformPlot(self)
-        graph.setObjectName('graph')
-        graph.setStyleSheet('#graph {min-height: 15em; min-width: 20em;}')
-        graph.maxRedrawRate = 2
-        graph.mouseEnabledX = True
-        graph.setShowXGrid(True)
-        graph.setShowYGrid(True)
-        graph.setBackgroundColor(QColor(_util.get_appropriate_color('LI')))
-        graph.setShowLegend(True)
-        graph.setAutoRangeX(False)
-        graph.setAutoRangeY(False)
-        graph.setMinXRange(-1.0)
-        graph.setMaxXRange(1.0)
-        graph.setMinYRange(-1.0)
-        graph.setMaxYRange(1.0)
-        graph.plotItem.showButtons()
-        graph.setAxisColor(QColor(0, 0, 0))
-        graph.setYLabels('Q')
-        graph.setXLabels('I')
-        axx = graph.plotItem.getAxis('right')
-        axx.setVisible(True)
-        axx.setTicks([])
-        axx.setWidth(0)
-        axx = graph.plotItem.getAxis('top')
-        axx.setVisible(True)
-        axx.setTicks([])
-        axx.setHeight(0)
-
-        basename = self.prefix + ('-' if self.prefix else '') + \
-            'LA-RF:LLRF:' + self.dev.pvname
-        opts = dict(
-            y_channel=basename + ':GET_CH1_Q',
-            x_channel=basename + ':GET_CH1_I',
-            name='Data',
-            color='red',
-            redraw_mode=2,
-            lineStyle=1,
-            lineWidth=3,
-            symbol='o',
-            symbolSize=10)
-        graph.addChannel(**opts)
-        opts = dict(
-            y_channel=basename + ':GET_CH1_SETTING_Q',
-            x_channel=basename + ':GET_CH1_SETTING_I',
-            name='Setpoint',
-            color='blue',
-            redraw_mode=2,
-            lineStyle=1,
-            lineWidth=3,
-            symbol='o',
-            symbolSize=10)
-        graph.addChannel(**opts)
-
-        lay1.addWidget(graph, 0, 0)
-
-
-class GraphAmpPha(QWidget):
-    """."""
-
-    def __init__(self, parent=None, dev=None, prop='Amp', prefix=''):
-        """."""
-        super().__init__(parent=parent)
-        self.prefix = prefix
-        if dev not in DEVICES:
-            dev = DEVICES.Kly1
-        self.dev = dev
-        self.prop = prop
-        self._setupui()
-
-    def _setupui(self):
-        """."""
-        basename = self.prefix + ('-' if self.prefix else '') + \
-            'LA-RF:LLRF:' + self.dev.pvname
-        lay1 = QGridLayout()
-        self.setLayout(lay1)
-
-        graph = SiriusTimePlot(self)
-        graph.setObjectName('graph')
-        graph.setStyleSheet('#graph {min-height: 7em; min-width: 20em;}')
-        graph.maxRedrawRate = 2
-        graph.setShowXGrid(True)
-        graph.setShowYGrid(True)
-        graph.setBackgroundColor(QColor(_util.get_appropriate_color('LI')))
-        graph.plotItem.showButtons()
-        axx = graph.plotItem.getAxis('right')
-        axx.setVisible(True)
-        axx.setTicks([])
-        axx.setWidth(0)
-        axx = graph.plotItem.getAxis('top')
-        axx.setVisible(True)
-        axx.setTicks([])
-        axx.setHeight(0)
-        graph.setAxisColor(QColor(0, 0, 0))
-        graph.plotItem.setLabel('bottom', 'Time')
-        graph.setTimeSpan(360)
-        graph.setUpdateInterval(1/3)
-        if self.prop == 'Amp':
-            graph.setLabel('left', 'Amplitude')
-            chname = basename + ':GET_CH1_AMP'
-        else:
-            graph.setLabel('left', 'Phase')
-            chname = basename + ':GET_CH1_PHASE'
-
-        opts = dict(
-            y_channel=chname,
-            color='black',
-            lineStyle=1,
-            lineWidth=3,
-            symbol='o',
-            symbolSize=10)
-        graph.addYChannel(**opts)
-        lay1.addWidget(graph, 0, 0)
