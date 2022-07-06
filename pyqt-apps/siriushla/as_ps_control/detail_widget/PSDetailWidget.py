@@ -1292,6 +1292,8 @@ class FBPDCLinkDetailWidget(DCLinkDetailWidget):
             self, self._prefixed_psname + ':VoltageDig-Mon')
         self._mod_status_mon = PyDMLabel(
             self, self._prefixed_psname + ':ModulesStatus-Mon')
+        self._ccpersync_mon = PyDMLabel(
+            self, self._prefixed_psname + ':NrCtrlCycBtwLastTrigs-Mon')
 
         pbprm = QPushButton(qta.icon('mdi.open-in-new'),
                             'Parameters', self)
@@ -1305,6 +1307,7 @@ class FBPDCLinkDetailWidget(DCLinkDetailWidget):
         layout.addRow('Voltage 3', self._out_3_mon)
         layout.addRow('Voltage dig', self._out_dig_mon)
         layout.addRow('Module Status', self._mod_status_mon)
+        layout.addRow('NrCtrlCycBtwLastTrigs', self._ccpersync_mon)
         layout.addRow(pbprm)
         return layout
 
