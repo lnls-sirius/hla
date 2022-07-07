@@ -1,9 +1,10 @@
 """Monitoring widgets."""
 
-from qtpy.QtGui import QPixmap
+from qtpy.QtGui import QPixmap, QIcon
 from qtpy.QtCore import Qt, Slot, Signal, QSize, QTimer
 from qtpy.QtWidgets import QWidget, QLabel, QGridLayout, QGroupBox, \
-    QHBoxLayout, QCheckBox, QMenu, QFrame
+    QHBoxLayout, QCheckBox, QMenu, QFrame, QSizePolicy as QSzPol, \
+    QPushButton
 
 import qtawesome as qta
 
@@ -483,3 +484,23 @@ class ClockLabel(QLabel):
     def _update(self):
         text = _Time.strftime(_Time.now(), '%H:%M:%S')
         self.setText(text)
+
+
+class TaskStatusLabel(QPushButton):
+    """Label to show if task is running."""
+
+    def __init__(self, parent=None, init_channel=None):
+        super().__init__(parent)
+        self._wait_icon = qta.icon('fa5s.spinner', animation=qta.Spin(self))
+        self.setFlat(True)
+        self._channel = SiriusConnectionSignal(init_channel)
+        self._channel.new_value_signal[int].connect(self._update_icon)
+        self.setSizePolicy(QSzPol.Fixed, QSzPol.Fixed)
+        self.setMaximumSize(25, 25)
+        self.setStyleSheet('QPushButton:hover{border:0pt solid transparent;}')
+
+    def _update_icon(self, status):
+        if status:
+            self.setIcon(self._wait_icon)
+        else:
+            self.setIcon(QIcon())

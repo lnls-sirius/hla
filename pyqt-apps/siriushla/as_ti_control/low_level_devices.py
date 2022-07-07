@@ -1,4 +1,5 @@
 """."""
+import logging as _log
 import numpy as _np
 
 from qtpy.QtCore import Qt, Slot
@@ -739,7 +740,15 @@ class BucketListGraph(BaseWidget):
 
         org_bunch = _np.arange(1, 864) - 0.5
         org_curve = _np.zeros(864)
-        org_curve[new_array-1] = 1
+        # trying to catch bug observed where new_array
+        # had strange values greater than 864
+        try:
+            org_curve[new_array-1] = 1
+        except IndexError:
+            _log.warning(
+                'IndexError: Received array for '
+                f'{self.sender().address} with values out of [1, 864]')
+            _log.warning(f'IndexError: new_array: {new_array}')
 
         new_bunch = _np.linspace(1, 864, 10000) - 0.5
         new_bunch_indices = _np.searchsorted(
