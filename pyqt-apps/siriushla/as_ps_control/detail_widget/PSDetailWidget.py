@@ -673,6 +673,8 @@ class PSDetailWidget(QWidget):
         self.curve_siggen.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
         self.curve_siggen.autoRangeX = True
         self.curve_siggen.autoRangeY = True
+        self.curve_siggen.showXGrid = True
+        self.curve_siggen.showYGrid = True
         self.curve_siggen.plotItem.showButtons()
         self.curve_siggen.setBackgroundColor(QColor(255, 255, 255))
         self.curve_siggen.addChannel(
@@ -820,9 +822,12 @@ class PSDetailWidget(QWidget):
         self.wfm.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
         self.wfm.autoRangeX = True
         self.wfm.autoRangeY = True
+        self.wfm.showXGrid = True
+        self.wfm.showYGrid = True
+        self.wfm.setLabel('left', text='Current [A]')
+        self.wfm.setLabel('bottom', text='Index')
         self.wfm.plotItem.showButtons()
         self.wfm.setBackgroundColor(QColor(255, 255, 255))
-        # self.wfm.setShowLegend(True)
         self.wfm.addChannel(y_channel=wfm_data_sp_ch, name='Wfm-SP',
                             color='red', lineWidth=2)
         self.wfm.addChannel(y_channel=wfm_data_rb_ch, name='Wfm-RB',
