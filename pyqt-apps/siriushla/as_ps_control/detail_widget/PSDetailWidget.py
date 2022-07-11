@@ -404,7 +404,9 @@ class PSDetailWidget(QWidget):
             for aux in self._auxdev:
                 chs2vals.update({self._prefixed_psname+aux+":"+alarm+"-Mon": 0
                                  for alarm in alarms})
-            self.alarm_led = PyDMLedMultiChannel(self, chs2vals)
+            self.alarm_led = PyDMLedMultiChannel(
+                self, chs2vals,
+                color_list=[PyDMLed.Yellow, PyDMLed.LightGreen, PyDMLed.Gray])
 
         self.reset_bt = PyDMPushButton(
             parent=self, icon=qta.icon('fa5s.sync'), pressValue=1,
