@@ -672,7 +672,7 @@ def get_object(ismenubar=True, parent=None):
 
             all_dev = QAction(
                 'All'+('' if sec != 'si' else ' Families'), psmenu)
-            self.connect_newprocess(all_dev, scr)
+            self.connect_newprocess(all_dev, [scr, '--device', 'all'])
             psmenu.addAction(all_dev)
 
             # dips
@@ -741,7 +741,8 @@ def get_object(ismenubar=True, parent=None):
                             act = QAction(label, all_gph_menu)
                             self.connect_newprocess(
                                 act, ['sirius-hla-as-ps-graphmon.py',
-                                      '--section', sec.upper(), '--device', filt])
+                                      '--section', sec.upper(),
+                                      '--device', filt])
                             all_gph_menu.addAction(act)
                     else:
                         all_gph_act = QAction('Graph', all_menu)
