@@ -77,45 +77,45 @@ def get_strength_name(psname):
 
 def get_prop2width(psname):
     psmodel = PSSearch.conv_psname_2_psmodel(psname)
-    detail_wid = '8.5' if psname.dev != 'DCLink' else '3'
+    detail_wid = 8.5 if psname.dev != 'DCLink' else 3
     dic = {
         'detail': detail_wid,
-        'state': '6',
-        'intlk':  '5',
-        'setpoint': '6',
+        'state': 6,
+        'intlk':  5,
+        'setpoint': 6,
     }
     if psmodel != 'REGATRON_DCLink':
-        dic.update({'readback': '6'})
+        dic.update({'readback': 6})
     if psmodel != 'FOFB_PS':
-        dic.update({'monitor': '6'})
+        dic.update({'monitor': 6})
     else:
-        dic.update({'ctrlloop': '8'})
+        dic.update({'ctrlloop': 8})
     if psname.sec == 'LI':
-        dic['conn'] = '5'
+        dic['conn'] = 5
     elif psmodel != 'FOFB_PS':
         dic.update({
-            'opmode': '8',
-            'reset': '4',
+            'opmode': 8,
+            'reset': 4,
         })
         if psmodel != 'REGATRON_DCLink':
             dic.update({
-                'bbb': 10,
-                'udc': 10,
-                'ctrlmode': '6',
-                'ctrlloop': '8',
-                'wfmupdate': '8',
-                'updparms': '6',
+                'bbb': 12,
+                'udc': 12,
+                'ctrlmode': 6,
+                'ctrlloop': 8,
+                'wfmupdate': 8,
+                'updparms': 6,
             })
     if get_strength_name(psname):
         dic.update({
-            'strength_sp': '6',
-            'strength_rb': '6'})
+            'strength_sp': 6,
+            'strength_rb': 6})
         if psmodel != 'FOFB_PS':
-            dic.update({'strength_mon': '8'})
+            dic.update({'strength_mon': 8})
     if psname.dis == 'PU':
-        dic.update({'pulse': '8'})
+        dic.update({'pulse': 8})
     if HasTrim.match(psname):
-        dic.update({'trim': '2'})
+        dic.update({'trim': 2})
     return sort_propties(dic)
 
 
