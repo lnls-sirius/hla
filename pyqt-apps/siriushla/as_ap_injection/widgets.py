@@ -9,6 +9,7 @@ from qtpy.QtWidgets import QWidget, QLabel, QGridLayout, QGroupBox, \
 import qtawesome as qta
 
 from pydm.widgets import PyDMPushButton
+from pydm.connection_inspector import ConnectionInspector
 
 from siriuspy.envars import VACA_PREFIX
 from siriuspy.namesys import SiriusPVName
@@ -187,6 +188,9 @@ class InjSysStbyControlWidget(QWidget):
             self._setupSummary()
         else:
             self._setupFull()
+
+        self.conn_act = self.menu.addAction('Show Connections...')
+        self.conn_act.triggered.connect(self._show_connections)
 
         self._ch_cmdsts = SiriusConnectionSignal(
             self._inj_prefix.substitute(propty='InjSysCmdSts-Mon'))
@@ -468,6 +472,12 @@ class InjSysStbyControlWidget(QWidget):
     def contextMenuEvent(self, event):
         """Show a custom context menu."""
         self.menu.popup(self.mapToGlobal(event.pos()))
+
+    def _show_connections(self, checked):
+        """Show connections action."""
+        _ = checked
+        conn = ConnectionInspector(self)
+        conn.show()
 
 
 class ClockLabel(QLabel):
