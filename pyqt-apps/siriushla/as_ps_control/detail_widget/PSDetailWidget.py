@@ -112,7 +112,7 @@ class PSDetailWidget(QWidget):
         'CycleAuxParam-SP', 'CycleAuxParam-RB',
         'WfmIndex-Mon', 'WfmSyncPulseCount-Mon',
         'WfmUpdateAuto-Sel', 'WfmUpdateAuto-Sts',
-        'SOFBMode-Sel', 'SOFBMode-Sts',
+        'SOFBMode-Sel', 'SOFBMode-Sts', 'SOFBUpdate-Cmd',
         'PRUCtrlQueueSize-Mon', 'SyncPulse-Cmd',
         'Wfm-SP', 'Wfm-RB', 'WfmRef-Mon', 'Wfm-Mon',
         'Voltage-SP', 'Voltage-RB', 'VoltageRef-Mon', 'Voltage-Mon',
@@ -194,8 +194,8 @@ class PSDetailWidget(QWidget):
         self.wfmparams_box = QGroupBox('Wfm Params')
         self.wfmparams_box.setObjectName('wfmparams_box')
         if self._psmodel == 'FBP':
-            self.sofbparams_box = QGroupBox('SOFB Params')
-            self.sofbparams_box.setObjectName('sofbparams_box')
+            self.sofbmode_box = QGroupBox('SOFB Mode')
+            self.sofbmode_box.setObjectName('sofbmode_box')
         self.genparams_box = QGroupBox('General Params')
         self.genparams_box.setObjectName('genparams_box')
         self.current_box = QGroupBox("Current")
@@ -231,7 +231,7 @@ class PSDetailWidget(QWidget):
         self.ctrlloop_box.setLayout(self._ctrlLoopLayout())
         self.wfmparams_box.setLayout(self._wfmParamsLayout())
         if self._psmodel == 'FBP':
-            self.sofbparams_box.setLayout(self._sofbParamsLayout())
+            self.sofbmode_box.setLayout(self._sofbModeLayout())
         self.genparams_box.setLayout(self._genParamsLayout())
         self.current_box.setLayout(self._currentLayout())
         self.siggen_tab.setLayout(self._siggenLayout())
@@ -255,7 +255,7 @@ class PSDetailWidget(QWidget):
         controls.addWidget(self.interlock_box, 3, 1)
         if self._psmodel == 'FBP':
             controls.addWidget(self.genparams_box, 4, 0)
-            controls.addWidget(self.sofbparams_box, 4, 1)
+            controls.addWidget(self.sofbmode_box, 4, 1)
         else:
             controls.addWidget(self.genparams_box, 4, 0, 1, 2)
         controls.addWidget(self.wfmparams_box, 5, 0, 1, 2)
@@ -723,20 +723,20 @@ class PSDetailWidget(QWidget):
         layout.addWidget(wfm_updateauto_sts_led, 2, 2)
         return layout
 
-    def _sofbParamsLayout(self):
-        sofb_mode_ca = self._prefixed_psname + ':SOFBMode-Sts'
+    def _sofbModeLayout(self):
         sofb_mode_sel = self._prefixed_psname + ':SOFBMode-Sel'
+        sofb_mode_sts = self._prefixed_psname + ':SOFBMode-Sts'
 
-        sofb_mode_label = QLabel('SOFB Mode', self)
+        sofb_mode_label = QLabel('Enable', self)
         sofb_mode_btn = PyDMStateButton(self, sofb_mode_sel)
-        sofb_mode_sts_led = SiriusLedState(self, sofb_mode_ca)
+        sofb_mode_led = SiriusLedState(self, sofb_mode_sts)
 
         layout = QGridLayout()
         layout.setAlignment(Qt.AlignTop)
         layout.setColumnStretch(3, 1)
         layout.addWidget(sofb_mode_label, 0, 0, Qt.AlignRight)
         layout.addWidget(sofb_mode_btn, 0, 1, Qt.AlignHCenter)
-        layout.addWidget(sofb_mode_sts_led, 0, 2)
+        layout.addWidget(sofb_mode_led, 0, 2)
         return layout
 
     def _genParamsLayout(self):
@@ -1897,7 +1897,7 @@ class PSAuxMeasWidget(SiriusDialog):
         else:
             flay = QFormLayout(wid)
             for pv in self.auxmeas:
-                text = pv.split('-')[0]
+                text = pv.split('-')[0] if 'SOFB' not in pv else pv
                 lbl = PyDMLabel(
                     self, self._prefixed_psname.substitute(propty=pv))
                 lbl.showUnits = True
