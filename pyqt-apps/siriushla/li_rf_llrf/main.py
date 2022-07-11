@@ -5,9 +5,9 @@ import os as _os
 from qtpy.QtCore import Qt
 from qtpy.QtGui import QPixmap
 from qtpy.QtWidgets import QGroupBox, QGridLayout, QWidget, QLabel, \
-    QHBoxLayout, QPushButton, QSizePolicy, QWidget
+    QHBoxLayout, QVBoxLayout, QPushButton, QSizePolicy, QWidget
+from pydm.widgets import PyDMLabel, PyDMSpinbox
 import qtawesome as _qta
-
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 
 from .. import util as _util
@@ -15,7 +15,9 @@ from ..widgets import SiriusMainWindow
 from ..widgets import SiriusSpinbox, PyDMStateButton, SiriusLedState, \
     SiriusLabel, SiriusLedAlert
 from .details import DeviceParamSettingWindow
-from .widgets import DeltaIQPhaseCorrButton, GraphAmpPha, GraphIvsQ, RelativeWidget
+from .widgets import DeltaIQPhaseCorrButton, GraphAmpPha, GraphIvsQ, \
+    RelativeWidget
+from .util import BASIC_INFO
 
 
 class DEVICES(_enum.IntEnum):
@@ -56,33 +58,84 @@ class MainWindow(SiriusMainWindow):
         for relativeItem in self.relativeWidgets:
             relativeItem.relativeResize(event)
 
+    def buildPvName(self, pv_name, device, prefix='', sufix=''):
+        return 'LA-RF:LLRF:' + device + ":" + prefix + pv_name + sufix
+
     def imageViewer(self):
         ''' Build the image'''
         self.image_container.setPixmap(self.pixmap)
         self.image_container.setScaledContents(True)
         self.image_container.setSizePolicy(
             QSizePolicy.Ignored, QSizePolicy.Ignored)
-        self.image_container.setMinimumSize(750, 500)
+        self.image_container.setMinimumSize(950, 0)
         return self.image_container
 
-    def getWidType(self, wid_type=None, pv_name=None):
+    def getWidType(self, wid_type='label', pv_name=''):
         ''' Get widget type '''
-        # pv_name = self.getPvName(device, pv_name)
         if wid_type == 'spinBox':
             widget = PyDMSpinbox(init_channel=pv_name)
             widget.showStepExponent = False
-        elif wid_type == 'pushButton':
-            widget = QPushButton()
+        elif wid_type == 'label':
+            widget = PyDMLabel(init_channel=pv_name)
         return widget
 
-    def baseWidget(self, title=None, widType=None, hasUnit=False):
-        bw_hlay = QHBoxLayout()
-        bw_hlay.addWidget(QLabel(title))
+    def showChartBtn(self, chart_type):
+        widget = QPushButton(chart_type)
+        widget.clicked.connect(
+            lambda: print(chart_type))
+        widget.setMinimumSize(20, 20)
+        return widget
 
-        widget = self.getWidType(widType)
-        if hasUnit:
-            widget.showUnits = True
-        bw_hlay.addWidget(widget)
+    def baseWidget(self, title='', pv_name='', wid_type='label', hasUnit=False):
+        bw_hlay = QHBoxLayout()
+
+        bw_hlay.addWidget(
+            QLabel(title), alignment=Qt.AlignCenter)
+
+        widget = self.getWidType(wid_type, pv_name)
+        widget.showUnits = hasUnit
+        bw_hlay.addWidget(
+            widget, alignment=Qt.AlignCenter)
+
+        #Remove
+        bw_hlay.addWidget(
+            QLabel("um"), alignment=Qt.AlignCenter)
+
+        return bw_hlay
+
+    def basicInfoBox(self, device, channel, info):
+        group = QGroupBox()
+        bi_vlay = QVBoxLayout()
+        bi_vlay.setContentsMargins(5, 5, 5, 5)
+
+        for type_charts in info["Chart"]:
+            bi_vlay.addWidget(
+                self.showChartBtn(type_charts),
+                alignment=Qt.AlignCenter)
+
+        for basicInfo in ["Power", "Phase"]:
+            bi_vlay.addLayout(
+                self.baseWidget(
+                    basicInfo,
+                    self.buildPvName(
+                        channel, device,
+                        "GET_", '_' + basicInfo.upper()),
+                    'label', True))
+        group.setLayout(bi_vlay)
+        group.setStyleSheet('''
+            max-width: 160px; max-height: 150px;
+        ''')
+
+        relWid = RelativeWidget(
+            parent=self.image_container,
+            widget=group,
+            relativePos=info["Position"])
+        self.relativeWidgets.append(relWid)
+
+    def buildDevicesWidgets(self):
+        for device, channel in BASIC_INFO.items():
+            for pv_name, info in channel.items():
+                self.basicInfoBox(device, pv_name, info)
 
     def _setupui(self):
         """."""
@@ -91,36 +144,24 @@ class MainWindow(SiriusMainWindow):
         lay1 = QGridLayout()
         wid.setLayout(lay1)
 
-        lay1.addWidget(self.imageViewer(), 0, 0)
+        lay1.addWidget(self.imageViewer(), 0, 1, 3, 10)
+        self.buildDevicesWidgets()
 
-        hlay = QHBoxLayout()
-        label = QLabel("123123", self.image_container)
-        label.setStyleSheet("background-color: #00ff00;")
-        hlay.addWidget(label)
-        position=[50, 20, 10, 10]
-        relWid = RelativeWidget(
-            parent=self.image_container,
-            lay=hlay,
-            relativePos=position)
-        self.relativeWidgets.append(relWid)
-
-        # for dev in DEVICES:
-        #     devSHB = False
-        #     grbox = QGroupBox(dev.label, wid)
-        #     lay = QGridLayout()
-        #     lay.setContentsMargins(0, 0, 0, 0)
-        #     grbox.setLayout(lay)
-        #     if(dev == DEVICES.SHB):
-        #         devSHB = True
-        #     lay.addWidget(
-        #         ControlBox(
-        #             grbox, dev, prefix=self.prefix, is_shb=devSHB), 0, 0)
-        #     lay.addWidget(
-        #         GraphsWidget(
-        #             wid, dev, prefix=self.prefix), 0, 1)
-        #     lay.setColumnStretch(0, 1)
-        #     lay.setColumnStretch(1, 3)
-        #     lay1.addWidget(grbox, dev.value, 0)
+        for dev in DEVICES:
+            devSHB = False
+            grbox = QGroupBox(dev.label, wid)
+            lay = QGridLayout()
+            lay.setContentsMargins(10, 10, 10, 10)
+            grbox.setLayout(lay)
+            if(dev == DEVICES.SHB):
+                devSHB = True
+            lay.addWidget(
+                ControlBox(
+                    grbox, dev, prefix=self.prefix, is_shb=devSHB), 0, 0)
+            # lay.addWidget(
+            #     GraphsWidget(
+            #         wid, dev, prefix=self.prefix), 0, 1)
+            lay1.addWidget(grbox, dev.value, 0)
 
 
 class GraphsWidget(QWidget):

@@ -6,7 +6,7 @@ from qtpy.QtGui import QColor
 from qtpy.QtCore import QSize
 
 from qtpy.QtWidgets import QPushButton, QGridLayout, \
-    QWidget
+    QWidget, QHBoxLayout
 from pydm.widgets import PyDMWaveformPlot
 import qtawesome as _qta
 
@@ -192,10 +192,12 @@ class RelativeWidget(QWidget):
     ''' Widget that stays in a relative position in the window '''
     ''' Relative position and size are given in percentage based on the parent size'''
 
-    def __init__(self, parent=None, lay=None, relativePos=None):
+    def __init__(self, parent=None, widget=None, relativePos=None):
         """."""
         super().__init__(parent=parent)
         self.parent = parent
+        lay = QHBoxLayout()
+        lay.addWidget(widget)
         self.setLayout(lay)
         self.x = relativePos[0]
         self.y = relativePos[1]
