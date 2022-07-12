@@ -95,7 +95,7 @@ class DCCTMonitor(QWidget):
         self.timegraph.showLegend = False
         self.timegraph.showXGrid = True
         self.timegraph.showYGrid = True
-        self.timegraph.plotItem.showButtons()
+        self.timegraph.setLabel('left', text='Current [mA]')
         self.timecurve = self.timegraph.curveAtIndex(0)
 
         wid = QWidget()
@@ -112,7 +112,6 @@ class DCCTMonitor(QWidget):
             '<h3>Current Raw Readings</h3>', self, alignment=Qt.AlignCenter)
 
         self.wavegraph = SiriusWaveformPlot(self)
-        self.wavegraph.setLabels(left='Current [mA]', bottom='Index')
         channel = 'FAKE:Readings'
         self.rawreadings_channel = SignalChannel(
             self.dcct_prefix.substitute(propty='RawReadings-Mon'))
@@ -121,13 +120,14 @@ class DCCTMonitor(QWidget):
         self.wavegraph.addChannel(
             y_channel=channel, name='Current Raw Readings', color='blue',
             lineWidth=2, lineStyle=Qt.SolidLine)
+        self.wavegraph.setLabel('left', text='Current [mA]')
+        self.wavegraph.setLabel('bottom', text='Index')
         self.wavegraph.autoRangeX = True
         self.wavegraph.autoRangeY = True
         self.wavegraph.backgroundColor = QColor(255, 255, 255)
         self.wavegraph.showLegend = False
         self.wavegraph.showXGrid = True
         self.wavegraph.showYGrid = True
-        self.wavegraph.plotItem.showButtons()
         self.wavecurve = self.wavegraph.curveAtIndex(0)
 
         wid = QWidget()
@@ -318,7 +318,7 @@ class DCCTMonitor(QWidget):
         else:
             xdata = np.arange(0, smpl)
             xlabel = 'Index'
-        self.wavegraph.setLabels(bottom=xlabel)
+        self.wavegraph.setLabel('bottom', text=xlabel)
         self.wavecurve.receiveXWaveform(xdata)
 
     def _handle_data_visualization(self):
@@ -359,6 +359,10 @@ class EffMonitor(QWidget):
 
         self.graph = SiriusTimePlot(self)
         self.graph.timeSpan = 1000  # [s]
+        self.graph.addYChannel(
+            y_channel=self._pvname, name='Efficiency',
+            color='blue', lineWidth=2, lineStyle=Qt.SolidLine,
+            symbol='o', symbolSize=2)
         self.graph.setAutoRangeX(True)
         self.graph.setAutoRangeY(True)
         self.graph.backgroundColor = QColor(255, 255, 255)
@@ -366,12 +370,7 @@ class EffMonitor(QWidget):
         self.graph.showXGrid = True
         self.graph.showYGrid = True
         self.graph.maxRedrawRate = 2
-        self.graph.plotItem.showButtons()
-        self.graph.setLabels(left='Efficiency [%]')
-        self.graph.addYChannel(
-            y_channel=self._pvname, name='Efficiency',
-            color='blue', lineWidth=2, lineStyle=Qt.SolidLine,
-            symbol='o', symbolSize=2)
+        self.graph.setLabel('left', text='Efficiency [%]')
         leftAxis = self.graph.getAxis('left')
         leftAxis.setStyle(autoExpandTextSpace=False, tickTextWidth=25)
         self.curve = self.graph.curveAtIndex(0)

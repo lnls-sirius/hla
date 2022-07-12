@@ -26,6 +26,7 @@ class TuneSpectraView(SiriusWaveformPlot):
         self.prefix = prefix
         self.section = section
 
+        self.addAxis(plot_data_item=None, name='left', orientation='left')
         self.autoRangeX = True
         self.autoRangeY = True
         self.showXGrid = True
@@ -33,9 +34,9 @@ class TuneSpectraView(SiriusWaveformPlot):
         self.axisColor = QColor(0, 0, 0)
         self.backgroundColor = QColor(255, 255, 255)
         self.showLegend = False
-        self.plotItem.showButtons()
         leftAxis = self.getAxis('left')
         leftAxis.setStyle(autoExpandTextSpace=False, tickTextWidth=25)
+        leftAxis.setLabel('Tune', color='gray')
 
         self.x_channel = 'Tune'
 

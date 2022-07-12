@@ -20,6 +20,7 @@ class Graph(SiriusWaveformPlot):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.addAxis(plot_data_item=None, name='left', orientation='left')
         self.setObjectName('graph')
         self.setStyleSheet('#graph {min-height: 15em; min-width: 25em;}')
         self.maxRedrawRate = 2
@@ -32,10 +33,10 @@ class Graph(SiriusWaveformPlot):
         self.setAutoRangeY(True)
         self.setMinXRange(0.0)
         self.setMaxXRange(1.0)
-        self.plotItem.showButtons()
         self.setAxisColor(QColor(0, 0, 0))
         self.plotItem.getAxis('bottom').setStyle(tickTextOffset=15)
         self.plotItem.getAxis('left').setStyle(tickTextOffset=5)
+        self.plotItem.getAxis('left').setLabel('Current [A]', color='gray')
 
     def mouseDoubleClickEvent(self, ev):
         if ev.button() == Qt.LeftButton:

@@ -76,8 +76,9 @@ class CorrectorsWidget(BaseWidget):
                 maxkick = InfLine(
                     conv=1e-6, pos=0.0, pen=pen, angle=0, name=name)
                 minkick = InfLine(conv=-1e-6, pos=0.0, pen=pen, angle=0)
-                self.graph[pln].addItem(maxkick)
-                self.graph[pln].addItem(minkick)
+                view = self.graph[pln].getAxis('left').linkedView()
+                view.addItem(maxkick)
+                view.addItem(minkick)
                 chan = _ConnSig(
                     self.devpref.substitute(propty=pvi + corr + '-RB'))
                 self._chans.append(chan)

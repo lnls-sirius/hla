@@ -185,6 +185,7 @@ class BbBDriveSettingsWidget(QWidget):
             ychannel=dev_pref+':DRIVE2_MASK',
             xchannel=dev_pref+':SRAM_XSC',
             name='Drive2', color=QColor('orange'), offset=0.04)
+        graph_exct.setLabel('left', '')
 
         self.layout().addWidget(graph_exct, 3, 0, 1, 5)
         self.layout().addItem(QSpacerItem(20, 20), 2, 0)

@@ -204,6 +204,7 @@ class GraphIvsQ(QWidget):
         self.setLayout(lay1)
 
         graph = SiriusWaveformPlot(self)
+        graph.addAxis(plot_data_item=None, name='left', orientation='left')
         graph.setObjectName('graph')
         graph.setStyleSheet('#graph {min-height: 15em; min-width: 20em;}')
         graph.maxRedrawRate = 2
@@ -218,10 +219,7 @@ class GraphIvsQ(QWidget):
         graph.setMaxXRange(1.0)
         graph.setMinYRange(-1.0)
         graph.setMaxYRange(1.0)
-        graph.plotItem.showButtons()
         graph.setAxisColor(QColor(0, 0, 0))
-        graph.setYLabels('Q')
-        graph.setXLabels('I')
         axx = graph.plotItem.getAxis('right')
         axx.setVisible(True)
         axx.setTicks([])
@@ -256,6 +254,9 @@ class GraphIvsQ(QWidget):
             symbolSize=10)
         graph.addChannel(**opts)
 
+        graph.setLabel('left', text='Q', color='k')
+        graph.setLabel('bottom', text='I', color='k')
+
         lay1.addWidget(graph, 0, 0)
 
 
@@ -280,13 +281,13 @@ class GraphAmpPha(QWidget):
         self.setLayout(lay1)
 
         graph = SiriusTimePlot(self)
+        graph.addAxis(plot_data_item=None, name='left', orientation='left')
         graph.setObjectName('graph')
         graph.setStyleSheet('#graph {min-height: 7em; min-width: 20em;}')
         graph.maxRedrawRate = 2
         graph.setShowXGrid(True)
         graph.setShowYGrid(True)
         graph.setBackgroundColor(QColor(_util.get_appropriate_color('LI')))
-        graph.plotItem.showButtons()
         axx = graph.plotItem.getAxis('right')
         axx.setVisible(True)
         axx.setTicks([])
@@ -296,14 +297,13 @@ class GraphAmpPha(QWidget):
         axx.setTicks([])
         axx.setHeight(0)
         graph.setAxisColor(QColor(0, 0, 0))
-        graph.plotItem.setLabel('bottom', 'Time')
         graph.setTimeSpan(360)
         graph.setUpdateInterval(1/3)
         if self.prop == 'Amp':
-            graph.setLabel('left', 'Amplitude')
+            ylabel = 'Amplitude'
             chname = basename + ':GET_CH1_AMP'
         else:
-            graph.setLabel('left', 'Phase')
+            ylabel = 'Phase'
             chname = basename + ':GET_CH1_PHASE'
 
         opts = dict(
@@ -314,4 +314,8 @@ class GraphAmpPha(QWidget):
             symbol='o',
             symbolSize=10)
         graph.addYChannel(**opts)
+
+        graph.setLabel('left', ylabel, color='k')
+        graph.setLabel('bottom', 'Time', color='k')
+
         lay1.addWidget(graph, 0, 0)
