@@ -5,13 +5,12 @@ Based on ImageView from pydm and GradientLegend from pyqtgraph.
 
 import numpy as np
 import logging
-from qtpy.QtWidgets import QActionGroup, QToolTip
+from qtpy.QtWidgets import QActionGroup, QToolTip, QMenu
 from qtpy.QtGui import QColor, QLinearGradient, QBrush, QPen
 from qtpy.QtCore import Signal, Slot, Property, QTimer, Q_ENUMS, \
     QThread, Qt, QRectF, QPointF
 from pyqtgraph import ViewBox, ImageItem, AxisItem, GraphicsLayoutWidget, \
     ColorMap, GraphicsWidget, LabelItem, PlotCurveItem, mkPen
-from pyqtgraph.graphicsItems.ViewBox.ViewBoxMenu import ViewBoxMenu
 from pydm.widgets.channel import PyDMChannel
 from pydm.widgets.colormaps import cmaps, cmap_names, PyDMColorMap
 from pydm.widgets.base import PyDMWidget
@@ -360,25 +359,13 @@ class SiriusSpectrogramView(
         self.ROIWidthChannel = roiwidth_channel
         self.ROIHeightChannel = roiheight_channel
 
-    # --- Context menu ---
-    def widget_ctx_menu(self):
-        """
-        Fetch the Widget specific context menu.
-
-        It will be populated with additional tools by `assemble_tools_menu`.
-
-        Returns
-        -------
-        QMenu or None
-            If the return of this method is None a new QMenu will be created by
-            `assemble_tools_menu`.
-        """
-        self.menu = ViewBoxMenu(self._view)
-        cm_menu = self.menu.addMenu("Color Map")
+        # Context menu
+        self.contextMenuEvent = None
+        cm_menu = QMenu("Color Map")
         for act in self.cmap_for_action.keys():
             cm_menu.addAction(act)
         cm_menu.triggered.connect(self._changeColorMap)
-        return self.menu
+        self._view.scene().contextMenu.append(cm_menu)
 
     # --- Colormap methods ---
     def _changeColorMap(self, action):
