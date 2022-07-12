@@ -541,6 +541,8 @@ class RFMainControl(SiriusMainWindow):
             QSpacerItem(10, 10, QSzPlcy.Expanding, QSzPlcy.Expanding), 4, 4)
 
         self.graph_plunmotors = SiriusTimePlot(self)
+        self.graph_plunmotors.addAxis(
+            plot_data_item=None, name='left', orientation='left')
         self.graph_plunmotors.setObjectName('graph')
         self.graph_plunmotors.setStyleSheet(
             '#graph{min-height:15em;min-width:20em;max-height:15em;}')
@@ -558,6 +560,7 @@ class RFMainControl(SiriusMainWindow):
         self.graph_plunmotors.addYChannel(
             y_channel=self.prefix+self.chs['Tun']['PlM2Curr'], color='red',
             name='Motor 2', lineStyle=Qt.SolidLine, lineWidth=1)
+        self.graph_plunmotors.setLabel('left', '')
 
         wid_tun = QWidget()
         lay_plun = QGridLayout(wid_tun)
@@ -836,6 +839,8 @@ class RFMainControl(SiriusMainWindow):
     def _rampMonLayout(self):
         self.ramp_graph = SiriusWaveformPlot(
             parent=self, background=QColor(255, 255, 255))
+        self.ramp_graph.addAxis(
+            plot_data_item=None, name='left', orientation='left')
         self.ramp_graph.setObjectName('graph')
         self.ramp_graph.setStyleSheet(
             '#graph{min-height:15em;min-width:21em;max-height:15em;}')
@@ -847,7 +852,6 @@ class RFMainControl(SiriusMainWindow):
         self.ramp_graph.setAutoRangeX(True)
         self.ramp_graph.setAutoRangeY(True)
         self.ramp_graph.setAxisColor(QColor(0, 0, 0))
-        self.ramp_graph.plotItem.showButtons()
         self.ramp_graph.plotItem.getAxis('bottom').setStyle(tickTextOffset=15)
         self.ramp_graph.plotItem.getAxis('left').setStyle(tickTextOffset=5)
         self.ramp_graph.addChannel(
@@ -871,6 +875,7 @@ class RFMainControl(SiriusMainWindow):
             x_channel=self.prefix+'BR-RF-DLLRF-01:DiagWf32Scale.AVAL',
             redraw_mode=2, name='Power [W]', color=QColor('blue'))
         self.curve_pwr = self.ramp_graph.curveAtIndex(2)
+        self.ramp_graph.setLabel('left', '')
         self.rb_pwr = QRadioButton('Power [W]', self)
         self.rb_pwr.toggled.connect(_part(self._handle_rmpwfm_visibility, 2))
         hbox_rb = QHBoxLayout()
@@ -1014,6 +1019,8 @@ class RFMainControl(SiriusMainWindow):
         lay_vals.addWidget(self.cb_units, 0, 2)
 
         self.pwr_mon_graph = SiriusTimePlot(self)
+        self.pwr_mon_graph.addAxis(
+            plot_data_item=None, name='left', orientation='left')
         self.pwr_mon_graph.autoRangeX = True
         self.pwr_mon_graph.autoRangeY = True
         self.pwr_mon_graph.backgroundColor = QColor(255, 255, 255)
@@ -1085,6 +1092,7 @@ class RFMainControl(SiriusMainWindow):
             self.curves[name+' mV'] = self.pwr_mon_graph.curveAtIndex(3*idx+2)
 
             idx += 1
+        self.pwr_mon_graph.setLabel('left', '')
 
         if self.section == 'BO':
             for name in data:
@@ -1165,6 +1173,8 @@ class RFMainControl(SiriusMainWindow):
             self.led_tempcellok, alignment=Qt.AlignRight)
 
         self.tempcell_graph = SiriusTimePlot(self)
+        self.tempcell_graph.addAxis(
+            plot_data_item=None, name='left', orientation='left')
         self.tempcell_graph.setObjectName('tempcell_graph')
         self.tempcell_graph.autoRangeX = True
         self.tempcell_graph.autoRangeY = True
@@ -1173,6 +1183,7 @@ class RFMainControl(SiriusMainWindow):
         self.tempcell_graph.showYGrid = True
         self.tempcell_graph.timeSpan = 1800
         self.tempcell_graph.maxRedrawRate = 2
+
         hbox_cbs = QHBoxLayout()
 
         for idx in range(len(self.chs['Cav Sts']['Temp']['Cells'])):
@@ -1192,11 +1203,14 @@ class RFMainControl(SiriusMainWindow):
             cbx.stateChanged.connect(self._handle_curves_visibility)
             hbox_cbs.addWidget(cbx)
 
+        self.tempcell_graph.setLabel('left', '')
+
         pen = mkPen(color='k', width=2, style=Qt.DashLine)
         self.line_cell_maxlim = InfiniteLine(angle=0, pen=pen)
         self.line_cell_minlim = InfiniteLine(angle=0, pen=pen)
-        self.tempcell_graph.addItem(self.line_cell_maxlim)
-        self.tempcell_graph.addItem(self.line_cell_minlim)
+        view = self.tempcell_graph.getAxis('left').linkedView()
+        view.addItem(self.line_cell_maxlim)
+        view.addItem(self.line_cell_minlim)
 
         # # Coupler
         lb_tempcoup = QLabel('<h3> • Coupler</h3>', self)
@@ -1207,6 +1221,8 @@ class RFMainControl(SiriusMainWindow):
             self.led_tempcoupok, alignment=Qt.AlignRight)
 
         self.tempcoup_graph = SiriusTimePlot(self)
+        self.tempcoup_graph.addAxis(
+            plot_data_item=None, name='left', orientation='left')
         self.tempcoup_graph.setObjectName('tempcoup_graph')
         self.tempcoup_graph.autoRangeX = True
         self.tempcoup_graph.autoRangeY = True
@@ -1215,16 +1231,17 @@ class RFMainControl(SiriusMainWindow):
         self.tempcoup_graph.showYGrid = True
         self.tempcoup_graph.timeSpan = 1800
         self.tempcoup_graph.maxRedrawRate = 2
-
         self.tempcoup_graph.addYChannel(
             y_channel=self.prefix+self.chs['Cav Sts']['Temp']['Coupler'][0],
             color=self.chs['Cav Sts']['Temp']['Coupler'][1],
             name='Coupler', lineStyle=Qt.SolidLine, lineWidth=1)
         self.curves['Coupler'] = self.tempcoup_graph.curveAtIndex(0)
+        self.tempcoup_graph.setLabel('left', '')
         self.line_coup_maxlim = InfiniteLine(angle=0, pen=pen)
         self.line_coup_minlim = InfiniteLine(angle=0, pen=pen)
-        self.tempcoup_graph.addItem(self.line_coup_maxlim)
-        self.tempcoup_graph.addItem(self.line_coup_minlim)
+        view = self.tempcoup_graph.getAxis('left').linkedView()
+        view.addItem(self.line_coup_maxlim)
+        view.addItem(self.line_coup_minlim)
 
         self.cavtemp_wid = QWidget()
         lay_cavtemp = QVBoxLayout(self.cavtemp_wid)
@@ -1255,6 +1272,8 @@ class RFMainControl(SiriusMainWindow):
             self.led_tempcircok, alignment=Qt.AlignRight)
 
         self.tempcirc_graph = SiriusTimePlot(self)
+        self.tempcirc_graph.addAxis(
+            plot_data_item=None, name='left', orientation='left')
         self.tempcirc_graph.setObjectName('tempcirc_graph')
         self.tempcirc_graph.autoRangeX = True
         self.tempcirc_graph.autoRangeY = True
@@ -1271,13 +1290,15 @@ class RFMainControl(SiriusMainWindow):
             y_channel=self.prefix+self.chs['TL Sts']['Circ TOut'],
             name='CTOut', color='darkRed',
             lineStyle=Qt.SolidLine, lineWidth=1)
+        self.tempcirc_graph.setLabel('left', '')
 
         self.line_circ_maxlim = InfiniteLine(
             pos=lims_circ[1], angle=0, pen=pen)
         self.line_circ_minlim = InfiniteLine(
             pos=lims_circ[0], angle=0, pen=pen)
-        self.tempcirc_graph.addItem(self.line_circ_maxlim)
-        self.tempcirc_graph.addItem(self.line_circ_minlim)
+        view = self.tempcirc_graph.getAxis('left').linkedView()
+        view.addItem(self.line_circ_maxlim)
+        view.addItem(self.line_circ_minlim)
 
         self.trltemp_wid = QWidget()
         lay_trltemp = QVBoxLayout(self.trltemp_wid)
@@ -1301,6 +1322,8 @@ class RFMainControl(SiriusMainWindow):
         hbox_vacuum_state.addWidget(self.led_condrun, alignment=Qt.AlignRight)
 
         self.vacuum_graph = SiriusTimePlot(self)
+        self.vacuum_graph.addAxis(
+            plot_data_item=None, name='left', orientation='left')
         self.vacuum_graph.setObjectName('vacuum_graph')
         self.vacuum_graph.autoRangeX = True
         self.vacuum_graph.autoRangeY = True
@@ -1312,6 +1335,7 @@ class RFMainControl(SiriusMainWindow):
         self.vacuum_graph.addYChannel(
             y_channel=self.prefix+self.chs['Cav Sts']['Vac']['Cells'],
             name='Vacuum', color='black', lineStyle=Qt.SolidLine, lineWidth=1)
+        self.vacuum_graph.setLabel('left', '')
 
         self.vac_wid = QWidget()
         self.vac_wid.setStyleSheet("""

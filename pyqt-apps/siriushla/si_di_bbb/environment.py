@@ -30,12 +30,14 @@ class BbBEnvironmMonWidget(QWidget):
         graph_fpgatemp.addYChannel(
             self.dev_pref+':TEMP_FPGA', color=QColor('blue'))
         graph_fpgatemp.setPlotTitle('FPGA temperature')
+        graph_fpgatemp.setLabel('left', 'Temp. [°C]', color='gray')
 
         graph_pcbtemp = TimeGraph(background='w')
         graph_pcbtemp.timeSpan = 300
         graph_pcbtemp.addYChannel(
             self.dev_pref+':TEMP_AMB', color=QColor('blue'))
         graph_pcbtemp.setPlotTitle('PCB temperature')
+        graph_pcbtemp.setLabel('left', 'Temp. [°C]', color='gray')
 
         graph_exttemp = TimeGraph(background='w')
         graph_exttemp.timeSpan = 300
@@ -44,24 +46,28 @@ class BbBEnvironmMonWidget(QWidget):
             self.dev_pref+':TEMP_EXT1', color=QColor('blue'))
         graph_exttemp.addYChannel(
             self.dev_pref+':TEMP_EXT2', color=QColor('red'))
+        graph_exttemp.setLabel('left', 'Temp. [°C]', color='gray')
 
         graph_bulkvolt = TimeGraph(background='w')
         graph_bulkvolt.timeSpan = 300
         graph_bulkvolt.addYChannel(
             self.dev_pref+':VBULK', color=QColor('red'))
         graph_bulkvolt.setPlotTitle('Bulk Supply voltage')
+        graph_bulkvolt.setLabel('left', 'Voltage [V]', color='gray')
 
         graph_digivolt = TimeGraph(background='w')
         graph_digivolt.timeSpan = 300
         graph_digivolt.addYChannel(
             self.dev_pref+':VCC', color=QColor('red'))
         graph_digivolt.setPlotTitle('Digital 3.3V')
+        graph_digivolt.setLabel('left', 'Voltage [V]', color='gray')
 
         graph_fpgavolt = TimeGraph(background='w')
         graph_fpgavolt.timeSpan = 300
         graph_fpgavolt.addYChannel(
             self.dev_pref+':VINT', color=QColor('red'))
         graph_fpgavolt.setPlotTitle('FPGA core supply voltage')
+        graph_fpgavolt.setLabel('left', 'Voltage [V]', color='gray')
 
         lay_graphs = QGridLayout()
         lay_graphs.setContentsMargins(0, 0, 0, 0)

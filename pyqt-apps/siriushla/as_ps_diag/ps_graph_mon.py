@@ -311,13 +311,14 @@ class PSGraph(SiriusWaveformPlot):
                  symbols=list(), color='blue'):
         """Init."""
         super().__init__(parent)
+        self.addAxis(plot_data_item=None, name='left', orientation='left')
         self.setBackgroundColor(QColor(255, 255, 255))
         self.setAutoRangeX(True)
         self.setAutoRangeY(True)
         self.setShowXGrid(True)
         self.setShowYGrid(True)
-        self.plotItem.showButtons()
         self.plotItem.setLabel('bottom', 's', units='m')
+        self.plotItem.setLabel('left', ' ')
         self._nok_pen = mkPen(QColor(color))
         self._nok_brush = mkBrush(QColor(255, 0, 0))
         self._ok_pen = mkPen(QColor(color))

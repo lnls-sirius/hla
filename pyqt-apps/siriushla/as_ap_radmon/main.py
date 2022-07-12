@@ -110,6 +110,8 @@ class RadTotDoseMonitor(QWidget):
         timespan = 30*60  # [s]
         self.timeplot = SiriusTimePlot(
             parent=self, background='w', show_tooltip=True)
+        self.timeplot.addAxis(
+            plot_data_item=None, name='left', orientation='left')
         self.timeplot.timeSpan = timespan
         self.timeplot.bufferSize = 4*60*60*10
         self.timeplot.autoRangeY = True

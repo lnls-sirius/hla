@@ -152,13 +152,6 @@ class LiBeamProfile(SiriusMainWindow):
         '''Build a graph widget'''
 
         graph_plot = SiriusWaveformPlot(background="#ffffff")
-        graph_plot.setPlotTitle(title)
-        graph_plot.setLabel(
-            'left',
-            text=graph_data.get("labelY"))
-        graph_plot.setLabel(
-            'bottom',
-            text=graph_data.get("labelX"))
         graph_plot.addChannel(
             y_channel=self.getPvName(
                 device, graph_data['channel']['centroid']),
@@ -169,6 +162,13 @@ class LiBeamProfile(SiriusMainWindow):
                 device, graph_data['channel']['data']),
             color="#ff0000",
             lineWidth=1)
+        graph_plot.setPlotTitle(title)
+        graph_plot.setLabel(
+            'left',
+            text=graph_data.get("labelY"))
+        graph_plot.setLabel(
+            'bottom',
+            text=graph_data.get("labelX"))
         graph_plot.setMinimumSize(50, 100)
 
         return graph_plot

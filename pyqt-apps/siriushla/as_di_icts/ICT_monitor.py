@@ -11,6 +11,7 @@ from qtpy.QtWidgets import QFormLayout, QGridLayout, QHBoxLayout, \
     QVBoxLayout, QSizePolicy as QSzPlcy, QLabel, QPushButton,\
     QSpacerItem, QGroupBox, QWidget
 import qtawesome as qta
+from pyqtgraph import BarGraphItem
 
 from pydm.widgets import PyDMLabel, PyDMEnumComboBox, PyDMSpinbox, \
     PyDMPushButton
@@ -584,6 +585,8 @@ class _ICTCalibration(QWidget):
 
     def _setupGraph(self):
         graph_rawread = _MyWaveformPlot(self)
+        graph_rawread.addAxis(
+            plot_data_item=None, name='left', orientation='left')
         graph_rawread.setObjectName('graph_rawread')
         graph_rawread.autoRangeX = True
         graph_rawread.autoRangeY = True
@@ -593,7 +596,8 @@ class _ICTCalibration(QWidget):
         graph_rawread.showYGrid = True
         graph_rawread.setStyleSheet("""
             #graph_rawread{min-width:36em;\nmin-height:28em;}""")
-        graph_rawread.setLabels(left='Raw Readings', bottom='Index')
+        graph_rawread.setLabel('left', text='Raw Readings', color='gray')
+        graph_rawread.setLabel('bottom', text='Index', color='gray')
         graph_rawread.addChannel(
             y_channel=self.ict_prefix.substitute(propty='RawPulse-Mon'),
             name='RawPulse', color='blue', lineWidth=2, lineStyle=Qt.SolidLine)
@@ -650,9 +654,12 @@ class _MyWaveformCurveItem(WaveformCurveItem):
 
 class _MyWaveformPlot(SiriusWaveformPlot):
 
-    def addChannel(self, y_channel=None, x_channel=None, name=None,
-                   color=None, lineStyle=None, lineWidth=None,
-                   symbol=None, symbolSize=None, redraw_mode=None):
+    def addChannel(self, y_channel=None, x_channel=None, plot_style=None,
+                   name=None, color=None, lineStyle=None, lineWidth=None,
+                   symbol=None, symbolSize=None, barWidth=None,
+                   upperThreshold=None, lowerThreshold=None,
+                   thresholdColor=None, redraw_mode=None, yAxisName=None):
+        """Reimplement to use _MyWaveformCurveItem."""
         plot_opts = {}
         plot_opts['symbol'] = symbol
         if symbolSize is not None:
@@ -665,8 +672,17 @@ class _MyWaveformPlot(SiriusWaveformPlot):
             plot_opts['redraw_mode'] = redraw_mode
         self._needs_redraw = False
         curve = _MyWaveformCurveItem(
-            y_addr=y_channel, x_addr=x_channel, name=name,
-            color=color, **plot_opts)
+            y_addr=y_channel, x_addr=x_channel, plot_style=plot_style,
+            name=name, color=color, yAxisName=yAxisName, **plot_opts)
         self.channel_pairs[(y_channel, x_channel)] = curve
-        self.addCurve(curve, curve_color=color)
+        if plot_style == 'Bar':
+            if barWidth is None:
+                barWidth = 1.0
+            curve.bar_graph_item = BarGraphItem(
+                x=[], height=[], width=barWidth, brush=color)
+            curve.setBarGraphInfo(
+                barWidth, upperThreshold, lowerThreshold, thresholdColor)
+        self.addCurve(curve, curve_color=color, y_axis_name=yAxisName)
+        if curve.bar_graph_item is not None:
+            curve.getViewBox().addItem(curve.bar_graph_item)
         curve.data_changed.connect(self.set_needs_redraw)

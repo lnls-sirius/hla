@@ -52,12 +52,15 @@ class EfficiencyMonitor(SiriusMainWindow):
         timespan = 30*60  # [s]
         self.timeplot = SiriusTimePlot(parent=self, background='w')
         self.timeplot.timeSpan = timespan
+        self.timeplot.addAxis(
+            plot_data_item=None, name='left', orientation='left')
         self.timeplot.autoRangeY = False
         self.timeplot.maxYRange = 150.0
         self.timeplot.minYRange = 0.0
         self.timeplot.showXGrid = True
         self.timeplot.showYGrid = True
-        self.timeplot.setLabel('left', text='Efficiency', units='%')
+        self.timeplot.setLabel(
+            'left', text='Efficiency', units='%', color='gray')
         self.timeplot.setObjectName('timeplot')
         self.timeplot.setStyleSheet(
             '#timeplot{min-width:24em; min-height: 10em;}')

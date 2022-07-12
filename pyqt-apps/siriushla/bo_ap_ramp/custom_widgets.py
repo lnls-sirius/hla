@@ -110,6 +110,7 @@ class GraphKicks(SiriusWaveformPlot):
                  tooltip_names=list(), c0=0, color='blue'):
         """Init."""
         super().__init__(parent)
+        self.addAxis(plot_data_item=None, name='left', orientation='left')
         self.setBackgroundColor(QColor(255, 255, 255))
         self.setAutoRangeX(True)
         self.setAutoRangeY(True)

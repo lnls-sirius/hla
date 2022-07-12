@@ -7,7 +7,6 @@ from qtpy.QtWidgets import QInputDialog, QLabel, QApplication, QAction
 
 from pyqtgraph import ViewBox, mkBrush
 
-from pydm import utilities
 from pydm.widgets.timeplot import TimePlotCurveItem, PyDMTimePlot, \
     DEFAULT_X_MIN
 
@@ -55,7 +54,7 @@ class SiriusTimePlotItem(TimePlotCurveItem):
             super().receiveNewValue(new_value)
 
     @Slot()
-    def redrawCurve(self):
+    def redrawCurve(self, min_x=None, max_x=None):
         """
         Rederive redrawCurve to use data only refered to timespan.
         """
@@ -72,7 +71,13 @@ class SiriusTimePlotItem(TimePlotCurveItem):
             if not self._plot_by_timestamps:
                 x -= now
 
-            self.setData(y=y, x=x)
+            if self.plot_style is None or self.plot_style == 'Line':
+                self.setData(y=y, x=x)
+            elif self.plot_style == 'Bar':
+                min_index = _np.searchsorted(x, min_x)
+                max_index = _np.searchsorted(x, max_x) + 1
+                self._setBarGraphItem(
+                    x=x[min_index:max_index], y=y[min_index:max_index])
         except (ZeroDivisionError, OverflowError):
             # Solve an issue with pyqtgraph and initial downsampling
             pass
@@ -89,6 +94,7 @@ class SiriusTimePlotItem(TimePlotCurveItem):
         self.data_buffer = _np.zeros((2, self._bufferSize),
                                      order='f', dtype=float)
 
+
 class SiriusTimePlot(PyDMTimePlot):
     """PyDMTimePlot with some extra features."""
 
@@ -99,13 +105,6 @@ class SiriusTimePlot(PyDMTimePlot):
         super().__init__(*args, **kws)
         self._filled_with_arch_data = dict()
         self._show_tooltip = show_tooltip
-
-        self.vb2 = ViewBox()
-        self.plotItem.scene().addItem(self.vb2)
-        self.vb2.setXLink(self.plotItem)
-        self.plotItem.getAxis('right').linkToView(self.vb2)
-        self._updateViews()
-        self.plotItem.vb.sigResized.connect(self._updateViews)
 
         self.carch = None
 
@@ -149,55 +148,12 @@ class SiriusTimePlot(PyDMTimePlot):
         """
         self._show_tooltip = new_show
 
-    def addCurve(self, plot_item, axis='left', curve_color=None):
-        """Reimplement to use right axis."""
-        if curve_color is None:
-            curve_color = utilities.colors.default_colors[
-                len(self._curves) % len(utilities.colors.default_colors)]
-            plot_item.color_string = curve_color
-        self._curves.append(plot_item)
-        if axis == 'left':
-            self.plotItem.addItem(plot_item)
-        elif axis == 'right':
-            if not self.plotItem.getAxis('right').isVisible():
-                self.plotItem.showAxis('right')
-            self.vb2.addItem(plot_item)
-        else:
-            raise ValueError('Choose a valid axis!')
-
-        # Connect channels
-        for chan in plot_item.channels():
-            if chan:
-                chan.connect()
-
-    def addYChannel(
-            self, y_channel=None, name=None, color=None, lineStyle=None,
-            lineWidth=None, symbol=None, symbolSize=None, axis='left'):
-        """Reimplement to use SiriusTimePlotItem and right axis."""
-        plot_opts = dict()
-        plot_opts['symbol'] = symbol
-        if symbolSize is not None:
-            plot_opts['symbolSize'] = symbolSize
-        if lineStyle is not None:
-            plot_opts['lineStyle'] = lineStyle
-        if lineWidth is not None:
-            plot_opts['lineWidth'] = lineWidth
-
-        # Add curve
-        new_curve = SiriusTimePlotItem(
-            self, y_channel,
-            plot_by_timestamps=self._plot_by_timestamps,
-            name=name, color=color, **plot_opts)
-        new_curve.setUpdatesAsynchronously(self.updatesAsynchronously)
-        new_curve.setBufferSize(self._bufferSize, initialize_buffer=True)
-
-        self.update_timer.timeout.connect(new_curve.asyncUpdate)
-        self.addCurve(new_curve, axis, curve_color=color)
-
-        new_curve.data_changed.connect(self.set_needs_redraw)
-        self.redraw_timer.start()
-
-        return new_curve
+    def createCurveItem(self, y_channel, plot_by_timestamps, plot_style, name,
+                        color, yAxisName, useArchiveData, **plot_opts):
+        return SiriusTimePlotItem(
+            self, y_channel, plot_by_timestamps=plot_by_timestamps,
+            plot_style=plot_style, name=name, color=color,
+            yAxisName=yAxisName, **plot_opts)
 
     def updateXAxis(self, update_immediately=False):
         """Reimplement to show only existing range."""
@@ -205,7 +161,7 @@ class SiriusTimePlot(PyDMTimePlot):
             return
 
         if self._plot_by_timestamps:
-            if self._update_mode == PyDMTimePlot.SynchronousMode:
+            if self._update_mode == PyDMTimePlot.OnValueChange:
                 maxrange = max([curve.max_x() for curve in self._curves])
             else:
                 maxrange = time.time()
@@ -226,10 +182,6 @@ class SiriusTimePlot(PyDMTimePlot):
             if diff_time > DEFAULT_X_MIN:
                 diff_time = DEFAULT_X_MIN
             self.getViewBox().setLimits(minXRange=diff_time)
-
-    def _updateViews(self):
-        self.vb2.setGeometry(self.plotItem.vb.sceneBoundingRect())
-        self.vb2.linkedViewChanged(self.plotItem.vb, self.vb2.XAxis)
 
     def _get_value_from_arch(
             self, pvname, t_init, t_end, process_type, process_bin_intvl):

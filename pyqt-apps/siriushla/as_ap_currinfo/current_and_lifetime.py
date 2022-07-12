@@ -114,10 +114,12 @@ class CurrLTWindow(SiriusMainWindow):
 
         # # Graph
         self.graph = SiriusTimePlot(self, background='w')
-        self.graph.plotItem.getAxis('left').setLabel(
-            'Current [mA]', color='blue')
-        self.graph.plotItem.getAxis('right').setLabel(
-            'Lifetime [h]', color='red')
+        self.graph.addAxis(
+            plot_data_item=None, name='curr', orientation='left')
+        self.graph.setLabel('curr', text='Current [mA]', color='blue')
+        self.graph.addAxis(
+            plot_data_item=None, name='lt', orientation='right')
+        self.graph.setLabel('lt', text='Lifetime [h]', color='red')
         self.graph.showLegend = False
         self.graph.showXGrid = True
         self.graph.showYGrid = True
@@ -134,7 +136,7 @@ class CurrLTWindow(SiriusMainWindow):
 
         pvname = self.devname.substitute(propty='Current-Mon')
         self.graph.addYChannel(
-            y_channel=pvname, axis='left', name='Current',
+            y_channel=pvname, yAxisName='curr', name='Current',
             color='blue', lineWidth=1)
         self._curve_current = self.graph.curveAtIndex(0)
         self.graph.fill_curve_with_archdata(
@@ -144,15 +146,15 @@ class CurrLTWindow(SiriusMainWindow):
         pvname = _PVName(
             'SI-01M1:DI-BPM:Sum-Mon').substitute(prefix=self.prefix)
         self.graph.addYChannel(
-            y_channel=pvname,
-            axis='left', name='Current', color='blue', lineWidth=1)
+            y_channel=pvname, yAxisName='curr', name='Current',
+            color='blue', lineWidth=1)
         self._curve_bpmsum = self.graph.curveAtIndex(1)
         self.graph.fill_curve_with_archdata(
             self._curve_bpmsum,  pvname,
             t_init=t_init_iso, t_end=t_end_iso)
 
         self.graph.addYChannel(
-            y_channel='FAKE:Lifetime', axis='right', name='Lifetime',
+            y_channel='FAKE:Lifetime', yAxisName='lt', name='Lifetime',
             color='red', lineWidth=1)
         self._curve_lifetimedcct = self.graph.curveAtIndex(2)
         self.graph.fill_curve_with_archdata(
@@ -161,7 +163,7 @@ class CurrLTWindow(SiriusMainWindow):
             t_init=t_init_iso, t_end=t_end_iso, factor=3600)
 
         self.graph.addYChannel(
-            y_channel='FAKE:LifetimeBPM', axis='right', name='Lifetime',
+            y_channel='FAKE:LifetimeBPM', yAxisName='lt', name='Lifetime',
             color='red', lineWidth=1)
         self._curve_lifetimebpm = self.graph.curveAtIndex(3)
         self.graph.fill_curve_with_archdata(
@@ -200,11 +202,11 @@ class CurrLTWindow(SiriusMainWindow):
             self._update_waveforms)
 
         self.graph.addYChannel(
-            y_channel='FAKE:DCCTBuffer', axis='left', name='DCCTBuffer',
+            y_channel='FAKE:DCCTBuffer', yAxisName='curr', name='DCCTBuffer',
             color='blue', lineStyle=Qt.NoPen, symbolSize=10, symbol='o')
         self._curve_dcct_buff = self.graph.curveAtIndex(4)
         self.graph.addYChannel(
-            y_channel='FAKE:BPMBuffer', axis='left', name='BPMBuffer',
+            y_channel='FAKE:BPMBuffer', yAxisName='curr', name='BPMBuffer',
             color='blue', lineStyle=Qt.NoPen, symbolSize=10, symbol='o')
         self._curve_bpm_buff = self.graph.curveAtIndex(5)
 

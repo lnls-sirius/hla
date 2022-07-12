@@ -670,13 +670,15 @@ class PSDetailWidget(QWidget):
         self.curve_siggen.setObjectName('graph')
         self.curve_siggen.setStyleSheet(
             '#graph{max-height:15em; max-width:16.5em;}')
-        self.curve_siggen.setLabels(left='Current [A]', bottom='T [s]')
+        self.curve_siggen.addAxis(
+            plot_data_item=None, name='left', orientation='left')
+        self.curve_siggen.setLabel('left', text='Current [A]', color='gray')
+        self.curve_siggen.setLabel('bottom', text='Time [s]', color='gray')
         self.curve_siggen.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
         self.curve_siggen.autoRangeX = True
         self.curve_siggen.autoRangeY = True
         self.curve_siggen.showXGrid = True
         self.curve_siggen.showYGrid = True
-        self.curve_siggen.plotItem.showButtons()
         self.curve_siggen.setBackgroundColor(QColor(255, 255, 255))
         self.curve_siggen.addChannel(
             y_channel='SigGen', x_channel='T [s]',
@@ -820,15 +822,14 @@ class PSDetailWidget(QWidget):
         self.wfm = SiriusWaveformPlot()
         self.wfm.setObjectName('graph')
         self.wfm.setStyleSheet('#graph{max-height:15em; max-width:16.5em;}')
+        self.wfm.addAxis(plot_data_item=None, name='left', orientation='left')
         self.wfm.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
         self.wfm.autoRangeX = True
         self.wfm.autoRangeY = True
         self.wfm.showXGrid = True
         self.wfm.showYGrid = True
-        self.wfm.setLabel('left', text='Current [A]')
-        self.wfm.setLabel('bottom', text='Time [s]')
+        self.wfm.setLabel('left', text='Current [A]', color='gray')
         self.wfm.plotItem.ctrl.fftCheck.toggled.connect(self._wfmUpdAxisLabel)
-        self.wfm.plotItem.showButtons()
         self.wfm.setBackgroundColor(QColor(255, 255, 255))
         self.wfm.addChannel(y_channel=wfm_data_sp_ch, name='Wfm-SP',
                             color='red', lineWidth=2)
@@ -1845,51 +1846,39 @@ class FastCorrPSDetailWidget(PSDetailWidget):
         chn = FastCorrPSDetailWidget.CONV_CORR2CHANNEL[subnam+'-'+dev]
 
         self.graph_curr = SiriusWaveformPlot()
+        self.graph_curr.addChannel(
+            y_channel=fofbctrl.substitute(
+                propty='GENConvArrayDataCH'+str(chn)),
+            name='Current', color='blue', lineWidth=2)
         # self.graph_curr.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
         self.graph_curr.autoRangeX = True
         self.graph_curr.autoRangeY = True
         self.graph_curr.showXGrid = True
         self.graph_curr.showYGrid = True
         self.graph_curr.title = 'Current'
-        self.graph_curr.setLabel("left", text='Current [A]')
-        self.graph_curr.setLabel("bottom", text='Index')
-        self.graph_curr.plotItem.showButtons()
+        self.graph_curr.setLabel('left', text='Current [A]', color='gray')
+        self.graph_curr.setLabel('bottom', text='Index')
         self.graph_curr.setBackgroundColor(QColor(255, 255, 255))
-        self.graph_curr.addChannel(
-            y_channel=fofbctrl.substitute(
-                propty='GENConvArrayDataCH'+str(chn)),
-            name='Current', color='blue', lineWidth=2)
 
         self.graph_volt = SiriusWaveformPlot()
+        self.graph_volt.addChannel(
+            y_channel=fofbctrl.substitute(
+                propty='GENConvArrayDataCH'+str(chn+12)),
+            name='Voltage', color='blue', lineWidth=2)
         # self.graph_volt.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
         self.graph_volt.autoRangeX = True
         self.graph_volt.autoRangeY = True
         self.graph_volt.showXGrid = True
         self.graph_volt.showYGrid = True
         self.graph_volt.title = 'Voltage'
-        self.graph_volt.setLabel("left", text='Voltage [V]')
-        self.graph_volt.setLabel("bottom", text='Index')
-        self.graph_volt.plotItem.showButtons()
+        self.graph_volt.setLabel('left', text='Voltage [V]', color='gray')
+        self.graph_volt.setLabel('bottom', text='Index')
         self.graph_volt.setBackgroundColor(QColor(255, 255, 255))
-        self.graph_volt.addChannel(
-            y_channel=fofbctrl.substitute(
-                propty='GENConvArrayDataCH'+str(chn+12)),
-            name='Voltage', color='blue', lineWidth=2)
 
         self.graph_chist = SiriusTimePlot()
-        self.graph_chist.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
-        self.graph_chist.autoRangeX = True
-        self.graph_chist.autoRangeY = True
-        self.graph_chist.showXGrid = True
-        self.graph_chist.showYGrid = True
-        self.graph_chist.title = 'Current Mean History'
-        self.graph_chist.setLabel("left", text='Current [A]')
-        self.graph_chist.showLegend = True
         timespan = 5*60  # 5min
         self.graph_chist.timeSpan = timespan  # [s]
         self.graph_chist.bufferSize = 5*timespan  # [max 5 samples/s]
-        self.graph_chist.plotItem.showButtons()
-        self.graph_chist.setBackgroundColor(QColor(255, 255, 255))
         self.graph_chist.addYChannel(
             y_channel=self._prefixed_psname.substitute(propty='Current-SP'),
             name='SP', color='red', lineWidth=2)
@@ -1904,6 +1893,15 @@ class FastCorrPSDetailWidget(PSDetailWidget):
             y_channel='FAKE:CurrentHistory',
             name='Mon', color='black', lineWidth=2)
         self.curve_chist = self.graph_chist.curveAtIndex(2)
+        self.graph_chist.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
+        self.graph_chist.autoRangeX = True
+        self.graph_chist.autoRangeY = True
+        self.graph_chist.showXGrid = True
+        self.graph_chist.showYGrid = True
+        self.graph_chist.title = 'Current Mean History'
+        self.graph_chist.setLabel('left', text='Current [A]', color='gray')
+        self.graph_chist.showLegend = True
+        self.graph_chist.setBackgroundColor(QColor(255, 255, 255))
 
         tab = QTabWidget(self)
         tab.setObjectName('SITab')
