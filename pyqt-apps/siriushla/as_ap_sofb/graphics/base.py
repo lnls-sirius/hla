@@ -12,12 +12,11 @@ from qtpy.QtGui import QColor
 from pyqtgraph import mkBrush, mkPen, InfiniteLine, functions
 import qtawesome as qta
 
-from pydm.widgets import PyDMWaveformPlot
-
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.sofb.csdev import SOFBFactory
 
-from siriushla.widgets import SiriusConnectionSignal as _ConnSig
+from siriushla.widgets import SiriusConnectionSignal as _ConnSig, \
+    SiriusWaveformPlot
 
 
 class BaseWidget(QWidget):
@@ -570,7 +569,7 @@ class Label(QLabel):
         super().setText(text)
 
 
-class Graph(PyDMWaveformPlot):
+class Graph(SiriusWaveformPlot):
     """."""
 
     doubleclick = Signal(int)

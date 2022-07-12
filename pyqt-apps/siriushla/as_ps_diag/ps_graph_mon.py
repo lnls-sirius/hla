@@ -12,7 +12,6 @@ from qtpy.QtWidgets import QGridLayout, QWidget, QLabel, QHBoxLayout, \
     QAction, QMenu
 import qtawesome as qta
 from pyqtgraph import mkPen, mkBrush
-from pydm.widgets import PyDMWaveformPlot
 from pydm.connection_inspector import ConnectionInspector
 
 from siriuspy.util import get_strength_label
@@ -23,7 +22,7 @@ from siriuspy.search import PSSearch as _PSSearch, \
 from siriuspy.pwrsupply.csdev import Const as _PSConst
 
 from siriushla.util import run_newprocess
-from siriushla.widgets import SiriusMainWindow
+from siriushla.widgets import SiriusMainWindow, SiriusWaveformPlot
 
 
 class PSGraphMonWindow(SiriusMainWindow):
@@ -305,7 +304,7 @@ class PSGraphProptySelWidget(QWidget):
             self.cb_prop_symb.setCurrentText(currsymb)
 
 
-class PSGraph(PyDMWaveformPlot):
+class PSGraph(SiriusWaveformPlot):
     """Power supply data graph."""
 
     def __init__(self, parent=None, psnames=list(), y_data=list(),

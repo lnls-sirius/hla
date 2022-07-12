@@ -8,7 +8,7 @@ from qtpy.QtWidgets import QLabel, QPushButton, QGroupBox, QVBoxLayout, \
     QHBoxLayout, QGridLayout, QMenuBar, QSplitter, QTabWidget, QWidget, \
     QSizePolicy as QSzPol, QCheckBox, QFrame, QAbstractItemView, QHeaderView
 import qtawesome as qta
-from pydm.widgets import PyDMLabel, PyDMLineEdit, PyDMWaveformPlot
+from pydm.widgets import PyDMLabel, PyDMLineEdit
 
 from siriuspy.search import LLTimeSearch, HLTimeSearch
 from siriuspy.namesys import SiriusPVName as _PVName
@@ -17,7 +17,7 @@ from siriuspy.timesys import csdev as _cstime
 from ..widgets import PyDMLed, PyDMStateButton, SiriusLedState, \
     SiriusEnumComboBox, SiriusLedAlert, SiriusLabel, \
     SiriusSpinbox, SiriusConnectionSignal, SiriusWaveformTable, \
-    SiriusPushButton, SiriusHexaSpinbox
+    SiriusPushButton, SiriusHexaSpinbox, SiriusWaveformPlot
 from ..widgets.windows import create_window_from_widget, SiriusDialog
 from ..util import connect_window, get_appropriate_color
 
@@ -658,7 +658,7 @@ class BucketListGraph(BaseWidget):
 
     def _setupUi(self):
         # Graph
-        self.graph = PyDMWaveformPlot(self)
+        self.graph = SiriusWaveformPlot(self)
         self.graph.setBackgroundColor(QColor(255, 255, 255))
         self.graph.maxRedrawRate = 2
         self.graph.mouseEnabledX = True

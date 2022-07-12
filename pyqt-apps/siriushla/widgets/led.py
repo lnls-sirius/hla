@@ -10,7 +10,7 @@ from qtpy.QtGui import QColor
 from qtpy.QtCore import Property, Slot, Signal
 from pydm.widgets.base import PyDMWidget
 from pydm.widgets.channel import PyDMChannel
-from pydm.widgets import PyDMWaveformPlot
+from .waveformplot import SiriusWaveformPlot
 from .windows import SiriusDialog
 from .QLed import QLed
 
@@ -552,7 +552,7 @@ class _DiffStatus(SiriusDialog):
                             len(self._current), len(self._desired))
                 else:
                     self._text = 'Difference: '
-                    self._plot = PyDMWaveformPlot()
+                    self._plot = SiriusWaveformPlot()
                     self._plot.autoRangeX = True
                     self._plot.autoRangeY = True
                     self._plot.plotItem.showButtons()

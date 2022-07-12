@@ -10,13 +10,13 @@ from qtpy.QtWidgets import QWidget, QLabel, QPushButton, QGridLayout, \
 
 import qtawesome as qta
 
-from pydm.widgets import PyDMLabel, PyDMWaveformPlot
+from pydm.widgets import PyDMLabel
 
 from siriuspy.namesys import SiriusPVName
 from siriuspy.diagbeam.dcct.csdev import Const as _DCCTc
 from siriuspy.search import LLTimeSearch as _LLTimeSearch
 from siriushla.widgets import SiriusConnectionSignal as SignalChannel, \
-    SiriusTimePlot, QSpinBoxPlus
+    SiriusTimePlot, QSpinBoxPlus, SiriusWaveformPlot
 
 
 class DCCTMonitor(QWidget):
@@ -111,7 +111,7 @@ class DCCTMonitor(QWidget):
         self.label_waveread = QLabel(
             '<h3>Current Raw Readings</h3>', self, alignment=Qt.AlignCenter)
 
-        self.wavegraph = PyDMWaveformPlot(self)
+        self.wavegraph = SiriusWaveformPlot(self)
         self.wavegraph.setLabels(left='Current [mA]', bottom='Index')
         channel = 'FAKE:Readings'
         self.rawreadings_channel = SignalChannel(

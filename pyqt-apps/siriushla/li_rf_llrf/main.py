@@ -6,15 +6,14 @@ from qtpy.QtCore import Qt
 from qtpy.QtGui import QColor
 from qtpy.QtWidgets import QGroupBox, QGridLayout, QWidget, QLabel, \
     QHBoxLayout, QPushButton
-from pydm.widgets import PyDMWaveformPlot
 import qtawesome as _qta
 
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 
 from .. import util as _util
-from ..widgets import SiriusMainWindow
-from ..widgets import SiriusSpinbox, PyDMStateButton, SiriusLedState, \
-    SiriusLabel, SiriusLedAlert, SiriusTimePlot
+from ..widgets import SiriusMainWindow, SiriusSpinbox, PyDMStateButton, \
+    SiriusLedState, SiriusLabel, SiriusLedAlert, SiriusTimePlot, \
+    SiriusWaveformPlot
 from .details import DeviceParamSettingWindow
 from .widgets import DeltaIQPhaseCorrButton
 
@@ -204,7 +203,7 @@ class GraphIvsQ(QWidget):
         lay1 = QGridLayout()
         self.setLayout(lay1)
 
-        graph = PyDMWaveformPlot(self)
+        graph = SiriusWaveformPlot(self)
         graph.setObjectName('graph')
         graph.setStyleSheet('#graph {min-height: 15em; min-width: 20em;}')
         graph.maxRedrawRate = 2

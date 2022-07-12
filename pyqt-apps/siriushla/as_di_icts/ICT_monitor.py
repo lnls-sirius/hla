@@ -7,13 +7,13 @@ import numpy as np
 from qtpy.uic import loadUi
 from qtpy.QtCore import Slot, Qt
 from qtpy.QtGui import QColor
-from qtpy.QtWidgets import QFormLayout, QGridLayout, QHBoxLayout, QVBoxLayout,\
-                           QSizePolicy as QSzPlcy, QLabel, QPushButton,\
-                           QSpacerItem, QGroupBox, QWidget
+from qtpy.QtWidgets import QFormLayout, QGridLayout, QHBoxLayout, \
+    QVBoxLayout, QSizePolicy as QSzPlcy, QLabel, QPushButton,\
+    QSpacerItem, QGroupBox, QWidget
 import qtawesome as qta
 
 from pydm.widgets import PyDMLabel, PyDMEnumComboBox, PyDMSpinbox, \
-                         PyDMPushButton, PyDMWaveformPlot
+    PyDMPushButton
 from pydm.widgets.waveformplot import WaveformCurveItem
 from pydm.utilities.macro import substitute_in_file as _substitute_in_file
 
@@ -22,7 +22,8 @@ from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriuspy.epics import PV
 
 from siriushla.widgets import SiriusMainWindow, SiriusDialog, \
-    SiriusLedAlert, PyDMStateButton, PyDMLedMultiChannel, QSpinBoxPlus
+    SiriusLedAlert, PyDMStateButton, PyDMLedMultiChannel, QSpinBoxPlus, \
+    SiriusWaveformPlot
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla import util
 from siriushla.as_ti_control.hl_trigger import HLTriggerDetailed
@@ -647,7 +648,7 @@ class _MyWaveformCurveItem(WaveformCurveItem):
         self.needs_new_y = True
 
 
-class _MyWaveformPlot(PyDMWaveformPlot):
+class _MyWaveformPlot(SiriusWaveformPlot):
 
     def addChannel(self, y_channel=None, x_channel=None, name=None,
                    color=None, lineStyle=None, lineWidth=None,

@@ -6,10 +6,10 @@ from qtpy.QtWidgets import QGroupBox, QHBoxLayout, QVBoxLayout, \
     QWidget, QLabel, QGridLayout, QRadioButton, QStackedWidget, \
     QSizePolicy
 from pydm.widgets import PyDMLabel, PyDMPushButton, \
-    PyDMWaveformPlot, PyDMSpinbox, PyDMImageView, PyDMLineEdit
+    PyDMSpinbox, PyDMImageView, PyDMLineEdit
 import qtawesome as qta
 from ..util import get_appropriate_color
-from ..widgets import SiriusMainWindow, PyDMLedMultiChannel
+from ..widgets import SiriusMainWindow, PyDMLedMultiChannel, SiriusWaveformPlot
 from .util import DEVICES, SCREENS_PANEL, SCREENS_INFO, HEADER, \
     GRAPH, SCREEN
 from .motorBtn import MotorBtn
@@ -151,7 +151,7 @@ class LiBeamProfile(SiriusMainWindow):
     def setGraph(self, device, graph_data, title):
         '''Build a graph widget'''
 
-        graph_plot = PyDMWaveformPlot(background="#ffffff")
+        graph_plot = SiriusWaveformPlot(background="#ffffff")
         graph_plot.setPlotTitle(title)
         graph_plot.setLabel(
             'left',

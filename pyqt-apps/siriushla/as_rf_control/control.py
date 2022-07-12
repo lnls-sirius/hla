@@ -9,12 +9,12 @@ from qtpy.QtGui import QColor
 import qtawesome as qta
 from pyqtgraph import InfiniteLine, mkPen
 
-from pydm.widgets import PyDMLineEdit, PyDMEnumComboBox, PyDMWaveformPlot, \
+from pydm.widgets import PyDMLineEdit, PyDMEnumComboBox, \
     PyDMLabel, PyDMSpinbox
 
 from ..widgets import SiriusMainWindow, PyDMStateButton, PyDMLed, \
     SiriusLedAlert, SiriusLedState, PyDMLedMultiChannel, SiriusTimePlot, \
-    SiriusConnectionSignal, SiriusPushButton, SiriusLabel
+    SiriusConnectionSignal, SiriusPushButton, SiriusLabel, SiriusWaveformPlot
 from ..util import connect_window, get_appropriate_color
 from .details import TransmLineStatusDetails, CavityStatusDetails, \
     LLRFInterlockDetails, TempMonitor
@@ -832,7 +832,7 @@ class RFMainControl(SiriusMainWindow):
         return lay
 
     def _rampMonLayout(self):
-        self.ramp_graph = PyDMWaveformPlot(
+        self.ramp_graph = SiriusWaveformPlot(
             parent=self, background=QColor(255, 255, 255))
         self.ramp_graph.setObjectName('graph')
         self.ramp_graph.setStyleSheet(

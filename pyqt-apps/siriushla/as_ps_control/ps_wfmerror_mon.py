@@ -7,17 +7,15 @@ from qtpy.QtGui import QColor
 from qtpy.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, \
     QGridLayout
 
-from pydm.widgets import PyDMWaveformPlot
-
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriuspy.namesys import SiriusPVName as _PVName
 
 from siriuspy.search import PSSearch
 from siriushla.widgets import SiriusConnectionSignal as _ConnSig, \
-    SiriusMainWindow, QSpinBoxPlus, QDoubleSpinBoxPlus
+    SiriusMainWindow, QSpinBoxPlus, QDoubleSpinBoxPlus, SiriusWaveformPlot
 
 
-class Graph(PyDMWaveformPlot):
+class Graph(SiriusWaveformPlot):
     doubleclick = Signal(int)
 
     def __init__(self, *args, **kwargs):
