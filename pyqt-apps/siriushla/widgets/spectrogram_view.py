@@ -1116,6 +1116,8 @@ class SiriusSpectrogramView(
             return
         pos = ev.pos()
         posaux = self._image_item.mapFromDevice(ev.pos())
+        if not posaux:
+            return
         if posaux.x() < 0 or posaux.x() >= self._image_item.width() or \
                 posaux.y() < 0 or posaux.y() >= self._image_item.height():
             super().mouseMoveEvent(ev)
