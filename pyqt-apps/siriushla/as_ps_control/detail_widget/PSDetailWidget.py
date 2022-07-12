@@ -825,7 +825,8 @@ class PSDetailWidget(QWidget):
         self.wfm.showXGrid = True
         self.wfm.showYGrid = True
         self.wfm.setLabel('left', text='Current [A]')
-        self.wfm.setLabel('bottom', text='Index')
+        self.wfm.setLabel('bottom', text='Time [s]')
+        self.wfm.plotItem.ctrl.fftCheck.toggled.connect(self._wfmUpdAxisLabel)
         self.wfm.plotItem.showButtons()
         self.wfm.setBackgroundColor(QColor(255, 255, 255))
         self.wfm.addChannel(y_channel=wfm_data_sp_ch, name='Wfm-SP',
@@ -840,6 +841,15 @@ class PSDetailWidget(QWidget):
                             'Wfm-RB': self.wfm.curveAtIndex(1),
                             'WfmRef-Mon': self.wfm.curveAtIndex(2),
                             'Wfm-Mon': self.wfm.curveAtIndex(3)}
+        # change xdata to show time indices according to ScopeDuration-RB
+        ch_scopedur = self._prefixed_psname + ":ScopeDuration-RB"
+        self._scopedur_ch_rb = SiriusConnectionSignal(ch_scopedur)
+        self._scopedur_ch_rb.new_value_signal[float].connect(self._wfmTimeData)
+        # reimplement fourier transform to use ScopeFreq-RB
+        ch_scopefreq = self._prefixed_psname + ":ScopeFreq-RB"
+        self._scopefreq_ch_rb = SiriusConnectionSignal(ch_scopefreq)
+        for curve in self._wfm_curves.values():
+            curve._fourierTransform = self._wfmFourierData
 
         # Show
         self.show_wfm_sp = QCheckBox('SP')
@@ -943,6 +953,41 @@ class PSDetailWidget(QWidget):
         layout.addWidget(self.scope_dur_sp_sb, 2, 1)
         layout.addWidget(self.scope_dur_rb_label, 2, 2)
         return layout
+
+    def _wfmUpdAxisLabel(self, state):
+        xlabel = 'Frequency [Hz]' if state else 'Time [s]'
+        self.wfm.setLabel('bottom', text=xlabel)
+
+    def _wfmTimeData(self, value):
+        for curve in self._wfm_curves.values():
+            size = curve.latest_y.size
+            xdata = _np.linspace(0, value, size)
+            curve.receiveXWaveform(xdata)
+            curve.redrawCurve()
+
+    def _wfmFourierData(self, x, y):
+        """Perform Fourier transform.
+
+        This code is a copy of pyqtgraph.graphicsItems.PlotDataItem, just
+        changing the sampling frequency to the ScopeFreq-RB value.
+        """
+        # If x values are not sampled uniformly,
+        # then use np.interp to resample before taking fft.
+        dx = _np.diff(x)
+        uniform = not _np.any(_np.abs(dx-dx[0]) > (abs(dx[0]) / 1000.))
+        if not uniform:
+            x2 = _np.linspace(x[0], x[-1], len(x))
+            y = _np.interp(x2, x, y)
+            x = x2
+
+        n = y.size
+        f = _np.fft.rfft(y) / n
+        # Diff: use scope frequency
+        scopefreq = self._scopefreq_ch_rb.value
+        d = 1./scopefreq if scopefreq is not None else 1
+        x = _np.fft.rfftfreq(n, d)
+        y = _np.abs(f)
+        return x, y
 
 
 class LIPSDetailWidget(PSDetailWidget):
