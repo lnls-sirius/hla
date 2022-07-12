@@ -540,7 +540,7 @@ class PSTestWindow(SiriusMainWindow):
         task2 = CheckOpMode(
             devices,
             state=[_PSC.States.SlowRef, _PSC.States.Off,
-                   _PSC.States.Interlock],
+                   _PSC.States.Interlock, _PSC.States.Initializing],
             parent=self)
         task2.itemDone.connect(self._log)
 
