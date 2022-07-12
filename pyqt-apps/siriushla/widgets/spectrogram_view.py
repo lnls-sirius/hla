@@ -15,6 +15,7 @@ from pydm.widgets.channel import PyDMChannel
 from pydm.widgets.colormaps import cmaps, cmap_names, PyDMColorMap
 from pydm.widgets.base import PyDMWidget
 from pydm.widgets.image import ReadingOrder
+from siriuspy.magnet.util import linear_interpolation as _linear_interpolation
 
 logger = logging.getLogger(__name__)
 
@@ -358,6 +359,10 @@ class SiriusSpectrogramView(
         self.ROIOffsetYChannel = roioffsety_channel
         self.ROIWidthChannel = roiwidth_channel
         self.ROIHeightChannel = roiheight_channel
+
+        # Handle view range changed
+        self._view.sigRangeChanged.connect(self._update_axis_range)
+        self._view.suggestPadding = lambda x: 0.0
 
         # Context menu
         self.contextMenuEvent = None
@@ -753,38 +758,38 @@ class SiriusSpectrogramView(
         logging.debug("SpectrogramView RedrawImage Thread Launched")
         self.thread.start()
 
+    def _update_axis_range(self, *_):
+        if self._last_xaxis_data is not None:
+            iszx = self._last_xaxis_data.size
+            ixMin = self._last_xaxis_data.min()
+            ixMax = self._last_xaxis_data.max()
+        else:
+            iszx = self.imageWidth if self.readingOrder == self.Clike \
+                else self.imageHeight
+            ixMin = 0
+            ixMax = iszx
+
+        if self._last_yaxis_data is not None:
+            iszy = self._last_yaxis_data.size
+            iyMin = self._last_yaxis_data.min()
+            iyMax = self._last_yaxis_data.max()
+        else:
+            iszy = self.imageHeight if self.readingOrder == self.Clike \
+                else self.imageWidth
+            iyMin = 0
+            iyMax = iszy
+
+        [_vx, _vy] = self._view.viewRange()
+        limsx = _linear_interpolation(
+            np.array(_vx), np.array([0, iszx]), np.array([ixMin, ixMax]))
+        limsy = _linear_interpolation(
+            np.array(_vy), np.array([0, iszy]), np.array([iyMin, iyMax]))
+        self.xaxis.setRange(limsx[0], limsx[1])
+        self.yaxis.setRange(limsy[0], limsy[1])
+
     @Slot(list)
     def _updateDisplay(self, data):
         logging.debug("SpectrogramView Update Display with new image")
-
-        # Update axis
-        if self._last_xaxis_data is not None:
-            szx = self._last_xaxis_data.size
-            xMin = self._last_xaxis_data.min()
-            xMax = self._last_xaxis_data.max()
-        else:
-            szx = self.imageWidth if self.readingOrder == self.Clike \
-                else self.imageHeight
-            xMin = 0
-            xMax = szx
-
-        if self._last_yaxis_data is not None:
-            szy = self._last_yaxis_data.size
-            yMin = self._last_yaxis_data.min()
-            yMax = self._last_yaxis_data.max()
-        else:
-            szy = self.imageHeight if self.readingOrder == self.Clike \
-                else self.imageWidth
-            yMin = 0
-            yMax = szy
-
-        self.xaxis.setRange(xMin, xMax)
-        self.yaxis.setRange(yMin, yMax)
-        self._view.setLimits(
-            xMin=0, xMax=szx, yMin=0, yMax=szy,
-            minXRange=szx, maxXRange=szx, minYRange=szy, maxYRange=szy)
-
-        # Update image
         if self.autoSetColorbarLims:
             self.colorbar.setLimits(data)
         mini, maxi = data[0], data[1]
