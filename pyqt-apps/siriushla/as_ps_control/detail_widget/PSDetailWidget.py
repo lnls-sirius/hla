@@ -14,7 +14,7 @@ from qtpy.QtGui import QColor
 import qtawesome as qta
 
 from pydm.widgets import PyDMLabel, PyDMEnumComboBox, PyDMPushButton, \
-    PyDMLineEdit, PyDMWaveformPlot
+    PyDMLineEdit
 from pydm.widgets.display_format import parse_value_for_display
 
 from siriuspy.util import get_strength_label
@@ -30,7 +30,7 @@ from ... import util
 from ...widgets import PyDMStateButton, PyDMSpinboxScrollbar, SiriusTimePlot, \
     SiriusConnectionSignal, SiriusLedState, SiriusLedAlert, \
     PyDMLedMultiChannel, SiriusDialog, SiriusWaveformTable, SiriusSpinbox, \
-    SiriusHexaSpinbox, PyDMLed
+    SiriusHexaSpinbox, PyDMLed, SiriusWaveformPlot
 from .InterlockWindow import InterlockWindow, LIInterlockWindow
 from .custom_widgets import LISpectIntlkLed
 
@@ -666,7 +666,7 @@ class PSDetailWidget(QWidget):
             else DEF_WFMSIZE_OTHERS
         self._siggen_w = self._siggen.get_waveform(self._siggen_nrpts)
 
-        self.curve_siggen = PyDMWaveformPlot()
+        self.curve_siggen = SiriusWaveformPlot()
         self.curve_siggen.setObjectName('graph')
         self.curve_siggen.setStyleSheet(
             '#graph{max-height:15em; max-width:16.5em;}')
@@ -817,7 +817,7 @@ class PSDetailWidget(QWidget):
             self._wfm_update_mo)
 
         # Plot
-        self.wfm = PyDMWaveformPlot()
+        self.wfm = SiriusWaveformPlot()
         self.wfm.setObjectName('graph')
         self.wfm.setStyleSheet('#graph{max-height:15em; max-width:16.5em;}')
         self.wfm.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
@@ -1844,7 +1844,7 @@ class FastCorrPSDetailWidget(PSDetailWidget):
         # fofbctrl = fofbctrl.replace('IA-'+subnum, 'XX-99SL01')  # comment
         chn = FastCorrPSDetailWidget.CONV_CORR2CHANNEL[subnam+'-'+dev]
 
-        self.graph_curr = PyDMWaveformPlot()
+        self.graph_curr = SiriusWaveformPlot()
         # self.graph_curr.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
         self.graph_curr.autoRangeX = True
         self.graph_curr.autoRangeY = True
@@ -1860,7 +1860,7 @@ class FastCorrPSDetailWidget(PSDetailWidget):
                 propty='GENConvArrayDataCH'+str(chn)),
             name='Current', color='blue', lineWidth=2)
 
-        self.graph_volt = PyDMWaveformPlot()
+        self.graph_volt = SiriusWaveformPlot()
         # self.graph_volt.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
         self.graph_volt.autoRangeX = True
         self.graph_volt.autoRangeY = True

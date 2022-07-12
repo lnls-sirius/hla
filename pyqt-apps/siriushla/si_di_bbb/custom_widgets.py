@@ -7,14 +7,14 @@ from qtpy.QtCore import Qt
 from qtpy.QtGui import QColor
 from qtpy.QtWidgets import QLabel, QSizePolicy as QSzPlcy
 from pyqtgraph import mkBrush
-from pydm.widgets import PyDMWaveformPlot
 from pydm.widgets.scale import QScale, PyDMScaleIndicator
 
-from ..widgets import SiriusTimePlot, SiriusConnectionSignal
+from ..widgets import SiriusTimePlot, SiriusConnectionSignal, \
+    SiriusWaveformPlot
 
 
-class WfmGraph(PyDMWaveformPlot):
-    """PyDMWaveformPlot rederivation."""
+class WfmGraph(SiriusWaveformPlot):
+    """SiriusWaveformPlot rederivation."""
 
     def __init__(self, *args, **kwargs):
         """."""

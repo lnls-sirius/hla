@@ -10,15 +10,14 @@ from qtpy.QtWidgets import QWidget, QGridLayout, QHBoxLayout, QVBoxLayout, \
     QComboBox, QCheckBox, QLabel, QPushButton, QMenu, QSpacerItem, \
     QSizePolicy as QSzPlcy, QFileDialog
 import qtawesome as qta
-from pydm.widgets import PyDMWaveformPlot
 
 from siriuspy.namesys import SiriusPVName as _PVName
 
-from siriushla.widgets import SiriusConnectionSignal
+from siriushla.widgets import SiriusConnectionSignal, SiriusWaveformPlot
 from .util import marker_color
 
 
-class TuneSpectraView(PyDMWaveformPlot):
+class TuneSpectraView(SiriusWaveformPlot):
     """Tune Spectra View."""
 
     def __init__(self, parent=None, prefix='', section=''):
