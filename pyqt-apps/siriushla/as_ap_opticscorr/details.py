@@ -3,12 +3,13 @@
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QPushButton, QGridLayout, QLabel, QSpacerItem, \
     QAbstractItemView, QGroupBox, QSizePolicy as QSzPlcy, QHeaderView
-from pydm.widgets import PyDMLabel, PyDMWaveformTable
+from pydm.widgets import PyDMLabel
 
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriuspy.namesys import SiriusPVName as _PVName
 
-from siriushla.widgets import SiriusMainWindow
+from siriushla.widgets import SiriusMainWindow, \
+    SiriusWaveformTable
 from .custom_widgets import ConfigLineEdit as _ConfigLineEdit
 
 
@@ -53,7 +54,7 @@ class CorrParamsDetailWindow(SiriusMainWindow):
 
         label_matrix = QLabel('<h4>Matrix</h4>', self,
                               alignment=Qt.AlignCenter)
-        self.table_matrix = PyDMWaveformTable(
+        self.table_matrix = SiriusWaveformTable(
             self, ioc_prefix.substitute(propty='RespMat-Mon'))
         self.table_matrix.setObjectName('matrix')
         self.table_matrix.setEnabled(False)
@@ -86,7 +87,7 @@ class CorrParamsDetailWindow(SiriusMainWindow):
         label_nomintstrength = QLabel(
             '<h4>Nominal '+self._intstrength+'s</h4>', self,
             alignment=Qt.AlignCenter)
-        self.table_nomintstrength = PyDMWaveformTable(
+        self.table_nomintstrength = SiriusWaveformTable(
             self, ioc_prefix.substitute(
                 propty='Nominal'+self._intstrength+'-Mon'))
         self.table_nomintstrength.setObjectName('nom_strength')
