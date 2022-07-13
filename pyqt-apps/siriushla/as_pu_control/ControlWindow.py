@@ -86,6 +86,8 @@ class PUControlWindow(SiriusMainWindow):
         elif sec == 'PingSI':
             devices = PSSearch.get_psnames(
                 {'sec': 'SI', 'dis': 'PU', 'dev': 'Ping'})
+        else:
+            raise ValueError(f'devices not defined for section {sec}.')
 
         visible_props = sort_propties(
             ['detail', 'state', 'reset', 'intlk', 'setpoint', 'monitor',
