@@ -180,12 +180,11 @@ class PSContainer(QWidget):
         """Set current setpoint for every visible widget."""
         dlg = QInputDialog(self)
         dlg.setLocale(QLocale(QLocale.English))
-        new_value, ok = dlg.getDouble(
-            self, "New setpoint", "Value")
+        new_value, ok = dlg.getDouble(self, "New setpoint", "Value")
         if ok:
             for dclink in self.dclink_widgets:
-                sp = dclink.setpoint.sp_lineedit
-                sp.setText(str(new_value))
+                sp = dclink.setpoint.spinbox
+                sp.value_changed(new_value)
                 try:
                     sp.send_value()
                 except TypeError:
@@ -578,13 +577,12 @@ class BasePSControlWidget(QWidget):
         """Set current setpoint for every visible widget."""
         dlg = QInputDialog(self)
         dlg.setLocale(QLocale(QLocale.English))
-        new_value, ok = dlg.getDouble(
-            self, "Insert current setpoint", "Value")
+        new_value, ok = dlg.getDouble(self, "Insert current setpoint", "Value")
         if ok:
             for key, widget in self.ps_widgets_dict.items():
                 if key in self.filtered_widgets:
-                    sp = widget.setpoint.sp_lineedit
-                    sp.setText(str(new_value))
+                    sp = widget.setpoint.spinbox
+                    sp.value_changed(new_value)
                     try:
                         sp.send_value()
                     except TypeError:
