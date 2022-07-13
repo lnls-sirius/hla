@@ -84,27 +84,25 @@ class InterlockWindow(SiriusMainWindow):
         else:
             self.setObjectName('ASApp')
 
-        auxlabel = 'Interlocks'
-        if 'Soft' in self._interlock[0]:
+        self._intlktype = ''
+        auxlabel = 'Alarms' if 'Alarm' in self._interlock[0] else 'Interlocks'
+        if 'IntlkSoft' in self._interlock[0]:
             self._intlktype = 'Soft'
-        elif 'Hard' in self._interlock[0]:
+        elif 'IntlkHard' in self._interlock[0]:
             self._intlktype = 'Hard'
-        elif 'IIB' in self._interlock[0]:
+        elif 'IntlkIIB' in self._interlock[0]:
             self._intlktype = 'IIB'
-            if 'Alarms' in self._interlock[0]:
-                auxlabel = 'Alarms'
         elif self._devname.dev in ['FCH', 'FCV']:
             self._intlktype = 'Amp'
-            auxlabel = 'Alarms'
 
         self._intlkname = self._intlktype + ' ' + auxlabel
         self.setWindowTitle(self._devname + ' - ' + self._intlkname)
         self._setup_ui()
 
     def _setup_ui(self):
-        self.cw = QWidget(parent=self)
-        self.setCentralWidget(self.cw)
-        lay = QVBoxLayout(self.cw)
+        self.cwid = QWidget(parent=self)
+        self.setCentralWidget(self.cwid)
+        lay = QVBoxLayout(self.cwid)
         lay.addWidget(QLabel("<h1>" + self._devname + "</h1>"))
         lay.addWidget(QLabel("<h3>" + self._intlkname + "</h3>"))
 
@@ -115,15 +113,20 @@ class InterlockWindow(SiriusMainWindow):
         else:
             self._tab_widget = QTabWidget(self)
             for aux in self._auxdev:
+                devaux = self._devname + aux
                 for intlk in self._interlock:
-                    tab_lbl = intlk.replace(self._intlktype, '').replace(
-                        'Alarms', '').replace('Intlk', '')
-                    if self._devname+aux in self._auxdev2mod:
-                        tab_lbl = 'Mod' + self._auxdev2mod[
-                            self._devname+aux][tab_lbl.split('Mod')[1]]
+                    name = intlk.replace('Alarms', '').replace('Intlk', '')
+                    if 'Mod' in name:
+                        mod = name.split('Mod')[1]
+                        tab_lbl = 'IIB Mod'.replace(self._intlktype, '')
+                        tab_lbl += self._auxdev2mod[devaux][mod] \
+                            if devaux in self._auxdev2mod else mod
+                    else:
+                        tab_lbl = 'IIB' if 'IIB' in intlk else 'Main'
+                    if tab_lbl == 'Main' and aux:
+                        continue
                     wid = InterlockListWidget(
-                        parent=self, devname=self._devname+aux,
-                        interlock=intlk)
+                        parent=self, devname=devaux, interlock=intlk)
                     self._tab_widget.addTab(wid, tab_lbl)
             lay.addWidget(self._tab_widget)
 
@@ -171,27 +174,24 @@ class LIInterlockWindow(SiriusMainWindow):
         self._setup_ui()
 
     def _setup_ui(self):
-        self.cw = QWidget(parent=self)
-        self.setCentralWidget(self.cw)
-        lay = QGridLayout(self.cw)
+        self.cwid = QWidget(parent=self)
+        self.setCentralWidget(self.cwid)
+        lay = QGridLayout(self.cwid)
         lay.setHorizontalSpacing(20)
 
         self.label_warn = QLabel('Warn Status')
         self.grid_warn = QGridLayout()
-        i = 0
         for bit, text in self.BIT_MAPS['IntlkWarn-Mon'].items():
-            led = PyDMLed(self, self._devname+':IntlkWarn-Mon', bit=i)
+            led = PyDMLed(self, self._devname+':IntlkWarn-Mon', bit=bit)
             led.setOnColor(self.COLOR_MAPS['IntlkWarn-Mon']['on'])
             led.setOffColor(self.COLOR_MAPS['IntlkWarn-Mon']['off'])
             lbl = QLabel(text, self)
-            self.grid_warn.addWidget(led, i, 0)
-            self.grid_warn.addWidget(lbl, i, 1)
-            i += 1
+            self.grid_warn.addWidget(led, bit, 0)
+            self.grid_warn.addWidget(lbl, bit, 1)
 
         self.label_digin = QLabel('Digital Input')
         self.label_digout = QLabel('Digital Output')
         for typ in ['In', 'Out']:
-            i = 0
             gridname = 'grid_dig'+typ.lower()
             setattr(self, gridname, QGridLayout())
             grd = getattr(self, gridname)
@@ -199,17 +199,16 @@ class LIInterlockWindow(SiriusMainWindow):
             sgch = 'IntlkSignal'+typ+'-Mon'
             mskch = 'IntlkRdSignal'+typ+'Mask-Mon'
             for bit, text in self.BIT_MAPS[sgch].items():
-                led = PyDMLed(self, self._devname+':'+sgch, bit=i)
+                led = PyDMLed(self, self._devname+':'+sgch, bit=bit)
                 led.setOnColor(self.COLOR_MAPS[sgch]['on'])
                 led.setOffColor(self.COLOR_MAPS[sgch]['off'])
                 lbl = QLabel(text, self)
-                led_msk = PyDMLed(self, self._devname+':'+mskch, bit=i)
+                led_msk = PyDMLed(self, self._devname+':'+mskch, bit=bit)
                 led_msk.setOnColor(self.COLOR_MAPS[mskch]['on'])
                 led_msk.setOffColor(self.COLOR_MAPS[mskch]['off'])
-                grd.addWidget(led, i, 0)
-                grd.addWidget(lbl, i, 1)
-                grd.addWidget(led_msk, i, 2)
-                i += 1
+                grd.addWidget(led, bit, 0)
+                grd.addWidget(lbl, bit, 1)
+                grd.addWidget(led_msk, bit, 2)
 
         lay.addWidget(QLabel("<h1>" + self._devname + "</h1>"), 0, 0, 1, 3)
         lay.addWidget(QLabel("<h3>Interlocks</h3>"), 1, 0, 1, 3)

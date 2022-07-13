@@ -18,7 +18,7 @@ from ..widgets import SiriusMainWindow, SiriusEnumComboBox, \
 from ..as_ti_control import BucketList, EVGInjectionLed, EVGInjectionButton
 from ..as_ap_machshift import MachShiftLabel
 from .widgets import InjDiagLed, MonitorSummaryWidget, \
-    InjSysStbyControlWidget, ClockLabel
+    InjSysStbyControlWidget, ClockLabel, TaskStatusLabel
 
 
 class InjCtrlWindow(SiriusMainWindow):
@@ -283,6 +283,8 @@ class InjCtrlWindow(SiriusMainWindow):
             self._inj_prefix.substitute(propty='Type-Sel'))
         self._ch_injtype.new_value_signal[int].connect(
             self._handle_injtype_settings_vis)
+        self._ind_injtype_mon = TaskStatusLabel(
+            self, self._inj_prefix.substitute(propty='TypeCmdSts-Mon'))
 
         # Single bunch bias voltage
         self._ld_sbbias = QLabel('SB Bias Voltage', self)
@@ -315,6 +317,8 @@ class InjCtrlWindow(SiriusMainWindow):
         self._lb_bias_mon = PyDMLabel(self, ch_bias_mon)
         self._lb_bias_mon.showUnits = True
         labelsmon.append(self._lb_bias_mon)
+        self._ind_bias_mon = TaskStatusLabel(
+            self, self._inj_prefix.substitute(propty='BiasVoltCmdSts-Mon'))
 
         # Filament current op value
         self._ld_filaopcurr = QLabel('Fila.Op. Curr.', self)
@@ -331,6 +335,8 @@ class InjCtrlWindow(SiriusMainWindow):
         self._lb_filaopcurr_mon = PyDMLabel(self, ch_filacurr_mon)
         self._lb_filaopcurr_mon.showUnits = True
         labelsmon.append(self._lb_filaopcurr_mon)
+        self._ind_filaopcurr_mon = TaskStatusLabel(
+            self, self._inj_prefix.substitute(propty='FilaOpCurrCmdSts-Mon'))
 
         # High voltage op value
         self._ld_hvopvolt = QLabel('HV.Op. Volt.', self)
@@ -347,6 +353,8 @@ class InjCtrlWindow(SiriusMainWindow):
         self._lb_hvopvolt_mon = PyDMLabel(self, ch_hvvolt_mon)
         self._lb_hvopvolt_mon.showUnits = True
         labelsmon.append(self._lb_hvopvolt_mon)
+        self._ind_hvopvolt_mon = TaskStatusLabel(
+            self, self._inj_prefix.substitute(propty='HVOpVoltCmdSts-Mon'))
 
         # header
         ld_sp = QLabel('<h4>SP</h4>', self, alignment=Qt.AlignCenter)
@@ -387,6 +395,7 @@ class InjCtrlWindow(SiriusMainWindow):
         glay2.addWidget(self._cb_injtype, 1, 1)
         glay2.addWidget(self._lb_injtype, 1, 2)
         glay2.addWidget(self._lb_injtype_mon, 1, 3)
+        glay2.addWidget(self._ind_injtype_mon, 1, 4)
         glay2.addWidget(self._ld_sbbias, 2, 0)
         glay2.addWidget(self._sb_sbbias, 2, 1)
         glay2.addWidget(self._lb_sbbias, 2, 2)
@@ -394,18 +403,22 @@ class InjCtrlWindow(SiriusMainWindow):
         glay2.addWidget(self._sb_mbbias, 2, 1)
         glay2.addWidget(self._lb_mbbias, 2, 2)
         glay2.addWidget(self._lb_bias_mon, 2, 3)
+        glay2.addWidget(self._ind_bias_mon, 2, 4)
         glay2.addWidget(self._ld_filaopcurr, 4, 0)
         glay2.addWidget(self._sb_filaopcurr, 4, 1)
         glay2.addWidget(self._lb_filaopcurr, 4, 2)
         glay2.addWidget(self._lb_filaopcurr_mon, 4, 3)
+        glay2.addWidget(self._ind_filaopcurr_mon, 4, 4)
         glay2.addWidget(self._ld_hvopvolt, 5, 0)
         glay2.addWidget(self._sb_hvopvolt, 5, 1)
         glay2.addWidget(self._lb_hvopvolt, 5, 2)
         glay2.addWidget(self._lb_hvopvolt_mon, 5, 3)
-        glay2.setColumnStretch(0, 3)
-        glay2.setColumnStretch(1, 2)
-        glay2.setColumnStretch(2, 2)
-        glay2.setColumnStretch(3, 2)
+        glay2.addWidget(self._ind_hvopvolt_mon, 5, 4)
+        glay2.setColumnStretch(0, 5)
+        glay2.setColumnStretch(1, 3)
+        glay2.setColumnStretch(2, 3)
+        glay2.setColumnStretch(3, 3)
+        glay2.setColumnStretch(3, 1)
 
         wid = QGroupBox('Settings')
         lay = QGridLayout(wid)

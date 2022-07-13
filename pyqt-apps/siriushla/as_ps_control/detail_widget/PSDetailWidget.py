@@ -79,6 +79,10 @@ class PSDetailWidget(QWidget):
             min-height: 1.5em;
             max-height: 1.5em;
         }
+        #auxmeaslabel {
+            min-width: 7.5em;
+            qproperty-alignment: AlignCenter;
+        }
     """
 
     AuxDev2ModDict = {
@@ -382,9 +386,10 @@ class PSDetailWidget(QWidget):
                                  for intlk in iib_intlks})
             self.iib_intlk_led = PyDMLedMultiChannel(self, chs2vals)
 
-        iib_alarms = [k.replace('Labels-Cte', '') for k in self._db
-                      if re.match('AlarmsIIB.*Labels-Cte', k)]
-        if iib_alarms:
+        alarms = ['Alarms', ] if 'Alarms-Mon' in self._db else []
+        alarms.extend([k.replace('Labels-Cte', '') for k in self._db
+                       if re.match('AlarmsIIB.*Labels-Cte', k)])
+        if alarms:
             self.alarm_label = QLabel(
                 'Alarms', self, alignment=Qt.AlignCenter)
             self.alarm_bt = QPushButton(qta.icon('fa5s.list-ul'), '', self)
@@ -393,13 +398,13 @@ class PSDetailWidget(QWidget):
                 '#alarm_bt{min-width:25px;max-width:25px;icon-size:20px;}')
             util.connect_window(
                 self.alarm_bt, InterlockWindow, self,
-                devname=self._psname, interlock=iib_alarms,
+                devname=self._psname, interlock=alarms,
                 auxdev=self._auxdev, auxdev2mod=self._auxdev2mod)
 
             chs2vals = dict()
             for aux in self._auxdev:
                 chs2vals.update({self._prefixed_psname+aux+":"+alarm+"-Mon": 0
-                                 for alarm in iib_alarms})
+                                 for alarm in alarms})
             self.alarm_led = PyDMLedMultiChannel(self, chs2vals)
 
         self.reset_bt = PyDMPushButton(
@@ -422,7 +427,7 @@ class PSDetailWidget(QWidget):
             layout.addWidget(self.iib_intlk_bt, 2, 0)
             layout.addWidget(self.iib_label, 2, 1)
             layout.addWidget(self.iib_intlk_led, 2, 2)
-        if iib_alarms:
+        if alarms:
             layout.addWidget(self.alarm_bt, 3, 0)
             layout.addWidget(self.alarm_label, 3, 1)
             layout.addWidget(self.alarm_led, 3, 2)
@@ -1288,6 +1293,8 @@ class FBPDCLinkDetailWidget(DCLinkDetailWidget):
             self, self._prefixed_psname + ':VoltageDig-Mon')
         self._mod_status_mon = PyDMLabel(
             self, self._prefixed_psname + ':ModulesStatus-Mon')
+        self._ccpersync_mon = PyDMLabel(
+            self, self._prefixed_psname + ':NrCtrlCycBtwLastTrigs-Mon')
 
         pbprm = QPushButton(qta.icon('mdi.open-in-new'),
                             'Parameters', self)
@@ -1301,6 +1308,7 @@ class FBPDCLinkDetailWidget(DCLinkDetailWidget):
         layout.addRow('Voltage 3', self._out_3_mon)
         layout.addRow('Voltage dig', self._out_dig_mon)
         layout.addRow('Module Status', self._mod_status_mon)
+        layout.addRow('NrCtrlCycBtwLastTrigs', self._ccpersync_mon)
         layout.addRow(pbprm)
         return layout
 
@@ -1972,6 +1980,7 @@ class PSAuxMeasWidget(SiriusDialog):
                 lbl = PyDMLabel(
                     self, self._prefixed_psname.substitute(propty=pv))
                 lbl.showUnits = True
+                lbl.setObjectName('auxmeaslabel')
                 flay.addRow(text, lbl)
         return wid
 
@@ -1994,6 +2003,7 @@ class PSAuxMeasWidget(SiriusDialog):
             text = pv.split('Mod'+mod)[0].split('IIB')[0]
             lbl = PyDMLabel(self, psname + ':' + pv)
             lbl.showUnits = True
+            lbl.setObjectName('auxmeaslabel')
             flay.addRow(text, lbl)
         lay.addLayout(flay)
 
