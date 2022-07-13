@@ -154,8 +154,9 @@ class BaseWindow(SiriusMainWindow):
         lb_scrntype.setStyleSheet("min-width:4.5em; max-width:4.5em;")
         lb_scrntype.setAlignment(Qt.AlignCenter)
 
-        led_scrntype = PyDMLed(self, scrn_device.substitute(
-            prefix=self.prefix, propty='ScrnType-Sts'),
+        led_scrntype = PyDMLed(
+            self, scrn_device.substitute(
+                prefix=self.prefix, propty='ScrnType-Sts'),
             color_list=[PyDMLed.LightGreen, PyDMLed.Red, PyDMLed.Red,
                         PyDMLed.Yellow])
         led_scrntype.shape = 2

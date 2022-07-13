@@ -1,15 +1,9 @@
+"""SiriusLogDisplay."""
+
 import logging
-import functools
+from qtpy.QtCore import Slot, Signal
+from pydm.widgets.logdisplay import GuiHandler, PyDMLogDisplay
 
-from collections import OrderedDict
-
-from pydm.widgets.logdisplay import logger_destroyed, GuiHandler, \
-    PyDMLogDisplay
-
-from qtpy.QtCore import (QObject, Slot, Signal, Property,
-                         Q_ENUMS, QSize)
-from qtpy.QtWidgets import (QWidget, QPlainTextEdit, QComboBox, QLabel,
-                            QPushButton, QHBoxLayout, QVBoxLayout)
 
 logger = logging.getLogger(__name__)
 
@@ -23,7 +17,9 @@ class SiriusGuiHandler(GuiHandler):
         self.level = level
 
     def emit(self, record):
-        """Emit formatted log messages when received but only if level is set."""
+        """
+        Emit formatted log messages when received but only if level is set.
+        """
         # Avoid garbage to be presented when master log is running with DEBUG.
         if self.level == logging.NOTSET:
             return
