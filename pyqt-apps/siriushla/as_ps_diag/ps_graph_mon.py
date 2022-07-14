@@ -214,12 +214,9 @@ class PSGraphProptySelWidget(QWidget):
         'DiagCurrentDiff-Mon', 'WfmSyncPulseCount-Mon',
         'PRUCtrlQueueSize-Mon']
     PROP_SYMB_FASTCORR = [
-        'DiagStatus-Mon',
-        'PwrState-Sel', 'PwrState-Sts',
-        'CtrlLoop-Sel', 'CtrlLoop-Sts']
+        'DiagStatus-Mon', 'AlarmsAmp-Mon', 'PwrState-Sel', 'PwrState-Sts']
     PROP_LINE_FASTCORR = [
-        'Current-Mon (from Array)',
-        'Current-SP', 'Current-RB',
+        'Current-Mon', 'Current-SP', 'Current-RB', 'CurrentRef-Mon',
         'DiagCurrentDiff-Mon']
 
     def __init__(self, parent):
@@ -297,12 +294,8 @@ class PSGraphProptySelWidget(QWidget):
         self.cb_prop_line.clear()
         self.cb_prop_line.addItems(self._choose_prop_line)
         self._intstr_propty = get_strength_label(self._magfunc)
-        if 'si-corrector-fc' in self._pstype:
-            for suf in ['-SP', '-RB']:
-                self.cb_prop_line.addItem(self._intstr_propty+suf)
-        else:
-            for suf in self._intstr_suffix:
-                self.cb_prop_line.addItem(self._intstr_propty+suf)
+        for suf in self._intstr_suffix:
+            self.cb_prop_line.addItem(self._intstr_propty+suf)
 
         if currline in self._choose_prop_line:
             self.cb_prop_line.setCurrentText(currline)
@@ -484,8 +477,6 @@ class PSGraphMonWidget(QWidget):
         self._prefix = prefix
         self._psnames = psnames
         self._property_line = 'Current-Mon'
-        self._property_line += ' (from Array)'\
-            if SiriusPVName(psnames[0]).dev in ('FCH', 'FCV') else ''
         self._property_symb = 'DiagStatus-Mon'
 
         self._pvhandler = _PVHandler(self._psnames, self._prefix, self)
@@ -591,14 +582,14 @@ class PSGraphMonWidget(QWidget):
             menu = QMenu("Actions", self)
             menu.addAction(self.cmd_turnon_act)
             menu.addAction(self.cmd_turnoff_act)
-            menu.addAction(self.cmd_ctrlloopclose_act)
-            menu.addAction(self.cmd_ctrlloopopen_act)
             if SiriusPVName(self._psnames[0]).dev in ('FCH', 'FCV'):
                 menu.addAction(self.cmd_acqtrigrep_act)
                 menu.addAction(self.cmd_acqtrigstart_act)
                 menu.addAction(self.cmd_acqtrigstop_act)
                 menu.addAction(self.cmd_acqtrigabort_act)
             else:
+                menu.addAction(self.cmd_ctrlloopclose_act)
+                menu.addAction(self.cmd_ctrlloopopen_act)
                 menu.addAction(self.cmd_setslowref_act)
                 menu.addAction(self.cmd_setcurrent_act)
                 menu.addAction(self.cmd_reset_act)
@@ -628,10 +619,9 @@ class _PVHandler:
     }
     PROPSYMB_2_DEFVAL_FCS = {
         'DiagStatus-Mon': 0,
+        'AlarmsAmp-Mon': 0,
         'PwrState-Sel': _PSConst.PwrStateSel.On,
         'PwrState-Sts': _PSConst.PwrStateSts.On,
-        'CtrlLoop-Sel': _PSConst.OffOn.On,
-        'CtrlLoop-Sts': _PSConst.OffOn.On,
     }
     CONV_FASTCORR2CHANNEL = {
         'M1-FCH': 0,
@@ -668,32 +658,21 @@ class _PVHandler:
         self._create_pvs(psnames, propty)
 
         values = list()
-        if '(from Array)' in propty:
-            self._vals_read = dict()
-            with ThreadPoolExecutor(max_workers=100) as executor:
-                for psn in psnames:
-                    self._vals_read[psn] = None
-                    executor.submit(self._get_fc_currentmon_value, psn)
-            while not all([v is not None for v in self._vals_read.values()]):
-                _time.sleep(0.1)
-            for psn in psnames:
-                values.append(self._vals_read[psn])
-        else:
-            for psn in psnames:
-                pvname = self._get_pvname(psn, propty)
-                _PVHandler._pvs[pvname].wait_for_connection()
+        for psn in psnames:
+            pvname = self._get_pvname(psn, propty)
+            _PVHandler._pvs[pvname].wait_for_connection()
 
-            for psn in psnames:
-                pvname = self._get_pvname(psn, propty)
-                try:
-                    val = _PVHandler._pvs[pvname].get()
-                except epics.ca.ChannelAccessException:
-                    val = None
-                val = val if val is not None else 0
-                if propty in self._propsymb_2_defval.keys():
-                    defval = self._propsymb_2_defval[propty]
-                    val = 1 if val == defval else 0
-                values.append(val)
+        for psn in psnames:
+            pvname = self._get_pvname(psn, propty)
+            try:
+                val = _PVHandler._pvs[pvname].get()
+            except epics.ca.ChannelAccessException:
+                val = None
+            val = val if val is not None else 0
+            if propty in self._propsymb_2_defval.keys():
+                defval = self._propsymb_2_defval[propty]
+                val = 1 if val == defval else 0
+            values.append(val)
         return values
 
     def _get_pvname(self, psname, propty):
@@ -702,11 +681,6 @@ class _PVHandler:
         if psname.dev in ('FCH', 'FCV'):
             fofbctl = SiriusPVName('IA-'+psname.sub[:2]+'RaBPM:BS-FOFBCtrl')
             if propty in ['ACQTriggerRep-Sel', 'ACQTriggerEvent-Sel']:
-                pvname = fofbctl.substitute(prefix=self._prefix, propty=propty)
-            elif 'Current-Mon' in propty:
-                nick = psname.sub[2:] + '-' + psname.dev
-                channel = _PVHandler.CONV_FASTCORR2CHANNEL[nick]
-                propty = 'GENConvArrayDataCH'+str(channel)
                 pvname = fofbctl.substitute(prefix=self._prefix, propty=propty)
             else:
                 pvname = psname.substitute(prefix=self._prefix, propty=propty)
@@ -719,23 +693,10 @@ class _PVHandler:
         new_pvs = dict()
         for psn in psnames:
             pvname = self._get_pvname(psn, propty)
-            auto_monitor = '(from Array)' not in propty
             if pvname in _PVHandler._pvs:
                 continue
-            new_pvs[pvname] = epics.PV(
-                pvname, auto_monitor=auto_monitor, connection_timeout=0.05)
+            new_pvs[pvname] = epics.PV(pvname, connection_timeout=0.05)
         _PVHandler._pvs.update(new_pvs)
-
-    def _get_fc_currentmon_value(self, psname):
-        epics.ca.create_context()
-        pvname = self._get_pvname(psname, 'Current-Mon')
-        pvobj = _PVHandler._pvs[pvname]
-        pvobj.wait_for_connection()
-        value = pvobj.get()
-        value = value.mean() if value is not None else 0
-        value = value if not _np.isnan(value) else 0
-        self._vals_read[psname] = value
-        epics.ca.destroy_context()
 
     def set_values(self, propty, value):
         """Set PV values."""
