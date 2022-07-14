@@ -376,7 +376,7 @@ class TempMonitor(SiriusDialog):
             dettab = DetachableTabWidget(self)
         dettab.setObjectName(self.section+'Tab')
         for dettabtitle, dtcontent in self.chs['TempMon'].items():
-            if dettabtitle == 'Power':
+            if dettabtitle == 'Power (Water)':
                 labels = list(dtcontent.keys())
                 channels = [self.prefix+ch for ch in dtcontent.values()]
                 wid = BarGraph(
