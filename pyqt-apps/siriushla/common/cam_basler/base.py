@@ -52,6 +52,8 @@ class SiriusImageView(PyDMImageView):
         if maxheight_channel:
             self.maxHeightChannel = maxheight_channel
         self.colorMap = self.Jet
+        # connect sigMouseMoved
+        self.scene.sigMouseMoved.connect(self._handle_mouse_moved)
 
     @Slot()
     def saveCalibrationGrid(self):
@@ -436,13 +438,12 @@ class SiriusImageView(PyDMImageView):
             self._channels[5] = self._maxheightchannel
             self._maxheightchannel.connect()
 
-    def mousePressEvent(self, ev):
-        pos = ev.pos()
+    def _handle_mouse_moved(self, pos):
         pos_scene = self.view.vb.mapSceneToView(pos)
         txt = '{0}, {1}'.format(round(pos_scene.x()),
                                 round(pos_scene.y()))
         QToolTip.showText(
-            self.mapToGlobal(pos), txt,
+            self.mapToGlobal(pos.toPoint()), txt,
             self, self.geometry(), 5000)
 
 
