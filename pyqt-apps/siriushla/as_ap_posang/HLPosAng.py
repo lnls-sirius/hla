@@ -344,9 +344,9 @@ class PosAngCorr(SiriusMainWindow):
         lay.addWidget(self.pb_config, 5, 1, 1, 2)
 
         if self._tl == 'TS':
+            ch1pvn = self.posang_prefix.substitute(propty='CH1-Cte')
             self.led_corrtype = PyDMLedMultiChannel(
-                self, {self.posang_prefix.substitute(
-                        propty='CH1-Cte'): self.corrs['CH1']})
+                self, {ch1pvn: self.corrs['CH1']})
             self.lb_corrtype = QLabel(
                 'Control ' + ('CH-Sept' if self._is_chsept else 'Sept-Sept'))
             lay.addWidget(self.led_corrtype, 0, 1)

@@ -113,7 +113,7 @@ class PSDetailWidget(QWidget):
         'CycleAuxParam-SP', 'CycleAuxParam-RB',
         'WfmIndex-Mon', 'WfmSyncPulseCount-Mon',
         'WfmUpdateAuto-Sel', 'WfmUpdateAuto-Sts',
-        'SOFBMode-Sel', 'SOFBMode-Sts',
+        'SOFBMode-Sel', 'SOFBMode-Sts', 'SOFBUpdate-Cmd',
         'PRUCtrlQueueSize-Mon', 'SyncPulse-Cmd',
         'Wfm-SP', 'Wfm-RB', 'WfmRef-Mon', 'Wfm-Mon',
         'Voltage-SP', 'Voltage-RB', 'VoltageRef-Mon', 'Voltage-Mon',
@@ -195,8 +195,8 @@ class PSDetailWidget(QWidget):
         self.wfmparams_box = QGroupBox('Wfm Params')
         self.wfmparams_box.setObjectName('wfmparams_box')
         if self._psmodel == 'FBP':
-            self.sofbparams_box = QGroupBox('SOFB Params')
-            self.sofbparams_box.setObjectName('sofbparams_box')
+            self.sofbmode_box = QGroupBox('SOFB Mode')
+            self.sofbmode_box.setObjectName('sofbmode_box')
         self.genparams_box = QGroupBox('General Params')
         self.genparams_box.setObjectName('genparams_box')
         self.current_box = QGroupBox("Current")
@@ -232,7 +232,7 @@ class PSDetailWidget(QWidget):
         self.ctrlloop_box.setLayout(self._ctrlLoopLayout())
         self.wfmparams_box.setLayout(self._wfmParamsLayout())
         if self._psmodel == 'FBP':
-            self.sofbparams_box.setLayout(self._sofbParamsLayout())
+            self.sofbmode_box.setLayout(self._sofbModeLayout())
         self.genparams_box.setLayout(self._genParamsLayout())
         self.current_box.setLayout(self._currentLayout())
         self.siggen_tab.setLayout(self._siggenLayout())
@@ -256,7 +256,7 @@ class PSDetailWidget(QWidget):
         controls.addWidget(self.interlock_box, 3, 1)
         if self._psmodel == 'FBP':
             controls.addWidget(self.genparams_box, 4, 0)
-            controls.addWidget(self.sofbparams_box, 4, 1)
+            controls.addWidget(self.sofbmode_box, 4, 1)
         else:
             controls.addWidget(self.genparams_box, 4, 0, 1, 2)
         controls.addWidget(self.wfmparams_box, 5, 0, 1, 2)
@@ -405,7 +405,9 @@ class PSDetailWidget(QWidget):
             for aux in self._auxdev:
                 chs2vals.update({self._prefixed_psname+aux+":"+alarm+"-Mon": 0
                                  for alarm in alarms})
-            self.alarm_led = PyDMLedMultiChannel(self, chs2vals)
+            self.alarm_led = PyDMLedMultiChannel(
+                self, chs2vals,
+                color_list=[PyDMLed.Yellow, PyDMLed.LightGreen, PyDMLed.Gray])
 
         self.reset_bt = PyDMPushButton(
             parent=self, icon=qta.icon('fa5s.sync'), pressValue=1,
@@ -672,6 +674,8 @@ class PSDetailWidget(QWidget):
         self.curve_siggen.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
         self.curve_siggen.autoRangeX = True
         self.curve_siggen.autoRangeY = True
+        self.curve_siggen.showXGrid = True
+        self.curve_siggen.showYGrid = True
         self.curve_siggen.plotItem.showButtons()
         self.curve_siggen.setBackgroundColor(QColor(255, 255, 255))
         self.curve_siggen.addChannel(
@@ -724,20 +728,20 @@ class PSDetailWidget(QWidget):
         layout.addWidget(wfm_updateauto_sts_led, 2, 2)
         return layout
 
-    def _sofbParamsLayout(self):
-        sofb_mode_ca = self._prefixed_psname + ':SOFBMode-Sts'
+    def _sofbModeLayout(self):
         sofb_mode_sel = self._prefixed_psname + ':SOFBMode-Sel'
+        sofb_mode_sts = self._prefixed_psname + ':SOFBMode-Sts'
 
-        sofb_mode_label = QLabel('SOFB Mode', self)
+        sofb_mode_label = QLabel('Enable', self)
         sofb_mode_btn = PyDMStateButton(self, sofb_mode_sel)
-        sofb_mode_sts_led = SiriusLedState(self, sofb_mode_ca)
+        sofb_mode_led = SiriusLedState(self, sofb_mode_sts)
 
         layout = QGridLayout()
         layout.setAlignment(Qt.AlignTop)
         layout.setColumnStretch(3, 1)
         layout.addWidget(sofb_mode_label, 0, 0, Qt.AlignRight)
         layout.addWidget(sofb_mode_btn, 0, 1, Qt.AlignHCenter)
-        layout.addWidget(sofb_mode_sts_led, 0, 2)
+        layout.addWidget(sofb_mode_led, 0, 2)
         return layout
 
     def _genParamsLayout(self):
@@ -819,9 +823,13 @@ class PSDetailWidget(QWidget):
         self.wfm.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
         self.wfm.autoRangeX = True
         self.wfm.autoRangeY = True
+        self.wfm.showXGrid = True
+        self.wfm.showYGrid = True
+        self.wfm.setLabel('left', text='Current [A]')
+        self.wfm.setLabel('bottom', text='Time [s]')
+        self.wfm.plotItem.ctrl.fftCheck.toggled.connect(self._wfmUpdAxisLabel)
         self.wfm.plotItem.showButtons()
         self.wfm.setBackgroundColor(QColor(255, 255, 255))
-        # self.wfm.setShowLegend(True)
         self.wfm.addChannel(y_channel=wfm_data_sp_ch, name='Wfm-SP',
                             color='red', lineWidth=2)
         self.wfm.addChannel(y_channel=wfm_data_rb_ch, name='Wfm-RB',
@@ -834,6 +842,15 @@ class PSDetailWidget(QWidget):
                             'Wfm-RB': self.wfm.curveAtIndex(1),
                             'WfmRef-Mon': self.wfm.curveAtIndex(2),
                             'Wfm-Mon': self.wfm.curveAtIndex(3)}
+        # change xdata to show time indices according to ScopeDuration-RB
+        ch_scopedur = self._prefixed_psname + ":ScopeDuration-RB"
+        self._scopedur_ch_rb = SiriusConnectionSignal(ch_scopedur)
+        self._scopedur_ch_rb.new_value_signal[float].connect(self._wfmTimeData)
+        # reimplement fourier transform to use ScopeFreq-RB
+        ch_scopefreq = self._prefixed_psname + ":ScopeFreq-RB"
+        self._scopefreq_ch_rb = SiriusConnectionSignal(ch_scopefreq)
+        for curve in self._wfm_curves.values():
+            curve._fourierTransform = self._wfmFourierData
 
         # Show
         self.show_wfm_sp = QCheckBox('SP')
@@ -937,6 +954,41 @@ class PSDetailWidget(QWidget):
         layout.addWidget(self.scope_dur_sp_sb, 2, 1)
         layout.addWidget(self.scope_dur_rb_label, 2, 2)
         return layout
+
+    def _wfmUpdAxisLabel(self, state):
+        xlabel = 'Frequency [Hz]' if state else 'Time [s]'
+        self.wfm.setLabel('bottom', text=xlabel)
+
+    def _wfmTimeData(self, value):
+        for curve in self._wfm_curves.values():
+            size = curve.latest_y.size
+            xdata = _np.linspace(0, value, size)
+            curve.receiveXWaveform(xdata)
+            curve.redrawCurve()
+
+    def _wfmFourierData(self, x, y):
+        """Perform Fourier transform.
+
+        This code is a copy of pyqtgraph.graphicsItems.PlotDataItem, just
+        changing the sampling frequency to the ScopeFreq-RB value.
+        """
+        # If x values are not sampled uniformly,
+        # then use np.interp to resample before taking fft.
+        dx = _np.diff(x)
+        uniform = not _np.any(_np.abs(dx-dx[0]) > (abs(dx[0]) / 1000.))
+        if not uniform:
+            x2 = _np.linspace(x[0], x[-1], len(x))
+            y = _np.interp(x2, x, y)
+            x = x2
+
+        n = y.size
+        f = _np.fft.rfft(y) / n
+        # Diff: use scope frequency
+        scopefreq = self._scopefreq_ch_rb.value
+        d = 1./scopefreq if scopefreq is not None else 1
+        x = _np.fft.rfftfreq(n, d)
+        y = _np.abs(f)
+        return x, y
 
 
 class LIPSDetailWidget(PSDetailWidget):
@@ -1976,7 +2028,7 @@ class PSAuxMeasWidget(SiriusDialog):
         else:
             flay = QFormLayout(wid)
             for pv in self.auxmeas:
-                text = pv.split('-')[0]
+                text = pv.split('-')[0] if 'SOFB' not in pv else pv
                 lbl = PyDMLabel(
                     self, self._prefixed_psname.substitute(propty=pv))
                 lbl.showUnits = True

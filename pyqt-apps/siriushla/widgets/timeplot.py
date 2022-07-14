@@ -63,6 +63,9 @@ class SiriusTimePlotItem(TimePlotCurveItem):
             now = Time.now().timestamp()
             xmin = now - self.parent.timeSpan
             idcs = _np.where(self.data_buffer[0] >= xmin)[0]
+            if idcs.size and idcs[0] != 0 and \
+                    self.data_buffer[0, idcs[0]-1] != 0:
+                idcs = _np.r_[idcs[0]-1, idcs]
             x = self.data_buffer[0, idcs].astype(_np.float)
             y = self.data_buffer[1, idcs].astype(_np.float)
 

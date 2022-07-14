@@ -442,32 +442,28 @@ class OpticsCorrWindow(SiriusMainWindow):
             mag_type = 'Q' if self.param == 'tune' else 'S'
             unit = '[1/m]' if self.param == 'tune' else '[1/m2]'
 
+            pvn = self.ioc_prefix.substitute(
+                propty='MeasConfigDelta'+self.intstrength+'Fam'+mag_type+'F')
             lb_meas_conf_dfamF = QLabel(
                 'Fam. Δ'+self.intstrength+' '+mag_type+'F '+unit, self)
             self.sb_meas_conf_dfamF = PyDMSpinbox(
-                self, self.ioc_prefix.substitute(
-                    propty='MeasConfigDelta'+self.intstrength +
-                           'Fam'+mag_type+'F-SP'))
+                self, pvn.substitute(propty_suffix='SP'))
             self.sb_meas_conf_dfamF.showStepExponent = False
             self.lb_meas_conf_dfamF = PyDMLabel(
-                self, self.ioc_prefix.substitute(
-                    propty='MeasConfigDelta'+self.intstrength +
-                           'Fam'+mag_type+'F-RB'))
+                self, pvn.substitute(propty_suffix='RB'))
             lay.addWidget(lb_meas_conf_dfamF, row+2, 0)
             lay.addWidget(self.sb_meas_conf_dfamF, row+2, 1)
             lay.addWidget(self.lb_meas_conf_dfamF, row+2, 2)
 
+            pvn = self.ioc_prefix.substitute(
+                propty='MeasConfigDelta'+self.intstrength+'Fam'+mag_type+'D')
             lb_meas_conf_dfamD = QLabel(
                 'Fam. Δ'+self.intstrength+' '+mag_type+'D '+unit, self)
             self.sb_meas_conf_dfamD = PyDMSpinbox(
-                self, self.ioc_prefix.substitute(
-                    propty='MeasConfigDelta'+self.intstrength +
-                           'Fam'+mag_type+'D-SP'))
+                self, pvn.substitute(propty_suffix='SP'))
             self.sb_meas_conf_dfamD.showStepExponent = False
             self.lb_meas_conf_dfamD = PyDMLabel(
-                self, self.ioc_prefix.substitute(
-                    propty='MeasConfigDelta'+self.intstrength +
-                           'Fam'+mag_type+'D-RB'))
+                self, pvn.substitute(propty_suffix='RB'))
             lay.addWidget(lb_meas_conf_dfamD, row+3, 0)
             lay.addWidget(self.sb_meas_conf_dfamD, row+3, 1)
             lay.addWidget(self.lb_meas_conf_dfamD, row+3, 2)

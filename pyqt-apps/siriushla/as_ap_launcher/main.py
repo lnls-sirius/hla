@@ -88,7 +88,6 @@ class MainLauncher(SiriusMainWindow):
         wid_injsys = InjSysStbyControlWidget(
             self, self._prefix, is_summary=True)
         lay_injsys = QGridLayout(self.wid_injsys)
-        lay_injsys.setAlignment(Qt.AlignCenter)
         lay_injsys.setContentsMargins(0, 0, 0, 0)
         lay_injsys.addWidget(wid_injsys)
 
