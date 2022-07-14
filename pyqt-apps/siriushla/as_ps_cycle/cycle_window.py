@@ -534,14 +534,15 @@ class CycleWindow(SiriusMainWindow):
 
         # update buttons and self._prepared dict if not in advanced mode
         if not self._is_adv_mode:
-            has_si = False
-            for psn in PSSearch.get_psnames({'sec': 'SI', 'dis': 'PS'}):
+            has_sifam = False
+            sifamfilt = {'sec': 'SI', 'sub': 'Fam', 'dis': 'PS'}
+            for psn in PSSearch.get_psnames(sifamfilt):
                 if psn not in self.pwrsupplies_tree._item_map:
                     continue
                 item = self.pwrsupplies_tree._item_map[psn]
-                has_si |= item.checkState(0) != 0
+                has_sifam |= item.checkState(0) != 0
 
-            if not has_si:
+            if not has_sifam:
                 self.cycle_bt.setText('8. Cycle')
                 self.restore_timing_bt.setText(
                     '9. Restore Timing Initial State')

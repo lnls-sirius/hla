@@ -20,8 +20,3 @@ class SIFastCorrectorControlWidget(BasePSControlWidget):
     def _getGroups(self):
         return [('Horizontal Fast Correctors', '-FCH'),
                 ('Vertical Fast Corretors', '-FCV')]
-
-    def _getVisibleProps(self):
-        return [
-            'detail', 'state', 'intlk', 'setpoint', 'readback',
-            'strength_sp', 'strength_rb']

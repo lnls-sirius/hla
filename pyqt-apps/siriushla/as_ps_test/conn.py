@@ -206,8 +206,7 @@ class TesterDCLink(_TesterPSBase):
                          DEFAULT_CAP_BANK_VOLT[self.device])
 
     def check_status(self):
-        status = True
-        status &= self.check_intlk()
+        status = self.check_intlk()
         if self.check_pwrstate():
             status &= self._cmp(
                 self._pvs['CapacitorBankVoltage-Mon'].value,
@@ -280,8 +279,7 @@ class TesterDCLinkRegatron(_TesterBase):
                            rtol=0.05)
 
     def check_status(self):
-        status = True
-        status &= self.check_intlk()
+        status = self.check_intlk()
         if self.check_pwrstate():
             status &= self.check_capvolt()
         return status
@@ -348,8 +346,7 @@ class TesterPS(_TesterPSBase):
 
     def check_status(self):
         """Check Status."""
-        status = True
-        status &= self.check_intlk()
+        status = self.check_intlk()
         if self.check_pwrstate():
             status &= self._cmp(
                 self._pvs['Current-Mon'].value,
@@ -451,12 +448,11 @@ class TesterPSLinac(_TesterBase):
 
     def check_status(self):
         """Check Status."""
-        status = True
-        status &= self.check_intlk()
+        status = self.check_intlk()
         if self.check_pwrstate():
             status &= self._cmp(
-                self._pvs['Current-SP'].value,
-                self._pvs['Current-Mon'].value)
+                self._pvs['Current-Mon'].value,
+                self._pvs['Current-SP'].value)
         return status
 
     def check_comm(self):
@@ -472,20 +468,14 @@ class TesterPSLinac(_TesterBase):
 class TesterPSFOFB(_TesterBase):
     """FOFB PS tester."""
 
-    CTRLLOOP_CLOSED = 1
-
     def __init__(self, device):
         """Init."""
         super().__init__(device)
         self.properties = [
-            'PSAmpOverCurrFlagL-Sts', 'PSAmpOverTempFlagL-Sts',
-            'PSAmpOverCurrFlagR-Sts', 'PSAmpOverTempFlagR-Sts',
+            'AlarmsAmp-Mon',
             'PwrState-Sel', 'PwrState-Sts',
-            'CtrlLoop-Sel', 'CtrlLoop-Sts',
-            'Current-SP', 'Current-RB',
-            'TestOpenLoopTriang-Sel', 'TestOpenLoopTriang-Sts',
-            'TestOpenLoopSquare-Sel', 'TestOpenLoopSquare-Sts',
-            'TestClosedLoopSquare-Sel', 'TestClosedLoopSquare-Sts',
+            'Current-SP', 'CurrentRef-Mon', 'Current-Mon',
+            'OpMode-Sel', 'OpMode-Sts',
         ]
         for ppty in self.properties:
             self._pvs[ppty] = _PV(
@@ -497,29 +487,21 @@ class TesterPSFOFB(_TesterBase):
         self.test_tol = splims['TSTR']
 
     def set_opmode(self, state):
-        """Set manual mode, disable tests."""
+        """Set manual mode."""
         if state != _PSC.OpMode.SlowRef:
             return
-        self._pvs['TestOpenLoopTriang-Sel'].value = _PSC.DsblEnbl.Dsbl
-        self._pvs['TestOpenLoopSquare-Sel'].value = _PSC.DsblEnbl.Dsbl
-        self._pvs['TestClosedLoopSquare-Sel'].value = _PSC.DsblEnbl.Dsbl
+        self._pvs['OpMode-Sel'].value = _PSC.OpModeFOFB.closed_loop_manual
 
     def check_opmode(self, state):
-        """Check whether power supply is in manual mode, test disabled."""
+        """Check whether power supply is in manual mode."""
         if state != _PSC.OpMode.SlowRef:
             return True
-        ok = self._pvs['TestOpenLoopTriang-Sts'].value == _PSC.DsblEnbl.Dsbl
-        ok &= self._pvs['TestOpenLoopSquare-Sts'].value == _PSC.DsblEnbl.Dsbl
-        ok &= self._pvs['TestClosedLoopSquare-Sts'].value == _PSC.DsblEnbl.Dsbl
-        return ok
+        return self._pvs['OpMode-Sts'].value == \
+            _PSC.OpModeFOFB.closed_loop_manual
 
     def check_intlk(self):
         """Check interlocks."""
-        status = (self._pvs['PSAmpOverCurrFlagL-Sts'].value == 1)
-        status &= (self._pvs['PSAmpOverTempFlagL-Sts'].value == 1)
-        status &= (self._pvs['PSAmpOverCurrFlagR-Sts'].value == 1)
-        status &= (self._pvs['PSAmpOverTempFlagR-Sts'].value == 1)
-        return status
+        return self._pvs['AlarmsAmp-Mon'].value == 0
 
     def set_pwrstate(self, state='on'):
         """Set PwrState."""
@@ -530,14 +512,6 @@ class TesterPSFOFB(_TesterBase):
         """Check PwrState."""
         value = _PSC.OffOn.On if state == 'on' else _PSC.OffOn.Off
         return self._pvs['PwrState-Sts'].value == value
-
-    def set_ctrlloop(self):
-        """Set CtrlLoop."""
-        self._pvs['CtrlLoop-Sel'].value = TesterPSFOFB.CTRLLOOP_CLOSED
-
-    def check_ctrlloop(self):
-        """Check CtrlLoop."""
-        return self._pvs['CtrlLoop-Sts'].value == TesterPSFOFB.CTRLLOOP_CLOSED
 
     def set_current(self, test=False, value=None):
         """Set current."""
@@ -555,16 +529,15 @@ class TesterPSFOFB(_TesterBase):
                 value = self.test_current
             else:
                 value = 0
-        status = self._cmp(self._pvs['Current-RB'].value, value)
-        return status
+        return self._cmp(self._pvs['Current-Mon'].value, value)
 
     def check_status(self):
         """Check Status."""
         status = self.check_intlk()
         if self.check_pwrstate():
             status &= self._cmp(
-                self._pvs['Current-RB'].value,
-                self._pvs['Current-SP'].value)
+                self._pvs['Current-Mon'].value,
+                self._pvs['CurrentRef-Mon'].value)
         return status
 
     def check_comm(self):
@@ -672,8 +645,7 @@ class _TesterPUBase(_TesterBase):
         return status
 
     def check_status(self):
-        status = True
-        status &= self.check_intlk()
+        status = self.check_intlk()
         if self.check_pwrstate():
             status &= self._cmp(
                 self._pvs['Voltage-Mon'].value,

@@ -21,6 +21,7 @@ class InterlockWidget(QWidget):
         self.led = SiriusLedAlert(self, init_channel, bit)
         self.label = QLabel(label, self)
         lay = QHBoxLayout()
+        lay.setAlignment(Qt.AlignLeft)
         lay.addWidget(self.led)
         lay.addWidget(self.label)
         self.setLayout(lay)
@@ -64,7 +65,7 @@ class InterlockWindow(SiriusMainWindow):
 
     def __init__(self, parent=None, devname='', interlock=None, auxdev=list(),
                  auxdev2mod=dict()):
-        """."""
+        """Init."""
         super().__init__(parent)
         self._devname = _PVName(devname)
         self._auxdev = auxdev
@@ -91,6 +92,8 @@ class InterlockWindow(SiriusMainWindow):
             self._intlktype = 'Hard'
         elif 'IntlkIIB' in self._interlock[0]:
             self._intlktype = 'IIB'
+        elif self._devname.dev in ['FCH', 'FCV']:
+            self._intlktype = 'Amp'
 
         self._intlkname = self._intlktype + ' ' + auxlabel
         self.setWindowTitle(self._devname + ' - ' + self._intlkname)
