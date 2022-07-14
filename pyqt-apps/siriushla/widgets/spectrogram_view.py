@@ -5,13 +5,12 @@ Based on ImageView from pydm and GradientLegend from pyqtgraph.
 
 import numpy as np
 import logging
-from qtpy.QtWidgets import QActionGroup, QToolTip
+from qtpy.QtWidgets import QActionGroup, QToolTip, QMenu
 from qtpy.QtGui import QColor, QLinearGradient, QBrush, QPen
 from qtpy.QtCore import Signal, Slot, Property, QTimer, Q_ENUMS, \
     QThread, Qt, QRectF, QPointF
 from pyqtgraph import ViewBox, ImageItem, AxisItem, GraphicsLayoutWidget, \
     ColorMap, GraphicsWidget, LabelItem, PlotCurveItem, mkPen
-from pyqtgraph.graphicsItems.ViewBox.ViewBoxMenu import ViewBoxMenu
 from pydm.widgets.channel import PyDMChannel
 from pydm.widgets.colormaps import cmaps, cmap_names, PyDMColorMap
 from pydm.widgets.base import PyDMWidget
@@ -360,25 +359,17 @@ class SiriusSpectrogramView(
         self.ROIWidthChannel = roiwidth_channel
         self.ROIHeightChannel = roiheight_channel
 
-    # --- Context menu ---
-    def widget_ctx_menu(self):
-        """
-        Fetch the Widget specific context menu.
+        # Handle view range changed
+        self._view.sigRangeChanged.connect(self._update_axis_range)
+        self._view.suggestPadding = lambda x: 0.0
 
-        It will be populated with additional tools by `assemble_tools_menu`.
-
-        Returns
-        -------
-        QMenu or None
-            If the return of this method is None a new QMenu will be created by
-            `assemble_tools_menu`.
-        """
-        self.menu = ViewBoxMenu(self._view)
-        cm_menu = self.menu.addMenu("Color Map")
+        # Context menu
+        self.contextMenuEvent = None
+        cm_menu = QMenu("Color Map")
         for act in self.cmap_for_action.keys():
             cm_menu.addAction(act)
         cm_menu.triggered.connect(self._changeColorMap)
-        return self.menu
+        self._view.scene().contextMenu.append(cm_menu)
 
     # --- Colormap methods ---
     def _changeColorMap(self, action):
@@ -766,38 +757,36 @@ class SiriusSpectrogramView(
         logging.debug("SpectrogramView RedrawImage Thread Launched")
         self.thread.start()
 
+    def _update_axis_range(self, *_):
+        if self._last_xaxis_data is not None:
+            iszx = self._last_xaxis_data.size
+            ixMin = self._last_xaxis_data.min()
+            ixMax = self._last_xaxis_data.max()
+        else:
+            iszx = self.imageWidth if self.readingOrder == self.Clike \
+                else self.imageHeight
+            ixMin = 0
+            ixMax = iszx
+
+        if self._last_yaxis_data is not None:
+            iszy = self._last_yaxis_data.size
+            iyMin = self._last_yaxis_data.min()
+            iyMax = self._last_yaxis_data.max()
+        else:
+            iszy = self.imageHeight if self.readingOrder == self.Clike \
+                else self.imageWidth
+            iyMin = 0
+            iyMax = iszy
+
+        [_vx, _vy] = self._view.viewRange()
+        limsx = np.array(_vx) / iszx * (ixMax-ixMin) + ixMin
+        limsy = np.array(_vy) / iszy * (iyMax-iyMin) + iyMin
+        self.xaxis.setRange(limsx[0], limsx[1])
+        self.yaxis.setRange(limsy[0], limsy[1])
+
     @Slot(list)
     def _updateDisplay(self, data):
         logging.debug("SpectrogramView Update Display with new image")
-
-        # Update axis
-        if self._last_xaxis_data is not None:
-            szx = self._last_xaxis_data.size
-            xMin = self._last_xaxis_data.min()
-            xMax = self._last_xaxis_data.max()
-        else:
-            szx = self.imageWidth if self.readingOrder == self.Clike \
-                else self.imageHeight
-            xMin = 0
-            xMax = szx
-
-        if self._last_yaxis_data is not None:
-            szy = self._last_yaxis_data.size
-            yMin = self._last_yaxis_data.min()
-            yMax = self._last_yaxis_data.max()
-        else:
-            szy = self.imageHeight if self.readingOrder == self.Clike \
-                else self.imageWidth
-            yMin = 0
-            yMax = szy
-
-        self.xaxis.setRange(xMin, xMax)
-        self.yaxis.setRange(yMin, yMax)
-        self._view.setLimits(
-            xMin=0, xMax=szx, yMin=0, yMax=szy,
-            minXRange=szx, maxXRange=szx, minYRange=szy, maxYRange=szy)
-
-        # Update image
         if self.autoSetColorbarLims:
             self.colorbar.setLimits(data)
         mini, maxi = data[0], data[1]
@@ -1129,6 +1118,8 @@ class SiriusSpectrogramView(
             return
         pos = ev.pos()
         posaux = self._image_item.mapFromDevice(ev.pos())
+        if not posaux:
+            return
         if posaux.x() < 0 or posaux.x() >= self._image_item.width() or \
                 posaux.y() < 0 or posaux.y() >= self._image_item.height():
             super().mouseMoveEvent(ev)
