@@ -15,7 +15,6 @@ from pydm.widgets.channel import PyDMChannel
 from pydm.widgets.colormaps import cmaps, cmap_names, PyDMColorMap
 from pydm.widgets.base import PyDMWidget
 from pydm.widgets.image import ReadingOrder
-from siriuspy.magnet.util import linear_interpolation as _linear_interpolation
 
 logger = logging.getLogger(__name__)
 
@@ -780,10 +779,8 @@ class SiriusSpectrogramView(
             iyMax = iszy
 
         [_vx, _vy] = self._view.viewRange()
-        limsx = _linear_interpolation(
-            np.array(_vx), np.array([0, iszx]), np.array([ixMin, ixMax]))
-        limsy = _linear_interpolation(
-            np.array(_vy), np.array([0, iszy]), np.array([iyMin, iyMax]))
+        limsx = np.array(_vx) / iszx * (ixMax-ixMin) + ixMin
+        limsy = np.array(_vy) / iszy * (iyMax-iyMin) + iyMin
         self.xaxis.setRange(limsx[0], limsx[1])
         self.yaxis.setRange(limsy[0], limsy[1])
 
