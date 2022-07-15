@@ -4,7 +4,7 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QLabel, QGridLayout, QGroupBox, \
     QHBoxLayout
 import qtawesome as qta
-from pydm.widgets import PyDMLabel, PyDMPushButton
+from pydm.widgets import PyDMPushButton
 
 from siriuspy.envars import VACA_PREFIX
 from siriuspy.namesys import SiriusPVName as _PVName
@@ -48,28 +48,28 @@ class BeamLineMVS2View(SiriusMainWindow):
         self._ld_enbl = QLabel('Start/Stop: ')
         self._sb_enbl = PyDMStateButton(
             gbox_ctrl, self._device_analysis+':MeasureCtrl-Sel')
-        self._lb_enbl = PyDMLabel(
+        self._lb_enbl = SiriusLabel(
             gbox_ctrl, self._device_analysis+':MeasureCtrl-Sts')
 
         self._ld_rate = QLabel('Acq. Rate: ')
         self._sb_rate = SiriusSpinbox(
             gbox_ctrl, self._device_analysis+':MeasureRate-SP')
         self._sb_rate.showStepExponent = False
-        self._lb_rate = PyDMLabel(
+        self._lb_rate = SiriusLabel(
             gbox_ctrl, self._device_analysis+':MeasureRate-RB')
 
         self._ld_tgtx = QLabel('Target X: ')
         self._sb_tgtx = SiriusSpinbox(
             gbox_ctrl, self._device_analysis+':TargetPosX-SP')
         self._sb_tgtx.showStepExponent = False
-        self._lb_tgtx = PyDMLabel(
+        self._lb_tgtx = SiriusLabel(
             gbox_ctrl, self._device_analysis+':TargetPosX-RB')
 
         self._ld_tgty = QLabel('Target Y: ')
         self._sb_tgty = SiriusSpinbox(
             gbox_ctrl, self._device_analysis+':TargetPosY-SP')
         self._sb_tgty.showStepExponent = False
-        self._lb_tgty = PyDMLabel(
+        self._lb_tgty = SiriusLabel(
             gbox_ctrl, self._device_analysis+':TargetPosY-RB')
 
         lay_ctrl.setAlignment(Qt.AlignTop)
@@ -105,7 +105,7 @@ class BeamLineMVS2View(SiriusMainWindow):
         pb_app.confirmMessage = \
             'This action will change the reference orbit used in SOFB.\n' +\
             pb_app.confirmMessage
-        lb_app = PyDMLabel(
+        lb_app = SiriusLabel(
             gbox_sofb, init_channel=pre+':ApplyStatus-Mon')
 
         lay_sofb.setAlignment(Qt.AlignTop)
@@ -135,7 +135,7 @@ class BeamLineMVS2View(SiriusMainWindow):
         self._sb_acqtime.showStepExponent = False
         self._sb_acqtime.limitsFromChannel = False
         self._sb_acqtime.setRange(0.001, 10)
-        self._lb_acqtime = PyDMLabel(
+        self._lb_acqtime = SiriusLabel(
             gbox_acqsett, self._device_cam+':cam1:AcquireTime_RBV')
         self._lb_acqtime.showUnits = True
 
@@ -145,16 +145,16 @@ class BeamLineMVS2View(SiriusMainWindow):
         self._sb_acqperd.showStepExponent = False
         self._sb_acqperd.limitsFromChannel = False
         self._sb_acqperd.setRange(0.001, 10)
-        self._lb_acqperd = PyDMLabel(
+        self._lb_acqperd = SiriusLabel(
             gbox_acqsett, self._device_cam+':cam1:AcquirePeriod_RBV')
         self._lb_acqperd.showUnits = True
 
         self._ld_numimgs = QLabel('# Images: ')
-        self._lb_numimgs = PyDMLabel(
+        self._lb_numimgs = SiriusLabel(
             gbox_acqsett, self._device_cam+':cam1:NumImages_RBV')
 
         self._ld_imgmode = QLabel('Image Mode: ')
-        self._lb_imgmode = PyDMLabel(
+        self._lb_imgmode = SiriusLabel(
             gbox_acqsett, self._device_cam+':cam1:ImageMode_RBV')
 
         self._ld_acqsts = QLabel('Acquire Status: ')
@@ -188,7 +188,7 @@ class BeamLineMVS2View(SiriusMainWindow):
         lay_acqsett.setRowStretch(10, 20)
 
         self.cw = QWidget()
-        self.cw.setStyleSheet('PyDMLabel{qproperty-alignment: AlignCenter;}')
+        self.cw.setStyleSheet('SiriusLabel{qproperty-alignment: AlignCenter;}')
         lay = QGridLayout(self.cw)
         lay.addWidget(label, 0, 0, 1, 3)
         lay.addWidget(self._process_image, 1, 0, 2, 1)

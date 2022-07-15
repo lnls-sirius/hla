@@ -12,13 +12,12 @@ from qtpy.QtWidgets import QWidget, QLabel, QCheckBox, QGridLayout, \
 
 import qtawesome as qta
 
-from pydm.widgets import PyDMLabel
 from pydm.connection_inspector import ConnectionInspector
 
 from siriuspy.envars import VACA_PREFIX
 from siriuspy.clientarch.time import Time
 from siriuspy.epics import PV
-from ..widgets import SiriusAlarmFrame, SiriusTimePlot
+from ..widgets import SiriusAlarmFrame, SiriusTimePlot, SiriusLabel
 from ..util import get_appropriate_color
 
 
@@ -191,7 +190,7 @@ class RadTotDoseMonitor(QWidget):
             cbx.setPalette(pal)
             self._cb_show[mon] = cbx
 
-            lbl = PyDMLabel(self, pvname + ':Dose')
+            lbl = SiriusLabel(self, pvname + ':Dose', keep_unit=True)
             lbl.alarmSensitiveBorder = False
             lbl.setStyleSheet('QLabel{font-size: 52pt;}')
             lbl.showUnits = True
@@ -235,7 +234,7 @@ class RadTotDoseMonitor(QWidget):
         lay.addWidget(widgrid, 0, 1)
 
         self.setStyleSheet("""
-            PyDMLabel{
+            SiriusLabel{
                 qproperty-alignment: AlignCenter; font-weight: bold;
             }
             QCheckBox::indicator {

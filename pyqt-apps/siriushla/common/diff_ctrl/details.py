@@ -1,8 +1,8 @@
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGridLayout, QFormLayout, QLabel, QGroupBox
-from pydm.widgets import PyDMLabel, PyDMPushButton, PyDMSpinbox
+from pydm.widgets import PyDMPushButton, PyDMSpinbox
 from siriuspy.namesys import SiriusPVName as _PVName
-from siriushla.widgets import SiriusDialog, PyDMLed
+from siriushla.widgets import SiriusDialog, PyDMLed, SiriusLabel
 
 
 class DiffCtrlDetails(SiriusDialog):
@@ -31,7 +31,7 @@ class DiffCtrlDetails(SiriusDialog):
         gbox_limits.setLayout(self._setupLimitsLayout())
 
         self.setStyleSheet("""
-            PyDMSpinbox, PyDMLabel{
+            PyDMSpinbox, SiriusLabel{
                 min-width: 5em; max-width: 5em;
             }""")
 
@@ -46,20 +46,20 @@ class DiffCtrlDetails(SiriusDialog):
 
     def _setupGeneralInfoLayout(self):
         label_NegMtrCtrlPrefix = QLabel('Negative Motion Control: ', self)
-        self.PyDMLabel_NegMtrCtrlPrefix = PyDMLabel(
+        self.lb_NegMtrCtrlPrefix = SiriusLabel(
             self, self.dev_prefix.substitute(propty='NegativeMotionCtrl-Cte'))
-        self.PyDMLabel_NegMtrCtrlPrefix.setStyleSheet("""
+        self.lb_NegMtrCtrlPrefix.setStyleSheet("""
             max-width:14.20em; max-height:1.29em;""")
 
         label_PosMtrCtrlPrefix = QLabel('Positive Motion Control: ', self)
-        self.PyDMLabel_PosMtrCtrlPrefix = PyDMLabel(
+        self.lb_PosMtrCtrlPrefix = SiriusLabel(
             self, self.dev_prefix.substitute(propty='PositiveMotionCtrl-Cte'))
-        self.PyDMLabel_PosMtrCtrlPrefix.setStyleSheet("""
+        self.lb_PosMtrCtrlPrefix.setStyleSheet("""
             max-width:14.20em; max-height:1.29em;""")
 
         flay = QFormLayout()
-        flay.addRow(label_NegMtrCtrlPrefix, self.PyDMLabel_NegMtrCtrlPrefix)
-        flay.addRow(label_PosMtrCtrlPrefix, self.PyDMLabel_PosMtrCtrlPrefix)
+        flay.addRow(label_NegMtrCtrlPrefix, self.lb_NegMtrCtrlPrefix)
+        flay.addRow(label_PosMtrCtrlPrefix, self.lb_PosMtrCtrlPrefix)
         flay.setLabelAlignment(Qt.AlignRight)
         flay.setFormAlignment(Qt.AlignCenter)
         return flay
@@ -134,22 +134,22 @@ class DiffCtrlDetails(SiriusDialog):
         self.sb_PosEdgeInnerLim = PyDMSpinbox(
             self, self.dev_prefix.substitute(propty='PosEdgeInnerLim-SP'))
         self.sb_PosEdgeInnerLim.showStepExponent = False
-        self.lb_PosEdgeInnerLim = PyDMLabel(
+        self.lb_PosEdgeInnerLim = SiriusLabel(
             self, self.dev_prefix.substitute(propty='PosEdgeInnerLim-RB'))
         self.sb_NegEdgeInnerLim = PyDMSpinbox(
             self, self.dev_prefix.substitute(propty='NegEdgeInnerLim-SP'))
         self.sb_NegEdgeInnerLim.showStepExponent = False
-        self.lb_NegEdgeInnerLim = PyDMLabel(
+        self.lb_NegEdgeInnerLim = SiriusLabel(
             self, self.dev_prefix.substitute(propty='NegEdgeInnerLim-RB'))
         self.sb_LowOuterLim = PyDMSpinbox(
             self, self.dev_prefix.substitute(propty='LowOuterLim-SP'))
         self.sb_LowOuterLim.showStepExponent = False
-        self.lb_LowOuterLim = PyDMLabel(
+        self.lb_LowOuterLim = SiriusLabel(
             self, self.dev_prefix.substitute(propty='LowOuterLim-RB'))
         self.sb_HighOuterLim = PyDMSpinbox(
             self, self.dev_prefix.substitute(propty='HighOuterLim-SP'))
         self.sb_HighOuterLim.showStepExponent = False
-        self.lb_HighOuterLim = PyDMLabel(
+        self.lb_HighOuterLim = SiriusLabel(
             self, self.dev_prefix.substitute(propty='HighOuterLim-RB'))
 
         lay = QGridLayout()

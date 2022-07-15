@@ -6,14 +6,14 @@ from qtpy.QtWidgets import QWidget, QGridLayout, QLabel, \
 
 import qtawesome as qta
 
-from pydm.widgets import PyDMLabel, PyDMPushButton
+from pydm.widgets import PyDMPushButton
 
 from siriuspy.envars import VACA_PREFIX
 from siriuspy.namesys import SiriusPVName as _PVName
 
 from ..util import connect_window, get_appropriate_color
 from ..widgets import SiriusMainWindow, SiriusLedState, SiriusSpinbox, \
-    PyDMStateButton
+    PyDMStateButton, SiriusLabel
 from .auxiliary_dialogs import ModIntlkDetailDialog, ModEmerStopDialog
 
 
@@ -241,12 +241,12 @@ class LIModltrWindow(SiriusMainWindow):
 
         sb_volt = SiriusSpinbox(self, dev+':WRITE_V')
         sb_volt.showStepExponent = False
-        lb_volt = PyDMLabel(self, dev+':READV')
+        lb_volt = SiriusLabel(self, dev+':READV')
         lb_volt.setAlignment(Qt.AlignCenter)
 
         sb_curr = SiriusSpinbox(self, dev+':WRITE_I')
         sb_curr.showStepExponent = False
-        lb_curr = PyDMLabel(self, dev+':READI')
+        lb_curr = SiriusLabel(self, dev+':READI')
         lb_curr.setAlignment(Qt.AlignCenter)
 
         wid = QFrame()
@@ -285,16 +285,16 @@ class LIModltrWindow(SiriusMainWindow):
         return wid
 
     def _setupAuxMonitorWidget(self, dev):
-        lb_klymin = PyDMLabel(self, dev+':K_W_T1')
+        lb_klymin = SiriusLabel(self, dev+':K_W_T1')
         lb_klymin.setStyleSheet(
             'QLabel{min-width: 2em; max-width: 2em;}')
-        lb_klysec = PyDMLabel(self, dev+':K_W_T2')
+        lb_klysec = SiriusLabel(self, dev+':K_W_T2')
         lb_klysec.setStyleSheet(
             'QLabel{min-width: 2em; max-width: 2em;}')
-        lb_thymin = PyDMLabel(self, dev+':TH_W_T01')
+        lb_thymin = SiriusLabel(self, dev+':TH_W_T01')
         lb_thymin.setStyleSheet(
             'QLabel{min-width: 2em; max-width: 2em;}')
-        lb_thysec = PyDMLabel(self, dev+':TH_W_T02')
+        lb_thysec = SiriusLabel(self, dev+':TH_W_T02')
         lb_thysec.setStyleSheet(
             'QLabel{min-width: 2em; max-width: 2em;}')
 

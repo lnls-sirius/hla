@@ -8,7 +8,7 @@ from qtpy.QtWidgets import QLabel, QPushButton, QGroupBox, QVBoxLayout, \
     QHBoxLayout, QGridLayout, QMenuBar, QSplitter, QTabWidget, QWidget, \
     QSizePolicy as QSzPol, QCheckBox, QFrame, QAbstractItemView, QHeaderView
 import qtawesome as qta
-from pydm.widgets import PyDMLabel, PyDMLineEdit, PyDMPushButton
+from pydm.widgets import PyDMLineEdit, PyDMPushButton
 
 from siriuspy.search import LLTimeSearch, HLTimeSearch
 from siriuspy.namesys import SiriusPVName as _PVName
@@ -180,7 +180,7 @@ class EVG(BaseWidget):
         sp = SiriusSpinbox(self, init_channel=pvname)
         sp.showStepExponent = False
         pvname = self.get_pvname(propty='InjRate-RB')
-        rb = PyDMLabel(self, init_channel=pvname)
+        rb = SiriusLabel(self, init_channel=pvname)
         pg = self._create_prop_widget('Pulse Rate [Hz]', configs_wid, (sp, rb))
         lay.addWidget(pg, 0, 4, alignment=Qt.AlignCenter)
 
@@ -201,7 +201,7 @@ class EVG(BaseWidget):
         pvname = self.get_pvname(propty='ACSrc-Sel')
         sp = SiriusEnumComboBox(self, init_channel=pvname)
         pvname = self.get_pvname(propty='ACSrc-Sts')
-        rb = PyDMLabel(self, init_channel=pvname)
+        rb = SiriusLabel(self, init_channel=pvname)
         pg = self._create_prop_widget('AC Source', configs_wid, (sp, rb))
         lay.addWidget(pg, 1, 2, alignment=Qt.AlignCenter)
 
@@ -223,7 +223,7 @@ class EVG(BaseWidget):
         sp = SiriusSpinbox(self, init_channel=pvname)
         sp.showStepExponent = False
         pvname = self.get_pvname(propty='RFDiv-RB')
-        rb = PyDMLabel(self, init_channel=pvname)
+        rb = SiriusLabel(self, init_channel=pvname)
         pg = self._create_prop_widget('RF Divisor', configs_wid, (sp, rb))
         lay.addWidget(pg, 1, 4, alignment=Qt.AlignCenter)
 
@@ -235,9 +235,9 @@ class EVG(BaseWidget):
         status_layout.setVerticalSpacing(5)
 
         pvname = self.get_pvname(propty='STATEMACHINE')
-        rb1 = PyDMLabel(self.status_wid, init_channel=pvname)
+        rb1 = SiriusLabel(self.status_wid, init_channel=pvname)
         pvname = self.get_pvname(propty='DevStatus-Mon')
-        rb2 = PyDMLabel(self.status_wid, init_channel=pvname)
+        rb2 = SiriusLabel(self.status_wid, init_channel=pvname)
         hlay = QHBoxLayout()
         hlay.addStretch()
         hlay.addWidget(rb1)
@@ -252,11 +252,11 @@ class EVG(BaseWidget):
         wid.setLayout(QHBoxLayout())
         wid.layout().setContentsMargins(0, 0, 0, 0)
         pvname = self.get_pvname(propty='TotalInjCount-Mon')
-        pydmlab1 = PyDMLabel(self.status_wid, init_channel=pvname)
+        pydmlab1 = SiriusLabel(self.status_wid, init_channel=pvname)
         pydmlab1.setStyleSheet('min-width:5em;')
         pydmlab1.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         pvname = self.get_pvname(propty='InjCount-Mon')
-        pydmlab2 = PyDMLabel(self.status_wid, init_channel=pvname)
+        pydmlab2 = SiriusLabel(self.status_wid, init_channel=pvname)
         pydmlab2.setAlignment(Qt.AlignCenter)
         lab1 = QLabel(
             '(', self.status_wid, alignment=Qt.AlignRight | Qt.AlignVCenter)
@@ -275,10 +275,10 @@ class EVG(BaseWidget):
         wid.setLayout(QHBoxLayout())
         wid.layout().setContentsMargins(0, 0, 0, 0)
         pvname = self.get_pvname(propty='SeqStatus-Mon')
-        pydmlab1 = PyDMLabel(self.status_wid, init_channel=pvname)
+        pydmlab1 = SiriusLabel(self.status_wid, init_channel=pvname)
         pydmlab1.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         pvname = self.get_pvname(propty='SeqCount-SP')
-        pydmlab2 = PyDMLabel(self.status_wid, init_channel=pvname)
+        pydmlab2 = SiriusLabel(self.status_wid, init_channel=pvname)
         lab1 = QLabel(
             '(', self.status_wid, alignment=Qt.AlignRight | Qt.AlignVCenter)
         lab2 = QLabel(
@@ -295,7 +295,7 @@ class EVG(BaseWidget):
 
         lb = QLabel("<b>Alive</b>")
         pvname = self.get_pvname(propty='Alive-Mon')
-        rb = PyDMLabel(self, init_channel=pvname)
+        rb = SiriusLabel(self, init_channel=pvname)
         gb = self._create_small_group('', self.status_wid, (lb, rb))
         status_layout.addWidget(gb, 2, 0)
 
@@ -351,9 +351,9 @@ class EVG(BaseWidget):
 
         lb = QLabel("<b>IP</b>")
         pvname = self.get_pvname(propty='IPAddr-Mon')
-        addr = PyDMLabel(self, init_channel=pvname)
+        addr = SiriusLabel(self, init_channel=pvname)
         pvname = self.get_pvname(propty='IPPort-Mon')
-        port = PyDMLabel(self, init_channel=pvname)
+        port = SiriusLabel(self, init_channel=pvname)
         gb = self._create_small_group('', info_wid, (lb, addr, port))
         lay.addWidget(gb, 0, 0, alignment=Qt.AlignHCenter)
 
@@ -361,19 +361,19 @@ class EVG(BaseWidget):
         pvname = self.get_pvname(propty='DevFun-Sel')
         sp = SiriusEnumComboBox(self, init_channel=pvname)
         pvname = self.get_pvname(propty='DevFun-Sts')
-        rb = PyDMLabel(self, init_channel=pvname)
+        rb = SiriusLabel(self, init_channel=pvname)
         gb = self._create_small_group('', info_wid, (lb, sp, rb))
         lay.addWidget(gb, 0, 1, alignment=Qt.AlignHCenter)
 
         lb = QLabel("<b>Device Status</b>")
         pvname = self.get_pvname(propty='DevStatus-Mon')
-        rb = PyDMLabel(self, init_channel=pvname)
+        rb = SiriusLabel(self, init_channel=pvname)
         gb = self._create_small_group('', info_wid, (lb, rb))
         lay.addWidget(gb, 0, 2, alignment=Qt.AlignHCenter)
 
         lb = QLabel("<b>FPGA Clk</b>")
         pvname = self.get_pvname('FPGAClk-Cte')
-        mon = PyDMLabel(self, init_channel=pvname)
+        mon = SiriusLabel(self, init_channel=pvname)
         mon.showUnits = True
         gb = self._create_small_group('', info_wid, (lb, mon))
         lay.addWidget(gb, 0, 3, alignment=Qt.AlignCenter)
@@ -396,7 +396,7 @@ class EVG(BaseWidget):
 
         lb = QLabel("<b>RF Ref.</b>")
         pvname = self.get_pvname('RFRef-Mon')
-        mon = PyDMLabel(self, init_channel=pvname)
+        mon = SiriusLabel(self, init_channel=pvname)
         mon.showUnits = True
         pvname = self.get_pvname('RFRef-Mon', field='INP')
         inp = PyDMLineEdit(self, init_channel=pvname)
@@ -405,13 +405,13 @@ class EVG(BaseWidget):
 
         lb = QLabel("<b>FRMVERSION</b>")
         pvname = self.get_pvname(propty='FrmVersionA-Cte')
-        frma = PyDMLabel(self, init_channel=pvname)
+        frma = SiriusLabel(self, init_channel=pvname)
         frma.displayFormat = frma.DisplayFormat.Hex
         pvname = self.get_pvname(propty='FrmVersionB-Cte')
-        frmb = PyDMLabel(self, init_channel=pvname)
+        frmb = SiriusLabel(self, init_channel=pvname)
         frmb.displayFormat = frmb.DisplayFormat.Hex
         pvname = self.get_pvname(propty='FrmVersionC-Cte')
-        frmc = PyDMLabel(self, init_channel=pvname)
+        frmc = SiriusLabel(self, init_channel=pvname)
         frmc.displayFormat = frmc.DisplayFormat.Hex
         gb = self._create_small_group(
             '', info_wid, (lb, frma, frmb, frmc))
@@ -461,7 +461,7 @@ class EVG(BaseWidget):
         pvname = self.get_pvname(propty='IntlkCtrlRepeatTime-SP')
         sp = PyDMLineEdit(self, init_channel=pvname)
         pvname = self.get_pvname(propty='IntlkCtrlRepeatTime-RB')
-        rb = PyDMLabel(self, init_channel=pvname)
+        rb = SiriusLabel(self, init_channel=pvname)
         gb = self._create_prop_widget('Intlk. Repeat Time', wid, (sp, rb))
         lay.addWidget(gb, 3, 0, alignment=Qt.AlignCenter)
 
@@ -477,7 +477,7 @@ class EVG(BaseWidget):
             le = PyDMLineEdit(self, self.get_pvname('IntlkEvtIn'+idxstr+'-SP'))
             le.setObjectName('le')
             le.setAlignment(Qt.AlignCenter)
-            lb = PyDMLabel(self, self.get_pvname('IntlkEvtIn'+idxstr+'-RB'))
+            lb = SiriusLabel(self, self.get_pvname('IntlkEvtIn'+idxstr+'-RB'))
             lb.setObjectName('lb')
             lb.setAlignment(Qt.AlignCenter)
             ld = SiriusLedState(
@@ -492,7 +492,7 @@ class EVG(BaseWidget):
         le = PyDMLineEdit(self, self.get_pvname('IntlkEvtOut-SP'))
         le.setObjectName('le')
         le.setAlignment(Qt.AlignCenter)
-        lb = PyDMLabel(self, self.get_pvname('IntlkEvtOut-RB'))
+        lb = SiriusLabel(self, self.get_pvname('IntlkEvtOut-RB'))
         lb.setObjectName('lb')
         lb.setAlignment(Qt.AlignCenter)
         ld = SiriusLedState(self, self.get_pvname('IntlkEvtStatus-Mon'), bit=7)
@@ -590,7 +590,7 @@ class EVG(BaseWidget):
         pvname = self.get_pvname(propty='TimestampSrc-Sel')
         sp = SiriusEnumComboBox(self, init_channel=pvname)
         pvname = self.get_pvname(propty='TimestampSrc-Sts')
-        rb = PyDMLabel(self, init_channel=pvname)
+        rb = SiriusLabel(self, init_channel=pvname)
         gb = self._create_small_group('', gbox, (lb, sp, rb))
         lay_box.addWidget(gb, 1, 1, alignment=Qt.AlignTop)
 
@@ -598,19 +598,19 @@ class EVG(BaseWidget):
         pvname = self.get_pvname(propty='UTC-SP')
         sp = PyDMLineEdit(self, init_channel=pvname)
         pvname = self.get_pvname(propty='UTC-RB')
-        rb = PyDMLabel(self, init_channel=pvname)
+        rb = SiriusLabel(self, init_channel=pvname)
         rb.showUnits = True
         gb = self._create_small_group('', gbox, (lb, sp, rb))
         lay_box.addWidget(gb, 2, 0, alignment=Qt.AlignTop)
 
         lb = QLabel('<b>Subsec</b>')
-        mon = PyDMLabel(self, self.get_pvname('SubSecond-Mon'))
+        mon = SiriusLabel(self, self.get_pvname('SubSecond-Mon'))
         mon.showUnits = True
         gb = self._create_small_group('', gbox, (lb, mon))
         lay_box.addWidget(gb, 2, 1, alignment=Qt.AlignTop)
 
         lb = QLabel('<b>Control Room UTC</b>')
-        mon = PyDMLabel(self, self.get_pvname('CtrlRoomUTC'))
+        mon = SiriusLabel(self, self.get_pvname('CtrlRoomUTC'))
         mon.showUnits = True
         gb = self._create_small_group('', gbox, (lb, mon))
         lay_box.addWidget(gb, 3, 0, alignment=Qt.AlignTop)
@@ -840,7 +840,8 @@ class BucketList(BaseWidget):
         vlay.addWidget(rb)
         lay.addLayout(vlay, 0, 1)
 
-        rb = PyDMLabel(wid, init_channel=self.get_pvname("BucketListLen-Mon"))
+        rb = SiriusLabel(
+            wid, init_channel=self.get_pvname("BucketListLen-Mon"))
         rb.setStyleSheet("min-width:4em; max-height:1.15em;")
         rb.setAlignment(Qt.AlignCenter)
         lab = QLabel('Size', wid)
@@ -856,7 +857,7 @@ class BucketList(BaseWidget):
         sp = SiriusSpinbox(wid, init_channel=pvname)
         sp.showStepExponent = False
         pvname = self.get_pvname("RepeatBucketList-RB")
-        rb = PyDMLabel(wid, init_channel=pvname)
+        rb = SiriusLabel(wid, init_channel=pvname)
         rb.setStyleSheet("min-width:4em; max-height:1.15em;")
         lab = QLabel('Repeat', wid, alignment=Qt.AlignCenter)
         hlay = QHBoxLayout()
@@ -974,32 +975,32 @@ class EventList(BaseList):
             pvname = device.substitute(propty=device.propty+'Mode-Sel')
             sp = SiriusEnumComboBox(self, init_channel=pvname)
             pvname = device.substitute(propty=device.propty+'Mode-Sts')
-            rb = PyDMLabel(self, init_channel=pvname)
+            rb = SiriusLabel(self, init_channel=pvname)
         elif prop == 'delay_type':
             pvname = device.substitute(propty=device.propty+'DelayType-Sel')
             sp = SiriusEnumComboBox(self, init_channel=pvname)
             pvname = device.substitute(propty=device.propty+'DelayType-Sts')
-            rb = PyDMLabel(self, init_channel=pvname)
+            rb = SiriusLabel(self, init_channel=pvname)
         elif prop == 'delay':
             pvname = device.substitute(propty=device.propty+'Delay-SP')
             sp = SiriusSpinbox(self, init_channel=pvname)
             sp.showStepExponent = False
             pvname = device.substitute(propty=device.propty+'Delay-RB')
-            rb = PyDMLabel(self, init_channel=pvname)
+            rb = SiriusLabel(self, init_channel=pvname)
         elif prop == 'delayraw':
             pvname = device.substitute(propty=device.propty+'DelayRaw-SP')
             sp = SiriusSpinbox(self, init_channel=pvname)
             sp.showStepExponent = False
             pvname = device.substitute(propty=device.propty+'DelayRaw-RB')
-            rb = PyDMLabel(self, init_channel=pvname)
+            rb = SiriusLabel(self, init_channel=pvname)
         elif prop == 'description':
             pvname = device.substitute(propty=device.propty+'Desc-SP')
             sp = PyDMLineEdit(self, init_channel=pvname)
             pvname = device.substitute(propty=device.propty+'Desc-RB')
-            rb = PyDMLabel(self, init_channel=pvname)
+            rb = SiriusLabel(self, init_channel=pvname)
         elif prop == 'code':
             pvname = device.substitute(propty=device.propty+'Code-Mon')
-            sp = PyDMLabel(self, init_channel=pvname)
+            sp = SiriusLabel(self, init_channel=pvname)
             sp.setAlignment(Qt.AlignCenter)
         if rb is None:
             return (sp, )
@@ -1041,7 +1042,7 @@ class ClockList(BaseList):
             sp.setMinimum(1)
             sp.setMaximum(2**31 - 1)
             pvname = device.substitute(propty=device.propty+'Freq-RB')
-            rb = PyDMLabel(self, init_channel=pvname)
+            rb = SiriusLabel(self, init_channel=pvname)
         elif prop == 'name':
             rb = QLabel(device.propty, self)
             rb.setAlignment(Qt.AlignCenter)
@@ -1056,7 +1057,7 @@ class ClockList(BaseList):
             sp = SiriusSpinbox(self, init_channel=pvname)
             sp.showStepExponent = False
             pvname = device.substitute(propty=device.propty+'MuxDiv-RB')
-            rb = PyDMLabel(self, init_channel=pvname)
+            rb = SiriusLabel(self, init_channel=pvname)
         return sp, rb
 
 
@@ -1142,7 +1143,8 @@ class FOUT(BaseWidget):
         status_lay.addWidget(gb, 0, 0)
 
         lb = QLabel("<b>Alive</b>")
-        rb = PyDMLabel(self, init_channel=self.get_pvname(propty='Alive-Mon'))
+        rb = SiriusLabel(
+            self, init_channel=self.get_pvname(propty='Alive-Mon'))
         gb = self._create_small_group('', status_wid, (lb, rb))
         status_lay.addWidget(gb, 0, 1)
 
@@ -1202,21 +1204,21 @@ class FOUT(BaseWidget):
 
         lb = QLabel("<b>IP</b>")
         pvname = self.get_pvname(propty='IPAddr-Mon')
-        addr = PyDMLabel(self, init_channel=pvname)
+        addr = SiriusLabel(self, init_channel=pvname)
         pvname = self.get_pvname(propty='IPPort-Mon')
-        port = PyDMLabel(self, init_channel=pvname)
+        port = SiriusLabel(self, init_channel=pvname)
         gb = self._create_small_group('', info_wid, (lb, addr, port))
         info_lay.addWidget(gb, 0, 0, alignment=Qt.AlignTop)
 
         lb = QLabel("<b>DevFun</b>")
         pvname = self.get_pvname(propty='DevFun-Sts')
-        rb = PyDMLabel(self, init_channel=pvname)
+        rb = SiriusLabel(self, init_channel=pvname)
         gb = self._create_small_group('', info_wid, (lb, rb))
         info_lay.addWidget(gb, 0, 1, alignment=Qt.AlignTop)
 
         lb = QLabel("<b>Device Status</b>")
         pvname = self.get_pvname(propty='DevStatus-Mon')
-        rb = PyDMLabel(self, init_channel=pvname)
+        rb = SiriusLabel(self, init_channel=pvname)
         gb = self._create_small_group('', info_wid, (lb, rb))
         info_lay.addWidget(gb, 0, 2, alignment=Qt.AlignTop)
 
@@ -1238,13 +1240,13 @@ class FOUT(BaseWidget):
 
         lb = QLabel("<b>FRMVERSION</b>")
         pvname = self.get_pvname(propty='FrmVersionA-Cte')
-        frma = PyDMLabel(self, init_channel=pvname)
+        frma = SiriusLabel(self, init_channel=pvname)
         frma.displayFormat = frma.DisplayFormat.Hex
         pvname = self.get_pvname(propty='FrmVersionB-Cte')
-        frmb = PyDMLabel(self, init_channel=pvname)
+        frmb = SiriusLabel(self, init_channel=pvname)
         frmb.displayFormat = frmb.DisplayFormat.Hex
         pvname = self.get_pvname(propty='FrmVersionC-Cte')
-        frmc = PyDMLabel(self, init_channel=pvname)
+        frmc = SiriusLabel(self, init_channel=pvname)
         frmc.displayFormat = frmc.DisplayFormat.Hex
         gb = self._create_small_group(
             '', info_wid, (lb, frma, frmb, frmc))
@@ -1387,7 +1389,7 @@ class AFC(BaseWidget):
 
         lb = QLabel("<b>Alive</b>")
         pvname = self.get_pvname('Alive-Mon')
-        rb = PyDMLabel(self, init_channel=pvname)
+        rb = SiriusLabel(self, init_channel=pvname)
         gb = self._create_small_group('', status_wid, (lb, rb))
         status_lay.addWidget(gb, 0, 1)
 
@@ -1421,7 +1423,7 @@ class AFC(BaseWidget):
 
         lb = QLabel("<b>FPGA Clk</b>")
         pvname = self.get_pvname('FPGAClk-Cte')
-        mon = PyDMLabel(self, init_channel=pvname)
+        mon = SiriusLabel(self, init_channel=pvname)
         mon.showUnits = True
         pvname = self.get_pvname('FPGAClk-Cte', field='INP')
         inp = PyDMLineEdit(self, init_channel=pvname)
@@ -1441,7 +1443,7 @@ class AFC(BaseWidget):
         sb_phskp.limitsFromChannel = False
         sb_phskp.setMinimum(-2**31)
         sb_phskp.setMaximum(2**31-1)
-        lb_phskp = PyDMLabel(
+        lb_phskp = SiriusLabel(
             self, self.get_pvname(propty=subdev+'PhasePropGain-RB'))
 
         ld_phski = QLabel('<b>Phase KI</b>', self, alignment=Qt.AlignCenter)
@@ -1451,7 +1453,7 @@ class AFC(BaseWidget):
         sb_phski.limitsFromChannel = False
         sb_phski.setMinimum(-2**31)
         sb_phski.setMaximum(2**31-1)
-        lb_phski = PyDMLabel(
+        lb_phski = SiriusLabel(
             self, self.get_pvname(propty=subdev+'PhaseIntgGain-RB'))
 
         ld_frqkp = QLabel('<b>Freq. KP</b>', self, alignment=Qt.AlignCenter)
@@ -1461,7 +1463,7 @@ class AFC(BaseWidget):
         sb_frqkp.limitsFromChannel = False
         sb_frqkp.setMinimum(-2**31)
         sb_frqkp.setMaximum(2**31-1)
-        lb_frqkp = PyDMLabel(
+        lb_frqkp = SiriusLabel(
             self, self.get_pvname(propty=subdev+'FreqPropGain-RB'))
 
         ld_frqki = QLabel('<b>Freq. KI</b>', self, alignment=Qt.AlignCenter)
@@ -1471,7 +1473,7 @@ class AFC(BaseWidget):
         sb_frqki.limitsFromChannel = False
         sb_frqki.setMinimum(-2**31)
         sb_frqki.setMaximum(2**31-1)
-        lb_frqki = PyDMLabel(
+        lb_frqki = SiriusLabel(
             self, self.get_pvname(propty=subdev+'FreqIntgGain-RB'))
 
         ld_phnvg = QLabel('<b>Phs.Navg</b>', self, alignment=Qt.AlignCenter)
@@ -1481,7 +1483,7 @@ class AFC(BaseWidget):
         sb_phnvg.limitsFromChannel = False
         sb_phnvg.setMinimum(-2**31)
         sb_phnvg.setMaximum(2**31-1)
-        lb_phnvg = PyDMLabel(
+        lb_phnvg = SiriusLabel(
             self, self.get_pvname(propty=subdev+'PhaseNavg-RB'))
 
         ld_phdiv = QLabel(
@@ -1492,7 +1494,7 @@ class AFC(BaseWidget):
         sb_phdiv.limitsFromChannel = False
         sb_phdiv.setMinimum(-2**31)
         sb_phdiv.setMaximum(2**31-1)
-        lb_phdiv = PyDMLabel(
+        lb_phdiv = SiriusLabel(
             self, self.get_pvname(propty=subdev+'PhaseDiv-RB'))
 
         ld_rfrlo = QLabel('<b>RFReqLo</b>', self, alignment=Qt.AlignCenter)
@@ -1502,9 +1504,9 @@ class AFC(BaseWidget):
         sb_rfrlo.limitsFromChannel = False
         sb_rfrlo.setMinimum(-2**31)
         sb_rfrlo.setMaximum(2**31-1)
-        lb_rfrlo = PyDMLabel(
+        lb_rfrlo = SiriusLabel(
             self, self.get_pvname(propty=subdev+'RFReqLo-RB'))
-        lb_rfrlo.displayFormat = PyDMLabel.DisplayFormat.Hex
+        lb_rfrlo.displayFormat = SiriusLabel.DisplayFormat.Hex
 
         ld_rfrhi = QLabel('<b>RFReqHi</b>', self, alignment=Qt.AlignCenter)
         sb_rfrhi = SiriusHexaSpinbox(
@@ -1513,9 +1515,9 @@ class AFC(BaseWidget):
         sb_rfrhi.limitsFromChannel = False
         sb_rfrhi.setMinimum(-2**31)
         sb_rfrhi.setMaximum(2**31-1)
-        lb_rfrhi = PyDMLabel(
+        lb_rfrhi = SiriusLabel(
             self, self.get_pvname(propty=subdev+'RFReqHi-RB'))
-        lb_rfrhi.displayFormat = PyDMLabel.DisplayFormat.Hex
+        lb_rfrhi.displayFormat = SiriusLabel.DisplayFormat.Hex
 
         ld_n1 = QLabel('<b>N1</b>', self, alignment=Qt.AlignCenter)
         ld_n1.setObjectName('n1')
@@ -1526,15 +1528,15 @@ class AFC(BaseWidget):
         sb_n1.limitsFromChannel = False
         sb_n1.setMinimum(-2**31)
         sb_n1.setMaximum(2**31-1)
-        lb_n1 = PyDMLabel(
+        lb_n1 = SiriusLabel(
             self, self.get_pvname(propty=subdev+'n1-RB'))
         lb_n1.setObjectName('n1')
-        lb_n1.displayFormat = PyDMLabel.DisplayFormat.Hex
+        lb_n1.displayFormat = SiriusLabel.DisplayFormat.Hex
 
         ld_hsdiv = QLabel('<b>HS_DIV</b>', self, alignment=Qt.AlignCenter)
         cb_hsdiv = SiriusEnumComboBox(
             self, self.get_pvname(propty=subdev+'hs_div-SP'))
-        lb_hsdiv = PyDMLabel(
+        lb_hsdiv = SiriusLabel(
             self, self.get_pvname(propty=subdev+'hs_div-RB'))
 
         # Equation
@@ -1552,7 +1554,8 @@ class AFC(BaseWidget):
         ld_freqsp = PyDMLineEdit(
             self, self.get_pvname(propty=subdev+'Freq-SP'))
         ld_freqsp.setObjectName('freq')
-        ld_freqrb = PyDMLabel(self, self.get_pvname(propty=subdev+'Freq-RB'))
+        ld_freqrb = SiriusLabel(
+            self, self.get_pvname(propty=subdev+'Freq-RB'), keep_unit=True)
         ld_freqrb.setObjectName('freq')
         ld_freqrb.showUnits = True
 
@@ -1618,7 +1621,7 @@ class AFC(BaseWidget):
             QComboBox, #n1 {max-width: 2.7em;}
             #frac {max-width: 1.5em;}
             #freq, #fpgaclk {max-width: 6.5em;}
-            PyDMLabel{qproperty-alignment: AlignCenter;}
+            SiriusLabel{qproperty-alignment: AlignCenter;}
         """)
 
         return gbox
@@ -1721,7 +1724,7 @@ class _EVR_EVE(BaseWidget):
 
         lb = QLabel("<b>Alive</b>")
         pvname = self.get_pvname('Alive-Mon')
-        rb = PyDMLabel(self, init_channel=pvname)
+        rb = SiriusLabel(self, init_channel=pvname)
         gb = self._create_small_group('', status_wid, (lb, rb))
         status_lay.addWidget(gb, 0, 1)
 
@@ -1774,7 +1777,7 @@ class _EVR_EVE(BaseWidget):
         else:
             sp = SiriusEnumComboBox(
                 self, init_channel=self.get_pvname('RFOut-Sel'))
-            rb = PyDMLabel(self, init_channel=self.get_pvname('RFOut-Sts'))
+            rb = SiriusLabel(self, init_channel=self.get_pvname('RFOut-Sts'))
             gb = self._create_small_group('RF Output', status_wid, (sp, rb))
         status_lay.addWidget(gb, 0, 6)
 
@@ -1800,9 +1803,9 @@ class _EVR_EVE(BaseWidget):
 
         lb = QLabel("<b>IP</b>")
         pvname = self.get_pvname(propty='IPAddr-Mon')
-        addr = PyDMLabel(self, init_channel=pvname)
+        addr = SiriusLabel(self, init_channel=pvname)
         pvname = self.get_pvname(propty='IPPort-Mon')
-        port = PyDMLabel(self, init_channel=pvname)
+        port = SiriusLabel(self, init_channel=pvname)
         gb = self._create_small_group('', info_wid, (lb, addr, port))
         info_lay.addWidget(gb, 0, 0, alignment=Qt.AlignTop)
 
@@ -1810,13 +1813,13 @@ class _EVR_EVE(BaseWidget):
         pvname = self.get_pvname(propty='DevFun-Sel')
         sp = SiriusEnumComboBox(self, init_channel=pvname)
         pvname = self.get_pvname(propty='DevFun-Sts')
-        rb = PyDMLabel(self, init_channel=pvname)
+        rb = SiriusLabel(self, init_channel=pvname)
         gb = self._create_small_group('', info_wid, (lb, sp, rb))
         info_lay.addWidget(gb, 0, 1, alignment=Qt.AlignTop)
 
         lb = QLabel("<b>Device Status</b>")
         pvname = self.get_pvname(propty='DevStatus-Mon')
-        rb = PyDMLabel(self, init_channel=pvname)
+        rb = SiriusLabel(self, init_channel=pvname)
         gb = self._create_small_group('', info_wid, (lb, rb))
         info_lay.addWidget(gb, 0, 2, alignment=Qt.AlignTop)
 
@@ -1845,7 +1848,7 @@ class _EVR_EVE(BaseWidget):
 
         lb = QLabel("<b>FPGA Clk</b>")
         pvname = self.get_pvname('FPGAClk-Cte')
-        mon = PyDMLabel(self, init_channel=pvname)
+        mon = SiriusLabel(self, init_channel=pvname)
         mon.showUnits = True
         pvname = self.get_pvname('FPGAClk-Cte', field='INP')
         inp = PyDMLineEdit(self, init_channel=pvname)
@@ -1854,13 +1857,13 @@ class _EVR_EVE(BaseWidget):
 
         lb = QLabel("<b>FRMVERSION</b>")
         pvname = self.get_pvname(propty='FrmVersionA-Cte')
-        frma = PyDMLabel(self, init_channel=pvname)
+        frma = SiriusLabel(self, init_channel=pvname)
         frma.displayFormat = frma.DisplayFormat.Hex
         pvname = self.get_pvname(propty='FrmVersionB-Cte')
-        frmb = PyDMLabel(self, init_channel=pvname)
+        frmb = SiriusLabel(self, init_channel=pvname)
         frmb.displayFormat = frmb.DisplayFormat.Hex
         pvname = self.get_pvname(propty='FrmVersionC-Cte')
-        frmc = PyDMLabel(self, init_channel=pvname)
+        frmc = SiriusLabel(self, init_channel=pvname)
         frmc.displayFormat = frmc.DisplayFormat.Hex
         gb = self._create_small_group(
             '', info_wid, (lb, frma, frmb, frmc))
@@ -1881,17 +1884,17 @@ class _EVR_EVE(BaseWidget):
         ld_timsrc = QLabel('<b>Source</b>', self)
         self.ec_timsrc = SiriusEnumComboBox(
             self, self.get_pvname('TimestampSrc-Sel'))
-        self.lb_timsrc = PyDMLabel(self, self.get_pvname('TimestampSrc-Sts'))
+        self.lb_timsrc = SiriusLabel(self, self.get_pvname('TimestampSrc-Sts'))
         gb_timsrc = self._create_small_group(
             '', gbox_tim, (ld_timsrc, self.ec_timsrc, self.lb_timsrc))
 
         fr_tim = QFrame()
         fr_tim.setStyleSheet('.QFrame{border: 1px solid gray;}')
         ld_timutc = QLabel('<b>UTC</b>', self)
-        self.lb_timutc = PyDMLabel(self, self.get_pvname('UTC-RB'))
+        self.lb_timutc = SiriusLabel(self, self.get_pvname('UTC-RB'))
         self.lb_timutc.showUnits = True
         ld_timsub = QLabel('<b>Subsec</b>')
-        self.lb_timsub = PyDMLabel(self, self.get_pvname('SubSecond-Mon'))
+        self.lb_timsub = SiriusLabel(self, self.get_pvname('SubSecond-Mon'))
         self.lb_timsub.showUnits = True
         lay_tim = QGridLayout(fr_tim)
         lay_tim.setAlignment(Qt.AlignVCenter)
@@ -1933,7 +1936,7 @@ class _EVR_EVE(BaseWidget):
             '', gbox_log, (ld_logpul, self.bt_logpul))
 
         ld_logcnt = QLabel('<b>Log Count</b>', self, alignment=Qt.AlignCenter)
-        self.lb_logcnt = PyDMLabel(self, self.get_pvname('LOGCOUNT'))
+        self.lb_logcnt = SiriusLabel(self, self.get_pvname('LOGCOUNT'))
         self.lb_logcnt.showUnits = True
         self.lb_logcnt.setAlignment(Qt.AlignCenter)
         ld_logful = QLabel('Full', self)
@@ -1953,18 +1956,18 @@ class _EVR_EVE(BaseWidget):
         lay_logcnt.addWidget(self.led_logemp, 2, 3, alignment=Qt.AlignTop)
 
         ld_logevt = QLabel('<b>Event</b>', self)
-        self.lb_logevt = PyDMLabel(self, self.get_pvname('LOGEVENT'))
+        self.lb_logevt = SiriusLabel(self, self.get_pvname('LOGEVENT'))
         gb_logevt = self._create_small_group(
             '', gbox_log, (ld_logevt, self.lb_logevt))
 
         ld_logutc = QLabel('<b>Log UTC</b>', self)
-        self.lb_logutc = PyDMLabel(self, self.get_pvname('LOGUTC'))
+        self.lb_logutc = SiriusLabel(self, self.get_pvname('LOGUTC'))
         self.lb_logutc.showUnits = True
         gb_logutc = self._create_small_group(
             '', gbox_log, (ld_logutc, self.lb_logutc))
 
         ld_logsub = QLabel('<b>Log Subsec</b>', self)
-        self.lb_logsub = PyDMLabel(self, self.get_pvname('LOGSUBSEC'))
+        self.lb_logsub = SiriusLabel(self, self.get_pvname('LOGSUBSEC'))
         self.lb_logsub.showUnits = True
         gb_logsub = self._create_small_group(
             '', gbox_log, (ld_logsub, self.lb_logsub))
@@ -1982,7 +1985,7 @@ class _EVR_EVE(BaseWidget):
         gbox_buf = QGroupBox('Timestamp Log Buffer', self)
 
         ld_bufcnt = QLabel('<b>Log Count</b>', self)
-        self.lb_bufcnt = PyDMLabel(self, self.get_pvname('LOGSOFTCNT'))
+        self.lb_bufcnt = SiriusLabel(self, self.get_pvname('LOGSOFTCNT'))
         self.lb_bufcnt.showUnits = True
         gb_bufcnt = self._create_small_group(
             '', gbox_buf, (ld_bufcnt, self.lb_bufcnt))
@@ -2146,11 +2149,11 @@ class EVGFOUTOUTList(BaseList):
                 sp.offColor = sp.LightGreen
         elif prop == 'tripdelay':
             pvname = device.substitute(propty='OUT'+str(idx)+'TripDelay-Mon')
-            sp = PyDMLabel(self, pvname)
+            sp = SiriusLabel(self, pvname)
             sp.setAlignment(Qt.AlignCenter)
         elif prop == 'position':
             pvname = device.substitute(propty='OUT'+str(idx)+'FramePos-Mon')
-            sp = PyDMLabel(self, pvname)
+            sp = SiriusLabel(self, pvname)
             sp.setAlignment(Qt.AlignCenter)
         elif prop == 'outdelay':
             pvname = device.substitute(propty='OUT'+str(idx)+'Delay-SP')
@@ -2160,7 +2163,7 @@ class EVGFOUTOUTList(BaseList):
             sp.setMinimum(0)
             sp.setMaximum(2**31 - 1)
             pvname = device.substitute(propty='OUT'+str(idx)+'Delay-RB')
-            rb = PyDMLabel(self, pvname)
+            rb = SiriusLabel(self, pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'rxenbl':
             pvname = device.substitute(propty='RxEnbl-SP', field='B'+str(idx))
@@ -2287,7 +2290,7 @@ class LLTriggerList(BaseList):
             sp.setMinimum(0)
             sp.setMaximum(255)
             pvname = intlb.substitute(propty=intlb.propty+'Evt-RB')
-            rb = PyDMLabel(self, init_channel=pvname)
+            rb = SiriusLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'widthraw':
             pvname = intlb.substitute(propty=intlb.propty+'WidthRaw-SP')
@@ -2297,20 +2300,20 @@ class LLTriggerList(BaseList):
             sp.setMinimum(1)
             sp.setMaximum(2**31 - 1)
             pvname = intlb.substitute(propty=intlb.propty+'WidthRaw-RB')
-            rb = PyDMLabel(self, init_channel=pvname)
+            rb = SiriusLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'width':
             pvname = intlb.substitute(propty=intlb.propty+'Width-SP')
             sp = SiriusSpinbox(self, init_channel=pvname)
             sp.showStepExponent = False
             pvname = intlb.substitute(propty=intlb.propty+'Width-RB')
-            rb = PyDMLabel(self, init_channel=pvname)
+            rb = SiriusLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'polarity':
             pvname = intlb.substitute(propty=intlb.propty+'Polarity-Sel')
             sp = SiriusEnumComboBox(self, init_channel=pvname)
             pvname = intlb.substitute(propty=intlb.propty+'Polarity-Sts')
-            rb = PyDMLabel(self, init_channel=pvname)
+            rb = SiriusLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'pulses':
             pvname = intlb.substitute(propty=intlb.propty+'NrPulses-SP')
@@ -2320,7 +2323,7 @@ class LLTriggerList(BaseList):
             sp.setMinimum(1)
             sp.setMaximum(2**31 - 1)
             pvname = intlb.substitute(propty=intlb.propty+'NrPulses-RB')
-            rb = PyDMLabel(self, init_channel=pvname)
+            rb = SiriusLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'delayraw':
             pvname = intlb.substitute(propty=intlb.propty+'DelayRaw-SP')
@@ -2330,14 +2333,14 @@ class LLTriggerList(BaseList):
             sp.setMinimum(0)
             sp.setMaximum(2**31 - 1)
             pvname = intlb.substitute(propty=intlb.propty+'DelayRaw-RB')
-            rb = PyDMLabel(self, init_channel=pvname)
+            rb = SiriusLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'delay':
             pvname = intlb.substitute(propty=intlb.propty+'Delay-SP')
             sp = SiriusSpinbox(self, init_channel=pvname)
             sp.showStepExponent = False
             pvname = intlb.substitute(propty=intlb.propty+'Delay-RB')
-            rb = PyDMLabel(self, init_channel=pvname)
+            rb = SiriusLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'timestamp':
             pvname = intlb.substitute(propty=intlb.propty+'Log-Sel')
@@ -2348,58 +2351,58 @@ class LLTriggerList(BaseList):
             pvname = outlb.substitute(propty=outlb.propty+'Src-Sel')
             sp = SiriusEnumComboBox(self, init_channel=pvname)
             pvname = outlb.substitute(propty=outlb.propty+'Src-Sts')
-            rb = PyDMLabel(self, init_channel=pvname)
+            rb = SiriusLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'trigger':
             pvname = outlb.substitute(propty=outlb.propty+'SrcTrig-SP')
             sp = SiriusSpinbox(self, init_channel=pvname)
             sp.showStepExponent = False
             pvname = outlb.substitute(propty=outlb.propty+'SrcTrig-RB')
-            rb = PyDMLabel(self, init_channel=pvname)
+            rb = SiriusLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'rf_delayraw':
             pvname = outlb.substitute(propty=outlb.propty+'RFDelayRaw-SP')
             sp = SiriusSpinbox(self, init_channel=pvname)
             sp.showStepExponent = False
             pvname = outlb.substitute(propty=outlb.propty+'RFDelayRaw-RB')
-            rb = PyDMLabel(self, init_channel=pvname)
+            rb = SiriusLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'rf_delay':
             pvname = outlb.substitute(propty=outlb.propty+'RFDelay-SP')
             sp = SiriusSpinbox(self, init_channel=pvname)
             sp.showStepExponent = False
             pvname = outlb.substitute(propty=outlb.propty+'RFDelay-RB')
-            rb = PyDMLabel(self, init_channel=pvname)
+            rb = SiriusLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'rf_delay_type':
             pvname = outlb.substitute(propty=outlb.propty+'RFDelayType-Sel')
             sp = SiriusEnumComboBox(self, init_channel=pvname)
             pvname = outlb.substitute(propty=outlb.propty+'RFDelayType-Sts')
-            rb = PyDMLabel(self, init_channel=pvname)
+            rb = SiriusLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'fine_delayraw':
             pvname = outlb.substitute(propty=outlb.propty+'FineDelayRaw-SP')
             sp = SiriusSpinbox(self, init_channel=pvname)
             sp.showStepExponent = False
             pvname = outlb.substitute(propty=outlb.propty+'FineDelayRaw-RB')
-            rb = PyDMLabel(self, init_channel=pvname)
+            rb = SiriusLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'fine_delay':
             pvname = outlb.substitute(propty=outlb.propty+'FineDelay-SP')
             sp = SiriusSpinbox(self, init_channel=pvname)
             sp.showStepExponent = False
             pvname = outlb.substitute(propty=outlb.propty+'FineDelay-RB')
-            rb = PyDMLabel(self, init_channel=pvname)
+            rb = SiriusLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'dir':
             pvname = intlb.substitute(propty=intlb.propty+'Dir-Sel')
             sp = SiriusEnumComboBox(self, init_channel=pvname)
             pvname = intlb.substitute(propty=intlb.propty+'Dir-Sts')
-            rb = PyDMLabel(self, init_channel=pvname)
+            rb = SiriusLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'evtcnt':
             pvname = intlb.substitute(propty=intlb.propty+'EvtCnt-Mon')
-            sp = PyDMLabel(self, init_channel=pvname)
+            sp = SiriusLabel(self, init_channel=pvname)
             sp.setAlignment(Qt.AlignCenter)
         elif prop == 'evtcntrst':
             pvname = intlb.substitute(propty=intlb.propty+'EvtCntRst-Cmd')
@@ -2481,7 +2484,7 @@ class EVREVEDIList(BaseList):
             pvname = device.substitute(propty='DIPol'+di_idx+'-Sel')
             sp = SiriusEnumComboBox(self, init_channel=pvname)
             pvname = device.substitute(propty='DIPol'+di_idx+'-Sts')
-            rb = PyDMLabel(self, init_channel=pvname)
+            rb = SiriusLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'event':
             pvname = device.substitute(propty='DIEvent'+di_idx+'-SP')
@@ -2491,7 +2494,7 @@ class EVREVEDIList(BaseList):
             sp.setMinimum(0)
             sp.setMaximum(255)
             pvname = device.substitute(propty='DIEvent'+di_idx+'-RB')
-            rb = PyDMLabel(self, init_channel=pvname)
+            rb = SiriusLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'timestamp':
             pvname = device.substitute(propty='DILog'+di_idx+'-Sel')

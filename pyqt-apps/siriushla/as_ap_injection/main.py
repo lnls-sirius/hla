@@ -6,7 +6,7 @@ from qtpy.QtWidgets import QWidget, QLabel, QGridLayout, QGroupBox, \
 
 import qtawesome as qta
 
-from pydm.widgets import PyDMPushButton, PyDMLabel
+from pydm.widgets import PyDMPushButton
 
 from siriuspy.namesys import SiriusPVName
 from siriuspy.injctrl.csdev import Const as _Const
@@ -150,7 +150,7 @@ class InjCtrlWindow(SiriusMainWindow):
                 propty='TopUpState-Sel'))
         self._pb_topup.setVisible(False)
         self._led_injti = EVGInjectionLed(self, self._prefix)
-        self._lb_injcnt = PyDMLabel(self)
+        self._lb_injcnt = SiriusLabel(self)
         self._lb_injcnt.setToolTip(
             'Count injection pulses when Egun Trigger is enabled.')
         ch_injcnt = SiriusPVName(
@@ -171,7 +171,7 @@ class InjCtrlWindow(SiriusMainWindow):
         # Current
         curr_pvname = SiriusPVName(
             'SI-Glob:AP-CurrInfo:Current-Mon').substitute(prefix=self._prefix)
-        self._lb_curr = PyDMLabel(self, curr_pvname)
+        self._lb_curr = SiriusLabel(self, curr_pvname)
         self._lb_curr.showUnits = True
         self._lb_curr.setStyleSheet("""
             QLabel{
@@ -183,7 +183,7 @@ class InjCtrlWindow(SiriusMainWindow):
         lay_curr.addWidget(self._lb_curr)
 
         # TopUp status
-        self._lb_tusts = PyDMLabel(
+        self._lb_tusts = SiriusLabel(
             self, self._inj_prefix.substitute(propty='TopUpState-Sts'))
         self._lb_tusts.setAlignment(Qt.AlignCenter)
         self._lb_tusts.setStyleSheet('QLabel{max-height:2em;}')
@@ -242,7 +242,7 @@ class InjCtrlWindow(SiriusMainWindow):
         labelsdesc.append(self._ld_injmode)
         self._cb_injmode = SiriusEnumComboBox(
             self, self._inj_prefix.substitute(propty='Mode-Sel'))
-        self._lb_injmode = PyDMLabel(
+        self._lb_injmode = SiriusLabel(
             self, self._inj_prefix.substitute(propty='Mode-Sts'))
         self._lb_injmode.showUnits = True
         labelsmon.append(self._lb_injmode)
@@ -253,8 +253,9 @@ class InjCtrlWindow(SiriusMainWindow):
         self._sb_currtgt = SiriusSpinbox(
             self, self._inj_prefix.substitute(propty='TargetCurrent-SP'))
         self._sb_currtgt.showStepExponent = False
-        self._lb_currtgt = PyDMLabel(
-            self, self._inj_prefix.substitute(propty='TargetCurrent-RB'))
+        self._lb_currtgt = SiriusLabel(
+            self, self._inj_prefix.substitute(propty='TargetCurrent-RB'),
+            keep_unit=True)
         self._lb_currtgt.showUnits = True
         labelsmon.append(self._lb_currtgt)
 
@@ -273,10 +274,10 @@ class InjCtrlWindow(SiriusMainWindow):
         labelsdesc.append(self._ld_injtype)
         self._cb_injtype = SiriusEnumComboBox(
             self, self._inj_prefix.substitute(propty='Type-Sel'))
-        self._lb_injtype = PyDMLabel(
+        self._lb_injtype = SiriusLabel(
             self, self._inj_prefix.substitute(propty='Type-Sts'))
         labelsmon.append(self._lb_injtype)
-        self._lb_injtype_mon = PyDMLabel(
+        self._lb_injtype_mon = SiriusLabel(
             self, self._inj_prefix.substitute(propty='Type-Mon'))
         labelsmon.append(self._lb_injtype_mon)
         self._ch_injtype = SiriusConnectionSignal(
@@ -292,8 +293,9 @@ class InjCtrlWindow(SiriusMainWindow):
         self._sb_sbbias = SiriusSpinbox(
             self, self._inj_prefix.substitute(propty='SglBunBiasVolt-SP'))
         self._sb_sbbias.showStepExponent = False
-        self._lb_sbbias = PyDMLabel(
-            self, self._inj_prefix.substitute(propty='SglBunBiasVolt-RB'))
+        self._lb_sbbias = SiriusLabel(
+            self, self._inj_prefix.substitute(propty='SglBunBiasVolt-RB'),
+            keep_unit=True)
         self._lb_sbbias.showUnits = True
         labelsmon.append(self._lb_sbbias)
         self._ld_sbbias.setVisible(False)
@@ -306,15 +308,17 @@ class InjCtrlWindow(SiriusMainWindow):
         self._sb_mbbias = SiriusSpinbox(
             self, self._inj_prefix.substitute(propty='MultBunBiasVolt-SP'))
         self._sb_mbbias.showStepExponent = False
-        self._lb_mbbias = PyDMLabel(
-            self, self._inj_prefix.substitute(propty='MultBunBiasVolt-RB'))
+        self._lb_mbbias = SiriusLabel(
+            self, self._inj_prefix.substitute(propty='MultBunBiasVolt-RB'),
+            keep_unit=True)
         self._lb_mbbias.showUnits = True
         labelsmon.append(self._lb_mbbias)
 
         # bias voltage mon
         ch_bias_mon = SiriusPVName('LI-01:EG-BiasPS').substitute(
             prefix=self._prefix, propty_name='voltinsoft')
-        self._lb_bias_mon = PyDMLabel(self, ch_bias_mon)
+        self._lb_bias_mon = SiriusLabel(
+            self, ch_bias_mon, keep_unit=True)
         self._lb_bias_mon.showUnits = True
         labelsmon.append(self._lb_bias_mon)
         self._ind_bias_mon = TaskStatusLabel(
@@ -326,13 +330,15 @@ class InjCtrlWindow(SiriusMainWindow):
         self._sb_filaopcurr = SiriusSpinbox(
             self, self._inj_prefix.substitute(propty='FilaOpCurr-SP'))
         self._sb_filaopcurr.showStepExponent = False
-        self._lb_filaopcurr = PyDMLabel(
-            self, self._inj_prefix.substitute(propty='FilaOpCurr-RB'))
+        self._lb_filaopcurr = SiriusLabel(
+            self, self._inj_prefix.substitute(propty='FilaOpCurr-RB'),
+            keep_unit=True)
         self._lb_filaopcurr.showUnits = True
         labelsmon.append(self._lb_filaopcurr)
         ch_filacurr_mon = SiriusPVName('LI-01:EG-FilaPS').substitute(
             prefix=self._prefix, propty_name='currentinsoft')
-        self._lb_filaopcurr_mon = PyDMLabel(self, ch_filacurr_mon)
+        self._lb_filaopcurr_mon = SiriusLabel(
+            self, ch_filacurr_mon, keep_unit=True)
         self._lb_filaopcurr_mon.showUnits = True
         labelsmon.append(self._lb_filaopcurr_mon)
         self._ind_filaopcurr_mon = TaskStatusLabel(
@@ -344,13 +350,15 @@ class InjCtrlWindow(SiriusMainWindow):
         self._sb_hvopvolt = SiriusSpinbox(
             self, self._inj_prefix.substitute(propty='HVOpVolt-SP'))
         self._sb_hvopvolt.showStepExponent = False
-        self._lb_hvopvolt = PyDMLabel(
-            self, self._inj_prefix.substitute(propty='HVOpVolt-RB'))
+        self._lb_hvopvolt = SiriusLabel(
+            self, self._inj_prefix.substitute(propty='HVOpVolt-RB'),
+            keep_unit=True)
         self._lb_hvopvolt.showUnits = True
         labelsmon.append(self._lb_hvopvolt)
         ch_hvvolt_mon = SiriusPVName('LI-01:EG-HVPS').substitute(
             prefix=self._prefix, propty_name='voltinsoft')
-        self._lb_hvopvolt_mon = PyDMLabel(self, ch_hvvolt_mon)
+        self._lb_hvopvolt_mon = SiriusLabel(
+            self, ch_hvvolt_mon, keep_unit=True)
         self._lb_hvopvolt_mon.showUnits = True
         labelsmon.append(self._lb_hvopvolt_mon)
         self._ind_hvopvolt_mon = TaskStatusLabel(
@@ -435,7 +443,7 @@ class InjCtrlWindow(SiriusMainWindow):
                     qproperty-alignment: 'AlignRight | AlignVCenter';
                 }""")
         for lbl in labelsmon:
-            lbl.setStyleSheet("PyDMLabel{qproperty-alignment: AlignCenter;}")
+            lbl.setStyleSheet("SiriusLabel{qproperty-alignment: AlignCenter;}")
 
         return wid
 
@@ -444,7 +452,7 @@ class InjCtrlWindow(SiriusMainWindow):
         self._sb_tuperd = SiriusSpinbox(
             self, self._inj_prefix.substitute(propty='TopUpPeriod-SP'))
         self._sb_tuperd.showStepExponent = False
-        self._lb_tuperd = PyDMLabel(
+        self._lb_tuperd = SiriusLabel(
             self, self._inj_prefix.substitute(propty='TopUpPeriod-RB'))
         self._lb_tuperd.showUnits = True
 
@@ -452,9 +460,8 @@ class InjCtrlWindow(SiriusMainWindow):
         self._sb_tumaxpu = SiriusSpinbox(
             self, self._inj_prefix.substitute(propty='TopUpMaxNrPulses-SP'))
         self._sb_tumaxpu.showStepExponent = False
-        self._lb_tumaxpu = PyDMLabel(
+        self._lb_tumaxpu = SiriusLabel(
             self, self._inj_prefix.substitute(propty='TopUpMaxNrPulses-RB'))
-        self._lb_tumaxpu.showUnits = True
 
         wid = QWidget()
         lay = QGridLayout(wid)
@@ -475,7 +482,7 @@ class InjCtrlWindow(SiriusMainWindow):
                 min-width: 6.5em; max-width: 6.5em; min-height: 1.5em;
                 qproperty-alignment: 'AlignRight | AlignVCenter';
             }
-            PyDMLabel{
+            SiriusLabel{
                 qproperty-alignment: AlignCenter;
             }""")
         return wid
@@ -504,7 +511,7 @@ class InjCtrlWindow(SiriusMainWindow):
                 min-width: 6.5em; max-width: 6.5em; min-height: 1.5em;
                 qproperty-alignment: 'AlignRight | AlignVCenter';
             }
-            PyDMLabel{
+            SiriusLabel{
                 qproperty-alignment: AlignCenter;
             }""")
         return wid

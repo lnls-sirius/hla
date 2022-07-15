@@ -9,15 +9,14 @@ from qtpy.QtGui import QColor, QFont, QBrush, QGradient
 
 import qtawesome as qta
 
-from pydm.widgets import PyDMLabel
-
 from siriuspy.envars import VACA_PREFIX
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.clientarch.time import Time
 
 from ..util import get_appropriate_color
 from ..widgets import SiriusMainWindow, SiriusTimePlot, SiriusFrame, \
-    SiriusLedState, SiriusLedAlert, SiriusConnectionSignal, PyDMLedMultiChannel
+    SiriusLedState, SiriusLedAlert, SiriusConnectionSignal, \
+    PyDMLedMultiChannel, SiriusLabel
 from ..as_di_tune.controls import SITuneMonitor
 from ..as_ap_injection import InjSysStbyLed
 from ..as_ap_machshift import MachShiftLabel
@@ -99,7 +98,7 @@ class SIGenStatusWindow(SiriusMainWindow):
         self.ld_curr.setStyleSheet('max-height: 2em;')
         pvname = _PVName('SI-Glob:AP-CurrInfo:Current-Mon')
         pvname = pvname.substitute(prefix=self.prefix)
-        self.lb_curr = PyDMLabel(self, pvname)
+        self.lb_curr = SiriusLabel(self, pvname)
         self.lb_curr.setAlignment(Qt.AlignCenter)
         self.lb_curr.setStyleSheet(
             'QLabel{background-color: '+self.app_color+';font-size: 45pt;}')
