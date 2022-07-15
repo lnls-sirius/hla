@@ -5,12 +5,10 @@ from qtpy.QtWidgets import QWidget, QGridLayout, QLabel, QGroupBox, \
     QSpacerItem, QSizePolicy as QSzPlcy
 import qtawesome as qta
 
-from pydm.widgets import PyDMLabel
-
 from siriuspy.envars import VACA_PREFIX
 
 from siriushla.widgets import SiriusMainWindow, SiriusLedState, \
-    SiriusSpinbox, PyDMStateButton
+    SiriusSpinbox, PyDMStateButton, SiriusLabel
 from siriushla.util import get_appropriate_color
 
 
@@ -139,7 +137,7 @@ class LIEgunWindow(SiriusMainWindow):
         self._sb_hvpsvoltsp.showStepExponent = False
 
         self._ld_hvpsvoltrb = QLabel('Voltage RB [kV]', self)
-        self._lb_hvpsvoltrb = PyDMLabel(
+        self._lb_hvpsvoltrb = SiriusLabel(
             self, self.prefix+self.dev_pref+':EG-HVPS:voltinsoft')
 
         self._ld_hvpsenblsel = QLabel('Enable')
@@ -156,7 +154,7 @@ class LIEgunWindow(SiriusMainWindow):
         self._sb_hvpscurrsp.showStepExponent = False
 
         self._ld_hvpscurrrb = QLabel('Current RB [mA]')
-        self._lb_hvpscurrrb = PyDMLabel(
+        self._lb_hvpscurrrb = SiriusLabel(
             self, self.prefix+self.dev_pref+':EG-HVPS:currentinsoft')
 
         wid = QGroupBox('High Voltage Power Supply', self)
@@ -221,11 +219,11 @@ class LIEgunWindow(SiriusMainWindow):
         self._sb_filacurrsp.showStepExponent = False
 
         self._ld_filacurrrb = QLabel('Current RB [A]', self)
-        self._lb_filacurrrb = PyDMLabel(
+        self._lb_filacurrrb = SiriusLabel(
             self, self.prefix+self.dev_pref+':EG-FilaPS:currentinsoft')
 
         self._ld_filavoltrb = QLabel('Voltage RB [V]', self)
-        self._lb_filavoltrb = PyDMLabel(
+        self._lb_filavoltrb = SiriusLabel(
             self, self.prefix+self.dev_pref+':EG-FilaPS:voltinsoft')
 
         wid = QGroupBox('Filament Power Supply', self)
@@ -257,11 +255,11 @@ class LIEgunWindow(SiriusMainWindow):
         self._sb_biasvoltsp.showStepExponent = False
 
         self._ld_biasvoltrb = QLabel('Voltage RB [V]', self)
-        self._lb_biasvoltrb = PyDMLabel(
+        self._lb_biasvoltrb = SiriusLabel(
             self, self.prefix+self.dev_pref+':EG-BiasPS:voltinsoft')
 
         self._ld_biascurrrb = QLabel('Current RB [A]', self)
-        self._lb_biascurrrb = PyDMLabel(
+        self._lb_biascurrrb = SiriusLabel(
             self, self.prefix+self.dev_pref+':EG-BiasPS:currentinsoft')
 
         wid = QGroupBox('Bias Power Supply', self)
@@ -331,7 +329,7 @@ class LIEgunWindow(SiriusMainWindow):
         self._sb_mpulspwrsp.setMaximum(300)
         self._sb_mpulspwrsp.showStepExponent = False
         self._ld_mpulspwrrb = QLabel('Power RB [V]', self)
-        self._lb_mpulspwrrb = PyDMLabel(
+        self._lb_mpulspwrrb = SiriusLabel(
             self, self.prefix+self.dev_pref+':EG-PulsePS:powerinsoft')
 
         wid = QGroupBox('Multi Pulse Power Supply', self)

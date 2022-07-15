@@ -10,13 +10,11 @@ from qtpy.QtWidgets import QWidget, QLabel, QPushButton, QGridLayout, \
 
 import qtawesome as qta
 
-from pydm.widgets import PyDMLabel
-
 from siriuspy.namesys import SiriusPVName
 from siriuspy.diagbeam.dcct.csdev import Const as _DCCTc
 from siriuspy.search import LLTimeSearch as _LLTimeSearch
 from siriushla.widgets import SiriusConnectionSignal as SignalChannel, \
-    SiriusTimePlot, QSpinBoxPlus, SiriusWaveformPlot
+    SiriusTimePlot, QSpinBoxPlus, SiriusWaveformPlot, SiriusLabel
 
 
 class DCCTMonitor(QWidget):
@@ -376,7 +374,7 @@ class EffMonitor(QWidget):
         self.curve = self.graph.curveAtIndex(0)
 
         l_eff = QLabel('<h4>Efficiency:</h4>', self)
-        self.label_eff = PyDMLabel(self, self._pvname)
+        self.label_eff = SiriusLabel(self, self._pvname)
         self.label_eff.showUnits = True
 
         hbox_eff = QHBoxLayout()
@@ -387,13 +385,13 @@ class EffMonitor(QWidget):
 
         if self.section == 'BO':
             l_injcurr = QLabel('Injected:', self)
-            self.label_injcurr = PyDMLabel(self, SiriusPVName(
+            self.label_injcurr = SiriusLabel(self, SiriusPVName(
                 'BO-Glob:AP-CurrInfo:Current150MeV-Mon').substitute(
                     prefix=self.prefix))
             self.label_injcurr.showUnits = True
 
             l_ejecurr = QLabel('Ejected:', self)
-            self.label_ejecurr = PyDMLabel(self, SiriusPVName(
+            self.label_ejecurr = SiriusLabel(self, SiriusPVName(
                 'BO-Glob:AP-CurrInfo:Current3GeV-Mon').substitute(
                     prefix=self.prefix))
             self.label_ejecurr.showUnits = True
@@ -411,7 +409,7 @@ class EffMonitor(QWidget):
         lay.addLayout(hbox_eff)
         self.setLayout(lay)
         self.setStyleSheet("""
-            PyDMLabel{
+            SiriusLabel{
                 qproperty-alignment:'AlignCenter';
                 min-width:5em; max-width:5em;}
             PyDMTimePlot{

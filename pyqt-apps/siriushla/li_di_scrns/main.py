@@ -5,11 +5,12 @@ from qtpy.QtGui import QPixmap
 from qtpy.QtWidgets import QGroupBox, QHBoxLayout, QVBoxLayout, \
     QWidget, QLabel, QGridLayout, QRadioButton, QStackedWidget, \
     QSizePolicy
-from pydm.widgets import PyDMLabel, PyDMPushButton, \
+from pydm.widgets import PyDMPushButton, \
     PyDMSpinbox, PyDMImageView, PyDMLineEdit
 import qtawesome as qta
 from ..util import get_appropriate_color
-from ..widgets import SiriusMainWindow, PyDMLedMultiChannel, SiriusWaveformPlot
+from ..widgets import SiriusMainWindow, PyDMLedMultiChannel, \
+    SiriusWaveformPlot, SiriusLabel
 from .util import DEVICES, SCREENS_PANEL, SCREENS_INFO, HEADER, \
     GRAPH, SCREEN
 from .motorBtn import MotorBtn
@@ -58,7 +59,7 @@ class LiBeamProfile(SiriusMainWindow):
         ''' Get widget type '''
         pv_name = self.getPvName(device, pv_name)
         if wid_type == 'label':
-            widget = PyDMLabel(self, init_channel=pv_name)
+            widget = SiriusLabel(self, init_channel=pv_name)
             widget.showUnits = True
             widget.setAlignment(Qt.AlignCenter)
         elif wid_type == 'led':
@@ -273,7 +274,7 @@ class LiBeamProfile(SiriusMainWindow):
         widget = QGroupBox()
         ms_vlay = QVBoxLayout()
         ms_vlay.addWidget(
-            PyDMLabel(
+            SiriusLabel(
                 init_channel=self.getPvName(
                     device, 'MOTOR:' + selection_info.get('selected'))),
             alignment=Qt.AlignCenter)

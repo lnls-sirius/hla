@@ -6,7 +6,7 @@ from qtpy.QtGui import QPixmap, QColor
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, QSpacerItem, \
     QHBoxLayout
-from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMEnumComboBox, PyDMLineEdit
+from pydm.widgets import PyDMSpinbox, PyDMEnumComboBox, PyDMLineEdit
 
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 from siriuspy.namesys import SiriusPVName as _PVName
@@ -47,8 +47,7 @@ class BbBSingleDriveSettingsWidget(QWidget):
                 f'<h3>Driver {self._driver_num:d}, NCO BITS: </h3>',
                 ld_drive, alignment=Qt.AlignRight)
             labd.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-            lab = PyDMLabel(
-                ld_drive, self.dev_pref+'BITS')
+            lab = SiriusLabel(ld_drive, self.dev_pref+'BITS')
             lab.setStyleSheet('font-size: 13pt; font-weight: bold;')
             lab.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
             ld_drive.layout().addStretch()
@@ -81,9 +80,9 @@ class BbBSingleDriveSettingsWidget(QWidget):
         ld_patt = QLabel('Drive Pattern', self)
         le_patt = PyDMLineEdit(self, self.dev_pref+'PATTERN')
 
-        lb_actfreq = PyDMLabel(self, self.dev_pref+'FREQ_ACT_STRING')
-        lb_actspan = PyDMLabel(self, self.dev_pref+'SPAN_ACT_STRING')
-        lb_actperd = PyDMLabel(self, self.dev_pref+'PERIOD_ACT')
+        lb_actfreq = SiriusLabel(self, self.dev_pref+'FREQ_ACT_STRING')
+        lb_actspan = SiriusLabel(self, self.dev_pref+'SPAN_ACT_STRING')
+        lb_actperd = SiriusLabel(self, self.dev_pref+'PERIOD_ACT')
 
         lay = QGridLayout(self)
         lay.addWidget(ld_drive, 0, 1, 1, 3)
@@ -133,7 +132,7 @@ class BbBSingleDriveSettingsWidget(QWidget):
             wid.layout().addWidget(lab)
             propty = f':PHTRK_FREQ{self._driver_num:d}'
             pv = self._prefix + self._device + propty
-            freq = PyDMLabel(self, init_channel=pv)
+            freq = SiriusLabel(self, init_channel=pv)
             wid.layout().addWidget(freq)
             wid.layout().addStretch()
 
