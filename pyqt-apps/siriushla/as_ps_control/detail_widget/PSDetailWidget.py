@@ -828,6 +828,7 @@ class PSDetailWidget(QWidget):
         self.wfm.showXGrid = True
         self.wfm.showYGrid = True
         self.wfm.setLabel('left', text='Current [A]', color='gray')
+        self.wfm.setLabel('bottom', text='Time [s]')
         self.wfm.plotItem.ctrl.fftCheck.toggled.connect(self._wfmUpdAxisLabel)
         self.wfm.setBackgroundColor(QColor(255, 255, 255))
         self.wfm.addChannel(y_channel=wfm_data_sp_ch, name='Wfm-SP',
