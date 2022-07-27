@@ -287,7 +287,7 @@ class InjCtrlWindow(SiriusMainWindow):
             self, self._inj_prefix.substitute(propty='TypeCmdSts-Mon'))
 
         # PUMode
-        self._ld_pumode = QLabel('PUMode', self)
+        self._ld_pumode = QLabel('PU Mode', self)
         labelsdesc.append(self._ld_pumode)
         self._cb_pumode = SiriusEnumComboBox(
             self, self._inj_prefix.substitute(propty='PUMode-Sel'))
