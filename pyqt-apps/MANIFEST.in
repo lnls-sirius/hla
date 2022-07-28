@@ -4,6 +4,7 @@ include siriushla/as_ap_injcontrol/TB-BO.svg
 include siriushla/as_di_icts/ui_ictmon.ui
 include siriushla/common/diff_ctrl/ui_as_ap_devhmon.ui
 include siriushla/common/diff_ctrl/ui_as_ap_devvmon.ui
+include siriushla/li_di_scrns/linac.png
 include siriushla/widgets/resources/led_shapes/circle.svg
 include siriushla/widgets/resources/led_shapes/round.svg
 include siriushla/widgets/resources/led_shapes/square.svg

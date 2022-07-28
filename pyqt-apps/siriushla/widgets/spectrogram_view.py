@@ -781,8 +781,10 @@ class SiriusSpectrogramView(
         [_vx, _vy] = self._view.viewRange()
         limsx = np.array(_vx) / iszx * (ixMax-ixMin) + ixMin
         limsy = np.array(_vy) / iszy * (iyMax-iyMin) + iyMin
-        self.xaxis.setRange(limsx[0], limsx[1])
-        self.yaxis.setRange(limsy[0], limsy[1])
+        if not np.any(np.isnan(limsx)):
+            self.xaxis.setRange(limsx[0], limsx[1])
+        if not np.any(np.isnan(limsy)):
+            self.yaxis.setRange(limsy[0], limsy[1])
 
     @Slot(list)
     def _updateDisplay(self, data):
