@@ -30,7 +30,7 @@ from ... import util
 from ...widgets import PyDMStateButton, PyDMSpinboxScrollbar, SiriusTimePlot, \
     SiriusConnectionSignal, SiriusLedState, SiriusLedAlert, \
     PyDMLedMultiChannel, SiriusDialog, SiriusWaveformTable, SiriusSpinbox, \
-    SiriusHexaSpinbox
+    SiriusHexaSpinbox, PyDMLed
 from .InterlockWindow import InterlockWindow, LIInterlockWindow
 from .custom_widgets import LISpectIntlkLed
 

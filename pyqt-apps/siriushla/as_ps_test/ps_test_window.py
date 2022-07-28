@@ -117,49 +117,49 @@ class PSTestWindow(SiriusMainWindow):
         lay_ps.setColumnStretch(0, 1)
 
         # PS commands
-        self.checkcomm_ps_bt = QPushButton('Check Communication', self)
+        self.checkcomm_ps_bt = QPushButton('1. Check Communication', self)
         self.checkcomm_ps_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
         self.checkcomm_ps_bt.clicked.connect(self._check_comm)
         self.checkcomm_ps_bt.setToolTip(
             'Check PS and DCLinks communication status (verify invalid alarms '
             'and, if LI, the value of Connected-Mon PV)')
 
-        self.checkstatus_ps_bt = QPushButton('Show Status Summary', self)
+        self.checkstatus_ps_bt = QPushButton('2. Show Status Summary', self)
         self.checkstatus_ps_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
         self.checkstatus_ps_bt.clicked.connect(_part(self._check_status, 'PS'))
         self.checkstatus_ps_bt.setToolTip(
             'Check PS and DCLinks interlock status and, if powered on, '
             'check if it is following reference')
 
-        self.dsbltrigger_ps_bt = QPushButton('Disable PS triggers', self)
+        self.dsbltrigger_ps_bt = QPushButton('3. Disable PS triggers', self)
         self.dsbltrigger_ps_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
         self.dsbltrigger_ps_bt.clicked.connect(
             _part(self._set_check_trigger_state, 'PS', 'dsbl'))
 
-        self.setsofbmode_ps_bt = QPushButton('Turn Off SOFBMode', self)
+        self.setsofbmode_ps_bt = QPushButton('4. Turn Off SOFBMode', self)
         self.setsofbmode_ps_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
         self.setsofbmode_ps_bt.clicked.connect(
             _part(self._set_check_fbp_sofbmode, 'off'))
 
         self.setslowref_ps_bt = QPushButton(
-            'Set PS and DCLinks to SlowRef', self)
+            '5. Set PS and DCLinks to SlowRef', self)
         self.setslowref_ps_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
         self.setslowref_ps_bt.clicked.connect(self._set_check_opmode_slowref)
 
-        self.currzero_ps_bt1 = QPushButton('Set PS Current to zero', self)
+        self.currzero_ps_bt1 = QPushButton('6. Set PS Current to zero', self)
         self.currzero_ps_bt1.clicked.connect(_part(self._set_lastcomm, 'PS'))
         self.currzero_ps_bt1.clicked.connect(self._set_zero_ps)
 
-        self.reset_ps_bt = QPushButton('Reset PS and DCLinks', self)
+        self.reset_ps_bt = QPushButton('7. Reset PS and DCLinks', self)
         self.reset_ps_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
         self.reset_ps_bt.clicked.connect(_part(self._reset_intlk, 'PS'))
 
-        self.prep_sidclink_bt = QPushButton('Prepare SI Fam DCLinks', self)
+        self.prep_sidclink_bt = QPushButton('8. Prepare SI Fam DCLinks', self)
         self.prep_sidclink_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
         self.prep_sidclink_bt.clicked.connect(self._prepare_sidclinks)
         self.prep_sidclink_bt.setVisible(False)
 
-        self.init_sips_bt = QPushButton('Initialize SI Fam PS', self)
+        self.init_sips_bt = QPushButton('9. Initialize SI Fam PS', self)
         self.init_sips_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
         self.init_sips_bt.clicked.connect(self._set_check_pwrstateinit)
         self.init_sips_bt.setVisible(False)
@@ -167,46 +167,61 @@ class PSTestWindow(SiriusMainWindow):
         self.aux_label = QLabel('')
         self.aux_label.setVisible(False)
 
-        self.turnon_dcl_bt = QPushButton('Turn DCLinks On', self)
+        self.turnon_dcl_bt = QPushButton('8. Turn DCLinks On', self)
         self.turnon_dcl_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
         self.turnon_dcl_bt.clicked.connect(
             _part(self._set_check_pwrstate_dclinks, 'on'))
 
-        self.checkctrlloop_dcl_bt = QPushButton('Check DCLinks CtrlLoop', self)
+        self.checkctrlloop_dcl_bt = QPushButton(
+            '9. Check DCLinks CtrlLoop', self)
         self.checkctrlloop_dcl_bt.clicked.connect(
             _part(self._set_lastcomm, 'PS'))
         self.checkctrlloop_dcl_bt.clicked.connect(
             _part(self._check_ctrlloop, 'dclink'))
 
-        self.setvolt_dcl_bt = QPushButton('Set DCLinks Voltage', self)
+        self.setvolt_dcl_bt = QPushButton('10. Set DCLinks Voltage', self)
         self.setvolt_dcl_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
         self.setvolt_dcl_bt.clicked.connect(
             self._set_check_dclinks_capvolt)
 
-        self.turnon_ps_bt = QPushButton('Turn PS On', self)
+        self.turnon_ps_bt = QPushButton('11. Turn PS On', self)
         self.turnon_ps_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
         self.turnon_ps_bt.clicked.connect(
             _part(self._set_check_pwrstate, 'PS', 'on', True))
 
-        self.checkctrlloop_ps_bt = QPushButton('Check PS CtrlLoop', self)
+        self.checkctrlloop_ps_bt = QPushButton('12. Check PS CtrlLoop', self)
         self.checkctrlloop_ps_bt.clicked.connect(
             _part(self._set_lastcomm, 'PS'))
         self.checkctrlloop_ps_bt.clicked.connect(
             _part(self._check_ctrlloop, 'pwrsupply'))
 
-        self.test_ps_bt = QPushButton('Set PS Current to test value', self)
+        self.test_ps_bt = QPushButton(
+            '13. Set PS Current to test value', self)
         self.test_ps_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
         self.test_ps_bt.clicked.connect(self._set_test_ps)
 
-        self.currzero_ps_bt2 = QPushButton('Set PS Current to zero', self)
+        self.currzero_ps_bt2 = QPushButton('14. Set PS Current to zero', self)
         self.currzero_ps_bt2.clicked.connect(_part(self._set_lastcomm, 'PS'))
         self.currzero_ps_bt2.clicked.connect(self._set_zero_ps)
 
-        self.restoretrigger_ps_bt = QPushButton('Restore PS triggers', self)
+        self.restoretrigger_ps_bt = QPushButton(
+            '15. Restore PS triggers', self)
         self.restoretrigger_ps_bt.clicked.connect(
             _part(self._set_lastcomm, 'PS'))
         self.restoretrigger_ps_bt.clicked.connect(
             _part(self._restore_triggers_state, 'PS'))
+
+        self._ps_buttons = [
+            self.checkcomm_ps_bt, self.checkstatus_ps_bt,
+            self.dsbltrigger_ps_bt, self.setsofbmode_ps_bt,
+            self.setslowref_ps_bt, self.currzero_ps_bt1,
+            self.reset_ps_bt, self.prep_sidclink_bt,
+            self.init_sips_bt, self.turnon_dcl_bt,
+            self.checkctrlloop_dcl_bt, self.setvolt_dcl_bt,
+            self.turnon_ps_bt, self.checkctrlloop_ps_bt,
+            self.test_ps_bt, self.currzero_ps_bt2,
+            self.restoretrigger_ps_bt,
+        ]
 
         gbox_ps_comm = QGroupBox('Commands', self)
         gbox_ps_comm.setObjectName('comm')
@@ -282,45 +297,45 @@ class PSTestWindow(SiriusMainWindow):
         lay_pu.setColumnStretch(0, 1)
 
         # PU commands
-        self.checkstatus_pu_bt = QPushButton('Show Status Summary', self)
+        self.checkstatus_pu_bt = QPushButton('1. Show Status Summary', self)
         self.checkstatus_pu_bt.clicked.connect(_part(self._set_lastcomm, 'PU'))
         self.checkstatus_pu_bt.clicked.connect(_part(self._check_status, 'PU'))
         self.checkstatus_pu_bt.setToolTip(
             'Check PU interlock status and, if powered on, '
             'check if it is following voltage setpoint')
 
-        self.voltzero_pu_bt1 = QPushButton('Set PU Voltage to zero', self)
+        self.voltzero_pu_bt1 = QPushButton('2. Set PU Voltage to zero', self)
         self.voltzero_pu_bt1.clicked.connect(_part(self._set_lastcomm, 'PU'))
         self.voltzero_pu_bt1.clicked.connect(_part(self._set_zero_pu, False))
 
-        self.reset_pu_bt = QPushButton('Reset PU', self)
+        self.reset_pu_bt = QPushButton('3. Reset PU', self)
         self.reset_pu_bt.clicked.connect(_part(self._set_lastcomm, 'PU'))
         self.reset_pu_bt.clicked.connect(_part(self._reset_intlk, 'PU'))
 
-        self.turnon_pu_bt = QPushButton('Turn PU On', self)
+        self.turnon_pu_bt = QPushButton('4. Turn PU On', self)
         self.turnon_pu_bt.clicked.connect(_part(self._set_lastcomm, 'PU'))
         self.turnon_pu_bt.clicked.connect(
             _part(self._set_check_pwrstate, 'PU', 'on', True))
 
-        self.enblpulse_pu_bt = QPushButton('Enable PU Pulse', self)
+        self.enblpulse_pu_bt = QPushButton('5. Enable PU Pulse', self)
         self.enblpulse_pu_bt.clicked.connect(_part(self._set_lastcomm, 'PU'))
         self.enblpulse_pu_bt.clicked.connect(
             _part(self._set_check_pulse, 'on'))
 
-        self.enbltrigger_pu_bt = QPushButton('Enable PU triggers', self)
+        self.enbltrigger_pu_bt = QPushButton('6. Enable PU triggers', self)
         self.enbltrigger_pu_bt.clicked.connect(_part(self._set_lastcomm, 'PU'))
         self.enbltrigger_pu_bt.clicked.connect(
             _part(self._set_check_trigger_state, 'PU', 'on'))
 
-        self.test_pu_bt = QPushButton('Set PU Voltage to test value', self)
+        self.test_pu_bt = QPushButton('7. Set PU Voltage to test value', self)
         self.test_pu_bt.clicked.connect(_part(self._set_lastcomm, 'PU'))
         self.test_pu_bt.clicked.connect(self._set_test_pu)
 
-        self.voltzero_pu_bt2 = QPushButton('Set PU Voltage to zero', self)
+        self.voltzero_pu_bt2 = QPushButton('8. Set PU Voltage to zero', self)
         self.voltzero_pu_bt2.clicked.connect(_part(self._set_lastcomm, 'PU'))
         self.voltzero_pu_bt2.clicked.connect(_part(self._set_zero_pu, True))
 
-        self.restoretrigger_pu_bt = QPushButton('Restore PU triggers', self)
+        self.restoretrigger_pu_bt = QPushButton('9. Restore PU triggers', self)
         self.restoretrigger_pu_bt.clicked.connect(
             _part(self._set_lastcomm, 'PU'))
         self.restoretrigger_pu_bt.clicked.connect(
@@ -1224,6 +1239,14 @@ class PSTestWindow(SiriusMainWindow):
         self.prep_sidclink_bt.setVisible(has_sifam)
         self.init_sips_bt.setVisible(has_sifam)
         self.aux_label.setVisible(has_sifam)
+        index = 1
+        for but in self._ps_buttons:
+            if not but.isVisible():
+                continue
+            oldtext = but.text()
+            newtext = str(index) + '.' + oldtext.split('.')[1]
+            but.setText(newtext)
+            index += 1
 
     # ---------- events ----------
 
