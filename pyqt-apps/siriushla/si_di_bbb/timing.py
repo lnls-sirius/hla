@@ -4,12 +4,12 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, \
     QGroupBox
 import qtawesome as qta
-from pydm.widgets import PyDMLabel, PyDMSpinbox
+from pydm.widgets import PyDMSpinbox, PyDMPushButton
 
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 from siriuspy.namesys import SiriusPVName as _PVName
 
-from ..widgets import SiriusFrame, SiriusSpinbox, SiriusPushButton
+from ..widgets import SiriusFrame, SiriusSpinbox, SiriusLabel
 from .util import set_bbb_color
 
 
@@ -51,9 +51,10 @@ class BbBTimingWidget(QWidget):
 
         # Timing Control
         ld_clkrst = QLabel('Clock Reset', self)
-        pb_clkrst = SiriusPushButton(
+        pb_clkrst = PyDMPushButton(
             self, init_channel=self.dev_pref+':CLKRST', pressValue=1,
             releaseValue=0)
+        pb_clkrst.writeWhenRelease = True
         pb_clkrst.setText('Reset')
         pb_clkrst.setToolTip('Reset Clock')
         pb_clkrst.setIcon(qta.icon('fa5s.sync'))
@@ -82,19 +83,29 @@ class BbBTimingWidget(QWidget):
 
         # Frequency counters
         ld_fcntch0 = QLabel('Input Clock', self)
-        lb_fcntch0 = PyDMLabel(self, self.dev_pref+':FREQ_CNT_CH0')
+        lb_fcntch0 = SiriusLabel(self, self.dev_pref+':FREQ_CNT_CH0')
+        lb_fcntch0.precisionFromPV = False
+        lb_fcntch0.precision = 6
         lb_fcntch0.showUnits = True
         ld_fcntch1 = QLabel('ACLK (RF/2)', self)
-        lb_fcntch1 = PyDMLabel(self, self.dev_pref+':FREQ_CNT_CH1')
+        lb_fcntch1 = SiriusLabel(self, self.dev_pref+':FREQ_CNT_CH1')
+        lb_fcntch1.precisionFromPV = False
+        lb_fcntch1.precision = 6
         lb_fcntch1.showUnits = True
         ld_fcntch2 = QLabel('ACLK3 (RF/3)', self)
-        lb_fcntch2 = PyDMLabel(self, self.dev_pref+':FREQ_CNT_CH2')
+        lb_fcntch2 = SiriusLabel(self, self.dev_pref+':FREQ_CNT_CH2')
+        lb_fcntch2.precisionFromPV = False
+        lb_fcntch2.precision = 6
         lb_fcntch2.showUnits = True
         ld_fcntch3 = QLabel('DAC Clock', self)
-        lb_fcntch3 = PyDMLabel(self, self.dev_pref+':FREQ_CNT_CH3')
+        lb_fcntch3 = SiriusLabel(self, self.dev_pref+':FREQ_CNT_CH3')
+        lb_fcntch3.precisionFromPV = False
+        lb_fcntch3.precision = 6
         lb_fcntch3.showUnits = True
         ld_fcntch4 = QLabel('RF/4 Processing Clock', self)
-        lb_fcntch4 = PyDMLabel(self, self.dev_pref+':FREQ_CNT_CH4')
+        lb_fcntch4 = SiriusLabel(self, self.dev_pref+':FREQ_CNT_CH4')
+        lb_fcntch4.precisionFromPV = False
+        lb_fcntch4.precision = 6
         lb_fcntch4.showUnits = True
 
         gbox_fcnts = QGroupBox('Frequency counters', self)

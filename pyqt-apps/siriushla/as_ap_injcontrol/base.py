@@ -6,13 +6,13 @@ from qtpy.QtSvg import QSvgWidget
 from qtpy.QtWidgets import QHBoxLayout, QVBoxLayout, QGridLayout, QWidget, \
     QLabel, QPushButton, QCheckBox, QSizePolicy as QSzPlcy, QGroupBox, \
     QButtonGroup, QMenuBar
-from pydm.widgets import PyDMLabel, PyDMEnumComboBox
+from pydm.widgets import PyDMEnumComboBox
 
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 
 from siriushla import util
 from siriushla.widgets import SiriusMainWindow, PyDMLed, \
-    SiriusLedState, PyDMSpinboxScrollbar
+    SiriusLedState, PyDMSpinboxScrollbar, SiriusLabel
 from siriushla.as_di_scrns import SiriusScrnView
 from siriushla.as_ps_control import PSDetailWindow
 from siriushla.as_pu_control import PUDetailWindow
@@ -149,7 +149,7 @@ class BaseWindow(SiriusMainWindow):
         cb_scrntype.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Fixed)
         cb_scrntype.setStyleSheet("min-width:4.5em;max-width:4.5em;")
 
-        lb_scrntype = PyDMLabel(self, scrn_device.substitute(
+        lb_scrntype = SiriusLabel(self, scrn_device.substitute(
             prefix=self.prefix, propty='ScrnType-Sts'))
         lb_scrntype.setStyleSheet("min-width:4.5em; max-width:4.5em;")
         lb_scrntype.setAlignment(Qt.AlignCenter)
@@ -210,8 +210,9 @@ class BaseWindow(SiriusMainWindow):
         sp_kick.scrollbar.limitsFromPV = True
         lay.addWidget(sp_kick, 1, 3, 2, 1)
 
-        lb_kick = PyDMLabel(
-            self, corr.substitute(prefix=self.prefix, propty=propty_mon))
+        lb_kick = SiriusLabel(
+            self, corr.substitute(prefix=self.prefix, propty=propty_mon),
+            keep_unit=True)
         lb_kick.setStyleSheet("""
             min-width:5em; max-width:5em; min-height:1.29em;""")
         lb_kick.showUnits = True

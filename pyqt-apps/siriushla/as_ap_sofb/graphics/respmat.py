@@ -132,7 +132,7 @@ class ShowMatrixWidget(QWidget):
             pen = mkPen(**dic)
             line = InfLine(pos=i*self._csorb.circum+bpm_pos[0]/2, pen=pen)
             self._inflines.append(line)
-            self.graph.addItem(line)
+            self.graph.getAxis('left').linkedView().addItem(line)
 
 
 class SingularValues(QWidget):
@@ -188,7 +188,7 @@ class SingularValues(QWidget):
         pen.setStyle(2)
         pen.setWidth(3)
         line = InfLine(pos=0, pen=pen, angle=90)
-        graph.addItem(line)
+        graph.getAxis('left').linkedView().addItem(line)
         self._chan.new_value_signal[int].connect(_part(self.setValue, line))
 
         graph.setObjectName('graph_singvalues')

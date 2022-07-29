@@ -3,8 +3,7 @@
 from qtpy.QtWidgets import QLabel, QGroupBox, QFormLayout, QVBoxLayout, \
     QHBoxLayout, QGridLayout
 
-from pydm.widgets import PyDMLabel
-
+from ...widgets import SiriusLabel
 from . import BaseWidget
 
 
@@ -57,11 +56,11 @@ class DriveControl(BaseWidget):
 
         hlay = QHBoxLayout()
         hlay.addWidget(QLabel('Frequency [Hz]: '))
-        hlay.addWidget(PyDMLabel(
+        hlay.addWidget(SiriusLabel(
             self, self.devpref.substitute(propty='DriveFrequency-Mon')))
         hlay.addStretch()
         hlay.addWidget(QLabel('Duration [s]: '))
-        hlay.addWidget(PyDMLabel(
+        hlay.addWidget(SiriusLabel(
             self, self.devpref.substitute(propty='DriveDuration-Mon')))
         gpbx_lay.addLayout(hlay)
         return gpbx

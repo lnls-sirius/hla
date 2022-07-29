@@ -12,7 +12,6 @@ from qtpy.QtWidgets import QGridLayout, QWidget, QLabel, QHBoxLayout, \
     QAction, QMenu
 import qtawesome as qta
 from pyqtgraph import mkPen, mkBrush
-from pydm.widgets import PyDMWaveformPlot
 from pydm.connection_inspector import ConnectionInspector
 
 from siriuspy.util import get_strength_label
@@ -23,7 +22,7 @@ from siriuspy.search import PSSearch as _PSSearch, \
 from siriuspy.pwrsupply.csdev import Const as _PSConst
 
 from siriushla.util import run_newprocess
-from siriushla.widgets import SiriusMainWindow
+from siriushla.widgets import SiriusMainWindow, SiriusWaveformPlot
 
 
 class PSGraphMonWindow(SiriusMainWindow):
@@ -305,20 +304,21 @@ class PSGraphProptySelWidget(QWidget):
             self.cb_prop_symb.setCurrentText(currsymb)
 
 
-class PSGraph(PyDMWaveformPlot):
+class PSGraph(SiriusWaveformPlot):
     """Power supply data graph."""
 
     def __init__(self, parent=None, psnames=list(), y_data=list(),
                  symbols=list(), color='blue'):
         """Init."""
         super().__init__(parent)
+        self.addAxis(plot_data_item=None, name='left', orientation='left')
         self.setBackgroundColor(QColor(255, 255, 255))
         self.setAutoRangeX(True)
         self.setAutoRangeY(True)
         self.setShowXGrid(True)
         self.setShowYGrid(True)
-        self.plotItem.showButtons()
         self.plotItem.setLabel('bottom', 's', units='m')
+        self.plotItem.setLabel('left', ' ')
         self._nok_pen = mkPen(QColor(color))
         self._nok_brush = mkBrush(QColor(255, 0, 0))
         self._ok_pen = mkPen(QColor(color))

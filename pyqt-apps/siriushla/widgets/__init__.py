@@ -21,10 +21,10 @@ from .label import SiriusLabel
 from .pvnames_tree import PVNameTree
 from .string_combo_box import SiriusStringComboBox
 from .timeplot import SiriusTimePlot
+from .waveformplot import SiriusWaveformPlot
 from .enum_combo_box import SiriusEnumComboBox
 from .frame import SiriusFrame, SiriusAlarmFrame
 from .process_image import SiriusProcessImage
 from .detachable_tabwidget import DetachableTabWidget
-from .pushbutton import SiriusPushButton
 from .waveformtable import SiriusWaveformTable
 from .selection_matrix import SelectionMatrixWidget

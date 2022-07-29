@@ -6,11 +6,11 @@ import numpy as np
 from qtpy.QtWidgets import QHBoxLayout, QSizePolicy as QSzPlcy, QVBoxLayout, \
     QToolTip
 from qtpy.QtCore import Qt, Slot, Signal, Property
-from pydm.widgets import PyDMImageView, PyDMLabel, PyDMSpinbox, \
+from pydm.widgets import PyDMImageView, PyDMSpinbox, \
     PyDMPushButton, PyDMEnumComboBox, PyDMLineEdit
 from pydm.widgets.channel import PyDMChannel
 
-from siriushla.widgets import PyDMStateButton, SiriusLedState
+from siriushla.widgets import PyDMStateButton, SiriusLedState, SiriusLabel
 
 
 class SiriusImageView(PyDMImageView):
@@ -472,7 +472,7 @@ def create_propty_layout(parent, prefix, propty, propty_type='', cmd=dict(),
             'hval', str(height)))
         sp.setAlignment(Qt.AlignCenter)
         layout.addWidget(sp)
-        label = PyDMLabel(parent, prefix.substitute(
+        label = SiriusLabel(parent, prefix.substitute(
             propty_name=propty, propty_suffix='RB'))
         setattr(parent, 'lb_'+propty, label)
         if not cmd:
@@ -510,7 +510,7 @@ def create_propty_layout(parent, prefix, propty, propty_type='', cmd=dict(),
             'hval', str(height)))
         statebutton.shape = 1
         layout.addWidget(statebutton)
-        label = PyDMLabel(parent, prefix.substitute(
+        label = SiriusLabel(parent, prefix.substitute(
             propty_name=propty, propty_suffix='Sts'))
         setattr(parent, 'lb_'+propty, label)
         if not cmd:
@@ -529,7 +529,7 @@ def create_propty_layout(parent, prefix, propty, propty_type='', cmd=dict(),
             max-height:hvalem;""".replace('wval', str(width)).replace(
                 'hval', str(height)))
         layout.addWidget(combobox)
-        label = PyDMLabel(parent, prefix.substitute(
+        label = SiriusLabel(parent, prefix.substitute(
             propty_name=propty, propty_suffix='Sts'))
         setattr(parent, 'lb_'+propty, label)
         if not cmd:
@@ -540,7 +540,7 @@ def create_propty_layout(parent, prefix, propty, propty_type='', cmd=dict(),
         label.setAlignment(Qt.AlignCenter)
         layout.addWidget(label)
     elif propty_type == 'mon':
-        label = PyDMLabel(parent, prefix.substitute(
+        label = SiriusLabel(parent, prefix.substitute(
             propty_name=propty, propty_suffix='Mon'))
         setattr(parent, 'lb_'+propty, label)
         label.setStyleSheet("""
@@ -550,7 +550,7 @@ def create_propty_layout(parent, prefix, propty, propty_type='', cmd=dict(),
         label.setAlignment(Qt.AlignCenter)
         layout.addWidget(label)
     elif propty_type == 'cte':
-        label = PyDMLabel(parent, prefix.substitute(
+        label = SiriusLabel(parent, prefix.substitute(
             propty_name=propty, propty_suffix='Cte'))
         setattr(parent, 'lb_'+propty, label)
         label.setStyleSheet("""

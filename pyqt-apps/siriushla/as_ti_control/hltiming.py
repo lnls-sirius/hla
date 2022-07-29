@@ -4,7 +4,7 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, \
     QGridLayout, QLabel, QSplitter, QSizePolicy as QSzPol
 import qtawesome as qta
-from pydm.widgets import PyDMPushButton, PyDMLabel
+from pydm.widgets import PyDMPushButton
 
 from siriuspy.timesys import csdev as _cstime
 from siriuspy.search import LLTimeSearch, HLTimeSearch
@@ -13,7 +13,7 @@ from siriuspy.namesys import SiriusPVName
 from ..util import connect_window, get_appropriate_color, \
     connect_newprocess
 from ..widgets.windows import create_window_from_widget
-from ..widgets import SiriusMainWindow, PyDMLed, PyDMStateButton
+from ..widgets import SiriusMainWindow, PyDMLed, PyDMStateButton, SiriusLabel
 
 from .low_level_devices import EventList as _EventList, EVG as _EVG, \
     BucketList, EVR as _EVR, EVE as _EVE, AFC as _AFC, FOUT as _FOUT
@@ -95,7 +95,7 @@ class TimingMain(SiriusMainWindow):
 
         hlay = QHBoxLayout()
         lab = QLabel('Inj Count:', wid)
-        pydmlab = PyDMLabel(
+        pydmlab = SiriusLabel(
             wid, init_channel=evg_pref.substitute(propty='InjCount-Mon'))
         pydmlab.setStyleSheet('min-width:5em;')
         pydmlab.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
@@ -103,12 +103,12 @@ class TimingMain(SiriusMainWindow):
         hlay.addWidget(lab)
         hlay.addWidget(pydmlab)
         hlay.addStretch()
-        pydmlab = PyDMLabel(
+        pydmlab = SiriusLabel(
             wid, init_channel=evg_pref.substitute(propty='STATEMACHINE'))
         pydmlab.setStyleSheet('min-width:10em;')
         hlay.addWidget(pydmlab)
         hlay.addStretch()
-        pydmlab = PyDMLabel(
+        pydmlab = SiriusLabel(
             wid, init_channel=evg_pref.substitute(propty='SeqCount-SP'))
         pydmlab.rules =\
             '[{"name": "VisibleRule", "property": "Visible", ' +\

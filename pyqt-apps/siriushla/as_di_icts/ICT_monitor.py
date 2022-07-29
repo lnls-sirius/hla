@@ -7,13 +7,13 @@ import numpy as np
 from qtpy.uic import loadUi
 from qtpy.QtCore import Slot, Qt
 from qtpy.QtGui import QColor
-from qtpy.QtWidgets import QFormLayout, QGridLayout, QHBoxLayout, QVBoxLayout,\
-                           QSizePolicy as QSzPlcy, QLabel, QPushButton,\
-                           QSpacerItem, QGroupBox, QWidget
+from qtpy.QtWidgets import QFormLayout, QGridLayout, QHBoxLayout, \
+    QVBoxLayout, QSizePolicy as QSzPlcy, QLabel, QPushButton,\
+    QSpacerItem, QGroupBox, QWidget
 import qtawesome as qta
+from pyqtgraph import BarGraphItem
 
-from pydm.widgets import PyDMLabel, PyDMEnumComboBox, PyDMSpinbox, \
-                         PyDMPushButton, PyDMWaveformPlot
+from pydm.widgets import PyDMEnumComboBox, PyDMSpinbox, PyDMPushButton
 from pydm.widgets.waveformplot import WaveformCurveItem
 from pydm.utilities.macro import substitute_in_file as _substitute_in_file
 
@@ -22,7 +22,8 @@ from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriuspy.epics import PV
 
 from siriushla.widgets import SiriusMainWindow, SiriusDialog, \
-    SiriusLedAlert, PyDMStateButton, PyDMLedMultiChannel, QSpinBoxPlus
+    SiriusLedAlert, PyDMStateButton, PyDMLedMultiChannel, QSpinBoxPlus, \
+    SiriusWaveformPlot, SiriusLabel
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla import util
 from siriushla.as_ti_control.hl_trigger import HLTriggerDetailed
@@ -50,7 +51,7 @@ class ICTSummary(QWidget):
         lay.setHorizontalSpacing(12)
 
         base_name = _PVName('TL-Glob:AP-CurrInfo:TranspEff-Mon')
-        self.lb_transpeff = PyDMLabel(
+        self.lb_transpeff = SiriusLabel(
             self, base_name.substitute(prefix=self.prefix, sec=self.tl))
         self.lb_transpeff.setAlignment(Qt.AlignCenter)
         lay_transpeff = QVBoxLayout()
@@ -67,7 +68,7 @@ class ICTSummary(QWidget):
             led_status.setObjectName(ict+'_status')
             txt_charge = QLabel(
                 'Charge: ', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
-            lb_charge = PyDMLabel(
+            lb_charge = SiriusLabel(
                 self, ict.substitute(prefix=self.prefix, propty='Charge-Mon'))
             lb_charge.setObjectName(ict+'_charge')
             lb_charge.setStyleSheet('max-width: 10em;')
@@ -268,7 +269,7 @@ class _ICTSettings(SiriusDialog):
         l_sampletrg = QLabel('Trigger Source: ', self)
         self.pydmenumcombobox_SampleTrg = PyDMEnumComboBox(
             self, self.ict_prefix.substitute(propty='SampleTrg-Sel'))
-        self.pydmlabel_SampleTrg = PyDMLabel(
+        self.pydmlabel_SampleTrg = SiriusLabel(
             self, self.ict_prefix.substitute(propty='SampleTrg-Sts'))
         hlay_sampletrg = QHBoxLayout()
         hlay_sampletrg.addWidget(self.pydmenumcombobox_SampleTrg)
@@ -300,13 +301,13 @@ class _ICTSettings(SiriusDialog):
         self.pydmspinbox_DigiDelay = PyDMSpinbox(
             self, self.ict_trig_digi_prefix.substitute(propty='Delay-SP'))
         self.pydmspinbox_DigiDelay.showStepExponent = False
-        self.pydmlabel_DigiDelay = PyDMLabel(
+        self.pydmlabel_DigiDelay = SiriusLabel(
             self, self.ict_trig_digi_prefix.substitute(propty='Delay-RB'))
         l_DigiDuration = QLabel('Duration: ', self)
         self.pydmspinbox_DigiDuration = PyDMSpinbox(
             self, self.ict_trig_digi_prefix.substitute(propty='Duration-SP'))
         self.pydmspinbox_DigiDuration.showStepExponent = False
-        self.pydmlabel_DigiDuration = PyDMLabel(
+        self.pydmlabel_DigiDuration = SiriusLabel(
             self, self.ict_trig_digi_prefix.substitute(propty='Duration-RB'))
         lay_Digi = QGridLayout()
         lay_Digi.addWidget(l_DigiSts, 0, 0)
@@ -345,13 +346,13 @@ class _ICTSettings(SiriusDialog):
         self.pydmspinbox_IntegDelay = PyDMSpinbox(
             self, self.ict_trig_digi_prefix.substitute(propty='Delay-SP'))
         self.pydmspinbox_IntegDelay.showStepExponent = False
-        self.pydmlabel_IntegDelay = PyDMLabel(
+        self.pydmlabel_IntegDelay = SiriusLabel(
             self, self.ict_trig_digi_prefix.substitute(propty='Delay-RB'))
         l_IntegDuration = QLabel('Delay: ', self)
         self.pydmspinbox_IntegDuration = PyDMSpinbox(
             self, self.ict_trig_digi_prefix.substitute(propty='Duration-SP'))
         self.pydmspinbox_IntegDuration.showStepExponent = False
-        self.pydmlabel_IntegDuration = PyDMLabel(
+        self.pydmlabel_IntegDuration = SiriusLabel(
             self, self.ict_trig_digi_prefix.substitute(propty='Duration-RB'))
         lay_Integ = QGridLayout()
         lay_Integ.addWidget(l_IntegSts, 0, 0)
@@ -368,7 +369,7 @@ class _ICTSettings(SiriusDialog):
         self.pydmspinbox_Threshold = PyDMSpinbox(
             self, self.ict_prefix.substitute(propty='Threshold-SP'))
         self.pydmspinbox_Threshold.showStepExponent = False
-        self.pydmlabel_Threshold = PyDMLabel(
+        self.pydmlabel_Threshold = SiriusLabel(
             self, self.ict_prefix.substitute(propty='Threshold-RB'))
         hlay_thold = QHBoxLayout()
         hlay_thold.addWidget(self.pydmspinbox_Threshold)
@@ -424,18 +425,18 @@ class _ICTCalibration(QWidget):
                 min-width:65em;
                 min-height:34em;}
             PyDMSpinbox{
-                min-width:7.10em;\nmax-width:7.10em;
-                min-height:1.29em;\nmax-height:1.29em;
+                min-width:7.10em; max-width:7.10em;
+                min-height:1.29em; max-height:1.29em;
                 qproperty-alignment: AlignCenter;\n}
             PyDMStateButton{
-                min-width:7.10em;\nmax-width:7.10em;
-                min-height:1.29em;\nmax-height:1.29em;\n}
+                min-width:7.10em; max-width:7.10em;
+                min-height:1.29em; max-height:1.29em;\n}
             PyDMEnumComboBox{
-                min-width:7.10em;\nmax-width:7.10em;
-                min-height:1.29em;\nmax-height:1.29em;\n}
-            PyDMLabel{
-                min-width:7.10em;\nmax-width:7.10em;
-                min-height:1.29em;\nmax-height:1.29em;
+                min-width:7.10em; max-width:7.10em;
+                min-height:1.29em; max-height:1.29em;\n}
+            SiriusLabel{
+                min-width:7.10em; max-width:7.10em;
+                min-height:1.29em; max-height:1.29em;
                 qproperty-alignment: AlignCenter;\n}
             QPushButton{
                 min-width:14.2em;\nmax-width:14.2em;\n}"""
@@ -450,7 +451,7 @@ class _ICTCalibration(QWidget):
         self.pydmspinbox_Threshold = PyDMSpinbox(
             self, self.ict_prefix.substitute(propty='Threshold-SP'))
         self.pydmspinbox_Threshold.showStepExponent = False
-        self.pydmlabel_Threshold = PyDMLabel(
+        self.pydmlabel_Threshold = SiriusLabel(
             self, self.ict_prefix.substitute(propty='Threshold-RB'))
         hlay_thold = QHBoxLayout()
         hlay_thold.addWidget(self.pydmspinbox_Threshold)
@@ -460,7 +461,7 @@ class _ICTCalibration(QWidget):
         self.pydmstatebutton_HFReject = PyDMStateButton(
             self, self.ict_prefix.substitute(propty='HFReject-Sel'))
         self.pydmstatebutton_HFReject.shape = 1
-        self.pydmlabel_HFReject = PyDMLabel(
+        self.pydmlabel_HFReject = SiriusLabel(
             self, self.ict_prefix.substitute(propty='HFReject-Sts'))
         hlay_hfreject = QHBoxLayout()
         hlay_hfreject.addWidget(self.pydmstatebutton_HFReject)
@@ -470,7 +471,7 @@ class _ICTCalibration(QWidget):
         self.pydmspinbox_2ndReadDly = PyDMSpinbox(
             self, self.ict_prefix.substitute(propty='2ndReadDly-SP'))
         self.pydmspinbox_2ndReadDly.showStepExponent = False
-        self.pydmlabel_2ndReadDly = PyDMLabel(
+        self.pydmlabel_2ndReadDly = SiriusLabel(
             self, self.ict_prefix.substitute(propty='2ndReadDly-RB'))
         hlay_2ndreaddy = QHBoxLayout()
         hlay_2ndreaddy.addWidget(self.pydmspinbox_2ndReadDly)
@@ -480,7 +481,7 @@ class _ICTCalibration(QWidget):
         self.pydmspinbox_SampleCnt = PyDMSpinbox(
             self, self.ict_prefix.substitute(propty='SampleCnt-SP'))
         self.pydmspinbox_SampleCnt.showStepExponent = False
-        self.pydmlabel_SampleCnt = PyDMLabel(
+        self.pydmlabel_SampleCnt = SiriusLabel(
             self, self.ict_prefix.substitute(propty='SampleCnt-RB'))
         hlay_samplecnt = QHBoxLayout()
         hlay_samplecnt.addWidget(self.pydmspinbox_SampleCnt)
@@ -490,7 +491,7 @@ class _ICTCalibration(QWidget):
         self.pydmspinbox_Aperture = PyDMSpinbox(
             self, self.ict_prefix.substitute(propty='Aperture-SP'))
         self.pydmspinbox_Aperture.showStepExponent = False
-        self.pydmlabel_Aperture = PyDMLabel(
+        self.pydmlabel_Aperture = SiriusLabel(
             self, self.ict_prefix.substitute(propty='Aperture-RB'))
         hlay_aperture = QHBoxLayout()
         hlay_aperture.addWidget(self.pydmspinbox_Aperture)
@@ -500,7 +501,7 @@ class _ICTCalibration(QWidget):
         self.pydmspinbox_SampleRate = PyDMSpinbox(
             self, self.ict_prefix.substitute(propty='SampleRate-SP'))
         self.pydmspinbox_SampleRate.showStepExponent = False
-        self.pydmlabel_SampleRate = PyDMLabel(
+        self.pydmlabel_SampleRate = SiriusLabel(
             self, self.ict_prefix.substitute(propty='SampleRate-RB'))
         hlay_samplerate = QHBoxLayout()
         hlay_samplerate.addWidget(self.pydmspinbox_SampleRate)
@@ -510,7 +511,7 @@ class _ICTCalibration(QWidget):
         self.pydmstatebutton_Imped = PyDMEnumComboBox(
             self, self.ict_prefix.substitute(propty='Imped-Sel'))
         self.pydmstatebutton_Imped.shape = 1
-        self.pydmlabel_Imped = PyDMLabel(
+        self.pydmlabel_Imped = SiriusLabel(
             self, self.ict_prefix.substitute(propty='Imped-Sts'))
         hlay_imped = QHBoxLayout()
         hlay_imped.addWidget(self.pydmstatebutton_Imped)
@@ -524,7 +525,7 @@ class _ICTCalibration(QWidget):
         l_range = QLabel('Range: ', self)
         self.pydmenumcombobox_Range = PyDMEnumComboBox(
             self, self.ict_prefix.substitute(propty='Range-Sel'))
-        self.pydmlabel_Range = PyDMLabel(
+        self.pydmlabel_Range = SiriusLabel(
             self, self.ict_prefix.substitute(propty='Range-Sts'))
         hlay_range = QHBoxLayout()
         hlay_range.addWidget(self.pydmenumcombobox_Range)
@@ -534,7 +535,7 @@ class _ICTCalibration(QWidget):
         self.pydmstatebutton_CalEnbl = PyDMStateButton(
             self, self.ict_prefix.substitute(propty='CalEnbl-Sel'))
         self.pydmstatebutton_CalEnbl.shape = 1
-        self.pydmlabel_CalEnbl = PyDMLabel(
+        self.pydmlabel_CalEnbl = SiriusLabel(
             self, self.ict_prefix.substitute(propty='CalEnbl-Sts'))
         hlay_calenbl = QHBoxLayout()
         hlay_calenbl.addWidget(self.pydmstatebutton_CalEnbl)
@@ -543,7 +544,7 @@ class _ICTCalibration(QWidget):
         l_calcharge = QLabel('Calibration Charge: ', self)
         self.pydmenumcombobox_CalCharge = PyDMEnumComboBox(
             self, self.ict_prefix.substitute(propty='CalCharge-Sel'))
-        self.pydmlabel_CalCharge = PyDMLabel(
+        self.pydmlabel_CalCharge = SiriusLabel(
             self, self.ict_prefix.substitute(propty='CalCharge-Sts'))
         hlay_calcharge = QHBoxLayout()
         hlay_calcharge.addWidget(self.pydmenumcombobox_CalCharge)
@@ -583,6 +584,8 @@ class _ICTCalibration(QWidget):
 
     def _setupGraph(self):
         graph_rawread = _MyWaveformPlot(self)
+        graph_rawread.addAxis(
+            plot_data_item=None, name='left', orientation='left')
         graph_rawread.setObjectName('graph_rawread')
         graph_rawread.autoRangeX = True
         graph_rawread.autoRangeY = True
@@ -592,7 +595,8 @@ class _ICTCalibration(QWidget):
         graph_rawread.showYGrid = True
         graph_rawread.setStyleSheet("""
             #graph_rawread{min-width:36em;\nmin-height:28em;}""")
-        graph_rawread.setLabels(left='Raw Readings', bottom='Index')
+        graph_rawread.setLabel('left', text='Raw Readings', color='gray')
+        graph_rawread.setLabel('bottom', text='Index', color='gray')
         graph_rawread.addChannel(
             y_channel=self.ict_prefix.substitute(propty='RawPulse-Mon'),
             name='RawPulse', color='blue', lineWidth=2, lineStyle=Qt.SolidLine)
@@ -647,11 +651,14 @@ class _MyWaveformCurveItem(WaveformCurveItem):
         self.needs_new_y = True
 
 
-class _MyWaveformPlot(PyDMWaveformPlot):
+class _MyWaveformPlot(SiriusWaveformPlot):
 
-    def addChannel(self, y_channel=None, x_channel=None, name=None,
-                   color=None, lineStyle=None, lineWidth=None,
-                   symbol=None, symbolSize=None, redraw_mode=None):
+    def addChannel(self, y_channel=None, x_channel=None, plot_style=None,
+                   name=None, color=None, lineStyle=None, lineWidth=None,
+                   symbol=None, symbolSize=None, barWidth=None,
+                   upperThreshold=None, lowerThreshold=None,
+                   thresholdColor=None, redraw_mode=None, yAxisName=None):
+        """Reimplement to use _MyWaveformCurveItem."""
         plot_opts = {}
         plot_opts['symbol'] = symbol
         if symbolSize is not None:
@@ -664,8 +671,17 @@ class _MyWaveformPlot(PyDMWaveformPlot):
             plot_opts['redraw_mode'] = redraw_mode
         self._needs_redraw = False
         curve = _MyWaveformCurveItem(
-            y_addr=y_channel, x_addr=x_channel, name=name,
-            color=color, **plot_opts)
+            y_addr=y_channel, x_addr=x_channel, plot_style=plot_style,
+            name=name, color=color, yAxisName=yAxisName, **plot_opts)
         self.channel_pairs[(y_channel, x_channel)] = curve
-        self.addCurve(curve, curve_color=color)
+        if plot_style == 'Bar':
+            if barWidth is None:
+                barWidth = 1.0
+            curve.bar_graph_item = BarGraphItem(
+                x=[], height=[], width=barWidth, brush=color)
+            curve.setBarGraphInfo(
+                barWidth, upperThreshold, lowerThreshold, thresholdColor)
+        self.addCurve(curve, curve_color=color, y_axis_name=yAxisName)
+        if curve.bar_graph_item is not None:
+            curve.getViewBox().addItem(curve.bar_graph_item)
         curve.data_changed.connect(self.set_needs_redraw)

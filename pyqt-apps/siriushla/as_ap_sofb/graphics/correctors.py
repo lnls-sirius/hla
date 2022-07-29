@@ -1,10 +1,10 @@
 """Control the Correctors Graphic Displnay."""
 
 from pyqtgraph import mkPen
-from qtpy.QtWidgets import QCheckBox, QLabel, QHBoxLayout, QGroupBox
+from qtpy.QtWidgets import QCheckBox, QLabel, QHBoxLayout, QGroupBox, \
+    QSizePolicy as QSzPol
 from qtpy.QtGui import QColor
-from pydm.widgets import PyDMLabel
-from siriushla.widgets import SiriusConnectionSignal as _ConnSig
+from siriushla.widgets import SiriusConnectionSignal as _ConnSig, SiriusLabel
 from siriushla.as_ap_sofb.graphics.base import BaseWidget, InfLine
 
 
@@ -36,18 +36,22 @@ class CorrectorsWidget(BaseWidget):
         vbl.addLayout(hbl)
         lbl = QLabel('Frequency', grpbx)
         hbl.addWidget(lbl)
-        lbl = PyDMLabel(
+        lbl = SiriusLabel(
             grpbx, self.devpref.substitute(propty='KickRF-Mon'))
         lbl.showUnits = True
+        lbl.setSizePolicy(QSzPol.Fixed, QSzPol.Preferred)
+        lbl.setStyleSheet('min-width: 8em;')
         hbl.addWidget(lbl)
 
         hbl = QHBoxLayout()
         vbl.addLayout(hbl)
         lbl = QLabel('Delta Freq.', grpbx)
         hbl.addWidget(lbl)
-        lbl = PyDMLabel(
+        lbl = SiriusLabel(
             grpbx, self.devpref.substitute(propty='DeltaKickRF-Mon'))
         lbl.showUnits = True
+        lbl.setSizePolicy(QSzPol.Fixed, QSzPol.Preferred)
+        lbl.setStyleSheet('min-width: 6em;')
         hbl.addWidget(lbl)
 
     def add_kicklimits_curves(self):
@@ -76,8 +80,9 @@ class CorrectorsWidget(BaseWidget):
                 maxkick = InfLine(
                     conv=1e-6, pos=0.0, pen=pen, angle=0, name=name)
                 minkick = InfLine(conv=-1e-6, pos=0.0, pen=pen, angle=0)
-                self.graph[pln].addItem(maxkick)
-                self.graph[pln].addItem(minkick)
+                view = self.graph[pln].getAxis('left').linkedView()
+                view.addItem(maxkick)
+                view.addItem(minkick)
                 chan = _ConnSig(
                     self.devpref.substitute(propty=pvi + corr + '-RB'))
                 self._chans.append(chan)

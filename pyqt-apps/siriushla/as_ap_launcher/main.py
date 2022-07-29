@@ -5,7 +5,7 @@ import qtawesome as qta
 from qtpy.QtCore import Qt, Slot, Signal, QEvent
 from qtpy.QtWidgets import QWidget, QGroupBox, QPushButton, QLabel, \
     QGridLayout, QApplication, QHBoxLayout
-from pydm.widgets import PyDMPushButton, PyDMLabel
+from pydm.widgets import PyDMPushButton
 
 from siriuspy.envars import VACA_PREFIX
 from siriuspy.namesys.implementation import SiriusPVName
@@ -185,7 +185,7 @@ class MainLauncher(SiriusMainWindow):
         lay_inject_sel.addWidget(self.but_tiinj, 0, 0)
         lay_inject_sel.addWidget(self.but_topup, 0, 0)
         led_injsts = EVGInjectionLed(self, self._prefix)
-        label_injcnt = PyDMLabel(self)
+        label_injcnt = SiriusLabel(self)
         label_injcnt.setToolTip(
             'Count injection pulses when Egun Trigger is enabled.')
         label_injcnt.channel = SiriusPVName(
@@ -222,8 +222,9 @@ class MainLauncher(SiriusMainWindow):
         self._sb_currtgt = SiriusSpinbox(
             self, injctrl_dev.substitute(propty='TargetCurrent-SP'))
         self._sb_currtgt.showStepExponent = False
-        self._lb_currtgt = PyDMLabel(
-            self, injctrl_dev.substitute(propty='TargetCurrent-RB'))
+        self._lb_currtgt = SiriusLabel(
+            self, injctrl_dev.substitute(propty='TargetCurrent-RB'),
+            keep_unit=True)
         self._lb_currtgt.showUnits = True
         self._wid_tcurr = QWidget()
         lay_tcurr = QGridLayout(self._wid_tcurr)
@@ -268,7 +269,7 @@ class MainLauncher(SiriusMainWindow):
         # Current
         curr_pvname = SiriusPVName(
             'SI-Glob:AP-CurrInfo:Current-Mon').substitute(prefix=self._prefix)
-        self.label_curr = PyDMLabel(self, curr_pvname)
+        self.label_curr = SiriusLabel(self, curr_pvname)
         self.label_curr.showUnits = True
         self.label_curr.setStyleSheet("""
             QLabel{

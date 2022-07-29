@@ -7,21 +7,20 @@ from qtpy.QtGui import QColor
 from qtpy.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, \
     QGridLayout
 
-from pydm.widgets import PyDMWaveformPlot
-
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriuspy.namesys import SiriusPVName as _PVName
 
 from siriuspy.search import PSSearch
 from siriushla.widgets import SiriusConnectionSignal as _ConnSig, \
-    SiriusMainWindow, QSpinBoxPlus, QDoubleSpinBoxPlus
+    SiriusMainWindow, QSpinBoxPlus, QDoubleSpinBoxPlus, SiriusWaveformPlot
 
 
-class Graph(PyDMWaveformPlot):
+class Graph(SiriusWaveformPlot):
     doubleclick = Signal(int)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.addAxis(plot_data_item=None, name='left', orientation='left')
         self.setObjectName('graph')
         self.setStyleSheet('#graph {min-height: 15em; min-width: 25em;}')
         self.maxRedrawRate = 2
@@ -34,10 +33,10 @@ class Graph(PyDMWaveformPlot):
         self.setAutoRangeY(True)
         self.setMinXRange(0.0)
         self.setMaxXRange(1.0)
-        self.plotItem.showButtons()
         self.setAxisColor(QColor(0, 0, 0))
         self.plotItem.getAxis('bottom').setStyle(tickTextOffset=15)
         self.plotItem.getAxis('left').setStyle(tickTextOffset=5)
+        self.plotItem.getAxis('left').setLabel('Current [A]', color='gray')
 
     def mouseDoubleClickEvent(self, ev):
         if ev.button() == Qt.LeftButton:

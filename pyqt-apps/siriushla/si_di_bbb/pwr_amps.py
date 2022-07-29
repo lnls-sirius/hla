@@ -5,13 +5,13 @@ from qtpy.QtGui import QColor
 from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, QGroupBox, \
     QHBoxLayout, QSizePolicy as QSzPlcy, QSpacerItem
 import qtawesome as qta
-from pydm.widgets import PyDMLabel, PyDMLineEdit
+from pydm.widgets import PyDMLineEdit, PyDMPushButton
 
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 from siriuspy.namesys import SiriusPVName as _PVName
 
 from ..widgets import PyDMStateButton, SiriusLedState, SiriusSpinbox, \
-    SiriusLabel, PyDMLed, SiriusPushButton
+    SiriusLabel, PyDMLed
 
 from .custom_widgets import MyScaleIndicator
 from .util import set_bbb_color
@@ -86,8 +86,8 @@ class BbBPwrAmpsWidget(QWidget):
         si_revpwr.setStyleSheet('#revpwr{min-height:6em; min-width:8em;}')
 
         ld_id = QLabel('ID', self)
-        lb_id = PyDMLabel(self, self.dev_pref+':SERIAL_ID')
-        lb_id.displayFormat = PyDMLabel.DisplayFormat.String
+        lb_id = SiriusLabel(self, self.dev_pref+':SERIAL_ID')
+        lb_id.displayFormat = SiriusLabel.DisplayFormat.String
         hbox_id = QHBoxLayout()
         hbox_id.setContentsMargins(0, 0, 0, 0)
         hbox_id.addWidget(ld_id)
@@ -131,7 +131,7 @@ class BbBPwrAmpsWidget(QWidget):
             self, self.dev_pref+':MMGRAW_'+unit_label+'_RF')
         led_rfsts.onColor = PyDMLed.LightGreen
         led_rfsts.offColor = PyDMLed.Red
-        lb_rfsts = PyDMLabel(
+        lb_rfsts = SiriusLabel(
             self, self.dev_pref+':MMGRAW_'+unit_label+'_RF')
 
         ld_fltlac = QLabel('Fault Latch', self)
@@ -139,7 +139,7 @@ class BbBPwrAmpsWidget(QWidget):
             self, self.dev_pref+':MMGRAW_'+unit_label+'_FAULT')
         led_fltlac.onColor = PyDMLed.LightGreen
         led_fltlac.offColor = PyDMLed.Red
-        lb_fltlac = PyDMLabel(
+        lb_fltlac = SiriusLabel(
             self, self.dev_pref+':MMGRAW_'+unit_label+'_FAULT')
 
         ld_slope = QLabel('Slope', self)
@@ -214,11 +214,12 @@ class BbBPwrAmpsWidget(QWidget):
         led_fault = PyDMLed(self, self.dev_pref+':MCLRAW_'+unit_label+'_FAULT')
         led_fault.onColor = PyDMLed.LightGreen
         led_fault.offColor = PyDMLed.Red
-        lb_fault = PyDMLabel(
+        lb_fault = SiriusLabel(
             self, self.dev_pref+':MCLRAW_'+unit_label+'_FAULT')
 
         ld_temp = QLabel('Temperature', self)
-        lb_temp = PyDMLabel(self, self.dev_pref+':MCLRAW_'+unit_label+'_TEMP')
+        lb_temp = SiriusLabel(
+            self, self.dev_pref+':MCLRAW_'+unit_label+'_TEMP')
         lb_temp.showUnits = True
 
         ld_fwrloss = QLabel('Fwd Loss', self)
@@ -284,8 +285,9 @@ class BbBPwrAmpsWidget(QWidget):
         ld_main = QLabel(
             '<h3>AR Amplifier</h3>', self, alignment=Qt.AlignCenter)
 
-        conf = SiriusPushButton(
+        conf = PyDMPushButton(
             self, init_channel=pref+':Rst-Cmd', pressValue=1, releaseValue=0)
+        conf.writeWhenRelease = True
         conf.setText('Reset')
         conf.setToolTip('Reset State')
         conf.setIcon(qta.icon('fa5s.sync'))

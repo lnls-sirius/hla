@@ -7,14 +7,14 @@ from qtpy.QtCore import Qt
 from qtpy.QtGui import QColor
 from qtpy.QtWidgets import QLabel, QSizePolicy as QSzPlcy
 from pyqtgraph import mkBrush
-from pydm.widgets import PyDMWaveformPlot
 from pydm.widgets.scale import QScale, PyDMScaleIndicator
 
-from ..widgets import SiriusTimePlot, SiriusConnectionSignal
+from ..widgets import SiriusTimePlot, SiriusConnectionSignal, \
+    SiriusWaveformPlot
 
 
-class WfmGraph(PyDMWaveformPlot):
-    """PyDMWaveformPlot rederivation."""
+class WfmGraph(SiriusWaveformPlot):
+    """SiriusWaveformPlot rederivation."""
 
     def __init__(self, *args, **kwargs):
         """."""
@@ -22,6 +22,8 @@ class WfmGraph(PyDMWaveformPlot):
         self.setObjectName('graph')
         self.setStyleSheet(
             '#graph {min-height: 6em; min-width: 15em;}')
+
+        self.addAxis(plot_data_item=None, name='left', orientation='left')
 
         self.maxRedrawRate = 2
 
@@ -35,7 +37,6 @@ class WfmGraph(PyDMWaveformPlot):
         self.showLegend = False
         self.setAxisColor(QColor(0, 0, 0))
         self.backgroundColor = QColor(255, 255, 255)
-        self.plotItem.showButtons()
 
         self._markers = dict()
         self._curves_names = []
@@ -110,6 +111,8 @@ class TimeGraph(SiriusTimePlot):
         self.setObjectName('graph')
         self.setStyleSheet(
             '#graph {min-height: 6em; min-width: 8em;}')
+
+        self.addAxis(plot_data_item=None, name='left', orientation='left')
 
         self.autoRangeX = True
         self.autoRangeY = True

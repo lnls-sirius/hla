@@ -11,13 +11,14 @@ from qtpy.QtWidgets import QGridLayout, QHBoxLayout, QFormLayout, QVBoxLayout,\
 from qtpy.QtCore import Qt, Slot, Signal
 import qtawesome as qta
 
-from pydm.widgets import PyDMLabel, PyDMEnumComboBox, PyDMPushButton
+from pydm.widgets import PyDMEnumComboBox, PyDMPushButton
 
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriuspy.namesys import SiriusPVName
 
 from siriushla import util
-from siriushla.widgets import PyDMLed, SiriusConnectionSignal, QSpinBoxPlus
+from siriushla.widgets import PyDMLed, SiriusConnectionSignal, QSpinBoxPlus, \
+    SiriusLabel
 from siriushla.common.cam_basler import \
     SiriusImageView as _SiriusImageView, \
     create_propty_layout as _create_propty_layout
@@ -342,73 +343,73 @@ class SiriusScrnView(QWidget):
         label_Centroid = QLabel('Centroid [mm]: ', self)
         label_Centroid.setStyleSheet("min-width:7em;")
         label_i_Center = QLabel('(', self)
-        self.PyDMLabel_CenterXDimFei = PyDMLabel(
+        self.lb_CenterXDimFei = SiriusLabel(
             parent=self, init_channel=self.scrn_prefix.substitute(
                 propty='CenterXDimFei-Mon'))
-        self.PyDMLabel_CenterXDimFei.setStyleSheet(
+        self.lb_CenterXDimFei.setStyleSheet(
             'min-width:4em; max-width:4em;')
-        self.PyDMLabel_CenterXNDStats = PyDMLabel(
+        self.lb_CenterXNDStats = SiriusLabel(
             parent=self, init_channel=self.scrn_prefix.substitute(
                 propty='CenterXNDStats-Mon'))
-        self.PyDMLabel_CenterXNDStats.setStyleSheet(
+        self.lb_CenterXNDStats.setStyleSheet(
             'min-width:4em; max-width:4em;')
-        self.PyDMLabel_CenterXNDStats.setVisible(False)
+        self.lb_CenterXNDStats.setVisible(False)
         label_m_Center = QLabel(',', self)
-        self.PyDMLabel_CenterYDimFei = PyDMLabel(
+        self.lb_CenterYDimFei = SiriusLabel(
             parent=self, init_channel=self.scrn_prefix.substitute(
                 propty='CenterYDimFei-Mon'))
-        self.PyDMLabel_CenterYDimFei.setStyleSheet(
+        self.lb_CenterYDimFei.setStyleSheet(
             'min-width:4em; max-width:4em;')
-        self.PyDMLabel_CenterYNDStats = PyDMLabel(
+        self.lb_CenterYNDStats = SiriusLabel(
             parent=self, init_channel=self.scrn_prefix.substitute(
                 propty='CenterYNDStats-Mon'))
-        self.PyDMLabel_CenterYNDStats.setStyleSheet(
+        self.lb_CenterYNDStats.setStyleSheet(
             'min-width:4em; max-width:4em;')
-        self.PyDMLabel_CenterYNDStats.setVisible(False)
+        self.lb_CenterYNDStats.setVisible(False)
         label_f_Center = QLabel(')', self)
 
         # - Sigma
         label_Sigma = QLabel('Sigma [mm]: ', self)
         label_Sigma.setStyleSheet("min-width:7em;")
         label_i_Sigma = QLabel('(', self)
-        self.PyDMLabel_SigmaXDimFei = PyDMLabel(
+        self.lb_SigmaXDimFei = SiriusLabel(
             parent=self, init_channel=self.scrn_prefix.substitute(
                 propty='SigmaXDimFei-Mon'))
-        self.PyDMLabel_SigmaXDimFei.setStyleSheet(
+        self.lb_SigmaXDimFei.setStyleSheet(
             'min-width:4em; max-width:4em;')
-        self.PyDMLabel_SigmaXNDStats = PyDMLabel(
+        self.lb_SigmaXNDStats = SiriusLabel(
             parent=self, init_channel=self.scrn_prefix.substitute(
                 propty='SigmaXNDStats-Mon'))
-        self.PyDMLabel_SigmaXNDStats.setStyleSheet(
+        self.lb_SigmaXNDStats.setStyleSheet(
             'min-width:4em; max-width:4em;')
-        self.PyDMLabel_SigmaXNDStats.setVisible(False)
+        self.lb_SigmaXNDStats.setVisible(False)
         label_m_Sigma = QLabel(',', self)
-        self.PyDMLabel_SigmaYDimFei = PyDMLabel(
+        self.lb_SigmaYDimFei = SiriusLabel(
             parent=self, init_channel=self.scrn_prefix.substitute(
                 propty='SigmaYDimFei-Mon'))
-        self.PyDMLabel_SigmaYDimFei.setStyleSheet(
+        self.lb_SigmaYDimFei.setStyleSheet(
             'min-width:4em; max-width:4em;')
-        self.PyDMLabel_SigmaYNDStats = PyDMLabel(
+        self.lb_SigmaYNDStats = SiriusLabel(
             parent=self, init_channel=self.scrn_prefix.substitute(
                 propty='SigmaYNDStats-Mon'))
-        self.PyDMLabel_SigmaYNDStats.setStyleSheet(
+        self.lb_SigmaYNDStats.setStyleSheet(
             'min-width:4em; max-width:4em;')
-        self.PyDMLabel_SigmaYNDStats.setVisible(False)
+        self.lb_SigmaYNDStats.setVisible(False)
         label_f_Sigma = QLabel(')', self)
 
         # - Theta
         label_Theta = QLabel('Theta [rad]: ')
         label_Theta.setStyleSheet("min-width:7em;")
         label_i_Theta = QLabel('(', self)
-        self.PyDMLabel_ThetaDimFei = PyDMLabel(
+        self.lb_ThetaDimFei = SiriusLabel(
             parent=self, init_channel=self.scrn_prefix.substitute(
                 propty='ThetaDimFei-Mon'))
-        self.PyDMLabel_ThetaDimFei.setStyleSheet("max-width:12em;")
-        self.PyDMLabel_ThetaNDStats = PyDMLabel(
+        self.lb_ThetaDimFei.setStyleSheet("max-width:12em;")
+        self.lb_ThetaNDStats = SiriusLabel(
             parent=self, init_channel=self.scrn_prefix.substitute(
                 propty='ThetaNDStats-Mon'))
-        self.PyDMLabel_ThetaNDStats.setStyleSheet("max-width:12em;")
-        self.PyDMLabel_ThetaNDStats.setVisible(False)
+        self.lb_ThetaNDStats.setStyleSheet("max-width:12em;")
+        self.lb_ThetaNDStats.setVisible(False)
         label_f_Theta = QLabel(')', self)
 
         lay = QGridLayout()
@@ -416,38 +417,38 @@ class SiriusScrnView(QWidget):
         lay.addWidget(self.comboBox_Method, 1, 3, 1, 3)
         lay.addWidget(label_Centroid, 3, 1, alignment=Qt.AlignCenter)
         lay.addWidget(label_i_Center, 3, 2)
-        lay.addWidget(self.PyDMLabel_CenterXDimFei, 3, 3)
-        lay.addWidget(self.PyDMLabel_CenterXNDStats, 3, 3)
+        lay.addWidget(self.lb_CenterXDimFei, 3, 3)
+        lay.addWidget(self.lb_CenterXNDStats, 3, 3)
         lay.addWidget(label_m_Center, 3, 4)
-        lay.addWidget(self.PyDMLabel_CenterYDimFei, 3, 5)
-        lay.addWidget(self.PyDMLabel_CenterYNDStats, 3, 5)
+        lay.addWidget(self.lb_CenterYDimFei, 3, 5)
+        lay.addWidget(self.lb_CenterYNDStats, 3, 5)
         lay.addWidget(label_f_Center, 3, 6)
         lay.addWidget(label_Sigma, 5, 1, alignment=Qt.AlignCenter)
         lay.addWidget(label_i_Sigma, 5, 2)
-        lay.addWidget(self.PyDMLabel_SigmaXDimFei, 5, 3)
-        lay.addWidget(self.PyDMLabel_SigmaXNDStats, 5, 3)
+        lay.addWidget(self.lb_SigmaXDimFei, 5, 3)
+        lay.addWidget(self.lb_SigmaXNDStats, 5, 3)
         lay.addWidget(label_m_Sigma, 5, 4)
-        lay.addWidget(self.PyDMLabel_SigmaYDimFei, 5, 5)
-        lay.addWidget(self.PyDMLabel_SigmaYNDStats, 5, 5)
+        lay.addWidget(self.lb_SigmaYDimFei, 5, 5)
+        lay.addWidget(self.lb_SigmaYNDStats, 5, 5)
         lay.addWidget(label_f_Sigma, 5, 6)
         lay.addWidget(label_Theta, 7, 1, alignment=Qt.AlignCenter)
         lay.addWidget(label_i_Theta, 7, 2)
-        lay.addWidget(self.PyDMLabel_ThetaDimFei, 7, 3, 1, 3)
-        lay.addWidget(self.PyDMLabel_ThetaNDStats, 7, 3, 1, 3)
+        lay.addWidget(self.lb_ThetaDimFei, 7, 3, 1, 3)
+        lay.addWidget(self.lb_ThetaNDStats, 7, 3, 1, 3)
         lay.addWidget(label_f_Theta, 7, 6)
         return lay
 
     def _handleShowStatistics(self, visible):
-        self.PyDMLabel_CenterXDimFei.setVisible(not visible)
-        self.PyDMLabel_CenterXNDStats.setVisible(visible)
-        self.PyDMLabel_CenterYDimFei.setVisible(not visible)
-        self.PyDMLabel_CenterYNDStats.setVisible(visible)
-        self.PyDMLabel_ThetaDimFei.setVisible(not visible)
-        self.PyDMLabel_ThetaNDStats.setVisible(visible)
-        self.PyDMLabel_SigmaXDimFei.setVisible(not visible)
-        self.PyDMLabel_SigmaXNDStats.setVisible(visible)
-        self.PyDMLabel_SigmaYDimFei.setVisible(not visible)
-        self.PyDMLabel_SigmaYNDStats.setVisible(visible)
+        self.lb_CenterXDimFei.setVisible(not visible)
+        self.lb_CenterXNDStats.setVisible(visible)
+        self.lb_CenterYDimFei.setVisible(not visible)
+        self.lb_CenterYNDStats.setVisible(visible)
+        self.lb_ThetaDimFei.setVisible(not visible)
+        self.lb_ThetaNDStats.setVisible(visible)
+        self.lb_SigmaXDimFei.setVisible(not visible)
+        self.lb_SigmaXNDStats.setVisible(visible)
+        self.lb_SigmaYDimFei.setVisible(not visible)
+        self.lb_SigmaYNDStats.setVisible(visible)
 
     def _saveCalibrationGrid(self):
         t = Thread(target=self._saveCalibrationGrid_thread, daemon=True)
@@ -611,7 +612,7 @@ class IndividualScrn(QWidget):
         self.scrn_view = SiriusScrnView(prefix=self._prefix, device=self._scrn)
         self.cb_scrntype = PyDMEnumComboBox(
             self, self._scrn_pref.substitute(propty='ScrnType-Sel'))
-        self.l_scrntype = PyDMLabel(
+        self.l_scrntype = SiriusLabel(
             self, self._scrn_pref.substitute(propty='ScrnType-Sts'))
         self.led_scrntype = PyDMLed(
             self, self._scrn_pref.substitute(propty='ScrnType-Sts'),

@@ -12,12 +12,11 @@ from qtpy.QtGui import QColor
 from pyqtgraph import mkBrush, mkPen, InfiniteLine, functions
 import qtawesome as qta
 
-from pydm.widgets import PyDMWaveformPlot
-
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.sofb.csdev import SOFBFactory
 
-from siriushla.widgets import SiriusConnectionSignal as _ConnSig
+from siriushla.widgets import SiriusConnectionSignal as _ConnSig, \
+    SiriusWaveformPlot
 
 
 class BaseWidget(QWidget):
@@ -145,7 +144,7 @@ class BaseWidget(QWidget):
         unit = 'm' if self.is_orb else 'rad'
         graph.setLabel('left', text=lab, units=unit)
         graph.setObjectName(lab.replace(' ', '')+pln)
-
+        view = graph.getAxis('left').linkedView()
         for i, lname in enumerate(self.line_names):
             opts = dict(
                 y_channel='A',
@@ -162,14 +161,14 @@ class BaseWidget(QWidget):
             pen.setStyle(4)
             cpstd = InfiniteLine(pos=0.0, pen=pen, angle=0)
             self.updater[i].ave_pstd[pln].connect(cpstd.setValue)
-            graph.addItem(cpstd)
+            view.addItem(cpstd)
             cmstd = InfiniteLine(pos=0.0, pen=pen, angle=0)
             self.updater[i].ave_mstd[pln].connect(cmstd.setValue)
-            graph.addItem(cmstd)
+            view.addItem(cmstd)
             pen.setStyle(2)
             cave = InfiniteLine(pos=0.0, pen=pen, angle=0)
             self.updater[i].ave[pln].connect(cave.setValue)
-            graph.addItem(cave)
+            view.addItem(cave)
             cdta = graph.curveAtIndex(-1)
             self.updater[i].data_sig[pln].connect(
                 _part(self._update_waveform, cdta, pln, i))
@@ -280,7 +279,7 @@ class BaseWidget(QWidget):
             grpbx = self.findChild(QGroupBox, 'GroupBox' + str(i))
             for pln in ('x', 'y'):
                 curve = self.graph[pln].curveAtIndex(i)
-                lines = self.graph[pln].plotItem.items
+                lines = self.graph[pln].getAxis('left').linkedView().addedItems
                 lines = [x for x in lines if isinstance(x, InfiniteLine)]
                 cbx = grpbx.findChild(QCheckBox, pln + 'checkbox')
                 grpbx.toggled.connect(curve.setVisible)
@@ -570,7 +569,7 @@ class Label(QLabel):
         super().setText(text)
 
 
-class Graph(PyDMWaveformPlot):
+class Graph(SiriusWaveformPlot):
     """."""
 
     doubleclick = Signal(int)
@@ -578,6 +577,7 @@ class Graph(PyDMWaveformPlot):
     def __init__(self, *args, **kwargs):
         """."""
         super().__init__(*args, **kwargs)
+        self.addAxis(plot_data_item=None, name='left', orientation='left')
         self.setObjectName('graph')
         self.setStyleSheet('#graph {min-height: 13em; min-width: 20em;}')
         self.maxRedrawRate = 2
@@ -590,7 +590,6 @@ class Graph(PyDMWaveformPlot):
         self.setAutoRangeY(True)
         self.setMinXRange(0.0)
         self.setMaxXRange(1.0)
-        self.plotItem.showButtons()
         self.setAxisColor(QColor(0, 0, 0))
         self.plotItem.getAxis('bottom').setStyle(tickTextOffset=15)
         self.plotItem.getAxis('left').setStyle(tickTextOffset=5)

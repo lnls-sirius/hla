@@ -3,12 +3,10 @@
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QPushButton, QGridLayout, QLabel, QSpacerItem, \
     QAbstractItemView, QGroupBox, QSizePolicy as QSzPlcy, QHeaderView
-from pydm.widgets import PyDMLabel
-
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriuspy.namesys import SiriusPVName as _PVName
 
-from siriushla.widgets import SiriusMainWindow, \
+from siriushla.widgets import SiriusMainWindow, SiriusLabel, \
     SiriusWaveformTable
 from .custom_widgets import ConfigLineEdit as _ConfigLineEdit
 
@@ -43,7 +41,7 @@ class CorrParamsDetailWindow(SiriusMainWindow):
         self.pydmlinedit_configname.setStyleSheet(
             """min-width:10em; max-width:10em;""")
 
-        self.pydmlabel_configname = PyDMLabel(
+        self.pydmlabel_configname = SiriusLabel(
             self, ioc_prefix.substitute(propty='ConfigName-RB'))
 
         lay.addWidget(label_configname, 10, 1, 1, self._nfam)
@@ -124,7 +122,7 @@ class CorrParamsDetailWindow(SiriusMainWindow):
         if self._opticsparam == 'Chrom':
             label_nomchrom = QLabel('<h4>Nominal Chrom</h4>', self,
                                     alignment=Qt.AlignCenter)
-            self.pydmlabel_nomchrom = PyDMLabel(
+            self.pydmlabel_nomchrom = SiriusLabel(
                 self, ioc_prefix.substitute(propty='NominalChrom-Mon'))
             self.pydmlabel_nomchrom.setAlignment(Qt.AlignCenter)
 

@@ -6,12 +6,12 @@ from qtpy.QtWidgets import QWidget, QGridLayout, QLabel, QGroupBox, \
 
 import qtawesome as qta
 
-from pydm.widgets import PyDMPushButton, PyDMLabel
+from pydm.widgets import PyDMPushButton
 
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 from siriuspy.namesys import SiriusPVName
 
-from ..widgets import SiriusMainWindow, SiriusLedState, \
+from ..widgets import SiriusMainWindow, SiriusLedState, SiriusLabel, \
     PyDMStateButton, SiriusLedAlert, SiriusSpinbox
 from .base import BaseObject
 
@@ -116,7 +116,7 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
         self._sb_minsumlim.limitsFromChannel = False
         self._sb_minsumlim.setMinimum(-1e12)
         self._sb_minsumlim.setMaximum(+1e12)
-        self._lb_minsumlim = PyDMLabel(
+        self._lb_minsumlim = SiriusLabel(
             self, self.devpref.substitute(propty='IntlkLmtMinSum-RB'))
 
         lay = QGridLayout()
@@ -168,7 +168,7 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
         sb_minx.limitsFromChannel = False
         sb_minx.setMinimum(-1e9)
         sb_minx.setMaximum(+1e9)
-        lb_minx = PyDMLabel(
+        lb_minx = SiriusLabel(
             self, self.devpref.substitute(propty='IntlkLmt'+intlk+'MinX-RB'))
 
         ld_maxx = QLabel(
@@ -180,7 +180,7 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
         sb_maxx.limitsFromChannel = False
         sb_maxx.setMinimum(-1e9)
         sb_maxx.setMaximum(+1e9)
-        lb_maxx = PyDMLabel(
+        lb_maxx = SiriusLabel(
             self, self.devpref.substitute(propty='IntlkLmt'+intlk+'MaxX-RB'))
 
         ld_miny = QLabel(
@@ -192,7 +192,7 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
         sb_miny.limitsFromChannel = False
         sb_miny.setMinimum(-1e9)
         sb_miny.setMaximum(+1e9)
-        lb_miny = PyDMLabel(
+        lb_miny = SiriusLabel(
             self, self.devpref.substitute(propty='IntlkLmt'+intlk+'MinY-RB'))
 
         ld_maxy = QLabel(
@@ -204,7 +204,7 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
         sb_maxy.limitsFromChannel = False
         sb_maxy.setMinimum(-1e9)
         sb_maxy.setMaximum(+1e9)
-        lb_maxy = PyDMLabel(
+        lb_maxy = SiriusLabel(
             self, self.devpref.substitute(propty='IntlkLmt'+intlk+'MaxY-RB'))
 
         ld_leglow = QLabel(

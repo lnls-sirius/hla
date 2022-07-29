@@ -46,10 +46,12 @@ class BOMonitor(SiriusMainWindow):
         colors = ['blue', 'red', 'green', 'magenta']
         self.timeplot.timeSpan = timespan  # [s]
         self.timeplot.bufferSize = 2*timespan  # [2 samples/s]
+        self.timeplot.addAxis(
+            plot_data_item=None, name='left', orientation='left')
         self.timeplot.autoRangeY = True
         self.timeplot.showXGrid = True
         self.timeplot.showYGrid = True
-        self.timeplot.setLabel('left', text='Charge', units='C')
+        self.timeplot.setLabel('left', text='Charge', units='C', color='gray')
         self.timeplot.setObjectName('timeplot')
         self.timeplot.setStyleSheet(
             '#timeplot{min-width:28em; min-height: 18em;}')

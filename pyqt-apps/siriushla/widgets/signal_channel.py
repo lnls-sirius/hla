@@ -19,6 +19,10 @@ class SiriusConnectionSignal(QObject, PyDMChannel):
     new_severity_signal = Signal(int)
     upper_ctrl_limit_signal = Signal([float], [int])
     lower_ctrl_limit_signal = Signal([float], [int])
+    upper_alarm_limit_signal = Signal([float], [int])
+    lower_alarm_limit_signal = Signal([float], [int])
+    upper_warning_limit_signal = Signal([float], [int])
+    lower_warning_limit_signal = Signal([float], [int])
 
     def __init__(self, address, **kws):
         QObject.__init__(self)
@@ -33,6 +37,10 @@ class SiriusConnectionSignal(QObject, PyDMChannel):
         self.prec_slot = self._prec_slot
         self.upper_ctrl_limit_slot = self._upper_ctrl_limit_slot
         self.lower_ctrl_limit_slot = self._lower_ctrl_limit_slot
+        self.upper_alarm_limit_slot = self._upper_alarm_limit_slot
+        self.lower_alarm_limit_slot = self._lower_alarm_limit_slot
+        self.upper_warning_limit_slot = self._upper_warning_limit_slot
+        self.lower_warning_limit_slot = self._lower_warning_limit_slot
         self.value_signal = self.send_value_signal
 
         self.channeltype = None
@@ -90,3 +98,23 @@ class SiriusConnectionSignal(QObject, PyDMChannel):
     @Slot(float)
     def _lower_ctrl_limit_slot(self, lower_ctrl_limit):
         self.lower_ctrl_limit_signal.emit(lower_ctrl_limit)
+
+    @Slot(int)
+    @Slot(float)
+    def _upper_alarm_limit_slot(self, upper_alarm_limit):
+        self.upper_alarm_limit_signal.emit(upper_alarm_limit)
+
+    @Slot(int)
+    @Slot(float)
+    def _lower_alarm_limit_slot(self, lower_alarm_limit):
+        self.lower_alarm_limit_signal.emit(lower_alarm_limit)
+
+    @Slot(int)
+    @Slot(float)
+    def _upper_warning_limit_slot(self, upper_warning_limit):
+        self.upper_warning_limit_signal.emit(upper_warning_limit)
+
+    @Slot(int)
+    @Slot(float)
+    def _lower_warning_limit_slot(self, lower_warning_limit):
+        self.lower_warning_limit_signal.emit(lower_warning_limit)

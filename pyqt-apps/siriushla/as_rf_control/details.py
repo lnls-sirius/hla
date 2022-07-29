@@ -6,11 +6,9 @@ from qtpy.QtWidgets import QFormLayout, QLabel, QSpacerItem, QTabWidget, \
 
 from pyqtgraph import PlotWidget, BarGraphItem
 
-from pydm.widgets import PyDMLabel
-
 from ..widgets import SiriusDialog, SiriusLedAlert, \
     PyDMLedMultiChannel, SiriusConnectionSignal as _ConnSignal, \
-    DetachableTabWidget
+    DetachableTabWidget, SiriusLabel
 from .util import SEC_2_CHANNELS
 
 
@@ -41,7 +39,7 @@ class CavityStatusDetails(SiriusDialog):
         tooltip = 'Interlock limits: \nMin: ' + str(lims[0]) + \
             '°C, Max: '+str(lims[1])+'°C'
         for idx, cell in enumerate(self.chs['Cav Sts']['Temp']['Cells']):
-            lbl = PyDMLabel(self, self.prefix+cell[0])
+            lbl = SiriusLabel(self, self.prefix+cell[0])
             lbl.showUnits = True
             lbl.setStyleSheet('min-width:3.5em; max-width:3.5em;')
             led = PyDMLedMultiChannel(
@@ -57,7 +55,7 @@ class CavityStatusDetails(SiriusDialog):
             lay_temp1.addRow('Cell '+str(idx + 1)+': ', hbox)
         ch_coup = self.chs['Cav Sts']['Temp']['Coupler'][0]
         lims_coup = self.chs['Cav Sts']['Temp']['Coupler Limits']
-        lb_coup = PyDMLabel(self, self.prefix+ch_coup)
+        lb_coup = SiriusLabel(self, self.prefix+ch_coup)
         lb_coup.setStyleSheet('min-width:3.5em; max-width:3.5em;')
         lb_coup.showUnits = True
         led_coup = PyDMLedMultiChannel(
@@ -155,7 +153,7 @@ class CavityStatusDetails(SiriusDialog):
         lay.addLayout(lay_vac, 2, 3)
 
         self.setStyleSheet("""
-            PyDMLabel{
+            SiriusLabel{
                 qproperty-alignment: AlignLeft;
             }
             QLed{
@@ -181,11 +179,11 @@ class TransmLineStatusDetails(SiriusDialog):
         self._setupUi()
 
     def _setupUi(self):
-        self.lb_circtin = PyDMLabel(
+        self.lb_circtin = SiriusLabel(
             self, self.prefix+self.chs['TL Sts']['Circ TIn'])
         self.lb_circtin.showUnits = True
         self.lb_circtin.setStyleSheet('qproperty-alignment: AlignLeft;')
-        self.lb_circtout = PyDMLabel(
+        self.lb_circtout = SiriusLabel(
             self, self.prefix+self.chs['TL Sts']['Circ TOut'])
         self.lb_circtout.showUnits = True
         self.lb_circtout.setStyleSheet('qproperty-alignment: AlignLeft;')
@@ -216,7 +214,7 @@ class TransmLineStatusDetails(SiriusDialog):
         lay.addRow('Circulator Intlk: ', self.led_circintlkop)
 
         self.setStyleSheet("""
-            PyDMLabel{
+            SiriusLabel{
                 qproperty-alignment: AlignLeft;
             }
             QLed{
@@ -296,7 +294,7 @@ class LLRFInterlockDetails(SiriusDialog):
             irow = int(idx)-1
             desc = QLabel('Interlock '+idx, self, alignment=Qt.AlignCenter)
             desc.setStyleSheet('QLabel{min-width:6em;}')
-            lbl = PyDMLabel(self, self.prefix+pvn)
+            lbl = SiriusLabel(self, self.prefix+pvn)
             lbl.showUnits = True
             lay_time.addWidget(desc, irow, 0)
             lay_time.addWidget(lbl, irow, 1)
