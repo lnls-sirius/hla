@@ -286,6 +286,22 @@ class InjCtrlWindow(SiriusMainWindow):
         self._ind_injtype_mon = TaskStatusLabel(
             self, self._inj_prefix.substitute(propty='TypeCmdSts-Mon'))
 
+        # PUMode
+        self._ld_pumode = QLabel('PU Mode', self)
+        labelsdesc.append(self._ld_pumode)
+        self._cb_pumode = SiriusEnumComboBox(
+            self, self._inj_prefix.substitute(propty='PUMode-Sel'))
+        self._lb_pumode = SiriusLabel(
+            self, self._inj_prefix.substitute(propty='PUMode-Sts'))
+        labelsmon.append(self._lb_pumode)
+        self._lb_pumode_mon = SiriusLabel(
+            self, self._inj_prefix.substitute(propty='PUMode-Mon'))
+        labelsmon.append(self._lb_pumode_mon)
+        self._ch_pumode = SiriusConnectionSignal(
+            self._inj_prefix.substitute(propty='PUMode-Sel'))
+        self._ind_pumode_mon = TaskStatusLabel(
+            self, self._inj_prefix.substitute(propty='PUModeCmdSts-Mon'))
+
         # Single bunch bias voltage
         self._ld_sbbias = QLabel('SB Bias Voltage', self)
         labelsdesc.append(self._ld_sbbias)
@@ -396,14 +412,19 @@ class InjCtrlWindow(SiriusMainWindow):
         glay2.addWidget(self._lb_injtype, 1, 2)
         glay2.addWidget(self._lb_injtype_mon, 1, 3)
         glay2.addWidget(self._ind_injtype_mon, 1, 4)
-        glay2.addWidget(self._ld_sbbias, 2, 0)
-        glay2.addWidget(self._sb_sbbias, 2, 1)
-        glay2.addWidget(self._lb_sbbias, 2, 2)
-        glay2.addWidget(self._ld_mbbias, 2, 0)
-        glay2.addWidget(self._sb_mbbias, 2, 1)
-        glay2.addWidget(self._lb_mbbias, 2, 2)
-        glay2.addWidget(self._lb_bias_mon, 2, 3)
-        glay2.addWidget(self._ind_bias_mon, 2, 4)
+        glay2.addWidget(self._ld_pumode, 2, 0)
+        glay2.addWidget(self._cb_pumode, 2, 1)
+        glay2.addWidget(self._lb_pumode, 2, 2)
+        glay2.addWidget(self._lb_pumode_mon, 2, 3)
+        glay2.addWidget(self._ind_pumode_mon, 2, 4)
+        glay2.addWidget(self._ld_sbbias, 3, 0)
+        glay2.addWidget(self._sb_sbbias, 3, 1)
+        glay2.addWidget(self._lb_sbbias, 3, 2)
+        glay2.addWidget(self._ld_mbbias, 3, 0)
+        glay2.addWidget(self._sb_mbbias, 3, 1)
+        glay2.addWidget(self._lb_mbbias, 3, 2)
+        glay2.addWidget(self._lb_bias_mon, 3, 3)
+        glay2.addWidget(self._ind_bias_mon, 3, 4)
         glay2.addWidget(self._ld_filaopcurr, 4, 0)
         glay2.addWidget(self._sb_filaopcurr, 4, 1)
         glay2.addWidget(self._lb_filaopcurr, 4, 2)
