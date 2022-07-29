@@ -9,8 +9,7 @@ from qtpy.QtWidgets import QGridLayout, QLabel, QGroupBox, QAbstractItemView, \
     QMessageBox, QApplication, QHBoxLayout
 from qtpy.QtCore import Qt
 import qtawesome as qta
-from pydm.widgets import PyDMWaveformTable, PyDMLineEdit, \
-    PyDMPushButton, PyDMSpinbox
+from pydm.widgets import PyDMLineEdit, PyDMPushButton, PyDMSpinbox
 
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriuspy.posang.csdev import Const
@@ -19,7 +18,7 @@ from siriuspy.namesys import SiriusPVName as _PVName
 from siriushla import util as _hlautil
 from siriushla.widgets import SiriusMainWindow, PyDMLogLabel, SiriusLedAlert, \
     PyDMSpinboxScrollbar, PyDMLedMultiChannel, SiriusConnectionSignal, \
-    SiriusLabel
+    SiriusLabel, SiriusWaveformTable
 from siriushla.as_ps_control import PSDetailWindow as _PSDetailWindow
 from siriushla.as_pu_control import PUDetailWindow as _PUDetailWindow
 from siriushla.as_ap_configdb import LoadConfigDialog as _LoadConfigDialog
@@ -408,7 +407,7 @@ class CorrParamsDetailWindow(SiriusMainWindow):
 
         label_matrix_x = QLabel('<h4>Matrix X</h4>', self,
                                 alignment=Qt.AlignCenter)
-        self.table_matrix_x = PyDMWaveformTable(
+        self.table_matrix_x = SiriusWaveformTable(
             self, self.posang_prefix.substitute(propty='RespMatX-Mon'))
         self.table_matrix_x.setObjectName('table_matrix_x')
         self.table_matrix_x.setStyleSheet("""
@@ -431,7 +430,7 @@ class CorrParamsDetailWindow(SiriusMainWindow):
         width = 12 if self._tl == 'TB' else 24
         label_matrix_y = QLabel('<h4>Matrix Y</h4>', self,
                                 alignment=Qt.AlignCenter)
-        self.table_matrix_y = PyDMWaveformTable(
+        self.table_matrix_y = SiriusWaveformTable(
             self, self.posang_prefix.substitute(propty='RespMatY-Mon'))
         self.table_matrix_y.setObjectName('table_matrix_y')
         self.table_matrix_y.setStyleSheet("""
