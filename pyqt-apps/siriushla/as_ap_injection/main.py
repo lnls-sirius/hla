@@ -477,12 +477,13 @@ class InjCtrlWindow(SiriusMainWindow):
             self, self._inj_prefix.substitute(propty='TopUpPeriod-RB'))
         self._lb_tuperd.showUnits = True
 
-        self._ld_tumaxpu = QLabel('Max.Nr.Pulses', self)
-        self._sb_tumaxpu = SiriusSpinbox(
-            self, self._inj_prefix.substitute(propty='TopUpMaxNrPulses-SP'))
-        self._sb_tumaxpu.showStepExponent = False
-        self._lb_tumaxpu = SiriusLabel(
-            self, self._inj_prefix.substitute(propty='TopUpMaxNrPulses-RB'))
+        self._ld_tunrpu = QLabel('Nr.Pulses', self)
+        self._sb_tunrpu = SiriusSpinbox(
+            self, self._inj_prefix.substitute(propty='TopUpNrPulses-SP'))
+        self._sb_tunrpu.showStepExponent = False
+        self._lb_tunrpu = SiriusLabel(
+            self, self._inj_prefix.substitute(propty='TopUpNrPulses-RB'))
+        self._lb_tunrpu.showUnits = True
 
         wid = QWidget()
         lay = QGridLayout(wid)
@@ -491,9 +492,9 @@ class InjCtrlWindow(SiriusMainWindow):
         lay.addWidget(self._ld_tuperd, 0, 0)
         lay.addWidget(self._sb_tuperd, 0, 1)
         lay.addWidget(self._lb_tuperd, 0, 2)
-        lay.addWidget(self._ld_tumaxpu, 1, 0)
-        lay.addWidget(self._sb_tumaxpu, 1, 1)
-        lay.addWidget(self._lb_tumaxpu, 1, 2)
+        lay.addWidget(self._ld_tunrpu, 1, 0)
+        lay.addWidget(self._sb_tunrpu, 1, 1)
+        lay.addWidget(self._lb_tunrpu, 1, 2)
         lay.setColumnStretch(0, 3)
         lay.setColumnStretch(1, 2)
         lay.setColumnStretch(2, 2)
