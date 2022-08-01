@@ -16,8 +16,7 @@ from siriuspy.timesys.csdev import Const as _TIc
 from siriushla.widgets import PyDMLedMultiChannel, PyDMLedMultiConnection
 from siriushla.widgets.dialog import ProgressDialog
 
-EVT_LIST = ['Linac', 'InjBO', 'InjSI', 'Study',
-            'DigLI', 'DigTB', 'DigBO', 'DigTS', 'DigSI']
+EVT_LIST = ['Linac', 'InjBO', 'InjSI', 'Study']
 
 
 class StatusAndCommands(QGroupBox):
