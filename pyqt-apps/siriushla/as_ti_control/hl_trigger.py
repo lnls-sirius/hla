@@ -305,7 +305,7 @@ class HLTriggerDetailed(BaseWidget):
                 index=idx-1)
             spin.setStyleSheet('min-width:7em;')
             lbl = _Label(
-                wid, init_channel=self.get_pvname(pvn+'-SP'),
+                wid, init_channel=self.get_pvname(pvn+'-RB'),
                 index=idx-1)
             lbl.setStyleSheet('min-width:6em;')
             lay.addWidget(nam, idx, 0)
