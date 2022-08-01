@@ -10,7 +10,7 @@ from qtpy.QtGui import QColor
 from qtpy.QtCore import Property, Slot, Signal
 from pydm.widgets.base import PyDMWidget
 from pydm.widgets.channel import PyDMChannel
-from .waveformplot import SiriusWaveformPlot
+from pydm.widgets import PyDMWaveformPlot
 from .windows import SiriusDialog
 from .QLed import QLed
 
@@ -552,14 +552,14 @@ class _DiffStatus(SiriusDialog):
                             len(self._current), len(self._desired))
                 else:
                     self._text = 'Difference: '
-                    self._plot = SiriusWaveformPlot()
+                    self._plot = PyDMWaveformPlot()
+                    self._plot.autoRangeX = True
+                    self._plot.autoRangeY = True
+                    self._plot.plotItem.showButtons()
+                    self._plot.setBackgroundColor(QColor(255, 255, 255))
                     self._plot.addChannel(y_channel='DES', color='blue')
                     self._plot.addChannel(y_channel='CURR', color='black')
                     self._plot.addChannel(y_channel='DIFF', color='magenta')
-                    self._plot.autoRangeX = True
-                    self._plot.autoRangeY = True
-                    self._plot.setLabel('left', '')
-                    self._plot.setBackgroundColor(QColor(255, 255, 255))
                     self._desired_curve = self._plot.curveAtIndex(0)
                     self._desired_curve.receiveYWaveform(self._desired)
                     self._desired_curve.redrawCurve()

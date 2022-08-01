@@ -4,11 +4,12 @@ from qtpy.QtWidgets import QWidget, QGroupBox, QHBoxLayout, \
     QGridLayout, QLabel, QTabWidget, \
     QPushButton
 import qtawesome as qta
-from pydm.widgets import PyDMSpinbox, PyDMPushButton
+from pydm.widgets import PyDMLabel, PyDMSpinbox
 from .util import PV_MPS, MPS_PREFIX, CTRL_TYPE, GROUP_POS, \
     GROUP_POSALL, LBL_MPS, LBL_WATER, PV_TEMP_MPS, TEMP_TYPE, LBL_ALL
 from ..util import get_appropriate_color
-from ..widgets import PyDMLedMultiChannel, PyDMLed, SiriusLabel
+from ..widgets import PyDMLedMultiChannel,\
+     PyDMLed, SiriusPushButton
 from .bypass_btn import BypassBtn
 
 
@@ -65,13 +66,12 @@ class MPSControl(QWidget):
                 self,
                 init_channel=device_name + pv_name + ctrl_type)
         elif ctrl_type == '_R':
-            widget = PyDMPushButton(
+            widget = SiriusPushButton(
                 self,
                 init_channel=device_name + pv_name + ctrl_type,
                 label='Reset',
                 pressValue=1,
                 releaseValue=0)
-            widget.writeWhenRelease = True
         widget.setStyleSheet('''
             min-width: 3.2em; max-width: 4.2em;
             min-height: 1.29em; max-height: 1.29em;
@@ -95,7 +95,7 @@ class MPSControl(QWidget):
             )
             widget.showStepExponent = False
         else:
-            widget = SiriusLabel(
+            widget = PyDMLabel(
                 parent=self,
                 init_channel=device_name + pv_name + temp_type
             )
@@ -186,13 +186,12 @@ class MPSControl(QWidget):
                 name = 'Close'
 
             pb_lay = QHBoxLayout()
-            widget = PyDMPushButton(
-                self,
-                init_channel=device_name + pv_name,
-                label=name,
-                pressValue=1,
-                releaseValue=0)
-            widget.writeWhenRelease = True
+            widget = SiriusPushButton(
+                        self,
+                        init_channel=device_name + pv_name,
+                        label=name,
+                        pressValue=1,
+                        releaseValue=0)
             widget.setStyleSheet('''
                 min-width: 3.2em; max-width: 4.2em;
                 min-height: 1.29em; max-height: 1.29em;

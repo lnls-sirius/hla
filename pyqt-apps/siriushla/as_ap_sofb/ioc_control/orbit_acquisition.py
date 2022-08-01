@@ -4,7 +4,7 @@ from qtpy.QtWidgets import QLabel, QGroupBox, QFormLayout, \
     QVBoxLayout, QHBoxLayout, QPushButton, QWidget, QTabWidget, QCheckBox
 from qtpy.QtCore import Qt
 import qtawesome as qta
-from pydm.widgets import PyDMPushButton
+from pydm.widgets import PyDMLabel, PyDMPushButton
 from siriushla.util import connect_window
 from siriushla.widgets import SiriusLedAlert, SiriusLabel
 from siriushla.widgets.windows import create_window_from_widget
@@ -126,7 +126,7 @@ class AcqControlWidget(BaseWidget):
         abrt.setStyleSheet(
             '#abrt{min-width:25px; max-width:25px; icon-size:20px;}')
 
-        pdmlbl = SiriusLabel(
+        pdmlbl = PyDMLabel(
             grp_bx, self.devpref.substitute(propty='TrigAcqCtrl-Sts'))
         pdmlbl.setObjectName('pdmlbl')
         pdmlbl.setStyleSheet(
@@ -274,7 +274,7 @@ class AcqControlWidget(BaseWidget):
         pdm_btn2 = PyDMPushButton(
             init_channel=self.devpref.substitute(propty='SPassBgCtrl-Cmd'),
             pressValue=1, label='Reset')
-        pdm_lbl = SiriusLabel(
+        pdm_lbl = PyDMLabel(
             wid, self.devpref.substitute(propty='SPassBgSts-Mon'))
         hbl.addWidget(pdm_btn1)
         hbl.addWidget(pdm_btn2)

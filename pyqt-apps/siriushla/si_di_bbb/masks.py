@@ -55,7 +55,6 @@ class BbBMasksWidget(QWidget):
             ychannel=self.dev_pref+':DRIVE2_MASK',
             xchannel=self.dev_pref+':SRAM_XSC',
             name='Drive2', color=QColor('orange'), offset=0.08)
-        graph_exct.setLabel('left', '')
 
         graph_spec = WfmGraph(self)
         graph_spec.setAutoRangeY(False)
@@ -70,7 +69,6 @@ class BbBMasksWidget(QWidget):
             ychannel=self.dev_pref+':BRAM_ACQ_MASK',
             xchannel=self.dev_pref+':BRAM_XSC',
             name='BRAM', color=QColor('blue'), offset=0.02)
-        graph_spec.setLabel('left', '')
 
         lay = QGridLayout(self)
         lay.addWidget(ld_exct_masks, 0, 0)

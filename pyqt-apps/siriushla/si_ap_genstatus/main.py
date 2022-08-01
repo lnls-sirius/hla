@@ -9,14 +9,15 @@ from qtpy.QtGui import QColor, QFont, QBrush, QGradient
 
 import qtawesome as qta
 
+from pydm.widgets import PyDMLabel
+
 from siriuspy.envars import VACA_PREFIX
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.clientarch.time import Time
 
 from ..util import get_appropriate_color
 from ..widgets import SiriusMainWindow, SiriusTimePlot, SiriusFrame, \
-    SiriusLedState, SiriusLedAlert, SiriusConnectionSignal, \
-    PyDMLedMultiChannel, SiriusLabel
+    SiriusLedState, SiriusLedAlert, SiriusConnectionSignal, PyDMLedMultiChannel
 from ..as_di_tune.controls import SITuneMonitor
 from ..as_ap_injection import InjSysStbyLed
 from ..as_ap_machshift import MachShiftLabel
@@ -98,7 +99,7 @@ class SIGenStatusWindow(SiriusMainWindow):
         self.ld_curr.setStyleSheet('max-height: 2em;')
         pvname = _PVName('SI-Glob:AP-CurrInfo:Current-Mon')
         pvname = pvname.substitute(prefix=self.prefix)
-        self.lb_curr = SiriusLabel(self, pvname)
+        self.lb_curr = PyDMLabel(self, pvname)
         self.lb_curr.setAlignment(Qt.AlignCenter)
         self.lb_curr.setStyleSheet(
             'QLabel{background-color: '+self.app_color+';font-size: 45pt;}')
@@ -136,21 +137,18 @@ class SIGenStatusWindow(SiriusMainWindow):
                                       use_color_labels=False)
         self.tune_mon.lb_tunefrach.setStyleSheet('QLabel{font-size: 45pt;}')
         self.tune_mon.lb_tunefracv.setStyleSheet('QLabel{font-size: 45pt;}')
-
         self.curr_graph = SiriusTimePlot(self)
-        self.curr_graph.addAxis(
-            plot_data_item=None, name='left', orientation='left')
         self.curr_graph.setObjectName('curr_graph')
         self.curr_graph.setStyleSheet(
             '#curr_graph{min-width: 20em; min-height: 14em;}')
         self.curr_graph.showXGrid = True
         self.curr_graph.showYGrid = True
         self.curr_graph.backgroundColor = QColor(255, 255, 255)
+        self.curr_graph.setYLabels(['Current [mA]'])
         for ax in self.curr_graph.getPlotItem().axes.values():
             sty = ax['item'].labelStyle
             sty['font-size'] = '18pt'
             ax['item'].setLabel(text=None, **sty)
-        self.curr_graph.setLabel('left', text='Current [mA]')
         font = QFont()
         font.setPointSize(18)
         self.curr_graph.plotItem.getAxis('bottom').setStyle(
@@ -167,6 +165,7 @@ class SIGenStatusWindow(SiriusMainWindow):
         self.curve = self.curr_graph.curveAtIndex(0)
         self.curve.setFillLevel(0)
         self.curve.setBrush(QBrush(QGradient(QGradient.ColdEvening)))
+
         timespan = 12*60*60
         self.curr_graph.timeSpan = timespan
         self.curr_graph.bufferSize = timespan*10

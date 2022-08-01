@@ -8,7 +8,7 @@ from qtpy.QtWidgets import QLabel, QGroupBox, QWidget, QSpacerItem,\
     QSizePolicy as QSzPlcy, QComboBox, QPushButton, QCheckBox,\
     QGridLayout, QHBoxLayout, QVBoxLayout
 import qtawesome as qta
-from pydm.widgets import PyDMEnumComboBox, PyDMLineEdit,\
+from pydm.widgets import PyDMEnumComboBox, PyDMLabel, PyDMLineEdit,\
     PyDMPushButton, PyDMSpinbox
 
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
@@ -17,7 +17,7 @@ from siriuspy.clientarch.time import Time
 from siriushla.util import connect_window
 from siriushla.widgets import SiriusLabel, SiriusLedAlert, SiriusLedState,\
     SiriusSpinbox, PyDMStateButton, SiriusMainWindow, SiriusConnectionSignal,\
-    SiriusTimePlot
+    SiriusTimePlot, QSpinBoxPlus
 from siriushla.as_di_dccts import DCCTMain, EffMonitor
 
 
@@ -90,7 +90,7 @@ class CurrLTWindow(SiriusMainWindow):
         # # Labels
         self._ld_current = QLabel('Current', self, alignment=Qt.AlignCenter)
         self._ld_current.setStyleSheet("font-weight:bold; max-height1.5em;")
-        self._lb_current = SiriusLabel(
+        self._lb_current = PyDMLabel(
             self, self.devname.substitute(propty='Current-Mon'))
         self._lb_current.setStyleSheet("font-size:40px;")
         self._lb_current.precision = 0
@@ -114,12 +114,10 @@ class CurrLTWindow(SiriusMainWindow):
 
         # # Graph
         self.graph = SiriusTimePlot(self, background='w')
-        self.graph.addAxis(
-            plot_data_item=None, name='curr', orientation='left')
-        self.graph.setLabel('curr', text='Current [mA]', color='blue')
-        self.graph.addAxis(
-            plot_data_item=None, name='lt', orientation='right')
-        self.graph.setLabel('lt', text='Lifetime [h]', color='red')
+        self.graph.plotItem.getAxis('left').setLabel(
+            'Current [mA]', color='blue')
+        self.graph.plotItem.getAxis('right').setLabel(
+            'Lifetime [h]', color='red')
         self.graph.showLegend = False
         self.graph.showXGrid = True
         self.graph.showYGrid = True
@@ -136,7 +134,7 @@ class CurrLTWindow(SiriusMainWindow):
 
         pvname = self.devname.substitute(propty='Current-Mon')
         self.graph.addYChannel(
-            y_channel=pvname, yAxisName='curr', name='Current',
+            y_channel=pvname, axis='left', name='Current',
             color='blue', lineWidth=1)
         self._curve_current = self.graph.curveAtIndex(0)
         self.graph.fill_curve_with_archdata(
@@ -146,15 +144,15 @@ class CurrLTWindow(SiriusMainWindow):
         pvname = _PVName(
             'SI-01M1:DI-BPM:Sum-Mon').substitute(prefix=self.prefix)
         self.graph.addYChannel(
-            y_channel=pvname, yAxisName='curr', name='Current',
-            color='blue', lineWidth=1)
+            y_channel=pvname,
+            axis='left', name='Current', color='blue', lineWidth=1)
         self._curve_bpmsum = self.graph.curveAtIndex(1)
         self.graph.fill_curve_with_archdata(
             self._curve_bpmsum,  pvname,
             t_init=t_init_iso, t_end=t_end_iso)
 
         self.graph.addYChannel(
-            y_channel='FAKE:Lifetime', yAxisName='lt', name='Lifetime',
+            y_channel='FAKE:Lifetime', axis='right', name='Lifetime',
             color='red', lineWidth=1)
         self._curve_lifetimedcct = self.graph.curveAtIndex(2)
         self.graph.fill_curve_with_archdata(
@@ -163,7 +161,7 @@ class CurrLTWindow(SiriusMainWindow):
             t_init=t_init_iso, t_end=t_end_iso, factor=3600)
 
         self.graph.addYChannel(
-            y_channel='FAKE:LifetimeBPM', yAxisName='lt', name='Lifetime',
+            y_channel='FAKE:LifetimeBPM', axis='right', name='Lifetime',
             color='red', lineWidth=1)
         self._curve_lifetimebpm = self.graph.curveAtIndex(3)
         self.graph.fill_curve_with_archdata(
@@ -202,11 +200,11 @@ class CurrLTWindow(SiriusMainWindow):
             self._update_waveforms)
 
         self.graph.addYChannel(
-            y_channel='FAKE:DCCTBuffer', yAxisName='curr', name='DCCTBuffer',
+            y_channel='FAKE:DCCTBuffer', axis='left', name='DCCTBuffer',
             color='blue', lineStyle=Qt.NoPen, symbolSize=10, symbol='o')
         self._curve_dcct_buff = self.graph.curveAtIndex(4)
         self.graph.addYChannel(
-            y_channel='FAKE:BPMBuffer', yAxisName='curr', name='BPMBuffer',
+            y_channel='FAKE:BPMBuffer', axis='left', name='BPMBuffer',
             color='blue', lineStyle=Qt.NoPen, symbolSize=10, symbol='o')
         self._curve_bpm_buff = self.graph.curveAtIndex(5)
 
@@ -251,9 +249,10 @@ class CurrLTWindow(SiriusMainWindow):
             Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
         self._cb_seldcct = PyDMEnumComboBox(
             self, self.devname.substitute(propty='DCCT-Sel'))
-        self._lb_seldcct = SiriusLabel(
+        self._lb_seldcct = PyDMLabel(
             self, self.devname.substitute(propty='DCCT-Sts'))
         self._lb_seldcct.setAlignment(Qt.AlignCenter)
+        self._lb_seldcct.precision = 0
 
         self._led_dcct13c4 = SiriusLedAlert(self, _PVName(
             'SI-13C4:DI-DCCT:ReliableMeas-Mon').substitute(prefix=self.prefix))
@@ -338,7 +337,7 @@ class CurrLTWindow(SiriusMainWindow):
         self._sb_curroffset = SiriusSpinbox(
             self, self.devname.substitute(propty='CurrOffset-SP'))
         self._sb_curroffset.showStepExponent = False
-        self._lb_curroffset = SiriusLabel(
+        self._lb_curroffset = PyDMLabel(
             self, self.devname.substitute(propty='CurrOffset-RB'))
         self._lb_curroffset.setAlignment(Qt.AlignCenter)
 
@@ -367,7 +366,7 @@ class CurrLTWindow(SiriusMainWindow):
             self, self.devname.substitute(propty='MaxSplIntvl-SP'))
         self._sb_maxintvl.precisionFromPV = True
         self._sb_maxintvl.showStepExponent = False
-        self._lb_maxintvl = SiriusLabel(
+        self._lb_maxintvl = PyDMLabel(
             self, self.devname.substitute(propty='MaxSplIntvl-RB'))
         self._lb_maxintvl.setAlignment(Qt.AlignCenter)
         self._lb_maxintvl.precisionFromPV = True
@@ -379,10 +378,10 @@ class CurrLTWindow(SiriusMainWindow):
         self._le_firstsmpl = PyDMLineEdit(
             self, self.devname.substitute(propty='FrstSplTime-SP'))
         self._le_firstsmpl.setVisible(False)
-        self._lb_firstsmpl_dcct = SiriusLabel(
+        self._lb_firstsmpl_dcct = PyDMLabel(
             self, self.devname.substitute(propty='FrstSplTime-RB'))
         self._lb_firstsmpl_dcct.setVisible(False)
-        self._lb_firstsmpl_bpm = SiriusLabel(
+        self._lb_firstsmpl_bpm = PyDMLabel(
             self, self.devname.substitute(propty='FrstSplTimeBPM-RB'))
         self._lb_firstsmpl_bpm.setVisible(False)
         self._pb_firstnow = QPushButton(
@@ -406,10 +405,10 @@ class CurrLTWindow(SiriusMainWindow):
         self._le_lastsmpl = PyDMLineEdit(
             self, self.devname.substitute(propty='LastSplTime-SP'))
         self._le_lastsmpl.setVisible(False)
-        self._lb_lastsmpl_dcct = SiriusLabel(
+        self._lb_lastsmpl_dcct = PyDMLabel(
             self, self.devname.substitute(propty='LastSplTime-RB'))
         self._lb_lastsmpl_dcct.setVisible(False)
-        self._lb_lastsmpl_bpm = SiriusLabel(
+        self._lb_lastsmpl_bpm = PyDMLabel(
             self, self.devname.substitute(propty='LastSplTimeBPM-RB'))
         self._lb_lastsmpl_bpm.setVisible(False)
         self._pb_lastnow = QPushButton(
@@ -427,9 +426,9 @@ class CurrLTWindow(SiriusMainWindow):
         self._ld_smplintvl = QLabel(
             'Samples\nInterval [s]:', self,
             alignment=Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
-        self._lb_smplintvl_dcct = SiriusLabel(
+        self._lb_smplintvl_dcct = PyDMLabel(
             self, self.devname.substitute(propty='SplIntvl-Mon'))
-        self._lb_smplintvl_bpm = SiriusLabel(
+        self._lb_smplintvl_bpm = PyDMLabel(
             self, self.devname.substitute(propty='SplIntvlBPM-Mon'))
         self._lb_smplintvl_bpm.setVisible(False)
 
@@ -440,7 +439,7 @@ class CurrLTWindow(SiriusMainWindow):
             self, self.devname.substitute(propty='MinIntvlBtwSpl-SP'))
         self._sb_intvlbtwspl.precisionFromPV = True
         self._sb_intvlbtwspl.showStepExponent = False
-        self._lb_intvlbtwspl = SiriusLabel(
+        self._lb_intvlbtwspl = PyDMLabel(
             self, self.devname.substitute(propty='MinIntvlBtwSpl-RB'))
         self._lb_intvlbtwspl.setAlignment(Qt.AlignCenter)
         self._lb_intvlbtwspl.precisionFromPV = True
@@ -450,7 +449,7 @@ class CurrLTWindow(SiriusMainWindow):
             alignment=Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
         self._cb_bufautoreset = PyDMEnumComboBox(
             self, self.devname.substitute(propty='BuffAutoRst-Sel'))
-        self._lb_bufautoreset = SiriusLabel(
+        self._lb_bufautoreset = PyDMLabel(
             self, self.devname.substitute(propty='BuffAutoRst-Sts'))
 
         self._ld_bufdcurr = QLabel(
@@ -459,16 +458,16 @@ class CurrLTWindow(SiriusMainWindow):
         self._sb_bufdcurr = PyDMSpinbox(
             self, self.devname.substitute(propty='BuffAutoRstDCurr-SP'))
         self._sb_bufdcurr.showStepExponent = False
-        self._lb_bufdcurr = SiriusLabel(
+        self._lb_bufdcurr = PyDMLabel(
             self, self.devname.substitute(propty='BuffAutoRstDCurr-RB'))
 
         self._ld_bufsize = QLabel(
             'Size:', self,
             alignment=Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
-        self._lb_bufsize_dcct = SiriusLabel(
+        self._lb_bufsize_dcct = PyDMLabel(
             self, self.devname.substitute(propty='BuffSize-Mon'))
         self._lb_bufsize_dcct.setAlignment(Qt.AlignCenter)
-        self._lb_bufsize_bpm = SiriusLabel(
+        self._lb_bufsize_bpm = PyDMLabel(
             self, self.devname.substitute(propty='BuffSizeBPM-Mon'))
         self._lb_bufsize_bpm.setAlignment(Qt.AlignCenter)
         self._lb_bufsize_bpm.setVisible(False)
@@ -479,13 +478,13 @@ class CurrLTWindow(SiriusMainWindow):
         self._pb_bufreset.setStyleSheet(
             "#reset{min-width:25px; max-width:25px; icon-size:20px;}")
         self._ld_sep = QLabel('/', self)
-        self._lb_bufsizetot_dcct = SiriusLabel(
+        self._lb_bufsizetot_dcct = PyDMLabel(
             self, self.devname.substitute(propty='BuffSizeTot-Mon'))
         self._lb_bufsizetot_dcct.setStyleSheet(
             "min-width:5em; max-width:5em;")
         self._lb_bufsizetot_dcct.setAlignment(Qt.AlignCenter)
         self._lb_bufsizetot_dcct.precision = 0
-        self._lb_bufsizetot_bpm = SiriusLabel(
+        self._lb_bufsizetot_bpm = PyDMLabel(
             self, self.devname.substitute(propty='BuffSizeTotBPM-Mon'))
         self._lb_bufsizetot_bpm.setStyleSheet(
             "min-width:5em; max-width:5em;")

@@ -3,10 +3,10 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGroupBox, QVBoxLayout, QTabWidget, \
     QWidget, QLabel, QGridLayout
 import qtawesome as qta
-from pydm.widgets import enum_button, PyDMEnumComboBox, PyDMSpinbox
+from pydm.widgets import PyDMLabel, enum_button, PyDMEnumComboBox, PyDMSpinbox
 
 from ..util import get_appropriate_color
-from ..widgets import SiriusMainWindow, SiriusLedState, SiriusLabel
+from ..widgets import SiriusMainWindow, SiriusLedState
 from ..as_di_bpms.base import GraphWave
 
 
@@ -333,7 +333,7 @@ class DigBeamPosProc(SiriusMainWindow):
     def dataItem(self, channel, style):
         '''Get data channel info'''
         if style == 0:
-            channel_info = SiriusLabel(
+            channel_info = PyDMLabel(
                 parent=self,
                 init_channel=self.prefix + self.device_name + ':' + channel)
         elif style in [1, 2, 4]:

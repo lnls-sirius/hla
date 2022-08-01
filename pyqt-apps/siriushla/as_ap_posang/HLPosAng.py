@@ -9,7 +9,8 @@ from qtpy.QtWidgets import QGridLayout, QLabel, QGroupBox, QAbstractItemView, \
     QMessageBox, QApplication, QHBoxLayout
 from qtpy.QtCore import Qt
 import qtawesome as qta
-from pydm.widgets import PyDMLineEdit, PyDMPushButton, PyDMSpinbox
+from pydm.widgets import PyDMWaveformTable, PyDMLabel, PyDMLineEdit, \
+    PyDMPushButton, PyDMSpinbox
 
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriuspy.posang.csdev import Const
@@ -17,8 +18,7 @@ from siriuspy.namesys import SiriusPVName as _PVName
 
 from siriushla import util as _hlautil
 from siriushla.widgets import SiriusMainWindow, PyDMLogLabel, SiriusLedAlert, \
-    PyDMSpinboxScrollbar, PyDMLedMultiChannel, SiriusConnectionSignal, \
-    SiriusLabel, SiriusWaveformTable
+    PyDMSpinboxScrollbar, PyDMLedMultiChannel, SiriusConnectionSignal
 from siriushla.as_ps_control import PSDetailWindow as _PSDetailWindow
 from siriushla.as_pu_control import PUDetailWindow as _PUDetailWindow
 from siriushla.as_ap_configdb import LoadConfigDialog as _LoadConfigDialog
@@ -156,8 +156,8 @@ class PosAngCorr(SiriusMainWindow):
             PyDMSpinbox{
                 min-width: 5em; max-width: 5em;
             }
-            SiriusLabel, PyDMSpinboxScrollbar{
-                min-width: 8em; max-width: 8em;
+            PyDMLabel, PyDMSpinboxScrollbar{
+                min-width: 6em; max-width: 6em;
             }
             QPushButton{
                 min-width: 8em;
@@ -176,8 +176,8 @@ class PosAngCorr(SiriusMainWindow):
         sb_deltapos.step_exponent = -2
         sb_deltapos.update_step_size()
         sb_deltapos.showStepExponent = False
-        lb_deltapos = SiriusLabel(self, self.posang_prefix.substitute(
-            propty='DeltaPos'+axis.upper()+'-RB'), keep_unit=True)
+        lb_deltapos = PyDMLabel(self, self.posang_prefix.substitute(
+            propty='DeltaPos'+axis.upper()+'-RB'))
         lb_deltapos.showUnits = True
         self._my_input_widgets.append(sb_deltapos)
         # ang
@@ -187,8 +187,8 @@ class PosAngCorr(SiriusMainWindow):
         sb_deltaang.step_exponent = -2
         sb_deltaang.update_step_size()
         sb_deltaang.showStepExponent = False
-        lb_deltaang = SiriusLabel(self, self.posang_prefix.substitute(
-            propty='DeltaAng'+axis.upper()+'-RB'), keep_unit=True)
+        lb_deltaang = PyDMLabel(self, self.posang_prefix.substitute(
+            propty='DeltaAng'+axis.upper()+'-RB'))
         lb_deltaang.showUnits = True
         self._my_input_widgets.append(sb_deltaang)
 
@@ -240,12 +240,10 @@ class PosAngCorr(SiriusMainWindow):
                 self, corr.substitute(prefix=self._prefix, propty='Kick-SP'))
             le_sp.spinbox.setAlignment(Qt.AlignCenter)
             le_sp.scrollbar.limitsFromPV = True
-            lb_rb = SiriusLabel(self, corr.substitute(
-                prefix=self._prefix, propty='Kick-RB'), keep_unit=True)
-            lb_rb.showUnits = True
-            lb_ref = SiriusLabel(self, self.posang_prefix.substitute(
-                propty='RefKick'+corrid+'-Mon'), keep_unit=True)
-            lb_ref.showUnits = True
+            lb_rb = PyDMLabel(self, corr.substitute(
+                prefix=self._prefix, propty='Kick-RB'))
+            lb_ref = PyDMLabel(self, self.posang_prefix.substitute(
+                propty='RefKick'+corrid+'-Mon'))
 
             lay.addWidget(pbt, idx, 0, alignment=Qt.AlignTop)
             lay.addWidget(
@@ -271,11 +269,9 @@ class PosAngCorr(SiriusMainWindow):
             le_kly2_sp.spinbox.precision = 2
             le_kly2_sp.spinbox.setAlignment(Qt.AlignCenter)
             le_kly2_sp.scrollbar.limitsFromPV = True
-            lb_kly2_rb = SiriusLabel(
-                self, pref+'LA-RF:LLRF:KLY2:GET_AMP', keep_unit=True)
+            lb_kly2_rb = PyDMLabel(self, pref+'LA-RF:LLRF:KLY2:GET_AMP')
             lb_kly2_rb.precisionFromPV = False
             lb_kly2_rb.precision = 2
-            lb_kly2_rb.showUnits = True
             lay.addWidget(lb_kly2_name, idx+3, 1,
                           alignment=Qt.AlignLeft | Qt.AlignTop)
             lay.addWidget(le_kly2_sp, idx+3, 2, alignment=Qt.AlignTop)
@@ -286,10 +282,8 @@ class PosAngCorr(SiriusMainWindow):
 
         label_voltsp = QLabel('<h4>Voltage-SP</h4>', self)
         label_voltrb = QLabel('<h4>Voltage-RB</h4>', self)
-        label_voltmn = QLabel('<h4>Voltage-Mon</h4>', self)
         lay.addWidget(label_voltsp, idx+4, 2)
         lay.addWidget(label_voltrb, idx+4, 3)
-        lay.addWidget(label_voltmn, idx+4, 4)
 
         lay.addItem(QSpacerItem(0, 8, QSzPlcy.Ignored, QSzPlcy.Fixed))
         pb_kckr = QPushButton(qta.icon('fa5s.list-ul'), '', self)
@@ -307,18 +301,13 @@ class PosAngCorr(SiriusMainWindow):
             self, self._kckr_name.substitute(
                 prefix=self._prefix, propty='Voltage-SP'))
         lb_kckr_sp.scrollbar.limitsFromPV = True
-        lb_kckr_rb = SiriusLabel(self, self._kckr_name.substitute(
-            prefix=self._prefix, propty='Voltage-RB'), keep_unit=True)
-        lb_kckr_rb.showUnits = True
-        lb_kckr_mn = SiriusLabel(self, self._kckr_name.substitute(
-            prefix=self._prefix, propty='Voltage-Mon'), keep_unit=True)
-        lb_kckr_mn.showUnits = True
+        lb_kckr_rb = PyDMLabel(self, self._kckr_name.substitute(
+            prefix=self._prefix, propty='Voltage-RB'))
         lay.addWidget(pb_kckr, idx+5, 0, alignment=Qt.AlignTop)
         lay.addWidget(
             lb_kckr_name, idx+5, 1, alignment=Qt.AlignLeft | Qt.AlignTop)
         lay.addWidget(lb_kckr_sp, idx+5, 2, alignment=Qt.AlignTop)
         lay.addWidget(lb_kckr_rb, idx+5, 3, alignment=Qt.AlignTop)
-        lay.addWidget(lb_kckr_mn, idx+5, 4, alignment=Qt.AlignTop)
         return lay
 
     def _setupStatusLayout(self):
@@ -364,6 +353,40 @@ class PosAngCorr(SiriusMainWindow):
             lay.addWidget(self.lb_corrtype, 0, 2)
         return lay
 
+    def _set_correctors_channels(self, corrs):
+        self.centralwidget.pushButton_CH1.setText(corrs[0])
+        _hlautil.connect_window(
+            self.centralwidget.pushButton_CH1, _PSDetailWindow, self,
+            psname=corrs[0])
+        self.centralwidget.PyDMLabel_KickRBCH1.channel = (
+            corrs[0].substitute(prefix=self._prefix, propty='Kick-RB'))
+
+        self.centralwidget.pushButton_CH2.setText(corrs[1])
+        if corrs[1].dis == 'PU':
+            _hlautil.connect_window(
+                self.centralwidget.pushButton_CH2, _PUDetailWindow, self,
+                devname=corrs[1])
+        else:
+            _hlautil.connect_window(
+                self.centralwidget.pushButton_CH2, _PSDetailWindow, self,
+                psname=corrs[1])
+        self.centralwidget.PyDMLabel_KickRBCH2.channel = (
+            corrs[1].substitute(prefix=self._prefix, propty='Kick-RB'))
+
+        self.centralwidget.pushButton_CV1.setText(corrs[2])
+        _hlautil.connect_window(
+            self.centralwidget.pushButton_CV1, _PSDetailWindow, self,
+            psname=corrs[2])
+        self.centralwidget.PyDMLabel_KickRBCV1.channel = (
+            corrs[2].substitute(prefix=self._prefix, propty='Kick-RB'))
+
+        self.centralwidget.pushButton_CV2.setText(corrs[3])
+        _hlautil.connect_window(
+            self.centralwidget.pushButton_CV2, _PSDetailWindow, self,
+            psname=corrs[3])
+        self.centralwidget.PyDMLabel_KickRBCV2.channel = (
+            corrs[3].substitute(prefix=self._prefix, propty='Kick-RB'))
+
     def _handle_need_update_ref_led(self, value):
         self._just_need_update = bool(value)
 
@@ -402,12 +425,12 @@ class CorrParamsDetailWindow(SiriusMainWindow):
                                   alignment=Qt.AlignCenter)
         self.pydmlinedit_configname = _ConfigLineEdit(
             self, self.posang_prefix.substitute(propty='ConfigName-SP'))
-        self.pydmlabel_configname = SiriusLabel(
+        self.pydmlabel_configname = PyDMLabel(
             self, self.posang_prefix.substitute(propty='ConfigName-RB'))
 
         label_matrix_x = QLabel('<h4>Matrix X</h4>', self,
                                 alignment=Qt.AlignCenter)
-        self.table_matrix_x = SiriusWaveformTable(
+        self.table_matrix_x = PyDMWaveformTable(
             self, self.posang_prefix.substitute(propty='RespMatX-Mon'))
         self.table_matrix_x.setObjectName('table_matrix_x')
         self.table_matrix_x.setStyleSheet("""
@@ -430,7 +453,7 @@ class CorrParamsDetailWindow(SiriusMainWindow):
         width = 12 if self._tl == 'TB' else 24
         label_matrix_y = QLabel('<h4>Matrix Y</h4>', self,
                                 alignment=Qt.AlignCenter)
-        self.table_matrix_y = SiriusWaveformTable(
+        self.table_matrix_y = PyDMWaveformTable(
             self, self.posang_prefix.substitute(propty='RespMatY-Mon'))
         self.table_matrix_y.setObjectName('table_matrix_y')
         self.table_matrix_y.setStyleSheet("""
@@ -477,7 +500,7 @@ class CorrParamsDetailWindow(SiriusMainWindow):
         self.setCentralWidget(self.centralwidget)
 
         self.setStyleSheet("""
-            SiriusLabel{
+            PyDMLabel{
                 min-width:valem; max-width:valem;
             }""".replace('val', str(width)))
 

@@ -12,10 +12,11 @@ import qtawesome as qta
 
 from pyqtgraph import mkPen, mkBrush
 
+from pydm.widgets import PyDMWaveformPlot
+
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 
 from siriushla.util import run_newprocess
-from siriushla.widgets import SiriusWaveformPlot
 
 from .base import BaseObject
 from .custom_widgets import RefOrbComboBox
@@ -281,19 +282,19 @@ class GraphLegendWidget(QWidget):
         lay.addWidget(self._label_labok)
 
 
-class Graph(BaseObject, SiriusWaveformPlot):
+class Graph(BaseObject, PyDMWaveformPlot):
     """BPM orbit interlock data graph."""
 
     def __init__(self, parent, intlktype):
         """Init."""
         BaseObject.__init__(self)
-        SiriusWaveformPlot.__init__(self, parent)
-        self.addAxis(plot_data_item=None, name='left', orientation='left')
+        PyDMWaveformPlot.__init__(self, parent)
         self.setBackgroundColor(QColor(255, 255, 255))
         self.setAutoRangeX(True)
         self.setAutoRangeY(True)
         self.setShowXGrid(True)
         self.setShowYGrid(True)
+        self.plotItem.showButtons()
         self.plotItem.setLabel('bottom', 's', units='m')
         self._nok_pen = mkPen(QColor('black'))
         self._nok_brush = mkBrush(QColor(255, 0, 0))

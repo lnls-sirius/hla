@@ -3,10 +3,11 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QLabel, QHBoxLayout, QGridLayout, \
     QSizePolicy as QSzPlcy, QSpacerItem
 
+from pydm.widgets import PyDMLabel
+
 from siriuspy.namesys import SiriusPVName as _PVName
 
-from siriushla.widgets import SiriusDialog, PyDMLed, PyDMLedMultiChannel, \
-    SiriusLabel
+from siriushla.widgets import SiriusDialog, PyDMLed, PyDMLedMultiChannel
 
 
 class APUAlarmDetails(SiriusDialog):
@@ -25,19 +26,19 @@ class APUAlarmDetails(SiriusDialog):
         self._ld_almaxctrl = QLabel('<h4>Axis Control</h4>', self)
 
         self._ld_almflag = QLabel('Flag', self)
-        self._lb_almflag = SiriusLabel(
+        self._lb_almflag = PyDMLabel(
             self, self.dev_pref.substitute(propty='AlrmPhase-Mon'))
 
         self._ld_almeid = QLabel('Error ID Code', self)
-        self._lb_almeid = SiriusLabel(
+        self._lb_almeid = PyDMLabel(
             self, self.dev_pref.substitute(propty='AlrmPhaseErrID-Mon'))
 
         self._ld_almsttdw = QLabel('State DWord', self)
-        self._lb_almsttdw = SiriusLabel(
+        self._lb_almsttdw = PyDMLabel(
             self, self.dev_pref.substitute(propty='AlrmPhaseSttDW-Mon'))
 
         self._ld_almsttcode = QLabel('State Code', self)
-        self._lb_almsttcode = SiriusLabel(
+        self._lb_almsttcode = PyDMLabel(
             self, self.dev_pref.substitute(propty='AlrmPhaseStt-Mon'))
 
         self._ld_almrack = QLabel('<h4>Rack</h4>', self)
@@ -109,7 +110,7 @@ class APUInterlockDetails(SiriusDialog):
             self, self.dev_pref.substitute(propty='IntlkInStop-Mon'))
         self._led_ilkistop.offColor = PyDMLed.LightGreen
         self._led_ilkistop.onColor = PyDMLed.Red
-        self._lb_ilkistop = SiriusLabel(
+        self._lb_ilkistop = PyDMLabel(
             self, self.dev_pref.substitute(propty='IntlkInStop-Mon'))
         hbox_ilkistop = QHBoxLayout()
         hbox_ilkistop.addWidget(self._led_ilkistop)
@@ -120,14 +121,14 @@ class APUInterlockDetails(SiriusDialog):
             self, self.dev_pref.substitute(propty='IntlkInEOpnGap-Mon'))
         self._led_ilkieopn.offColor = PyDMLed.LightGreen
         self._led_ilkieopn.onColor = PyDMLed.Red
-        self._lb_ilkieopn = SiriusLabel(
+        self._lb_ilkieopn = PyDMLabel(
             self, self.dev_pref.substitute(propty='IntlkInEOpnGap-Mon'))
         hbox_eopngap = QHBoxLayout()
         hbox_eopngap.addWidget(self._led_ilkieopn)
         hbox_eopngap.addWidget(self._lb_ilkieopn)
 
         self._ld_ilkogapopn = QLabel('Gap Opened\n(Output)', self)
-        self._lb_ilkogapopn = SiriusLabel(
+        self._lb_ilkogapopn = PyDMLabel(
             self, self.dev_pref.substitute(propty='IntlkOutGapStt-Mon'))
         self._lb_ilkogapopn.setAlignment(Qt.AlignCenter)
 
@@ -174,7 +175,7 @@ class APUHardLLDetails(SiriusDialog):
         self._led_stthw.setObjectName('led')
         self._led_stthw.setStyleSheet('#led{max-width: 1.29em;}')
         self._led_stthw.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Preferred)
-        self._lb_stthw = SiriusLabel(
+        self._lb_stthw = PyDMLabel(
             self, self.dev_pref.substitute(propty='StateHw-Mon'))
 
         self._ld_sttsys = QLabel('System state', self)
@@ -187,7 +188,7 @@ class APUHardLLDetails(SiriusDialog):
         self._led_sttsys.setObjectName('led')
         self._led_sttsys.setStyleSheet('#led{max-width: 1.29em;}')
         self._led_sttsys.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Preferred)
-        self._lb_sttsys = SiriusLabel(
+        self._lb_sttsys = PyDMLabel(
             self, self.dev_pref.substitute(propty='State-Mon'))
 
         self._ld_isopr = QLabel('Is operational', self)

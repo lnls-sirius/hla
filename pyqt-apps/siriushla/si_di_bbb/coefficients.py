@@ -5,7 +5,7 @@ from qtpy.QtCore import Qt
 from qtpy.QtGui import QColor
 from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, QGroupBox, QTabWidget
 import qtawesome as qta
-from pydm.widgets import PyDMSpinbox, PyDMEnumComboBox, \
+from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMEnumComboBox, \
     PyDMLineEdit, PyDMPushButton
 
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
@@ -263,20 +263,20 @@ class BbBCoefficientsWidget(QWidget):
         ld_bcamp = QLabel('Amplitude', self)
         sb_bcamp = PyDMSpinbox(self, self.dev_pref+':CLEAN_AMPL')
         sb_bcamp.showStepExponent = False
-        lb_svamp = SiriusLabel(self, self.dev_pref+':CLEAN_SAVE_AMPL')
+        lb_svamp = PyDMLabel(self, self.dev_pref+':CLEAN_SAVE_AMPL')
 
         ld_bctune = QLabel('Tune', self)
         sb_bctune = PyDMSpinbox(self, self.dev_pref+':CLEAN_TUNE')
         sb_bctune.showStepExponent = False
-        lb_svfreq = SiriusLabel(self, self.dev_pref+':CLEAN_SAVE_FREQ')
+        lb_svfreq = PyDMLabel(self, self.dev_pref+':CLEAN_SAVE_FREQ')
 
         ld_bcspan = QLabel('Span', self)
         le_bcspan = PyDMLineEdit(self, self.dev_pref+':CLEAN_SPAN')
-        lb_svspan = SiriusLabel(self, self.dev_pref+':CLEAN_SAVE_SPAN')
+        lb_svspan = PyDMLabel(self, self.dev_pref+':CLEAN_SAVE_SPAN')
 
         ld_bcper = QLabel('Period', self)
         le_bcper = PyDMLineEdit(self, self.dev_pref+':CLEAN_PERIOD')
-        lb_svper = SiriusLabel(self, self.dev_pref+':CLEAN_SAVE_PERIOD')
+        lb_svper = PyDMLabel(self, self.dev_pref+':CLEAN_SAVE_PERIOD')
 
         ld_bcpatt = QLabel('Mask', self)
         le_bcpatt = PyDMLineEdit(self, self.dev_pref+':CLEAN_PATTERN')
@@ -307,7 +307,7 @@ class BbBCoefficientsWidget(QWidget):
     def _setupCoefficientsViewWidget(self):
         ld_coef0 = QLabel('<h4>Set 0</h4>', self)
         ld_coef0.setStyleSheet('max-width: 3em;')
-        lb_coef0 = SiriusLabel(self, self.dev_pref+':DESC_CSET0')
+        lb_coef0 = PyDMLabel(self, self.dev_pref+':DESC_CSET0')
         lb_coef0.setStyleSheet('background-color: #DCDCDC;')
         led_coef0 = SiriusLedAlert(self, self.dev_pref+':CVERIFY.C')
         led_coef0.setStyleSheet(
@@ -319,7 +319,7 @@ class BbBCoefficientsWidget(QWidget):
 
         ld_coef1 = QLabel('<h4>Set 1</h4>', self)
         ld_coef1.setStyleSheet('max-width: 3em;')
-        lb_coef1 = SiriusLabel(self, self.dev_pref+':DESC_CSET1')
+        lb_coef1 = PyDMLabel(self, self.dev_pref+':DESC_CSET1')
         lb_coef1.setStyleSheet('background-color: #DCDCDC;')
         led_coef1 = SiriusLedAlert(self, self.dev_pref+':CVERIFY.D')
         led_coef1.setStyleSheet(
@@ -331,7 +331,7 @@ class BbBCoefficientsWidget(QWidget):
 
         ld_coef2 = QLabel('<h4>Set 2</h4>', self)
         ld_coef2.setStyleSheet('max-width: 3em;')
-        lb_coef2 = SiriusLabel(self, self.dev_pref+':DESC_CSET2')
+        lb_coef2 = PyDMLabel(self, self.dev_pref+':DESC_CSET2')
         lb_coef2.setStyleSheet('background-color: #DCDCDC;')
         led_coef2 = SiriusLedAlert(self, self.dev_pref+':CVERIFY.G')
         led_coef2.setStyleSheet(
@@ -343,7 +343,7 @@ class BbBCoefficientsWidget(QWidget):
 
         ld_coef3 = QLabel('<h4>Set 3</h4>', self)
         ld_coef3.setStyleSheet('max-width: 3em;')
-        lb_coef3 = SiriusLabel(self, self.dev_pref+':DESC_CSET3')
+        lb_coef3 = PyDMLabel(self, self.dev_pref+':DESC_CSET3')
         lb_coef3.setStyleSheet('background-color: #DCDCDC;')
         led_coef3 = SiriusLedAlert(self, self.dev_pref+':CVERIFY.H')
         led_coef3.setStyleSheet('min-width: 1.29em; max-width: 1.29em;')

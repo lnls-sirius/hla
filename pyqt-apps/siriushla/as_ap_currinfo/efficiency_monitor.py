@@ -6,10 +6,12 @@ from qtpy.QtWidgets import QWidget, QLabel, QCheckBox, QGridLayout, \
 
 import qtawesome as qta
 
+from pydm.widgets import PyDMLabel
+
 from siriuspy.envars import VACA_PREFIX
 from siriuspy.namesys import SiriusPVName
 from siriuspy.clientarch.time import Time
-from siriushla.widgets import SiriusMainWindow, SiriusTimePlot, SiriusLabel
+from siriushla.widgets import SiriusMainWindow, SiriusTimePlot
 from siriushla.util import get_appropriate_color
 
 
@@ -50,15 +52,12 @@ class EfficiencyMonitor(SiriusMainWindow):
         timespan = 30*60  # [s]
         self.timeplot = SiriusTimePlot(parent=self, background='w')
         self.timeplot.timeSpan = timespan
-        self.timeplot.addAxis(
-            plot_data_item=None, name='left', orientation='left')
         self.timeplot.autoRangeY = False
         self.timeplot.maxYRange = 150.0
         self.timeplot.minYRange = 0.0
         self.timeplot.showXGrid = True
         self.timeplot.showYGrid = True
-        self.timeplot.setLabel(
-            'left', text='Efficiency', units='%', color='gray')
+        self.timeplot.setLabel('left', text='Efficiency', units='%')
         self.timeplot.setObjectName('timeplot')
         self.timeplot.setStyleSheet(
             '#timeplot{min-width:24em; min-height: 10em;}')
@@ -91,7 +90,7 @@ class EfficiencyMonitor(SiriusMainWindow):
             cb.stateChanged.connect(curve.setVisible)
             self._cb_show[pvn] = cb
 
-            lb = SiriusLabel(self, pvname)
+            lb = PyDMLabel(self, pvname)
             lb.setStyleSheet("""
                 QLabel{
                     font-weight: bold; min-width: 6em; max-width: 6em;

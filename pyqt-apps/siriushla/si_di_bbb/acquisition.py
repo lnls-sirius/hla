@@ -6,14 +6,14 @@ from qtpy.QtCore import Qt
 from qtpy.QtGui import QColor, QPixmap
 from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, QPushButton, \
     QGroupBox, QVBoxLayout, QSizePolicy as QSzPlcy, QSpacerItem
-from pydm.widgets import PyDMSpinbox, PyDMEnumComboBox, PyDMLineEdit
+from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMEnumComboBox, \
+    PyDMLineEdit
 
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 from siriuspy.namesys import SiriusPVName as _PVName
 
 from ..util import connect_window
-from ..widgets import SiriusFrame, PyDMStateButton, SiriusLedState, \
-    SiriusLabel
+from ..widgets import SiriusFrame, PyDMStateButton, SiriusLedState
 from ..widgets.windows import create_window_from_widget
 
 from .custom_widgets import WfmGraph
@@ -109,20 +109,20 @@ class _BbBModalAnalysis(QWidget):
         cb_mode = PyDMEnumComboBox(self, self.prop_pref+'MD_SP_SEARCH')
 
         ld_mnum = QLabel('Mode #', self, alignment=Qt.AlignRight)
-        lb_mnum = SiriusLabel(self, self.prop_pref+'MD_MAXMODE')
+        lb_mnum = PyDMLabel(self, self.prop_pref+'MD_MAXMODE')
 
         ld_mamp = QLabel('Mode Amp.', self, alignment=Qt.AlignRight)
-        lb_mamp = SiriusLabel(self, self.prop_pref+'MD_MAXVAL')
+        lb_mamp = PyDMLabel(self, self.prop_pref+'MD_MAXVAL')
 
         ld_peak = QLabel('Value', self, alignment=Qt.AlignRight)
-        lb_peak = SiriusLabel(self, self.prop_pref+'MD_PEAK')
+        lb_peak = PyDMLabel(self, self.prop_pref+'MD_PEAK')
 
         ld_pfrq = QLabel('Freq', self, alignment=Qt.AlignRight)
-        lb_pfrq = SiriusLabel(self, self.prop_pref+'MD_PEAKFREQ')
+        lb_pfrq = PyDMLabel(self, self.prop_pref+'MD_PEAKFREQ')
         lb_pfrq.showUnits = True
 
         ld_tune = QLabel('Tune', self, alignment=Qt.AlignRight)
-        lb_tune = SiriusLabel(self, self.prop_pref+'MD_PEAKTUNE')
+        lb_tune = PyDMLabel(self, self.prop_pref+'MD_PEAKTUNE')
 
         gb_mark = QGroupBox('Marker', self)
         lay_mark = QGridLayout(gb_mark)
@@ -219,13 +219,12 @@ class _BbBAcqBase(QWidget):
         fr_growtime.add_widget(sb_growtime)
 
         ld_acqlen = QLabel('Acquisition Length', self)
-        lb_acqlen = SiriusLabel(
-            self, self.dev_pref+':'+self.TYPE+'_ACQ_TURNS', keep_unit=True)
+        lb_acqlen = PyDMLabel(self, self.dev_pref+':'+self.TYPE+'_ACQ_TURNS')
         lb_acqlen.showUnits = True
 
         ld_psttrglen = QLabel('Post Trigger Length', self)
-        lb_psttrglen = SiriusLabel(
-            self, self.dev_pref+':'+self.TYPE+'_POST_TURNS', keep_unit=True)
+        lb_psttrglen = PyDMLabel(
+            self, self.dev_pref+':'+self.TYPE+'_POST_TURNS')
         lb_psttrglen.showUnits = True
 
         bt_modal = QPushButton('Modal Analysis', self)
@@ -287,8 +286,8 @@ class _BbBAcqBase(QWidget):
             self, self.dev_pref+':'+self.TYPE+'_BR_ARM')
 
         ld_rst = QLabel('Trigger 1/2 Cap.:', self)
-        lb_rst1 = SiriusLabel(self, self.dev_pref+':'+self.TYPE+'_CAP_TRIG1')
-        lb_rst2 = SiriusLabel(self, self.dev_pref+':'+self.TYPE+'_CAP_TRIG2')
+        lb_rst1 = PyDMLabel(self, self.dev_pref+':'+self.TYPE+'_CAP_TRIG1')
+        lb_rst2 = PyDMLabel(self, self.dev_pref+':'+self.TYPE+'_CAP_TRIG2')
 
         gbox_trig = QGroupBox('Trigger', self)
         lay_trig = QGridLayout(gbox_trig)
@@ -394,16 +393,16 @@ class _BbBAcqBase(QWidget):
             self, self.dev_pref+':'+self.TYPE+'_ACQ_SINGLE')
 
         ld_mean = QLabel('Mean', self, alignment=Qt.AlignCenter)
-        lb_mean = SiriusLabel(self, self.dev_pref+':'+self.TYPE+'_MEANVAL')
+        lb_mean = PyDMLabel(self, self.dev_pref+':'+self.TYPE+'_MEANVAL')
 
         ld_rms = QLabel('RMS', self, alignment=Qt.AlignCenter)
-        lb_rms = SiriusLabel(self, self.dev_pref+':'+self.TYPE+'_RMSVAL')
+        lb_rms = PyDMLabel(self, self.dev_pref+':'+self.TYPE+'_RMSVAL')
 
         ld_ampp2p = QLabel('Amp P-P', self, alignment=Qt.AlignCenter)
-        lb_ampp2p = SiriusLabel(self, self.dev_pref+':'+self.TYPE+'_AMP_PP')
+        lb_ampp2p = PyDMLabel(self, self.dev_pref+':'+self.TYPE+'_AMP_PP')
 
         ld_maxrms = QLabel('Max RMS', self, alignment=Qt.AlignCenter)
-        lb_maxrms = SiriusLabel(self, self.dev_pref+':'+self.TYPE+'_MAXRMSVAL')
+        lb_maxrms = PyDMLabel(self, self.dev_pref+':'+self.TYPE+'_MAXRMSVAL')
 
         ld_bunpatt = QLabel('Bunch\npattern', self)
         le_bunpatt = PyDMLineEdit(
@@ -447,21 +446,21 @@ class _BbBAcqBase(QWidget):
         le_high1 = PyDMLineEdit(self, self.dev_pref+':'+self.TYPE+'_SP_HIGH1')
         cb_mode1 = PyDMEnumComboBox(
             self, self.dev_pref+':'+self.TYPE+'_SP_SEARCH1')
-        lb_peak1 = SiriusLabel(self, self.dev_pref+':'+self.TYPE+'_PEAK1')
+        lb_peak1 = PyDMLabel(self, self.dev_pref+':'+self.TYPE+'_PEAK1')
         lb_peak1.showUnits = True
-        lb_pfrq1 = SiriusLabel(self, self.dev_pref+':'+self.TYPE+'_PEAKFREQ1')
+        lb_pfrq1 = PyDMLabel(self, self.dev_pref+':'+self.TYPE+'_PEAKFREQ1')
         lb_pfrq1.showUnits = True
-        lb_tune1 = SiriusLabel(self, self.dev_pref+':'+self.TYPE+'_PEAKTUNE1')
+        lb_tune1 = PyDMLabel(self, self.dev_pref+':'+self.TYPE+'_PEAKTUNE1')
 
         le_low2 = PyDMLineEdit(self, self.dev_pref+':'+self.TYPE+'_SP_LOW2')
         le_high2 = PyDMLineEdit(self, self.dev_pref+':'+self.TYPE+'_SP_HIGH2')
         cb_mode2 = PyDMEnumComboBox(
             self, self.dev_pref+':'+self.TYPE+'_SP_SEARCH2')
-        lb_peak2 = SiriusLabel(self, self.dev_pref+':'+self.TYPE+'_PEAK2')
+        lb_peak2 = PyDMLabel(self, self.dev_pref+':'+self.TYPE+'_PEAK2')
         lb_peak2.showUnits = True
-        lb_pfrq2 = SiriusLabel(self, self.dev_pref+':'+self.TYPE+'_PEAKFREQ2')
+        lb_pfrq2 = PyDMLabel(self, self.dev_pref+':'+self.TYPE+'_PEAKFREQ2')
         lb_pfrq2.showUnits = True
-        lb_tune2 = SiriusLabel(self, self.dev_pref+':'+self.TYPE+'_PEAKTUNE2')
+        lb_tune2 = PyDMLabel(self, self.dev_pref+':'+self.TYPE+'_PEAKTUNE2')
 
         gbox_mark = QGroupBox('Markers', self)
         lay_mark = QGridLayout(gbox_mark)
@@ -539,10 +538,10 @@ class BbBAcqSB(QWidget):
         sb_bunid.showStepExponent = False
 
         ld_acqsmpl = QLabel('Acq Samples', self)
-        lb_acqsmpl = SiriusLabel(self, self.dev_pref+':SB_ACQ_SAMPLES')
+        lb_acqsmpl = PyDMLabel(self, self.dev_pref+':SB_ACQ_SAMPLES')
 
         ld_currbun = QLabel('Current Bunch', self)
-        lb_currbun = SiriusLabel(self, self.dev_pref+':SB_RAW_BUNCH_ID')
+        lb_currbun = PyDMLabel(self, self.dev_pref+':SB_RAW_BUNCH_ID')
 
         gbox_dtacq = QGroupBox('Data Acquisition', self)
         lay_dtacq = QGridLayout(gbox_dtacq)
@@ -604,11 +603,11 @@ class BbBAcqSB(QWidget):
         sb_dec.showStepExponent = False
 
         ld_rate = QLabel('Rate', self)
-        lb_rate = SiriusLabel(self, self.dev_pref+':PHTRK_RATE')
+        lb_rate = PyDMLabel(self, self.dev_pref+':PHTRK_RATE')
         lb_rate.showUnits = True
 
         ld_bw = QLabel('Bandwidth', self)
-        lb_bw = SiriusLabel(self, self.dev_pref+':PHTRK_BANDWIDTH')
+        lb_bw = PyDMLabel(self, self.dev_pref+':PHTRK_BANDWIDTH')
         lb_bw.showUnits = True
 
         ld_loopctrl = QLabel('Loop Control', self)
@@ -647,30 +646,30 @@ class BbBAcqSB(QWidget):
             '<h4>Data</h4>', self, alignment=Qt.AlignCenter)
 
         ld_mag = QLabel('Magnitude', self)
-        lb_mag = SiriusLabel(self, self.dev_pref+':PHTRK_MAG')
+        lb_mag = PyDMLabel(self, self.dev_pref+':PHTRK_MAG')
         lb_mag.showUnits = True
 
         ld_trgain = QLabel('Transfer Gain', self)
-        lb_trgain = SiriusLabel(self, self.dev_pref+':PHTRK_TFGAIN')
+        lb_trgain = PyDMLabel(self, self.dev_pref+':PHTRK_TFGAIN')
         lb_trgain.showUnits = True
 
         ld_nshift = QLabel('Normalizing Shift', self)
-        lb_nshift = SiriusLabel(self, self.dev_pref+':PHTRK_SHIFT')
+        lb_nshift = PyDMLabel(self, self.dev_pref+':PHTRK_SHIFT')
 
         ld_phase = QLabel('Phase', self)
-        lb_phase = SiriusLabel(self, self.dev_pref+':PHTRK_PHASE')
+        lb_phase = PyDMLabel(self, self.dev_pref+':PHTRK_PHASE')
         lb_phase.showUnits = True
 
         ld_error = QLabel('Error', self)
-        lb_error = SiriusLabel(self, self.dev_pref+':PHTRK_ERROR')
+        lb_error = PyDMLabel(self, self.dev_pref+':PHTRK_ERROR')
         lb_error.showUnits = True
 
         ld_trfreq = QLabel('Tracking Frequency', self)
-        lb_trfreq = SiriusLabel(self, self.dev_pref+':PHTRK_FREQ0')
+        lb_trfreq = PyDMLabel(self, self.dev_pref+':PHTRK_FREQ0')
         lb_trfreq.showUnits = True
 
         ld_trtune = QLabel('Tracking Tune', self)
-        lb_trtune = SiriusLabel(self, self.dev_pref+':PHTRK_TUNE')
+        lb_trtune = PyDMLabel(self, self.dev_pref+':PHTRK_TUNE')
 
         lay_phtrkdata = QGridLayout()
         lay_phtrkdata.addWidget(ld_phtrkdata, 0, 0, 1, 2)
@@ -696,7 +695,7 @@ class BbBAcqSB(QWidget):
         lay_phtrk.addLayout(lay_phtrkdata, 1, 0)
 
         gbox_phtrk.setStyleSheet("""
-            SiriusLabel{
+            PyDMLabel{
                 min-width: 6em; max-width: 6em;
             }""")
 
@@ -787,16 +786,16 @@ class BbBAcqSB(QWidget):
         cb_acqsing = PyDMEnumComboBox(self, self.dev_pref+':SB_ACQ_SINGLE')
 
         ld_mean = QLabel('Mean', self, alignment=Qt.AlignCenter)
-        lb_mean = SiriusLabel(self, self.dev_pref+':SB_MEANVAL')
+        lb_mean = PyDMLabel(self, self.dev_pref+':SB_MEANVAL')
 
         ld_rms = QLabel('RMS', self, alignment=Qt.AlignCenter)
-        lb_rms = SiriusLabel(self, self.dev_pref+':SB_RMSVAL')
+        lb_rms = PyDMLabel(self, self.dev_pref+':SB_RMSVAL')
 
         ld_ampp2p = QLabel('Amp P-P', self, alignment=Qt.AlignCenter)
-        lb_ampp2p = SiriusLabel(self, self.dev_pref+':SB_AMP_PP')
+        lb_ampp2p = PyDMLabel(self, self.dev_pref+':SB_AMP_PP')
 
         ld_bunid = QLabel('Bunch ID', self, alignment=Qt.AlignCenter)
-        lb_bunid = SiriusLabel(self, self.dev_pref+':SB_RAW_BUNCH_ID')
+        lb_bunid = PyDMLabel(self, self.dev_pref+':SB_RAW_BUNCH_ID')
 
         gbox_acqctrl = QGroupBox('Acquisition control', self)
         lay_acqctrl = QGridLayout(gbox_acqctrl)
@@ -824,19 +823,19 @@ class BbBAcqSB(QWidget):
         cb_mkmode = PyDMEnumComboBox(self, self.dev_pref+':SB_SP_SEARCH1')
 
         ld_mkfreq = QLabel('Frequency', self, alignment=Qt.AlignCenter)
-        lb_mkfreq = SiriusLabel(self, self.dev_pref+':SB_PEAKFREQ1')
+        lb_mkfreq = PyDMLabel(self, self.dev_pref+':SB_PEAKFREQ1')
         lb_mkfreq.showUnits = True
 
         ld_mktune = QLabel('Tune', self, alignment=Qt.AlignCenter)
-        lb_mktune = SiriusLabel(self, self.dev_pref+':SB_PEAKTUNE1')
+        lb_mktune = PyDMLabel(self, self.dev_pref+':SB_PEAKTUNE1')
         lb_mktune.showUnits = True
 
         ld_mkmag = QLabel('Magnitude', self, alignment=Qt.AlignCenter)
-        lb_mkmag = SiriusLabel(self, self.dev_pref+':SB_PEAK1')
+        lb_mkmag = PyDMLabel(self, self.dev_pref+':SB_PEAK1')
         lb_mkmag.showUnits = True
 
         ld_mkphs = QLabel('Phase', self, alignment=Qt.AlignCenter)
-        lb_mkphs = SiriusLabel(self, self.dev_pref+':SB_PHASE1')
+        lb_mkphs = PyDMLabel(self, self.dev_pref+':SB_PHASE1')
         lb_mkphs.showUnits = True
 
         lay = QGridLayout()

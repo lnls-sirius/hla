@@ -6,8 +6,9 @@ from qtpy.QtCore import Qt, QLocale
 from qtpy.QtWidgets import QLineEdit, QTableWidget, QTableWidgetItem, \
     QStyledItemDelegate, QToolTip
 from pyqtgraph import functions
+from pydm.widgets import PyDMWaveformPlot
 
-from siriushla.widgets import QDoubleSpinBoxPlus, SiriusWaveformPlot
+from siriushla.widgets import QDoubleSpinBoxPlus
 from siriushla.as_ap_configdb import LoadConfigDialog as _LoadConfigDialog
 
 
@@ -91,7 +92,6 @@ class CustomTableWidgetItem(QTableWidgetItem):
 
 
 class ConfigLineEdit(QLineEdit):
-    """Line Edit to choose a configuration."""
 
     def __init__(self, config_type, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -103,14 +103,11 @@ class ConfigLineEdit(QLineEdit):
         popup.exec_()
 
 
-class GraphKicks(SiriusWaveformPlot):
-    """Kick Graph."""
+class GraphKicks(PyDMWaveformPlot):
 
     def __init__(self, parent=None, xdata=list(), ydata=list(),
                  tooltip_names=list(), c0=0, color='blue'):
-        """Init."""
         super().__init__(parent)
-        self.addAxis(plot_data_item=None, name='left', orientation='left')
         self.setBackgroundColor(QColor(255, 255, 255))
         self.setAutoRangeX(True)
         self.setAutoRangeY(True)
@@ -140,11 +137,9 @@ class GraphKicks(SiriusWaveformPlot):
         self.mean.receiveYWaveform(_np.array([_np.mean(ydata)]*len(ydata)))
         self.mean.redrawCurve()
 
-        # connect sigMouseMoved
-        self.plotItem.scene().sigMouseMoved.connect(self._handle_mouse_moved)
-
-    def _handle_mouse_moved(self, pos):
+    def mouseMoveEvent(self, ev):
         unit = 'urad'
+        pos = ev.pos()
 
         posx = self.curve.scatter.mapFromScene(pos).x()
         posx = posx % self.c0
@@ -155,4 +150,4 @@ class GraphKicks(SiriusWaveformPlot):
         txt = '{0:s}, y = {1:.3f} {2:s}'.format(
             self.tooltip_names[ind], sca*posy, prf+unit)
         QToolTip.showText(
-            self.mapToGlobal(pos.toPoint()), txt, self, self.geometry(), 500)
+            self.mapToGlobal(pos), txt, self, self.geometry(), 500)

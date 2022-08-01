@@ -3,13 +3,13 @@
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QGridLayout, \
     QLabel, QTabWidget
+from pydm.widgets import PyDMLabel
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.search import PSSearch
 from siriuspy.pwrsupply.csdev import ETypes as _et
 from siriuspy.pwrsupply.csdev import get_ps_propty_database
-from siriushla.widgets import SiriusMainWindow, SiriusLedAlert, PyDMLed, \
-    SiriusLabel
+from siriushla.widgets import SiriusMainWindow, SiriusLedAlert, PyDMLed
 
 
 class InterlockWidget(QWidget):
@@ -49,7 +49,7 @@ class InterlockListWidget(QWidget):
         lay = QGridLayout()
         hbox = QHBoxLayout()
         hbox.addWidget(QLabel('Value: ', self))
-        hbox.addWidget(SiriusLabel(self, ch))
+        hbox.addWidget(PyDMLabel(self, ch))
         hbox.addStretch()
         lay.addLayout(hbox, 0, 0, 1, len(labels)/8)
         for bit, label in enumerate(labels):

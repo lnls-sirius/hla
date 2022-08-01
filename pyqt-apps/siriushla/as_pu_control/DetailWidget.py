@@ -3,13 +3,13 @@ import qtawesome as qta
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QGridLayout, \
     QLabel, QGroupBox, QFormLayout
-from pydm.widgets import PyDMPushButton
+from pydm.widgets import PyDMLabel, PyDMPushButton
 
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriushla import util
 from siriushla.widgets import SiriusLedState, SiriusLedAlert, PyDMLed, \
-    PyDMStateButton, PyDMSpinboxScrollbar, SiriusLabel
+    PyDMStateButton, PyDMSpinboxScrollbar
 from siriushla.as_ti_control.hl_trigger import HLTriggerSimple
 
 
@@ -116,7 +116,7 @@ class PUDetailWidget(QWidget):
 
         intlk_cnt = 8 if 'Sept' not in self._devname else 7
         for i in range(intlk_cnt):
-            label = SiriusLabel(
+            label = PyDMLabel(
                 self, getattr(self, '_intlk' + str(i+1) + '_lbcte_pv'))
             led = PyDMLed(
                 self, getattr(self, '_intlk' + str(i+1) + '_mon_pv'))
@@ -166,12 +166,10 @@ class PUDetailWidget(QWidget):
 
         self.voltage_sp_widget = PyDMSpinboxScrollbar(
             self, self._voltage_sp_pv)
-        self.voltage_rb_label = SiriusLabel(
-            self, self._voltage_rb_pv, keep_unit=True)
+        self.voltage_rb_label = PyDMLabel(self, self._voltage_rb_pv)
         self.voltage_rb_label.showUnits = True
         self.voltage_rb_label.precisionFromPV = True
-        self.voltage_mon_label = SiriusLabel(
-            self, self._voltage_mon_pv, keep_unit=True)
+        self.voltage_mon_label = PyDMLabel(self, self._voltage_mon_pv)
         self.voltage_mon_label.showUnits = True
         self.voltage_mon_label.precisionFromPV = True
 
@@ -186,12 +184,10 @@ class PUDetailWidget(QWidget):
 
     def _kick_layout(self):
         self.kick_sp_widget = PyDMSpinboxScrollbar(self, self._kick_sp_pv)
-        self.kick_rb_label = SiriusLabel(
-            self, self._kick_rb_pv, keep_unit=True)
+        self.kick_rb_label = PyDMLabel(self, self._kick_rb_pv)
         self.kick_rb_label.showUnits = True
         self.kick_rb_label.precisionFromPV = True
-        self.kick_mon_label = SiriusLabel(
-            self, self._kick_mon_pv, keep_unit=True)
+        self.kick_mon_label = PyDMLabel(self, self._kick_mon_pv)
         self.kick_mon_label.showUnits = True
         self.kick_mon_label.precisionFromPV = True
 
@@ -209,7 +205,7 @@ class PUDetailWidget(QWidget):
 
         self.ctrlmode_led = SiriusLedAlert(
             parent=self, init_channel=self._ctrlmode_pv)
-        self.ctrlmode_label = SiriusLabel(
+        self.ctrlmode_label = PyDMLabel(
             parent=self, init_channel=self._ctrlmode_pv)
 
         ctrlmode_layout.addStretch()

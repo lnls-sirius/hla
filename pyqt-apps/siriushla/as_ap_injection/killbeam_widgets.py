@@ -2,15 +2,14 @@
 
 import qtawesome as qta
 
-from pydm.widgets import PyDMPushButton
-
 from siriuspy.namesys import SiriusPVName
 from siriuspy.injctrl.csdev import Const as _Const
 
-from ..widgets import SiriusConnectionSignal as _ConnSignal
+from ..widgets import SiriusPushButton, \
+    SiriusConnectionSignal as _ConnSignal
 
 
-class RFKillBeamButton(PyDMPushButton):
+class RFKillBeamButton(SiriusPushButton):
     """Button to kill beam with RF."""
 
     def __init__(self, parent=None, prefix=''):

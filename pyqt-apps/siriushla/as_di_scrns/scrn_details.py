@@ -3,12 +3,13 @@
 from qtpy.QtWidgets import QGridLayout, QFormLayout, \
     QWidget, QGroupBox, QLabel, QPushButton, QVBoxLayout
 from qtpy.QtCore import Qt
+from pydm.widgets import PyDMLabel
 
 from siriuspy.namesys import SiriusPVName
 
 from siriushla import util
 
-from siriushla.widgets import SiriusMainWindow, SiriusLabel
+from siriushla.widgets.windows import SiriusMainWindow
 from siriushla.common.cam_basler import \
     BaslerCamSettings as _BaslerCamSettings
 from siriushla.as_di_scrns.scrn_calib import \
@@ -55,20 +56,20 @@ class ScrnSettingsDetails(SiriusMainWindow):
 
     def _setupGeneralInfoLayout(self):
         label_MtrPrefix = QLabel('Motor Prefix: ', self)
-        self.lb_MtrPrefix = SiriusLabel(
+        self.PyDMLabel_MtrPrefix = PyDMLabel(
             self, self.scrn_prefix.substitute(propty='MtrCtrlPrefix-Cte'))
-        self.lb_MtrPrefix.setStyleSheet(
+        self.PyDMLabel_MtrPrefix.setStyleSheet(
             """max-width:14.20em; max-height:1.29em;""")
 
         label_CamPrefix = QLabel('Camera Prefix: ', self)
-        self.lb_CamPrefix = SiriusLabel(
+        self.PyDMLabel_CamPrefix = PyDMLabel(
             self, self.scrn_prefix.substitute(propty='CamPrefix-Cte'))
-        self.lb_CamPrefix.setStyleSheet(
+        self.PyDMLabel_CamPrefix.setStyleSheet(
             """max-width:14.20em; max-height:1.29em;""")
 
         flay = QFormLayout()
-        flay.addRow(label_MtrPrefix, self.lb_MtrPrefix)
-        flay.addRow(label_CamPrefix, self.lb_CamPrefix)
+        flay.addRow(label_MtrPrefix, self.PyDMLabel_MtrPrefix)
+        flay.addRow(label_CamPrefix, self.PyDMLabel_CamPrefix)
         flay.setLabelAlignment(Qt.AlignRight)
         flay.setFormAlignment(Qt.AlignCenter)
         return flay

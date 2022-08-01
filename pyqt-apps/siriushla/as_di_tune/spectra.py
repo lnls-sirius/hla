@@ -10,14 +10,15 @@ from qtpy.QtWidgets import QWidget, QGridLayout, QHBoxLayout, QVBoxLayout, \
     QComboBox, QCheckBox, QLabel, QPushButton, QMenu, QSpacerItem, \
     QSizePolicy as QSzPlcy, QFileDialog
 import qtawesome as qta
+from pydm.widgets import PyDMWaveformPlot
 
 from siriuspy.namesys import SiriusPVName as _PVName
 
-from siriushla.widgets import SiriusConnectionSignal, SiriusWaveformPlot
+from siriushla.widgets import SiriusConnectionSignal
 from .util import marker_color
 
 
-class TuneSpectraView(SiriusWaveformPlot):
+class TuneSpectraView(PyDMWaveformPlot):
     """Tune Spectra View."""
 
     def __init__(self, parent=None, prefix='', section=''):
@@ -26,7 +27,6 @@ class TuneSpectraView(SiriusWaveformPlot):
         self.prefix = prefix
         self.section = section
 
-        self.addAxis(plot_data_item=None, name='left', orientation='left')
         self.autoRangeX = True
         self.autoRangeY = True
         self.showXGrid = True
@@ -34,9 +34,9 @@ class TuneSpectraView(SiriusWaveformPlot):
         self.axisColor = QColor(0, 0, 0)
         self.backgroundColor = QColor(255, 255, 255)
         self.showLegend = False
+        self.plotItem.showButtons()
         leftAxis = self.getAxis('left')
         leftAxis.setStyle(autoExpandTextSpace=False, tickTextWidth=25)
-        leftAxis.setLabel('Tune', color='gray')
 
         self.x_channel = 'Tune'
 

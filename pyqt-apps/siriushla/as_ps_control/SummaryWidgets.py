@@ -5,7 +5,7 @@ import re
 from qtpy.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget, QPushButton, \
     QLabel, QSizePolicy as QSzPlcy
 import qtawesome as qta
-from pydm.widgets import PyDMPushButton
+from pydm.widgets import PyDMPushButton, PyDMLabel
 
 from siriuspy.envars import VACA_PREFIX as VACA_PREFIX
 from siriuspy.namesys import SiriusPVName as PVName
@@ -13,7 +13,7 @@ from siriuspy.search import PSSearch
 from siriuspy.pwrsupply.csdev import PS_LI_INTLK_THRS as _PS_LI_INTLK
 from siriushla.widgets import PyDMStateButton, SiriusLedState, \
     SiriusLedAlert, PyDMSpinboxScrollbar, PyDMLedMultiChannel, \
-    SiriusEnumComboBox, SiriusLabel
+    SiriusEnumComboBox
 from .detail_widget.custom_widgets import LISpectIntlkLed
 
 
@@ -533,10 +533,10 @@ class SummaryWidget(QWidget):
             if 'Voltage' not in self._analog_name:
                 self.opmode_cb = SiriusEnumComboBox(self, self._opmode_sel)
                 self.opmode_wid.layout().addWidget(self.opmode_cb)
-            self.opmode_lb = SiriusLabel(self, self._opmode_sts)
+            self.opmode_lb = PyDMLabel(self, self._opmode_sts)
             self.opmode_wid.layout().addWidget(self.opmode_lb)
         elif name == 'ctrlmode' and self._has_ctrlmode:
-            self.ctrlmode_lb = SiriusLabel(self, self._ctrlmode_sts)
+            self.ctrlmode_lb = PyDMLabel(self, self._ctrlmode_sts)
             self.ctrlmode_wid.layout().addWidget(self.ctrlmode_lb)
         elif name == 'state' and self._has_pwrstate:
             self.state_bt = PyDMStateButton(self, self._pwrstate_sel)
@@ -591,7 +591,7 @@ class SummaryWidget(QWidget):
         elif name == 'ctrlloop' and self._has_ctrlloop:
             self.ctrlloop_bt = PyDMStateButton(
                 self, self._ctrlloop_sel, invert=True)
-            self.ctrlloop_lb = SiriusLabel(self, self._ctrlloop_sts)
+            self.ctrlloop_lb = PyDMLabel(self, self._ctrlloop_sts)
             self.ctrlloop_wid.layout().addWidget(self.ctrlloop_bt)
             self.ctrlloop_wid.layout().addWidget(self.ctrlloop_lb)
         elif name == 'wfmupdate' and self._has_wfmupdt:
@@ -619,15 +619,13 @@ class SummaryWidget(QWidget):
                 self.setpoint.spinbox.precision = 6
             self.setpoint_wid.layout().addWidget(self.setpoint)
         elif name == 'readback' and self._has_analrb:
-            self.readback = SiriusLabel(self, self._analog_rb)
-            self.readback.showUnits = True
+            self.readback = PyDMLabel(self, self._analog_rb)
             if self._is_fofb:
                 self.readback.precisionFromPV = False
                 self.readback.precision = 6
             self.readback_wid.layout().addWidget(self.readback)
         elif name == 'monitor':
-            self.monitor = SiriusLabel(self, self._analog_mon, keep_unit=True)
-            self.monitor.showUnits = True
+            self.monitor = PyDMLabel(self, self._analog_mon)
             if self._is_fofb:
                 self.monitor.precisionFromPV = False
                 self.monitor.precision = 6
@@ -636,13 +634,13 @@ class SummaryWidget(QWidget):
             self.strength_sp_le = PyDMSpinboxScrollbar(self, self._strength_sp)
             self.strength_sp_wid.layout().addWidget(self.strength_sp_le)
         elif name == 'strength_rb' and self._has_strength:
-            self.strength_rb_lb = SiriusLabel(
-                parent=self, init_channel=self._strength_rb, keep_unit=True)
+            self.strength_rb_lb = PyDMLabel(
+                parent=self, init_channel=self._strength_rb)
             self.strength_rb_lb.showUnits = True
             self.strength_rb_wid.layout().addWidget(self.strength_rb_lb)
         elif name == 'strength_mon' and self._has_strength:
-            self.strength_mon_lb = SiriusLabel(
-                parent=self, init_channel=self._strength_mon, keep_unit=True)
+            self.strength_mon_lb = PyDMLabel(
+                parent=self, init_channel=self._strength_mon)
             self.strength_mon_lb.showUnits = True
             self.strength_mon_wid.layout().addWidget(self.strength_mon_lb)
         elif name == 'trim' and self._has_trim:

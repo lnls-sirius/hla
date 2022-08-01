@@ -9,12 +9,13 @@ from qtpy.QtWidgets import QFileDialog, QGroupBox, QPushButton, QFormLayout, \
 from qtpy.QtCore import Qt
 import qtawesome as qta
 
-from pydm.widgets import PyDMPushButton, PyDMCheckbox
+from pydm.widgets import PyDMLabel, PyDMPushButton, PyDMCheckbox
 from siriuspy.sofb.csdev import ConstTLines
 from siriuspy.clientconfigdb import ConfigDBClient, ConfigDBException
 from siriushla.widgets.windows import create_window_from_widget
-from siriushla.widgets import SiriusLedState, SiriusEnumComboBox, \
-    SiriusConnectionSignal as _ConnSig, SiriusLabel
+from siriushla.widgets import SiriusLedState, \
+    SiriusConnectionSignal as _ConnSig, \
+    SiriusLabel, SiriusEnumComboBox
 from siriushla.util import connect_window, get_appropriate_color, \
     connect_newprocess
 from siriushla.as_ap_configdb import LoadConfigDialog, SaveConfigDialog
@@ -208,7 +209,7 @@ class RespMatWidget(BaseWidget):
         rst.setObjectName('conf')
         rst.setStyleSheet(
             '#conf{min-width:25px; max-width:25px; icon-size:20px;}')
-        lbl = SiriusLabel(
+        lbl = PyDMLabel(
             meas_wid, self.devpref.substitute(propty='MeasRespMat-Mon'))
         lbl.setAlignment(Qt.AlignCenter)
         hbl = QHBoxLayout()

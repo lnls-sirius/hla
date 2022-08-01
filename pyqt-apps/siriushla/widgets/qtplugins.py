@@ -13,7 +13,6 @@ from .line_edit import SiriusLineEdit
 from .spectrogram_view import SiriusSpectrogramView
 from .string_combo_box import SiriusStringComboBox
 from .timeplot import SiriusTimePlot
-from .waveformplot import SiriusWaveformPlot
 from .enum_combo_box import SiriusEnumComboBox
 from .windows import SiriusDialog, SiriusMainWindow
 
@@ -46,12 +45,12 @@ SiriusLineEditPlugin = qtplugin_factory(SiriusLineEdit, group=SIRIUS_CATEGORY)
 
 # Scrollbar plugin
 QDoubleScrollBarPlugin = qtplugin_factory(
-    QDoubleScrollBar, group=SIRIUS_CATEGORY)
+                    QDoubleScrollBar, group=SIRIUS_CATEGORY)
 PyDMScrollBarPlugin = qtplugin_factory(PyDMScrollBar, group=SIRIUS_CATEGORY)
 
 # State Button
 PyDMStateButtonPlugin = qtplugin_factory(
-    PyDMStateButton, group=SIRIUS_CATEGORY)
+                    PyDMStateButton, group=SIRIUS_CATEGORY)
 
 # Spinbox plugin
 SiriusSpinboxPlugin = qtplugin_factory(SiriusSpinbox, group=SIRIUS_CATEGORY)
@@ -71,7 +70,3 @@ SiriusSpectrogramViewPlugin = qtplugin_factory(
 # TimePlot plugin
 SiriusTimePlotPlugin = qtplugin_factory(
     SiriusTimePlot, group=SIRIUS_CATEGORY)
-
-# WaveformPlot plugin
-SiriusWaveformPlotPlugin = qtplugin_factory(
-    SiriusWaveformPlot, group=SIRIUS_CATEGORY)

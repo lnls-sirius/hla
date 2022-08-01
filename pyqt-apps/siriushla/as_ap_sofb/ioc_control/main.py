@@ -6,12 +6,12 @@ from qtpy.QtWidgets import QLabel, QGroupBox, QPushButton, QFormLayout, \
 from qtpy.QtCore import Qt
 import qtawesome as qta
 
-from pydm.widgets import PyDMPushButton
+from pydm.widgets import PyDMPushButton, PyDMLabel
 
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriushla.widgets.label import SiriusLabel
 
-from ...widgets import SiriusConnectionSignal as _ConnSig, SiriusLabel, \
+from ...widgets import SiriusConnectionSignal as _ConnSig, \
     SiriusLedAlert, SiriusSpinbox, PyDMStateButton, SiriusLedState
 from ...widgets.windows import create_window_from_widget
 from ... import util as _util
@@ -132,12 +132,12 @@ class SOFBControl(BaseWidget):
         stp = SiriusSpinbox(
             orb_wid, self.devpref.substitute(propty='SmoothNrPts-SP'))
         stp.showStepExponent = False
-        rdb = SiriusLabel(
+        rdb = PyDMLabel(
             orb_wid, self.devpref.substitute(propty='SmoothNrPts-RB'))
         rdb.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         slsh = QLabel('/', orb_wid, alignment=Qt.AlignCenter)
         slsh.setStyleSheet('min-width:0.7em; max-width:0.7em;')
-        cnt = SiriusLabel(
+        cnt = PyDMLabel(
             orb_wid, self.devpref.substitute(propty='BufferCount-Mon'))
         cnt.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         cnt.setToolTip('Current Buffer Size')

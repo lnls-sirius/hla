@@ -2,11 +2,11 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QTabWidget, QLabel, QFormLayout, \
     QHBoxLayout, QPushButton
 import qtawesome as qta
-from pydm.widgets import PyDMPushButton
+from pydm.widgets import PyDMLabel, PyDMPushButton
 
 from siriuspy.namesys import SiriusPVName
 from siriushla import util
-from siriushla.widgets import SiriusLedAlert, SiriusLabel
+from siriushla.widgets import SiriusLedAlert
 from siriushla.widgets.windows import create_window_from_widget
 from .base import create_propty_layout
 
@@ -94,14 +94,14 @@ class BaslerCamSettings(QTabWidget):
             propty='Connection', propty_type='mon')
 
         label_Temp = QLabel('Temperature State:', self)
-        self.lb_Temp = SiriusLabel(
+        self.lb_Temp = PyDMLabel(
             self, self.cam_prefix.substitute(propty='Temp-Mon'))
         self.lb_Temp.setStyleSheet('min-width:7.1em; max-width:7.1em;')
         self.lb_Temp.setAlignment(Qt.AlignCenter)
         self.led_TempState = SiriusLedAlert(
             self, self.cam_prefix.substitute(propty='TempState-Mon'))
         self.led_TempState.setStyleSheet('min-width:1.29em; max-width:1.29em;')
-        self.lb_TempState = SiriusLabel(
+        self.lb_TempState = PyDMLabel(
             self, self.cam_prefix.substitute(propty='TempState-Mon'))
         self.lb_TempState.setStyleSheet('min-width:2.5em; max-width:2.5em;')
         hbox_Temp = QHBoxLayout()
@@ -297,15 +297,15 @@ class BaslerCamSettings(QTabWidget):
 
     def _ROIWidget(self):
         label_MaxWidth = QLabel('Maximum Width [pixels]:', self)
-        self.lb_MaxWidth = SiriusLabel(
+        self.PyDMLabel_MaxWidth = PyDMLabel(
             self, self.cam_prefix.substitute(propty='SensorWidth-Cte'))
-        self.lb_MaxWidth.setStyleSheet(
+        self.PyDMLabel_MaxWidth.setStyleSheet(
             """max-width:7.10em; max-height:1.29em;""")
 
         label_MaxHeight = QLabel('Maximum Height [pixels]:', self)
-        self.lb_MaxHeight = SiriusLabel(
+        self.PyDMLabel_MaxHeight = PyDMLabel(
             self, self.cam_prefix.substitute(propty='SensorHeight-Cte'))
-        self.lb_MaxHeight.setStyleSheet(
+        self.PyDMLabel_MaxHeight.setStyleSheet(
             """max-width:7.10em; max-height:1.29em;""")
 
         label_ROIWidth = QLabel('Width [pixels]:', self)
@@ -342,8 +342,8 @@ class BaslerCamSettings(QTabWidget):
         flay = QFormLayout(wid)
         flay.setLabelAlignment(Qt.AlignRight)
         flay.setFormAlignment(Qt.AlignHCenter)
-        flay.addRow(label_MaxWidth, self.lb_MaxWidth)
-        flay.addRow(label_MaxHeight, self.lb_MaxHeight)
+        flay.addRow(label_MaxWidth, self.PyDMLabel_MaxWidth)
+        flay.addRow(label_MaxHeight, self.PyDMLabel_MaxHeight)
         flay.addRow(label_ROIWidth, hbox_ROIWidth)
         flay.addRow(label_ROIHeight, hbox_ROIHeight)
         flay.addRow(label_ROIOffsetX, hbox_ROIOffsetX)

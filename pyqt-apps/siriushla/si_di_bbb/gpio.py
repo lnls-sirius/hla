@@ -3,12 +3,12 @@
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, QGroupBox, \
     QHBoxLayout, QVBoxLayout
-from pydm.widgets import PyDMSpinbox, PyDMEnumComboBox
+from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMEnumComboBox
 
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 from siriuspy.namesys import SiriusPVName as _PVName
 
-from ..widgets import PyDMStateButton, SiriusLabel
+from ..widgets import PyDMStateButton
 
 from .custom_widgets import MyScaleIndicator
 
@@ -46,7 +46,7 @@ class BbBGPIOWidget(QWidget):
         lay.setColumnStretch(3, 3)
         lay.setRowStretch(3, 3)
 
-        self.setStyleSheet("SiriusLabel{qproperty-alignment: AlignCenter;}")
+        self.setStyleSheet("""PyDMLabel{qproperty-alignment: AlignCenter;}""")
 
     def _setupGPIOSelectionWidget(self):
         # # GPIO Selection
@@ -87,9 +87,9 @@ class BbBGPIOWidget(QWidget):
         sb_gpiobeat.showStepExponent = False
         # # Phases
         ld_gpiophss = QLabel('<h4>Phases</h4>', self, alignment=Qt.AlignCenter)
-        lb_gpiohph = SiriusLabel(self, self.dev_pref+':FBE_X_PHASE')
-        lb_gpiovph = SiriusLabel(self, self.dev_pref+':FBE_Y_PHASE')
-        lb_gpiolph = SiriusLabel(self, self.dev_pref+':FBE_Z_PHASE')
+        lb_gpiohph = PyDMLabel(self, self.dev_pref+':FBE_X_PHASE')
+        lb_gpiovph = PyDMLabel(self, self.dev_pref+':FBE_Y_PHASE')
+        lb_gpiolph = PyDMLabel(self, self.dev_pref+':FBE_Z_PHASE')
         lay_phases = QGridLayout()
         lay_phases.addWidget(ld_gpiophss, 0, 0, 1, 10)
         lay_phases.addWidget(QLabel('L:'), 1, 1)
@@ -168,23 +168,23 @@ class BbBGPIOWidget(QWidget):
     def _setupThermoWidget(self):
         # # DS1822 ROM/Thermometer
         ld_gpiosts = QLabel('Status', self)
-        lb_gpiosts = SiriusLabel(self, self.dev_pref+':FBE_DS1822_STAT')
+        lb_gpiosts = PyDMLabel(self, self.dev_pref+':FBE_DS1822_STAT')
 
         ld_gpiocsum = QLabel('CheckSum', self)
-        lb_gpiocsum = SiriusLabel(self, self.dev_pref+':FBE_DS1822_XSUM')
+        lb_gpiocsum = PyDMLabel(self, self.dev_pref+':FBE_DS1822_XSUM')
 
         ld_gpiomod = QLabel('Modification', self)
-        lb_gpiomod = SiriusLabel(self, self.dev_pref+':FBE_MOD_SENSE')
+        lb_gpiomod = PyDMLabel(self, self.dev_pref+':FBE_MOD_SENSE')
 
         ld_gpiodevid = QLabel('Device ID', self)
-        lb_gpiodevid = SiriusLabel(self, self.dev_pref+':FBE_DS1822_DEVID')
-        lb_gpiodevid.displayFormat = SiriusLabel.DisplayFormat.Hex
+        lb_gpiodevid = PyDMLabel(self, self.dev_pref+':FBE_DS1822_DEVID')
+        lb_gpiodevid.displayFormat = PyDMLabel.DisplayFormat.Hex
 
         ld_gpioser = QLabel('Serial', self)
-        lb_gpioser = SiriusLabel(self, self.dev_pref+':FBE_DS1822_SERIAL')
+        lb_gpioser = PyDMLabel(self, self.dev_pref+':FBE_DS1822_SERIAL')
 
         ld_gpiotemp = QLabel('Temperature', self)
-        lb_gpiotemp = SiriusLabel(self, self.dev_pref+':FBE_TEMP')
+        lb_gpiotemp = PyDMLabel(self, self.dev_pref+':FBE_TEMP')
         lb_gpiotemp.showUnits = True
 
         gbox_thermo = QGroupBox('DS1822 ROM/Thermometer', self)
@@ -209,8 +209,7 @@ class BbBGPIOWidget(QWidget):
         cb_gpiomode = PyDMStateButton(self, self.dev_pref+':FBELT_FAN_MODE')
 
         ld_gpiofanspd = QLabel('Fan Speed', self)
-        lb_gpiofanspd = SiriusLabel(
-            self, self.dev_pref+':FBE_FANMON', keep_unit=True)
+        lb_gpiofanspd = PyDMLabel(self, self.dev_pref+':FBE_FANMON')
         lb_gpiofanspd.showUnits = True
 
         ld_gpiotempsp = QLabel('Temperature Setpoint', self)

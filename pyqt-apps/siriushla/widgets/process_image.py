@@ -10,7 +10,8 @@ from qtpy.QtWidgets import QLabel, QGridLayout, QGroupBox, QFormLayout, \
 import qtawesome as qta
 from pyqtgraph import PlotCurveItem, mkPen
 
-from pydm.widgets import PyDMImageView, PyDMEnumComboBox, PyDMPushButton
+from pydm.widgets import PyDMImageView, PyDMEnumComboBox, PyDMLabel, \
+    PyDMPushButton
 
 from siriuspy.namesys import SiriusPVName
 
@@ -105,11 +106,11 @@ class SiriusProcessImage(QWidget):
         nrpt_sp = SiriusSpinbox(
             gb_pos, init_channel=self._dev+':NrAverages-SP')
         nrpt_sp.showStepExponent = False
-        rdb = SiriusLabel(gb_pos, init_channel=self._dev+':NrAverages-RB')
+        rdb = PyDMLabel(gb_pos, init_channel=self._dev+':NrAverages-RB')
         rdb.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         slsh = QLabel('/', gb_pos, alignment=Qt.AlignCenter)
         slsh.setStyleSheet('min-width:0.7em; max-width:0.7em;')
-        cnt = SiriusLabel(gb_pos, init_channel=self._dev+':BufferSize-Mon')
+        cnt = PyDMLabel(gb_pos, init_channel=self._dev+':BufferSize-Mon')
         cnt.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         cnt.setToolTip('Current Buffer Size')
         pbt = PyDMPushButton(

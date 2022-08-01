@@ -1434,7 +1434,7 @@ class SiriusSpectrogramView(
         channels : list
             List of PyDMChannel objects
         """
-        return [ch for ch in self._channels if ch is not None]
+        return self._channels
 
     def channels_for_tools(self):
         """Return channels for tools."""

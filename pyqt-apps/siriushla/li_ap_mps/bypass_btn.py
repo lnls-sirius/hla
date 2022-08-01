@@ -1,8 +1,8 @@
 from qtpy.QtGui import QPalette, QColor
-from pydm.widgets import PyDMPushButton
+from ..widgets import SiriusPushButton
 
 
-class BypassBtn(PyDMPushButton):
+class BypassBtn(SiriusPushButton):
 
     def __init__(self, parent=None, init_channel=None):
         super().__init__(parent, init_channel=init_channel, pressValue=0)

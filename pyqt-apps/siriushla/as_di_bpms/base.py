@@ -4,12 +4,12 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QCheckBox, \
     QFormLayout, QGroupBox, QLabel
 from qtpy.QtGui import QColor
-from pydm.widgets import PyDMEnumComboBox
+from pydm.widgets import PyDMWaveformPlot, PyDMEnumComboBox
 from pydm.widgets.base import PyDMPrimitiveWidget
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.diagbeam.bpm.csdev import Const as _csbpm
 from siriushla.widgets import SiriusConnectionSignal, SiriusLabel, \
-    SiriusSpinbox, SiriusTimePlot, SiriusWaveformPlot
+    SiriusSpinbox, SiriusTimePlot
 
 _BPMDB = _csbpm.get_bpm_database()
 
@@ -104,7 +104,7 @@ def get_custom_widget_class(CLASS):
 
 
 class BaseGraph(BaseWidget):
-    CLASS = get_custom_widget_class(SiriusWaveformPlot)
+    CLASS = get_custom_widget_class(PyDMWaveformPlot)
     DATA_CLASS = np.ndarray
 
     def __init__(self, parent=None, prefix='', bpm='', data_prefix=''):
@@ -115,7 +115,6 @@ class BaseGraph(BaseWidget):
         self.setupui()
 
     def setupgraph(self, graph):
-        graph.addAxis(plot_data_item=None, name='left', orientation='left')
         graph.mouseEnabledX = True
         graph.setShowXGrid(True)
         graph.setShowYGrid(True)
@@ -125,6 +124,7 @@ class BaseGraph(BaseWidget):
         graph.setMinXRange(0.0)
         graph.setMaxXRange(1.0)
         graph.setAxisColor(QColor(0, 0, 0))
+        graph.plotItem.showButtons()
         graph.plotItem.getAxis('bottom').setStyle(tickTextOffset=15)
         graph.plotItem.getAxis('left').setStyle(
             tickTextOffset=5, autoExpandTextSpace=False, tickTextWidth=30)
