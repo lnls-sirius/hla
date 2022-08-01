@@ -278,7 +278,7 @@ class HLTriggerDetailed(BaseWidget):
 
     def _create_deltadelay(self, israw=False):
         unit = '' if israw else ' [us]'
-        PV = 'DeltaDelay' + ('Raw' if israw else '')
+        pvn = 'DeltaDelay' + ('Raw' if israw else '')
         wid_ = QWidget()
         lay = QVBoxLayout(wid_)
         sc_area = QScrollArea()
