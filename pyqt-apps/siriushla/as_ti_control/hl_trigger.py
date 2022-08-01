@@ -1,5 +1,6 @@
 """."""
 from copy import deepcopy as _dcopy
+from functools import partial as _partial
 
 import numpy as _np
 from qtpy.QtCore import Qt
@@ -25,8 +26,9 @@ from .low_level_devices import LLTriggerList, \
 
 class HLTriggerSimple(BaseWidget):
 
-    def __init__(self, parent, device='', prefix='', delay=True,
-                 duration=False, nrpulses=False, src=False):
+    def __init__(
+            self, parent, device='', prefix='', delay=True, delayraw=False,
+            duration=False, nrpulses=False, src=False):
         super().__init__(parent, device, prefix)
         flay = QFormLayout(self)
         flay.setLabelAlignment(Qt.AlignRight)
@@ -60,6 +62,13 @@ class HLTriggerSimple(BaseWidget):
             l_delay = QLabel('Delay [us]: ', self)
             l_delay.setStyleSheet("min-width:5em;")
             hlay_delay = self._create_propty_layout(propty='Delay-SP')
+            flay.addRow(l_delay, hlay_delay)
+
+        if delayraw:
+            l_delay = QLabel('DelayRaw: ', self)
+            l_delay.setStyleSheet("min-width:5em;")
+            hlay_delay = self._create_propty_layout(
+                propty='DelayRaw-SP', show_unit=False)
             flay.addRow(l_delay, hlay_delay)
 
         if duration:
@@ -138,7 +147,15 @@ class HLTriggerDetailed(BaseWidget):
         connect_window(
             but, Window, self, prefix=self.prefix,
             hltrigger=self.device.device_name, obj_names=obj_names)
-        ll_list_layout.addWidget(but, 0, 0, 1, 2)
+        lay = QHBoxLayout()
+        ll_list_layout.addLayout(lay, 0, 0, 1, 2)
+        lay.addWidget(but)
+        lay.addStretch()
+
+        pbt_bl = QPushButton('>', self)
+        pbt_bl.setToolTip('Show Delta Delay information.')
+        pbt_bl.setStyleSheet('QPushButton{max-width: 0.8em;}')
+        lay.addWidget(pbt_bl)
 
         init_channel = self.get_pvname('LowLvlLock-Sel')
         sp = PyDMStateButton(self, init_channel=init_channel)
@@ -236,7 +253,22 @@ class HLTriggerDetailed(BaseWidget):
             ll_list_layout.addWidget(tabdel, 4, 0, 1, 2)
 
         gbdelta = self._create_deltadelay()
+        gbdelta.setVisible(False)
+        pbt_bl.clicked.connect(_partial(
+            self._toggle_visibility, gbdelta, pbt_bl))
         ll_list_layout.addWidget(gbdelta, 0, 2, 5, 1)
+
+    def _toggle_visibility(self, wid, but):
+        show = wid.isHidden()
+        wid.setVisible(show)
+        text = '<' if show else '>'
+        but.setText(text)
+        tooltip = ('Hide' if show else 'Show') + but.toolTip()[4:]
+        self.sender().setToolTip(tooltip)
+        parent = but.parent()
+        while parent is not None:
+            parent.adjustSize()
+            parent = parent.parent()
 
     def _create_deltadelay(self):
         gb = QGroupBox('Delta Delay')

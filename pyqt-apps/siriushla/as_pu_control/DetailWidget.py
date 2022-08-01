@@ -94,7 +94,8 @@ class PUDetailWidget(QWidget):
         timing_box.setObjectName('timing_box')
         hbl = QHBoxLayout(timing_box)
         hbl.addWidget(HLTriggerSimple(
-            timing_box, self._trigname, self._prefix))
+            timing_box, self._trigname, self._prefix, delay=False,
+            delayraw=True, src=True))
 
         self.layout = QGridLayout(self)
         self.layout.addWidget(self.header_label, 0, 0, 1, 3)

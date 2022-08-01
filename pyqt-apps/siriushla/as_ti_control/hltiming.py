@@ -125,9 +125,10 @@ class TimingMain(SiriusMainWindow):
         props = {'name', 'ext_trig', 'mode', 'delay_type', 'delay'}
         evg_pref = LLTimeSearch.get_evg_name()
         names = list(map(
-            lambda x: evg_pref.substitute(propty=x[1]),
-            sorted(_cstime.Const.EvtLL2HLMap.items())))
-        names = [x for x in names if not x.endswith(('Dsbl', 'PsMtn'))]
+            lambda x: evg_pref.substitute(propty=x[0]),
+            sorted(
+                HLTimeSearch.get_configurable_hl_events().items(),
+                key=lambda x: x[1])))
         evts = _EventList(
             name='High Level Events', parent=self, prefix=self.prefix,
             props=props, obj_names=names)
@@ -171,7 +172,7 @@ class TimingMain(SiriusMainWindow):
 
         menu_afc = menu.addMenu('AMCs')
         for afc in LLTimeSearch.get_device_names(
-                                    filters={'dev': 'AMCFPGAEVR'}):
+                filters={'dev': 'AMCFPGAEVR'}):
             action = menu_afc.addAction(afc)
             Window = create_window_from_widget(_AFC, title=afc, icon=icon)
             connect_window(
