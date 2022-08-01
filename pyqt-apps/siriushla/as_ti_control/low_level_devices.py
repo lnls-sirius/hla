@@ -112,7 +112,7 @@ class EVG(BaseWidget):
 
         obj_names = [
             self.device.substitute(propty=dev) for dev in
-            sorted(_cstime.Const.EvtLL._fields) if 0 < int(dev[-2:]) < 64]
+            sorted(_cstime.Const.EvtLL._fields) if 0 < int(dev[3:]) < 64]
         self.events_wid = EventList(
             name='Events', parent=self, prefix=self.prefix,
             obj_names=obj_names)
