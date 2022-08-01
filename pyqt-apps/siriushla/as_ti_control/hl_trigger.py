@@ -252,11 +252,17 @@ class HLTriggerDetailed(BaseWidget):
         else:
             ll_list_layout.addWidget(tabdel, 4, 0, 1, 2)
 
-        gbdelta = self._create_deltadelay()
-        gbdelta.setVisible(False)
+        tabdelta = QTabWidget(self)
+        tabdelta.setObjectName(self.device.sec + 'Tab')
+        deltaus = self._create_deltadelay(israw=False)
+        deltaraw = self._create_deltadelay(israw=True)
+        tabdelta.addTab(deltaus, 'Delta Delay')
+        tabdelta.addTab(deltaraw, 'Delta Delay Raw')
+
+        tabdelta.setVisible(False)
         pbt_bl.clicked.connect(_partial(
-            self._toggle_visibility, gbdelta, pbt_bl))
-        ll_list_layout.addWidget(gbdelta, 0, 2, 5, 1)
+            self._toggle_visibility, tabdelta, pbt_bl))
+        ll_list_layout.addWidget(tabdelta, 0, 2, 5, 1)
 
     def _toggle_visibility(self, wid, but):
         show = wid.isHidden()
@@ -270,9 +276,11 @@ class HLTriggerDetailed(BaseWidget):
             parent.adjustSize()
             parent = parent.parent()
 
-    def _create_deltadelay(self):
-        gb = QGroupBox('Delta Delay')
-        lay = QVBoxLayout(gb)
+    def _create_deltadelay(self, israw=False):
+        unit = '' if israw else ' [us]'
+        pvn = 'DeltaDelay' + ('Raw' if israw else '')
+        wid_ = QWidget()
+        lay = QVBoxLayout(wid_)
         sc_area = QScrollArea()
         sc_area.setWidgetResizable(True)
         sc_area.setFrameShape(QFrame.NoFrame)
@@ -286,18 +294,18 @@ class HLTriggerDetailed(BaseWidget):
         lay = QGridLayout(wid)
         lay.setAlignment(Qt.AlignTop)
         lay.addWidget(QLabel('<h4>Low Level</h4>'), 0, 0, Qt.AlignCenter)
-        lay.addWidget(QLabel('<h4>SP [us]</h4>'), 0, 1, Qt.AlignCenter)
-        lay.addWidget(QLabel('<h4>RB [us]</h4>'), 0, 2, Qt.AlignCenter)
+        lay.addWidget(QLabel(f'<h4>SP{unit:s}</h4>'), 0, 1, Qt.AlignCenter)
+        lay.addWidget(QLabel(f'<h4>RB{unit:s}</h4>'), 0, 2, Qt.AlignCenter)
         ll_obj_names = HLTimeSearch.get_ll_trigger_names(
             self.device.device_name)
         for idx, obj in enumerate(ll_obj_names, 1):
             nam = QLabel(obj, wid)
             spin = _SpinBox(
-                wid, init_channel=self.get_pvname('DeltaDelay-SP'),
+                wid, init_channel=self.get_pvname(pvn+'-SP'),
                 index=idx-1)
             spin.setStyleSheet('min-width:7em;')
             lbl = _Label(
-                wid, init_channel=self.get_pvname('DeltaDelay-SP'),
+                wid, init_channel=self.get_pvname(pvn+'-RB'),
                 index=idx-1)
             lbl.setStyleSheet('min-width:6em;')
             lay.addWidget(nam, idx, 0)
@@ -305,7 +313,7 @@ class HLTriggerDetailed(BaseWidget):
             lay.addWidget(lbl, idx, 2)
         sc_area.setSizeAdjustPolicy(QScrollArea.AdjustToContentsOnFirstShow)
         sc_area.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
-        return gb
+        return wid_
 
 
 class _SpinBox(SiriusSpinbox):

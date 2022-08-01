@@ -110,8 +110,9 @@ class EVG(BaseWidget):
         splitter.setHandleWidth(20)
         mylayout.addWidget(splitter, 3, 0, 1, 2)
 
-        obj_names = [self.device.substitute(propty=dev) for dev in
-                     sorted(_cstime.Const.EvtLL._fields[1:])]
+        obj_names = [
+            self.device.substitute(propty=dev) for dev in
+            sorted(_cstime.Const.EvtLL._fields) if 0 < int(dev[3:]) < 64]
         self.events_wid = EventList(
             name='Events', parent=self, prefix=self.prefix,
             obj_names=obj_names)
@@ -123,6 +124,8 @@ class EVG(BaseWidget):
             name='Clocks', parent=self, prefix=self.prefix,
             obj_names=obj_names, has_search=True)
         splitter.addWidget(self.clocks_wid)
+
+        splitter.setSizePolicy(QSzPol.Preferred, QSzPol.MinimumExpanding)
 
     def _setupmenus(self):
         main_menu = QMenuBar()
