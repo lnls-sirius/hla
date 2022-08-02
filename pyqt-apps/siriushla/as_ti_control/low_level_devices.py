@@ -663,8 +663,6 @@ class BucketListGraph(BaseWidget):
     def _setupUi(self):
         # Graph
         self.graph = SiriusWaveformPlot(self)
-        self.graph.addAxis(
-            plot_data_item=None, name='left', orientation='left')
         self.graph.setBackgroundColor(QColor(255, 255, 255))
         self.graph.maxRedrawRate = 2
         self.graph.mouseEnabledX = True

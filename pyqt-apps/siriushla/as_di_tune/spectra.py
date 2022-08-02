@@ -26,7 +26,6 @@ class TuneSpectraView(SiriusWaveformPlot):
         self.prefix = prefix
         self.section = section
 
-        self.addAxis(plot_data_item=None, name='left', orientation='left')
         self.autoRangeX = True
         self.autoRangeY = True
         self.showXGrid = True

@@ -115,7 +115,6 @@ class BaseGraph(BaseWidget):
         self.setupui()
 
     def setupgraph(self, graph):
-        graph.addAxis(plot_data_item=None, name='left', orientation='left')
         graph.mouseEnabledX = True
         graph.setShowXGrid(True)
         graph.setShowYGrid(True)

@@ -311,7 +311,6 @@ class PSGraph(SiriusWaveformPlot):
                  symbols=list(), color='blue'):
         """Init."""
         super().__init__(parent)
-        self.addAxis(plot_data_item=None, name='left', orientation='left')
         self.setBackgroundColor(QColor(255, 255, 255))
         self.setAutoRangeX(True)
         self.setAutoRangeY(True)

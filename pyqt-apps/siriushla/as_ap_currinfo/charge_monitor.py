@@ -46,8 +46,6 @@ class BOMonitor(SiriusMainWindow):
         colors = ['blue', 'red', 'green', 'magenta']
         self.timeplot.timeSpan = timespan  # [s]
         self.timeplot.bufferSize = 2*timespan  # [2 samples/s]
-        self.timeplot.addAxis(
-            plot_data_item=None, name='left', orientation='left')
         self.timeplot.autoRangeY = True
         self.timeplot.showXGrid = True
         self.timeplot.showYGrid = True

@@ -138,8 +138,6 @@ class SIGenStatusWindow(SiriusMainWindow):
         self.tune_mon.lb_tunefracv.setStyleSheet('QLabel{font-size: 45pt;}')
 
         self.curr_graph = SiriusTimePlot(self)
-        self.curr_graph.addAxis(
-            plot_data_item=None, name='left', orientation='left')
         self.curr_graph.setObjectName('curr_graph')
         self.curr_graph.setStyleSheet(
             '#curr_graph{min-width: 20em; min-height: 14em;}')
