@@ -5,9 +5,8 @@ from qtpy.QtWidgets import QLabel, QApplication
 from qtpy.QtCore import Qt, Property, Q_ENUMS
 from pydm.utilities import units
 from pydm.widgets.display_format import DisplayFormat, parse_value_for_display
-from pydm.widgets.base import PyDMWidget, TextFormatter, str_types
+from pydm.widgets.base import PyDMWidget, TextFormatter
 from pydm.utilities import is_pydm_app, is_qt_designer
-from pydm import config
 
 from siriuspy.clientarch import Time as _Time
 
@@ -34,10 +33,6 @@ class SiriusLabel(QLabel, TextFormatter, PyDMWidget, DisplayFormat):
         """Init."""
         QLabel.__init__(self, parent, **kws)
         PyDMWidget.__init__(self, init_channel=init_channel)
-        if 'Text' not in SiriusLabel.RULE_PROPERTIES:
-            SiriusLabel.RULE_PROPERTIES = PyDMWidget.RULE_PROPERTIES.copy()
-            SiriusLabel.RULE_PROPERTIES.update(
-                {'Text': ['value_changed', str]})
         self.app = QApplication.instance()
         self.setTextFormat(Qt.PlainText)
         self.setTextInteractionFlags(Qt.NoTextInteraction)
@@ -59,7 +54,7 @@ class SiriusLabel(QLabel, TextFormatter, PyDMWidget, DisplayFormat):
         if self._display_format_type == new_type:
             return
         self._display_format_type = new_type
-        if not is_qt_designer() or config.DESIGNER_ONLINE:
+        if not is_qt_designer():
             # Trigger the update of display format
             self.value_changed(self.value)
 
@@ -115,7 +110,7 @@ class SiriusLabel(QLabel, TextFormatter, PyDMWidget, DisplayFormat):
             string_encoding=self._string_encoding, widget=self)
         # If the value is a string, just display it as-is, no formatting
         # needed.
-        if isinstance(new_value, str_types):
+        if isinstance(new_value, str):
             if self._show_units and self._unit != "":
                 new_value = "{} {}".format(new_value, self._unit)
             self.setText(new_value)
