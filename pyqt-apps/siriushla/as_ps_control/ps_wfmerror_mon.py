@@ -20,7 +20,6 @@ class Graph(SiriusWaveformPlot):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.addAxis(plot_data_item=None, name='left', orientation='left')
         self.setObjectName('graph')
         self.setStyleSheet('#graph {min-height: 15em; min-width: 25em;}')
         self.maxRedrawRate = 2

@@ -23,8 +23,6 @@ class WfmGraph(SiriusWaveformPlot):
         self.setStyleSheet(
             '#graph {min-height: 6em; min-width: 15em;}')
 
-        self.addAxis(plot_data_item=None, name='left', orientation='left')
-
         self.maxRedrawRate = 2
 
         self.autoRangeX = True
@@ -111,8 +109,6 @@ class TimeGraph(SiriusTimePlot):
         self.setObjectName('graph')
         self.setStyleSheet(
             '#graph {min-height: 6em; min-width: 8em;}')
-
-        self.addAxis(plot_data_item=None, name='left', orientation='left')
 
         self.autoRangeX = True
         self.autoRangeY = True

@@ -204,7 +204,6 @@ class GraphIvsQ(QWidget):
         self.setLayout(lay1)
 
         graph = SiriusWaveformPlot(self)
-        graph.addAxis(plot_data_item=None, name='left', orientation='left')
         graph.setObjectName('graph')
         graph.setStyleSheet('#graph {min-height: 15em; min-width: 20em;}')
         graph.maxRedrawRate = 2
@@ -281,7 +280,6 @@ class GraphAmpPha(QWidget):
         self.setLayout(lay1)
 
         graph = SiriusTimePlot(self)
-        graph.addAxis(plot_data_item=None, name='left', orientation='left')
         graph.setObjectName('graph')
         graph.setStyleSheet('#graph {min-height: 7em; min-width: 20em;}')
         graph.maxRedrawRate = 2

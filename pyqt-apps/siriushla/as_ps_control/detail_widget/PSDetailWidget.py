@@ -669,8 +669,6 @@ class PSDetailWidget(QWidget):
         self.curve_siggen.setObjectName('graph')
         self.curve_siggen.setStyleSheet(
             '#graph{max-height:15em; max-width:16.5em;}')
-        self.curve_siggen.addAxis(
-            plot_data_item=None, name='left', orientation='left')
         self.curve_siggen.setLabel('left', text='Current [A]', color='gray')
         self.curve_siggen.setLabel('bottom', text='Time [s]', color='gray')
         self.curve_siggen.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
@@ -821,7 +819,6 @@ class PSDetailWidget(QWidget):
         self.wfm = SiriusWaveformPlot()
         self.wfm.setObjectName('graph')
         self.wfm.setStyleSheet('#graph{max-height:15em; max-width:16.5em;}')
-        self.wfm.addAxis(plot_data_item=None, name='left', orientation='left')
         self.wfm.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
         self.wfm.autoRangeX = True
         self.wfm.autoRangeY = True

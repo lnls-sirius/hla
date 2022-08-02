@@ -11,7 +11,6 @@ from qtpy.QtWidgets import QFormLayout, QGridLayout, QHBoxLayout, \
     QVBoxLayout, QSizePolicy as QSzPlcy, QLabel, QPushButton,\
     QSpacerItem, QGroupBox, QWidget
 import qtawesome as qta
-from pyqtgraph import BarGraphItem
 
 from pydm.widgets import PyDMEnumComboBox, PyDMSpinbox, PyDMPushButton
 from pydm.widgets.waveformplot import WaveformCurveItem
@@ -584,8 +583,6 @@ class _ICTCalibration(QWidget):
 
     def _setupGraph(self):
         graph_rawread = _MyWaveformPlot(self)
-        graph_rawread.addAxis(
-            plot_data_item=None, name='left', orientation='left')
         graph_rawread.setObjectName('graph_rawread')
         graph_rawread.autoRangeX = True
         graph_rawread.autoRangeY = True
@@ -653,11 +650,9 @@ class _MyWaveformCurveItem(WaveformCurveItem):
 
 class _MyWaveformPlot(SiriusWaveformPlot):
 
-    def addChannel(self, y_channel=None, x_channel=None, plot_style=None,
-                   name=None, color=None, lineStyle=None, lineWidth=None,
-                   symbol=None, symbolSize=None, barWidth=None,
-                   upperThreshold=None, lowerThreshold=None,
-                   thresholdColor=None, redraw_mode=None, yAxisName=None):
+    def addChannel(self, y_channel=None, x_channel=None, name=None,
+                   color=None, lineStyle=None, lineWidth=None,
+                   symbol=None, symbolSize=None, redraw_mode=None):
         """Reimplement to use _MyWaveformCurveItem."""
         plot_opts = {}
         plot_opts['symbol'] = symbol
@@ -671,17 +666,8 @@ class _MyWaveformPlot(SiriusWaveformPlot):
             plot_opts['redraw_mode'] = redraw_mode
         self._needs_redraw = False
         curve = _MyWaveformCurveItem(
-            y_addr=y_channel, x_addr=x_channel, plot_style=plot_style,
-            name=name, color=color, yAxisName=yAxisName, **plot_opts)
+            y_addr=y_channel, x_addr=x_channel, name=name,
+            color=color, **plot_opts)
         self.channel_pairs[(y_channel, x_channel)] = curve
-        if plot_style == 'Bar':
-            if barWidth is None:
-                barWidth = 1.0
-            curve.bar_graph_item = BarGraphItem(
-                x=[], height=[], width=barWidth, brush=color)
-            curve.setBarGraphInfo(
-                barWidth, upperThreshold, lowerThreshold, thresholdColor)
-        self.addCurve(curve, curve_color=color, y_axis_name=yAxisName)
-        if curve.bar_graph_item is not None:
-            curve.getViewBox().addItem(curve.bar_graph_item)
+        self.addCurve(curve, curve_color=color)
         curve.data_changed.connect(self.set_needs_redraw)

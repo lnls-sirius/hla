@@ -288,7 +288,6 @@ class Graph(BaseObject, SiriusWaveformPlot):
         """Init."""
         BaseObject.__init__(self)
         SiriusWaveformPlot.__init__(self, parent)
-        self.addAxis(plot_data_item=None, name='left', orientation='left')
         self.setBackgroundColor(QColor(255, 255, 255))
         self.setAutoRangeX(True)
         self.setAutoRangeY(True)

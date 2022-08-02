@@ -17,7 +17,7 @@ from siriuspy.timesys import csdev as _cstime
 from ..widgets import PyDMLed, PyDMStateButton, SiriusLedState, \
     SiriusEnumComboBox, SiriusLedAlert, SiriusLabel, \
     SiriusSpinbox, SiriusConnectionSignal, SiriusWaveformTable, \
-    SiriusHexaSpinbox, SiriusWaveformPlot
+    SiriusPushButton, SiriusHexaSpinbox, SiriusWaveformPlot
 from ..widgets.windows import create_window_from_widget, SiriusDialog
 from ..util import connect_window, get_appropriate_color
 
@@ -383,10 +383,9 @@ class EVG(BaseWidget):
 
         lb = QLabel("<b>Download</b>")
         pvname = self.get_pvname('Download-Cmd')
-        sp = PyDMPushButton(
+        sp = SiriusPushButton(
             self, label='', icon=qta.icon('fa5s.download'),
             pressValue=1, releaseValue=0, init_channel=pvname)  # ?
-        sp.writeWhenRelease = True
         gb = self._create_small_group('', info_wid, (lb, sp))
         lay.addWidget(gb, 1, 0, alignment=Qt.AlignHCenter)
 
@@ -663,8 +662,6 @@ class BucketListGraph(BaseWidget):
     def _setupUi(self):
         # Graph
         self.graph = SiriusWaveformPlot(self)
-        self.graph.addAxis(
-            plot_data_item=None, name='left', orientation='left')
         self.graph.setBackgroundColor(QColor(255, 255, 255))
         self.graph.maxRedrawRate = 2
         self.graph.mouseEnabledX = True
@@ -1227,10 +1224,9 @@ class FOUT(BaseWidget):
 
         lb = QLabel("<b>Download</b>")
         pvname = self.get_pvname('Download-Cmd')
-        sp = PyDMPushButton(
+        sp = SiriusPushButton(
             self, label='', icon=qta.icon('fa5s.download'),
             pressValue=1, releaseValue=0, init_channel=pvname)  # ?
-        sp.writeWhenRelease = True
         gb = self._create_small_group('', info_wid, (lb, sp))
         info_lay.addWidget(gb, 1, 0, alignment=Qt.AlignTop)
 
@@ -1828,10 +1824,9 @@ class _EVR_EVE(BaseWidget):
 
         lb = QLabel("<b>Download</b>")
         pvname = self.get_pvname('Download-Cmd')
-        sp = PyDMPushButton(
+        sp = SiriusPushButton(
             self, label='', icon=qta.icon('fa5s.download'),
             pressValue=1, releaseValue=0, init_channel=pvname)  # ?
-        sp.writeWhenRelease = True
         gb = self._create_small_group('', info_wid, (lb, sp))
         info_lay.addWidget(gb, 0, 3, alignment=Qt.AlignTop)
 
@@ -1927,10 +1922,9 @@ class _EVR_EVE(BaseWidget):
             '', gbox_log, (ld_logrst, self.sb_logrst, self.led_logrst))
 
         ld_logpul = QLabel('<b>Pull</b>', self)
-        self.bt_logpul = PyDMPushButton(
+        self.bt_logpul = SiriusPushButton(
             parent=self, init_channel=self.get_pvname('pull'),
             pressValue=1, releaseValue=0)  # ?
-        self.bt_logpul.writeWhenRelease = True
         self.bt_logpul.setIcon(qta.icon('fa5s.arrow-down'))
         self.bt_logpul.setObjectName('bt')
         self.bt_logpul.setStyleSheet(
@@ -1994,10 +1988,9 @@ class _EVR_EVE(BaseWidget):
             '', gbox_buf, (ld_bufcnt, self.lb_bufcnt))
 
         ld_bufrst = QLabel('<b>Reset</b>', self)
-        self.bt_bufrst = PyDMPushButton(
+        self.bt_bufrst = SiriusPushButton(
             parent=self, init_channel=self.get_pvname('rstSoftBuff'),
             pressValue=1, releaseValue=0)  # ?
-        self.bt_bufrst.writeWhenRelease = True
         self.bt_bufrst.setIcon(qta.icon('fa5s.sync'))
         self.bt_bufrst.setObjectName('bt')
         self.bt_bufrst.setStyleSheet(
