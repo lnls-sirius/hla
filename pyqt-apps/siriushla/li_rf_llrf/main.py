@@ -19,6 +19,7 @@ from .details import DeviceParamSettingWindow
 from .widgets import DeltaIQPhaseCorrButton, RelativeWidget
 from .util import BASIC_INFO
 from .chart import ChartWindow
+from .motor_control import MotorControlWindow
 
 
 class DEVICES(_enum.IntEnum):
@@ -71,17 +72,12 @@ class MainWindow(QWidget):
         self.image_container.setMinimumSize(950, 0)
         return self.image_container
 
-    def getWidType(self, wid_type='label', pv_name=''):
+    def formatLabel(self, pv_name=''):
         ''' Get widget type '''
-        if wid_type == 'spinBox':
-            widget = PyDMSpinbox(init_channel=pv_name)
-            widget.setDecimals(2)
-            widget.showStepExponent = False
-        elif wid_type == 'label':
-            widget = PyDMLabel(init_channel=pv_name)
-            widget.precisionFromPV = False
-            widget.precision = 2
-            widget._display_format_type = self.displayFormat.Exponential
+        widget = PyDMLabel(init_channel=pv_name)
+        widget.precisionFromPV = False
+        widget.precision = 2
+        widget._display_format_type = self.displayFormat.Exponential
         return widget
 
     def showChartBtn(self, device, channel, chart_type):
@@ -98,7 +94,7 @@ class MainWindow(QWidget):
         bw_hlay.addWidget(
             QLabel(title), alignment=Qt.AlignCenter)
 
-        widget = self.getWidType(wid_type, pv_name)
+        widget = self.formatLabel(pv_name)
         widget.showUnits = hasUnit
         bw_hlay.addWidget(
             widget, alignment=Qt.AlignCenter)
@@ -137,9 +133,9 @@ class MainWindow(QWidget):
 
     def motorControlBtn(self, device, info):
         btn = QPushButton("Motor Control")
-        # _util.connect_window(
-        #     btn, ChartWindow,
-        #     parent=self, dev=self.dev, chart_type=device)
+        _util.connect_window(
+            btn, MotorControlWindow,
+            parent=self, motor_type=device)
         relWid = RelativeWidget(
             parent=self.image_container,
             widget=btn,

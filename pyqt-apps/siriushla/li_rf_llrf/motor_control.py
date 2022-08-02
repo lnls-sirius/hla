@@ -1,62 +1,111 @@
 """LI LLRF Motor Control Windows."""
 
 from qtpy.QtCore import Qt
-from qtpy.QtWidgets import QGridLayout, QWidget
-
-from ..widgets import SiriusMainWindow, PyDMStateButton, SiriusLedState, \
-    SiriusSpinbox, SiriusLabel
-from .widgets import DeltaIQPhaseCorrButton, GraphTime, GraphIvsQ
+from qtpy.QtWidgets import QGridLayout, QWidget, QLabel
+from pydm.widgets import PyDMSpinbox
+from ..widgets import SiriusLabel, SiriusMainWindow, PyDMLedMultiChannel, SiriusPushButton
+from .util import MOTOR_CONTROL
 
 class MotorControlWindow(SiriusMainWindow):
     """Motor Control Window."""
 
-    def __init__(self, parent=None, dev='', motor_type="SHB"):
+    def __init__(self, parent=None, motor_type="SHB"):
         """Init."""
         super().__init__(parent)
         self.prefix = 'LA-RF:LLRF:'
-        self.device = dev
-        self.channel = channel
-        self.chart_type = chart_type
-
+        self.motor_type = motor_type
         self.setObjectName('LIApp')
+        self.setWindowTitle(motor_type + ' Control')
 
-        if channel != '':
-            self.setWindowTitle(self.device + " " + self.channel + " " + chart_type + ' Chart')
+        self._setupUi()
+
+    def buildLed(self, pv_name=''):
+        config = 0
+        if "ST" in pv_name:
+            config = 1
+
+        ch2vals = {
+            pv_name: config}
+        led = PyDMLedMultiChannel(self)
+        led.set_channels2values(ch2vals)
+        return led
+
+    def ledBox(self, data=None, pos=None, basename='', lay=None):
+        for title, name in data.items():
+            lay.addWidget(
+                QLabel(title), pos[0], pos[1], 1, 1,
+                alignment=Qt.AlignCenter)
+            lay.addWidget(
+                self.buildLed(basename + name), pos[0], pos[1]+1, 1, 1,
+                alignment=Qt.AlignCenter)
+            pos[0] += 1
+        return pos
+
+    def infoBox(self, title='', pv_name='', pos=[0, 0], lay=None):
+        lay.addWidget(
+            QLabel(title), pos[0], pos[1], 1, 1,
+            alignment=Qt.AlignCenter)
+        if title == "Absolute Position":
+            widget = SiriusLabel(
+                init_channel=pv_name)
+            widget.showUnits = True
         else:
-            self.setWindowTitle(chart_type + ' Chart')
+            widget = SiriusPushButton(
+                label="Enable",
+                init_channel=pv_name,
+                pressValue=1,
+                releaseValue=0)
 
-        self._setupUi(chart_type)
+        lay.addWidget(
+            widget, pos[0], pos[1]+1, 1, 1,
+            alignment=Qt.AlignCenter)
 
-    def chartsIQAmpPha(self, lay):
-        iqtime = GraphIvsQ(self, self.device, 'Time', self.prefix, self.channel)
-        ivsq = GraphIvsQ(self, self.device, 'IvsQ', self.prefix, self.channel)
-        amp = GraphTime(self, self.device, 'Amp', self.prefix, self.channel)
-        pha = GraphTime(self, self.device, 'Pha', self.prefix, self.channel)
-        lay.addWidget(iqtime, 0, 0)
-        lay.addWidget(ivsq, 1, 0)
-        lay.addWidget(amp, 0, 1)
-        lay.addWidget(pha, 1, 1)
+    def rbvBox(self, pos=None, lay=None):
+        basename = self.prefix + "KLY1"
+        lay.addWidget(
+            QLabel("Phase"), pos[0], pos[1], 1, 2,
+            alignment=Qt.AlignCenter)
+        widget = PyDMSpinbox(
+                init_channel=basename+MOTOR_CONTROL[self.motor_type][0])
+        widget.showStepExponent = False
+        lay.addWidget(
+            widget,
+            pos[0], pos[1]+2, 1, 1,
+            alignment=Qt.AlignCenter)
+        lay.addWidget(
+            SiriusLabel(
+                init_channel=basename+MOTOR_CONTROL[self.motor_type][1]),
+            pos[0], pos[1]+3, 1, 1,
+            alignment=Qt.AlignCenter)
 
-    def chartsPulseAmpPha(self, lay):
-        amp = GraphTime(self, self.device, 'PAmp', self.prefix, self.channel)
-        pha = GraphTime(self, self.device, 'PPha', self.prefix, self.channel)
-        lay.addWidget(amp, 0, 2)
-        lay.addWidget(pha, 1, 2)
+    def basicData(self, pos=None, lay=None):
+        basename = self.prefix + self.motor_type
+        for title, data in MOTOR_CONTROL["General"].items():
+            print(pos)
+            if title in ["Status", "Limits"]:
+                lay.addWidget(
+                    QLabel(title), pos[0], pos[1], 1, 2,
+                    alignment=Qt.AlignCenter)
+                pos[0] += 1
+                pos = self.ledBox(data, pos, basename, lay)
+            else:
+                self.infoBox(title, basename+data, pos, lay)
 
-    def _setupUi(self, chart_type):
+                pos[0] += 1
+            if pos[0] >= 3:
+                pos[0] = 1
+                pos[1] += 2
+
+
+    def _setupUi(self):
         wid = QWidget(self)
         self.setCentralWidget(wid)
         lay = QGridLayout()
         wid.setLayout(lay)
 
-        if self.chart_type in ["Reference", "VM"]:
-            self.chartsIQAmpPha(lay)
-        elif self.chart_type in ["Pick-Up", "Forward"]:
-            self.chartsIQAmpPha(lay)
-            self.chartsPulseAmpPha(lay)
-        elif self.chart_type == 'Diff':
-            lay.addWidget(
-                GraphTime(self, self.device, 'Diff', self.prefix))
-        else:
-            lay.addWidget(
-                GraphTime(self, self.device, 'Raw', self.prefix))
+        pos = [0, 0]
+        if self.motor_type == 'HPPS':
+            self.rbvBox(pos, lay)
+
+        pos[0] += 1
+        self.basicData(pos, lay)

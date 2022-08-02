@@ -95,17 +95,27 @@ BASIC_INFO = {
     }
 }
 
-
-
-# Extra Windows Parameters
-# [
-#     para_kly2.edl -> PV_PREFIX=KLY2,SUB_NAME=Klystron2
-#     para_kly1.edl -> PV_PREFIX=KLY1,SUB_NAME=Klystron1
-#     para_kly0.edl -> PV_PREFIX=BUN1,SUB_NAME=Buncher
-# ]
-
-# Extra Windows Motor Control
-# [
-#     shb.edl -> BUN1_PREFIX=BUN1,SHB_PREFIX=SHB
-#     hpps.edl -> PPS_PREFIX=HPPS
-# ]
+MOTOR_CONTROL = {
+    "General": {
+        "Absolute Position": ":POS_RB",
+        "Status": {
+            "Moving": ":BUSY",
+            "Error": ":ST"
+        },
+        "Up to Limit": ":UP.PROC",
+        "Limits": {
+            "Upper": ":IS_A",
+            "Lower": ":IS_B"
+        }
+    },
+    "SHB": {
+        "PID Mode": ":SET_PID_MODE",
+        "Fw/Bw Steps": ":SET_PID_MODE",
+        "KI": ":SET_PID_KI",
+        "KP": ":SET_PID_KP"
+    },
+    "HPPS": [
+        ":GET_SHIF_MOTOR_ANGLE_CALC",
+        ":SET_SHIF_MOTOR_ANGLE"
+    ]
+}
