@@ -16,8 +16,7 @@ class DeviceParamSettingWindow(SiriusMainWindow):
         super().__init__(parent)
         self.prefix = prefix
         self.dev = device
-        self.devpref = self.prefix + ('-' if self.prefix else '') + \
-            'LA-RF:LLRF:' + self.dev.pvname
+        self.devpref = self.prefix + self.dev.pvname
 
         self.setObjectName('LIApp')
         self.setWindowTitle(self.dev.label + ' Parameter Setting')
@@ -208,10 +207,10 @@ class DeviceParamSettingWindow(SiriusMainWindow):
             lay.addWidget(spa, row, 2)
             if prop == 'CH1_PHASE_CORR':
                 dniqc = DeltaIQPhaseCorrButton(
-                    self, self.dev, prefix=self.prefix,
+                    self, self.dev.pvname, prefix=self.prefix,
                     delta=-90, show_label=False)
                 dpiqc = DeltaIQPhaseCorrButton(
-                    self, self.dev, prefix=self.prefix,
+                    self, self.dev.pvname, prefix=self.prefix,
                     delta=90, show_label=False)
                 lay.addWidget(dniqc, row, 1)
                 lay.addWidget(dpiqc, row, 3)

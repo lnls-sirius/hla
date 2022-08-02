@@ -5,6 +5,7 @@ import sys
 import argparse as _argparse
 from siriushla.sirius_application import SiriusApplication
 from siriuspy.envars import VACA_PREFIX
+from siriushla.widgets.windows import create_window_from_widget
 from siriushla.li_rf_llrf import MainWindow
 
 parser = _argparse.ArgumentParser(
@@ -15,5 +16,9 @@ parser.add_argument(
 args = parser.parse_args()
 
 app = SiriusApplication()
-app.open_window(MainWindow, parent=None, prefix=args.prefix)
+window = create_window_from_widget(
+    MainWindow, title='LI LLRF', is_main=True,
+    withscroll=True, min_width=75)
+app.open_window(
+    window, parent=None, prefix=args.prefix)
 sys.exit(app.exec_())

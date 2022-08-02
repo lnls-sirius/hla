@@ -26,8 +26,7 @@ class DeltaIQPhaseCorrButton(QPushButton):
 
         self.prefix = prefix
         self.dev = device
-        self.devpref = self.prefix + ('-' if self.prefix else '') + \
-            'LA-RF:LLRF:' + self.dev.pvname
+        self.devpref = self.prefix + self.dev
         self.delta = delta
 
         self.setToolTip(f'Do {delta:.1f}° delta')
@@ -64,15 +63,18 @@ class DeltaIQPhaseCorrButton(QPushButton):
 class GraphIvsQ(QWidget):
     """."""
 
-    def __init__(self, parent=None, dev=None, prefix=''):
+    def __init__(self, parent=None, dev=None, prop='Time', prefix='', channel='CH1'):
         """."""
         super().__init__(parent=parent)
         self.prefix = prefix
         self.dev = dev
+        self.prop = prop
+        self.channel = channel
         self._setupui()
 
     def _setupui(self):
         """."""
+        channels = {}
         lay1 = QGridLayout()
         self.setLayout(lay1)
 
@@ -87,14 +89,11 @@ class GraphIvsQ(QWidget):
         graph.setShowLegend(True)
         graph.setAutoRangeX(False)
         graph.setAutoRangeY(False)
-        graph.setMinXRange(-1.0)
-        graph.setMaxXRange(1.0)
-        graph.setMinYRange(-1.0)
-        graph.setMaxYRange(1.0)
         graph.plotItem.showButtons()
         graph.setAxisColor(QColor(0, 0, 0))
         graph.setYLabels('Q')
         graph.setXLabels('I')
+        graph.setPlotTitle("I & Q Graph")
         axx = graph.plotItem.getAxis('right')
         axx.setVisible(True)
         axx.setTicks([])
@@ -104,11 +103,33 @@ class GraphIvsQ(QWidget):
         axx.setTicks([])
         axx.setHeight(0)
 
-        basename = self.prefix + ('-' if self.prefix else '') + \
-            'LA-RF:LLRF:' + self.dev.pvname
+        basename = self.prefix + self.dev
+        if self.prop == 'IvsQ':
+            channels = {
+                'Data': {
+                    'X': basename + ':GET_'+self.channel+'_I',
+                    'Y': basename + ':GET_'+self.channel+'_Q'
+                },
+                'Setpoint': {
+                    'X': basename + ':GET_'+self.channel+'_SETTING_I',
+                    'Y': basename + ':GET_'+self.channel+'_SETTING_Q'
+                }
+            }
+        else:
+            channels = {
+                'Data': {
+                    'X': None,
+                    'Y': basename + ':WF_ADC' + self.channel[2] + '_I'
+                },
+                'Setpoint': {
+                    'X': None,
+                    'Y': basename + ':WF_ADC' + self.channel[2] + '_Q'
+                }
+            }
+
         opts = dict(
-            y_channel=basename + ':GET_CH1_Q',
-            x_channel=basename + ':GET_CH1_I',
+            y_channel=channels['Data']['Y'],
+            x_channel=channels['Data']['X'],
             name='Data',
             color='red',
             redraw_mode=2,
@@ -117,47 +138,54 @@ class GraphIvsQ(QWidget):
             symbol='o',
             symbolSize=10)
         graph.addChannel(**opts)
-        opts = dict(
-            y_channel=basename + ':GET_CH1_SETTING_Q',
-            x_channel=basename + ':GET_CH1_SETTING_I',
-            name='Setpoint',
-            color='blue',
-            redraw_mode=2,
-            lineStyle=1,
-            lineWidth=3,
-            symbol='o',
-            symbolSize=10)
-        graph.addChannel(**opts)
+
+        if ((self.prop != 'IvsQ') or (self.channel == 'CH1')):
+            opts = dict(
+                y_channel=channels['Setpoint']['Y'],
+                x_channel=channels['Setpoint']['X'],
+                name='Setpoint',
+                color='blue',
+                redraw_mode=2,
+                lineStyle=1,
+                lineWidth=3,
+                symbol='o',
+                symbolSize=10)
+            graph.addChannel(**opts)
 
         lay1.addWidget(graph, 0, 0)
 
-
-class GraphAmpPha(QWidget):
+class GraphTime(QWidget):
     """."""
 
-    def __init__(self, parent=None, dev=None, prop='Amp', prefix=''):
+    def __init__(self, parent=None, dev='', prop='Amp', prefix='', channel='CH1'):
         """."""
         super().__init__(parent=parent)
         self.prefix = prefix
         self.dev = dev
         self.prop = prop
+        self.channel = channel
         self._setupui()
 
     def _setupui(self):
         """."""
-        basename = self.prefix + ('-' if self.prefix else '') + \
-            'LA-RF:LLRF:' + self.dev.pvname
+        chartName = self.prop
+        basename = self.prefix + self.dev
         lay1 = QGridLayout()
         self.setLayout(lay1)
 
-        graph = SiriusTimePlot(self)
+        graph = PyDMWaveformPlot(self)
         graph.setObjectName('graph')
-        graph.setStyleSheet('#graph {min-height: 7em; min-width: 20em;}')
+        graph.setStyleSheet('#graph {min-height: 15em; min-width: 20em;}')
         graph.maxRedrawRate = 2
         graph.setShowXGrid(True)
         graph.setShowYGrid(True)
         graph.setBackgroundColor(QColor(_util.get_appropriate_color('LI')))
+        graph.setShowLegend(True)
+        graph.setAutoRangeX(False)
+        graph.setAutoRangeY(False)
         graph.plotItem.showButtons()
+        graph.setAxisColor(QColor(0, 0, 0))
+        graph.setXLabels(["Time"])
         axx = graph.plotItem.getAxis('right')
         axx.setVisible(True)
         axx.setTicks([])
@@ -166,27 +194,40 @@ class GraphAmpPha(QWidget):
         axx.setVisible(True)
         axx.setTicks([])
         axx.setHeight(0)
-        graph.setAxisColor(QColor(0, 0, 0))
-        graph.plotItem.setLabel('bottom', 'Time')
-        graph.setTimeSpan(360)
-        graph.setUpdateInterval(1/3)
+
         if self.prop == 'Amp':
-            graph.setLabel('left', 'Amplitude')
-            chname = basename + ':GET_CH1_AMP'
+            chartName = 'Amplitude'
+            chname = basename + ':GET_' + self.channel + '_AMP'
+        elif self.prop == 'Pha':
+            chartName = 'Phase'
+            chname = basename + ':GET_' + self.channel + '_PHASE'
+        elif self.prop == 'PAmp':
+            chartName = 'Pulse Amplitude'
+            chname = basename + ':WF_' + self.channel + 'AMP'
+        elif self.prop == 'PPha':
+            chartName = 'Pulse Phase'
+            chname = basename + ':WF_' + self.channel + 'PHASE'
+        elif self.prop == 'Diff':
+            chartName = 'Phase Diff'
+            chname = basename + ':GET_PHASE_DIFF'
         else:
-            graph.setLabel('left', 'Phase')
-            chname = basename + ':GET_CH1_PHASE'
+            chartName = 'Raw Data'
+            chname = basename + ':WF_ADC9'
+
+        graph.setPlotTitle(chartName)
+        graph.setYLabels([chartName])
 
         opts = dict(
             y_channel=chname,
-            color='black',
+            name='Data',
+            color='red',
+            redraw_mode=2,
             lineStyle=1,
             lineWidth=3,
             symbol='o',
             symbolSize=10)
-        graph.addYChannel(**opts)
+        graph.addChannel(**opts)
         lay1.addWidget(graph, 0, 0)
-
 
 class RelativeWidget(QWidget):
     ''' Widget that stays in a relative position in the window '''

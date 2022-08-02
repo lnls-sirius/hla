@@ -7,6 +7,7 @@ from qtpy.QtGui import QPixmap
 from qtpy.QtWidgets import QGroupBox, QGridLayout, QWidget, QLabel, \
     QHBoxLayout, QVBoxLayout, QPushButton, QSizePolicy, QWidget
 from pydm.widgets import PyDMLabel, PyDMSpinbox
+from pydm.widgets.display_format import DisplayFormat
 import qtawesome as _qta
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 
@@ -15,17 +16,17 @@ from ..widgets import SiriusMainWindow
 from ..widgets import SiriusSpinbox, PyDMStateButton, SiriusLedState, \
     SiriusLabel, SiriusLedAlert
 from .details import DeviceParamSettingWindow
-from .widgets import DeltaIQPhaseCorrButton, GraphAmpPha, GraphIvsQ, \
-    RelativeWidget
+from .widgets import DeltaIQPhaseCorrButton, RelativeWidget
 from .util import BASIC_INFO
+from .chart import ChartWindow
 
 
 class DEVICES(_enum.IntEnum):
     """."""
 
-    SHB = (0, 'Sub-harmonic Buncher', 'BUN1', 'SHB')
+    SHB = (2, 'Sub-harmonic Buncher', 'BUN1', 'SHB')
     Kly1 = (1, 'Klystron 1', 'KLY1', 'K1')
-    Kly2 = (2, 'Klystron 2', 'KLY2', 'K2')
+    Kly2 = (0, 'Klystron 2', 'KLY2', 'K2')
 
     def __new__(cls, value, label, pvname, nickname):
         """."""
@@ -36,13 +37,14 @@ class DEVICES(_enum.IntEnum):
         self.nickname = nickname
         return self
 
-class MainWindow(SiriusMainWindow):
+class MainWindow(QWidget):
     """."""
 
     def __init__(self, parent=None, prefix=_VACA_PREFIX):
         """."""
         super().__init__(parent=parent)
-        self.prefix = prefix
+        self.displayFormat = DisplayFormat
+        self.prefix = 'LA-RF:LLRF:'
         self.setObjectName('LIApp')
         self.setWindowTitle('LI LLRF')
         self.setWindowIcon(_qta.icon(
@@ -51,7 +53,6 @@ class MainWindow(SiriusMainWindow):
         self.pixmap = QPixmap(_os.path.join(
             _os.path.abspath(_os.path.dirname(__file__)), "llrf.png"))
         self.relativeWidgets = []
-
         self._setupui()
 
     def resizeEvent(self, event):
@@ -59,7 +60,7 @@ class MainWindow(SiriusMainWindow):
             relativeItem.relativeResize(event)
 
     def buildPvName(self, pv_name, device, prefix='', sufix=''):
-        return 'LA-RF:LLRF:' + device + ":" + prefix + pv_name + sufix
+        return self.prefix + device + ":" + prefix + pv_name + sufix
 
     def imageViewer(self):
         ''' Build the image'''
@@ -74,15 +75,20 @@ class MainWindow(SiriusMainWindow):
         ''' Get widget type '''
         if wid_type == 'spinBox':
             widget = PyDMSpinbox(init_channel=pv_name)
+            widget.setDecimals(2)
             widget.showStepExponent = False
         elif wid_type == 'label':
             widget = PyDMLabel(init_channel=pv_name)
+            widget.precisionFromPV = False
+            widget.precision = 2
+            widget._display_format_type = self.displayFormat.Exponential
         return widget
 
-    def showChartBtn(self, chart_type):
+    def showChartBtn(self, device, channel, chart_type):
         widget = QPushButton(chart_type)
-        widget.clicked.connect(
-            lambda: print(chart_type))
+        _util.connect_window(
+            widget, ChartWindow,
+            parent=self, dev=device, chart_type=chart_type, channel=channel)
         widget.setMinimumSize(20, 20)
         return widget
 
@@ -97,20 +103,17 @@ class MainWindow(SiriusMainWindow):
         bw_hlay.addWidget(
             widget, alignment=Qt.AlignCenter)
 
-        #Remove
-        bw_hlay.addWidget(
-            QLabel("um"), alignment=Qt.AlignCenter)
-
         return bw_hlay
 
     def basicInfoBox(self, device, channel, info):
         group = QGroupBox()
         bi_vlay = QVBoxLayout()
-        bi_vlay.setContentsMargins(5, 5, 5, 5)
+        bi_vlay.setContentsMargins(2, 2, 2, 2)
 
-        for type_charts in info["Chart"]:
+        for chart_type in info["Chart"]:
             bi_vlay.addWidget(
-                self.showChartBtn(type_charts),
+                self.showChartBtn(
+                    device, channel, chart_type),
                 alignment=Qt.AlignCenter)
 
         for basicInfo in ["Power", "Phase"]:
@@ -132,77 +135,62 @@ class MainWindow(SiriusMainWindow):
             relativePos=info["Position"])
         self.relativeWidgets.append(relWid)
 
+    def motorControlBtn(self, device, info):
+        btn = QPushButton("Motor Control")
+        # _util.connect_window(
+        #     btn, ChartWindow,
+        #     parent=self, dev=self.dev, chart_type=device)
+        relWid = RelativeWidget(
+            parent=self.image_container,
+            widget=btn,
+            relativePos=info["Position"])
+        self.relativeWidgets.append(relWid)
+
     def buildDevicesWidgets(self):
         for device, channel in BASIC_INFO.items():
             for pv_name, info in channel.items():
-                self.basicInfoBox(device, pv_name, info)
+                if device != "MOTOR":
+                    self.basicInfoBox(device, pv_name, info)
+                else:
+                    self.motorControlBtn(pv_name, info)
+
 
     def _setupui(self):
         """."""
-        wid = QWidget(self)
-        self.setCentralWidget(wid)
         lay1 = QGridLayout()
-        wid.setLayout(lay1)
+        self.setLayout(lay1)
 
         lay1.addWidget(self.imageViewer(), 0, 1, 3, 10)
         self.buildDevicesWidgets()
 
         for dev in DEVICES:
             devSHB = False
-            grbox = QGroupBox(dev.label, wid)
+            grbox = QGroupBox(dev.label, self)
             lay = QGridLayout()
-            lay.setContentsMargins(10, 10, 10, 10)
+            lay.setContentsMargins(0, 0, 0, 0)
             grbox.setLayout(lay)
             if(dev == DEVICES.SHB):
                 devSHB = True
             lay.addWidget(
                 ControlBox(
-                    grbox, dev, prefix=self.prefix, is_shb=devSHB), 0, 0)
-            # lay.addWidget(
-            #     GraphsWidget(
-            #         wid, dev, prefix=self.prefix), 0, 1)
+                    grbox, dev.pvname, prefix=self.prefix, is_shb=devSHB, device=dev), 0, 0)
             lay1.addWidget(grbox, dev.value, 0)
-
-
-class GraphsWidget(QWidget):
-    """."""
-
-    def __init__(self, parent=None, dev=None, prefix=_VACA_PREFIX):
-        """."""
-        super().__init__(parent=parent)
-        self.prefix = prefix
-        self.dev = dev
-        self._setupui()
-
-    def _setupui(self):
-        """."""
-        lay = QGridLayout()
-        self.setLayout(lay)
-
-        ivsq = GraphIvsQ(self, self.dev, prefix=self.prefix)
-        amp = GraphAmpPha(self, self.dev, prefix=self.prefix)
-        pha = GraphAmpPha(self, self.dev, prop='Phase', prefix=self.prefix)
-
-        lay.addWidget(ivsq, 0, 1)
-        lay.addWidget(amp, 0, 2)
-        lay.addWidget(pha, 0, 3)
-
 
 class ControlBox(QWidget):
     """."""
 
-    def __init__(self, parent=None, dev=None, prefix='', is_shb=False):
+    def __init__(self, parent=None, dev='', prefix='', is_shb=False, device=None):
         """."""
         super().__init__(parent=parent)
         self.prefix = prefix
         self.dev = dev
+        self.device = device
         self.is_shb = is_shb
         self._setupui()
 
     def _setupui(self):
         """."""
-        basename = self.prefix + ('-' if self.prefix else '') + \
-            'LA-RF:LLRF:' + self.dev.pvname
+        basename = self.prefix + self.dev
 
         lay1 = QGridLayout()
         self.setLayout(lay1)
@@ -220,7 +208,7 @@ class ControlBox(QWidget):
             "#detail{min-width:25px; max-width:25px; icon-size:20px;}")
         _util.connect_window(
             pb_param, DeviceParamSettingWindow, parent=self,
-            device=self.dev, prefix=self.prefix)
+            device=self.device, prefix=self.prefix)
         lay1.addWidget(pb_param, row, 0, alignment=Qt.AlignLeft)
 
         props = (
@@ -274,8 +262,13 @@ class ControlBox(QWidget):
             rbc = SiriusLabel(self, init_channel=rbpv)
             rbc.precisionFromPV = False
             rbc.precision = 2
+            btn = QPushButton("Chart")
+            _util.connect_window(
+                btn, ChartWindow,
+                parent=self, dev=self.dev, chart_type="Diff")
             lay1.addWidget(labc, row, 0, 1, 2)
-            lay1.addWidget(rbc, row, 2)
+            lay1.addWidget(rbc, row, 1)
+            lay1.addWidget(btn, row, 2)
             row += 1
         else:
             rbpv = basename + ':GET_INTERLOCK'
