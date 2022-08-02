@@ -13,7 +13,7 @@ from siriuspy.namesys import SiriusPVName as _PVName
 
 from ..util import connect_window, get_appropriate_color
 from ..widgets import SiriusMainWindow, SiriusLedState, SiriusSpinbox, \
-    PyDMStateButton, SiriusLabel
+    SiriusPushButton, PyDMStateButton, SiriusLabel
 from .auxiliary_dialogs import ModIntlkDetailDialog, ModEmerStopDialog
 
 
@@ -88,10 +88,9 @@ class LIModltrWindow(SiriusMainWindow):
         led_output = SiriusLedState(self, dev+':OutPut_Status')
 
         # Reset
-        pb_reset = PyDMPushButton(
+        pb_reset = SiriusPushButton(
             self, label='Reset', icon=qta.icon('fa5s.sync'),
             pressValue=1, releaseValue=0, init_channel=dev+':RESET')
-        pb_reset.writeWhenRelease = True
         pb_reset.setObjectName('reset')
         pb_reset.setStyleSheet("""
             #reset{

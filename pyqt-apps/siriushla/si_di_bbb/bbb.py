@@ -4,7 +4,7 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, \
     QGroupBox, QSpacerItem, QSizePolicy as QSzPlcy, QPushButton, QHBoxLayout
 import qtawesome as qta
-from pydm.widgets import PyDMSpinbox, PyDMEnumComboBox, PyDMPushButton
+from pydm.widgets import PyDMSpinbox, PyDMEnumComboBox
 
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 from siriuspy.namesys import SiriusPVName as _PVName
@@ -12,7 +12,7 @@ from siriuspy.namesys import SiriusPVName as _PVName
 from ..util import connect_window, connect_newprocess
 from ..widgets.windows import create_window_from_widget
 from ..widgets import SiriusMainWindow, SiriusLedAlert, PyDMStateButton, \
-    PyDMLedMultiChannel, DetachableTabWidget, SiriusLabel
+    PyDMLedMultiChannel, DetachableTabWidget, SiriusLabel, SiriusPushButton
 
 from .acquisition import BbBAcqSRAM, BbBAcqBRAM, BbBAcqSB
 from .coefficients import BbBCoefficientsWidget
@@ -272,10 +272,9 @@ class BbBStatusWidget(QWidget):
 
         ld_intvl = QLabel('Interval [s]', alignment=Qt.AlignCenter)
         lb_intvl = SiriusLabel(self, self.dev_pref+':RST_COUNT')
-        pb_intvl = PyDMPushButton(
+        pb_intvl = SiriusPushButton(
             self, init_channel=self.dev_pref+':CNTRST', pressValue=1,
             releaseValue=0)
-        pb_intvl.writeWhenRelease = True
         pb_intvl.setText('Reset')
         pb_intvl.setToolTip('Reset Counts')
         pb_intvl.setIcon(qta.icon('fa5s.sync'))

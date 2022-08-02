@@ -1,24 +1,21 @@
 
 
 from qtpy.QtWidgets import QHBoxLayout, QWidget
-from pydm.widgets import PyDMPushButton
+from siriushla.widgets import SiriusPushButton
 
 
 class RFEnblDsblButton(QWidget):
     """Button to enbl/dsbl attribute controlled by 2 PVs."""
 
     def __init__(self, parent=None, channels=dict()):
-        """Init."""
         super().__init__(parent)
-        self.pb_off = PyDMPushButton(
+        self.pb_off = SiriusPushButton(
             parent=self, label='Off', init_channel=channels['off'],
-            pressValue=1, releaseValue=0)
-        self.pb_off.writeWhenRelease = True
+            releaseValue=0)
         self.pb_off.setStyleSheet('min-width:1.4em; max-width:1.4em;')
-        self.pb_on = PyDMPushButton(
+        self.pb_on = SiriusPushButton(
             parent=self, label='On', init_channel=channels['on'],
-            pressValue=1, releaseValue=0)
-        self.pb_on.writeWhenRelease = True
+            releaseValue=0)
         self.pb_on.setStyleSheet('min-width:1.4em; max-width:1.4em;')
         lay = QHBoxLayout(self)
         lay.setContentsMargins(0, 0, 0, 0)
