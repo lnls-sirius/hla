@@ -14,8 +14,8 @@ parser.add_argument(
     choices=('function', 'sectors'))
 args = parser.parse_args()
 
-main_secs = ('InjBO', 'EjeBO', 'InjSI') if args.groups == 'function' \
-    else ('TB', 'BO', 'TS', 'SI')
+main_secs = ('InjBO', 'EjeBO', 'InjSI', 'PingSI') \
+    if args.groups == 'function' else ('TB', 'BO', 'TS', 'SI')
 
 app = SiriusApplication()
 app.open_window(

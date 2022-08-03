@@ -13,10 +13,10 @@ parser.add_argument('-dev', "--device", type=str, default='')
 args = parser.parse_args()
 
 app = SiriusApplication()
-device = args.device
-if device:
+dev = args.device
+if dev and dev != 'all':
     window = PSControlWindow
-    kwargs = dict(section='TB', device=device)
+    kwargs = dict(section='TB', device=dev)
 else:
     window = PSTabControlWindow
     kwargs = dict(section='TB')

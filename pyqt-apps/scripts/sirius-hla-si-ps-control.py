@@ -16,18 +16,18 @@ parser.add_argument('-istrim', action='store_true')
 args = parser.parse_args()
 
 app = SiriusApplication()
-device = args.device
-subsection = args.subsection
+dev = args.device
+sub = args.subsection
 istrim = args.istrim
-if device:
+if dev and dev != 'all':
     if not istrim:
         window = PSControlWindow
-        kwargs = dict(section='SI', device=device)
-        if subsection:
-            kwargs.update({'subsection': subsection})
+        kwargs = dict(section='SI', device=dev)
+        if sub:
+            kwargs.update({'subsection': sub})
     else:
         window = PSTrimWindow
-        kwargs = dict(device=device)
+        kwargs = dict(device=dev)
 else:
     window = PSTabControlWindow
     kwargs = dict(section='SI')

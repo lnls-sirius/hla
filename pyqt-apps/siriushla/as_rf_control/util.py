@@ -548,7 +548,7 @@ SEC_2_CHANNELS = {
                     'Disc 8': 'SI-02SB:RF-P7Cav:Disc8WdT-Mon',
                 },
             },
-            'Dissip. Power': {
+            'Dissip. Power (Water)': {
                 'Cells': {
                     'Cell 1': 'SI-02SB:RF-P7Cav:PwrDissCell1-Mon',
                     'Cell 2': 'SI-02SB:RF-P7Cav:PwrDissCell2-Mon',
@@ -569,7 +569,7 @@ SEC_2_CHANNELS = {
                     'Disc 8': 'SI-02SB:RF-P7Cav:PwrDissDisc8-Mon',
                 },
             },
-            'Power': {
+            'Power (Water)': {
                 'Cell 1': 'SI-02SB:RF-P7Cav:PwrWtCell1-Mon',
                 'Cell 2': 'SI-02SB:RF-P7Cav:PwrWtCell2-Mon',
                 'Cell 3': 'SI-02SB:RF-P7Cav:PwrWtCell3-Mon',

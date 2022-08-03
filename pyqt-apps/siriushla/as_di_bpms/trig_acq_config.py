@@ -1,7 +1,7 @@
 from qtpy.QtWidgets import QHBoxLayout, QGridLayout, QLabel, QGroupBox
 from qtpy.QtCore import Qt
-from pydm.widgets import PyDMLabel
 from pydm.widgets import PyDMPushButton
+from siriushla.widgets import SiriusLabel
 from siriushla.as_di_bpms.base import BaseWidget
 
 
@@ -42,7 +42,7 @@ class ACQTrigConfigs(BaseWidget):
         lab = QLabel('Status:')
         lab.setAlignment(Qt.AlignCenter)
         gdl.addWidget(lab, 2, 0)
-        lab = PyDMLabel(grpbx, init_channel=self.get_pvname('Status-Sts'))
+        lab = SiriusLabel(grpbx, init_channel=self.get_pvname('Status-Sts'))
         lab.setAlignment(Qt.AlignCenter)
         gdl.addWidget(lab, 2, 1)
         self.layoutg.addWidget(grpbx, 1, 0)

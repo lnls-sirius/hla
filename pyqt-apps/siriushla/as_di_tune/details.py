@@ -4,13 +4,13 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QLabel, QFormLayout, QHBoxLayout, QVBoxLayout, \
     QGridLayout, QGroupBox, QWidget, QSpacerItem, QSizePolicy as QSzPlcy
 import qtawesome as qta
-from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMEnumComboBox, \
+from pydm.widgets import PyDMSpinbox, PyDMEnumComboBox, \
     PyDMPushButton, PyDMLineEdit
 
 from siriuspy.namesys import SiriusPVName
 from siriushla.widgets import PyDMLedMultiChannel, SiriusMainWindow, \
     PyDMStateButton, SiriusLedState, SiriusConnectionSignal, PyDMLed, \
-    SiriusStringComboBox
+    SiriusStringComboBox, SiriusLabel
 from siriushla.as_ti_control import HLTriggerSimple
 
 
@@ -95,7 +95,7 @@ class TuneDetails(SiriusMainWindow):
                 min-height:1.29em; max-height:1.29em;
                 qproperty-alignment: "AlignVCenter | AlignHCenter";
             }
-            PyDMLabel, PyDMSpinbox, PyDMEnumComboBox,
+            SiriusLabel, PyDMSpinbox, PyDMEnumComboBox,
             PyDMStateButton{
                 min-width:6em; max-width:6em;
             }""")
@@ -157,7 +157,7 @@ class TuneDetails(SiriusMainWindow):
             # Frame Count
             lbl_acqcnt = QLabel('Frame Count', self)
             dev = self.device.substitute(dev='TuneProc')
-            self.lb_acqcnt = PyDMLabel(
+            self.lb_acqcnt = SiriusLabel(
                 self, dev.substitute(propty='FrameCount-Mon'))
             self.lb_acqcnt.setAlignment(Qt.AlignCenter)
             self.led_acqcnt = PyDMLedMultiChannel(parent=self)
@@ -172,7 +172,7 @@ class TuneDetails(SiriusMainWindow):
 
         # Nr. Samples p/ spec
         lbl_nrsmp = QLabel('Nr. Samples p/ Spec.', self)
-        self.lb_nrsmp = PyDMLabel(
+        self.lb_nrsmp = SiriusLabel(
             parent=self, init_channel=self.device.substitute(
                 dev='TuneProc', propty_name='SwePts',
                 propty_suffix='RB'))
@@ -187,7 +187,7 @@ class TuneDetails(SiriusMainWindow):
 
             # Sweep time
             lbl_swetime = QLabel('Sweep Time [ms]', self)
-            self.lb_swetime = PyDMLabel(
+            self.lb_swetime = SiriusLabel(
                 parent=self,
                 init_channel=self.device.substitute(
                     dev='TuneProc', propty_name='SweTime',
@@ -198,7 +198,7 @@ class TuneDetails(SiriusMainWindow):
         self.le_span = PyDMLineEdit(
             self, self.device.substitute(propty='Span-SP'))
         self.le_span.precisionFromPV = True
-        self.lb_span = PyDMLabel(
+        self.lb_span = SiriusLabel(
             self, self.device.substitute(propty='Span-RB'))
         hbox_span = QHBoxLayout()
         hbox_span.addWidget(self.le_span)
@@ -220,7 +220,7 @@ class TuneDetails(SiriusMainWindow):
             self.cb_rbw = SiriusStringComboBox(
                 self, self.device.substitute(propty='SpecAnaRBW-Sel'),
                 items=items)
-        self.lb_rbw = PyDMLabel(
+        self.lb_rbw = SiriusLabel(
             self, self.device.substitute(propty='SpecAnaRBW-Sts'))
         hbox_rbw = QHBoxLayout()
         hbox_rbw.addWidget(self.cb_rbw)
@@ -232,7 +232,7 @@ class TuneDetails(SiriusMainWindow):
             self, self.device.substitute(propty='RevN-SP'))
         self.sb_h.showStepExponent = False
         self.sb_h.precisionFromPV = True
-        self.lb_h = PyDMLabel(
+        self.lb_h = SiriusLabel(
             self, self.device.substitute(propty='RevN-RB'))
         hbox_h = QHBoxLayout()
         hbox_h.addWidget(self.sb_h)
@@ -240,7 +240,7 @@ class TuneDetails(SiriusMainWindow):
 
         # Harmonic Frequency
         lbl_Fh = QLabel('Harm. Freq. [kHz]', self)
-        self.lb_Fh = PyDMLabel(parent=self)
+        self.lb_Fh = SiriusLabel(parent=self)
         self.lb_Fh.setToolTip('Frf/(h*n)')
         self.lb_Fh.channel = self.device.substitute(propty='FreqRevN-Mon')
 
@@ -250,7 +250,7 @@ class TuneDetails(SiriusMainWindow):
             self, self.device.substitute(propty='FreqOff-SP'))
         self.sb_foff.showStepExponent = False
         self.sb_foff.precisionFromPV = True
-        self.lb_foff = PyDMLabel(
+        self.lb_foff = SiriusLabel(
             self, self.device.substitute(propty='FreqOff-RB'))
         hbox_foff = QHBoxLayout()
         hbox_foff.addWidget(self.sb_foff)
@@ -261,7 +261,7 @@ class TuneDetails(SiriusMainWindow):
         self.le_Fc = PyDMLineEdit(
             self, self.device.substitute(propty='CenterFreq-SP'))
         self.le_Fc.precisionFromPV = True
-        self.lb_Fc = PyDMLabel(
+        self.lb_Fc = SiriusLabel(
             self, self.device.substitute(propty='CenterFreq-RB'))
         hbox_Fc = QHBoxLayout()
         hbox_Fc.addWidget(self.le_Fc)
@@ -284,7 +284,7 @@ class TuneDetails(SiriusMainWindow):
             self, self.device.substitute(propty='AmpGain-SP'))
         self.sb_drivegain.showStepExponent = False
         self.sb_drivegain.precisionFromPV = True
-        self.lb_drivegain = PyDMLabel(
+        self.lb_drivegain = SiriusLabel(
             self, self.device.substitute(propty='AmpGain-RB'))
         hbox_drivegain = QHBoxLayout()
         hbox_drivegain.addWidget(self.sb_drivegain)
@@ -308,7 +308,7 @@ class TuneDetails(SiriusMainWindow):
                 self, self.device.substitute(propty='NoiseAmpl-SP'))
             self.sb_noiseamp.showStepExponent = False
             self.sb_noiseamp.precisionFromPV = True
-            self.lb_noiseamp = PyDMLabel(
+            self.lb_noiseamp = SiriusLabel(
                 self, self.device.substitute(propty='NoiseAmpl-RB'))
             hbox_noiseamp = QHBoxLayout()
             hbox_noiseamp.addWidget(self.sb_noiseamp)
@@ -318,7 +318,7 @@ class TuneDetails(SiriusMainWindow):
             lbl_trkgenlvl = QLabel('Trk. Gen. Power [dBm]', self)
             self.sb_trkgenlvl = PyDMLineEdit(
                 self, self.device.substitute(propty='SpecAnaTrkGenLvl-SP'))
-            self.lb_trkgenlvl = PyDMLabel(
+            self.lb_trkgenlvl = SiriusLabel(
                 self, self.device.substitute(propty='SpecAnaTrkGenLvl-RB'))
             hbox_trkgenlvl = QHBoxLayout()
             hbox_trkgenlvl.addWidget(self.sb_trkgenlvl)
@@ -393,7 +393,7 @@ class TuneDetails(SiriusMainWindow):
         lbl_mode = QLabel('Mode', self)
         self.cb_mode = PyDMEnumComboBox(
             self, dev.substitute(propty='SpecMode-Sel'))
-        self.lb_mode = PyDMLabel(
+        self.lb_mode = SiriusLabel(
             self, dev.substitute(propty='SpecMode-Sts'))
         hbox_mode = QHBoxLayout()
         hbox_mode.addWidget(self.cb_mode)
@@ -404,7 +404,7 @@ class TuneDetails(SiriusMainWindow):
         self.le_timewdw = PyDMLineEdit(
             self, dev.substitute(propty='SpecTime-SP'))
         self.le_timewdw.precisionFromPV = True
-        self.lb_timewdw = PyDMLabel(
+        self.lb_timewdw = SiriusLabel(
             self, dev.substitute(propty='SpecTime-RB'))
         hbox_timewdw = QHBoxLayout()
         hbox_timewdw.addWidget(self.le_timewdw)
@@ -423,7 +423,7 @@ class TuneDetails(SiriusMainWindow):
         self.le_roistartx = PyDMLineEdit(
             self, self.device.substitute(propty='ROIOffsetX-SP'))
         self.le_roistartx.precisionFromPV = True
-        self.lb_roistartx = PyDMLabel(
+        self.lb_roistartx = SiriusLabel(
             self, self.device.substitute(propty='ROIOffsetX-RB'))
         hbox_roistartx = QHBoxLayout()
         hbox_roistartx.addWidget(self.le_roistartx)
@@ -434,7 +434,7 @@ class TuneDetails(SiriusMainWindow):
         self.le_roiwidth = PyDMLineEdit(
             self, self.device.substitute(propty='ROIWidth-SP'))
         self.le_roiwidth.precisionFromPV = True
-        self.lb_roiwidth = PyDMLabel(
+        self.lb_roiwidth = SiriusLabel(
             self, self.device.substitute(propty='ROIWidth-RB'))
         hbox_roiwidth = QHBoxLayout()
         hbox_roiwidth.addWidget(self.le_roiwidth)
@@ -445,7 +445,7 @@ class TuneDetails(SiriusMainWindow):
         self.le_roistarty = PyDMLineEdit(
             self, self.device.substitute(propty='ROIOffsetY-SP'))
         self.le_roistarty.precisionFromPV = True
-        self.lb_roistarty = PyDMLabel(
+        self.lb_roistarty = SiriusLabel(
             self, self.device.substitute(propty='ROIOffsetY-RB'))
         hbox_roistarty = QHBoxLayout()
         hbox_roistarty.addWidget(self.le_roistarty)
@@ -456,7 +456,7 @@ class TuneDetails(SiriusMainWindow):
         self.le_roiheight = PyDMLineEdit(
             self, self.device.substitute(propty='ROIHeight-SP'))
         self.le_roiheight.precisionFromPV = True
-        self.lb_roiheight = PyDMLabel(
+        self.lb_roiheight = SiriusLabel(
             self, self.device.substitute(propty='ROIHeight-RB'))
         hbox_roiheight = QHBoxLayout()
         hbox_roiheight.addWidget(self.le_roiheight)
@@ -557,7 +557,7 @@ class SITuneMarkerDetails(SiriusMainWindow):
         label_x = QLabel(' X: ', self)
         self.sb_x = PyDMLineEdit(self, self.dev.substitute(
             propty=self.mtyp+'MarkX'+self.idx+'-SP'))
-        self.lb_x = PyDMLabel(self, self.dev.substitute(
+        self.lb_x = SiriusLabel(self, self.dev.substitute(
             propty=self.mtyp+'MarkX'+self.idx+'-RB'))
         hbox_x = QHBoxLayout()
         hbox_x.addWidget(self.sb_x)
@@ -565,12 +565,12 @@ class SITuneMarkerDetails(SiriusMainWindow):
         lay.addRow(label_x, hbox_x)
 
         label_y = QLabel(' Y: ', self)
-        self.lb_y = PyDMLabel(self, self.dev.substitute(
+        self.lb_y = SiriusLabel(self, self.dev.substitute(
             propty=self.mtyp+'MarkY'+self.idx+'-Mon'))
         hbox_y = QHBoxLayout()
         hbox_y.addWidget(self.lb_y)
         if self.mtyp == 'D':
-            self.lb_dynamicY = PyDMLabel(self, self.dev.substitute(
+            self.lb_dynamicY = SiriusLabel(self, self.dev.substitute(
                 propty='DynamicDX'+self.idx+'-Mon'))
             self.lb_dynamicY.setVisible(False)
             hbox_y.addWidget(self.lb_dynamicY)
@@ -628,7 +628,7 @@ class SITuneMarkerDetails(SiriusMainWindow):
             label_limright = QLabel('Mark Limit Right: ', self)
             self.sb_limright = PyDMLineEdit(
                 self, self.dev.substitute(propty='MarkLimitRight-SP'))
-            self.lb_limright = PyDMLabel(
+            self.lb_limright = SiriusLabel(
                 self, self.dev.substitute(propty='MarkLimitRight-RB'))
             hbox_limright = QHBoxLayout()
             hbox_limright.addWidget(self.sb_limright)
@@ -638,7 +638,7 @@ class SITuneMarkerDetails(SiriusMainWindow):
             label_limleft = QLabel('Mark Limit Left: ', self)
             self.sb_limleft = PyDMLineEdit(
                 self, self.dev.substitute(propty='MarkLimitLeft-SP'))
-            self.lb_limleft = PyDMLabel(
+            self.lb_limleft = SiriusLabel(
                 self, self.dev.substitute(propty='MarkLimitLeft-RB'))
             hbox_limleft = QHBoxLayout()
             hbox_limleft.addWidget(self.sb_limleft)
@@ -653,7 +653,7 @@ class SITuneMarkerDetails(SiriusMainWindow):
                 min-height:1.29em; max-height:1.29em;
                 qproperty-alignment: "AlignVCenter | AlignHCenter";
             }
-            PyDMLabel, PyDMSpinbox, PyDMEnumComboBox,
+            SiriusLabel, PyDMSpinbox, PyDMEnumComboBox,
             PyDMStateButton{
                 min-width:6em; max-width:6em;
             }""")

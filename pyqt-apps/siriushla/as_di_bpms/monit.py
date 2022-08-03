@@ -1,4 +1,4 @@
-from qtpy.QtWidgets import QHBoxLayout, QVBoxLayout
+from qtpy.QtWidgets import QVBoxLayout
 from siriushla.as_di_bpms.base import BaseWidget, GraphTime
 
 

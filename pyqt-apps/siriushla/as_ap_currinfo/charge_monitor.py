@@ -49,7 +49,7 @@ class BOMonitor(SiriusMainWindow):
         self.timeplot.autoRangeY = True
         self.timeplot.showXGrid = True
         self.timeplot.showYGrid = True
-        self.timeplot.setLabel('left', text='Charge', units='nC')
+        self.timeplot.setLabel('left', text='Charge', units='C', color='gray')
         self.timeplot.setObjectName('timeplot')
         self.timeplot.setStyleSheet(
             '#timeplot{min-width:28em; min-height: 18em;}')
@@ -78,7 +78,7 @@ class BOMonitor(SiriusMainWindow):
             curve = self.timeplot.curveAtIndex(-1)
             self._curves[e] = curve
             self.timeplot.fill_curve_with_archdata(
-                self._curves[e], pvname,
+                self._curves[e], pvname, factor=1e9,
                 t_init=t_init.get_iso8601(), t_end=t_end.get_iso8601())
 
             cb = QCheckBox(e)
@@ -124,7 +124,7 @@ class BOMonitor(SiriusMainWindow):
         curve = self._curves[energy]
         latest_offset = self._latest_offsets[energy]
         new_value = value - latest_offset
-        curve.receiveNewValue(new_value)
+        curve.receiveNewValue(1e-9*new_value)
         curve.redrawCurve()
         lb = self._pvs_labels[energy]
         lb.setText('{:.4e} nC'.format(new_value))
@@ -149,8 +149,8 @@ class BOMonitor(SiriusMainWindow):
     def _update_curve_and_label(self, energy, value):
         self._curves[energy].blockSignals(True)
         self._curves[energy].data_buffer[1] += \
-            self._latest_offsets[energy]
-        self._curves[energy].data_buffer[1] -= value
+            self._latest_offsets[energy]*1e-9
+        self._curves[energy].data_buffer[1] -= value*1e-9
         self._latest_offsets[energy] = value
         self._curves[energy].redrawCurve()
         self._curves[energy].blockSignals(False)

@@ -1,6 +1,7 @@
 """QDoubleScrollBar module."""
 
 import logging
+import numpy as _np
 
 from qtpy.QtWidgets import QInputDialog, QScrollBar, QMenu, QToolTip
 from qtpy.QtCore import Qt, Signal, Slot, Property, QPoint
@@ -92,13 +93,15 @@ class QDoubleScrollBar(QScrollBar):
 
     def setMinimum(self, value):
         """Set minimum value."""
+        if _np.isnan(value):
+            value = 0
         try:
             mini = round(value*self._scale)
             mini = min(mini, 2**31-1)
             mini = max(-2**31, mini)
             super().setMinimum(mini)
-        except OverflowError as e:
-            logging.warning(str(e), '(value=' + str(value) + ')')
+        except (OverflowError, ValueError) as err:
+            logging.warning(str(err), '(value=' + str(value) + ')')
 
     minimum = Property(float, getMinimum, setMinimum)
 
@@ -108,13 +111,15 @@ class QDoubleScrollBar(QScrollBar):
 
     def setMaximum(self, value):
         """Set maximum value."""
+        if _np.isnan(value):
+            value = 0
         try:
             maxi = round(value*self._scale)
             maxi = min(maxi, 2**31-1)
             maxi = max(-2**31, maxi)
             super().setMaximum(maxi)
-        except OverflowError as e:
-            logging.warning(str(e), '(value=' + str(value) + ')')
+        except (OverflowError, ValueError) as err:
+            logging.warning(str(err), '(value=' + str(value) + ')')
 
     maximum = Property(float, getMaximum, setMaximum)
 
@@ -166,8 +171,8 @@ class QDoubleScrollBar(QScrollBar):
             val = min(val, 2**31-1)
             val = max(-2**31, val)
             super().setValue(val)
-        except OverflowError as e:
-            logging.warning(str(e), '(value=' + str(value) + ')')
+        except (OverflowError, ValueError) as err:
+            logging.warning(str(err), '(value=' + str(value) + ')')
 
     value = Property(float, getValue, setValue)
 

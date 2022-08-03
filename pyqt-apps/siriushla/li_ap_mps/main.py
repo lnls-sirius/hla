@@ -3,12 +3,12 @@ from qtpy.QtCore import Qt, QEvent
 from qtpy.QtWidgets import QWidget, QGroupBox, QHBoxLayout, \
     QGridLayout, QLabel, QTabWidget, QPushButton
 import qtawesome as qta
-from pydm.widgets import PyDMLabel, PyDMSpinbox
+from pydm.widgets import PyDMSpinbox
 from .util import PV_MPS, MPS_PREFIX, CTRL_TYPE, GROUP_POS, \
     GROUP_POSALL, LBL_MPS, LBL_WATER, PV_TEMP_MPS, TEMP_TYPE, LBL_ALL
 from ..util import get_appropriate_color
-from ..widgets import PyDMLedMultiChannel,\
-     PyDMLed, SiriusPushButton
+from ..widgets import PyDMLedMultiChannel, PyDMLed, SiriusLabel, \
+    SiriusPushButton
 from .bypass_btn import BypassBtn
 
 
@@ -94,7 +94,7 @@ class MPSControl(QWidget):
             )
             widget.showStepExponent = False
         else:
-            widget = PyDMLabel(
+            widget = SiriusLabel(
                 parent=self,
                 init_channel=device_name + pv_name + temp_type
             )
@@ -186,11 +186,11 @@ class MPSControl(QWidget):
 
             pb_lay = QHBoxLayout()
             widget = SiriusPushButton(
-                        self,
-                        init_channel=device_name + pv_name,
-                        label=name,
-                        pressValue=1,
-                        releaseValue=0)
+                self,
+                init_channel=device_name + pv_name,
+                label=name,
+                pressValue=1,
+                releaseValue=0)
             widget.setStyleSheet('''
                 min-width: 3.2em; max-width: 4.2em;
                 min-height: 1.29em; max-height: 1.29em;

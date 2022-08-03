@@ -63,6 +63,9 @@ class SiriusTimePlotItem(TimePlotCurveItem):
             now = Time.now().timestamp()
             xmin = now - self.parent.timeSpan
             idcs = _np.where(self.data_buffer[0] >= xmin)[0]
+            if idcs.size and idcs[0] != 0 and \
+                    self.data_buffer[0, idcs[0]-1] != 0:
+                idcs = _np.r_[idcs[0]-1, idcs]
             x = self.data_buffer[0, idcs].astype(_np.float)
             y = self.data_buffer[1, idcs].astype(_np.float)
 
@@ -85,6 +88,7 @@ class SiriusTimePlotItem(TimePlotCurveItem):
         # resolution for the timestamp data.
         self.data_buffer = _np.zeros((2, self._bufferSize),
                                      order='f', dtype=float)
+
 
 class SiriusTimePlot(PyDMTimePlot):
     """PyDMTimePlot with some extra features."""
@@ -161,7 +165,7 @@ class SiriusTimePlot(PyDMTimePlot):
             self.vb2.addItem(plot_item)
         else:
             raise ValueError('Choose a valid axis!')
-        self.redraw_timer.start()
+
         # Connect channels
         for chan in plot_item.channels():
             if chan:
@@ -342,7 +346,6 @@ class SiriusTimePlot(PyDMTimePlot):
             font.setPointSize(font.pointSize() - 10)
             palette = QPalette()
             palette.setColor(QPalette.WindowText, curve.color)
-            palette.setColor(QPalette.Window, Qt.darkGray)
             self.label_tooltip.setText(txt)
             self.label_tooltip.setFont(font)
             self.label_tooltip.setPalette(palette)

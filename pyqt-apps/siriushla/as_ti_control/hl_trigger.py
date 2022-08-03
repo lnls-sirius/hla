@@ -1,5 +1,6 @@
 """."""
 from copy import deepcopy as _dcopy
+from functools import partial as _partial
 
 import numpy as _np
 from qtpy.QtCore import Qt
@@ -7,7 +8,6 @@ from qtpy.QtWidgets import QGroupBox, QLabel, QPushButton, QFormLayout, \
     QVBoxLayout, QGridLayout, QWidget, QDoubleSpinBox, QHBoxLayout, \
     QFrame, QScrollArea, QTabWidget
 import qtawesome as qta
-from pydm.widgets import PyDMLabel
 from pydm.widgets.base import PyDMWritableWidget
 
 from siriuspy.search import HLTimeSearch
@@ -26,8 +26,9 @@ from .low_level_devices import LLTriggerList, \
 
 class HLTriggerSimple(BaseWidget):
 
-    def __init__(self, parent, device='', prefix='', delay=True,
-                 duration=False, nrpulses=False, src=False):
+    def __init__(
+            self, parent, device='', prefix='', delay=True, delayraw=False,
+            duration=False, nrpulses=False, src=False):
         super().__init__(parent, device, prefix)
         flay = QFormLayout(self)
         flay.setLabelAlignment(Qt.AlignRight)
@@ -61,6 +62,13 @@ class HLTriggerSimple(BaseWidget):
             l_delay = QLabel('Delay [us]: ', self)
             l_delay.setStyleSheet("min-width:5em;")
             hlay_delay = self._create_propty_layout(propty='Delay-SP')
+            flay.addRow(l_delay, hlay_delay)
+
+        if delayraw:
+            l_delay = QLabel('DelayRaw: ', self)
+            l_delay.setStyleSheet("min-width:5em;")
+            hlay_delay = self._create_propty_layout(
+                propty='DelayRaw-SP', show_unit=False)
             flay.addRow(l_delay, hlay_delay)
 
         if duration:
@@ -139,7 +147,15 @@ class HLTriggerDetailed(BaseWidget):
         connect_window(
             but, Window, self, prefix=self.prefix,
             hltrigger=self.device.device_name, obj_names=obj_names)
-        ll_list_layout.addWidget(but, 0, 0, 1, 2)
+        lay = QHBoxLayout()
+        ll_list_layout.addLayout(lay, 0, 0, 1, 2)
+        lay.addWidget(but)
+        lay.addStretch()
+
+        pbt_bl = QPushButton('>', self)
+        pbt_bl.setToolTip('Show Delta Delay information.')
+        pbt_bl.setStyleSheet('QPushButton{max-width: 0.8em;}')
+        lay.addWidget(pbt_bl)
 
         init_channel = self.get_pvname('LowLvlLock-Sel')
         sp = PyDMStateButton(self, init_channel=init_channel)
@@ -159,14 +175,14 @@ class HLTriggerDetailed(BaseWidget):
         init_channel = self.get_pvname('Polarity-Sel')
         sp = SiriusEnumComboBox(self, init_channel=init_channel)
         init_channel = self.get_pvname('Polarity-Sts')
-        rb = PyDMLabel(self, init_channel=init_channel)
+        rb = SiriusLabel(self, init_channel=init_channel)
         gb = self._create_small_group('Polarity', self.ll_list_wid, (sp, rb))
         ll_list_layout.addWidget(gb, 2, 0)
 
         init_channel = self.get_pvname('Src-Sel')
         sp = SiriusEnumComboBox(self, init_channel=init_channel)
         init_channel = self.get_pvname('Src-Sts')
-        rb = PyDMLabel(self, init_channel=init_channel)
+        rb = SiriusLabel(self, init_channel=init_channel)
         gb = self._create_small_group('Source', self.ll_list_wid, (sp, rb))
         ll_list_layout.addWidget(gb, 2, 1)
 
@@ -174,7 +190,7 @@ class HLTriggerDetailed(BaseWidget):
         sp = SiriusSpinbox(self, init_channel=init_channel)
         sp.showStepExponent = False
         init_channel = self.get_pvname('NrPulses-RB')
-        rb = PyDMLabel(self, init_channel=init_channel)
+        rb = SiriusLabel(self, init_channel=init_channel)
         gb = self._create_small_group('Nr Pulses', self.ll_list_wid, (sp, rb))
         ll_list_layout.addWidget(gb, 3, 0)
 
@@ -182,7 +198,7 @@ class HLTriggerDetailed(BaseWidget):
         sp = SiriusSpinbox(self, init_channel=init_channel)
         sp.showStepExponent = False
         init_channel = self.get_pvname('Duration-RB')
-        rb = PyDMLabel(self, init_channel=init_channel)
+        rb = SiriusLabel(self, init_channel=init_channel)
         gb = self._create_small_group(
             'Duration [us]', self.ll_list_wid, (sp, rb))
         ll_list_layout.addWidget(gb, 3, 1)
@@ -191,22 +207,22 @@ class HLTriggerDetailed(BaseWidget):
         sp = SiriusSpinbox(self, init_channel=init_channel)
         sp.showStepExponent = False
         init_channel = self.get_pvname('Delay-RB')
-        rb = PyDMLabel(self, init_channel=init_channel)
+        rb = SiriusLabel(self, init_channel=init_channel)
         gbdel = self._create_small_group('[us]', self.ll_list_wid, (sp, rb))
 
         init_channel = self.get_pvname('DelayRaw-SP')
         sp = SiriusSpinbox(self, init_channel=init_channel)
         sp.showStepExponent = False
         init_channel = self.get_pvname('DelayRaw-RB')
-        rb = PyDMLabel(self, init_channel=init_channel)
+        rb = SiriusLabel(self, init_channel=init_channel)
         gbdelr = self._create_small_group('Raw', self.ll_list_wid, (sp, rb))
 
         init_channel = self.get_pvname('TotalDelay-Mon')
-        rb = PyDMLabel(self, init_channel=init_channel)
+        rb = SiriusLabel(self, init_channel=init_channel)
         gbtdel = self._create_small_group('[us]', self.ll_list_wid, (rb, ))
 
         init_channel = self.get_pvname('TotalDelayRaw-Mon')
-        rb = PyDMLabel(self, init_channel=init_channel)
+        rb = SiriusLabel(self, init_channel=init_channel)
         gbtdelr = self._create_small_group('Raw', self.ll_list_wid, (rb, ))
 
         widd = QWidget(self.ll_list_wid)
@@ -228,7 +244,7 @@ class HLTriggerDetailed(BaseWidget):
             init_channel = self.get_pvname('RFDelayType-Sel')
             sp = SiriusEnumComboBox(self, init_channel=init_channel)
             init_channel = self.get_pvname('RFDelayType-Sts')
-            rb = PyDMLabel(self, init_channel=init_channel)
+            rb = SiriusLabel(self, init_channel=init_channel)
             gb = self._create_small_group(
                 'Delay Type', self.ll_list_wid, (sp, rb))
             ll_list_layout.addWidget(gb, 4, 0)
@@ -236,12 +252,35 @@ class HLTriggerDetailed(BaseWidget):
         else:
             ll_list_layout.addWidget(tabdel, 4, 0, 1, 2)
 
-        gbdelta = self._create_deltadelay()
-        ll_list_layout.addWidget(gbdelta, 0, 2, 5, 1)
+        tabdelta = QTabWidget(self)
+        tabdelta.setObjectName(self.device.sec + 'Tab')
+        deltaus = self._create_deltadelay(israw=False)
+        deltaraw = self._create_deltadelay(israw=True)
+        tabdelta.addTab(deltaus, 'Delta Delay')
+        tabdelta.addTab(deltaraw, 'Delta Delay Raw')
 
-    def _create_deltadelay(self):
-        gb = QGroupBox('Delta Delay')
-        lay = QVBoxLayout(gb)
+        tabdelta.setVisible(False)
+        pbt_bl.clicked.connect(_partial(
+            self._toggle_visibility, tabdelta, pbt_bl))
+        ll_list_layout.addWidget(tabdelta, 0, 2, 5, 1)
+
+    def _toggle_visibility(self, wid, but):
+        show = wid.isHidden()
+        wid.setVisible(show)
+        text = '<' if show else '>'
+        but.setText(text)
+        tooltip = ('Hide' if show else 'Show') + but.toolTip()[4:]
+        self.sender().setToolTip(tooltip)
+        parent = but.parent()
+        while parent is not None:
+            parent.adjustSize()
+            parent = parent.parent()
+
+    def _create_deltadelay(self, israw=False):
+        unit = '' if israw else ' [us]'
+        pvn = 'DeltaDelay' + ('Raw' if israw else '')
+        wid_ = QWidget()
+        lay = QVBoxLayout(wid_)
         sc_area = QScrollArea()
         sc_area.setWidgetResizable(True)
         sc_area.setFrameShape(QFrame.NoFrame)
@@ -255,18 +294,18 @@ class HLTriggerDetailed(BaseWidget):
         lay = QGridLayout(wid)
         lay.setAlignment(Qt.AlignTop)
         lay.addWidget(QLabel('<h4>Low Level</h4>'), 0, 0, Qt.AlignCenter)
-        lay.addWidget(QLabel('<h4>SP [us]</h4>'), 0, 1, Qt.AlignCenter)
-        lay.addWidget(QLabel('<h4>RB [us]</h4>'), 0, 2, Qt.AlignCenter)
+        lay.addWidget(QLabel(f'<h4>SP{unit:s}</h4>'), 0, 1, Qt.AlignCenter)
+        lay.addWidget(QLabel(f'<h4>RB{unit:s}</h4>'), 0, 2, Qt.AlignCenter)
         ll_obj_names = HLTimeSearch.get_ll_trigger_names(
             self.device.device_name)
         for idx, obj in enumerate(ll_obj_names, 1):
             nam = QLabel(obj, wid)
             spin = _SpinBox(
-                wid, init_channel=self.get_pvname('DeltaDelay-SP'),
+                wid, init_channel=self.get_pvname(pvn+'-SP'),
                 index=idx-1)
             spin.setStyleSheet('min-width:7em;')
             lbl = _Label(
-                wid, init_channel=self.get_pvname('DeltaDelay-SP'),
+                wid, init_channel=self.get_pvname(pvn+'-RB'),
                 index=idx-1)
             lbl.setStyleSheet('min-width:6em;')
             lay.addWidget(nam, idx, 0)
@@ -274,7 +313,7 @@ class HLTriggerDetailed(BaseWidget):
             lay.addWidget(lbl, idx, 2)
         sc_area.setSizeAdjustPolicy(QScrollArea.AdjustToContentsOnFirstShow)
         sc_area.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
-        return gb
+        return wid_
 
 
 class _SpinBox(SiriusSpinbox):
@@ -459,47 +498,47 @@ class HLTriggerList(BaseList):
             init_channel = device.substitute(propty='Src-Sel')
             sp = SiriusEnumComboBox(self, init_channel=init_channel)
             init_channel = device.substitute(propty='Src-Sts')
-            rb = PyDMLabel(self, init_channel=init_channel)
+            rb = SiriusLabel(self, init_channel=init_channel)
         elif prop == 'pulses':
             init_channel = device.substitute(propty='NrPulses-SP')
             sp = SiriusSpinbox(self, init_channel=init_channel)
             sp.showStepExponent = False
             init_channel = device.substitute(propty='NrPulses-RB')
-            rb = PyDMLabel(self, init_channel=init_channel)
+            rb = SiriusLabel(self, init_channel=init_channel)
         elif prop == 'duration':
             init_channel = device.substitute(propty='Duration-SP')
             sp = SiriusSpinbox(self, init_channel=init_channel)
             sp.showStepExponent = False
             init_channel = device.substitute(propty='Duration-RB')
-            rb = PyDMLabel(self, init_channel=init_channel)
+            rb = SiriusLabel(self, init_channel=init_channel)
         elif prop == 'polarity':
             init_channel = device.substitute(propty='Polarity-Sel')
             sp = SiriusEnumComboBox(self, init_channel=init_channel)
             init_channel = device.substitute(propty='Polarity-Sts')
-            rb = PyDMLabel(self, init_channel=init_channel)
+            rb = SiriusLabel(self, init_channel=init_channel)
         elif prop == 'delay_type':
             init_channel = device.substitute(propty='RFDelayType-Sel')
             sp = SiriusEnumComboBox(self, init_channel=init_channel)
             init_channel = device.substitute(propty='RFDelayType-Sts')
-            rb = PyDMLabel(self, init_channel=init_channel)
+            rb = SiriusLabel(self, init_channel=init_channel)
         elif prop == 'delay':
             init_channel = device.substitute(propty='Delay-SP')
             sp = SiriusSpinbox(self, init_channel=init_channel)
             sp.showStepExponent = False
             init_channel = device.substitute(propty='Delay-RB')
-            rb = PyDMLabel(self, init_channel=init_channel)
+            rb = SiriusLabel(self, init_channel=init_channel)
         elif prop == 'delayraw':
             init_channel = device.substitute(propty='DelayRaw-SP')
             sp = SiriusSpinbox(self, init_channel=init_channel)
             sp.showStepExponent = False
             init_channel = device.substitute(propty='DelayRaw-RB')
-            rb = PyDMLabel(self, init_channel=init_channel)
+            rb = SiriusLabel(self, init_channel=init_channel)
         elif prop == 'total_delay':
             init_channel = device.substitute(propty='TotalDelay-Mon')
-            sp = PyDMLabel(self, init_channel=init_channel)
+            sp = SiriusLabel(self, init_channel=init_channel)
         elif prop == 'total_delayraw':
             init_channel = device.substitute(propty='TotalDelayRaw-Mon')
-            sp = PyDMLabel(self, init_channel=init_channel)
+            sp = SiriusLabel(self, init_channel=init_channel)
         elif prop == 'ininjtable':
             init_channel = device.substitute(propty='InInjTable-Mon')
             sp = SiriusLedState(self, init_channel=init_channel)

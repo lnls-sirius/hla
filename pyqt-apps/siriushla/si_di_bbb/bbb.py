@@ -4,7 +4,7 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, \
     QGroupBox, QSpacerItem, QSizePolicy as QSzPlcy, QPushButton, QHBoxLayout
 import qtawesome as qta
-from pydm.widgets import PyDMLabel, PyDMSpinbox, PyDMEnumComboBox
+from pydm.widgets import PyDMSpinbox, PyDMEnumComboBox
 
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 from siriuspy.namesys import SiriusPVName as _PVName
@@ -12,7 +12,7 @@ from siriuspy.namesys import SiriusPVName as _PVName
 from ..util import connect_window, connect_newprocess
 from ..widgets.windows import create_window_from_widget
 from ..widgets import SiriusMainWindow, SiriusLedAlert, PyDMStateButton, \
-    PyDMLedMultiChannel, DetachableTabWidget, SiriusPushButton
+    PyDMLedMultiChannel, DetachableTabWidget, SiriusLabel, SiriusPushButton
 
 from .acquisition import BbBAcqSRAM, BbBAcqBRAM, BbBAcqSB
 from .coefficients import BbBCoefficientsWidget
@@ -248,30 +248,30 @@ class BbBStatusWidget(QWidget):
     def _setupUi(self):
         ld_clkmis = QLabel('Clock missing', alignment=Qt.AlignCenter)
         led_clkmis = SiriusLedAlert(self, self.dev_pref+':CLKMISS')
-        lb_clkmis = PyDMLabel(self, self.dev_pref+':CLKMISS_COUNT')
+        lb_clkmis = SiriusLabel(self, self.dev_pref+':CLKMISS_COUNT')
 
         ld_pllulk = QLabel('PLL Unlocked', alignment=Qt.AlignCenter)
         led_pllulk = SiriusLedAlert(self, self.dev_pref+':PLL_UNLOCK')
-        lb_pllulk = PyDMLabel(self, self.dev_pref+':PLL_UNLOCK_COUNT')
+        lb_pllulk = SiriusLabel(self, self.dev_pref+':PLL_UNLOCK_COUNT')
 
         ld_dcmulk = QLabel('DCM unlocked', alignment=Qt.AlignCenter)
         led_dcmulk = SiriusLedAlert(self, self.dev_pref+':DCM_UNLOCK')
-        lb_dcmulk = PyDMLabel(self, self.dev_pref+':DCM_UNLOCK_COUNT')
+        lb_dcmulk = SiriusLabel(self, self.dev_pref+':DCM_UNLOCK_COUNT')
 
         ld_avcovr = QLabel('ADC Overrange', alignment=Qt.AlignCenter)
         led_avcovr = SiriusLedAlert(self, self.dev_pref+':ADC_OVR')
-        lb_avcovr = PyDMLabel(self, self.dev_pref+':ADC_OVR_COUNT')
+        lb_avcovr = SiriusLabel(self, self.dev_pref+':ADC_OVR_COUNT')
 
         ld_outsat = QLabel('Output satured', alignment=Qt.AlignCenter)
         led_outsat = SiriusLedAlert(self, self.dev_pref+':SAT')
-        lb_outsat = PyDMLabel(self, self.dev_pref+':SAT_COUNT')
+        lb_outsat = SiriusLabel(self, self.dev_pref+':SAT_COUNT')
 
         ld_fiderr = QLabel('Fiducial Error', alignment=Qt.AlignCenter)
         led_fiderr = SiriusLedAlert(self, self.dev_pref+':FID_ERR')
-        lb_fiderr = PyDMLabel(self, self.dev_pref+':FID_ERR_COUNT')
+        lb_fiderr = SiriusLabel(self, self.dev_pref+':FID_ERR_COUNT')
 
         ld_intvl = QLabel('Interval [s]', alignment=Qt.AlignCenter)
-        lb_intvl = PyDMLabel(self, self.dev_pref+':RST_COUNT')
+        lb_intvl = SiriusLabel(self, self.dev_pref+':RST_COUNT')
         pb_intvl = SiriusPushButton(
             self, init_channel=self.dev_pref+':CNTRST', pressValue=1,
             releaseValue=0)
@@ -342,25 +342,25 @@ class BbBInfoWidget(QGroupBox):
         self.setTitle('System Information')
 
         ld_rffreq = QLabel('Nominal RF Frequency', self)
-        lb_rffreq = PyDMLabel(self, self.dev_pref+':RF_FREQ')
+        lb_rffreq = SiriusLabel(self, self.dev_pref+':RF_FREQ')
         lb_rffreq.showUnits = True
 
         ld_revfrq = QLabel('Revolution Frequency', self)
-        lb_revfrq = PyDMLabel(self, self.dev_pref+':FREV')
+        lb_revfrq = SiriusLabel(self, self.dev_pref+':FREV')
         lb_revfrq.showUnits = True
 
         ld_hn = QLabel('Harmonic Number', self)
-        lb_hn = PyDMLabel(self, self.dev_pref+':HARM_NUM')
+        lb_hn = SiriusLabel(self, self.dev_pref+':HARM_NUM')
 
         ld_gtwrvw = QLabel('Gateway Revision', self)
-        lb_gtwrvw = PyDMLabel(self, self.dev_pref+':REVISION')
+        lb_gtwrvw = SiriusLabel(self, self.dev_pref+':REVISION')
 
         ld_gtwtyp = QLabel('Gateway Type', self)
-        lb_gtwtyp = PyDMLabel(self, self.dev_pref+':GW_TYPE')
-        lb_gtwtyp.displayFormat = PyDMLabel.DisplayFormat.Hex
+        lb_gtwtyp = SiriusLabel(self, self.dev_pref+':GW_TYPE')
+        lb_gtwtyp.displayFormat = SiriusLabel.DisplayFormat.Hex
 
         ld_ipaddr = QLabel('IP Address', self)
-        lb_ipaddr = PyDMLabel(self, self.dev_pref+':IP_ADDR')
+        lb_ipaddr = SiriusLabel(self, self.dev_pref+':IP_ADDR')
 
         lay = QGridLayout(self)
         lay.setVerticalSpacing(15)
@@ -378,4 +378,4 @@ class BbBInfoWidget(QGroupBox):
         lay.addWidget(lb_ipaddr, 5, 1)
 
         self.setStyleSheet(
-            "PyDMLabel{qproperty-alignment: AlignCenter;}")
+            "SiriusLabel{qproperty-alignment: AlignCenter;}")

@@ -2,8 +2,8 @@
 
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, QGroupBox, QHBoxLayout
-from pydm.widgets import PyDMSpinbox, PyDMEnumComboBox
 import qtawesome as qta
+from pydm.widgets import PyDMSpinbox, PyDMEnumComboBox
 
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 from siriuspy.namesys import SiriusPVName as _PVName

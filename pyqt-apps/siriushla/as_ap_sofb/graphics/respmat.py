@@ -2,7 +2,8 @@
 from functools import partial as _part
 
 import numpy as _np
-from pyqtgraph import functions, mkPen
+from pyqtgraph import mkPen
+# from pyqtgraph import functions
 from qtpy.QtWidgets import QWidget, QLabel, QVBoxLayout, QHBoxLayout, \
     QToolTip
 from qtpy.QtCore import Qt

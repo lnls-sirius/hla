@@ -6,9 +6,10 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGridLayout, QVBoxLayout, QHBoxLayout, QWidget, \
     QSizePolicy as QSzPlcy, QGroupBox, QLabel, QPushButton, QAction
 
-from pydm.widgets import PyDMSpinbox, PyDMLabel, PyDMPushButton
+from pydm.widgets import PyDMSpinbox, PyDMPushButton
 from siriuspy.namesys import SiriusPVName
 from siriushla import util
+from siriushla.widgets import SiriusLabel
 from siriushla.as_ap_posang import CorrParamsDetailWindow
 from siriushla.as_ap_injcontrol.base import BaseWindow
 
@@ -128,8 +129,10 @@ class InjBOControlWindow(BaseWindow):
                 self, posang_prefix.substitute(propty='DeltaPos'+axis+'-SP'))
             pos_sp.setObjectName('pos_sp_'+axis.lower())
             pos_sp.showStepExponent = False
-            pos_rb = PyDMLabel(
-                self, posang_prefix.substitute(propty='DeltaPos'+axis+'-RB'))
+            pos_rb = SiriusLabel(
+                self, posang_prefix.substitute(propty='DeltaPos'+axis+'-RB'),
+                keep_unit=True)
+            pos_rb.showUnits = True
             pos_rb.setObjectName('pos_rb_'+axis.lower())
             lb_ang = QLabel('<h4>Δ'+axis.lower()+'\'</h4>', self,
                             alignment=Qt.AlignRight)
@@ -138,8 +141,10 @@ class InjBOControlWindow(BaseWindow):
                 self, posang_prefix.substitute(propty='DeltaAng'+axis+'-SP'))
             ang_sp.setObjectName('ang_sp_'+axis.lower())
             ang_sp.showStepExponent = False
-            ang_rb = PyDMLabel(
-                self, posang_prefix.substitute(propty='DeltaAng'+axis+'-RB'))
+            ang_rb = SiriusLabel(
+                self, posang_prefix.substitute(propty='DeltaAng'+axis+'-RB'),
+                keep_unit=True)
+            ang_rb.showUnits = True
             ang_rb.setObjectName('ang_rb_'+axis.lower())
             gbox_posang = QGroupBox(title, self)
             axlay = QGridLayout(gbox_posang)
@@ -163,10 +168,10 @@ class InjBOControlWindow(BaseWindow):
         lay_posangref.addWidget(QLabel('<h4>Reference Kicks</h4>', self,
                                        alignment=Qt.AlignCenter), 0, 0, 1, 7)
         for corr in ('CH1', 'CH2', 'CV1', 'CV2'):
-            lb_corr = PyDMLabel(
+            lb_corr = SiriusLabel(
                 self, posang_prefix.substitute(propty=corr+'-Cte'))
             lb_corr.setStyleSheet('font-weight:bold;')
-            lb_refkick = PyDMLabel(
+            lb_refkick = SiriusLabel(
                 self, posang_prefix.substitute(propty='RefKick'+corr+'-Mon'))
             lb_refkick.showUnits = True
             col = 1 if 'CH' in corr else 4

@@ -6,14 +6,14 @@ from qtpy.QtWidgets import QWidget, QGridLayout, QLabel, \
 
 import qtawesome as qta
 
-from pydm.widgets import PyDMLabel
+from pydm.widgets import PyDMPushButton
 
 from siriuspy.envars import VACA_PREFIX
 from siriuspy.namesys import SiriusPVName as _PVName
 
 from ..util import connect_window, get_appropriate_color
 from ..widgets import SiriusMainWindow, SiriusLedState, SiriusSpinbox, \
-    SiriusPushButton, PyDMStateButton
+    SiriusPushButton, PyDMStateButton, SiriusLabel
 from .auxiliary_dialogs import ModIntlkDetailDialog, ModEmerStopDialog
 
 
@@ -156,7 +156,7 @@ class LIModltrWindow(SiriusMainWindow):
             '<h4>RUN_STOP</h4>', self, alignment=Qt.AlignCenter)
         led_RUN_STOP = SiriusLedState(self, dev + ':RUN_STOP')
         led_RUN_STOP.offColor = SiriusLedState.Red
-        btn_STOP = SiriusPushButton(
+        btn_STOP = PyDMPushButton(
             parent=self, init_channel=dev + ':RUN_STOP', pressValue=0,
             icon=qta.icon('mdi.power-off'))
         btn_STOP.setToolTip(
@@ -167,7 +167,7 @@ class LIModltrWindow(SiriusMainWindow):
             "<h4>After this operation the system will enter in a 1h long "
             "ramping process when turned on again.</h4>\n"
             "Are you sure you want to proceed?")
-        btn_RUN = SiriusPushButton(
+        btn_RUN = PyDMPushButton(
             parent=self, init_channel=dev + ':RUN_STOP', pressValue=1,
             icon=qta.icon('mdi.power-on'))
         btn_RUN.setToolTip('Turn On')
@@ -181,7 +181,7 @@ class LIModltrWindow(SiriusMainWindow):
             '<h4>PREHEAT</h4>', self, alignment=Qt.AlignCenter)
         led_PREHEAT = SiriusLedState(self, dev + ':PREHEAT')
         led_PREHEAT.offColor = SiriusLedState.Red
-        btn_PREHEAT_OFF = SiriusPushButton(
+        btn_PREHEAT_OFF = PyDMPushButton(
             parent=self, init_channel=dev + ':PREHEAT', pressValue=0,
             icon=qta.icon('mdi.power-off'))
         btn_PREHEAT_OFF.setToolTip(
@@ -192,7 +192,7 @@ class LIModltrWindow(SiriusMainWindow):
             "<h4>After this operation the system will enter in a 1h long "
             "ramping process when turned on again.</h4>\n"
             "Are you sure you want to proceed?")
-        btn_PREHEAT_ON = SiriusPushButton(
+        btn_PREHEAT_ON = PyDMPushButton(
             parent=self, init_channel=dev + ':PREHEAT', pressValue=1,
             icon=qta.icon('mdi.power-on'))
         btn_PREHEAT_ON.showConfirmDialog = True
@@ -240,12 +240,12 @@ class LIModltrWindow(SiriusMainWindow):
 
         sb_volt = SiriusSpinbox(self, dev+':WRITE_V')
         sb_volt.showStepExponent = False
-        lb_volt = PyDMLabel(self, dev+':READV')
+        lb_volt = SiriusLabel(self, dev+':READV')
         lb_volt.setAlignment(Qt.AlignCenter)
 
         sb_curr = SiriusSpinbox(self, dev+':WRITE_I')
         sb_curr.showStepExponent = False
-        lb_curr = PyDMLabel(self, dev+':READI')
+        lb_curr = SiriusLabel(self, dev+':READI')
         lb_curr.setAlignment(Qt.AlignCenter)
 
         wid = QFrame()
@@ -284,16 +284,16 @@ class LIModltrWindow(SiriusMainWindow):
         return wid
 
     def _setupAuxMonitorWidget(self, dev):
-        lb_klymin = PyDMLabel(self, dev+':K_W_T1')
+        lb_klymin = SiriusLabel(self, dev+':K_W_T1')
         lb_klymin.setStyleSheet(
             'QLabel{min-width: 2em; max-width: 2em;}')
-        lb_klysec = PyDMLabel(self, dev+':K_W_T2')
+        lb_klysec = SiriusLabel(self, dev+':K_W_T2')
         lb_klysec.setStyleSheet(
             'QLabel{min-width: 2em; max-width: 2em;}')
-        lb_thymin = PyDMLabel(self, dev+':TH_W_T01')
+        lb_thymin = SiriusLabel(self, dev+':TH_W_T01')
         lb_thymin.setStyleSheet(
             'QLabel{min-width: 2em; max-width: 2em;}')
-        lb_thysec = PyDMLabel(self, dev+':TH_W_T02')
+        lb_thysec = SiriusLabel(self, dev+':TH_W_T02')
         lb_thysec.setStyleSheet(
             'QLabel{min-width: 2em; max-width: 2em;}')
 

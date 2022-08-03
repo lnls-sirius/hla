@@ -4,12 +4,12 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QCheckBox, \
     QFormLayout, QGroupBox, QLabel
 from qtpy.QtGui import QColor
-from pydm.widgets import PyDMWaveformPlot, PyDMEnumComboBox
+from pydm.widgets import PyDMEnumComboBox
 from pydm.widgets.base import PyDMPrimitiveWidget
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.diagbeam.bpm.csdev import Const as _csbpm
 from siriushla.widgets import SiriusConnectionSignal, SiriusLabel, \
-    SiriusSpinbox, SiriusTimePlot
+    SiriusSpinbox, SiriusTimePlot, SiriusWaveformPlot
 
 _BPMDB = _csbpm.get_bpm_database()
 
@@ -104,7 +104,7 @@ def get_custom_widget_class(CLASS):
 
 
 class BaseGraph(BaseWidget):
-    CLASS = get_custom_widget_class(PyDMWaveformPlot)
+    CLASS = get_custom_widget_class(SiriusWaveformPlot)
     DATA_CLASS = np.ndarray
 
     def __init__(self, parent=None, prefix='', bpm='', data_prefix=''):

@@ -3,13 +3,13 @@ import qtawesome as qta
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QGridLayout, \
     QLabel, QGroupBox, QFormLayout
-from pydm.widgets import PyDMLabel, PyDMPushButton
+from pydm.widgets import PyDMPushButton
 
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriushla import util
 from siriushla.widgets import SiriusLedState, SiriusLedAlert, PyDMLed, \
-    PyDMStateButton, PyDMLinEditScrollbar
+    PyDMStateButton, PyDMSpinboxScrollbar, SiriusLabel
 from siriushla.as_ti_control.hl_trigger import HLTriggerSimple
 
 
@@ -94,7 +94,8 @@ class PUDetailWidget(QWidget):
         timing_box.setObjectName('timing_box')
         hbl = QHBoxLayout(timing_box)
         hbl.addWidget(HLTriggerSimple(
-            timing_box, self._trigname, self._prefix))
+            timing_box, self._trigname, self._prefix, delay=False,
+            delayraw=True, src=True))
 
         self.layout = QGridLayout(self)
         self.layout.addWidget(self.header_label, 0, 0, 1, 3)
@@ -115,7 +116,7 @@ class PUDetailWidget(QWidget):
 
         intlk_cnt = 8 if 'Sept' not in self._devname else 7
         for i in range(intlk_cnt):
-            label = PyDMLabel(
+            label = SiriusLabel(
                 self, getattr(self, '_intlk' + str(i+1) + '_lbcte_pv'))
             led = PyDMLed(
                 self, getattr(self, '_intlk' + str(i+1) + '_mon_pv'))
@@ -163,14 +164,14 @@ class PUDetailWidget(QWidget):
     def _voltage_layout(self):
         voltage_layout = QVBoxLayout()
 
-        self.voltage_sp_widget = PyDMLinEditScrollbar(
-            parent=self, channel=self._voltage_sp_pv)
-        self.voltage_rb_label = PyDMLabel(
-            parent=self, init_channel=self._voltage_rb_pv)
-        self.voltage_rb_label .showUnits = True
+        self.voltage_sp_widget = PyDMSpinboxScrollbar(
+            self, self._voltage_sp_pv)
+        self.voltage_rb_label = SiriusLabel(
+            self, self._voltage_rb_pv, keep_unit=True)
+        self.voltage_rb_label.showUnits = True
         self.voltage_rb_label.precisionFromPV = True
-        self.voltage_mon_label = PyDMLabel(
-            parent=self, init_channel=self._voltage_mon_pv)
+        self.voltage_mon_label = SiriusLabel(
+            self, self._voltage_mon_pv, keep_unit=True)
         self.voltage_mon_label.showUnits = True
         self.voltage_mon_label.precisionFromPV = True
 
@@ -184,14 +185,13 @@ class PUDetailWidget(QWidget):
         return voltage_layout
 
     def _kick_layout(self):
-        self.kick_sp_widget = PyDMLinEditScrollbar(
-            parent=self, channel=self._kick_sp_pv)
-        self.kick_rb_label = PyDMLabel(
-            parent=self, init_channel=self._kick_rb_pv)
+        self.kick_sp_widget = PyDMSpinboxScrollbar(self, self._kick_sp_pv)
+        self.kick_rb_label = SiriusLabel(
+            self, self._kick_rb_pv, keep_unit=True)
         self.kick_rb_label.showUnits = True
         self.kick_rb_label.precisionFromPV = True
-        self.kick_mon_label = PyDMLabel(
-            parent=self, init_channel=self._kick_mon_pv)
+        self.kick_mon_label = SiriusLabel(
+            self, self._kick_mon_pv, keep_unit=True)
         self.kick_mon_label.showUnits = True
         self.kick_mon_label.precisionFromPV = True
 
@@ -209,7 +209,7 @@ class PUDetailWidget(QWidget):
 
         self.ctrlmode_led = SiriusLedAlert(
             parent=self, init_channel=self._ctrlmode_pv)
-        self.ctrlmode_label = PyDMLabel(
+        self.ctrlmode_label = SiriusLabel(
             parent=self, init_channel=self._ctrlmode_pv)
 
         ctrlmode_layout.addStretch()
