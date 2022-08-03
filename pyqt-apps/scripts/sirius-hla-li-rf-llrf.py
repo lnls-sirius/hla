@@ -18,7 +18,7 @@ args = parser.parse_args()
 app = SiriusApplication()
 window = create_window_from_widget(
     MainWindow, title='LI LLRF', is_main=True,
-    withscroll=True, min_width=75)
+    withscroll=True, min_width=105)
 app.open_window(
     window, parent=None, prefix=args.prefix)
 sys.exit(app.exec_())
