@@ -3,11 +3,13 @@
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGridLayout, QHBoxLayout, QWidget, QLabel
 from pydm.widgets import PyDMSpinbox, PyDMLineEdit
-from ..widgets import SiriusLabel, SiriusMainWindow, PyDMLedMultiChannel, SiriusPushButton
+from ..widgets import SiriusLabel, SiriusMainWindow, \
+    PyDMLedMultiChannel, SiriusPushButton
 from .util import MOTOR_CONTROL
 
+
 class MotorControlWindow(SiriusMainWindow):
-    """Motor Control Window."""
+    """Motor Control Window of the SHB and HPPS."""
 
     def __init__(self, parent=None, motor_type="SHB"):
         """Init."""
@@ -21,6 +23,7 @@ class MotorControlWindow(SiriusMainWindow):
         self._setupUi()
 
     def buildLed(self, pv_name=''):
+        """Build a led widget"""
         config = 0
         if "ST" in pv_name:
             config = 1
@@ -31,6 +34,7 @@ class MotorControlWindow(SiriusMainWindow):
         return led
 
     def getWidget(self, wid_type='', pv_name=''):
+        """Get the selected widget"""
         if wid_type == 'led':
             widget = self.buildLed(pv_name)
         elif wid_type == 'button':
@@ -53,6 +57,7 @@ class MotorControlWindow(SiriusMainWindow):
         return widget
 
     def ledBox(self, main_title='', data=None, basename=''):
+        """Show all the leds PVs of a dict"""
         lb_glay = QGridLayout()
         pos = [0, 0]
         lb_glay.addWidget(
@@ -65,11 +70,12 @@ class MotorControlWindow(SiriusMainWindow):
                 alignment=Qt.AlignCenter)
             lb_glay.addWidget(
                 self.getWidget('led', basename + name),
-                pos[0], pos[1]+1,
+                pos[0], pos[1] + 1,
                 alignment=Qt.AlignCenter)
         return lb_glay, pos
 
     def infoBox(self, title='', pv_name=''):
+        """Show general control information (Besides the leds)"""
         ib_hlay = QHBoxLayout()
         ib_hlay.addWidget(
             QLabel(title), alignment=Qt.AlignCenter)
@@ -85,6 +91,7 @@ class MotorControlWindow(SiriusMainWindow):
         return ib_hlay
 
     def rbvBox(self):
+        """Show a RBV Widget"""
         rbv_hlay = QHBoxLayout()
         basename = self.prefix + "KLY1"
         rbv_hlay.addWidget(
@@ -95,13 +102,14 @@ class MotorControlWindow(SiriusMainWindow):
             if 'SET' in pv_name:
                 wid_type = 'spinBox'
             widget = self.getWidget(
-                wid_type, basename+pv_name)
+                wid_type, basename + pv_name)
             rbv_hlay.addWidget(
                 widget,
                 alignment=Qt.AlignCenter)
         return rbv_hlay
 
     def pidBox(self):
+        """Show the PID control widgets"""
         basename = self.prefix + "BUN1"
         pb_glay = QGridLayout()
         pos = [0, 0]
@@ -117,7 +125,7 @@ class MotorControlWindow(SiriusMainWindow):
                 wid_type = 'edit'
 
             pb_glay.addWidget(
-                self.getWidget(wid_type, basename+pv_name),
+                self.getWidget(wid_type, basename + pv_name),
                 pos[0], pos[1],
                 alignment=Qt.AlignCenter)
             pos[1] += 1
@@ -128,8 +136,9 @@ class MotorControlWindow(SiriusMainWindow):
         return pb_glay
 
     def basicData(self, pos=None, lay=None):
+        """Show all the general control information"""
         basename = self.prefix + self.motor_type
-        maxRow = pos[0] + 2
+        max_row = pos[0] + 2
         for title, data in MOTOR_CONTROL["General"].items():
             if title in ["Status", "Limits"]:
                 lb_glay, pos_temp = self.ledBox(title, data, basename)
@@ -141,17 +150,17 @@ class MotorControlWindow(SiriusMainWindow):
                     alignment=Qt.AlignTop)
             else:
                 lay.addLayout(
-                    self.infoBox(title, basename+data),
+                    self.infoBox(title, basename + data),
                     pos[0], pos[1], 1, 1,
                     alignment=Qt.AlignTop)
                 pos[0] += 1
-            if pos[0] >= maxRow:
+            if pos[0] >= max_row:
                 pos[0] = 1
                 pos[1] += 1
         return pos
 
-
     def _setupUi(self):
+        """Show the selected Control Window"""
         wid = QWidget(self)
         self.setCentralWidget(wid)
         lay = QGridLayout()

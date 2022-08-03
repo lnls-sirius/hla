@@ -5,15 +5,14 @@ import os as _os
 from qtpy.QtCore import Qt
 from qtpy.QtGui import QPixmap
 from qtpy.QtWidgets import QGroupBox, QGridLayout, QWidget, QLabel, \
-    QHBoxLayout, QVBoxLayout, QPushButton, QSizePolicy, QWidget
-from pydm.widgets import PyDMLabel, PyDMSpinbox
+    QHBoxLayout, QVBoxLayout, QPushButton, QSizePolicy
+from pydm.widgets import PyDMLabel
 from pydm.widgets.display_format import DisplayFormat
 
 import qtawesome as _qta
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 
 from .. import util as _util
-from ..widgets import SiriusMainWindow
 from ..widgets import SiriusSpinbox, PyDMStateButton, SiriusLedState, \
     SiriusLabel, SiriusLedAlert
 from .details import DeviceParamSettingWindow
@@ -39,13 +38,14 @@ class DEVICES(_enum.IntEnum):
         self.nickname = nickname
         return self
 
+
 class MainWindow(QWidget):
     """."""
 
     def __init__(self, parent=None, prefix=_VACA_PREFIX):
         """."""
         super().__init__(parent=parent)
-        self.displayFormat = DisplayFormat
+        self.display_format = DisplayFormat
         self.prefix = 'LA-RF:LLRF:'
         self.setObjectName('LIApp')
         self.setWindowTitle('LI LLRF')
@@ -54,18 +54,20 @@ class MainWindow(QWidget):
         self.image_container = QLabel()
         self.pixmap = QPixmap(_os.path.join(
             _os.path.abspath(_os.path.dirname(__file__)), "llrf.png"))
-        self.relativeWidgets = []
+        self.relative_widgets = []
         self._setupui()
 
     def resizeEvent(self, event):
-        for relativeItem in self.relativeWidgets:
-            relativeItem.relativeResize(event)
+        """Signal the resize event to the relative Widgets"""
+        for relative_item in self.relative_widgets:
+            relative_item.relativeResize(event)
 
     def buildPvName(self, pv_name, device, prefix='', sufix=''):
+        """Build the pv name"""
         return self.prefix + device + ":" + prefix + pv_name + sufix
 
     def imageViewer(self):
-        ''' Build the image'''
+        """Build the image"""
         self.image_container.setPixmap(self.pixmap)
         self.image_container.setScaledContents(True)
         self.image_container.setSizePolicy(
@@ -74,14 +76,15 @@ class MainWindow(QWidget):
         return self.image_container
 
     def formatLabel(self, pv_name=''):
-        ''' Get widget type '''
+        """Get widget type"""
         widget = PyDMLabel(init_channel=pv_name)
         widget.precisionFromPV = False
         widget.precision = 2
-        widget._display_format_type = self.displayFormat.Exponential
+        widget._display_format_type = self.display_format.Exponential
         return widget
 
     def showChartBtn(self, device, channel, chart_type):
+        """Show the Chart Button Widget"""
         widget = QPushButton(chart_type)
         _util.connect_window(
             widget, ChartWindow,
@@ -89,20 +92,28 @@ class MainWindow(QWidget):
         widget.setMinimumSize(20, 20)
         return widget
 
-    def baseWidget(self, title='', pv_name='', wid_type='label', hasUnit=False):
-        bw_hlay = QHBoxLayout()
+    def baseWidget(
+        self, title='', pv_name=''):
+            """Show the base widget"""
+            """Base Widget: 'title'  'PV information'"""
+            bw_hlay = QHBoxLayout()
+            bw_hlay.addWidget(
+                QLabel(title), alignment=Qt.AlignCenter)
 
-        bw_hlay.addWidget(
-            QLabel(title), alignment=Qt.AlignCenter)
+            widget = self.formatLabel(pv_name)
+            widget.showUnits = True
+            bw_hlay.addWidget(
+                widget, alignment=Qt.AlignCenter)
 
-        widget = self.formatLabel(pv_name)
-        widget.showUnits = hasUnit
-        bw_hlay.addWidget(
-            widget, alignment=Qt.AlignCenter)
-
-        return bw_hlay
+            return bw_hlay
 
     def basicInfoBox(self, device, channel, info):
+        """Show the basic information of an element"""
+        """
+            The basic information of and element consists of:
+            -Power and Phase information
+            -Chart buttons
+        """
         group = QGroupBox()
         bi_vlay = QVBoxLayout()
         bi_vlay.setContentsMargins(2, 2, 2, 2)
@@ -113,44 +124,46 @@ class MainWindow(QWidget):
                     device, channel, chart_type),
                 alignment=Qt.AlignCenter)
 
-        for basicInfo in ["Power", "Phase"]:
+        for basic_info in ["Power", "Phase"]:
             bi_vlay.addLayout(
                 self.baseWidget(
-                    basicInfo,
+                    basic_info,
                     self.buildPvName(
                         channel, device,
-                        "GET_", '_' + basicInfo.upper()),
-                    'label', True))
+                        "GET_", '_' + basic_info.upper())))
         group.setLayout(bi_vlay)
         group.setStyleSheet('''
             max-width: 160px; max-height: 150px;
         ''')
 
-        relWid = RelativeWidget(
+        rel_wid = RelativeWidget(
             parent=self.image_container,
             widget=group,
             relativePos=info["Position"])
-        self.relativeWidgets.append(relWid)
+        self.relative_widgets.append(rel_wid)
 
     def motorControlBtn(self, device, info):
+        """Show the motor control button"""
         btn = QPushButton("Motor Control")
         _util.connect_window(
             btn, MotorControlWindow,
             parent=self, motor_type=device)
-        relWid = RelativeWidget(
+        rel_wid = RelativeWidget(
             parent=self.image_container,
             widget=btn,
             relativePos=info["Position"])
-        self.relativeWidgets.append(relWid)
+        self.relative_widgets.append(rel_wid)
 
     def buildDevicesWidgets(self):
+        """Build and arrange the basic information
+        and control buttons on the image"""
+
         for device, channel in BASIC_INFO.items():
             for pv_name, info in channel.items():
                 if device != "MOTOR":
                     self.basicInfoBox(device, pv_name, info)
                 else:
                     self.motorControlBtn(pv_name, info)
-
 
     def _setupui(self):
         """."""
@@ -161,29 +174,33 @@ class MainWindow(QWidget):
         self.buildDevicesWidgets()
 
         for dev in DEVICES:
-            devSHB = False
+            dev_shb = False
             grbox = QGroupBox(dev.label, self)
             lay = QGridLayout()
             lay.setContentsMargins(0, 0, 0, 0)
             grbox.setLayout(lay)
-            if(dev == DEVICES.SHB):
-                devSHB = True
+            if dev == DEVICES.SHB:
+                dev_shb = True
             lay.addWidget(
                 ControlBox(
-                    grbox, dev.pvname, prefix=self.prefix, is_shb=devSHB, device=dev), 0, 0)
+                    grbox, dev.pvname, prefix=self.prefix,
+                    is_shb=dev_shb, device=dev),
+                0, 0)
             lay1.addWidget(grbox, dev.value, 0)
+
 
 class ControlBox(QWidget):
     """."""
 
-    def __init__(self, parent=None, dev='', prefix='', is_shb=False, device=None):
-        """."""
-        super().__init__(parent=parent)
-        self.prefix = prefix
-        self.dev = dev
-        self.device = device
-        self.is_shb = is_shb
-        self._setupui()
+    def __init__(
+        self, parent=None, dev='', prefix='', is_shb=False, device=None):
+            """."""
+            super().__init__(parent=parent)
+            self.prefix = prefix
+            self.dev = dev
+            self.device = device
+            self.is_shb = is_shb
+            self._setupui()
 
     def _setupui(self):
         """."""

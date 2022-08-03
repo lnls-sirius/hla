@@ -15,10 +15,11 @@ from ..widgets import SiriusTimePlot, SiriusConnectionSignal as _ConnSignal
 
 
 class DeltaIQPhaseCorrButton(QPushButton):
-
+    """."""
     def __init__(self, parent=None, device=None, prefix='', delta=0,
                  show_label=True):
-        label = str(abs(delta))+'°' if show_label else ''
+        """."""
+        label = str(abs(delta)) + '°' if show_label else ''
         icon_name = 'mdi.plus' if np.sign(delta) == 1 else 'mdi.minus'
         icon = _qta.icon(icon_name)
         super().__init__(icon, label, parent)
@@ -32,14 +33,14 @@ class DeltaIQPhaseCorrButton(QPushButton):
         self.setToolTip(f'Do {delta:.1f}° delta')
         self.setEnabled(False)
         self.ch_loop_enable = _ConnSignal(
-            self.devpref+':SET_FB_MODE')
+            self.devpref + ':SET_FB_MODE')
         self.ch_loop_enable.new_value_signal[int].connect(
             self._handle_enable_state)
         self.ch_loop_enable.connection_state_signal.connect(
             self._handle_enable_state)
 
         self.ch_iqcorr_phase_ch1 = _ConnSignal(
-            self.devpref+':SET_CH1_PHASE_CORR')
+            self.devpref + ':SET_CH1_PHASE_CORR')
 
         self.clicked.connect(self._do_delta)
 
@@ -61,16 +62,18 @@ class DeltaIQPhaseCorrButton(QPushButton):
 
 
 class GraphIvsQ(QWidget):
-    """."""
+    """Show the I&Q Chart based on IxQ or Time"""
 
-    def __init__(self, parent=None, dev=None, prop='Time', prefix='', channel='CH1'):
-        """."""
-        super().__init__(parent=parent)
-        self.prefix = prefix
-        self.dev = dev
-        self.prop = prop
-        self.channel = channel
-        self._setupui()
+    def __init__(
+        self, parent=None, dev=None,
+        prop='Time', prefix='', channel='CH1'):
+            """."""
+            super().__init__(parent=parent)
+            self.prefix = prefix
+            self.dev = dev
+            self.prop = prop
+            self.channel = channel
+            self._setupui()
 
     def _setupui(self):
         """."""
@@ -107,12 +110,12 @@ class GraphIvsQ(QWidget):
         if self.prop == 'IvsQ':
             channels = {
                 'Data': {
-                    'X': basename + ':GET_'+self.channel+'_I',
-                    'Y': basename + ':GET_'+self.channel+'_Q'
+                    'X': basename + ':GET_' + self.channel + '_I',
+                    'Y': basename + ':GET_' + self.channel + '_Q'
                 },
                 'Setpoint': {
-                    'X': basename + ':GET_'+self.channel+'_SETTING_I',
-                    'Y': basename + ':GET_'+self.channel+'_SETTING_Q'
+                    'X': basename + ':GET_' + self.channel + '_SETTING_I',
+                    'Y': basename + ':GET_' + self.channel + '_SETTING_Q'
                 }
             }
         else:
@@ -154,10 +157,13 @@ class GraphIvsQ(QWidget):
 
         lay1.addWidget(graph, 0, 0)
 
-class GraphTime(QWidget):
-    """."""
 
-    def __init__(self, parent=None, dev='', prop='Amp', prefix='', channel='CH1'):
+class GraphTime(QWidget):
+    """Show the graphs of Amplitude, Phase,
+    Pulse Amplitude, Pulse Phase, Diff and Raw Data"""
+
+    def __init__(
+        self, parent=None, dev='', prop='Amp', prefix='', channel='CH1'):
         """."""
         super().__init__(parent=parent)
         self.prefix = prefix
@@ -168,7 +174,7 @@ class GraphTime(QWidget):
 
     def _setupui(self):
         """."""
-        chartName = self.prop
+        chart_name = self.prop
         basename = self.prefix + self.dev
         lay1 = QGridLayout()
         self.setLayout(lay1)
@@ -196,26 +202,26 @@ class GraphTime(QWidget):
         axx.setHeight(0)
 
         if self.prop == 'Amp':
-            chartName = 'Amplitude'
+            chart_name = 'Amplitude'
             chname = basename + ':GET_' + self.channel + '_AMP'
         elif self.prop == 'Pha':
-            chartName = 'Phase'
+            chart_name = 'Phase'
             chname = basename + ':GET_' + self.channel + '_PHASE'
         elif self.prop == 'PAmp':
-            chartName = 'Pulse Amplitude'
+            chart_name = 'Pulse Amplitude'
             chname = basename + ':WF_' + self.channel + 'AMP'
         elif self.prop == 'PPha':
-            chartName = 'Pulse Phase'
+            chart_name = 'Pulse Phase'
             chname = basename + ':WF_' + self.channel + 'PHASE'
         elif self.prop == 'Diff':
-            chartName = 'Phase Diff'
+            chart_name = 'Phase Diff'
             chname = basename + ':GET_PHASE_DIFF'
         else:
-            chartName = 'Raw Data'
+            chart_name = 'Raw Data'
             chname = basename + ':WF_ADC9'
 
-        graph.setPlotTitle(chartName)
-        graph.setYLabels([chartName])
+        graph.setPlotTitle(chart_name)
+        graph.setYLabels([chart_name])
 
         opts = dict(
             y_channel=chname,
@@ -229,27 +235,29 @@ class GraphTime(QWidget):
         graph.addChannel(**opts)
         lay1.addWidget(graph, 0, 0)
 
+
 class RelativeWidget(QWidget):
     ''' Widget that stays in a relative position in the window '''
-    ''' Relative position and size are given in percentage based on the parent size'''
+    ''' Relative position and size are given
+    as a percentage based on the size of the parents'''
 
-    def __init__(self, parent=None, widget=None, relativePos=None):
+    def __init__(self, parent=None, widget=None, relative_pos=None):
         """."""
         super().__init__(parent=parent)
         self.parent = parent
         lay = QHBoxLayout()
         lay.addWidget(widget)
         self.setLayout(lay)
-        self.x = relativePos[0]
-        self.y = relativePos[1]
-        self.width = relativePos[2]
-        self.height = relativePos[3]
+        self.posX = relative_pos[0]
+        self.posY = relative_pos[1]
+        self.width = relative_pos[2]
+        self.height = relative_pos[3]
 
-    def relativeResize(self, event):
+    def relativeResize(self):
         ''' Resize and position in according to the relative position '''
         self.move(
-            self.parent.geometry().width()*self.x/100,
-            self.parent.geometry().height()*self.y/100)
+            self.parent.geometry().width() * self.posX / 100,
+            self.parent.geometry().height() * self.posY / 100)
         self.resize(
-            self.parent.geometry().width()*self.width/100,
-            self.parent.geometry().height()*self.height/100)
+            self.parent.geometry().width() * self.width / 100,
+            self.parent.geometry().height() * self.height / 100)
