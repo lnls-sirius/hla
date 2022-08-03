@@ -5,7 +5,7 @@ from qtpy.QtGui import QColor
 from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, QGroupBox, \
     QHBoxLayout, QSizePolicy as QSzPlcy, QSpacerItem
 import qtawesome as qta
-from pydm.widgets import PyDMLabel, PyDMLineEdit
+from pydm.widgets import PyDMLineEdit
 
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 from siriuspy.namesys import SiriusPVName as _PVName
@@ -86,8 +86,8 @@ class BbBPwrAmpsWidget(QWidget):
         si_revpwr.setStyleSheet('#revpwr{min-height:6em; min-width:8em;}')
 
         ld_id = QLabel('ID', self)
-        lb_id = PyDMLabel(self, self.dev_pref+':SERIAL_ID')
-        lb_id.displayFormat = PyDMLabel.DisplayFormat.String
+        lb_id = SiriusLabel(self, self.dev_pref+':SERIAL_ID')
+        lb_id.displayFormat = SiriusLabel.DisplayFormat.String
         hbox_id = QHBoxLayout()
         hbox_id.setContentsMargins(0, 0, 0, 0)
         hbox_id.addWidget(ld_id)
@@ -131,7 +131,7 @@ class BbBPwrAmpsWidget(QWidget):
             self, self.dev_pref+':MMGRAW_'+unit_label+'_RF')
         led_rfsts.onColor = PyDMLed.LightGreen
         led_rfsts.offColor = PyDMLed.Red
-        lb_rfsts = PyDMLabel(
+        lb_rfsts = SiriusLabel(
             self, self.dev_pref+':MMGRAW_'+unit_label+'_RF')
 
         ld_fltlac = QLabel('Fault Latch', self)
@@ -139,7 +139,7 @@ class BbBPwrAmpsWidget(QWidget):
             self, self.dev_pref+':MMGRAW_'+unit_label+'_FAULT')
         led_fltlac.onColor = PyDMLed.LightGreen
         led_fltlac.offColor = PyDMLed.Red
-        lb_fltlac = PyDMLabel(
+        lb_fltlac = SiriusLabel(
             self, self.dev_pref+':MMGRAW_'+unit_label+'_FAULT')
 
         ld_slope = QLabel('Slope', self)
@@ -214,11 +214,12 @@ class BbBPwrAmpsWidget(QWidget):
         led_fault = PyDMLed(self, self.dev_pref+':MCLRAW_'+unit_label+'_FAULT')
         led_fault.onColor = PyDMLed.LightGreen
         led_fault.offColor = PyDMLed.Red
-        lb_fault = PyDMLabel(
+        lb_fault = SiriusLabel(
             self, self.dev_pref+':MCLRAW_'+unit_label+'_FAULT')
 
         ld_temp = QLabel('Temperature', self)
-        lb_temp = PyDMLabel(self, self.dev_pref+':MCLRAW_'+unit_label+'_TEMP')
+        lb_temp = SiriusLabel(
+            self, self.dev_pref+':MCLRAW_'+unit_label+'_TEMP')
         lb_temp.showUnits = True
 
         ld_fwrloss = QLabel('Fwd Loss', self)

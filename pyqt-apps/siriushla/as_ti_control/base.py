@@ -27,7 +27,7 @@ class BaseWidget(QWidget):
         return self.device.substitute(
             prefix=self.prefix, propty=propty, field=field)
 
-    def _create_propty_layout(self, propty, width=6.0):
+    def _create_propty_layout(self, propty, width=6.0, show_unit=True):
         """Return layout that handles a property according to 'propty_type'."""
         layout = QHBoxLayout()
         not_enum = propty.endswith('-SP')
@@ -52,7 +52,7 @@ class BaseWidget(QWidget):
         label.setStyleSheet(style)
         label.setAlignment(Qt.AlignCenter)
         label.setObjectName(pv2.replace('-', ''))
-        label.showUnits = True
+        label.showUnits = show_unit
         layout.addWidget(label)
 
         layout.setAlignment(Qt.AlignVCenter)

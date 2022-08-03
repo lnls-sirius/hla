@@ -5,12 +5,13 @@ import numpy as _np
 from qtpy.QtCore import Qt, Signal
 from qtpy.QtWidgets import QWidget, QHBoxLayout, QSizePolicy, QComboBox, \
     QLabel, QVBoxLayout
-from pydm.widgets import PyDMLabel, PyDMEnumComboBox
+from pydm.widgets import PyDMEnumComboBox
 from pydm.widgets.base import PyDMPrimitiveWidget
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.sofb.csdev import SOFBFactory
 from siriuspy.clientconfigdb import ConfigDBClient
-from siriushla.widgets import SiriusSpinbox, PyDMStateButton, SiriusLedState
+from siriushla.widgets import SiriusSpinbox, PyDMStateButton, SiriusLedState,\
+    SiriusLabel
 from siriushla.as_ap_configdb import LoadConfigDialog
 
 
@@ -62,7 +63,7 @@ class BaseWidget(BaseObject, QWidget):
         lay.setContentsMargins(0, 0, 0, 0)
         pdm_spbx = SiriusSpinbox(wid, basename.substitute(propty_suffix='SP'))
         pdm_spbx.showStepExponent = False
-        pdm_lbl = PyDMLabel(wid, basename.substitute(propty_suffix='RB'))
+        pdm_lbl = SiriusLabel(wid, basename.substitute(propty_suffix='RB'))
         pdm_lbl.setAlignment(Qt.AlignCenter)
         lay.addWidget(pdm_spbx)
         lay.addWidget(pdm_lbl)
@@ -83,7 +84,7 @@ class BaseWidget(BaseObject, QWidget):
         lay.setContentsMargins(0, 0, 0, 0)
         pdm_cbbx = PyDMEnumComboBox(
             wid, basename.substitute(propty_suffix='Sel'))
-        pdm_lbl = PyDMLabel(wid, basename.substitute(propty_suffix='Sts'))
+        pdm_lbl = SiriusLabel(wid, basename.substitute(propty_suffix='Sts'))
         pdm_lbl.setAlignment(Qt.AlignCenter)
         lay.addWidget(pdm_cbbx)
         lay.addWidget(pdm_lbl)

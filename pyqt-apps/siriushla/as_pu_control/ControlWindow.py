@@ -83,9 +83,11 @@ class PUControlWindow(SiriusMainWindow):
         elif sec == 'InjSI':
             devices = PSSearch.get_psnames(
                 {'sec': '(TS|SI)', 'dis': 'PU', 'dev': 'Inj'})
-        elif sec == 'Ping':
+        elif sec == 'PingSI':
             devices = PSSearch.get_psnames(
                 {'sec': 'SI', 'dis': 'PU', 'dev': 'Ping'})
+        else:
+            raise ValueError(f'devices not defined for section {sec}.')
 
         visible_props = sort_propties(
             ['detail', 'state', 'reset', 'intlk', 'setpoint', 'monitor',
@@ -127,7 +129,7 @@ class PUControlWindow(SiriusMainWindow):
         self.reset_act.triggered.connect(self._reset_interlocks)
 
         self.set_voltage = QAction("Set Voltage to 0.0", wid)
-        self.set_voltage.triggered.connect(self._set_voltage)
+        self.set_voltage.triggered.connect(self._set_voltage_zero)
 
     # # Overloaded method
     def contextMenuEvent(self, event):
@@ -165,7 +167,7 @@ class PUControlWindow(SiriusMainWindow):
 
     @Slot(bool)
     def _set_pulse(self, state):
-        """Execute turn on/off actions."""
+        """Execute turn pulse on/off actions."""
         for widget in self.pu_widgets_dict.values():
             try:
                 if state:
@@ -185,12 +187,13 @@ class PUControlWindow(SiriusMainWindow):
                 pass
 
     @Slot()
-    def _set_voltage(self):
-        """Reset interlocks."""
+    def _set_voltage_zero(self):
+        """Set voltage to zero."""
         for widget in self.pu_widgets_dict.values():
             try:
-                widget.setpoint.sp_lineedit.setText('0.0')
-                widget.setpoint.sp_lineedit.send_value()
+                sp = widget.setpoint.spinbox
+                sp.value_changed(0.0)
+                sp.send_value()
             except TypeError:
                 pass
 

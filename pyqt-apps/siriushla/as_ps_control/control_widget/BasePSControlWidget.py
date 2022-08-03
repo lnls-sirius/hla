@@ -180,12 +180,11 @@ class PSContainer(QWidget):
         """Set current setpoint for every visible widget."""
         dlg = QInputDialog(self)
         dlg.setLocale(QLocale(QLocale.English))
-        new_value, ok = dlg.getDouble(
-            self, "New setpoint", "Value")
+        new_value, ok = dlg.getDouble(self, "New setpoint", "Value")
         if ok:
             for dclink in self.dclink_widgets:
-                sp = dclink.setpoint.sp_lineedit
-                sp.setText(str(new_value))
+                sp = dclink.setpoint.spinbox
+                sp.value_changed(new_value)
                 try:
                     sp.send_value()
                 except TypeError:
@@ -199,6 +198,8 @@ class PSContainer(QWidget):
     def contextMenuEvent(self, event):
         """Overload to create a custom context menu."""
         widget = self.childAt(event.pos())
+        if not widget:
+            return
         parent = widget.parent()
         grand_parent = parent.parent()
         if widget.objectName() == 'DCLinkContainer' or \
@@ -498,6 +499,14 @@ class BasePSControlWidget(QWidget):
         self.updparms_act = QAction("Update Parameters", self)
         self.updparms_act.triggered.connect(self._update_params)
         self.updparms_act.setEnabled(False)
+        self.sofbmode_on_act = QAction("Set SOFBMode On", self)
+        self.sofbmode_on_act.triggered.connect(
+            lambda: self._set_sofbmode(True))
+        self.sofbmode_on_act.setEnabled(False)
+        self.sofbmode_off_act = QAction("Set SOFBMode Off", self)
+        self.sofbmode_off_act.triggered.connect(
+            lambda: self._set_sofbmode(False))
+        self.sofbmode_off_act.setEnabled(False)
 
     def _enable_actions(self):
         if 'state' in self.visible_props and \
@@ -524,6 +533,10 @@ class BasePSControlWidget(QWidget):
         if 'updparms' in self.visible_props and \
                 not self.updparms_act.isEnabled():
             self.updparms_act.setEnabled(True)
+        if 'sofbmode' in self.visible_props and \
+                not self.sofbmode_on_act.isEnabled():
+            self.sofbmode_on_act.setEnabled(True)
+            self.sofbmode_off_act.setEnabled(True)
 
     @Slot(bool)
     def _set_pwrstate(self, state):
@@ -566,13 +579,12 @@ class BasePSControlWidget(QWidget):
         """Set current setpoint for every visible widget."""
         dlg = QInputDialog(self)
         dlg.setLocale(QLocale(QLocale.English))
-        new_value, ok = dlg.getDouble(
-            self, "Insert current setpoint", "Value")
+        new_value, ok = dlg.getDouble(self, "Insert current setpoint", "Value")
         if ok:
             for key, widget in self.ps_widgets_dict.items():
                 if key in self.filtered_widgets:
-                    sp = widget.setpoint.sp_lineedit
-                    sp.setText(str(new_value))
+                    sp = widget.setpoint.spinbox
+                    sp.value_changed(new_value)
                     try:
                         sp.send_value()
                     except TypeError:
@@ -611,6 +623,19 @@ class BasePSControlWidget(QWidget):
                 except TypeError:
                     pass
 
+    @Slot(bool)
+    def _set_sofbmode(self, state):
+        """Execute turn SOFBMode on/off actions."""
+        for key, widget in self.ps_widgets_dict.items():
+            if key in self.filtered_widgets:
+                try:
+                    if state:
+                        widget.sofbmode_on()
+                    else:
+                        widget.sofbmode_off()
+                except TypeError:
+                    pass
+
     # Overloaded method
     def contextMenuEvent(self, event):
         """Show a custom context menu."""
@@ -618,15 +643,18 @@ class BasePSControlWidget(QWidget):
         menu = QMenu("Actions", self)
         menu.addAction(self.turn_on_act)
         menu.addAction(self.turn_off_act)
-        menu.addAction(self.ctrlloop_close_act)
-        menu.addAction(self.ctrlloop_open_act)
         menu.addAction(self.set_current_sp_act)
         if not self._dev_list[0].dev in ('FCH', 'FCV'):
+            menu.addAction(self.ctrlloop_close_act)
+            menu.addAction(self.ctrlloop_open_act)
             menu.addAction(self.set_slowref_act)
             menu.addAction(self.reset_act)
             menu.addAction(self.wfmupdate_on_act)
             menu.addAction(self.wfmupdate_off_act)
             menu.addAction(self.updparms_act)
+        if PSSearch.conv_psname_2_psmodel(self._dev_list[0]) == 'FBP':
+            menu.addAction(self.sofbmode_on_act)
+            menu.addAction(self.sofbmode_off_act)
         menu.addSeparator()
         action = menu.addAction('Show Connections...')
         action.triggered.connect(self.show_connections)

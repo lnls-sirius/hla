@@ -10,13 +10,11 @@ from qtpy.QtWidgets import QWidget, QLabel, QPushButton, QGridLayout, \
 
 import qtawesome as qta
 
-from pydm.widgets import PyDMLabel, PyDMWaveformPlot
-
 from siriuspy.namesys import SiriusPVName
 from siriuspy.diagbeam.dcct.csdev import Const as _DCCTc
 from siriuspy.search import LLTimeSearch as _LLTimeSearch
 from siriushla.widgets import SiriusConnectionSignal as SignalChannel, \
-    SiriusTimePlot, QSpinBoxPlus
+    SiriusTimePlot, QSpinBoxPlus, SiriusWaveformPlot, SiriusLabel
 
 
 class DCCTMonitor(QWidget):
@@ -95,7 +93,7 @@ class DCCTMonitor(QWidget):
         self.timegraph.showLegend = False
         self.timegraph.showXGrid = True
         self.timegraph.showYGrid = True
-        self.timegraph.plotItem.showButtons()
+        self.timegraph.setLabel('left', text='Current [mA]')
         self.timecurve = self.timegraph.curveAtIndex(0)
 
         wid = QWidget()
@@ -111,8 +109,7 @@ class DCCTMonitor(QWidget):
         self.label_waveread = QLabel(
             '<h3>Current Raw Readings</h3>', self, alignment=Qt.AlignCenter)
 
-        self.wavegraph = PyDMWaveformPlot(self)
-        self.wavegraph.setLabels(left='Current [mA]', bottom='Index')
+        self.wavegraph = SiriusWaveformPlot(self)
         channel = 'FAKE:Readings'
         self.rawreadings_channel = SignalChannel(
             self.dcct_prefix.substitute(propty='RawReadings-Mon'))
@@ -121,13 +118,14 @@ class DCCTMonitor(QWidget):
         self.wavegraph.addChannel(
             y_channel=channel, name='Current Raw Readings', color='blue',
             lineWidth=2, lineStyle=Qt.SolidLine)
+        self.wavegraph.setLabel('left', text='Current [mA]')
+        self.wavegraph.setLabel('bottom', text='Index')
         self.wavegraph.autoRangeX = True
         self.wavegraph.autoRangeY = True
         self.wavegraph.backgroundColor = QColor(255, 255, 255)
         self.wavegraph.showLegend = False
         self.wavegraph.showXGrid = True
         self.wavegraph.showYGrid = True
-        self.wavegraph.plotItem.showButtons()
         self.wavecurve = self.wavegraph.curveAtIndex(0)
 
         wid = QWidget()
@@ -318,7 +316,7 @@ class DCCTMonitor(QWidget):
         else:
             xdata = np.arange(0, smpl)
             xlabel = 'Index'
-        self.wavegraph.setLabels(bottom=xlabel)
+        self.wavegraph.setLabel('bottom', text=xlabel)
         self.wavecurve.receiveXWaveform(xdata)
 
     def _handle_data_visualization(self):
@@ -359,6 +357,10 @@ class EffMonitor(QWidget):
 
         self.graph = SiriusTimePlot(self)
         self.graph.timeSpan = 1000  # [s]
+        self.graph.addYChannel(
+            y_channel=self._pvname, name='Efficiency',
+            color='blue', lineWidth=2, lineStyle=Qt.SolidLine,
+            symbol='o', symbolSize=2)
         self.graph.setAutoRangeX(True)
         self.graph.setAutoRangeY(True)
         self.graph.backgroundColor = QColor(255, 255, 255)
@@ -366,18 +368,13 @@ class EffMonitor(QWidget):
         self.graph.showXGrid = True
         self.graph.showYGrid = True
         self.graph.maxRedrawRate = 2
-        self.graph.plotItem.showButtons()
-        self.graph.setLabels(left='Efficiency [%]')
-        self.graph.addYChannel(
-            y_channel=self._pvname, name='Efficiency',
-            color='blue', lineWidth=2, lineStyle=Qt.SolidLine,
-            symbol='o', symbolSize=2)
+        self.graph.setLabel('left', text='Efficiency [%]')
         leftAxis = self.graph.getAxis('left')
         leftAxis.setStyle(autoExpandTextSpace=False, tickTextWidth=25)
         self.curve = self.graph.curveAtIndex(0)
 
         l_eff = QLabel('<h4>Efficiency:</h4>', self)
-        self.label_eff = PyDMLabel(self, self._pvname)
+        self.label_eff = SiriusLabel(self, self._pvname)
         self.label_eff.showUnits = True
 
         hbox_eff = QHBoxLayout()
@@ -388,13 +385,13 @@ class EffMonitor(QWidget):
 
         if self.section == 'BO':
             l_injcurr = QLabel('Injected:', self)
-            self.label_injcurr = PyDMLabel(self, SiriusPVName(
+            self.label_injcurr = SiriusLabel(self, SiriusPVName(
                 'BO-Glob:AP-CurrInfo:Current150MeV-Mon').substitute(
                     prefix=self.prefix))
             self.label_injcurr.showUnits = True
 
             l_ejecurr = QLabel('Ejected:', self)
-            self.label_ejecurr = PyDMLabel(self, SiriusPVName(
+            self.label_ejecurr = SiriusLabel(self, SiriusPVName(
                 'BO-Glob:AP-CurrInfo:Current3GeV-Mon').substitute(
                     prefix=self.prefix))
             self.label_ejecurr.showUnits = True
@@ -412,7 +409,7 @@ class EffMonitor(QWidget):
         lay.addLayout(hbox_eff)
         self.setLayout(lay)
         self.setStyleSheet("""
-            PyDMLabel{
+            SiriusLabel{
                 qproperty-alignment:'AlignCenter';
                 min-width:5em; max-width:5em;}
             PyDMTimePlot{

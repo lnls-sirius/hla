@@ -249,7 +249,7 @@ height:3em;</string>
         <string/>
        </property>
        <property name="rotation" stdset="0">
-        <double>45.000000000000000</double>
+        <double>0.000000000000000</double>
        </property>
       </widget>
       <widget class="PyDMDrawingTriangle" name="arrowY">
@@ -294,7 +294,7 @@ height:3em;</string>
         <string/>
        </property>
        <property name="rotation" stdset="0">
-        <double>135.000000000000000</double>
+        <double>90.000000000000000</double>
        </property>
       </widget>
       <widget class="PyDMDrawingTriangle" name="arrowX">

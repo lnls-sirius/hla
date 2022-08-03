@@ -4,14 +4,13 @@ from qtpy.QtCore import Slot, QVariant
 from qtpy.QtWidgets import QVBoxLayout, QWidget, QPushButton, \
     QHBoxLayout, QLabel
 from qtpy.QtGui import QPalette, QColor
-from pydm.widgets import PyDMLabel
 
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriushla.common.epics.task import EpicsConnector, EpicsSetter, \
     EpicsChecker, EpicsGetter, EpicsWait
 from siriushla.widgets.dialog import ReportDialog, ProgressDialog
-from siriushla.widgets import PVNameTree, QDoubleSpinBoxPlus
+from siriushla.widgets import PVNameTree, QDoubleSpinBoxPlus, SiriusLabel
 from siriushla.util import get_appropriate_color
 
 from .set_energy import init_section
@@ -54,7 +53,7 @@ class EnergyButton(QWidget):
         else:
             raise RuntimeError
         sp_channel = _PVName(sp_channel).substitute(prefix=_VACA_PREFIX)
-        self.energy_sp = PyDMLabel(self)
+        self.energy_sp = SiriusLabel(self, keep_unit=True)
         self.energy_sp.channel = sp_channel
         self.energy_sp.showUnits = True
 

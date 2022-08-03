@@ -1,17 +1,19 @@
 """Monitoring widgets."""
 
-from qtpy.QtGui import QPixmap
+from qtpy.QtGui import QPixmap, QIcon
 from qtpy.QtCore import Qt, Slot, Signal, QSize, QTimer
 from qtpy.QtWidgets import QWidget, QLabel, QGridLayout, QGroupBox, \
-    QHBoxLayout, QCheckBox, QMenu, QFrame
+    QHBoxLayout, QCheckBox, QMenu, QFrame, QSizePolicy as QSzPol, \
+    QPushButton
 
 import qtawesome as qta
 
 from pydm.widgets import PyDMPushButton
+from pydm.connection_inspector import ConnectionInspector
 
 from siriuspy.envars import VACA_PREFIX
 from siriuspy.namesys import SiriusPVName
-from siriuspy.devices import InjSysStandbyHandler
+from siriuspy.devices import InjSysStandbyHandler, InjBOStandbyHandler
 from siriuspy.clientarch import Time as _Time
 from siriuspy.injctrl.csdev import get_status_labels, Const as _Const
 
@@ -104,12 +106,18 @@ class InjDiagLed(SiriusLedAlert):
 class InjSysStbyLed(PyDMLedMultiChannel):
     """Led to check whether several PVs are in stanby state."""
 
-    def __init__(self, parent=None, handler=None):
+    def __init__(self, parent=None, prefix=VACA_PREFIX, handler=None):
         if not handler:
             handler = InjSysStandbyHandler()
         super().__init__(parent, handler.on_values)
         self.stateColors = [PyDMLed.DarkGreen, PyDMLed.LightGreen,
                             PyDMLed.Yellow, PyDMLed.Gray]
+        self._injbo_hdlr = InjBOStandbyHandler()
+        self._injbo_onvals = self._injbo_hdlr.on_values
+        self._ch_injmode = SiriusConnectionSignal(SiriusPVName(
+            'AS-Glob:AP-InjCtrl').substitute(prefix=prefix, propty='Mode-Sts'))
+        self._ch_injmode.new_value_signal[int].connect(
+            self._handle_injmode_changed)
 
     def _update_statuses(self):
         if not self._connected:
@@ -126,6 +134,18 @@ class InjSysStbyLed(PyDMLedMultiChannel):
             else:
                 state = 1
         self.setState(state)
+
+    def _handle_injmode_changed(self, new_mode):
+        if new_mode == _Const.InjMode.TopUp:
+            c2v = self.channels2values
+            for key in self._injbo_onvals:
+                c2v.pop(key)
+            self.set_channels2values(c2v)
+        elif new_mode == _Const.InjMode.Decay:
+            c2v = self.channels2values
+            for key, val in self._injbo_onvals.items():
+                c2v[key] = val
+            self.set_channels2values(c2v)
 
     def mouseDoubleClickEvent(self, ev):
         pv_groups, texts = list(), list()
@@ -187,6 +207,9 @@ class InjSysStbyControlWidget(QWidget):
         else:
             self._setupFull()
 
+        self.conn_act = self.menu.addAction('Show Connections...')
+        self.conn_act.triggered.connect(self._show_connections)
+
         self._ch_cmdsts = SiriusConnectionSignal(
             self._inj_prefix.substitute(propty='InjSysCmdSts-Mon'))
 
@@ -236,7 +259,7 @@ class InjSysStbyControlWidget(QWidget):
         self._pb_on.setStyleSheet(
             '#bt{min-width:25px; max-width:25px; icon-size:20px;}')
 
-        self._led_sts = InjSysStbyLed(self)
+        self._led_sts = InjSysStbyLed(self, self.prefix)
         self._led_sts.setStyleSheet(
             'QLed{min-width:1.29em; max-width:1.29em;}')
 
@@ -308,7 +331,7 @@ class InjSysStbyControlWidget(QWidget):
         self._pb_on.setStyleSheet(
             '#bt{min-width:25px; max-width:25px; icon-size:20px;}')
 
-        self._led_sts = InjSysStbyLed(self)
+        self._led_sts = InjSysStbyLed(self, self.prefix)
 
         lay.addWidget(self._pb_off, 6, 1)
         lay.addWidget(self._pb_on, 6, 2)
@@ -468,6 +491,12 @@ class InjSysStbyControlWidget(QWidget):
         """Show a custom context menu."""
         self.menu.popup(self.mapToGlobal(event.pos()))
 
+    def _show_connections(self, checked):
+        """Show connections action."""
+        _ = checked
+        conn = ConnectionInspector(self)
+        conn.show()
+
 
 class ClockLabel(QLabel):
     """Clock label."""
@@ -483,3 +512,23 @@ class ClockLabel(QLabel):
     def _update(self):
         text = _Time.strftime(_Time.now(), '%H:%M:%S')
         self.setText(text)
+
+
+class TaskStatusLabel(QPushButton):
+    """Label to show if task is running."""
+
+    def __init__(self, parent=None, init_channel=None):
+        super().__init__(parent)
+        self._wait_icon = qta.icon('fa5s.spinner', animation=qta.Spin(self))
+        self.setFlat(True)
+        self._channel = SiriusConnectionSignal(init_channel)
+        self._channel.new_value_signal[int].connect(self._update_icon)
+        self.setSizePolicy(QSzPol.Fixed, QSzPol.Fixed)
+        self.setMaximumSize(25, 25)
+        self.setStyleSheet('QPushButton:hover{border:0pt solid transparent;}')
+
+    def _update_icon(self, status):
+        if status:
+            self.setIcon(self._wait_icon)
+        else:
+            self.setIcon(QIcon())

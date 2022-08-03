@@ -8,6 +8,7 @@ from qtpy.QtWidgets import QGroupBox, QGridLayout, QWidget, QLabel, \
     QHBoxLayout, QVBoxLayout, QPushButton, QSizePolicy, QWidget
 from pydm.widgets import PyDMLabel, PyDMSpinbox
 from pydm.widgets.display_format import DisplayFormat
+
 import qtawesome as _qta
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 

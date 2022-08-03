@@ -4,11 +4,12 @@ import re as _re
 import time as _time
 from functools import partial as _part
 
-from qtpy.QtGui import QColor, QPalette
+from qtpy.QtGui import QColor, QPalette, QKeySequence
 from qtpy.QtCore import Signal, QThread, Qt, QTimer, QSize
 from qtpy.QtWidgets import QWidget, QGridLayout, QVBoxLayout, QHBoxLayout, \
     QPushButton, QLabel, QMessageBox, QGroupBox, QListWidget, QSpacerItem, \
-    QListWidgetItem, QProgressBar, QSizePolicy as QSzPlcy
+    QListWidgetItem, QProgressBar, QSizePolicy as QSzPlcy, QApplication, \
+    QAbstractItemView
 import qtawesome as qta
 
 from siriuspy.envars import VACA_PREFIX as VACA_PREFIX
@@ -286,6 +287,9 @@ class CycleWindow(SiriusMainWindow):
         self.progress_list.setObjectName('progresslist')
         self.progress_list.setStyleSheet('#progresslist{min-width:20em;}')
         self.progress_list.itemDoubleClicked.connect(self._open_ps_detail)
+        self.progress_list.setSelectionMode(QAbstractItemView.MultiSelection)
+        self.progress_list.setToolTip(
+            'Select rows and press Ctrl+C to copy and Esc to deselect.')
 
         self.progress_bar = MyProgressBar(self)
 
@@ -482,9 +486,10 @@ class CycleWindow(SiriusMainWindow):
         if not _re.match('.*-.*:.*-.*', psname):
             return
 
-        if not self._is_adv_mode and psname.sec == 'SI':
+        if not self._is_adv_mode and psname.sec == 'SI' and \
+                not psname.dev.startswith('FC'):
             psname2check = Filter.process_filters(
-                self._psnames, filters={'sec': 'SI'})
+                self._psnames, filters={'sec': 'SI', 'dev': '(?!FC)'})
             psname2check.remove(psname)
             state2set = item.checkState(0)
             self.pwrsupplies_tree.tree.blockSignals(True)
@@ -529,14 +534,15 @@ class CycleWindow(SiriusMainWindow):
 
         # update buttons and self._prepared dict if not in advanced mode
         if not self._is_adv_mode:
-            has_si = False
-            for psn in PSSearch.get_psnames({'sec': 'SI', 'dis': 'PS'}):
+            has_sifam = False
+            sifamfilt = {'sec': 'SI', 'sub': 'Fam', 'dis': 'PS'}
+            for psn in PSSearch.get_psnames(sifamfilt):
                 if psn not in self.pwrsupplies_tree._item_map:
                     continue
                 item = self.pwrsupplies_tree._item_map[psn]
-                has_si |= item.checkState(0) != 0
+                has_sifam |= item.checkState(0) != 0
 
-            if not has_si:
+            if not has_sifam:
                 self.cycle_bt.setText('8. Cycle')
                 self.restore_timing_bt.setText(
                     '9. Restore Timing Initial State')
@@ -625,6 +631,16 @@ class CycleWindow(SiriusMainWindow):
         run_newprocess(['sirius-hla-as-ps-detail.py', psname])
 
     # --- events ---
+
+    def keyPressEvent(self, evt):
+        """Implement keyPressEvent."""
+        if evt.matches(QKeySequence.Copy) and self.progress_list.underMouse():
+            items = self.progress_list.selectedItems()
+            items = '\n'.join([i.text() for i in items])
+            QApplication.clipboard().setText(items)
+        if evt.key() == Qt.Key_Escape and self.progress_list.underMouse():
+            items = self.progress_list.clearSelection()
+        super().keyPressEvent(evt)
 
     def closeEvent(self, ev):
         self._update_setup_timer.stop()

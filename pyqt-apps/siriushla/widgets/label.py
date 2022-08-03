@@ -6,16 +6,12 @@ from qtpy.QtCore import Qt, Property, Q_ENUMS
 from pydm.utilities import units
 from pydm.widgets.display_format import DisplayFormat, parse_value_for_display
 from pydm.widgets.base import PyDMWidget, TextFormatter
-from pydm.utilities import is_pydm_app
+from pydm.utilities import is_pydm_app, is_qt_designer
 
 from siriuspy.clientarch import Time as _Time
 
 
 class SiriusLabel(QLabel, TextFormatter, PyDMWidget, DisplayFormat):
-    """Sirius Label."""
-    Q_ENUMS(DisplayFormat)
-    DisplayFormat = DisplayFormat
-    DisplayFormat.Time = 6
     """
     A QLabel with support for Channels and more from PyDM
 
@@ -25,19 +21,26 @@ class SiriusLabel(QLabel, TextFormatter, PyDMWidget, DisplayFormat):
         The parent widget for the Label
     init_channel : str, optional
         The channel to be used by the widget.
+    keep_unit : bool, optional
+        If True, label do not use unit convertion feature.
+        Default to False.
     """
+    Q_ENUMS(DisplayFormat)
+    DisplayFormat = DisplayFormat
+    DisplayFormat.Time = 6
 
-    def __init__(self, parent=None, init_channel=None, **kws):
+    def __init__(self, parent=None, init_channel=None, keep_unit=False, **kws):
         """Init."""
         QLabel.__init__(self, parent, **kws)
         PyDMWidget.__init__(self, init_channel=init_channel)
         self.app = QApplication.instance()
         self.setTextFormat(Qt.PlainText)
         self.setTextInteractionFlags(Qt.NoTextInteraction)
-        self.setText("PyDMLabel")
+        self.setText("######")
         self._display_format_type = self.DisplayFormat.Default
         self._string_encoding = "utf_8"
         self._conv = 1
+        self._keep_unit = keep_unit
         if is_pydm_app():
             self._string_encoding = self.app.get_string_encoding()
 
@@ -48,8 +51,10 @@ class SiriusLabel(QLabel, TextFormatter, PyDMWidget, DisplayFormat):
 
     @displayFormat.setter
     def displayFormat(self, new_type):
-        if self._display_format_type != new_type:
-            self._display_format_type = new_type
+        if self._display_format_type == new_type:
+            return
+        self._display_format_type = new_type
+        if not is_qt_designer():
             # Trigger the update of display format
             self.value_changed(self.value)
 
@@ -68,14 +73,17 @@ class SiriusLabel(QLabel, TextFormatter, PyDMWidget, DisplayFormat):
         if isinstance(self.value, (int, float)):
             self.format_string = "{:." + str(self.precision) + "f}"
         if self._show_units and self._unit != "":
-            unt_opt = units.find_unit_options(self._unit)
-            if unt_opt:
-                unt_si = [un for un in unt_opt if units.find_unit(un) == 1][0]
-                self._conv = units.convert(self._unit, unt_si)
+            if self._keep_unit:
+                self.format_string += " {}".format(self._unit)
             else:
-                self._conv = 1
-                unt_si = self._unit
-            self.format_string += " {}"+"{}".format(unt_si)
+                unt_opt = units.find_unit_options(self._unit)
+                if unt_opt:
+                    unt_si = [u for u in unt_opt if units.find_unit(u) == 1][0]
+                    self._conv = units.convert(self._unit, unt_si)
+                else:
+                    self._conv = 1
+                    unt_si = self._unit
+                self.format_string += " {}"+"{}".format(unt_si)
         return self.format_string
 
     def value_changed(self, new_value):
@@ -103,6 +111,8 @@ class SiriusLabel(QLabel, TextFormatter, PyDMWidget, DisplayFormat):
         # If the value is a string, just display it as-is, no formatting
         # needed.
         if isinstance(new_value, str):
+            if self._show_units and self._unit != "":
+                new_value = "{} {}".format(new_value, self._unit)
             self.setText(new_value)
             return
         # If the value is an enum, display the appropriate enum string for
@@ -116,7 +126,7 @@ class SiriusLabel(QLabel, TextFormatter, PyDMWidget, DisplayFormat):
         # If the value is a number (float or int), display it using a
         # format string if necessary.
         if isinstance(new_value, (int, float)):
-            if self._show_units and self._unit != '':
+            if self._show_units and self._unit != '' and not self._keep_unit:
                 new_value *= self._conv
                 sc, prf = func.siScale(new_value)
                 self.setText(self.format_string.format(sc*new_value, prf))

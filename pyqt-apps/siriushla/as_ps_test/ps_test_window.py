@@ -6,7 +6,8 @@ from functools import partial as _part
 from qtpy.QtCore import Qt, QTimer
 from qtpy.QtWidgets import QFrame, QGridLayout, QVBoxLayout, QHBoxLayout, \
     QSizePolicy, QGroupBox, QPushButton, QListWidget, QLabel, QApplication, \
-    QMessageBox, QTabWidget, QWidget, QInputDialog
+    QMessageBox, QTabWidget, QWidget, QInputDialog, QAbstractItemView
+from qtpy.QtGui import QKeySequence
 import qtawesome as qta
 
 from siriuspy.search import PSSearch
@@ -27,7 +28,7 @@ from .tasks import CreateTesters, \
     SetOpMode, CheckOpMode, \
     SetPwrState, CheckPwrState, CheckInitOk, \
     SetPulse, CheckPulse, \
-    SetCtrlLoop, CheckCtrlLoop, \
+    CheckCtrlLoop, \
     SetCapBankVolt, CheckCapBankVolt, \
     SetCurrent, CheckCurrent, \
     SetVoltage, CheckVoltage, \
@@ -116,49 +117,49 @@ class PSTestWindow(SiriusMainWindow):
         lay_ps.setColumnStretch(0, 1)
 
         # PS commands
-        self.checkcomm_ps_bt = QPushButton('Check Communication', self)
+        self.checkcomm_ps_bt = QPushButton('1. Check Communication', self)
         self.checkcomm_ps_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
         self.checkcomm_ps_bt.clicked.connect(self._check_comm)
         self.checkcomm_ps_bt.setToolTip(
             'Check PS and DCLinks communication status (verify invalid alarms '
             'and, if LI, the value of Connected-Mon PV)')
 
-        self.checkstatus_ps_bt = QPushButton('Show Status Summary', self)
+        self.checkstatus_ps_bt = QPushButton('2. Show Status Summary', self)
         self.checkstatus_ps_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
         self.checkstatus_ps_bt.clicked.connect(_part(self._check_status, 'PS'))
         self.checkstatus_ps_bt.setToolTip(
             'Check PS and DCLinks interlock status and, if powered on, '
             'check if it is following reference')
 
-        self.dsbltrigger_ps_bt = QPushButton('Disable PS triggers', self)
+        self.dsbltrigger_ps_bt = QPushButton('3. Disable PS triggers', self)
         self.dsbltrigger_ps_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
         self.dsbltrigger_ps_bt.clicked.connect(
             _part(self._set_check_trigger_state, 'PS', 'dsbl'))
 
-        self.setsofbmode_ps_bt = QPushButton('Turn Off SOFBMode', self)
+        self.setsofbmode_ps_bt = QPushButton('4. Turn Off SOFBMode', self)
         self.setsofbmode_ps_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
         self.setsofbmode_ps_bt.clicked.connect(
             _part(self._set_check_fbp_sofbmode, 'off'))
 
         self.setslowref_ps_bt = QPushButton(
-            'Set PS and DCLinks to SlowRef', self)
+            '5. Set PS and DCLinks to SlowRef', self)
         self.setslowref_ps_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
         self.setslowref_ps_bt.clicked.connect(self._set_check_opmode_slowref)
 
-        self.currzero_ps_bt1 = QPushButton('Set PS Current to zero', self)
+        self.currzero_ps_bt1 = QPushButton('6. Set PS Current to zero', self)
         self.currzero_ps_bt1.clicked.connect(_part(self._set_lastcomm, 'PS'))
         self.currzero_ps_bt1.clicked.connect(self._set_zero_ps)
 
-        self.reset_ps_bt = QPushButton('Reset PS and DCLinks', self)
+        self.reset_ps_bt = QPushButton('7. Reset PS and DCLinks', self)
         self.reset_ps_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
         self.reset_ps_bt.clicked.connect(_part(self._reset_intlk, 'PS'))
 
-        self.prep_sidclink_bt = QPushButton('Prepare SI Fam DCLinks', self)
+        self.prep_sidclink_bt = QPushButton('8. Prepare SI Fam DCLinks', self)
         self.prep_sidclink_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
         self.prep_sidclink_bt.clicked.connect(self._prepare_sidclinks)
         self.prep_sidclink_bt.setVisible(False)
 
-        self.init_sips_bt = QPushButton('Initialize SI Fam PS', self)
+        self.init_sips_bt = QPushButton('9. Initialize SI Fam PS', self)
         self.init_sips_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
         self.init_sips_bt.clicked.connect(self._set_check_pwrstateinit)
         self.init_sips_bt.setVisible(False)
@@ -166,46 +167,61 @@ class PSTestWindow(SiriusMainWindow):
         self.aux_label = QLabel('')
         self.aux_label.setVisible(False)
 
-        self.turnon_dcl_bt = QPushButton('Turn DCLinks On', self)
+        self.turnon_dcl_bt = QPushButton('8. Turn DCLinks On', self)
         self.turnon_dcl_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
         self.turnon_dcl_bt.clicked.connect(
             _part(self._set_check_pwrstate_dclinks, 'on'))
 
-        self.checkctrlloop_dcl_bt = QPushButton('Check DCLinks CtrlLoop', self)
+        self.checkctrlloop_dcl_bt = QPushButton(
+            '9. Check DCLinks CtrlLoop', self)
         self.checkctrlloop_dcl_bt.clicked.connect(
             _part(self._set_lastcomm, 'PS'))
         self.checkctrlloop_dcl_bt.clicked.connect(
-            _part(self._set_check_ctrlloop, 'dclink'))
+            _part(self._check_ctrlloop, 'dclink'))
 
-        self.setvolt_dcl_bt = QPushButton('Set DCLinks Voltage', self)
+        self.setvolt_dcl_bt = QPushButton('10. Set DCLinks Voltage', self)
         self.setvolt_dcl_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
         self.setvolt_dcl_bt.clicked.connect(
             self._set_check_dclinks_capvolt)
 
-        self.turnon_ps_bt = QPushButton('Turn PS On', self)
+        self.turnon_ps_bt = QPushButton('11. Turn PS On', self)
         self.turnon_ps_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
         self.turnon_ps_bt.clicked.connect(
             _part(self._set_check_pwrstate, 'PS', 'on', True))
 
-        self.setcheckctrlloop_ps_bt = QPushButton('Check PS CtrlLoop', self)
-        self.setcheckctrlloop_ps_bt.clicked.connect(
+        self.checkctrlloop_ps_bt = QPushButton('12. Check PS CtrlLoop', self)
+        self.checkctrlloop_ps_bt.clicked.connect(
             _part(self._set_lastcomm, 'PS'))
-        self.setcheckctrlloop_ps_bt.clicked.connect(
-            _part(self._set_check_ctrlloop, 'pwrsupply'))
+        self.checkctrlloop_ps_bt.clicked.connect(
+            _part(self._check_ctrlloop, 'pwrsupply'))
 
-        self.test_ps_bt = QPushButton('Set PS Current to test value', self)
+        self.test_ps_bt = QPushButton(
+            '13. Set PS Current to test value', self)
         self.test_ps_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
         self.test_ps_bt.clicked.connect(self._set_test_ps)
 
-        self.currzero_ps_bt2 = QPushButton('Set PS Current to zero', self)
+        self.currzero_ps_bt2 = QPushButton('14. Set PS Current to zero', self)
         self.currzero_ps_bt2.clicked.connect(_part(self._set_lastcomm, 'PS'))
         self.currzero_ps_bt2.clicked.connect(self._set_zero_ps)
 
-        self.restoretrigger_ps_bt = QPushButton('Restore PS triggers', self)
+        self.restoretrigger_ps_bt = QPushButton(
+            '15. Restore PS triggers', self)
         self.restoretrigger_ps_bt.clicked.connect(
             _part(self._set_lastcomm, 'PS'))
         self.restoretrigger_ps_bt.clicked.connect(
             _part(self._restore_triggers_state, 'PS'))
+
+        self._ps_buttons = [
+            self.checkcomm_ps_bt, self.checkstatus_ps_bt,
+            self.dsbltrigger_ps_bt, self.setsofbmode_ps_bt,
+            self.setslowref_ps_bt, self.currzero_ps_bt1,
+            self.reset_ps_bt, self.prep_sidclink_bt,
+            self.init_sips_bt, self.turnon_dcl_bt,
+            self.checkctrlloop_dcl_bt, self.setvolt_dcl_bt,
+            self.turnon_ps_bt, self.checkctrlloop_ps_bt,
+            self.test_ps_bt, self.currzero_ps_bt2,
+            self.restoretrigger_ps_bt,
+        ]
 
         gbox_ps_comm = QGroupBox('Commands', self)
         gbox_ps_comm.setObjectName('comm')
@@ -238,7 +254,7 @@ class PSTestWindow(SiriusMainWindow):
         lay_ps_comm.addWidget(QLabel('<h4>Test</h4>', self,
                                      alignment=Qt.AlignCenter))
         lay_ps_comm.addWidget(self.turnon_ps_bt)
-        lay_ps_comm.addWidget(self.setcheckctrlloop_ps_bt)
+        lay_ps_comm.addWidget(self.checkctrlloop_ps_bt)
         lay_ps_comm.addWidget(self.test_ps_bt)
         lay_ps_comm.addWidget(self.currzero_ps_bt2)
         lay_ps_comm.addWidget(QLabel(''))
@@ -281,45 +297,45 @@ class PSTestWindow(SiriusMainWindow):
         lay_pu.setColumnStretch(0, 1)
 
         # PU commands
-        self.checkstatus_pu_bt = QPushButton('Show Status Summary', self)
+        self.checkstatus_pu_bt = QPushButton('1. Show Status Summary', self)
         self.checkstatus_pu_bt.clicked.connect(_part(self._set_lastcomm, 'PU'))
         self.checkstatus_pu_bt.clicked.connect(_part(self._check_status, 'PU'))
         self.checkstatus_pu_bt.setToolTip(
             'Check PU interlock status and, if powered on, '
             'check if it is following voltage setpoint')
 
-        self.voltzero_pu_bt1 = QPushButton('Set PU Voltage to zero', self)
+        self.voltzero_pu_bt1 = QPushButton('2. Set PU Voltage to zero', self)
         self.voltzero_pu_bt1.clicked.connect(_part(self._set_lastcomm, 'PU'))
         self.voltzero_pu_bt1.clicked.connect(_part(self._set_zero_pu, False))
 
-        self.reset_pu_bt = QPushButton('Reset PU', self)
+        self.reset_pu_bt = QPushButton('3. Reset PU', self)
         self.reset_pu_bt.clicked.connect(_part(self._set_lastcomm, 'PU'))
         self.reset_pu_bt.clicked.connect(_part(self._reset_intlk, 'PU'))
 
-        self.turnon_pu_bt = QPushButton('Turn PU On', self)
+        self.turnon_pu_bt = QPushButton('4. Turn PU On', self)
         self.turnon_pu_bt.clicked.connect(_part(self._set_lastcomm, 'PU'))
         self.turnon_pu_bt.clicked.connect(
             _part(self._set_check_pwrstate, 'PU', 'on', True))
 
-        self.enblpulse_pu_bt = QPushButton('Enable PU Pulse', self)
+        self.enblpulse_pu_bt = QPushButton('5. Enable PU Pulse', self)
         self.enblpulse_pu_bt.clicked.connect(_part(self._set_lastcomm, 'PU'))
         self.enblpulse_pu_bt.clicked.connect(
             _part(self._set_check_pulse, 'on'))
 
-        self.enbltrigger_pu_bt = QPushButton('Enable PU triggers', self)
+        self.enbltrigger_pu_bt = QPushButton('6. Enable PU triggers', self)
         self.enbltrigger_pu_bt.clicked.connect(_part(self._set_lastcomm, 'PU'))
         self.enbltrigger_pu_bt.clicked.connect(
             _part(self._set_check_trigger_state, 'PU', 'on'))
 
-        self.test_pu_bt = QPushButton('Set PU Voltage to test value', self)
+        self.test_pu_bt = QPushButton('7. Set PU Voltage to test value', self)
         self.test_pu_bt.clicked.connect(_part(self._set_lastcomm, 'PU'))
         self.test_pu_bt.clicked.connect(self._set_test_pu)
 
-        self.voltzero_pu_bt2 = QPushButton('Set PU Voltage to zero', self)
+        self.voltzero_pu_bt2 = QPushButton('8. Set PU Voltage to zero', self)
         self.voltzero_pu_bt2.clicked.connect(_part(self._set_lastcomm, 'PU'))
         self.voltzero_pu_bt2.clicked.connect(_part(self._set_zero_pu, True))
 
-        self.restoretrigger_pu_bt = QPushButton('Restore PU triggers', self)
+        self.restoretrigger_pu_bt = QPushButton('9. Restore PU triggers', self)
         self.restoretrigger_pu_bt.clicked.connect(
             _part(self._set_lastcomm, 'PU'))
         self.restoretrigger_pu_bt.clicked.connect(
@@ -362,9 +378,15 @@ class PSTestWindow(SiriusMainWindow):
         self.ok_ps = QListWidget(self)
         self.ok_ps.setObjectName('OkList')
         self.ok_ps.doubleClicked.connect(self._open_detail)
+        self.ok_ps.setSelectionMode(QAbstractItemView.MultiSelection)
+        self.ok_ps.setToolTip(
+            'Select rows and press Ctrl+C to copy and Esc to deselect.')
         self.nok_ps = QListWidget(self)
         self.nok_ps.setObjectName('NokList')
         self.nok_ps.doubleClicked.connect(self._open_detail)
+        self.nok_ps.setSelectionMode(QAbstractItemView.MultiSelection)
+        self.nok_ps.setToolTip(
+            'Select rows and press Ctrl+C to copy and Esc to deselect.')
         self.clearlists_bt = QPushButton('Clear', self)
         self.clearlists_bt.clicked.connect(self._clear_lastcomm)
         self.ok_ps_aux_list = list()
@@ -437,7 +459,7 @@ class PSTestWindow(SiriusMainWindow):
         lay.setHorizontalSpacing(15)
         lay.setVerticalSpacing(5)
         lay.addWidget(QLabel(
-            '<h3>Power Supplies Test</h3>', self, alignment=Qt.AlignCenter),
+            '<h3>Power Supply Test</h3>', self, alignment=Qt.AlignCenter),
             0, 0, 1, 3)
         lay.addWidget(self.tab, 1, 0)
         lay.addLayout(list_layout, 1, 1)
@@ -533,7 +555,7 @@ class PSTestWindow(SiriusMainWindow):
         task2 = CheckOpMode(
             devices,
             state=[_PSC.States.SlowRef, _PSC.States.Off,
-                   _PSC.States.Interlock],
+                   _PSC.States.Interlock, _PSC.States.Initializing],
             parent=self)
         task2.itemDone.connect(self._log)
 
@@ -560,12 +582,12 @@ class PSTestWindow(SiriusMainWindow):
             if not devices:
                 return
             dev_label = 'PU'
-        devices_not_rst = {
+        devices_rst = {
             dev for dev in devices if dev.sec != 'LI' and
             dev.dev not in ('FCH', 'FCV')}
 
         task0 = CreateTesters(devices, parent=self)
-        task1 = ResetIntlk(devices_not_rst, parent=self)
+        task1 = ResetIntlk(devices_rst, parent=self)
         task2 = CheckIntlk(devices, parent=self)
         task2.itemDone.connect(self._log)
         tasks = [task0, task1, task2]
@@ -832,35 +854,27 @@ class PSTestWindow(SiriusMainWindow):
         dlg = ProgressDialog(labels, tasks, self)
         dlg.exec_()
 
-    def _set_check_ctrlloop(self, dev_type='pwrsupply'):
+    def _check_ctrlloop(self, dev_type='pwrsupply'):
         self.ok_ps.clear()
         self.nok_ps.clear()
         pwrsupplies = self._get_selected_ps()
         if not pwrsupplies:
             return
-        devices_set = {}
         if dev_type == 'pwrsupply':
-            devices = {dev for dev in pwrsupplies if 'LI' not in dev}
-            devices_set = {dev for dev in devices if dev.dev in ('FCH', 'FCV')}
+            devices = {
+                dev for dev in pwrsupplies if dev.sec != 'LI' and
+                dev.dev not in ('FCH', 'FCV')}
         else:
             devices = self._get_related_dclinks(pwrsupplies)
         if not devices:
             return
 
-        tasks = [CreateTesters(devices, parent=self), ]
-        labels = ['Connecting to devices...', ]
-        if devices_set:
-            task1 = SetCtrlLoop(devices_set, parent=self)
-            task2 = CheckCtrlLoop(devices, parent=self)
-            task2.itemDone.connect(self._log)
-            tasks.extend([task1, task2])
-            labels.extend([
-                'Setting CtrlLoop...', 'Checking CtrlLoop state...'])
-        else:
-            task1 = CheckCtrlLoop(devices, parent=self)
-            task1.itemDone.connect(self._log)
-            tasks.append(task1)
-            labels.append('Checking CtrlLoop state...')
+        task0 = CreateTesters(devices, parent=self)
+        task1 = CheckCtrlLoop(devices, parent=self)
+        task1.itemDone.connect(self._log)
+        labels = ['Connecting to devices...',
+                  'Checking CtrlLoop state...']
+        tasks = [task0, task1]
         dlg = ProgressDialog(labels, tasks, self)
         dlg.exec_()
 
@@ -1101,7 +1115,7 @@ class PSTestWindow(SiriusMainWindow):
             else:
                 self.nok_ps_aux_list.append(name)
 
-    # ---------- devices control ----------
+    # ---------- device control ----------
 
     def _get_ps_tree_names(self):
         # add LI, TB, BO, TS
@@ -1164,7 +1178,8 @@ class PSTestWindow(SiriusMainWindow):
                         dcl_typ = PSSearch.conv_psname_2_pstype(dcl)
                         if dcl_typ == 'as-dclink-regatron-master':
                             alldclinks.add(dcl)
-        return list(alldclinks)
+        alldclinks = [PVName(dev) for dev in alldclinks]
+        return alldclinks
 
     def _open_detail(self, index):
         name = PVName(index.data())
@@ -1224,13 +1239,29 @@ class PSTestWindow(SiriusMainWindow):
         self.prep_sidclink_bt.setVisible(has_sifam)
         self.init_sips_bt.setVisible(has_sifam)
         self.aux_label.setVisible(has_sifam)
+        index = 1
+        for but in self._ps_buttons:
+            if not but.isVisible():
+                continue
+            oldtext = but.text()
+            newtext = str(index) + '.' + oldtext.split('.')[1]
+            but.setText(newtext)
+            index += 1
 
-        # set CtrlLoop button label
-        has_fast = False
-        for psn in self._si_fastcorrs:
-            item = self.ps_tree._item_map[psn]
-            has_fast |= item.checkState(0) != 0
+    # ---------- events ----------
 
-        text = 'Set(FC) and Check PS CtrlLoop' \
-            if has_fast else 'Check PS CtrlLoop'
-        self.setcheckctrlloop_ps_bt.setText(text)
+    def keyPressEvent(self, evt):
+        """Implement keyPressEvent."""
+        if evt.matches(QKeySequence.Copy):
+            if self.ok_ps.underMouse():
+                items = self.ok_ps.selectedItems()
+            elif self.nok_ps.underMouse():
+                items = self.nok_ps.selectedItems()
+            items = '\n'.join([i.text() for i in items])
+            QApplication.clipboard().setText(items)
+        if evt.key() == Qt.Key_Escape:
+            if self.ok_ps.underMouse():
+                items = self.ok_ps.clearSelection()
+            elif self.nok_ps.underMouse():
+                items = self.nok_ps.clearSelection()
+        super().keyPressEvent(evt)

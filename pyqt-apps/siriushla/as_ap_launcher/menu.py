@@ -13,6 +13,7 @@ from siriuspy.envars import VACA_PREFIX as _prefix
 from siriuspy.clientconfigdb import ConfigDBClient
 from siriuspy.search import PSSearch, IDSearch
 from siriuspy.namesys import SiriusPVName
+from siriuspy.oscilloscope import Scopes
 
 from siriushla import util
 from siriushla.widgets.windows import create_window_from_widget
@@ -148,31 +149,31 @@ def get_object(ismenubar=True, parent=None):
             osci = LEVEL2M('Osc.View', menu)
             asdifctdig = QAction('AS-DI-FCT', osci)
             util.connect_newprocess(
-                asdifctdig, ['gvncviewer', 'as-di-fctdig'],
+                asdifctdig, ['gvncviewer', Scopes.AS_DI_FCTDIG],
                 is_window=False)
             asdifpmdig = QAction('AS-DI-FPM', osci)
             util.connect_newprocess(
-                asdifpmdig, ['gvncviewer', 'as-di-fpmdig'],
+                asdifpmdig, ['gvncviewer', Scopes.AS_DI_FPMDIG],
                 is_window=False)
             lidiict = QAction('LI-DI-ICT', osci)
             util.connect_newprocess(
-                lidiict, ['gvncviewer', 'li-di-ictosc'],
+                lidiict, ['gvncviewer', Scopes.LI_DI_ICTOSC],
                 is_window=False)
             tbpuinjbo = QAction('TB-PU-InjBO', osci)
             util.connect_newprocess(
-                tbpuinjbo, ['gvncviewer', 'TB-PU-Osc-InjBO'],
+                tbpuinjbo, ['gvncviewer', Scopes.TB_PU_OSC_INJBO],
                 is_window=False)
             tspuejebo = QAction('TS-PU-EjeBO', osci)
             util.connect_newprocess(
-                tspuejebo, ['gvncviewer', 'TS-PU-Osc-EjeBO'],
+                tspuejebo, ['gvncviewer', Scopes.TS_PU_OSC_EJEBO],
                 is_window=False)
             tspuinjsi = QAction('TS-PU-InjSI', osci)
             util.connect_newprocess(
-                tspuinjsi, ['gvncviewer', 'TS-PU-Osc-InjSI'],
+                tspuinjsi, ['gvncviewer', Scopes.TS_PU_OSC_INJSI],
                 is_window=False)
             sipuinjsi = QAction('SI-PU-InjSI', osci)
             util.connect_newprocess(
-                sipuinjsi, ['gvncviewer', 'SI-PU-Osc-InjSI'],
+                sipuinjsi, ['gvncviewer', Scopes.SI_PU_OSC_INJSI],
                 is_window=False)
 
             osci.addAction(asdifctdig)
@@ -671,7 +672,7 @@ def get_object(ismenubar=True, parent=None):
 
             all_dev = QAction(
                 'All'+('' if sec != 'si' else ' Families'), psmenu)
-            self.connect_newprocess(all_dev, scr)
+            self.connect_newprocess(all_dev, [scr, '--device', 'all'])
             psmenu.addAction(all_dev)
 
             # dips
@@ -740,7 +741,8 @@ def get_object(ismenubar=True, parent=None):
                             act = QAction(label, all_gph_menu)
                             self.connect_newprocess(
                                 act, ['sirius-hla-as-ps-graphmon.py',
-                                      '--section', sec.upper(), '--device', filt])
+                                      '--section', sec.upper(),
+                                      '--device', filt])
                             all_gph_menu.addAction(act)
                     else:
                         all_gph_act = QAction('Graph', all_menu)
@@ -827,7 +829,7 @@ def get_object(ismenubar=True, parent=None):
                 self.connect_newprocess(pmag, [script, '-s', 'EjeBO'])
                 pumenu.addAction(pmag)
             elif sec == 'as':
-                pmag = QAction('InjBO, EjeBO && InjSI', pumenu)
+                pmag = QAction('InjBO, EjeBO, InjSI && Ping', pumenu)
                 self.connect_newprocess(
                     pmag, 'sirius-hla-as-pu-control.py')
                 pumenu.addAction(pmag)

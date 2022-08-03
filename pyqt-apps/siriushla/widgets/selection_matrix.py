@@ -25,13 +25,13 @@ class SelectionMatrixWidget(QWidget):
         Whether to show button to send applyBothPlanesClicked signal.
         Default: False.
     toggle_all_false_text: string, optional
-        Text to be dislayed in toggleAllItems to False button.
+        Text to be displayed in toggleAllItems to False button.
         Default: 'Disable All'.
     show_toggle_all_false: bool, optional
         Whether to show button to send toggleAllItems to False.
         Default: True.
     toggle_all_true_text: string, optional
-        Text to be dislayed in toggleAllItems to True button.
+        Text to be displayed in toggleAllItems to True button.
         Default: 'Enable All'.
     show_toggle_all_true: bool, optional
         Whether to show button to send toggleAllItems to True.
