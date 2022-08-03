@@ -60,7 +60,7 @@ class MainWindow(QWidget):
     def resizeEvent(self, event):
         """Signal the resize event to the relative Widgets"""
         for relative_item in self.relative_widgets:
-            relative_item.relativeResize(event)
+            relative_item.relativeResize()
 
     def buildPvName(self, pv_name, device, prefix='', sufix=''):
         """Build the pv name"""
@@ -139,7 +139,7 @@ class MainWindow(QWidget):
         rel_wid = RelativeWidget(
             parent=self.image_container,
             widget=group,
-            relativePos=info["Position"])
+            relative_pos=info["Position"])
         self.relative_widgets.append(rel_wid)
 
     def motorControlBtn(self, device, info):
@@ -151,7 +151,7 @@ class MainWindow(QWidget):
         rel_wid = RelativeWidget(
             parent=self.image_container,
             widget=btn,
-            relativePos=info["Position"])
+            relative_pos=info["Position"])
         self.relative_widgets.append(rel_wid)
 
     def buildDevicesWidgets(self):
