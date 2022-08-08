@@ -19,6 +19,7 @@ class MotorControlWindow(SiriusMainWindow):
         self.setObjectName('LIApp')
         self.setWindowTitle(motor_type + ' Control')
         self.setMaximumHeight(250)
+        self.setMinimumHeight(175)
 
         self._setupUi()
 
@@ -67,27 +68,31 @@ class MotorControlWindow(SiriusMainWindow):
             pos[0] += 1
             lb_glay.addWidget(
                 QLabel(title), pos[0], pos[1],
-                alignment=Qt.AlignCenter)
+                alignment=Qt.AlignRight)
             lb_glay.addWidget(
                 self.getWidget('led', basename + name),
                 pos[0], pos[1] + 1,
-                alignment=Qt.AlignCenter)
+                alignment=Qt.AlignLeft)
         return lb_glay, pos
 
     def infoBox(self, title='', pv_name=''):
         """Show general control information (Besides the leds)"""
         ib_hlay = QHBoxLayout()
-        ib_hlay.addWidget(
-            QLabel(title), alignment=Qt.AlignCenter)
 
-        if title == "Absolute Position":
-            wid_type = 'label'
-        else:
+        if title == "Up to Limit" and self.motor_type == "HPPS":
+            title = "Up to Zero"
+
+        ib_hlay.addWidget(
+            QLabel(title), alignment=Qt.AlignRight)
+
+        if title == "Up to Limit":
             wid_type = 'button'
+        else:
+            wid_type = 'label'
 
         ib_hlay.addWidget(
             self.getWidget(wid_type, pv_name),
-            alignment=Qt.AlignCenter)
+            alignment=Qt.AlignLeft)
         return ib_hlay
 
     def rbvBox(self):
@@ -96,38 +101,47 @@ class MotorControlWindow(SiriusMainWindow):
         basename = self.prefix + "KLY1"
         rbv_hlay.addWidget(
             QLabel("Phase"),
-            alignment=Qt.AlignCenter)
+            alignment=Qt.AlignRight)
         for pv_name in MOTOR_CONTROL[self.motor_type]:
             wid_type = 'label'
+            align = Qt.AlignLeft
             if 'SET' in pv_name:
                 wid_type = 'spinBox'
+                align = Qt.AlignCenter
             widget = self.getWidget(
                 wid_type, basename + pv_name)
             rbv_hlay.addWidget(
                 widget,
-                alignment=Qt.AlignCenter)
+                alignment=align)
         return rbv_hlay
 
     def pidBox(self):
         """Show the PID control widgets"""
-        basename = self.prefix + "BUN1"
         pb_glay = QGridLayout()
         pos = [0, 0]
         for title, pv_name in MOTOR_CONTROL["SHB"].items():
+            if pv_name == ":FL":
+                basedev = "SHB"
+            else:
+                basedev = "BUN1"
+
             pb_glay.addWidget(
                 QLabel(title), pos[0], pos[1],
-                alignment=Qt.AlignCenter)
+                alignment=Qt.AlignRight)
             pos[1] += 1
 
             if "PID" in title:
                 wid_type = 'button'
+            elif "K" in title:
+                wid_type = 'label'
             else:
                 wid_type = 'edit'
 
             pb_glay.addWidget(
-                self.getWidget(wid_type, basename + pv_name),
+                self.getWidget(
+                    wid_type, self.prefix + basedev + pv_name),
                 pos[0], pos[1],
-                alignment=Qt.AlignCenter)
+                alignment=Qt.AlignLeft)
             pos[1] += 1
 
             if pos[1] >= 4:
@@ -152,7 +166,7 @@ class MotorControlWindow(SiriusMainWindow):
                 lay.addLayout(
                     self.infoBox(title, basename + data),
                     pos[0], pos[1], 1, 1,
-                    alignment=Qt.AlignTop)
+                    alignment=Qt.AlignCenter)
                 pos[0] += 1
             if pos[0] >= max_row:
                 pos[0] = 1

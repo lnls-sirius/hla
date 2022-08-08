@@ -6,7 +6,6 @@ from qtpy.QtCore import Qt
 from qtpy.QtGui import QPixmap
 from qtpy.QtWidgets import QGroupBox, QGridLayout, QWidget, QLabel, \
     QHBoxLayout, QVBoxLayout, QPushButton, QSizePolicy
-from pydm.widgets import PyDMLabel
 from pydm.widgets.display_format import DisplayFormat
 
 import qtawesome as _qta
@@ -14,7 +13,7 @@ from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 
 from .. import util as _util
 from ..widgets import SiriusSpinbox, PyDMStateButton, SiriusLedState, \
-    SiriusLabel, SiriusLedAlert
+    SiriusLabel, SiriusLedAlert, SiriusLabel
 from .details import DeviceParamSettingWindow
 from .widgets import DeltaIQPhaseCorrButton, RelativeWidget
 from .util import BASIC_INFO
@@ -75,12 +74,13 @@ class MainWindow(QWidget):
         self.image_container.setMinimumSize(950, 0)
         return self.image_container
 
-    def formatLabel(self, pv_name=''):
+    def formatLabel(self, pv_name='', pv_type='Power'):
         """Get widget type"""
-        widget = PyDMLabel(init_channel=pv_name)
+        widget = SiriusLabel(init_channel=pv_name)
         widget.precisionFromPV = False
         widget.precision = 2
-        widget._display_format_type = self.display_format.Exponential
+        if pv_type == 'Power':
+            widget._display_format_type = self.display_format.Exponential
         return widget
 
     def showChartBtn(self, device, channel, chart_type):
@@ -100,7 +100,7 @@ class MainWindow(QWidget):
             bw_hlay.addWidget(
                 QLabel(title), alignment=Qt.AlignCenter)
 
-            widget = self.formatLabel(pv_name)
+            widget = self.formatLabel(pv_name, title)
             widget.showUnits = True
             bw_hlay.addWidget(
                 widget, alignment=Qt.AlignCenter)
@@ -174,17 +174,14 @@ class MainWindow(QWidget):
         self.buildDevicesWidgets()
 
         for dev in DEVICES:
-            dev_shb = False
             grbox = QGroupBox(dev.label, self)
             lay = QGridLayout()
             lay.setContentsMargins(0, 0, 0, 0)
             grbox.setLayout(lay)
-            if dev == DEVICES.SHB:
-                dev_shb = True
             lay.addWidget(
                 ControlBox(
                     grbox, dev.pvname, prefix=self.prefix,
-                    is_shb=dev_shb, device=dev),
+                    device=dev),
                 0, 0)
             lay1.addWidget(grbox, dev.value, 0)
 
@@ -193,13 +190,12 @@ class ControlBox(QWidget):
     """."""
 
     def __init__(
-        self, parent=None, dev='', prefix='', is_shb=False, device=None):
+        self, parent=None, dev='', prefix='', device=None):
             """."""
             super().__init__(parent=parent)
             self.prefix = prefix
             self.dev = dev
             self.device = device
-            self.is_shb = is_shb
             self._setupui()
 
     def _setupui(self):
@@ -241,7 +237,7 @@ class ControlBox(QWidget):
 
         props = [('Amp [%]', 'AMP'), ('Phase [°]', 'PHASE'),
                  ('↳ ΔPhase (IQ Corr)', '')]
-        if not self.is_shb:
+        if self.dev != DEVICES.SHB:
             props.append(('Refl. Pow. [MW]', 'REFL_POWER_LIMIT'))
         for name, prop in props:
             row += 1
@@ -270,7 +266,7 @@ class ControlBox(QWidget):
 
         row += 1
         hlay = QHBoxLayout()
-        if self.is_shb:
+        if self.dev == DEVICES.SHB:
             labc = QLabel('Phase Diff [°]', self)
             rbpv = basename + ':GET_PHASE_DIFF'
             rbc = SiriusLabel(self, init_channel=rbpv)

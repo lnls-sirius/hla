@@ -7,11 +7,11 @@ from qtpy.QtCore import QSize
 
 from qtpy.QtWidgets import QPushButton, QGridLayout, \
     QWidget, QHBoxLayout
-from pydm.widgets import PyDMWaveformPlot
 import qtawesome as _qta
 
 from .. import util as _util
-from ..widgets import SiriusTimePlot, SiriusConnectionSignal as _ConnSignal
+from ..widgets import SiriusTimePlot, SiriusWaveformPlot, \
+    SiriusConnectionSignal as _ConnSignal
 
 
 class DeltaIQPhaseCorrButton(QPushButton):
@@ -81,7 +81,7 @@ class GraphIvsQ(QWidget):
         lay1 = QGridLayout()
         self.setLayout(lay1)
 
-        graph = PyDMWaveformPlot(self)
+        graph = SiriusWaveformPlot(self)
         graph.setObjectName('graph')
         graph.setStyleSheet('#graph {min-height: 15em; min-width: 20em;}')
         graph.maxRedrawRate = 2
@@ -94,9 +94,6 @@ class GraphIvsQ(QWidget):
         graph.setAutoRangeY(False)
         graph.plotItem.showButtons()
         graph.setAxisColor(QColor(0, 0, 0))
-        graph.setYLabels('Q')
-        graph.setXLabels('I')
-        graph.setPlotTitle("I & Q Graph")
         axx = graph.plotItem.getAxis('right')
         axx.setVisible(True)
         axx.setTicks([])
@@ -108,6 +105,8 @@ class GraphIvsQ(QWidget):
 
         basename = self.prefix + self.dev
         if self.prop == 'IvsQ':
+            chart_title = "I & Q Fasor"
+            lblAxis = ["I", "Q"]
             channels = {
                 'Data': {
                     'X': basename + ':GET_' + self.channel + '_I',
@@ -119,6 +118,8 @@ class GraphIvsQ(QWidget):
                 }
             }
         else:
+            chart_title = "I & Q Waveform"
+            lblAxis = ["I & Q", "Time"]
             channels = {
                 'Data': {
                     'X': None,
@@ -129,6 +130,10 @@ class GraphIvsQ(QWidget):
                     'Y': basename + ':WF_ADC' + self.channel[2] + '_Q'
                 }
             }
+
+        graph.setYLabels([lblAxis[0]])
+        graph.setXLabels([lblAxis[1]])
+        graph.setPlotTitle(chart_title)
 
         opts = dict(
             y_channel=channels['Data']['Y'],
@@ -179,7 +184,7 @@ class GraphTime(QWidget):
         lay1 = QGridLayout()
         self.setLayout(lay1)
 
-        graph = PyDMWaveformPlot(self)
+        graph = SiriusWaveformPlot(self)
         graph.setObjectName('graph')
         graph.setStyleSheet('#graph {min-height: 15em; min-width: 20em;}')
         graph.maxRedrawRate = 2
@@ -208,10 +213,10 @@ class GraphTime(QWidget):
             chart_name = 'Phase'
             chname = basename + ':GET_' + self.channel + '_PHASE'
         elif self.prop == 'PAmp':
-            chart_name = 'Pulse Amplitude'
+            chart_name = 'Amplitude Waveform'
             chname = basename + ':WF_' + self.channel + 'AMP'
         elif self.prop == 'PPha':
-            chart_name = 'Pulse Phase'
+            chart_name = 'Phase Waveform'
             chname = basename + ':WF_' + self.channel + 'PHASE'
         elif self.prop == 'Diff':
             chart_name = 'Phase Diff'

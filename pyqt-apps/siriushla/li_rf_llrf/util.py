@@ -110,12 +110,12 @@ MOTOR_CONTROL = {
     },
     "SHB": {
         "PID Mode": ":SET_PID_MODE",
-        "Fw/Bw Steps": ":SET_PID_MODE",
+        "Fw/Bw Steps": ":FL",
         "KI": ":SET_PID_KI",
         "KP": ":SET_PID_KP"
     },
     "HPPS": [
-        ":GET_SHIF_MOTOR_ANGLE_CALC",
-        ":SET_SHIF_MOTOR_ANGLE"
+        ":SET_SHIF_MOTOR_ANGLE",
+        ":GET_SHIF_MOTOR_ANGLE_CALC"
     ]
 }
