@@ -3,6 +3,8 @@
 """Linac MPS Monitor."""
 import sys
 import argparse as _argparse
+import qtawesome as _qta
+from siriushla import util as _util
 from siriushla.sirius_application import SiriusApplication
 from siriuspy.envars import VACA_PREFIX
 from siriushla.widgets.windows import create_window_from_widget
@@ -18,7 +20,9 @@ args = parser.parse_args()
 app = SiriusApplication()
 window = create_window_from_widget(
     MainWindow, title='LI LLRF', is_main=True,
-    withscroll=True, min_width=105, min_height=78)
+    withscroll=True, min_width=105, min_height=55,
+    icon=_qta.icon(
+        'mdi.waves', color=_util.get_appropriate_color('LI')))
 app.open_window(
     window, parent=None, prefix=args.prefix)
 sys.exit(app.exec_())

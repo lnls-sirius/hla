@@ -4,7 +4,7 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGridLayout, QHBoxLayout, QWidget, QLabel
 from pydm.widgets import PyDMSpinbox, PyDMLineEdit
 from ..widgets import SiriusLabel, SiriusMainWindow, \
-    PyDMLedMultiChannel, SiriusPushButton
+    PyDMLedMultiChannel, SiriusPushButton, PyDMStateButton
 from .util import MOTOR_CONTROL
 
 
@@ -14,7 +14,7 @@ class MotorControlWindow(SiriusMainWindow):
     def __init__(self, parent=None, motor_type="SHB"):
         """Init."""
         super().__init__(parent)
-        self.prefix = 'LA-RF:LLRF:'
+        self.main_dev = 'LA-RF:LLRF:'
         self.motor_type = motor_type
         self.setObjectName('LIApp')
         self.setWindowTitle(motor_type + ' Control')
@@ -52,6 +52,9 @@ class MotorControlWindow(SiriusMainWindow):
             widget = PyDMSpinbox(
                 init_channel=pv_name)
             widget.showStepExponent = False
+        elif wid_type == 'state':
+            widget = PyDMStateButton(
+                init_channel=pv_name)
         else:
             widget = PyDMLineEdit(
                 init_channel=pv_name)
@@ -98,7 +101,7 @@ class MotorControlWindow(SiriusMainWindow):
     def rbvBox(self):
         """Show a RBV Widget"""
         rbv_hlay = QHBoxLayout()
-        basename = self.prefix + "KLY1"
+        basename = self.main_dev + "KLY1"
         rbv_hlay.addWidget(
             QLabel("Phase"),
             alignment=Qt.AlignRight)
@@ -131,7 +134,7 @@ class MotorControlWindow(SiriusMainWindow):
             pos[1] += 1
 
             if "PID" in title:
-                wid_type = 'button'
+                wid_type = 'state'
             elif "K" in title:
                 wid_type = 'label'
             else:
@@ -139,7 +142,7 @@ class MotorControlWindow(SiriusMainWindow):
 
             pb_glay.addWidget(
                 self.getWidget(
-                    wid_type, self.prefix + basedev + pv_name),
+                    wid_type, self.main_dev + basedev + pv_name),
                 pos[0], pos[1],
                 alignment=Qt.AlignLeft)
             pos[1] += 1
@@ -151,7 +154,7 @@ class MotorControlWindow(SiriusMainWindow):
 
     def basicData(self, pos=None, lay=None):
         """Show all the general control information"""
-        basename = self.prefix + self.motor_type
+        basename = self.main_dev + self.motor_type
         max_row = pos[0] + 2
         for title, data in MOTOR_CONTROL["General"].items():
             if title in ["Status", "Limits"]:

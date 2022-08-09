@@ -8,6 +8,7 @@ from qtpy.QtCore import QSize
 from qtpy.QtWidgets import QPushButton, QGridLayout, \
     QWidget, QHBoxLayout
 import qtawesome as _qta
+from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 
 from .. import util as _util
 from ..widgets import SiriusTimePlot, SiriusWaveformPlot, \
@@ -16,8 +17,8 @@ from ..widgets import SiriusTimePlot, SiriusWaveformPlot, \
 
 class DeltaIQPhaseCorrButton(QPushButton):
     """."""
-    def __init__(self, parent=None, device=None, prefix='', delta=0,
-                 show_label=True):
+    def __init__(self, parent=None, device=None, main_dev='', delta=0,
+                 show_label=True, prefix=''):
         """."""
         label = str(abs(delta)) + '°' if show_label else ''
         icon_name = 'mdi.plus' if np.sign(delta) == 1 else 'mdi.minus'
@@ -26,8 +27,9 @@ class DeltaIQPhaseCorrButton(QPushButton):
         self.setIconSize(QSize(20, 20))
 
         self.prefix = prefix
+        self.main_dev = main_dev
         self.dev = device
-        self.devpref = self.prefix + self.dev
+        self.devpref = self.prefix + ('-' if self.prefix else '') + self.main_dev + device
         self.delta = delta
 
         self.setToolTip(f'Do {delta:.1f}° delta')
@@ -66,10 +68,11 @@ class GraphIvsQ(QWidget):
 
     def __init__(
         self, parent=None, dev=None,
-        prop='Time', prefix='', channel='CH1'):
+        prop='Time', main_dev='', channel='CH1', prefix=''):
             """."""
             super().__init__(parent=parent)
             self.prefix = prefix
+            self.main_dev = main_dev
             self.dev = dev
             self.prop = prop
             self.channel = channel
@@ -103,7 +106,7 @@ class GraphIvsQ(QWidget):
         axx.setTicks([])
         axx.setHeight(0)
 
-        basename = self.prefix + self.dev
+        basename = self.prefix + ('-' if self.prefix else '') + self.main_dev + self.dev
         if self.prop == 'IvsQ':
             chart_title = "I & Q Fasor"
             lblAxis = ["I", "Q"]
@@ -168,10 +171,12 @@ class GraphTime(QWidget):
     Pulse Amplitude, Pulse Phase, Diff and Raw Data"""
 
     def __init__(
-        self, parent=None, dev='', prop='Amp', prefix='', channel='CH1'):
+        self, parent=None, dev='', prop='Amp', main_dev='', channel='CH1', prefix=''):
         """."""
         super().__init__(parent=parent)
+        print(prefix)
         self.prefix = prefix
+        self.main_dev = main_dev
         self.dev = dev
         self.prop = prop
         self.channel = channel
@@ -180,7 +185,7 @@ class GraphTime(QWidget):
     def _setupui(self):
         """."""
         chart_name = self.prop
-        basename = self.prefix + self.dev
+        basename = self.prefix + ('-' if self.prefix else '') + self.main_dev + self.dev
         lay1 = QGridLayout()
         self.setLayout(lay1)
 

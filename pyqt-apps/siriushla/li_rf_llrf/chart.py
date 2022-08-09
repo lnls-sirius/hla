@@ -10,11 +10,13 @@ from .widgets import GraphTime, GraphIvsQ
 class ChartWindow(SiriusMainWindow):
     """Show the Chart Window."""
 
-    def __init__(self, parent=None, dev='', channel='', chart_type="Forward"):
+    def __init__(self, parent=None, dev='', channel='', chart_type="Forward", prefix=''):
         """Init."""
         super().__init__(parent)
-        self.prefix = 'LA-RF:LLRF:'
+        self.prefix = prefix
+        self.main_dev = 'LA-RF:LLRF:'
         self.device = dev
+        self.devpref = self.prefix + ('-' if self.prefix else '') + self.main_dev
         self.channel = channel
         self.chart_type = chart_type
 
@@ -33,13 +35,13 @@ class ChartWindow(SiriusMainWindow):
         """Show the 4 basic charts"""
         """These being: I&Q, based on time and IxQ, Amplitude and Phase"""
         iqtime = GraphIvsQ(
-            self, self.device, 'Time', self.prefix, self.channel)
+            self, self.device, 'Time', self.devpref, self.channel, prefix=self.prefix)
         ivsq = GraphIvsQ(
-            self, self.device, 'IvsQ', self.prefix, self.channel)
+            self, self.device, 'IvsQ', self.devpref, self.channel, prefix=self.prefix)
         amp = GraphTime(
-            self, self.device, 'Amp', self.prefix, self.channel)
+            self, self.device, 'Amp', self.devpref, self.channel, prefix=self.prefix)
         pha = GraphTime(
-            self, self.device, 'Pha', self.prefix, self.channel)
+            self, self.device, 'Pha', self.devpref, self.channel, prefix=self.prefix)
         lay.addWidget(iqtime, 0, 0)
         lay.addWidget(ivsq, 1, 0)
         lay.addWidget(amp, 0, 1)
@@ -47,8 +49,10 @@ class ChartWindow(SiriusMainWindow):
 
     def chartsPulseAmpPha(self, lay):
         """Show the pulse charts of Amplitude and Phase"""
-        amp = GraphTime(self, self.device, 'PAmp', self.prefix, self.channel)
-        pha = GraphTime(self, self.device, 'PPha', self.prefix, self.channel)
+        amp = GraphTime(
+            self, self.device, 'PAmp', self.devpref, self.channel, prefix=self.prefix)
+        pha = GraphTime(
+            self, self.device, 'PPha', self.devpref, self.channel, prefix=self.prefix)
         lay.addWidget(amp, 0, 2)
         lay.addWidget(pha, 1, 2)
 
@@ -66,7 +70,7 @@ class ChartWindow(SiriusMainWindow):
             self.chartsPulseAmpPha(lay)
         elif self.chart_type == 'Diff':
             lay.addWidget(
-                GraphTime(self, self.device, 'Diff', self.prefix))
+                GraphTime(self, self.device, 'Diff', self.devpref, prefix=self.prefix))
         else:
             lay.addWidget(
-                GraphTime(self, self.device, 'Raw', self.prefix))
+                GraphTime(self, self.device, 'Raw', self.devpref, prefix=self.prefix))

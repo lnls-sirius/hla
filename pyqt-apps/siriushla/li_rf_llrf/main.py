@@ -44,12 +44,11 @@ class MainWindow(QWidget):
     def __init__(self, parent=None, prefix=_VACA_PREFIX):
         """."""
         super().__init__(parent=parent)
+        self.prefix = prefix
         self.display_format = DisplayFormat
-        self.prefix = 'LA-RF:LLRF:'
+        self.main_dev = 'LA-RF:LLRF:'
         self.setObjectName('LIApp')
         self.setWindowTitle('LI LLRF')
-        self.setWindowIcon(_qta.icon(
-            'mdi.waves', color=_util.get_appropriate_color('LI')))
         self.image_container = QLabel()
         self.pixmap = QPixmap(_os.path.join(
             _os.path.abspath(_os.path.dirname(__file__)), "llrf.png"))
@@ -61,9 +60,10 @@ class MainWindow(QWidget):
         for relative_item in self.relative_widgets:
             relative_item.relativeResize()
 
-    def buildPvName(self, pv_name, device, prefix='', sufix=''):
+    def buildPvName(self, pv_name, device, pvPrefix='', pvSufix=''):
         """Build the pv name"""
-        return self.prefix + device + ":" + prefix + pv_name + sufix
+        return (self.prefix + ('-' if self.prefix else '') + self.main_dev +
+            device + ":" + pvPrefix + pv_name + pvSufix)
 
     def imageViewer(self):
         """Build the image"""
@@ -180,8 +180,8 @@ class MainWindow(QWidget):
             grbox.setLayout(lay)
             lay.addWidget(
                 ControlBox(
-                    grbox, dev.pvname, prefix=self.prefix,
-                    device=dev),
+                    grbox, dev.pvname, main_dev=self.main_dev,
+                    device=dev, prefix=self.prefix),
                 0, 0)
             lay1.addWidget(grbox, dev.value, 0)
 
@@ -190,17 +190,18 @@ class ControlBox(QWidget):
     """."""
 
     def __init__(
-        self, parent=None, dev='', prefix='', device=None):
+        self, parent=None, dev='', main_dev='', device=None, prefix=''):
             """."""
             super().__init__(parent=parent)
             self.prefix = prefix
+            self.main_dev = main_dev
             self.dev = dev
             self.device = device
             self._setupui()
 
     def _setupui(self):
         """."""
-        basename = self.prefix + self.dev
+        basename = self.prefix + ('-' if self.prefix else '') + self.main_dev + self.dev
 
         lay1 = QGridLayout()
         self.setLayout(lay1)
@@ -218,7 +219,7 @@ class ControlBox(QWidget):
             "#detail{min-width:25px; max-width:25px; icon-size:20px;}")
         _util.connect_window(
             pb_param, DeviceParamSettingWindow, parent=self,
-            device=self.device, prefix=self.prefix)
+            device=self.device, prefix=self.main_dev)
         lay1.addWidget(pb_param, row, 0, alignment=Qt.AlignLeft)
 
         props = (
@@ -244,9 +245,9 @@ class ControlBox(QWidget):
             laba = QLabel(name, self)
             if 'IQ Corr' in name:
                 dniqc = DeltaIQPhaseCorrButton(
-                    self, self.dev, prefix=self.prefix, delta=-90)
+                    self, self.dev, main_dev=self.main_dev, delta=-90, prefix=self.prefix)
                 dpiqc = DeltaIQPhaseCorrButton(
-                    self, self.dev, prefix=self.prefix, delta=90)
+                    self, self.dev, main_dev=self.main_dev, delta=90, prefix=self.prefix)
                 lay1.addWidget(laba, row, 0)
                 lay1.addWidget(dniqc, row, 1, alignment=Qt.AlignCenter)
                 lay1.addWidget(dpiqc, row, 2, alignment=Qt.AlignCenter)
