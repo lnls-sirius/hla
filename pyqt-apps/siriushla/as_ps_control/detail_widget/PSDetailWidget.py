@@ -288,6 +288,7 @@ class PSDetailWidget(QWidget):
 
         self.version_cte = SiriusLabel(
             self, self._prefixed_psname + ":Version-Cte")
+        self.version_cte.displayFormat = SiriusLabel.DisplayFormat.Version
         self.version_cte.setObjectName("version_cte_label")
         self.version_cte.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
 
