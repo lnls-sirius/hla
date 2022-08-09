@@ -219,7 +219,7 @@ class ControlBox(QWidget):
             "#detail{min-width:25px; max-width:25px; icon-size:20px;}")
         _util.connect_window(
             pb_param, DeviceParamSettingWindow, parent=self,
-            device=self.device, prefix=self.main_dev)
+            device=self.device, main_dev=self.main_dev, prefix=self.prefix)
         lay1.addWidget(pb_param, row, 0, alignment=Qt.AlignLeft)
 
         props = (

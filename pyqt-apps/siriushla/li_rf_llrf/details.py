@@ -3,6 +3,7 @@
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QLabel, QFrame, QGridLayout, QGroupBox, QWidget
 
+from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from ..widgets import SiriusMainWindow, PyDMStateButton, SiriusLedState, \
     SiriusSpinbox, SiriusLabel
 from .widgets import DeltaIQPhaseCorrButton
@@ -11,12 +12,14 @@ from .widgets import DeltaIQPhaseCorrButton
 class DeviceParamSettingWindow(SiriusMainWindow):
     """Device Parameter Setting Window."""
 
-    def __init__(self, parent=None, device=None, main_dev=''):
+    def __init__(self, parent=None, device=None, main_dev='', prefix=_VACA_PREFIX):
         """Init."""
         super().__init__(parent)
+
+        self.prefix = prefix + ('-' if prefix else '')
         self.main_dev = main_dev
         self.dev = device
-        self.devpref = self.main_dev + self.dev.pvname
+        self.devpref = self.prefix + self.main_dev + self.dev.pvname
 
         self.setObjectName('LIApp')
         self.setWindowTitle(self.dev.label + ' Parameter Setting')

@@ -174,7 +174,6 @@ class GraphTime(QWidget):
         self, parent=None, dev='', prop='Amp', main_dev='', channel='CH1', prefix=''):
         """."""
         super().__init__(parent=parent)
-        print(prefix)
         self.prefix = prefix
         self.main_dev = main_dev
         self.dev = dev
