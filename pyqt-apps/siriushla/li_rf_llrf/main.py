@@ -44,7 +44,7 @@ class MainWindow(QWidget):
     def __init__(self, parent=None, prefix=_VACA_PREFIX):
         """."""
         super().__init__(parent=parent)
-        self.prefix = prefix
+        self.prefix = prefix + ('-' if prefix else '')
         self.display_format = DisplayFormat
         self.main_dev = 'LA-RF:LLRF:'
         self.setObjectName('LIApp')
@@ -62,7 +62,7 @@ class MainWindow(QWidget):
 
     def buildPvName(self, pv_name, device, pvPrefix='', pvSufix=''):
         """Build the pv name"""
-        return (self.prefix + ('-' if self.prefix else '') + self.main_dev +
+        return (self.prefix + self.main_dev +
             device + ":" + pvPrefix + pv_name + pvSufix)
 
     def imageViewer(self):
@@ -201,7 +201,7 @@ class ControlBox(QWidget):
 
     def _setupui(self):
         """."""
-        basename = self.prefix + ('-' if self.prefix else '') + self.main_dev + self.dev
+        basename = self.prefix + self.main_dev + self.dev
 
         lay1 = QGridLayout()
         self.setLayout(lay1)

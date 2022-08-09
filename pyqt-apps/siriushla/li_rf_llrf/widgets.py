@@ -29,7 +29,7 @@ class DeltaIQPhaseCorrButton(QPushButton):
         self.prefix = prefix
         self.main_dev = main_dev
         self.dev = device
-        self.devpref = self.prefix + ('-' if self.prefix else '') + self.main_dev + device
+        self.devpref = self.prefix + self.main_dev + device
         self.delta = delta
 
         self.setToolTip(f'Do {delta:.1f}° delta')
@@ -106,7 +106,7 @@ class GraphIvsQ(QWidget):
         axx.setTicks([])
         axx.setHeight(0)
 
-        basename = self.prefix + ('-' if self.prefix else '') + self.main_dev + self.dev
+        basename = self.prefix + self.main_dev + self.dev
         if self.prop == 'IvsQ':
             chart_title = "I & Q Fasor"
             lblAxis = ["I", "Q"]
@@ -185,7 +185,7 @@ class GraphTime(QWidget):
     def _setupui(self):
         """."""
         chart_name = self.prop
-        basename = self.prefix + ('-' if self.prefix else '') + self.main_dev + self.dev
+        basename = self.prefix + self.main_dev + self.dev
         lay1 = QGridLayout()
         self.setLayout(lay1)
 

@@ -16,7 +16,7 @@ class ChartWindow(SiriusMainWindow):
         self.prefix = prefix
         self.main_dev = 'LA-RF:LLRF:'
         self.device = dev
-        self.devpref = self.prefix + ('-' if self.prefix else '') + self.main_dev
+        self.devpref = self.prefix + self.main_dev
         self.channel = channel
         self.chart_type = chart_type
 
