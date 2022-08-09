@@ -80,7 +80,7 @@ class MainWindow(QWidget):
         widget.precisionFromPV = False
         widget.precision = 2
         if pv_type == 'Power':
-            widget._display_format_type = self.display_format.Exponential
+            widget.displayFormat = self.display_format.Exponential
         return widget
 
     def showChartBtn(self, device, channel, chart_type):
