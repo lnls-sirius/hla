@@ -56,6 +56,17 @@ class ChartWindow(SiriusMainWindow):
         lay.addWidget(amp, 0, 2)
         lay.addWidget(pha, 1, 2)
 
+    def chartsMon(self, lay):
+        ivsq = GraphIvsQ(
+            self, self.device, 'IvsQ', self.devpref, self.channel, prefix=self.prefix)
+        amp = GraphTime(
+            self, self.device, 'Amp', self.devpref, self.channel, prefix=self.prefix)
+        pha = GraphTime(
+            self, self.device, 'Pha', self.devpref, self.channel, prefix=self.prefix)
+        lay.addWidget(ivsq, 0, 0)
+        lay.addWidget(amp, 0, 1)
+        lay.addWidget(pha, 0, 2)
+
     def _setupUi(self):
         """Display the selected chart type."""
         wid = QWidget(self)
@@ -71,6 +82,8 @@ class ChartWindow(SiriusMainWindow):
         elif self.chart_type == 'Diff':
             lay.addWidget(
                 GraphTime(self, self.device, 'Diff', self.devpref, prefix=self.prefix))
-        else:
+        elif self.chart_type == 'Raw':
             lay.addWidget(
                 GraphTime(self, self.device, 'Raw', self.devpref, prefix=self.prefix))
+        else:
+            self.chartsMon(lay)

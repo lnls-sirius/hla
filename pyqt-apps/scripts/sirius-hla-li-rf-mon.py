@@ -8,7 +8,7 @@ from siriushla import util as _util
 from siriushla.sirius_application import SiriusApplication
 from siriuspy.envars import VACA_PREFIX
 from siriushla.widgets.windows import create_window_from_widget
-from siriushla.li_rf_llrf import LLRFMain
+from siriushla.li_rf_llrf import LLRFMonitor
 
 parser = _argparse.ArgumentParser(
     description="Run Linac LLRF Control Interface.")
@@ -19,8 +19,8 @@ args = parser.parse_args()
 
 app = SiriusApplication()
 window = create_window_from_widget(
-    LLRFMain, title='LI LLRF', is_main=True,
-    withscroll=True, min_width=105, min_height=55,
+    LLRFMonitor, is_main=True,
+    withscroll=True, min_width=100, min_height=55,
     icon=_qta.icon(
         'mdi.waves', color=_util.get_appropriate_color('LI')))
 app.open_window(
