@@ -88,7 +88,7 @@ class MotorControlWindow(SiriusMainWindow):
         ib_hlay.addWidget(
             QLabel(title), alignment=Qt.AlignRight)
 
-        if title == "Up to Limit":
+        if "Up to" in title:
             wid_type = 'button'
         else:
             wid_type = 'label'
