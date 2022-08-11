@@ -3,7 +3,7 @@
 import numpy as np
 
 from qtpy.QtGui import QColor
-from qtpy.QtCore import QSize
+from qtpy.QtCore import Qt, QSize
 
 from qtpy.QtWidgets import QPushButton, QGridLayout, \
     QWidget, QHBoxLayout
@@ -109,7 +109,7 @@ class GraphIvsQ(QWidget):
         basename = self.prefix + self.main_dev + self.dev
         if self.prop == 'IvsQ':
             chart_title = "I & Q Fasor"
-            lblAxis = ["I", "Q"]
+            lblAxis = ["Q", "I"]
             channels = {
                 'Data': {
                     'X': basename + ':GET_' + self.channel + '_I',
@@ -120,6 +120,10 @@ class GraphIvsQ(QWidget):
                     'Y': basename + ':GET_' + self.channel + '_SETTING_Q'
                 }
             }
+            graph.setMinXRange(-1.0)
+            graph.setMaxXRange(1.0)
+            graph.setMinYRange(-1.0)
+            graph.setMaxYRange(1.0)
         else:
             chart_title = "I & Q Waveform"
             lblAxis = ["I & Q", "Time"]
@@ -235,7 +239,7 @@ class GraphTime(QWidget):
         opts = dict(
             y_channel=chname,
             name='Data',
-            color='red',
+            color='black',
             redraw_mode=2,
             lineStyle=1,
             lineWidth=3,

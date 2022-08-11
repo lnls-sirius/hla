@@ -121,7 +121,8 @@ class ControlBox(QWidget):
             btn = QPushButton("Chart")
             _util.connect_window(
                 btn, ChartWindow,
-                parent=self, dev=self.dev, chart_type="Diff")
+                parent=self, dev=self.dev,
+                chart_type="Diff", prefix=self.prefix)
             lay1.addWidget(labc, row, 0, 1, 2)
             lay1.addWidget(rbc, row, 1)
             lay1.addWidget(btn, row, 2)

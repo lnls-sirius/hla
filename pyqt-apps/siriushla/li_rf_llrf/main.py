@@ -4,7 +4,7 @@ import os as _os
 from qtpy.QtCore import Qt
 from qtpy.QtGui import QPixmap
 from qtpy.QtWidgets import QGroupBox, QGridLayout, QWidget, QLabel, \
-    QHBoxLayout, QVBoxLayout, QPushButton, QSizePolicy
+    QHBoxLayout, QVBoxLayout, QPushButton, QSizePolicy, QTabWidget, QFrame
 from pydm.widgets.display_format import DisplayFormat
 
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
@@ -13,9 +13,10 @@ from .. import util as _util
 from ..widgets import SiriusLabel
 from .widgets import RelativeWidget
 from .util import BASIC_INFO
-from .chart import ChartWindow
+from .chart import ChartWindow, ChartMon
 from .motor_control import MotorControlWindow
 from .controls import ControlBox, DEVICES
+
 
 class LLRFMain(QWidget):
     """."""
@@ -144,12 +145,40 @@ class LLRFMain(QWidget):
                 else:
                     self.motorControlBtn(pv_name, info)
 
+    def buildLine(self):
+        line = QFrame()
+        line.setFrameShape(QFrame.HLine)
+        line.setFrameShadow(QFrame.Raised)
+        line.setLineWidth(3)
+        return line
+
+    def buildChartMonitor(self):
+        widget = QWidget()
+        lay = QVBoxLayout()
+        for dev in DEVICES:
+            lay.addWidget(
+                ChartMon(
+                    parent=self, dev=dev.pvname, prefix=self.prefix))
+            if dev != DEVICES.SHB:
+                lay.addWidget(self.buildLine())
+        widget.setLayout(lay)
+        return widget
+
+    def buildTabs(self):
+        tab = QTabWidget()
+        tab.setObjectName("LITab")
+        tab.setContentsMargins(0, 0, 0, 0)
+        tab.addTab(self.imageViewer(), "Planta Completa")
+        tab.addTab(self.buildChartMonitor(), "Monitoramento dos Loops de Controle")
+
+        return tab
+
     def _setupui(self):
         """."""
         lay1 = QGridLayout()
         self.setLayout(lay1)
 
-        lay1.addWidget(self.imageViewer(), 0, 1, 3, 10)
+        lay1.addWidget(self.buildTabs(), 0, 1, 3, 10)
         self.buildDevicesWidgets()
 
         for dev in DEVICES:
