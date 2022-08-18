@@ -28,6 +28,7 @@ class SiriusLabel(QLabel, TextFormatter, PyDMWidget, DisplayFormat):
     Q_ENUMS(DisplayFormat)
     DisplayFormat = DisplayFormat
     DisplayFormat.Time = 6
+    DisplayFormat.BSMPUDCVersion = 7
 
     def __init__(self, parent=None, init_channel=None, keep_unit=False, **kws):
         """Init."""
@@ -102,6 +103,13 @@ class SiriusLabel(QLabel, TextFormatter, PyDMWidget, DisplayFormat):
             time = _Time(int(new_value)).time().isoformat() \
                 if new_value is not None else ''
             self.setText(time)
+            return
+
+        # If it is a version string, replace multiple whitespaces with a single one
+        if self._display_format_type == self.DisplayFormat.BSMPUDCVersion:
+            version = new_value[:16] + " " + new_value[16:]
+            version = " ".join(version.split())
+            self.setText(version)
             return
 
         new_value = parse_value_for_display(
