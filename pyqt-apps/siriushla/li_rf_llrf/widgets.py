@@ -1,4 +1,4 @@
-"""LILLRF Custom Widgets."""
+"""LI LLRF Custom Widgets."""
 
 import numpy as np
 
@@ -200,8 +200,6 @@ class GraphTime(QWidget):
         graph.setShowYGrid(True)
         graph.setBackgroundColor(QColor(_util.get_appropriate_color('LI')))
         graph.setShowLegend(True)
-        graph.setAutoRangeX(False)
-        graph.setAutoRangeY(False)
         graph.plotItem.showButtons()
         graph.setAxisColor(QColor(0, 0, 0))
         graph.setXLabels(["Time"])
@@ -239,7 +237,7 @@ class GraphTime(QWidget):
         opts = dict(
             y_channel=chname,
             name='Data',
-            color='black',
+            color='red',
             redraw_mode=2,
             lineStyle=1,
             lineWidth=3,

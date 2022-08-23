@@ -1,10 +1,11 @@
 """Main module of the Application Interface."""
 
 import os as _os
-from qtpy.QtCore import Qt
+from qtpy.QtCore import Qt, QEvent
 from qtpy.QtGui import QPixmap
 from qtpy.QtWidgets import QGroupBox, QGridLayout, QWidget, QLabel, \
-    QHBoxLayout, QVBoxLayout, QPushButton, QSizePolicy, QTabWidget, QFrame
+    QHBoxLayout, QVBoxLayout, QPushButton, QSizePolicy, QTabWidget, \
+    QFrame, QSpacerItem
 from pydm.widgets.display_format import DisplayFormat
 
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
@@ -35,10 +36,12 @@ class LLRFMain(QWidget):
         self.relative_widgets = []
         self._setupui()
 
-    def resizeEvent(self, event):
+    def eventFilter(self, obj, event):
         """Signal the resize event to the relative Widgets"""
-        for relative_item in self.relative_widgets:
-            relative_item.relativeResize()
+        if (event.type() == QEvent.Resize):
+            for relative_item in self.relative_widgets:
+                relative_item.relativeResize()
+        return super().eventFilter(obj, event)
 
     def buildPvName(self, pv_name, device, pvPrefix='', pvSufix=''):
         """Build the pv name"""
@@ -48,6 +51,7 @@ class LLRFMain(QWidget):
     def imageViewer(self):
         """Build the image"""
         self.image_container.setPixmap(self.pixmap)
+        self.image_container.installEventFilter(self)
         self.image_container.setScaledContents(True)
         self.image_container.setSizePolicy(
             QSizePolicy.Ignored, QSizePolicy.Ignored)
@@ -146,15 +150,19 @@ class LLRFMain(QWidget):
                     self.motorControlBtn(pv_name, info)
 
     def buildLine(self):
+        """ Build a single horizontal line """
         line = QFrame()
         line.setFrameShape(QFrame.HLine)
         line.setFrameShadow(QFrame.Raised)
+        line.setStyleSheet('color: gray;')
         line.setLineWidth(3)
         return line
 
     def buildChartMonitor(self):
+        """ Build the Control Loop Monitor tab """
         widget = QWidget()
         lay = QVBoxLayout()
+        lay.setContentsMargins(0, 0, 0, 0)
         for dev in DEVICES:
             lay.addWidget(
                 ChartMon(
@@ -165,22 +173,26 @@ class LLRFMain(QWidget):
         return widget
 
     def buildTabs(self):
+        """ Build the tab widget """
         tab = QTabWidget()
         tab.setObjectName("LITab")
         tab.setContentsMargins(0, 0, 0, 0)
-        tab.addTab(self.imageViewer(), "Planta Completa")
-        tab.addTab(self.buildChartMonitor(), "Monitoramento dos Loops de Controle")
+        tab.addTab(self.imageViewer(), "Complete Footprint")
+        tab.addTab(self.buildChartMonitor(), "Control Loop Monitor")
 
         return tab
 
     def _setupui(self):
-        """."""
+        """ . """
         lay1 = QGridLayout()
         self.setLayout(lay1)
 
-        lay1.addWidget(self.buildTabs(), 0, 1, 3, 10)
+        lay1.addWidget(self.buildTabs(), 0, 1)
         self.buildDevicesWidgets()
 
+        conlay = QGridLayout()
+        conlay.addItem(
+            QSpacerItem(1, 12, QSizePolicy.Ignored, QSizePolicy.Fixed), 0, 0)
         for dev in DEVICES:
             grbox = QGroupBox(dev.label, self)
             lay = QGridLayout()
@@ -191,4 +203,5 @@ class LLRFMain(QWidget):
                     grbox, dev.pvname, main_dev=self.main_dev,
                     device=dev, prefix=self.prefix),
                 0, 0)
-            lay1.addWidget(grbox, dev.value, 0)
+            conlay.addWidget(grbox, dev.value+1, 0)
+        lay1.addLayout(conlay, 0, 0)
