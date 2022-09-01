@@ -237,7 +237,7 @@ class GraphTime(QWidget):
         opts = dict(
             y_channel=chname,
             name='Data',
-            color='red',
+            color='black',
             redraw_mode=2,
             lineStyle=1,
             lineWidth=3,

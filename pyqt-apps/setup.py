@@ -94,6 +94,7 @@ setup(
         'scripts/sirius-hla-li-ps-control.py',
         'scripts/sirius-hla-li-pu-modltr.py',
         'scripts/sirius-hla-li-rf-llrf.py',
+        'scripts/sirius-hla-li-va-vacuum.py',
         'scripts/sirius-hla-si-ap-chromcorr.py',
         'scripts/sirius-hla-si-ap-currlt.py',
         'scripts/sirius-hla-si-ap-genstatus.py',
