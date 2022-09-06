@@ -2,6 +2,7 @@
 
 """RAD Monitor."""
 
+import os
 import sys as sys
 import argparse as argparse
 import qtawesome as qta
@@ -11,6 +12,7 @@ from siriushla.sirius_application import SiriusApplication
 from siriushla.as_ap_radmon import RadTotDoseMonitor
 from siriushla.widgets.windows import create_window_from_widget
 
+os.environ['EPICS_CA_ADDR_LIST'] += ' ' + '10.0.38.72'
 
 parser = argparse.ArgumentParser(
     description="Run RAD Monitor.")
