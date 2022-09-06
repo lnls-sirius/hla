@@ -604,7 +604,7 @@ class PSTestWindow(SiriusMainWindow):
         self.nok_ps.clear()
         if isinstance(dev_type, list):
             devices = list(dev_type)
-            dev_type = devices[0].dis
+            dev_type = PVName(devices[0]).dis
         else:
             if dev_type == 'PS':
                 devices = self._get_selected_ps()
