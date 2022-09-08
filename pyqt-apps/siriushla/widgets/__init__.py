@@ -29,3 +29,4 @@ from .detachable_tabwidget import DetachableTabWidget
 from .pushbutton import SiriusPushButton
 from .waveformtable import SiriusWaveformTable
 from .selection_matrix import SelectionMatrixWidget
+from .relative_widget import RelativeWidget

@@ -1,16 +1,21 @@
-GREEN = '#00FF00'
-RED = '#FF0000'
-BLUE = '#0000FF'
-YELLOW = '#FFFF00'
+from qtpy.QtGui import QColor
 
-COLORS = [RED, GREEN, BLUE, YELLOW]
+COLORS = {
+    "light_green": QColor(0, 140, 0),
+    "dark_green": QColor(20, 80, 10),
+    "yellow": QColor(210, 205, 0),
+    "red": QColor(207, 0, 0),
+    "gray": QColor(169, 169, 169),
+    "blue": QColor(0, 0, 115),
+    "purple": QColor(75, 0, 130)
+}
 
 # Styles
 # CCG (1 e 2)
 # PRG (3)
 PVS_CONFIG = {
     "Vacuum": {
-        'prefix': 'LA-VA:H1VGC-0',
+        'prefix': 'LA-VA:H1VGC-',
         'iterations': [1, 5],
         'unit': ':RdUnit',
         'value': {
@@ -19,57 +24,66 @@ PVS_CONFIG = {
         },
         'led': {
             'text': ':RdState',
-            1: {
-                'up': '.BB',
-                'low': '.BA'
-            },
-            2: {
-                'up': '.B7',
-                'low': '.B6'
-            },
+            1: ['.BB', '.BA'],
+            2: ['.B7', '.B6'],
             3: '.B3'
         },
         'position': [
-            [(), (), ()],
-            [(), (), ()],
-            [(), (), ()],
-            [(), (), ()],
-            [(), (), ()]
-        ]
+            [[0, 0], [0, 0], [0, 0]],
+            [[0, 0], [0, 0], [0, 0]],
+            [[0, 0], [0, 0], [0, 0]],
+            [[0, 0], [0, 0], [0, 0]],
+            [[0, 0], [0, 0], [0, 0]]
+        ],
+        'size': {
+            "V": [8, 17],
+            "H": [15, 8]
+        }
     },
     "Pump": {
         'prefix': 'LA-VA:H1IPS-',
         'iterations': [1, 16],
-        'voltage': ':ReadV',
-        'current': ':ReadI',
+        'current': {
+            'text': ':ReadI',
+            'color': COLORS["purple"].name()
+        },
+        'voltage': {
+            'text': ':ReadV',
+            'color': COLORS["blue"].name()
+        },
         'position': [
-            (), (), (), (),
-            (), (), (), (),
-            (), (), (), (),
-            (), (), (), ()
-        ]
+            [0, 0], [0, 20], [0, 40], [0, 60],
+            [0, 40], [0, 50], [0, 60], [0, 70],
+            [0, 80], [0, 90], [0, 100], [0, 0],
+            [0, 0], [0, 0], [0, 0], [0, 0]
+        ],
+        'size': {
+            "V": [8, 17],
+            "H": [13, 12]
+        }
     },
     "Valve": {
         'prefix': 'LA-CN:H1MPS-1:Gval',
         'sufix': ['Opened', 'Closed'],
         'iterations': [1, 2],
         'position': [
-            (), ()]
+            [20, 20], [10, 10]],
+        'size': [10, 10]
     }
 }
 
 LEGEND = {
     'Gauge Status': [
         {
-            'color': GREEN,
+            'color': COLORS["dark_green"],
             'text': 'ON'
         },
         {
-            'color': BLUE,
+            'color': COLORS["light_green"],
             'text': 'OFF'
         },
         {
-            'color': YELLOW,
+            'color': COLORS["yellow"],
             'text': 'Inconsistent'
         }
     ],
@@ -86,40 +100,47 @@ LEGEND = {
     ],
     'IPS Control': [
         {
-            'color': GREEN,
+            'color': COLORS["dark_green"],
             'text': 'ON / Remote'
         },
         {
-            'color': BLUE,
+            'color': COLORS["light_green"],
             'text': 'OFF / Local'
         },
         {
-            'color': YELLOW,
+            'color': COLORS["yellow"],
             'text': 'Inconsistent'
         }
     ],
     'CCG': [
         {
-            'color': [GREEN, GREEN],
+            'color': COLORS["dark_green"],
             'text': 'Ok'
         },
         {
-            'color': [YELLOW, GREEN],
+            'color': COLORS["yellow"],
             'text': 'Warning'
         },
         {
-            'color': [YELLOW, RED],
+            'color': COLORS["red"],
             'text': 'Alarm'
         }
     ],
     'PRG': [
         {
-            'color': GREEN,
+            'color': COLORS["dark_green"],
             'text': 'Ok'
         },
         {
-            'color': YELLOW,
+            'color': COLORS["yellow"],
             'text': 'Warning'
         }
     ]
 }
+
+# MULTI_LED_CONFIG = {
+#     {
+#         self.prefix+ch_coup: {'comp': 'ne', 'value': pvs},
+#         self.prefix+ch_coup: {'comp': 'ne', 'value': pvs},
+#         self.prefix+ch_coup: {'comp': 'ne', 'value': pvs}
+#     }

@@ -11,8 +11,7 @@ from pydm.widgets.display_format import DisplayFormat
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 
 from .. import util as _util
-from ..widgets import SiriusLabel
-from .widgets import RelativeWidget
+from ..widgets import SiriusLabel, RelativeWidget
 from .util import BASIC_INFO
 from .chart import ChartWindow, ChartMon
 from .motor_control import MotorControlWindow
