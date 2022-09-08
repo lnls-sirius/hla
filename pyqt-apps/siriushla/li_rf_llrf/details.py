@@ -3,6 +3,7 @@
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QLabel, QFrame, QGridLayout, QGroupBox, QWidget
 
+from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from ..widgets import SiriusMainWindow, PyDMStateButton, SiriusLedState, \
     SiriusSpinbox, SiriusLabel
 from .widgets import DeltaIQPhaseCorrButton
@@ -11,13 +12,14 @@ from .widgets import DeltaIQPhaseCorrButton
 class DeviceParamSettingWindow(SiriusMainWindow):
     """Device Parameter Setting Window."""
 
-    def __init__(self, parent=None, device=None, prefix=''):
+    def __init__(self, parent=None, device=None, main_dev='', prefix=_VACA_PREFIX):
         """Init."""
         super().__init__(parent)
-        self.prefix = prefix
+
+        self.prefix = prefix + ('-' if prefix else '')
+        self.main_dev = main_dev
         self.dev = device
-        self.devpref = self.prefix + ('-' if self.prefix else '') + \
-            'LA-RF:LLRF:' + self.dev.pvname
+        self.devpref = self.prefix + self.main_dev + self.dev.pvname
 
         self.setObjectName('LIApp')
         self.setWindowTitle(self.dev.label + ' Parameter Setting')
@@ -208,11 +210,11 @@ class DeviceParamSettingWindow(SiriusMainWindow):
             lay.addWidget(spa, row, 2)
             if prop == 'CH1_PHASE_CORR':
                 dniqc = DeltaIQPhaseCorrButton(
-                    self, self.dev, prefix=self.prefix,
-                    delta=-90, show_label=False)
+                    self, self.dev.pvname, main_dev=self.main_dev,
+                    delta=-90, show_label=False, prefix=self.prefix)
                 dpiqc = DeltaIQPhaseCorrButton(
-                    self, self.dev, prefix=self.prefix,
-                    delta=90, show_label=False)
+                    self, self.dev.pvname, main_dev=self.main_dev,
+                    delta=90, show_label=False, prefix=self.prefix)
                 lay.addWidget(dniqc, row, 1)
                 lay.addWidget(dpiqc, row, 3)
 

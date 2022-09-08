@@ -120,8 +120,8 @@ class LiBeamProfile(SiriusMainWindow):
         ''' Build formatted RBV Component'''
         rbv_hlay = QHBoxLayout()
         title = QLabel(label)
-        title.setMinimumWidth(50)
-        title.setAlignment(Qt.AlignCenter)
+        title.setMinimumWidth(75)
+        title.setAlignment(Qt.AlignVCenter | Qt.AlignRight)
         rbv_hlay.addWidget(title)
         for item in range(1, -1, -1):
             pv_name = pv_prefix + channel[item]
@@ -163,6 +163,7 @@ class LiBeamProfile(SiriusMainWindow):
                 device, graph_data['channel']['data']),
             color="#ff0000",
             lineWidth=1)
+            
         graph_plot.setPlotTitle(title)
         graph_plot.setLabel(
             'left',
@@ -182,7 +183,6 @@ class LiBeamProfile(SiriusMainWindow):
         image_wid = PyDMImageView(
             image_channel=self.getPvName(device, SCREEN['Screen']['data']),
             width_channel=self.getPvName(device, SCREEN['Screen']['width']))
-        image_wid.setMinimumSize(500, 100)
 
         ss_vlay.addWidget(image_wid, 5)
         ss_vlay.addLayout(self.setScrnInfo(device), 1)

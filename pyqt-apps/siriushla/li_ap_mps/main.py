@@ -1,8 +1,7 @@
 ''' Monitor Protection System Controller Interface '''
 from qtpy.QtCore import Qt, QEvent
 from qtpy.QtWidgets import QWidget, QGroupBox, QHBoxLayout, \
-    QGridLayout, QLabel, QTabWidget, \
-    QPushButton
+    QGridLayout, QLabel, QTabWidget, QPushButton
 import qtawesome as qta
 from pydm.widgets import PyDMSpinbox
 from .util import PV_MPS, MPS_PREFIX, CTRL_TYPE, GROUP_POS, \
