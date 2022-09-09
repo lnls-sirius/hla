@@ -1,15 +1,17 @@
 """Main module of the Application Interface."""
 
 import os as _os
+import math as _math
 from qtpy.QtCore import Qt, QEvent, QSize
 from qtpy.QtWidgets import QWidget, QGridLayout, QVBoxLayout, QLabel, \
-    QGroupBox, QHBoxLayout
+    QGroupBox, QHBoxLayout, QPushButton
 from pydm.widgets.display_format import DisplayFormat
 from qtpy.QtGui import QPixmap
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from .util import LEGEND, PVS_CONFIG, COLORS
 from .widgets import LedLegend
-from ..widgets import RelativeWidget, PyDMLedMultiChannel, SiriusLabel
+from ..widgets import RelativeWidget, PyDMLedMultiChannel, \
+    SiriusLabel, PyDMLed
 
 class VacuumMain(QWidget):
     """."""
@@ -26,10 +28,31 @@ class VacuumMain(QWidget):
         self.relative_widgets = []
         self._setupui()
 
-    def showUnitView(self, pv_name):
+    def showUnitView(self, pv_name, color="#000000"):
         widget = SiriusLabel(init_channel=pv_name)
+        widget.setStyleSheet(
+            "color: "+color+";"+
+            "padding: 0.05em;"+
+            "border: 0.2em solid "+color+";")
         widget.showUnits = True
         return widget
+
+    def buildIdName(self, name, id_num, isValve):
+        pv_id = ""
+        if not isValve:
+            if id_num < 10:
+                pv_id = "0"
+        pv_id += str(id_num)
+        return name + pv_id
+
+    def setLayOrientation(self, orient):
+        if orient == "V":
+            lay = QVBoxLayout()
+        else:
+            lay = QHBoxLayout()
+        lay.setContentsMargins(0, 0, 0, 0)
+        lay.setSpacing(0)
+        return lay
 
     def eventFilter(self, obj, event):
         """Signal the resize event to the relative Widgets"""
@@ -48,7 +71,7 @@ class VacuumMain(QWidget):
         leg_glay = QGridLayout()
         leg_glay.addWidget(
             self.legendText('<b>'+legend+'</b>'),
-            0, 0, 1, 2, Qt.AlignCenter)
+            0, 0, 1, 2, alignment=Qt.AlignCenter)
         row = 1
         for item in LEGEND[legend]:
             column = 0
@@ -56,12 +79,14 @@ class VacuumMain(QWidget):
                 leg_glay.addWidget(
                     LedLegend(self,
                         item['color']),
-                    row, column, 1, 1, Qt.AlignCenter)
+                    row, column, 1, 1,
+                    alignment=Qt.AlignCenter)
                 column = 1
 
             leg_glay.addWidget(
                 self.legendText(item['text']),
-                row, column, 1, 1, Qt.AlignLeft)
+                row, column, 1, 1,
+                alignment=Qt.AlignLeft)
             row += 1
         return leg_glay
 
@@ -73,74 +98,148 @@ class VacuumMain(QWidget):
         self.image_container.setMinimumSize(1000, 500)
         return self.image_container
 
-    def buildValveLed(self, pv_name, config):
-        chan2vals = {
-            pv_name + config["sufix"][0]: 1,
-            pv_name + config["sufix"][1]: 0
-        }
+    def buildLed(self, pv_name, sufix_list, comp):
+        if comp == 'on/off':
+            chan2vals = {
+                pv_name + sufix_list[0]: 1,
+                pv_name + sufix_list[1]: 0
+            }
+        elif comp == 'equal':
+            chan2vals = {
+                pv_name + sufix_list[0]: 1,
+                pv_name + sufix_list[1]: 1
+            }
         color_list = [
             COLORS["yellow"], COLORS["light_green"], COLORS["gray"]]
         led = PyDMLedMultiChannel(
             self, chan2vals, color_list)
         return led
 
-    def buildIdName(self, name, number, isValve):
-        pv_id = ""
-        if not isValve:
-            if number < 10:
-                pv_id = "0"
-        pv_id += str(number)
-        return name + pv_id
+    def setWindowBtn(self, cat, id_num):
+        button = QPushButton(
+            self.getBtnTitle(cat, id_num))
+        #Connect to window
+        button.setStyleSheet("font-weight: bold;")
+        return button
 
-    def buildIPSInfo(self, pv_name, config, number, orientation="V"):
-        group = QGroupBox()
-        size = config["size"][orientation]
-        if orientation == "V":
-            lay_ips = QVBoxLayout()
-            group.setMaximumSize(size[0]*12, size[1]*6)
+    def getBtnTitle(self, cat, id_num):
+        dev_number = id_num
+        if cat == "Pump":
+            name = "IPS"
         else:
-            lay_ips = QHBoxLayout()
-            group.setMaximumSize(8*8, 17*8)
-
-        lay_ips.setContentsMargins(0, 0, 0, 0)
-        lay_ips.setSpacing(0)
-        group.setLayout(lay_ips)
-
-        id_name = QLabel(
-            "<strong>"+self.buildIdName("IPS", number, False)+"</strong>")
-        lay_ips.addWidget(id_name,
-            alignment=Qt.AlignCenter)
-        for info_type in ['voltage', 'current']:
-            wid = self.showUnitView(pv_name + config[info_type]['text'])
-            lay_ips.addWidget(wid,
-                alignment=Qt.AlignCenter)
-            wid.setStyleSheet(
-                "color: "+config[info_type]['color']+";"+
-                "padding: 0.05em;"+
-                "border: 0.2em solid"+config[info_type]['color']+";")
-        #Add to IPS Widget List
-        return group
-
-    def showMainWidgets(self, category_name="Vacuum"):
-        config = PVS_CONFIG[category_name]
-        pv_range = config["iterations"]
-        for item in range(pv_range[0], pv_range[1]+1):
-            pv_name = self.buildIdName(
-                config["prefix"], item, category_name=="Valve")
-            if(category_name == "Valve"):
-                widget = self.buildValveLed(pv_name, config)
-                position = config["position"][item-1] + config["size"]
-            elif(category_name == "Pump"):
-                widget = self.buildIPSInfo(pv_name, config, item, "V")
-                position = config["position"][item-1] + config["size"]["V"]
+            dev_number, dev_gen = self.buildIdsVac(id_num)
+            if dev_gen == 3:
+                name = "PRG"
             else:
-                widget = None
-                position = config["position"][item-1][0] + config["size"]["H"]
+                name = "CCG"
+        return self.buildIdName(name, dev_number, False)
+
+    def buildBasicGroup(self, cat, id_num, orient="V"):
+        group = QGroupBox()
+        lay = self.setLayOrientation(orient)
+        group.setLayout(lay)
+        lay.addWidget(
+            self.setWindowBtn(cat, id_num),
+            alignment=Qt.AlignCenter)
+        return lay, group
+
+    def buildIPSInfo(self, pv_name, config, lay):
+        for info_type in ['voltage', 'current']:
+            info = config[info_type]
+            name = pv_name + info['text']
+            wid = self.showUnitView(
+                name, info['color'])
+            lay.addWidget(wid,
+                alignment=Qt.AlignCenter)
+        return lay
+
+    def buildIdsVac(self, id_num):
+        dev_number = _math.ceil(id_num / 3)
+        dev_gen = id_num % 3
+        if dev_gen == 2:
+            dev_number += 5
+        if not dev_gen:
+            dev_gen = 3
+        return dev_number, dev_gen
+
+    def buildVacPv(self, config, id_num):
+        dev_number, dev_gen = self.buildIdsVac(id_num)
+        if dev_gen == 2:
+            dev_number -= 5
+        pv_name = self.buildIdName(
+            config["prefix"], dev_number, False)
+        return pv_name, dev_gen
+
+    def buildVacInfo(self, config, id_num, lay):
+        name, dev_gen = self.buildVacPv(config, id_num)
+        led_config = config["led"]
+        led_name = name+led_config["text"]
+        unit_name = name+config["text"]+str(dev_gen)
+        sufix_list = led_config["sufix"]
+        lay.addWidget(
+            self.showUnitView(
+                unit_name, config['color']),
+            alignment=Qt.AlignCenter)
+        if id_num % 3 != 0:
+            led = self.buildLed(
+                led_name, sufix_list[id_num % 3], "equal")
+        else:
+            led = PyDMLed(
+                init_channel=led_name+sufix_list[0])
+        lay.addWidget(led, alignment=Qt.AlignCenter)
+        return lay
+
+    def getPosition(self, coord, size, orient):
+        if isinstance(size, dict):
+            return coord + size[orient]
+        return coord + size
+
+    def getWidget(self, config, item, cat, orient):
+        pv_name = self.buildIdName(
+                config["prefix"], item, cat=="Valve")
+        if(cat == "Valve"):
+            widget = self.buildLed(
+                pv_name, config['sufix'], "on/off")
+        elif(cat == "Pump"):
+            lay, widget = self.buildBasicGroup(
+                cat, item, orient)
+            self.buildIPSInfo(
+                pv_name, config, lay)
+        else:
+            lay, widget = self.buildBasicGroup(
+                cat, item, orient)
+            self.buildVacInfo(
+                config, item, lay)
+        return widget
+
+    def saveWidget(self, widget, size, coord, orient, lay):
+        if orient == 'H':
+            lay.addWidget(widget, alignment=Qt.AlignCenter)
+        else:
             rel_wid = RelativeWidget(
                 parent=self.image_container,
                 widget=widget,
-                relative_pos=position)
+                relative_pos=self.getPosition(
+                    coord, size, orient))
             self.relative_widgets.append(rel_wid)
+        return lay
+
+    def showMainWidgets(self, cat="Vacuum"):
+        lay = QVBoxLayout()
+        config = PVS_CONFIG[cat]
+        pv_range = config["iterations"]
+        lists = ['V', 'H']
+        if cat == "Valve":
+            lists = ['']
+        for orient in lists:
+            for item in range(pv_range[0], pv_range[1]+1):
+                coord = config["position"][item-1]
+                widget = self.getWidget(
+                    config, item, cat, orient)
+                lay = self.saveWidget(
+                    widget, config["size"], coord,
+                    orient, lay)
+        return lay
 
     def _setupui(self):
         """ . """
@@ -148,5 +247,8 @@ class VacuumMain(QWidget):
         self.setLayout(layG)
 
         layG.addWidget(self.imageViewer(), 0, 0)
+        row = 1
         for wid_cat in PVS_CONFIG:
-            self.showMainWidgets(wid_cat)
+            widget = self.showMainWidgets(wid_cat)
+            layG.addLayout(widget, row, 0)
+            row+=1
