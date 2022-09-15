@@ -5,9 +5,9 @@ COLORS = {
     "dark_green": QColor(20, 80, 10),
     "yellow": QColor(210, 205, 0),
     "red": QColor(207, 0, 0),
-    "gray": QColor(169, 169, 169),
-    "blue": QColor(0, 0, 115),
-    "purple": QColor(75, 0, 130)
+    "blue": QColor(130, 143, 255),
+    "purple": QColor(186, 130, 255),
+    "btn_bg": "#77f2b6bc"
 }
 
 # Styles
@@ -19,7 +19,7 @@ PVS_CONFIG = {
         'iterations': [1, 15],
         # 'unit': ':RdUnit',
         'text': ':RdPrs-',
-        'color': COLORS["light_green"].name(),
+        'color': '',
         'led': {
             'text': ':RdState',
             'sufix': {
@@ -29,15 +29,16 @@ PVS_CONFIG = {
             }
         },
         'position': [
-            [20, 0], [00, 0], [00, 0],
-            [0, 0], [0, 0], [0, 0],
-            [0, 0], [0, 0], [0, 0],
-            [0, 0], [0, 0], [0, 0],
-            [0, 0], [0, 0], [0, 0]
+            [93.5, 83], [53.5, 58], [93.5, 90],
+            [79.75, 90], [57, 7], [4.5, 67],
+            [3.5, 74], [40, 40], [51.5, 72.5],
+            [72.25, 58], [30, 58], [60, 22],
+            [63, 40], [47, 7], [43, 22]
         ],
-        'size': {
-            "V": [8, 17],
-            "H": [15, 8]
+        'size': [7, 9],
+        'list': {
+            'coord': [77.5, 0],
+            'size': [23, 70]
         }
     },
     "Pump": {
@@ -52,14 +53,15 @@ PVS_CONFIG = {
             'color': COLORS["blue"].name()
         },
         'position': [
-            [40, 0], [50, 0], [0, 0], [0, 0],
-            [0, 0], [0, 0], [0, 0], [0, 0],
-            [0, 0], [0, 0], [0, 0], [0, 0],
-            [0, 0], [0, 0], [0, 0], [0, 0]
+            [86, 90], [73, 90], [21.5, 68], [14.5, 70],
+            [73, 72.5], [73, 43], [63, 72.5], [63, 55],
+            [50, 65], [50, 49], [55.5, 15], [40, 72.5],
+            [40, 55], [30.5, 72.5], [26, 49], [50, 15]
         ],
-        'size': {
-            "V": [8, 17],
-            "H": [13, 12]
+        'size': [5, 9],
+        'list': {
+            'coord': [2.5, 0],
+            'size': [30, 60] 
         }
     },
     "Valve": {
@@ -67,19 +69,19 @@ PVS_CONFIG = {
         'sufix': ['Opened', 'Closed'],
         'iterations': [1, 2],
         'position': [
-            [50, 20], [50, 10]],
+            [22, 77.5], [85, 77.5]],
         'size': [10, 10]
     }
 }
-
 LEGEND = {
+    'size': [8.5, 15],
     'Gauge Status': [
         {
-            'color': COLORS["dark_green"],
+            'color': COLORS["light_green"],
             'text': 'ON'
         },
         {
-            'color': COLORS["light_green"],
+            'color': COLORS["dark_green"],
             'text': 'OFF'
         },
         {
@@ -100,11 +102,11 @@ LEGEND = {
     ],
     'IPS Control': [
         {
-            'color': COLORS["dark_green"],
+            'color': COLORS["light_green"],
             'text': 'ON / Remote'
         },
         {
-            'color': COLORS["light_green"],
+            'color': COLORS["dark_green"],
             'text': 'OFF / Local'
         },
         {
@@ -114,7 +116,7 @@ LEGEND = {
     ],
     'CCG': [
         {
-            'color': COLORS["dark_green"],
+            'color': COLORS["light_green"],
             'text': 'Ok'
         },
         {
@@ -128,7 +130,7 @@ LEGEND = {
     ],
     'PRG': [
         {
-            'color': COLORS["dark_green"],
+            'color': COLORS["light_green"],
             'text': 'Ok'
         },
         {
@@ -137,10 +139,3 @@ LEGEND = {
         }
     ]
 }
-
-# MULTI_LED_CONFIG = {
-#     {
-#         self.prefix+ch_coup: {'comp': 'ne', 'value': pvs},
-#         self.prefix+ch_coup: {'comp': 'ne', 'value': pvs},
-#         self.prefix+ch_coup: {'comp': 'ne', 'value': pvs}
-#     }

@@ -2,16 +2,19 @@
 
 import os as _os
 import math as _math
-from qtpy.QtCore import Qt, QEvent, QSize
+from qtpy.QtCore import Qt, QEvent
 from qtpy.QtWidgets import QWidget, QGridLayout, QVBoxLayout, QLabel, \
     QGroupBox, QHBoxLayout, QPushButton
+import qtawesome as _qta
 from pydm.widgets.display_format import DisplayFormat
 from qtpy.QtGui import QPixmap
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from .util import LEGEND, PVS_CONFIG, COLORS
-from .widgets import LedLegend
+from .widgets import LedLegend, QGroupBoxButton
 from ..widgets import RelativeWidget, PyDMLedMultiChannel, \
     SiriusLabel, PyDMLed
+from siriushla.as_di_bpms.base import GraphTime
+from ..si_di_bbb.custom_widgets import MyScaleIndicator
 
 class VacuumMain(QWidget):
     """."""
@@ -22,19 +25,27 @@ class VacuumMain(QWidget):
         self.prefix = prefix + ('-' if prefix else '')
         self.setObjectName('LIApp')
         self.setWindowTitle('LI Vacuum')
+        self.display_format = DisplayFormat
         self.image_container = QLabel()
         self.pixmap = QPixmap(_os.path.join(
             _os.path.abspath(_os.path.dirname(__file__)), "vacuum.png"))
         self.relative_widgets = []
+        self.pumpList = []
+        self.vacList = []
+        self.graphs = []
         self._setupui()
 
     def showUnitView(self, pv_name, color="#000000"):
         widget = SiriusLabel(init_channel=pv_name)
-        widget.setStyleSheet(
-            "color: "+color+";"+
-            "padding: 0.05em;"+
-            "border: 0.2em solid "+color+";")
+        styled = "min-height:0.75em;max-height:0.75em;background-color:"+color+";min-width: 3em;"
+        widget.setStyleSheet(styled)
         widget.showUnits = True
+        widget._keep_unit = True
+        widget.setAlignment(Qt.AlignCenter)
+        if "RdPrs" in pv_name:
+            widget.precisionFromPV = False
+            widget.precision = 2
+            widget.displayFormat = self.display_format.Exponential
         return widget
 
     def buildIdName(self, name, id_num, isValve):
@@ -50,7 +61,7 @@ class VacuumMain(QWidget):
             lay = QVBoxLayout()
         else:
             lay = QHBoxLayout()
-        lay.setContentsMargins(0, 0, 0, 0)
+        lay.setContentsMargins(0, 2, 0, 0)
         lay.setSpacing(0)
         return lay
 
@@ -61,68 +72,72 @@ class VacuumMain(QWidget):
                 relative_item.relativeResize()
         return super().eventFilter(obj, event)
 
-    def legendText(self, text):
-        text = QLabel(text)
-        text.setMaximumHeight(30)
-        return text
-
     def showLegend(self, legend):
         """ Show one of the legends present in the LEGEND variable in util"""
-        leg_glay = QGridLayout()
-        leg_glay.addWidget(
-            self.legendText('<b>'+legend+'</b>'),
+        wid, lay = self.getGridWidget()
+        lay.addWidget(
+            QLabel('<b>'+legend+'</b>'),
             0, 0, 1, 2, alignment=Qt.AlignCenter)
         row = 1
         for item in LEGEND[legend]:
             column = 0
             if 'color' in item:
-                leg_glay.addWidget(
+                lay.addWidget(
                     LedLegend(self,
                         item['color']),
                     row, column, 1, 1,
                     alignment=Qt.AlignCenter)
                 column = 1
 
-            leg_glay.addWidget(
-                self.legendText(item['text']),
+            lay.addWidget(
+                QLabel(item['text']),
                 row, column, 1, 1,
                 alignment=Qt.AlignLeft)
             row += 1
-        return leg_glay
+        return wid
 
     def imageViewer(self):
         """Build the image"""
         self.image_container.setPixmap(self.pixmap)
         self.image_container.installEventFilter(self)
         self.image_container.setScaledContents(True)
-        self.image_container.setMinimumSize(1000, 500)
+        self.image_container.setMinimumSize(1580, 0)
         return self.image_container
 
     def buildLed(self, pv_name, sufix_list, comp):
-        if comp == 'on/off':
-            chan2vals = {
-                pv_name + sufix_list[0]: 1,
-                pv_name + sufix_list[1]: 0
-            }
-        elif comp == 'equal':
-            chan2vals = {
-                pv_name + sufix_list[0]: 1,
-                pv_name + sufix_list[1]: 1
-            }
-        color_list = [
-            COLORS["yellow"], COLORS["light_green"], COLORS["gray"]]
-        led = PyDMLedMultiChannel(
-            self, chan2vals, color_list)
+        if comp == 'normal':
+            led = PyDMLed(
+                init_channel=pv_name+sufix_list)
+            shape = 1
+        else: 
+            if comp == 'on/off':
+                chan2vals = {
+                    pv_name + sufix_list[0]: 0,
+                    pv_name + sufix_list[1]: 1
+                }
+                shape = 4
+            elif comp == 'equal':
+                chan2vals = {
+                    pv_name + sufix_list[0]: 0,
+                    pv_name + sufix_list[1]: 0
+                }
+                shape = 3
+            color_list = [
+                COLORS["light_green"], COLORS["yellow"], COLORS["red"]]
+            led = PyDMLedMultiChannel(
+                self, chan2vals, color_list)
+        led.shape = shape
+        if shape != 1: shape-=2
+        led.setStyleSheet("min-width:"+str(shape)+"em; max-width:"+str(shape)+"em;")
         return led
 
-    def setWindowBtn(self, cat, id_num):
-        button = QPushButton(
-            self.getBtnTitle(cat, id_num))
+    def setWindowBtn(self):
+        button = QPushButton(_qta.icon('fa5s.ellipsis-h'), '', self)
         #Connect to window
-        button.setStyleSheet("font-weight: bold;")
+        button.setStyleSheet("margin: 0.1em;")
         return button
 
-    def getBtnTitle(self, cat, id_num):
+    def getGroupTitle(self, cat, id_num):
         dev_number = id_num
         if cat == "Pump":
             name = "IPS"
@@ -134,33 +149,52 @@ class VacuumMain(QWidget):
                 name = "CCG"
         return self.buildIdName(name, dev_number, False)
 
+    def selWindow(self, cat, id):
+        if cat == "Vacuum":
+           dev_number, dev_gen = self.buildIdsVac(id)
+           print(str(cat) + str(dev_number) + str(dev_gen)) 
+        print(str(cat) + str(id))
+
     def buildBasicGroup(self, cat, id_num, orient="V"):
-        group = QGroupBox()
+        group = QGroupBoxButton(
+            title=self.getGroupTitle(cat, id_num))
         lay = self.setLayOrientation(orient)
         group.setLayout(lay)
-        lay.addWidget(
-            self.setWindowBtn(cat, id_num),
-            alignment=Qt.AlignCenter)
+        group.setObjectName("group")
+        group.setStyleSheet("QGroupBox#group{background-color:"+COLORS['btn_bg']+"};")
+        group.clicked.connect(lambda: self.selWindow(cat, id_num))
+        if orient == "H":
+            lay.addWidget(
+                self.setWindowBtn(),
+                alignment=Qt.AlignLeft)
         return lay, group
 
-    def buildIPSInfo(self, pv_name, config, lay):
+    def getProgressBar(self, pv_name):
+        bar = MyScaleIndicator(
+            init_channel=pv_name)
+        bar.limitsFromChannel = False
+        bar.showLimits = False
+        bar.showValue = False
+        bar.barIndicator = True
+        bar.userLowerLimit = 0
+        bar.userUpperLimit = 200
+        bar.indicatorColor = COLORS['purple']
+        bar.setStyleSheet('min-height:1em; min-width:5em;')
+        return bar
+
+    def buildIPSInfo(self, pv_name, config, lay, orient):
         for info_type in ['voltage', 'current']:
             info = config[info_type]
             name = pv_name + info['text']
+            if info_type == 'current' and orient == 'H':
+                lay.addWidget(
+                    self.getProgressBar(name),
+                    alignment=Qt.AlignCenter)
             wid = self.showUnitView(
                 name, info['color'])
-            lay.addWidget(wid,
-                alignment=Qt.AlignCenter)
+            lay.addWidget(
+                wid, alignment=Qt.AlignCenter)
         return lay
-
-    def buildIdsVac(self, id_num):
-        dev_number = _math.ceil(id_num / 3)
-        dev_gen = id_num % 3
-        if dev_gen == 2:
-            dev_number += 5
-        if not dev_gen:
-            dev_gen = 3
-        return dev_number, dev_gen
 
     def buildVacPv(self, config, id_num):
         dev_number, dev_gen = self.buildIdsVac(id_num)
@@ -170,7 +204,7 @@ class VacuumMain(QWidget):
             config["prefix"], dev_number, False)
         return pv_name, dev_gen
 
-    def buildVacInfo(self, config, id_num, lay):
+    def buildVacInfo(self, config, id_num, lay, orient):
         name, dev_gen = self.buildVacPv(config, id_num)
         led_config = config["led"]
         led_name = name+led_config["text"]
@@ -181,18 +215,13 @@ class VacuumMain(QWidget):
                 unit_name, config['color']),
             alignment=Qt.AlignCenter)
         if id_num % 3 != 0:
-            led = self.buildLed(
-                led_name, sufix_list[id_num % 3], "equal")
+            comp = 'equal'
         else:
-            led = PyDMLed(
-                init_channel=led_name+sufix_list[0])
+            comp = 'normal'
+        led = self.buildLed(
+            led_name, sufix_list[id_num % 3], comp)
         lay.addWidget(led, alignment=Qt.AlignCenter)
         return lay
-
-    def getPosition(self, coord, size, orient):
-        if isinstance(size, dict):
-            return coord + size[orient]
-        return coord + size
 
     def getWidget(self, config, item, cat, orient):
         pv_name = self.buildIdName(
@@ -204,28 +233,30 @@ class VacuumMain(QWidget):
             lay, widget = self.buildBasicGroup(
                 cat, item, orient)
             self.buildIPSInfo(
-                pv_name, config, lay)
+                pv_name, config, lay, orient)
         else:
             lay, widget = self.buildBasicGroup(
                 cat, item, orient)
             self.buildVacInfo(
-                config, item, lay)
+                config, item, lay, orient)
         return widget
 
-    def saveWidget(self, widget, size, coord, orient, lay):
-        if orient == 'H':
-            lay.addWidget(widget, alignment=Qt.AlignCenter)
+    def saveRelWid(self, widget, size, coord):
+        rel_wid = RelativeWidget(
+            parent=self.image_container,
+            widget=widget,
+            relative_pos=coord + size)
+        self.relative_widgets.append(rel_wid)
+
+    def saveWidToList(self, widget, cat):
+        if cat == "Vacuum":
+            self.vacList.append(widget)
         else:
-            rel_wid = RelativeWidget(
-                parent=self.image_container,
-                widget=widget,
-                relative_pos=self.getPosition(
-                    coord, size, orient))
-            self.relative_widgets.append(rel_wid)
-        return lay
+            self.pumpList.append(widget)
 
     def showMainWidgets(self, cat="Vacuum"):
         lay = QVBoxLayout()
+        lay.setSpacing(0)
         config = PVS_CONFIG[cat]
         pv_range = config["iterations"]
         lists = ['V', 'H']
@@ -236,19 +267,120 @@ class VacuumMain(QWidget):
                 coord = config["position"][item-1]
                 widget = self.getWidget(
                     config, item, cat, orient)
-                lay = self.saveWidget(
-                    widget, config["size"], coord,
-                    orient, lay)
-        return lay
+                if orient == 'H':
+                    self.saveWidToList(widget, cat)
+                else:
+                    self.saveRelWid(
+                        widget, config["size"], coord)
+    
+    def buildIdsVac(self, id_num):
+        dev_number = _math.ceil(id_num / 3)
+        dev_gen = id_num % 3
+        if dev_gen == 2:
+            dev_number += 5
+        if not dev_gen:
+            dev_gen = 3
+        return dev_number, dev_gen
+
+    def getGridWidget(self):
+        wid = QWidget()
+        lay = QGridLayout()
+        wid.setLayout(lay)
+        return wid, lay
+
+    def showVacList(self, config):
+        wid, lay = self.getGridWidget()
+        pos = [0, 0]
+        id = 1
+        for item in self.vacList:
+            pos[0], pos[1]  = self.buildIdsVac(id)
+            if pos[1] == 2:
+                pos[1] = 1
+            elif pos[1] == 3:
+                pos[1] = 0
+            lay.addWidget(item, pos[0], pos[1])   
+            self.saveRelWid(
+                wid, config['size'], config['coord'])
+            id += 1
+
+    def showPumpList(self, config):
+        wid, lay = self.getGridWidget()
+        pos = [0, 0]
+        for item in self.pumpList:
+            if pos[0]>=10 and pos[1]==0:
+                pos[0] = 0
+                pos[1] = 1
+            lay.addWidget(item, pos[0], pos[1])   
+            self.saveRelWid(
+                wid, config['size'], config['coord'])
+            pos[0] += 1
+
+    def showLists(self, cat):
+        config = PVS_CONFIG[cat]['list']
+        if cat == "Vacuum":
+            self.showVacList(config)
+        else:      
+            self.showPumpList(config)
+    
+    def showAllLegends(self):
+        size = LEGEND['size'] 
+        coord = [50, 85]
+        for leg in ['CCG', 'PRG']:
+            self.saveRelWid( 
+                self.showLegend(leg), size, coord)
+            coord[0] += 6
+
+    def showButtons(self):
+        size = [10, 8]
+        coord = [35, 85]
+        for title in ['Details', 'CCG Graphs']:
+            self.saveRelWid(
+                QPushButton(title), 
+                size, coord)
+            coord[1] += 5
+
+
+    # def getGraph(self):
+    #     if len(self.graphs) == 0:
+    #         self.graphs[0] = GraphTime()
+
+    # def createGraph(self, graph_data):
+    #     '''Build a graph widget'''
+
+    #     graph_plot.graph.title = graph_data.get("title")
+    #     graph_plot.setLabel(
+    #         'left',
+    #         text=graph_data.get("labelY"),
+    #         units=graph_data.get("unitY"))
+    #     graph_plot.setLabel(
+    #         'bottom',
+    #         text=graph_data.get("labelX"),
+    #         units=graph_data.get("unitX"))
+
+    #     for channel in graph_data.get("channels"):
+
+    #         channel_data = graph_data.get("channels").get(channel)
+    #         graph_plot.addChannel(
+    #             y_channel=self.prefix + self.device_name + ':' + channel_data.get('path'),
+    #             name=channel_data.get('name'),
+    #             color=channel_data.get('color'),
+    #             lineWidth=1)
+
+    #     graph_plot.setMinimumWidth(600)
+    #     graph_plot.setMinimumHeight(250)
+
+    #     return graph_plot
 
     def _setupui(self):
         """ . """
-        layG = QGridLayout()
-        self.setLayout(layG)
+        lay = QGridLayout()
+        self.setLayout(lay)
 
-        layG.addWidget(self.imageViewer(), 0, 0)
-        row = 1
+        lay.addWidget(self.imageViewer(), 0, 0)
         for wid_cat in PVS_CONFIG:
-            widget = self.showMainWidgets(wid_cat)
-            layG.addLayout(widget, row, 0)
-            row+=1
+            self.showMainWidgets(wid_cat)
+            if wid_cat != "Valve":
+                self.showLists(wid_cat)
+
+        self.showAllLegends()
+        self.showButtons()

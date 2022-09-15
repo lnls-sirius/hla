@@ -1,4 +1,5 @@
-from qtpy.QtWidgets import QWidget
+from qtpy.QtCore import Qt
+from qtpy.QtWidgets import QWidget, QGroupBox
 from qtpy.QtGui import QPainter, QBrush, QPen, QColor
 
 class LedLegend(QWidget):
@@ -28,3 +29,17 @@ class LedLegend(QWidget):
         self.setMinimumHeight(size[1])
         self.setMaximumHeight(size[1]+10)
 
+class QGroupBoxButton(QGroupBox):
+    """."""
+
+    def __init__(self, parent=None, title=""):
+        """."""
+        super().__init__(parent=parent)
+        self.setTitle(title)
+        self.setMouseTracking(True)
+
+    def mousePressEvent(self, event):
+        child = self.childAt(event.pos())
+        if not child:
+            child = self
+        self.clicked.emit()
