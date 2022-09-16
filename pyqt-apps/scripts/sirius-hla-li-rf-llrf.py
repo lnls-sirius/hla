@@ -3,9 +3,12 @@
 """Linac MPS Monitor."""
 import sys
 import argparse as _argparse
+import qtawesome as _qta
+from siriushla import util as _util
 from siriushla.sirius_application import SiriusApplication
 from siriuspy.envars import VACA_PREFIX
-from siriushla.li_rf_llrf import MainWindow
+from siriushla.widgets.windows import create_window_from_widget
+from siriushla.li_rf_llrf import LLRFMain
 
 parser = _argparse.ArgumentParser(
     description="Run Linac LLRF Control Interface.")
@@ -15,5 +18,11 @@ parser.add_argument(
 args = parser.parse_args()
 
 app = SiriusApplication()
-app.open_window(MainWindow, parent=None, prefix=args.prefix)
+window = create_window_from_widget(
+    LLRFMain, title='LI LLRF', is_main=True,
+    withscroll=True, min_width=105, min_height=55,
+    icon=_qta.icon(
+        'mdi.waves', color=_util.get_appropriate_color('LI')))
+app.open_window(
+    window, parent=None, prefix=args.prefix)
 sys.exit(app.exec_())

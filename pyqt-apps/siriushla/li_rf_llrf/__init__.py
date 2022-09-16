@@ -1,1 +1,1 @@
-from .main import MainWindow
+from .main import LLRFMain

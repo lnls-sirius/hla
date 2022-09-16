@@ -107,7 +107,8 @@ class SiriusLabel(QLabel, TextFormatter, PyDMWidget, DisplayFormat):
 
         # If it is a version string, replace multiple whitespaces with a single one
         if self._display_format_type == self.DisplayFormat.BSMPUDCVersion:
-            version = new_value[:16] + " " + new_value[16:]
+            version = new_value[:16] + " " + new_value[16:] \
+                if new_value is not None else ''
             version = " ".join(version.split())
             self.setText(version)
             return
