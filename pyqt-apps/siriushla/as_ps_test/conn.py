@@ -13,6 +13,7 @@ from siriuspy.pwrsupply.csdev import Const as _PSC, ETypes as _PSE, \
 
 DEFAULT_CAP_BANK_VOLT = {
     'FBP_DCLink': 100,
+    'IA-14RaPS01:PS-DCLink-AS2': 70,
     'PA-RaPSE01:PS-DCLink-BO': 240,
     'PA-RaPSE02:PS-DCLink-BO': 240,
     'PA-RaPSE03:PS-DCLink-BO': 240,
@@ -147,8 +148,9 @@ class TesterDCLinkFBP(_TesterPSBase):
 
     def set_capvolt(self):
         """Set capacitor bank voltage."""
-        self._pvs['Voltage-SP'].value = \
-            DEFAULT_CAP_BANK_VOLT['FBP_DCLink']
+        key = 'FBP_DCLink' if self.device not in DEFAULT_CAP_BANK_VOLT \
+            else self.device
+        self._pvs['Voltage-SP'].value = DEFAULT_CAP_BANK_VOLT[key]
 
     def check_capvolt(self):
         """Do not need to check."""
