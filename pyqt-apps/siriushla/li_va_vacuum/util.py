@@ -7,6 +7,7 @@ COLORS = {
     "red": QColor(207, 0, 0),
     "blue": QColor(130, 143, 255),
     "purple": QColor(186, 130, 255),
+    "cyan": QColor(0, 187, 196),
     "btn_bg": "#77f2b6bc"
 }
 
@@ -17,7 +18,6 @@ PVS_CONFIG = {
     "Vacuum": {
         'prefix': 'LA-VA:H1VGC-',
         'iterations': [1, 15],
-        # 'unit': ':RdUnit',
         'text': ':RdPrs-',
         'color': '',
         'led': {
@@ -52,6 +52,10 @@ PVS_CONFIG = {
             'text': ':ReadV',
             'color': COLORS["blue"].name()
         },
+        'pressure': {
+            'text': ':ReadP',
+            'color': COLORS["cyan"].name()
+        },
         'position': [
             [86, 90], [73, 90], [21.5, 68], [14.5, 70],
             [73, 72.5], [73, 43], [63, 72.5], [63, 55],
@@ -73,6 +77,96 @@ PVS_CONFIG = {
         'size': [10, 10]
     }
 }
+
+IPS_DETAILS = {
+    "Status": [
+        {
+            "title": "4KV",
+            "name": ":4KVState",
+            "widget": "button"
+        },
+        {
+            "title": "6KV",
+            "name": ":6KVState",
+            "widget": "button"
+        },
+        {
+            "title": "BAKE",
+            "name": ":BkState",
+            "widget": "button"
+        },
+        {
+            "title": "Local/Remote",
+            "name": ":LoReState",
+            "widget": "button"
+        },
+        {
+            "title": "State",
+            "name": "StWoState",
+            "widget": "button"
+        },
+        {
+            "name": ":ReadS",
+            "widget": "led"
+        }
+    ],
+    "Parameter": [
+        {
+            "title": "IPS No.",
+            "name": ":SetJH",
+            "widget": "edit"
+        },
+        {
+            "title": "High Protect Pressure",
+            "name": ":SetBH",
+            "widget": "edit"
+        },
+        {
+            "title": "Low Protect Pressure",
+            "name": ":SetBA",
+            "widget": "edit"
+        },
+        {
+            "title": "Start Current",
+            "name": ":SetQD",
+            "widget": "edit"
+        },
+        {
+            "title": "Work Current",
+            "name": ":SetYX",
+            "widget": "edit"
+        },
+        {
+            "name": ":ParSetEn",
+            "widget": "button"
+        }
+    ]
+}
+
+# VGC_DETAILS = {
+#     "Gauge": "",
+#     "Pressure Readback": ":RdPrs-"+n,
+#     "Pressure Readback": ":RdPrs-"+n+"s",
+#     "On/Off - Control": ":GaugeOn-"+n,
+#     "On/Off - RB": ":GaugeSts-"+n,
+#     "led": {
+#         'text': ':RdState',
+#         'sufix': {
+#             0: '.B3',
+#             1: ['.BB', '.BA'],
+#             2: ['.B7', '.B6']
+#         }
+#     },
+#     "SP": {
+#         "No.": [
+#             (1, 2), (5, 6), (9, 10)],
+#         "SP": (":SetSP-", ":RdSP-"),
+#         "SP-H": (":SetSH-", ":RdSH-")
+#     },
+#     "relay": (":SetRlySts-"+n, ":RdRlySts-"+n),
+#     "unit": ":RdUnit"
+# }
+
 LEGEND = {
     'size': [8.5, 15],
     'Gauge Status': [

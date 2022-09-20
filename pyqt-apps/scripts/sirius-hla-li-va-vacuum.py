@@ -20,7 +20,7 @@ args = parser.parse_args()
 app = SiriusApplication()
 window = create_window_from_widget(
     VacuumMain, title='LI Vacuum', is_main=True,
-    withscroll=True)
+    withscroll=True, min_width=70)
 # icon=_qta.icon(
 #     'fa5s.vacuum', color=_util.get_appropriate_color('LI'))
 app.open_window(
