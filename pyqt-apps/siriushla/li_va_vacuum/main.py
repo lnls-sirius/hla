@@ -10,7 +10,7 @@ from siriushla.li_va_vacuum.chart import ChartWindow
 from siriushla.li_va_vacuum.details import IpsDetailWindow
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from .util import LEGEND, PVS_CONFIG, COLORS
-from .functions import buildIdsVac, buildIdName, buildVacPv, showUnitView
+from .functions import buildIdsVac, buildIdName, buildVacPv, getGroupTitle, showUnitView
 from .widgets import LedLegend, QGroupBoxButton
 from ..widgets import RelativeWidget, PyDMLedMultiChannel, PyDMLed
 from ..si_di_bbb.custom_widgets import MyScaleIndicator
@@ -119,36 +119,25 @@ class VacuumMain(QWidget):
         led.setStyleSheet("min-width:"+str(shape)+"em; max-width:"+str(shape)+"em;")
         return led
 
-    def setWindowBtn(self):
+    def setWindowBtn(self, cat, id_num):
         button = QPushButton(_qta.icon('fa5s.ellipsis-h'), '', self)
-        #Connect to window
+        button.clicked.connect(
+            lambda: self.selWindow(cat, id_num))
         button.setStyleSheet("margin: 0.1em;")
         return button
     
-    def getGroupTitle(self, cat, id_num):
-        dev_number = id_num
-        if cat == "Pump":
-            name = "IPS"
-        else:
-            dev_number, dev_gen = buildIdsVac(id_num)
-            if dev_gen == 3:
-                name = "PRG"
-            else:
-                name = "CCG"
-        return buildIdName(name, dev_number, False)
-    
     def buildBasicGroup(self, cat, id_num, orient="V"):
         group = QGroupBoxButton(
-            title=self.getGroupTitle(cat, id_num))
+            title=getGroupTitle(cat, id_num))
         lay = self.setLayOrientation(orient)
         group.setLayout(lay)
         group.clicked.connect(
-                lambda: self.selWindow(cat, id_num))
+            lambda: self.selWindow(cat, id_num))
         group.setObjectName("group")
         group.setStyleSheet("QGroupBox#group{background-color:"+COLORS['btn_bg']+"};")
         if orient == "H":
             lay.addWidget(
-                self.setWindowBtn(),
+                self.setWindowBtn(cat, id_num),
                 alignment=Qt.AlignLeft)
         return lay, group
 

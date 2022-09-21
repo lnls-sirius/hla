@@ -82,62 +82,72 @@ IPS_DETAILS = {
     "Status": [
         {
             "title": "4KV",
-            "name": ":4KVState",
-            "widget": "button"
+            "status": ":4KVState",
+            "control": ":V4K",
+            "widget": "enum"
         },
         {
             "title": "6KV",
-            "name": ":6KVState",
-            "widget": "button"
+            "status": ":6KVState",
+            "control": ":V6K",
+            "widget": "enum"
         },
         {
             "title": "BAKE",
-            "name": ":BkState",
-            "widget": "button"
+            "status": ":BkState",
+            "control": ":Bk",
+            "widget": "enum"
         },
         {
-            "title": "Local/Remote",
-            "name": ":LoReState",
-            "widget": "button"
+            "title": "Local/\nRemote",
+            "status": ":LoReState",
+            "control": ":LoRe",
+            "widget": "enum"
         },
         {
             "title": "State",
-            "name": "StWoState",
-            "widget": "button"
+            "status": ":StWoState",
+            "control": ":StartWork",
+            "widget": "enum"
         },
         {
-            "name": ":ReadS",
+            "status": ":ReadS",
             "widget": "led"
         }
     ],
     "Parameter": [
         {
             "title": "IPS No.",
-            "name": ":SetJH",
+            "status": ":ReadJH",
+            "control": ":SetJH",
             "widget": "edit"
         },
         {
-            "title": "High Protect Pressure",
-            "name": ":SetBH",
+            "title": "High Protect\nPressure (mA)",
+            "status": ":ReadBH",
+            "control": ":SetBH",
             "widget": "edit"
         },
         {
-            "title": "Low Protect Pressure",
-            "name": ":SetBA",
+            "title": "Low Protect\nPressure (mA)",
+            "status": ":ReadBA",
+            "control": ":SetBA",
             "widget": "edit"
         },
         {
             "title": "Start Current",
-            "name": ":SetQD",
+            "status": ":ReadQD",
+            "control": ":SetQD",
             "widget": "edit"
         },
         {
             "title": "Work Current",
-            "name": ":SetYX",
+            "status": ":ReadYX",
+            "control": ":SetYX",
             "widget": "edit"
         },
         {
-            "name": ":ParSetEn",
+            "status": ":ParSetEn",
             "widget": "button"
         }
     ]

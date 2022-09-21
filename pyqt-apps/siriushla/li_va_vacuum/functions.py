@@ -33,7 +33,7 @@ def showUnitView(pv_name, color="#000000", min_width=3):
     widget = SiriusLabel(init_channel=pv_name)
     styled = """
         min-height:0.75em;min-width: """+str(min_width)+"""em;
-        max-height:0.75em;max-width: 10em;
+        max-height:0.75em;max-width: """+str(min_width*5)+"""em;
         background-color:"""+color+";"
     widget.setStyleSheet(styled)
     widget.showUnits = True
@@ -44,3 +44,15 @@ def showUnitView(pv_name, color="#000000", min_width=3):
         widget.precision = 2
         widget.displayFormat = _DisplayFormat.Exponential
     return widget
+
+def getGroupTitle(cat, id_num):
+    dev_number = id_num
+    if cat == "Pump":
+        name = "IPS"
+    else:
+        dev_number, dev_gen = buildIdsVac(id_num)
+        if dev_gen == 3:
+            name = "PRG"
+        else:
+            name = "CCG"
+    return buildIdName(name, dev_number, False)
