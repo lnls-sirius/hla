@@ -176,8 +176,8 @@ class LLRFMain(QWidget):
         tab = QTabWidget()
         tab.setObjectName("LITab")
         tab.setContentsMargins(0, 0, 0, 0)
-        tab.addTab(self.imageViewer(), "Complete Footprint")
-        tab.addTab(self.buildChartMonitor(), "Control Loop Monitor")
+        tab.addTab(self.imageViewer(), "Plant")
+        tab.addTab(self.buildChartMonitor(), "Control Loop")
 
         return tab
 

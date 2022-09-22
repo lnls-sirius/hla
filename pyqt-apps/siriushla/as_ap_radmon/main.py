@@ -25,14 +25,26 @@ class RadTotDoseMonitor(QWidget):
     """RAD Total Dose Rate Monitor."""
 
     REF_TOT_DOSE = 0.5  # µSv/h
-    SENSOR_LIST = (
-        'Thermo12', 'ELSE', 'Thermo8',
-        'Thermo10', 'Berthold', 'Thermo9',
-        'Thermo13', 'Thermo7', 'Thermo16',
-        'Thermo2', 'Thermo1', 'Thermo15',
-        'Thermo14', 'Thermo4', 'Thermo6',
-        'Thermo3', 'Thermo5', 'Thermo11',
-    )
+    SENSOR2LOC = {
+        'Thermo12': 'Thermo 12 (SI-01, hall eixo 16)',
+        'ELSE': 'ELSE (SI-01, hall eixo 17)',
+        'Thermo8': 'Thermo 8 (SI-01, hall eixo 18)',
+        'Thermo10': 'Thermo 10 (SI-01, chicane 1)',
+        'Berthold': 'Berthold (corredor de serviço, eixo 19)',
+        'Thermo9': 'Thermo 9 (SI-02, hall eixo 20)',
+        'Thermo13': 'Thermo 13 (SI-06, hall eixo 31)',
+        'Thermo7': 'Thermo 7 (SI-08-IA-08, eixo 37)',
+        'Thermo16': 'Thermo 16 (SI-08, hall eixo 38)',
+        'Thermo2': 'Thermo 2 (SI-09-IA-09, eixo 40)',
+        'Thermo1': 'Thermo 1 (SI-10, hall eixo 43)',
+        'Thermo15': 'Thermo 15 (SI-12, hall eixo 50)',
+        'Thermo14': 'Thermo 14 (SI-14, hall eixo 55)',
+        'Thermo4': 'Thermo 4 (SI-14-IA-14, eixo 57)',
+        'Thermo6': 'Thermo 6 (SI-15, hall eixo 59)',
+        'Thermo3': 'Thermo 3 (SI-17, hall eixo 04)',
+        'Thermo5': 'Thermo 5 (SI-19, hall eixo 10)',
+        'Thermo11': 'Thermo 11 (SI-20, hall eixo 14)',
+    }
 
     def __init__(self, parent=None, prefix=VACA_PREFIX):
         super().__init__(parent)
@@ -53,12 +65,13 @@ class RadTotDoseMonitor(QWidget):
 
         # define data
         self._mon2loco, self._locn2mon, self._mon2pos = dict(), dict(), dict()
-        self._mon2locv = {m: None for m in self.SENSOR_LIST}
-        for mon in self.SENSOR_LIST:
+        self._mon2locv = {m: None for m in self.SENSOR2LOC}
+        for mon in self.SENSOR2LOC:
             pvname = self._prefix + ('-' if self._prefix else '')
             pvname += 'RAD:' + mon + ':Location-Cte.VAL$'
             self._mon2loco[mon] = PV(pvname, callback=self._update_location)
             self._locn2mon[pvname] = mon
+        self._mon2locn = {v: k for k, v in self._locn2mon.items()}
 
         _t0 = _time.time()
         while _time.time() - _t0 < 10:  # wait location to be read
@@ -66,7 +79,12 @@ class RadTotDoseMonitor(QWidget):
             if all([v is not None for v in self._mon2locv.values()]):
                 break
         else:
-            raise TimeoutError('could not read RAD Monitor Locations')
+            # if not connected, use hardcoded locations
+            for mon in self.SENSOR2LOC:
+                if self._mon2locv[mon] is None:
+                    print(mon)
+                    self._update_location(
+                        self._mon2locn[mon], self.SENSOR2LOC[mon])
 
         self._mon_order = [
             m[0] for m in sorted(self._mon2pos.items(), key=lambda x: x[1])]
@@ -77,7 +95,7 @@ class RadTotDoseMonitor(QWidget):
             'g': [0.0, 0.0, 0.0, 0.4, 1.0, 0.2, 0.8, 0.2, 0.0, 0.0, 0.5, 1.0],
             'b': [1.0, 0.6, 0.3, 1.0, 1.0, 0.0, 0.8, 0.2, 0.0, 0.0, 0.0, 0.0],
         }
-        xeval = np.linspace(0, 1, len(self.SENSOR_LIST))
+        xeval = np.linspace(0, 1, len(self.SENSOR2LOC))
         reval = np.interp(xeval, cmap['x'], cmap['r'])*255
         geval = np.interp(xeval, cmap['x'], cmap['g'])*255
         beval = np.interp(xeval, cmap['x'], cmap['b'])*255
@@ -315,7 +333,8 @@ class RadTotDoseMonitor(QWidget):
             cbx.setChecked(state)
 
     def _update_location(self, pvname, value, **kws):
-        value = bytes(value).decode('utf-8')
+        if not isinstance(value, str):
+            value = bytes(value).decode('utf-8')
         value = value.replace('corredor', 'corr.')  # abbreviations
         mon = self._locn2mon[pvname]
         if self._mon2locv[mon] is not None and self._mon2locv[mon] != value:
