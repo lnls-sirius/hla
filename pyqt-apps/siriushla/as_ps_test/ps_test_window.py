@@ -549,20 +549,28 @@ class PSTestWindow(SiriusMainWindow):
         dclinks = self._get_related_dclinks(devices)
         devices.extend(dclinks)
         devices = [dev for dev in devices if 'LI-' not in dev]
+        devsot = [dev for dev in devices if dev.dev not in ('FCH', 'FCV')]
+        devsfc = [dev for dev in devices if dev.dev in ('FCH', 'FCV')]
 
         task0 = CreateTesters(devices, parent=self)
-        task1 = SetOpMode(devices, state=_PSC.OpMode.SlowRef, parent=self)
-        task2 = CheckOpMode(
-            devices,
+        task1 = SetOpMode(devsot, state=_PSC.OpMode.SlowRef, parent=self)
+        task2 = SetOpMode(devsfc, state=_PSC.OpModeFOFBSel.manual, parent=self)
+        task3 = CheckOpMode(
+            devsot,
             state=[_PSC.States.SlowRef, _PSC.States.Off,
                    _PSC.States.Interlock, _PSC.States.Initializing],
             parent=self)
-        task2.itemDone.connect(self._log)
+        task3.itemDone.connect(self._log)
+        task4 = CheckOpMode(
+            devsfc, state=_PSC.OpModeFOFBSts.manual, parent=self)
+        task4.itemDone.connect(self._log)
 
         labels = ['Connecting to devices...',
                   'Setting PS OpMode to SlowRef...',
-                  'Checking PS OpMode...']
-        tasks = [task0, task1, task2]
+                  'Setting FC PS OpMode to manual...',
+                  'Checking PS OpMode...',
+                  'Checking FC PS OpMode...']
+        tasks = [task0, task1, task2, task3, task4]
         dlg = ProgressDialog(labels, tasks, self)
         dlg.exec_()
 
