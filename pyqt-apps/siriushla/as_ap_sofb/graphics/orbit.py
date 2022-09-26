@@ -58,7 +58,7 @@ class OrbitWidget(BaseWidget):
         btn = QPushButton('Corrs', grpbx)
         gdl.addWidget(btn, 0, 0)
         Window = create_window_from_widget(
-            CorrectorsWidget, title='Correctors')
+            CorrectorsWidget, title=self.acc + ' - Correctors')
         _util.connect_window(
             btn, Window, self, device=self.device,
             prefix=self.prefix, acc=self.acc)

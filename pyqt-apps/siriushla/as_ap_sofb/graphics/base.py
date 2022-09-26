@@ -99,7 +99,8 @@ class BaseWidget(QWidget):
         graphy = self.uigetgraph('y', (45, 15))
         suf = 'Orbit' if self.is_orb else 'Correctors'
         lab = QLabel(
-            '<h2>Horizontal ' + suf + '</h2>', self, alignment=Qt.AlignLeft)
+            '<h2>' + self.acc + ' - Horizontal ' + suf + '</h2>',
+            self, alignment=Qt.AlignLeft)
         lab.setStyleSheet("""min-height:1.5em; max-height:1.5em;""")
         self.hbl_nameh = QHBoxLayout()
         vbl.addItem(self.hbl_nameh)
@@ -108,7 +109,8 @@ class BaseWidget(QWidget):
         vbl.addWidget(graphx)
         vbl.addSpacing(30)
         lab = QLabel(
-            '<h2>Vertical ' + suf + '</h2>', self, alignment=Qt.AlignLeft)
+            '<h2>' + self.acc + ' - Vertical ' + suf + '</h2>',
+            self, alignment=Qt.AlignLeft)
         lab.setStyleSheet("""min-height:1.5em; max-height:1.5em;""")
         self.hbl_namev = QHBoxLayout()
         vbl.addItem(self.hbl_namev)
