@@ -9,6 +9,9 @@ class LedLegend(QWidget):
         if self.shape == 1:
             painter.drawEllipse(
                 pos[0], pos[1], size[0], size[1])
+        elif self.shape == 2:
+            painter.drawRoundedRect(
+                pos[0], pos[1], size[0], size[1], 3, 15)
         elif self.shape == 3:
             painter.drawRect(
                 pos[0], pos[1], size[0], size[1])
@@ -33,7 +36,10 @@ class LedLegend(QWidget):
         """."""
         super().__init__(parent=parent)
 
-        size = [12, 12]
+        if shape != 2:  
+            size = [12, 12]
+        else:
+            size = [25, 10]
         self.color = color
         self.shape = shape
         self.setMinimumWidth(size[0])

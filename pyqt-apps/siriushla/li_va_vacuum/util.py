@@ -17,23 +17,14 @@ COLORS = {
 PVS_CONFIG = {
     "Vacuum": {
         'prefix': 'LA-VA:H1VGC-',
+        'bar': ':LOGPrs-',
         'iterations': [1, 15],
-        'text': ':RdPrs-',
-        'color': '',
-        'led': {
-            'text': ':RdState',
-            'sufix': {
-                0: '.B3',
-                1: ['.BB', '.BA'],
-                2: ['.B7', '.B6']
-            }
-        },
         'position': [
-            [93.5, 83], [53.5, 58], [93.5, 90],
-            [79.75, 90], [57, 7], [4.5, 67],
-            [3.5, 74], [40, 40], [51.5, 72.5],
-            [72.25, 58], [30, 58], [60, 22],
-            [63, 40], [47, 7], [43, 22]
+            [93.5, 83], [79.75, 90], [93.5, 90],
+            [3.5, 74], [72.25, 58], [4.5, 67],
+            [63, 40], [53.5, 58], [51.5, 72.5],
+            [57, 7], [40, 40], [60, 22],
+            [30, 58], [47, 7], [43, 22]
         ],
         'size': [7, 9],
         'list': {
@@ -44,18 +35,6 @@ PVS_CONFIG = {
     "Pump": {
         'prefix': 'LA-VA:H1IPS-',
         'iterations': [1, 16],
-        'current': {
-            'text': ':ReadI',
-            'color': COLORS["purple"].name()
-        },
-        'voltage': {
-            'text': ':ReadV',
-            'color': COLORS["blue"].name()
-        },
-        'pressure': {
-            'text': ':ReadP',
-            'color': COLORS["cyan"].name()
-        },
         'position': [
             [86, 90], [73, 90], [21.5, 68], [14.5, 70],
             [73, 72.5], [73, 43], [63, 72.5], [63, 55],
@@ -79,7 +58,25 @@ PVS_CONFIG = {
 }
 
 IPS_DETAILS = {
+    "General": {
+        'current': {
+            'text': ':ReadI',
+            'color': COLORS["purple"].name()
+        },
+        'voltage': {
+            'text': ':ReadV',
+            'color': COLORS["blue"].name()
+        },
+        'pressure': {
+            'text': ':ReadP',
+            'color': COLORS["cyan"].name()
+        }
+    },
     "Status": [
+        {
+            "status": ":ReadS",
+            "widget": "led"
+        },
         {
             "title": "4KV",
             "status": ":4KVState",
@@ -109,13 +106,15 @@ IPS_DETAILS = {
             "status": ":StWoState",
             "control": ":StartWork",
             "widget": "enum"
-        },
-        {
-            "status": ":ReadS",
-            "widget": "led"
         }
     ],
     "Parameter": [
+        {
+            "title": "Enable",
+            "status": ":ParSetEn",
+            "control": ":Da",
+            "widget": "enum"
+        },
         {
             "title": "IPS No.",
             "status": ":ReadJH",
@@ -145,40 +144,93 @@ IPS_DETAILS = {
             "status": ":ReadYX",
             "control": ":SetYX",
             "widget": "edit"
-        },
-        {
-            "status": ":ParSetEn",
-            "widget": "button"
         }
     ]
 }
 
-# VGC_DETAILS = {
-#     "Gauge": "",
-#     "Pressure Readback": ":RdPrs-"+n,
-#     "Pressure Readback": ":RdPrs-"+n+"s",
-#     "On/Off - Control": ":GaugeOn-"+n,
-#     "On/Off - RB": ":GaugeSts-"+n,
-#     "led": {
-#         'text': ':RdState',
-#         'sufix': {
-#             0: '.B3',
-#             1: ['.BB', '.BA'],
-#             2: ['.B7', '.B6']
-#         }
-#     },
-#     "SP": {
-#         "No.": [
-#             (1, 2), (5, 6), (9, 10)],
-#         "SP": (":SetSP-", ":RdSP-"),
-#         "SP-H": (":SetSH-", ":RdSH-")
-#     },
-#     "relay": (":SetRlySts-"+n, ":RdRlySts-"+n),
-#     "unit": ":RdUnit"
-# }
+VGC_DETAILS = {
+    "Gauge": "Vacuum",
+    "led": {
+        'text': ':RdState',
+        'sufix': {
+            0: '.B3',
+            1: ['.BB', '.BA'],
+            2: ['.B7', '.B6']
+        }
+    },
+    "Pressure<br/>Readback": ":RdPrs-",
+    "Gauge<br/>Message": [":RdPrs-", "s"],
+    "On/Off": {
+        "title": "",
+        "status": ":GaugeSts-",
+        "control": ":GaugeOn-",
+        "widget": "enum"
+    },
+    "Setpoint": {
+        "No.": [
+            (9, 10), (1, 2), (5, 6)],
+        "SP": {
+            "title": "",
+            "status": ":RdSP-",
+            "control": ":SetSP-",
+            "widget": "edit"
+        },
+        "SP-H": {
+            "title": "",
+            "status": ":RdSH-",
+            "control": ":SetSH-",
+            "widget": "edit"
+        },
+        "Relay Querry & Set": {
+            "title": "",
+            "status": ":RdRlySts-",
+            "control": ":SetRlySts-",
+            "widget": "enum"
+        }
+    },
+    "Unit": ":RdUnit"
+}
 
 LEGEND = {
     'size': [8.5, 15],
+    'CCG': [
+        {
+            'color': COLORS["light_green"],
+            'text': 'Ok'
+        },
+        {
+            'color': COLORS["yellow"],
+            'text': 'Warning'
+        },
+        {
+            'color': COLORS["red"],
+            'text': 'Alarm'
+        }
+    ],
+    'PRG': [
+        {
+            'color': COLORS["light_green"],
+            'text': 'Ok'
+        },
+        {
+            'color': COLORS["yellow"],
+            'text': 'Warning'
+        }
+    ],
+    'IPS Control': [
+        {
+            'color': COLORS["light_green"],
+            'text': 'ON / Remote'
+        },
+        {
+            'color': COLORS["dark_green"],
+            'text': 'OFF / Local'
+        },
+        {
+            'color': COLORS["yellow"],
+            'text': 'Inconsistent'
+        }
+    ],
     'Gauge Status': [
         {
             'color': COLORS["light_green"],
@@ -202,44 +254,6 @@ LEGEND = {
         },
         {
             'text': 'CLEAR: Disable the relay'
-        }
-    ],
-    'IPS Control': [
-        {
-            'color': COLORS["light_green"],
-            'text': 'ON / Remote'
-        },
-        {
-            'color': COLORS["dark_green"],
-            'text': 'OFF / Local'
-        },
-        {
-            'color': COLORS["yellow"],
-            'text': 'Inconsistent'
-        }
-    ],
-    'CCG': [
-        {
-            'color': COLORS["light_green"],
-            'text': 'Ok'
-        },
-        {
-            'color': COLORS["yellow"],
-            'text': 'Warning'
-        },
-        {
-            'color': COLORS["red"],
-            'text': 'Alarm'
-        }
-    ],
-    'PRG': [
-        {
-            'color': COLORS["light_green"],
-            'text': 'Ok'
-        },
-        {
-            'color': COLORS["yellow"],
-            'text': 'Warning'
         }
     ]
 }

@@ -1,8 +1,6 @@
-from qtpy.QtWidgets import QVBoxLayout, QWidget
-from siriushla.li_va_vacuum.functions import buildVacPv, getGroupTitle
-from siriushla.widgets.timeplot import SiriusTimePlot
-from .util import COLORS, PVS_CONFIG
-from ..widgets import SiriusMainWindow
+from .functions import buildVacPv, getGroupTitle, getLayoutWidget
+from .util import COLORS, PVS_CONFIG, VGC_DETAILS
+from ..widgets import SiriusMainWindow, SiriusTimePlot
 
 class ChartWindow(SiriusMainWindow):
     """Show the Chart Window."""
@@ -14,7 +12,7 @@ class ChartWindow(SiriusMainWindow):
         self.prefix = prefix
         self.main_dev = self.config["prefix"]
         self.devpref = self.prefix + self.main_dev
-        self.channel = self.config['text']
+        self.channel = VGC_DETAILS["Pressure<br/>Readback"]
         self.defaultColors = [
             COLORS["dark_green"], COLORS["red"], COLORS["blue"], COLORS["purple"]]
         self.setObjectName('LIApp')
@@ -35,8 +33,8 @@ class ChartWindow(SiriusMainWindow):
         return graph
 
     def addChannels(self, graph, id_num, color):
-        name, gen = buildVacPv(self.config, id_num)
-        pv_name = name+self.channel+str(gen)
+        name, gen = buildVacPv(id_num)
+        pv_name = self.config['prefix']+name+self.channel+str(gen)
         graph.addYChannel(
             y_channel=pv_name, axis='left', name=getGroupTitle("Vacuum", id_num),
             color=color, lineWidth=1)
@@ -59,9 +57,7 @@ class ChartWindow(SiriusMainWindow):
         
     def _setupUi(self):
         """Display the selected chart type."""
-        lay = QVBoxLayout()
-        wid = QWidget()
-        wid.setLayout(lay)
+        wid, lay = getLayoutWidget("V")
         self.setCentralWidget(wid)
         lay.setContentsMargins(10, 10, 10, 10)
         self.chartsMon(lay)
