@@ -96,6 +96,7 @@ setup(
         'scripts/sirius-hla-li-rf-llrf.py',
         'scripts/sirius-hla-si-ap-chromcorr.py',
         'scripts/sirius-hla-si-ap-currlt.py',
+        'scripts/sirius-hla-si-ap-fofb.py',
         'scripts/sirius-hla-si-ap-genstatus.py',
         'scripts/sirius-hla-si-ap-manaca.py',
         'scripts/sirius-hla-si-ap-orbintlk.py',
