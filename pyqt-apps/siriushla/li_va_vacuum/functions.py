@@ -2,11 +2,11 @@ from qtpy.QtCore import Qt
 import math as _math
 from pydm.widgets.display_format import DisplayFormat as _DisplayFormat
 from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, QHBoxLayout, QVBoxLayout
-from .util import LEGEND
+from .util import COLORS, IPS_DETAILS, LEGEND
 from .widgets import LedLegend
 from ..widgets import SiriusLabel, PyDMLed, PyDMLedMultiChannel, \
     SiriusLineEdit, SiriusEnumComboBox
-
+from ..si_di_bbb.custom_widgets import MyScaleIndicator
 
 def buildIdName(id_num, isValve=False):
     pv_id = ""
@@ -134,6 +134,7 @@ def buildLed(self, pv_name, sufix_list, comp, bit=-1):
 
 def SPRBWidget(self, title, control, readback, wid_type, kp_unit=False, sec_wid="label"):
     wid, lay = getLayoutWidget("H")
+    lay.setContentsMargins(0, 1, 0, 1)
     if title != "":
         label = QLabel(title, alignment=Qt.AlignCenter)
         label.setStyleSheet("min-width:5em;")
@@ -159,7 +160,7 @@ def getWidget(self, name, wid_type='button', keep_unit=False, precision=True):
     elif wid_type == 'enum':
         widget = SiriusEnumComboBox(
             self, init_channel=pv_name)
-        widget.setStyleSheet("min-width:4em;")
+        widget.setStyleSheet("min-width:4em;max-height:1em;")
     else:
         if wid_type == 'edit':
             widget = SiriusLineEdit(
@@ -174,8 +175,23 @@ def getWidget(self, name, wid_type='button', keep_unit=False, precision=True):
             widget.precision = 2
             widget.displayFormat = _DisplayFormat.Exponential
         widget.setAlignment(Qt.AlignCenter)
-        widget.setStyleSheet("min-width:4em;")
+        widget.setStyleSheet("min-width:4em;max-height:1em;")
     return widget
+
+def getVgcSPRB(self, data, pv_list, num, gen, sec_wid='led'):
+    pv_name = {}
+    for data_type, name in pv_list.items():
+        pv_name[data_type] = num + name + str(gen)
+    return SPRBWidget(
+        self, data['title'], pv_name['control'], 
+        pv_name['status'], data['widget'], sec_wid=sec_wid)
+
+def getVgcLed(self, name, gen, suf_list):
+    if gen%3 != 0:
+        comp = 'equal'
+    else:
+        comp = 'normal'
+    return buildLed(self, name, suf_list[gen%3], comp)
 
 def showAllLegends(self, list=LEGEND):
     wid, lay = getLayoutWidget("H")
@@ -184,3 +200,126 @@ def showAllLegends(self, list=LEGEND):
             lay.addWidget( 
                 showLegend(self, leg))
     return wid
+
+def showSPTitle(title, alternative, lay):
+    text = title
+    if alternative:
+        if title == "SP":
+            text = "Warning"
+        elif title == "SP-H":
+            text = "Alarm"
+        elif title == "No.":
+            text = ""
+    return QLabel('<strong>'+text+'</strong>')
+
+def getSPTable(self, num, gen, data, showTitle=False, alternative=False):
+    pos = [0, 0]
+    wid, lay = getLayoutWidget()
+    lay.setSpacing(0)
+    lay.setContentsMargins(0, 0, 0, 0)
+    for title, obj_data in data.items():
+        if showTitle:
+            lay.addWidget(
+                showSPTitle(title, alternative, lay), 
+                pos[0], pos[1], 1, 3, alignment=Qt.AlignCenter)
+        pos[0] += 1
+        for sp_gen in data["No."][gen%3]:
+            if title == "No.":
+                text = ''
+                if not alternative:
+                    text = str(sp_gen)
+                widget = QLabel('<strong>'+text+'</strong>')
+                widget.setStyleSheet("min-width: 2em;")
+                widget.setAlignment(Qt.AlignCenter)
+            else:
+                pv_suf = getSufixes(obj_data)
+                if alternative:
+                    if title =="SP" and sp_gen in [2, 6, 10]:
+                        pv_suf = {'status': ':RdSH-', 'control': ':SetSH-'}
+                        sp_gen -= 1
+                    if title == "SP-H" and sp_gen in [1, 5, 9]:
+                        pv_suf = {'status': ':RdSP-', 'control': ':SetSP-'}
+                        sp_gen += 1
+                widget = getVgcSPRB(
+                    self, obj_data, pv_suf, num, sp_gen, sec_wid='label')
+            lay.addWidget(
+                widget, pos[0], pos[1], 
+                1, 1, alignment=Qt.AlignCenter)
+            pos[0] += 1
+        pos[1] += 3
+        pos[0] = 0
+    return wid
+
+
+def getSimplePvWidget(self, title, suf, num, gen):
+    pv_name = num + suf[0]
+    if title in ["Pressure<br/>Readback", "Gauge<br/>Message"]:
+        pv_name += str(gen) + suf[1]
+        wid_type = "label"
+    elif title == "Unit":
+        wid_type = "enum"
+    else:
+        wid_type = "label"
+    wid = getWidget(
+        self, pv_name, wid_type)
+    return wid
+
+def getProgressBar(pv_name, limit):
+    bar = MyScaleIndicator(
+        init_channel=pv_name)
+    bar.limitsFromChannel = False
+    bar.showLimits = False
+    bar.showValue = False
+    bar.barIndicator = True
+    bar.userLowerLimit = limit[0]
+    bar.userUpperLimit = limit[1]
+    bar.indicatorColor = COLORS['purple']
+    width = 6
+    if limit[1] == 200:
+        width = 8
+    bar.setStyleSheet('min-height:1em; min-width:'+str(width)+'em;')
+    return bar
+
+def buildIPSInfo(pv_name, lay, orient):
+    for info_type in ['voltage', 'current']:
+        info = IPS_DETAILS["General"][info_type]
+        name = pv_name + info["text"]
+        if info_type == 'current' and orient == 'H':
+            lay.addWidget(
+                getProgressBar(name, [0, 200]),
+                alignment=Qt.AlignCenter)
+        wid = showUnitView(
+            name, info['color'])
+        lay.addWidget(
+            wid, alignment=Qt.AlignCenter)
+    return lay
+
+def getSufixes(data):
+    pv_suf = ["", ""]
+    if isinstance(data, str):
+        pv_suf[0] = data
+    elif isinstance(data, list):
+        pv_suf[0] = data[0]
+        pv_suf[1] = data[1]
+    elif isinstance(data, dict) and 'title' in data:
+        pv_suf = {
+            'status': data['status'], 
+            'control': data['control']
+        }
+    return pv_suf
+
+def getVacPosition(id, divide=True):
+    pos = [0, 0]
+    pos[0], pos[1] = buildIdsVac(id)
+    if pos[1] == 3:
+        if divide:
+            pos[1] = 0
+        else:
+            pos[0] += 10
+    else:
+        pos[0] *= 2
+        if pos[1] == 1:
+            pos[0] -= 1
+        if divide:
+            pos[1] = 1
+    return pos

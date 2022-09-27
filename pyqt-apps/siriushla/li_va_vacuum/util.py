@@ -6,7 +6,7 @@ COLORS = {
     "yellow": QColor(210, 205, 0),
     "red": QColor(207, 0, 0),
     "blue": QColor(130, 143, 255),
-    "purple": QColor(186, 130, 255),
+    "purple": QColor(148, 60, 255),
     "cyan": QColor(0, 187, 196),
     "btn_bg": "#77f2b6bc"
 }
@@ -181,7 +181,7 @@ VGC_DETAILS = {
             "control": ":SetSH-",
             "widget": "edit"
         },
-        "Relay Querry & Set": {
+        "Relay Status": {
             "title": "",
             "status": ":RdRlySts-",
             "control": ":SetRlySts-",

@@ -1,6 +1,7 @@
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QGroupBox
 from qtpy.QtGui import QPainter, QBrush, QPen, QColor
+from pydm.widgets import PyDMPushButton
 
 class LedLegend(QWidget):
     """."""
@@ -61,3 +62,19 @@ class QGroupBoxButton(QGroupBox):
         super().__init__(parent=parent)
         self.setTitle(title)
         self.setMouseTracking(True)
+
+class OnOffBtn(PyDMPushButton):
+
+    def __init__(self, parent=None, init_channel=None, label=''):
+        super().__init__(parent, init_channel=init_channel, label=label, pressValue=0)
+
+    def value_changed(self, new_value):
+        """Redefine value_changed."""
+        if new_value == 1:
+            self.setChecked(True)
+            self.pressValue = 0
+        else:
+            self.setChecked(False)
+            self.pressValue = 1
+
+        return super().value_changed(new_value)

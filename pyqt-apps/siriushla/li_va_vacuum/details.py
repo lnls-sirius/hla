@@ -1,8 +1,10 @@
 from qtpy.QtCore import Qt
-from qtpy.QtWidgets import QWidget, QGroupBox, QVBoxLayout, \
-    QHBoxLayout, QLabel, QGridLayout
-from .functions import SPRBWidget, buildIdName, buildIdsVac, buildLed, buildVacPv, getLayoutWidget, \
-    getGroupTitle, getWidget, showAllLegends, showUnitView
+import qtawesome as _qta
+from qtpy.QtWidgets import QGroupBox, QVBoxLayout, QHBoxLayout, QLabel, QPushButton
+from siriushla.li_va_vacuum.widgets import OnOffBtn
+from .functions import SPRBWidget, buildIPSInfo, buildIdName, buildIdsVac, buildVacPv, getLayoutWidget, \
+    getGroupTitle, getProgressBar, getSPTable, getSimplePvWidget, getSufixes, getVacPosition, getVgcLed, getVgcSPRB, getWidget, \
+    showAllLegends, showUnitView
 from .util import IPS_DETAILS, PVS_CONFIG, VGC_DETAILS
 from ..widgets import SiriusMainWindow
 
@@ -87,87 +89,33 @@ class VgcDetailWindow(SiriusMainWindow):
         self.devpref = self.prefix + self.main_dev
         self._setupUi()
 
-    def getSufixes(self, data):
-        pv_suf = ["", ""]
-        if isinstance(data, str):
-            pv_suf[0] = data
-        elif isinstance(data, list):
-            pv_suf[0] = data[0]
-            pv_suf[1] = data[1]
-        elif isinstance(data, dict) and 'title' in data:
-            pv_suf = {
-                'status': data['status'], 
-                'control': data['control']
-            }
-        return pv_suf
-
-    def showSPTable(self, num, gen, data):
-        pos = [0, 0]
-        wid, lay = getLayoutWidget()
-        lay.setSpacing(0)
-        for title, obj_data in data.items():
-            lay.addWidget(
-                QLabel('<strong>'+title+'</strong>'), pos[0], pos[1],
-                1, 3, alignment=Qt.AlignCenter)
-            pos[0] += 1
-            for sp_gen in data["No."][gen%3]:
-                if title == "No.":
-                    widget = QLabel('<strong>'+str(sp_gen)+'</strong>')
-                else:
-                    pv_name = {}
-                    pv_suf = self.getSufixes(obj_data)
-                    for data_type, name in pv_suf.items():
-                        pv_name[data_type] = num + name + str(sp_gen)
-                    widget = SPRBWidget(
-                        self, obj_data["title"], pv_name["control"],
-                        pv_name["status"], obj_data["widget"])
-                lay.addWidget(
-                    widget, pos[0], pos[1], 
-                    1, 1, alignment=Qt.AlignCenter)
-                pos[0] += 1
-            pos[1] += 3
-            pos[0] = 0
-        return wid
-
     def showDevices(self, title, data, lay, col):
         row = 1
         for gen in range(3, 0, -1):
             vgc_id = (self.number * 3)-(gen-1)
             pv_number, generation = buildVacPv(vgc_id)
-            pv_suf = self.getSufixes(data)
+            pv_suf = getSufixes(data)
             if title == "Gauge":
                 widget = QLabel(
                     '<strong>'+getGroupTitle(data, vgc_id)+'</strong>', 
                     alignment=Qt.AlignCenter)
             elif isinstance(data, dict):
                 if title == "Setpoint":
-                    widget = self.showSPTable(pv_number, generation, data)
+                    showTitle = False
+                    if gen == 3:
+                        showTitle = True
+                    widget = getSPTable(
+                        self, pv_number, generation, data, showTitle)
                 elif 'title' in data:
-                    pv_name = {}
-                    for data_type, name in pv_suf.items():
-                        pv_name[data_type] = pv_number + name + str(generation)
-                    widget = SPRBWidget(
-                        self, data['title'], pv_name['control'], 
-                        pv_name['status'], data['widget'], sec_wid='led')
+                    widget = getVgcSPRB(
+                        self, data, pv_suf, pv_number, generation)
                 else:
                     pv_name = self.devpref + str(pv_number) + data['text']
-                    if generation%3 != 0:
-                        comp = 'equal'
-                    else:
-                        comp = 'normal'
-                    widget = buildLed(self, pv_name, data['sufix'][generation%3], comp)
+                    widget = getVgcLed(
+                        self, pv_name, generation, data['sufix'])
             else:
-                pv_name = pv_number + pv_suf[0]
-                if title in ["Pressure<br/>Readback", "Gauge<br/>Message"]:
-                    pv_name += str(generation) + pv_suf[1]
-                    wid_type = "label"
-                elif title == "Unit":
-                    wid_type = "enum"
-                else:
-                    wid_type = "label"
-                widget = getWidget(
-                    self, pv_name, wid_type)
-            
+                widget = getSimplePvWidget(
+                    self, title, pv_suf, pv_number, generation)
             lay.addWidget(widget, row, col)
             row += 1
 
@@ -175,7 +123,7 @@ class VgcDetailWindow(SiriusMainWindow):
         wid, lay = getLayoutWidget()
         pos = [0, 0]
         for title, data in VGC_DETAILS.items():
-            if title not in ['led', 'SP']:
+            if title != 'led':
                 label = QLabel('<strong>'+title+'</strong>')
                 label.setAlignment(Qt.AlignCenter)
                 lay.addWidget(
@@ -205,29 +153,138 @@ class DetailWindow(SiriusMainWindow):
         self.setObjectName('LIApp')
         self.setWindowTitle("Vacuum Details")
         self._setupUi()
+    
+    def selWindow(self, cat, id=0):
+        if cat == "Pump":
+            self.window = IpsDetailWindow(id_ips=id)
+        else:
+            self.window = VgcDetailWindow(id_vgc=id)
+        self.window.show()
+
+    def setWindowBtn(self, cat, id_num):
+        button = QPushButton(_qta.icon('fa5s.ellipsis-h'), '', self)
+        button.clicked.connect(
+            lambda: self.selWindow(cat, id_num))
+        button.setStyleSheet("margin: 0.1em;")
+        return button
+
+    def buildBasicGroup(self, cat, id_num, orient="V"):
+        group = QGroupBox(
+            title=getGroupTitle(cat, id_num))
+        wid, lay = getLayoutWidget(orient)
+        lay.setSpacing(0)
+        lay.setContentsMargins(0, 2, 0, 0)
+        group.setLayout(lay)
+        lay.addWidget(
+            self.setWindowBtn(cat, id_num),
+            alignment=Qt.AlignLeft)
+        return lay, group
+
+    def showIPSControl(self, pv_name, lay_item):
+        for item in IPS_DETAILS["Status"]:
+            if 'title' in item:
+                if item['title'] != "State":
+                    name = pv_name + item['control']
+                    if item['title'] == "Local/\nRemote":
+                        wid = getWidget(self, name[12:], item['widget'])
+                        max = 3.5
+                    else:
+                        wid = OnOffBtn(
+                            self, init_channel=name, label=item['title'])
+                        max = 2.5
+                    wid.setStyleSheet("max-width:"+str(max)+"em;")
+                    lay_item.addWidget(wid)
+
+    def showIPSList(self):
+        wid, lay = getLayoutWidget("V")
+        cat = "Pump"
+        config = PVS_CONFIG[cat]
+        self.devpref = config['prefix']
+        pv_range = config["iterations"]
+        for item in range(pv_range[0], pv_range[1]+1):
+            pv_name = self.devpref + buildIdName(item)
+            lay_item, widget = self.buildBasicGroup(
+                cat, item, "H")
+            buildIPSInfo(pv_name, lay_item, "H")
+            self.showIPSControl(pv_name, lay_item)
+            lay.addWidget(widget)
+        return wid
+    
+    def showAllDevices(self, title, data, lay, pos):
+        config = PVS_CONFIG["Vacuum"]
+        pv_range = config['iterations']
+        self.devpref = config['prefix']
+        for vgc_id in range(pv_range[0], pv_range[1]+1):
+            pv_number, generation = buildVacPv(vgc_id)
+            pos_temp = getVacPosition(vgc_id, False)
+            pos[0] = pos_temp[0]
+            pv_suf = getSufixes(data)
+            if title == "Gauge":
+                pos[1] = 0
+                lay.addWidget(
+                    self.setWindowBtn(
+                        "Vacuum", vgc_id), pos[0], pos[1], 1, 1)
+                pos[1] += 1
+                widget = QLabel(
+                    '<strong>'+getGroupTitle(data, vgc_id)+'</strong>')
+            elif isinstance(data, dict):
+                if title == "Setpoint":
+                    widget = getSPTable(
+                        self, pv_number, generation, data, pos[0]==1, True)
+                elif 'title' in data:
+                    widget = getVgcSPRB(
+                        self, data, pv_suf, pv_number, generation)
+                else:
+                    pv_name = self.devpref + pv_number + data['text']
+                    widget = getVgcLed(
+                        self, pv_name, generation, data['sufix'])
+            else:
+                if title  == "Gauge<br/>Message":
+                    if generation == 3:
+                        limits = [-4, -2]
+                    else:
+                        limits = [-11, -2]
+                    widget = getProgressBar(
+                        self.devpref+pv_number+config["bar"]+str(generation), limits)
+                else:
+                    widget = getSimplePvWidget(
+                        self, title, pv_suf, pv_number, generation)
+            lay.addWidget(
+                widget, pos[0], pos[1], 1, 1, Qt.AlignCenter)
+            pos[0] += 1
+        return pos
+
+    def showVgcList(self):
+        wid, lay = getLayoutWidget("G")
+        pos = [0, 1]
+        for title, data in VGC_DETAILS.items():
+            pos[0] = 0
+            if title != 'led':
+                label = QLabel('<strong>'+title+'</strong>')
+                label.setAlignment(Qt.AlignCenter)
+                lay.addWidget(label, pos[0], pos[1], 1, 1)
+            pos[0] += 1
+            pos = self.showAllDevices(title, data, lay, pos)
+            pos[1] += 1
+        return wid
 
     def buildList(self, cat):
-        wid, lay = getLayoutWidget("V")
-        # lay.setSpacing(0)
-        # lay.setContentsMargins(0, 0, 0, 0)
-        # config = PVS_CONFIG[cat]
-        # pv_range = config["iterations"]
-        # for item in range(pv_range[0], pv_range[1]+1):
-        #     # widget = getGroupWidgets(
-        #     #     config, item, cat)
-        #     widget = QLabel("213")
-        #     lay.addWidget(widget)
+        if cat == "Vacuum":
+            wid = self.showVgcList()
+        else:
+            wid = self.showIPSList()
         return wid
 
     def widgetLists(self):
         wid, lay = getLayoutWidget("H")
         lay.setSpacing(0)
         lay.setContentsMargins(0, 0, 0, 0)
+        size = 3
         for cat in PVS_CONFIG:
             if cat != "Valve":
                 lay.addWidget(
-                    self.buildList(cat),
-                    alignment=Qt.AlignCenter)
+                    self.buildList(cat), size)
+                size = 1
         return wid
 
     def _setupUi(self):
