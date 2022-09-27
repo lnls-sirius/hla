@@ -9,7 +9,6 @@ import qtawesome as qta
 from pydm.widgets import PyDMPushButton
 
 from siriuspy.namesys import SiriusPVName as _PVName
-from siriushla.widgets.label import SiriusLabel
 
 from ...widgets import SiriusConnectionSignal as _ConnSig, SiriusLabel, \
     SiriusLedAlert, SiriusSpinbox, PyDMStateButton, SiriusLedState

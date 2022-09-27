@@ -13,7 +13,7 @@ from siriuspy.search import PSSearch
 from siriuspy.pwrsupply.csdev import PS_LI_INTLK_THRS as _PS_LI_INTLK
 from siriushla.widgets import PyDMStateButton, SiriusLedState, \
     SiriusLedAlert, PyDMSpinboxScrollbar, PyDMLedMultiChannel, \
-    SiriusEnumComboBox, SiriusLabel
+    SiriusEnumComboBox, SiriusLabel, SiriusSpinbox
 from .detail_widget.custom_widgets import LISpectIntlkLed
 
 
@@ -104,6 +104,12 @@ def get_prop2width(psname):
                     'wfmupdate': 8,
                     'updparms': 6,
                 })
+        else:
+            dic.update({
+                'accgain': 6,
+                'accfreeze': 6,
+                'accclear': 6,
+            })
     if get_strength_name(psname):
         dic.update({
             'strength_sp': 6,
@@ -150,6 +156,12 @@ def get_prop2label(psname):
                     'wfmupdate': 'Wfm Update',
                     'updparms': 'Upd.Params',
                 })
+        else:
+            dic.update({
+                'accgain': 'Acc Gain',
+                'accfreeze': 'Acc Freeze',
+                'accclear': 'Acc Clear',
+            })
     strength = get_strength_name(psname)
     if strength:
         dic.update({
@@ -169,7 +181,8 @@ def sort_propties(labels):
     default_order = (
         'detail', 'bbb', 'udc', 'opmode', 'ctrlmode', 'state', 'pulse',
         'intlk', 'reset', 'conn', 'ctrlloop', 'wfmupdate', 'updparms',
-        'sofbmode', 'setpoint', 'readback', 'monitor', 'strength_sp',
+        'sofbmode', 'accgain', 'accfreeze', 'accclear',
+        'setpoint', 'readback', 'monitor', 'strength_sp',
         'strength_rb', 'strength_mon', 'trim')
     idcs = list()
     for lbl in labels:
@@ -321,6 +334,21 @@ class SummaryWidget(QWidget):
             self.sofbmode_wid = self._build_widget(name='sofbmode')
             self._widgets_dict['sofbmode'] = self.sofbmode_wid
             lay.addWidget(self.sofbmode_wid)
+
+        if self._is_fofb:
+            self.accgain_wid = self._build_widget(
+                name='accgain', orientation='v')
+            self._widgets_dict['accgain'] = self.accgain_wid
+            lay.addWidget(self.accgain_wid)
+
+            self.accfreeze_wid = self._build_widget(
+                name='accfreeze', orientation='v')
+            self._widgets_dict['accfreeze'] = self.accfreeze_wid
+            lay.addWidget(self.accfreeze_wid)
+
+            self.accclear_wid = self._build_widget(name='accclear')
+            self._widgets_dict['accclear'] = self.accclear_wid
+            lay.addWidget(self.accclear_wid)
 
         self.setpoint_wid = self._build_widget(
             name='setpoint', orientation='v')
@@ -476,6 +504,20 @@ class SummaryWidget(QWidget):
             self._sofbmode_sts = self._prefixed_name.substitute(
                 propty='SOFBMode-Sts')
 
+        if self._is_fofb:
+            self._accgain_sp = self._prefixed_name.substitute(
+                propty='FOFBAccGain-SP')
+            self._accgain_rb = self._prefixed_name.substitute(
+                propty='FOFBAccGain-RB')
+
+            self._accfreeze_sel = self._prefixed_name.substitute(
+                propty='FOFBAccFreeze-Sel')
+            self._accfreeze_sts = self._prefixed_name.substitute(
+                propty='FOFBAccFreeze-Sts')
+
+            self._accclear_cmd = self._prefixed_name.substitute(
+                propty='FOFBAccClear-Cmd')
+
         # analog control
         sp = self._analog_name
         if self._has_analsp:
@@ -612,6 +654,29 @@ class SummaryWidget(QWidget):
             self.sofbmode_led = SiriusLedState(self, self._sofbmode_sts)
             self.sofbmode_wid.layout().addWidget(self.sofbmode_bt)
             self.sofbmode_wid.layout().addWidget(self.sofbmode_led)
+        elif name == 'accgain' and self._is_fofb:
+            self.accgain_sp = SiriusSpinbox(self, self._accgain_sp)
+            self.accgain_sp.showStepExponent = False
+            self.accgain_sp.precisionFromPV = False
+            self.accgain_sp.precision = 6
+            self.accgain_rb = SiriusLabel(self, self._accgain_rb)
+            self.accgain_rb.precisionFromPV = False
+            self.accgain_rb.precision = 6
+            self.accgain_wid.layout().addWidget(self.accgain_sp)
+            self.accgain_wid.layout().addWidget(self.accgain_rb)
+        elif name == 'accfreeze' and self._is_fofb:
+            self.accfreeze_cb = SiriusEnumComboBox(self, self._accfreeze_sel)
+            self.accfreeze_lb = SiriusLabel(self, self._accfreeze_sts)
+            self.accfreeze_wid.layout().addWidget(self.accfreeze_cb)
+            self.accfreeze_wid.layout().addWidget(self.accfreeze_lb)
+        elif name == 'accclear' and self._is_fofb:
+            self.accclear_bt = PyDMPushButton(
+                parent=self, init_channel=self._accclear_cmd, pressValue=1)
+            self.accclear_bt.setIcon(qta.icon('mdi.sync'))
+            self.accclear_bt.setObjectName('clear_bt')
+            self.accclear_bt.setStyleSheet(
+                '#clear_bt{min-width:25px; max-width:25px; icon-size:20px;}')
+            self.accclear_wid.layout().addWidget(self.accclear_bt)
         elif name == 'setpoint' and self._has_analsp:
             self.setpoint = PyDMSpinboxScrollbar(self, self._analog_sp)
             if self._is_fofb:
@@ -750,6 +815,30 @@ class SummaryWidget(QWidget):
             if self.sofbmode_bt.isEnabled():
                 if self.sofbmode_bt.value:
                     self.sofbmode_bt.send_value()
+
+    def set_accfreeze_frozen(self):
+        """Set power supply AccFreeze to frozen."""
+        if hasattr(self, 'accfreeze_cb'):
+            if self.accfreeze_cb.isEnabled():
+                index = self.accfreeze_cb.findText('frozen')
+                if index == -1:
+                    return
+                self.accfreeze_cb.internal_combo_box_activated_int(index)
+
+    def set_accfreeze_unfrozen(self):
+        """Set power supply AccFreeze to unfrozen."""
+        if hasattr(self, 'accfreeze_cb'):
+            if self.accfreeze_cb.isEnabled():
+                index = self.accfreeze_cb.findText('unfrozen')
+                if index == -1:
+                    return
+                self.accfreeze_cb.internal_combo_box_activated_int(index)
+
+    def acc_clear(self):
+        """Reset power supply."""
+        if hasattr(self, 'accclear_bt'):
+            if self.accclear_bt.isEnabled():
+                self.accclear_bt.sendValue()
 
 
 class SummaryHeader(QWidget):

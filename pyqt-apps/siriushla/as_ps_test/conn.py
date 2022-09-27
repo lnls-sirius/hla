@@ -489,17 +489,15 @@ class TesterPSFOFB(_TesterBase):
         self.test_tol = splims['TSTR']
 
     def set_opmode(self, state):
-        """Set manual mode."""
-        if state != _PSC.OpMode.SlowRef:
-            return
-        self._pvs['OpMode-Sel'].value = _PSC.OpModeFOFB.closed_loop_manual
+        """Set opmode to 'state'."""
+        self._pvs['OpMode-Sel'].value = state
 
     def check_opmode(self, state):
-        """Check whether power supply is in manual mode."""
-        if state != _PSC.OpMode.SlowRef:
-            return True
-        return self._pvs['OpMode-Sts'].value == \
-            _PSC.OpModeFOFB.closed_loop_manual
+        """Check whether power supply is in opmode 'state'."""
+        if isinstance(state, (list, tuple)):
+            return self._pvs['OpMode-Sts'].value in state
+        else:
+            return self._pvs['OpMode-Sts'].value == state
 
     def check_intlk(self):
         """Check interlocks."""
