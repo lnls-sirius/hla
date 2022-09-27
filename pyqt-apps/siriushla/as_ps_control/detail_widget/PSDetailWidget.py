@@ -1923,8 +1923,12 @@ class FastCorrPSDetailWidget(PSDetailWidget):
         self.fofbaccgain_sp = SiriusSpinbox(
             self, self._prefixed_psname + ':FOFBAccGain-SP')
         self.fofbaccgain_sp.showStepExponent = False
+        self.fofbaccgain_sp.precisionFromPV = False
+        self.fofbaccgain_sp.precision = 8
         self.fofbaccgain_rb = SiriusLabel(
             self, self._prefixed_psname + ':FOFBAccGain-RB')
+        self.fofbaccgain_rb.precisionFromPV = False
+        self.fofbaccgain_rb.precision = 8
 
         fofbaccfreeze_lb = QLabel(
             'Acc Freeze', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
