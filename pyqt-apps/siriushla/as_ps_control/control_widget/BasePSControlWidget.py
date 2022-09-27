@@ -507,6 +507,19 @@ class BasePSControlWidget(QWidget):
         self.sofbmode_off_act.triggered.connect(
             lambda: self._set_sofbmode(False))
         self.sofbmode_off_act.setEnabled(False)
+        self.set_accfreeze_frozen_act = QAction(
+            "Set AccFreeze to frozen", self)
+        self.set_accfreeze_frozen_act.triggered.connect(
+            lambda: self._set_acc_freeze(True))
+        self.set_accfreeze_frozen_act.setEnabled(False)
+        self.set_accfreeze_unfrozen_act = QAction(
+            "Set AccFreeze to unfrozen", self)
+        self.set_accfreeze_unfrozen_act.triggered.connect(
+            lambda: self._set_acc_freeze(False))
+        self.set_accfreeze_unfrozen_act.setEnabled(False)
+        self.acc_clear_act = QAction("Clear Acc", self)
+        self.acc_clear_act.triggered.connect(self._acc_clear_cmd)
+        self.acc_clear_act.setEnabled(False)
 
     def _enable_actions(self):
         if 'state' in self.visible_props and \
@@ -537,6 +550,13 @@ class BasePSControlWidget(QWidget):
                 not self.sofbmode_on_act.isEnabled():
             self.sofbmode_on_act.setEnabled(True)
             self.sofbmode_off_act.setEnabled(True)
+        if 'accfreeze' in self.visible_props and \
+                not self.set_accfreeze_frozen_act.isEnabled():
+            self.set_accfreeze_frozen_act.setEnabled(True)
+            self.set_accfreeze_unfrozen_act.setEnabled(True)
+        if 'accclear' in self.visible_props and \
+                not self.acc_clear_act.isEnabled():
+            self.acc_clear_act.setEnabled(True)
 
     @Slot(bool)
     def _set_pwrstate(self, state):
@@ -636,6 +656,29 @@ class BasePSControlWidget(QWidget):
                 except TypeError:
                     pass
 
+    @Slot(bool)
+    def _set_acc_freeze(self, state):
+        """Execute turn AccFreeze frozen/unfrozen actions."""
+        for key, widget in self.ps_widgets_dict.items():
+            if key in self.filtered_widgets:
+                try:
+                    if state:
+                        widget.set_accfreeze_frozen()
+                    else:
+                        widget.set_accfreeze_unfrozen()
+                except TypeError:
+                    pass
+
+    @Slot()
+    def _acc_clear_cmd(self):
+        """Reset interlocks."""
+        for key, widget in self.ps_widgets_dict.items():
+            if key in self.filtered_widgets:
+                try:
+                    widget.acc_clear()
+                except TypeError:
+                    pass
+
     # Overloaded method
     def contextMenuEvent(self, event):
         """Show a custom context menu."""
@@ -652,6 +695,10 @@ class BasePSControlWidget(QWidget):
             menu.addAction(self.wfmupdate_on_act)
             menu.addAction(self.wfmupdate_off_act)
             menu.addAction(self.updparms_act)
+        else:
+            menu.addAction(self.set_accfreeze_frozen_act)
+            menu.addAction(self.set_accfreeze_unfrozen_act)
+            menu.addAction(self.acc_clear_act)
         if PSSearch.conv_psname_2_psmodel(self._dev_list[0]) == 'FBP':
             menu.addAction(self.sofbmode_on_act)
             menu.addAction(self.sofbmode_off_act)
