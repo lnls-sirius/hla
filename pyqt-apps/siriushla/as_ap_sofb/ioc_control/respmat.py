@@ -213,7 +213,7 @@ class RespMatWidget(BaseWidget):
         lbl.setAlignment(Qt.AlignCenter)
         hbl = QHBoxLayout()
         hbl.setSpacing(8)
-        meas_lay.addItem(hbl)
+        meas_lay.addLayout(hbl)
         hbl.addWidget(strt)
         hbl.addWidget(stop)
         hbl.addWidget(rst)
@@ -222,7 +222,7 @@ class RespMatWidget(BaseWidget):
 
         fml = QFormLayout()
         meas_lay.addSpacing(20)
-        meas_lay.addItem(fml)
+        meas_lay.addLayout(fml)
         lbl = QLabel('CH [urad]', meas_wid)
         wid = self.create_pair(meas_wid, 'MeasRespMatKickCH')
         fml.addRow(lbl, wid)
