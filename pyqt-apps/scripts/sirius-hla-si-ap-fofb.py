@@ -21,17 +21,21 @@ parser.add_argument(
 parser.add_argument(
     '-m', '--matrix', action='store_true', default=False,
     help="Choose whether to show matrix widget")
+parser.add_argument(
+    '--property', type=str, default='RespMat-Mon',
+    help="Define which matrix to show.")
 
 args = parser.parse_args()
 
 app = SiriusApplication()
 if args.matrix:
     window = create_window_from_widget(
-        ShowMatrixWidget, 'Response Matrix',
+        ShowMatrixWidget, 'Matrix View',
         icon=qta.icon('fa5s.hammer', color=util.get_appropriate_color('SI')),
         is_main=True)
     app.open_window(
-        window, parent=None, device='SI-Glob:AP-FOFB', prefix=args.prefix)
+        window, parent=None, device='SI-Glob:AP-FOFB', propty=args.property,
+        prefix=args.prefix)
 else:
     app.open_window(
         MainWindow, parent=None, device='SI-Glob:AP-FOFB',
