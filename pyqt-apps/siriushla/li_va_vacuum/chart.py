@@ -20,6 +20,7 @@ class ChartWindow(SiriusMainWindow):
         self._setupUi()
 
     def showGraph(self):
+        """Create and configure Chart Widget"""
         graph = SiriusTimePlot(parent=self, background='w')
         graph.showLegend = True
         graph.showXGrid = True
@@ -27,12 +28,11 @@ class ChartWindow(SiriusMainWindow):
         graph.autoRangeY = True
         graph.timeSpan = 10*60
         graph.bufferSize = graph.timeSpan*10
-
-
         graph.setStyleSheet("min-width: 15em; min-height: 10em;")
         return graph
 
     def addChannels(self, graph, id_num, color):
+        """Add one channel(curve) to the chart"""
         name, gen = buildVacPv(id_num)
         pv_name = self.config['prefix']+name+self.channel+str(gen)
         graph.addYChannel(
@@ -41,6 +41,7 @@ class ChartWindow(SiriusMainWindow):
         return graph
 
     def chartsMon(self, lay):
+        """Display the three charts with their channels"""
         id_num = 1
         for num in range(0, 3):
             graph = self.showGraph()
@@ -56,7 +57,7 @@ class ChartWindow(SiriusMainWindow):
             lay.addWidget(graph)
         
     def _setupUi(self):
-        """Display the selected chart type."""
+        """."""
         wid, lay = getLayoutWidget("V")
         self.setCentralWidget(wid)
         lay.setContentsMargins(10, 10, 10, 10)

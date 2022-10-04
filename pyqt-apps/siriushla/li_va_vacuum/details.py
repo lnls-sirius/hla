@@ -1,15 +1,14 @@
 from qtpy.QtCore import Qt
-import qtawesome as _qta
-from qtpy.QtWidgets import QGroupBox, QVBoxLayout, QHBoxLayout, QLabel, QPushButton
+from qtpy.QtWidgets import QGroupBox, QVBoxLayout, QHBoxLayout, QLabel
 from siriushla.li_va_vacuum.widgets import OnOffBtn
-from .functions import SPRBWidget, buildIPSInfo, buildIdName, buildIdsVac, buildVacPv, getLayoutWidget, \
-    getGroupTitle, getProgressBar, getSPTable, getSimplePvWidget, getSufixes, getVacPosition, getVgcLed, getVgcSPRB, getWidget, \
-    showAllLegends, showUnitView
+from .functions import SPRBWidget, buildBasicGroup, buildIPSInfo, buildIdName, buildIdsVac, buildVacPv, getLayoutWidget, \
+    getGroupTitle, getProgressBar, getSPTable, getSimplePvWidget, getSufixes, getVacPosition, getVgcLed, \
+    getVgcSPRB, getWidget, setWindowBtn, showAllLegends, showUnitView
 from .util import IPS_DETAILS, PVS_CONFIG, VGC_DETAILS
 from ..widgets import SiriusMainWindow
 
 class IpsDetailWindow(SiriusMainWindow):
-    """."""
+    """ Display IPS Detail Window"""
 
     def __init__(self, parent=None, prefix='', id_ips=''):
         """Init."""
@@ -21,7 +20,8 @@ class IpsDetailWindow(SiriusMainWindow):
         self.setWindowTitle("IPS "+str(id_ips)+" Details")
         self._setupUi()
 
-    def buildIPSInfo(self, info):
+    def buildIPSDetail(self, info):
+        """ Display IPS measurement complete information """
         wid = QGroupBox()
         lay = QHBoxLayout()
         lay.setContentsMargins(0, 0, 0, 0)
@@ -34,6 +34,7 @@ class IpsDetailWindow(SiriusMainWindow):
         return wid
             
     def buildGroup(self, info, title):
+        """ Display one detail group """
         group = QGroupBox()
         lay = QVBoxLayout()
         group.setTitle(title)
@@ -62,7 +63,7 @@ class IpsDetailWindow(SiriusMainWindow):
         for title, info in IPS_DETAILS.items():
             pos[3] = 1
             if title == "General":
-                group = self.buildIPSInfo(info)
+                group = self.buildIPSDetail(info)
                 pos[3] = 2
             else:
                 group = self.buildGroup(info, title) 
@@ -74,7 +75,7 @@ class IpsDetailWindow(SiriusMainWindow):
             
 
 class VgcDetailWindow(SiriusMainWindow):
-    """."""
+    """ Display VGC Detail Window"""
 
     def __init__(self, parent=None, prefix='', id_vgc=''):
         """Init."""
@@ -90,6 +91,7 @@ class VgcDetailWindow(SiriusMainWindow):
         self._setupUi()
 
     def showDevices(self, title, data, lay, col):
+        """ Display the infomation of three devices of the same group"""
         row = 1
         for gen in range(3, 0, -1):
             vgc_id = (self.number * 3)-(gen-1)
@@ -120,6 +122,7 @@ class VgcDetailWindow(SiriusMainWindow):
             row += 1
 
     def buildVgcTable(self):
+        """ Create the information columns """
         wid, lay = getLayoutWidget()
         pos = [0, 0]
         for title, data in VGC_DETAILS.items():
@@ -145,7 +148,7 @@ class VgcDetailWindow(SiriusMainWindow):
          
 
 class DetailWindow(SiriusMainWindow):
-    """."""
+    """ Display General Detail Window"""
 
     def __init__(self, parent=None):
         """Init."""
@@ -155,62 +158,15 @@ class DetailWindow(SiriusMainWindow):
         self._setupUi()
     
     def selWindow(self, cat, id=0):
+        """ Open selected window with click """
         if cat == "Pump":
             self.window = IpsDetailWindow(id_ips=id)
         else:
             self.window = VgcDetailWindow(id_vgc=id)
         self.window.show()
-
-    def setWindowBtn(self, cat, id_num):
-        button = QPushButton(_qta.icon('fa5s.ellipsis-h'), '', self)
-        button.clicked.connect(
-            lambda: self.selWindow(cat, id_num))
-        button.setStyleSheet("margin: 0.1em;")
-        return button
-
-    def buildBasicGroup(self, cat, id_num, orient="V"):
-        group = QGroupBox(
-            title=getGroupTitle(cat, id_num))
-        wid, lay = getLayoutWidget(orient)
-        lay.setSpacing(0)
-        lay.setContentsMargins(0, 2, 0, 0)
-        group.setLayout(lay)
-        lay.addWidget(
-            self.setWindowBtn(cat, id_num),
-            alignment=Qt.AlignLeft)
-        return lay, group
-
-    def showIPSControl(self, pv_name, lay_item):
-        for item in IPS_DETAILS["Status"]:
-            if 'title' in item:
-                if item['title'] != "State":
-                    name = pv_name + item['control']
-                    if item['title'] == "Local/\nRemote":
-                        wid = getWidget(self, name[12:], item['widget'])
-                        max = 3.5
-                    else:
-                        wid = OnOffBtn(
-                            self, init_channel=name, label=item['title'])
-                        max = 2.5
-                    wid.setStyleSheet("max-width:"+str(max)+"em;")
-                    lay_item.addWidget(wid)
-
-    def showIPSList(self):
-        wid, lay = getLayoutWidget("V")
-        cat = "Pump"
-        config = PVS_CONFIG[cat]
-        self.devpref = config['prefix']
-        pv_range = config["iterations"]
-        for item in range(pv_range[0], pv_range[1]+1):
-            pv_name = self.devpref + buildIdName(item)
-            lay_item, widget = self.buildBasicGroup(
-                cat, item, "H")
-            buildIPSInfo(pv_name, lay_item, "H")
-            self.showIPSControl(pv_name, lay_item)
-            lay.addWidget(widget)
-        return wid
     
     def showAllDevices(self, title, data, lay, pos):
+        """ Display the VGC informations of one device"""
         config = PVS_CONFIG["Vacuum"]
         pv_range = config['iterations']
         self.devpref = config['prefix']
@@ -222,8 +178,8 @@ class DetailWindow(SiriusMainWindow):
             if title == "Gauge":
                 pos[1] = 0
                 lay.addWidget(
-                    self.setWindowBtn(
-                        "Vacuum", vgc_id), pos[0], pos[1], 1, 1)
+                    setWindowBtn(
+                        self, "Vacuum", vgc_id), pos[0], pos[1], 1, 1)
                 pos[1] += 1
                 widget = QLabel(
                     '<strong>'+getGroupTitle(data, vgc_id)+'</strong>')
@@ -254,7 +210,24 @@ class DetailWindow(SiriusMainWindow):
             pos[0] += 1
         return pos
 
+    def showIPSControl(self, pv_name, lay_item):
+        """ Display simple buttons for IPS Control """
+        for item in IPS_DETAILS["Status"]:
+            if 'title' in item:
+                if item['title'] != "State":
+                    name = pv_name + item['control']
+                    if item['title'] == "Local/\nRemote":
+                        wid = getWidget(self, name[12:], item['widget'])
+                        max = 3.5
+                    else:
+                        wid = OnOffBtn(
+                            self, init_channel=name, label=item['title'])
+                        max = 2.5
+                    wid.setStyleSheet("max-width:"+str(max)+"em;")
+                    lay_item.addWidget(wid)
+
     def showVgcList(self):
+        """ Display VGC Widget List with all VGC elements """
         wid, lay = getLayoutWidget("G")
         pos = [0, 1]
         for title, data in VGC_DETAILS.items():
@@ -268,7 +241,24 @@ class DetailWindow(SiriusMainWindow):
             pos[1] += 1
         return wid
 
+    def showIPSList(self):
+        """ Display IPS Widget List with all IPS elements """
+        wid, lay = getLayoutWidget("V")
+        cat = "Pump"
+        config = PVS_CONFIG[cat]
+        self.devpref = config['prefix']
+        pv_range = config["iterations"]
+        for item in range(pv_range[0], pv_range[1]+1):
+            pv_name = self.devpref + buildIdName(item)
+            lay_item, widget = buildBasicGroup(
+                self, cat, item, "H")
+            buildIPSInfo(pv_name, lay_item, "H")
+            self.showIPSControl(pv_name, lay_item)
+            lay.addWidget(widget)
+        return wid
+
     def buildList(self, cat):
+        """ Select which widget list to build """
         if cat == "Vacuum":
             wid = self.showVgcList()
         else:
@@ -276,6 +266,7 @@ class DetailWindow(SiriusMainWindow):
         return wid
 
     def widgetLists(self):
+        """ Build all lists """
         wid, lay = getLayoutWidget("H")
         lay.setSpacing(0)
         lay.setContentsMargins(0, 0, 0, 0)

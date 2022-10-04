@@ -1,77 +1,17 @@
 from qtpy.QtCore import Qt
+import qtawesome as _qta
 import math as _math
 from pydm.widgets.display_format import DisplayFormat as _DisplayFormat
-from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, QHBoxLayout, QVBoxLayout
+from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, \
+    QHBoxLayout, QVBoxLayout, QPushButton
 from .util import COLORS, IPS_DETAILS, LEGEND
-from .widgets import LedLegend
+from .widgets import LedLegend, QGroupBoxButton
 from ..widgets import SiriusLabel, PyDMLed, PyDMLedMultiChannel, \
     SiriusLineEdit, SiriusEnumComboBox
 from ..si_di_bbb.custom_widgets import MyScaleIndicator
 
-def buildIdName(id_num, isValve=False):
-    pv_id = ""
-    if not isValve:
-        if id_num < 10:
-            pv_id = "0"
-    pv_id += str(id_num)
-    return pv_id
-
-def buildVacPv(id_num):
-    dev_number, dev_gen = buildIdsVac(id_num)
-    pv_number = buildIdName(dev_number, False)
-    return pv_number, dev_gen
-
-def buildIdsVac(id_num):
-    dev_number = _math.ceil(id_num / 3)
-    dev_gen = id_num % 3
-    if not dev_gen:
-        dev_gen = 3
-    return dev_number, dev_gen
-
-def showUnitView(pv_name, color="#00000000", min_width=3):
-    widget = SiriusLabel(init_channel=pv_name)
-    styled = """
-        min-height:0.75em;min-width: """+str(min_width)+"""em;
-        max-height:0.75em;max-width: """+str(min_width*5)+"""em;
-        background-color:"""+color+";"
-    widget.setStyleSheet(styled)
-    widget.showUnits = True
-    widget._keep_unit = True
-    widget.setAlignment(Qt.AlignCenter)
-    if any(x in pv_name for x in ["RdPrs", "ReadP"]):
-        widget.precisionFromPV = False
-        widget.precision = 2
-        widget.displayFormat = _DisplayFormat.Exponential
-    return widget
-
-def getGroupTitle(cat, id_num):
-    dev_id = id_num
-    if cat == "Pump":
-        name = "IPS"
-    else:
-        dev_number, dev_gen = buildIdsVac(id_num)
-        if dev_gen == 3:
-            dev_id = dev_number
-            name = "PRG"
-        else:
-            dev_id = dev_number * 2
-            if dev_gen == 1:
-                dev_id -= 1
-            name = "CCG"
-    return name + buildIdName(dev_id, False)
-
-def getShape(name):
-    if any(x in name for x in ["PRG", "normal"]):
-        shape = 1
-    elif any(x in name for x in ["CCG", "equal"]):
-        shape = 3
-    elif "on/off" in name:
-        shape = 4
-    else:
-        shape = 2
-    return shape
-
 def getLayoutWidget(orient="G"):
+    """ Get Widget with a layout inside """
     wid = QWidget()
     if orient == "G":
         lay = QGridLayout()
@@ -82,73 +22,8 @@ def getLayoutWidget(orient="G"):
     wid.setLayout(lay)
     return wid, lay
 
-def showLegend(self, legend):
-    """ Show one of the legends present in the LEGEND variable in util"""
-    wid, lay = getLayoutWidget()
-    lay.addWidget(
-        QLabel('<b>'+legend+'</b>'),
-        0, 0, 1, 2, alignment=Qt.AlignCenter)
-    row = 1
-    for item in LEGEND[legend]:
-        column = 0
-        if 'color' in item:
-            shape = getShape(legend)
-            lay.addWidget(
-                LedLegend(self, shape,
-                    item['color'].name()),
-                row, column, 1, 1,
-                alignment=Qt.AlignCenter)
-            column = 1
-
-        lay.addWidget(
-            QLabel(item['text']),
-            row, column, 1, 1,
-            alignment=Qt.AlignLeft)
-        row += 1
-    return wid
-
-def buildLed(self, pv_name, sufix_list, comp, bit=-1):
-    if comp == 'normal':
-        if "Gauge" in pv_name:
-            comp='diff'
-        led = PyDMLed(
-            init_channel=pv_name+sufix_list, bit=bit)
-    else: 
-        if comp == 'on/off':
-            chan2vals = {
-                pv_name + sufix_list[0]: 1,
-                pv_name + sufix_list[1]: 0
-            }
-        elif comp == 'equal':
-            chan2vals = {
-                pv_name + sufix_list[0]: 1,
-                pv_name + sufix_list[1]: 1
-            }
-        led = PyDMLedMultiChannel(
-            self, chan2vals)
-    shape = getShape(comp)
-    led.shape = shape
-    if shape not in [1, 2]: shape-=2
-    led.setStyleSheet("min-width:"+str(shape)+"em; max-width:"+str(shape)+"em;")
-    return led
-
-def SPRBWidget(self, title, control, readback, wid_type, kp_unit=False, sec_wid="label"):
-    wid, lay = getLayoutWidget("H")
-    lay.setContentsMargins(0, 1, 0, 1)
-    if title != "":
-        label = QLabel(title, alignment=Qt.AlignCenter)
-        label.setStyleSheet("min-width:5em;")
-        lay.addWidget(label)
-    lay.addWidget(
-        getWidget(self, control, wid_type, kp_unit), 
-        alignment=Qt.AlignRight)
-    widget = getWidget(self, readback, sec_wid, kp_unit, wid_type!='enum')
-    lay.addWidget(
-        widget, 
-        alignment=Qt.AlignLeft)
-    return wid
-
 def getWidget(self, name, wid_type='button', keep_unit=False, precision=True):
+    """ Build and configure widgets used """
     pv_name = self.devpref + name
     if wid_type == 'led':
         if 'ReadS' in name:
@@ -178,7 +53,215 @@ def getWidget(self, name, wid_type='button', keep_unit=False, precision=True):
         widget.setStyleSheet("min-width:4em;max-height:1em;")
     return widget
 
+def getGroupTitle(cat, id_num):
+    """ Get element simple name """
+    dev_id = id_num
+    if cat == "Pump":
+        name = "IPS"
+    else:
+        dev_number, dev_gen = buildIdsVac(id_num)
+        if dev_gen == 3:
+            dev_id = dev_number
+            name = "PRG"
+        else:
+            dev_id = dev_number * 2
+            if dev_gen == 1:
+                dev_id -= 1
+            name = "CCG"
+    return name + buildIdName(dev_id, False)
+
+def showUnitView(pv_name, color="#00000000", min_width=3):
+    """Create and format SiriusLabel"""
+    widget = SiriusLabel(init_channel=pv_name)
+    styled = """
+        min-height:0.75em;min-width: """+str(min_width)+"""em;
+        max-height:0.75em;max-width: """+str(min_width*5)+"""em;
+        background-color:"""+color+";"
+    widget.setStyleSheet(styled)
+    widget.showUnits = True
+    widget._keep_unit = True
+    widget.setAlignment(Qt.AlignCenter)
+    if any(x in pv_name for x in ["RdPrs", "ReadP"]):
+        widget.precisionFromPV = False
+        widget.precision = 2
+        widget.displayFormat = _DisplayFormat.Exponential
+    return widget
+
+def setWindowBtn(self, cat, id_num):
+    """ Create and configure button to open detail windows """
+    button = QPushButton(_qta.icon('fa5s.ellipsis-h'), '', self)
+    button.clicked.connect(
+        lambda: self.selWindow(cat, id_num))
+    button.setStyleSheet("margin: 0.1em;")
+    return button
+
+def getShape(name):
+    """ Get led shape number """
+    if any(x in name for x in ["PRG", "normal"]):
+        shape = 1
+    elif any(x in name for x in ["CCG", "equal"]):
+        shape = 3
+    elif "on/off" in name:
+        shape = 4
+    else:
+        shape = 2
+    return shape
+
+def buildLed(self, pv_name, sufix_list, comp, bit=-1):
+    """ Build and configure different types of Led """
+    if comp == 'normal':
+        if "Gauge" in pv_name:
+            comp='diff'
+        led = PyDMLed(
+            init_channel=pv_name+sufix_list, bit=bit)
+    else: 
+        if comp == 'on/off':
+            chan2vals = {
+                pv_name + sufix_list[0]: 1,
+                pv_name + sufix_list[1]: 0
+            }
+        elif comp == 'equal':
+            chan2vals = {
+                pv_name + sufix_list[0]: 1,
+                pv_name + sufix_list[1]: 1
+            }
+        led = PyDMLedMultiChannel(
+            self, chan2vals)
+    shape = getShape(comp)
+    led.shape = shape
+    if shape not in [1, 2]: shape-=2
+    led.setStyleSheet("min-width:"+str(shape)+"em; max-width:"+str(shape)+"em;")
+    return led
+
+def SPRBWidget(self, title, control, readback, wid_type, kp_unit=False, sec_wid="label"):
+    """ 
+        Build a setpoint and readback widget: 
+        title + setpoint + readback
+    """
+    wid, lay = getLayoutWidget("H")
+    lay.setContentsMargins(0, 1, 0, 1)
+    if title != "":
+        label = QLabel(title, alignment=Qt.AlignCenter)
+        label.setStyleSheet("min-width:5em;")
+        lay.addWidget(label)
+    lay.addWidget(
+        getWidget(self, control, wid_type, kp_unit), 
+        alignment=Qt.AlignRight)
+    widget = getWidget(self, readback, sec_wid, kp_unit, wid_type!='enum')
+    lay.addWidget(
+        widget, 
+        alignment=Qt.AlignLeft)
+    return wid
+
+def getProgressBar(pv_name, limit):
+    """ Create and configure Progress Bar """
+    bar = MyScaleIndicator(
+        init_channel=pv_name)
+    bar.limitsFromChannel = False
+    bar.showLimits = False
+    bar.showValue = False
+    bar.barIndicator = True
+    bar.userLowerLimit = limit[0]
+    bar.userUpperLimit = limit[1]
+    bar.indicatorColor = COLORS['purple']
+    width = 6
+    if limit[1] == 200:
+        width = 8
+    bar.setStyleSheet('min-height:1em; min-width:'+str(width)+'em;')
+    return bar
+
+def buildBasicGroup(self, cat, id_num, orient="V"):
+    """ Build anc configure group template """
+    group = QGroupBoxButton(
+        title=getGroupTitle(cat, id_num))
+    wid, lay = getLayoutWidget(orient)
+    lay.setSpacing(0)
+    lay.setContentsMargins(0, 2, 0, 0)
+    group.setLayout(lay)
+    if orient == "H":
+        lay.addWidget(
+            setWindowBtn(self, cat, id_num),
+            alignment=Qt.AlignLeft)
+    else:
+        group.setObjectName("group")
+        group.setStyleSheet("QGroupBox#group{background-color:"+COLORS['btn_bg']+"};") 
+        group.clicked.connect(
+            lambda: self.selWindow(cat, id_num))
+    return lay, group
+
+def getSufixes(data):
+    """ Format sufixes based on info type """
+    pv_suf = ["", ""]
+    if isinstance(data, str):
+        pv_suf[0] = data
+    elif isinstance(data, list):
+        pv_suf = data
+    elif isinstance(data, dict) and 'title' in data:
+        pv_suf = {
+            'status': data['status'], 
+            'control': data['control']
+        }
+    return pv_suf
+
+def showAllLegends(self, list=LEGEND):
+    """ Display all the legends """
+    wid, lay = getLayoutWidget("H")
+    for leg in list:
+        if leg != 'size':
+            lay.addWidget( 
+                showLegend(self, leg))
+    return wid
+
+def showLegend(self, legend):
+    """ Show one of the legends present in the LEGEND variable in util"""
+    wid, lay = getLayoutWidget()
+    lay.addWidget(
+        QLabel('<b>'+legend+'</b>'),
+        0, 0, 1, 2, alignment=Qt.AlignCenter)
+    row = 1
+    for item in LEGEND[legend]:
+        column = 0
+        if 'color' in item:
+            shape = getShape(legend)
+            lay.addWidget(
+                LedLegend(self, shape,
+                    item['color'].name()),
+                row, column, 1, 1,
+                alignment=Qt.AlignCenter)
+            column = 1
+
+        lay.addWidget(
+            QLabel(item['text']),
+            row, column, 1, 1,
+            alignment=Qt.AlignLeft)
+        row += 1
+    return wid
+
+def buildIdName(id_num, isValve=False):
+    """Format number in the PV name"""
+    pv_id = ""
+    if not isValve:
+        if id_num < 10:
+            pv_id = "0"
+    pv_id += str(id_num)
+    return pv_id
+
+def buildVacPv(id_num):
+    """Generate VGC PV name with VGC id"""
+    dev_number, dev_gen = buildIdsVac(id_num)
+    pv_number = buildIdName(dev_number, False)
+    return pv_number, dev_gen
+
+def buildIdsVac(id_num):
+    """Get VGC group and individual identity and with VGC id"""
+    dev_number = _math.ceil(id_num / 3)
+    dev_gen = id_num % 3
+    if not dev_gen:
+        dev_gen = 3
+    return dev_number, dev_gen
+
 def getVgcSPRB(self, data, pv_list, num, gen, sec_wid='led'):
+    """ Use dict info to create a SPRBWidget """
     pv_name = {}
     for data_type, name in pv_list.items():
         pv_name[data_type] = num + name + str(gen)
@@ -187,21 +270,15 @@ def getVgcSPRB(self, data, pv_list, num, gen, sec_wid='led'):
         pv_name['status'], data['widget'], sec_wid=sec_wid)
 
 def getVgcLed(self, name, gen, suf_list):
+    """ Select led type based on VGC identity """
     if gen%3 != 0:
         comp = 'equal'
     else:
         comp = 'normal'
     return buildLed(self, name, suf_list[gen%3], comp)
 
-def showAllLegends(self, list=LEGEND):
-    wid, lay = getLayoutWidget("H")
-    for leg in list:
-        if leg != 'size':
-            lay.addWidget( 
-                showLegend(self, leg))
-    return wid
-
-def showSPTitle(title, alternative, lay):
+def headerWidget(title, alternative):
+    """ Get SP Table Header Widget """
     text = title
     if alternative:
         if title == "SP":
@@ -213,6 +290,7 @@ def showSPTitle(title, alternative, lay):
     return QLabel('<strong>'+text+'</strong>')
 
 def getSPTable(self, num, gen, data, showTitle=False, alternative=False):
+    """ Build and configure VGC SP table"""
     pos = [0, 0]
     wid, lay = getLayoutWidget()
     lay.setSpacing(0)
@@ -220,7 +298,7 @@ def getSPTable(self, num, gen, data, showTitle=False, alternative=False):
     for title, obj_data in data.items():
         if showTitle:
             lay.addWidget(
-                showSPTitle(title, alternative, lay), 
+                headerWidget(title, alternative), 
                 pos[0], pos[1], 1, 3, alignment=Qt.AlignCenter)
         pos[0] += 1
         for sp_gen in data["No."][gen%3]:
@@ -250,8 +328,8 @@ def getSPTable(self, num, gen, data, showTitle=False, alternative=False):
         pos[0] = 0
     return wid
 
-
 def getSimplePvWidget(self, title, suf, num, gen):
+    """ Get simple VGC widget """
     pv_name = num + suf[0]
     if title in ["Pressure<br/>Readback", "Gauge<br/>Message"]:
         pv_name += str(gen) + suf[1]
@@ -264,51 +342,8 @@ def getSimplePvWidget(self, title, suf, num, gen):
         self, pv_name, wid_type)
     return wid
 
-def getProgressBar(pv_name, limit):
-    bar = MyScaleIndicator(
-        init_channel=pv_name)
-    bar.limitsFromChannel = False
-    bar.showLimits = False
-    bar.showValue = False
-    bar.barIndicator = True
-    bar.userLowerLimit = limit[0]
-    bar.userUpperLimit = limit[1]
-    bar.indicatorColor = COLORS['purple']
-    width = 6
-    if limit[1] == 200:
-        width = 8
-    bar.setStyleSheet('min-height:1em; min-width:'+str(width)+'em;')
-    return bar
-
-def buildIPSInfo(pv_name, lay, orient):
-    for info_type in ['voltage', 'current']:
-        info = IPS_DETAILS["General"][info_type]
-        name = pv_name + info["text"]
-        if info_type == 'current' and orient == 'H':
-            lay.addWidget(
-                getProgressBar(name, [0, 200]),
-                alignment=Qt.AlignCenter)
-        wid = showUnitView(
-            name, info['color'])
-        lay.addWidget(
-            wid, alignment=Qt.AlignCenter)
-    return lay
-
-def getSufixes(data):
-    pv_suf = ["", ""]
-    if isinstance(data, str):
-        pv_suf[0] = data
-    elif isinstance(data, list):
-        pv_suf[0] = data[0]
-        pv_suf[1] = data[1]
-    elif isinstance(data, dict) and 'title' in data:
-        pv_suf = {
-            'status': data['status'], 
-            'control': data['control']
-        }
-    return pv_suf
-
 def getVacPosition(id, divide=True):
+    """ Get VGC widget position on the VGC Lists """
     pos = [0, 0]
     pos[0], pos[1] = buildIdsVac(id)
     if pos[1] == 3:
@@ -323,3 +358,19 @@ def getVacPosition(id, divide=True):
         if divide:
             pos[1] = 1
     return pos
+
+def buildIPSInfo(pv_name, lay, orient):
+    """ Display IPS measurement information """
+    for info_type in ['voltage', 'current']:
+        info = IPS_DETAILS["General"][info_type]
+        name = pv_name + info["text"]
+        if info_type == 'current' and orient == 'H':
+            lay.addWidget(
+                getProgressBar(name, [0, 200]),
+                alignment=Qt.AlignCenter)
+        wid = showUnitView(
+            name, info['color'])
+        lay.addWidget(
+            wid, alignment=Qt.AlignCenter)
+    return lay
+
