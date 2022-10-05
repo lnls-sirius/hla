@@ -1,3 +1,4 @@
+""" Static information about the PVs and colors """
 from qtpy.QtGui import QColor
 
 COLORS = {
@@ -8,6 +9,9 @@ COLORS = {
     "blue": QColor(130, 143, 255),
     "purple": QColor(148, 60, 255),
     "cyan": QColor(0, 187, 196),
+    "gre_blu": QColor(0, 175, 175),
+    "black": QColor(0, 0, 0),
+    "orange": QColor(255, 150, 0),
     "btn_bg": "#77f2b6bc"
 }
 
@@ -44,7 +48,7 @@ PVS_CONFIG = {
         'size': [5, 9],
         'list': {
             'coord': [2.5, 0],
-            'size': [30, 60] 
+            'size': [37, 65]
         }
     },
     "Valve": {
@@ -52,7 +56,7 @@ PVS_CONFIG = {
         'sufix': ['Opened', 'Closed'],
         'iterations': [1, 2],
         'position': [
-            [22, 77.5], [85, 77.5]],
+            [85, 77.5], [22, 77.5]],
         'size': [10, 10]
     }
 }
@@ -74,26 +78,22 @@ IPS_DETAILS = {
     },
     "Status": [
         {
-            "status": ":ReadS",
-            "widget": "led"
-        },
-        {
             "title": "4KV",
             "status": ":4KVState",
             "control": ":V4K",
-            "widget": "enum"
+            "widget": "state"
         },
         {
             "title": "6KV",
             "status": ":6KVState",
             "control": ":V6K",
-            "widget": "enum"
+            "widget": "state"
         },
         {
             "title": "BAKE",
             "status": ":BkState",
             "control": ":Bk",
-            "widget": "enum"
+            "widget": "state"
         },
         {
             "title": "Local/\nRemote",
@@ -106,9 +106,13 @@ IPS_DETAILS = {
             "status": ":StWoState",
             "control": ":StartWork",
             "widget": "enum"
+        },
+        {
+            "status": ":ReadS",
+            "widget": "led"
         }
     ],
-    "Parameter": [
+    "Parameters": [
         {
             "title": "Enable",
             "status": ":ParSetEn",
@@ -122,25 +126,25 @@ IPS_DETAILS = {
             "widget": "edit"
         },
         {
-            "title": "High Protect\nPressure (mA)",
+            "title": "High Protect\nPressure(mA)",
             "status": ":ReadBH",
             "control": ":SetBH",
             "widget": "edit"
         },
         {
-            "title": "Low Protect\nPressure (mA)",
+            "title": "Low Protect\nPressure(mA)",
             "status": ":ReadBA",
             "control": ":SetBA",
             "widget": "edit"
         },
         {
-            "title": "Start Current",
+            "title": "Start Current\n(mA)",
             "status": ":ReadQD",
             "control": ":SetQD",
             "widget": "edit"
         },
         {
-            "title": "Work Current",
+            "title": "Work Current\n(mA)",
             "status": ":ReadYX",
             "control": ":SetYX",
             "widget": "edit"
@@ -160,11 +164,11 @@ VGC_DETAILS = {
     },
     "Pressure<br/>Readback": ":RdPrs-",
     "Gauge<br/>Message": [":RdPrs-", "s"],
-    "On/Off": {
+    "Gauge Status": {
         "title": "",
         "status": ":GaugeSts-",
         "control": ":GaugeOn-",
-        "widget": "enum"
+        "widget": "state"
     },
     "Setpoint": {
         "No.": [
@@ -217,20 +221,6 @@ LEGEND = {
             'text': 'Warning'
         }
     ],
-    'IPS Control': [
-        {
-            'color': COLORS["light_green"],
-            'text': 'ON / Remote'
-        },
-        {
-            'color': COLORS["dark_green"],
-            'text': 'OFF / Local'
-        },
-        {
-            'color': COLORS["yellow"],
-            'text': 'Inconsistent'
-        }
-    ],
     'Gauge Status': [
         {
             'color': COLORS["light_green"],
@@ -247,7 +237,7 @@ LEGEND = {
     ],
     'Relay Status': [
         {
-            'text': 'ENABLE: Depends on the pressure and\nthe setpoint value'
+            'text': 'ENABLE: Depends on the pressure\n and the setpoint value'
         },
         {
             'text': 'SET: Forces relay activation'

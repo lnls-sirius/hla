@@ -8,7 +8,7 @@ from siriushla import util as _util
 from siriushla.sirius_application import SiriusApplication
 from siriuspy.envars import VACA_PREFIX
 from siriushla.widgets.windows import create_window_from_widget
-from siriushla.li_va_vacuum import VacuumMain
+from siriushla.li_va_control import VacuumMain
 
 parser = _argparse.ArgumentParser(
     description="Run Linac Vacuum Control Interface.")
