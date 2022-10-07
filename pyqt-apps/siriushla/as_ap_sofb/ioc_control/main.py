@@ -545,6 +545,28 @@ class PerformanceWidget(QWidget):
         lbl_main = QLabel(
             '<h3>Loop Performance</h3>', self, alignment=Qt.AlignCenter)
 
+        lbl_prnt = QLabel('Number of Iter. Between Updates', self)
+        lbl_rate = QLabel('Effective Rate', self)
+        slsh = QLabel('/', self, alignment=Qt.AlignCenter)
+        slsh.setStyleSheet('min-width:0.7em; max-width:0.7em;')
+
+        spb = SiriusSpinbox(self, lamb('LoopPrintEveryNumIters-SP'))
+        spb.showStepExponent = False
+        ldrb = SiriusLabel(self, lamb('LoopPrintEveryNumIters-RB'))
+        ldmon = SiriusLabel(self, lamb('LoopNumIters-Mon'))
+        ld_rate = SiriusLabel(self, lamb('LoopEffectiveRate-Mon'))
+        ld_rate.showUnits = True
+
+        lay_niter = QGridLayout()
+        lay_niter.addWidget(lbl_prnt, 0, 0, 1, 4, alignment=Qt.AlignCenter)
+        lay_niter.addWidget(spb, 1, 0)
+        lay_niter.addWidget(ldrb, 1, 1)
+        lay_niter.addWidget(slsh, 1, 2)
+        lay_niter.addWidget(ldmon, 1, 3)
+        lay_niter.setColumnStretch(4, 3)
+        lay_niter.addWidget(lbl_rate, 0, 5, alignment=Qt.AlignCenter)
+        lay_niter.addWidget(ld_rate, 1, 5)
+
         lbl_iters = QLabel('Iterations [%]:', self)
         lbl_ok = QLabel('OK', self, alignment=Qt.AlignCenter)
         lbl_tout = QLabel('Timeout', self, alignment=Qt.AlignCenter)
@@ -607,13 +629,16 @@ class PerformanceWidget(QWidget):
                 lay_tim.addWidget(ld_, i+2, j+1, alignment=Qt.AlignCenter)
 
         lay = QGridLayout(self)
-        lay.addWidget(lbl_main, 0, 0)
+        lay.addLayout(lay_niter, 0, 0)
         lay.addItem(QSpacerItem(1, 20), 1, 0)
-        lay.addLayout(lay_iters, 2, 0)
+        lay.addWidget(lbl_main, 2, 0)
         lay.addItem(QSpacerItem(1, 20), 3, 0)
-        lay.addLayout(lay_psd, 4, 0)
+        lay.addLayout(lay_iters, 4, 0)
         lay.addItem(QSpacerItem(1, 20), 5, 0)
-        lay.addLayout(lay_tim, 6, 0)
+        lay.addLayout(lay_psd, 6, 0)
+        lay.addItem(QSpacerItem(1, 20), 7, 0)
+        lay.addLayout(lay_tim, 8, 0)
         lay.setRowStretch(1, 2)
         lay.setRowStretch(3, 2)
         lay.setRowStretch(5, 2)
+        lay.setRowStretch(7, 2)
