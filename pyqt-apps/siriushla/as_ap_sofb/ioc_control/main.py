@@ -239,19 +239,56 @@ class SOFBControl(BaseWidget):
 
         if self.acc != 'BO':
             auto_wid = self.get_auto_correction_widget(corr_tab)
-            corr_tab.addTab(auto_wid, 'Automatic')
+            corr_tab.addTab(auto_wid, 'Loop')
 
         man_wid = self.get_manual_correction_widget(corr_tab)
         corr_tab.addTab(man_wid, 'Manual')
 
         kicks_wid = KicksConfigWidget(
             parent, self.device, prefix=self.prefix, acc=self.acc)
-        corr_tab.addTab(kicks_wid, 'Kicks Config')
+        corr_tab.addTab(kicks_wid, 'Kicks')
+
+        fofb_wid = self.get_fofb_widget(corr_tab)
+        corr_tab.addTab(fofb_wid, 'FOFB')
 
         if self.acc != 'BO':
             hbl = kicks_wid.get_status_widget(corr_wid)
             corr_wid.layout().addLayout(hbl)
         return corr_wid
+
+    def get_fofb_widget(self, parent):
+        """."""
+        wid = QWidget(parent)
+        wid.setObjectName('grp')
+        gdl = QGridLayout(wid)
+        gdl.setSpacing(9)
+
+        gdl.setColumnStretch(0, 2)
+
+        gdl.addWidget(QLabel('Description', wid), 0, 0)
+        gdl.addWidget(QLabel('Setpoint', wid), 0, 1)
+        gdl.addWidget(QLabel('Status', wid), 0, 2)
+        gdl.addWidget(QLabel('Monitor', wid), 0, 3)
+        props = [
+            'FOFBDownloadKicks', 'FOFBUpdateRefOrb',
+            'FOFBNullSpaceProj', 'FOFBZeroDistortionAtBPMs']
+        desc = [
+            'Download Kicks', 'Update RefOrb',
+            'Project in Kernel', 'Zero Distortion']
+        for i, (prop, des) in enumerate(zip(props, desc)):
+            lbl = QLabel(des, wid)
+            spt = PyDMStateButton(
+                wid, self.devpref.substitute(propty=prop+'-Sel'))
+            rdb = SiriusLedState(
+                wid, self.devpref.substitute(propty=prop+'-Sts'))
+            mon = SiriusLedState(
+                wid, self.devpref.substitute(propty=prop+'-Mon'))
+            gdl.addWidget(lbl, i+1, 0)
+            gdl.addWidget(spt, i+1, 1)
+            gdl.addWidget(rdb, i+1, 2)
+            gdl.addWidget(mon, i+1, 3)
+        gdl.setRowStretch(5, 3)
+        return wid
 
     def get_manual_correction_widget(self, parent):
         """."""
