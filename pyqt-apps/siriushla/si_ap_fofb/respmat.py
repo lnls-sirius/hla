@@ -24,6 +24,7 @@ from ..as_ap_sofb.ioc_control.respmat_enbllist import \
     SingleSelMatrix as _SingleSelMatrix
 
 from .base import BaseObject, BaseWidget
+from .graphics import CorrGainWidget
 
 
 class RespMatWidget(_RespMatWidget, BaseWidget):
@@ -128,9 +129,15 @@ class RespMatWidget(_RespMatWidget, BaseWidget):
         act_invrespmhw = QAction('InvRespMat - Hardware Units', self)
         connect_newprocess(act_invrespmhw, cmd + ['InvRespMatHw-Mon', ])
         btnmenu.addAction(act_invrespmhw)
-        act_coeffs = QAction('Corrector Coefficients and Gains', self)
+        act_coeffs = QAction('Corrector Coefficients', self)
         connect_newprocess(act_coeffs, cmd + ['CorrCoeffs-Mon', ])
         btnmenu.addAction(act_coeffs)
+        act_gains = QAction('Corrector Gains', self)
+        window = create_window_from_widget(
+            CorrGainWidget, title='Corrector Gains', icon=icon)
+        connect_window(
+            act_gains, window, None, device=self.device, prefix=self.prefix)
+        btnmenu.addAction(act_gains)
         btn.setMenu(btnmenu)
         sel_lay.addWidget(btn, 0, 2)
 

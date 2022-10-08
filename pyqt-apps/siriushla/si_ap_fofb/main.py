@@ -2,7 +2,7 @@
 
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QPushButton, QWidget, QGridLayout, \
-    QLabel, QVBoxLayout, QGroupBox
+    QLabel, QVBoxLayout, QGroupBox, QMenuBar, QAction
 import qtawesome as qta
 
 from pydm.widgets import PyDMPushButton
@@ -10,26 +10,35 @@ from pydm.widgets import PyDMPushButton
 from siriuspy.fofb.csdev import ETypes as _FOFBEnums
 from siriushla.widgets.led import SiriusLedState
 
-from siriushla.widgets.state_button import PyDMStateButton
+from ..util import connect_window, get_appropriate_color
+from ..widgets import SiriusLedAlert, SiriusLabel, SiriusSpinbox, \
+    PyDMLogLabel, SiriusMainWindow, PyDMStateButton
 
-from ..util import connect_window
-from ..widgets import SiriusLedAlert, SiriusLabel, SiriusSpinbox, PyDMLogLabel
-
-from .base import BaseWidget
-from .custom_widgets import RefOrbComboBox, StatusDialog
+from .base import BaseObject
+from .custom_widgets import RefOrbWidget, StatusDialog, AuxCommDialog
 from .respmat import RespMatWidget
 
 
-class MainWindow(BaseWidget):
+class MainWindow(BaseObject, SiriusMainWindow):
     """FOFB RespMat widget."""
 
     def __init__(self, parent=None, prefix='', device=''):
-        super().__init__(parent, device, prefix=prefix)
+        BaseObject.__init__(self, device, prefix=prefix)
+        SiriusMainWindow.__init__(self, parent)
         self.setWindowTitle('SI - FOFB')
+        self.setObjectName('SIApp')
+        self.setWindowIcon(
+            qta.icon(
+                'fa5s.hammer', 'fa5s.signal',
+                options=[
+                    dict(scale_factor=0.6, offset=(0.25, 0.0)),
+                    dict(scale_factor=0.5, rotated=90, vflip=True)],
+                color=get_appropriate_color('SI')))
         self._setupUi()
         self.setFocusPolicy(Qt.StrongFocus)
 
     def _setupUi(self):
+        # layout
         self.status = self._setupStatusWidget()
 
         self.reforb = self._setupRefOrbWidget()
@@ -40,7 +49,8 @@ class MainWindow(BaseWidget):
 
         self.log = self._setupLogWidget()
 
-        layout = QGridLayout(self)
+        cwid = QWidget()
+        layout = QGridLayout(cwid)
         layout.addWidget(self.log, 0, 0, 4, 1)
         layout.addWidget(self.status, 0, 1)
         layout.addWidget(self.loop, 1, 1)
@@ -48,6 +58,16 @@ class MainWindow(BaseWidget):
         layout.addWidget(self.respmat, 3, 1)
         layout.setColumnStretch(0, 3)
         layout.setColumnStretch(1, 1)
+        self.setCentralWidget(cwid)
+
+        # menu
+        menubar = QMenuBar(self)
+        self.setMenuBar(menubar)
+        auxcomm_act = QAction('Auxiliary commands', menubar)
+        connect_window(
+            auxcomm_act, AuxCommDialog, parent=self,
+            device=self.device, prefix=self.prefix)
+        menubar.addAction(auxcomm_act)
 
     def _setupStatusWidget(self):
         # correctors
@@ -77,11 +97,6 @@ class MainWindow(BaseWidget):
         cnf_corr.setObjectName('conf')
         cnf_corr.setStyleSheet(
             '#conf{min-width:25px; max-width:25px; icon-size:20px;}')
-
-        # 'CorrSetOpModeManual-Cmd'
-        # 'CorrSetAccFreezeDsbl-Cmd'
-        # 'CorrSetAccFreezeEnbl-Cmd'
-        # 'CorrSetAccClear-Cmd'
 
         # controllers
         lbl_ctrl = QLabel(
@@ -119,23 +134,11 @@ class MainWindow(BaseWidget):
         return wid
 
     def _setupRefOrbWidget(self):
-        lbl_serv = QLabel(
-            'From serv.conf.:', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
-        cb_serv = RefOrbComboBox(self, self.device, self.prefix)
-
-        lbl_sloworb = QLabel(
-            'From SlowOrb:', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
-        bt_sloworb = PyDMPushButton(
-            self, label='Get from SOFB', pressValue=1,
-            init_channel=self.devpref.substitute(
-                propty='GetRefOrbFromSlowOrb-Cmd'))
+        widget = RefOrbWidget(self, self.device, self.prefix)
 
         wid = QGroupBox('Ref.Orb.')
-        lay = QGridLayout(wid)
-        lay.addWidget(lbl_serv, 0, 0)
-        lay.addWidget(cb_serv, 0, 1)
-        lay.addWidget(lbl_sloworb, 1, 0)
-        lay.addWidget(bt_sloworb, 1, 1)
+        lay = QVBoxLayout(wid)
+        lay.addWidget(widget)
         return wid
 
     def _setupLoopWidget(self):
@@ -154,6 +157,11 @@ class MainWindow(BaseWidget):
         lb_gain = SiriusLabel(
             self, self.devpref.substitute(propty='LoopGain-RB'))
 
+        ld_gain_mon = QLabel(
+            'Impl.Gain: ', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+        lb_gain_mon = SiriusLabel(
+            self, self.devpref.substitute(propty='LoopGain-Mon'))
+
         wid = QGroupBox('Loop')
         lay = QGridLayout(wid)
         lay.addWidget(ld_enbl, 0, 0)
@@ -162,6 +170,8 @@ class MainWindow(BaseWidget):
         lay.addWidget(ld_gain, 1, 0)
         lay.addWidget(sb_gain, 1, 1)
         lay.addWidget(lb_gain, 1, 2)
+        lay.addWidget(ld_gain_mon, 2, 0)
+        lay.addWidget(lb_gain_mon, 2, 1)
         return wid
 
     def _setupLogWidget(self):

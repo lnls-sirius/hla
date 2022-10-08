@@ -10,7 +10,7 @@ import siriushla.util as util
 
 from siriushla.sirius_application import SiriusApplication
 from siriushla.widgets.windows import create_window_from_widget
-from siriushla.si_ap_fofb import MainWindow, ShowMatrixWidget
+from siriushla.si_ap_fofb import MainWindow, MatrixWidget
 from siriuspy.envars import VACA_PREFIX
 
 
@@ -30,7 +30,7 @@ args = parser.parse_args()
 app = SiriusApplication()
 if args.matrix:
     window = create_window_from_widget(
-        ShowMatrixWidget, 'Matrix View',
+        MatrixWidget, 'Matrix View',
         icon=qta.icon('fa5s.hammer', color=util.get_appropriate_color('SI')),
         is_main=True)
     app.open_window(
