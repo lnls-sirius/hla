@@ -31,8 +31,9 @@ class MainWindow(BaseObject, SiriusMainWindow):
             qta.icon(
                 'fa5s.hammer', 'fa5s.signal',
                 options=[
-                    dict(scale_factor=0.6, offset=(0.25, 0.0)),
-                    dict(scale_factor=0.5, rotated=90, vflip=True)],
+                    dict(scale_factor=0.85, offset=(0.15, 0.0)),
+                    dict(scale_factor=0.7, offset=(0.0, 0.25),
+                         rotated=90, vflip=True)],
                 color=get_appropriate_color('SI')))
         self._setupUi()
         self.setFocusPolicy(Qt.StrongFocus)
