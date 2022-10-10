@@ -179,9 +179,13 @@ class BPMSwModeWidget(BaseObject, QWidget):
         props = ['SwMode-Sel', ]
         self._bpm_devs = [Device(b, props, auto_mon=True) for b in bnames]
         self._setupUi()
+        self._init_dict = {}
         self._init = False
-        self._pv_init = self._bpm_devs[0].pv_object('SwMode-Sel')
-        self._pv_init.connection_callbacks.append(self._set_initial_value)
+        for dev in self._bpm_devs:
+            pvo = dev.pv_object('SwMode-Sel')
+            pvo.add_callback(self._set_initial_value)
+            if pvo.connected:
+                self._set_initial_value(pvo.pvname, pvo.value)
 
     def _setupUi(self):
         lbl = QLabel(
@@ -206,23 +210,26 @@ class BPMSwModeWidget(BaseObject, QWidget):
             bpm+':SwMode-Sts': mode for bpm in self._csorb.bpm_names}
         self.sts.set_channels2values(ch2vals)
 
-    def _set_initial_value(self, conn, **kws):
-        if conn and not self._init:
-            self._init = True
+    def _set_initial_value(self, pvname, value, **kws):
+        if value is not None:
+            self._init_dict[pvname] = value
 
-            if self._pv_init.wait_for_connection(1):
-                value = self._pv_init.value
-                mode = _csbpm.SwModes._fields[value]
-            else:
-                mode = 'switching'
-                value = _csbpm.SwModes._fields.index(mode)
+        if self._init or len(self._init_dict) < len(self._bpm_devs):
+            return
 
-            ch2vals = {
-                bpm+':SwMode-Sts': value for bpm in self._csorb.bpm_names}
-            self.sts.set_channels2values(ch2vals)
+        self._init = True
 
-            self.sel.setCurrentText(mode)
-            self.sel.currentTextChanged.connect(self._set_swithing_mode)
+        vals, cnts = _np.unique(
+            list(self._init_dict.values()), return_counts=True)
+        value = vals[_np.argmax(cnts)]
+        mode = _csbpm.SwModes._fields[value]
+
+        ch2vals = {
+            bpm+':SwMode-Sts': value for bpm in self._csorb.bpm_names}
+        self.sts.set_channels2values(ch2vals)
+
+        self.sel.setCurrentText(mode)
+        self.sel.currentTextChanged.connect(self._set_swithing_mode)
 
 
 class AuxCommDialog(BaseObject, SiriusDialog):
