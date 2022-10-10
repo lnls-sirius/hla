@@ -1,5 +1,6 @@
 """Custom widgets."""
 
+import time as _time
 import numpy as _np
 
 from qtpy.QtCore import Qt, Slot
@@ -131,6 +132,7 @@ class RefOrbWidget(BaseObject, QWidget):
 
     def _send_new_value(self):
         self._ch_refx.send_value_signal[_np.ndarray].emit(self._refx)
+        _time.sleep(self._csorb.DEF_TIMEWAIT)
         self._ch_refy.send_value_signal[_np.ndarray].emit(self._refy)
 
 
