@@ -493,6 +493,16 @@ def get_object(ismenubar=True, parent=None):
             self.connect_newprocess(sofb, 'sirius-hla-'+sec+'-ap-sofb.py')
             optics.addAction(sofb)
 
+            if sec == 'si':
+                fofb = QAction('FOFB', optics)
+                fofb.setIcon(qta.icon(
+                    'fa5s.hammer', 'fa5s.signal',
+                    options=[
+                        dict(scale_factor=0.6, offset=(0.25, 0.0)),
+                        dict(scale_factor=0.5, rotated=90, vflip=True)]))
+                self.connect_newprocess(fofb, 'sirius-hla-si-ap-fofb.py')
+                optics.addAction(fofb)
+
             if sec in {'tb', 'ts'}:
                 PosAng = QAction('PosAng', optics)
                 self.connect_newprocess(
