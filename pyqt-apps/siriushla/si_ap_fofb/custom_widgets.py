@@ -284,6 +284,22 @@ class AuxCommDialog(BaseObject, SiriusDialog):
                 hlay.addWidget(spw)
                 hlay.addWidget(rbw)
                 glay.addLayout(hlay)
+            elif 'Control' in group:
+                lbl = QLabel(
+                    'TimeFrameLen: ', self,
+                    alignment=Qt.AlignRight | Qt.AlignVCenter)
+                pref = self.devpref
+                spw = SiriusSpinbox(
+                    self, pref.substitute(propty='TimeFrameLen-SP'))
+                spw.showStepExponent = False
+                rbw = SiriusLabel(
+                    self, pref.substitute(propty='TimeFrameLen-RB'))
+                hlay = QHBoxLayout()
+                hlay.setContentsMargins(0, 0, 0, 0)
+                hlay.addWidget(lbl)
+                hlay.addWidget(spw)
+                hlay.addWidget(rbw)
+                glay.addLayout(hlay)
             elif 'BPM' in group:
                 swbpm = BPMSwModeWidget(self, self.device, self.prefix)
                 glay.addWidget(swbpm)
