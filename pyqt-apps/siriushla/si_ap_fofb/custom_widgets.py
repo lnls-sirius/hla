@@ -268,7 +268,7 @@ class AuxCommDialog(BaseObject, SiriusDialog):
             'Controllers': {
                 'Sync Net': 'FOFBCtrlSyncNet-Cmd',
                 'Sync RefOrb': 'FOFBCtrlSyncRefOrb-Cmd',
-                'Configure TimeFrameLength': 'FOFBCtrlConfTFrameLen-Cmd',
+                # 'Configure TimeFrameLength': 'FOFBCtrlConfTFrameLen-Cmd',
             },
             'BPMs': {
                 'Configure BPM Log.Trigs.': 'FOFBCtrlConfBPMLogTrg-Cmd',
@@ -280,21 +280,22 @@ class AuxCommDialog(BaseObject, SiriusDialog):
             glay = QVBoxLayout(gbox)
 
             if 'Corr' in group:
-                lbl = QLabel(
-                    'Sat. Limit (A): ', self,
-                    alignment=Qt.AlignRight | Qt.AlignVCenter)
-                pref = self.devpref
-                spw = SiriusSpinbox(
-                    self, pref.substitute(propty='CorrAccSatMax-SP'))
-                spw.showStepExponent = False
-                rbw = SiriusLabel(
-                    self, pref.substitute(propty='CorrAccSatMax-RB'))
-                hlay = QHBoxLayout()
-                hlay.setContentsMargins(0, 0, 0, 0)
-                hlay.addWidget(lbl)
-                hlay.addWidget(spw)
-                hlay.addWidget(rbw)
-                glay.addLayout(hlay)
+                for dev in ['CH', 'CV']:
+                    lbl = QLabel(
+                        dev+' Sat. Limit (A): ', self,
+                        alignment=Qt.AlignRight | Qt.AlignVCenter)
+                    pref = self.devpref
+                    spw = SiriusSpinbox(
+                        self, pref.substitute(propty=dev+'AccSatMax-SP'))
+                    spw.showStepExponent = False
+                    rbw = SiriusLabel(
+                        self, pref.substitute(propty=dev+'AccSatMax-RB'))
+                    hlay = QHBoxLayout()
+                    hlay.setContentsMargins(0, 0, 0, 0)
+                    hlay.addWidget(lbl)
+                    hlay.addWidget(spw)
+                    hlay.addWidget(rbw)
+                    glay.addLayout(hlay)
             elif 'Control' in group:
                 lbl = QLabel(
                     'TimeFrameLen: ', self,
