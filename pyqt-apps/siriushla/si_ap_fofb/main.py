@@ -15,7 +15,8 @@ from ..widgets import SiriusLedAlert, SiriusLabel, SiriusSpinbox, \
     PyDMLogLabel, SiriusMainWindow, PyDMStateButton
 
 from .base import BaseObject
-from .custom_widgets import RefOrbWidget, StatusDialog, AuxCommDialog
+from .custom_widgets import RefOrbWidget, StatusDialog, AuxCommDialog, \
+    ControllersDetailDialog
 from .respmat import RespMatWidget
 
 
@@ -118,9 +119,19 @@ class MainWindow(BaseObject, SiriusMainWindow):
         cmds[4] = self.devpref.substitute(propty='FOFBCtrlSyncRefOrb-Cmd')
         cmds[5] = self.devpref.substitute(propty='FOFBCtrlConfTFrameLen-Cmd')
         cmds[6] = self.devpref.substitute(propty='FOFBCtrlConfBPMLogTrg-Cmd')
+        dtl_ctrl = QPushButton('Details')
+        dtl_ctrl.setDefault(False)
+        dtl_ctrl.setAutoDefault(False)
+        dtl_ctrl.setIcon(qta.icon('fa5s.ellipsis-h'))
+        dtl_ctrl.setToolTip('Open Controllers Details')
+        dtl_ctrl.setObjectName('sts')
+        dtl_ctrl.setStyleSheet('#sts{icon-size:20px;}')
+        connect_window(
+            dtl_ctrl, ControllersDetailDialog, parent=self,
+            device=self.device, prefix=self.prefix)
         connect_window(
             sts_ctrl, StatusDialog, parent=self, pvname=pvname, labels=labels,
-            cmds=cmds, title='FOFB Controller Status')
+            cmds=cmds, title='FOFB Controller Status', detail_button=dtl_ctrl)
 
         wid = QGroupBox('Status')
         lay = QGridLayout(wid)
