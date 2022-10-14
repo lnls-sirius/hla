@@ -141,7 +141,7 @@ class MatrixWidget(BaseObject, QWidget):
 
 
 class CorrGainWidget(BaseObject, QWidget):
-    """Matrix widget."""
+    """Corrector gain widget."""
 
     def __init__(self, parent, device, prefix=''):
         """Init."""
@@ -214,7 +214,7 @@ class CorrGainWidget(BaseObject, QWidget):
 
 
 class RefOrbViewWidget(BaseObject, SiriusDialog):
-    """Matrix widget."""
+    """RefOrb View widget."""
 
     UM2M = 1e-6
 
@@ -246,7 +246,8 @@ class RefOrbViewWidget(BaseObject, SiriusDialog):
             setattr(self, name, graph)
             graph.setTitle('Horizontal' if plane == 'x' else 'Vertical')
             graph.setObjectName(name)
-            graph.setStyleSheet('#'+name+'{min-width: 16em; min-height: 8em;}')
+            graph.setStyleSheet(
+                '#'+name+'{min-width: 45em; min-height: 15em;}')
             graph.setLabel('bottom', text='BPM Position', units='m')
             graph.setLabel('left', text=plane, units='m')
             color = 'blue' if plane == 'x' else 'red'
@@ -300,3 +301,88 @@ class RefOrbViewWidget(BaseObject, SiriusDialog):
         curve.receiveYWaveform(self.UM2M*_np.array(refx))
         curve = self.graph_y.curveAtIndex(1)
         curve.receiveYWaveform(self.UM2M*_np.array(refy))
+
+
+class KickWidget(BaseObject, QWidget):
+    """Corrector kicks widget."""
+
+    def __init__(self, parent, device, prefix=''):
+        """Init."""
+        BaseObject.__init__(self, device, prefix)
+        QWidget.__init__(self, parent)
+        self.setObjectName('SIApp')
+        self._setupui()
+        self.kickh = _ConnSig(self.devpref.substitute(propty='KickCH-Mon'))
+        self.kickh.new_value_signal[_np.ndarray].connect(
+            _part(self._update_graph, 'kick', 'h'))
+        self.kickv = _ConnSig(self.devpref.substitute(propty='KickCV-Mon'))
+        self.kickv.new_value_signal[_np.ndarray].connect(
+            _part(self._update_graph, 'kick', 'v'))
+        self.limh = _ConnSig(self.devpref.substitute(propty='CHAccSatMax-RB'))
+        self.limh.new_value_signal[_np.ndarray].connect(
+            _part(self._update_graph, 'lim', 'h'))
+        self.limv = _ConnSig(self.devpref.substitute(propty='CVAccSatMax-RB'))
+        self.limv.new_value_signal[_np.ndarray].connect(
+            _part(self._update_graph, 'lim', 'v'))
+        # TODO create curves
+        # TODO create strength converters
+        # TODO add option to show limits
+        self._update_horizontal()
+
+    def _setupui(self):
+        vbl = QVBoxLayout(self)
+        lab = QLabel(
+            '<h4>Fast Corrector Kicks</h4>', self, alignment=Qt.AlignCenter)
+        vbl.addWidget(lab)
+
+        for plane in ['h', 'v']:
+            graph = Graph(self)
+            name = 'graph_' + plane
+            setattr(self, name, graph)
+            graph.setTitle('Horizontal' if plane == 'h' else 'Vertical')
+            graph.setObjectName(name)
+            graph.setStyleSheet('#'+name+'{min-width: 16em; min-height: 8em;}')
+            graph.setLabel('bottom', text='Position', units='m')
+            graph.setLabel('left', text='Kick')
+            graph.showLegend = False
+            color = 'blue' if plane == 'h' else 'red'
+            opts = dict(
+                y_channel='', x_channel='', name='',
+                color=color, redraw_mode=2,
+                lineStyle=1, lineWidth=1,
+                symbol='o', symbolSize=10)
+            graph.addChannel(**opts)
+            graph.plotItem.scene().sigMouseMoved.connect(
+                _part(self._show_tooltip, plane))
+            vbl.addWidget(graph)
+
+    def _show_tooltip(self, plane, pos):
+        if plane == 'h':
+            cname = self._csorb.ch_nicknames
+            xdata = self._csorb.ch_pos
+        else:
+            cname = self._csorb.cv_nicknames
+            xdata = self._csorb.cv_pos
+
+        graph = getattr(self, 'graph_' + plane)
+        curve = graph.curveAtIndex(0)
+        posx = curve.scatter.mapFromScene(pos).x()
+        ind = _np.argmin(_np.abs(_np.array(xdata)-posx))
+        txt = '{0:s}'.format(cname[ind])
+        QToolTip.showText(
+            graph.mapToGlobal(pos.toPoint()),
+            txt, graph, graph.geometry(), 500)
+
+    def _update_graph(self, data, plane, value):
+        if value is None:
+            return
+        graph = getattr(self, 'graph_' + plane)
+        if data == 'kick':
+            curve = graph.curveAtIndex(0)
+            curve.receiveYWaveform(_np.asarray(value))
+
+    def _update_horizontal(self):
+        curve = self.graph_h.curveAtIndex(0)
+        curve.receiveXWaveform(_np.array(self._csorb.ch_pos))
+        curve = self.graph_v.curveAtIndex(0)
+        curve.receiveXWaveform(_np.array(self._csorb.cv_pos))

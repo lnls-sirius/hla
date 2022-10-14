@@ -13,11 +13,13 @@ from siriushla.widgets.led import SiriusLedState
 from ..util import connect_window, get_appropriate_color
 from ..widgets import SiriusLedAlert, SiriusLabel, SiriusSpinbox, \
     PyDMLogLabel, SiriusMainWindow, PyDMStateButton
+from ..widgets.windows import create_window_from_widget
 
 from .base import BaseObject
 from .custom_widgets import RefOrbWidget, StatusDialog, AuxCommDialog, \
     ControllersDetailDialog
 from .respmat import RespMatWidget
+from .graphics import KickWidget
 
 
 class MainWindow(BaseObject, SiriusMainWindow):
@@ -70,6 +72,13 @@ class MainWindow(BaseObject, SiriusMainWindow):
             auxcomm_act, AuxCommDialog, parent=self,
             device=self.device, prefix=self.prefix)
         menubar.addAction(auxcomm_act)
+        kickmon_act = QAction('Kicks Monitor', menubar)
+        win = create_window_from_widget(
+            KickWidget, 'SI - FOFB - Kicks Monitor')
+        connect_window(
+            kickmon_act, win, parent=self,
+            device=self.device, prefix=self.prefix)
+        menubar.addAction(kickmon_act)
 
     def _setupStatusWidget(self):
         # correctors
