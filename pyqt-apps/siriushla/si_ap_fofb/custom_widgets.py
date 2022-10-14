@@ -51,15 +51,30 @@ class RefOrbWidget(BaseObject, QWidget):
             self.devpref.substitute(propty='RefOrbX-SP'))
         self._ch_refy = _ConnSignal(
             self.devpref.substitute(propty='RefOrbY-SP'))
+        self._ch_syncref = _ConnSignal(
+            self.devpref.substitute(propty='FOFBCtrlSyncRefOrb-Cmd'))
+
         sofb_prefix = _PVName('SI-Glob:AP-SOFB').substitute(prefix=self.prefix)
         self._ch_sofb_orbx = _ConnSignal(
             sofb_prefix.substitute(propty='SlowOrbX-Mon'))
+        self._ch_sofb_orbx.new_value_signal[_np.ndarray].connect(
+            _part(self._watch_if_changed, 'x', 'SOFB SlowOrb'))
+        self._ch_sofb_orbx.new_value_signal[float].connect(
+            _part(self._watch_if_changed, 'x', 'SOFB SlowOrb'))
         self._ch_sofb_orby = _ConnSignal(
             sofb_prefix.substitute(propty='SlowOrbY-Mon'))
+        self._ch_sofb_orby.new_value_signal[_np.ndarray].connect(
+            _part(self._watch_if_changed, 'y', 'SOFB SlowOrb'))
+        self._ch_sofb_orby.new_value_signal[float].connect(
+            _part(self._watch_if_changed, 'y', 'SOFB SlowOrb'))
         self._ch_sofb_refx = _ConnSignal(
             sofb_prefix.substitute(propty='RefOrbX-RB'))
+        self._ch_sofb_refx.new_value_signal[_np.ndarray].connect(
+            _part(self._watch_if_changed, 'x', 'SOFB RefOrb'))
         self._ch_sofb_refy = _ConnSignal(
             sofb_prefix.substitute(propty='RefOrbY-RB'))
+        self._ch_sofb_refy.new_value_signal[_np.ndarray].connect(
+            _part(self._watch_if_changed, 'y', 'SOFB RefOrb'))
 
         self._setupUi()
 
@@ -136,8 +151,18 @@ class RefOrbWidget(BaseObject, QWidget):
 
     def _send_new_value(self):
         self._ch_refx.send_value_signal[_np.ndarray].emit(self._refx)
-        _time.sleep(self._csorb.DEF_TIMEWAIT)
         self._ch_refy.send_value_signal[_np.ndarray].emit(self._refy)
+        _time.sleep(0.05)
+        self._ch_syncref.send_value_signal[int].emit(1)
+
+    def _watch_if_changed(self, plane, orb, value):
+        myvalue = getattr(self, '_ref' + plane)
+        if orb != self.read.currentText():
+            return
+        if myvalue is not None and myvalue.size == value.size and \
+                _np.allclose(value, myvalue, rtol=1e-7):
+            return
+        self.read.setCurrentIndex(self.read.count()-1)
 
 
 class StatusDialog(SiriusDialog):
