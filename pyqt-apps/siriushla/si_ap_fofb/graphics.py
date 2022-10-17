@@ -5,7 +5,10 @@ import numpy as _np
 
 from qtpy.QtCore import Qt
 from qtpy.QtGui import QColor
-from qtpy.QtWidgets import QToolTip, QWidget, QVBoxLayout, QLabel, QHBoxLayout
+from qtpy.QtWidgets import QToolTip, QWidget, QVBoxLayout, QLabel, \
+    QHBoxLayout, QCheckBox
+
+from siriuspy.devices import StrengthConv
 
 from ..widgets import SiriusConnectionSignal as _ConnSig, QDoubleSpinBoxPlus,\
     SiriusDialog
@@ -141,7 +144,7 @@ class MatrixWidget(BaseObject, QWidget):
 
 
 class CorrGainWidget(BaseObject, QWidget):
-    """Matrix widget."""
+    """Corrector gain widget."""
 
     def __init__(self, parent, device, prefix=''):
         """Init."""
@@ -214,9 +217,7 @@ class CorrGainWidget(BaseObject, QWidget):
 
 
 class RefOrbViewWidget(BaseObject, SiriusDialog):
-    """Matrix widget."""
-
-    UM2M = 1e-6
+    """RefOrb View widget."""
 
     def __init__(self, parent, device, prefix=''):
         """Init."""
@@ -246,7 +247,8 @@ class RefOrbViewWidget(BaseObject, SiriusDialog):
             setattr(self, name, graph)
             graph.setTitle('Horizontal' if plane == 'x' else 'Vertical')
             graph.setObjectName(name)
-            graph.setStyleSheet('#'+name+'{min-width: 16em; min-height: 8em;}')
+            graph.setStyleSheet(
+                '#'+name+'{min-width: 45em; min-height: 15em;}')
             graph.setLabel('bottom', text='BPM Position', units='m')
             graph.setLabel('left', text=plane, units='m')
             color = 'blue' if plane == 'x' else 'red'
@@ -300,3 +302,126 @@ class RefOrbViewWidget(BaseObject, SiriusDialog):
         curve.receiveYWaveform(self.UM2M*_np.array(refx))
         curve = self.graph_y.curveAtIndex(1)
         curve.receiveYWaveform(self.UM2M*_np.array(refy))
+
+
+class KickWidget(BaseObject, QWidget):
+    """Corrector kicks widget."""
+
+    def __init__(self, parent, device, prefix=''):
+        """Init."""
+        BaseObject.__init__(self, device, prefix)
+        QWidget.__init__(self, parent)
+        self.setObjectName('SIApp')
+        self._setupui()
+        self._psconv = {
+            psn: StrengthConv(psn, 'Ref-Mon', auto_mon=True)
+            for psn in self._csorb.ch_names + self._csorb.cv_names}
+        self.kickh = _ConnSig(self.devpref.substitute(propty='KickCH-Mon'))
+        self.kickh.new_value_signal[_np.ndarray].connect(
+            _part(self._update_graph, 'kick', 'h'))
+        self.kickv = _ConnSig(self.devpref.substitute(propty='KickCV-Mon'))
+        self.kickv.new_value_signal[_np.ndarray].connect(
+            _part(self._update_graph, 'kick', 'v'))
+        self.limh = _ConnSig(self.devpref.substitute(propty='CHAccSatMax-RB'))
+        self.limh.new_value_signal[float].connect(
+            _part(self._update_graph, 'lim', 'h'))
+        self.limv = _ConnSig(self.devpref.substitute(propty='CVAccSatMax-RB'))
+        self.limv.new_value_signal[float].connect(
+            _part(self._update_graph, 'lim', 'v'))
+        self._update_horizontal()
+
+    def _setupui(self):
+        vbl = QVBoxLayout(self)
+        lab = QLabel(
+            '<h4>Fast Corrector Kicks</h4>', self, alignment=Qt.AlignCenter)
+        vbl.addWidget(lab)
+
+        cblim = QCheckBox('Show Kick Limits', self)
+        cblim.setChecked(True)
+        vbl.addWidget(cblim, alignment=Qt.AlignRight)
+
+        for plane in ['h', 'v']:
+            graph = Graph(self)
+            name = 'graph_' + plane
+            setattr(self, name, graph)
+            graph.setTitle('Horizontal' if plane == 'h' else 'Vertical')
+            graph.setObjectName(name)
+            graph.setStyleSheet(
+                '#'+name+'{min-width: 45em; min-height: 15em;}')
+            graph.setLabel('bottom', text='Position', units='m')
+            graph.setLabel('left', text='Kick', units='rad')
+            graph.showLegend = False
+
+            # kicks
+            color = 'blue' if plane == 'h' else 'red'
+            opts = dict(
+                y_channel='', x_channel='', name='',
+                color=color, redraw_mode=2,
+                lineStyle=1, lineWidth=1,
+                symbol='o', symbolSize=10)
+            graph.addChannel(**opts)
+
+            # limits
+            opts = dict(
+                y_channel='', x_channel='', name='',
+                color='black', redraw_mode=2,
+                lineStyle=2, lineWidth=1)
+            graph.addChannel(**opts)
+            maxkick = graph.curveAtIndex(1)
+            graph.addChannel(**opts)
+            minkick = graph.curveAtIndex(2)
+
+            cblim.toggled.connect(maxkick.setVisible)
+            cblim.toggled.connect(minkick.setVisible)
+
+            graph.plotItem.scene().sigMouseMoved.connect(
+                _part(self._show_tooltip, plane))
+            vbl.addWidget(graph)
+
+    def _show_tooltip(self, plane, pos):
+        if plane == 'h':
+            cname = self._csorb.ch_nicknames
+            xdata = self._csorb.ch_pos
+        else:
+            cname = self._csorb.cv_nicknames
+            xdata = self._csorb.cv_pos
+
+        graph = getattr(self, 'graph_' + plane)
+        curve = graph.curveAtIndex(0)
+        posx = curve.scatter.mapFromScene(pos).x()
+        ind = _np.argmin(_np.abs(_np.array(xdata)-posx))
+        txt = '{0:s}'.format(cname[ind])
+        QToolTip.showText(
+            graph.mapToGlobal(pos.toPoint()),
+            txt, graph, graph.geometry(), 500)
+
+    def _update_graph(self, data, plane, value):
+        if value is None:
+            return
+        graph = getattr(self, 'graph_' + plane)
+        if data == 'kick':
+            data = _np.asarray(value)*self.URAD2RAD
+            curve = graph.curveAtIndex(0)
+            curve.receiveYWaveform(data)
+        else:
+            psnames = self._csorb.ch_names if plane == 'h' \
+                else self._csorb.cv_names
+            maxlim = _np.array([
+                self._psconv[psn].conv_current_2_strength(value)
+                for psn in psnames])*self.URAD2RAD
+            maxc = graph.curveAtIndex(1)
+            maxc.receiveYWaveform(maxlim)
+            minlim = _np.array([
+                self._psconv[psn].conv_current_2_strength(-value)
+                for psn in psnames])*self.URAD2RAD
+            minc = graph.curveAtIndex(2)
+            minc.receiveYWaveform(minlim)
+
+    def _update_horizontal(self):
+        for plane in ['h', 'v']:
+            graph = getattr(self, 'graph_' + plane)
+            data = self._csorb.ch_pos if plane == 'h' else self._csorb.cv_pos
+            data = _np.array(data)
+            for idx in range(3):
+                curve = graph.curveAtIndex(idx)
+                curve.receiveXWaveform(data)

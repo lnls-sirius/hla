@@ -13,10 +13,13 @@ from siriushla.widgets.led import SiriusLedState
 from ..util import connect_window, get_appropriate_color
 from ..widgets import SiriusLedAlert, SiriusLabel, SiriusSpinbox, \
     PyDMLogLabel, SiriusMainWindow, PyDMStateButton
+from ..widgets.windows import create_window_from_widget
 
 from .base import BaseObject
-from .custom_widgets import RefOrbWidget, StatusDialog, AuxCommDialog
+from .custom_widgets import RefOrbWidget, StatusDialog, AuxCommDialog, \
+    ControllersDetailDialog
 from .respmat import RespMatWidget
+from .graphics import KickWidget
 
 
 class MainWindow(BaseObject, SiriusMainWindow):
@@ -69,6 +72,13 @@ class MainWindow(BaseObject, SiriusMainWindow):
             auxcomm_act, AuxCommDialog, parent=self,
             device=self.device, prefix=self.prefix)
         menubar.addAction(auxcomm_act)
+        kickmon_act = QAction('Kicks Monitor', menubar)
+        win = create_window_from_widget(
+            KickWidget, 'SI - FOFB - Kicks Monitor')
+        connect_window(
+            kickmon_act, win, parent=self,
+            device=self.device, prefix=self.prefix)
+        menubar.addAction(kickmon_act)
 
     def _setupStatusWidget(self):
         # correctors
@@ -118,9 +128,19 @@ class MainWindow(BaseObject, SiriusMainWindow):
         cmds[4] = self.devpref.substitute(propty='FOFBCtrlSyncRefOrb-Cmd')
         cmds[5] = self.devpref.substitute(propty='FOFBCtrlConfTFrameLen-Cmd')
         cmds[6] = self.devpref.substitute(propty='FOFBCtrlConfBPMLogTrg-Cmd')
+        dtl_ctrl = QPushButton('Details')
+        dtl_ctrl.setDefault(False)
+        dtl_ctrl.setAutoDefault(False)
+        dtl_ctrl.setIcon(qta.icon('fa5s.ellipsis-h'))
+        dtl_ctrl.setToolTip('Open Controllers Details')
+        dtl_ctrl.setObjectName('sts')
+        dtl_ctrl.setStyleSheet('#sts{icon-size:20px;}')
+        connect_window(
+            dtl_ctrl, ControllersDetailDialog, parent=self,
+            device=self.device, prefix=self.prefix)
         connect_window(
             sts_ctrl, StatusDialog, parent=self, pvname=pvname, labels=labels,
-            cmds=cmds, title='FOFB Controller Status')
+            cmds=cmds, title='FOFB Controller Status', detail_button=dtl_ctrl)
 
         wid = QGroupBox('Status')
         lay = QGridLayout(wid)
@@ -150,29 +170,42 @@ class MainWindow(BaseObject, SiriusMainWindow):
         lb_enbl = SiriusLedState(
             self, self.devpref.substitute(propty='LoopState-Sts'))
 
-        ld_gain = QLabel(
-            'Gain: ', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
-        sb_gain = SiriusSpinbox(
-            self, self.devpref.substitute(propty='LoopGain-SP'))
-        sb_gain.showStepExponent = False
-        lb_gain = SiriusLabel(
-            self, self.devpref.substitute(propty='LoopGain-RB'))
+        ld_gain_h = QLabel(
+            'Gain H: ', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+        sb_gain_h = SiriusSpinbox(
+            self, self.devpref.substitute(propty='LoopGainH-SP'))
+        sb_gain_h.showStepExponent = False
+        lb_gain_h = SiriusLabel(
+            self, self.devpref.substitute(propty='LoopGainH-RB'))
+        lb_gain_mon_h = SiriusLabel(
+            self, self.devpref.substitute(propty='LoopGainH-Mon'))
 
-        ld_gain_mon = QLabel(
-            'Impl.Gain: ', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
-        lb_gain_mon = SiriusLabel(
-            self, self.devpref.substitute(propty='LoopGain-Mon'))
+        ld_gain_v = QLabel(
+            'Gain V: ', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+        sb_gain_v = SiriusSpinbox(
+            self, self.devpref.substitute(propty='LoopGainV-SP'))
+        sb_gain_v.showStepExponent = False
+        lb_gain_v = SiriusLabel(
+            self, self.devpref.substitute(propty='LoopGainV-RB'))
+        lb_gain_mon_v = SiriusLabel(
+            self, self.devpref.substitute(propty='LoopGainV-Mon'))
 
         wid = QGroupBox('Loop')
         lay = QGridLayout(wid)
-        lay.addWidget(ld_enbl, 0, 0)
-        lay.addWidget(sb_enbl, 0, 1)
-        lay.addWidget(lb_enbl, 0, 2, alignment=Qt.AlignLeft)
-        lay.addWidget(ld_gain, 1, 0)
-        lay.addWidget(sb_gain, 1, 1)
-        lay.addWidget(lb_gain, 1, 2)
-        lay.addWidget(ld_gain_mon, 2, 0)
-        lay.addWidget(lb_gain_mon, 2, 1)
+        lay.addWidget(QLabel('<h4>SP</h4>'), 0, 1, alignment=Qt.AlignCenter)
+        lay.addWidget(QLabel('<h4>RB</h4>'), 0, 2, alignment=Qt.AlignCenter)
+        lay.addWidget(QLabel('<h4>Mon</h4>'), 0, 3, alignment=Qt.AlignCenter)
+        lay.addWidget(ld_enbl, 1, 0)
+        lay.addWidget(sb_enbl, 1, 1)
+        lay.addWidget(lb_enbl, 1, 2)
+        lay.addWidget(ld_gain_h, 2, 0)
+        lay.addWidget(sb_gain_h, 2, 1)
+        lay.addWidget(lb_gain_h, 2, 2)
+        lay.addWidget(lb_gain_mon_h, 2, 3)
+        lay.addWidget(ld_gain_v, 3, 0)
+        lay.addWidget(sb_gain_v, 3, 1)
+        lay.addWidget(lb_gain_v, 3, 2)
+        lay.addWidget(lb_gain_mon_v, 3, 3)
         return wid
 
     def _setupLogWidget(self):

@@ -12,6 +12,9 @@ from ..as_ap_sofb.ioc_control.base import BaseObject as _BaseObject, \
 class BaseObject(_BaseObject):
     """Base object."""
 
+    UM2M = 1e-6
+    URAD2RAD = 1e-6
+
     def __init__(self, device, prefix=''):
         """Init."""
         self.prefix = prefix
