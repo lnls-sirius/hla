@@ -6,12 +6,12 @@ import numpy as _np
 from qtpy.QtCore import Qt
 from qtpy.QtGui import QColor
 from qtpy.QtWidgets import QToolTip, QWidget, QVBoxLayout, QLabel, \
-    QHBoxLayout, QCheckBox
+    QHBoxLayout, QCheckBox, QGridLayout
 
 from siriuspy.devices import StrengthConv
 
 from ..widgets import SiriusConnectionSignal as _ConnSig, QDoubleSpinBoxPlus,\
-    SiriusDialog
+    SiriusDialog, SiriusSpinbox, SiriusLabel
 from ..as_ap_sofb.graphics.base import Graph
 from .base import BaseObject
 
@@ -331,15 +331,32 @@ class KickWidget(BaseObject, QWidget):
         self._update_horizontal()
 
     def _setupui(self):
-        vbl = QVBoxLayout(self)
+        lay = QGridLayout(self)
         lab = QLabel(
             '<h4>Fast Corrector Kicks</h4>', self, alignment=Qt.AlignCenter)
-        vbl.addWidget(lab)
+        lay.addWidget(lab, 0, 0, 1, 2)
+
+        ldbuff = QLabel('Buffer Size:', self)
+        pvname = self.devpref.substitute(
+            prefix=self.prefix, propty='KickBufferSize-SP')
+        sbbuff = SiriusSpinbox(self, pvname)
+        sbbuff.showStepExponent = False
+        lbbuffmon = SiriusLabel(self, pvname.substitute(propty_suffix='Mon'))
+        lbbuff = SiriusLabel(self, pvname.substitute(propty_suffix='RB'))
+        laybuff = QHBoxLayout()
+        laybuff.setContentsMargins(0, 0, 0, 0)
+        laybuff.addWidget(ldbuff)
+        laybuff.addWidget(sbbuff)
+        laybuff.addWidget(lbbuffmon)
+        laybuff.addWidget(QLabel('/'))
+        laybuff.addWidget(lbbuff)
+        lay.addLayout(laybuff, 1, 0, alignment=Qt.AlignLeft)
 
         cblim = QCheckBox('Show Kick Limits', self)
         cblim.setChecked(True)
-        vbl.addWidget(cblim, alignment=Qt.AlignRight)
+        lay.addWidget(cblim, 1, 1, alignment=Qt.AlignRight)
 
+        row = 2
         for plane in ['h', 'v']:
             graph = Graph(self)
             name = 'graph_' + plane
@@ -376,7 +393,8 @@ class KickWidget(BaseObject, QWidget):
 
             graph.plotItem.scene().sigMouseMoved.connect(
                 _part(self._show_tooltip, plane))
-            vbl.addWidget(graph)
+            lay.addWidget(graph, row, 0, 1, 2)
+            row += 1
 
     def _show_tooltip(self, plane, pos):
         if plane == 'h':
