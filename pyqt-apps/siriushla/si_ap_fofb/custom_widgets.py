@@ -378,6 +378,7 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
 
     def _setupUi(self):
         tab = QTabWidget(self)
+        tab.setObjectName('SITab')
         tab.addTab(self._setupBPMIdsTab(), 'DCC BPM Ids')
         tab.addTab(self._setupNetSyncTab(), 'Net Sync Status')
         tab.addTab(self._setupLinkPartnerTab(), 'DCC Linked Partners')
