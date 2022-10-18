@@ -286,9 +286,10 @@ class AuxCommDialog(BaseObject, SiriusDialog):
             'Correctors': {
                 'Set all current to zero': 'CorrSetCurrZero-Cmd',
                 'Clear all Acc': 'CorrSetAccClear-Cmd',
-                # 'Set all OpMode to Manual': 'CorrSetOpModeManual-Cmd',
-                # 'Set all AccFreeze to Enbl': 'CorrSetAccFreezeEnbl-Cmd',
-                # 'Set all AccFreeze to Dsbl': 'CorrSetAccFreezeDsbl-Cmd',
+                'Set all PwrState to On': 'CorrSetPwrStateOn-Cmd',
+                'Set all OpMode to Manual': 'CorrSetOpModeManual-Cmd',
+                'Set all AccFreeze to Enbl': 'CorrSetAccFreezeEnbl-Cmd',
+                'Set all AccFreeze to Dsbl': 'CorrSetAccFreezeDsbl-Cmd',
             },
             'Controllers': {
                 'Sync Net': 'FOFBCtrlSyncNet-Cmd',
