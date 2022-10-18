@@ -124,6 +124,7 @@ class MainWindow(BaseObject, SiriusMainWindow):
         pvname = self.devpref.substitute(propty='FOFBCtrlStatus-Mon')
         labels = _FOFBEnums.STS_LBLS_FOFBCTRL
         cmds = [None]*len(labels)
+        cmds[1] = self.devpref.substitute(propty='FOFBCtrlConfBPMId-Cmd')
         cmds[2] = self.devpref.substitute(propty='FOFBCtrlSyncNet-Cmd')
         cmds[4] = self.devpref.substitute(propty='FOFBCtrlSyncRefOrb-Cmd')
         cmds[5] = self.devpref.substitute(propty='FOFBCtrlConfTFrameLen-Cmd')
