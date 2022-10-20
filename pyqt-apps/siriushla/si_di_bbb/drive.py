@@ -6,12 +6,12 @@ from qtpy.QtGui import QPixmap, QColor
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, QSpacerItem, \
     QHBoxLayout
-from pydm.widgets import PyDMSpinbox, PyDMEnumComboBox, PyDMLineEdit
+from pydm.widgets import PyDMEnumComboBox, PyDMLineEdit
 
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 from siriuspy.namesys import SiriusPVName as _PVName
 
-from ..widgets import PyDMStateButton, SiriusFrame, SiriusLabel
+from ..widgets import PyDMStateButton, SiriusFrame, SiriusLabel, SiriusSpinbox
 
 from .util import set_bbb_color
 from .custom_widgets import WfmGraph
@@ -56,11 +56,11 @@ class BbBSingleDriveSettingsWidget(QWidget):
             ld_drive.layout().addStretch()
 
         ld_amp = QLabel('Amplitude', self)
-        sb_amp = PyDMSpinbox(self, self.dev_pref+'AMPL')
+        sb_amp = SiriusSpinbox(self, self.dev_pref+'AMPL')
         sb_amp.showStepExponent = False
 
         ld_freq = QLabel('Frequency', self)
-        sb_freq = PyDMSpinbox(self, self.dev_pref+'FREQ')
+        sb_freq = SiriusSpinbox(self, self.dev_pref+'FREQ')
         sb_freq.showStepExponent = False
 
         ld_wav = QLabel('Waveform', self)
@@ -70,11 +70,11 @@ class BbBSingleDriveSettingsWidget(QWidget):
         cb_tmod = PyDMStateButton(self, self.dev_pref+'MOD')
 
         ld_span = QLabel('Span', self)
-        sb_span = PyDMSpinbox(self, self.dev_pref+'SPAN')
+        sb_span = SiriusSpinbox(self, self.dev_pref+'SPAN')
         sb_span.showStepExponent = False
 
         ld_perd = QLabel('Period', self)
-        sb_perd = PyDMSpinbox(self, self.dev_pref+'PERIOD')
+        sb_perd = SiriusSpinbox(self, self.dev_pref+'PERIOD')
         sb_perd.showStepExponent = False
 
         ld_patt = QLabel('Drive Pattern', self)

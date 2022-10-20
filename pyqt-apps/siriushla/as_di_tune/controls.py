@@ -5,13 +5,13 @@ from qtpy.QtWidgets import QWidget, QLabel, QPushButton, QGridLayout, \
     QTabWidget, QVBoxLayout, QApplication
 import qtawesome as qta
 
-from pydm.widgets import PyDMSpinbox, PyDMLineEdit, \
-    PyDMEnumComboBox, PyDMPushButton
+from pydm.widgets import PyDMLineEdit, PyDMEnumComboBox, PyDMPushButton
 
 from siriuspy.namesys import SiriusPVName
 import siriushla.util as util
 from siriushla.widgets import PyDMLedMultiChannel, PyDMLed, PyDMStateButton, \
-    SiriusStringComboBox, SiriusLedState, SiriusConnectionSignal, SiriusLabel
+    SiriusStringComboBox, SiriusLedState, SiriusConnectionSignal, \
+    SiriusLabel, SiriusSpinbox
 from .details import TuneDetails, SITuneMarkerDetails
 from .util import marker_color
 
@@ -161,7 +161,7 @@ class TuneControls(QWidget):
 
         # Harmonic
         lbl_h = QLabel('Harmonic (n)', self)
-        self.sb_h = PyDMSpinbox(
+        self.sb_h = SiriusSpinbox(
             self, self.device.substitute(propty='RevN-SP'))
         self.sb_h.showStepExponent = False
         self.sb_h.precisionFromPV = True
@@ -179,7 +179,7 @@ class TuneControls(QWidget):
 
         # Frequency Offset
         lbl_foff = QLabel('Freq. Offset [kHz]', self)
-        self.sb_foff = PyDMSpinbox(
+        self.sb_foff = SiriusSpinbox(
             self, self.device.substitute(propty='FreqOff-SP'))
         self.sb_foff.showStepExponent = False
         self.sb_foff.precisionFromPV = True
@@ -405,7 +405,7 @@ class TuneControls(QWidget):
             #detail, #mark_dtl{
                 min-width:35px; max-width:35px; icon-size:20px;
             }
-            SiriusLabel, PyDMSpinbox, PyDMStateButton,
+            SiriusLabel, SiriusSpinbox, PyDMStateButton,
             PyDMLineEdit, PyDMEnumComboBox{
                 min-width:6em; max-width:6em;
             }""")

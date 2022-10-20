@@ -3,12 +3,12 @@
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, QGroupBox, \
     QHBoxLayout, QVBoxLayout
-from pydm.widgets import PyDMSpinbox, PyDMEnumComboBox
+from pydm.widgets import PyDMEnumComboBox
 
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 from siriuspy.namesys import SiriusPVName as _PVName
 
-from ..widgets import PyDMStateButton, SiriusLabel
+from ..widgets import PyDMStateButton, SiriusLabel, SiriusSpinbox
 
 from .custom_widgets import MyScaleIndicator
 
@@ -62,28 +62,28 @@ class BbBGPIOWidget(QWidget):
     def _setupFrontBackEndRegsWidget(self):
         # # Front/back end registers
         ld_gpiohph = QLabel('Horiz. Phase', self)
-        sb_gpiohph = PyDMSpinbox(self, self.dev_pref+':FBELT_X_PHASE_SETPT')
+        sb_gpiohph = SiriusSpinbox(self, self.dev_pref+':FBELT_X_PHASE_SETPT')
         sb_gpiohph.showStepExponent = False
         ld_gpiohat = QLabel('Horiz. Atten.', self)
-        sb_gpiohat = PyDMSpinbox(self, self.dev_pref+':FBE_X_ATT')
+        sb_gpiohat = SiriusSpinbox(self, self.dev_pref+':FBE_X_ATT')
         sb_gpiohat.showStepExponent = False
         ld_gpiovph = QLabel('Vert. Phase', self)
-        sb_gpiovph = PyDMSpinbox(self, self.dev_pref+':FBELT_Y_PHASE_SETPT')
+        sb_gpiovph = SiriusSpinbox(self, self.dev_pref+':FBELT_Y_PHASE_SETPT')
         sb_gpiovph.showStepExponent = False
         ld_gpiovat = QLabel('Vert. Atten.', self)
-        sb_gpiovat = PyDMSpinbox(self, self.dev_pref+':FBE_Y_ATT')
+        sb_gpiovat = SiriusSpinbox(self, self.dev_pref+':FBE_Y_ATT')
         sb_gpiovat.showStepExponent = False
         ld_gpiolph = QLabel('Long. Phase', self)
-        sb_gpiolph = PyDMSpinbox(self, self.dev_pref+':FBELT_SERVO_SETPT')
+        sb_gpiolph = SiriusSpinbox(self, self.dev_pref+':FBELT_SERVO_SETPT')
         sb_gpiolph.showStepExponent = False
         ld_gpiolat = QLabel('Long. Atten.', self)
-        sb_gpiolat = PyDMSpinbox(self, self.dev_pref+':FBE_Z_ATT')
+        sb_gpiolat = SiriusSpinbox(self, self.dev_pref+':FBE_Z_ATT')
         sb_gpiolat.showStepExponent = False
         ld_gpiobeph = QLabel('Back-end Phase', self)
-        sb_gpiobeph = PyDMSpinbox(self, self.dev_pref+':FBE_BE_PHASE')
+        sb_gpiobeph = SiriusSpinbox(self, self.dev_pref+':FBE_BE_PHASE')
         sb_gpiobeph.showStepExponent = False
         ld_gpiobeat = QLabel('Back-end Atten.', self)
-        sb_gpiobeat = PyDMSpinbox(self, self.dev_pref+':FBE_BE_ATT')
+        sb_gpiobeat = SiriusSpinbox(self, self.dev_pref+':FBE_BE_ATT')
         sb_gpiobeat.showStepExponent = False
         # # Phases
         ld_gpiophss = QLabel('<h4>Phases</h4>', self, alignment=Qt.AlignCenter)
@@ -134,11 +134,11 @@ class BbBGPIOWidget(QWidget):
             self, self.dev_pref+':FBELT_SERVO_SIGN')
 
         ld_gpiogain = QLabel('Gain', self)
-        sb_gpiogain = PyDMSpinbox(self, self.dev_pref+':FBELT_SERVO_GAIN')
+        sb_gpiogain = SiriusSpinbox(self, self.dev_pref+':FBELT_SERVO_GAIN')
         sb_gpiogain.showStepExponent = False
 
         ld_gpiooff = QLabel('Offset', self)
-        sb_gpiooff = PyDMSpinbox(self, self.dev_pref+':FBELT_SERVO_OFFSET')
+        sb_gpiooff = SiriusSpinbox(self, self.dev_pref+':FBELT_SERVO_OFFSET')
         sb_gpiooff.showStepExponent = False
 
         ld_gpiohtrk = QLabel('Hor. Trk.', self)
@@ -214,7 +214,7 @@ class BbBGPIOWidget(QWidget):
         lb_gpiofanspd.showUnits = True
 
         ld_gpiotempsp = QLabel('Temperature Setpoint', self)
-        sb_gpiotempsp = PyDMSpinbox(self, self.dev_pref+':FBELT_FAN_SETPT')
+        sb_gpiotempsp = SiriusSpinbox(self, self.dev_pref+':FBELT_FAN_SETPT')
         sb_gpiotempsp.showStepExponent = False
 
         gbox_fbe = QGroupBox('Fan Control', self)
@@ -242,7 +242,7 @@ class BbBGPIOWidget(QWidget):
             self, self.dev_pref+':FBELT_SERVO_DELTA')
         ld_gpioservomax = QLabel(
             '<h4>Max</h4>', self, alignment=Qt.AlignCenter)
-        sb_gpioservomax = PyDMSpinbox(
+        sb_gpioservomax = SiriusSpinbox(
             self, self.dev_pref+':FBELT_SERVO_MAXDELTA')
         sb_gpioservomax.showStepExponent = False
 

@@ -5,14 +5,13 @@ from qtpy.QtCore import Qt
 from qtpy.QtGui import QColor
 from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, QGroupBox, QTabWidget
 import qtawesome as qta
-from pydm.widgets import PyDMSpinbox, PyDMEnumComboBox, \
-    PyDMLineEdit, PyDMPushButton
+from pydm.widgets import PyDMEnumComboBox, PyDMLineEdit, PyDMPushButton
 
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 from siriuspy.namesys import SiriusPVName as _PVName
 
 from ..widgets import SiriusLedAlert, SiriusLabel, PyDMStateButton, \
-    SiriusLedState
+    SiriusLedState, SiriusSpinbox
 from .custom_widgets import WfmGraph
 from .util import set_bbb_color
 
@@ -98,7 +97,7 @@ class BbBCoefficientsWidget(QWidget):
             '<h4> Marker:</h4>', wid, alignment=Qt.AlignLeft | Qt.AlignVCenter)
         ld_ftval = QLabel(
             'Frequency [0-1]', wid, alignment=Qt.AlignRight | Qt.AlignVCenter)
-        sb_ftval = PyDMSpinbox(wid, self.dev_pref+':FTF_TUNE')
+        sb_ftval = SiriusSpinbox(wid, self.dev_pref+':FTF_TUNE')
         sb_ftval.showStepExponent = False
         ld_ftgain = QLabel(
             'Gain [dB]', wid, alignment=Qt.AlignRight | Qt.AlignVCenter)
@@ -156,18 +155,18 @@ class BbBCoefficientsWidget(QWidget):
             '<h4>Generate Coefficients</h4>', self, alignment=Qt.AlignCenter)
         ld_gengain = QLabel(
             'Gain [0-1]', self, alignment=Qt.AlignRight)
-        sb_gengain = PyDMSpinbox(self, self.dev_pref+':FLT_GAIN')
+        sb_gengain = SiriusSpinbox(self, self.dev_pref+':FLT_GAIN')
         sb_gengain.showStepExponent = False
         ld_genphs = QLabel('Phase [°]', self, alignment=Qt.AlignRight)
-        sb_genphs = PyDMSpinbox(self, self.dev_pref+':FLT_PHASE')
+        sb_genphs = SiriusSpinbox(self, self.dev_pref+':FLT_PHASE')
         sb_genphs.showStepExponent = False
         ld_genfreq = QLabel(
             'Frequency [0-1]', self, alignment=Qt.AlignRight)
-        sb_genfreq = PyDMSpinbox(self, self.dev_pref+':FLT_FREQ')
+        sb_genfreq = SiriusSpinbox(self, self.dev_pref+':FLT_FREQ')
         sb_genfreq.showStepExponent = False
         ld_genntap = QLabel(
             'Number of taps', self, alignment=Qt.AlignRight)
-        sb_genntap = PyDMSpinbox(self, self.dev_pref+':FLT_TAPS')
+        sb_genntap = SiriusSpinbox(self, self.dev_pref+':FLT_TAPS')
         sb_genntap.showStepExponent = False
 
         wid = QWidget(self)
@@ -215,15 +214,15 @@ class BbBCoefficientsWidget(QWidget):
         cb_coefsel = PyDMEnumComboBox(self, self.dev_pref+':SETSEL')
 
         ld_sftgain = QLabel('Shift Gain', self)
-        sb_sftgain = PyDMSpinbox(self, self.dev_pref+':SHIFTGAIN')
+        sb_sftgain = SiriusSpinbox(self, self.dev_pref+':SHIFTGAIN')
         sb_sftgain.showStepExponent = False
 
         ld_downspl = QLabel('Downsampling', self)
-        sb_downspl = PyDMSpinbox(self, self.dev_pref+':PROC_DS')
+        sb_downspl = SiriusSpinbox(self, self.dev_pref+':PROC_DS')
         sb_downspl.showStepExponent = False
 
         ld_satthrs = QLabel('Sat. Threshold [%]', self)
-        sb_satthrs = PyDMSpinbox(self, self.dev_pref+':SAT_THRESHOLD')
+        sb_satthrs = SiriusSpinbox(self, self.dev_pref+':SAT_THRESHOLD')
         sb_satthrs.showStepExponent = False
 
         lay_patt = QGridLayout()
@@ -261,12 +260,12 @@ class BbBCoefficientsWidget(QWidget):
         cb_bcenbl = PyDMStateButton(self, self.dev_pref+':CLEAN_ENABLE')
 
         ld_bcamp = QLabel('Amplitude', self)
-        sb_bcamp = PyDMSpinbox(self, self.dev_pref+':CLEAN_AMPL')
+        sb_bcamp = SiriusSpinbox(self, self.dev_pref+':CLEAN_AMPL')
         sb_bcamp.showStepExponent = False
         lb_svamp = SiriusLabel(self, self.dev_pref+':CLEAN_SAVE_AMPL')
 
         ld_bctune = QLabel('Tune', self)
-        sb_bctune = PyDMSpinbox(self, self.dev_pref+':CLEAN_TUNE')
+        sb_bctune = SiriusSpinbox(self, self.dev_pref+':CLEAN_TUNE')
         sb_bctune.showStepExponent = False
         lb_svfreq = SiriusLabel(self, self.dev_pref+':CLEAN_SAVE_FREQ')
 

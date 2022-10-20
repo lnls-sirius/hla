@@ -6,11 +6,12 @@ import numpy as np
 from qtpy.QtWidgets import QHBoxLayout, QSizePolicy as QSzPlcy, QVBoxLayout, \
     QToolTip
 from qtpy.QtCore import Qt, Slot, Signal, Property
-from pydm.widgets import PyDMImageView, PyDMSpinbox, \
-    PyDMPushButton, PyDMEnumComboBox, PyDMLineEdit
+from pydm.widgets import PyDMImageView, PyDMPushButton, PyDMEnumComboBox, \
+    PyDMLineEdit
 from pydm.widgets.channel import PyDMChannel
 
-from siriushla.widgets import PyDMStateButton, SiriusLedState, SiriusLabel
+from siriushla.widgets import PyDMStateButton, SiriusLedState, SiriusLabel, \
+    SiriusSpinbox
 
 
 class SiriusImageView(PyDMImageView):
@@ -462,7 +463,7 @@ def create_propty_layout(parent, prefix, propty, propty_type='', cmd=dict(),
                 propty_name=propty, propty_suffix='SP'))
             setattr(parent, 'le_'+propty, sp)
         else:
-            sp = PyDMSpinbox(parent, prefix.substitute(
+            sp = SiriusSpinbox(parent, prefix.substitute(
                 propty_name=propty, propty_suffix='SP'))
             setattr(parent, 'sb_'+propty, sp)
             sp.showStepExponent = False

@@ -9,7 +9,7 @@ from qtpy.QtWidgets import QLabel, QGroupBox, QWidget, QSpacerItem,\
     QGridLayout, QHBoxLayout, QVBoxLayout
 import qtawesome as qta
 from pydm.widgets import PyDMEnumComboBox, PyDMLineEdit,\
-    PyDMPushButton, PyDMSpinbox
+    PyDMPushButton
 
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriuspy.namesys import SiriusPVName as _PVName
@@ -361,7 +361,7 @@ class CurrLTWindow(SiriusMainWindow):
         hlay_maxintvl = QHBoxLayout()
         hlay_maxintvl.addWidget(self._pb_plussett)
         hlay_maxintvl.addWidget(self._ld_maxintvl)
-        self._sb_maxintvl = PyDMSpinbox(
+        self._sb_maxintvl = SiriusSpinbox(
             self, self.devname.substitute(propty='MaxSplIntvl-SP'))
         self._sb_maxintvl.precisionFromPV = True
         self._sb_maxintvl.showStepExponent = False
@@ -434,7 +434,7 @@ class CurrLTWindow(SiriusMainWindow):
         self._ld_intvlbtwspl = QLabel(
             'Interval Between\nSamples [s]:', self,
             alignment=Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
-        self._sb_intvlbtwspl = PyDMSpinbox(
+        self._sb_intvlbtwspl = SiriusSpinbox(
             self, self.devname.substitute(propty='MinIntvlBtwSpl-SP'))
         self._sb_intvlbtwspl.precisionFromPV = True
         self._sb_intvlbtwspl.showStepExponent = False
@@ -454,7 +454,7 @@ class CurrLTWindow(SiriusMainWindow):
         self._ld_bufdcurr = QLabel(
             'Auto Reset Delta\nCurrent [mA]:', self,
             alignment=Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
-        self._sb_bufdcurr = PyDMSpinbox(
+        self._sb_bufdcurr = SiriusSpinbox(
             self, self.devname.substitute(propty='BuffAutoRstDCurr-SP'))
         self._sb_bufdcurr.showStepExponent = False
         self._lb_bufdcurr = SiriusLabel(

@@ -3,10 +3,11 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGroupBox, QVBoxLayout, QTabWidget, \
     QWidget, QLabel, QGridLayout
 import qtawesome as qta
-from pydm.widgets import enum_button, PyDMEnumComboBox, PyDMSpinbox
+from pydm.widgets import enum_button, PyDMEnumComboBox
 
 from ..util import get_appropriate_color
-from ..widgets import SiriusMainWindow, SiriusLedState, SiriusLabel
+from ..widgets import SiriusMainWindow, SiriusLedState, SiriusLabel, \
+    SiriusSpinbox
 from ..as_di_bpms.base import GraphWave
 
 
@@ -337,7 +338,7 @@ class DigBeamPosProc(SiriusMainWindow):
                 parent=self,
                 init_channel=self.prefix + self.device_name + ':' + channel)
         elif style in [1, 2, 4]:
-            channel_info = PyDMSpinbox(
+            channel_info = SiriusSpinbox(
                 parent=self,
                 init_channel=self.prefix + self.device_name + ':' + channel)
             channel_info.showStepExponent = False

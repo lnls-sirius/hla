@@ -5,7 +5,7 @@ from qtpy.QtWidgets import QWidget, QGroupBox, QGridLayout, QLabel, \
     QHBoxLayout, QSizePolicy as QSzPlcy, QSpacerItem, QPushButton, \
     QVBoxLayout
 import qtawesome as qta
-from pydm.widgets import PyDMPushButton, PyDMSpinbox
+from pydm.widgets import PyDMPushButton
 
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 from siriuspy.namesys import SiriusPVName as _PVName
@@ -13,7 +13,8 @@ from siriuspy.search import IDSearch
 
 from siriushla.util import connect_window, connect_newprocess
 from siriushla.widgets import SiriusMainWindow, PyDMLed, SiriusLedAlert, \
-    SiriusLedState, PyDMLedMultiChannel, PyDMStateButton, SiriusLabel
+    SiriusLedState, PyDMLedMultiChannel, PyDMStateButton, SiriusLabel, \
+    SiriusSpinbox
 
 from .auxiliary_dialogs import APUAlarmDetails, APUInterlockDetails, \
     APUHardLLDetails
@@ -63,21 +64,21 @@ class APUControlWindow(SiriusMainWindow):
 
     def _mainControlsWidget(self):
         self._ld_phs = QLabel('Phase [mm]', self)
-        self._sb_phs = PyDMSpinbox(
+        self._sb_phs = SiriusSpinbox(
             self, self.dev_pref.substitute(propty='Phase-SP'))
         self._sb_phs.showStepExponent = False
         self._lb_phs = SiriusLabel(
             self, self.dev_pref.substitute(propty='Phase-Mon'))
 
         self._ld_kx = QLabel('Kx', self)
-        self._sb_kx = PyDMSpinbox(
+        self._sb_kx = SiriusSpinbox(
             self, self.dev_pref.substitute(propty='Kx-SP'))
         self._sb_kx.showStepExponent = False
         self._lb_kx = SiriusLabel(
             self, self.dev_pref.substitute(propty='Kx-Mon'))
 
         self._ld_phsspd = QLabel('Phase Speed\n[mm/s]', self)
-        self._sb_phsspd = PyDMSpinbox(
+        self._sb_phsspd = SiriusSpinbox(
             self, self.dev_pref.substitute(propty='PhaseSpeed-SP'))
         self._sb_phsspd.showStepExponent = False
         self._lb_phsspd = SiriusLabel(
@@ -239,7 +240,7 @@ class APUControlWindow(SiriusMainWindow):
 
     def _auxCommandsWidget(self):
         self._ld_speedlim = QLabel('Max Phase Speed\n[mm/s]', self)
-        self._sb_speedlim = PyDMSpinbox(
+        self._sb_speedlim = SiriusSpinbox(
             self, self.dev_pref.substitute(propty='MaxPhaseSpeed-SP'))
         self._sb_speedlim.showStepExponent = False
         self._sb_speedlim.setStyleSheet('max-width:4.5em;')
@@ -363,19 +364,19 @@ class APUSummaryWidget(APUSummaryBase):
             self._pb_dev,
             ['sirius-hla-si-id-control.py', '-dev', self._device])
 
-        self._sb_phs = PyDMSpinbox(
+        self._sb_phs = SiriusSpinbox(
             self, self.dev_pref.substitute(propty='Phase-SP'))
         self._sb_phs.showStepExponent = False
         self._lb_phs = SiriusLabel(
             self, self.dev_pref.substitute(propty='Phase-Mon'))
 
-        self._sb_kx = PyDMSpinbox(
+        self._sb_kx = SiriusSpinbox(
             self, self.dev_pref.substitute(propty='Kx-SP'))
         self._sb_kx.showStepExponent = False
         self._lb_kx = SiriusLabel(
             self, self.dev_pref.substitute(propty='Kx-Mon'))
 
-        self._sb_phsspd = PyDMSpinbox(
+        self._sb_phsspd = SiriusSpinbox(
             self, self.dev_pref.substitute(propty='PhaseSpeed-SP'))
         self._sb_phsspd.showStepExponent = False
         self._lb_phsspd = SiriusLabel(

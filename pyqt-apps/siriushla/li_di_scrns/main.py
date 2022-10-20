@@ -5,12 +5,11 @@ from qtpy.QtGui import QPixmap
 from qtpy.QtWidgets import QGroupBox, QHBoxLayout, QVBoxLayout, \
     QWidget, QLabel, QGridLayout, QRadioButton, QStackedWidget, \
     QSizePolicy
-from pydm.widgets import PyDMPushButton, \
-    PyDMSpinbox, PyDMImageView, PyDMLineEdit
+from pydm.widgets import PyDMPushButton, PyDMImageView, PyDMLineEdit
 import qtawesome as qta
 from ..util import get_appropriate_color
 from ..widgets import SiriusMainWindow, PyDMLedMultiChannel, \
-    SiriusWaveformPlot, SiriusLabel
+    SiriusWaveformPlot, SiriusLabel, SiriusSpinbox
 from .util import DEVICES, SCREENS_PANEL, SCREENS_INFO, HEADER, \
     GRAPH, SCREEN
 from .motorBtn import MotorBtn
@@ -72,7 +71,7 @@ class LiBeamProfile(SiriusMainWindow):
             widget = PyDMPushButton(self, init_channel=pv_name,
                                     label=label, pressValue=value)
         elif wid_type == 'spinBox':
-            widget = PyDMSpinbox(init_channel=pv_name)
+            widget = SiriusSpinbox(init_channel=pv_name)
             widget.showStepExponent = False
             widget.showUnits = True
         elif wid_type == 'lineEdit':
@@ -163,7 +162,7 @@ class LiBeamProfile(SiriusMainWindow):
                 device, graph_data['channel']['data']),
             color="#ff0000",
             lineWidth=1)
-            
+
         graph_plot.setPlotTitle(title)
         graph_plot.setLabel(
             'left',

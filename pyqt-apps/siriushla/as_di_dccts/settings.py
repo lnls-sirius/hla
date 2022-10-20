@@ -6,7 +6,7 @@ from qtpy.QtWidgets import QWidget, QLabel, QPushButton, QGroupBox, \
     QSizePolicy as QSzPly
 import qtawesome as qta
 
-from pydm.widgets import PyDMSpinbox, PyDMEnumComboBox, PyDMPushButton
+from pydm.widgets import PyDMEnumComboBox, PyDMPushButton
 
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.diagbeam.dcct.csdev import Const as _DCCTc, get_dcct_database
@@ -14,7 +14,7 @@ from siriuspy.epics import PV as _PV
 
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla.widgets import PyDMStateButton, SiriusConnectionSignal, \
-    SiriusLedState, SiriusLedAlert, SiriusLabel
+    SiriusLedState, SiriusLedAlert, SiriusLabel, SiriusSpinbox
 from siriushla import util as _hlautil
 from siriushla.as_ti_control.hl_trigger import HLTriggerSimple
 
@@ -152,7 +152,7 @@ class DCCTSettings(QWidget):
         self.setLayout(lay)
         self.setStyleSheet("""
             QSpinBox, QComboBox, QPushButton,
-            PyDMSpinbox, PyDMEnumComboBox, SiriusLabel{
+            SiriusSpinbox, PyDMEnumComboBox, SiriusLabel{
                 min-width:6em; max-width:6em;}
             .QLabel{max-height:1.5em;}""")
 
@@ -165,7 +165,7 @@ class DCCTSettings(QWidget):
             visible = False
 
         l_smpcnt = QLabel('Sample Count: ', self)
-        spinbox_SampleCnt = PyDMSpinbox(
+        spinbox_SampleCnt = SiriusSpinbox(
             self, prefix.substitute(propty=prefix.propty_name+'SampleCnt-SP'))
         spinbox_SampleCnt.showStepExponent = False
         label_SampleCnt = SiriusLabel(
@@ -175,7 +175,7 @@ class DCCTSettings(QWidget):
         hlay_smpcnt.addWidget(label_SampleCnt)
 
         l_measperiod = QLabel('Period [s]: ', self)
-        spinbox_MeasPeriod = PyDMSpinbox(
+        spinbox_MeasPeriod = SiriusSpinbox(
             self, prefix.substitute(propty=prefix.propty_name+'MeasPeriod-SP'))
         spinbox_MeasPeriod.showStepExponent = False
         label_MeasPeriod = SiriusLabel(
@@ -254,7 +254,7 @@ class DCCTSettingsDetails(QWidget):
         self.setLayout(lay)
 
         self.setStyleSheet("""
-            PyDMSpinbox, SiriusLabel{
+            SiriusSpinbox, SiriusLabel{
                 min-width:6em; max-width:6em;
                 qproperty-alignment: AlignCenter;}
             PyDMLedMultiChannel, PyDMStateButton, PyDMEnumComboBox{
@@ -335,7 +335,7 @@ class DCCTSettingsDetails(QWidget):
         hlay_lowlimenbl.addWidget(self.pydmlabel_LowLimEnbl)
 
         l_currthold = QLabel('Current Threshold [mA]: ', self)
-        self.pydmspinbox_CurrThold = PyDMSpinbox(
+        self.pydmspinbox_CurrThold = SiriusSpinbox(
             self, self.dcct_prefix.substitute(propty='CurrThold-SP'))
         self.pydmspinbox_CurrThold.showStepExponent = False
         self.pydmlabel_CurrThold = SiriusLabel(
@@ -392,7 +392,7 @@ class DCCTSettingsDetails(QWidget):
         gbox_modesettings = QGroupBox(mode+' Measurement Mode Settings', self)
 
         l_smpcnt = QLabel('Sample Count: ', self)
-        spinbox_SampleCnt = PyDMSpinbox(
+        spinbox_SampleCnt = SiriusSpinbox(
             self, prefix.substitute(propty=prefix.propty_name+'SampleCnt-SP'))
         spinbox_SampleCnt.showStepExponent = False
         label_SampleCnt = SiriusLabel(
@@ -402,7 +402,7 @@ class DCCTSettingsDetails(QWidget):
         hlay_smpcnt.addWidget(label_SampleCnt)
 
         l_measperiod = QLabel('Period [s]: ', self)
-        spinbox_MeasPeriod = PyDMSpinbox(
+        spinbox_MeasPeriod = SiriusSpinbox(
             self, prefix.substitute(propty=prefix.propty_name+'MeasPeriod-SP'))
         spinbox_MeasPeriod.showStepExponent = False
         label_MeasPeriod = SiriusLabel(
@@ -436,7 +436,7 @@ class DCCTSettingsDetails(QWidget):
         hlay_offset.addWidget(label_RelEnbl)
 
         l_rellvl = QLabel('Relative Offset Level [V]: ', self)
-        spinbox_RelLvl = PyDMSpinbox(
+        spinbox_RelLvl = SiriusSpinbox(
             self, prefix.substitute(propty=prefix.propty_name+'RelLvl-SP'))
         spinbox_RelLvl.showStepExponent = False
         label_RelLvl = SiriusLabel(
@@ -489,7 +489,7 @@ class DCCTSettingsDetails(QWidget):
             hlay_avgenbl.addWidget(label_AvgFilterEnbl)
 
             l_avgcnt = QLabel('Samples: ', self)
-            spinbox_AvgFilterCount = PyDMSpinbox(self, prefix.substitute(
+            spinbox_AvgFilterCount = SiriusSpinbox(self, prefix.substitute(
                 propty=prefix.propty_name+'AvgFilterCnt-SP'))
             spinbox_AvgFilterCount.showStepExponent = False
             label_AvgFilterCount = SiriusLabel(self, prefix.substitute(
@@ -508,7 +508,7 @@ class DCCTSettingsDetails(QWidget):
             hlay_avgtyp.addWidget(label_AvgFilterTyp)
 
             l_avgwin = QLabel('Noise window size [%]: ', self)
-            spinbox_AvgFilterWind = PyDMSpinbox(self, prefix.substitute(
+            spinbox_AvgFilterWind = SiriusSpinbox(self, prefix.substitute(
                 propty=prefix.propty_name+'AvgFilterWind-SP'))
             spinbox_AvgFilterWind.showStepExponent = False
             label_AvgFilterWind = SiriusLabel(self, prefix.substitute(
@@ -528,7 +528,7 @@ class DCCTSettingsDetails(QWidget):
         gbox_modesettings.setLayout(flay_modesettings)
         gbox_modesettings.setVisible(visible)
         gbox_modesettings.setStyleSheet("""
-            PyDMSpinbox, SiriusLabel{
+            SiriusLabel{
                 min-width:6em; max-width:6em;
                 qproperty-alignment: AlignCenter;}
             PyDMLedMultiChannel, PyDMStateButton, PyDMEnumComboBox{
