@@ -163,7 +163,6 @@ class TuneControls(QWidget):
         lbl_h = QLabel('Harmonic (n)', self)
         self.sb_h = SiriusSpinbox(
             self, self.device.substitute(propty='RevN-SP'))
-        self.sb_h.showStepExponent = False
         self.sb_h.precisionFromPV = True
         self.lb_h = SiriusLabel(
             self, self.device.substitute(propty='RevN-RB'))
@@ -181,7 +180,6 @@ class TuneControls(QWidget):
         lbl_foff = QLabel('Freq. Offset [kHz]', self)
         self.sb_foff = SiriusSpinbox(
             self, self.device.substitute(propty='FreqOff-SP'))
-        self.sb_foff.showStepExponent = False
         self.sb_foff.precisionFromPV = True
         self.lb_foff = SiriusLabel(
             self, self.device.substitute(propty='FreqOff-RB'))

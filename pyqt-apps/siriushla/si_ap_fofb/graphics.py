@@ -340,7 +340,6 @@ class KickWidget(BaseObject, QWidget):
         pvname = self.devpref.substitute(
             prefix=self.prefix, propty='KickBufferSize-SP')
         sbbuff = SiriusSpinbox(self, pvname)
-        sbbuff.showStepExponent = False
         lbbuffmon = SiriusLabel(self, pvname.substitute(propty_suffix='Mon'))
         lbbuff = SiriusLabel(self, pvname.substitute(propty_suffix='RB'))
         laybuff = QHBoxLayout()

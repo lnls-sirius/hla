@@ -167,7 +167,6 @@ class DCCTSettings(QWidget):
         l_smpcnt = QLabel('Sample Count: ', self)
         spinbox_SampleCnt = SiriusSpinbox(
             self, prefix.substitute(propty=prefix.propty_name+'SampleCnt-SP'))
-        spinbox_SampleCnt.showStepExponent = False
         label_SampleCnt = SiriusLabel(
             self, prefix.substitute(propty=prefix.propty_name+'SampleCnt-RB'))
         hlay_smpcnt = QHBoxLayout()
@@ -177,7 +176,6 @@ class DCCTSettings(QWidget):
         l_measperiod = QLabel('Period [s]: ', self)
         spinbox_MeasPeriod = SiriusSpinbox(
             self, prefix.substitute(propty=prefix.propty_name+'MeasPeriod-SP'))
-        spinbox_MeasPeriod.showStepExponent = False
         label_MeasPeriod = SiriusLabel(
             self, prefix.substitute(propty=prefix.propty_name+'MeasPeriod-RB'))
         hlay_measperiod = QHBoxLayout()
@@ -337,7 +335,6 @@ class DCCTSettingsDetails(QWidget):
         l_currthold = QLabel('Current Threshold [mA]: ', self)
         self.pydmspinbox_CurrThold = SiriusSpinbox(
             self, self.dcct_prefix.substitute(propty='CurrThold-SP'))
-        self.pydmspinbox_CurrThold.showStepExponent = False
         self.pydmlabel_CurrThold = SiriusLabel(
             self, self.dcct_prefix.substitute(propty='CurrThold-RB'))
         hlay_currthold = QHBoxLayout()
@@ -394,7 +391,6 @@ class DCCTSettingsDetails(QWidget):
         l_smpcnt = QLabel('Sample Count: ', self)
         spinbox_SampleCnt = SiriusSpinbox(
             self, prefix.substitute(propty=prefix.propty_name+'SampleCnt-SP'))
-        spinbox_SampleCnt.showStepExponent = False
         label_SampleCnt = SiriusLabel(
             self, prefix.substitute(propty=prefix.propty_name+'SampleCnt-RB'))
         hlay_smpcnt = QHBoxLayout()
@@ -404,7 +400,6 @@ class DCCTSettingsDetails(QWidget):
         l_measperiod = QLabel('Period [s]: ', self)
         spinbox_MeasPeriod = SiriusSpinbox(
             self, prefix.substitute(propty=prefix.propty_name+'MeasPeriod-SP'))
-        spinbox_MeasPeriod.showStepExponent = False
         label_MeasPeriod = SiriusLabel(
             self, prefix.substitute(propty=prefix.propty_name+'MeasPeriod-RB'))
         hlay_measperiod = QHBoxLayout()
@@ -438,7 +433,6 @@ class DCCTSettingsDetails(QWidget):
         l_rellvl = QLabel('Relative Offset Level [V]: ', self)
         spinbox_RelLvl = SiriusSpinbox(
             self, prefix.substitute(propty=prefix.propty_name+'RelLvl-SP'))
-        spinbox_RelLvl.showStepExponent = False
         label_RelLvl = SiriusLabel(
             self, prefix.substitute(propty=prefix.propty_name+'RelLvl-RB'))
         label_RelLvl.precisionFromPV = False
@@ -491,7 +485,6 @@ class DCCTSettingsDetails(QWidget):
             l_avgcnt = QLabel('Samples: ', self)
             spinbox_AvgFilterCount = SiriusSpinbox(self, prefix.substitute(
                 propty=prefix.propty_name+'AvgFilterCnt-SP'))
-            spinbox_AvgFilterCount.showStepExponent = False
             label_AvgFilterCount = SiriusLabel(self, prefix.substitute(
                 propty=prefix.propty_name+'AvgFilterCnt-RB'))
             hlay_avgcnt = QHBoxLayout()
@@ -510,7 +503,6 @@ class DCCTSettingsDetails(QWidget):
             l_avgwin = QLabel('Noise window size [%]: ', self)
             spinbox_AvgFilterWind = SiriusSpinbox(self, prefix.substitute(
                 propty=prefix.propty_name+'AvgFilterWind-SP'))
-            spinbox_AvgFilterWind.showStepExponent = False
             label_AvgFilterWind = SiriusLabel(self, prefix.substitute(
                 propty=prefix.propty_name+'AvgFilterWind-RB'))
             hlay_avgwin = QHBoxLayout()

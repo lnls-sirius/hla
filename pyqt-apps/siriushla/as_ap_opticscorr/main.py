@@ -144,10 +144,8 @@ class OpticsCorrWindow(SiriusMainWindow):
 
         self.sb_paramx = SiriusSpinbox(self, self.ioc_prefix.substitute(
             propty=self.param_pv.format('X', 'SP')))
-        self.sb_paramx.showStepExponent = False
         self.sb_paramy = SiriusSpinbox(self, self.ioc_prefix.substitute(
             propty=self.param_pv.format('Y', 'SP')))
-        self.sb_paramy.showStepExponent = False
 
         self.lb_paramx = SiriusLabel(self, self.ioc_prefix.substitute(
             propty=self.param_pv.format('X', 'RB')))
@@ -195,12 +193,10 @@ class OpticsCorrWindow(SiriusMainWindow):
 
             self.sb_paramx_delta = SiriusSpinbox(
                 self, self.ioc_prefix.substitute(propty='DeltaChromX-SP'))
-            self.sb_paramx_delta.showStepExponent = False
             self.sb_paramx_delta.setVisible(False)
 
             self.sb_paramy_delta = SiriusSpinbox(
                 self, self.ioc_prefix.substitute(propty='DeltaChromY-SP'))
-            self.sb_paramy_delta.showStepExponent = False
             self.sb_paramy_delta.setVisible(False)
 
             self.lb_paramx_delta = SiriusLabel(
@@ -345,7 +341,6 @@ class OpticsCorrWindow(SiriusMainWindow):
                 self.sb_meas_chrom_dfRF = SiriusSpinbox(
                     self, self.ioc_prefix.substitute(
                         propty='MeasChromDeltaFreqRF-SP'))
-                self.sb_meas_chrom_dfRF.showStepExponent = False
                 self.lb_meas_chrom_dfRF = SiriusLabel(
                     self, self.ioc_prefix.substitute(
                         propty='MeasChromDeltaFreqRF-RB'))
@@ -357,7 +352,6 @@ class OpticsCorrWindow(SiriusMainWindow):
                 self.sb_meas_chrom_wait = SiriusSpinbox(
                     self, self.ioc_prefix.substitute(
                         propty='MeasChromWaitTune-SP'))
-                self.sb_meas_chrom_wait.showStepExponent = False
                 self.lb_meas_chrom_wait = SiriusLabel(
                     self, self.ioc_prefix.substitute(
                         propty='MeasChromWaitTune-RB'))
@@ -369,7 +363,6 @@ class OpticsCorrWindow(SiriusMainWindow):
                 self.sb_meas_chrom_nrsteps = SiriusSpinbox(
                     self, self.ioc_prefix.substitute(
                         propty='MeasChromNrSteps-SP'))
-                self.sb_meas_chrom_nrsteps.showStepExponent = False
                 self.lb_meas_chrom_nrsteps = SiriusLabel(
                     self, self.ioc_prefix.substitute(
                         propty='MeasChromNrSteps-RB'))
@@ -448,7 +441,6 @@ class OpticsCorrWindow(SiriusMainWindow):
                 'Fam. Δ'+self.intstrength+' '+mag_type+'F '+unit, self)
             self.sb_meas_conf_dfamF = SiriusSpinbox(
                 self, pvn.substitute(propty_suffix='SP'))
-            self.sb_meas_conf_dfamF.showStepExponent = False
             self.lb_meas_conf_dfamF = SiriusLabel(
                 self, pvn.substitute(propty_suffix='RB'))
             lay.addWidget(lb_meas_conf_dfamF, row+2, 0)
@@ -461,7 +453,6 @@ class OpticsCorrWindow(SiriusMainWindow):
                 'Fam. Δ'+self.intstrength+' '+mag_type+'D '+unit, self)
             self.sb_meas_conf_dfamD = SiriusSpinbox(
                 self, pvn.substitute(propty_suffix='SP'))
-            self.sb_meas_conf_dfamD.showStepExponent = False
             self.lb_meas_conf_dfamD = SiriusLabel(
                 self, pvn.substitute(propty_suffix='RB'))
             lay.addWidget(lb_meas_conf_dfamD, row+3, 0)
@@ -471,7 +462,6 @@ class OpticsCorrWindow(SiriusMainWindow):
             lb_meas_conf_wait = QLabel('Wait [s]', self)
             self.sb_meas_conf_wait = SiriusSpinbox(
                 self, self.ioc_prefix.substitute(propty='MeasConfigWait-SP'))
-            self.sb_meas_conf_wait.showStepExponent = False
             self.lb_meas_conf_wait = SiriusLabel(
                 self, self.ioc_prefix.substitute(propty='MeasConfigWait-RB'))
             lay.addWidget(lb_meas_conf_wait, row+4, 0)

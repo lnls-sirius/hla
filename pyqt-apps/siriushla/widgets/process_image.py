@@ -104,7 +104,6 @@ class SiriusProcessImage(QWidget):
         nrpt_ld = QLabel('Num. Pts.', gb_pos)
         nrpt_sp = SiriusSpinbox(
             gb_pos, init_channel=self._dev+':NrAverages-SP')
-        nrpt_sp.showStepExponent = False
         rdb = SiriusLabel(gb_pos, init_channel=self._dev+':NrAverages-RB')
         rdb.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         slsh = QLabel('/', gb_pos, alignment=Qt.AlignCenter)
@@ -128,12 +127,10 @@ class SiriusProcessImage(QWidget):
         hbl.addWidget(rdb)
 
         rsx_sp = SiriusSpinbox(gb_pos, init_channel=self._dev+':ROISizeX-SP')
-        rsx_sp.showStepExponent = False
         rsx_lb = SiriusLabel(gb_pos, init_channel=self._dev+':ROISizeX-RB')
         rsx_ld = QLabel('ROI Size X', gb_pos)
 
         rsy_sp = SiriusSpinbox(gb_pos, init_channel=self._dev+':ROISizeY-SP')
-        rsy_sp.showStepExponent = False
         rsy_lb = SiriusLabel(gb_pos, init_channel=self._dev+':ROISizeY-RB')
         rsy_ld = QLabel('ROI Size Y', gb_pos)
 
@@ -144,12 +141,10 @@ class SiriusProcessImage(QWidget):
         ra_ld = QLabel('Auto Center:', gb_pos)
 
         rcx_sp = SiriusSpinbox(gb_pos, init_channel=self._dev+':ROICenterX-SP')
-        rcx_sp.showStepExponent = False
         rcx_lb = SiriusLabel(gb_pos, init_channel=self._dev+':ROICenterX-RB')
         rcx_ld = QLabel('ROI Center X', gb_pos)
 
         rcy_sp = SiriusSpinbox(gb_pos, init_channel=self._dev+':ROICenterY-SP')
-        rcy_sp.showStepExponent = False
         rcy_lb = SiriusLabel(gb_pos, init_channel=self._dev+':ROICenterY-RB')
         rcy_ld = QLabel('ROI Center Y', gb_pos)
 
@@ -374,7 +369,6 @@ class _DetailedWidget(QWidget):
         wid.setLayout(QHBoxLayout())
         spnbox = SiriusSpinbox(wid, init_channel=self._dev+':ImgCropLow-SP')
         lbl = SiriusLabel(wid, init_channel=self._dev+':ImgCropLow-RB')
-        spnbox.showStepExponent = False
         wid.layout().addWidget(spnbox)
         wid.layout().addWidget(lbl)
         self.layout().addRow(QLabel(
@@ -393,7 +387,6 @@ class _DetailedWidget(QWidget):
         wid.setLayout(QHBoxLayout())
         spnbox = SiriusSpinbox(wid, init_channel=self._dev+':ImgCropHigh-SP')
         lbl = SiriusLabel(wid, init_channel=self._dev+':ImgCropHigh-RB')
-        spnbox.showStepExponent = False
         wid.layout().addWidget(spnbox)
         wid.layout().addWidget(lbl)
         self.layout().addRow(QLabel(
@@ -404,7 +397,6 @@ class _DetailedWidget(QWidget):
         if self._conv_set:
             spb = SiriusSpinbox(wid, init_channel=self._dev+':Px2mmScaleX-SP')
             lbl = SiriusLabel(wid, init_channel=self._dev+':Px2mmScaleX-RB')
-            spb.showStepExponent = False
             wid.layout().addWidget(spb)
             wid.layout().addWidget(lbl)
         else:
@@ -418,7 +410,6 @@ class _DetailedWidget(QWidget):
         if self._conv_set:
             spb = SiriusSpinbox(wid, init_channel=self._dev+':Px2mmScaleY-SP')
             lbl = SiriusLabel(wid, init_channel=self._dev+':Px2mmScaleY-RB')
-            spb.showStepExponent = False
             wid.layout().addWidget(spb)
             wid.layout().addWidget(lbl)
         else:
@@ -442,7 +433,6 @@ class _DetailedWidget(QWidget):
         wid.setLayout(QHBoxLayout())
         spnbox = SiriusSpinbox(wid, init_channel=self._dev+':Px2mmCenterX-SP')
         lbl = SiriusLabel(wid, init_channel=self._dev+':Px2mmCenterX-RB')
-        spnbox.showStepExponent = False
         wid.layout().addWidget(spnbox)
         wid.layout().addWidget(lbl)
         self.layout().addRow(QLabel(
@@ -452,7 +442,6 @@ class _DetailedWidget(QWidget):
         wid.setLayout(QHBoxLayout())
         spnbox = SiriusSpinbox(wid, init_channel=self._dev+':Px2mmCenterY-SP')
         lbl = SiriusLabel(wid, init_channel=self._dev+':Px2mmCenterY-RB')
-        spnbox.showStepExponent = False
         wid.layout().addWidget(spnbox)
         wid.layout().addWidget(lbl)
         self.layout().addRow(QLabel(

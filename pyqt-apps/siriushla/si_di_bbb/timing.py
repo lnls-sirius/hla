@@ -32,13 +32,10 @@ class BbBTimingWidget(QWidget):
         # Feedback Timing
         ld_adcdelay = QLabel('ADC Delay [ps]', self)
         sb_adcdelay = SiriusSpinbox(self, self.dev_pref+':TADC')
-        sb_adcdelay.showStepExponent = False
         ld_dacdelay = QLabel('DAC Delay [ps]', self)
         sb_dacdelay = SiriusSpinbox(self, self.dev_pref+':TDAC')
-        sb_dacdelay.showStepExponent = False
         ld_outdelay = QLabel('Output Delay', self)
         sb_outdelay = SiriusSpinbox(self, self.dev_pref+':DELAY')
-        sb_outdelay.showStepExponent = False
 
         gbox_fbti = QGroupBox('Feedback Timing', self)
         lay_fbti = QGridLayout(gbox_fbti)
@@ -61,13 +58,11 @@ class BbBTimingWidget(QWidget):
 
         ld_fidsigoff = QLabel('FID Signal Offset [ps]', self)
         sb_fidsigoff = SiriusSpinbox(self, self.dev_pref+':OFF_FIDS')
-        sb_fidsigoff.showStepExponent = False
         sb_fidsigoff.limitsFromChannel = False
         sb_fidsigoff.setMinimum(0)
         sb_fidsigoff.setMaximum(3000)
         ld_fiddelay = QLabel('Fiducial Delay', self)
         sb_fiddelay = SiriusSpinbox(self, self.dev_pref+':FID_DELAY')
-        sb_fiddelay.showStepExponent = False
         fr_fiddelay = SiriusFrame(self, self.dev_pref+':FID_DELAY_SUBWR')
         fr_fiddelay.add_widget(sb_fiddelay)
 

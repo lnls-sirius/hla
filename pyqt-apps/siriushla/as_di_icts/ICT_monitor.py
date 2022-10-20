@@ -299,13 +299,11 @@ class _ICTSettings(SiriusDialog):
         l_DigiDelay = QLabel('Delay: ', self)
         self.pydmspinbox_DigiDelay = SiriusSpinbox(
             self, self.ict_trig_digi_prefix.substitute(propty='Delay-SP'))
-        self.pydmspinbox_DigiDelay.showStepExponent = False
         self.pydmlabel_DigiDelay = SiriusLabel(
             self, self.ict_trig_digi_prefix.substitute(propty='Delay-RB'))
         l_DigiDuration = QLabel('Duration: ', self)
         self.pydmspinbox_DigiDuration = SiriusSpinbox(
             self, self.ict_trig_digi_prefix.substitute(propty='Duration-SP'))
-        self.pydmspinbox_DigiDuration.showStepExponent = False
         self.pydmlabel_DigiDuration = SiriusLabel(
             self, self.ict_trig_digi_prefix.substitute(propty='Duration-RB'))
         lay_Digi = QGridLayout()
@@ -344,13 +342,11 @@ class _ICTSettings(SiriusDialog):
         l_IntegDelay = QLabel('Delay: ', self)
         self.pydmspinbox_IntegDelay = SiriusSpinbox(
             self, self.ict_trig_digi_prefix.substitute(propty='Delay-SP'))
-        self.pydmspinbox_IntegDelay.showStepExponent = False
         self.pydmlabel_IntegDelay = SiriusLabel(
             self, self.ict_trig_digi_prefix.substitute(propty='Delay-RB'))
         l_IntegDuration = QLabel('Delay: ', self)
         self.pydmspinbox_IntegDuration = SiriusSpinbox(
             self, self.ict_trig_digi_prefix.substitute(propty='Duration-SP'))
-        self.pydmspinbox_IntegDuration.showStepExponent = False
         self.pydmlabel_IntegDuration = SiriusLabel(
             self, self.ict_trig_digi_prefix.substitute(propty='Duration-RB'))
         lay_Integ = QGridLayout()
@@ -367,7 +363,6 @@ class _ICTSettings(SiriusDialog):
         l_thold = QLabel('Threshold [nC]: ', self)
         self.pydmspinbox_Threshold = SiriusSpinbox(
             self, self.ict_prefix.substitute(propty='Threshold-SP'))
-        self.pydmspinbox_Threshold.showStepExponent = False
         self.pydmlabel_Threshold = SiriusLabel(
             self, self.ict_prefix.substitute(propty='Threshold-RB'))
         hlay_thold = QHBoxLayout()
@@ -449,7 +444,6 @@ class _ICTCalibration(QWidget):
         l_thold = QLabel('Charge Threshold [nC]: ', self)
         self.pydmspinbox_Threshold = SiriusSpinbox(
             self, self.ict_prefix.substitute(propty='Threshold-SP'))
-        self.pydmspinbox_Threshold.showStepExponent = False
         self.pydmlabel_Threshold = SiriusLabel(
             self, self.ict_prefix.substitute(propty='Threshold-RB'))
         hlay_thold = QHBoxLayout()
@@ -469,7 +463,6 @@ class _ICTCalibration(QWidget):
         l_2ndreaddy = QLabel('2nd Read Delay [s]: ', self)
         self.pydmspinbox_2ndReadDly = SiriusSpinbox(
             self, self.ict_prefix.substitute(propty='2ndReadDly-SP'))
-        self.pydmspinbox_2ndReadDly.showStepExponent = False
         self.pydmlabel_2ndReadDly = SiriusLabel(
             self, self.ict_prefix.substitute(propty='2ndReadDly-RB'))
         hlay_2ndreaddy = QHBoxLayout()
@@ -479,7 +472,6 @@ class _ICTCalibration(QWidget):
         l_samplecnt = QLabel('Sample Count: ', self)
         self.pydmspinbox_SampleCnt = SiriusSpinbox(
             self, self.ict_prefix.substitute(propty='SampleCnt-SP'))
-        self.pydmspinbox_SampleCnt.showStepExponent = False
         self.pydmlabel_SampleCnt = SiriusLabel(
             self, self.ict_prefix.substitute(propty='SampleCnt-RB'))
         hlay_samplecnt = QHBoxLayout()
@@ -489,7 +481,6 @@ class _ICTCalibration(QWidget):
         l_aperture = QLabel('Aperture [us]: ', self)
         self.pydmspinbox_Aperture = SiriusSpinbox(
             self, self.ict_prefix.substitute(propty='Aperture-SP'))
-        self.pydmspinbox_Aperture.showStepExponent = False
         self.pydmlabel_Aperture = SiriusLabel(
             self, self.ict_prefix.substitute(propty='Aperture-RB'))
         hlay_aperture = QHBoxLayout()
@@ -499,7 +490,6 @@ class _ICTCalibration(QWidget):
         l_samplerate = QLabel('Sample Rate [rdgs/s]: ', self)
         self.pydmspinbox_SampleRate = SiriusSpinbox(
             self, self.ict_prefix.substitute(propty='SampleRate-SP'))
-        self.pydmspinbox_SampleRate.showStepExponent = False
         self.pydmlabel_SampleRate = SiriusLabel(
             self, self.ict_prefix.substitute(propty='SampleRate-RB'))
         hlay_samplerate = QHBoxLayout()
@@ -519,7 +509,6 @@ class _ICTCalibration(QWidget):
         l_bcmrange = QLabel('BCM Range [V]: ', self)
         self.pydmspinbox_BCMRange = SiriusSpinbox(
             self, self.ict_prefix.substitute(propty='BCMRange-SP'))
-        self.pydmspinbox_BCMRange.showStepExponent = False
 
         l_range = QLabel('Range: ', self)
         self.pydmenumcombobox_Range = PyDMEnumComboBox(

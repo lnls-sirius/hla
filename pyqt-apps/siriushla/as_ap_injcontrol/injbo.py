@@ -128,7 +128,6 @@ class InjBOControlWindow(BaseWindow):
             pos_sp = SiriusSpinbox(
                 self, posang_prefix.substitute(propty='DeltaPos'+axis+'-SP'))
             pos_sp.setObjectName('pos_sp_'+axis.lower())
-            pos_sp.showStepExponent = False
             pos_rb = SiriusLabel(
                 self, posang_prefix.substitute(propty='DeltaPos'+axis+'-RB'),
                 keep_unit=True)
@@ -140,7 +139,6 @@ class InjBOControlWindow(BaseWindow):
             ang_sp = SiriusSpinbox(
                 self, posang_prefix.substitute(propty='DeltaAng'+axis+'-SP'))
             ang_sp.setObjectName('ang_sp_'+axis.lower())
-            ang_sp.showStepExponent = False
             ang_rb = SiriusLabel(
                 self, posang_prefix.substitute(propty='DeltaAng'+axis+'-RB'),
                 keep_unit=True)

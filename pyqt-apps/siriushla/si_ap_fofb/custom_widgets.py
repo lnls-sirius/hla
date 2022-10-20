@@ -312,7 +312,6 @@ class AuxCommDialog(BaseObject, SiriusDialog):
                     pref = self.devpref
                     spw = SiriusSpinbox(
                         self, pref.substitute(propty=dev+'AccSatMax-SP'))
-                    spw.showStepExponent = False
                     rbw = SiriusLabel(
                         self, pref.substitute(propty=dev+'AccSatMax-RB'))
                     hlay = QHBoxLayout()
@@ -328,7 +327,6 @@ class AuxCommDialog(BaseObject, SiriusDialog):
                 pref = self.devpref
                 spw = SiriusSpinbox(
                     self, pref.substitute(propty='TimeFrameLen-SP'))
-                spw.showStepExponent = False
                 rbw = SiriusLabel(
                     self, pref.substitute(propty='TimeFrameLen-RB'))
                 hlay = QHBoxLayout()

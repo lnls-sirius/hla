@@ -229,7 +229,6 @@ class TuneDetails(SiriusMainWindow):
         lbl_h = QLabel('Harmonic (n)', self)
         self.sb_h = SiriusSpinbox(
             self, self.device.substitute(propty='RevN-SP'))
-        self.sb_h.showStepExponent = False
         self.sb_h.precisionFromPV = True
         self.lb_h = SiriusLabel(
             self, self.device.substitute(propty='RevN-RB'))
@@ -247,7 +246,6 @@ class TuneDetails(SiriusMainWindow):
         lbl_foff = QLabel('Frequency Offset [kHz]', self)
         self.sb_foff = SiriusSpinbox(
             self, self.device.substitute(propty='FreqOff-SP'))
-        self.sb_foff.showStepExponent = False
         self.sb_foff.precisionFromPV = True
         self.lb_foff = SiriusLabel(
             self, self.device.substitute(propty='FreqOff-RB'))
@@ -281,7 +279,6 @@ class TuneDetails(SiriusMainWindow):
         lbl_drivegain = QLabel('Amplifier Gain [dB]', self)
         self.sb_drivegain = SiriusSpinbox(
             self, self.device.substitute(propty='AmpGain-SP'))
-        self.sb_drivegain.showStepExponent = False
         self.sb_drivegain.precisionFromPV = True
         self.lb_drivegain = SiriusLabel(
             self, self.device.substitute(propty='AmpGain-RB'))
@@ -305,7 +302,6 @@ class TuneDetails(SiriusMainWindow):
             lbl_noiseamp = QLabel('Noise Amplitude [V]', self)
             self.sb_noiseamp = SiriusSpinbox(
                 self, self.device.substitute(propty='NoiseAmpl-SP'))
-            self.sb_noiseamp.showStepExponent = False
             self.sb_noiseamp.precisionFromPV = True
             self.lb_noiseamp = SiriusLabel(
                 self, self.device.substitute(propty='NoiseAmpl-RB'))

@@ -252,7 +252,6 @@ class InjCtrlWindow(SiriusMainWindow):
         labelsdesc.append(self._ld_currtgt)
         self._sb_currtgt = SiriusSpinbox(
             self, self._inj_prefix.substitute(propty='TargetCurrent-SP'))
-        self._sb_currtgt.showStepExponent = False
         self._lb_currtgt = SiriusLabel(
             self, self._inj_prefix.substitute(propty='TargetCurrent-RB'),
             keep_unit=True)
@@ -308,7 +307,6 @@ class InjCtrlWindow(SiriusMainWindow):
         labelsdesc.append(self._ld_sbbias)
         self._sb_sbbias = SiriusSpinbox(
             self, self._inj_prefix.substitute(propty='SglBunBiasVolt-SP'))
-        self._sb_sbbias.showStepExponent = False
         self._lb_sbbias = SiriusLabel(
             self, self._inj_prefix.substitute(propty='SglBunBiasVolt-RB'),
             keep_unit=True)
@@ -323,7 +321,6 @@ class InjCtrlWindow(SiriusMainWindow):
         labelsdesc.append(self._ld_mbbias)
         self._sb_mbbias = SiriusSpinbox(
             self, self._inj_prefix.substitute(propty='MultBunBiasVolt-SP'))
-        self._sb_mbbias.showStepExponent = False
         self._lb_mbbias = SiriusLabel(
             self, self._inj_prefix.substitute(propty='MultBunBiasVolt-RB'),
             keep_unit=True)
@@ -345,7 +342,6 @@ class InjCtrlWindow(SiriusMainWindow):
         labelsdesc.append(self._ld_filaopcurr)
         self._sb_filaopcurr = SiriusSpinbox(
             self, self._inj_prefix.substitute(propty='FilaOpCurr-SP'))
-        self._sb_filaopcurr.showStepExponent = False
         self._lb_filaopcurr = SiriusLabel(
             self, self._inj_prefix.substitute(propty='FilaOpCurr-RB'),
             keep_unit=True)
@@ -365,7 +361,6 @@ class InjCtrlWindow(SiriusMainWindow):
         labelsdesc.append(self._ld_hvopvolt)
         self._sb_hvopvolt = SiriusSpinbox(
             self, self._inj_prefix.substitute(propty='HVOpVolt-SP'))
-        self._sb_hvopvolt.showStepExponent = False
         self._lb_hvopvolt = SiriusLabel(
             self, self._inj_prefix.substitute(propty='HVOpVolt-RB'),
             keep_unit=True)
@@ -472,7 +467,6 @@ class InjCtrlWindow(SiriusMainWindow):
         self._ld_tuperd = QLabel('Period', self)
         self._sb_tuperd = SiriusSpinbox(
             self, self._inj_prefix.substitute(propty='TopUpPeriod-SP'))
-        self._sb_tuperd.showStepExponent = False
         self._lb_tuperd = SiriusLabel(
             self, self._inj_prefix.substitute(propty='TopUpPeriod-RB'))
         self._lb_tuperd.showUnits = True
@@ -480,7 +474,6 @@ class InjCtrlWindow(SiriusMainWindow):
         self._ld_tunrpu = QLabel('Nr.Pulses', self)
         self._sb_tunrpu = SiriusSpinbox(
             self, self._inj_prefix.substitute(propty='TopUpNrPulses-SP'))
-        self._sb_tunrpu.showStepExponent = False
         self._lb_tunrpu = SiriusLabel(
             self, self._inj_prefix.substitute(propty='TopUpNrPulses-RB'))
         self._lb_tunrpu.showUnits = True

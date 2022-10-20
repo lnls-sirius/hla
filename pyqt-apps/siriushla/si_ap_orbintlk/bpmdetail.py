@@ -112,7 +112,6 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
             alignment=Qt.AlignRight | Qt.AlignVCenter)
         self._sb_minsumlim = SiriusSpinbox(
             self, self.devpref.substitute(propty='IntlkLmtMinSum-SP'))
-        self._sb_minsumlim.showStepExponent = False
         self._sb_minsumlim.limitsFromChannel = False
         self._sb_minsumlim.setMinimum(-1e12)
         self._sb_minsumlim.setMaximum(+1e12)
@@ -164,7 +163,6 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
             alignment=Qt.AlignRight | Qt.AlignVCenter)
         sb_minx = SiriusSpinbox(
             self, self.devpref.substitute(propty='IntlkLmt'+intlk+'MinX-SP'))
-        sb_minx.showStepExponent = False
         sb_minx.limitsFromChannel = False
         sb_minx.setMinimum(-1e9)
         sb_minx.setMaximum(+1e9)
@@ -176,7 +174,6 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
             alignment=Qt.AlignRight | Qt.AlignVCenter)
         sb_maxx = SiriusSpinbox(
             self, self.devpref.substitute(propty='IntlkLmt'+intlk+'MaxX-SP'))
-        sb_maxx.showStepExponent = False
         sb_maxx.limitsFromChannel = False
         sb_maxx.setMinimum(-1e9)
         sb_maxx.setMaximum(+1e9)
@@ -188,7 +185,6 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
             alignment=Qt.AlignRight | Qt.AlignVCenter)
         sb_miny = SiriusSpinbox(
             self, self.devpref.substitute(propty='IntlkLmt'+intlk+'MinY-SP'))
-        sb_miny.showStepExponent = False
         sb_miny.limitsFromChannel = False
         sb_miny.setMinimum(-1e9)
         sb_miny.setMaximum(+1e9)
@@ -200,7 +196,6 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
             alignment=Qt.AlignRight | Qt.AlignVCenter)
         sb_maxy = SiriusSpinbox(
             self, self.devpref.substitute(propty='IntlkLmt'+intlk+'MaxY-SP'))
-        sb_maxy.showStepExponent = False
         sb_maxy.limitsFromChannel = False
         sb_maxy.setMinimum(-1e9)
         sb_maxy.setMaximum(+1e9)

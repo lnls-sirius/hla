@@ -98,7 +98,6 @@ class BbBCoefficientsWidget(QWidget):
         ld_ftval = QLabel(
             'Frequency [0-1]', wid, alignment=Qt.AlignRight | Qt.AlignVCenter)
         sb_ftval = SiriusSpinbox(wid, self.dev_pref+':FTF_TUNE')
-        sb_ftval.showStepExponent = False
         ld_ftgain = QLabel(
             'Gain [dB]', wid, alignment=Qt.AlignRight | Qt.AlignVCenter)
         lb_ftgain = Label(wid, self.dev_pref+':FTF_GTUNE')
@@ -156,18 +155,14 @@ class BbBCoefficientsWidget(QWidget):
         ld_gengain = QLabel(
             'Gain [0-1]', self, alignment=Qt.AlignRight)
         sb_gengain = SiriusSpinbox(self, self.dev_pref+':FLT_GAIN')
-        sb_gengain.showStepExponent = False
         ld_genphs = QLabel('Phase [°]', self, alignment=Qt.AlignRight)
         sb_genphs = SiriusSpinbox(self, self.dev_pref+':FLT_PHASE')
-        sb_genphs.showStepExponent = False
         ld_genfreq = QLabel(
             'Frequency [0-1]', self, alignment=Qt.AlignRight)
         sb_genfreq = SiriusSpinbox(self, self.dev_pref+':FLT_FREQ')
-        sb_genfreq.showStepExponent = False
         ld_genntap = QLabel(
             'Number of taps', self, alignment=Qt.AlignRight)
         sb_genntap = SiriusSpinbox(self, self.dev_pref+':FLT_TAPS')
-        sb_genntap.showStepExponent = False
 
         wid = QWidget(self)
         lay_genset = QGridLayout(wid)
@@ -215,15 +210,12 @@ class BbBCoefficientsWidget(QWidget):
 
         ld_sftgain = QLabel('Shift Gain', self)
         sb_sftgain = SiriusSpinbox(self, self.dev_pref+':SHIFTGAIN')
-        sb_sftgain.showStepExponent = False
 
         ld_downspl = QLabel('Downsampling', self)
         sb_downspl = SiriusSpinbox(self, self.dev_pref+':PROC_DS')
-        sb_downspl.showStepExponent = False
 
         ld_satthrs = QLabel('Sat. Threshold [%]', self)
         sb_satthrs = SiriusSpinbox(self, self.dev_pref+':SAT_THRESHOLD')
-        sb_satthrs.showStepExponent = False
 
         lay_patt = QGridLayout()
         lay_patt.addWidget(ld_fbpatt, 0, 0)
@@ -261,12 +253,10 @@ class BbBCoefficientsWidget(QWidget):
 
         ld_bcamp = QLabel('Amplitude', self)
         sb_bcamp = SiriusSpinbox(self, self.dev_pref+':CLEAN_AMPL')
-        sb_bcamp.showStepExponent = False
         lb_svamp = SiriusLabel(self, self.dev_pref+':CLEAN_SAVE_AMPL')
 
         ld_bctune = QLabel('Tune', self)
         sb_bctune = SiriusSpinbox(self, self.dev_pref+':CLEAN_TUNE')
-        sb_bctune.showStepExponent = False
         lb_svfreq = SiriusLabel(self, self.dev_pref+':CLEAN_SAVE_FREQ')
 
         ld_bcspan = QLabel('Span', self)

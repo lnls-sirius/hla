@@ -181,7 +181,6 @@ class EVG(BaseWidget):
 
         pvname = self.get_pvname(propty='InjRate-SP')
         sp = SiriusSpinbox(self, init_channel=pvname)
-        sp.showStepExponent = False
         pvname = self.get_pvname(propty='InjRate-RB')
         rb = SiriusLabel(self, init_channel=pvname)
         pg = self._create_prop_widget('Pulse Rate [Hz]', configs_wid, (sp, rb))
@@ -224,7 +223,6 @@ class EVG(BaseWidget):
 
         pvname = self.get_pvname(propty='RFDiv-SP')
         sp = SiriusSpinbox(self, init_channel=pvname)
-        sp.showStepExponent = False
         pvname = self.get_pvname(propty='RFDiv-RB')
         rb = SiriusLabel(self, init_channel=pvname)
         pg = self._create_prop_widget('RF Divisor', configs_wid, (sp, rb))
@@ -855,7 +853,6 @@ class BucketList(BaseWidget):
 
         pvname = self.get_pvname("RepeatBucketList-SP")
         sp = SiriusSpinbox(wid, init_channel=pvname)
-        sp.showStepExponent = False
         pvname = self.get_pvname("RepeatBucketList-RB")
         rb = SiriusLabel(wid, init_channel=pvname)
         rb.setStyleSheet("min-width:4em; max-height:1.15em;")
@@ -887,7 +884,6 @@ class BucketList(BaseWidget):
             wid, inj_prefix.substitute(propty='BucketListStart-SP'))
         self._sb_start.setAlignment(Qt.AlignCenter)
         self._sb_start.setStyleSheet('max-width:5em;')
-        self._sb_start.showStepExponent = False
         self._lb_start = SiriusLabel(
             wid, inj_prefix.substitute(propty='BucketListStart-RB'))
 
@@ -895,7 +891,6 @@ class BucketList(BaseWidget):
             wid, inj_prefix.substitute(propty='BucketListStop-SP'))
         self._sb_stop.setAlignment(Qt.AlignCenter)
         self._sb_stop.setStyleSheet('max-width:5em;')
-        self._sb_stop.showStepExponent = False
         self._lb_stop = SiriusLabel(
             wid, inj_prefix.substitute(propty='BucketListStop-RB'))
 
@@ -903,7 +898,6 @@ class BucketList(BaseWidget):
             wid, inj_prefix.substitute(propty='BucketListStep-SP'))
         self._sb_step.setAlignment(Qt.AlignCenter)
         self._sb_step.setStyleSheet('max-width:5em;')
-        self._sb_step.showStepExponent = False
         self._lb_step = SiriusLabel(
             wid, inj_prefix.substitute(propty='BucketListStep-RB'))
 
@@ -984,13 +978,11 @@ class EventList(BaseList):
         elif prop == 'delay':
             pvname = device.substitute(propty=device.propty+'Delay-SP')
             sp = SiriusSpinbox(self, init_channel=pvname)
-            sp.showStepExponent = False
             pvname = device.substitute(propty=device.propty+'Delay-RB')
             rb = SiriusLabel(self, init_channel=pvname)
         elif prop == 'delayraw':
             pvname = device.substitute(propty=device.propty+'DelayRaw-SP')
             sp = SiriusSpinbox(self, init_channel=pvname)
-            sp.showStepExponent = False
             pvname = device.substitute(propty=device.propty+'DelayRaw-RB')
             rb = SiriusLabel(self, init_channel=pvname)
         elif prop == 'description':
@@ -1037,7 +1029,6 @@ class ClockList(BaseList):
         if prop == 'frequency':
             pvname = device.substitute(propty=device.propty+'Freq-SP')
             sp = SiriusSpinbox(self, init_channel=pvname)
-            sp.showStepExponent = False
             sp.limitsFromChannel = False
             sp.setMinimum(1)
             sp.setMaximum(2**31 - 1)
@@ -1055,7 +1046,6 @@ class ClockList(BaseList):
         elif prop == 'mux_div':
             pvname = device.substitute(propty=device.propty+'MuxDiv-SP')
             sp = SiriusSpinbox(self, init_channel=pvname)
-            sp.showStepExponent = False
             pvname = device.substitute(propty=device.propty+'MuxDiv-RB')
             rb = SiriusLabel(self, init_channel=pvname)
         return sp, rb
@@ -1438,7 +1428,6 @@ class AFC(BaseWidget):
         ld_phskp = QLabel('<b>Phase KP</b>', self, alignment=Qt.AlignCenter)
         sb_phskp = SiriusSpinbox(
             self, self.get_pvname(propty=subdev+'PhasePropGain-SP'))
-        sb_phskp.showStepExponent = False
         sb_phskp.limitsFromChannel = False
         sb_phskp.setMinimum(-2**31)
         sb_phskp.setMaximum(2**31-1)
@@ -1448,7 +1437,6 @@ class AFC(BaseWidget):
         ld_phski = QLabel('<b>Phase KI</b>', self, alignment=Qt.AlignCenter)
         sb_phski = SiriusSpinbox(
             self, self.get_pvname(propty=subdev+'PhaseIntgGain-SP'))
-        sb_phski.showStepExponent = False
         sb_phski.limitsFromChannel = False
         sb_phski.setMinimum(-2**31)
         sb_phski.setMaximum(2**31-1)
@@ -1458,7 +1446,6 @@ class AFC(BaseWidget):
         ld_frqkp = QLabel('<b>Freq. KP</b>', self, alignment=Qt.AlignCenter)
         sb_frqkp = SiriusSpinbox(
             self, self.get_pvname(propty=subdev+'FreqPropGain-SP'))
-        sb_frqkp.showStepExponent = False
         sb_frqkp.limitsFromChannel = False
         sb_frqkp.setMinimum(-2**31)
         sb_frqkp.setMaximum(2**31-1)
@@ -1468,7 +1455,6 @@ class AFC(BaseWidget):
         ld_frqki = QLabel('<b>Freq. KI</b>', self, alignment=Qt.AlignCenter)
         sb_frqki = SiriusSpinbox(
             self, self.get_pvname(propty=subdev+'FreqIntgGain-SP'))
-        sb_frqki.showStepExponent = False
         sb_frqki.limitsFromChannel = False
         sb_frqki.setMinimum(-2**31)
         sb_frqki.setMaximum(2**31-1)
@@ -1478,7 +1464,6 @@ class AFC(BaseWidget):
         ld_phnvg = QLabel('<b>Phs.Navg</b>', self, alignment=Qt.AlignCenter)
         sb_phnvg = SiriusSpinbox(
             self, self.get_pvname(propty=subdev+'PhaseNavg-SP'))
-        sb_phnvg.showStepExponent = False
         sb_phnvg.limitsFromChannel = False
         sb_phnvg.setMinimum(-2**31)
         sb_phnvg.setMaximum(2**31-1)
@@ -1489,7 +1474,6 @@ class AFC(BaseWidget):
             '<b>Phs.Div 2<sup>n</sup></b>', self, alignment=Qt.AlignCenter)
         sb_phdiv = SiriusSpinbox(
             self, self.get_pvname(propty=subdev+'PhaseDiv-SP'))
-        sb_phdiv.showStepExponent = False
         sb_phdiv.limitsFromChannel = False
         sb_phdiv.setMinimum(-2**31)
         sb_phdiv.setMaximum(2**31-1)
@@ -1499,7 +1483,6 @@ class AFC(BaseWidget):
         ld_rfrlo = QLabel('<b>RFReqLo</b>', self, alignment=Qt.AlignCenter)
         sb_rfrlo = SiriusHexaSpinbox(
             self, self.get_pvname(propty=subdev+'RFReqLo-SP'))
-        sb_rfrlo.showStepExponent = False
         sb_rfrlo.limitsFromChannel = False
         sb_rfrlo.setMinimum(-2**31)
         sb_rfrlo.setMaximum(2**31-1)
@@ -1510,7 +1493,6 @@ class AFC(BaseWidget):
         ld_rfrhi = QLabel('<b>RFReqHi</b>', self, alignment=Qt.AlignCenter)
         sb_rfrhi = SiriusHexaSpinbox(
             self, self.get_pvname(propty=subdev+'RFReqHi-SP'))
-        sb_rfrhi.showStepExponent = False
         sb_rfrhi.limitsFromChannel = False
         sb_rfrhi.setMinimum(-2**31)
         sb_rfrhi.setMaximum(2**31-1)
@@ -1523,7 +1505,6 @@ class AFC(BaseWidget):
         sb_n1 = SiriusHexaSpinbox(
             self, self.get_pvname(propty=subdev+'n1-SP'))
         sb_n1.setObjectName('n1')
-        sb_n1.showStepExponent = False
         sb_n1.limitsFromChannel = False
         sb_n1.setMinimum(-2**31)
         sb_n1.setMaximum(2**31-1)
@@ -2154,7 +2135,6 @@ class EVGFOUTOUTList(BaseList):
         elif prop == 'outdelay':
             pvname = device.substitute(propty='OUT'+str(idx)+'Delay-SP')
             sp = SiriusSpinbox(self, pvname)
-            sp.showStepExponent = False
             sp.limitsFromChannel = False
             sp.setMinimum(0)
             sp.setMaximum(2**31 - 1)
@@ -2281,7 +2261,6 @@ class LLTriggerList(BaseList):
         elif prop == 'event':
             pvname = intlb.substitute(propty=intlb.propty+'Evt-SP')
             sp = SiriusSpinbox(self, init_channel=pvname)
-            sp.showStepExponent = False
             sp.limitsFromChannel = False
             sp.setMinimum(0)
             sp.setMaximum(255)
@@ -2291,7 +2270,6 @@ class LLTriggerList(BaseList):
         elif prop == 'widthraw':
             pvname = intlb.substitute(propty=intlb.propty+'WidthRaw-SP')
             sp = SiriusSpinbox(self, init_channel=pvname)
-            sp.showStepExponent = False
             sp.limitsFromChannel = False
             sp.setMinimum(1)
             sp.setMaximum(2**31 - 1)
@@ -2301,7 +2279,6 @@ class LLTriggerList(BaseList):
         elif prop == 'width':
             pvname = intlb.substitute(propty=intlb.propty+'Width-SP')
             sp = SiriusSpinbox(self, init_channel=pvname)
-            sp.showStepExponent = False
             pvname = intlb.substitute(propty=intlb.propty+'Width-RB')
             rb = SiriusLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
@@ -2314,7 +2291,6 @@ class LLTriggerList(BaseList):
         elif prop == 'pulses':
             pvname = intlb.substitute(propty=intlb.propty+'NrPulses-SP')
             sp = SiriusSpinbox(self, init_channel=pvname)
-            sp.showStepExponent = False
             sp.limitsFromChannel = False
             sp.setMinimum(1)
             sp.setMaximum(2**31 - 1)
@@ -2324,7 +2300,6 @@ class LLTriggerList(BaseList):
         elif prop == 'delayraw':
             pvname = intlb.substitute(propty=intlb.propty+'DelayRaw-SP')
             sp = SiriusSpinbox(self, init_channel=pvname)
-            sp.showStepExponent = False
             sp.limitsFromChannel = False
             sp.setMinimum(0)
             sp.setMaximum(2**31 - 1)
@@ -2334,7 +2309,6 @@ class LLTriggerList(BaseList):
         elif prop == 'delay':
             pvname = intlb.substitute(propty=intlb.propty+'Delay-SP')
             sp = SiriusSpinbox(self, init_channel=pvname)
-            sp.showStepExponent = False
             pvname = intlb.substitute(propty=intlb.propty+'Delay-RB')
             rb = SiriusLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
@@ -2352,21 +2326,18 @@ class LLTriggerList(BaseList):
         elif prop == 'trigger':
             pvname = outlb.substitute(propty=outlb.propty+'SrcTrig-SP')
             sp = SiriusSpinbox(self, init_channel=pvname)
-            sp.showStepExponent = False
             pvname = outlb.substitute(propty=outlb.propty+'SrcTrig-RB')
             rb = SiriusLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'rf_delayraw':
             pvname = outlb.substitute(propty=outlb.propty+'RFDelayRaw-SP')
             sp = SiriusSpinbox(self, init_channel=pvname)
-            sp.showStepExponent = False
             pvname = outlb.substitute(propty=outlb.propty+'RFDelayRaw-RB')
             rb = SiriusLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'rf_delay':
             pvname = outlb.substitute(propty=outlb.propty+'RFDelay-SP')
             sp = SiriusSpinbox(self, init_channel=pvname)
-            sp.showStepExponent = False
             pvname = outlb.substitute(propty=outlb.propty+'RFDelay-RB')
             rb = SiriusLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
@@ -2379,14 +2350,12 @@ class LLTriggerList(BaseList):
         elif prop == 'fine_delayraw':
             pvname = outlb.substitute(propty=outlb.propty+'FineDelayRaw-SP')
             sp = SiriusSpinbox(self, init_channel=pvname)
-            sp.showStepExponent = False
             pvname = outlb.substitute(propty=outlb.propty+'FineDelayRaw-RB')
             rb = SiriusLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'fine_delay':
             pvname = outlb.substitute(propty=outlb.propty+'FineDelay-SP')
             sp = SiriusSpinbox(self, init_channel=pvname)
-            sp.showStepExponent = False
             pvname = outlb.substitute(propty=outlb.propty+'FineDelay-RB')
             rb = SiriusLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
@@ -2485,7 +2454,6 @@ class EVREVEDIList(BaseList):
         elif prop == 'event':
             pvname = device.substitute(propty='DIEvent'+di_idx+'-SP')
             sp = SiriusSpinbox(self, init_channel=pvname)
-            sp.showStepExponent = False
             sp.limitsFromChannel = False
             sp.setMinimum(0)
             sp.setMaximum(255)

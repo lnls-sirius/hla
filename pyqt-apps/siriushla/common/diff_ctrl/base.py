@@ -63,12 +63,10 @@ class DiffCtrlDevMonitor(QWidget):
         self.lb_descCtrl1 = QLabel(
             '', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         self.sb_Ctrl1 = SiriusSpinbox(self)
-        self.sb_Ctrl1.showStepExponent = False
         self.lb_Ctrl1 = SiriusLabel(self)
         self.lb_descCtrl2 = QLabel(
             '', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         self.sb_Ctrl2 = SiriusSpinbox(self)
-        self.sb_Ctrl2.showStepExponent = False
         self.lb_Ctrl2 = SiriusLabel(self)
 
         self.pb_open = PyDMPushButton(

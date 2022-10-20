@@ -51,7 +51,6 @@ class MotorControlWindow(SiriusMainWindow):
         elif wid_type == 'spinBox':
             widget = SiriusSpinbox(
                 init_channel=pv_name)
-            widget.showStepExponent = False
         elif wid_type == 'state':
             widget = PyDMStateButton(
                 init_channel=pv_name)

@@ -175,7 +175,6 @@ class PosAngCorr(SiriusMainWindow):
             propty='DeltaPos'+axis.upper()+'-SP'))
         sb_deltapos.step_exponent = -2
         sb_deltapos.update_step_size()
-        sb_deltapos.showStepExponent = False
         lb_deltapos = SiriusLabel(self, self.posang_prefix.substitute(
             propty='DeltaPos'+axis.upper()+'-RB'), keep_unit=True)
         lb_deltapos.showUnits = True
@@ -186,7 +185,6 @@ class PosAngCorr(SiriusMainWindow):
             propty='DeltaAng'+axis.upper()+'-SP'))
         sb_deltaang.step_exponent = -2
         sb_deltaang.update_step_size()
-        sb_deltaang.showStepExponent = False
         lb_deltaang = SiriusLabel(self, self.posang_prefix.substitute(
             propty='DeltaAng'+axis.upper()+'-RB'), keep_unit=True)
         lb_deltaang.showUnits = True

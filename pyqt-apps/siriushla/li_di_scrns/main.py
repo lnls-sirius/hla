@@ -72,7 +72,6 @@ class LiBeamProfile(SiriusMainWindow):
                                     label=label, pressValue=value)
         elif wid_type == 'spinBox':
             widget = SiriusSpinbox(init_channel=pv_name)
-            widget.showStepExponent = False
             widget.showUnits = True
         elif wid_type == 'lineEdit':
             widget = PyDMLineEdit(

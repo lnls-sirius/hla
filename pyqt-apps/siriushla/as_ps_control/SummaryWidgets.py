@@ -656,7 +656,6 @@ class SummaryWidget(QWidget):
             self.sofbmode_wid.layout().addWidget(self.sofbmode_led)
         elif name == 'accgain' and self._is_fofb:
             self.accgain_sp = SiriusSpinbox(self, self._accgain_sp)
-            self.accgain_sp.showStepExponent = False
             self.accgain_sp.precisionFromPV = False
             self.accgain_sp.precision = 6
             self.accgain_rb = SiriusLabel(self, self._accgain_rb)

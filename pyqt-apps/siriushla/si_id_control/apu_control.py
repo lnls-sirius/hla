@@ -66,21 +66,18 @@ class APUControlWindow(SiriusMainWindow):
         self._ld_phs = QLabel('Phase [mm]', self)
         self._sb_phs = SiriusSpinbox(
             self, self.dev_pref.substitute(propty='Phase-SP'))
-        self._sb_phs.showStepExponent = False
         self._lb_phs = SiriusLabel(
             self, self.dev_pref.substitute(propty='Phase-Mon'))
 
         self._ld_kx = QLabel('Kx', self)
         self._sb_kx = SiriusSpinbox(
             self, self.dev_pref.substitute(propty='Kx-SP'))
-        self._sb_kx.showStepExponent = False
         self._lb_kx = SiriusLabel(
             self, self.dev_pref.substitute(propty='Kx-Mon'))
 
         self._ld_phsspd = QLabel('Phase Speed\n[mm/s]', self)
         self._sb_phsspd = SiriusSpinbox(
             self, self.dev_pref.substitute(propty='PhaseSpeed-SP'))
-        self._sb_phsspd.showStepExponent = False
         self._lb_phsspd = SiriusLabel(
             self, self.dev_pref.substitute(propty='PhaseSpeed-Mon'))
 
@@ -242,7 +239,6 @@ class APUControlWindow(SiriusMainWindow):
         self._ld_speedlim = QLabel('Max Phase Speed\n[mm/s]', self)
         self._sb_speedlim = SiriusSpinbox(
             self, self.dev_pref.substitute(propty='MaxPhaseSpeed-SP'))
-        self._sb_speedlim.showStepExponent = False
         self._sb_speedlim.setStyleSheet('max-width:4.5em;')
         self._lb_speedlim = SiriusLabel(
             self, self.dev_pref.substitute(propty='MaxPhaseSpeed-RB'))
@@ -366,19 +362,16 @@ class APUSummaryWidget(APUSummaryBase):
 
         self._sb_phs = SiriusSpinbox(
             self, self.dev_pref.substitute(propty='Phase-SP'))
-        self._sb_phs.showStepExponent = False
         self._lb_phs = SiriusLabel(
             self, self.dev_pref.substitute(propty='Phase-Mon'))
 
         self._sb_kx = SiriusSpinbox(
             self, self.dev_pref.substitute(propty='Kx-SP'))
-        self._sb_kx.showStepExponent = False
         self._lb_kx = SiriusLabel(
             self, self.dev_pref.substitute(propty='Kx-Mon'))
 
         self._sb_phsspd = SiriusSpinbox(
             self, self.dev_pref.substitute(propty='PhaseSpeed-SP'))
-        self._sb_phsspd.showStepExponent = False
         self._lb_phsspd = SiriusLabel(
             self, self.dev_pref.substitute(propty='PhaseSpeed-Mon'))
 

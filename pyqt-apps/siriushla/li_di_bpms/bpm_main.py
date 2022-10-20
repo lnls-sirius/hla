@@ -341,7 +341,6 @@ class DigBeamPosProc(SiriusMainWindow):
             channel_info = SiriusSpinbox(
                 parent=self,
                 init_channel=self.prefix + self.device_name + ':' + channel)
-            channel_info.showStepExponent = False
         else:
             channel_info = QLabel("Error", self)
 

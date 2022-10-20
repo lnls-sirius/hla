@@ -335,7 +335,6 @@ class CurrLTWindow(SiriusMainWindow):
             alignment=Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
         self._sb_curroffset = SiriusSpinbox(
             self, self.devname.substitute(propty='CurrOffset-SP'))
-        self._sb_curroffset.showStepExponent = False
         self._lb_curroffset = SiriusLabel(
             self, self.devname.substitute(propty='CurrOffset-RB'))
         self._lb_curroffset.setAlignment(Qt.AlignCenter)
@@ -364,7 +363,6 @@ class CurrLTWindow(SiriusMainWindow):
         self._sb_maxintvl = SiriusSpinbox(
             self, self.devname.substitute(propty='MaxSplIntvl-SP'))
         self._sb_maxintvl.precisionFromPV = True
-        self._sb_maxintvl.showStepExponent = False
         self._lb_maxintvl = SiriusLabel(
             self, self.devname.substitute(propty='MaxSplIntvl-RB'))
         self._lb_maxintvl.setAlignment(Qt.AlignCenter)
@@ -437,7 +435,6 @@ class CurrLTWindow(SiriusMainWindow):
         self._sb_intvlbtwspl = SiriusSpinbox(
             self, self.devname.substitute(propty='MinIntvlBtwSpl-SP'))
         self._sb_intvlbtwspl.precisionFromPV = True
-        self._sb_intvlbtwspl.showStepExponent = False
         self._lb_intvlbtwspl = SiriusLabel(
             self, self.devname.substitute(propty='MinIntvlBtwSpl-RB'))
         self._lb_intvlbtwspl.setAlignment(Qt.AlignCenter)
@@ -456,7 +453,6 @@ class CurrLTWindow(SiriusMainWindow):
             alignment=Qt.AlignRight | Qt.AlignTrailing | Qt.AlignVCenter)
         self._sb_bufdcurr = SiriusSpinbox(
             self, self.devname.substitute(propty='BuffAutoRstDCurr-SP'))
-        self._sb_bufdcurr.showStepExponent = False
         self._lb_bufdcurr = SiriusLabel(
             self, self.devname.substitute(propty='BuffAutoRstDCurr-RB'))
 

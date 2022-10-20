@@ -57,11 +57,9 @@ class BbBSingleDriveSettingsWidget(QWidget):
 
         ld_amp = QLabel('Amplitude', self)
         sb_amp = SiriusSpinbox(self, self.dev_pref+'AMPL')
-        sb_amp.showStepExponent = False
 
         ld_freq = QLabel('Frequency', self)
         sb_freq = SiriusSpinbox(self, self.dev_pref+'FREQ')
-        sb_freq.showStepExponent = False
 
         ld_wav = QLabel('Waveform', self)
         cb_wav = PyDMEnumComboBox(self, self.dev_pref+'WAVEFORM')
@@ -71,11 +69,9 @@ class BbBSingleDriveSettingsWidget(QWidget):
 
         ld_span = QLabel('Span', self)
         sb_span = SiriusSpinbox(self, self.dev_pref+'SPAN')
-        sb_span.showStepExponent = False
 
         ld_perd = QLabel('Period', self)
         sb_perd = SiriusSpinbox(self, self.dev_pref+'PERIOD')
-        sb_perd.showStepExponent = False
 
         ld_patt = QLabel('Drive Pattern', self)
         le_patt = PyDMLineEdit(self, self.dev_pref+'PATTERN')

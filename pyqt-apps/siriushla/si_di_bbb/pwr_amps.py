@@ -306,12 +306,10 @@ class BbBPwrAmpsWidget(QWidget):
 
         ld_gain_db = QLabel('Gain [dB]', self)
         sp_gain_db = SiriusSpinbox(self, pref+':Gain-SP')
-        sp_gain_db.showStepExponent = False
         lb_gain_db = SiriusLabel(self, init_channel=pref+':Gain-RB')
 
         ld_gain_st = QLabel('Gain [steps]', self)
         sp_gain_st = SiriusSpinbox(self, pref+':GainStep-SP')
-        sp_gain_st.showStepExponent = False
         lb_gain_st = SiriusLabel(self, init_channel=pref+':GainStep-RB')
 
         wid = QWidget()

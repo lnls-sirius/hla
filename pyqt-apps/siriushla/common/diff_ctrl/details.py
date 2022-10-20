@@ -133,22 +133,18 @@ class DiffCtrlDetails(SiriusDialog):
     def _setupLimitsLayout(self):
         self.sb_PosEdgeInnerLim = SiriusSpinbox(
             self, self.dev_prefix.substitute(propty='PosEdgeInnerLim-SP'))
-        self.sb_PosEdgeInnerLim.showStepExponent = False
         self.lb_PosEdgeInnerLim = SiriusLabel(
             self, self.dev_prefix.substitute(propty='PosEdgeInnerLim-RB'))
         self.sb_NegEdgeInnerLim = SiriusSpinbox(
             self, self.dev_prefix.substitute(propty='NegEdgeInnerLim-SP'))
-        self.sb_NegEdgeInnerLim.showStepExponent = False
         self.lb_NegEdgeInnerLim = SiriusLabel(
             self, self.dev_prefix.substitute(propty='NegEdgeInnerLim-RB'))
         self.sb_LowOuterLim = SiriusSpinbox(
             self, self.dev_prefix.substitute(propty='LowOuterLim-SP'))
-        self.sb_LowOuterLim.showStepExponent = False
         self.lb_LowOuterLim = SiriusLabel(
             self, self.dev_prefix.substitute(propty='LowOuterLim-RB'))
         self.sb_HighOuterLim = SiriusSpinbox(
             self, self.dev_prefix.substitute(propty='HighOuterLim-SP'))
-        self.sb_HighOuterLim.showStepExponent = False
         self.lb_HighOuterLim = SiriusLabel(
             self, self.dev_prefix.substitute(propty='HighOuterLim-RB'))
 

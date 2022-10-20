@@ -77,7 +77,6 @@ class EnergyMeasure(QWidget):
             'LI-01:PS-Spect:Current-SP').substitute(prefix=self.prefix))
         lbl = SiriusLabel(wid, _PVName(
             'LI-01:PS-Spect:Current-Mon').substitute(prefix=self.prefix))
-        spnbox.showStepExponent = False
         wid.layout().addWidget(spnbox)
         wid.layout().addWidget(lbl)
         vl.addWidget(QLabel('Spectrometer Current [A]', gb_ctrl))

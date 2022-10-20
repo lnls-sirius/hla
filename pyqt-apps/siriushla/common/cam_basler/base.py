@@ -466,7 +466,6 @@ def create_propty_layout(parent, prefix, propty, propty_type='', cmd=dict(),
             sp = SiriusSpinbox(parent, prefix.substitute(
                 propty_name=propty, propty_suffix='SP'))
             setattr(parent, 'sb_'+propty, sp)
-            sp.showStepExponent = False
         sp.setStyleSheet("""
             min-width:wvalem; max-width:wvalem; min-height:hvalem;
             max-height:hvalem;""".replace('wval', str(width)).replace(

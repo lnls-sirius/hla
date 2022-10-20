@@ -239,12 +239,10 @@ class LIModltrWindow(SiriusMainWindow):
         lbl_ma = QLabel('mA', self, alignment=Qt.AlignCenter)
 
         sb_volt = SiriusSpinbox(self, dev+':WRITE_V')
-        sb_volt.showStepExponent = False
         lb_volt = SiriusLabel(self, dev+':READV')
         lb_volt.setAlignment(Qt.AlignCenter)
 
         sb_curr = SiriusSpinbox(self, dev+':WRITE_I')
-        sb_curr.showStepExponent = False
         lb_curr = SiriusLabel(self, dev+':READI')
         lb_curr.setAlignment(Qt.AlignCenter)
 

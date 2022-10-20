@@ -344,12 +344,10 @@ class RFMainControl(SiriusMainWindow):
             self._handle_ampl_unit_visibility)
         self.sb_amp1 = SiriusSpinbox(
             self, self.prefix+self.chs['SL']['ASet'][0]+'-SP')
-        self.sb_amp1.showStepExponent = False
         self.lb_amp1 = SiriusLabel(
             self, self.prefix+self.chs['SL']['ASet'][0]+'-RB')
         self.sb_amp2 = SiriusSpinbox(
             self, self.prefix+self.chs['SL']['ASet'][1]+'-SP')
-        self.sb_amp2.showStepExponent = False
         self.sb_amp2.setVisible(False)
         self.lb_amp2 = SiriusLabel(
             self, self.prefix+self.chs['SL']['ASet'][1]+'-RB')
@@ -360,7 +358,6 @@ class RFMainControl(SiriusMainWindow):
             self, self.prefix+self.chs['SL']['AInc'])
         self.sb_phs = SiriusSpinbox(
             self, self.prefix+self.chs['SL']['PSet']+':S')
-        self.sb_phs.showStepExponent = False
         self.lb_phs = SiriusLabel(
             self, self.prefix+self.chs['SL']['PSet'])
         self.cb_phsincrate = PyDMEnumComboBox(
@@ -472,7 +469,6 @@ class RFMainControl(SiriusMainWindow):
         lb_dtune = QLabel('DTune: ', self, alignment=Qt.AlignRight)
         self.sb_dtune = SiriusSpinbox(
             self, self.prefix+self.chs['Tun']['DTune'].replace('RB', 'SP'))
-        self.sb_dtune.showStepExponent = False
         self.lb_dtune = SiriusLabel(
             self, self.prefix+self.chs['Tun']['DTune'])
         self.lb_dtune.showUnits = True
@@ -590,15 +586,12 @@ class RFMainControl(SiriusMainWindow):
         lb_ffg2 = QLabel(f'Gain Cell {lb2:s}: ', self, alignment=Qt.AlignRight)
         self.sb_ffg1 = SiriusSpinbox(self, self.prefix+pvs['Gain1']+':S')
         self.sb_ffg2 = SiriusSpinbox(self, self.prefix+pvs['Gain2']+':S')
-        self.sb_ffg1.showStepExponent = False
-        self.sb_ffg2.showStepExponent = False
         self.lb_ffg1 = SiriusLabel(self, self.prefix+pvs['Gain1'])
         self.lb_ffg2 = SiriusLabel(self, self.prefix+pvs['Gain2'])
         self.lb_ffg1.showUnits = True
         self.lb_ffg2.showUnits = True
         lb_ffdb = QLabel('DeadBand: ', self, alignment=Qt.AlignRight)
         self.sb_ffdb = SiriusSpinbox(self, self.prefix+pvs['Deadband']+':S')
-        self.sb_ffdb.showStepExponent = False
         self.lb_ffdb = SiriusLabel(self, self.prefix+pvs['Deadband'])
         self.lb_ffdb.showUnits = True
         lb_ffcell1 = QLabel('Cell 2: ', self, alignment=Qt.AlignRight)
@@ -684,39 +677,33 @@ class RFMainControl(SiriusMainWindow):
 
         self.cb_rmpincts = SiriusSpinbox(
             self, self.prefix+'BR-RF-DLLRF-01:RmpIncTs-SP')
-        self.cb_rmpincts.showStepExponent = False
         self.lb_rmpincts = SiriusLabel(
             self, self.prefix+'BR-RF-DLLRF-01:RmpIncTs-RB')
         self.lb_rmpincts.showUnits = True
 
         self.sb_rmpts1 = SiriusSpinbox(
             self, self.prefix+'BR-RF-DLLRF-01:RmpTs1-SP')
-        self.sb_rmpts1.showStepExponent = False
         self.lb_rmpts1 = SiriusLabel(
             self, self.prefix+'BR-RF-DLLRF-01:RmpTs1-RB')
         self.lb_rmpts1.showUnits = True
         self.sb_rmpts2 = SiriusSpinbox(
             self, self.prefix+'BR-RF-DLLRF-01:RmpTs2-SP')
-        self.sb_rmpts2.showStepExponent = False
         self.lb_rmpts2 = SiriusLabel(
             self, self.prefix+'BR-RF-DLLRF-01:RmpTs2-RB')
         self.lb_rmpts2.showUnits = True
         self.sb_rmpts3 = SiriusSpinbox(
             self, self.prefix+'BR-RF-DLLRF-01:RmpTs3-SP')
-        self.sb_rmpts3.showStepExponent = False
         self.lb_rmpts3 = SiriusLabel(
             self, self.prefix+'BR-RF-DLLRF-01:RmpTs3-RB')
         self.lb_rmpts3.showUnits = True
         self.sb_rmpts4 = SiriusSpinbox(
             self, self.prefix+'BR-RF-DLLRF-01:RmpTs4-SP')
-        self.sb_rmpts4.showStepExponent = False
         self.lb_rmpts4 = SiriusLabel(
             self, self.prefix+'BR-RF-DLLRF-01:RmpTs4-RB')
         self.lb_rmpts4.showUnits = True
 
         self.sb_rmpphstop = SiriusSpinbox(
             self, self.prefix+'BR-RF-DLLRF-01:RmpPhsTop-SP')
-        self.sb_rmpphstop.showStepExponent = False
         self.lb_rmpphstop = SiriusLabel(
             self, self.prefix+'BR-RF-DLLRF-01:RmpPhsTop-RB')
         self.lb_rmpphstop.showUnits = True
@@ -745,7 +732,6 @@ class RFMainControl(SiriusMainWindow):
 
         self.sb_rmpphsbot = SiriusSpinbox(
             self, self.prefix+'BR-RF-DLLRF-01:RmpPhsBot-SP')
-        self.sb_rmpphsbot.showStepExponent = False
         self.lb_rmpphsbot = SiriusLabel(
             self, self.prefix+'BR-RF-DLLRF-01:RmpPhsBot-RB')
         self.lb_rmpphsbot.showUnits = True

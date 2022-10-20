@@ -63,28 +63,20 @@ class BbBGPIOWidget(QWidget):
         # # Front/back end registers
         ld_gpiohph = QLabel('Horiz. Phase', self)
         sb_gpiohph = SiriusSpinbox(self, self.dev_pref+':FBELT_X_PHASE_SETPT')
-        sb_gpiohph.showStepExponent = False
         ld_gpiohat = QLabel('Horiz. Atten.', self)
         sb_gpiohat = SiriusSpinbox(self, self.dev_pref+':FBE_X_ATT')
-        sb_gpiohat.showStepExponent = False
         ld_gpiovph = QLabel('Vert. Phase', self)
         sb_gpiovph = SiriusSpinbox(self, self.dev_pref+':FBELT_Y_PHASE_SETPT')
-        sb_gpiovph.showStepExponent = False
         ld_gpiovat = QLabel('Vert. Atten.', self)
         sb_gpiovat = SiriusSpinbox(self, self.dev_pref+':FBE_Y_ATT')
-        sb_gpiovat.showStepExponent = False
         ld_gpiolph = QLabel('Long. Phase', self)
         sb_gpiolph = SiriusSpinbox(self, self.dev_pref+':FBELT_SERVO_SETPT')
-        sb_gpiolph.showStepExponent = False
         ld_gpiolat = QLabel('Long. Atten.', self)
         sb_gpiolat = SiriusSpinbox(self, self.dev_pref+':FBE_Z_ATT')
-        sb_gpiolat.showStepExponent = False
         ld_gpiobeph = QLabel('Back-end Phase', self)
         sb_gpiobeph = SiriusSpinbox(self, self.dev_pref+':FBE_BE_PHASE')
-        sb_gpiobeph.showStepExponent = False
         ld_gpiobeat = QLabel('Back-end Atten.', self)
         sb_gpiobeat = SiriusSpinbox(self, self.dev_pref+':FBE_BE_ATT')
-        sb_gpiobeat.showStepExponent = False
         # # Phases
         ld_gpiophss = QLabel('<h4>Phases</h4>', self, alignment=Qt.AlignCenter)
         lb_gpiohph = SiriusLabel(self, self.dev_pref+':FBE_X_PHASE')
@@ -135,11 +127,9 @@ class BbBGPIOWidget(QWidget):
 
         ld_gpiogain = QLabel('Gain', self)
         sb_gpiogain = SiriusSpinbox(self, self.dev_pref+':FBELT_SERVO_GAIN')
-        sb_gpiogain.showStepExponent = False
 
         ld_gpiooff = QLabel('Offset', self)
         sb_gpiooff = SiriusSpinbox(self, self.dev_pref+':FBELT_SERVO_OFFSET')
-        sb_gpiooff.showStepExponent = False
 
         ld_gpiohtrk = QLabel('Hor. Trk.', self)
         cb_gpiohtrk = PyDMStateButton(
@@ -215,7 +205,6 @@ class BbBGPIOWidget(QWidget):
 
         ld_gpiotempsp = QLabel('Temperature Setpoint', self)
         sb_gpiotempsp = SiriusSpinbox(self, self.dev_pref+':FBELT_FAN_SETPT')
-        sb_gpiotempsp.showStepExponent = False
 
         gbox_fbe = QGroupBox('Fan Control', self)
         lay_fbe = QGridLayout(gbox_fbe)
@@ -244,7 +233,6 @@ class BbBGPIOWidget(QWidget):
             '<h4>Max</h4>', self, alignment=Qt.AlignCenter)
         sb_gpioservomax = SiriusSpinbox(
             self, self.dev_pref+':FBELT_SERVO_MAXDELTA')
-        sb_gpioservomax.showStepExponent = False
 
         gbox_phsout = QGroupBox('Phase Servo Output', self)
         lay_phsout = QGridLayout(gbox_phsout)

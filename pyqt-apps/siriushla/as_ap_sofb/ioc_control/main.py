@@ -130,7 +130,6 @@ class SOFBControl(BaseWidget):
         lbl = QLabel('Num. Pts.', orb_wid)
         stp = SiriusSpinbox(
             orb_wid, self.devpref.substitute(propty='SmoothNrPts-SP'))
-        stp.showStepExponent = False
         rdb = SiriusLabel(
             orb_wid, self.devpref.substitute(propty='SmoothNrPts-RB'))
         rdb.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
@@ -291,7 +290,6 @@ class SOFBControl(BaseWidget):
 
         spb = SiriusSpinbox(
             wid, self.devpref.substitute(propty='FOFBDownloadKicksPerc-SP'))
-        spb.showStepExponent = False
         lbl = SiriusLabel(
             wid, self.devpref.substitute(propty='FOFBDownloadKicksPerc-RB'))
         lbl.showUnits = False
@@ -563,7 +561,6 @@ class PerformanceWidget(QWidget):
         slsh.setStyleSheet('min-width:0.7em; max-width:0.7em;')
 
         spb = SiriusSpinbox(self, lamb('LoopPrintEveryNumIters-SP'))
-        spb.showStepExponent = False
         ldrb = SiriusLabel(self, lamb('LoopPrintEveryNumIters-RB'))
         ldmon = SiriusLabel(self, lamb('LoopNumIters-Mon'))
         ld_rate = SiriusLabel(self, lamb('LoopEffectiveRate-Mon'))

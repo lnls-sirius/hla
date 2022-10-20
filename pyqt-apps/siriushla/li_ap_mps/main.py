@@ -92,7 +92,6 @@ class MPSControl(QWidget):
                 parent=self,
                 init_channel=device_name + pv_name + temp_type
             )
-            widget.showStepExponent = False
         else:
             widget = SiriusLabel(
                 parent=self,

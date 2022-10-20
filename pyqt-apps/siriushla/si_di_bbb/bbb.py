@@ -158,15 +158,12 @@ class BbBMainSettingsWidget(QWidget):
 
         ld_sftgain = QLabel('Shift Gain', self)
         sb_sftgain = SiriusSpinbox(self, self.dev_pref+':SHIFTGAIN')
-        sb_sftgain.showStepExponent = False
 
         ld_downspl = QLabel('Downsampling', self)
         sb_downspl = SiriusSpinbox(self, self.dev_pref+':PROC_DS')
-        sb_downspl.showStepExponent = False
 
         ld_satthrs = QLabel('Sat. Threshold [%]', self)
         sb_satthrs = SiriusSpinbox(self, self.dev_pref+':SAT_THRESHOLD')
-        sb_satthrs.showStepExponent = False
 
         lay = QGridLayout()
         lay.addWidget(ld_fbenbl, 1, 0)

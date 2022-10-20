@@ -174,7 +174,6 @@ class MainWindow(BaseObject, SiriusMainWindow):
             'Gain H: ', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         sb_gain_h = SiriusSpinbox(
             self, self.devpref.substitute(propty='LoopGainH-SP'))
-        sb_gain_h.showStepExponent = False
         lb_gain_h = SiriusLabel(
             self, self.devpref.substitute(propty='LoopGainH-RB'))
         lb_gain_mon_h = SiriusLabel(
@@ -184,7 +183,6 @@ class MainWindow(BaseObject, SiriusMainWindow):
             'Gain V: ', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         sb_gain_v = SiriusSpinbox(
             self, self.devpref.substitute(propty='LoopGainV-SP'))
-        sb_gain_v.showStepExponent = False
         lb_gain_v = SiriusLabel(
             self, self.devpref.substitute(propty='LoopGainV-RB'))
         lb_gain_mon_v = SiriusLabel(
