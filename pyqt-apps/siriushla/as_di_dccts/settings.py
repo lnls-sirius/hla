@@ -520,7 +520,7 @@ class DCCTSettingsDetails(QWidget):
         gbox_modesettings.setLayout(flay_modesettings)
         gbox_modesettings.setVisible(visible)
         gbox_modesettings.setStyleSheet("""
-            SiriusLabel{
+            SiriusSpinbox, SiriusLabel{
                 min-width:6em; max-width:6em;
                 qproperty-alignment: AlignCenter;}
             PyDMLedMultiChannel, PyDMStateButton, PyDMEnumComboBox{

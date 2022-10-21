@@ -35,7 +35,6 @@ class FFTConfig(BaseWidget):
         CLASS = PyDMEnumComboBox if enum else SiriusSpinbox
         wid = CLASS(self)
         self._make_connections(wid, pv)
-        if not enum:
         lab = QLabel(label)
         lab.setStyleSheet("""min-width:8em;""")
         self.fl.addRow(lab, wid)
