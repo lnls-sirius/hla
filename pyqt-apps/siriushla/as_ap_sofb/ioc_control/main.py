@@ -269,6 +269,7 @@ class SOFBControl(BaseWidget):
         gdl.addWidget(QLabel('Setpoint', wid), 0, 1)
         gdl.addWidget(QLabel('Status', wid), 0, 2)
         gdl.addWidget(QLabel('Monitor', wid), 0, 3)
+        gdl.addWidget(QLabel('%', wid), 0, 4, alignment=Qt.AlignCenter)
         props = [
             'FOFBDownloadKicks', 'FOFBUpdateRefOrb',
             'FOFBNullSpaceProj', 'FOFBZeroDistortionAtBPMs']
@@ -287,6 +288,17 @@ class SOFBControl(BaseWidget):
             gdl.addWidget(spt, i+1, 1)
             gdl.addWidget(rdb, i+1, 2)
             gdl.addWidget(mon, i+1, 3)
+
+        spb = SiriusSpinbox(
+            wid, self.devpref.substitute(propty='FOFBDownloadKicksPerc-SP'))
+        spb.showStepExponent = False
+        lbl = SiriusLabel(
+            wid, self.devpref.substitute(propty='FOFBDownloadKicksPerc-RB'))
+        lbl.showUnits = False
+        gdl2 = QGridLayout()
+        gdl2.addWidget(spb, 0, 0)
+        gdl2.addWidget(lbl, 1, 0)
+        gdl.addLayout(gdl2, 1, 4)
         gdl.setRowStretch(5, 3)
         return wid
 
