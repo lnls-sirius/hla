@@ -54,21 +54,18 @@ class BeamLineMVS2View(SiriusMainWindow):
         self._ld_rate = QLabel('Acq. Rate: ')
         self._sb_rate = SiriusSpinbox(
             gbox_ctrl, self._device_analysis+':MeasureRate-SP')
-        self._sb_rate.showStepExponent = False
         self._lb_rate = SiriusLabel(
             gbox_ctrl, self._device_analysis+':MeasureRate-RB')
 
         self._ld_tgtx = QLabel('Target X: ')
         self._sb_tgtx = SiriusSpinbox(
             gbox_ctrl, self._device_analysis+':TargetPosX-SP')
-        self._sb_tgtx.showStepExponent = False
         self._lb_tgtx = SiriusLabel(
             gbox_ctrl, self._device_analysis+':TargetPosX-RB')
 
         self._ld_tgty = QLabel('Target Y: ')
         self._sb_tgty = SiriusSpinbox(
             gbox_ctrl, self._device_analysis+':TargetPosY-SP')
-        self._sb_tgty.showStepExponent = False
         self._lb_tgty = SiriusLabel(
             gbox_ctrl, self._device_analysis+':TargetPosY-RB')
 
@@ -132,7 +129,6 @@ class BeamLineMVS2View(SiriusMainWindow):
         self._ld_acqtime = QLabel('Acquire Time: ')
         self._sb_acqtime = SiriusSpinbox(
             gbox_ctrl, self._device_cam + ':cam1:AcquireTime')
-        self._sb_acqtime.showStepExponent = False
         self._sb_acqtime.limitsFromChannel = False
         self._sb_acqtime.setRange(0.001, 10)
         self._lb_acqtime = SiriusLabel(
@@ -142,7 +138,6 @@ class BeamLineMVS2View(SiriusMainWindow):
         self._ld_acqperd = QLabel('Acquire Period: ')
         self._sb_acqperd = SiriusSpinbox(
             gbox_ctrl, self._device_cam + ':cam1:AcquirePeriod')
-        self._sb_acqperd.showStepExponent = False
         self._sb_acqperd.limitsFromChannel = False
         self._sb_acqperd.setRange(0.001, 10)
         self._lb_acqperd = SiriusLabel(

@@ -924,19 +924,16 @@ class PSDetailWidget(QWidget):
 
         self.scope_src_label = QLabel('Source', self)
         self.scope_src_sp_sb = SiriusHexaSpinbox(self, src_sp)
-        self.scope_src_sp_sb.showStepExponent = False
         self.scope_src_rb_lb = SiriusLabel(self, src_rb)
         self.scope_src_rb_lb.displayFormat = SiriusLabel.DisplayFormat.Hex
 
         self.scope_freq_label = QLabel('Frequency [Hz]', self)
         self.scope_freq_sp_sb = SiriusSpinbox(self, freq_sp)
-        self.scope_freq_sp_sb.showStepExponent = False
         self.scope_freq_rb_label = SiriusLabel(self, freq_rb, keep_unit=True)
         self.scope_freq_rb_label.showUnits = True
 
         self.scope_dur_label = QLabel('Duration [s]', self)
         self.scope_dur_sp_sb = SiriusSpinbox(self, dur_sp)
-        self.scope_dur_sp_sb.showStepExponent = False
         self.scope_dur_rb_label = SiriusLabel(self, dur_rb)
         self.scope_dur_rb_label.showUnits = True
 
@@ -1695,7 +1692,6 @@ class FastCorrPSDetailWidget(PSDetailWidget):
         self.ctlkp_sp.limitsFromChannel = False
         self.ctlkp_sp.setMinimum(0.0)
         self.ctlkp_sp.setMaximum(2**31 - 1)
-        self.ctlkp_sp.showStepExponent = False
         self.ctlkp_rb = SiriusLabel(
             self, self._prefixed_psname + ':CurrLoopKp-RB')
 
@@ -1706,7 +1702,6 @@ class FastCorrPSDetailWidget(PSDetailWidget):
         self.ctlti_sp.limitsFromChannel = False
         self.ctlti_sp.setMinimum(0.0)
         self.ctlti_sp.setMaximum(2**31 - 1)
-        self.ctlti_sp.showStepExponent = False
         self.ctlti_rb = SiriusLabel(
             self, self._prefixed_psname + ':CurrLoopTi-RB')
 
@@ -1719,7 +1714,6 @@ class FastCorrPSDetailWidget(PSDetailWidget):
         self.cgain_sp.limitsFromChannel = False
         self.cgain_sp.setMinimum(-1)
         self.cgain_sp.setMaximum(+1)
-        self.cgain_sp.showStepExponent = False
         self.cgain_rb = SiriusLabel(
             self, self._prefixed_psname + ':CurrGain-RB')
         self.cgain_rb.precisionFromPV = False
@@ -1734,7 +1728,6 @@ class FastCorrPSDetailWidget(PSDetailWidget):
         self.coffs_sp.limitsFromChannel = False
         self.coffs_sp.setMinimum(-100)
         self.coffs_sp.setMaximum(+100)
-        self.coffs_sp.showStepExponent = False
         self.coffs_rb = SiriusLabel(
             self, self._prefixed_psname + ':CurrOffset-RB')
         self.coffs_rb.precisionFromPV = False
@@ -1749,7 +1742,6 @@ class FastCorrPSDetailWidget(PSDetailWidget):
         self.vgain_sp.limitsFromChannel = False
         self.vgain_sp.setMinimum(-1)
         self.vgain_sp.setMaximum(+1)
-        self.vgain_sp.showStepExponent = False
         self.vgain_rb = SiriusLabel(
             self, self._prefixed_psname + ':VoltGain-RB')
         self.vgain_rb.precisionFromPV = False
@@ -1764,7 +1756,6 @@ class FastCorrPSDetailWidget(PSDetailWidget):
         self.voffs_sp.limitsFromChannel = False
         self.voffs_sp.setMinimum(-100)
         self.voffs_sp.setMaximum(+100)
-        self.voffs_sp.showStepExponent = False
         self.voffs_rb = SiriusLabel(
             self, self._prefixed_psname + ':VoltOffset-RB')
         self.voffs_rb.precisionFromPV = False
@@ -1800,7 +1791,6 @@ class FastCorrPSDetailWidget(PSDetailWidget):
             'Limit A', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         self.testlima_sp = SiriusSpinbox(
             self, self._prefixed_psname + ':TestLimA-SP')
-        self.testlima_sp.showStepExponent = False
         self.testlima_rb = SiriusLabel(
             self, self._prefixed_psname + ':TestLimA-RB')
 
@@ -1808,7 +1798,6 @@ class FastCorrPSDetailWidget(PSDetailWidget):
             'Limit B', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         self.testlimb_sp = SiriusSpinbox(
             self, self._prefixed_psname + ':TestLimB-SP')
-        self.testlimb_sp.showStepExponent = False
         self.testlimb_rb = SiriusLabel(
             self, self._prefixed_psname + ':TestLimB-RB')
 
@@ -1816,7 +1805,6 @@ class FastCorrPSDetailWidget(PSDetailWidget):
             'Wave Period', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         self.testwaveper_sp = SiriusSpinbox(
             self, self._prefixed_psname + ':TestWavePeriod-SP')
-        self.testwaveper_sp.showStepExponent = False
         self.testwaveper_rb = SiriusLabel(
             self, self._prefixed_psname + ':TestWavePeriod-RB')
 
@@ -1922,7 +1910,6 @@ class FastCorrPSDetailWidget(PSDetailWidget):
             'Acc Gain', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         self.fofbaccgain_sp = SiriusSpinbox(
             self, self._prefixed_psname + ':FOFBAccGain-SP')
-        self.fofbaccgain_sp.showStepExponent = False
         self.fofbaccgain_sp.precisionFromPV = False
         self.fofbaccgain_sp.precision = 8
         self.fofbaccgain_rb = SiriusLabel(

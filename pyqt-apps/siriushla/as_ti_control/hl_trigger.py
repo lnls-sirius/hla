@@ -188,7 +188,6 @@ class HLTriggerDetailed(BaseWidget):
 
         init_channel = self.get_pvname('NrPulses-SP')
         sp = SiriusSpinbox(self, init_channel=init_channel)
-        sp.showStepExponent = False
         init_channel = self.get_pvname('NrPulses-RB')
         rb = SiriusLabel(self, init_channel=init_channel)
         gb = self._create_small_group('Nr Pulses', self.ll_list_wid, (sp, rb))
@@ -196,7 +195,6 @@ class HLTriggerDetailed(BaseWidget):
 
         init_channel = self.get_pvname('Duration-SP')
         sp = SiriusSpinbox(self, init_channel=init_channel)
-        sp.showStepExponent = False
         init_channel = self.get_pvname('Duration-RB')
         rb = SiriusLabel(self, init_channel=init_channel)
         gb = self._create_small_group(
@@ -205,14 +203,12 @@ class HLTriggerDetailed(BaseWidget):
 
         init_channel = self.get_pvname('Delay-SP')
         sp = SiriusSpinbox(self, init_channel=init_channel)
-        sp.showStepExponent = False
         init_channel = self.get_pvname('Delay-RB')
         rb = SiriusLabel(self, init_channel=init_channel)
         gbdel = self._create_small_group('[us]', self.ll_list_wid, (sp, rb))
 
         init_channel = self.get_pvname('DelayRaw-SP')
         sp = SiriusSpinbox(self, init_channel=init_channel)
-        sp.showStepExponent = False
         init_channel = self.get_pvname('DelayRaw-RB')
         rb = SiriusLabel(self, init_channel=init_channel)
         gbdelr = self._create_small_group('Raw', self.ll_list_wid, (sp, rb))
@@ -321,7 +317,6 @@ class _SpinBox(SiriusSpinbox):
     def __init__(self, parent=None, init_channel=None, index=0):
         self._index = index
         super().__init__(parent=parent, init_channel=init_channel)
-        self.showStepExponent = False
 
     def value_changed(self, value):
         self.valueBeingSet = True
@@ -502,13 +497,11 @@ class HLTriggerList(BaseList):
         elif prop == 'pulses':
             init_channel = device.substitute(propty='NrPulses-SP')
             sp = SiriusSpinbox(self, init_channel=init_channel)
-            sp.showStepExponent = False
             init_channel = device.substitute(propty='NrPulses-RB')
             rb = SiriusLabel(self, init_channel=init_channel)
         elif prop == 'duration':
             init_channel = device.substitute(propty='Duration-SP')
             sp = SiriusSpinbox(self, init_channel=init_channel)
-            sp.showStepExponent = False
             init_channel = device.substitute(propty='Duration-RB')
             rb = SiriusLabel(self, init_channel=init_channel)
         elif prop == 'polarity':
@@ -524,13 +517,11 @@ class HLTriggerList(BaseList):
         elif prop == 'delay':
             init_channel = device.substitute(propty='Delay-SP')
             sp = SiriusSpinbox(self, init_channel=init_channel)
-            sp.showStepExponent = False
             init_channel = device.substitute(propty='Delay-RB')
             rb = SiriusLabel(self, init_channel=init_channel)
         elif prop == 'delayraw':
             init_channel = device.substitute(propty='DelayRaw-SP')
             sp = SiriusSpinbox(self, init_channel=init_channel)
-            sp.showStepExponent = False
             init_channel = device.substitute(propty='DelayRaw-RB')
             rb = SiriusLabel(self, init_channel=init_channel)
         elif prop == 'total_delay':

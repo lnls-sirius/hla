@@ -2,9 +2,9 @@
 
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGridLayout, QHBoxLayout, QWidget, QLabel
-from pydm.widgets import PyDMSpinbox, PyDMLineEdit
-from ..widgets import SiriusLabel, SiriusMainWindow, \
-    PyDMLedMultiChannel, SiriusPushButton, PyDMStateButton
+from pydm.widgets import PyDMLineEdit
+from ..widgets import SiriusLabel, SiriusMainWindow, PyDMLedMultiChannel, \
+    SiriusPushButton, PyDMStateButton, SiriusSpinbox
 from .util import MOTOR_CONTROL
 
 
@@ -49,9 +49,8 @@ class MotorControlWindow(SiriusMainWindow):
                 init_channel=pv_name)
             widget.showUnits = True
         elif wid_type == 'spinBox':
-            widget = PyDMSpinbox(
+            widget = SiriusSpinbox(
                 init_channel=pv_name)
-            widget.showStepExponent = False
         elif wid_type == 'state':
             widget = PyDMStateButton(
                 init_channel=pv_name)

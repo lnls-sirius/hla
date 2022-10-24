@@ -53,7 +53,6 @@ class BaseWidget(QWidget):
                     chan1 = self.get_pvname(pv1, is_data=isdata)
                     wid = SiriusSpinbox(self, init_channel=chan1)
                     wid.setStyleSheet("min-width:5em;")
-                    wid.showStepExponent = False
                     wid.limitsFromChannel = False
                     pvn = self.data_prefix + pv1
                     wid.setMinimum(self.bpmdb[pvn].get('low', -1e10))

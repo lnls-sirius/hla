@@ -6,14 +6,14 @@ from qtpy.QtCore import Qt
 from qtpy.QtGui import QColor, QPixmap
 from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, QPushButton, \
     QGroupBox, QVBoxLayout, QSizePolicy as QSzPlcy, QSpacerItem
-from pydm.widgets import PyDMSpinbox, PyDMEnumComboBox, PyDMLineEdit
+from pydm.widgets import PyDMEnumComboBox, PyDMLineEdit
 
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 from siriuspy.namesys import SiriusPVName as _PVName
 
 from ..util import connect_window
 from ..widgets import SiriusFrame, PyDMStateButton, SiriusLedState, \
-    SiriusLabel
+    SiriusLabel, SiriusSpinbox
 from ..widgets.windows import create_window_from_widget
 
 from .custom_widgets import WfmGraph
@@ -70,22 +70,18 @@ class _BbBModalAnalysis(QWidget):
         cb_sel = PyDMEnumComboBox(self, self.prop_pref+'MD_SMODE')
 
         ld_sbnd = QLabel('Sideband', self, alignment=Qt.AlignRight)
-        sb_sbnd = PyDMSpinbox(self, self.prop_pref+'MD_FTUNE')
-        sb_sbnd.showStepExponent = False
+        sb_sbnd = SiriusSpinbox(self, self.prop_pref+'MD_FTUNE')
         sb_sbnd.showUnits = True
 
         ld_span = QLabel('Span', self, alignment=Qt.AlignRight)
-        sb_span = PyDMSpinbox(self, self.prop_pref+'MD_FSPAN')
-        sb_span.showStepExponent = False
+        sb_span = SiriusSpinbox(self, self.prop_pref+'MD_FSPAN')
         sb_span.showUnits = True
 
         ld_mode = QLabel('Mode', self, alignment=Qt.AlignRight)
-        sb_mode = PyDMSpinbox(self, self.prop_pref+'MD_MSEL')
-        sb_mode.showStepExponent = False
+        sb_mode = SiriusSpinbox(self, self.prop_pref+'MD_MSEL')
 
         ld_avg = QLabel('Sample Avg', self, alignment=Qt.AlignRight)
-        sb_avg = PyDMSpinbox(self, self.prop_pref+'MD_AVG')
-        sb_avg.showStepExponent = False
+        sb_avg = SiriusSpinbox(self, self.prop_pref+'MD_AVG')
 
         gb_ctrl = QGroupBox('Acquisition control', self)
         lay_ctrl = QGridLayout(gb_ctrl)
@@ -186,33 +182,28 @@ class _BbBAcqBase(QWidget):
         cb_growenbl = PyDMEnumComboBox(self, self.dev_pref+':GDEN')
 
         ld_down = QLabel('Rec. Downsample ', self)
-        sb_down = PyDMSpinbox(self, self.dev_pref+':'+self.TYPE+'_REC_DS')
-        sb_down.showStepExponent = False
+        sb_down = SiriusSpinbox(self, self.dev_pref+':'+self.TYPE+'_REC_DS')
 
         ld_rawdata = QLabel('Raw Data', self)
         cb_rawdata = PyDMStateButton(self, self.dev_pref+':'+self.TYPE+'_DUMP')
 
         ld_acqtime = QLabel('Acquisition Time', self)
-        sb_acqtime = PyDMSpinbox(self, self.dev_pref+':'+self.TYPE+'_ACQTIME')
-        sb_acqtime.showStepExponent = False
+        sb_acqtime = SiriusSpinbox(self, self.dev_pref+':'+self.TYPE+'_ACQTIME')
         sb_acqtime.showUnits = True
 
         ld_holdoff = QLabel('Hold-Off Time', self)
-        sb_holdoff = PyDMSpinbox(self, self.dev_pref+':'+self.TYPE+'_HOLDTIME')
-        sb_holdoff.showStepExponent = False
+        sb_holdoff = SiriusSpinbox(self, self.dev_pref+':'+self.TYPE+'_HOLDTIME')
         sb_holdoff.showUnits = True
 
         ld_posttrg = QLabel('Post Trigger', self)
-        sb_posttrg = PyDMSpinbox(self, self.dev_pref+':'+self.TYPE+'_POSTTIME')
-        sb_posttrg.showStepExponent = False
+        sb_posttrg = SiriusSpinbox(self, self.dev_pref+':'+self.TYPE+'_POSTTIME')
         sb_posttrg.showUnits = True
         fr_posttrg = SiriusFrame(
             self, self.dev_pref+':'+self.TYPE+'_POSTREG_SUBWR')
         fr_posttrg.add_widget(sb_posttrg)
 
         ld_growtime = QLabel('Growth Time', self)
-        sb_growtime = PyDMSpinbox(self, self.dev_pref+':'+self.TYPE+'_GDTIME')
-        sb_growtime.showStepExponent = False
+        sb_growtime = SiriusSpinbox(self, self.dev_pref+':'+self.TYPE+'_GDTIME')
         sb_growtime.showUnits = True
         fr_growtime = SiriusFrame(
             self, self.dev_pref+':'+self.TYPE+'_GDREG_SUBWR')
@@ -410,8 +401,7 @@ class _BbBAcqBase(QWidget):
             self, self.dev_pref+':'+self.TYPE+'_ACQ_PATTERN')
 
         ld_avg = QLabel('Sample Avg', self)
-        sb_avg = PyDMSpinbox(self, self.dev_pref+':'+self.TYPE+'_SP_AVG')
-        sb_avg.showStepExponent = False
+        sb_avg = SiriusSpinbox(self, self.dev_pref+':'+self.TYPE+'_SP_AVG')
 
         gbox_acqctrl = QGroupBox('Acquisition control', self)
         lay_acqctrl = QGridLayout(gbox_acqctrl)
@@ -531,12 +521,10 @@ class BbBAcqSB(QWidget):
 
     def _setupControlsWidget(self):
         ld_acqtime = QLabel('Acquisition Time [ms]', self)
-        sb_acqtime = PyDMSpinbox(self, self.dev_pref+':SB_ACQTIME')
-        sb_acqtime.showStepExponent = False
+        sb_acqtime = SiriusSpinbox(self, self.dev_pref+':SB_ACQTIME')
 
         ld_bunid = QLabel('Bunch Number', self)
-        sb_bunid = PyDMSpinbox(self, self.dev_pref+':SB_BUNCH_ID')
-        sb_bunid.showStepExponent = False
+        sb_bunid = SiriusSpinbox(self, self.dev_pref+':SB_BUNCH_ID')
 
         ld_acqsmpl = QLabel('Acq Samples', self)
         lb_acqsmpl = SiriusLabel(self, self.dev_pref+':SB_ACQ_SAMPLES')
@@ -584,24 +572,19 @@ class BbBAcqSB(QWidget):
             '<h4>Controls</h4>', self, alignment=Qt.AlignCenter)
 
         ld_bunnr = QLabel('Bunch Number', self)
-        sb_bunnr = PyDMSpinbox(self, self.dev_pref+':SB_BUNCH_ID')
-        sb_bunnr.showStepExponent = False
+        sb_bunnr = SiriusSpinbox(self, self.dev_pref+':SB_BUNCH_ID')
 
         ld_gain = QLabel('Gain', self)
-        sb_gain = PyDMSpinbox(self, self.dev_pref+':PHTRK_GAIN')
-        sb_gain.showStepExponent = False
+        sb_gain = SiriusSpinbox(self, self.dev_pref+':PHTRK_GAIN')
 
         ld_sp = QLabel('Setpoint [deg]', self)
-        sb_sp = PyDMSpinbox(self, self.dev_pref+':PHTRK_SETPT')
-        sb_sp.showStepExponent = False
+        sb_sp = SiriusSpinbox(self, self.dev_pref+':PHTRK_SETPT')
 
         ld_range = QLabel('Range [kHz]', self)
-        sb_range = PyDMSpinbox(self, self.dev_pref+':PHTRK_RANGE')
-        sb_range.showStepExponent = False
+        sb_range = SiriusSpinbox(self, self.dev_pref+':PHTRK_RANGE')
 
         ld_dec = QLabel('Decimation', self)
-        sb_dec = PyDMSpinbox(self, self.dev_pref+':PHTRK_DECIM')
-        sb_dec.showStepExponent = False
+        sb_dec = SiriusSpinbox(self, self.dev_pref+':PHTRK_DECIM')
 
         ld_rate = QLabel('Rate', self)
         lb_rate = SiriusLabel(self, self.dev_pref+':PHTRK_RATE')
@@ -758,8 +741,7 @@ class BbBAcqSB(QWidget):
         le_delaycal = PyDMLineEdit(self, self.dev_pref+':SB_DEL_CAL')
 
         ld_avg = QLabel('Averaging', self)
-        sb_avg = PyDMSpinbox(self, self.dev_pref+':SB_SP_AVG')
-        sb_avg.showStepExponent = False
+        sb_avg = SiriusSpinbox(self, self.dev_pref+':SB_SP_AVG')
 
         gbox_fftsett = QGroupBox(self)
         lay_fftsett = QGridLayout(gbox_fftsett)

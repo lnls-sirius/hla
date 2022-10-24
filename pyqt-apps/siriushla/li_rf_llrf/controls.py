@@ -100,7 +100,6 @@ class ControlBox(QWidget):
                 sppv = basename + ':SET_' + prop
                 rbpv = basename + ':GET_' + prop
                 spa = SiriusSpinbox(self, init_channel=sppv)
-                spa.showStepExponent = False
                 spa.precisionFromPV = False
                 spa.precision = 2
                 rba = SiriusLabel(self, init_channel=rbpv)

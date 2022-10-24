@@ -9,7 +9,7 @@ from qtpy.QtWidgets import QGridLayout, QLabel, QGroupBox, QAbstractItemView, \
     QMessageBox, QApplication, QHBoxLayout
 from qtpy.QtCore import Qt
 import qtawesome as qta
-from pydm.widgets import PyDMLineEdit, PyDMPushButton, PyDMSpinbox
+from pydm.widgets import PyDMLineEdit, PyDMPushButton
 
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriuspy.posang.csdev import Const
@@ -18,7 +18,7 @@ from siriuspy.namesys import SiriusPVName as _PVName
 from siriushla import util as _hlautil
 from siriushla.widgets import SiriusMainWindow, PyDMLogLabel, SiriusLedAlert, \
     PyDMSpinboxScrollbar, PyDMLedMultiChannel, SiriusConnectionSignal, \
-    SiriusLabel, SiriusWaveformTable
+    SiriusLabel, SiriusWaveformTable, SiriusSpinbox
 from siriushla.as_ps_control import PSDetailWindow as _PSDetailWindow
 from siriushla.as_pu_control import PUDetailWindow as _PUDetailWindow
 from siriushla.as_ap_configdb import LoadConfigDialog as _LoadConfigDialog
@@ -153,7 +153,7 @@ class PosAngCorr(SiriusMainWindow):
 
         # stlesheet
         self.setStyleSheet("""
-            PyDMSpinbox{
+            SiriusSpinbox{
                 min-width: 5em; max-width: 5em;
             }
             SiriusLabel, PyDMSpinboxScrollbar{
@@ -171,22 +171,20 @@ class PosAngCorr(SiriusMainWindow):
     def _setupDeltaControlLayout(self, axis=''):
         # pos
         label_pos = QLabel("<h4>Δ"+axis+"</h4>", self)
-        sb_deltapos = PyDMSpinbox(self, self.posang_prefix.substitute(
+        sb_deltapos = SiriusSpinbox(self, self.posang_prefix.substitute(
             propty='DeltaPos'+axis.upper()+'-SP'))
         sb_deltapos.step_exponent = -2
         sb_deltapos.update_step_size()
-        sb_deltapos.showStepExponent = False
         lb_deltapos = SiriusLabel(self, self.posang_prefix.substitute(
             propty='DeltaPos'+axis.upper()+'-RB'), keep_unit=True)
         lb_deltapos.showUnits = True
         self._my_input_widgets.append(sb_deltapos)
         # ang
         label_ang = QLabel("<h4>Δ"+axis+"'</h4>", self)
-        sb_deltaang = PyDMSpinbox(self, self.posang_prefix.substitute(
+        sb_deltaang = SiriusSpinbox(self, self.posang_prefix.substitute(
             propty='DeltaAng'+axis.upper()+'-SP'))
         sb_deltaang.step_exponent = -2
         sb_deltaang.update_step_size()
-        sb_deltaang.showStepExponent = False
         lb_deltaang = SiriusLabel(self, self.posang_prefix.substitute(
             propty='DeltaAng'+axis.upper()+'-RB'), keep_unit=True)
         lb_deltaang.showUnits = True

@@ -104,7 +104,6 @@ class DeviceParamSettingWindow(SiriusMainWindow):
             sppv = self.devpref + ':SET_' + prop
             rbpv = self.devpref + ':GET_' + prop
             spa = SiriusSpinbox(self, init_channel=sppv)
-            spa.showStepExponent = False
             rba = SiriusLabel(self, init_channel=rbpv)
             lay.addWidget(laba, row, 0)
             lay.addWidget(spa, row, 1)
@@ -138,7 +137,6 @@ class DeviceParamSettingWindow(SiriusMainWindow):
             sppv = self.devpref + ':SET_' + prop
             rbpv = self.devpref + ':GET_' + prop
             spa = SiriusSpinbox(self, init_channel=sppv)
-            spa.showStepExponent = False
             rba = SiriusLabel(self, init_channel=rbpv)
             lay.addWidget(laba, row, 0)
             lay.addWidget(spa, row, 1)
@@ -204,7 +202,6 @@ class DeviceParamSettingWindow(SiriusMainWindow):
             sppv = self.devpref + ':SET_' + prop
             rbpv = self.devpref + ':GET_' + prop
             spa = SiriusSpinbox(self, init_channel=sppv)
-            spa.showStepExponent = False
             spa.precisionFromPV = False
             spa.precision = 2
             lay.addWidget(spa, row, 2)
@@ -280,7 +277,6 @@ class DeviceParamSettingWindow(SiriusMainWindow):
             laba = QLabel(name, self)
             sppv = self.devpref + ':SET_' + prop
             spa = SiriusSpinbox(self, init_channel=sppv)
-            spa.showStepExponent = False
             dsc = QLabel('*'+str(factor))
             lay.addWidget(laba, row, 0)
             lay.addWidget(spa, row, 1)
@@ -326,7 +322,6 @@ class DeviceParamSettingWindow(SiriusMainWindow):
             laba = QLabel(name, self)
             sppv = self.devpref + ':SET_' + prop
             spa = SiriusSpinbox(self, init_channel=sppv)
-            spa.showStepExponent = False
             spa.precisionFromPV = False
             spa.precision = 2
             lay.addWidget(laba, row, 0)

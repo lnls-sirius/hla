@@ -4,13 +4,12 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QLabel, QFormLayout, QHBoxLayout, QVBoxLayout, \
     QGridLayout, QGroupBox, QWidget, QSpacerItem, QSizePolicy as QSzPlcy
 import qtawesome as qta
-from pydm.widgets import PyDMSpinbox, PyDMEnumComboBox, \
-    PyDMPushButton, PyDMLineEdit
+from pydm.widgets import PyDMEnumComboBox, PyDMPushButton, PyDMLineEdit
 
 from siriuspy.namesys import SiriusPVName
 from siriushla.widgets import PyDMLedMultiChannel, SiriusMainWindow, \
     PyDMStateButton, SiriusLedState, SiriusConnectionSignal, PyDMLed, \
-    SiriusStringComboBox, SiriusLabel
+    SiriusStringComboBox, SiriusLabel, SiriusSpinbox
 from siriushla.as_ti_control import HLTriggerSimple
 
 
@@ -95,7 +94,7 @@ class TuneDetails(SiriusMainWindow):
                 min-height:1.29em; max-height:1.29em;
                 qproperty-alignment: "AlignVCenter | AlignHCenter";
             }
-            SiriusLabel, PyDMSpinbox, PyDMEnumComboBox,
+            SiriusLabel, SiriusSpinbox, PyDMEnumComboBox,
             PyDMStateButton{
                 min-width:6em; max-width:6em;
             }""")
@@ -228,9 +227,8 @@ class TuneDetails(SiriusMainWindow):
 
         # Harmonic
         lbl_h = QLabel('Harmonic (n)', self)
-        self.sb_h = PyDMSpinbox(
+        self.sb_h = SiriusSpinbox(
             self, self.device.substitute(propty='RevN-SP'))
-        self.sb_h.showStepExponent = False
         self.sb_h.precisionFromPV = True
         self.lb_h = SiriusLabel(
             self, self.device.substitute(propty='RevN-RB'))
@@ -246,9 +244,8 @@ class TuneDetails(SiriusMainWindow):
 
         # Frequency Offset
         lbl_foff = QLabel('Frequency Offset [kHz]', self)
-        self.sb_foff = PyDMSpinbox(
+        self.sb_foff = SiriusSpinbox(
             self, self.device.substitute(propty='FreqOff-SP'))
-        self.sb_foff.showStepExponent = False
         self.sb_foff.precisionFromPV = True
         self.lb_foff = SiriusLabel(
             self, self.device.substitute(propty='FreqOff-RB'))
@@ -280,9 +277,8 @@ class TuneDetails(SiriusMainWindow):
 
         # Amplifier Gain
         lbl_drivegain = QLabel('Amplifier Gain [dB]', self)
-        self.sb_drivegain = PyDMSpinbox(
+        self.sb_drivegain = SiriusSpinbox(
             self, self.device.substitute(propty='AmpGain-SP'))
-        self.sb_drivegain.showStepExponent = False
         self.sb_drivegain.precisionFromPV = True
         self.lb_drivegain = SiriusLabel(
             self, self.device.substitute(propty='AmpGain-RB'))
@@ -304,9 +300,8 @@ class TuneDetails(SiriusMainWindow):
 
             # Noise Amplitude
             lbl_noiseamp = QLabel('Noise Amplitude [V]', self)
-            self.sb_noiseamp = PyDMSpinbox(
+            self.sb_noiseamp = SiriusSpinbox(
                 self, self.device.substitute(propty='NoiseAmpl-SP'))
-            self.sb_noiseamp.showStepExponent = False
             self.sb_noiseamp.precisionFromPV = True
             self.lb_noiseamp = SiriusLabel(
                 self, self.device.substitute(propty='NoiseAmpl-RB'))
@@ -653,7 +648,7 @@ class SITuneMarkerDetails(SiriusMainWindow):
                 min-height:1.29em; max-height:1.29em;
                 qproperty-alignment: "AlignVCenter | AlignHCenter";
             }
-            SiriusLabel, PyDMSpinbox, PyDMEnumComboBox,
+            SiriusLabel, SiriusSpinbox, PyDMEnumComboBox,
             PyDMStateButton{
                 min-width:6em; max-width:6em;
             }""")

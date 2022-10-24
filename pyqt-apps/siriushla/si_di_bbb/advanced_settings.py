@@ -3,12 +3,12 @@
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, QGroupBox, QHBoxLayout
 import qtawesome as qta
-from pydm.widgets import PyDMSpinbox, PyDMEnumComboBox
+from pydm.widgets import PyDMEnumComboBox
 
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 from siriuspy.namesys import SiriusPVName as _PVName
 
-from ..widgets import SiriusFrame, SiriusLabel, SiriusPushButton
+from ..widgets import SiriusFrame, SiriusLabel, SiriusPushButton, SiriusSpinbox
 
 from .custom_widgets import MyScaleIndicator
 from .util import set_bbb_color
@@ -62,26 +62,22 @@ class BbBGeneralSettingsWidget(QWidget):
 
         # # Delay Lines
         ld_adcclock = QLabel('ADC Clock', self)
-        sb_adcclock = PyDMSpinbox(self, self.dev_pref+':ECLDEL0')
-        sb_adcclock.showStepExponent = False
+        sb_adcclock = SiriusSpinbox(self, self.dev_pref+':ECLDEL0')
         fr_adcclock = SiriusFrame(self, self.dev_pref+':ECLDEL0_SUBWR')
         fr_adcclock.add_widget(sb_adcclock)
 
         ld_fidclock = QLabel('Fiducial Clock', self)
-        sb_fidclock = PyDMSpinbox(self, self.dev_pref+':ECLDEL1')
-        sb_fidclock.showStepExponent = False
+        sb_fidclock = SiriusSpinbox(self, self.dev_pref+':ECLDEL1')
         fr_fidclock = SiriusFrame(self, self.dev_pref+':ECLDEL1_SUBWR')
         fr_fidclock.add_widget(sb_fidclock)
 
         ld_fiducial = QLabel('Fiducial', self)
-        sb_fiducial = PyDMSpinbox(self, self.dev_pref+':ECLDEL2')
-        sb_fiducial.showStepExponent = False
+        sb_fiducial = SiriusSpinbox(self, self.dev_pref+':ECLDEL2')
         fr_fiducial = SiriusFrame(self, self.dev_pref+':ECLDEL2_SUBWR')
         fr_fiducial.add_widget(sb_fiducial)
 
         ld_dacclock = QLabel('DAC Clock', self)
-        sb_dacclock = PyDMSpinbox(self, self.dev_pref+':ECLDEL3')
-        sb_dacclock.showStepExponent = False
+        sb_dacclock = SiriusSpinbox(self, self.dev_pref+':ECLDEL3')
         fr_dacclock = SiriusFrame(self, self.dev_pref+':ECLDEL3_SUBWR')
         fr_dacclock.add_widget(sb_dacclock)
 
@@ -107,8 +103,7 @@ class BbBGeneralSettingsWidget(QWidget):
         cb_fidlvlenbl = PyDMEnumComboBox(
             self, self.dev_pref+':LEVEL_FID_ENABLE')
         cb_fidlvlenbl.setStyleSheet('max-width:3em;')
-        sb_fidv = PyDMSpinbox(self, self.dev_pref+':AD5644_V_CH9')
-        sb_fidv.showStepExponent = False
+        sb_fidv = SiriusSpinbox(self, self.dev_pref+':AD5644_V_CH9')
         sb_fidv.showUnits = True
         fr_fidv = SiriusFrame(self, self.dev_pref+':AD5644CH9_SUBWR')
         fr_fidv.add_widget(sb_fidv)
@@ -118,8 +113,7 @@ class BbBGeneralSettingsWidget(QWidget):
         cb_trg1lvlenbl = PyDMEnumComboBox(
             self, self.dev_pref+':LEVEL_TRIG1_ENABLE')
         cb_trg1lvlenbl.setStyleSheet('max-width:3em;')
-        sb_trg1lvlv = PyDMSpinbox(self, self.dev_pref+':LEVEL_VTRIG1')
-        sb_trg1lvlv.showStepExponent = False
+        sb_trg1lvlv = SiriusSpinbox(self, self.dev_pref+':LEVEL_VTRIG1')
         sb_trg1lvlv.showUnits = True
         fr_trg1lvlv = SiriusFrame(
             self, self.dev_pref+':AD5644CH10_SUBWR')
@@ -132,8 +126,7 @@ class BbBGeneralSettingsWidget(QWidget):
         cb_trg2lvlenbl = PyDMEnumComboBox(
             self, self.dev_pref+':LEVEL_TRIG2_ENABLE')
         cb_trg2lvlenbl.setStyleSheet('max-width:3em;')
-        sb_trg2lvlv = PyDMSpinbox(self, self.dev_pref+':LEVEL_VTRIG2')
-        sb_trg2lvlv.showStepExponent = False
+        sb_trg2lvlv = SiriusSpinbox(self, self.dev_pref+':LEVEL_VTRIG2')
         sb_trg2lvlv.showUnits = True
         fr_trg2lvlv = SiriusFrame(self, self.dev_pref+':AD5644CH8_SUBWR')
         fr_trg2lvlv.add_widget(sb_trg2lvlv)
@@ -141,8 +134,7 @@ class BbBGeneralSettingsWidget(QWidget):
         cb_trg2edge.setStyleSheet('max-width:3.2em;')
 
         ld_dacoff = QLabel('DAC Offset', self)
-        sb_dacoff = PyDMSpinbox(self, self.dev_pref+':AD5644_V_CH11')
-        sb_dacoff.showStepExponent = False
+        sb_dacoff = SiriusSpinbox(self, self.dev_pref+':AD5644_V_CH11')
         sb_dacoff.showUnits = True
         fr_dacoff = SiriusFrame(self, self.dev_pref+':AD5644CH11_SUBWR')
         fr_dacoff.add_widget(sb_dacoff)
@@ -179,14 +171,12 @@ class BbBGeneralSettingsWidget(QWidget):
         ld_sfir = QLabel('Shaper FIR ([C0 2^17 C2])', self)
 
         ld_firc0 = QLabel('C0', self)
-        sb_firc0 = PyDMSpinbox(self, self.dev_pref+':SHAPE_C0')
-        sb_firc0.showStepExponent = False
+        sb_firc0 = SiriusSpinbox(self, self.dev_pref+':SHAPE_C0')
         fr_firc0 = SiriusFrame(self, self.dev_pref+':SHAPE_C0_SUBWR')
         fr_firc0.add_widget(sb_firc0)
 
         ld_firc2 = QLabel('C2', self)
-        sb_firc2 = PyDMSpinbox(self, self.dev_pref+':SHAPE_C2')
-        sb_firc2.showStepExponent = False
+        sb_firc2 = SiriusSpinbox(self, self.dev_pref+':SHAPE_C2')
         fr_firc2 = SiriusFrame(self, self.dev_pref+':SHAPE_C2_SUBWR')
         fr_firc2.add_widget(sb_firc2)
 
@@ -231,32 +221,28 @@ class BbBSlowDACsWidget(QWidget):
 
         ld_dacch0 = QLabel('0', self, alignment=Qt.AlignCenter)
         ld_dacch0.setStyleSheet('font-weight: bold; max-width: 3em;')
-        sb_dacch0 = PyDMSpinbox(self, self.dev_pref+':AD5644_V_CH0')
-        sb_dacch0.showStepExponent = False
+        sb_dacch0 = SiriusSpinbox(self, self.dev_pref+':AD5644_V_CH0')
         sb_dacch0.showUnits = True
         fr_dacch0 = SiriusFrame(self, self.dev_pref+':AD5644CH0_SUBWR')
         fr_dacch0.add_widget(sb_dacch0)
 
         ld_dacch1 = QLabel('1', self, alignment=Qt.AlignCenter)
         ld_dacch1.setStyleSheet('font-weight: bold; max-width: 3em;')
-        sb_dacch1 = PyDMSpinbox(self, self.dev_pref+':AD5644_V_CH1')
-        sb_dacch1.showStepExponent = False
+        sb_dacch1 = SiriusSpinbox(self, self.dev_pref+':AD5644_V_CH1')
         sb_dacch1.showUnits = True
         fr_dacch1 = SiriusFrame(self, self.dev_pref+':AD5644CH1_SUBWR')
         fr_dacch1.add_widget(sb_dacch1)
 
         ld_dacch2 = QLabel('2', self, alignment=Qt.AlignCenter)
         ld_dacch2.setStyleSheet('font-weight: bold; max-width: 3em;')
-        sb_dacch2 = PyDMSpinbox(self, self.dev_pref+':AD5644_V_CH2')
-        sb_dacch2.showStepExponent = False
+        sb_dacch2 = SiriusSpinbox(self, self.dev_pref+':AD5644_V_CH2')
         sb_dacch2.showUnits = True
         fr_dacch2 = SiriusFrame(self, self.dev_pref+':AD5644CH2_SUBWR')
         fr_dacch2.add_widget(sb_dacch2)
 
         ld_dacch3 = QLabel('3', self, alignment=Qt.AlignCenter)
         ld_dacch3.setStyleSheet('font-weight: bold; max-width: 3em;')
-        sb_dacch3 = PyDMSpinbox(self, self.dev_pref+':AD5644_V_CH3')
-        sb_dacch3.showStepExponent = False
+        sb_dacch3 = SiriusSpinbox(self, self.dev_pref+':AD5644_V_CH3')
         sb_dacch3.showUnits = True
         fr_dacch3 = SiriusFrame(self, self.dev_pref+':AD5644CH3_SUBWR')
         fr_dacch3.add_widget(sb_dacch3)
@@ -267,32 +253,28 @@ class BbBSlowDACsWidget(QWidget):
 
         ld_dacch4 = QLabel('4', self, alignment=Qt.AlignCenter)
         ld_dacch4.setStyleSheet('font-weight: bold; max-width: 3em;')
-        sb_dacch4 = PyDMSpinbox(self, self.dev_pref+':AD5644_V_CH4')
-        sb_dacch4.showStepExponent = False
+        sb_dacch4 = SiriusSpinbox(self, self.dev_pref+':AD5644_V_CH4')
         sb_dacch4.showUnits = True
         fr_dacch4 = SiriusFrame(self, self.dev_pref+':AD5644CH4_SUBWR')
         fr_dacch4.add_widget(sb_dacch4)
 
         ld_dacch5 = QLabel('5', self, alignment=Qt.AlignCenter)
         ld_dacch5.setStyleSheet('font-weight: bold; max-width: 3em;')
-        sb_dacch5 = PyDMSpinbox(self, self.dev_pref+':AD5644_V_CH5')
-        sb_dacch5.showStepExponent = False
+        sb_dacch5 = SiriusSpinbox(self, self.dev_pref+':AD5644_V_CH5')
         sb_dacch5.showUnits = True
         fr_dacch5 = SiriusFrame(self, self.dev_pref+':AD5644CH5_SUBWR')
         fr_dacch5.add_widget(sb_dacch5)
 
         ld_dacch6 = QLabel('6', self, alignment=Qt.AlignCenter)
         ld_dacch6.setStyleSheet('font-weight: bold; max-width: 3em;')
-        sb_dacch6 = PyDMSpinbox(self, self.dev_pref+':AD5644_V_CH6')
-        sb_dacch6.showStepExponent = False
+        sb_dacch6 = SiriusSpinbox(self, self.dev_pref+':AD5644_V_CH6')
         sb_dacch6.showUnits = True
         fr_dacch6 = SiriusFrame(self, self.dev_pref+':AD5644CH6_SUBWR')
         fr_dacch6.add_widget(sb_dacch6)
 
         ld_dacch7 = QLabel('7', self, alignment=Qt.AlignCenter)
         ld_dacch7.setStyleSheet('font-weight: bold; max-width: 3em;')
-        sb_dacch7 = PyDMSpinbox(self, self.dev_pref+':AD5644_V_CH7')
-        sb_dacch7.showStepExponent = False
+        sb_dacch7 = SiriusSpinbox(self, self.dev_pref+':AD5644_V_CH7')
         sb_dacch7.showUnits = True
         fr_dacch7 = SiriusFrame(self, self.dev_pref+':AD5644CH7_SUBWR')
         fr_dacch7.add_widget(sb_dacch7)
@@ -448,15 +430,13 @@ class BbBInterlock(QWidget):
         # ld_cyc.setStyleSheet('font-weight: bold; max-width: 3em;')
 
         ld_sat = QLabel('Saturation Time', self)
-        sb_sat = PyDMSpinbox(self, self.dev_pref+':ILOCK_TSAT')
-        sb_sat.showStepExponent = False
+        sb_sat = SiriusSpinbox(self, self.dev_pref+':ILOCK_TSAT')
         sb_sat.showUnits = True
         lb_sat = SiriusLabel(self, self.dev_pref+':ILOCK_TSAT_T2C')
         lb_sat.setAlignment(Qt.AlignCenter)
 
         ld_tim = QLabel('Timeout', self)
-        sb_tim = PyDMSpinbox(self, self.dev_pref+':ILOCK_TOUT')
-        sb_tim.showStepExponent = False
+        sb_tim = SiriusSpinbox(self, self.dev_pref+':ILOCK_TOUT')
         sb_tim.showUnits = True
         lb_tim = SiriusLabel(self, self.dev_pref+':ILOCK_TOUT_T2C')
         lb_tim.setAlignment(Qt.AlignCenter)
@@ -486,28 +466,23 @@ class BbBInterlock(QWidget):
             '<h3>Sensitivity Controls</h3>', self, alignment=Qt.AlignCenter)
 
         ld_tun = QLabel('Fractional Tune', self)
-        sb_tun = PyDMSpinbox(self, self.dev_pref+':ILOCK_TUNE')
-        sb_tun.showStepExponent = False
+        sb_tun = SiriusSpinbox(self, self.dev_pref+':ILOCK_TUNE')
         sb_tun.showUnits = True
 
         ld_tap = QLabel('Filter Taps', self)
-        sb_tap = PyDMSpinbox(self, self.dev_pref+':ILOCK_TAPS')
-        sb_tap.showStepExponent = False
+        sb_tap = SiriusSpinbox(self, self.dev_pref+':ILOCK_TAPS')
         sb_tap.showUnits = True
 
         ld_cal = QLabel('Calibration', self)
-        sb_cal = PyDMSpinbox(self, self.dev_pref+':ILOCK_FE_CAL')
-        sb_cal.showStepExponent = False
+        sb_cal = SiriusSpinbox(self, self.dev_pref+':ILOCK_FE_CAL')
         sb_cal.showUnits = True
 
         ld_ncur = QLabel('Nominal Current', self)
-        sb_ncur = PyDMSpinbox(self, self.dev_pref+':ILOCK_CURRENT')
-        sb_ncur.showStepExponent = False
+        sb_ncur = SiriusSpinbox(self, self.dev_pref+':ILOCK_CURRENT')
         sb_ncur.showUnits = True
 
         ld_thr = QLabel('Threshold', self)
-        sb_thr = PyDMSpinbox(self, self.dev_pref+':ILOCK_THRESH')
-        sb_thr.showStepExponent = False
+        sb_thr = SiriusSpinbox(self, self.dev_pref+':ILOCK_THRESH')
         sb_thr.showUnits = True
 
         pb_upt = SiriusPushButton(

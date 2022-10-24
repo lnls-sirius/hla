@@ -134,7 +134,6 @@ class LIEgunWindow(SiriusMainWindow):
         self._ld_hvpsvoltsp = QLabel('Voltage SP [kV]', self)
         self._sb_hvpsvoltsp = SiriusSpinbox(
             self, self.prefix+self.dev_pref+':EG-HVPS:voltoutsoft')
-        self._sb_hvpsvoltsp.showStepExponent = False
 
         self._ld_hvpsvoltrb = QLabel('Voltage RB [kV]', self)
         self._lb_hvpsvoltrb = SiriusLabel(
@@ -151,7 +150,6 @@ class LIEgunWindow(SiriusMainWindow):
         self._ld_hvpscurrsp = QLabel('Current SP [mA]')
         self._sb_hvpscurrsp = SiriusSpinbox(
             self, self.prefix+self.dev_pref+':EG-HVPS:currentoutsoft')
-        self._sb_hvpscurrsp.showStepExponent = False
 
         self._ld_hvpscurrrb = QLabel('Current RB [mA]')
         self._lb_hvpscurrrb = SiriusLabel(
@@ -216,7 +214,6 @@ class LIEgunWindow(SiriusMainWindow):
         self._ld_filacurrsp = QLabel('Current SP [A]', self)
         self._sb_filacurrsp = SiriusSpinbox(
             self, self.prefix+self.dev_pref+':EG-FilaPS:currentoutsoft')
-        self._sb_filacurrsp.showStepExponent = False
 
         self._ld_filacurrrb = QLabel('Current RB [A]', self)
         self._lb_filacurrrb = SiriusLabel(
@@ -252,7 +249,6 @@ class LIEgunWindow(SiriusMainWindow):
         self._ld_biasvoltsp = QLabel('Voltage SP [V]', self)
         self._sb_biasvoltsp = SiriusSpinbox(
             self, self.prefix+self.dev_pref+':EG-BiasPS:voltoutsoft')
-        self._sb_biasvoltsp.showStepExponent = False
 
         self._ld_biasvoltrb = QLabel('Voltage RB [V]', self)
         self._lb_biasvoltrb = SiriusLabel(
@@ -327,7 +323,6 @@ class LIEgunWindow(SiriusMainWindow):
         self._sb_mpulspwrsp.limitsFromChannel = False
         self._sb_mpulspwrsp.setMinimum(0)
         self._sb_mpulspwrsp.setMaximum(300)
-        self._sb_mpulspwrsp.showStepExponent = False
         self._ld_mpulspwrrb = QLabel('Power RB [V]', self)
         self._lb_mpulspwrrb = SiriusLabel(
             self, self.prefix+self.dev_pref+':EG-PulsePS:powerinsoft')

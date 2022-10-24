@@ -314,7 +314,6 @@ class AuxCommDialog(BaseObject, SiriusDialog):
                     pref = self.devpref
                     spw = SiriusSpinbox(
                         self, pref.substitute(propty=dev+'AccSatMax-SP'))
-                    spw.showStepExponent = False
                     rbw = SiriusLabel(
                         self, pref.substitute(propty=dev+'AccSatMax-RB'))
                     hlay = QHBoxLayout()
@@ -333,7 +332,6 @@ class AuxCommDialog(BaseObject, SiriusDialog):
                     alignment=Qt.AlignRight | Qt.AlignVCenter)
                 spw = SiriusSpinbox(
                     self, pref.substitute(propty='TimeFrameLen-SP'))
-                spw.showStepExponent = False
                 rbw = SiriusLabel(
                     self, pref.substitute(propty='TimeFrameLen-RB'))
                 glay2.addWidget(lbl, 0, 0)
