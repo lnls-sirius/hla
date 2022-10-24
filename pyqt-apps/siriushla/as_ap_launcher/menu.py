@@ -59,7 +59,6 @@ def get_object(ismenubar=True, parent=None):
             ts_apps = self._create_section_menu('TS', 'TS')
             si_apps = self._create_section_menu('SI', 'SI')
             id_apps = self._create_id_menu()
-            bl_apps = self._create_bl_menu()
             tool_apps = self._create_tool_menu()
             it_apps = self._create_it_menu()
 
@@ -71,7 +70,6 @@ def get_object(ismenubar=True, parent=None):
             self.add_object_to_level0(ts_apps)
             self.add_object_to_level0(si_apps)
             self.add_object_to_level0(id_apps)
-            self.add_object_to_level0(bl_apps)
             self.add_object_to_level0(tool_apps)
             self.add_object_to_level0(it_apps)
 
@@ -431,17 +429,6 @@ def get_object(ismenubar=True, parent=None):
                 self.connect_newprocess(
                     APU, ['sirius-hla-si-id-control.py', '-dev', idname])
                 self.add_object_to_level1(menu, APU)
-
-            return menu
-
-        def _create_bl_menu(self):
-            menu = LEVEL1('BL', self)
-            menu.setObjectName('IDApp')
-
-            Manaca = LEVEL2A('MANACA', menu)
-            self.connect_newprocess(
-                Manaca, ['sirius-hla-si-ap-manaca.py'])
-            self.add_object_to_level1(menu, Manaca)
 
             return menu
 
