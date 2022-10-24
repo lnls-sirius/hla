@@ -22,7 +22,8 @@ from pydm.widgets import PyDMPushButton
 
 from ..util import connect_window
 from ..widgets import SiriusConnectionSignal as _ConnSignal, SiriusLedAlert, \
-    SiriusDialog, PyDMLedMultiChannel, SiriusLabel, SiriusSpinbox
+    SiriusDialog, PyDMLedMultiChannel, SiriusLabel, SiriusSpinbox, PyDMLed, \
+    PyDMStateButton, SiriusLedState
 from ..widgets.windows import create_window_from_widget
 from ..as_ap_configdb import LoadConfigDialog
 from ..as_di_bpms.triggers import LogicalTriggers
@@ -286,9 +287,10 @@ class AuxCommDialog(BaseObject, SiriusDialog):
             'Correctors': {
                 'Set all current to zero': 'CorrSetCurrZero-Cmd',
                 'Clear all Acc': 'CorrSetAccClear-Cmd',
-                # 'Set all OpMode to Manual': 'CorrSetOpModeManual-Cmd',
-                # 'Set all AccFreeze to Enbl': 'CorrSetAccFreezeEnbl-Cmd',
-                # 'Set all AccFreeze to Dsbl': 'CorrSetAccFreezeDsbl-Cmd',
+                'Set all PwrState to On': 'CorrSetPwrStateOn-Cmd',
+                'Set all OpMode to Manual': 'CorrSetOpModeManual-Cmd',
+                'Set all AccFreeze to Enbl': 'CorrSetAccFreezeEnbl-Cmd',
+                'Set all AccFreeze to Dsbl': 'CorrSetAccFreezeDsbl-Cmd',
             },
             'Controllers': {
                 'Sync Net': 'FOFBCtrlSyncNet-Cmd',
@@ -322,21 +324,33 @@ class AuxCommDialog(BaseObject, SiriusDialog):
                     hlay.addWidget(rbw)
                     glay.addLayout(hlay)
             elif 'Control' in group:
+                glay2 = QGridLayout()
+                glay2.setContentsMargins(0, 0, 0, 0)
+
+                pref = self.devpref
                 lbl = QLabel(
                     'TimeFrameLen: ', self,
                     alignment=Qt.AlignRight | Qt.AlignVCenter)
-                pref = self.devpref
                 spw = SiriusSpinbox(
                     self, pref.substitute(propty='TimeFrameLen-SP'))
                 spw.showStepExponent = False
                 rbw = SiriusLabel(
                     self, pref.substitute(propty='TimeFrameLen-RB'))
-                hlay = QHBoxLayout()
-                hlay.setContentsMargins(0, 0, 0, 0)
-                hlay.addWidget(lbl)
-                hlay.addWidget(spw)
-                hlay.addWidget(rbw)
-                glay.addLayout(hlay)
+                glay2.addWidget(lbl, 0, 0)
+                glay2.addWidget(spw, 0, 1)
+                glay2.addWidget(rbw, 0, 2)
+
+                lbl = QLabel(
+                    'Consider BPMEnblList in Sync: ', self,
+                    alignment=Qt.AlignRight | Qt.AlignVCenter)
+                pvn = pref.substitute(propty='FOFBCtrlSyncUseEnblList-Sel')
+                sbt = PyDMStateButton(self, pvn)
+                led = SiriusLedState(self, pvn.substitute(propty_suffix='Sts'))
+                glay2.addWidget(lbl, 1, 0)
+                glay2.addWidget(sbt, 1, 1)
+                glay2.addWidget(led, 1, 2)
+
+                glay.addLayout(glay2)
             elif 'BPM' in group:
                 swbpm = BPMSwModeWidget(self, self.device, self.prefix)
                 glay.addWidget(swbpm)
@@ -374,6 +388,12 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
             self.dccids.append(bid)
 
         self._setupUi()
+
+        self._ch_synenls = _ConnSignal(
+            self.devpref.substitute(propty='FOFBCtrlSyncEnblList-Mon'))
+        self._ch_synenls.new_value_signal[_np.ndarray].connect(
+            self._update_dcc_enbllist)
+
         self.setFocusPolicy(Qt.StrongFocus)
 
     def _setupUi(self):
@@ -427,8 +447,11 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
             QLabel('<h4>Device</h4>', self, alignment=Qt.AlignCenter), 0, 0)
         lay.addWidget(
             QLabel('<h4>BPM Count</h4>', self, alignment=Qt.AlignCenter), 0, 1)
+        lay.addWidget(
+            QLabel('<h4>Enable</h4>', self, alignment=Qt.AlignCenter), 0, 2)
 
         # table
+        self.leds_sync, self.leds_dccsts = dict(), dict()
         for idx, dcc in enumerate(self.dccnames):
             row = idx + 1
             lbl = QLabel(dcc, self, alignment=Qt.AlignCenter)
@@ -437,12 +460,36 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
             lay.addWidget(lbl, row, 0)
             lay.addWidget(plb, row, 1)
 
+            pvn = _PVName(dcc).substitute(prefix=self.prefix) + 'CCEnable-RB'
+            led = PyDMLed(self, pvn)
+            led.setObjectName('led_status')
+            led.shape = led.ShapeMap.Square
+            if 'FOFBCtrl' in dcc:
+                led.offColor = led.Red
+            self.leds_dccsts[dcc] = led
+            lay.addWidget(led, row, 2, alignment=Qt.AlignTop)
+
             if 'FMC' in dcc:
                 c2v = {pvn: FOFBCtrlDCC.DEF_FMC_BPMCNT}
                 led = PyDMLedMultiChannel(self, c2v)
-                lay.addWidget(led, row, 2)
+                self.leds_sync[dcc] = led
+                lay.addWidget(led, row, 3)
 
         return self._build_scroll_area(wid)
+
+    def _update_dcc_enbllist(self, value):
+        for dcc, led in self.leds_sync.items():
+            pvn = _PVName(dcc).substitute(prefix=self.prefix) + 'BPMCnt-Mon'
+            c2v = {pvn: int(_np.sum(value))}
+            led.set_channels2values(c2v)
+        for idx, bpm in enumerate(self._csorb.bpm_names):
+            led = self.leds_dccsts[bpm+':DCCP2P']
+            if value[idx]:
+                led.offColor = led.Red
+                led.onColor = led.LightGreen
+            else:
+                led.offColor = led.DarkGreen
+                led.onColor = led.Red
 
     def _setupLinkPartnerTab(self):
         wid = QWidget()
@@ -671,5 +718,6 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
         widget.setStyleSheet(
             '#widget{background-color: transparent;}'
             'QLabel{border: 1px solid gray; min-height: 1.5em;}'
-            '#lbl_bpmname{border: 0px solid gray; min-height: 1.5em;}')
+            '#lbl_bpmname{border: 0px solid gray; min-height: 1.5em;}'
+            '#led_status{border: 1px solid gray; min-height: 1.5em;}')
         return area
