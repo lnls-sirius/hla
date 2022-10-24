@@ -6,10 +6,10 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGridLayout, QVBoxLayout, QHBoxLayout, QWidget, \
     QSizePolicy as QSzPlcy, QGroupBox, QLabel, QPushButton, QAction
 
-from pydm.widgets import PyDMSpinbox, PyDMPushButton
+from pydm.widgets import PyDMPushButton
 from siriuspy.namesys import SiriusPVName
 from siriushla import util
-from siriushla.widgets import SiriusLabel
+from siriushla.widgets import SiriusLabel, SiriusSpinbox
 from siriushla.as_ap_posang import CorrParamsDetailWindow
 from siriushla.as_ap_injcontrol.base import BaseWindow
 
@@ -125,10 +125,9 @@ class InjBOControlWindow(BaseWindow):
             lb_pos = QLabel('<h4>Δ'+axis.lower()+'</h4>', self,
                             alignment=Qt.AlignRight)
             lb_pos.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
-            pos_sp = PyDMSpinbox(
+            pos_sp = SiriusSpinbox(
                 self, posang_prefix.substitute(propty='DeltaPos'+axis+'-SP'))
             pos_sp.setObjectName('pos_sp_'+axis.lower())
-            pos_sp.showStepExponent = False
             pos_rb = SiriusLabel(
                 self, posang_prefix.substitute(propty='DeltaPos'+axis+'-RB'),
                 keep_unit=True)
@@ -137,10 +136,9 @@ class InjBOControlWindow(BaseWindow):
             lb_ang = QLabel('<h4>Δ'+axis.lower()+'\'</h4>', self,
                             alignment=Qt.AlignRight)
             lb_ang.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
-            ang_sp = PyDMSpinbox(
+            ang_sp = SiriusSpinbox(
                 self, posang_prefix.substitute(propty='DeltaAng'+axis+'-SP'))
             ang_sp.setObjectName('ang_sp_'+axis.lower())
-            ang_sp.showStepExponent = False
             ang_rb = SiriusLabel(
                 self, posang_prefix.substitute(propty='DeltaAng'+axis+'-RB'),
                 keep_unit=True)

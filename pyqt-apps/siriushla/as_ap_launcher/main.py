@@ -221,7 +221,6 @@ class MainLauncher(SiriusMainWindow):
             '<h4>Target Curr.</h4>', self, alignment=Qt.AlignCenter)
         self._sb_currtgt = SiriusSpinbox(
             self, injctrl_dev.substitute(propty='TargetCurrent-SP'))
-        self._sb_currtgt.showStepExponent = False
         self._lb_currtgt = SiriusLabel(
             self, injctrl_dev.substitute(propty='TargetCurrent-RB'),
             keep_unit=True)

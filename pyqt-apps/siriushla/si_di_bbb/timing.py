@@ -4,12 +4,12 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, \
     QGroupBox
 import qtawesome as qta
-from pydm.widgets import PyDMSpinbox
 
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 from siriuspy.namesys import SiriusPVName as _PVName
 
-from ..widgets import SiriusFrame, SiriusSpinbox, SiriusLabel, SiriusPushButton
+from ..widgets import SiriusFrame, SiriusSpinbox, SiriusLabel, \
+    SiriusPushButton, SiriusSpinbox
 from .util import set_bbb_color
 
 
@@ -31,14 +31,11 @@ class BbBTimingWidget(QWidget):
 
         # Feedback Timing
         ld_adcdelay = QLabel('ADC Delay [ps]', self)
-        sb_adcdelay = PyDMSpinbox(self, self.dev_pref+':TADC')
-        sb_adcdelay.showStepExponent = False
+        sb_adcdelay = SiriusSpinbox(self, self.dev_pref+':TADC')
         ld_dacdelay = QLabel('DAC Delay [ps]', self)
-        sb_dacdelay = PyDMSpinbox(self, self.dev_pref+':TDAC')
-        sb_dacdelay.showStepExponent = False
+        sb_dacdelay = SiriusSpinbox(self, self.dev_pref+':TDAC')
         ld_outdelay = QLabel('Output Delay', self)
-        sb_outdelay = PyDMSpinbox(self, self.dev_pref+':DELAY')
-        sb_outdelay.showStepExponent = False
+        sb_outdelay = SiriusSpinbox(self, self.dev_pref+':DELAY')
 
         gbox_fbti = QGroupBox('Feedback Timing', self)
         lay_fbti = QGridLayout(gbox_fbti)
@@ -61,13 +58,11 @@ class BbBTimingWidget(QWidget):
 
         ld_fidsigoff = QLabel('FID Signal Offset [ps]', self)
         sb_fidsigoff = SiriusSpinbox(self, self.dev_pref+':OFF_FIDS')
-        sb_fidsigoff.showStepExponent = False
         sb_fidsigoff.limitsFromChannel = False
         sb_fidsigoff.setMinimum(0)
         sb_fidsigoff.setMaximum(3000)
         ld_fiddelay = QLabel('Fiducial Delay', self)
-        sb_fiddelay = PyDMSpinbox(self, self.dev_pref+':FID_DELAY')
-        sb_fiddelay.showStepExponent = False
+        sb_fiddelay = SiriusSpinbox(self, self.dev_pref+':FID_DELAY')
         fr_fiddelay = SiriusFrame(self, self.dev_pref+':FID_DELAY_SUBWR')
         fr_fiddelay.add_widget(sb_fiddelay)
 

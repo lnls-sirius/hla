@@ -89,7 +89,6 @@ class PhysicalTriggers(BaseWidget):
         chan = self.get_pvname(pvn)
         spbx = SiriusSpinbox(
             grpbx, init_channel=chan)
-        spbx.showStepExponent = False
         spbx.limitsFromChannel = False
         low = self.bpmdb[pvn].get('low', -1e10)
         high = self.bpmdb[pvn].get('high', 1e10)
@@ -104,7 +103,6 @@ class PhysicalTriggers(BaseWidget):
         chan = self.get_pvname(pvn)
         spbx = SiriusSpinbox(
             grpbx, init_channel=chan)
-        spbx.showStepExponent = False
         spbx.limitsFromChannel = False
         low = self.bpmdb[pvn].get('low', -1e10)
         high = self.bpmdb[pvn].get('high', 1e10)
@@ -184,7 +182,6 @@ class LogicalTriggers(BaseWidget):
         chan = self.get_pvname(pvn)
         spbx = SiriusSpinbox(
             grpbx, init_channel=chan)
-        spbx.showStepExponent = False
         spbx.limitsFromChannel = False
         low = self.bpmdb[pvn].get('low', -1e10)
         high = self.bpmdb[pvn].get('high', 1e10)
@@ -199,7 +196,6 @@ class LogicalTriggers(BaseWidget):
         chan = self.get_pvname(pvn)
         spbx = SiriusSpinbox(
             grpbx, init_channel=chan)
-        spbx.showStepExponent = False
         spbx.limitsFromChannel = False
         low = self.bpmdb[pvn].get('low', -1e10)
         high = self.bpmdb[pvn].get('high', 1e10)

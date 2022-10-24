@@ -62,7 +62,6 @@ class BaseWidget(BaseObject, QWidget):
             lay = QHBoxLayout(wid)
         lay.setContentsMargins(0, 0, 0, 0)
         pdm_spbx = SiriusSpinbox(wid, basename.substitute(propty_suffix='SP'))
-        pdm_spbx.showStepExponent = False
         pdm_lbl = SiriusLabel(wid, basename.substitute(propty_suffix='RB'))
         pdm_lbl.setAlignment(Qt.AlignCenter)
         lay.addWidget(pdm_spbx)

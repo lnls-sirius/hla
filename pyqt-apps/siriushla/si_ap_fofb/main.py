@@ -124,6 +124,7 @@ class MainWindow(BaseObject, SiriusMainWindow):
         pvname = self.devpref.substitute(propty='FOFBCtrlStatus-Mon')
         labels = _FOFBEnums.STS_LBLS_FOFBCTRL
         cmds = [None]*len(labels)
+        cmds[1] = self.devpref.substitute(propty='FOFBCtrlConfBPMId-Cmd')
         cmds[2] = self.devpref.substitute(propty='FOFBCtrlSyncNet-Cmd')
         cmds[4] = self.devpref.substitute(propty='FOFBCtrlSyncRefOrb-Cmd')
         cmds[5] = self.devpref.substitute(propty='FOFBCtrlConfTFrameLen-Cmd')
@@ -174,7 +175,6 @@ class MainWindow(BaseObject, SiriusMainWindow):
             'Gain H: ', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         sb_gain_h = SiriusSpinbox(
             self, self.devpref.substitute(propty='LoopGainH-SP'))
-        sb_gain_h.showStepExponent = False
         lb_gain_h = SiriusLabel(
             self, self.devpref.substitute(propty='LoopGainH-RB'))
         lb_gain_mon_h = SiriusLabel(
@@ -184,7 +184,6 @@ class MainWindow(BaseObject, SiriusMainWindow):
             'Gain V: ', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         sb_gain_v = SiriusSpinbox(
             self, self.devpref.substitute(propty='LoopGainV-SP'))
-        sb_gain_v.showStepExponent = False
         lb_gain_v = SiriusLabel(
             self, self.devpref.substitute(propty='LoopGainV-RB'))
         lb_gain_mon_v = SiriusLabel(

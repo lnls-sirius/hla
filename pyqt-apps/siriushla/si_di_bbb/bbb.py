@@ -4,7 +4,7 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, \
     QGroupBox, QSpacerItem, QSizePolicy as QSzPlcy, QPushButton, QHBoxLayout
 import qtawesome as qta
-from pydm.widgets import PyDMSpinbox, PyDMEnumComboBox
+from pydm.widgets import PyDMEnumComboBox
 
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 from siriuspy.namesys import SiriusPVName as _PVName
@@ -12,7 +12,8 @@ from siriuspy.namesys import SiriusPVName as _PVName
 from ..util import connect_window, connect_newprocess
 from ..widgets.windows import create_window_from_widget
 from ..widgets import SiriusMainWindow, SiriusLedAlert, PyDMStateButton, \
-    PyDMLedMultiChannel, DetachableTabWidget, SiriusLabel, SiriusPushButton
+    PyDMLedMultiChannel, DetachableTabWidget, SiriusLabel, SiriusPushButton, \
+    SiriusSpinbox
 
 from .acquisition import BbBAcqSRAM, BbBAcqBRAM, BbBAcqSB
 from .coefficients import BbBCoefficientsWidget
@@ -156,16 +157,13 @@ class BbBMainSettingsWidget(QWidget):
         cb_coefsel = PyDMEnumComboBox(self, self.dev_pref+':SETSEL')
 
         ld_sftgain = QLabel('Shift Gain', self)
-        sb_sftgain = PyDMSpinbox(self, self.dev_pref+':SHIFTGAIN')
-        sb_sftgain.showStepExponent = False
+        sb_sftgain = SiriusSpinbox(self, self.dev_pref+':SHIFTGAIN')
 
         ld_downspl = QLabel('Downsampling', self)
-        sb_downspl = PyDMSpinbox(self, self.dev_pref+':PROC_DS')
-        sb_downspl.showStepExponent = False
+        sb_downspl = SiriusSpinbox(self, self.dev_pref+':PROC_DS')
 
         ld_satthrs = QLabel('Sat. Threshold [%]', self)
-        sb_satthrs = PyDMSpinbox(self, self.dev_pref+':SAT_THRESHOLD')
-        sb_satthrs.showStepExponent = False
+        sb_satthrs = SiriusSpinbox(self, self.dev_pref+':SAT_THRESHOLD')
 
         lay = QGridLayout()
         lay.addWidget(ld_fbenbl, 1, 0)
