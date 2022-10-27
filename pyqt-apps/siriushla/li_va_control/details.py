@@ -10,14 +10,14 @@ from ..widgets import SiriusMainWindow
 class IpsDetailWindow(SiriusMainWindow, BaseFunctionsInterface):
     """ Display IPS Detail Window"""
 
-    def __init__(self, parent=None, prefix='', id_ips=''):
+    def __init__(self, parent=None, prefix='', id_num=''):
         """Init."""
         super().__init__(parent)
         self.prefix = prefix
         self.main_dev = PVS_CONFIG["Pump"]["prefix"]
-        self.devpref = self.prefix + self.main_dev + self.buildIdName(id_ips)
+        self.devpref = self.prefix + self.main_dev + self.buildIdName(id_num)
         self.setObjectName('LIApp')
-        title = "IPS "+str(id_ips)+" Details"
+        title = "IPS "+str(id_num)+" Details"
         self.setWindowTitle(title)
         self._setupUi(title)
 
@@ -85,14 +85,14 @@ class IpsDetailWindow(SiriusMainWindow, BaseFunctionsInterface):
 class VgcDetailWindow(SiriusMainWindow, BaseFunctionsInterface):
     """ Display VGC Detail Window"""
 
-    def __init__(self, parent=None, prefix='', id_vgc=''):
+    def __init__(self, parent=None, prefix='', id_num=''):
         """Init."""
         super().__init__(parent)
         self.config = PVS_CONFIG["Vacuum"]
         self.prefix = prefix
         self.main_dev = self.config["prefix"]
         self.setObjectName('LIApp')
-        self.number, gen = self.buildIdsVac(id_vgc)
+        self.number, gen = self.buildIdsVac(id_num)
         title = "VGC "+str(self.number)+" Details"
         self.setWindowTitle(title)
         self.devpref = self.prefix + self.main_dev
@@ -167,18 +167,17 @@ class DetailWindow(SiriusMainWindow, BaseFunctionsInterface):
         """Init."""
         super().__init__(parent)
         self.devpref = ""
-        self.window = None
         self.setObjectName('LIApp')
         self.setWindowTitle("Vacuum Details")
         self._setupUi()
 
-    def selWindow(self, cat, id_win=0):
+    def selWindow(self, cat):
         """ Open selected window with click """
         if cat == "Pump":
-            self.window = IpsDetailWindow(id_ips=id_win)
+            window = IpsDetailWindow
         else:
-            self.window = VgcDetailWindow(id_vgc=id_win)
-        self.window.show()
+            window = VgcDetailWindow
+        return window
 
     def setupAllDevices(self, title, data, lay, pos):
         """ Display the VGC informations of one device"""

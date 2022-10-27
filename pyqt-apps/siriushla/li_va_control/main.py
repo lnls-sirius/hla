@@ -1,6 +1,7 @@
 """Main window of the Vacuum Control."""
 
 import os as _os
+from .. import util as _util
 from qtpy.QtCore import Qt, QEvent
 from qtpy.QtWidgets import QWidget, QGridLayout, QVBoxLayout, QLabel, \
     QPushButton
@@ -30,8 +31,6 @@ class VacuumMain(QWidget, BaseFunctionsInterface):
         self.vgc_list = []
         self.graphs = []
         self.gen_btn = []
-        self.window = None
-
         self._setupui()
 
     def eventFilter(self, obj, event):
@@ -56,17 +55,17 @@ class VacuumMain(QWidget, BaseFunctionsInterface):
         else:
             self.pump_list.append(widget)
 
-    def selWindow(self, cat, id_win=0):
+    def selWindow(self, cat):
         """ Open selected window with click """
         if cat == "CCG Graphs":
-            self.window = ChartWindow()
+            window = ChartWindow
         elif cat == "Pump":
-            self.window = IpsDetailWindow(id_ips=id_win)
+            window = IpsDetailWindow
         elif cat == "Vacuum":
-            self.window = VgcDetailWindow(id_vgc=id_win)
+            window = VgcDetailWindow
         else:
-            self.window = DetailWindow()
-        self.window.show()
+            window = DetailWindow
+        return window
 
     def imageViewer(self):
         """Build the image"""
@@ -164,7 +163,13 @@ class VacuumMain(QWidget, BaseFunctionsInterface):
     def buildAllLegendsRel(self):
         """ Display Legend in a relative widget"""
         size = LEGEND['size']
-        coord = [50, 85]
+        coord = [50, 82.5]
+        title = QLabel(
+            "<strong>LEGEND</strong>",
+            alignment=Qt.AlignCenter)
+        self.saveRelWid(
+            title, [10,10], coord)
+        coord[1] += 5
         for leg in ['CCG', 'PRG']:
             self.saveRelWid(
                 self.setupLegend(leg), size, coord)
@@ -178,8 +183,8 @@ class VacuumMain(QWidget, BaseFunctionsInterface):
         count = 0
         for title in ['Details', 'CCG Graphs']:
             btn = QPushButton(title)
-            btn.clicked.connect(
-                lambda state, title=title: self.selWindow(title))
+            _util.connect_window(
+                btn, self.selWindow(title), self)
             self.gen_btn.append(btn)
             self.saveRelWid(
                 self.gen_btn[-1],

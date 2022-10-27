@@ -1,14 +1,16 @@
 """ Basic functions """
 import math as _math
 import qtawesome as _qta
+from siriushla.li_rf_llrf.chart import ChartWindow
+from .. import util as _util
 from qtpy.QtCore import Qt
 from pydm.widgets.display_format import DisplayFormat as _DisplayFormat
 from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, \
-    QHBoxLayout, QVBoxLayout, QPushButton, QSizePolicy
+    QHBoxLayout, QVBoxLayout, QPushButton, QSizePolicy, QGroupBox
 from .util import COLORS, IPS_DETAILS, LEGEND
-from .widgets import LedLegend, QGroupBoxButton
+from .widgets import LedLegend, QGroupBoxButton, PyDMLedMultiIncosistencyDetector
 from ..widgets import SiriusLabel, PyDMLed, PyDMLedMultiChannel, \
-    SiriusLineEdit, SiriusEnumComboBox, PyDMStateButton
+    SiriusLineEdit, SiriusEnumComboBox, PyDMStateButton, SiriusLedAlert
 from ..si_di_bbb.custom_widgets import MyScaleIndicator
 
 
@@ -31,11 +33,11 @@ class BaseFunctionsInterface():
         """ Build and configure widgets used """
         pv_name = self.devpref + name
         if wid_type == 'led':
-            if 'ReadS' in name:
-                bit = 1
+            if "ReadS.B4" in pv_name:
+                led_type = 'alert'
             else:
-                bit = -1
-            widget = self.buildLed(pv_name, '', 'normal', bit)
+                led_type = 'normal'
+            widget = self.buildLed(pv_name, '', led_type)
         elif wid_type == 'enum':
             widget = SiriusEnumComboBox(
                 self, init_channel=pv_name)
@@ -114,30 +116,35 @@ class BaseFunctionsInterface():
     def setWindowBtn(self, cat, id_num):
         """ Create and configure button to open detail windows """
         button = QPushButton(_qta.icon('fa5s.ellipsis-h'), '', self)
-        button.clicked.connect(
-            lambda: self.selWindow(cat, id_num))
+        _util.connect_window(
+            button, self.selWindow(cat),
+            parent=self, id_num=id_num)
         button.setStyleSheet("margin: 0.1em;")
         return button
 
-    def buildLed(self, pv_name, sufix_list, comp, bit=-1):
+    def buildLed(self, pv_name, sufix_list, comp):
         """ Build and configure different types of Led """
         if comp == 'normal':
             if "Gauge" in pv_name:
                 comp = 'diff'
             led = PyDMLed(
-                init_channel=pv_name + sufix_list, bit=bit)
-        else:
-            if comp == 'on/off':
-                chan2vals = {
-                    pv_name + sufix_list[0]: 1,
-                    pv_name + sufix_list[1]: 0
-                }
-            elif comp == 'equal':
-                chan2vals = {
-                    pv_name + sufix_list[0]: 1,
-                    pv_name + sufix_list[1]: 1
-                }
+                init_channel=pv_name + sufix_list)
+        elif comp == 'alert':
+            led = SiriusLedAlert(
+                self, init_channel=pv_name)
+        elif comp == 'on/off':
+            chan2vals = {
+                pv_name + sufix_list[0]: 1,
+                pv_name + sufix_list[1]: 0
+            }
             led = PyDMLedMultiChannel(
+                self, chan2vals)
+        else:
+            chan2vals = {
+                pv_name + sufix_list[0]: 1,
+                pv_name + sufix_list[1]: 1
+            }
+            led = PyDMLedMultiIncosistencyDetector(
                 self, chan2vals)
         shape = getShape(comp)
         led.shape = shape
@@ -185,6 +192,7 @@ class BaseFunctionsInterface():
         prog_bar.setStyleSheet('min-height:1em; min-width:'+str(width)+'em;')
         return prog_bar
 
+
     def buildBasicGroup(self, cat, id_num, orient="V"):
         """ Build anc configure group template """
         group = QGroupBoxButton(
@@ -201,21 +209,26 @@ class BaseFunctionsInterface():
             group.setObjectName("group")
             group.setStyleSheet(
                 "QGroupBox#group{background-color:"+COLORS['btn_bg']+"};")
-            group.clicked.connect(
-                lambda: self.selWindow(cat, id_num))
+            window = self.selWindow(cat)
+            windowConfig = window(self, id_num=id_num)
+            group.clicked.connect(lambda: windowConfig.show())
         return lay, group
 
     def buildAllLegends(self, listleg=LEGEND):
         """ Display all the legends """
-        wid, lay = self.getLayoutWidget("H")
-        lay.setSpacing(0)
-        lay.setContentsMargins(0, 0, 0, 0)
+        group = QGroupBox()
+        lay = QHBoxLayout()
+        group.setLayout(lay)
+        group.setContentsMargins(0, 0, 0, 0)
+        col = 0
+        group.setTitle("LEGEND")
         for leg in listleg:
             if leg != 'size':
                 lay.addWidget(
                     self.setupLegend(leg),
                     alignment=Qt.AlignTop)
-        return wid
+                col += 1
+        return group
 
     def setupLegend(self, legend):
         """ Show one of the legends present in the LEGEND variable in util"""

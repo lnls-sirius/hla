@@ -108,8 +108,10 @@ IPS_DETAILS = {
             "widget": "enum"
         },
         {
-            "status": ":ReadS",
-            "widget": "led"
+            "title": "FAILED(RESET)",
+            "status": ":ReadS.B4",
+            "control": ":Reset",
+            "widget": "state"
         }
     ],
     "Parameters": [

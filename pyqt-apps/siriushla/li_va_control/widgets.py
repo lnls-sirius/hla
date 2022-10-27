@@ -2,7 +2,7 @@
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QGroupBox
 from qtpy.QtGui import QPainter, QBrush, QPen, QColor
-
+from ..widgets import PyDMLedMultiChannel
 
 class LedLegend(QWidget):
     """ Drawing of a Led for the Legend """
@@ -51,6 +51,31 @@ class LedLegend(QWidget):
         painter.setPen(QPen(Qt.black, 1, Qt.SolidLine))
         self.drawSingleLed(painter, QColor(self.color), 0, 100)
         painter.end()
+
+
+
+class PyDMLedMultiIncosistencyDetector(PyDMLedMultiChannel):
+    """ Drawing of a Led for the Legend """
+
+    LightGreen = QColor(0, 140, 0)
+    Yellow = QColor(210, 205, 0)
+    Red = QColor(207, 0, 0)
+
+    def __init__(self, parent=None, channels2values=dict(), color_list=[Red, LightGreen, Yellow]):
+        """."""
+        super().__init__(parent=parent, channels2values=channels2values, color_list=color_list)
+
+    def _update_statuses(self):
+        first_pv = list(self._address2status.keys())[0]
+        final_state = self._address2status[first_pv]
+        if not self._connected:
+            final_state = 2
+        else:
+            for status in self._address2status.values():
+                if status != final_state:
+                    final_state = 2
+                    break
+        self.setState(final_state)
 
 
 class QGroupBoxButton(QGroupBox):
