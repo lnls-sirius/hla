@@ -367,6 +367,7 @@ class KickWidget(BaseObject, QWidget):
             graph.setLabel('bottom', text='Position', units='m')
             graph.setLabel('left', text='Kick', units='rad')
             graph.showLegend = False
+            graph.maxRedrawRate = 8  # [Hz]
 
             # kicks
             color = 'blue' if plane == 'h' else 'red'
