@@ -297,6 +297,17 @@ class SOFBControl(BaseWidget):
         gdl2.addWidget(spb, 0, 0)
         gdl2.addWidget(lbl, 1, 0)
         gdl.addLayout(gdl2, 1, 4)
+
+        spb = SiriusSpinbox(
+            wid, self.devpref.substitute(propty='FOFBUpdateRefOrbPerc-SP'))
+        lbl = SiriusLabel(
+            wid, self.devpref.substitute(propty='FOFBUpdateRefOrbPerc-RB'))
+        lbl.showUnits = False
+        gdl2 = QGridLayout()
+        gdl2.addWidget(spb, 0, 0)
+        gdl2.addWidget(lbl, 1, 0)
+        gdl.addLayout(gdl2, 2, 4)
+
         gdl.setRowStretch(5, 3)
         return wid
 
