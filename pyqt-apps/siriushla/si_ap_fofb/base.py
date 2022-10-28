@@ -13,6 +13,7 @@ class BaseObject(_BaseObject):
     """Base object."""
 
     UM2M = 1e-6
+    UM2NM = 1e3
     URAD2RAD = 1e-6
 
     def __init__(self, device, prefix=''):
