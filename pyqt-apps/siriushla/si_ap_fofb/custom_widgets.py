@@ -713,7 +713,7 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
 
         self._ch_odt = _ConnSignal(
             self.devpref.substitute(propty='LoopMaxOrbDistortion-RB'))
-        self._ch_odt.new_value_signal[int].connect(
+        self._ch_odt.new_value_signal[float].connect(
             self._update_reforbdist)
         self._ch_odd = _ConnSignal(
             self.devpref.substitute(propty='LoopMaxOrbDistortionEnbl-Sts'))
