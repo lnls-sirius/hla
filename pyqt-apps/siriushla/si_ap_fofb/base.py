@@ -2,9 +2,12 @@
 
 from qtpy.QtWidgets import QWidget
 
+import qtawesome as qta
+
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.fofb.csdev import HLFOFBConst
 
+from ..util import get_appropriate_color
 from ..as_ap_sofb.ioc_control.base import BaseObject as _BaseObject, \
     BaseWidget as _BaseWidget
 
@@ -47,3 +50,13 @@ class BaseWidget(_BaseWidget, BaseObject):
         BaseObject.__init__(self, device, prefix)
         QWidget.__init__(self, parent)
         self.setObjectName('SIApp')
+
+
+def get_fofb_icon(color=True):
+    """Return default icon."""
+    iconcolor = get_appropriate_color('SI') if color else None
+    return qta.icon(
+        'fa5s.hammer', 'fa5s.signal', options=[
+            dict(scale_factor=0.85, offset=(0.15, 0.0)),
+            dict(scale_factor=0.7, offset=(0.0, 0.25), rotated=90,
+                 vflip=True)], color=iconcolor)

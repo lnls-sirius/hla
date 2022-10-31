@@ -20,6 +20,7 @@ from siriushla.widgets.windows import create_window_from_widget
 from siriushla.as_ap_configdb.pvsconfigs import SelectAndApplyPVsWidget
 from siriushla.as_di_scrns.list_scrns import get_scrn_list
 from siriushla.as_di_dccts.main import get_dcct_list
+from siriushla.si_ap_fofb import get_fofb_icon
 
 
 def get_pushbutton(name, parent):
@@ -482,12 +483,7 @@ def get_object(ismenubar=True, parent=None):
 
             if sec == 'si':
                 fofb = QAction('FOFB', optics)
-                fofb.setIcon(qta.icon(
-                    'fa5s.hammer', 'fa5s.signal',
-                    options=[
-                        dict(scale_factor=0.85, offset=(0.15, 0.0)),
-                        dict(scale_factor=0.7, offset=(0.0, 0.25),
-                             rotated=90, vflip=True)]))
+                fofb.setIcon(get_fofb_icon(color=False))
                 self.connect_newprocess(fofb, 'sirius-hla-si-ap-fofb.py')
                 optics.addAction(fofb)
 

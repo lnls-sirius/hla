@@ -10,12 +10,12 @@ from pydm.widgets import PyDMPushButton
 from siriuspy.fofb.csdev import ETypes as _FOFBEnums
 from siriushla.widgets.led import SiriusLedState
 
-from ..util import connect_window, get_appropriate_color
+from ..util import connect_window
 from ..widgets import SiriusLedAlert, SiriusLabel, SiriusSpinbox, \
     PyDMLogLabel, SiriusMainWindow, PyDMStateButton
 from ..widgets.windows import create_window_from_widget
 
-from .base import BaseObject
+from .base import BaseObject, get_fofb_icon
 from .custom_widgets import RefOrbWidget, StatusDialog, AuxCommDialog, \
     ControllersDetailDialog
 from .respmat import RespMatWidget
@@ -30,14 +30,7 @@ class MainWindow(BaseObject, SiriusMainWindow):
         SiriusMainWindow.__init__(self, parent)
         self.setWindowTitle('SI - FOFB')
         self.setObjectName('SIApp')
-        self.setWindowIcon(
-            qta.icon(
-                'fa5s.hammer', 'fa5s.signal',
-                options=[
-                    dict(scale_factor=0.85, offset=(0.15, 0.0)),
-                    dict(scale_factor=0.7, offset=(0.0, 0.25),
-                         rotated=90, vflip=True)],
-                color=get_appropriate_color('SI')))
+        self.setWindowIcon(get_fofb_icon())
         self._setupUi()
         self.setFocusPolicy(Qt.StrongFocus)
 
