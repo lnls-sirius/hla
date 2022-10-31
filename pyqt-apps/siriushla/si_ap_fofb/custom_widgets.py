@@ -53,7 +53,7 @@ class RefOrbWidget(BaseObject, QWidget):
         self._ch_refy = _ConnSignal(
             self.devpref.substitute(propty='RefOrbY-SP'))
         self._ch_syncref = _ConnSignal(
-            self.devpref.substitute(propty='FOFBCtrlSyncRefOrb-Cmd'))
+            self.devpref.substitute(propty='CtrlrSyncRefOrb-Cmd'))
 
         sofb_prefix = _PVName('SI-Glob:AP-SOFB').substitute(prefix=self.prefix)
         self._ch_sofb_orbx = _ConnSignal(
@@ -214,17 +214,20 @@ class BPMSwModeWidget(BaseObject, QWidget):
     def __init__(self, parent, device, prefix=''):
         BaseObject.__init__(self, device, prefix)
         QWidget.__init__(self, parent)
-        bnames = self._csorb.bpm_names
         props = ['SwMode-Sel', ]
-        self._bpm_devs = [Device(b, props, auto_mon=True) for b in bnames]
+        self._bpm_devs = [
+            Device(b, props, auto_mon=True) for b in self._csorb.bpm_names]
         self._setupUi()
         self._init_dict = {}
         self._init = False
+        self._pv_objs = list()
         for dev in self._bpm_devs:
             pvo = dev.pv_object('SwMode-Sel')
             pvo.add_callback(self._set_initial_value)
+            pvo.add_callback(self._update_current_value)
             if pvo.connected:
                 self._set_initial_value(pvo.pvname, pvo.value)
+            self._pv_objs.append(pvo)
 
     def _setupUi(self):
         lbl = QLabel(
@@ -241,12 +244,21 @@ class BPMSwModeWidget(BaseObject, QWidget):
         lay.addWidget(self.sel)
         lay.addWidget(self.sts)
 
-    def _set_swithing_mode(self, text):
+    def _set_swithing_mode(self, text, do_sp=True):
         mode = _csbpm.SwModes._fields.index(text)
-        for dev in self._bpm_devs:
-            dev['SwMode-Sel'] = mode
-        ch2vals = {
-            bpm+':SwMode-Sts': mode for bpm in self._csorb.bpm_names}
+        if do_sp:
+            for dev in self._bpm_devs:
+                dev['SwMode-Sel'] = mode
+        else:
+            self.blockSignals(True)
+            self.sel.setCurrentText(text)
+            self.blockSignals(False)
+
+        ch2vals = dict()
+        for bpm in self._csorb.bpm_names:
+            pvn = _PVName(bpm).substitute(
+                prefix=self.prefix, propty='SwMode-Sts')
+            ch2vals[pvn] = mode
         self.sts.set_channels2values(ch2vals)
 
     def _set_initial_value(self, pvname, value, **kws):
@@ -263,13 +275,23 @@ class BPMSwModeWidget(BaseObject, QWidget):
         value = vals[_np.argmax(cnts)]
         mode = _csbpm.SwModes._fields[value]
 
-        ch2vals = {
-            bpm+':SwMode-Sts': value for bpm in self._csorb.bpm_names}
+        ch2vals = dict()
+        for bpm in self._csorb.bpm_names:
+            pvn = _PVName(bpm).substitute(
+                prefix=self.prefix, propty='SwMode-Sts')
+            ch2vals[pvn] = value
         self.sts.set_channels2values(ch2vals)
 
         self.sel.setCurrentText(mode)
         self.sel.currentTextChanged.connect(self._set_swithing_mode)
 
+    def _update_current_value(self, value, **kws):
+        if not self._init:
+            return
+        if not _np.all([pvo.value == value for pvo in self._pv_objs]):
+            return
+        mode = _csbpm.SwModes._fields[value]
+        self._set_swithing_mode(mode, do_sp=False)
 
 class AuxCommDialog(BaseObject, SiriusDialog):
     """Auxiliary command dialog."""
@@ -293,12 +315,11 @@ class AuxCommDialog(BaseObject, SiriusDialog):
                 'Set all AccFreeze to Dsbl': 'CorrSetAccFreezeDsbl-Cmd',
             },
             'Controllers': {
-                'Sync Net': 'FOFBCtrlSyncNet-Cmd',
-                'Sync RefOrb': 'FOFBCtrlSyncRefOrb-Cmd',
-                # 'Configure TimeFrameLength': 'FOFBCtrlConfTFrameLen-Cmd',
+                'Sync Net': 'CtrlrSyncNet-Cmd',
+                'Sync RefOrb': 'CtrlrSyncRefOrb-Cmd',
             },
             'BPMs': {
-                'Configure BPM Log.Trigs.': 'FOFBCtrlConfBPMLogTrg-Cmd',
+                'Configure BPM Log.Trigs.': 'CtrlrConfBPMLogTrg-Cmd',
             },
         }
         lay = QVBoxLayout(self)
@@ -309,7 +330,7 @@ class AuxCommDialog(BaseObject, SiriusDialog):
             if 'Corr' in group:
                 for dev in ['CH', 'CV']:
                     lbl = QLabel(
-                        dev+' Sat. Limit (A): ', self,
+                        dev+' Sat. Limit [A]: ', self,
                         alignment=Qt.AlignRight | Qt.AlignVCenter)
                     pref = self.devpref
                     spw = SiriusSpinbox(
@@ -341,12 +362,33 @@ class AuxCommDialog(BaseObject, SiriusDialog):
                 lbl = QLabel(
                     'Consider BPMEnblList in Sync: ', self,
                     alignment=Qt.AlignRight | Qt.AlignVCenter)
-                pvn = pref.substitute(propty='FOFBCtrlSyncUseEnblList-Sel')
+                pvn = pref.substitute(propty='CtrlrSyncUseEnblList-Sel')
                 sbt = PyDMStateButton(self, pvn)
                 led = SiriusLedState(self, pvn.substitute(propty_suffix='Sts'))
                 glay2.addWidget(lbl, 1, 0)
                 glay2.addWidget(sbt, 1, 1)
                 glay2.addWidget(led, 1, 2)
+
+                lbl = QLabel(
+                    'Orbit Distortion Threshold [um]: ', self,
+                    alignment=Qt.AlignRight | Qt.AlignVCenter)
+                spw = SiriusSpinbox(
+                    self, pref.substitute(propty='LoopMaxOrbDistortion-SP'))
+                rbw = SiriusLabel(
+                    self, pref.substitute(propty='LoopMaxOrbDistortion-RB'))
+                glay2.addWidget(lbl, 2, 0)
+                glay2.addWidget(spw, 2, 1)
+                glay2.addWidget(rbw, 2, 2)
+
+                lbl = QLabel(
+                    'Enable Orbit Distortion Detection: ', self,
+                    alignment=Qt.AlignRight | Qt.AlignVCenter)
+                pvn = pref.substitute(propty='LoopMaxOrbDistortionEnbl-Sel')
+                sbt = PyDMStateButton(self, pvn)
+                led = SiriusLedState(self, pvn.substitute(propty_suffix='Sts'))
+                glay2.addWidget(lbl, 3, 0)
+                glay2.addWidget(sbt, 3, 1)
+                glay2.addWidget(led, 3, 2)
 
                 glay.addLayout(glay2)
             elif 'BPM' in group:
@@ -388,7 +430,7 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
         self._setupUi()
 
         self._ch_synenls = _ConnSignal(
-            self.devpref.substitute(propty='FOFBCtrlSyncEnblList-Mon'))
+            self.devpref.substitute(propty='CtrlrSyncEnblList-Mon'))
         self._ch_synenls.new_value_signal[_np.ndarray].connect(
             self._update_dcc_enbllist)
 
@@ -402,6 +444,8 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
         tab.addTab(self._setupLinkPartnerTab(), 'DCC Linked Partners')
         tab.addTab(self._setupRefOrbTab(), 'RefOrb Sync Status')
         tab.addTab(self._setupTimeFrameLenTab(), 'DCC TimeFrameLen')
+        tab.addTab(self._setupOrbDistTab(), 'Orbit Distortion Detection')
+        tab.addTab(self._setupIntlkTab(), 'Interlock')
         tab.addTab(self._setupBPMLogTrigTab(), 'BPM Logical Trigger Configs')
 
         lay = QVBoxLayout(self)
@@ -648,6 +692,96 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
     def _update_reftimeframelen(self, value):
         for pvn, led in self._led_timeframelen.items():
             led.set_channels2values({pvn: value})
+
+    def _setupOrbDistTab(self):
+        wid = QWidget()
+        lay = QGridLayout(wid)
+        lay.setSpacing(1)
+        lay.setAlignment(Qt.AlignLeft | Qt.AlignTop)
+
+        # header
+        lay.addWidget(
+            QLabel('<h4>Device</h4>', self, alignment=Qt.AlignCenter), 0, 0)
+        lay.addWidget(
+            QLabel('<h4>Threshold</h4>', self, alignment=Qt.AlignCenter), 0, 1)
+        lay.addWidget(
+            QLabel('<h4>Enable</h4>', self, alignment=Qt.AlignCenter), 0, 2)
+
+        # table
+        self.leds_odd = dict()
+        for idx, ctl in enumerate(self.ctrlrs):
+            row = idx + 1
+            c2v = dict()
+
+            lbl = QLabel(ctl, self, alignment=Qt.AlignCenter)
+            pvn = _PVName(ctl).substitute(
+                prefix=self.prefix, propty='MaxOrbDistortion-RB')
+            c2v[pvn] = 0
+            plb = SiriusLabel(self, pvn)
+            lay.addWidget(lbl, row, 0)
+            lay.addWidget(plb, row, 1)
+
+            pvn = _PVName(ctl).substitute(
+                prefix=self.prefix, propty='MaxOrbDistortionEnbl-Sts')
+            c2v[pvn] = 0
+            led = SiriusLedState(self, pvn)
+            led.setObjectName('led_status')
+            led.shape = led.ShapeMap.Square
+            lay.addWidget(led, row, 2, alignment=Qt.AlignTop)
+
+            led = PyDMLedMultiChannel(self, c2v)
+            self.leds_odd[ctl] = led
+            lay.addWidget(led, row, 3)
+
+        self._ch_odt = _ConnSignal(
+            self.devpref.substitute(propty='LoopMaxOrbDistortion-RB'))
+        self._ch_odt.new_value_signal[float].connect(
+            self._update_reforbdist)
+        self._ch_odd = _ConnSignal(
+            self.devpref.substitute(propty='LoopMaxOrbDistortionEnbl-Sts'))
+        self._ch_odd.new_value_signal[int].connect(
+            self._update_reforbdist)
+
+        return self._build_scroll_area(wid)
+
+    def _update_reforbdist(self, _):
+        odt = self._ch_odt.value
+        odd = self._ch_odd.value
+        if odt is None or odd is None:
+            return
+        odt = int(odt*self.UM2NM)
+        for ctl, led in self.leds_odd.items():
+            pref = _PVName(ctl).substitute(prefix=self.prefix)
+            c2v = {
+                pref.substitute(propty='MaxOrbDistortion-RB'): odt,
+                pref.substitute(propty='MaxOrbDistortionEnbl-Sts'): odd,
+            }
+            led.set_channels2values(c2v)
+
+    def _setupIntlkTab(self):
+        wid = QWidget()
+        lay = QGridLayout(wid)
+        lay.setSpacing(1)
+        lay.setAlignment(Qt.AlignLeft | Qt.AlignTop)
+
+        # header
+        lay.addWidget(
+            QLabel('<h4>Device</h4>', self, alignment=Qt.AlignCenter), 0, 0)
+        lay.addWidget(
+            QLabel('<h4>Interlock</h4>', self, alignment=Qt.AlignCenter), 0, 1)
+
+        # table
+        for idx, dcc in enumerate(self.ctrlrs):
+            row = idx + 1
+            lbl = QLabel(dcc, self, alignment=Qt.AlignCenter)
+            lay.addWidget(lbl, row, 0)
+            pvn = _PVName(dcc).substitute(
+                prefix=self.prefix, propty='Intlk-Mon')
+            led = SiriusLedAlert(self, pvn)
+            led.setObjectName('led_status')
+            lay.addWidget(led, row, 1, alignment=Qt.AlignTop)
+
+        return self._build_scroll_area(wid)
 
     def _setupBPMLogTrigTab(self):
         wid = QWidget()

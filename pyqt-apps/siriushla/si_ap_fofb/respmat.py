@@ -12,8 +12,7 @@ from pydm.widgets import PyDMCheckbox
 
 from siriuspy.clientconfigdb import ConfigDBClient
 
-from ..util import connect_window, get_appropriate_color, \
-    connect_newprocess
+from ..util import connect_window, connect_newprocess
 from ..widgets.windows import create_window_from_widget
 from ..widgets import SiriusConnectionSignal as _ConnSignal, \
     SiriusLedState, SiriusEnumComboBox, SiriusLabel, \
@@ -23,7 +22,7 @@ from ..as_ap_sofb.ioc_control.respmat import RespMatWidget as _RespMatWidget
 from ..as_ap_sofb.ioc_control.respmat_enbllist import \
     SingleSelMatrix as _SingleSelMatrix
 
-from .base import BaseObject, BaseWidget
+from .base import BaseObject, BaseWidget, get_fofb_icon
 from .graphics import CorrGainWidget
 
 
@@ -84,7 +83,7 @@ class RespMatWidget(_RespMatWidget, BaseWidget):
         sel_lay = QGridLayout(sel_wid)
         sel_lay.setVerticalSpacing(15)
 
-        icon = qta.icon('fa5s.hammer', color=get_appropriate_color('SI'))
+        icon = get_fofb_icon()
         window = create_window_from_widget(
             SelectionMatrix, title='Corrs and BPMs selection', icon=icon)
         btn = QPushButton('', sel_wid)

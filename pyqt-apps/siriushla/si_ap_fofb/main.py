@@ -2,7 +2,8 @@
 
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QPushButton, QWidget, QGridLayout, \
-    QLabel, QVBoxLayout, QGroupBox, QMenuBar, QAction
+    QLabel, QVBoxLayout, QGroupBox, QMenuBar, QAction, \
+    QSizePolicy as QSzPlcy
 import qtawesome as qta
 
 from pydm.widgets import PyDMPushButton
@@ -10,12 +11,12 @@ from pydm.widgets import PyDMPushButton
 from siriuspy.fofb.csdev import ETypes as _FOFBEnums
 from siriushla.widgets.led import SiriusLedState
 
-from ..util import connect_window, get_appropriate_color
+from ..util import connect_window
 from ..widgets import SiriusLedAlert, SiriusLabel, SiriusSpinbox, \
     PyDMLogLabel, SiriusMainWindow, PyDMStateButton
 from ..widgets.windows import create_window_from_widget
 
-from .base import BaseObject
+from .base import BaseObject, get_fofb_icon
 from .custom_widgets import RefOrbWidget, StatusDialog, AuxCommDialog, \
     ControllersDetailDialog
 from .respmat import RespMatWidget
@@ -30,19 +31,16 @@ class MainWindow(BaseObject, SiriusMainWindow):
         SiriusMainWindow.__init__(self, parent)
         self.setWindowTitle('SI - FOFB')
         self.setObjectName('SIApp')
-        self.setWindowIcon(
-            qta.icon(
-                'fa5s.hammer', 'fa5s.signal',
-                options=[
-                    dict(scale_factor=0.85, offset=(0.15, 0.0)),
-                    dict(scale_factor=0.7, offset=(0.0, 0.25),
-                         rotated=90, vflip=True)],
-                color=get_appropriate_color('SI')))
+        self.setWindowIcon(get_fofb_icon())
         self._setupUi()
         self.setFocusPolicy(Qt.StrongFocus)
 
     def _setupUi(self):
         # layout
+        self.log = self._setupLogWidget()
+
+        self.kicks_view = KickWidget(self, self.device, self.prefix)
+
         self.status = self._setupStatusWidget()
 
         self.reforb = self._setupRefOrbWidget()
@@ -51,17 +49,17 @@ class MainWindow(BaseObject, SiriusMainWindow):
 
         self.loop = self._setupLoopWidget()
 
-        self.log = self._setupLogWidget()
-
         cwid = QWidget()
         layout = QGridLayout(cwid)
         layout.addWidget(self.log, 0, 0, 4, 1)
-        layout.addWidget(self.status, 0, 1)
-        layout.addWidget(self.loop, 1, 1)
-        layout.addWidget(self.reforb, 2, 1)
-        layout.addWidget(self.respmat, 3, 1)
-        layout.setColumnStretch(0, 3)
-        layout.setColumnStretch(1, 1)
+        layout.addWidget(self.kicks_view, 0, 1, 4, 1)
+        layout.addWidget(self.status, 0, 2)
+        layout.addWidget(self.loop, 1, 2)
+        layout.addWidget(self.reforb, 2, 2)
+        layout.addWidget(self.respmat, 3, 2)
+        layout.setColumnStretch(0, 1)
+        layout.setColumnStretch(1, 3)
+        layout.setColumnStretch(2, 1)
         self.setCentralWidget(cwid)
 
         # menu
@@ -72,13 +70,6 @@ class MainWindow(BaseObject, SiriusMainWindow):
             auxcomm_act, AuxCommDialog, parent=self,
             device=self.device, prefix=self.prefix)
         menubar.addAction(auxcomm_act)
-        kickmon_act = QAction('Kicks Monitor', menubar)
-        win = create_window_from_widget(
-            KickWidget, 'SI - FOFB - Kicks Monitor')
-        connect_window(
-            kickmon_act, win, parent=self,
-            device=self.device, prefix=self.prefix)
-        menubar.addAction(kickmon_act)
 
     def _setupStatusWidget(self):
         # correctors
@@ -114,21 +105,23 @@ class MainWindow(BaseObject, SiriusMainWindow):
             'Controllers: ', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
 
         led_ctrl = SiriusLedAlert(
-            self, self.devpref.substitute(propty='FOFBCtrlStatus-Mon'))
+            self, self.devpref.substitute(propty='CtrlrStatus-Mon'))
         sts_ctrl = QPushButton('', self)
         sts_ctrl.setIcon(qta.icon('fa5s.list-ul'))
         sts_ctrl.setToolTip('Open Detailed Status View')
         sts_ctrl.setObjectName('sts')
         sts_ctrl.setStyleSheet(
             '#sts{min-width:25px; max-width:25px; icon-size:20px;}')
-        pvname = self.devpref.substitute(propty='FOFBCtrlStatus-Mon')
+        pvname = self.devpref.substitute(propty='CtrlrStatus-Mon')
         labels = _FOFBEnums.STS_LBLS_FOFBCTRL
         cmds = [None]*len(labels)
-        cmds[1] = self.devpref.substitute(propty='FOFBCtrlConfBPMId-Cmd')
-        cmds[2] = self.devpref.substitute(propty='FOFBCtrlSyncNet-Cmd')
-        cmds[4] = self.devpref.substitute(propty='FOFBCtrlSyncRefOrb-Cmd')
-        cmds[5] = self.devpref.substitute(propty='FOFBCtrlConfTFrameLen-Cmd')
-        cmds[6] = self.devpref.substitute(propty='FOFBCtrlConfBPMLogTrg-Cmd')
+        cmds[1] = self.devpref.substitute(propty='CtrlrConfBPMId-Cmd')
+        cmds[2] = self.devpref.substitute(propty='CtrlrSyncNet-Cmd')
+        cmds[4] = self.devpref.substitute(propty='CtrlrSyncRefOrb-Cmd')
+        cmds[5] = self.devpref.substitute(propty='CtrlrSyncTFrameLen-Cmd')
+        cmds[6] = self.devpref.substitute(propty='CtrlrConfBPMLogTrg-Cmd')
+        cmds[7] = self.devpref.substitute(propty='CtrlrSyncMaxOrbDist-Cmd')
+        cmds[8] = self.devpref.substitute(propty='CtrlrReset-Cmd')
         dtl_ctrl = QPushButton('Details')
         dtl_ctrl.setDefault(False)
         dtl_ctrl.setAutoDefault(False)
@@ -210,6 +203,7 @@ class MainWindow(BaseObject, SiriusMainWindow):
     def _setupLogWidget(self):
         loglabel = PyDMLogLabel(
             self, init_channel=self.devpref.substitute(propty='Log-Mon'))
+        loglabel.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.MinimumExpanding)
         loglabel.setAlternatingRowColors(True)
         loglabel.maxCount = 2000
 

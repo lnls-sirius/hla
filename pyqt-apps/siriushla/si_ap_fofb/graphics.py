@@ -8,6 +8,8 @@ from qtpy.QtGui import QColor
 from qtpy.QtWidgets import QToolTip, QWidget, QVBoxLayout, QLabel, \
     QHBoxLayout, QCheckBox, QGridLayout
 
+from pyqtgraph import mkBrush, mkPen
+
 from siriuspy.devices import StrengthConv
 
 from ..widgets import SiriusConnectionSignal as _ConnSig, QDoubleSpinBoxPlus,\
@@ -328,6 +330,12 @@ class KickWidget(BaseObject, QWidget):
         self.limv = _ConnSig(self.devpref.substitute(propty='CVAccSatMax-RB'))
         self.limv.new_value_signal[float].connect(
             _part(self._update_graph, 'lim', 'v'))
+        self.enblh = _ConnSig(self.devpref.substitute(propty='CHEnblList-RB'))
+        self.enblh.new_value_signal[_np.ndarray].connect(
+            _part(self._update_graph, 'enbl', 'h'))
+        self.enblv = _ConnSig(self.devpref.substitute(propty='CVEnblList-RB'))
+        self.enblv.new_value_signal[_np.ndarray].connect(
+            _part(self._update_graph, 'enbl', 'v'))
         self._update_horizontal()
 
     def _setupui(self):
@@ -367,6 +375,7 @@ class KickWidget(BaseObject, QWidget):
             graph.setLabel('bottom', text='Position', units='m')
             graph.setLabel('left', text='Kick', units='rad')
             graph.showLegend = False
+            graph.maxRedrawRate = 8  # [Hz]
 
             # kicks
             color = 'blue' if plane == 'h' else 'red'
@@ -420,6 +429,26 @@ class KickWidget(BaseObject, QWidget):
             data = _np.asarray(value)*self.URAD2RAD
             curve = graph.curveAtIndex(0)
             curve.receiveYWaveform(data)
+        elif data == 'enbl':
+            data = _np.asarray(value)
+            curve = graph.curveAtIndex(0)
+            offcor = QColor('black')
+            offbrs, offpen, offsz = mkBrush(offcor), mkPen(offcor), 10
+            oncor = QColor('blue') if plane == 'h' else QColor('red')
+            onbrs, onpen, onsize = mkBrush(oncor), mkPen(oncor), 10
+            brss, pens, sizes = [], [], []
+            for val in data:
+                if val:
+                    brss.append(onbrs)
+                    pens.append(onpen)
+                    sizes.append(onsize)
+                else:
+                    brss.append(offbrs)
+                    pens.append(offpen)
+                    sizes.append(offsz)
+            curve.opts['symbolBrush'] = brss
+            curve.opts['symbolPen'] = pens
+            curve.opts['symbolSize'] = sizes
         else:
             psnames = self._csorb.ch_names if plane == 'h' \
                 else self._csorb.cv_names
