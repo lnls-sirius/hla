@@ -2,7 +2,8 @@
 
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QPushButton, QWidget, QGridLayout, \
-    QLabel, QVBoxLayout, QGroupBox, QMenuBar, QAction
+    QLabel, QVBoxLayout, QGroupBox, QMenuBar, QAction, \
+    QSizePolicy as QSzPlcy
 import qtawesome as qta
 
 from pydm.widgets import PyDMPushButton
@@ -36,6 +37,10 @@ class MainWindow(BaseObject, SiriusMainWindow):
 
     def _setupUi(self):
         # layout
+        self.log = self._setupLogWidget()
+
+        self.kicks_view = KickWidget(self, self.device, self.prefix)
+
         self.status = self._setupStatusWidget()
 
         self.reforb = self._setupRefOrbWidget()
@@ -44,17 +49,17 @@ class MainWindow(BaseObject, SiriusMainWindow):
 
         self.loop = self._setupLoopWidget()
 
-        self.log = self._setupLogWidget()
-
         cwid = QWidget()
         layout = QGridLayout(cwid)
         layout.addWidget(self.log, 0, 0, 4, 1)
-        layout.addWidget(self.status, 0, 1)
-        layout.addWidget(self.loop, 1, 1)
-        layout.addWidget(self.reforb, 2, 1)
-        layout.addWidget(self.respmat, 3, 1)
-        layout.setColumnStretch(0, 3)
-        layout.setColumnStretch(1, 1)
+        layout.addWidget(self.kicks_view, 0, 1, 4, 1)
+        layout.addWidget(self.status, 0, 2)
+        layout.addWidget(self.loop, 1, 2)
+        layout.addWidget(self.reforb, 2, 2)
+        layout.addWidget(self.respmat, 3, 2)
+        layout.setColumnStretch(0, 1)
+        layout.setColumnStretch(1, 3)
+        layout.setColumnStretch(2, 1)
         self.setCentralWidget(cwid)
 
         # menu
@@ -65,13 +70,6 @@ class MainWindow(BaseObject, SiriusMainWindow):
             auxcomm_act, AuxCommDialog, parent=self,
             device=self.device, prefix=self.prefix)
         menubar.addAction(auxcomm_act)
-        kickmon_act = QAction('Kicks Monitor', menubar)
-        win = create_window_from_widget(
-            KickWidget, 'SI - FOFB - Kicks Monitor')
-        connect_window(
-            kickmon_act, win, parent=self,
-            device=self.device, prefix=self.prefix)
-        menubar.addAction(kickmon_act)
 
     def _setupStatusWidget(self):
         # correctors
@@ -205,6 +203,7 @@ class MainWindow(BaseObject, SiriusMainWindow):
     def _setupLogWidget(self):
         loglabel = PyDMLogLabel(
             self, init_channel=self.devpref.substitute(propty='Log-Mon'))
+        loglabel.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.MinimumExpanding)
         loglabel.setAlternatingRowColors(True)
         loglabel.maxCount = 2000
 
