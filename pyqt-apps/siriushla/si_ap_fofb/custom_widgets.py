@@ -308,7 +308,7 @@ class AuxCommDialog(BaseObject, SiriusDialog):
             if 'Corr' in group:
                 for dev in ['CH', 'CV']:
                     lbl = QLabel(
-                        dev+' Sat. Limit (A): ', self,
+                        dev+' Sat. Limit [A]: ', self,
                         alignment=Qt.AlignRight | Qt.AlignVCenter)
                     pref = self.devpref
                     spw = SiriusSpinbox(
@@ -348,7 +348,7 @@ class AuxCommDialog(BaseObject, SiriusDialog):
                 glay2.addWidget(led, 1, 2)
 
                 lbl = QLabel(
-                    'Orbit Distortion Threshold (um): ', self,
+                    'Orbit Distortion Threshold [um]: ', self,
                     alignment=Qt.AlignRight | Qt.AlignVCenter)
                 spw = SiriusSpinbox(
                     self, pref.substitute(propty='LoopMaxOrbDistortion-SP'))
