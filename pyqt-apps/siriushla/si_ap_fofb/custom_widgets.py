@@ -348,7 +348,7 @@ class AuxCommDialog(BaseObject, SiriusDialog):
                 glay2.addWidget(led, 1, 2)
 
                 lbl = QLabel(
-                    'Orbit Distortion Threshold: ', self,
+                    'Orbit Distortion Threshold (um): ', self,
                     alignment=Qt.AlignRight | Qt.AlignVCenter)
                 spw = SiriusSpinbox(
                     self, pref.substitute(propty='LoopMaxOrbDistortion-SP'))
@@ -359,7 +359,7 @@ class AuxCommDialog(BaseObject, SiriusDialog):
                 glay2.addWidget(rbw, 2, 2)
 
                 lbl = QLabel(
-                    'Enable Interlocks: ', self,
+                    'Enable Orbit Distortion Detection: ', self,
                     alignment=Qt.AlignRight | Qt.AlignVCenter)
                 pvn = pref.substitute(propty='LoopMaxOrbDistortionEnbl-Sel')
                 sbt = PyDMStateButton(self, pvn)
