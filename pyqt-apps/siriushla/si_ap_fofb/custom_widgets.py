@@ -214,17 +214,20 @@ class BPMSwModeWidget(BaseObject, QWidget):
     def __init__(self, parent, device, prefix=''):
         BaseObject.__init__(self, device, prefix)
         QWidget.__init__(self, parent)
-        bnames = self._csorb.bpm_names
         props = ['SwMode-Sel', ]
-        self._bpm_devs = [Device(b, props, auto_mon=True) for b in bnames]
+        self._bpm_devs = [
+            Device(b, props, auto_mon=True) for b in self._csorb.bpm_names]
         self._setupUi()
         self._init_dict = {}
         self._init = False
+        self._pv_objs = list()
         for dev in self._bpm_devs:
             pvo = dev.pv_object('SwMode-Sel')
             pvo.add_callback(self._set_initial_value)
+            pvo.add_callback(self._update_current_value)
             if pvo.connected:
                 self._set_initial_value(pvo.pvname, pvo.value)
+            self._pv_objs.append(pvo)
 
     def _setupUi(self):
         lbl = QLabel(
@@ -241,12 +244,21 @@ class BPMSwModeWidget(BaseObject, QWidget):
         lay.addWidget(self.sel)
         lay.addWidget(self.sts)
 
-    def _set_swithing_mode(self, text):
+    def _set_swithing_mode(self, text, do_sp=True):
         mode = _csbpm.SwModes._fields.index(text)
-        for dev in self._bpm_devs:
-            dev['SwMode-Sel'] = mode
-        ch2vals = {
-            bpm+':SwMode-Sts': mode for bpm in self._csorb.bpm_names}
+        if do_sp:
+            for dev in self._bpm_devs:
+                dev['SwMode-Sel'] = mode
+        else:
+            self.blockSignals(True)
+            self.sel.setCurrentText(text)
+            self.blockSignals(False)
+
+        ch2vals = dict()
+        for bpm in self._csorb.bpm_names:
+            pvn = _PVName(bpm).substitute(
+                prefix=self.prefix, propty='SwMode-Sts')
+            ch2vals[pvn] = mode
         self.sts.set_channels2values(ch2vals)
 
     def _set_initial_value(self, pvname, value, **kws):
@@ -263,13 +275,23 @@ class BPMSwModeWidget(BaseObject, QWidget):
         value = vals[_np.argmax(cnts)]
         mode = _csbpm.SwModes._fields[value]
 
-        ch2vals = {
-            bpm+':SwMode-Sts': value for bpm in self._csorb.bpm_names}
+        ch2vals = dict()
+        for bpm in self._csorb.bpm_names:
+            pvn = _PVName(bpm).substitute(
+                prefix=self.prefix, propty='SwMode-Sts')
+            ch2vals[pvn] = value
         self.sts.set_channels2values(ch2vals)
 
         self.sel.setCurrentText(mode)
         self.sel.currentTextChanged.connect(self._set_swithing_mode)
 
+    def _update_current_value(self, value, **kws):
+        if not self._init:
+            return
+        if not _np.all([pvo.value == value for pvo in self._pv_objs]):
+            return
+        mode = _csbpm.SwModes._fields[value]
+        self._set_swithing_mode(mode, do_sp=False)
 
 class AuxCommDialog(BaseObject, SiriusDialog):
     """Auxiliary command dialog."""
