@@ -10,6 +10,7 @@ from qtpy.QtWidgets import QToolTip, QWidget, QVBoxLayout, QLabel, \
 
 from pyqtgraph import mkBrush, mkPen
 
+from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.devices import StrengthConv
 
 from ..widgets import SiriusConnectionSignal as _ConnSig, QDoubleSpinBoxPlus,\
@@ -336,6 +337,12 @@ class KickWidget(BaseObject, QWidget):
         self.enblv = _ConnSig(self.devpref.substitute(propty='CVEnblList-RB'))
         self.enblv.new_value_signal[_np.ndarray].connect(
             _part(self._update_graph, 'enbl', 'v'))
+        self.energy = _ConnSig(_PVName('SI-Fam:PS-B1B2-1').substitute(
+            prefix=self.prefix, propty='EnergyRef-Mon'))
+        self.energy.new_value_signal[float].connect(
+            _part(self._update_graph, 'energy', 'h'))
+        self.energy.new_value_signal[float].connect(
+            _part(self._update_graph, 'energy', 'v'))
         self._update_horizontal()
 
     def _setupui(self):
@@ -450,6 +457,11 @@ class KickWidget(BaseObject, QWidget):
             curve.opts['symbolPen'] = pens
             curve.opts['symbolSize'] = sizes
         else:
+            if data == 'energy':
+                value = self.limh.value if plane == 'h' \
+                    else self.limv.value
+                if value is None:
+                    return
             psnames = self._csorb.ch_names if plane == 'h' \
                 else self._csorb.cv_names
             maxlim = _np.array([
