@@ -8,7 +8,7 @@ from qtpy.QtWidgets import QWidget, QGroupBox, QPushButton, QLabel, \
 from pydm.widgets import PyDMPushButton
 
 from siriuspy.envars import VACA_PREFIX
-from siriuspy.namesys.implementation import SiriusPVName
+from siriuspy.namesys import SiriusPVName
 from siriuspy.injctrl.csdev import Const as _InjConst
 
 from ..util import get_appropriate_color, connect_newprocess
