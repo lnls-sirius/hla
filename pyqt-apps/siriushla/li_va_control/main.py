@@ -1,17 +1,18 @@
 """Main window of the Vacuum Control."""
 
 import os as _os
-from .. import util as _util
 from qtpy.QtCore import Qt, QEvent
+from qtpy.QtGui import QPixmap
 from qtpy.QtWidgets import QWidget, QGridLayout, QVBoxLayout, QLabel, \
     QPushButton
-from qtpy.QtGui import QPixmap
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
+from ..widgets import RelativeWidget
+from ..widgets.windows import create_window_from_widget
+from .. import util as _util
 from .util import LEGEND, PVS_CONFIG, VGC_DETAILS
 from .chart import ChartWindow
 from .details import DetailWindow, IpsDetailWindow, VgcDetailWindow
 from .functions import BaseFunctionsInterface
-from ..widgets import RelativeWidget
 
 
 class VacuumMain(QWidget, BaseFunctionsInterface):
@@ -64,7 +65,9 @@ class VacuumMain(QWidget, BaseFunctionsInterface):
         elif cat == "Vacuum":
             window = VgcDetailWindow
         else:
-            window = DetailWindow
+            window = create_window_from_widget(
+                DetailWindow, title='Vacuum Details', is_main=True,
+                withscroll=True, min_width=90, min_height=52.5)
         return window
 
     def imageViewer(self):
@@ -146,7 +149,7 @@ class VacuumMain(QWidget, BaseFunctionsInterface):
         lay.setSpacing(0)
         config = PVS_CONFIG[cat]
         pv_range = config["iterations"]
-        lists = ['V', 'H']
+        lists = ['H', 'V']
         if cat == "Valve":
             lists = ['']
         for orient in lists:
@@ -159,6 +162,8 @@ class VacuumMain(QWidget, BaseFunctionsInterface):
                 else:
                     self.saveRelWid(
                         widget, config["size"], coord)
+            if orient == 'H':
+                self.setupLists(cat)
 
     def buildAllLegendsRel(self):
         """ Display Legend in a relative widget"""
@@ -200,8 +205,6 @@ class VacuumMain(QWidget, BaseFunctionsInterface):
         lay.addWidget(self.imageViewer(), 0, 0)
         for wid_cat in PVS_CONFIG:
             self.setupMainWidgets(wid_cat)
-            if wid_cat != "Valve":
-                self.setupLists(wid_cat)
 
         self.buildAllLegendsRel()
         self.setupButtons()

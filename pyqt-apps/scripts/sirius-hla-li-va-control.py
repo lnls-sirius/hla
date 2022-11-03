@@ -22,7 +22,7 @@ window = create_window_from_widget(
     VacuumMain, title='LI Vacuum', is_main=True,
     withscroll=True, min_width=100, min_height=50,
     icon=_qta.icon(
-        'mdi.network-outline', color=_util.get_appropriate_color('LI')))
+        'mdi.network-outline', vflip=True, color=_util.get_appropriate_color('LI')))
 app.open_window(
     window, parent=None, prefix=args.prefix)
 sys.exit(app.exec_())

@@ -248,7 +248,7 @@ def get_object(ismenubar=True, parent=None):
             pulsedps.setIcon(qta.icon('mdi.current-ac'))
 
             vacuum = LEVEL2M('VA', menu)
-            vacuum.setIcon(qta.icon('mdi.network-outline'))
+            vacuum.setIcon(qta.icon('mdi.network-outline', vflip=True))
             vacuum.setObjectName('ASApp')
             agilent = QAction('Agilent', vacuum)
             self.connect_newprocess(
@@ -355,7 +355,7 @@ def get_object(ismenubar=True, parent=None):
 
             va = LEVEL2M('VA', menu)
             va.setObjectName('LIApp')
-            va.setIcon(qta.icon('mdi.network-outline'))
+            va.setIcon(qta.icon('mdi.network-outline', vflip=True))
             vac = QAction('Control', va)
             self.connect_newprocess(vac, 'sirius-hla-li-va-control.py')
             va.addAction(vac)
@@ -862,7 +862,7 @@ def get_object(ismenubar=True, parent=None):
         def _set_va_menu(self, sec):
             secl = sec.lower()
             menu = LEVEL2M('VA', self)
-            menu.setIcon(qta.icon('mdi.network-outline'))
+            menu.setIcon(qta.icon('mdi.network-outline', vflip=True))
             menu.setObjectName(sec.upper()+'App')
 
             if sec != 'it':

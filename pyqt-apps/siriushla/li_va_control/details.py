@@ -1,11 +1,10 @@
 """ All the detail Chart Windows """
 
 from qtpy.QtCore import Qt
-from qtpy.QtWidgets import QGroupBox, QVBoxLayout, QHBoxLayout, QLabel
+from qtpy.QtWidgets import QWidget, QGroupBox, QVBoxLayout, QHBoxLayout, QLabel
+from ..widgets import SiriusMainWindow
 from .functions import BaseFunctionsInterface
 from .util import IPS_DETAILS, PVS_CONFIG, VGC_DETAILS, COLORS
-from ..widgets import SiriusMainWindow
-
 
 class IpsDetailWindow(SiriusMainWindow, BaseFunctionsInterface):
     """ Display IPS Detail Window"""
@@ -92,7 +91,7 @@ class VgcDetailWindow(SiriusMainWindow, BaseFunctionsInterface):
         self.prefix = prefix
         self.main_dev = self.config["prefix"]
         self.setObjectName('LIApp')
-        self.number, gen = self.buildIdsVac(id_num)
+        self.number = id_num
         title = "VGC "+str(self.number)+" Details"
         self.setWindowTitle(title)
         self.devpref = self.prefix + self.main_dev
@@ -160,7 +159,7 @@ class VgcDetailWindow(SiriusMainWindow, BaseFunctionsInterface):
             self.buildAllLegends(leg_list))
 
 
-class DetailWindow(SiriusMainWindow, BaseFunctionsInterface):
+class DetailWindow(QWidget, BaseFunctionsInterface):
     """ Display General Detail Window"""
 
     def __init__(self, parent=None):
@@ -168,7 +167,6 @@ class DetailWindow(SiriusMainWindow, BaseFunctionsInterface):
         super().__init__(parent)
         self.devpref = ""
         self.setObjectName('LIApp')
-        self.setWindowTitle("Vacuum Details")
         self._setupUi()
 
     def selWindow(self, cat):
@@ -235,7 +233,7 @@ class DetailWindow(SiriusMainWindow, BaseFunctionsInterface):
         pos = [0, 0]
         for item in IPS_DETAILS["Status"]:
             if 'title' in item:
-                if item['title'] != "State":
+                if item['title'] not in ["State", "FAILED(RESET)"]:
                     name = pv_name + item['control']
                     if item['title'] != "Local/\nRemote":
                         lbl = QLabel(item['title'])
@@ -275,8 +273,15 @@ class DetailWindow(SiriusMainWindow, BaseFunctionsInterface):
         pv_range = config["iterations"]
         for item in range(pv_range[0], pv_range[1]+1):
             pv_name = self.devpref + self.buildIdName(item)
-            lay_item, widget = self.buildBasicGroup(
-                cat, item, "H")
+            widget, lay_item = self.getLayoutWidget("H")
+            lay_item.setSpacing(0)
+            lay_item.setContentsMargins(0, 2, 0, 0)
+            lay_item.addWidget(
+                self.setWindowBtn(cat, item),
+                alignment=Qt.AlignLeft)
+            lay_item.addWidget(
+                QLabel("<strong>IPS"+str(item)+"</strong>"),
+                alignment=Qt.AlignLeft)
             self.buildIPSInfo(pv_name, lay_item, "H")
             lay_item.addWidget(
                 self.setupIPSControl(pv_name))
@@ -312,8 +317,8 @@ class DetailWindow(SiriusMainWindow, BaseFunctionsInterface):
     def _setupUi(self):
         """."""
         wid, lay = self.getLayoutWidget("V")
-        self.setCentralWidget(wid)
         lay.setContentsMargins(0, 0, 0, 0)
 
         lay.addWidget(self.widgetLists(), 5)
         lay.addWidget(self.buildAllLegends(), 1)
+        self.setLayout(lay)

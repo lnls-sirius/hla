@@ -1,9 +1,8 @@
 """ CCG Chart Window """
 
+from ..widgets import SiriusMainWindow, SiriusTimePlot
 from .functions import BaseFunctionsInterface
 from .util import COLORS, PVS_CONFIG, VGC_DETAILS
-from ..widgets import SiriusMainWindow, SiriusTimePlot
-
 
 class ChartWindow(SiriusMainWindow, BaseFunctionsInterface):
     """Show the Chart Window."""

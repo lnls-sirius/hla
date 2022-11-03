@@ -1,17 +1,17 @@
 """ Basic functions """
 import math as _math
 import qtawesome as _qta
-from siriushla.li_rf_llrf.chart import ChartWindow
-from .. import util as _util
 from qtpy.QtCore import Qt
-from pydm.widgets.display_format import DisplayFormat as _DisplayFormat
 from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, \
     QHBoxLayout, QVBoxLayout, QPushButton, QSizePolicy, QGroupBox
-from .util import COLORS, IPS_DETAILS, LEGEND
-from .widgets import LedLegend, QGroupBoxButton, PyDMLedMultiIncosistencyDetector
+from pydm.widgets.display_format import DisplayFormat as _DisplayFormat
+from ..si_di_bbb.custom_widgets import MyScaleIndicator
+from ..li_rf_llrf.chart import ChartWindow
+from .. import util as _util
 from ..widgets import SiriusLabel, PyDMLed, PyDMLedMultiChannel, \
     SiriusLineEdit, SiriusEnumComboBox, PyDMStateButton, SiriusLedAlert
-from ..si_di_bbb.custom_widgets import MyScaleIndicator
+from .util import COLORS, IPS_DETAILS, LEGEND
+from .widgets import LedLegend, QGroupBoxButton, PyDMLedMultiIncosistencyDetector
 
 
 class BaseFunctionsInterface():
@@ -58,7 +58,7 @@ class BaseFunctionsInterface():
                 widget = SiriusLabel(
                     init_channel=pv_name,
                     keep_unit=keep_unit)
-            if precision:
+            if precision and 's' != pv_name[-1]:
                 widget.displayFormat = _DisplayFormat.Exponential
             widget.setAlignment(Qt.AlignCenter)
             widget.setStyleSheet(
@@ -107,15 +107,17 @@ class BaseFunctionsInterface():
         widget.setStyleSheet(styled)
         widget.showUnits = True
         widget.setAlignment(Qt.AlignCenter)
-        if any(x in pv_name for x in ["RdPrs", "ReadP"]):
-            widget.precisionFromPV = False
-            widget.precision = 2
-            widget.displayFormat = _DisplayFormat.Exponential
+        if any(x in pv_name for x in ["RdPrs", "ReadP"]) and 's' != pv_name[-1]:
+                widget.precisionFromPV = False
+                widget.precision = 2
+                widget.displayFormat = _DisplayFormat.Exponential
         return widget
 
     def setWindowBtn(self, cat, id_num):
         """ Create and configure button to open detail windows """
         button = QPushButton(_qta.icon('fa5s.ellipsis-h'), '', self)
+        if cat == 'Vacuum':
+            id_num, lx = self.buildIdsVac(id_num)
         _util.connect_window(
             button, self.selWindow(cat),
             parent=self, id_num=id_num)
@@ -210,6 +212,8 @@ class BaseFunctionsInterface():
             group.setStyleSheet(
                 "QGroupBox#group{background-color:"+COLORS['btn_bg']+"};")
             window = self.selWindow(cat)
+            if cat == 'Vacuum':
+                id_num, lx  = self.buildIdsVac(id_num)
             windowConfig = window(self, id_num=id_num)
             group.clicked.connect(lambda: windowConfig.show())
         return lay, group
