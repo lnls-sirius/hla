@@ -69,28 +69,37 @@ class SIGenStatusWindow(SiriusMainWindow):
             'QLed{min-width:3em;min-height:3em;max-width:3em;max-height:3em;}')
         self._led_sofbloop.offColor = SiriusLedState.Red
         self._gbox_sofbloop = self._create_groupbox(
-            'SOFB Loop', self._led_sofbloop)
+            'SOFB', self._led_sofbloop)
 
-        bbbdev_pref = _PVName('SI-Glob:DI-BbBProc-L')
-        bbbdev_pref = bbbdev_pref.substitute(prefix=self.prefix)
-        self._led_bbbloop = SiriusLedState(
-            self, bbbdev_pref.substitute(propty_name='FBCTRL'))
-        self._led_bbbloop.setStyleSheet(
+        pvname = _PVName('SI-Glob:AP-FOFB:LoopState-Sts')
+        pvname = pvname.substitute(prefix=self.prefix)
+        self._led_fofbloop = SiriusLedState(self, pvname)
+        self._led_fofbloop.setStyleSheet(
             'QLed{min-width:3em;min-height:3em;max-width:3em;max-height:3em;}')
-        self._led_bbbloop.offColor = SiriusLedState.Red
-        chs2vals = {
-            bbbdev_pref.substitute(propty_name='CLKMISS'): 0,
-            bbbdev_pref.substitute(propty_name='PLL_UNLOCK'): 0,
-            bbbdev_pref.substitute(propty_name='DCM_UNLOCK'): 0,
-            bbbdev_pref.substitute(propty_name='ADC_OVR'): 0,
-            bbbdev_pref.substitute(propty_name='SAT'): 0,
-            bbbdev_pref.substitute(propty_name='FID_ERR'): 0}
-        self._led_bbbsts = PyDMLedMultiChannel(self, chs2vals)
-        self._led_bbbsts.setStyleSheet(
-            'QLed{min-width:3em;min-height:3em;max-width:3em;max-height:3em;}')
-        self._led_bbbsts.offColor = SiriusLedState.Red
+        self._led_fofbloop.offColor = SiriusLedState.Red
+        self._gbox_fofbloop = self._create_groupbox(
+            'FOFB', self._led_fofbloop)
+
+        ledsbbb = list()
+        for axis in ['H', 'V', 'L']:
+            bbb_pref = _PVName('SI-Glob:DI-BbBProc-'+axis)
+            bbb_pref = bbb_pref.substitute(prefix=self.prefix)
+            chs2vals = {
+                bbb_pref.substitute(propty_name='FBCTRL'): 1,
+                bbb_pref.substitute(propty_name='CLKMISS'): 0,
+                bbb_pref.substitute(propty_name='PLL_UNLOCK'): 0,
+                bbb_pref.substitute(propty_name='DCM_UNLOCK'): 0,
+                bbb_pref.substitute(propty_name='ADC_OVR'): 0,
+                bbb_pref.substitute(propty_name='SAT'): 0,
+                bbb_pref.substitute(propty_name='FID_ERR'): 0}
+            led = PyDMLedMultiChannel(self, chs2vals)
+            led.setStyleSheet(
+                'QLed{min-width:3em;min-height:3em;'
+                'max-width:3em;max-height:3em;}')
+            led.offColor = SiriusLedState.Red
+            ledsbbb.append(led)
         self._gbox_bbbloop = self._create_groupbox(
-            'BbB Loop', [self._led_bbbloop, self._led_bbbsts], orientation='H')
+            'BbB', ledsbbb, orientation='H')
 
         # current
         self.ld_curr = QLabel(
@@ -189,6 +198,7 @@ class SIGenStatusWindow(SiriusMainWindow):
         hlay2.addWidget(self._gbox_siriusintlk)
         hlay2.addWidget(self._gbox_injsyssts)
         hlay2.addWidget(self._gbox_sofbloop)
+        hlay2.addWidget(self._gbox_fofbloop)
         hlay2.addWidget(self._gbox_bbbloop)
         hlay2.setStretch(0, 1)
         hlay2.setStretch(1, 1)
