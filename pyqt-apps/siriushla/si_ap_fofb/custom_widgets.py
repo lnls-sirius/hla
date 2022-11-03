@@ -8,7 +8,7 @@ from qtpy.QtCore import Qt, Slot
 from qtpy.QtGui import QColor, QPalette
 from qtpy.QtWidgets import QComboBox, QSizePolicy as QSzPlcy, \
     QLabel, QGridLayout, QWidget, QHBoxLayout, QPushButton, \
-    QVBoxLayout, QGroupBox, QTabWidget, QCheckBox, QScrollArea
+    QVBoxLayout, QTabWidget, QCheckBox, QScrollArea
 
 import qtawesome as qta
 from matplotlib import cm
@@ -22,8 +22,7 @@ from pydm.widgets import PyDMPushButton
 
 from ..util import connect_window
 from ..widgets import SiriusConnectionSignal as _ConnSignal, SiriusLedAlert, \
-    SiriusDialog, PyDMLedMultiChannel, SiriusLabel, SiriusSpinbox, PyDMLed, \
-    PyDMStateButton, SiriusLedState
+    SiriusDialog, PyDMLedMultiChannel, SiriusLabel, PyDMLed, SiriusLedState
 from ..widgets.windows import create_window_from_widget
 from ..as_ap_configdb import LoadConfigDialog
 from ..as_di_bpms.triggers import LogicalTriggers
@@ -292,117 +291,6 @@ class BPMSwModeWidget(BaseObject, QWidget):
             return
         mode = _csbpm.SwModes._fields[value]
         self._set_swithing_mode(mode, do_sp=False)
-
-class AuxCommDialog(BaseObject, SiriusDialog):
-    """Auxiliary command dialog."""
-
-    def __init__(self, parent, device, prefix=''):
-        BaseObject.__init__(self, device, prefix)
-        SiriusDialog.__init__(self, parent)
-        self.setObjectName('SIApp')
-        self.setWindowTitle('SI - FOFB - Auxiliary Commands')
-        self._setupUi()
-        self.setFocusPolicy(Qt.StrongFocus)
-
-    def _setupUi(self):
-        group2cmd = {
-            'Correctors': {
-                'Set all current to zero': 'CorrSetCurrZero-Cmd',
-                'Clear all Acc': 'CorrSetAccClear-Cmd',
-                'Set all PwrState to On': 'CorrSetPwrStateOn-Cmd',
-                'Set all OpMode to Manual': 'CorrSetOpModeManual-Cmd',
-                'Set all AccFreeze to Enbl': 'CorrSetAccFreezeEnbl-Cmd',
-                'Set all AccFreeze to Dsbl': 'CorrSetAccFreezeDsbl-Cmd',
-            },
-            'Controllers': {
-                'Sync Net': 'CtrlrSyncNet-Cmd',
-                'Sync RefOrb': 'CtrlrSyncRefOrb-Cmd',
-            },
-            'BPMs': {
-                'Configure BPM Log.Trigs.': 'CtrlrConfBPMLogTrg-Cmd',
-            },
-        }
-        lay = QVBoxLayout(self)
-        for group, commands in group2cmd.items():
-            gbox = QGroupBox(group)
-            glay = QVBoxLayout(gbox)
-
-            if 'Corr' in group:
-                for dev in ['CH', 'CV']:
-                    lbl = QLabel(
-                        dev+' Sat. Limit [A]: ', self,
-                        alignment=Qt.AlignRight | Qt.AlignVCenter)
-                    pref = self.devpref
-                    spw = SiriusSpinbox(
-                        self, pref.substitute(propty=dev+'AccSatMax-SP'))
-                    rbw = SiriusLabel(
-                        self, pref.substitute(propty=dev+'AccSatMax-RB'))
-                    hlay = QHBoxLayout()
-                    hlay.setContentsMargins(0, 0, 0, 0)
-                    hlay.addWidget(lbl)
-                    hlay.addWidget(spw)
-                    hlay.addWidget(rbw)
-                    glay.addLayout(hlay)
-            elif 'Control' in group:
-                glay2 = QGridLayout()
-                glay2.setContentsMargins(0, 0, 0, 0)
-
-                pref = self.devpref
-                lbl = QLabel(
-                    'TimeFrameLen: ', self,
-                    alignment=Qt.AlignRight | Qt.AlignVCenter)
-                spw = SiriusSpinbox(
-                    self, pref.substitute(propty='TimeFrameLen-SP'))
-                rbw = SiriusLabel(
-                    self, pref.substitute(propty='TimeFrameLen-RB'))
-                glay2.addWidget(lbl, 0, 0)
-                glay2.addWidget(spw, 0, 1)
-                glay2.addWidget(rbw, 0, 2)
-
-                lbl = QLabel(
-                    'Consider BPMEnblList in Sync: ', self,
-                    alignment=Qt.AlignRight | Qt.AlignVCenter)
-                pvn = pref.substitute(propty='CtrlrSyncUseEnblList-Sel')
-                sbt = PyDMStateButton(self, pvn)
-                led = SiriusLedState(self, pvn.substitute(propty_suffix='Sts'))
-                glay2.addWidget(lbl, 1, 0)
-                glay2.addWidget(sbt, 1, 1)
-                glay2.addWidget(led, 1, 2)
-
-                lbl = QLabel(
-                    'Orbit Distortion Threshold [um]: ', self,
-                    alignment=Qt.AlignRight | Qt.AlignVCenter)
-                spw = SiriusSpinbox(
-                    self, pref.substitute(propty='LoopMaxOrbDistortion-SP'))
-                rbw = SiriusLabel(
-                    self, pref.substitute(propty='LoopMaxOrbDistortion-RB'))
-                glay2.addWidget(lbl, 2, 0)
-                glay2.addWidget(spw, 2, 1)
-                glay2.addWidget(rbw, 2, 2)
-
-                lbl = QLabel(
-                    'Enable Orbit Distortion Detection: ', self,
-                    alignment=Qt.AlignRight | Qt.AlignVCenter)
-                pvn = pref.substitute(propty='LoopMaxOrbDistortionEnbl-Sel')
-                sbt = PyDMStateButton(self, pvn)
-                led = SiriusLedState(self, pvn.substitute(propty_suffix='Sts'))
-                glay2.addWidget(lbl, 3, 0)
-                glay2.addWidget(sbt, 3, 1)
-                glay2.addWidget(led, 3, 2)
-
-                glay.addLayout(glay2)
-            elif 'BPM' in group:
-                swbpm = BPMSwModeWidget(self, self.device, self.prefix)
-                glay.addWidget(swbpm)
-
-            for desc, cmd in commands.items():
-                btn = PyDMPushButton(
-                    self, label=desc, pressValue=1,
-                    init_channel=self.devpref.substitute(propty=cmd))
-                btn.setDefault(False)
-                btn.setAutoDefault(False)
-                glay.addWidget(btn)
-            lay.addWidget(gbox)
 
 
 class ControllersDetailDialog(BaseObject, SiriusDialog):
