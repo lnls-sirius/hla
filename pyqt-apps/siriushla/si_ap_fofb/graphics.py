@@ -54,7 +54,7 @@ class MatrixWidget(BaseObject, QWidget):
         vbl.addWidget(graph)
 
         self.spbox = QDoubleSpinBoxPlus(self)
-        self.spbox.setMinimum(0.01)
+        self.spbox.setMinimum(0)
         self.spbox.setMaximum(1000)
         value = 1.0 if self._is_coeff or self._is_inv else 80.0
         self.spbox.setValue(value)
@@ -109,8 +109,12 @@ class MatrixWidget(BaseObject, QWidget):
         ind = _np.argmin(_np.abs(_np.array(bpos)-posx))
         posy = curve.scatter.mapFromScene(pos).y()
 
-        indy = int(posy // self.spbox.value())
-        indy = max(min(indy, len(cname)-1), 0)
+        sbval = self.spbox.value()
+        if sbval == 0:
+            indy = 0
+        else:
+            indy = int(posy // self.spbox.value())
+            indy = max(min(indy, len(cname)-1), 0)
         txt = 'BPM = {0:s}, Corr = {1:s}'.format(bname[ind], cname[indy])
         QToolTip.showText(
             graph.mapToGlobal(pos.toPoint()),
