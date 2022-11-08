@@ -11,7 +11,8 @@ from .. import util as _util
 from ..widgets import SiriusLabel, PyDMLed, PyDMLedMultiChannel, \
     SiriusLineEdit, SiriusEnumComboBox, PyDMStateButton, SiriusLedAlert
 from .util import COLORS, IPS_DETAILS, LEGEND
-from .widgets import LedLegend, QGroupBoxButton, PyDMLedMultiIncosistencyDetector
+from .widgets import LedLegend, QGroupBoxButton, \
+    PyDMLedMultiIncosistencyDetector
 
 
 class BaseFunctionsInterface():
@@ -58,7 +59,7 @@ class BaseFunctionsInterface():
                 widget = SiriusLabel(
                     init_channel=pv_name,
                     keep_unit=keep_unit)
-            if precision and 's' != pv_name[-1]:
+            if precision and pv_name[-1] != 's':
                 widget.displayFormat = _DisplayFormat.Exponential
             widget.setAlignment(Qt.AlignCenter)
             widget.setStyleSheet(
@@ -107,7 +108,8 @@ class BaseFunctionsInterface():
         widget.setStyleSheet(styled)
         widget.showUnits = True
         widget.setAlignment(Qt.AlignCenter)
-        if any(x in pv_name for x in ["RdPrs", "ReadP"]) and 's' != pv_name[-1]:
+        if any(x in pv_name for x in ["RdPrs", "ReadP"]) \
+            and 's' != pv_name[-1]:
                 widget.precisionFromPV = False
                 widget.precision = 2
                 widget.displayFormat = _DisplayFormat.Exponential
@@ -194,12 +196,11 @@ class BaseFunctionsInterface():
         prog_bar.setStyleSheet('min-height:1em; min-width:'+str(width)+'em;')
         return prog_bar
 
-
     def buildBasicGroup(self, cat, id_num, orient="V"):
         """ Build anc configure group template """
         group = QGroupBoxButton(
             title=self.getGroupTitle(cat, id_num))
-        wid, lay = self.getLayoutWidget(orient)
+        _, lay = self.getLayoutWidget(orient)
         lay.setSpacing(0)
         lay.setContentsMargins(0, 2, 0, 0)
         group.setLayout(lay)
@@ -215,7 +216,9 @@ class BaseFunctionsInterface():
             if cat == 'Vacuum':
                 id_num, lx  = self.buildIdsVac(id_num)
             windowConfig = window(self, id_num=id_num)
-            group.clicked.connect(lambda: windowConfig.show())
+            _util.connect_window(
+                group, window, parent=self, id_num=id_num,
+                signal=group.clicked)
         return lay, group
 
     def buildAllLegends(self, listleg=LEGEND):

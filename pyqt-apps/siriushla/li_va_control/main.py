@@ -173,7 +173,7 @@ class VacuumMain(QWidget, BaseFunctionsInterface):
             "<strong>LEGEND</strong>",
             alignment=Qt.AlignCenter)
         self.saveRelWid(
-            title, [10,10], coord)
+            title, [10, 10], coord)
         coord[1] += 5
         for leg in ['CCG', 'PRG']:
             self.saveRelWid(

@@ -6,6 +6,7 @@ from ..widgets import SiriusMainWindow
 from .functions import BaseFunctionsInterface
 from .util import IPS_DETAILS, PVS_CONFIG, VGC_DETAILS, COLORS
 
+
 class IpsDetailWindow(SiriusMainWindow, BaseFunctionsInterface):
     """ Display IPS Detail Window"""
 
@@ -26,7 +27,7 @@ class IpsDetailWindow(SiriusMainWindow, BaseFunctionsInterface):
         lay = QHBoxLayout()
         lay.setContentsMargins(0, 0, 0, 0)
         wid.setLayout(lay)
-        for info_type, type_config in info.items():
+        for type_config in info.values():
             name = self.devpref + type_config['text']
             widget = self.setupUnitView(
                 name, type_config['color'], 6)
@@ -316,7 +317,7 @@ class DetailWindow(QWidget, BaseFunctionsInterface):
 
     def _setupUi(self):
         """."""
-        wid, lay = self.getLayoutWidget("V")
+        lay = QVBoxLayout()
         lay.setContentsMargins(0, 0, 0, 0)
 
         lay.addWidget(self.widgetLists(), 5)
