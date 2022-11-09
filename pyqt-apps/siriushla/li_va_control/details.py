@@ -42,7 +42,7 @@ class IpsDetailWindow(SiriusMainWindow, BaseFunctionsInterface):
         group.setLayout(lay)
         for item in info:
             if 'title' in item:
-                if item['widget'] == 'state':
+                if item['widget'] in ['state', 'button']:
                     sec_wid = 'led'
                 else:
                     sec_wid = 'label'
@@ -192,7 +192,7 @@ class DetailWindow(QWidget, BaseFunctionsInterface):
                 pos[1] = 0
                 lay.addWidget(
                     self.setWindowBtn(
-                        "Vacuum", vgc_id), pos[0], pos[1], 1, 1)
+                        "Vacuum", vgc_id), pos[0], pos[1], 2, 1)
                 pos[1] += 1
                 widget = QLabel(
                     '<strong>'+self.getGroupTitle(data, vgc_id)+'</strong>')
@@ -222,7 +222,7 @@ class DetailWindow(QWidget, BaseFunctionsInterface):
                         title,
                         pv_suf, pv_number, generation)
             lay.addWidget(
-                widget, pos[0], pos[1], 1, 1, Qt.AlignCenter)
+                widget, pos[0], pos[1], 2, 1, Qt.AlignCenter)
             pos[0] += 1
         return pos
 
@@ -234,17 +234,24 @@ class DetailWindow(QWidget, BaseFunctionsInterface):
         pos = [0, 0]
         for item in IPS_DETAILS["Status"]:
             if 'title' in item:
-                if item['title'] not in ["State", "FAILED(RESET)"]:
-                    name = pv_name + item['control']
+                if item['title'] not in ["State", "FAILED"]:
                     if item['title'] != "Local/\nRemote":
                         lbl = QLabel(item['title'])
                         lbl.setStyleSheet(
                             "font: 8pt;max-height:0.6em; min-width:2em;")
-                        lay.addWidget(lbl, pos[0], pos[1])
+                        lay.addWidget(lbl, pos[0], pos[1], alignment=Qt.AlignCenter)
                     pos[0] += 1
+                    name = pv_name + item['control']
                     lay.addWidget(
                         self.getWidget(name[12:], item['widget']),
-                        pos[0], pos[1])
+                        pos[0], pos[1], alignment=Qt.AlignCenter)
+                    widget = 'led'
+                    if item['title'] == "Local/\nRemote":
+                        widget = 'label'
+                    name = pv_name + item['status']
+                    lay.addWidget(
+                        self.getWidget(name[12:], widget, precision=False),
+                        pos[0]+1, pos[1], alignment=Qt.AlignCenter)
                     pos[1] += 1
                     pos[0] = 0
 

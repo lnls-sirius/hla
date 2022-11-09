@@ -9,7 +9,8 @@ from ..si_di_bbb.custom_widgets import MyScaleIndicator
 from ..li_rf_llrf.chart import ChartWindow
 from .. import util as _util
 from ..widgets import SiriusLabel, PyDMLed, PyDMLedMultiChannel, \
-    SiriusLineEdit, SiriusEnumComboBox, PyDMStateButton, SiriusLedAlert
+    SiriusLineEdit, SiriusEnumComboBox, PyDMStateButton, SiriusLedAlert,\
+    SiriusPushButton
 from .util import COLORS, IPS_DETAILS, LEGEND
 from .widgets import LedLegend, QGroupBoxButton, \
     PyDMLedMultiIncosistencyDetector
@@ -19,6 +20,7 @@ class BaseFunctionsInterface():
     """ Export basic functions to the Vacuum windows """
 
     def getLayout(self, orient="G"):
+        """ Get Layout with correct orientation """
         if orient == "G":
             return QGridLayout()
         elif orient == "H":
@@ -39,6 +41,8 @@ class BaseFunctionsInterface():
         if wid_type == 'led':
             if "ReadS.B4" in pv_name:
                 led_type = 'alert'
+            elif "GaugeSts" in pv_name:
+                led_type = 'inconsistent'
             else:
                 led_type = 'normal'
             widget = self.buildLed(pv_name, '', led_type)
@@ -50,6 +54,10 @@ class BaseFunctionsInterface():
             widget = PyDMStateButton(
                 self, init_channel=pv_name)
             widget.setStyleSheet("min-height: 0.6em; min-width: 1.5em;")
+        elif wid_type == 'button':
+            widget = SiriusPushButton(
+                self, init_channel=pv_name, label='RESET',
+                pressValue=1, releaseValue=0)
         else:
             if wid_type == 'edit':
                 widget = SiriusLineEdit(
@@ -134,8 +142,12 @@ class BaseFunctionsInterface():
         if comp == 'normal':
             if "Gauge" in pv_name:
                 comp = 'diff'
+            list_colors = None
+            if ".B3" in sufix_list:
+                list_colors = [COLORS['yellow'], COLORS['light_green']]
             led = PyDMLed(
-                init_channel=pv_name + sufix_list)
+                init_channel=pv_name + sufix_list,
+                color_list=list_colors)
         elif comp == 'alert':
             led = SiriusLedAlert(
                 self, init_channel=pv_name)
@@ -147,10 +159,15 @@ class BaseFunctionsInterface():
             led = PyDMLedMultiChannel(
                 self, chan2vals)
         else:
-            chan2vals = {
-                pv_name + sufix_list[0]: 1,
-                pv_name + sufix_list[1]: 1
-            }
+            if len(sufix_list)>1:
+                chan2vals = {
+                    pv_name + sufix_list[0]: 1,
+                    pv_name + sufix_list[1]: 1
+                }
+            else:
+                chan2vals = {
+                    pv_name + sufix_list: 1
+                }
             led = PyDMLedMultiIncosistencyDetector(
                 self, chan2vals)
         shape = getShape(comp)

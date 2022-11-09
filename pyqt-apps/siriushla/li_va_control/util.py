@@ -108,10 +108,10 @@ IPS_DETAILS = {
             "widget": "enum"
         },
         {
-            "title": "FAILED(RESET)",
+            "title": "FAILED",
             "status": ":ReadS.B4",
             "control": ":Reset",
-            "widget": "state"
+            "widget": "button"
         }
     ],
     "Parameters": [
@@ -119,7 +119,7 @@ IPS_DETAILS = {
             "title": "Enable",
             "status": ":ParSetEn",
             "control": ":Da",
-            "widget": "enum"
+            "widget": "state"
         },
         {
             "title": "IPS No.",
@@ -229,12 +229,12 @@ LEGEND = {
             'text': 'ON'
         },
         {
-            'color': COLORS["dark_green"],
-            'text': 'OFF'
-        },
-        {
             'color': COLORS["yellow"],
             'text': 'Inconsistent'
+        },
+        {
+            'color': COLORS["red"],
+            'text': 'OFF'
         }
     ],
     'Relay Status': [
