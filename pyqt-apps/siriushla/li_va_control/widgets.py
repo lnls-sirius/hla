@@ -62,13 +62,13 @@ class PyDMLedMultiIncosistencyDetector(PyDMLedMultiChannel):
     Red = QColor(207, 0, 0)
 
     def __init__(
-        self, parent=None, channels2values=dict(),
-        color_list=[Red, LightGreen, Yellow]):
-            """."""
-            super().__init__(
-                parent=parent,
-                channels2values=channels2values,
-                color_list=color_list)
+            self, parent=None, channels2values=dict(),
+            color_list=[Red, LightGreen, Yellow]):
+        """."""
+        super().__init__(
+            parent=parent,
+            channels2values=channels2values,
+            color_list=color_list)
 
     def _update_statuses(self):
         first_pv = list(self._address2status.keys())[0]

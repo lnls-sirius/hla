@@ -17,15 +17,18 @@ from .widgets import LedLegend, QGroupBoxButton, \
 
 class BaseFunctionsInterface():
     """ Export basic functions to the Vacuum windows """
+
+    def getLayout(self, orient="G"):
+        if orient == "G":
+            return QGridLayout()
+        elif orient == "H":
+            return QHBoxLayout()
+        return QVBoxLayout()
+
     def getLayoutWidget(self, orient="G"):
         """ Get Widget with a layout inside """
         wid = QWidget()
-        if orient == "G":
-            lay = QGridLayout()
-        elif orient == "H":
-            lay = QHBoxLayout()
-        else:
-            lay = QVBoxLayout()
+        lay = self.getLayout(orient)
         wid.setLayout(lay)
         return wid, lay
 
@@ -109,10 +112,10 @@ class BaseFunctionsInterface():
         widget.showUnits = True
         widget.setAlignment(Qt.AlignCenter)
         if any(x in pv_name for x in ["RdPrs", "ReadP"]) \
-            and 's' != pv_name[-1]:
-                widget.precisionFromPV = False
-                widget.precision = 2
-                widget.displayFormat = _DisplayFormat.Exponential
+                and pv_name[-1] != 's':
+            widget.precisionFromPV = False
+            widget.precision = 2
+            widget.displayFormat = _DisplayFormat.Exponential
         return widget
 
     def setWindowBtn(self, cat, id_num):
@@ -200,7 +203,7 @@ class BaseFunctionsInterface():
         """ Build anc configure group template """
         group = QGroupBoxButton(
             title=self.getGroupTitle(cat, id_num))
-        _, lay = self.getLayoutWidget(orient)
+        lay = self.getLayout(orient)
         lay.setSpacing(0)
         lay.setContentsMargins(0, 2, 0, 0)
         group.setLayout(lay)
