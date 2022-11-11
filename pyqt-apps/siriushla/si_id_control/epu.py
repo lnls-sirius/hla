@@ -172,6 +172,7 @@ class EPUControlWindow(IDCommonControlWindow):
         self._ld_isbusy = QLabel('Is Busy', self)
         self._led_isbusy = SiriusLedAlert(
             self, self.dev_pref.substitute(propty='IsBusy-Mon'))
+        self._led_isbusy.onColor = SiriusLedAlert.Yellow
 
         self._ld_status = QLabel('Status', self)
         self._led_status = SiriusLedAlert(
