@@ -12,7 +12,8 @@ from siriuspy.namesys import SiriusPVName as _PVName
 
 from ..widgets import SiriusMainWindow, SiriusConnectionSignal
 
-from .apu_control import APUSummaryHeader, APUSummaryWidget
+from .apu import APUSummaryHeader, APUSummaryWidget
+from .epu import EPUSummaryHeader, EPUSummaryWidget
 from .util import get_id_icon
 
 
@@ -29,8 +30,8 @@ class IDControl(SiriusMainWindow):
         self._create_actions()
 
     def _setupUi(self):
-        cw = QWidget()
-        self.setCentralWidget(cw)
+        cwid = QWidget()
+        self.setCentralWidget(cwid)
 
         label = QLabel('<h3>ID Control Window</h3>',
                        self, alignment=Qt.AlignCenter)
@@ -53,11 +54,15 @@ class IDControl(SiriusMainWindow):
         self._gbox_apu = QGroupBox('APU', self)
         self._gbox_apu.setLayout(self._setupAPULayout())
 
-        lay = QGridLayout(cw)
+        self._gbox_epu = QGroupBox('EPU', self)
+        self._gbox_epu.setLayout(self._setupEPULayout())
+
+        lay = QGridLayout(cwid)
         lay.addWidget(self.label_mov1, 0, 0)
         lay.addWidget(label, 0, 1)
         lay.addWidget(self.label_mov2, 0, 2)
         lay.addWidget(self._gbox_apu, 1, 0, 1, 3)
+        lay.addWidget(self._gbox_epu, 2, 0, 1, 3)
         lay.setColumnStretch(0, 1)
         lay.setColumnStretch(1, 15)
         lay.setColumnStretch(2, 1)
@@ -76,6 +81,27 @@ class IDControl(SiriusMainWindow):
                   'SI-11SP:ID-APU58']
         for idname in idlist:
             apu_wid = APUSummaryWidget(self, self._prefix, idname)
+            lay.addWidget(apu_wid)
+            self._apu_widgets.append(apu_wid)
+            ch_mov = SiriusConnectionSignal(_PVName(idname).substitute(
+                prefix=self._prefix, propty='Moving-Mon'))
+            ch_mov.new_value_signal[float].connect(self._handle_moving_vis)
+            self._channels_mov.append(ch_mov)
+
+        return lay
+
+    def _setupEPULayout(self):
+        lay = QVBoxLayout()
+        lay.setAlignment(Qt.AlignTop)
+
+        self._epu_header = EPUSummaryHeader(self)
+        lay.addWidget(self._epu_header)
+
+        self._apu_widgets = list()
+        self._channels_mov = list()
+        idlist = ['SI-10SB:ID-EPU50', ]
+        for idname in idlist:
+            apu_wid = EPUSummaryWidget(self, self._prefix, idname)
             lay.addWidget(apu_wid)
             self._apu_widgets.append(apu_wid)
             ch_mov = SiriusConnectionSignal(_PVName(idname).substitute(
@@ -119,8 +145,8 @@ class IDControl(SiriusMainWindow):
     def show_connections(self, checked):
         """Show connections."""
         _ = checked
-        c = ConnectionInspector(self)
-        c.show()
+        conn = ConnectionInspector(self)
+        conn.show()
 
     def _handle_moving_vis(self, value):
         """Handle visualization of moving state label."""
