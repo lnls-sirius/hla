@@ -7,7 +7,7 @@ import qtawesome as qta
 from pydm.widgets import PyDMPushButton
 
 from siriushla.util import connect_window
-from siriushla.widgets import PyDMLogLabel, SiriusLedAlert, \
+from siriushla.widgets import PyDMLogLabel, SiriusLedAlert, PyDMLed, \
     SiriusLedState, PyDMLedMultiChannel, SiriusLabel, SiriusSpinbox
 
 from .base import IDCommonControlWindow, IDCommonDialog, \
@@ -202,28 +202,56 @@ class EPUControlWindow(IDCommonControlWindow):
         return None
 
     def _auxCommandsWidget(self):
-        self._ld_phsspdlim = QLabel('Max Phase\nSpeed [mm/s]', self)
-        self._sb_phsspdlim = SiriusSpinbox(
-            self, self.dev_pref.substitute(propty='MaxPhaseSpeed-SP'))
-        self._sb_phsspdlim.setStyleSheet('max-width:4.5em;')
-        self._lb_phsspdlim = SiriusLabel(
-            self, self.dev_pref.substitute(propty='MaxPhaseSpeed-RB'))
-
-        self._ld_gapspdlim = QLabel('Max Gap\nSpeed [mm/s]', self)
-        self._sb_gapspdlim = SiriusSpinbox(
-            self, self.dev_pref.substitute(propty='MaxGapSpeed-SP'))
-        self._sb_gapspdlim.setStyleSheet('max-width:4.5em;')
-        self._lb_gapspdlim = SiriusLabel(
-            self, self.dev_pref.substitute(propty='MaxGapSpeed-RB'))
-
         gbox = QGroupBox('Auxiliary Commands', self)
         lay = QGridLayout(gbox)
-        lay.addWidget(self._ld_phsspdlim, 0, 0)
-        lay.addWidget(self._sb_phsspdlim, 0, 1)
-        lay.addWidget(self._lb_phsspdlim, 0, 2)
-        lay.addWidget(self._ld_gapspdlim, 1, 0)
-        lay.addWidget(self._sb_gapspdlim, 1, 1)
-        lay.addWidget(self._lb_gapspdlim, 1, 2)
+
+        row = 0
+        for prop in ['Phase', 'Gap']:
+            ld_phsspdlim = QLabel('Max '+prop+' Speed [mm/s]', self)
+            sb_phsspdlim = SiriusSpinbox(
+                self, self.dev_pref.substitute(propty='Max'+prop+'Speed-SP'))
+            sb_phsspdlim.setStyleSheet('max-width:4.5em;')
+            lb_phsspdlim = SiriusLabel(
+                self, self.dev_pref.substitute(propty='Max'+prop+'Speed-RB'))
+
+            ld_pwrenbl = QLabel('Enable '+prop+' Drives Power', self)
+            pvname = self.dev_pref.substitute(propty='EnblPwr'+prop+'-Cmd')
+            pb_pwrenbl = PyDMPushButton(
+                parent=self, label='', icon=qta.icon('fa5s.plug'),
+                init_channel=pvname, pressValue=1)
+            pb_pwrenbl.setObjectName('btn')
+            pb_pwrenbl.setStyleSheet(
+                '#btn{min-width:30px; max-width:30px; icon-size:25px;}')
+            led_pwrsts = SiriusLedState(
+                self, self.dev_pref.substitute(propty='Pwr'+prop+'-Mon'))
+            led_pwrsts.offColor = PyDMLed.Red
+
+            lay.addWidget(ld_phsspdlim, row, 0)
+            lay.addWidget(sb_phsspdlim, row, 1)
+            lay.addWidget(lb_phsspdlim, row, 2)
+            lay.addWidget(ld_pwrenbl, row+1, 0)
+            lay.addWidget(pb_pwrenbl, row+1, 1)
+            lay.addWidget(led_pwrsts, row+1, 2, alignment=Qt.AlignLeft)
+            lay.addItem(
+                QSpacerItem(1, 15, QSzPlcy.Ignored, QSzPlcy.Fixed), row+2, 0)
+            row += 3
+
+        ld_pwrenbl = QLabel('Enable All Drives Power', self)
+        pvname = self.dev_pref.substitute(propty='EnblPwrAll-Cmd')
+        pb_pwrenbl = PyDMPushButton(
+            parent=self,  label='', icon=qta.icon('fa5s.plug'),
+            init_channel=pvname, pressValue=1)
+        pb_pwrenbl.setObjectName('btn')
+        pb_pwrenbl.setStyleSheet(
+            '#btn{min-width:30px; max-width:30px; icon-size:25px;}')
+        c2v = {
+            self.dev_pref.substitute(propty='PwrPhase-Mon'): 1,
+            self.dev_pref.substitute(propty='PwrGap-Mon'): 1}
+        led_pwrsts = PyDMLedMultiChannel(self, channels2values=c2v)
+
+        lay.addWidget(ld_pwrenbl, row, 0)
+        lay.addWidget(pb_pwrenbl, row, 1)
+        lay.addWidget(led_pwrsts, row, 2, alignment=Qt.AlignLeft)
         gbox.setStyleSheet(
             '.QLabel{qproperty-alignment: "AlignRight | AlignVCenter";}')
         return gbox
