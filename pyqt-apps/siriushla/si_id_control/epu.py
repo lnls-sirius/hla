@@ -134,7 +134,7 @@ class EPUControlWindow(IDCommonControlWindow):
 
             row += 5
 
-        self._ld_stopall = QLabel('Stop all', self)
+        self._ld_stopall = QLabel('Stop All Motion', self)
         self._pb_stopall = PyDMPushButton(
                 self, label='', icon=qta.icon('fa5s.times'))
         self._pb_stopall.setToolTip('Stop all motion, lock all brakes.')
