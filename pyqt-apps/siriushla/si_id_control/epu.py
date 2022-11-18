@@ -259,13 +259,8 @@ class EPUSummaryWidget(IDCommonSummaryWidget, EPUSummaryBase):
         if not wids:
             orientation = 'v'
         if prop == 'Status':
-            led = PyDMLedMultiChannel(
-                self,
-                {self.dev_pref.substitute(propty='Alarm-Mon'): 0,
-                 self.dev_pref.substitute(propty='IntlkInStop-Mon'): 0,
-                 self.dev_pref.substitute(propty='IntlkInEOpnGap-Mon'): 0,
-                 self.dev_pref.substitute(propty='IntlkOutPwrEnbld-Mon'): 1,
-                 self.dev_pref.substitute(propty='IsOperational-Mon'): 1})
+            led = SiriusLedAlert(
+                self, self.dev_pref.substitute(propty='Status-Mon'))
             wids.append(led)
         elif prop == 'Phase':
             spb = SiriusSpinbox(
