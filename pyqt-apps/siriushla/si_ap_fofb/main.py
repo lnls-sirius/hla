@@ -114,7 +114,8 @@ class MainWindow(BaseObject, SiriusMainWindow):
         labels = _FOFBEnums.STS_LBLS_FOFBCTRL
         cmds = [None]*len(labels)
         cmds[1] = self.devpref.substitute(propty='CtrlrConfBPMId-Cmd')
-        cmds[2] = self.devpref.substitute(propty='CtrlrSyncNet-Cmd')
+        sofbpvname = _PVName('SI-Glob:AP-SOFB').substitute(prefix=self.prefix)
+        cmds[2] = sofbpvname.substitute(propty='SyncBPMs-Cmd')
         cmds[4] = self.devpref.substitute(propty='CtrlrSyncRefOrb-Cmd')
         cmds[5] = self.devpref.substitute(propty='CtrlrSyncTFrameLen-Cmd')
         cmds[6] = self.devpref.substitute(propty='CtrlrConfBPMLogTrg-Cmd')
