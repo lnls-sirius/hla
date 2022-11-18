@@ -321,6 +321,8 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
             self.devpref.substitute(propty='CtrlrSyncEnblList-Mon'))
         self._ch_synenls.new_value_signal[_np.ndarray].connect(
             self._update_dcc_enbllist)
+        self._ch_synenls.new_value_signal[_np.ndarray].connect(
+            self._update_refpacketloss)
 
         self.setFocusPolicy(Qt.StrongFocus)
 
@@ -332,9 +334,10 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
         tab.addTab(self._setupLinkPartnerTab(), 'DCC Linked Partners')
         tab.addTab(self._setupRefOrbTab(), 'RefOrb Sync Status')
         tab.addTab(self._setupTimeFrameLenTab(), 'DCC TimeFrameLen')
-        tab.addTab(self._setupOrbDistTab(), 'Orbit Distortion Detection')
-        tab.addTab(self._setupIntlkTab(), 'Interlock')
         tab.addTab(self._setupBPMLogTrigTab(), 'BPM Logical Trigger Configs')
+        tab.addTab(self._setupOrbDistTab(), 'Orbit Distortion Detection')
+        tab.addTab(self._setupPacketLossTab(), 'Packet Loss Detection')
+        tab.addTab(self._setupIntlkTab(), 'Loop Interlock')
 
         lay = QVBoxLayout(self)
         lay.addWidget(tab)
@@ -643,6 +646,67 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
             c2v = {
                 pref.substitute(propty='MaxOrbDistortion-RB'): odt,
                 pref.substitute(propty='MaxOrbDistortionEnbl-Sts'): odd,
+            }
+            led.set_channels2values(c2v)
+
+    def _setupPacketLossTab(self):
+        wid = QWidget()
+        lay = QGridLayout(wid)
+        lay.setSpacing(1)
+        lay.setAlignment(Qt.AlignLeft | Qt.AlignTop)
+
+        # header
+        lay.addWidget(
+            QLabel('<h4>Device</h4>', self, alignment=Qt.AlignCenter), 0, 0)
+        lay.addWidget(
+            QLabel('<h4>MinBPMCount</h4>', self, alignment=Qt.AlignCenter), 0, 1)
+        lay.addWidget(
+            QLabel('<h4>Enable</h4>', self, alignment=Qt.AlignCenter), 0, 2)
+
+        # table
+        self.leds_pld = dict()
+        for idx, ctl in enumerate(self.ctrlrs):
+            row = idx + 1
+            c2v = dict()
+
+            lbl = QLabel(ctl, self, alignment=Qt.AlignCenter)
+            pvn = _PVName(ctl).substitute(
+                prefix=self.prefix, propty='MinBPMCnt-RB')
+            c2v[pvn] = 0
+            plb = SiriusLabel(self, pvn)
+            lay.addWidget(lbl, row, 0)
+            lay.addWidget(plb, row, 1)
+
+            pvn = _PVName(ctl).substitute(
+                prefix=self.prefix, propty='MinBPMCntEnbl-Sts')
+            c2v[pvn] = 0
+            led = SiriusLedState(self, pvn)
+            led.setObjectName('led_status')
+            led.shape = led.ShapeMap.Square
+            lay.addWidget(led, row, 2, alignment=Qt.AlignTop)
+
+            led = PyDMLedMultiChannel(self, c2v)
+            self.leds_pld[ctl] = led
+            lay.addWidget(led, row, 3)
+
+        self._ch_ple = _ConnSignal(
+            self.devpref.substitute(propty='LoopPacketLossDetecEnbl-Sts'))
+        self._ch_ple.new_value_signal[int].connect(
+            self._update_refpacketloss)
+
+        return self._build_scroll_area(wid)
+
+    def _update_refpacketloss(self, _):
+        plc = self._ch_synenls.value
+        ple = self._ch_ple.value
+        if plc is None or ple is None:
+            return
+        plc = int(_np.sum(plc))
+        for ctl, led in self.leds_pld.items():
+            pref = _PVName(ctl).substitute(prefix=self.prefix)
+            c2v = {
+                pref.substitute(propty='MinBPMCnt-RB'): plc,
+                pref.substitute(propty='MinBPMCntEnbl-Sts'): ple,
             }
             led.set_channels2values(c2v)
 

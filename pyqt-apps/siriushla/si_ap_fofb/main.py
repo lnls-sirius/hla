@@ -8,12 +8,12 @@ import qtawesome as qta
 
 from pydm.widgets import PyDMPushButton
 
+from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.fofb.csdev import ETypes as _FOFBEnums
-from siriushla.widgets.led import SiriusLedState
 
 from ..util import connect_window
 from ..widgets import SiriusLedAlert, SiriusLabel, SiriusSpinbox, \
-    PyDMLogLabel, SiriusMainWindow, PyDMStateButton
+    PyDMLogLabel, SiriusMainWindow, PyDMStateButton, SiriusLedState
 
 from .base import BaseObject, get_fofb_icon
 from .custom_widgets import RefOrbWidget, StatusDialog, BPMSwModeWidget, \
@@ -120,7 +120,9 @@ class MainWindow(BaseObject, SiriusMainWindow):
         cmds[5] = self.devpref.substitute(propty='CtrlrSyncTFrameLen-Cmd')
         cmds[6] = self.devpref.substitute(propty='CtrlrConfBPMLogTrg-Cmd')
         cmds[7] = self.devpref.substitute(propty='CtrlrSyncMaxOrbDist-Cmd')
-        cmds[8] = self.devpref.substitute(propty='CtrlrReset-Cmd')
+        cmds[8] = self.devpref.substitute(
+            propty='CtrlrSyncPacketLossDetec-Cmd')
+        cmds[9] = self.devpref.substitute(propty='CtrlrReset-Cmd')
         dtl_ctrl = QPushButton('Details')
         dtl_ctrl.setDefault(False)
         dtl_ctrl.setAutoDefault(False)
@@ -286,6 +288,16 @@ class MainWindow(BaseObject, SiriusMainWindow):
                 glay2.addWidget(lbl, 3, 0)
                 glay2.addWidget(sbt, 3, 1)
                 glay2.addWidget(led, 3, 2)
+
+                lbl = QLabel(
+                    'Enable Packet Loss Detec.: ', self,
+                    alignment=Qt.AlignRight | Qt.AlignVCenter)
+                pvn = pref.substitute(propty='LoopPacketLossDetecEnbl-Sel')
+                sbt = PyDMStateButton(self, pvn)
+                led = SiriusLedState(self, pvn.substitute(propty_suffix='Sts'))
+                glay2.addWidget(lbl, 4, 0)
+                glay2.addWidget(sbt, 4, 1)
+                glay2.addWidget(led, 4, 2)
 
                 glay.addLayout(glay2)
             elif 'BPM' in group:
