@@ -385,6 +385,6 @@ class EPUDriveDetails(IDCommonDialog):
             glay.addWidget(lb_moving, 5, col)
 
         gbox.setStyleSheet(
-            '.QLabel{qproperty-alignment: AlignCenter;}')
+            'QLabel{qproperty-alignment: AlignCenter; max-width: 12em;}')
         lay = QHBoxLayout(self)
         lay.addWidget(gbox)
