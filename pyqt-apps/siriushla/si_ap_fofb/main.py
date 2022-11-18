@@ -227,7 +227,10 @@ class MainWindow(BaseObject, SiriusMainWindow):
             glay = QVBoxLayout(gbox)
 
             if 'Corr' in group:
-                for dev in ['CH', 'CV']:
+                glay2 = QGridLayout()
+                glay2.setContentsMargins(0, 0, 0, 0)
+
+                for row, dev in enumerate(['CH', 'CV']):
                     lbl = QLabel(
                         dev+' Sat. Limit [A]: ', self,
                         alignment=Qt.AlignRight | Qt.AlignVCenter)
@@ -236,12 +239,24 @@ class MainWindow(BaseObject, SiriusMainWindow):
                         self, pref.substitute(propty=dev+'AccSatMax-SP'))
                     rbw = SiriusLabel(
                         self, pref.substitute(propty=dev+'AccSatMax-RB'))
-                    hlay = QHBoxLayout()
-                    hlay.setContentsMargins(0, 0, 0, 0)
-                    hlay.addWidget(lbl)
-                    hlay.addWidget(spw)
-                    hlay.addWidget(rbw)
-                    glay.addLayout(hlay)
+                    glay2.addWidget(lbl, row, 0)
+                    glay2.addWidget(spw, row, 1)
+                    glay2.addWidget(rbw, row, 2)
+
+                lbl = QLabel(
+                    'Curr. Ramp Down Dur. [s]: ', self,
+                    alignment=Qt.AlignRight | Qt.AlignVCenter)
+                pref = self.devpref
+                spw = SiriusSpinbox(
+                    self, pref.substitute(propty='CorrSetCurrZeroDuration-SP'))
+                rbw = SiriusLabel(
+                    self, pref.substitute(propty='CorrSetCurrZeroDuration-RB'))
+                glay2.addWidget(lbl, 2, 0)
+                glay2.addWidget(spw, 2, 1)
+                glay2.addWidget(rbw, 2, 2)
+
+                glay.addLayout(glay2)
+
             elif 'Control' in group:
                 glay2 = QGridLayout()
                 glay2.setContentsMargins(0, 0, 0, 0)
