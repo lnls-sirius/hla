@@ -18,36 +18,10 @@ class EPUControlWindow(IDCommonControlWindow):
     """EPU Control Window."""
 
     def _mainControlsWidget(self):
-        self._ld_kx = QLabel('Kx', self)
-        self._sb_kx = SiriusSpinbox(
-            self, self.dev_pref.substitute(propty='Kx-SP'))
-        self._lb_kx = SiriusLabel(
-            self, self.dev_pref.substitute(propty='Kx-RB'))
-        self._lb_kxmon = SiriusLabel(
-            self, self.dev_pref.substitute(propty='Kx-Mon'))
-
-        self._ld_ky = QLabel('Ky', self)
-        self._sb_ky = SiriusSpinbox(
-            self, self.dev_pref.substitute(propty='Ky-SP'))
-        self._lb_ky = SiriusLabel(
-            self, self.dev_pref.substitute(propty='Ky-RB'))
-        self._lb_kymon = SiriusLabel(
-            self, self.dev_pref.substitute(propty='Ky-Mon'))
-
         gbox = QGroupBox('Main Controls', self)
         lay = QGridLayout(gbox)
-        lay.addWidget(self._ld_kx, 0, 0)
-        lay.addWidget(self._sb_kx, 0, 1)
-        lay.addWidget(self._lb_kx, 0, 2)
-        lay.addWidget(self._lb_kxmon, 0, 3)
-        lay.addWidget(self._ld_ky, 1, 0)
-        lay.addWidget(self._sb_ky, 1, 1)
-        lay.addWidget(self._lb_ky, 1, 2)
-        lay.addWidget(self._lb_kymon, 1, 3)
-        lay.addItem(
-            QSpacerItem(1, 15, QSzPlcy.Ignored, QSzPlcy.Fixed), 2, 0)
 
-        row = 3
+        row = 0
         for prop in ['Phase', 'Gap']:
             ld_prop = QLabel(prop+' [mm]', self)
             sb_prop = SiriusSpinbox(
@@ -262,8 +236,6 @@ class EPUSummaryBase(IDCommonSummaryBase):
 
     MODEL_WIDTHS = (
         ('Status', 4),
-        ('Kx', 6),
-        ('Ky', 6),
         ('Phase', 6),
         ('Phase Speed', 6),
         ('Start Phase', 4),
@@ -295,20 +267,6 @@ class EPUSummaryWidget(IDCommonSummaryWidget, EPUSummaryBase):
                  self.dev_pref.substitute(propty='IntlkOutPwrEnbld-Mon'): 1,
                  self.dev_pref.substitute(propty='IsOperational-Mon'): 1})
             wids.append(led)
-        elif prop == 'Kx':
-            spb = SiriusSpinbox(
-                self, self.dev_pref.substitute(propty='Kx-SP'))
-            wids.append(spb)
-            lbl = SiriusLabel(
-                self, self.dev_pref.substitute(propty='Kx-Mon'))
-            wids.append(lbl)
-        elif prop == 'Ky':
-            spb = SiriusSpinbox(
-                self, self.dev_pref.substitute(propty='Ky-SP'))
-            wids.append(spb)
-            lbl = SiriusLabel(
-                self, self.dev_pref.substitute(propty='Ky-Mon'))
-            wids.append(lbl)
         elif prop == 'Phase':
             spb = SiriusSpinbox(
                 self, self.dev_pref.substitute(propty='Phase-SP'))
