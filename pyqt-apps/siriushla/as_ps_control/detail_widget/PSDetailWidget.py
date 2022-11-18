@@ -1907,7 +1907,7 @@ class FastCorrPSDetailWidget(PSDetailWidget):
     def _fofbctrlLayout(self):
         # controls
         fofbaccgain_lb = QLabel(
-            'Acc Gain', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            'Acc. Gain', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         self.fofbaccgain_sp = SiriusSpinbox(
             self, self._prefixed_psname + ':FOFBAccGain-SP')
         self.fofbaccgain_sp.precisionFromPV = False
@@ -1918,20 +1918,44 @@ class FastCorrPSDetailWidget(PSDetailWidget):
         self.fofbaccgain_rb.precision = 8
 
         fofbaccfreeze_lb = QLabel(
-            'Acc Freeze', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            'Acc. Freeze', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         self.fofbaccfreeze_sp = PyDMEnumComboBox(
             self, self._prefixed_psname + ':FOFBAccFreeze-Sel')
         self.fofbaccfreeze_rb = SiriusLabel(
             self, self._prefixed_psname + ':FOFBAccFreeze-Sts')
 
         fofbaccclear_lb = QLabel(
-            'Acc Clear', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            'Acc. Clear', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         self.fofbaccclear_bt = PyDMPushButton(
             parent=self, icon=qta.icon('mdi.sync'), pressValue=1,
             init_channel=self._prefixed_psname + ":FOFBAccClear-Cmd")
         self.fofbaccclear_bt.setObjectName('accclear_bt')
         self.fofbaccclear_bt.setStyleSheet(
             '#accclear_bt{min-width:25px; max-width:25px; icon-size:20px;}')
+
+        fofbaccmaxsat_lb = QLabel(
+            'Max. Sat. Current', self,
+            alignment=Qt.AlignRight | Qt.AlignVCenter)
+        self.fofbaccmaxsat_sp = SiriusSpinbox(
+            self, self._prefixed_psname + ':FOFBAccSatMax-SP')
+        self.fofbaccmaxsat_sp.precisionFromPV = False
+        self.fofbaccmaxsat_sp.precision = 8
+        self.fofbaccmaxsat_rb = SiriusLabel(
+            self, self._prefixed_psname + ':FOFBAccSatMax-RB')
+        self.fofbaccmaxsat_rb.precisionFromPV = False
+        self.fofbaccmaxsat_rb.precision = 8
+
+        fofbaccminsat_lb = QLabel(
+            'Min. Sat. Current', self,
+            alignment=Qt.AlignRight | Qt.AlignVCenter)
+        self.fofbaccminsat_sp = SiriusSpinbox(
+            self, self._prefixed_psname + ':FOFBAccSatMin-SP')
+        self.fofbaccminsat_sp.precisionFromPV = False
+        self.fofbaccminsat_sp.precision = 8
+        self.fofbaccminsat_rb = SiriusLabel(
+            self, self._prefixed_psname + ':FOFBAccSatMin-RB')
+        self.fofbaccminsat_rb.precisionFromPV = False
+        self.fofbaccminsat_rb.precision = 8
 
         widctrl = QWidget()
         lay = QGridLayout(widctrl)
@@ -1944,6 +1968,12 @@ class FastCorrPSDetailWidget(PSDetailWidget):
         lay.addWidget(self.fofbaccfreeze_rb, 1, 2)
         lay.addWidget(fofbaccclear_lb, 2, 0, Qt.AlignRight)
         lay.addWidget(self.fofbaccclear_bt, 2, 1)
+        lay.addWidget(fofbaccmaxsat_lb, 3, 0, Qt.AlignRight)
+        lay.addWidget(self.fofbaccmaxsat_sp, 3, 1)
+        lay.addWidget(self.fofbaccmaxsat_rb, 3, 2)
+        lay.addWidget(fofbaccminsat_lb, 4, 0, Qt.AlignRight)
+        lay.addWidget(self.fofbaccminsat_sp, 4, 1)
+        lay.addWidget(self.fofbaccminsat_rb, 4, 2)
 
         # coefficients
         self.gph_fofbcoeff = SiriusWaveformPlot()
