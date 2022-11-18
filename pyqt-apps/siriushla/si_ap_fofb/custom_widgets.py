@@ -664,7 +664,7 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
             lbl = QLabel(dcc, self, alignment=Qt.AlignCenter)
             lay.addWidget(lbl, row, 0)
             pvn = _PVName(dcc).substitute(
-                prefix=self.prefix, propty='Intlk-Mon')
+                prefix=self.prefix, propty='LoopIntlk-Mon')
             led = SiriusLedAlert(self, pvn)
             led.setObjectName('led_status')
             lay.addWidget(led, row, 1, alignment=Qt.AlignTop)
