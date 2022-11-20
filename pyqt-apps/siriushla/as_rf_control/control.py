@@ -1384,7 +1384,7 @@ class RFMainControl(SiriusMainWindow):
                     '-Mon', 'Dsbl-Cmd')})
         rules = (
             '[{"name": "EnblRule", "property": "Enable", ' +
-            '"expression": "ch[0] < 3.0", "channels": [' +
+            '"expression": "ch[0] < 3.5", "channels": [' +
             '{"channel": "'+self.prefix+chs_dict['PreDrive'] +
             '", "trigger": true}]}]')
         bt_pinsw.pb_on.rules = rules
