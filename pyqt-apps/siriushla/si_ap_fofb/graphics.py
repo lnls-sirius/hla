@@ -10,6 +10,7 @@ from qtpy.QtWidgets import QToolTip, QWidget, QVBoxLayout, QLabel, \
 
 from pyqtgraph import mkBrush, mkPen
 
+from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.devices import StrengthConv
 
 from ..widgets import SiriusConnectionSignal as _ConnSig, QDoubleSpinBoxPlus,\
@@ -53,7 +54,7 @@ class MatrixWidget(BaseObject, QWidget):
         vbl.addWidget(graph)
 
         self.spbox = QDoubleSpinBoxPlus(self)
-        self.spbox.setMinimum(0.01)
+        self.spbox.setMinimum(0)
         self.spbox.setMaximum(1000)
         value = 1.0 if self._is_coeff or self._is_inv else 80.0
         self.spbox.setValue(value)
@@ -108,8 +109,12 @@ class MatrixWidget(BaseObject, QWidget):
         ind = _np.argmin(_np.abs(_np.array(bpos)-posx))
         posy = curve.scatter.mapFromScene(pos).y()
 
-        indy = int(posy // self.spbox.value())
-        indy = max(min(indy, len(cname)-1), 0)
+        sbval = self.spbox.value()
+        if sbval == 0:
+            indy = 0
+        else:
+            indy = int(posy // self.spbox.value())
+            indy = max(min(indy, len(cname)-1), 0)
         txt = 'BPM = {0:s}, Corr = {1:s}'.format(bname[ind], cname[indy])
         QToolTip.showText(
             graph.mapToGlobal(pos.toPoint()),
@@ -336,6 +341,12 @@ class KickWidget(BaseObject, QWidget):
         self.enblv = _ConnSig(self.devpref.substitute(propty='CVEnblList-RB'))
         self.enblv.new_value_signal[_np.ndarray].connect(
             _part(self._update_graph, 'enbl', 'v'))
+        self.energy = _ConnSig(_PVName('SI-Fam:PS-B1B2-1').substitute(
+            prefix=self.prefix, propty='EnergyRef-Mon'))
+        self.energy.new_value_signal[float].connect(
+            _part(self._update_graph, 'energy', 'h'))
+        self.energy.new_value_signal[float].connect(
+            _part(self._update_graph, 'energy', 'v'))
         self._update_horizontal()
 
     def _setupui(self):
@@ -450,6 +461,11 @@ class KickWidget(BaseObject, QWidget):
             curve.opts['symbolPen'] = pens
             curve.opts['symbolSize'] = sizes
         else:
+            if data == 'energy':
+                value = self.limh.value if plane == 'h' \
+                    else self.limv.value
+                if value is None:
+                    return
             psnames = self._csorb.ch_names if plane == 'h' \
                 else self._csorb.cv_names
             maxlim = _np.array([

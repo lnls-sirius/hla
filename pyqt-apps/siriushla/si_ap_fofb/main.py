@@ -1,30 +1,29 @@
 """High level FOFB main module."""
 
 from qtpy.QtCore import Qt
-from qtpy.QtWidgets import QPushButton, QWidget, QGridLayout, \
-    QLabel, QVBoxLayout, QGroupBox, QMenuBar, QAction, \
-    QSizePolicy as QSzPlcy
+from qtpy.QtWidgets import QPushButton, QWidget, QGridLayout, QMenu, \
+    QLabel, QVBoxLayout, QGroupBox, QMenuBar, QAction, QHBoxLayout, \
+    QSizePolicy as QSzPlcy, QDockWidget, QTabWidget
 import qtawesome as qta
 
 from pydm.widgets import PyDMPushButton
 
+from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.fofb.csdev import ETypes as _FOFBEnums
-from siriushla.widgets.led import SiriusLedState
 
 from ..util import connect_window
 from ..widgets import SiriusLedAlert, SiriusLabel, SiriusSpinbox, \
-    PyDMLogLabel, SiriusMainWindow, PyDMStateButton
-from ..widgets.windows import create_window_from_widget
+    PyDMLogLabel, SiriusMainWindow, PyDMStateButton, SiriusLedState
 
 from .base import BaseObject, get_fofb_icon
-from .custom_widgets import RefOrbWidget, StatusDialog, AuxCommDialog, \
+from .custom_widgets import RefOrbWidget, StatusDialog, BPMSwModeWidget, \
     ControllersDetailDialog
 from .respmat import RespMatWidget
 from .graphics import KickWidget
 
 
 class MainWindow(BaseObject, SiriusMainWindow):
-    """FOFB RespMat widget."""
+    """FOFB Main Window."""
 
     def __init__(self, parent=None, prefix='', device=''):
         BaseObject.__init__(self, device, prefix=prefix)
@@ -41,35 +40,34 @@ class MainWindow(BaseObject, SiriusMainWindow):
 
         self.kicks_view = KickWidget(self, self.device, self.prefix)
 
-        self.status = self._setupStatusWidget()
+        self.control = self._setupControlWidget()
 
-        self.reforb = self._setupRefOrbWidget()
-
-        self.respmat = RespMatWidget(self, self.device, self.prefix)
-
-        self.loop = self._setupLoopWidget()
-
-        cwid = QWidget()
-        layout = QGridLayout(cwid)
-        layout.addWidget(self.log, 0, 0, 4, 1)
-        layout.addWidget(self.kicks_view, 0, 1, 4, 1)
-        layout.addWidget(self.status, 0, 2)
-        layout.addWidget(self.loop, 1, 2)
-        layout.addWidget(self.reforb, 2, 2)
-        layout.addWidget(self.respmat, 3, 2)
-        layout.setColumnStretch(0, 1)
-        layout.setColumnStretch(1, 3)
-        layout.setColumnStretch(2, 1)
-        self.setCentralWidget(cwid)
+        self.setDocumentMode(False)
+        self.setDockNestingEnabled(True)
+        self.addDockWidget(Qt.LeftDockWidgetArea, self.log)
+        self.setCentralWidget(self.kicks_view)
+        self.addDockWidget(Qt.RightDockWidgetArea, self.control)
 
         # menu
         menubar = QMenuBar(self)
         self.setMenuBar(menubar)
-        auxcomm_act = QAction('Auxiliary commands', menubar)
-        connect_window(
-            auxcomm_act, AuxCommDialog, parent=self,
-            device=self.device, prefix=self.prefix)
-        menubar.addAction(auxcomm_act)
+        menuopen = QMenu('Open', menubar)
+        actions = (
+            ('&FOFB Control', 'FOFB Control', '', True, self.control),
+            ('FOFB &Log', 'FOFB Log', '', True, self.log),
+        )
+        for name, tool, short, check, doc in actions:
+            action = QAction(name, self)
+            action.setToolTip(tool)
+            action.setShortcut(short)
+            action.setCheckable(check)
+            action.setChecked(check)
+            action.setEnabled(True)
+            action.setVisible(True)
+            action.toggled.connect(doc.setVisible)
+            doc.visibilityChanged.connect(action.setChecked)
+            menuopen.addAction(action)
+        menubar.addAction(menuopen.menuAction())
 
     def _setupStatusWidget(self):
         # correctors
@@ -116,12 +114,15 @@ class MainWindow(BaseObject, SiriusMainWindow):
         labels = _FOFBEnums.STS_LBLS_FOFBCTRL
         cmds = [None]*len(labels)
         cmds[1] = self.devpref.substitute(propty='CtrlrConfBPMId-Cmd')
-        cmds[2] = self.devpref.substitute(propty='CtrlrSyncNet-Cmd')
+        sofbpvname = _PVName('SI-Glob:AP-SOFB').substitute(prefix=self.prefix)
+        cmds[2] = sofbpvname.substitute(propty='SyncBPMs-Cmd')
         cmds[4] = self.devpref.substitute(propty='CtrlrSyncRefOrb-Cmd')
         cmds[5] = self.devpref.substitute(propty='CtrlrSyncTFrameLen-Cmd')
         cmds[6] = self.devpref.substitute(propty='CtrlrConfBPMLogTrg-Cmd')
         cmds[7] = self.devpref.substitute(propty='CtrlrSyncMaxOrbDist-Cmd')
-        cmds[8] = self.devpref.substitute(propty='CtrlrReset-Cmd')
+        cmds[8] = self.devpref.substitute(
+            propty='CtrlrSyncPacketLossDetec-Cmd')
+        cmds[9] = self.devpref.substitute(propty='CtrlrReset-Cmd')
         dtl_ctrl = QPushButton('Details')
         dtl_ctrl.setDefault(False)
         dtl_ctrl.setAutoDefault(False)
@@ -200,9 +201,184 @@ class MainWindow(BaseObject, SiriusMainWindow):
         lay.addWidget(lb_gain_mon_v, 3, 3)
         return wid
 
+    def _setupAuxCommWidget(self):
+        group2cmd = {
+            'Correctors': {
+                'Set all current to zero': 'CorrSetCurrZero-Cmd',
+                'Clear all Acc': 'CorrSetAccClear-Cmd',
+                'Set all PwrState to On': 'CorrSetPwrStateOn-Cmd',
+                'Set all OpMode to Manual': 'CorrSetOpModeManual-Cmd',
+                'Set all AccFreeze to Enbl': 'CorrSetAccFreezeEnbl-Cmd',
+                'Set all AccFreeze to Dsbl': 'CorrSetAccFreezeDsbl-Cmd',
+            },
+            'Controllers': {
+                'Sync Net': 'CtrlrSyncNet-Cmd',
+                'Sync RefOrb': 'CtrlrSyncRefOrb-Cmd',
+            },
+            'BPMs': {
+                'Configure BPM Log.Trigs.': 'CtrlrConfBPMLogTrg-Cmd',
+            },
+        }
+        wid = QWidget()
+        lay = QVBoxLayout(wid)
+        lay.setContentsMargins(0, 0, 0, 0)
+        for group, commands in group2cmd.items():
+            gbox = QGroupBox(group)
+            glay = QVBoxLayout(gbox)
+
+            if 'Corr' in group:
+                glay2 = QGridLayout()
+                glay2.setContentsMargins(0, 0, 0, 0)
+
+                for row, dev in enumerate(['CH', 'CV']):
+                    lbl = QLabel(
+                        dev+' Sat. Limit [A]: ', self,
+                        alignment=Qt.AlignRight | Qt.AlignVCenter)
+                    pref = self.devpref
+                    spw = SiriusSpinbox(
+                        self, pref.substitute(propty=dev+'AccSatMax-SP'))
+                    rbw = SiriusLabel(
+                        self, pref.substitute(propty=dev+'AccSatMax-RB'))
+                    glay2.addWidget(lbl, row, 0)
+                    glay2.addWidget(spw, row, 1)
+                    glay2.addWidget(rbw, row, 2)
+
+                lbl = QLabel(
+                    'Curr. Ramp Down Dur. [s]: ', self,
+                    alignment=Qt.AlignRight | Qt.AlignVCenter)
+                pref = self.devpref
+                spw = SiriusSpinbox(
+                    self, pref.substitute(propty='CorrSetCurrZeroDuration-SP'))
+                rbw = SiriusLabel(
+                    self, pref.substitute(propty='CorrSetCurrZeroDuration-RB'))
+                glay2.addWidget(lbl, 2, 0)
+                glay2.addWidget(spw, 2, 1)
+                glay2.addWidget(rbw, 2, 2)
+
+                glay.addLayout(glay2)
+
+            elif 'Control' in group:
+                glay2 = QGridLayout()
+                glay2.setContentsMargins(0, 0, 0, 0)
+
+                pref = self.devpref
+                lbl = QLabel(
+                    'TimeFrameLen: ', self,
+                    alignment=Qt.AlignRight | Qt.AlignVCenter)
+                spw = SiriusSpinbox(
+                    self, pref.substitute(propty='TimeFrameLen-SP'))
+                rbw = SiriusLabel(
+                    self, pref.substitute(propty='TimeFrameLen-RB'))
+                glay2.addWidget(lbl, 0, 0)
+                glay2.addWidget(spw, 0, 1)
+                glay2.addWidget(rbw, 0, 2)
+
+                lbl = QLabel(
+                    'Consider EnblList in Sync: ', self,
+                    alignment=Qt.AlignRight | Qt.AlignVCenter)
+                pvn = pref.substitute(propty='CtrlrSyncUseEnblList-Sel')
+                sbt = PyDMStateButton(self, pvn)
+                led = SiriusLedState(self, pvn.substitute(propty_suffix='Sts'))
+                glay2.addWidget(lbl, 1, 0)
+                glay2.addWidget(sbt, 1, 1)
+                glay2.addWidget(led, 1, 2)
+
+                lbl = QLabel(
+                    'Orbit Dist. Thres. [um]: ', self,
+                    alignment=Qt.AlignRight | Qt.AlignVCenter)
+                spw = SiriusSpinbox(
+                    self, pref.substitute(propty='LoopMaxOrbDistortion-SP'))
+                rbw = SiriusLabel(
+                    self, pref.substitute(propty='LoopMaxOrbDistortion-RB'))
+                glay2.addWidget(lbl, 2, 0)
+                glay2.addWidget(spw, 2, 1)
+                glay2.addWidget(rbw, 2, 2)
+
+                lbl = QLabel(
+                    'Enable Orbit Dist. Detec.: ', self,
+                    alignment=Qt.AlignRight | Qt.AlignVCenter)
+                pvn = pref.substitute(propty='LoopMaxOrbDistortionEnbl-Sel')
+                sbt = PyDMStateButton(self, pvn)
+                led = SiriusLedState(self, pvn.substitute(propty_suffix='Sts'))
+                glay2.addWidget(lbl, 3, 0)
+                glay2.addWidget(sbt, 3, 1)
+                glay2.addWidget(led, 3, 2)
+
+                lbl = QLabel(
+                    'Enable Packet Loss Detec.: ', self,
+                    alignment=Qt.AlignRight | Qt.AlignVCenter)
+                pvn = pref.substitute(propty='LoopPacketLossDetecEnbl-Sel')
+                sbt = PyDMStateButton(self, pvn)
+                led = SiriusLedState(self, pvn.substitute(propty_suffix='Sts'))
+                glay2.addWidget(lbl, 4, 0)
+                glay2.addWidget(sbt, 4, 1)
+                glay2.addWidget(led, 4, 2)
+
+                glay.addLayout(glay2)
+            elif 'BPM' in group:
+                swbpm = BPMSwModeWidget(self, self.device, self.prefix)
+                glay.addWidget(swbpm)
+
+            for desc, cmd in commands.items():
+                btn = PyDMPushButton(
+                    self, label=desc, pressValue=1,
+                    init_channel=self.devpref.substitute(propty=cmd))
+                btn.setDefault(False)
+                btn.setAutoDefault(False)
+                glay.addWidget(btn)
+            lay.addWidget(gbox)
+        return wid
+
+    def _setupControlWidget(self):
+        self.controltabs = QTabWidget()
+
+        # tab main
+        self.status = self._setupStatusWidget()
+
+        self.reforb = self._setupRefOrbWidget()
+
+        self.respmat = RespMatWidget(self, self.device, self.prefix)
+
+        self.loop = self._setupLoopWidget()
+
+        maintab = QWidget()
+        lay = QVBoxLayout(maintab)
+        lay.addWidget(self.status)
+        lay.addWidget(self.loop)
+        lay.addWidget(self.reforb)
+        lay.addWidget(self.respmat)
+        self.controltabs.addTab(maintab, 'Main')
+
+        # tab aux
+        self.auxcmd = self._setupAuxCommWidget()
+
+        auxtab = QWidget()
+        lay = QVBoxLayout(auxtab)
+        lay.addWidget(self.auxcmd)
+        self.controltabs.addTab(auxtab, 'Auxiliary commands')
+
+        wid = QWidget()
+        lay = QVBoxLayout(wid)
+        lay.addWidget(self.controltabs)
+
+        # dock widget
+        dockwid = QDockWidget(self)
+        dockwid.setObjectName('SIApp')
+        dockwid.setWindowTitle('FOFB Control')
+        sz_pol = QSzPlcy(QSzPlcy.Preferred, QSzPlcy.Preferred)
+        sz_pol.setVerticalStretch(1)
+        dockwid.setSizePolicy(sz_pol)
+        dockwid.setFloating(False)
+        dockwid.setFeatures(QDockWidget.AllDockWidgetFeatures)
+        dockwid.setAllowedAreas(Qt.AllDockWidgetAreas)
+        dockwid.setWidget(wid)
+        return dockwid
+
     def _setupLogWidget(self):
         loglabel = PyDMLogLabel(
             self, init_channel=self.devpref.substitute(propty='Log-Mon'))
+        loglabel.setObjectName('log')
+        loglabel.setStyleSheet('#log{min-width: 20em;}')
         loglabel.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.MinimumExpanding)
         loglabel.setAlternatingRowColors(True)
         loglabel.maxCount = 2000
@@ -212,7 +388,17 @@ class MainWindow(BaseObject, SiriusMainWindow):
 
         wid = QWidget()
         lay = QVBoxLayout(wid)
-        lay.setContentsMargins(0, 0, 0, 0)
         lay.addWidget(loglabel)
         lay.addWidget(bt_clear, alignment=Qt.AlignCenter)
-        return wid
+
+        dockwid = QDockWidget(self)
+        dockwid.setObjectName('SIApp')
+        dockwid.setWindowTitle("FOFB Log")
+        sz_pol = QSzPlcy(QSzPlcy.Preferred, QSzPlcy.Preferred)
+        sz_pol.setVerticalStretch(1)
+        dockwid.setSizePolicy(sz_pol)
+        dockwid.setFloating(False)
+        dockwid.setFeatures(QDockWidget.AllDockWidgetFeatures)
+        dockwid.setAllowedAreas(Qt.AllDockWidgetAreas)
+        dockwid.setWidget(wid)
+        return dockwid
