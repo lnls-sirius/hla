@@ -43,9 +43,14 @@ class ChartWindow(SiriusMainWindow, BaseFunctionsInterface):
         name, gen = self.buildVacPv(id_num)
         pv_name = self.config['prefix']+name+self.channel+str(gen)
         graph.addYChannel(
-            y_channel=pv_name, axis='left',
+            y_channel=pv_name,
             name=self.getGroupTitle("Vacuum", id_num),
-            color=color, lineWidth=2)
+            color=color,
+            lineStyle=1,
+            lineWidth=3,
+            symbol='o',
+            symbolSize=10,
+            axis='left')
         return graph
 
     def chartsMon(self, lay):
