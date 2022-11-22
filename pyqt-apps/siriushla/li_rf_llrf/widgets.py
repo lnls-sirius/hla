@@ -192,7 +192,7 @@ class GraphTime(QWidget):
         lay1 = QGridLayout()
         self.setLayout(lay1)
 
-        graph = SiriusWaveformPlot(self)
+        graph = SiriusTimePlot(self)
         graph.setObjectName('graph')
         graph.setStyleSheet('#graph {min-height: 15em; min-width: 20em;}')
         graph.maxRedrawRate = 2
@@ -238,12 +238,11 @@ class GraphTime(QWidget):
             y_channel=chname,
             name='Data',
             color='red',
-            redraw_mode=2,
             lineStyle=1,
             lineWidth=3,
             symbol='o',
             symbolSize=10)
-        graph.addChannel(**opts)
+        graph.addYChannel(**opts)
         lay1.addWidget(graph, 0, 0)
 
 
