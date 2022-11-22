@@ -20,7 +20,7 @@ args = parser.parse_args()
 app = SiriusApplication()
 window = create_window_from_widget(
     LLRFMain, title='LI LLRF', is_main=True,
-    withscroll=True, min_width=105, min_height=55,
+    withscroll=True, min_width=90, min_height=45,
     icon=_qta.icon(
         'mdi.waves', color=_util.get_appropriate_color('LI')))
 app.open_window(
