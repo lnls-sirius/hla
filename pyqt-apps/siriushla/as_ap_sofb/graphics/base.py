@@ -103,7 +103,7 @@ class BaseWidget(QWidget):
             self, alignment=Qt.AlignLeft)
         lab.setStyleSheet("""min-height:1.5em; max-height:1.5em;""")
         self.hbl_nameh = QHBoxLayout()
-        vbl.addItem(self.hbl_nameh)
+        vbl.addLayout(self.hbl_nameh)
         self.hbl_nameh.addWidget(lab)
         self.hbl_nameh.addStretch(1)
         vbl.addWidget(graphx)
@@ -113,20 +113,20 @@ class BaseWidget(QWidget):
             self, alignment=Qt.AlignLeft)
         lab.setStyleSheet("""min-height:1.5em; max-height:1.5em;""")
         self.hbl_namev = QHBoxLayout()
-        vbl.addItem(self.hbl_namev)
+        vbl.addLayout(self.hbl_namev)
         self.hbl_namev.addWidget(lab)
         self.hbl_namev.addStretch(1)
         vbl.addWidget(graphy)
         self.graph = {'x': graphx, 'y': graphy}
 
         self.hbl = QHBoxLayout()
-        vbl.addItem(self.hbl)
-        self.hbl.addStretch(1)
+        vbl.addLayout(self.hbl)
+        self.hbl.addStretch(6)
         for i, _ in enumerate(self.line_names):
             grpbx = self.uicreate_groupbox(i)
             grpbx.setObjectName('GroupBox'+str(i))
             self.hbl.addWidget(grpbx)
-            self.hbl.addStretch(1)
+            self.hbl.addStretch(6)
 
     def uigetgraph(self, pln, size):
         """."""

@@ -50,7 +50,7 @@ class ShowMatrixWidget(QWidget):
         self.spbox.editingFinished.connect(self._update_graph)
 
         hbl = QHBoxLayout()
-        vbl.addItem(hbl)
+        vbl.addLayout(hbl)
         hbl.addWidget(QLabel('Lines spacing:', self))
         hbl.addWidget(self.spbox)
         hbl.addStretch()

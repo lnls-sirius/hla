@@ -34,6 +34,13 @@ class AcqControlWidget(BaseWidget):
         vbl.addStretch()
 
         tabw = QTabWidget(self)
+        tabw.setObjectName(self.acc+'Tab')
+        tabw.setStyleSheet("""
+            #{0}Tab::pane {{
+                border-left: 2px solid gray;
+                border-bottom: 2px solid gray;
+                border-right: 2px solid gray;
+            }}""".format(self.acc))
         grp_bx = self._get_single_pass_acq_grpbx()
         tabw.addTab(grp_bx, 'SinglePass')
         if self.isring:
@@ -44,6 +51,13 @@ class AcqControlWidget(BaseWidget):
         vbl.addStretch()
 
         tabw = QTabWidget(self)
+        tabw.setObjectName(self.acc+'Tab')
+        tabw.setStyleSheet("""
+            #{0}Tab::pane {{
+                border-left: 2px solid gray;
+                border-bottom: 2px solid gray;
+                border-right: 2px solid gray;
+            }}""".format(self.acc))
         self._set_detailed(tabw)
         grp_bx = _HLTriggerSimple(
             parent=tabw, device=self._csorb.trigger_acq_name,

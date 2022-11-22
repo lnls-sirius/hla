@@ -46,26 +46,28 @@ class RespMatWidget(BaseWidget):
         """."""
         gbox = QGroupBox('Matrix', self)
         gbox.setObjectName('grbx')
-        self.setLayout(QVBoxLayout())
-        self.layout().addWidget(gbox)
         vbl = QVBoxLayout(gbox)
-        tabw = QTabWidget(gbox)
-        vbl.addWidget(tabw)
+        vbl.setContentsMargins(0, 6, 0, 0)
 
+        tabw = QTabWidget(gbox)
+        tabw.setObjectName(self.acc+'Tab')
+        vbl.addWidget(tabw)
         main_wid = self.get_main_widget(tabw)
         tabw.addTab(main_wid, 'Main')
-
         svs_wid = self.get_singular_values_widget(tabw)
         tabw.addTab(svs_wid, 'SVs')
-
         if self.acc != 'BO':
             meas_wid = self.get_measurement_widget(tabw)
             tabw.addTab(meas_wid, 'Meas')
 
+        lay = QVBoxLayout()
+        lay.setContentsMargins(0, 0, 0, 0)
+        self.setLayout(lay)
+        lay.addWidget(gbox)
+
     def get_main_widget(self, parent):
         main_wid = QWidget(parent)
         main_lay = QVBoxLayout(main_wid)
-        main_lay.setContentsMargins(0, 0, 0, 0)
 
         sel_gp = QGroupBox('Sel.')
         sel_gp.setLayout(QHBoxLayout())

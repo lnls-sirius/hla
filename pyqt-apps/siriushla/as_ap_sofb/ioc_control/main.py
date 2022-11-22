@@ -34,8 +34,8 @@ class SOFBControl(BaseWidget):
     def setupui(self):
         """."""
         vbl = QVBoxLayout(self)
-        vbl.setContentsMargins(0, 0, 0, 0)
         tabw = QTabWidget(self)
+        tabw.setObjectName(self.acc+'Tab')
         vbl.addWidget(tabw)
 
         main_wid = self.get_main_widget(tabw)
@@ -52,15 +52,22 @@ class SOFBControl(BaseWidget):
         main_wid.setLayout(vbl)
 
         tabw = QTabWidget(main_wid)
+        tabw.setObjectName(self.acc+'Tab')
         orb_wid = self.get_orbit_widget(tabw)
         acqrt_wid = self.get_orbitdetails_widget(tabw)
         tabw.addTab(orb_wid, 'Orbit')
         tabw.addTab(acqrt_wid, 'Details')
+        tabw.setStyleSheet("""
+            #{0}Tab::pane {{
+                border-left: 2px solid gray;
+                border-bottom: 2px solid gray;
+                border-right: 2px solid gray;
+            }}
+        """.format(self.acc))
 
         corr_wid = self.get_correction_widget(main_wid)
         mat_wid = RespMatWidget(main_wid, self.device, self.prefix, self.acc)
 
-        vbl.setContentsMargins(0, 0, 0, 0)
         vbl.addWidget(tabw)
         vbl.addStretch()
         vbl.addWidget(corr_wid)
@@ -109,7 +116,7 @@ class SOFBControl(BaseWidget):
         hbl.addWidget(pdm_led)
         hbl.addWidget(sts)
         hbl.addWidget(conf)
-        orb_wid.layout().addItem(hbl, 0, 0, 1, 2)
+        orb_wid.layout().addLayout(hbl, 0, 0, 1, 2)
 
         lbl = QLabel('SOFB Mode', orb_wid)
         wid = self.create_pair_sel(orb_wid, 'SOFBMode')
@@ -154,7 +161,7 @@ class SOFBControl(BaseWidget):
         hbl.addWidget(rdb)
         hbl.addWidget(rst)
         orb_wid.layout().addWidget(lbl, 4, 0, alignment=Qt.AlignVCenter)
-        orb_wid.layout().addItem(hbl, 4, 1)
+        orb_wid.layout().addLayout(hbl, 4, 1)
 
         orb_wid.layout().setColumnStretch(1, 2)
         return orb_wid
@@ -182,7 +189,7 @@ class SOFBControl(BaseWidget):
         hbl = QHBoxLayout()
         grp_bx.layout().addLayout(hbl)
         fbl = QFormLayout()
-        hbl.addItem(fbl)
+        hbl.addLayout(fbl)
         lbl = QLabel('Orbit [Hz]', grp_bx, alignment=Qt.AlignCenter)
         wid = self.create_pair(grp_bx, 'OrbAcqRate')
         fbl.addRow(lbl, wid)
@@ -199,7 +206,7 @@ class SOFBControl(BaseWidget):
         vbl.addWidget(lab)
         hbl = QHBoxLayout()
         hbl.setContentsMargins(0, 0, 0, 0)
-        vbl.addItem(hbl)
+        vbl.addLayout(hbl)
         spt = PyDMStateButton(
             wid, self.devpref.substitute(propty='SyncWithInjection-Sel'))
         rdb = SiriusLedState(
@@ -223,18 +230,21 @@ class SOFBControl(BaseWidget):
     def get_correction_widget(self, parent):
         """."""
         corr_wid = QGroupBox('Correction', parent)
-        corr_wid.setLayout(QVBoxLayout())
+        lay = QVBoxLayout(corr_wid)
+        lay.setContentsMargins(0, 0, 0, 0)
 
         if self.acc != 'BO':
             lbl = QLabel('Auto Correction State:', corr_wid)
             wid = self.create_pair_butled(corr_wid, 'LoopState')
             hbl = QHBoxLayout()
+            hbl.setContentsMargins(6, 6, 6, 0)
             hbl.addWidget(lbl)
             hbl.addWidget(wid)
-            corr_wid.layout().addLayout(hbl)
+            lay.addLayout(hbl)
 
         corr_tab = QTabWidget(corr_wid)
-        corr_wid.layout().addWidget(corr_tab)
+        corr_tab.setObjectName(self.acc+'Tab')
+        lay.addWidget(corr_tab)
 
         if self.acc != 'BO':
             auto_wid = self.get_auto_correction_widget(corr_tab)
@@ -252,7 +262,8 @@ class SOFBControl(BaseWidget):
 
         if self.acc != 'BO':
             hbl = kicks_wid.get_status_widget(corr_wid)
-            corr_wid.layout().addLayout(hbl)
+            hbl.setContentsMargins(6, 0, 6, 6)
+            lay.addLayout(hbl)
         return corr_wid
 
     def get_fofb_widget(self, parent):
@@ -420,6 +431,13 @@ class SOFBControl(BaseWidget):
         vbl2 = QVBoxLayout(auto_wid)
 
         tabw = QTabWidget(auto_wid)
+        tabw.setObjectName(self.acc+'Tab')
+        tabw.setStyleSheet("""
+            #{0}Tab::pane {{
+                border-left: 2px solid gray;
+                border-bottom: 2px solid gray;
+                border-right: 2px solid gray;
+            }}""".format(self.acc))
         vbl2.addWidget(tabw)
 
         # Add Main Tab
