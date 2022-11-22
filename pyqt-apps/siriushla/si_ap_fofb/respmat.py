@@ -48,7 +48,6 @@ class RespMatWidget(_RespMatWidget, BaseWidget):
     def get_main_widget(self, parent):
         main_wid = QWidget(parent)
         main_lay = QVBoxLayout(main_wid)
-        main_lay.setContentsMargins(0, 0, 0, 0)
 
         sel_gp = QGroupBox('Sel.')
         sel_gp.setLayout(QHBoxLayout())
