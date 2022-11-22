@@ -181,7 +181,7 @@ class LiBeamProfile(SiriusMainWindow):
         image_wid = PyDMImageView(
             image_channel=self.getPvName(device, SCREEN['Screen']['data']),
             width_channel=self.getPvName(device, SCREEN['Screen']['width']))
-
+        image_wid.readingOrder = image_wid.ReadingOrder.Clike
         ss_vlay.addWidget(image_wid, 5)
         ss_vlay.addLayout(self.setScrnInfo(device), 1)
 
@@ -284,7 +284,7 @@ class LiBeamProfile(SiriusMainWindow):
                     PyDMPushButton(
                         init_channel=self.getPvName(
                             device, 'MOTOR:' + pv_name),
-                        label=label))
+                        label=label, pressValue=0))
         widget.setLayout(ms_vlay)
         widget.setTitle("Position")
         return widget
