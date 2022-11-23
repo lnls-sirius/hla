@@ -4,11 +4,11 @@ from qtpy.QtCore import Qt
 from qtpy.QtGui import QPixmap
 from qtpy.QtWidgets import QGroupBox, QHBoxLayout, QVBoxLayout, \
     QWidget, QLabel, QGridLayout, QStackedWidget, \
-    QSizePolicy
+    QSizePolicy, QPushButton
 from pydm.widgets import PyDMPushButton, PyDMImageView, PyDMLineEdit, \
     enum_button
 import qtawesome as qta
-from ..util import get_appropriate_color
+from .. import util as _util
 from ..widgets import SiriusMainWindow, PyDMLedMultiChannel, \
     SiriusWaveformPlot, SiriusLabel, SiriusSpinbox, SiriusConnectionSignal
 from .util import DEVICES, SCREENS_PANEL, SCREENS_INFO, HEADER, \
@@ -16,38 +16,7 @@ from .util import DEVICES, SCREENS_PANEL, SCREENS_INFO, HEADER, \
 from .motorBtn import MotorBtn
 
 
-class LiBeamProfile(SiriusMainWindow):
-    ''' Linac Profile Screen '''
-
-    def __init__(self, prefix='', parent=None):
-        '''Contain all the graphic interface data'''
-        super().__init__(parent)
-        self.prefix = prefix + ('-' if prefix else '')
-
-        self.setObjectName('LIApp')
-        color = get_appropriate_color('LI')
-
-        self.device_name = 'LA-BI'
-        self.window_title = "Linac Screen View"
-
-        self.setWindowIcon(qta.icon('mdi.camera-metering-center', color=color))
-        self.setWindowTitle(self.window_title)
-        self.image_container = QLabel()
-        self.pixmap = QPixmap(_os.path.join(
-            _os.path.abspath(_os.path.dirname(__file__)), "linac.png"))
-        self.selected_device = ''
-        self.stack_screens = QStackedWidget()
-        self.stack_screen = QStackedWidget()
-        self.stack_graphs = QStackedWidget()
-        self._setupUi()
-
-    def radioBtnClick(self, value):
-        ''' Action on radio button change '''
-        self.selected_device = DEVICES[value]
-        device_index = DEVICES.index(self.selected_device)
-        self.stack_screens.setCurrentIndex(device_index)
-        self.stack_screen.setCurrentIndex(device_index)
-        self.stack_graphs.setCurrentIndex(device_index)
+class GeneralFunctions():
 
     def getPvName(self, device, pv_name):
         ''' Build PV name '''
@@ -85,17 +54,6 @@ class LiBeamProfile(SiriusMainWindow):
         widget.setMinimumWidth(60)
         widget.setFixedHeight(20)
         return widget
-
-    def selectionItem(self, channel):
-        '''Build a selection widget'''
-        selector = enum_button.PyDMEnumButton(
-            init_channel=self.prefix + self.device_name+":"+channel)
-        self.active_screen = SiriusConnectionSignal(
-            self.prefix + self.device_name+":"+channel)
-        self.active_screen.new_value_signal[int].connect(
-            self.radioBtnClick)
-        selector.widgetType = 1
-        return selector
 
     def setBasicInfo(self, device, label, pv_name):
         ''' Build one basic information Component '''
@@ -148,31 +106,48 @@ class LiBeamProfile(SiriusMainWindow):
                     widget, alignment=Qt.AlignLeft)
         return rbv_hlay
 
-    def setGraph(self, device, graph_data, title):
-        '''Build a graph widget'''
 
-        graph_plot = SiriusWaveformPlot(background="#ffffff")
-        graph_plot.addChannel(
-            y_channel=self.getPvName(
-                device, graph_data['channel']['centroid']),
-            color="#ff8b98",
-            lineWidth=1)
-        graph_plot.addChannel(
-            y_channel=self.getPvName(
-                device, graph_data['channel']['data']),
-            color="#ff0000",
-            lineWidth=1)
+class LiBeamProfile(SiriusMainWindow, GeneralFunctions):
+    ''' Linac Profile Screen '''
 
-        graph_plot.setPlotTitle(title)
-        graph_plot.setLabel(
-            'left',
-            text=graph_data.get("labelY"))
-        graph_plot.setLabel(
-            'bottom',
-            text=graph_data.get("labelX"))
-        graph_plot.setMinimumSize(50, 100)
+    def __init__(self, prefix='', parent=None):
+        '''Contain all the graphic interface data'''
+        super().__init__(parent)
+        self.prefix = prefix + ('-' if prefix else '')
 
-        return graph_plot
+        self.setObjectName('LIApp')
+        color = _util.get_appropriate_color('LI')
+
+        self.device_name = 'LA-BI'
+        self.window_title = "Linac Screen View"
+
+        self.setWindowIcon(qta.icon('mdi.camera-metering-center', color=color))
+        self.setWindowTitle(self.window_title)
+        self.image_container = QLabel()
+        self.pixmap = QPixmap(_os.path.join(
+            _os.path.abspath(_os.path.dirname(__file__)), "linac.png"))
+        self.selected_device = ''
+        self.stack_screens = QStackedWidget()
+        self.stack_screen = QStackedWidget()
+        self._setupUi()
+
+    def radioBtnClick(self, value):
+        ''' Action on radio button change '''
+        self.selected_device = DEVICES[value]
+        device_index = DEVICES.index(self.selected_device)
+        self.stack_screens.setCurrentIndex(device_index)
+        self.stack_screen.setCurrentIndex(device_index)
+
+    def selectionItem(self, channel):
+        '''Build a selection widget'''
+        selector = enum_button.PyDMEnumButton(
+            init_channel=self.prefix + self.device_name+":"+channel)
+        self.active_screen = SiriusConnectionSignal(
+            self.prefix + self.device_name+":"+channel)
+        self.active_screen.new_value_signal[int].connect(
+            self.radioBtnClick)
+        selector.widgetType = 1
+        return selector
 
     def setSingleScrn(self, device):
         ''' Build a single screen Component '''
@@ -183,6 +158,7 @@ class LiBeamProfile(SiriusMainWindow):
             image_channel=self.getPvName(device, SCREEN['Screen']['data']),
             width_channel=self.getPvName(device, SCREEN['Screen']['width']))
         image_wid.readingOrder = image_wid.ReadingOrder.Clike
+        image_wid.setMinimumHeight(400)
         ss_vlay.addWidget(image_wid, 5)
         ss_vlay.addLayout(self.setScrnInfo(device), 1)
 
@@ -323,75 +299,34 @@ class LiBeamProfile(SiriusMainWindow):
         ''' Build selected screen information '''
         group = QGroupBox()
         sm_glay = QGridLayout()
+        group.setTitle(SCREENS_INFO.get('title') + ' ' + device)
+        group.setLayout(sm_glay)
+
         pos = [0, 0]
         for label, channel in SCREENS_INFO.get('content').items():
             sm_glay.addLayout(
                 self.setBasicInfo(device, label, 'MOTOR:' + channel),
-                pos[0], pos[1], 1, 2)
-            pos[0] += 1
+                pos[0], pos[1], 2, 2)
+            pos[0] += 2
 
         sm_glay.addLayout(
             self.setZeroOpt(
                 SCREENS_INFO.get('special_content')[1], device),
             pos[0], pos[1], 1, 3)
 
+        btn = QPushButton("ROI View")
+        _util.connect_window(
+            btn, ROIViewWindow,
+            parent=self)
+        sm_glay.addWidget(btn, pos[0]+1, 0, 1, 3)
+
         pos[0] = 0
 
         sm_glay.addWidget(
             self.setScrnSelection(
                 SCREENS_INFO.get('special_content')[0], device),
-            pos[0], pos[1] + 2, 5, 1)
+            pos[0], pos[1] + 2, 10, 1)
 
-        group.setTitle(SCREENS_INFO.get('title') + ' ' + device)
-        group.setLayout(sm_glay)
-        return group
-
-    def setGraphInfo(self, device, graph_info):
-        ''' Build the basic graph information '''
-        gi_hlay = QHBoxLayout()
-        gi_hlay.addStretch()
-        for label, channel in graph_info.items():
-            gi_hlay.addLayout(
-                self.setBasicInfo(device, label, channel))
-            gi_hlay.addStretch()
-        return gi_hlay
-
-    def setRoiInfo(self, device, roi_data, title):
-        ''' Build the ROI information '''
-        group = QGroupBox()
-        ri_glay = QGridLayout()
-        counter = [0, 0]
-        col_span = 2
-        for label, channel in roi_data.items():
-            ri_glay.addLayout(
-                self.setRBVObj(device, channel, label, 'ROI:'),
-                counter[0], counter[1], 1, col_span)
-            if counter[0] == 2:
-                counter[0] = 0
-                counter[1] = 1
-            counter[0] += 1
-            col_span = 1
-
-        group.setLayout(ri_glay)
-        group.setTitle(title)
-        return group
-
-    def setGraphs(self, device):
-        ''' Build the graph group '''
-        group = QGroupBox()
-        ag_vlay = QVBoxLayout()
-        for title, graph_data in GRAPH.items():
-            if title == "ROI":
-                ag_vlay.addWidget(
-                    self.setRoiInfo(device, graph_data, title))
-            else:
-                ag_vlay.addWidget(
-                    self.setGraph(device, graph_data, title))
-                ag_vlay.addLayout(
-                    self.setGraphInfo(device, graph_data['info']))
-
-        group.setLayout(ag_vlay)
-        group.setTitle("Projections " + device)
         return group
 
     def getStackItem(self, stack_type, device):
@@ -399,17 +334,14 @@ class LiBeamProfile(SiriusMainWindow):
         if stack_type == 0:
             return self.setSingleScrnInfo(device)
         elif stack_type == 1:
-            return self.setGraphs(device)
-        elif stack_type == 2:
             return self.setSingleScrn(device)
 
     def saveStack(self, stack, stack_type):
         ''' Save the stack for future item changes '''
         if stack_type == 0:
+            stack.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Expanding)
             self.stack_screens = stack
         elif stack_type == 1:
-            self.stack_graphs = stack
-        elif stack_type == 2:
             self.stack_screen = stack
 
     def buildStacks(self, stack_type):
@@ -476,10 +408,124 @@ class LiBeamProfile(SiriusMainWindow):
         if_glay = QGridLayout()
 
         if_glay.addLayout(self.header(), 0, 0, 1, 10)
-        if_glay.addWidget(self.imageViewer(), 1, 1, 3, 9)
-        if_glay.addWidget(self.setScrnPanel(), 1, 0, 3, 1)
-        if_glay.addWidget(self.buildStacks(2), 4, 2, 6, 8)
-        if_glay.addWidget(self.buildStacks(0), 4, 0, 3, 2)
-        if_glay.addWidget(self.buildStacks(1), 7, 0, 3, 2)
+        if_glay.addWidget(self.imageViewer(), 1, 1, 4, 10)
+        if_glay.addWidget(self.setScrnPanel(), 1, 0, 7, 1)
+        if_glay.addWidget(self.buildStacks(0), 8, 0, 7, 1)
+        if_glay.addWidget(self.buildStacks(1), 5, 1, 10, 10)
         wid.setLayout(if_glay)
         self.setCentralWidget(wid)
+
+
+class ROIViewWindow(SiriusMainWindow, GeneralFunctions):
+    """Show the Chart Window."""
+
+    def __init__(self, parent=None, prefix=''):
+        """Init."""
+        super().__init__(parent)
+        self.device_name = 'LA-BI'
+        self.setObjectName('LIApp')
+        self.setWindowTitle('ROI View')
+        self.active_screen = SiriusConnectionSignal(
+            prefix + self.device_name+":PRF:OPI")
+        self.active_screen.new_value_signal[int].connect(
+            self.radioBtnClick)
+        self.stack_graphs = QStackedWidget()
+        self._setupUi()
+
+    def setGraphInfo(self, device, graph_info):
+        ''' Build the basic graph information '''
+        gi_hlay = QHBoxLayout()
+        gi_hlay.addStretch()
+        for label, channel in graph_info.items():
+            gi_hlay.addLayout(
+                self.setBasicInfo(device, label, channel))
+            gi_hlay.addStretch()
+        return gi_hlay
+
+    def setRoiInfo(self, device, roi_data, title):
+        ''' Build the ROI information '''
+        group = QGroupBox()
+        ri_glay = QGridLayout()
+        counter = [0, 0]
+        col_span = 2
+        for label, channel in roi_data.items():
+            ri_glay.addLayout(
+                self.setRBVObj(device, channel, label, 'ROI:'),
+                counter[0], counter[1], 1, col_span)
+            if counter[0] == 2:
+                counter[0] = 0
+                counter[1] = 1
+            counter[0] += 1
+            col_span = 1
+
+        group.setLayout(ri_glay)
+        group.setTitle(title)
+        return group
+
+    def setGraph(self, device, graph_data, title):
+        '''Build a graph widget'''
+
+        graph_plot = SiriusWaveformPlot(background="#ffffff")
+        graph_plot.addChannel(
+            y_channel=self.getPvName(
+                device, graph_data['channel']['centroid']),
+            color="#ff8b98",
+            lineWidth=1)
+        graph_plot.addChannel(
+            y_channel=self.getPvName(
+                device, graph_data['channel']['data']),
+            color="#ff0000",
+            lineWidth=1)
+
+        graph_plot.setPlotTitle(title)
+        graph_plot.setLabel(
+            'left',
+            text=graph_data.get("labelY"))
+        graph_plot.setLabel(
+            'bottom',
+            text=graph_data.get("labelX"))
+        graph_plot.setMinimumSize(50, 100)
+
+        return graph_plot
+
+    def setGraphs(self, device):
+        ''' Build the graph group '''
+        group = QGroupBox()
+        ag_vlay = QVBoxLayout()
+        for title, graph_data in GRAPH.items():
+            if title == "ROI":
+                ag_vlay.addWidget(
+                    self.setRoiInfo(device, graph_data, title))
+            else:
+                ag_vlay.addWidget(
+                    self.setGraph(device, graph_data, title))
+                ag_vlay.addLayout(
+                    self.setGraphInfo(device, graph_data['info']))
+
+        group.setLayout(ag_vlay)
+        group.setTitle("Projections " + device)
+        return group
+
+    def radioBtnClick(self, value):
+        ''' Action on radio button change '''
+        self.selected_device = DEVICES[value]
+        device_index = DEVICES.index(self.selected_device)
+        self.stack_graphs.setCurrentIndex(device_index)
+
+    def buildStacks(self):
+        ''' Build all the stack groups '''
+        stack = QStackedWidget()
+        for device in DEVICES:
+            stack.addWidget(
+                self.setGraphs(device))
+        self.stack_graphs = stack
+        return stack
+
+    def _setupUi(self):
+        """Build the UI."""
+        wid = QWidget(self)
+        self.setCentralWidget(wid)
+        lay = QGridLayout()
+        wid.setLayout(lay)
+
+        lay.addWidget(self.buildStacks())
