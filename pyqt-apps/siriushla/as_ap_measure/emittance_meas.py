@@ -338,7 +338,6 @@ class EmittanceMeasure(QWidget):
         lbl = SiriusLabel(
             gb, _PVName('LI-01:PS-QF3:Current-Mon').substitute(
                 prefix=self._prefix))
-        spnbox.showStepExponent = False
         gb.layout().addWidget(spnbox)
         gb.layout().addWidget(lbl)
         gb.layout().setAlignment(Qt.AlignTop)

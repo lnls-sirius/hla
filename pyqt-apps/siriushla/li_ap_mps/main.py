@@ -3,12 +3,12 @@ from qtpy.QtCore import Qt, QEvent
 from qtpy.QtWidgets import QWidget, QGroupBox, QHBoxLayout, \
     QGridLayout, QLabel, QTabWidget, QPushButton
 import qtawesome as qta
-from pydm.widgets import PyDMSpinbox
+
 from .util import PV_MPS, MPS_PREFIX, CTRL_TYPE, GROUP_POS, \
     GROUP_POSALL, LBL_MPS, LBL_WATER, PV_TEMP_MPS, TEMP_TYPE, LBL_ALL
 from ..util import get_appropriate_color
 from ..widgets import PyDMLedMultiChannel, PyDMLed, SiriusLabel, \
-    SiriusPushButton
+    SiriusPushButton, SiriusSpinbox
 from .bypass_btn import BypassBtn
 
 
@@ -88,11 +88,10 @@ class MPSControl(QWidget):
         ''' Display the temperature label widget '''
         device_name = self.getDeviceName(pv_name)
         if temp_type == 'Thrd':
-            widget = PyDMSpinbox(
+            widget = SiriusSpinbox(
                 parent=self,
                 init_channel=device_name + pv_name + temp_type
             )
-            widget.showStepExponent = False
         else:
             widget = SiriusLabel(
                 parent=self,

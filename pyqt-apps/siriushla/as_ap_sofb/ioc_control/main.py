@@ -9,7 +9,6 @@ import qtawesome as qta
 from pydm.widgets import PyDMPushButton
 
 from siriuspy.namesys import SiriusPVName as _PVName
-from siriushla.widgets.label import SiriusLabel
 
 from ...widgets import SiriusConnectionSignal as _ConnSig, SiriusLabel, \
     SiriusLedAlert, SiriusSpinbox, PyDMStateButton, SiriusLedState
@@ -131,7 +130,6 @@ class SOFBControl(BaseWidget):
         lbl = QLabel('Num. Pts.', orb_wid)
         stp = SiriusSpinbox(
             orb_wid, self.devpref.substitute(propty='SmoothNrPts-SP'))
-        stp.showStepExponent = False
         rdb = SiriusLabel(
             orb_wid, self.devpref.substitute(propty='SmoothNrPts-RB'))
         rdb.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
@@ -240,19 +238,78 @@ class SOFBControl(BaseWidget):
 
         if self.acc != 'BO':
             auto_wid = self.get_auto_correction_widget(corr_tab)
-            corr_tab.addTab(auto_wid, 'Automatic')
+            corr_tab.addTab(auto_wid, 'Loop')
 
         man_wid = self.get_manual_correction_widget(corr_tab)
         corr_tab.addTab(man_wid, 'Manual')
 
         kicks_wid = KicksConfigWidget(
             parent, self.device, prefix=self.prefix, acc=self.acc)
-        corr_tab.addTab(kicks_wid, 'Kicks Config')
+        corr_tab.addTab(kicks_wid, 'Kicks')
+
+        fofb_wid = self.get_fofb_widget(corr_tab)
+        corr_tab.addTab(fofb_wid, 'FOFB')
 
         if self.acc != 'BO':
             hbl = kicks_wid.get_status_widget(corr_wid)
             corr_wid.layout().addLayout(hbl)
         return corr_wid
+
+    def get_fofb_widget(self, parent):
+        """."""
+        wid = QWidget(parent)
+        wid.setObjectName('grp')
+        gdl = QGridLayout(wid)
+        gdl.setSpacing(9)
+
+        gdl.setColumnStretch(0, 2)
+
+        gdl.addWidget(QLabel('Description', wid), 0, 0)
+        gdl.addWidget(QLabel('Setpoint', wid), 0, 1)
+        gdl.addWidget(QLabel('Status', wid), 0, 2)
+        gdl.addWidget(QLabel('Monitor', wid), 0, 3)
+        gdl.addWidget(QLabel('%', wid), 0, 4, alignment=Qt.AlignCenter)
+        props = [
+            'FOFBDownloadKicks', 'FOFBUpdateRefOrb',
+            'FOFBNullSpaceProj', 'FOFBZeroDistortionAtBPMs']
+        desc = [
+            'Download Kicks', 'Update RefOrb',
+            'Project in Kernel', 'Zero Distortion']
+        for i, (prop, des) in enumerate(zip(props, desc)):
+            lbl = QLabel(des, wid)
+            spt = PyDMStateButton(
+                wid, self.devpref.substitute(propty=prop+'-Sel'))
+            rdb = SiriusLedState(
+                wid, self.devpref.substitute(propty=prop+'-Sts'))
+            mon = SiriusLedState(
+                wid, self.devpref.substitute(propty=prop+'-Mon'))
+            gdl.addWidget(lbl, i+1, 0)
+            gdl.addWidget(spt, i+1, 1)
+            gdl.addWidget(rdb, i+1, 2)
+            gdl.addWidget(mon, i+1, 3)
+
+        spb = SiriusSpinbox(
+            wid, self.devpref.substitute(propty='FOFBDownloadKicksPerc-SP'))
+        lbl = SiriusLabel(
+            wid, self.devpref.substitute(propty='FOFBDownloadKicksPerc-RB'))
+        lbl.showUnits = False
+        gdl2 = QGridLayout()
+        gdl2.addWidget(spb, 0, 0)
+        gdl2.addWidget(lbl, 1, 0)
+        gdl.addLayout(gdl2, 1, 4)
+
+        spb = SiriusSpinbox(
+            wid, self.devpref.substitute(propty='FOFBUpdateRefOrbPerc-SP'))
+        lbl = SiriusLabel(
+            wid, self.devpref.substitute(propty='FOFBUpdateRefOrbPerc-RB'))
+        lbl.showUnits = False
+        gdl2 = QGridLayout()
+        gdl2.addWidget(spb, 0, 0)
+        gdl2.addWidget(lbl, 1, 0)
+        gdl.addLayout(gdl2, 2, 4)
+
+        gdl.setRowStretch(5, 3)
+        return wid
 
     def get_manual_correction_widget(self, parent):
         """."""
@@ -509,6 +566,27 @@ class PerformanceWidget(QWidget):
         lbl_main = QLabel(
             '<h3>Loop Performance</h3>', self, alignment=Qt.AlignCenter)
 
+        lbl_prnt = QLabel('Number of Iter. Between Updates', self)
+        lbl_rate = QLabel('Effective Rate', self)
+        slsh = QLabel('/', self, alignment=Qt.AlignCenter)
+        slsh.setStyleSheet('min-width:0.7em; max-width:0.7em;')
+
+        spb = SiriusSpinbox(self, lamb('LoopPrintEveryNumIters-SP'))
+        ldrb = SiriusLabel(self, lamb('LoopPrintEveryNumIters-RB'))
+        ldmon = SiriusLabel(self, lamb('LoopNumIters-Mon'))
+        ld_rate = SiriusLabel(self, lamb('LoopEffectiveRate-Mon'))
+        ld_rate.showUnits = True
+
+        lay_niter = QGridLayout()
+        lay_niter.addWidget(lbl_prnt, 0, 0, 1, 4, alignment=Qt.AlignCenter)
+        lay_niter.addWidget(spb, 1, 0)
+        lay_niter.addWidget(ldrb, 1, 1)
+        lay_niter.addWidget(slsh, 1, 2)
+        lay_niter.addWidget(ldmon, 1, 3)
+        lay_niter.setColumnStretch(4, 3)
+        lay_niter.addWidget(lbl_rate, 0, 5, alignment=Qt.AlignCenter)
+        lay_niter.addWidget(ld_rate, 1, 5)
+
         lbl_iters = QLabel('Iterations [%]:', self)
         lbl_ok = QLabel('OK', self, alignment=Qt.AlignCenter)
         lbl_tout = QLabel('Timeout', self, alignment=Qt.AlignCenter)
@@ -571,13 +649,16 @@ class PerformanceWidget(QWidget):
                 lay_tim.addWidget(ld_, i+2, j+1, alignment=Qt.AlignCenter)
 
         lay = QGridLayout(self)
-        lay.addWidget(lbl_main, 0, 0)
+        lay.addLayout(lay_niter, 0, 0)
         lay.addItem(QSpacerItem(1, 20), 1, 0)
-        lay.addLayout(lay_iters, 2, 0)
+        lay.addWidget(lbl_main, 2, 0)
         lay.addItem(QSpacerItem(1, 20), 3, 0)
-        lay.addLayout(lay_psd, 4, 0)
+        lay.addLayout(lay_iters, 4, 0)
         lay.addItem(QSpacerItem(1, 20), 5, 0)
-        lay.addLayout(lay_tim, 6, 0)
+        lay.addLayout(lay_psd, 6, 0)
+        lay.addItem(QSpacerItem(1, 20), 7, 0)
+        lay.addLayout(lay_tim, 8, 0)
         lay.setRowStretch(1, 2)
         lay.setRowStretch(3, 2)
         lay.setRowStretch(5, 2)
+        lay.setRowStretch(7, 2)

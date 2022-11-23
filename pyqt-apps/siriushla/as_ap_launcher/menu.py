@@ -20,6 +20,7 @@ from siriushla.widgets.windows import create_window_from_widget
 from siriushla.as_ap_configdb.pvsconfigs import SelectAndApplyPVsWidget
 from siriushla.as_di_scrns.list_scrns import get_scrn_list
 from siriushla.as_di_dccts.main import get_dcct_list
+from siriushla.si_ap_fofb import get_fofb_icon
 
 
 def get_pushbutton(name, parent):
@@ -59,7 +60,6 @@ def get_object(ismenubar=True, parent=None):
             ts_apps = self._create_section_menu('TS', 'TS')
             si_apps = self._create_section_menu('SI', 'SI')
             id_apps = self._create_id_menu()
-            bl_apps = self._create_bl_menu()
             tool_apps = self._create_tool_menu()
             it_apps = self._create_it_menu()
 
@@ -71,7 +71,6 @@ def get_object(ismenubar=True, parent=None):
             self.add_object_to_level0(ts_apps)
             self.add_object_to_level0(si_apps)
             self.add_object_to_level0(id_apps)
-            self.add_object_to_level0(bl_apps)
             self.add_object_to_level0(tool_apps)
             self.add_object_to_level0(it_apps)
 
@@ -429,7 +428,7 @@ def get_object(ismenubar=True, parent=None):
 
             idlist = ['SI-06SB:ID-APU22', 'SI-07SP:ID-APU22',
                       'SI-08SB:ID-APU22', 'SI-09SA:ID-APU22',
-                      'SI-11SP:ID-APU58']
+                      'SI-11SP:ID-APU58', 'SI-10SB:ID-EPU50']
             for idname in idlist:
                 idname = SiriusPVName(idname)
                 beamline = IDSearch.conv_idname_2_beamline(idname)
@@ -440,17 +439,6 @@ def get_object(ismenubar=True, parent=None):
                 self.connect_newprocess(
                     APU, ['sirius-hla-si-id-control.py', '-dev', idname])
                 self.add_object_to_level1(menu, APU)
-
-            return menu
-
-        def _create_bl_menu(self):
-            menu = LEVEL1('BL', self)
-            menu.setObjectName('IDApp')
-
-            Manaca = LEVEL2A('MANACA', menu)
-            self.connect_newprocess(
-                Manaca, ['sirius-hla-si-ap-manaca.py'])
-            self.add_object_to_level1(menu, Manaca)
 
             return menu
 
@@ -501,6 +489,12 @@ def get_object(ismenubar=True, parent=None):
             sofb.setIcon(qta.icon('fa5s.hammer'))
             self.connect_newprocess(sofb, 'sirius-hla-'+sec+'-ap-sofb.py')
             optics.addAction(sofb)
+
+            if sec == 'si':
+                fofb = QAction('FOFB', optics)
+                fofb.setIcon(get_fofb_icon(color=False))
+                self.connect_newprocess(fofb, 'sirius-hla-si-ap-fofb.py')
+                optics.addAction(fofb)
 
             if sec in {'tb', 'ts'}:
                 PosAng = QAction('PosAng', optics)

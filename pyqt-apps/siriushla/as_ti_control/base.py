@@ -40,7 +40,6 @@ class BaseWidget(QWidget):
             chan1 = self.get_pvname(propty)
             if not_enum:
                 wid = SiriusSpinbox(self, init_channel=chan1)
-                wid.showStepExponent = False
                 wid.setAlignment(Qt.AlignCenter)
             else:
                 wid = SiriusEnumComboBox(self, init_channel=chan1)

@@ -8,10 +8,10 @@ from qtpy.QtWidgets import QWidget, QVBoxLayout, QGroupBox, QPushButton, \
     QLabel, QGridLayout, QScrollArea
 import qtawesome as qta
 from pydm.utilities.macro import substitute_in_file as _substitute_in_file
-from pydm.widgets import PyDMSpinbox, PyDMPushButton
+from pydm.widgets import PyDMPushButton
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriuspy.namesys import SiriusPVName as _PVName
-from siriushla.widgets import PyDMLedMultiChannel, SiriusLabel
+from siriushla.widgets import PyDMLedMultiChannel, SiriusLabel, SiriusSpinbox
 from siriushla import util
 from .details import DiffCtrlDetails as _DiffCtrlDetails
 
@@ -37,7 +37,7 @@ class DiffCtrlDevMonitor(QWidget):
         self.updateDevWidget()
 
         self.setStyleSheet("""
-            PyDMSpinbox, SiriusLabel{
+            SiriusSpinbox, SiriusLabel{
                 min-width:5em; max-width: 5em;
             }""")
 
@@ -62,13 +62,11 @@ class DiffCtrlDevMonitor(QWidget):
 
         self.lb_descCtrl1 = QLabel(
             '', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
-        self.sb_Ctrl1 = PyDMSpinbox(self)
-        self.sb_Ctrl1.showStepExponent = False
+        self.sb_Ctrl1 = SiriusSpinbox(self)
         self.lb_Ctrl1 = SiriusLabel(self)
         self.lb_descCtrl2 = QLabel(
             '', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
-        self.sb_Ctrl2 = PyDMSpinbox(self)
-        self.sb_Ctrl2.showStepExponent = False
+        self.sb_Ctrl2 = SiriusSpinbox(self)
         self.lb_Ctrl2 = SiriusLabel(self)
 
         self.pb_open = PyDMPushButton(

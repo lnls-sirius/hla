@@ -4,16 +4,15 @@ from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, QGroupBox, \
     QPushButton, QVBoxLayout, QSpacerItem, QSizePolicy as QSzPly, \
     QHBoxLayout
 import qtawesome as qta
-from pydm.widgets import PyDMPushButton, PyDMEnumComboBox, \
-    PyDMSpinbox, PyDMLineEdit
+from pydm.widgets import PyDMPushButton, PyDMEnumComboBox, PyDMLineEdit
 
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.opticscorr.csdev import Const as _Const
 
 from siriushla import util as _hlautil
-from siriushla.widgets import SiriusMainWindow, PyDMLogLabel, PyDMStateButton, \
-    SiriusLabel
+from siriushla.widgets import SiriusMainWindow, PyDMLogLabel, SiriusSpinbox, \
+    PyDMStateButton, SiriusLabel
 from siriushla.as_ps_control import PSDetailWindow as _PSDetailWindow
 from .details import CorrParamsDetailWindow as _CorrParamsDetailWindow
 from .custom_widgets import StatusLed as _StatusLed, \
@@ -143,12 +142,10 @@ class OpticsCorrWindow(SiriusMainWindow):
         self.lb_mon = QLabel(
             '<h4>Estimative</h4>', self, alignment=Qt.AlignCenter)
 
-        self.sb_paramx = PyDMSpinbox(self, self.ioc_prefix.substitute(
+        self.sb_paramx = SiriusSpinbox(self, self.ioc_prefix.substitute(
             propty=self.param_pv.format('X', 'SP')))
-        self.sb_paramx.showStepExponent = False
-        self.sb_paramy = PyDMSpinbox(self, self.ioc_prefix.substitute(
+        self.sb_paramy = SiriusSpinbox(self, self.ioc_prefix.substitute(
             propty=self.param_pv.format('Y', 'SP')))
-        self.sb_paramy.showStepExponent = False
 
         self.lb_paramx = SiriusLabel(self, self.ioc_prefix.substitute(
             propty=self.param_pv.format('X', 'RB')))
@@ -194,14 +191,12 @@ class OpticsCorrWindow(SiriusMainWindow):
             self.pb_change_sp = QPushButton(self._icon_absval, '', self)
             self.pb_change_sp.clicked.connect(self._change_chrom_sp)
 
-            self.sb_paramx_delta = PyDMSpinbox(
+            self.sb_paramx_delta = SiriusSpinbox(
                 self, self.ioc_prefix.substitute(propty='DeltaChromX-SP'))
-            self.sb_paramx_delta.showStepExponent = False
             self.sb_paramx_delta.setVisible(False)
 
-            self.sb_paramy_delta = PyDMSpinbox(
+            self.sb_paramy_delta = SiriusSpinbox(
                 self, self.ioc_prefix.substitute(propty='DeltaChromY-SP'))
-            self.sb_paramy_delta.showStepExponent = False
             self.sb_paramy_delta.setVisible(False)
 
             self.lb_paramx_delta = SiriusLabel(
@@ -343,10 +338,9 @@ class OpticsCorrWindow(SiriusMainWindow):
                 lay.addWidget(lb_meas_chrom, 6, 0, 1, 3)
 
                 lb_meas_chrom_dfRF = QLabel('ΔFreq RF [Hz]', self)
-                self.sb_meas_chrom_dfRF = PyDMSpinbox(
+                self.sb_meas_chrom_dfRF = SiriusSpinbox(
                     self, self.ioc_prefix.substitute(
                         propty='MeasChromDeltaFreqRF-SP'))
-                self.sb_meas_chrom_dfRF.showStepExponent = False
                 self.lb_meas_chrom_dfRF = SiriusLabel(
                     self, self.ioc_prefix.substitute(
                         propty='MeasChromDeltaFreqRF-RB'))
@@ -355,10 +349,9 @@ class OpticsCorrWindow(SiriusMainWindow):
                 lay.addWidget(self.lb_meas_chrom_dfRF, 7, 2)
 
                 lb_meas_chrom_wait = QLabel('Wait Tune [s]', self)
-                self.sb_meas_chrom_wait = PyDMSpinbox(
+                self.sb_meas_chrom_wait = SiriusSpinbox(
                     self, self.ioc_prefix.substitute(
                         propty='MeasChromWaitTune-SP'))
-                self.sb_meas_chrom_wait.showStepExponent = False
                 self.lb_meas_chrom_wait = SiriusLabel(
                     self, self.ioc_prefix.substitute(
                         propty='MeasChromWaitTune-RB'))
@@ -367,10 +360,9 @@ class OpticsCorrWindow(SiriusMainWindow):
                 lay.addWidget(self.lb_meas_chrom_wait, 8, 2)
 
                 lb_meas_chrom_nrsteps = QLabel('Nr Steps', self)
-                self.sb_meas_chrom_nrsteps = PyDMSpinbox(
+                self.sb_meas_chrom_nrsteps = SiriusSpinbox(
                     self, self.ioc_prefix.substitute(
                         propty='MeasChromNrSteps-SP'))
-                self.sb_meas_chrom_nrsteps.showStepExponent = False
                 self.lb_meas_chrom_nrsteps = SiriusLabel(
                     self, self.ioc_prefix.substitute(
                         propty='MeasChromNrSteps-RB'))
@@ -447,9 +439,8 @@ class OpticsCorrWindow(SiriusMainWindow):
                 propty='MeasConfigDelta'+self.intstrength+'Fam'+mag_type+'F')
             lb_meas_conf_dfamF = QLabel(
                 'Fam. Δ'+self.intstrength+' '+mag_type+'F '+unit, self)
-            self.sb_meas_conf_dfamF = PyDMSpinbox(
+            self.sb_meas_conf_dfamF = SiriusSpinbox(
                 self, pvn.substitute(propty_suffix='SP'))
-            self.sb_meas_conf_dfamF.showStepExponent = False
             self.lb_meas_conf_dfamF = SiriusLabel(
                 self, pvn.substitute(propty_suffix='RB'))
             lay.addWidget(lb_meas_conf_dfamF, row+2, 0)
@@ -460,9 +451,8 @@ class OpticsCorrWindow(SiriusMainWindow):
                 propty='MeasConfigDelta'+self.intstrength+'Fam'+mag_type+'D')
             lb_meas_conf_dfamD = QLabel(
                 'Fam. Δ'+self.intstrength+' '+mag_type+'D '+unit, self)
-            self.sb_meas_conf_dfamD = PyDMSpinbox(
+            self.sb_meas_conf_dfamD = SiriusSpinbox(
                 self, pvn.substitute(propty_suffix='SP'))
-            self.sb_meas_conf_dfamD.showStepExponent = False
             self.lb_meas_conf_dfamD = SiriusLabel(
                 self, pvn.substitute(propty_suffix='RB'))
             lay.addWidget(lb_meas_conf_dfamD, row+3, 0)
@@ -470,9 +460,8 @@ class OpticsCorrWindow(SiriusMainWindow):
             lay.addWidget(self.lb_meas_conf_dfamD, row+3, 2)
 
             lb_meas_conf_wait = QLabel('Wait [s]', self)
-            self.sb_meas_conf_wait = PyDMSpinbox(
+            self.sb_meas_conf_wait = SiriusSpinbox(
                 self, self.ioc_prefix.substitute(propty='MeasConfigWait-SP'))
-            self.sb_meas_conf_wait.showStepExponent = False
             self.lb_meas_conf_wait = SiriusLabel(
                 self, self.ioc_prefix.substitute(propty='MeasConfigWait-RB'))
             lay.addWidget(lb_meas_conf_wait, row+4, 0)

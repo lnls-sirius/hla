@@ -3,14 +3,14 @@ import os as _os
 from qtpy.QtCore import Qt
 from qtpy.QtGui import QPixmap
 from qtpy.QtWidgets import QGroupBox, QHBoxLayout, QVBoxLayout, \
-    QWidget, QLabel, QGridLayout, QRadioButton, QStackedWidget, \
+    QWidget, QLabel, QGridLayout, QStackedWidget, \
     QSizePolicy
-from pydm.widgets import PyDMPushButton, \
-    PyDMSpinbox, PyDMImageView, PyDMLineEdit
+from pydm.widgets import PyDMPushButton, PyDMImageView, PyDMLineEdit, \
+    enum_button
 import qtawesome as qta
 from ..util import get_appropriate_color
 from ..widgets import SiriusMainWindow, PyDMLedMultiChannel, \
-    SiriusWaveformPlot, SiriusLabel
+    SiriusWaveformPlot, SiriusLabel, SiriusSpinbox, SiriusConnectionSignal
 from .util import DEVICES, SCREENS_PANEL, SCREENS_INFO, HEADER, \
     GRAPH, SCREEN
 from .motorBtn import MotorBtn
@@ -41,15 +41,13 @@ class LiBeamProfile(SiriusMainWindow):
         self.stack_graphs = QStackedWidget()
         self._setupUi()
 
-    def radioBtnClick(self):
+    def radioBtnClick(self, value):
         ''' Action on radio button change '''
-        radio_button = self.sender()
-        if radio_button.isChecked():
-            self.selected_device = radio_button.device
-            device_index = DEVICES.index(self.selected_device)
-            self.stack_screens.setCurrentIndex(device_index)
-            self.stack_screen.setCurrentIndex(device_index)
-            self.stack_graphs.setCurrentIndex(device_index)
+        self.selected_device = DEVICES[value]
+        device_index = DEVICES.index(self.selected_device)
+        self.stack_screens.setCurrentIndex(device_index)
+        self.stack_screen.setCurrentIndex(device_index)
+        self.stack_graphs.setCurrentIndex(device_index)
 
     def getPvName(self, device, pv_name):
         ''' Build PV name '''
@@ -72,8 +70,7 @@ class LiBeamProfile(SiriusMainWindow):
             widget = PyDMPushButton(self, init_channel=pv_name,
                                     label=label, pressValue=value)
         elif wid_type == 'spinBox':
-            widget = PyDMSpinbox(init_channel=pv_name)
-            widget.showStepExponent = False
+            widget = SiriusSpinbox(init_channel=pv_name)
             widget.showUnits = True
         elif wid_type == 'lineEdit':
             widget = PyDMLineEdit(
@@ -89,14 +86,16 @@ class LiBeamProfile(SiriusMainWindow):
         widget.setFixedHeight(20)
         return widget
 
-    def getRadioBtn(self, device):
-        ''' Get the one radio button '''
-        radio_button = QRadioButton(device)
-        radio_button.device = device
-        radio_button.toggled.connect(self.radioBtnClick)
-        if device == DEVICES[0]:
-            radio_button.setChecked(True)
-        return radio_button
+    def selectionItem(self, channel):
+        '''Build a selection widget'''
+        selector = enum_button.PyDMEnumButton(
+            init_channel=self.prefix + self.device_name+":"+channel)
+        self.active_screen = SiriusConnectionSignal(
+            self.prefix + self.device_name+":"+channel)
+        self.active_screen.new_value_signal[int].connect(
+            self.radioBtnClick)
+        selector.widgetType = 1
+        return selector
 
     def setBasicInfo(self, device, label, pv_name):
         ''' Build one basic information Component '''
@@ -163,7 +162,7 @@ class LiBeamProfile(SiriusMainWindow):
                 device, graph_data['channel']['data']),
             color="#ff0000",
             lineWidth=1)
-            
+
         graph_plot.setPlotTitle(title)
         graph_plot.setLabel(
             'left',
@@ -183,7 +182,7 @@ class LiBeamProfile(SiriusMainWindow):
         image_wid = PyDMImageView(
             image_channel=self.getPvName(device, SCREEN['Screen']['data']),
             width_channel=self.getPvName(device, SCREEN['Screen']['width']))
-
+        image_wid.readingOrder = image_wid.ReadingOrder.Clike
         ss_vlay.addWidget(image_wid, 5)
         ss_vlay.addLayout(self.setScrnInfo(device), 1)
 
@@ -207,10 +206,6 @@ class LiBeamProfile(SiriusMainWindow):
         pv_list = SCREENS_PANEL.get('content')
         pv_name = 'MOTOR' + ":"
         count = 0
-
-        layout.addWidget(
-            self.getRadioBtn(device),
-            row, count, alignment=Qt.AlignCenter)
 
         count += 1
         for item in range(0, len(pv_list)):
@@ -248,6 +243,10 @@ class LiBeamProfile(SiriusMainWindow):
         am_glay = self.setScrnHeader(am_glay)
 
         row = 1
+        am_glay.addWidget(
+            self.selectionItem('PRF:OPI'),
+            row, 0, 5, 1,
+            alignment=Qt.AlignCenter)
         for device in DEVICES:
             am_glay = self.setPanelInfo(
                 device, am_glay, row)
@@ -286,7 +285,7 @@ class LiBeamProfile(SiriusMainWindow):
                     PyDMPushButton(
                         init_channel=self.getPvName(
                             device, 'MOTOR:' + pv_name),
-                        label=label))
+                        label=label, pressValue=0))
         widget.setLayout(ms_vlay)
         widget.setTitle("Position")
         return widget

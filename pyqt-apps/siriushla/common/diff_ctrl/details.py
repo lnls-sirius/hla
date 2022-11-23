@@ -1,8 +1,8 @@
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGridLayout, QFormLayout, QLabel, QGroupBox
-from pydm.widgets import PyDMPushButton, PyDMSpinbox
+from pydm.widgets import PyDMPushButton
 from siriuspy.namesys import SiriusPVName as _PVName
-from siriushla.widgets import SiriusDialog, PyDMLed, SiriusLabel
+from siriushla.widgets import SiriusDialog, PyDMLed, SiriusLabel, SiriusSpinbox
 
 
 class DiffCtrlDetails(SiriusDialog):
@@ -31,7 +31,7 @@ class DiffCtrlDetails(SiriusDialog):
         gbox_limits.setLayout(self._setupLimitsLayout())
 
         self.setStyleSheet("""
-            PyDMSpinbox, SiriusLabel{
+            SiriusSpinbox, SiriusLabel{
                 min-width: 5em; max-width: 5em;
             }""")
 
@@ -131,24 +131,20 @@ class DiffCtrlDetails(SiriusDialog):
         return flay
 
     def _setupLimitsLayout(self):
-        self.sb_PosEdgeInnerLim = PyDMSpinbox(
+        self.sb_PosEdgeInnerLim = SiriusSpinbox(
             self, self.dev_prefix.substitute(propty='PosEdgeInnerLim-SP'))
-        self.sb_PosEdgeInnerLim.showStepExponent = False
         self.lb_PosEdgeInnerLim = SiriusLabel(
             self, self.dev_prefix.substitute(propty='PosEdgeInnerLim-RB'))
-        self.sb_NegEdgeInnerLim = PyDMSpinbox(
+        self.sb_NegEdgeInnerLim = SiriusSpinbox(
             self, self.dev_prefix.substitute(propty='NegEdgeInnerLim-SP'))
-        self.sb_NegEdgeInnerLim.showStepExponent = False
         self.lb_NegEdgeInnerLim = SiriusLabel(
             self, self.dev_prefix.substitute(propty='NegEdgeInnerLim-RB'))
-        self.sb_LowOuterLim = PyDMSpinbox(
+        self.sb_LowOuterLim = SiriusSpinbox(
             self, self.dev_prefix.substitute(propty='LowOuterLim-SP'))
-        self.sb_LowOuterLim.showStepExponent = False
         self.lb_LowOuterLim = SiriusLabel(
             self, self.dev_prefix.substitute(propty='LowOuterLim-RB'))
-        self.sb_HighOuterLim = PyDMSpinbox(
+        self.sb_HighOuterLim = SiriusSpinbox(
             self, self.dev_prefix.substitute(propty='HighOuterLim-SP'))
-        self.sb_HighOuterLim.showStepExponent = False
         self.lb_HighOuterLim = SiriusLabel(
             self, self.dev_prefix.substitute(propty='HighOuterLim-RB'))
 

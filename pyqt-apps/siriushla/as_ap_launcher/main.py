@@ -8,7 +8,7 @@ from qtpy.QtWidgets import QWidget, QGroupBox, QPushButton, QLabel, \
 from pydm.widgets import PyDMPushButton
 
 from siriuspy.envars import VACA_PREFIX
-from siriuspy.namesys.implementation import SiriusPVName
+from siriuspy.namesys import SiriusPVName
 from siriuspy.injctrl.csdev import Const as _InjConst
 
 from ..util import get_appropriate_color, connect_newprocess
@@ -221,7 +221,6 @@ class MainLauncher(SiriusMainWindow):
             '<h4>Target Curr.</h4>', self, alignment=Qt.AlignCenter)
         self._sb_currtgt = SiriusSpinbox(
             self, injctrl_dev.substitute(propty='TargetCurrent-SP'))
-        self._sb_currtgt.showStepExponent = False
         self._lb_currtgt = SiriusLabel(
             self, injctrl_dev.substitute(propty='TargetCurrent-RB'),
             keep_unit=True)
