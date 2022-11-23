@@ -247,6 +247,7 @@ def get_object(ismenubar=True, parent=None):
             pulsedps.setIcon(qta.icon('mdi.current-ac'))
 
             vacuum = LEVEL2M('VA', menu)
+            vacuum.setIcon(qta.icon('mdi.network-outline', vflip=True))
             vacuum.setObjectName('ASApp')
             agilent = QAction('Agilent', vacuum)
             self.connect_newprocess(
@@ -351,6 +352,13 @@ def get_object(ismenubar=True, parent=None):
             self.connect_newprocess(llrfa, 'sirius-hla-li-rf-llrf.py')
             llrf.addAction(llrfa)
 
+            va = LEVEL2M('VA', menu)
+            va.setObjectName('LIApp')
+            va.setIcon(qta.icon('mdi.network-outline', vflip=True))
+            vac = QAction('Control', va)
+            self.connect_newprocess(vac, 'sirius-hla-li-va-control.py')
+            va.addAction(vac)
+
             optics = LEVEL2M('Optics', menu)
             optics.setObjectName('LIApp')
             energy = QAction('Energy Meas', optics)
@@ -368,6 +376,7 @@ def get_object(ismenubar=True, parent=None):
             self.add_object_to_level1(menu, mod)
             self.add_object_to_level1(menu, llrf)
             self.add_object_to_level1(menu, launcher)
+            self.add_object_to_level1(menu, va)
             self.add_object_to_level1(menu, optics)
             return menu
 
@@ -847,6 +856,7 @@ def get_object(ismenubar=True, parent=None):
         def _set_va_menu(self, sec):
             secl = sec.lower()
             menu = LEVEL2M('VA', self)
+            menu.setIcon(qta.icon('mdi.network-outline', vflip=True))
             menu.setObjectName(sec.upper()+'App')
 
             if sec != 'it':
