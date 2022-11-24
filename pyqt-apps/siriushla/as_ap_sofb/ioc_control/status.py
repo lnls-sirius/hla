@@ -41,7 +41,7 @@ class StatusWidget(BaseWidget):
         hbl.addWidget(QLabel('Global Status', self))
         hbl.addStretch()
         hbl.addWidget(conf)
-        vbl.addItem(hbl)
+        vbl.addLayout(hbl)
 
         grpbx = self.creategroupbox()
         vbl.addWidget(grpbx)

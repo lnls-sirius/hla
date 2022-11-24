@@ -331,6 +331,7 @@ class MainWindow(BaseObject, SiriusMainWindow):
 
     def _setupControlWidget(self):
         self.controltabs = QTabWidget()
+        self.controltabs.setObjectName('SITab')
 
         # tab main
         self.status = self._setupStatusWidget()

@@ -36,6 +36,13 @@ class KicksConfigWidget(BaseWidget):
             planes = ('CH', 'CV', 'RF')
 
         tabw = QTabWidget(self)
+        tabw.setObjectName(self.acc+'Tab')
+        tabw.setStyleSheet("""
+            #{0}Tab::pane {{
+                border-left: 2px solid gray;
+                border-bottom: 2px solid gray;
+                border-right: 2px solid gray;
+            }}""".format(self.acc))
         self.layout().addWidget(tabw)
         for tab, pvname, units in zip(tabs, pvnames, unitss):
             grpbx = QWidget(tabw)

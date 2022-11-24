@@ -285,7 +285,7 @@ class OrbitRegister(QWidget):
         hlay.addStretch()
         hlay.addWidget(confirm)
         hlay.addStretch()
-        wid.layout().addItem(hlay)
+        wid.layout().addLayout(hlay)
         res = wid.exec_()
 
         if res != QDialog.Accepted:
@@ -316,7 +316,7 @@ class OrbitRegister(QWidget):
         wid.setLayout(QVBoxLayout())
 
         hbl = QHBoxLayout()
-        wid.layout().addItem(hbl)
+        wid.layout().addLayout(hbl)
         hbl.addWidget(QLabel('X = ', wid))
         multx = QLineEdit(wid)
         multx.setValidator(QDoubleValidator())
@@ -335,7 +335,7 @@ class OrbitRegister(QWidget):
         hbl.addWidget(QLabel(' [um]', wid))
 
         hbl = QHBoxLayout()
-        wid.layout().addItem(hbl)
+        wid.layout().addLayout(hbl)
         hbl.addWidget(QLabel('Y = ', wid))
         multy = QLineEdit(wid)
         multy.setValidator(QDoubleValidator())
@@ -364,7 +364,7 @@ class OrbitRegister(QWidget):
         hlay.addStretch()
         hlay.addWidget(confirm)
         hlay.addStretch()
-        wid.layout().addItem(hlay)
+        wid.layout().addLayout(hlay)
         res = wid.exec_()
 
         if res != QDialog.Accepted:
@@ -468,7 +468,7 @@ class OrbitRegister(QWidget):
         hlay.addStretch()
         hlay.addWidget(confirm)
         hlay.addStretch()
-        wid.layout().addItem(hlay, row, 0, 1, 2)
+        wid.layout().addLayout(hlay, row, 0, 1, 2)
         res = wid.exec_()
         if res != QDialog.Accepted:
             return
