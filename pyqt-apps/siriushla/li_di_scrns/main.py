@@ -17,6 +17,7 @@ from .motorBtn import MotorBtn
 
 
 class GeneralFunctions():
+    ''' Class with the functions used in both Screens Windows'''
 
     def getPvName(self, device, pv_name):
         ''' Build PV name '''
@@ -106,6 +107,25 @@ class GeneralFunctions():
                     widget, alignment=Qt.AlignLeft)
         return rbv_hlay
 
+    def setSingleScrn(self, device, screen):
+        ''' Build a single screen Component '''
+        group = QGroupBox()
+        ss_vlay = QVBoxLayout()
+
+        image_wid = PyDMImageView(
+            image_channel=self.getPvName(device, screen['data']),
+            width_channel=self.getPvName(device, screen['width']))
+        image_wid.readingOrder = image_wid.ReadingOrder.Clike
+        image_wid.setMinimumHeight(300)
+        ss_vlay.addWidget(image_wid, 5)
+
+        if 'IMG' not in screen['data']:
+            ss_vlay.addLayout(self.setScrnInfo(device), 1)
+
+        group.setTitle(screen['title'] + " " + device)
+        group.setLayout(ss_vlay)
+        return group
+
 
 class LiBeamProfile(SiriusMainWindow, GeneralFunctions):
     ''' Linac Profile Screen '''
@@ -148,23 +168,6 @@ class LiBeamProfile(SiriusMainWindow, GeneralFunctions):
             self.radioBtnClick)
         selector.widgetType = 1
         return selector
-
-    def setSingleScrn(self, device):
-        ''' Build a single screen Component '''
-        group = QGroupBox()
-        ss_vlay = QVBoxLayout()
-
-        image_wid = PyDMImageView(
-            image_channel=self.getPvName(device, SCREEN['Screen']['data']),
-            width_channel=self.getPvName(device, SCREEN['Screen']['width']))
-        image_wid.readingOrder = image_wid.ReadingOrder.Clike
-        image_wid.setMinimumHeight(400)
-        ss_vlay.addWidget(image_wid, 5)
-        ss_vlay.addLayout(self.setScrnInfo(device), 1)
-
-        group.setTitle(SCREEN['title'] + " " + device)
-        group.setLayout(ss_vlay)
-        return group
 
     def setScrnHeader(self, layout):
         ''' Build the screen panel header '''
@@ -334,7 +337,7 @@ class LiBeamProfile(SiriusMainWindow, GeneralFunctions):
         if stack_type == 0:
             return self.setSingleScrnInfo(device)
         elif stack_type == 1:
-            return self.setSingleScrn(device)
+            return self.setSingleScrn(device, SCREEN['Screen_Camera'])
 
     def saveStack(self, stack, stack_type):
         ''' Save the stack for future item changes '''
@@ -417,7 +420,7 @@ class LiBeamProfile(SiriusMainWindow, GeneralFunctions):
 
 
 class ROIViewWindow(SiriusMainWindow, GeneralFunctions):
-    """Show the Chart Window."""
+    """Show the ROI View Window."""
 
     def __init__(self, parent=None, prefix=''):
         """Init."""
@@ -429,7 +432,9 @@ class ROIViewWindow(SiriusMainWindow, GeneralFunctions):
             prefix + self.device_name+":PRF:OPI")
         self.active_screen.new_value_signal[int].connect(
             self.radioBtnClick)
+        self.selected_device = 0
         self.stack_graphs = QStackedWidget()
+        self.stack_screen = QStackedWidget()
         self._setupUi()
 
     def setGraphInfo(self, device, graph_info):
@@ -470,12 +475,16 @@ class ROIViewWindow(SiriusMainWindow, GeneralFunctions):
             y_channel=self.getPvName(
                 device, graph_data['channel']['centroid']),
             color="#ff8b98",
-            lineWidth=1)
+            lineWidth=1,
+            symbol='o',
+            symbolSize=5)
         graph_plot.addChannel(
             y_channel=self.getPvName(
                 device, graph_data['channel']['data']),
             color="#ff0000",
-            lineWidth=1)
+            lineWidth=1,
+            symbol='o',
+            symbolSize=5)
 
         graph_plot.setPlotTitle(title)
         graph_plot.setLabel(
@@ -511,14 +520,30 @@ class ROIViewWindow(SiriusMainWindow, GeneralFunctions):
         self.selected_device = DEVICES[value]
         device_index = DEVICES.index(self.selected_device)
         self.stack_graphs.setCurrentIndex(device_index)
+        self.stack_screen.setCurrentIndex(device_index)
 
-    def buildStacks(self):
+    def getStackItem(self, stack_type, device):
+        ''' Get one stack item '''
+        if stack_type == 0:
+            return self.setSingleScrn(
+                    device, SCREEN['Screen_ROI'])
+        elif stack_type == 1:
+            return self.setGraphs(device)
+
+    def saveStack(self, stack, stack_type):
+        ''' Save the stack for future item changes '''
+        if stack_type == 0:
+            self.stack_screen = stack
+        elif stack_type == 1:
+            self.stack_graphs = stack
+
+    def buildStacks(self, stack_type):
         ''' Build all the stack groups '''
         stack = QStackedWidget()
         for device in DEVICES:
             stack.addWidget(
-                self.setGraphs(device))
-        self.stack_graphs = stack
+                self.getStackItem(stack_type, device))
+        self.saveStack(stack, stack_type)
         return stack
 
     def _setupUi(self):
@@ -528,4 +553,5 @@ class ROIViewWindow(SiriusMainWindow, GeneralFunctions):
         lay = QGridLayout()
         wid.setLayout(lay)
 
-        lay.addWidget(self.buildStacks())
+        lay.addWidget(self.buildStacks(0))
+        lay.addWidget(self.buildStacks(1))

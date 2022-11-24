@@ -102,8 +102,13 @@ GRAPH = {
 }
 
 SCREEN = {
-    "title": "Screen Camera",
-    "Screen": {
+    "Screen_ROI": {
+        "title": "ROI View",
+        "data": "IMG:ArrayData",
+        "width": "IMG:ArraySize0_RBV"
+    },
+    "Screen_Camera": {
+        "title": "Screen Camera",
         "data": "RAW:ArrayData",
         "width": "RAW:ArraySize0_RBV"
     },
