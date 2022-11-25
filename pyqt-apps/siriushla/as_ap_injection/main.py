@@ -464,8 +464,8 @@ class InjCtrlWindow(SiriusMainWindow):
             keep_unit=True)
         self._lb_tuperd.showUnits = True
 
-        self._ld_tuoffs = QLabel('Start Offset', self)
-        pvname = self._inj_prefix.substitute(propty='TopUpStartTimeOffset-SP')
+        self._ld_tuoffs = QLabel('Head Start Time', self)
+        pvname = self._inj_prefix.substitute(propty='TopUpHeadStartTime-SP')
         self._sb_tuoffs = SiriusSpinbox(self, pvname)
         self._lb_tuoffs = SiriusLabel(
             self, pvname.substitute(propty_suffix='RB'), keep_unit=True)
