@@ -57,6 +57,7 @@ class CorrectorsWidget(BaseWidget):
     def add_kicklimits_curves(self):
         grpbx = QGroupBox('Show Kick Limits', self)
         vbl = QHBoxLayout(grpbx)
+        self.hbl_namev.addStretch(1)
         self.hbl_namev.addWidget(grpbx)
         chcbox1 = QCheckBox('Kicks', grpbx)
         chcbox2 = QCheckBox('Delta Kicks', grpbx)
