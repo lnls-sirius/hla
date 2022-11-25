@@ -116,7 +116,7 @@ class BaseWidget(QWidget):
         vbl.addLayout(self.hbl_namev)
         self.hbl_namev.addWidget(lab)
         self.hbl_namev.addStretch(1)
-        self.hbl_namev.addWidget(QLabel('Graphic Update Rate:'))
+        self.hbl_namev.addWidget(QLabel('Graphic Update Rate [Hz]:'))
         updt_rate = QDoubleSpinBox(self)
         updt_rate.setDecimals(1)
         updt_rate.setSingleStep(0.1)
@@ -139,7 +139,7 @@ class BaseWidget(QWidget):
     def _change_update_rate(self, value):
         self.graph['x'].maxRedrawRate = value + 0.1
         self.graph['y'].maxRedrawRate = value + 0.1
-        self.timer.setInterval(1000/value)
+        self.timer.setInterval(1000/value)  # [ms]
 
     def uigetgraph(self, pln, size):
         """."""
