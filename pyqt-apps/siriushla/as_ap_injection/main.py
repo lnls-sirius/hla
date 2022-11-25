@@ -447,7 +447,7 @@ class InjCtrlWindow(SiriusMainWindow):
         for lbl in labelsdesc:
             lbl.setStyleSheet("""
                 QLabel{
-                    min-width: 6.5em; max-width: 6.5em; min-height: 1.5em;
+                    min-width: 7em; max-width: 7em; min-height: 1.5em;
                     qproperty-alignment: 'AlignRight | AlignVCenter';
                 }""")
         for lbl in labelsmon:
@@ -497,7 +497,7 @@ class InjCtrlWindow(SiriusMainWindow):
 
         wid.setStyleSheet("""
             .QLabel{
-                min-width: 6.5em; max-width: 6.5em; min-height: 1.5em;
+                min-width: 7em; max-width: 7em; min-height: 1.5em;
                 qproperty-alignment: 'AlignRight | AlignVCenter';
             }
             SiriusLabel{
@@ -526,7 +526,7 @@ class InjCtrlWindow(SiriusMainWindow):
 
         wid.setStyleSheet("""
             .QLabel{
-                min-width: 6.5em; max-width: 6.5em; min-height: 1.5em;
+                min-width: 7em; max-width: 7em; min-height: 1.5em;
                 qproperty-alignment: 'AlignRight | AlignVCenter';
             }
             SiriusLabel{
