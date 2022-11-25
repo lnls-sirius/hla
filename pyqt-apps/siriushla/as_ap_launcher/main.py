@@ -153,12 +153,6 @@ class MainLauncher(SiriusMainWindow):
         label_tunxt.displayFormat = SiriusLabel.DisplayFormat.Time
         label_tunxt.setAlignment(Qt.AlignCenter)
         label_tunxt.setStyleSheet('max-height:2em;')
-        but_round = PyDMPushButton(
-            self, '', qta.icon('mdi.tilde'), 1, False,
-            injctrl_dev.substitute(propty='TopUpNextInjRound-Cmd'))
-        but_round.setObjectName('but')
-        but_round.setStyleSheet(
-            '#but{min-width:18px; max-width:18px; icon-size:16px;}')
         self.wid_tusts = QWidget()
         self.wid_tusts.setObjectName('wid')
         self.wid_tusts.setStyleSheet("#wid{min-width: 8em; max-width: 8em;}")
@@ -170,7 +164,6 @@ class MainLauncher(SiriusMainWindow):
         lay_tusts.addWidget(label_tunow, 1, 1)
         lay_tusts.addWidget(QLabel('Next:', self), 2, 0)
         lay_tusts.addWidget(label_tunxt, 2, 1)
-        lay_tusts.addWidget(but_round, 2, 2)
         self.wid_tusts.setVisible(False)
 
         # # Control
