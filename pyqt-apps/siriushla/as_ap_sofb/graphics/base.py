@@ -6,7 +6,7 @@ import numpy as _np
 
 from qtpy.QtWidgets import QWidget, QFileDialog, QLabel, QCheckBox, \
     QVBoxLayout, QHBoxLayout, QSizePolicy, QGroupBox, QPushButton, QComboBox, \
-    QToolTip, QGridLayout
+    QToolTip, QGridLayout, QDoubleSpinBox
 from qtpy.QtCore import Qt, QTimer, QThread, Signal, QObject
 from qtpy.QtGui import QColor
 from pyqtgraph import mkBrush, mkPen, InfiniteLine, functions
@@ -116,6 +116,14 @@ class BaseWidget(QWidget):
         vbl.addLayout(self.hbl_namev)
         self.hbl_namev.addWidget(lab)
         self.hbl_namev.addStretch(1)
+        self.hbl_namev.addWidget(QLabel('Graphic Update Rate [Hz]:'))
+        updt_rate = QDoubleSpinBox(self)
+        updt_rate.setDecimals(1)
+        updt_rate.setSingleStep(0.1)
+        updt_rate.setValue(self.update_rate)
+        updt_rate.setRange(0.5, 10)
+        updt_rate.valueChanged.connect(self._change_update_rate)
+        self.hbl_namev.addWidget(updt_rate)
         vbl.addWidget(graphy)
         self.graph = {'x': graphx, 'y': graphy}
 
@@ -127,6 +135,11 @@ class BaseWidget(QWidget):
             grpbx.setObjectName('GroupBox'+str(i))
             self.hbl.addWidget(grpbx)
             self.hbl.addStretch(6)
+
+    def _change_update_rate(self, value):
+        self.graph['x'].maxRedrawRate = value + 0.1
+        self.graph['y'].maxRedrawRate = value + 0.1
+        self.timer.setInterval(1000/value)  # [ms]
 
     def uigetgraph(self, pln, size):
         """."""
