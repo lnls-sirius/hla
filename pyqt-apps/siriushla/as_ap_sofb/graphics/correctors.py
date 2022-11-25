@@ -90,6 +90,7 @@ class CorrectorsWidget(BaseWidget):
                 chan.new_value_signal[float].connect(minkick.setValue)
                 chb.toggled.connect(maxkick.setVisible)
                 chb.toggled.connect(minkick.setVisible)
+            chb.setChecked(False)
 
     def channels(self):
         chans = super().channels()
