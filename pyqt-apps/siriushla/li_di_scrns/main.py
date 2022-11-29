@@ -1,5 +1,7 @@
 ''' Diagnostic Interface of the LINAC's Screen'''
+from array import array
 import os as _os
+import numpy as _np
 from qtpy.QtCore import Qt
 from qtpy.QtGui import QPixmap
 from qtpy.QtWidgets import QGroupBox, QHBoxLayout, QVBoxLayout, \
@@ -115,13 +117,12 @@ class GeneralFunctions():
         image_wid = PyDMImageView(
             image_channel=self.getPvName(device, screen['data']),
             width_channel=self.getPvName(device, screen['width']))
+
         image_wid.readingOrder = image_wid.ReadingOrder.Clike
-        image_wid.setMinimumHeight(300)
         ss_vlay.addWidget(image_wid, 5)
 
         if 'IMG' not in screen['data']:
             ss_vlay.addLayout(self.setScrnInfo(device), 1)
-
         group.setTitle(screen['title'] + " " + device)
         group.setLayout(ss_vlay)
         return group
@@ -435,17 +436,23 @@ class ROIViewWindow(SiriusMainWindow, GeneralFunctions):
         self.selected_device = 0
         self.stack_graphs = QStackedWidget()
         self.stack_screen = QStackedWidget()
+        self.connect_sign = dict()
+        self.curves = dict()
+        self.roi_screens = dict()
         self._setupUi()
 
     def setGraphInfo(self, device, graph_info):
         ''' Build the basic graph information '''
+        wid = QWidget()
         gi_hlay = QHBoxLayout()
+        wid.setLayout(gi_hlay)
+
         gi_hlay.addStretch()
         for label, channel in graph_info.items():
             gi_hlay.addLayout(
                 self.setBasicInfo(device, label, channel))
             gi_hlay.addStretch()
-        return gi_hlay
+        return wid
 
     def setRoiInfo(self, device, roi_data, title):
         ''' Build the ROI information '''
@@ -467,54 +474,6 @@ class ROIViewWindow(SiriusMainWindow, GeneralFunctions):
         group.setTitle(title)
         return group
 
-    def setGraph(self, device, graph_data, title):
-        '''Build a graph widget'''
-
-        graph_plot = SiriusWaveformPlot(background="#ffffff")
-        graph_plot.addChannel(
-            y_channel=self.getPvName(
-                device, graph_data['channel']['centroid']),
-            color="#ff8b98",
-            lineWidth=1,
-            symbol='o',
-            symbolSize=5)
-        graph_plot.addChannel(
-            y_channel=self.getPvName(
-                device, graph_data['channel']['data']),
-            color="#ff0000",
-            lineWidth=1,
-            symbol='o',
-            symbolSize=5)
-
-        graph_plot.setPlotTitle(title)
-        graph_plot.setLabel(
-            'left',
-            text=graph_data.get("labelY"))
-        graph_plot.setLabel(
-            'bottom',
-            text=graph_data.get("labelX"))
-        graph_plot.setMinimumSize(50, 100)
-
-        return graph_plot
-
-    def setGraphs(self, device):
-        ''' Build the graph group '''
-        group = QGroupBox()
-        ag_vlay = QVBoxLayout()
-        for title, graph_data in GRAPH.items():
-            if title == "ROI":
-                ag_vlay.addWidget(
-                    self.setRoiInfo(device, graph_data, title))
-            else:
-                ag_vlay.addWidget(
-                    self.setGraph(device, graph_data, title))
-                ag_vlay.addLayout(
-                    self.setGraphInfo(device, graph_data['info']))
-
-        group.setLayout(ag_vlay)
-        group.setTitle("Projections " + device)
-        return group
-
     def radioBtnClick(self, value):
         ''' Action on radio button change '''
         self.selected_device = DEVICES[value]
@@ -522,13 +481,97 @@ class ROIViewWindow(SiriusMainWindow, GeneralFunctions):
         self.stack_graphs.setCurrentIndex(device_index)
         self.stack_screen.setCurrentIndex(device_index)
 
+    def rotate_chart(self, x_array):
+        ''' Rotate X and Y Axis in the Chart '''
+        curve = self.curves[self.selected_device]['centroid']
+        curve.receiveXWaveform(x_array)
+        curve.receiveYWaveform(_np.linspace(0, 500, num=500))
+
+    def setGraph(self, device, graph_data, orientation='V'):
+        '''Build a graph widget'''
+
+        self.connect_sign[device] = dict()
+        self.curves[device] = dict()
+
+        graph_plot = SiriusWaveformPlot(background="#ffffff")
+        graph_plot.addChannel(
+            y_channel=self.getPvName(
+                    device, graph_data['channel']['centroid']),
+            color="#ff8b98",
+            lineWidth=1,
+            symbol='o',
+            symbolSize=5)
+
+        graph_plot.addChannel(
+            y_channel=self.getPvName(
+                    device, graph_data['channel']['data']),
+            color="#ff0000",
+            lineWidth=1,
+            symbol='o',
+            symbolSize=5)
+
+        if orientation == 'V':
+            self.curves[device]['centroid'] = graph_plot.curveAtIndex(0)
+            self.connect_sign[device]['centroid'] = SiriusConnectionSignal(
+                self.getPvName(
+                    device, graph_data['channel']['centroid']))
+            self.connect_sign[device]['centroid'].new_value_signal[_np.ndarray].connect(
+                self.rotate_chart)
+
+            self.curves[device]['data'] = graph_plot.curveAtIndex(1)
+            self.connect_sign[device]['data'] = SiriusConnectionSignal(
+                self.getPvName(
+                    device, graph_data['channel']['data']))
+            self.connect_sign[device]['data'].new_value_signal[_np.ndarray].connect(
+                self.rotate_chart)
+
+            graph_plot.setMaximumWidth(400)
+        else:
+            graph_plot.setMaximumHeight(300)
+
+        return graph_plot
+
+    def scrnAndProj(self, device):
+        ''' Display ROI Screen, the projection charts
+            and the projection information '''
+
+        group = QGroupBox()
+        lay = QGridLayout()
+        group.setLayout(lay)
+
+        self.roi_screens[device] = self.setSingleScrn(
+            device, SCREEN['Screen_ROI'])
+        lay.addWidget(
+            self.roi_screens[device], 0, 0, 3, 3)
+
+        lay.addWidget(
+            self.setGraph(device, GRAPH["Horizontal"], 'H'),
+            3, 0, 1, 3)
+
+        lay.addWidget(
+            self.setGraph(device, GRAPH["Vertical"], 'V'),
+            0, 3, 1, 1)
+
+        info_group = QGroupBox()
+        lay_info = QVBoxLayout()
+        info_group.setLayout(lay_info)
+        info_group.setTitle("Projections Info")
+        for title in ["Horizontal", "Vertical"]:
+            lay_info.addWidget(
+                QLabel(title), 1, alignment=Qt.AlignHCenter)
+            lay_info.addWidget(
+                self.setGraphInfo(device, GRAPH[title]['info']),
+                1, alignment=Qt.AlignTop)
+        lay.addWidget(info_group, 3, 3, 1, 1)
+
+        return group
+
     def getStackItem(self, stack_type, device):
         ''' Get one stack item '''
         if stack_type == 0:
-            return self.setSingleScrn(
-                    device, SCREEN['Screen_ROI'])
+            return self.scrnAndProj(device)
         elif stack_type == 1:
-            return self.setGraphs(device)
+            return self.setRoiInfo(device, GRAPH["ROI"], "ROI")
 
     def saveStack(self, stack, stack_type):
         ''' Save the stack for future item changes '''

@@ -62,8 +62,6 @@ HEADER = {
 
 GRAPH = {
     "Horizontal": {
-        "labelX": "Points",
-        "labelY": "Projection",
         "channel": {
             "centroid": "CAL:ProfileCentroidX_RBV",
             "data": "X:Gauss:Data"
@@ -75,8 +73,6 @@ GRAPH = {
         }
     },
     "Vertical": {
-        "labelX": "Points",
-        "labelY": "Projection",
         "channel": {
             "centroid": "CAL:ProfileCentroidY_RBV",
             "data": "Y:Gauss:Data"
