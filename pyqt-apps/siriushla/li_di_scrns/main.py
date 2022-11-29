@@ -1,5 +1,4 @@
 ''' Diagnostic Interface of the LINAC's Screen'''
-from array import array
 import os as _os
 import numpy as _np
 from qtpy.QtCore import Qt
