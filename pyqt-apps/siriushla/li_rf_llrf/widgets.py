@@ -238,7 +238,6 @@ class GraphTime(QWidget):
             y_channel=chname,
             name='Data',
             color='black',
-            redraw_mode=2,
             lineStyle=1,
             lineWidth=3,
             symbol='o',
