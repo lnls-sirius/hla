@@ -403,7 +403,8 @@ class LiBeamProfile(SiriusMainWindow, GeneralFunctions):
         ''' Build the image'''
         self.image_container.setPixmap(self.pixmap)
         self.image_container.setScaledContents(True)
-        self.image_container.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Ignored)
+        self.image_container.setSizePolicy(
+            QSizePolicy.Ignored, QSizePolicy.Ignored)
         return self.image_container
 
     def _setupUi(self):
