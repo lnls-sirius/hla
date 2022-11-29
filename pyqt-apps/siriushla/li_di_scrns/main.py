@@ -483,9 +483,13 @@ class ROIViewWindow(SiriusMainWindow, GeneralFunctions):
 
     def rotate_chart(self, x_array):
         ''' Rotate X and Y Axis in the Chart '''
-        curve = self.curves[self.selected_device]['centroid']
+        pvname = self.sender().address
+        device = pvname.split(':')[1]
+        curvename = 'data' if 'Gauss:Data' in pvname else 'centroid'
+        curve = self.curves[device][curvename]
+        size = len(x_array)
         curve.receiveXWaveform(x_array)
-        curve.receiveYWaveform(_np.linspace(0, 500, num=500))
+        curve.receiveYWaveform(_np.linspace(0, size, num=size))
 
     def setGraph(self, device, graph_data, orientation='V'):
         '''Build a graph widget'''
@@ -494,17 +498,19 @@ class ROIViewWindow(SiriusMainWindow, GeneralFunctions):
         self.curves[device] = dict()
 
         graph_plot = SiriusWaveformPlot(background="#ffffff")
+        pvname = self.getPvName(device, graph_data['channel']['centroid']) \
+            if orientation != 'V' else 'Fake'
         graph_plot.addChannel(
-            y_channel=self.getPvName(
-                    device, graph_data['channel']['centroid']),
+            y_channel=pvname,
             color="#ff8b98",
             lineWidth=1,
             symbol='o',
             symbolSize=5)
 
+        pvname = self.getPvName(device, graph_data['channel']['data']) \
+            if orientation != 'V' else 'Fake'
         graph_plot.addChannel(
-            y_channel=self.getPvName(
-                    device, graph_data['channel']['data']),
+            y_channel=pvname,
             color="#ff0000",
             lineWidth=1,
             symbol='o',
