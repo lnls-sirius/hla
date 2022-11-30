@@ -62,8 +62,6 @@ HEADER = {
 
 GRAPH = {
     "Horizontal": {
-        "labelX": "Points",
-        "labelY": "Projection",
         "channel": {
             "centroid": "CAL:ProfileCentroidX_RBV",
             "data": "X:Gauss:Data"
@@ -75,8 +73,6 @@ GRAPH = {
         }
     },
     "Vertical": {
-        "labelX": "Points",
-        "labelY": "Projection",
         "channel": {
             "centroid": "CAL:ProfileCentroidY_RBV",
             "data": "Y:Gauss:Data"
@@ -102,8 +98,13 @@ GRAPH = {
 }
 
 SCREEN = {
-    "title": "Screen Camera",
-    "Screen": {
+    "Screen_ROI": {
+        "title": "ROI View",
+        "data": "IMG:ArrayData",
+        "width": "IMG:ArraySize0_RBV"
+    },
+    "Screen_Camera": {
+        "title": "Screen Camera",
         "data": "RAW:ArrayData",
         "width": "RAW:ArraySize0_RBV"
     },
