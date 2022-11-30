@@ -6,8 +6,6 @@ from qtpy.QtWidgets import QWidget, QLabel, QGridLayout, QGroupBox, \
 
 import qtawesome as qta
 
-from pydm.widgets import PyDMPushButton
-
 from siriuspy.namesys import SiriusPVName
 from siriuspy.injctrl.csdev import Const as _Const
 
