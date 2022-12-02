@@ -476,6 +476,13 @@ class InjCtrlWindow(SiriusMainWindow):
             self, self._inj_prefix.substitute(propty='TopUpNrPulses-RB'))
         self._lb_tunrpu.showUnits = True
 
+        self._ld_tupustd = QLabel('PU Standby', self)
+        pvname = self._inj_prefix.substitute(propty='TopUpPUStandbyEnbl-Sel')
+        self._sb_tupustd = PyDMStateButton(self, pvname)
+        self._lb_tupustd = SiriusLedState(
+            self, pvname.substitute(propty_suffix='Sts'))
+        self._lb_tupustd.showUnits = True
+
         wid = QWidget()
         lay = QGridLayout(wid)
         lay.setContentsMargins(0, 6, 0, 0)
@@ -489,6 +496,9 @@ class InjCtrlWindow(SiriusMainWindow):
         lay.addWidget(self._ld_tunrpu, 2, 0)
         lay.addWidget(self._sb_tunrpu, 2, 1)
         lay.addWidget(self._lb_tunrpu, 2, 2)
+        lay.addWidget(self._ld_tupustd, 3, 0)
+        lay.addWidget(self._sb_tupustd, 3, 1)
+        lay.addWidget(self._lb_tupustd, 3, 2)
         lay.setColumnStretch(0, 3)
         lay.setColumnStretch(1, 2)
         lay.setColumnStretch(2, 2)
