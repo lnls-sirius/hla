@@ -26,6 +26,8 @@ class IDControl(SiriusMainWindow):
         self.setObjectName('IDApp')
         self.setWindowTitle('ID Controls')
         self.setWindowIcon(get_id_icon())
+        self._id_widgets = list()
+        self._channels_mov = list()
         self._setupUi()
         self._create_actions()
 
@@ -74,15 +76,13 @@ class IDControl(SiriusMainWindow):
         self._apu_header = APUSummaryHeader(self)
         lay.addWidget(self._apu_header)
 
-        self._apu_widgets = list()
-        self._channels_mov = list()
         idlist = ['SI-06SB:ID-APU22', 'SI-07SP:ID-APU22',
                   'SI-08SB:ID-APU22', 'SI-09SA:ID-APU22',
                   'SI-11SP:ID-APU58']
         for idname in idlist:
             apu_wid = APUSummaryWidget(self, self._prefix, idname)
             lay.addWidget(apu_wid)
-            self._apu_widgets.append(apu_wid)
+            self._id_widgets.append(apu_wid)
             ch_mov = SiriusConnectionSignal(_PVName(idname).substitute(
                 prefix=self._prefix, propty='Moving-Mon'))
             ch_mov.new_value_signal[float].connect(self._handle_moving_vis)
@@ -97,16 +97,14 @@ class IDControl(SiriusMainWindow):
         self._epu_header = EPUSummaryHeader(self)
         lay.addWidget(self._epu_header)
 
-        self._apu_widgets = list()
-        self._channels_mov = list()
         idlist = ['SI-10SB:ID-EPU50', ]
         for idname in idlist:
-            apu_wid = EPUSummaryWidget(self, self._prefix, idname)
-            lay.addWidget(apu_wid)
-            self._apu_widgets.append(apu_wid)
+            epu_wid = EPUSummaryWidget(self, self._prefix, idname)
+            lay.addWidget(epu_wid)
+            self._id_widgets.append(epu_wid)
             ch_mov = SiriusConnectionSignal(_PVName(idname).substitute(
                 prefix=self._prefix, propty='Moving-Mon'))
-            ch_mov.new_value_signal[float].connect(self._handle_moving_vis)
+            ch_mov.new_value_signal[int].connect(self._handle_moving_vis)
             self._channels_mov.append(ch_mov)
 
         return lay
@@ -122,7 +120,7 @@ class IDControl(SiriusMainWindow):
     @Slot(bool)
     def _set_beamline_control(self, state):
         """Execute enable/disable beamline control actions."""
-        for widget in self._apu_widgets:
+        for widget in self._id_widgets:
             try:
                 if state:
                     widget.enable_beamline_control()
@@ -150,6 +148,7 @@ class IDControl(SiriusMainWindow):
 
     def _handle_moving_vis(self, value):
         """Handle visualization of moving state label."""
+        _ = value
         show = any([
             ch.connected and ch.value != 0
             for ch in self._channels_mov])

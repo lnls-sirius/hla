@@ -6,8 +6,6 @@ from qtpy.QtWidgets import QWidget, QLabel, QGridLayout, QGroupBox, \
 
 import qtawesome as qta
 
-from pydm.widgets import PyDMPushButton
-
 from siriuspy.namesys import SiriusPVName
 from siriuspy.injctrl.csdev import Const as _Const
 
@@ -198,13 +196,6 @@ class InjCtrlWindow(SiriusMainWindow):
         self._lb_tunxt.displayFormat = SiriusLabel.DisplayFormat.Time
         self._lb_tunxt.setAlignment(Qt.AlignCenter)
         self._lb_tunxt.setStyleSheet('QLabel{max-height:2em;}')
-        self._pb_round = PyDMPushButton(
-            self, label='', icon=qta.icon('mdi.tilde'), pressValue=1,
-            init_channel=self._inj_prefix.substitute(
-                propty='TopUpNextInjRound-Cmd'))
-        self._pb_round.setObjectName('but')
-        self._pb_round.setStyleSheet(
-            '#but{min-width:18px; max-width:18px; icon-size:16px;}')
         self.wid_tusts = QGroupBox('Top-up status')
         self.wid_tusts.setVisible(False)
         lay_tusts = QGridLayout(self.wid_tusts)
@@ -213,7 +204,6 @@ class InjCtrlWindow(SiriusMainWindow):
         lay_tusts.addWidget(self._lb_tunow, 1, 1)
         lay_tusts.addWidget(self._ld_tunxt, 2, 0)
         lay_tusts.addWidget(self._lb_tunxt, 2, 1)
-        lay_tusts.addWidget(self._pb_round, 2, 2)
 
         wid = QWidget()
         lay = QGridLayout(wid)
@@ -455,7 +445,7 @@ class InjCtrlWindow(SiriusMainWindow):
         for lbl in labelsdesc:
             lbl.setStyleSheet("""
                 QLabel{
-                    min-width: 6.5em; max-width: 6.5em; min-height: 1.5em;
+                    min-width: 7em; max-width: 7em; min-height: 1.5em;
                     qproperty-alignment: 'AlignRight | AlignVCenter';
                 }""")
         for lbl in labelsmon:
@@ -468,8 +458,16 @@ class InjCtrlWindow(SiriusMainWindow):
         self._sb_tuperd = SiriusSpinbox(
             self, self._inj_prefix.substitute(propty='TopUpPeriod-SP'))
         self._lb_tuperd = SiriusLabel(
-            self, self._inj_prefix.substitute(propty='TopUpPeriod-RB'))
+            self, self._inj_prefix.substitute(propty='TopUpPeriod-RB'),
+            keep_unit=True)
         self._lb_tuperd.showUnits = True
+
+        self._ld_tuoffs = QLabel('Head Start Time', self)
+        pvname = self._inj_prefix.substitute(propty='TopUpHeadStartTime-SP')
+        self._sb_tuoffs = SiriusSpinbox(self, pvname)
+        self._lb_tuoffs = SiriusLabel(
+            self, pvname.substitute(propty_suffix='RB'), keep_unit=True)
+        self._lb_tuoffs.showUnits = True
 
         self._ld_tunrpu = QLabel('Nr.Pulses', self)
         self._sb_tunrpu = SiriusSpinbox(
@@ -485,16 +483,19 @@ class InjCtrlWindow(SiriusMainWindow):
         lay.addWidget(self._ld_tuperd, 0, 0)
         lay.addWidget(self._sb_tuperd, 0, 1)
         lay.addWidget(self._lb_tuperd, 0, 2)
-        lay.addWidget(self._ld_tunrpu, 1, 0)
-        lay.addWidget(self._sb_tunrpu, 1, 1)
-        lay.addWidget(self._lb_tunrpu, 1, 2)
+        lay.addWidget(self._ld_tuoffs, 1, 0)
+        lay.addWidget(self._sb_tuoffs, 1, 1)
+        lay.addWidget(self._lb_tuoffs, 1, 2)
+        lay.addWidget(self._ld_tunrpu, 2, 0)
+        lay.addWidget(self._sb_tunrpu, 2, 1)
+        lay.addWidget(self._lb_tunrpu, 2, 2)
         lay.setColumnStretch(0, 3)
         lay.setColumnStretch(1, 2)
         lay.setColumnStretch(2, 2)
 
         wid.setStyleSheet("""
             .QLabel{
-                min-width: 6.5em; max-width: 6.5em; min-height: 1.5em;
+                min-width: 7em; max-width: 7em; min-height: 1.5em;
                 qproperty-alignment: 'AlignRight | AlignVCenter';
             }
             SiriusLabel{
@@ -523,7 +524,7 @@ class InjCtrlWindow(SiriusMainWindow):
 
         wid.setStyleSheet("""
             .QLabel{
-                min-width: 6.5em; max-width: 6.5em; min-height: 1.5em;
+                min-width: 7em; max-width: 7em; min-height: 1.5em;
                 qproperty-alignment: 'AlignRight | AlignVCenter';
             }
             SiriusLabel{

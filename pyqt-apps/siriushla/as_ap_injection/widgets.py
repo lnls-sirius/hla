@@ -52,6 +52,7 @@ class MonitorSummaryWidget(QWidget):
             lbl = QLabel(sub, self, alignment=Qt.AlignCenter)
             glay.addWidget(lbl, row+1, 0)
 
+        row = len(sub_lbls) - 1
         line = QFrame(self)
         line.setFrameShape(QFrame.HLine)
         line.setFrameShadow(QFrame.Sunken)
@@ -139,7 +140,8 @@ class InjSysStbyLed(PyDMLedMultiChannel):
         if new_mode == _Const.InjMode.TopUp:
             c2v = self.channels2values
             for key in self._injbo_onvals:
-                c2v.pop(key)
+                if key in c2v:
+                    c2v.pop(key)
             self.set_channels2values(c2v)
         elif new_mode == _Const.InjMode.Decay:
             c2v = self.channels2values
