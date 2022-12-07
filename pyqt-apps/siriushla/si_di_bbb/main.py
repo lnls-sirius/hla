@@ -2,7 +2,7 @@
 
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGridLayout, QLabel, QWidget, QHBoxLayout, \
-    QPushButton
+    QPushButton, QComboBox
 
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 
@@ -35,12 +35,20 @@ class BbBMainWindow(SiriusMainWindow):
         self._but_fbe = QPushButton('FBE', self)
 
         window = create_window_from_widget(
-            BbBGPIOWidget, title='Front-Back End', icon=get_bbb_icon())
+            BbBGPIOWidget, title='Front-Back End', icon=get_bbb_icon(),
+            is_main=True)
         connect_window(
             self._but_fbe, window, self, prefix=self.prefix,
-            device='SI-Glob:DI-BbBProc-L')
+            device='')  # device will be filled by the QComboBox callback
+
+        cbox = QComboBox(self)
+        cbox.addItems(['L', 'H', 'V'])
+        cbox.currentTextChanged.connect(self._change_fbe_proc)
+        cbox.setCurrentIndex(2)
 
         hlay = QHBoxLayout()
+        hlay.addWidget(QLabel('Plane', self))
+        hlay.addWidget(cbox)
         hlay.addWidget(self._but_fbe)
         hlay.addStretch()
         hlay.addWidget(self._ld_bbb)
@@ -63,3 +71,6 @@ class BbBMainWindow(SiriusMainWindow):
         lay.addLayout(hlay, 0, 0, 1, len(idcs_types))
         lay.setRowStretch(0, 1)
         lay.setRowStretch(1, 6)
+
+    def _change_fbe_proc(self, proc):
+        self._but_fbe.kwargs['device'] = 'SI-Glob:DI-BbBProc-' + proc

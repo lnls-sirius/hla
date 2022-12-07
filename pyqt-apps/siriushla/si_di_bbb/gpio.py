@@ -27,7 +27,8 @@ class BbBGPIOWidget(QWidget):
 
     def _setupUi(self):
         ld_gpio = QLabel(
-            '<h3>GPIO Settings</h3>', self, alignment=Qt.AlignCenter)
+            f'<h3>GPIO Settings ({self.dev_pref.device_name:s})</h3>', self,
+            alignment=Qt.AlignCenter)
 
         vlay1 = QVBoxLayout()
         vlay1.addWidget(self._setupFrontBackEndRegsWidget())
