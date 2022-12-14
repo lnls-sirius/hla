@@ -1,9 +1,8 @@
 """LI LLRF Chart Window."""
 
 from qtpy.QtWidgets import QGridLayout, QWidget
-from ..widgets import SiriusMainWindow, PyDMStateButton, SiriusLedState, \
-    SiriusSpinbox, SiriusLabel
-from .widgets import GraphTime, GraphIvsQ
+from ..widgets import SiriusMainWindow
+from .widgets import GraphTime, GraphIvsQ, GraphWave
 
 
 class ChartWindow(SiriusMainWindow):
@@ -51,10 +50,10 @@ class ChartWindow(SiriusMainWindow):
 
     def chartsPulseAmpPha(self, lay):
         """Show the pulse charts of Amplitude and Phase"""
-        amp = GraphTime(
+        amp = GraphWave(
             self, self.device, 'PAmp', self.devpref,
             self.channel, prefix=self.prefix)
-        pha = GraphTime(
+        pha = GraphWave(
             self, self.device, 'PPha', self.devpref,
             self.channel, prefix=self.prefix)
         lay.addWidget(amp, 0, 2)
@@ -78,7 +77,7 @@ class ChartWindow(SiriusMainWindow):
                 GraphTime(self, self.device, 'Diff', self.devpref, prefix=self.prefix))
         else:
             lay.addWidget(
-                GraphTime(self, self.device, 'Raw', self.devpref, prefix=self.prefix))
+                GraphWave(self, self.device, 'Raw', self.devpref, prefix=self.prefix))
 
 class ChartMon(QWidget):
     """Show the Chart Window."""
