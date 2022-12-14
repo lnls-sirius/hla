@@ -171,8 +171,7 @@ class GraphIvsQ(QWidget):
 
 
 class GraphTime(QWidget):
-    """Show the graphs of Amplitude, Phase,
-    Pulse Amplitude, Pulse Phase, Diff and Raw Data"""
+    """Show the graphs of Amplitude, Phase and Diff Data"""
 
     def __init__(
         self, parent=None, dev='', prop='Amp', main_dev='', channel='CH1', prefix=''):
@@ -195,6 +194,7 @@ class GraphTime(QWidget):
         graph = SiriusTimePlot(self)
         graph.setObjectName('graph')
         graph.setStyleSheet('#graph {min-height: 15em; min-width: 20em;}')
+        graph.timeSpan = 120  # [s]
         graph.maxRedrawRate = 2
         graph.setShowXGrid(True)
         graph.setShowYGrid(True)
@@ -218,18 +218,11 @@ class GraphTime(QWidget):
         elif self.prop == 'Pha':
             chart_name = 'Phase'
             chname = basename + ':GET_' + self.channel + '_PHASE'
-        elif self.prop == 'PAmp':
-            chart_name = 'Amplitude Waveform'
-            chname = basename + ':WF_' + self.channel + 'AMP'
-        elif self.prop == 'PPha':
-            chart_name = 'Phase Waveform'
-            chname = basename + ':WF_' + self.channel + 'PHASE'
         elif self.prop == 'Diff':
             chart_name = 'Phase Diff'
             chname = basename + ':GET_PHASE_DIFF'
         else:
-            chart_name = 'Raw Data'
-            chname = basename + ':WF_ADC9'
+            raise ValueError('channel not define for property '+self.prop)
 
         graph.setPlotTitle(chart_name)
         graph.setYLabels([chart_name])
@@ -243,4 +236,72 @@ class GraphTime(QWidget):
             symbol='o',
             symbolSize=10)
         graph.addYChannel(**opts)
+        lay1.addWidget(graph, 0, 0)
+
+
+class GraphWave(QWidget):
+    """Show the graphs of Pulse Amplitude, Pulse Phase and Raw Data."""
+
+    def __init__(
+        self, parent=None, dev='', prop='Amp', main_dev='', channel='CH1', prefix=''):
+        """."""
+        super().__init__(parent=parent)
+        self.prefix = prefix
+        self.main_dev = main_dev
+        self.dev = dev
+        self.prop = prop
+        self.channel = channel
+        self._setupui()
+
+    def _setupui(self):
+        """."""
+        chart_name = self.prop
+        basename = self.prefix + self.main_dev + self.dev
+        lay1 = QGridLayout()
+        self.setLayout(lay1)
+
+        graph = SiriusWaveformPlot(self)
+        graph.setObjectName('graph')
+        graph.setStyleSheet('#graph {min-height: 15em; min-width: 20em;}')
+        graph.maxRedrawRate = 2
+        graph.setShowXGrid(True)
+        graph.setShowYGrid(True)
+        graph.setBackgroundColor(QColor(_util.get_appropriate_color('LI')))
+        graph.setShowLegend(True)
+        graph.plotItem.showButtons()
+        graph.setAxisColor(QColor(0, 0, 0))
+        graph.setXLabels(["Time"])
+        axx = graph.plotItem.getAxis('right')
+        axx.setVisible(True)
+        axx.setTicks([])
+        axx.setWidth(0)
+        axx = graph.plotItem.getAxis('top')
+        axx.setVisible(True)
+        axx.setTicks([])
+        axx.setHeight(0)
+
+        if self.prop == 'PAmp':
+            chart_name = 'Amplitude Waveform'
+            chname = basename + ':WF_' + self.channel + 'AMP'
+        elif self.prop == 'PPha':
+            chart_name = 'Phase Waveform'
+            chname = basename + ':WF_' + self.channel + 'PHASE'
+        elif self.prop == 'Raw':
+            chart_name = 'Raw Data'
+            chname = basename + ':WF_ADC9'
+        else:
+            raise ValueError('channel not define for property '+self.prop)
+
+        graph.setPlotTitle(chart_name)
+        graph.setYLabels([chart_name])
+
+        opts = dict(
+            y_channel=chname,
+            name='Data',
+            color='black',
+            lineStyle=1,
+            lineWidth=3,
+            symbol='o',
+            symbolSize=10)
+        graph.addChannel(**opts)
         lay1.addWidget(graph, 0, 0)
