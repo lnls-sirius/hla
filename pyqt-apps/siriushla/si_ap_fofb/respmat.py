@@ -84,7 +84,7 @@ class RespMatWidget(_RespMatWidget, BaseWidget):
 
         icon = get_fofb_icon()
         window = create_window_from_widget(
-            SelectionMatrix, title='Corrs and BPMs selection', icon=icon)
+            SelectionMatrix, title=self.acc + ' - FOFB - Corrs and BPMs selection', icon=icon)
         btn = QPushButton('', sel_wid)
         btn.setObjectName('btn')
         btn.setIcon(qta.icon('fa5s.tasks'))
@@ -209,6 +209,7 @@ class SelectionMatrix(BaseWidget):
     def __init__(self, parent, device, prefix=''):
         super().__init__(parent, device, prefix=prefix)
         tab = QTabWidget(self)
+        tab.setObjectName('SITab')
         hbl = QHBoxLayout(self)
         hbl.addWidget(tab)
         hbl.setContentsMargins(0, 0, 0, 0)

@@ -92,7 +92,7 @@ class RespMatWidget(BaseWidget):
 
         icon = qta.icon('fa5s.hammer', color=get_appropriate_color(self.acc))
         Window = create_window_from_widget(
-            SelectionMatrix, title='Corrs and BPMs selection', icon=icon)
+            SelectionMatrix, title=self.acc + ' - SOFB - Corrs and BPMs selection', icon=icon)
         btn = QPushButton('', sel_wid)
         btn.setObjectName('btn')
         btn.setIcon(qta.icon('fa5s.tasks'))
