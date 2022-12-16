@@ -213,7 +213,7 @@ class EPUControlWindow(IDCommonControlWindow):
         ld_pwrenbl = QLabel('Enable All Drives Power', self)
         pvname = self.dev_pref.substitute(propty='EnblPwrAll-Cmd')
         pb_pwrenbl = PyDMPushButton(
-            parent=self,  label='', icon=qta.icon('fa5s.plug'),
+            parent=self, label='', icon=qta.icon('fa5s.plug'),
             init_channel=pvname, pressValue=1)
         pb_pwrenbl.setObjectName('btn')
         pb_pwrenbl.setStyleSheet(
@@ -222,10 +222,23 @@ class EPUControlWindow(IDCommonControlWindow):
             self.dev_pref.substitute(propty='PwrPhase-Mon'): 1,
             self.dev_pref.substitute(propty='PwrGap-Mon'): 1}
         led_pwrsts = PyDMLedMultiChannel(self, channels2values=c2v)
-
         lay.addWidget(ld_pwrenbl, row, 0)
         lay.addWidget(pb_pwrenbl, row, 1)
         lay.addWidget(led_pwrsts, row, 2, alignment=Qt.AlignLeft)
+        row += 1
+
+        ld_clrerr = QLabel('Clear Drive Errors', self)
+        pvname = self.dev_pref.substitute(propty='ClearErr-Cmd')
+        pb_clrerr = PyDMPushButton(
+            parent=self, label='', icon=qta.icon('fa5s.sync'),
+            init_channel=pvname, pressValue=1)
+        pb_clrerr.setObjectName('btn')
+        pb_clrerr.setStyleSheet(
+            '#btn{min-width:30px; max-width:30px; icon-size:25px;}')
+        lay.addWidget(ld_clrerr, row, 0)
+        lay.addWidget(pb_clrerr, row, 1)
+        row += 1
+
         gbox.setStyleSheet(
             '.QLabel{qproperty-alignment: "AlignRight | AlignVCenter";}')
         return gbox
@@ -372,6 +385,7 @@ class EPUDriveDetails(IDCommonDialog):
             pvname = self.dev_pref.substitute(
                 propty='Drive'+drive+'DiagMsg-Mon')
             lb_diagmsg = SiriusLabel(self, pvname)
+            lb_diagmsg.displayFormat = lb_diagmsg.DisplayFormat.String
 
             pvname = self.dev_pref.substitute(
                 propty='Drive'+drive+'Moving-Mon')
