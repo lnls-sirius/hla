@@ -84,18 +84,22 @@ class LIEgunWindow(SiriusMainWindow):
         self._ld_sysexternal = QLabel('Ext. Intlk', self)
         self._led_sysexternal = SiriusLedState(
             self, self.prefix+self.dev_pref+':EG-External:status')
+        self._led_sysexternal.offColor = SiriusLedState.Red
 
         self._ld_sysvalve = QLabel('Valve', self)
         self._led_sysvalve = SiriusLedState(
             self, self.prefix+self.dev_pref+':EG-Valve:status')
+        self._led_sysvalve.offColor = SiriusLedState.Red
 
         self._ld_sysgate = QLabel('Gate', self)
         self._led_sysgate = SiriusLedState(
             self, self.prefix+self.dev_pref+':EG-Gate:status')
+        self._led_sysgate.offColor = SiriusLedState.Red
 
         self._ld_sysvac = QLabel('Vacuum', self)
         self._led_sysvac = SiriusLedState(
             self, self.prefix+self.dev_pref+':EG-Vacuum:status')
+        self._led_sysvac.offColor = SiriusLedState.Red
 
         self._ld_sysplc = QLabel('PLC', self)
         self._led_sysplc = SiriusLedState(
@@ -127,7 +131,6 @@ class LIEgunWindow(SiriusMainWindow):
         self._bt_hvpsswtsel = PyDMStateButton(
             self, self.prefix+self.dev_pref+':EG-HVPS:switch')
 
-        self._ld_hvpsswtsts = QLabel('Status', self)
         self._led_hvpsswtsts = SiriusLedState(
             self, self.prefix+self.dev_pref+':EG-HVPS:swstatus')
 
@@ -143,7 +146,6 @@ class LIEgunWindow(SiriusMainWindow):
         self._bt_hvpsenblsel = PyDMStateButton(
             self, self.prefix+self.dev_pref+':EG-HVPS:enable')
 
-        self._ld_hvpsenblsts = QLabel('Status')
         self._led_hvpsenblsts = SiriusLedState(
             self, self.prefix+self.dev_pref+':EG-HVPS:enstatus')
 
@@ -157,19 +159,17 @@ class LIEgunWindow(SiriusMainWindow):
 
         wid = QGroupBox('High Voltage Power Supply', self)
         lay = QGridLayout(wid)
-        lay.addWidget(self._ld_hvpsswtsel, 0, 0)
-        lay.addWidget(self._bt_hvpsswtsel, 1, 0)
-        lay.addWidget(self._ld_hvpsswtsts, 0, 1)
-        lay.addWidget(self._led_hvpsswtsts, 1, 1)
+        lay.addWidget(self._ld_hvpsswtsel, 0, 0, 1, 2)
+        lay.addWidget(self._bt_hvpsswtsel, 1, 0, alignment=Qt.AlignRight)
+        lay.addWidget(self._led_hvpsswtsts, 1, 1, alignment=Qt.AlignLeft)
         lay.addWidget(self._ld_hvpsvoltsp, 0, 2)
         lay.addWidget(self._sb_hvpsvoltsp, 1, 2)
         lay.addWidget(self._ld_hvpsvoltrb, 0, 3)
         lay.addWidget(self._lb_hvpsvoltrb, 1, 3)
         lay.addItem(QSpacerItem(1, 15, QSzPlcy.Ignored, QSzPlcy.Fixed), 2, 0)
-        lay.addWidget(self._ld_hvpsenblsel, 3, 0)
-        lay.addWidget(self._bt_hvpsenblsel, 4, 0)
-        lay.addWidget(self._ld_hvpsenblsts, 3, 1)
-        lay.addWidget(self._led_hvpsenblsts, 4, 1)
+        lay.addWidget(self._ld_hvpsenblsel, 3, 0, 1, 2)
+        lay.addWidget(self._bt_hvpsenblsel, 4, 0, alignment=Qt.AlignRight)
+        lay.addWidget(self._led_hvpsenblsts, 4, 1, alignment=Qt.AlignLeft)
         lay.addWidget(self._ld_hvpscurrsp, 3, 2)
         lay.addWidget(self._sb_hvpscurrsp, 4, 2)
         lay.addWidget(self._ld_hvpscurrrb, 3, 3)
@@ -198,8 +198,8 @@ class LIEgunWindow(SiriusMainWindow):
         lay.addWidget(self._ld_trigall, 2, 0, 1, 2)
         lay.addWidget(self._led_trigall, 3, 0, 1, 2)
         lay.addWidget(self._ld_trigenbl, 4, 0, 1, 2)
-        lay.addWidget(self._bt_trigenblsel, 5, 0)
-        lay.addWidget(self._led_trigenblsts, 5, 1)
+        lay.addWidget(self._bt_trigenblsel, 5, 0, alignment=Qt.AlignRight)
+        lay.addWidget(self._led_trigenblsts, 5, 1, alignment=Qt.AlignLeft)
         return wid
 
     def _setupFilaPSWidget(self):
@@ -207,7 +207,6 @@ class LIEgunWindow(SiriusMainWindow):
         self._bt_filaswtsel = PyDMStateButton(
             self, self.prefix+self.dev_pref+':EG-FilaPS:switch')
 
-        self._ld_filaswtsts = QLabel('Status', self)
         self._led_filasswtsts = SiriusLedState(
             self, self.prefix+self.dev_pref+':EG-FilaPS:swstatus')
 
@@ -225,10 +224,9 @@ class LIEgunWindow(SiriusMainWindow):
 
         wid = QGroupBox('Filament Power Supply', self)
         lay = QGridLayout(wid)
-        lay.addWidget(self._ld_filaswtsel, 0, 0)
-        lay.addWidget(self._bt_filaswtsel, 1, 0)
-        lay.addWidget(self._ld_filaswtsts, 0, 1)
-        lay.addWidget(self._led_filasswtsts, 1, 1)
+        lay.addWidget(self._ld_filaswtsel, 0, 0, 1, 2)
+        lay.addWidget(self._bt_filaswtsel, 1, 0, alignment=Qt.AlignRight)
+        lay.addWidget(self._led_filasswtsts, 1, 1, alignment=Qt.AlignLeft)
         lay.addWidget(self._ld_filacurrsp, 0, 2)
         lay.addWidget(self._sb_filacurrsp, 1, 2)
         lay.addWidget(self._ld_filacurrrb, 0, 3)
@@ -242,7 +240,6 @@ class LIEgunWindow(SiriusMainWindow):
         self._bt_biasswtsel = PyDMStateButton(
             self, self.prefix+self.dev_pref+':EG-BiasPS:switch')
 
-        self._ld_biasswtsts = QLabel('Status', self)
         self._led_biassswtsts = SiriusLedState(
             self, self.prefix+self.dev_pref+':EG-BiasPS:swstatus')
 
@@ -260,10 +257,9 @@ class LIEgunWindow(SiriusMainWindow):
 
         wid = QGroupBox('Bias Power Supply', self)
         lay = QGridLayout(wid)
-        lay.addWidget(self._ld_biasswtsel, 0, 0)
-        lay.addWidget(self._bt_biasswtsel, 1, 0)
-        lay.addWidget(self._ld_biasswtsts, 0, 1)
-        lay.addWidget(self._led_biassswtsts, 1, 1)
+        lay.addWidget(self._ld_biasswtsel, 0, 0, 1, 2)
+        lay.addWidget(self._bt_biasswtsel, 1, 0, alignment=Qt.AlignRight)
+        lay.addWidget(self._led_biassswtsts, 1, 1, alignment=Qt.AlignLeft)
         lay.addWidget(self._ld_biasvoltsp, 0, 2)
         lay.addWidget(self._sb_biasvoltsp, 1, 2)
         lay.addWidget(self._ld_biasvoltrb, 0, 3)
@@ -274,9 +270,7 @@ class LIEgunWindow(SiriusMainWindow):
 
     def _setupPulsePSWidget(self):
         self._ld_pulsemodsel = QLabel('Mode', self)
-        self._ld_pulsemodsts = QLabel('Status', self)
         self._ld_pulseswtsel = QLabel('Switch', self)
-        self._ld_pulseswtsts = QLabel('Status', self)
         self._ld_pulsesing = QLabel('Single', self)
         self._ld_pulsemult = QLabel('Multi', self)
 
@@ -300,20 +294,18 @@ class LIEgunWindow(SiriusMainWindow):
 
         wid = QGroupBox('Pulse Power Supply', self)
         lay = QGridLayout(wid)
-        lay.addWidget(self._ld_pulsemodsel, 0, 1)
-        lay.addWidget(self._ld_pulsemodsts, 0, 2)
-        lay.addWidget(self._ld_pulseswtsel, 0, 3)
-        lay.addWidget(self._ld_pulseswtsts, 0, 4)
+        lay.addWidget(self._ld_pulsemodsel, 0, 1, 1, 2)
+        lay.addWidget(self._ld_pulseswtsel, 0, 3, 1, 2)
         lay.addWidget(self._ld_pulsesing, 1, 0)
         lay.addWidget(self._ld_pulsemult, 2, 0)
-        lay.addWidget(self._bt_pulsesingmod, 1, 1)
-        lay.addWidget(self._led_pulsesingmod, 1, 2)
-        lay.addWidget(self._bt_pulsesingswt, 1, 3)
-        lay.addWidget(self._led_pulsesingswt, 1, 4)
-        lay.addWidget(self._bt_pulsemultmod, 2, 1)
-        lay.addWidget(self._led_pulsemultmod, 2, 2)
-        lay.addWidget(self._bt_pulsemultswt, 2, 3)
-        lay.addWidget(self._led_pulsemultswt, 2, 4)
+        lay.addWidget(self._bt_pulsesingmod, 1, 1, alignment=Qt.AlignRight)
+        lay.addWidget(self._led_pulsesingmod, 1, 2, alignment=Qt.AlignLeft)
+        lay.addWidget(self._bt_pulsesingswt, 1, 3, alignment=Qt.AlignRight)
+        lay.addWidget(self._led_pulsesingswt, 1, 4, alignment=Qt.AlignLeft)
+        lay.addWidget(self._bt_pulsemultmod, 2, 1, alignment=Qt.AlignRight)
+        lay.addWidget(self._led_pulsemultmod, 2, 2, alignment=Qt.AlignLeft)
+        lay.addWidget(self._bt_pulsemultswt, 2, 3, alignment=Qt.AlignRight)
+        lay.addWidget(self._led_pulsemultswt, 2, 4, alignment=Qt.AlignLeft)
         return wid
 
     def _setupMultiPulsePSWidget(self):
