@@ -2,7 +2,7 @@
 
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QPushButton, QWidget, QGridLayout, QMenu, \
-    QLabel, QVBoxLayout, QGroupBox, QMenuBar, QAction, QHBoxLayout, \
+    QLabel, QVBoxLayout, QGroupBox, QMenuBar, QAction, \
     QSizePolicy as QSzPlcy, QDockWidget, QTabWidget
 import qtawesome as qta
 
@@ -137,6 +137,15 @@ class MainWindow(BaseObject, SiriusMainWindow):
             sts_ctrl, StatusDialog, parent=self, pvname=pvname, labels=labels,
             cmds=cmds, title='FOFB Controller Status', detail_button=dtl_ctrl)
 
+        cnf_ctrl = PyDMPushButton(
+            self, pressValue=1,
+            init_channel=self.devpref.substitute(propty='CtrlrReset-Cmd'))
+        cnf_ctrl.setToolTip('Send Reset command to controllers')
+        cnf_ctrl.setIcon(qta.icon('fa5s.sync'))
+        cnf_ctrl.setObjectName('conf')
+        cnf_ctrl.setStyleSheet(
+            '#conf{min-width:25px; max-width:25px; icon-size:20px;}')
+
         wid = QGroupBox('Status')
         lay = QGridLayout(wid)
         lay.setAlignment(Qt.AlignCenter)
@@ -147,6 +156,7 @@ class MainWindow(BaseObject, SiriusMainWindow):
         lay.addWidget(lbl_ctrl, 1, 0)
         lay.addWidget(led_ctrl, 1, 1)
         lay.addWidget(sts_ctrl, 1, 2)
+        lay.addWidget(cnf_ctrl, 1, 3)
         return wid
 
     def _setupRefOrbWidget(self):
