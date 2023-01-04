@@ -212,6 +212,34 @@ class MainWindow(BaseObject, SiriusMainWindow):
         return wid
 
     def _setupAuxCommWidget(self):
+        ld_orbdist = QLabel(
+            'Orbit Dist. Detec.: ', self,
+            alignment=Qt.AlignRight | Qt.AlignVCenter)
+        sb_orbdist = PyDMStateButton(
+            self, self.devpref.substitute(
+                propty='LoopMaxOrbDistortionEnbl-Sel'))
+        lb_orbdist = SiriusLedState(
+            self, self.devpref.substitute(
+                propty='LoopMaxOrbDistortionEnbl-Sts'))
+
+        btn_corrzero = PyDMPushButton(
+            self, label='Set Correctors current to zero', pressValue=1,
+            init_channel=self.devpref.substitute(propty='CorrSetCurrZero-Cmd'))
+        btn_corrzero.setDefault(False)
+        btn_corrzero.setAutoDefault(False)
+
+        wid = QGroupBox('Aux. Commands')
+        lay = QGridLayout(wid)
+        lay.addWidget(btn_corrzero, 0, 0, 1, 3)
+        lay.addWidget(ld_orbdist, 1, 0)
+        lay.addWidget(sb_orbdist, 1, 1)
+        lay.addWidget(lb_orbdist, 1, 2)
+        lay.setColumnStretch(0, 2)
+        lay.setColumnStretch(1, 1)
+        lay.setColumnStretch(2, 1)
+        return wid
+
+    def _setupDetailsWidget(self):
         group2cmd = {
             'Correctors': {
                 'Set all current to zero': 'CorrSetCurrZero-Cmd',
@@ -346,27 +374,30 @@ class MainWindow(BaseObject, SiriusMainWindow):
         # tab main
         self.status = self._setupStatusWidget()
 
+        self.loop = self._setupLoopWidget()
+
+        self.auxcmd = self._setupAuxCommWidget()
+
         self.reforb = self._setupRefOrbWidget()
 
         self.respmat = RespMatWidget(self, self.device, self.prefix)
-
-        self.loop = self._setupLoopWidget()
 
         maintab = QWidget()
         lay = QVBoxLayout(maintab)
         lay.addWidget(self.status)
         lay.addWidget(self.loop)
+        lay.addWidget(self.auxcmd)
         lay.addWidget(self.reforb)
         lay.addWidget(self.respmat)
         self.controltabs.addTab(maintab, 'Main')
 
         # tab aux
-        self.auxcmd = self._setupAuxCommWidget()
+        self.details = self._setupDetailsWidget()
 
-        auxtab = QWidget()
-        lay = QVBoxLayout(auxtab)
-        lay.addWidget(self.auxcmd)
-        self.controltabs.addTab(auxtab, 'Auxiliary commands')
+        dettab = QWidget()
+        lay = QVBoxLayout(dettab)
+        lay.addWidget(self.details)
+        self.controltabs.addTab(dettab, 'Details')
 
         wid = QWidget()
         lay = QVBoxLayout(wid)
