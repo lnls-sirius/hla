@@ -257,8 +257,9 @@ class SOFBControl(BaseWidget):
             parent, self.device, prefix=self.prefix, acc=self.acc)
         corr_tab.addTab(kicks_wid, 'Kicks')
 
-        fofb_wid = self.get_fofb_widget(corr_tab)
-        corr_tab.addTab(fofb_wid, 'FOFB')
+        if self.acc == 'SI':
+            fofb_wid = self.get_fofb_widget(corr_tab)
+            corr_tab.addTab(fofb_wid, 'FOFB')
 
         if self.acc != 'BO':
             hbl = kicks_wid.get_status_widget(corr_wid)
