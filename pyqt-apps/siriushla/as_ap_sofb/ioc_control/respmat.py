@@ -20,7 +20,7 @@ from siriushla.util import connect_window, get_appropriate_color, \
 from siriushla.as_ap_configdb import LoadConfigDialog, SaveConfigDialog
 
 from .respmat_enbllist import SelectionMatrix
-from .base import BaseWidget
+from .base import BaseWidget, CAPushButton
 from ..graphics import SingularValues
 
 
@@ -30,6 +30,12 @@ class RespMatWidget(BaseWidget):
 
     def __init__(self, parent, device, prefix='', acc='SI'):
         super().__init__(parent, device, prefix=prefix, acc=acc)
+        self._enblrule = (
+            '[{"name": "EnblRule", "property": "Enable", ' +
+            '"expression": "not ch[0]", "channels": [{"channel": "' +
+            self.devpref.substitute(propty='LoopState-Sts') +
+            '", "trigger": true}]}]')
+
         self.setupui()
         self._config_type = acc.lower() + '_orbcorr_respm'
         self._client = ConfigDBClient(config_type=self._config_type)
@@ -93,7 +99,8 @@ class RespMatWidget(BaseWidget):
         icon = qta.icon('fa5s.hammer', color=get_appropriate_color(self.acc))
         Window = create_window_from_widget(
             SelectionMatrix, title='Corrs and BPMs selection', icon=icon)
-        btn = QPushButton('', sel_wid)
+        btn = CAPushButton('', sel_wid)
+        btn.rules = self._enblrule
         btn.setObjectName('btn')
         btn.setIcon(qta.icon('fa5s.tasks'))
         btn.setToolTip('Open window to select BPMs and correctors')
@@ -109,18 +116,22 @@ class RespMatWidget(BaseWidget):
         sel_lay.addStretch()
         sel_lay.addLayout(lay)
 
+        pdm_cbx = SiriusEnumComboBox(
+            sel_wid, self.devpref.substitute(propty='RespMatMode-Sel'))
+        pdm_cbx.rules = self._enblrule
+        pdm_lbl = SiriusLabel(
+            sel_wid, self.devpref.substitute(propty='RespMatMode-Sts'))
         hlay = QHBoxLayout()
+        hlay.addWidget(pdm_cbx)
+        hlay.addWidget(pdm_lbl)
         lay.addLayout(hlay)
-        hlay.addWidget(SiriusEnumComboBox(
-            sel_wid, self.devpref.substitute(propty='RespMatMode-Sel')))
-        hlay.addWidget(SiriusLabel(
-            sel_wid, self.devpref.substitute(propty='RespMatMode-Sts')))
 
         if self.acc in {'SI', 'BO'}:
             hlay = QHBoxLayout()
             lay.addLayout(hlay)
             pdm_chbx = PyDMCheckbox(
                 sel_wid, self.devpref.substitute(propty='RFEnbl-Sel'))
+            pdm_chbx.rules = self._enblrule
             pdm_chbx.setText('use RF')
             pdm_led = SiriusLedState(
                 sel_wid, self.devpref.substitute(propty='RFEnbl-Sts'))
@@ -143,13 +154,15 @@ class RespMatWidget(BaseWidget):
         svs_wid = QWidget(parent)
         svs_lay = QGridLayout(svs_wid)
 
-        wid = self.create_pair(svs_wid, 'MinSingValue')
         lbl = QLabel('Min. SV: ')
+        wid = self.create_pair(
+            svs_wid, 'MinSingValue', rules=self._enblrule)
         svs_lay.addWidget(lbl, 0, 0)
         svs_lay.addWidget(wid, 0, 1)
 
-        wid = self.create_pair(svs_wid, 'TikhonovRegConst')
         lbl = QLabel('Tikhonov: ')
+        wid = self.create_pair(
+            svs_wid, 'TikhonovRegConst', rules=self._enblrule)
         svs_lay.addWidget(lbl, 1, 0)
         svs_lay.addWidget(wid, 1, 1)
 
@@ -249,12 +262,14 @@ class RespMatWidget(BaseWidget):
 
         lbl = QLabel('Load:', svld_wid)
         svld_lay.addWidget(lbl, 0, 0, alignment=Qt.AlignRight)
-        pbtn = QPushButton('', svld_wid)
+        pbtn = CAPushButton('', svld_wid)
+        pbtn.rules = self._enblrule
         pbtn.setIcon(qta.icon('mdi.file-upload-outline'))
         pbtn.setToolTip('Load RespMat from file')
         pbtn.clicked.connect(self._load_respmat_from_file)
         svld_lay.addWidget(pbtn, 0, 1)
-        pbtn = QPushButton('', svld_wid)
+        pbtn = CAPushButton('', svld_wid)
+        pbtn.rules = self._enblrule
         pbtn.setIcon(qta.icon('mdi.cloud-upload-outline'))
         pbtn.setToolTip('Load RespMat from ServConf')
         pbtn.clicked.connect(self._open_load_config_servconf)

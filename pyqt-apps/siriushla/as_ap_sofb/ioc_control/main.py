@@ -77,6 +77,12 @@ class SOFBControl(BaseWidget):
 
     def get_orbit_widget(self, parent):
         """."""
+        rules = (
+            '[{"name": "EnblRule", "property": "Enable", ' +
+            '"expression": "not ch[0]", "channels": [{"channel": "' +
+            self.devpref.substitute(propty='LoopState-Sts') +
+            '", "trigger": true}]}]')
+
         orb_wid = QWidget(parent)
         orb_wid.setObjectName('grp')
         orb_wid.setStyleSheet('#grp{min-height: 11em; max-height: 15em;}')
@@ -85,6 +91,7 @@ class SOFBControl(BaseWidget):
         conf = PyDMPushButton(
             orb_wid, pressValue=1,
             init_channel=self.devpref.substitute(propty='TrigAcqConfig-Cmd'))
+        conf.rules = rules
         conf.setToolTip('Refresh Configurations')
         conf.setIcon(qta.icon('fa5s.sync'))
         conf.setObjectName('conf')
@@ -119,13 +126,14 @@ class SOFBControl(BaseWidget):
         orb_wid.layout().addLayout(hbl, 0, 0, 1, 2)
 
         lbl = QLabel('SOFB Mode', orb_wid)
-        wid = self.create_pair_sel(orb_wid, 'SOFBMode')
+        wid = self.create_pair_sel(orb_wid, 'SOFBMode', rules=rules)
         orb_wid.layout().addWidget(lbl, 1, 0, alignment=Qt.AlignVCenter)
         orb_wid.layout().addWidget(wid, 1, 1)
 
         lbl = QLabel('RefOrb:', orb_wid)
         combo = RefControl(
             self, self.device, self.ctrls, prefix=self.prefix, acc=self.acc)
+        combo.rules = rules
         lbl2 = QLabel('', orb_wid)
         combo.configname.connect(lbl2.setText)
         vbl_ref = QVBoxLayout()
@@ -175,7 +183,7 @@ class SOFBControl(BaseWidget):
         combo = OfflineOrbControl(
             grp_bx, self.device, self.ctrls, prefix=self.prefix, acc=self.acc)
         rules = (
-            '[{"name": "EnblRule", "property": "Visible", ' +
+            '[{"name": "VisRule", "property": "Visible", ' +
             '"expression": "not ch[0]", "channels": [{"channel": "' +
             self.devpref.substitute(propty='SOFBMode-Sts') +
             '", "trigger": true}]}]')
@@ -186,15 +194,20 @@ class SOFBControl(BaseWidget):
         fbl.addRow(lbl, combo)
         grp_bx.layout().addStretch()
 
+        rules = (
+            '[{"name": "EnblRule", "property": "Enable", ' +
+            '"expression": "not ch[0]", "channels": [{"channel": "' +
+            self.devpref.substitute(propty='LoopState-Sts') +
+            '", "trigger": true}]}]')
         hbl = QHBoxLayout()
         grp_bx.layout().addLayout(hbl)
         fbl = QFormLayout()
         hbl.addLayout(fbl)
         lbl = QLabel('Orbit [Hz]', grp_bx, alignment=Qt.AlignCenter)
-        wid = self.create_pair(grp_bx, 'OrbAcqRate')
+        wid = self.create_pair(grp_bx, 'OrbAcqRate', rules=rules)
         fbl.addRow(lbl, wid)
         lbl = QLabel('Kicks [Hz]', grp_bx, alignment=Qt.AlignCenter)
-        wid = self.create_pair(grp_bx, 'KickAcqRate')
+        wid = self.create_pair(grp_bx, 'KickAcqRate', rules=rules)
         fbl.addRow(lbl, wid)
 
         wid = QWidget(grp_bx)
@@ -209,6 +222,7 @@ class SOFBControl(BaseWidget):
         vbl.addLayout(hbl)
         spt = PyDMStateButton(
             wid, self.devpref.substitute(propty='SyncWithInjection-Sel'))
+        spt.rules = rules
         rdb = SiriusLedState(
             wid, self.devpref.substitute(propty='SyncWithInjection-Sts'))
         hbl.addWidget(spt)
@@ -218,11 +232,11 @@ class SOFBControl(BaseWidget):
         fbl = QFormLayout()
         grp_bx.layout().addLayout(fbl)
         lbl = QLabel('Smooth Method', grp_bx, alignment=Qt.AlignCenter)
-        wid = self.create_pair_sel(grp_bx, 'SmoothMethod')
+        wid = self.create_pair_sel(grp_bx, 'SmoothMethod', rules=rules)
         fbl.addRow(lbl, wid)
         if self.isring:
             lbl = QLabel('Extend Ring', grp_bx, alignment=Qt.AlignCenter)
-            wid = self.create_pair(grp_bx, 'RingSize')
+            wid = self.create_pair(grp_bx, 'RingSize', rules=rules)
             fbl.addRow(lbl, wid)
 
         return grp_bx

@@ -123,6 +123,12 @@ class KicksConfigWidget(BaseWidget):
         conf = PyDMPushButton(
             parent, pressValue=1,
             init_channel=self.devpref.substitute(propty='CorrConfig-Cmd'))
+        rules = (
+            '[{"name": "EnblRule", "property": "Enable", ' +
+            '"expression": "not ch[0]", "channels": [{"channel": "' +
+            self.devpref.substitute(propty='LoopState-Sts') +
+            '", "trigger": true}]}]')
+        conf.rules = rules
         conf.setToolTip('Refresh Configurations')
         conf.setIcon(qta.icon('fa5s.sync'))
         conf.setObjectName('conf')
