@@ -34,25 +34,24 @@ class OrbitRegisters(QWidget):
             'ref': [
                 _ConnSig(self.devpref.substitute(propty='RefOrbX-RB')),
                 _ConnSig(self.devpref.substitute(propty='RefOrbY-RB'))],
-            'sp': [
-                _ConnSig(self.devpref.substitute(propty='SPassOrbX-Mon')),
-                _ConnSig(self.devpref.substitute(propty='SPassOrbY-Mon'))],
-            'off': [
-                _ConnSig(self.devpref.substitute(propty='OfflineOrbX-SP')),
-                _ConnSig(self.devpref.substitute(propty='OfflineOrbY-SP'))],
             'bpm': [
                 _ConnSig(self.devpref.substitute(propty='BPMOffsetX-Mon')),
                 _ConnSig(self.devpref.substitute(propty='BPMOffsetY-Mon'))],
             'mat': _ConnSig(self.devpref.substitute(propty='RespMat-RB')),
             }
-        if self.acc == 'SI':
-            self._orbits['orb'] = [
-                _ConnSig(self.devpref.substitute(propty='SlowOrbX-Mon')),
-                _ConnSig(self.devpref.substitute(propty='SlowOrbY-Mon'))]
+        if self.acc in {'TB', 'TS', 'SI'}:
+            self._orbits['sp'] = [
+                _ConnSig(self.devpref.substitute(propty='SPassOrbX-Mon')),
+                _ConnSig(self.devpref.substitute(propty='SPassOrbY-Mon'))]
         if self.acc in {'SI', 'BO'}:
             self._orbits['mti'] = [
                 _ConnSig(self.devpref.substitute(propty='MTurnIdxOrbX-Mon')),
                 _ConnSig(self.devpref.substitute(propty='MTurnIdxOrbY-Mon'))]
+        if self.acc == 'SI':
+            self._orbits['orb'] = [
+                _ConnSig(self.devpref.substitute(propty='SlowOrbX-Mon')),
+                _ConnSig(self.devpref.substitute(propty='SlowOrbY-Mon'))]
+
         self.setupui()
 
     def channels(self):
@@ -206,14 +205,12 @@ class OrbitRegister(QWidget):
             act = menu2.addAction('&MTurnOrb')
             act.setIcon(qta.icon('mdi.alarm-multiple'))
             act.triggered.connect(_part(self._register_orbit, 'mti'))
-        act = menu2.addAction('S&PassOrb')
-        act.setIcon(qta.icon('mdi.clock-fast'))
-        act.triggered.connect(_part(self._register_orbit, 'sp'))
+        if self._csorb.acc.upper() != 'BO':
+            act = menu2.addAction('S&PassOrb')
+            act.setIcon(qta.icon('mdi.clock-fast'))
+            act.triggered.connect(_part(self._register_orbit, 'sp'))
         act = menu2.addAction('&RefOrb')
         act.triggered.connect(_part(self._register_orbit, 'ref'))
-        act = menu2.addAction('&OfflineOrb')
-        act.setIcon(qta.icon('mdi.signal-off'))
-        act.triggered.connect(_part(self._register_orbit, 'off'))
         act = menu2.addAction('&BPM Offsets')
         act.setIcon(qta.icon('mdi.currency-sign'))
         act.triggered.connect(_part(self._register_orbit, 'bpm'))

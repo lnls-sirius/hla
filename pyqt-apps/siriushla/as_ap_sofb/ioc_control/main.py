@@ -51,19 +51,10 @@ class SOFBControl(BaseWidget):
         vbl = QVBoxLayout()
         main_wid.setLayout(vbl)
 
-        tabw = QTabWidget(main_wid)
-        tabw.setObjectName(self.acc+'Tab')
+        tabw = QGroupBox('Orbit', main_wid)
+        tabw.setLayout(QHBoxLayout())
         orb_wid = self.get_orbit_widget(tabw)
-        acqrt_wid = self.get_orbitdetails_widget(tabw)
-        tabw.addTab(orb_wid, 'Orbit')
-        tabw.addTab(acqrt_wid, 'Details')
-        tabw.setStyleSheet("""
-            #{0}Tab::pane {{
-                border-left: 2px solid gray;
-                border-bottom: 2px solid gray;
-                border-right: 2px solid gray;
-            }}
-        """.format(self.acc))
+        tabw.layout().addWidget(orb_wid)
 
         corr_wid = self.get_correction_widget(main_wid)
         mat_wid = RespMatWidget(main_wid, self.device, self.prefix, self.acc)
@@ -125,10 +116,13 @@ class SOFBControl(BaseWidget):
         hbl.addWidget(conf)
         orb_wid.layout().addLayout(hbl, 0, 0, 1, 2)
 
-        lbl = QLabel('SOFB Mode', orb_wid)
-        wid = self.create_pair_sel(orb_wid, 'SOFBMode', rules=rules)
-        orb_wid.layout().addWidget(lbl, 1, 0, alignment=Qt.AlignVCenter)
-        orb_wid.layout().addWidget(wid, 1, 1)
+        if self.acc == 'SI':
+            lbl = QLabel('SOFB Mode', orb_wid)
+            wid = self.create_pair_sel(orb_wid, 'SOFBMode', rules=rules)
+            orb_wid.layout().addWidget(lbl, 1, 0, alignment=Qt.AlignVCenter)
+            orb_wid.layout().addWidget(wid, 1, 1)
+
+        orb_wid.layout().setRowStretch(2, 3)
 
         lbl = QLabel('RefOrb:', orb_wid)
         combo = RefControl(
@@ -171,75 +165,13 @@ class SOFBControl(BaseWidget):
         orb_wid.layout().addWidget(lbl, 4, 0, alignment=Qt.AlignVCenter)
         orb_wid.layout().addLayout(hbl, 4, 1)
 
+        lbl = QLabel('Smooth Method', orb_wid, alignment=Qt.AlignCenter)
+        wid = self.create_pair_sel(orb_wid, 'SmoothMethod', rules=rules)
+        orb_wid.layout().addWidget(lbl, 5, 0, alignment=Qt.AlignVCenter)
+        orb_wid.layout().addWidget(wid, 5, 1)
+
         orb_wid.layout().setColumnStretch(1, 2)
         return orb_wid
-
-    def get_orbitdetails_widget(self, parent):
-        """."""
-        grp_bx = QWidget(parent)
-        grp_bx.setLayout(QVBoxLayout())
-
-        lbl = CALabel('OfflineOrb:', grp_bx)
-        combo = OfflineOrbControl(
-            grp_bx, self.device, self.ctrls, prefix=self.prefix, acc=self.acc)
-        rules = (
-            '[{"name": "VisRule", "property": "Visible", ' +
-            '"expression": "not ch[0]", "channels": [{"channel": "' +
-            self.devpref.substitute(propty='SOFBMode-Sts') +
-            '", "trigger": true}]}]')
-        combo.rules = rules
-        lbl.rules = rules
-        fbl = QFormLayout()
-        grp_bx.layout().addLayout(fbl)
-        fbl.addRow(lbl, combo)
-        grp_bx.layout().addStretch()
-
-        rules = (
-            '[{"name": "EnblRule", "property": "Enable", ' +
-            '"expression": "not ch[0]", "channels": [{"channel": "' +
-            self.devpref.substitute(propty='LoopState-Sts') +
-            '", "trigger": true}]}]')
-        hbl = QHBoxLayout()
-        grp_bx.layout().addLayout(hbl)
-        fbl = QFormLayout()
-        hbl.addLayout(fbl)
-        lbl = QLabel('Orbit [Hz]', grp_bx, alignment=Qt.AlignCenter)
-        wid = self.create_pair(grp_bx, 'OrbAcqRate', rules=rules)
-        fbl.addRow(lbl, wid)
-        lbl = QLabel('Kicks [Hz]', grp_bx, alignment=Qt.AlignCenter)
-        wid = self.create_pair(grp_bx, 'KickAcqRate', rules=rules)
-        fbl.addRow(lbl, wid)
-
-        wid = QWidget(grp_bx)
-        wid.setStyleSheet('max-width:6em;')
-        hbl.addWidget(wid)
-        vbl = QVBoxLayout(wid)
-        vbl.setContentsMargins(0, 0, 0, 0)
-        lab = QLabel('Sync. Injection', wid, alignment=Qt.AlignCenter)
-        vbl.addWidget(lab)
-        hbl = QHBoxLayout()
-        hbl.setContentsMargins(0, 0, 0, 0)
-        vbl.addLayout(hbl)
-        spt = PyDMStateButton(
-            wid, self.devpref.substitute(propty='SyncWithInjection-Sel'))
-        spt.rules = rules
-        rdb = SiriusLedState(
-            wid, self.devpref.substitute(propty='SyncWithInjection-Sts'))
-        hbl.addWidget(spt)
-        hbl.addWidget(rdb)
-        grp_bx.layout().addStretch()
-
-        fbl = QFormLayout()
-        grp_bx.layout().addLayout(fbl)
-        lbl = QLabel('Smooth Method', grp_bx, alignment=Qt.AlignCenter)
-        wid = self.create_pair_sel(grp_bx, 'SmoothMethod', rules=rules)
-        fbl.addRow(lbl, wid)
-        if self.isring:
-            lbl = QLabel('Extend Ring', grp_bx, alignment=Qt.AlignCenter)
-            wid = self.create_pair(grp_bx, 'RingSize', rules=rules)
-            fbl.addRow(lbl, wid)
-
-        return grp_bx
 
     def get_correction_widget(self, parent):
         """."""
@@ -260,7 +192,7 @@ class SOFBControl(BaseWidget):
         corr_tab.setObjectName(self.acc+'Tab')
         lay.addWidget(corr_tab)
 
-        if self.acc != 'BO':
+        if self.acc == 'SI':
             auto_wid = self.get_auto_correction_widget(corr_tab)
             corr_tab.addTab(auto_wid, 'Loop')
 
@@ -293,7 +225,7 @@ class SOFBControl(BaseWidget):
         for col, text in enumerate(headers):
             lbl = QLabel(text, wid, alignment=Qt.AlignHCenter)
             lbl.setStyleSheet('QLabel{max-height: 1.2em;}')
-            gdl.addWidget(lbl, 0, col)
+            gdl.addWidget(lbl, 0, col+1)
 
         props = [
             'FOFBDownloadKicks', 'FOFBUpdateRefOrb',
@@ -311,10 +243,10 @@ class SOFBControl(BaseWidget):
             mon = SiriusLedState(
                 wid, self.devpref.substitute(propty=prop+'-Mon'))
             wids = [lbl, spt, rdb, mon]
-            gdl.addWidget(lbl, i+1, 0)
-            gdl.addWidget(spt, i+1, 1)
-            gdl.addWidget(rdb, i+1, 2)
-            gdl.addWidget(mon, i+1, 3)
+            gdl.addWidget(lbl, i+1, 0, 1, 2)
+            gdl.addWidget(spt, i+1, 2)
+            gdl.addWidget(rdb, i+1, 3)
+            gdl.addWidget(mon, i+1, 4)
             if prop in ['FOFBDownloadKicks', 'FOFBUpdateRefOrb']:
                 sbp = SiriusSpinbox(
                     wid, self.devpref.substitute(propty=prop+'Perc-SP'))
@@ -325,7 +257,7 @@ class SOFBControl(BaseWidget):
                 gdl2.setContentsMargins(0, 0, 0, 0)
                 gdl2.addWidget(sbp, 0, 0)
                 gdl2.addWidget(rbp, 1, 0)
-                gdl.addLayout(gdl2, i+1, 4)
+                gdl.addLayout(gdl2, i+1, 5)
                 wids.extend([sbp, rbp])
             if prop != 'FOFBDownloadKicks':
                 vislist.extend(wids)
@@ -339,7 +271,7 @@ class SOFBControl(BaseWidget):
         btmore.clicked.connect(self._handle_fofb_options_vis)
         btmore.visItems = vislist
         btmore.setFlat(True)
-        gdl.addWidget(btmore, 5, 0, alignment=Qt.AlignLeft)
+        gdl.addWidget(btmore, 0, 0, alignment=Qt.AlignLeft)
 
         return wid
 
@@ -585,21 +517,6 @@ class RefControl(BaseCombo):
             super().setup_ui(['bba_orb', 'ref_orb'])
         else:
             super().setup_ui()
-
-
-class OfflineOrbControl(BaseCombo):
-    """."""
-
-    def __init__(self, parent, device, ctrls, prefix='', acc='SI'):
-        """."""
-        setpoint = dict()
-        readback = dict()
-        basename = _PVName(device).substitute(prefix=prefix)
-        setpoint['x'] = _ConnSig(basename.substitute(propty='OfflineOrbX-SP'))
-        setpoint['y'] = _ConnSig(basename.substitute(propty='OfflineOrbY-SP'))
-        readback['x'] = _ConnSig(basename.substitute(propty='OfflineOrbX-RB'))
-        readback['y'] = _ConnSig(basename.substitute(propty='OfflineOrbY-RB'))
-        super().__init__(parent, ctrls, setpoint, readback, acc)
 
 
 class PerformanceWidget(QWidget):

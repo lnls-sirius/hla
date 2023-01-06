@@ -63,8 +63,6 @@ class AcqControlWidget(BaseWidget):
             parent=tabw, device=self._csorb.trigger_acq_name,
             prefix=self.prefix, src=True)
         tabw.addTab(grp_bx, 'External Trigger')
-        grp_bx = self._get_trigdata_params_grpbx()
-        tabw.addTab(grp_bx, 'Data-Driven Trigger')
         vbl.addWidget(tabw)
 
     def _set_detailed(self, wids):
@@ -84,14 +82,14 @@ class AcqControlWidget(BaseWidget):
         fbl.addRow(lbl, wid)
         self._set_detailed([lbl, wid])
 
+        lab = QLabel('Sync. Injection', grp_bx, alignment=Qt.AlignCenter)
+        wid = self.create_pair_butled(grp_bx, 'SyncWithInjection-Sel')
+        fbl.addRow(lab, wid)
+        self._set_detailed([lab, wid])
+
         lbl = QLabel('Channel Rate', grp_bx, alignment=Qt.AlignCenter)
         wid = self.create_pair_sel(grp_bx, 'TrigAcqChan')
         fbl.addRow(lbl, wid)
-
-        lbl = QLabel('Trigger Type', grp_bx, alignment=Qt.AlignCenter)
-        wid = self.create_pair_sel(grp_bx, 'TrigAcqTrigger')
-        fbl.addRow(lbl, wid)
-        self._set_detailed([lbl, wid])
 
         lbl = QLabel('Repeat', grp_bx, alignment=Qt.AlignCenter)
         wid = self.create_pair_butled(grp_bx, 'TrigAcqRepeat')
@@ -191,26 +189,6 @@ class AcqControlWidget(BaseWidget):
 
         return grp_bx
 
-    def _get_trigdata_params_grpbx(self):
-        grp_bx = QWidget(self)
-        fbl = QFormLayout(grp_bx)
-        lbl = QLabel('Channel', grp_bx, alignment=Qt.AlignCenter)
-        wid = self.create_pair_sel(grp_bx, 'TrigDataChan')
-        fbl.addRow(lbl, wid)
-        lbl = QLabel('Selection', grp_bx, alignment=Qt.AlignCenter)
-        wid = self.create_pair_sel(grp_bx, 'TrigDataSel')
-        fbl.addRow(lbl, wid)
-        lbl = QLabel('Threshold', grp_bx, alignment=Qt.AlignCenter)
-        wid = self.create_pair(grp_bx, 'TrigDataThres')
-        fbl.addRow(lbl, wid)
-        lbl = QLabel('Hysteresis', grp_bx, alignment=Qt.AlignCenter)
-        wid = self.create_pair(grp_bx, 'TrigDataHyst')
-        fbl.addRow(lbl, wid)
-        lbl = QLabel('Polarity', grp_bx, alignment=Qt.AlignCenter)
-        wid = self.create_pair_sel(grp_bx, 'TrigDataPol')
-        fbl.addRow(lbl, wid)
-        return grp_bx
-
     def _get_multturn_acq_grpbx(self):
         grp_bx = QWidget(self)
         fbl = QFormLayout(grp_bx)
@@ -278,24 +256,4 @@ class AcqControlWidget(BaseWidget):
         wid = self.create_pair(grp_bx, 'SPassMaskSplEnd')
         fbl.addRow(lbl, wid)
         self._set_detailed([lbl, wid])
-
-        wid = QWidget(grp_bx)
-        self._set_detailed(wid)
-        hbl = QHBoxLayout(wid)
-        pdm_btn1 = PyDMPushButton(
-            init_channel=self.devpref.substitute(propty='SPassBgCtrl-Cmd'),
-            pressValue=0, label='Acquire')
-        pdm_btn2 = PyDMPushButton(
-            init_channel=self.devpref.substitute(propty='SPassBgCtrl-Cmd'),
-            pressValue=1, label='Reset')
-        pdm_lbl = SiriusLabel(
-            wid, self.devpref.substitute(propty='SPassBgSts-Mon'))
-        hbl.addWidget(pdm_btn1)
-        hbl.addWidget(pdm_btn2)
-        hbl.addWidget(pdm_lbl)
-        lbl = QLabel('BG acq.:', grp_bx, alignment=Qt.AlignCenter)
-        fbl.addRow(lbl, wid)
-        lbl = QLabel('Use BG', grp_bx, alignment=Qt.AlignCenter)
-        wid = self.create_pair_butled(grp_bx, 'SPassUseBg')
-        fbl.addRow(lbl, wid)
         return grp_bx
