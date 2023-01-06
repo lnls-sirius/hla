@@ -425,18 +425,22 @@ class OrbitRegister(QWidget):
         lay.addWidget(orbcombo, row, 1)
 
         row += 1
-        lay.addWidget(QLabel('Subsection', wid), row, 0)
+        lay.addWidget(QLabel('Section', wid), row, 0)
         sscombo = QComboBox(wid)
-        sub = ['SA', 'SB', 'SP', 'SB']
-        ssnames = [f'{d+1:02d}{sub[d%len(sub)]}' for d in range(20)]
-        bcnames = [f'{d+1:02d}BC' for d in range(20)]
-        names = []
-        for aaa, bbb in zip(ssnames, bcnames):
-            names.extend([aaa, bbb])
-        sscombo.addItems(names)
-        sscombo.setMaxVisibleItems(10)
+        ssnames = [f'{d:02d}' for d in range(1, 21)]
+        sscombo.addItems(ssnames)
+        sscombo.setMaxVisibleItems(7)
         sscombo.setStyleSheet('QComboBox{combobox-popup: 0;}')
         lay.addWidget(sscombo, row, 1)
+
+        row += 1
+        lay.addWidget(QLabel('Subsection', wid), row, 0)
+        sbcombo = QComboBox(wid)
+        names = ['SS', 'C1', 'C2', 'BC']
+        sbcombo.addItems(names)
+        sbcombo.setMaxVisibleItems(5)
+        sbcombo.setStyleSheet('QComboBox{combobox-popup: 0;}')
+        lay.addWidget(sbcombo, row, 1)
 
         row += 1
         lay.addWidget(QLabel('\u03B8<sub>x</sub> [urad]', wid), row, 0)
@@ -507,10 +511,17 @@ class OrbitRegister(QWidget):
         agy = float(angy.text())
         psx = float(posx.text())
         psy = float(posy.text())
-        sub = sscombo.currentText()
-        orbx, orby = _calculate_bump(orbx, orby, sub, agx, agy, psx, psy)
+        sec = sscombo.currentText()
+        sub = sbcombo.currentText()
+        if sub == 'SS':
+            sub = 'SA'
+            if not int(sec) % 2:
+                sub = 'SB'
+            elif not (int(sec)+1) % 4:
+                sub = 'SP'
+        orbx, orby = _calculate_bump(orbx, orby, sec+sub, agx, agy, psx, psy)
 
-        txt = f'Bump@{sub}: ref={confname}\n'
+        txt = f'Bump@{sec+sub}; ref={confname}; '
         txt += f'ax={agx:.1f} ay={agy:.1f} dx={psx:.1f} dy={psy:.1f}'
         self._update_and_emit(txt, orbx, orby)
 
