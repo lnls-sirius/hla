@@ -249,7 +249,6 @@ class InjCtrlWindow(SiriusMainWindow):
         labelsmon.append(self._lb_currtgt)
 
         # mode specific configurations
-        self.wid_dcdtls = self._setupDecayModeWidget()
         self.wid_tudtls = self._setupTopUpModeWidget()
         self.wid_tudtls.setVisible(False)
 
@@ -388,7 +387,6 @@ class InjCtrlWindow(SiriusMainWindow):
         glay1.addWidget(self._sb_currtgt, 2, 1)
         glay1.addWidget(self._lb_currtgt, 2, 2)
         glay1.addWidget(self.wid_tudtls, 3, 0, 2, 3)
-        glay1.addWidget(self.wid_dcdtls, 3, 0, 2, 3)
         glay1.setColumnStretch(0, 3)
         glay1.setColumnStretch(1, 2)
         glay1.setColumnStretch(2, 2)
@@ -513,35 +511,6 @@ class InjCtrlWindow(SiriusMainWindow):
             }""")
         return wid
 
-    def _setupDecayModeWidget(self):
-        self._ld_autostop = QLabel('Auto Stop', self)
-        self._cb_autostop = PyDMStateButton(
-            self, self._inj_prefix.substitute(propty='AutoStop-Sel'))
-        self._cb_autostop.shape = 1
-        self._led_autostop = SiriusLedState(
-            self, self._inj_prefix.substitute(propty='AutoStop-Sts'))
-
-        wid = QWidget()
-        lay = QGridLayout(wid)
-        lay.setAlignment(Qt.AlignTop)
-        lay.setContentsMargins(0, 6, 0, 0)
-        lay.addWidget(self._ld_autostop, 0, 0)
-        lay.addWidget(self._cb_autostop, 0, 1)
-        lay.addWidget(self._led_autostop, 0, 2)
-        lay.setColumnStretch(0, 3)
-        lay.setColumnStretch(1, 2)
-        lay.setColumnStretch(2, 2)
-
-        wid.setStyleSheet("""
-            .QLabel{
-                min-width: 7em; max-width: 7em; min-height: 1.5em;
-                qproperty-alignment: 'AlignRight | AlignVCenter';
-            }
-            SiriusLabel{
-                qproperty-alignment: AlignCenter;
-            }""")
-        return wid
-
     def _setupLogWidget(self):
         self._log = PyDMLogLabel(
             self, self._inj_prefix.substitute(propty='Log-Mon'),
@@ -580,7 +549,6 @@ class InjCtrlWindow(SiriusMainWindow):
         is_topoup = new_mode == _Const.InjMode.TopUp
         self.wid_tudtls.setVisible(is_topoup)
         self._pb_topup.setVisible(is_topoup)
-        self.wid_dcdtls.setVisible(not is_topoup)
         self._pb_tiinj.setVisible(not is_topoup)
         self.wid_tusts.setVisible(is_topoup)
 
