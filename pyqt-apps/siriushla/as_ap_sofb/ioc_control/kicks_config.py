@@ -110,20 +110,21 @@ class KicksConfigWidget(BaseWidget):
 
     def get_status_widget(self, parent):
         """."""
-        conf = PyDMPushButton(
-            parent, pressValue=1,
-            init_channel=self.devpref.substitute(propty='CorrConfig-Cmd'))
-        rules = (
-            '[{"name": "EnblRule", "property": "Enable", ' +
-            '"expression": "not ch[0]", "channels": [{"channel": "' +
-            self.devpref.substitute(propty='LoopState-Sts') +
-            '", "trigger": true}]}]')
-        conf.rules = rules
-        conf.setToolTip('Refresh Configurations')
-        conf.setIcon(qta.icon('fa5s.sync'))
-        conf.setObjectName('conf')
-        conf.setStyleSheet(
-            '#conf{min-width:25px; max-width:25px; icon-size:20px;}')
+        if self.acc not in {'TS', 'TB'}:
+            conf = PyDMPushButton(
+                parent, pressValue=1,
+                init_channel=self.devpref.substitute(propty='CorrConfig-Cmd'))
+            rules = (
+                '[{"name": "EnblRule", "property": "Enable", ' +
+                '"expression": "not ch[0]", "channels": [{"channel": "' +
+                self.devpref.substitute(propty='LoopState-Sts') +
+                '", "trigger": true}]}]')
+            conf.rules = rules
+            conf.setToolTip('Refresh Configurations')
+            conf.setIcon(qta.icon('fa5s.sync'))
+            conf.setObjectName('conf')
+            conf.setStyleSheet(
+                '#conf{min-width:25px; max-width:25px; icon-size:20px;}')
 
         sts = QPushButton('', parent)
         sts.setIcon(qta.icon('fa5s.list-ul'))
@@ -147,5 +148,6 @@ class KicksConfigWidget(BaseWidget):
         hbl.addStretch()
         hbl.addWidget(pdm_led)
         hbl.addWidget(sts)
-        hbl.addWidget(conf)
+        if self.acc not in {'TS', 'TB'}:
+            hbl.addWidget(conf)
         return hbl
