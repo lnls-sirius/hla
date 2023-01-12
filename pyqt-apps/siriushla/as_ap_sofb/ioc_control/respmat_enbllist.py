@@ -25,12 +25,9 @@ class SingleSelMatrix(BaseObject, SelectionWidget, PyDMWidget):
         # initialize BaseObject
         BaseObject.__init__(self, device, prefix=prefix, acc=acc)
         self.dev = dev
-        max_rz = self._csorb.MAX_RINGSZ
-        bpms = np.array(self._csorb.bpm_pos)
-        bpm_pos = [bpms + i*self._csorb.circum for i in range(max_rz)]
-        bpm_pos = np.hstack(bpm_pos)
-        bpm_name = self._csorb.bpm_names * max_rz
-        bpm_nknm = self._csorb.bpm_nicknames * max_rz
+        bpm_pos = np.array(self._csorb.bpm_pos)
+        bpm_name = self._csorb.bpm_names
+        bpm_nknm = self._csorb.bpm_nicknames
         self.devpos = {
             'BPMX': bpm_pos,
             'BPMY': bpm_pos,
@@ -85,8 +82,6 @@ class SingleSelMatrix(BaseObject, SelectionWidget, PyDMWidget):
         else:
             top_headers = nicks
             side_headers = [' ']
-        if self.dev.lower().startswith('bpm'):
-            side_headers *= self._csorb.MAX_RINGSZ
         return top_headers, side_headers
 
     def get_widgets(self):
@@ -113,8 +108,6 @@ class SingleSelMatrix(BaseObject, SelectionWidget, PyDMWidget):
             _, nicks = self.devnames[self.dev]
             rsize, hsize, i = len(nicks), len(side_headers), 0
             if self.dev.lower().startswith('bpm'):
-                rsize //= self._csorb.MAX_RINGSZ
-                hsize //= self._csorb.MAX_RINGSZ
                 i = (idx // rsize) * hsize
             if self.acc == 'BO':
                 sec = int(nicks[idx][:2])
