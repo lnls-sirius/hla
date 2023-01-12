@@ -7,7 +7,7 @@ import qtawesome as qta
 from pydm.widgets import PyDMPushButton
 
 from ...util import connect_window
-from ...widgets import SiriusLedAlert
+from ...widgets import SiriusLedAlert, SiriusLabel, SiriusLedState
 from ...widgets.windows import create_window_from_widget
 from ...as_ti_control import HLTriggerDetailed
 
@@ -64,6 +64,7 @@ class KicksConfigWidget(BaseWidget):
         if self.acc == 'SI':
             det_wid = self.get_details_widget(tabw)
             tabw.addTab(det_wid, 'Details')
+            tabw.setCurrentIndex(2)
 
     def get_details_widget(self, parent):
         """."""
@@ -71,30 +72,24 @@ class KicksConfigWidget(BaseWidget):
         det_wid.setObjectName('gbx')
         det_lay = QGridLayout(det_wid)
 
-        syn_grp = QGroupBox('Sync.', det_wid)
-        syn_wid = self.create_pair_sel(syn_grp, 'CorrSync', is_vert=True)
+        syn_wid = self.create_pair_butled(det_wid, 'CorrSync', is_vert=False)
+        syn_lab = SiriusLabel(det_wid, self.device+':CorrSync-Sts')
         syn_wid.layout().setContentsMargins(0, 1, 0, 1)
-        gdl = QGridLayout(syn_grp)
-        gdl.addWidget(syn_wid, 0, 0)
+        det_lay.addWidget(QLabel('Synchronization', det_wid), 0, 0)
+        det_lay.addWidget(syn_wid, 0, 1)
+        det_lay.addWidget(syn_lab, 0, 2)
 
-        pssofb_grp = QGroupBox('PSSOFB', det_wid)
-        enbl_lbl = QLabel('Enable:', pssofb_grp)
-        enbl_wid = self.create_pair_butled(pssofb_grp, 'CorrPSSOFBEnbl')
+        enbl_wid = self.create_pair_butled(
+            det_wid, 'CorrPSSOFBEnbl', is_vert=False)
+        enbl_led = SiriusLedState(det_wid, self.device+':CorrPSSOFBEnbl-Mon')
         enbl_wid.layout().setContentsMargins(0, 0, 0, 0)
-        wait_lbl = QLabel('Wait:', pssofb_grp)
-        wait_wid = self.create_pair_butled(pssofb_grp, 'CorrPSSOFBWait')
-        wait_wid.layout().setContentsMargins(0, 0, 0, 0)
-        gdl = QGridLayout(pssofb_grp)
-        gdl.setSpacing(1)
-        gdl.addWidget(enbl_lbl, 0, 0)
-        gdl.addWidget(wait_lbl, 1, 0)
-        gdl.addWidget(enbl_wid, 0, 1)
-        gdl.addWidget(wait_wid, 1, 1)
+        det_lay.addWidget(QLabel('PSSOFB Enable:', det_wid), 1, 0)
+        det_lay.addWidget(enbl_wid, 1, 1)
+        det_lay.addWidget(enbl_led, 1, 2)
 
-        del_grp = QGroupBox('Trigger Delay', det_wid)
         del_wid = self.create_pair(
-            del_grp, 'Delay', device='SI-Glob:TI-Mags-Corrs', is_vert=False)
-        del_det = QPushButton(qta.icon('fa5s.ellipsis-h'), '', del_grp)
+            det_wid, 'Delay', device='SI-Glob:TI-Mags-Corrs', is_vert=False)
+        del_det = QPushButton(qta.icon('fa5s.ellipsis-h'), '', det_wid)
         del_det.setToolTip('Open details')
         del_det.setObjectName('detail')
         del_det.setStyleSheet(
@@ -105,29 +100,31 @@ class KicksConfigWidget(BaseWidget):
         connect_window(
             del_det, trg_w, parent=None, device='SI-Glob:TI-Mags-Corrs',
             prefix=self.prefix)
-        del_lay = QHBoxLayout(del_grp)
-        del_lay.addStretch()
-        del_lay.addWidget(del_wid)
-        del_lay.addWidget(del_det)
-        del_lay.addStretch()
+        del_lay = QGridLayout()
+        del_lay.addWidget(QLabel('Trigger Delay', det_wid), 0, 0)
+        del_lay.addWidget(del_wid, 0, 1)
+        del_lay.addWidget(del_det, 0, 2)
+        det_lay.addLayout(del_lay, 2, 0, 1, 3)
 
-        det_lay.addWidget(pssofb_grp, 0, 0)
-        det_lay.addWidget(syn_grp, 0, 2)
-        det_lay.addWidget(del_grp, 2, 0, 1, 3)
-        det_lay.setColumnStretch(1, 10)
-        det_lay.setRowStretch(1, 10)
         return det_wid
 
     def get_status_widget(self, parent):
         """."""
-        conf = PyDMPushButton(
-            parent, pressValue=1,
-            init_channel=self.devpref.substitute(propty='CorrConfig-Cmd'))
-        conf.setToolTip('Refresh Configurations')
-        conf.setIcon(qta.icon('fa5s.sync'))
-        conf.setObjectName('conf')
-        conf.setStyleSheet(
-            '#conf{min-width:25px; max-width:25px; icon-size:20px;}')
+        if self.acc not in {'TS', 'TB'}:
+            conf = PyDMPushButton(
+                parent, pressValue=1,
+                init_channel=self.devpref.substitute(propty='CorrConfig-Cmd'))
+            rules = (
+                '[{"name": "EnblRule", "property": "Enable", ' +
+                '"expression": "not ch[0]", "channels": [{"channel": "' +
+                self.devpref.substitute(propty='LoopState-Sts') +
+                '", "trigger": true}]}]')
+            conf.rules = rules
+            conf.setToolTip('Refresh Configurations')
+            conf.setIcon(qta.icon('fa5s.sync'))
+            conf.setObjectName('conf')
+            conf.setStyleSheet(
+                '#conf{min-width:25px; max-width:25px; icon-size:20px;}')
 
         sts = QPushButton('', parent)
         sts.setIcon(qta.icon('fa5s.list-ul'))
@@ -151,5 +148,6 @@ class KicksConfigWidget(BaseWidget):
         hbl.addStretch()
         hbl.addWidget(pdm_led)
         hbl.addWidget(sts)
-        hbl.addWidget(conf)
+        if self.acc not in {'TS', 'TB'}:
+            hbl.addWidget(conf)
         return hbl

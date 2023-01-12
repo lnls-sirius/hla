@@ -80,13 +80,14 @@ class OrbitWidget(BaseWidget):
                 btn, Window, self, device=self.device, prefix=self.prefix,
                 csorb=self._csorb)
 
-        btn = QPushButton('SingPass Sum', grpbx)
-        gdl.addWidget(btn, 0, 3)
-        Window = create_window_from_widget(
-            SinglePassSumWidget, title='Single Pass Sum')
-        _util.connect_window(
-            btn, Window, self, device=self.device, prefix=self.prefix,
-            csorb=self._csorb)
+        if self.acc != 'BO':
+            btn = QPushButton('SingPass Sum', grpbx)
+            gdl.addWidget(btn, 0, 3)
+            Window = create_window_from_widget(
+                SinglePassSumWidget, title='Single Pass Sum')
+            _util.connect_window(
+                btn, Window, self, device=self.device, prefix=self.prefix,
+                csorb=self._csorb)
 
     def channels(self):
         """."""
@@ -97,12 +98,11 @@ class OrbitWidget(BaseWidget):
     @staticmethod
     def get_default_ctrls(device, prefix='', acc='SI'):
         """."""
-        pvs = [
-            'SPassOrbX-Mon', 'SPassOrbY-Mon',
-            'OfflineOrbX-RB', 'OfflineOrbY-RB',
-            'RefOrbX-RB', 'RefOrbY-RB']
-        orbs = [
-            'IOC-SPassOrb', 'IOC-OfflineOrb', 'IOC-RefOrb']
+        pvs = ['RefOrbX-RB', 'RefOrbY-RB']
+        orbs = ['IOC-RefOrb', ]
+        if acc.upper() != 'BO':
+            pvs.extend(['SPassOrbX-Mon', 'SPassOrbY-Mon'])
+            orbs.append('IOC-SPassOrb')
         if acc.upper() == 'SI':
             pvs.extend(['SlowOrbX-Mon', 'SlowOrbY-Mon'])
             orbs.append('IOC-SlowOrb')

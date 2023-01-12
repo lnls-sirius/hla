@@ -28,8 +28,6 @@ class ShowMatrixWidget(QWidget):
         self.setupui()
         self.mat = _ConnSig(self.devpref.substitute(propty='RespMat-Mon'))
         self.mat.new_value_signal[_np.ndarray].connect(self._update_graph)
-        self.rsize = _ConnSig(self.devpref.substitute(propty='RingSize-RB'))
-        self.rsize.new_value_signal[int].connect(self._update_horizontal)
         self._update_horizontal(None)
         self._update_graph(None)
 
@@ -112,9 +110,7 @@ class ShowMatrixWidget(QWidget):
             cur.receiveYWaveform(sep*i + val[:, i])
 
     def _update_horizontal(self, _):
-        val = self.rsize.getvalue()
-        if val is None:
-            val = 1
+        val = 1
         bpm_pos = _np.array(self._csorb.bpm_pos)
         bpm_pos = [bpm_pos + i*self._csorb.circum for i in range(2*val)]
         bpm_pos = _np.hstack(bpm_pos)

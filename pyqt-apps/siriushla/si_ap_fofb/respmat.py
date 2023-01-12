@@ -21,6 +21,7 @@ from ..widgets import SiriusConnectionSignal as _ConnSignal, \
 from ..as_ap_sofb.ioc_control.respmat import RespMatWidget as _RespMatWidget
 from ..as_ap_sofb.ioc_control.respmat_enbllist import \
     SingleSelMatrix as _SingleSelMatrix
+from ..as_ap_sofb.ioc_control.base import CAPushButton
 
 from .base import BaseObject, BaseWidget, get_fofb_icon
 from .graphics import CorrGainWidget
@@ -32,6 +33,11 @@ class RespMatWidget(_RespMatWidget, BaseWidget):
     def __init__(self, parent, device, prefix=''):
         BaseWidget.__init__(self, parent, device, prefix=prefix)
         self.setWindowTitle('SI - FOFB')
+        self._enblrule = (
+            '[{"name": "EnblRule", "property": "Enable", ' +
+            '"expression": "not ch[0]", "channels": [{"channel": "' +
+            self.devpref.substitute(propty='LoopState-Sts') +
+            '", "trigger": true}]}]')
         self.setupui()
         self.layout().setContentsMargins(0, 0, 0, 0)
         self._config_type = 'si_fastorbcorr_respm'
@@ -59,6 +65,7 @@ class RespMatWidget(_RespMatWidget, BaseWidget):
         norm_gp = QGroupBox('Norm.Mode')
         pdm_cbb = SiriusEnumComboBox(
             self, self.devpref.substitute(propty='InvRespMatNormMode-Sel'))
+        pdm_cbb.rules = self._enblrule
         pdm_lbl = SiriusLabel(
             self, self.devpref.substitute(propty='InvRespMatNormMode-Sts'))
         nlay = QHBoxLayout(norm_gp)
@@ -84,8 +91,11 @@ class RespMatWidget(_RespMatWidget, BaseWidget):
 
         icon = get_fofb_icon()
         window = create_window_from_widget(
-            SelectionMatrix, title='Corrs and BPMs selection', icon=icon)
-        btn = QPushButton('', sel_wid)
+            SelectionMatrix,
+            title=self.acc + ' - FOFB - Corrs and BPMs selection',
+            icon=icon)
+        btn = CAPushButton('', sel_wid)
+        btn.rules = self._enblrule
         btn.setObjectName('btn')
         btn.setIcon(qta.icon('fa5s.tasks'))
         btn.setToolTip('Open window to select BPMs and correctors')
@@ -98,6 +108,7 @@ class RespMatWidget(_RespMatWidget, BaseWidget):
 
         pdm_chbx = PyDMCheckbox(
             sel_wid, self.devpref.substitute(propty='UseRF-Sel'))
+        pdm_chbx.rules = self._enblrule
         pdm_chbx.setText('use RF')
         pdm_led = SiriusLedState(
             sel_wid, self.devpref.substitute(propty='UseRF-Sts'))
@@ -209,6 +220,7 @@ class SelectionMatrix(BaseWidget):
     def __init__(self, parent, device, prefix=''):
         super().__init__(parent, device, prefix=prefix)
         tab = QTabWidget(self)
+        tab.setObjectName('SITab')
         hbl = QHBoxLayout(self)
         hbl.addWidget(tab)
         hbl.setContentsMargins(0, 0, 0, 0)

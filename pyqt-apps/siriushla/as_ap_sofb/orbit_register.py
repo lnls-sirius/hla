@@ -34,25 +34,24 @@ class OrbitRegisters(QWidget):
             'ref': [
                 _ConnSig(self.devpref.substitute(propty='RefOrbX-RB')),
                 _ConnSig(self.devpref.substitute(propty='RefOrbY-RB'))],
-            'sp': [
-                _ConnSig(self.devpref.substitute(propty='SPassOrbX-Mon')),
-                _ConnSig(self.devpref.substitute(propty='SPassOrbY-Mon'))],
-            'off': [
-                _ConnSig(self.devpref.substitute(propty='OfflineOrbX-SP')),
-                _ConnSig(self.devpref.substitute(propty='OfflineOrbY-SP'))],
             'bpm': [
                 _ConnSig(self.devpref.substitute(propty='BPMOffsetX-Mon')),
                 _ConnSig(self.devpref.substitute(propty='BPMOffsetY-Mon'))],
             'mat': _ConnSig(self.devpref.substitute(propty='RespMat-RB')),
             }
-        if self.acc == 'SI':
-            self._orbits['orb'] = [
-                _ConnSig(self.devpref.substitute(propty='SlowOrbX-Mon')),
-                _ConnSig(self.devpref.substitute(propty='SlowOrbY-Mon'))]
+        if self.acc in {'TB', 'TS', 'SI'}:
+            self._orbits['sp'] = [
+                _ConnSig(self.devpref.substitute(propty='SPassOrbX-Mon')),
+                _ConnSig(self.devpref.substitute(propty='SPassOrbY-Mon'))]
         if self.acc in {'SI', 'BO'}:
             self._orbits['mti'] = [
                 _ConnSig(self.devpref.substitute(propty='MTurnIdxOrbX-Mon')),
                 _ConnSig(self.devpref.substitute(propty='MTurnIdxOrbY-Mon'))]
+        if self.acc == 'SI':
+            self._orbits['orb'] = [
+                _ConnSig(self.devpref.substitute(propty='SlowOrbX-Mon')),
+                _ConnSig(self.devpref.substitute(propty='SlowOrbY-Mon'))]
+
         self.setupui()
 
     def channels(self):
@@ -113,6 +112,8 @@ class OrbitRegister(QWidget):
 
     DEFAULT_DIR = '/home/sirius/mounts/screens-iocs'
 
+    MAX_BUMP_CURR = 10  # [mA]
+
     new_orbx_signal = Signal(_np.ndarray)
     new_orby_signal = Signal(_np.ndarray)
     new_string_signal = Signal(str)
@@ -134,6 +135,10 @@ class OrbitRegister(QWidget):
         self._csorb = SOFBFactory.create(acc.upper())
         self.string_status = 'Empty'
         self.name = 'Register {0:d}'.format(self.idx)
+        self._chn_curr = _ConnSig(
+            _PVName('SI-Glob:AP-CurrInfo:Current-Mon').substitute(
+                prefix=prefix))
+
         self.setup_ui()
 
         self._orbits = orbits
@@ -200,14 +205,12 @@ class OrbitRegister(QWidget):
             act = menu2.addAction('&MTurnOrb')
             act.setIcon(qta.icon('mdi.alarm-multiple'))
             act.triggered.connect(_part(self._register_orbit, 'mti'))
-        act = menu2.addAction('S&PassOrb')
-        act.setIcon(qta.icon('mdi.clock-fast'))
-        act.triggered.connect(_part(self._register_orbit, 'sp'))
+        if self._csorb.acc.upper() != 'BO':
+            act = menu2.addAction('S&PassOrb')
+            act.setIcon(qta.icon('mdi.clock-fast'))
+            act.triggered.connect(_part(self._register_orbit, 'sp'))
         act = menu2.addAction('&RefOrb')
         act.triggered.connect(_part(self._register_orbit, 'ref'))
-        act = menu2.addAction('&OfflineOrb')
-        act.setIcon(qta.icon('mdi.signal-off'))
-        act.triggered.connect(_part(self._register_orbit, 'off'))
         act = menu2.addAction('&BPM Offsets')
         act.setIcon(qta.icon('mdi.currency-sign'))
         act.triggered.connect(_part(self._register_orbit, 'bpm'))
@@ -381,6 +384,19 @@ class OrbitRegister(QWidget):
         self._update_and_emit(txt, orbx, orby)
 
     def _create_bump(self):
+        curr = self._chn_curr.value
+        if curr is None:
+            QMessageBox.warning(
+                self, 'Warning', 'Could not read current value.',
+                QMessageBox.Ok)
+        elif curr > OrbitRegister.MAX_BUMP_CURR:
+            ans = QMessageBox.question(
+                self, 'Are you Sure?',
+                f'Stored current is above {OrbitRegister.MAX_BUMP_CURR}mA ' +
+                f'({curr:.2f}mA),\nare you sure you want to continue?',
+                QMessageBox.Yes, QMessageBox.Cancel)
+            if ans != QMessageBox.Yes:
+                return
 
         def _add_entry(index):
             cbox = self.sender()
@@ -409,16 +425,22 @@ class OrbitRegister(QWidget):
         lay.addWidget(orbcombo, row, 1)
 
         row += 1
-        lay.addWidget(QLabel('Subsection', wid), row, 0)
+        lay.addWidget(QLabel('Section', wid), row, 0)
         sscombo = QComboBox(wid)
-        sub = ['SA', 'SB', 'SP', 'SB']
-        ssnames = [f'{d+1:02d}{sub[d%len(sub)]}' for d in range(20)]
-        bcnames = [f'{d+1:02d}BC' for d in range(20)]
-        names = []
-        for aaa, bbb in zip(ssnames, bcnames):
-            names.extend([aaa, bbb])
-        sscombo.addItems(names)
+        ssnames = [f'{d:02d}' for d in range(1, 21)]
+        sscombo.addItems(ssnames)
+        sscombo.setMaxVisibleItems(7)
+        sscombo.setStyleSheet('QComboBox{combobox-popup: 0;}')
         lay.addWidget(sscombo, row, 1)
+
+        row += 1
+        lay.addWidget(QLabel('Subsection', wid), row, 0)
+        sbcombo = QComboBox(wid)
+        names = ['SS', 'C1', 'C2', 'BC']
+        sbcombo.addItems(names)
+        sbcombo.setMaxVisibleItems(5)
+        sbcombo.setStyleSheet('QComboBox{combobox-popup: 0;}')
+        lay.addWidget(sbcombo, row, 1)
 
         row += 1
         lay.addWidget(QLabel('\u03B8<sub>x</sub> [urad]', wid), row, 0)
@@ -489,10 +511,17 @@ class OrbitRegister(QWidget):
         agy = float(angy.text())
         psx = float(posx.text())
         psy = float(posy.text())
-        sub = sscombo.currentText()
-        orbx, orby = _calculate_bump(orbx, orby, sub, agx, agy, psx, psy)
+        sec = sscombo.currentText()
+        sub = sbcombo.currentText()
+        if sub == 'SS':
+            sub = 'SA'
+            if not int(sec) % 2:
+                sub = 'SB'
+            elif not (int(sec)+1) % 4:
+                sub = 'SP'
+        orbx, orby = _calculate_bump(orbx, orby, sec+sub, agx, agy, psx, psy)
 
-        txt = f'Bump@{sub}: ref={confname}\n'
+        txt = f'Bump@{sec+sub}; ref={confname}; '
         txt += f'ax={agx:.1f} ay={agy:.1f} dx={psx:.1f} dy={psy:.1f}'
         self._update_and_emit(txt, orbx, orby)
 
