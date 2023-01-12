@@ -1,11 +1,11 @@
 #!/usr/bin/env python-sirius
 
-"""Open power supplies test window."""
+"""Open power supplies commands window."""
 
 import sys
 import argparse as _argparse
 from siriushla.sirius_application import SiriusApplication
-from siriushla.as_ps_test.ps_test_window import PSTestWindow
+from siriushla.as_ps_commands.main import PSCmdWindow
 
 
 parser = _argparse.ArgumentParser(
@@ -16,5 +16,5 @@ isadv = args.isadv
 
 
 app = SiriusApplication()
-app.open_window(PSTestWindow, adv_mode=isadv)
+app.open_window(PSCmdWindow, adv_mode=isadv)
 sys.exit(app.exec_())

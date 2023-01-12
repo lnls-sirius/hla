@@ -35,16 +35,16 @@ from .tasks import CreateTesters, \
     SetTriggerState, CheckTriggerState
 
 
-class PSTestWindow(SiriusMainWindow):
-    """PS test window."""
+class PSCmdWindow(SiriusMainWindow):
+    """PS commands window."""
 
     def __init__(self, parent=None, adv_mode=False):
         """Constructor."""
         super().__init__(parent)
-        self.setWindowTitle('PS/PU Test')
+        self.setWindowTitle('Power Supply Commands')
         self.setObjectName('ASApp')
         cor = get_appropriate_color(section='AS')
-        self.setWindowIcon(qta.icon('mdi.test-tube', color=cor))
+        self.setWindowIcon(qta.icon('mdi.format-list-numbered', color=cor))
 
         # auxiliar data for initializing SI Fam PS
         self._is_adv_mode = adv_mode
@@ -81,6 +81,9 @@ class PSTestWindow(SiriusMainWindow):
                 border-right: 2px solid gray;
             }""")
         self.setCentralWidget(self.central_widget)
+
+        self.title = QLabel(
+            '<h3>Power Supply Commands</h3>', self, alignment=Qt.AlignCenter)
 
         self.tab = QTabWidget(self)
         self.tab.setObjectName('ASTab')
@@ -458,9 +461,7 @@ class PSTestWindow(SiriusMainWindow):
         lay = QGridLayout()
         lay.setHorizontalSpacing(15)
         lay.setVerticalSpacing(5)
-        lay.addWidget(QLabel(
-            '<h3>Power Supply Test</h3>', self, alignment=Qt.AlignCenter),
-            0, 0, 1, 3)
+        lay.addWidget(self.title, 0, 0, 1, 3)
         lay.addWidget(self.tab, 1, 0)
         lay.addLayout(list_layout, 1, 1)
         lay.setColumnStretch(0, 2)
