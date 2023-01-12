@@ -5,7 +5,6 @@ import qtawesome as qta
 from qtpy.QtCore import Qt, Slot, Signal, QEvent
 from qtpy.QtWidgets import QWidget, QGroupBox, QPushButton, QLabel, \
     QGridLayout, QApplication, QHBoxLayout
-from pydm.widgets import PyDMPushButton
 
 from siriuspy.envars import VACA_PREFIX
 from siriuspy.namesys import SiriusPVName
@@ -126,23 +125,6 @@ class MainLauncher(SiriusMainWindow):
         lay_injsett.addWidget(label_sett, 0, 0)
         lay_injsett.addWidget(led_sett, 1, 0)
 
-        # # Auto Stop
-        self.label_injauto = QLabel(
-            '<h4>AutoStop</h4>', self, alignment=Qt.AlignCenter)
-        self.but_injauto = PyDMStateButton(
-            self, injctrl_dev.substitute(propty='AutoStop-Sel'))
-        self.led_injauto = SiriusLedState(
-            self, injctrl_dev.substitute(propty='AutoStop-Sts'))
-        self.wid_injauto = QWidget()
-        self.wid_injauto.setObjectName('wid')
-        self.wid_injauto.setStyleSheet("#wid{min-width: 8em; max-width: 8em;}")
-        lay_injauto = QGridLayout(self.wid_injauto)
-        lay_injauto.setContentsMargins(0, 0, 0, 0)
-        lay_injauto.setAlignment(Qt.AlignTop)
-        lay_injauto.addWidget(self.label_injauto, 0, 0)
-        lay_injauto.addWidget(self.but_injauto, 1, 0)
-        lay_injauto.addWidget(self.led_injauto, 2, 0)
-
         # # Top-up status
         label_tusts = QLabel(
             '<h4>Status</h4>', self, alignment=Qt.AlignCenter)
@@ -251,7 +233,6 @@ class MainLauncher(SiriusMainWindow):
         lay_inj.setVerticalSpacing(5)
         lay_inj.setHorizontalSpacing(12)
         lay_inj.addWidget(self.wid_injsett, 0, 0, 2, 1)
-        lay_inj.addWidget(self.wid_injauto, 0, 1, 2, 1)
         lay_inj.addWidget(self.wid_tusts, 0, 1, 2, 1)
         lay_inj.addWidget(self.wid_injctrl, 0, 2, 2, 1)
         lay_inj.addWidget(pbt_bl, 0, 3, alignment=Qt.AlignTop)
@@ -344,9 +325,6 @@ class MainLauncher(SiriusMainWindow):
     @Slot(int)
     def _handle_injmode_settings_vis(self, new_mode):
         is_topup = new_mode == _InjConst.InjMode.TopUp
-        self.label_injauto.setVisible(not is_topup)
-        self.but_injauto.setVisible(not is_topup)
-        self.led_injauto.setVisible(not is_topup)
         self.wid_tusts.setVisible(is_topup)
         self.but_tiinj.setVisible(not is_topup)
         self.but_topup.setVisible(is_topup)
