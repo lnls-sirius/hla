@@ -4,7 +4,7 @@ from functools import partial as _part
 import numpy as _np
 from qtpy.QtCore import Qt, Signal
 from qtpy.QtWidgets import QWidget, QHBoxLayout, QSizePolicy, QComboBox, \
-    QLabel, QVBoxLayout
+    QLabel, QVBoxLayout, QPushButton
 from pydm.widgets import PyDMEnumComboBox
 from pydm.widgets.base import PyDMPrimitiveWidget
 from siriuspy.namesys import SiriusPVName as _PVName
@@ -50,7 +50,8 @@ class BaseWidget(BaseObject, QWidget):
         QWidget.__init__(self, parent)
         self.setObjectName(acc.upper()+'App')
 
-    def create_pair(self, parent, pvname, device=None, is_vert=False):
+    def create_pair(
+            self, parent, pvname, device=None, is_vert=False, rules=None):
         """."""
         device = device or self.device
         basename = _PVName(device).substitute(
@@ -62,6 +63,8 @@ class BaseWidget(BaseObject, QWidget):
             lay = QHBoxLayout(wid)
         lay.setContentsMargins(0, 0, 0, 0)
         pdm_spbx = SiriusSpinbox(wid, basename.substitute(propty_suffix='SP'))
+        if rules is not None:
+            pdm_spbx.rules = rules
         pdm_lbl = SiriusLabel(wid, basename.substitute(propty_suffix='RB'))
         pdm_lbl.setAlignment(Qt.AlignCenter)
         lay.addWidget(pdm_spbx)
@@ -70,7 +73,8 @@ class BaseWidget(BaseObject, QWidget):
         wid.rb_wid = pdm_lbl
         return wid
 
-    def create_pair_sel(self, parent, pvname, device=None, is_vert=False):
+    def create_pair_sel(
+            self, parent, pvname, device=None, is_vert=False, rules=None):
         """."""
         device = device or self.device
         basename = _PVName(device).substitute(
@@ -83,6 +87,8 @@ class BaseWidget(BaseObject, QWidget):
         lay.setContentsMargins(0, 0, 0, 0)
         pdm_cbbx = PyDMEnumComboBox(
             wid, basename.substitute(propty_suffix='Sel'))
+        if rules is not None:
+            pdm_cbbx.rules = rules
         pdm_lbl = SiriusLabel(wid, basename.substitute(propty_suffix='Sts'))
         pdm_lbl.setAlignment(Qt.AlignCenter)
         lay.addWidget(pdm_cbbx)
@@ -91,7 +97,8 @@ class BaseWidget(BaseObject, QWidget):
         wid.rb_wid = pdm_lbl
         return wid
 
-    def create_pair_butled(self, parent, pvname, device=None, is_vert=False):
+    def create_pair_butled(
+            self, parent, pvname, device=None, is_vert=False, rules=None):
         """."""
         device = device or self.device
         basename = _PVName(device).substitute(
@@ -103,6 +110,8 @@ class BaseWidget(BaseObject, QWidget):
             lay = QHBoxLayout(wid)
         lay.setContentsMargins(0, 0, 0, 0)
         spnt = PyDMStateButton(wid, basename.substitute(propty_suffix='Sel'))
+        if rules is not None:
+            spnt.rules = rules
         rdb = SiriusLedState(wid, basename.substitute(propty_suffix='Sts'))
         lay.addWidget(spnt)
         lay.addWidget(rdb)
@@ -237,4 +246,8 @@ class BaseCombo(QComboBox, PyDMPrimitiveWidget):
 
 
 class CALabel(QLabel, PyDMPrimitiveWidget):
-    """."""
+    """QLabel with rules."""
+
+
+class CAPushButton(QPushButton, PyDMPrimitiveWidget):
+    """QPushButton with rules."""

@@ -77,6 +77,12 @@ class SOFBControl(BaseWidget):
 
     def get_orbit_widget(self, parent):
         """."""
+        rules = (
+            '[{"name": "EnblRule", "property": "Enable", ' +
+            '"expression": "not ch[0]", "channels": [{"channel": "' +
+            self.devpref.substitute(propty='LoopState-Sts') +
+            '", "trigger": true}]}]')
+
         orb_wid = QWidget(parent)
         orb_wid.setObjectName('grp')
         orb_wid.setStyleSheet('#grp{min-height: 11em; max-height: 15em;}')
@@ -85,6 +91,7 @@ class SOFBControl(BaseWidget):
         conf = PyDMPushButton(
             orb_wid, pressValue=1,
             init_channel=self.devpref.substitute(propty='TrigAcqConfig-Cmd'))
+        conf.rules = rules
         conf.setToolTip('Refresh Configurations')
         conf.setIcon(qta.icon('fa5s.sync'))
         conf.setObjectName('conf')
@@ -119,13 +126,14 @@ class SOFBControl(BaseWidget):
         orb_wid.layout().addLayout(hbl, 0, 0, 1, 2)
 
         lbl = QLabel('SOFB Mode', orb_wid)
-        wid = self.create_pair_sel(orb_wid, 'SOFBMode')
+        wid = self.create_pair_sel(orb_wid, 'SOFBMode', rules=rules)
         orb_wid.layout().addWidget(lbl, 1, 0, alignment=Qt.AlignVCenter)
         orb_wid.layout().addWidget(wid, 1, 1)
 
         lbl = QLabel('RefOrb:', orb_wid)
         combo = RefControl(
             self, self.device, self.ctrls, prefix=self.prefix, acc=self.acc)
+        combo.rules = rules
         lbl2 = QLabel('', orb_wid)
         combo.configname.connect(lbl2.setText)
         vbl_ref = QVBoxLayout()
@@ -175,7 +183,7 @@ class SOFBControl(BaseWidget):
         combo = OfflineOrbControl(
             grp_bx, self.device, self.ctrls, prefix=self.prefix, acc=self.acc)
         rules = (
-            '[{"name": "EnblRule", "property": "Visible", ' +
+            '[{"name": "VisRule", "property": "Visible", ' +
             '"expression": "not ch[0]", "channels": [{"channel": "' +
             self.devpref.substitute(propty='SOFBMode-Sts') +
             '", "trigger": true}]}]')
@@ -186,15 +194,20 @@ class SOFBControl(BaseWidget):
         fbl.addRow(lbl, combo)
         grp_bx.layout().addStretch()
 
+        rules = (
+            '[{"name": "EnblRule", "property": "Enable", ' +
+            '"expression": "not ch[0]", "channels": [{"channel": "' +
+            self.devpref.substitute(propty='LoopState-Sts') +
+            '", "trigger": true}]}]')
         hbl = QHBoxLayout()
         grp_bx.layout().addLayout(hbl)
         fbl = QFormLayout()
         hbl.addLayout(fbl)
         lbl = QLabel('Orbit [Hz]', grp_bx, alignment=Qt.AlignCenter)
-        wid = self.create_pair(grp_bx, 'OrbAcqRate')
+        wid = self.create_pair(grp_bx, 'OrbAcqRate', rules=rules)
         fbl.addRow(lbl, wid)
         lbl = QLabel('Kicks [Hz]', grp_bx, alignment=Qt.AlignCenter)
-        wid = self.create_pair(grp_bx, 'KickAcqRate')
+        wid = self.create_pair(grp_bx, 'KickAcqRate', rules=rules)
         fbl.addRow(lbl, wid)
 
         wid = QWidget(grp_bx)
@@ -209,6 +222,7 @@ class SOFBControl(BaseWidget):
         vbl.addLayout(hbl)
         spt = PyDMStateButton(
             wid, self.devpref.substitute(propty='SyncWithInjection-Sel'))
+        spt.rules = rules
         rdb = SiriusLedState(
             wid, self.devpref.substitute(propty='SyncWithInjection-Sts'))
         hbl.addWidget(spt)
@@ -218,11 +232,11 @@ class SOFBControl(BaseWidget):
         fbl = QFormLayout()
         grp_bx.layout().addLayout(fbl)
         lbl = QLabel('Smooth Method', grp_bx, alignment=Qt.AlignCenter)
-        wid = self.create_pair_sel(grp_bx, 'SmoothMethod')
+        wid = self.create_pair_sel(grp_bx, 'SmoothMethod', rules=rules)
         fbl.addRow(lbl, wid)
         if self.isring:
             lbl = QLabel('Extend Ring', grp_bx, alignment=Qt.AlignCenter)
-            wid = self.create_pair(grp_bx, 'RingSize')
+            wid = self.create_pair(grp_bx, 'RingSize', rules=rules)
             fbl.addRow(lbl, wid)
 
         return grp_bx
@@ -257,8 +271,9 @@ class SOFBControl(BaseWidget):
             parent, self.device, prefix=self.prefix, acc=self.acc)
         corr_tab.addTab(kicks_wid, 'Kicks')
 
-        fofb_wid = self.get_fofb_widget(corr_tab)
-        corr_tab.addTab(fofb_wid, 'FOFB')
+        if self.acc == 'SI':
+            fofb_wid = self.get_fofb_widget(corr_tab)
+            corr_tab.addTab(fofb_wid, 'FOFB')
 
         if self.acc != 'BO':
             hbl = kicks_wid.get_status_widget(corr_wid)
@@ -271,21 +286,22 @@ class SOFBControl(BaseWidget):
         wid = QWidget(parent)
         wid.setObjectName('grp')
         gdl = QGridLayout(wid)
-        gdl.setSpacing(9)
+        gdl.setAlignment(Qt.AlignTop)
 
-        gdl.setColumnStretch(0, 2)
+        headers = [
+            'Description', 'Setpoint', 'Status', 'Monitor', '%']
+        for col, text in enumerate(headers):
+            lbl = QLabel(text, wid, alignment=Qt.AlignHCenter)
+            lbl.setStyleSheet('QLabel{max-height: 1.2em;}')
+            gdl.addWidget(lbl, 0, col)
 
-        gdl.addWidget(QLabel('Description', wid), 0, 0)
-        gdl.addWidget(QLabel('Setpoint', wid), 0, 1)
-        gdl.addWidget(QLabel('Status', wid), 0, 2)
-        gdl.addWidget(QLabel('Monitor', wid), 0, 3)
-        gdl.addWidget(QLabel('%', wid), 0, 4, alignment=Qt.AlignCenter)
         props = [
             'FOFBDownloadKicks', 'FOFBUpdateRefOrb',
             'FOFBNullSpaceProj', 'FOFBZeroDistortionAtBPMs']
         desc = [
             'Download Kicks', 'Update RefOrb',
             'Project in Kernel', 'Zero Distortion']
+        vislist = list()
         for i, (prop, des) in enumerate(zip(props, desc)):
             lbl = QLabel(des, wid)
             spt = PyDMStateButton(
@@ -294,32 +310,37 @@ class SOFBControl(BaseWidget):
                 wid, self.devpref.substitute(propty=prop+'-Sts'))
             mon = SiriusLedState(
                 wid, self.devpref.substitute(propty=prop+'-Mon'))
+            wids = [lbl, spt, rdb, mon]
             gdl.addWidget(lbl, i+1, 0)
             gdl.addWidget(spt, i+1, 1)
             gdl.addWidget(rdb, i+1, 2)
             gdl.addWidget(mon, i+1, 3)
+            if prop in ['FOFBDownloadKicks', 'FOFBUpdateRefOrb']:
+                sbp = SiriusSpinbox(
+                    wid, self.devpref.substitute(propty=prop+'Perc-SP'))
+                rbp = SiriusLabel(
+                    wid, self.devpref.substitute(propty=prop+'Perc-RB'))
+                rbp.showUnits = False
+                gdl2 = QGridLayout()
+                gdl2.setContentsMargins(0, 0, 0, 0)
+                gdl2.addWidget(sbp, 0, 0)
+                gdl2.addWidget(rbp, 1, 0)
+                gdl.addLayout(gdl2, i+1, 4)
+                wids.extend([sbp, rbp])
+            if prop != 'FOFBDownloadKicks':
+                vislist.extend(wids)
+                for w in wids:
+                    w.setVisible(False)
 
-        spb = SiriusSpinbox(
-            wid, self.devpref.substitute(propty='FOFBDownloadKicksPerc-SP'))
-        lbl = SiriusLabel(
-            wid, self.devpref.substitute(propty='FOFBDownloadKicksPerc-RB'))
-        lbl.showUnits = False
-        gdl2 = QGridLayout()
-        gdl2.addWidget(spb, 0, 0)
-        gdl2.addWidget(lbl, 1, 0)
-        gdl.addLayout(gdl2, 1, 4)
+        btmore = QPushButton(qta.icon('fa5s.angle-down'), '', self)
+        btmore.setToolTip('Show advanced SOFB <-> FOFB interaction options')
+        btmore.setStyleSheet(
+            'QPushButton{max-height:0.8em; max-width:1.6em;}')
+        btmore.clicked.connect(self._handle_fofb_options_vis)
+        btmore.visItems = vislist
+        btmore.setFlat(True)
+        gdl.addWidget(btmore, 5, 0, alignment=Qt.AlignLeft)
 
-        spb = SiriusSpinbox(
-            wid, self.devpref.substitute(propty='FOFBUpdateRefOrbPerc-SP'))
-        lbl = SiriusLabel(
-            wid, self.devpref.substitute(propty='FOFBUpdateRefOrbPerc-RB'))
-        lbl.showUnits = False
-        gdl2 = QGridLayout()
-        gdl2.addWidget(spb, 0, 0)
-        gdl2.addWidget(lbl, 1, 0)
-        gdl.addLayout(gdl2, 2, 4)
-
-        gdl.setRowStretch(5, 3)
         return wid
 
     def get_manual_correction_widget(self, parent):
@@ -511,6 +532,21 @@ class SOFBControl(BaseWidget):
             pbc.toggled.connect(pair.sp_wid.setHidden)
         gpbx_lay.setRowStretch(4, 2)
         return auto_wid
+
+    def _handle_fofb_options_vis(self):
+        btn = self.sender()
+        tooltip = btn.toolTip()
+        vis = 'Hide' in tooltip
+        if vis:
+            tooltip = tooltip.replace('Hide', 'Show')
+        else:
+            tooltip = tooltip.replace('Show', 'Hide')
+        iconname = 'fa5s.angle-down' if vis else 'fa5s.angle-up'
+        btn.setIcon(qta.icon(iconname))
+        btn.setToolTip(tooltip)
+        for item in btn.visItems:
+            item.setVisible(not vis)
+        self.adjustSize()
 
 
 class RefControl(BaseCombo):

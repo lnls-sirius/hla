@@ -78,18 +78,18 @@ class KicksConfigWidget(BaseWidget):
         gdl.addWidget(syn_wid, 0, 0)
 
         pssofb_grp = QGroupBox('PSSOFB', det_wid)
-        enbl_lbl = QLabel('Enable:', pssofb_grp)
-        enbl_wid = self.create_pair_butled(pssofb_grp, 'CorrPSSOFBEnbl')
-        enbl_wid.layout().setContentsMargins(0, 0, 0, 0)
         wait_lbl = QLabel('Wait:', pssofb_grp)
         wait_wid = self.create_pair_butled(pssofb_grp, 'CorrPSSOFBWait')
         wait_wid.layout().setContentsMargins(0, 0, 0, 0)
+        enbl_lbl = QLabel('Enable:', pssofb_grp)
+        enbl_wid = self.create_pair_butled(pssofb_grp, 'CorrPSSOFBEnbl')
+        enbl_wid.layout().setContentsMargins(0, 0, 0, 0)
         gdl = QGridLayout(pssofb_grp)
         gdl.setSpacing(1)
-        gdl.addWidget(enbl_lbl, 0, 0)
-        gdl.addWidget(wait_lbl, 1, 0)
-        gdl.addWidget(enbl_wid, 0, 1)
-        gdl.addWidget(wait_wid, 1, 1)
+        gdl.addWidget(wait_lbl, 0, 0)
+        gdl.addWidget(wait_wid, 0, 1)
+        gdl.addWidget(enbl_lbl, 1, 0)
+        gdl.addWidget(enbl_wid, 1, 1)
 
         del_grp = QGroupBox('Trigger Delay', det_wid)
         del_wid = self.create_pair(
@@ -111,9 +111,9 @@ class KicksConfigWidget(BaseWidget):
         del_lay.addWidget(del_det)
         del_lay.addStretch()
 
-        det_lay.addWidget(pssofb_grp, 0, 0)
-        det_lay.addWidget(syn_grp, 0, 2)
-        det_lay.addWidget(del_grp, 2, 0, 1, 3)
+        det_lay.addWidget(syn_grp, 0, 0)
+        det_lay.addWidget(pssofb_grp, 0, 2)
+        det_lay.addWidget(del_grp, 1, 0, 1, 3)
         det_lay.setColumnStretch(1, 10)
         det_lay.setRowStretch(1, 10)
         return det_wid
@@ -123,6 +123,12 @@ class KicksConfigWidget(BaseWidget):
         conf = PyDMPushButton(
             parent, pressValue=1,
             init_channel=self.devpref.substitute(propty='CorrConfig-Cmd'))
+        rules = (
+            '[{"name": "EnblRule", "property": "Enable", ' +
+            '"expression": "not ch[0]", "channels": [{"channel": "' +
+            self.devpref.substitute(propty='LoopState-Sts') +
+            '", "trigger": true}]}]')
+        conf.rules = rules
         conf.setToolTip('Refresh Configurations')
         conf.setIcon(qta.icon('fa5s.sync'))
         conf.setObjectName('conf')
