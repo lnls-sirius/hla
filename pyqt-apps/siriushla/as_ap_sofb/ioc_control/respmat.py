@@ -97,8 +97,10 @@ class RespMatWidget(BaseWidget):
         sel_lay = QHBoxLayout(sel_wid)
 
         icon = qta.icon('fa5s.hammer', color=get_appropriate_color(self.acc))
-        Window = create_window_from_widget(
-            SelectionMatrix, title='Corrs and BPMs selection', icon=icon)
+        window = create_window_from_widget(
+            SelectionMatrix,
+            title=self.acc + ' - SOFB - Corrs and BPMs selection',
+            icon=icon)
         btn = CAPushButton('', sel_wid)
         btn.rules = self._enblrule
         btn.setObjectName('btn')
@@ -108,7 +110,7 @@ class RespMatWidget(BaseWidget):
             '#btn{min-width:3.8em; max-width:3.8em;\
             min-height:2em; max-height:2em; icon-size:25px;}')
         connect_window(
-            btn, Window, None, device=self.device,
+            btn, window, None, device=self.device,
             prefix=self.prefix, acc=self.acc)
         sel_lay.addWidget(btn)
 

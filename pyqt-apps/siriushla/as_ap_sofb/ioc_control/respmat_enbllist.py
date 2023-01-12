@@ -188,6 +188,7 @@ class SelectionMatrix(BaseWidget):
     def __init__(self, parent, device, prefix='', acc='SI'):
         super().__init__(parent, device, prefix=prefix, acc=acc)
         tab = QTabWidget(self)
+        tab.setObjectName(self.acc.upper() + 'Tab')
         hbl = QHBoxLayout(self)
         hbl.addWidget(tab)
         hbl.setContentsMargins(0, 0, 0, 0)
