@@ -113,6 +113,8 @@ class OrbitRegister(QWidget):
 
     DEFAULT_DIR = '/home/sirius/mounts/screens-iocs'
 
+    MAX_BUMP_CURR = 10  # [mA]
+
     new_orbx_signal = Signal(_np.ndarray)
     new_orby_signal = Signal(_np.ndarray)
     new_string_signal = Signal(str)
@@ -134,6 +136,10 @@ class OrbitRegister(QWidget):
         self._csorb = SOFBFactory.create(acc.upper())
         self.string_status = 'Empty'
         self.name = 'Register {0:d}'.format(self.idx)
+        self._chn_curr = _ConnSig(
+            _PVName('SI-Glob:AP-CurrInfo:Current-Mon').substitute(
+                prefix=prefix))
+
         self.setup_ui()
 
         self._orbits = orbits
@@ -381,6 +387,19 @@ class OrbitRegister(QWidget):
         self._update_and_emit(txt, orbx, orby)
 
     def _create_bump(self):
+        curr = self._chn_curr.value
+        if curr is None:
+            QMessageBox.warning(
+                self, 'Warning', 'Could not read current value.',
+                QMessageBox.Ok)
+        elif curr > OrbitRegister.MAX_BUMP_CURR:
+            ans = QMessageBox.question(
+                self, 'Are you Sure?',
+                f'Stored current is above {OrbitRegister.MAX_BUMP_CURR}mA ' +
+                f'({curr:.2f}mA),\nare you sure you want to continue?',
+                QMessageBox.Yes, QMessageBox.Cancel)
+            if ans != QMessageBox.Yes:
+                return
 
         def _add_entry(index):
             cbox = self.sender()
@@ -418,6 +437,8 @@ class OrbitRegister(QWidget):
         for aaa, bbb in zip(ssnames, bcnames):
             names.extend([aaa, bbb])
         sscombo.addItems(names)
+        sscombo.setMaxVisibleItems(10)
+        sscombo.setStyleSheet('QComboBox{combobox-popup: 0;}')
         lay.addWidget(sscombo, row, 1)
 
         row += 1

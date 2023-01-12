@@ -4,8 +4,8 @@ import time as _time
 from functools import partial as _part
 import numpy as _np
 
-from qtpy.QtCore import Qt, Slot
-from qtpy.QtGui import QColor, QPalette
+from qtpy.QtCore import Qt, Slot, QTimer
+from qtpy.QtGui import QColor, QPalette, QIcon
 from qtpy.QtWidgets import QComboBox, QSizePolicy as QSzPlcy, \
     QLabel, QGridLayout, QWidget, QHBoxLayout, QPushButton, \
     QVBoxLayout, QTabWidget, QCheckBox, QScrollArea
@@ -79,19 +79,30 @@ class RefOrbWidget(BaseObject, QWidget):
         self._setupUi()
 
     def _setupUi(self):
-        lbl_read = QLabel(
-            'Get from: ', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
-        self.read = QComboBox()
-        self.read.setSizePolicy(QSzPlcy.Expanding, QSzPlcy.Preferred)
-        self.read.setMaxVisibleItems(10)
+        lbl_combo = QLabel(
+            'Value: ', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+        self.combo = QComboBox()
+        self.combo.setSizePolicy(QSzPlcy.Expanding, QSzPlcy.Preferred)
+        self.combo.setMaxVisibleItems(10)
         self._choose_reforb = [
             'Zero', 'SOFB SlowOrb', 'SOFB RefOrb',
             'ref_orb', 'bba_orb', 'other...',
             'Out of Date']
         for item in self._choose_reforb:
-            self.read.addItem(item)
-        self.read.setCurrentText('Out of Date')
-        self.read.activated.connect(self._add_reforb_entry)
+            self.combo.addItem(item)
+        self.combo.setCurrentText('Out of Date')
+        self.combo.activated.connect(self._add_reforb_entry)
+
+        self.status = QPushButton(QIcon(), '', self)
+        self.status.setFlat(True)
+        self.status.setStyleSheet(
+            'QPushButton{min-width: 25px; max-width: 25px; icon-size: 20px;}')
+        self.statusopacity = 0
+        self.statusvalue = True
+        self.statustimer = QTimer()
+        self.statustimer.setInterval(100)
+        self.statustimer.timeout.connect(self._update_response_icon)
+        self.statustimer.start()
 
         self.graph = RefOrbViewWidget(self, self.device, self.prefix)
         self.viewgraph = QPushButton(self)
@@ -100,19 +111,16 @@ class RefOrbWidget(BaseObject, QWidget):
         self.viewgraph.setStyleSheet('#btn{max-width:25px; icon-size:25px;}')
         self.viewgraph.clicked.connect(self.graph.show)
 
-        self.write = QPushButton('Send', self)
-        self.write.clicked.connect(self._send_new_value)
-
         lay = QGridLayout(self)
         lay.setContentsMargins(0, 0, 0, 0)
-        lay.addWidget(lbl_read, 0, 0)
-        lay.addWidget(self.read, 0, 1)
-        lay.addWidget(self.viewgraph, 0, 2)
-        lay.addWidget(self.write, 1, 1)
+        lay.addWidget(lbl_combo, 0, 0)
+        lay.addWidget(self.combo, 0, 1)
+        lay.addWidget(self.status, 0, 2)
+        lay.addWidget(self.viewgraph, 0, 3)
 
     @Slot(int)
     def _add_reforb_entry(self, index):
-        text = self.read.itemText(index)
+        text = self.combo.itemText(index)
         if text == 'Out of Date':
             return
         if not text.startswith('other'):
@@ -121,13 +129,14 @@ class RefOrbWidget(BaseObject, QWidget):
         win = LoadConfigDialog(self._config_type, self)
         confname, status = win.exec_()
         if not status:
-            self.read.setCurrentText('Out of Date')
+            self.combo.setCurrentText('Out of Date')
             return
-        self.read.insertItem(index, confname)
-        self.read.setCurrentIndex(index)
+        self.combo.insertItem(index, confname)
+        self.combo.setCurrentIndex(index)
         self._update_new_value(confname)
 
     def _update_new_value(self, text):
+        # read
         if text == 'Zero':
             refx, refy = self._refzero['x'], self._refzero['y']
         elif text == 'SOFB SlowOrb':
@@ -139,30 +148,53 @@ class RefOrbWidget(BaseObject, QWidget):
         else:
             data = self._client.get_config_value(text)
             refx, refy = data['x'], data['y']
+
+        # check
         if refx is None or refy is None or \
                 _np.asarray(refx).size != self._csorb.nr_bpms or \
                 _np.asarray(refy).size != self._csorb.nr_bpms:
-            self.read.setCurrentText('Out of Date')
+            self.combo.setCurrentText('Out of Date')
+            self._show_response_icon(ok=False)
             return
 
         self._refx = _np.asarray(refx)
         self._refy = _np.asarray(refy)
+
+        # update graph
         self.graph.update_new_value_curves(self._refx, self._refy)
 
-    def _send_new_value(self):
+        # send
         self._ch_refx.send_value_signal[_np.ndarray].emit(self._refx)
         self._ch_refy.send_value_signal[_np.ndarray].emit(self._refy)
         _time.sleep(0.05)
         self._ch_syncref.send_value_signal[int].emit(1)
 
+        self._show_response_icon(ok=True)
+
     def _watch_if_changed(self, plane, orb, value):
         myvalue = getattr(self, '_ref' + plane)
-        if orb != self.read.currentText():
+        if orb != self.combo.currentText():
             return
         if myvalue is not None and myvalue.size == value.size and \
                 _np.allclose(value, myvalue, rtol=1e-7):
             return
-        self.read.setCurrentIndex(self.read.count()-1)
+        self.combo.setCurrentIndex(self.combo.count()-1)
+
+    def _show_response_icon(self, ok=True):
+        self.statusvalue = ok
+        self.statusopacity = 1
+
+    def _update_response_icon(self):
+        if self.statusopacity <= 0:
+            return
+        name = 'fa5s.check' if self.statusvalue else 'fa5s.times'
+        color = 'blue' if self.statusvalue else 'red'
+        icon = qta.icon(
+            name, options=[{
+                'color': color, 'opacity': self.statusopacity}])
+        self.status.setIcon(icon)
+        if self.statusopacity > 0:
+            self.statusopacity -= 0.2
 
 
 class StatusDialog(SiriusDialog):
