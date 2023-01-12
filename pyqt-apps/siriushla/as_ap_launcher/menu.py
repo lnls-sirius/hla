@@ -158,6 +158,10 @@ def get_object(ismenubar=True, parent=None):
             util.connect_newprocess(
                 lidiict, ['gvncviewer', Scopes.LI_DI_ICTOSC],
                 is_window=False)
+            lipumodltr = QAction('LI-PU-MODLTR', osci)
+            util.connect_newprocess(
+                lipumodltr, ['gvncviewer', Scopes.LI_PU_OSC_MODLTR],
+                is_window=False)
             tbpuinjbo = QAction('TB-PU-InjBO', osci)
             util.connect_newprocess(
                 tbpuinjbo, ['gvncviewer', Scopes.TB_PU_OSC_INJBO],
@@ -178,6 +182,7 @@ def get_object(ismenubar=True, parent=None):
             osci.addAction(asdifctdig)
             osci.addAction(asdifpmdig)
             osci.addAction(lidiict)
+            osci.addAction(lipumodltr)
             osci.addAction(tbpuinjbo)
             osci.addAction(tspuejebo)
             osci.addAction(tspuinjsi)
