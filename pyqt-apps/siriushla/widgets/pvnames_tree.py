@@ -185,7 +185,7 @@ class PVNameTree(QWidget):
         self._msg = QLabel(self)
 
         # Add Selection Tree
-        self._check_count = QLabel(self)
+        self._check_count = QLabel(self, alignment=Qt.AlignRight)
         self.tree = Tree(self)
         self.tree.setColumnCount(3)
         self.tree.setHeaderHidden(False)
