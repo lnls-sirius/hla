@@ -93,7 +93,7 @@ class DiffCtrlDetails(SiriusDialog):
             max-width:7.10em; max-height:1.29em;""")
 
         label_ConvOk = QLabel('Convertion from virtual to measured'
-                              '\ncoordanates was succesfully done? ', self)
+                              '\ncoordinates was succesfully done? ', self)
         self.PyDMLed_ConvOk = PyDMLed(
             parent=self, init_channel=self.dev_prefix.substitute(
                 propty='CoordConvErr-Mon'),
