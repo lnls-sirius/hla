@@ -1,11 +1,15 @@
+"""DiffCtrl Details."""
+
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGridLayout, QFormLayout, QLabel, QGroupBox
 from pydm.widgets import PyDMPushButton
 from siriuspy.namesys import SiriusPVName as _PVName
-from siriushla.widgets import SiriusDialog, PyDMLed, SiriusLabel, SiriusSpinbox
+from siriushla.widgets import SiriusDialog, PyDMLed, SiriusLabel, \
+    SiriusSpinbox, PyDMStateButton, SiriusLedState
 
 
 class DiffCtrlDetails(SiriusDialog):
+    """DiffCtrl Details."""
 
     def __init__(self, parent=None, prefix='', device=''):
         """Init."""
@@ -15,8 +19,13 @@ class DiffCtrlDetails(SiriusDialog):
         self._setupUi()
 
     def _setupUi(self):
-        label = QLabel('<h3>'+self.dev_prefix+' Control Details</h3>', self,
-                       alignment=Qt.AlignCenter)
+        lay = QGridLayout()
+        lay.setVerticalSpacing(15)
+
+        label = QLabel(
+            '<h3>'+self.dev_prefix+' Control Details</h3>', self,
+            alignment=Qt.AlignCenter)
+        lay.addWidget(label, 0, 0)
 
         gbox_general = QGroupBox('Low Level Devices Prefixes', self)
         gbox_general.setLayout(self._setupGeneralInfoLayout())
@@ -30,18 +39,20 @@ class DiffCtrlDetails(SiriusDialog):
         gbox_limits = QGroupBox('Limits', self)
         gbox_limits.setLayout(self._setupLimitsLayout())
 
-        self.setStyleSheet("""
-            SiriusSpinbox, SiriusLabel{
-                min-width: 5em; max-width: 5em;
-            }""")
-
-        lay = QGridLayout()
-        lay.setVerticalSpacing(15)
-        lay.addWidget(label, 0, 0)
         lay.addWidget(gbox_general, 1, 0)
         lay.addWidget(gbox_status, 2, 0)
         lay.addWidget(gbox_force, 3, 0)
         lay.addWidget(gbox_limits, 4, 0)
+
+        if 'Scrap' in self.dev_prefix:
+            gbox_backlash = QGroupBox('Backlash Compensation', self)
+            gbox_backlash.setLayout(self._setupBacklashCompLayout())
+            lay.addWidget(gbox_backlash, 5, 0)
+
+        self.setStyleSheet("""
+            SiriusSpinbox, SiriusLabel{
+                min-width: 5em; max-width: 5em;
+            }""")
         self.setLayout(lay)
 
     def _setupGeneralInfoLayout(self):
@@ -162,4 +173,37 @@ class DiffCtrlDetails(SiriusDialog):
         lay.addWidget(QLabel('High Outer Limit:', self), 3, 0)
         lay.addWidget(self.sb_HighOuterLim, 3, 1)
         lay.addWidget(self.lb_HighOuterLim, 3, 2)
+        return lay
+
+    def _setupBacklashCompLayout(self):
+        self.sb_EnblBacklashComp = PyDMStateButton(
+            self, self.dev_prefix.substitute(
+                propty='EnblBacklashComp-Sel'))
+        self.led_EnblBacklashComp = SiriusLedState(
+            self, self.dev_prefix.substitute(
+                propty='EnblBacklashComp-Sts'))
+        self.sb_PosEdgeBacklashDist = SiriusSpinbox(
+            self, self.dev_prefix.substitute(
+                propty='PositiveEdgeBacklashDist-SP'))
+        self.lb_PosEdgeBacklashDist = SiriusLabel(
+            self, self.dev_prefix.substitute(
+                propty='PositiveEdgeBacklashDist-RB'))
+        self.sb_NegEdgeBacklashDist = SiriusSpinbox(
+            self, self.dev_prefix.substitute(
+                propty='NegativeEdgeBacklashDist-SP'))
+        self.lb_NegEdgeBacklashDist = SiriusLabel(
+            self, self.dev_prefix.substitute(
+                propty='NegativeEdgeBacklashDist-RB'))
+
+        lay = QGridLayout()
+        lay.setVerticalSpacing(15)
+        lay.addWidget(QLabel('Enable Backlash Compensation:', self), 0, 0)
+        lay.addWidget(self.sb_EnblBacklashComp, 0, 1)
+        lay.addWidget(self.led_EnblBacklashComp, 0, 2)
+        lay.addWidget(QLabel('Positive Edge Backlash Distance:', self), 1, 0)
+        lay.addWidget(self.sb_PosEdgeBacklashDist, 1, 1)
+        lay.addWidget(self.lb_PosEdgeBacklashDist, 1, 2)
+        lay.addWidget(QLabel('Negative Edge Backlash Distance:', self), 2, 0)
+        lay.addWidget(self.sb_NegEdgeBacklashDist, 2, 1)
+        lay.addWidget(self.lb_NegEdgeBacklashDist, 2, 2)
         return lay
