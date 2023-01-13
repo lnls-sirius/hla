@@ -9,12 +9,10 @@ from siriushla.as_ps_commands.main import PSCmdWindow
 
 
 parser = _argparse.ArgumentParser(
-    description="Run Power Supply Test Interface.")
-parser.add_argument('-isadv', action='store_true')
+    description="Run Power Supply Commands Interface.")
 args = parser.parse_args()
-isadv = args.isadv
 
 
 app = SiriusApplication()
-app.open_window(PSCmdWindow, adv_mode=isadv)
+app.open_window(PSCmdWindow)
 sys.exit(app.exec_())

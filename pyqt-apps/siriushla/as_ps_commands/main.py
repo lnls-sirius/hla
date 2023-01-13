@@ -38,7 +38,7 @@ from .tasks import CreateTesters, \
 class PSCmdWindow(SiriusMainWindow):
     """PS commands window."""
 
-    def __init__(self, parent=None, adv_mode=False):
+    def __init__(self, parent=None):
         """Constructor."""
         super().__init__(parent)
         self.setWindowTitle('Power Supply Commands')
@@ -47,7 +47,6 @@ class PSCmdWindow(SiriusMainWindow):
         self.setWindowIcon(qta.icon('mdi.format-list-numbered', color=cor))
 
         # auxiliar data for initializing SI Fam PS
-        self._is_adv_mode = adv_mode
         self._si_fam_psnames = PSSearch.get_psnames(
             filters={'sec': 'SI', 'sub': 'Fam', 'dis': 'PS'})
 
@@ -1217,7 +1216,7 @@ class PSCmdWindow(SiriusMainWindow):
         state2set = item.checkState(0)
 
         # ensure power supplies that share dclinks are checked together
-        if devname in self._si_fam_psnames and not self._is_adv_mode:
+        if devname in self._si_fam_psnames:
             dclinks = PSSearch.conv_psname_2_dclink(devname)
             if dclinks:
                 psname2check = set()
