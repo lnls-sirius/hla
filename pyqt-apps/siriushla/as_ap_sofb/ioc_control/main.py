@@ -307,17 +307,15 @@ class SOFBControl(BaseWidget):
             gdl.setRowStretch(2, 2)
             return man_wid
 
-        exp = 'ch[0] in (1, 2, 3)'
-        ch = ''
+        rules = ''
         if self.isring:
-            exp = 'ch[1] in (1, 2, 3) and not ch[0]'
+            exp = 'not ch[0]'
             ch = '{"channel": "' + self.devpref.substitute(
                  propty='LoopState-Sts') + '", "trigger": true},'
-        rules = (
-            '[{"name": "EnblRule", "property": "Enable", ' +
-            '"expression": "'+exp+'", "channels": ['+ch +
-            '{"channel": "'+self.devpref.substitute(propty='SOFBMode-Sts') +
-            '", "trigger": true}]}]')
+            rules = (
+                '[{"name": "EnblRule", "property": "Enable", ' +
+                '"expression": "'+exp+'", "channels": ['+ch +
+                '", "trigger": true}]}]')
 
         lst = [
             ('All', self._csorb.ApplyDelta.All),
