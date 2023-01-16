@@ -41,8 +41,9 @@ class AcqControlWidget(BaseWidget):
                 border-bottom: 2px solid gray;
                 border-right: 2px solid gray;
             }}""".format(self.acc))
-        grp_bx = self._get_single_pass_acq_grpbx()
-        tabw.addTab(grp_bx, 'SinglePass')
+        if self.acc != 'BO':
+            grp_bx = self._get_single_pass_acq_grpbx()
+            tabw.addTab(grp_bx, 'SinglePass')
         if self.isring:
             grp_bx = self._get_multturn_acq_grpbx()
             tabw.addTab(grp_bx, 'MultiTurn')
