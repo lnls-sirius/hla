@@ -116,7 +116,7 @@ class BaseWidget(BaseObject, QWidget):
         lay.addWidget(spnt)
         lay.addWidget(rdb)
         wid.sp_wid = spnt
-        wid.rb_wid = spnt
+        wid.rb_wid = rdb
         return wid
 
 
