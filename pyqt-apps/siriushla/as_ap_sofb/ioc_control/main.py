@@ -179,7 +179,7 @@ class SOFBControl(BaseWidget):
         lay = QVBoxLayout(corr_wid)
         lay.setContentsMargins(0, 0, 0, 0)
 
-        if self.acc != 'BO':
+        if self.acc == 'SI':
             lbl = QLabel('Auto Correction State:', corr_wid)
             wid = self.create_pair_butled(corr_wid, 'LoopState')
             hbl = QHBoxLayout()
