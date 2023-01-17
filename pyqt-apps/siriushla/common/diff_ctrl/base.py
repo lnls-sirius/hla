@@ -5,7 +5,7 @@ import os as _os
 from qtpy.uic import loadUi
 from qtpy.QtCore import Qt, QEvent
 from qtpy.QtWidgets import QWidget, QVBoxLayout, QGroupBox, QPushButton, \
-    QLabel, QGridLayout, QScrollArea
+    QLabel, QGridLayout, QScrollArea, QSizePolicy
 import qtawesome as qta
 from pydm.utilities.macro import substitute_in_file as _substitute_in_file
 from pydm.widgets import PyDMPushButton
@@ -84,6 +84,8 @@ class DiffCtrlDevMonitor(QWidget):
             '#scrarea{background-color: transparent; max-width: 15em;}'
             '#dev{background-color:transparent;}')
         self.dev_widget_scrarea.setWidget(self.dev_widget)
+        self.dev_widget_scrarea.setSizePolicy(
+            QSizePolicy.Preferred, QSizePolicy.MinimumExpanding)
 
         lay = QGridLayout(self)
         lay.setAlignment(Qt.AlignTop)
@@ -133,6 +135,12 @@ class DiffCtrlView(QWidget):
         super(DiffCtrlView, self).__init__(parent)
         self.setObjectName(self.sec+'App')
 
+        devname = 'Slits' if 'Slit' in self.DEVICE_PREFIX else 'Scrapers'
+        title = QLabel(
+            '<h3>' + self.sec + ' ' + devname + ' View</h3>',
+            alignment=Qt.AlignCenter)
+        title.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Maximum)
+
         gbox_h = QGroupBox(self.DEVICE_PREFIX + 'H')
         self.dev_h = self.DEVICE_CLASS(self, prefix, self.DEVICE_PREFIX+'H')
         lay_h = QVBoxLayout()
@@ -147,10 +155,7 @@ class DiffCtrlView(QWidget):
 
         lay = QVBoxLayout()
         lay.setSpacing(20)
-        lay.addWidget(QLabel(
-            '<h3>' + self.sec + ' ' +
-            ('Slits' if 'Slit' in self.DEVICE_PREFIX else 'Scrapers') +
-            ' View</h3>', alignment=Qt.AlignCenter))
+        lay.addWidget(title)
         lay.addWidget(gbox_h)
         lay.addWidget(gbox_v)
         self.setLayout(lay)

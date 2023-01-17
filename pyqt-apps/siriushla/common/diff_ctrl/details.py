@@ -33,8 +33,8 @@ class DiffCtrlDetails(SiriusDialog):
         gbox_status = QGroupBox('Status', self)
         gbox_status.setLayout(self._setupDetailedStatusLayout())
 
-        gbox_force = QGroupBox('Commands to Force Positions', self)
-        gbox_force.setLayout(self._setupForceCommandsLayout())
+        gbox_force = QGroupBox('Positions', self)
+        gbox_force.setLayout(self._setupPositionsLayout())
 
         gbox_limits = QGroupBox('Limits', self)
         gbox_limits.setLayout(self._setupLimitsLayout())
@@ -109,10 +109,10 @@ class DiffCtrlDetails(SiriusDialog):
         flay.setFormAlignment(Qt.AlignCenter)
         return flay
 
-    def _setupForceCommandsLayout(self):
+    def _setupPositionsLayout(self):
         self.PyDMPushButton_DoHome = PyDMPushButton(
             parent=self, label='Do Homing', pressValue=1,
-            init_channel=self.dev_prefix+':Home-Cmd')
+            init_channel=self.dev_prefix.substitute(propty='Home-Cmd'))
 
         self.PyDMPushButton_NegDoneMov = PyDMPushButton(
             parent=self, label='Force Negative Edge Position', pressValue=1,

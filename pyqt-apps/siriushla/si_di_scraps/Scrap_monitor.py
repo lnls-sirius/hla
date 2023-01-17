@@ -34,16 +34,16 @@ class ScraperMonitoring(DiffCtrlDevMonitor):
         self.lb_descCtrl1.setStyleSheet(
             'min-width: 10.5em; max-width: 10.5em;')
         self.sb_Ctrl1.channel = \
-            self.device+':PositiveEdgePos-SP'
+            self.device.substitute(propty='PositiveEdgePos-SP')
         self.lb_Ctrl1.channel = \
-            self.device+':PositiveEdgePos-RB'
+            self.device.substitute(propty='PositiveEdgePos-RB')
         self.lb_descCtrl2.setText('Negative Edge Pos.[mm]:')
         self.lb_descCtrl2.setStyleSheet(
             'min-width: 10.5em; max-width: 10.5em;')
         self.sb_Ctrl2.channel = \
-            self.device+':NegativeEdgePos-SP'
+            self.device.substitute(propty='NegativeEdgePos-SP')
         self.lb_Ctrl2.channel = \
-            self.device+':NegativeEdgePos-RB'
+            self.device.substitute(propty='NegativeEdgePos-RB')
 
     def updateDevWidget(self):
         """Update Scraper illustration."""
