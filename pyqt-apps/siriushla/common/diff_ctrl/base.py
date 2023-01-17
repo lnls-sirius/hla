@@ -8,7 +8,6 @@ from qtpy.QtWidgets import QWidget, QVBoxLayout, QGroupBox, QPushButton, \
     QLabel, QGridLayout, QScrollArea, QSizePolicy
 import qtawesome as qta
 from pydm.utilities.macro import substitute_in_file as _substitute_in_file
-from pydm.widgets import PyDMPushButton
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriushla.widgets import PyDMLedMultiChannel, SiriusLabel, SiriusSpinbox
@@ -69,10 +68,6 @@ class DiffCtrlDevMonitor(QWidget):
         self.sb_Ctrl2 = SiriusSpinbox(self)
         self.lb_Ctrl2 = SiriusLabel(self)
 
-        self.pb_open = PyDMPushButton(
-            parent=self, label='Open', pressValue=1,
-            init_channel=self.device.substitute(propty='Home-Cmd'))
-
         tmp_file = _substitute_in_file(
             _os.path.abspath(_os.path.dirname(__file__))+'/ui_as_ap_dev' +
             self.orientation.lower()+'mon.ui', {'PREFIX': self.prefix})
@@ -98,7 +93,6 @@ class DiffCtrlDevMonitor(QWidget):
         lay.addWidget(self.lb_descCtrl2, 2, 0)
         lay.addWidget(self.sb_Ctrl2, 2, 1)
         lay.addWidget(self.lb_Ctrl2, 2, 2)
-        lay.addWidget(self.pb_open, 3, 1, 1, 2)
         lay.addWidget(self.dev_widget_scrarea, 0, 3, 4, 1)
 
     def _createConnectors(self):
