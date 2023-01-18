@@ -10,6 +10,7 @@ from qtpy.QtGui import QBrush, QColor, QPainter
 from siriushla.widgets.led import SiriusLedAlert
 
 from .QLed import QLed
+from .pushbutton import CAPushButton
 
 
 class SelectionMatrixWidget(QWidget):
@@ -39,6 +40,9 @@ class SelectionMatrixWidget(QWidget):
     use_scroll: bool, optional
         Whether to use or not QScrollArea.
         Default: True.
+    rules:
+        PyDM rules to be applied in write buttons.
+        Default: None.
 
     Signals
     -------
@@ -55,7 +59,7 @@ class SelectionMatrixWidget(QWidget):
             self, parent=None, title='', has_bothplanes=False,
             toggle_all_false_text='Disable All', show_toggle_all_false=True,
             toggle_all_true_text='Enable All', show_toggle_all_true=True,
-            use_scroll=True):
+            use_scroll=True, rules=None):
         """Init."""
         super().__init__(parent)
 
@@ -66,6 +70,7 @@ class SelectionMatrixWidget(QWidget):
         self.toggle_all_true_text = toggle_all_true_text
         self.show_toggle_all_true = show_toggle_all_true
         self.use_scroll = use_scroll
+        self.enbl_rules = rules
 
         self.begin = QPoint()
         self.end = QPoint()
@@ -147,13 +152,15 @@ class SelectionMatrixWidget(QWidget):
         if self.show_toggle_all_true:
             hlay.addStretch()
 
-        self.btn_send = QPushButton('Apply Changes')
+        self.btn_send = CAPushButton('Apply Changes')
+        self.btn_send.rules = self.enbl_rules
         self.btn_send.clicked.connect(self.applyChangesClicked.emit)
         hlay.addWidget(self.btn_send)
         hlay.addStretch()
 
         if self.has_bothplanes:
-            self.btn_send_otpl = QPushButton('Apply Both Planes')
+            self.btn_send_otpl = CAPushButton('Apply Both Planes')
+            self.btn_send_otpl.rules = self.enbl_rules
             self.btn_send_otpl.clicked.connect(
                 self.applyBothPlanesClicked.emit)
             hlay.addWidget(self.btn_send_otpl)
