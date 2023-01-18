@@ -14,13 +14,13 @@ from siriuspy.sofb.csdev import ConstTLines
 from siriuspy.clientconfigdb import ConfigDBClient, ConfigDBException
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla.widgets import SiriusLedState, SiriusEnumComboBox, \
-    SiriusConnectionSignal as _ConnSig, SiriusLabel
+    SiriusConnectionSignal as _ConnSig, SiriusLabel, CAPushButton
 from siriushla.util import connect_window, get_appropriate_color, \
     connect_newprocess
 from siriushla.as_ap_configdb import LoadConfigDialog, SaveConfigDialog
 
 from .respmat_enbllist import SelectionMatrix
-from .base import BaseWidget, CAPushButton
+from .base import BaseWidget
 from ..graphics import SingularValues
 
 

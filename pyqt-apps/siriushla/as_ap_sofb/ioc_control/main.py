@@ -19,7 +19,7 @@ from .status import StatusWidget
 from .kicks_config import KicksConfigWidget
 from .orbit_acquisition import AcqControlWidget
 from .respmat import RespMatWidget
-from .base import BaseWidget, BaseCombo, CALabel
+from .base import BaseWidget, BaseCombo
 
 
 class SOFBControl(BaseWidget):

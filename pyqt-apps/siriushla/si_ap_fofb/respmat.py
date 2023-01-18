@@ -16,12 +16,11 @@ from ..util import connect_window, connect_newprocess
 from ..widgets.windows import create_window_from_widget
 from ..widgets import SiriusConnectionSignal as _ConnSignal, \
     SiriusLedState, SiriusEnumComboBox, SiriusLabel, \
-    SelectionMatrixWidget as SelectionWidget
+    SelectionMatrixWidget as SelectionWidget, CAPushButton
 
 from ..as_ap_sofb.ioc_control.respmat import RespMatWidget as _RespMatWidget
 from ..as_ap_sofb.ioc_control.respmat_enbllist import \
     SingleSelMatrix as _SingleSelMatrix
-from ..as_ap_sofb.ioc_control.base import CAPushButton
 
 from .base import BaseObject, BaseWidget, get_fofb_icon
 from .graphics import CorrGainWidget
