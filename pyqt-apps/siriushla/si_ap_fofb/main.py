@@ -1,5 +1,7 @@
 """High level FOFB main module."""
 
+import time as _time
+
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QPushButton, QWidget, QGridLayout, QMenu, \
     QLabel, QVBoxLayout, QGroupBox, QMenuBar, QAction, \
@@ -13,7 +15,8 @@ from siriuspy.fofb.csdev import ETypes as _FOFBEnums
 
 from ..util import connect_window
 from ..widgets import SiriusLedAlert, SiriusLabel, SiriusSpinbox, \
-    PyDMLogLabel, SiriusMainWindow, PyDMStateButton, SiriusLedState
+    PyDMLogLabel, SiriusMainWindow, PyDMStateButton, SiriusLedState, \
+    SiriusConnectionSignal as _ConnSignal, CAPushButton
 
 from .base import BaseObject, get_fofb_icon
 from .custom_widgets import RefOrbWidget, StatusDialog, BPMSwModeWidget, \
@@ -31,6 +34,11 @@ class MainWindow(BaseObject, SiriusMainWindow):
         self.setWindowTitle('SI - FOFB')
         self.setObjectName('SIApp')
         self.setWindowIcon(get_fofb_icon())
+        self._enblrule = (
+            '[{"name": "EnblRule", "property": "Enable", ' +
+            '"expression": "not ch[0]", "channels": [{"channel": "' +
+            self.devpref.substitute(propty='LoopState-Sts') +
+            '", "trigger": true}]}]')
         self._setupUi()
         self.setFocusPolicy(Qt.StrongFocus)
 
@@ -222,15 +230,19 @@ class MainWindow(BaseObject, SiriusMainWindow):
             self, self.devpref.substitute(
                 propty='LoopMaxOrbDistortionEnbl-Sts'))
 
-        btn_corrzero = PyDMPushButton(
-            self, label='Set Correctors current to zero', pressValue=1,
-            init_channel=self.devpref.substitute(propty='CorrSetCurrZero-Cmd'))
-        btn_corrzero.setDefault(False)
-        btn_corrzero.setAutoDefault(False)
+        self.ch_currzero = _ConnSignal(
+            self.devpref.substitute(propty='CorrSetCurrZero-Cmd'))
+        self.ch_clearacc = _ConnSignal(
+            self.devpref.substitute(propty='CorrSetAccClear-Cmd'))
+        btn_zero = CAPushButton('Reset Correctors current and Acc', self)
+        btn_zero.setDefault(False)
+        btn_zero.setAutoDefault(False)
+        btn_zero.rules = self._enblrule
+        btn_zero.clicked.connect(self._handle_reset_correctors)
 
         wid = QGroupBox('Aux. Commands')
         lay = QGridLayout(wid)
-        lay.addWidget(btn_corrzero, 0, 0, 1, 3)
+        lay.addWidget(btn_zero, 0, 0, 1, 3)
         lay.addWidget(ld_orbdist, 1, 0)
         lay.addWidget(sb_orbdist, 1, 1)
         lay.addWidget(lb_orbdist, 1, 2)
@@ -316,6 +328,7 @@ class MainWindow(BaseObject, SiriusMainWindow):
                     alignment=Qt.AlignRight | Qt.AlignVCenter)
                 pvn = pref.substitute(propty='CtrlrSyncUseEnblList-Sel')
                 sbt = PyDMStateButton(self, pvn)
+                sbt.rules = self._enblrule
                 led = SiriusLedState(self, pvn.substitute(propty_suffix='Sts'))
                 glay2.addWidget(lbl, 1, 0)
                 glay2.addWidget(sbt, 1, 1)
@@ -363,6 +376,7 @@ class MainWindow(BaseObject, SiriusMainWindow):
                     init_channel=self.devpref.substitute(propty=cmd))
                 btn.setDefault(False)
                 btn.setAutoDefault(False)
+                btn.rules = self._enblrule
                 glay.addWidget(btn)
             lay.addWidget(gbox)
         return wid
@@ -444,3 +458,8 @@ class MainWindow(BaseObject, SiriusMainWindow):
         dockwid.setAllowedAreas(Qt.AllDockWidgetAreas)
         dockwid.setWidget(wid)
         return dockwid
+
+    def _handle_reset_correctors(self):
+        self.ch_clearacc.send_value_signal[float].emit(1)
+        _time.sleep(0.5)
+        self.ch_currzero.send_value_signal[float].emit(1)

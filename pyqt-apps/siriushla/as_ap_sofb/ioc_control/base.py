@@ -4,7 +4,7 @@ from functools import partial as _part
 import numpy as _np
 from qtpy.QtCore import Qt, Signal
 from qtpy.QtWidgets import QWidget, QHBoxLayout, QSizePolicy, QComboBox, \
-    QLabel, QVBoxLayout, QPushButton
+    QVBoxLayout
 from pydm.widgets import PyDMEnumComboBox
 from pydm.widgets.base import PyDMPrimitiveWidget
 from siriuspy.namesys import SiriusPVName as _PVName
@@ -116,7 +116,7 @@ class BaseWidget(BaseObject, QWidget):
         lay.addWidget(spnt)
         lay.addWidget(rdb)
         wid.sp_wid = spnt
-        wid.rb_wid = spnt
+        wid.rb_wid = rdb
         return wid
 
 
@@ -243,11 +243,3 @@ class BaseCombo(QComboBox, PyDMPrimitiveWidget):
             return
         self.setCurrentIndex(self.count()-1)
         self.configname.emit('')
-
-
-class CALabel(QLabel, PyDMPrimitiveWidget):
-    """QLabel with rules."""
-
-
-class CAPushButton(QPushButton, PyDMPrimitiveWidget):
-    """QPushButton with rules."""

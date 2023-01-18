@@ -73,6 +73,9 @@ class KicksConfigWidget(BaseWidget):
         det_lay = QGridLayout(det_wid)
 
         syn_wid = self.create_pair_butled(det_wid, 'CorrSync', is_vert=False)
+        syn_wid.rb_wid.stateColors = [
+            syn_wid.rb_wid.DarkGreen, syn_wid.rb_wid.LightGreen,
+            syn_wid.rb_wid.LightGreen]
         syn_lab = SiriusLabel(det_wid, self.device+':CorrSync-Sts')
         syn_wid.layout().setContentsMargins(0, 1, 0, 1)
         det_lay.addWidget(QLabel('Synchronization', det_wid), 0, 0)

@@ -19,7 +19,7 @@ from .status import StatusWidget
 from .kicks_config import KicksConfigWidget
 from .orbit_acquisition import AcqControlWidget
 from .respmat import RespMatWidget
-from .base import BaseWidget, BaseCombo, CALabel
+from .base import BaseWidget, BaseCombo
 
 
 class SOFBControl(BaseWidget):
@@ -179,7 +179,7 @@ class SOFBControl(BaseWidget):
         lay = QVBoxLayout(corr_wid)
         lay.setContentsMargins(0, 0, 0, 0)
 
-        if self.acc != 'BO':
+        if self.acc == 'SI':
             lbl = QLabel('Auto Correction State:', corr_wid)
             wid = self.create_pair_butled(corr_wid, 'LoopState')
             hbl = QHBoxLayout()
@@ -307,17 +307,15 @@ class SOFBControl(BaseWidget):
             gdl.setRowStretch(2, 2)
             return man_wid
 
-        exp = 'ch[0] in (1, 2, 3)'
-        ch = ''
+        rules = ''
         if self.isring:
-            exp = 'ch[1] in (1, 2, 3) and not ch[0]'
+            exp = 'not ch[0]'
             ch = '{"channel": "' + self.devpref.substitute(
                  propty='LoopState-Sts') + '", "trigger": true},'
-        rules = (
-            '[{"name": "EnblRule", "property": "Enable", ' +
-            '"expression": "'+exp+'", "channels": ['+ch +
-            '{"channel": "'+self.devpref.substitute(propty='SOFBMode-Sts') +
-            '", "trigger": true}]}]')
+            rules = (
+                '[{"name": "EnblRule", "property": "Enable", ' +
+                '"expression": "'+exp+'", "channels": ['+ch +
+                '", "trigger": true}]}]')
 
         lst = [
             ('All', self._csorb.ApplyDelta.All),

@@ -1,7 +1,9 @@
 """Sirius pushbutton."""
 
 from qtpy.QtCore import Slot, Property
+from qtpy.QtWidgets import QPushButton
 
+from pydm.widgets.base import PyDMPrimitiveWidget
 from pydm.widgets import PyDMPushButton
 
 
@@ -116,3 +118,7 @@ class SiriusPushButton(PyDMPushButton):
         self.send_value_signal[self.channeltype].emit(
             self.channeltype(send_value))
         return send_value
+
+
+class CAPushButton(QPushButton, PyDMPrimitiveWidget):
+    """QPushButton with rules."""

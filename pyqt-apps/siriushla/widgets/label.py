@@ -4,6 +4,7 @@ from pyqtgraph import functions as func
 from qtpy.QtWidgets import QLabel, QApplication
 from qtpy.QtCore import Qt, Property, Q_ENUMS
 from pydm.utilities import units
+from pydm.widgets.base import PyDMPrimitiveWidget
 from pydm.widgets.display_format import DisplayFormat, parse_value_for_display
 from pydm.widgets.base import PyDMWidget, TextFormatter
 from pydm.utilities import is_pydm_app, is_qt_designer
@@ -145,3 +146,7 @@ class SiriusLabel(QLabel, TextFormatter, PyDMWidget, DisplayFormat):
         # If you made it this far, just turn whatever the heck the value
         # is into a string and display it.
         self.setText(str(new_value))
+
+
+class CALabel(QLabel, PyDMPrimitiveWidget):
+    """QLabel with rules."""

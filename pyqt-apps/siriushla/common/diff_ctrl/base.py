@@ -5,10 +5,9 @@ import os as _os
 from qtpy.uic import loadUi
 from qtpy.QtCore import Qt, QEvent
 from qtpy.QtWidgets import QWidget, QVBoxLayout, QGroupBox, QPushButton, \
-    QLabel, QGridLayout, QScrollArea
+    QLabel, QGridLayout, QScrollArea, QSizePolicy
 import qtawesome as qta
 from pydm.utilities.macro import substitute_in_file as _substitute_in_file
-from pydm.widgets import PyDMPushButton
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriushla.widgets import PyDMLedMultiChannel, SiriusLabel, SiriusSpinbox
@@ -30,6 +29,14 @@ class DiffCtrlDevMonitor(QWidget):
         self.device = self.device.substitute(prefix=self.prefix)
         self.section = self.device.sec
         self.orientation = self.device.dev[-1]
+        if self.orientation == 'H':
+            self.neg_label = 'Inner'
+            self.pos_label = 'Outer'
+        else:
+            self.neg_label = 'Bottom'
+            self.pos_label = 'Top'
+        self.neg_label += ' Slit'
+        self.pos_label += ' Slit'
         self.setObjectName(self.section+'App')
         self._setupUi()
         self._createConnectors()
@@ -57,21 +64,28 @@ class DiffCtrlDevMonitor(QWidget):
         self.pb_details.setObjectName('detail')
         self.pb_details.setStyleSheet(
             "#detail{min-width:25px; max-width:25px; icon-size:20px;}")
-        util.connect_window(self.pb_details, _DiffCtrlDetails, parent=self,
-                            prefix=self.prefix, device=self.device)
+
+        util.connect_window(
+            self.pb_details, _DiffCtrlDetails, parent=self,
+            prefix=self.prefix, device=self.device,
+            neg_label=self.neg_label, pos_label=self.pos_label)
 
         self.lb_descCtrl1 = QLabel(
             '', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         self.sb_Ctrl1 = SiriusSpinbox(self)
+        self.sb_Ctrl1.precisionFromPV = False
+        self.sb_Ctrl1.precision = 3
         self.lb_Ctrl1 = SiriusLabel(self)
+        self.lb_Ctrl1.precisionFromPV = False
+        self.lb_Ctrl1.precision = 3
         self.lb_descCtrl2 = QLabel(
             '', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         self.sb_Ctrl2 = SiriusSpinbox(self)
+        self.sb_Ctrl2.precisionFromPV = False
+        self.sb_Ctrl2.precision = 3
         self.lb_Ctrl2 = SiriusLabel(self)
-
-        self.pb_open = PyDMPushButton(
-            parent=self, label='Open', pressValue=1,
-            init_channel=self.device.substitute(propty='Home-Cmd'))
+        self.lb_Ctrl2.precisionFromPV = False
+        self.lb_Ctrl2.precision = 3
 
         tmp_file = _substitute_in_file(
             _os.path.abspath(_os.path.dirname(__file__))+'/ui_as_ap_dev' +
@@ -84,6 +98,8 @@ class DiffCtrlDevMonitor(QWidget):
             '#scrarea{background-color: transparent; max-width: 15em;}'
             '#dev{background-color:transparent;}')
         self.dev_widget_scrarea.setWidget(self.dev_widget)
+        self.dev_widget_scrarea.setSizePolicy(
+            QSizePolicy.Preferred, QSizePolicy.MinimumExpanding)
 
         lay = QGridLayout(self)
         lay.setAlignment(Qt.AlignTop)
@@ -96,7 +112,6 @@ class DiffCtrlDevMonitor(QWidget):
         lay.addWidget(self.lb_descCtrl2, 2, 0)
         lay.addWidget(self.sb_Ctrl2, 2, 1)
         lay.addWidget(self.lb_Ctrl2, 2, 2)
-        lay.addWidget(self.pb_open, 3, 1, 1, 2)
         lay.addWidget(self.dev_widget_scrarea, 0, 3, 4, 1)
 
     def _createConnectors(self):
@@ -133,6 +148,12 @@ class DiffCtrlView(QWidget):
         super(DiffCtrlView, self).__init__(parent)
         self.setObjectName(self.sec+'App')
 
+        devname = 'Slits' if 'Slit' in self.DEVICE_PREFIX else 'Scrapers'
+        title = QLabel(
+            '<h3>' + self.sec + ' ' + devname + ' View</h3>',
+            alignment=Qt.AlignCenter)
+        title.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Maximum)
+
         gbox_h = QGroupBox(self.DEVICE_PREFIX + 'H')
         self.dev_h = self.DEVICE_CLASS(self, prefix, self.DEVICE_PREFIX+'H')
         lay_h = QVBoxLayout()
@@ -147,10 +168,7 @@ class DiffCtrlView(QWidget):
 
         lay = QVBoxLayout()
         lay.setSpacing(20)
-        lay.addWidget(QLabel(
-            '<h3>' + self.sec + ' ' +
-            ('Slits' if 'Slit' in self.DEVICE_PREFIX else 'Scrapers') +
-            ' View</h3>', alignment=Qt.AlignCenter))
+        lay.addWidget(title)
         lay.addWidget(gbox_h)
         lay.addWidget(gbox_v)
         self.setLayout(lay)

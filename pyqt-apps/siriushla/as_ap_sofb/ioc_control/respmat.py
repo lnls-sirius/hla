@@ -14,13 +14,13 @@ from siriuspy.sofb.csdev import ConstTLines
 from siriuspy.clientconfigdb import ConfigDBClient, ConfigDBException
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla.widgets import SiriusLedState, SiriusEnumComboBox, \
-    SiriusConnectionSignal as _ConnSig, SiriusLabel
+    SiriusConnectionSignal as _ConnSig, SiriusLabel, CAPushButton
 from siriushla.util import connect_window, get_appropriate_color, \
     connect_newprocess
 from siriushla.as_ap_configdb import LoadConfigDialog, SaveConfigDialog
 
 from .respmat_enbllist import SelectionMatrix
-from .base import BaseWidget, CAPushButton
+from .base import BaseWidget
 from ..graphics import SingularValues
 
 
@@ -30,11 +30,13 @@ class RespMatWidget(BaseWidget):
 
     def __init__(self, parent, device, prefix='', acc='SI'):
         super().__init__(parent, device, prefix=prefix, acc=acc)
-        self._enblrule = (
-            '[{"name": "EnblRule", "property": "Enable", ' +
-            '"expression": "not ch[0]", "channels": [{"channel": "' +
-            self.devpref.substitute(propty='LoopState-Sts') +
-            '", "trigger": true}]}]')
+        self._enblrule = None
+        if acc == 'SI':
+            self._enblrule = (
+                '[{"name": "EnblRule", "property": "Enable", ' +
+                '"expression": "not ch[0]", "channels": [{"channel": "' +
+                self.devpref.substitute(propty='LoopState-Sts') +
+                '", "trigger": true}]}]')
 
         self.setupui()
         self._config_type = acc.lower() + '_orbcorr_respm'
@@ -101,8 +103,7 @@ class RespMatWidget(BaseWidget):
             SelectionMatrix,
             title=self.acc + ' - SOFB - Corrs and BPMs selection',
             icon=icon)
-        btn = CAPushButton('', sel_wid)
-        btn.rules = self._enblrule
+        btn = QPushButton('', sel_wid)
         btn.setObjectName('btn')
         btn.setIcon(qta.icon('fa5s.tasks'))
         btn.setToolTip('Open window to select BPMs and correctors')
@@ -111,7 +112,7 @@ class RespMatWidget(BaseWidget):
             min-height:2em; max-height:2em; icon-size:25px;}')
         connect_window(
             btn, window, None, device=self.device,
-            prefix=self.prefix, acc=self.acc)
+            prefix=self.prefix, acc=self.acc, rules=self._enblrule)
         sel_lay.addWidget(btn)
 
         lay = QVBoxLayout()
@@ -199,7 +200,7 @@ class RespMatWidget(BaseWidget):
             meas_wid,
             init_channel=self.devpref.substitute(propty="MeasRespMat-Cmd"),
             pressValue=ConstTLines.MeasRespMatCmd.Start)
-        strt.setEnabled(True)
+        strt.rules = self._enblrule
         strt.setToolTip('Start Measurement')
         strt.setIcon(qta.icon('fa5s.play'))
         strt.setObjectName('strt')
@@ -209,7 +210,7 @@ class RespMatWidget(BaseWidget):
             meas_wid,
             init_channel=self.devpref.substitute(propty="MeasRespMat-Cmd"),
             pressValue=ConstTLines.MeasRespMatCmd.Stop)
-        stop.setEnabled(True)
+        stop.rules = self._enblrule
         stop.setToolTip('Stop Measurement')
         stop.setIcon(qta.icon('fa5s.stop'))
         stop.setObjectName('stop')
@@ -219,7 +220,7 @@ class RespMatWidget(BaseWidget):
             meas_wid,
             init_channel=self.devpref.substitute(propty="MeasRespMat-Cmd"),
             pressValue=ConstTLines.MeasRespMatCmd.Reset)
-        rst.setEnabled(True)
+        rst.rules = self._enblrule
         rst.setToolTip('Reset Measurement Status')
         rst.setIcon(qta.icon('fa5s.sync'))
         rst.setObjectName('conf')
@@ -241,18 +242,22 @@ class RespMatWidget(BaseWidget):
         meas_lay.addSpacing(20)
         meas_lay.addLayout(fml)
         lbl = QLabel('CH [urad]', meas_wid)
-        wid = self.create_pair(meas_wid, 'MeasRespMatKickCH')
+        wid = self.create_pair(
+            meas_wid, 'MeasRespMatKickCH', rules=self._enblrule)
         fml.addRow(lbl, wid)
         lbl = QLabel('CV [urad]', meas_wid)
-        wid = self.create_pair(meas_wid, 'MeasRespMatKickCV')
+        wid = self.create_pair(
+            meas_wid, 'MeasRespMatKickCV', rules=self._enblrule)
         fml.addRow(lbl, wid)
         if self.acc in {'SI', 'BO'}:
             lbl = QLabel('RF [Hz]', meas_wid)
-            wid = self.create_pair(meas_wid, 'MeasRespMatKickRF')
+            wid = self.create_pair(
+                meas_wid, 'MeasRespMatKickRF', rules=self._enblrule)
             fml.addRow(lbl, wid)
         lbl = QLabel('Wait [s]', meas_wid)
         lbl.setToolTip('Time to wait between kicks')
-        wid = self.create_pair(meas_wid, 'MeasRespMatWait')
+        wid = self.create_pair(
+            meas_wid, 'MeasRespMatWait', rules=self._enblrule)
         fml.addRow(lbl, wid)
 
         return meas_wid
