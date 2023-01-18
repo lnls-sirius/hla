@@ -30,14 +30,14 @@ class ScraperMonitoring(DiffCtrlDevMonitor):
 
     def _setupControlWidgets(self):
         """Setup control widgets channels/labels."""
-        self.lb_descCtrl1.setText('Positive Edge Pos.[mm]:')
+        self.lb_descCtrl1.setText(self.pos_label+' Pos.[mm]:')
         self.lb_descCtrl1.setStyleSheet(
             'min-width: 10.5em; max-width: 10.5em;')
         self.sb_Ctrl1.channel = \
             self.device.substitute(propty='PositiveEdgePos-SP')
         self.lb_Ctrl1.channel = \
             self.device.substitute(propty='PositiveEdgePos-RB')
-        self.lb_descCtrl2.setText('Negative Edge Pos.[mm]:')
+        self.lb_descCtrl2.setText(self.neg_label+' Pos.[mm]:')
         self.lb_descCtrl2.setStyleSheet(
             'min-width: 10.5em; max-width: 10.5em;')
         self.sb_Ctrl2.channel = \
@@ -51,7 +51,7 @@ class ScraperMonitoring(DiffCtrlDevMonitor):
         self.style().polish(self.dev_widget.widget_draw)
         widget_w = self.dev_widget.widget_draw.width()
         widget_h = self.dev_widget.widget_draw.height()
-        vacuum_chamber_d = 24  # mm
+        vacuum_chamber_d = 24 if self.orientation == 'H' else 9  # mm
 
         if self.orientation == 'H':
             rect_h = widget_h*3/5

@@ -29,6 +29,14 @@ class DiffCtrlDevMonitor(QWidget):
         self.device = self.device.substitute(prefix=self.prefix)
         self.section = self.device.sec
         self.orientation = self.device.dev[-1]
+        if self.orientation == 'H':
+            self.neg_label = 'Inner'
+            self.pos_label = 'Outer'
+        else:
+            self.neg_label = 'Bottom'
+            self.pos_label = 'Top'
+        self.neg_label += ' Slit'
+        self.pos_label += ' Slit'
         self.setObjectName(self.section+'App')
         self._setupUi()
         self._createConnectors()
@@ -56,17 +64,28 @@ class DiffCtrlDevMonitor(QWidget):
         self.pb_details.setObjectName('detail')
         self.pb_details.setStyleSheet(
             "#detail{min-width:25px; max-width:25px; icon-size:20px;}")
-        util.connect_window(self.pb_details, _DiffCtrlDetails, parent=self,
-                            prefix=self.prefix, device=self.device)
+
+        util.connect_window(
+            self.pb_details, _DiffCtrlDetails, parent=self,
+            prefix=self.prefix, device=self.device,
+            neg_label=self.neg_label, pos_label=self.pos_label)
 
         self.lb_descCtrl1 = QLabel(
             '', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         self.sb_Ctrl1 = SiriusSpinbox(self)
+        self.sb_Ctrl1.precisionFromPV = False
+        self.sb_Ctrl1.precision = 3
         self.lb_Ctrl1 = SiriusLabel(self)
+        self.lb_Ctrl1.precisionFromPV = False
+        self.lb_Ctrl1.precision = 3
         self.lb_descCtrl2 = QLabel(
             '', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         self.sb_Ctrl2 = SiriusSpinbox(self)
+        self.sb_Ctrl2.precisionFromPV = False
+        self.sb_Ctrl2.precision = 3
         self.lb_Ctrl2 = SiriusLabel(self)
+        self.lb_Ctrl2.precisionFromPV = False
+        self.lb_Ctrl2.precision = 3
 
         tmp_file = _substitute_in_file(
             _os.path.abspath(_os.path.dirname(__file__))+'/ui_as_ap_dev' +

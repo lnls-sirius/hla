@@ -11,11 +11,15 @@ from siriushla.widgets import SiriusDialog, PyDMLed, SiriusLabel, \
 class DiffCtrlDetails(SiriusDialog):
     """DiffCtrl Details."""
 
-    def __init__(self, parent=None, prefix='', device=''):
+    def __init__(
+            self, parent=None, prefix='', device='',
+            pos_label='', neg_label=''):
         """Init."""
         super(DiffCtrlDetails, self).__init__(parent)
         self.dev_prefix = _PVName(device).substitute(prefix=prefix)
         self.setObjectName(self.dev_prefix.sec+'App')
+        self.neg_label = neg_label
+        self.pos_label = pos_label
         self._setupUi()
 
     def _setupUi(self):
@@ -56,13 +60,15 @@ class DiffCtrlDetails(SiriusDialog):
         self.setLayout(lay)
 
     def _setupGeneralInfoLayout(self):
-        label_NegMtrCtrlPrefix = QLabel('Negative Motion Control: ', self)
+        label_NegMtrCtrlPrefix = QLabel(
+            self.neg_label + ' Motion Control: ', self)
         self.lb_NegMtrCtrlPrefix = SiriusLabel(
             self, self.dev_prefix.substitute(propty='NegativeMotionCtrl-Cte'))
         self.lb_NegMtrCtrlPrefix.setStyleSheet("""
             max-width:14.20em; max-height:1.29em;""")
 
-        label_PosMtrCtrlPrefix = QLabel('Positive Motion Control: ', self)
+        label_PosMtrCtrlPrefix = QLabel(
+            self.pos_label + ' Motion Control: ', self)
         self.lb_PosMtrCtrlPrefix = SiriusLabel(
             self, self.dev_prefix.substitute(propty='PositiveMotionCtrl-Cte'))
         self.lb_PosMtrCtrlPrefix.setStyleSheet("""
@@ -76,7 +82,8 @@ class DiffCtrlDetails(SiriusDialog):
         return flay
 
     def _setupDetailedStatusLayout(self):
-        label_NegDoneMov = QLabel('Negative Edge Motor Finished Move? ', self)
+        label_NegDoneMov = QLabel(
+            self.neg_label + ' Motor Finished Move? ', self)
         self.PyDMLed_NegDoneMov = PyDMLed(
             parent=self, init_channel=self.dev_prefix.substitute(
                 propty='NegativeDoneMov-Mon'),
@@ -84,7 +91,8 @@ class DiffCtrlDetails(SiriusDialog):
         self.PyDMLed_NegDoneMov.setStyleSheet("""
             max-width:7.10em; max-height:1.29em;""")
 
-        label_PosDoneMov = QLabel('Positive Edge Motor Finished Move? ', self)
+        label_PosDoneMov = QLabel(
+            self.pos_label + ' Motor Finished Move? ', self)
         self.PyDMLed_PosDoneMov = PyDMLed(
             parent=self, init_channel=self.dev_prefix.substitute(
                 propty='PositiveDoneMov-Mon'),
@@ -115,13 +123,13 @@ class DiffCtrlDetails(SiriusDialog):
             init_channel=self.dev_prefix.substitute(propty='Home-Cmd'))
 
         self.PyDMPushButton_NegDoneMov = PyDMPushButton(
-            parent=self, label='Force Negative Edge Position', pressValue=1,
-            init_channel=self.dev_prefix.substitute(
+            parent=self, label='Force ' + self.neg_label + ' Position',
+            pressValue=1, init_channel=self.dev_prefix.substitute(
                 propty='ForceNegativeEdgePos-Cmd'))
 
         self.PyDMPushButton_PosDoneMov = PyDMPushButton(
-            parent=self, label='Force Positive Edge Position', pressValue=1,
-            init_channel=self.dev_prefix.substitute(
+            parent=self, label='Force ' + self.pos_label + ' Position',
+            pressValue=1, init_channel=self.dev_prefix.substitute(
                 propty='ForcePositiveEdgePos-Cmd'))
 
         label_ForceComplete = QLabel('Force Commands Completed? ', self)
@@ -161,18 +169,18 @@ class DiffCtrlDetails(SiriusDialog):
 
         lay = QGridLayout()
         lay.setVerticalSpacing(15)
-        lay.addWidget(QLabel('Positive Edge Inner Limit:', self), 0, 0)
+        lay.addWidget(QLabel(self.pos_label+' Inner Limit:', self), 0, 0)
         lay.addWidget(self.sb_PosEdgeInnerLim, 0, 1)
         lay.addWidget(self.lb_PosEdgeInnerLim, 0, 2)
-        lay.addWidget(QLabel('Negative Edge Inner Limit:', self), 1, 0)
-        lay.addWidget(self.sb_NegEdgeInnerLim, 1, 1)
-        lay.addWidget(self.lb_NegEdgeInnerLim, 1, 2)
-        lay.addWidget(QLabel('Low Outer Limit:', self), 2, 0)
-        lay.addWidget(self.sb_LowOuterLim, 2, 1)
-        lay.addWidget(self.lb_LowOuterLim, 2, 2)
-        lay.addWidget(QLabel('High Outer Limit:', self), 3, 0)
-        lay.addWidget(self.sb_HighOuterLim, 3, 1)
-        lay.addWidget(self.lb_HighOuterLim, 3, 2)
+        lay.addWidget(QLabel(self.pos_label+' Outer Limit:', self), 1, 0)
+        lay.addWidget(self.sb_HighOuterLim, 1, 1)
+        lay.addWidget(self.lb_HighOuterLim, 1, 2)
+        lay.addWidget(QLabel(self.neg_label+' Inner Limit:', self), 2, 0)
+        lay.addWidget(self.sb_NegEdgeInnerLim, 2, 1)
+        lay.addWidget(self.lb_NegEdgeInnerLim, 2, 2)
+        lay.addWidget(QLabel(self.neg_label+' Outer Limit:', self), 3, 0)
+        lay.addWidget(self.sb_LowOuterLim, 3, 1)
+        lay.addWidget(self.lb_LowOuterLim, 3, 2)
         return lay
 
     def _setupBacklashCompLayout(self):
@@ -200,10 +208,10 @@ class DiffCtrlDetails(SiriusDialog):
         lay.addWidget(QLabel('Enable Backlash Compensation:', self), 0, 0)
         lay.addWidget(self.sb_EnblBacklashComp, 0, 1)
         lay.addWidget(self.led_EnblBacklashComp, 0, 2)
-        lay.addWidget(QLabel('Positive Edge Backlash Distance:', self), 1, 0)
+        lay.addWidget(QLabel(self.pos_label+' Backlash Distance:', self), 1, 0)
         lay.addWidget(self.sb_PosEdgeBacklashDist, 1, 1)
         lay.addWidget(self.lb_PosEdgeBacklashDist, 1, 2)
-        lay.addWidget(QLabel('Negative Edge Backlash Distance:', self), 2, 0)
+        lay.addWidget(QLabel(self.neg_label+' Backlash Distance:', self), 2, 0)
         lay.addWidget(self.sb_NegEdgeBacklashDist, 2, 1)
         lay.addWidget(self.lb_NegEdgeBacklashDist, 2, 2)
         return lay
