@@ -19,7 +19,7 @@ from siriushla.as_ap_sofb.ioc_control.base import BaseObject, BaseWidget
 class SingleSelMatrix(BaseObject, SelectionWidget, PyDMWidget):
     """Create the Selection Matrices for BPMs and Correctors."""
 
-    def __init__(self, parent, dev, device, prefix='', acc='SI'):
+    def __init__(self, parent, dev, device, prefix='', acc='SI', rules=None):
         """Initialize the matrix data of the specified dev."""
 
         # initialize BaseObject
@@ -44,7 +44,8 @@ class SingleSelMatrix(BaseObject, SelectionWidget, PyDMWidget):
         # initialize SelectionWidget
         SelectionWidget.__init__(
             self, parent=parent, title=dev + "List",
-            has_bothplanes=dev.lower().startswith('bpm'))
+            has_bothplanes=dev.lower().startswith('bpm'),
+            rules=rules)
 
         # initialize PyDMWidget
         init_channel = self.devpref.substitute(propty=self.dev+'EnblList-RB')
@@ -176,9 +177,10 @@ class SingleSelMatrix(BaseObject, SelectionWidget, PyDMWidget):
             led = wid.findChild(QLed)
             led.setEnabled(new_conn)
 
+
 class SelectionMatrix(BaseWidget):
 
-    def __init__(self, parent, device, prefix='', acc='SI'):
+    def __init__(self, parent, device, prefix='', acc='SI', rules=None):
         super().__init__(parent, device, prefix=prefix, acc=acc)
         tab = QTabWidget(self)
         tab.setObjectName(self.acc.upper() + 'Tab')
@@ -188,5 +190,6 @@ class SelectionMatrix(BaseWidget):
 
         for dev in ('BPMX', 'BPMY', 'CH', 'CV'):
             wid = SingleSelMatrix(
-                tab, dev, self.device, prefix=self.prefix, acc=self.acc)
+                tab, dev, self.device, prefix=self.prefix, acc=self.acc,
+                rules=rules)
             tab.addTab(wid, dev)

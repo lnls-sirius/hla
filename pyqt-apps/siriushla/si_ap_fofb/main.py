@@ -13,7 +13,8 @@ from siriuspy.fofb.csdev import ETypes as _FOFBEnums
 
 from ..util import connect_window
 from ..widgets import SiriusLedAlert, SiriusLabel, SiriusSpinbox, \
-    PyDMLogLabel, SiriusMainWindow, PyDMStateButton, SiriusLedState
+    PyDMLogLabel, SiriusMainWindow, PyDMStateButton, SiriusLedState, \
+    SiriusConnectionSignal as _ConnSignal, CAPushButton
 
 from .base import BaseObject, get_fofb_icon
 from .custom_widgets import RefOrbWidget, StatusDialog, BPMSwModeWidget, \
@@ -31,6 +32,11 @@ class MainWindow(BaseObject, SiriusMainWindow):
         self.setWindowTitle('SI - FOFB')
         self.setObjectName('SIApp')
         self.setWindowIcon(get_fofb_icon())
+        self._enblrule = (
+            '[{"name": "EnblRule", "property": "Enable", ' +
+            '"expression": "not ch[0]", "channels": [{"channel": "' +
+            self.devpref.substitute(propty='LoopState-Sts') +
+            '", "trigger": true}]}]')
         self._setupUi()
         self.setFocusPolicy(Qt.StrongFocus)
 
@@ -316,6 +322,7 @@ class MainWindow(BaseObject, SiriusMainWindow):
                     alignment=Qt.AlignRight | Qt.AlignVCenter)
                 pvn = pref.substitute(propty='CtrlrSyncUseEnblList-Sel')
                 sbt = PyDMStateButton(self, pvn)
+                sbt.rules = self._enblrule
                 led = SiriusLedState(self, pvn.substitute(propty_suffix='Sts'))
                 glay2.addWidget(lbl, 1, 0)
                 glay2.addWidget(sbt, 1, 1)
@@ -363,6 +370,7 @@ class MainWindow(BaseObject, SiriusMainWindow):
                     init_channel=self.devpref.substitute(propty=cmd))
                 btn.setDefault(False)
                 btn.setAutoDefault(False)
+                btn.rules = self._enblrule
                 glay.addWidget(btn)
             lay.addWidget(gbox)
         return wid

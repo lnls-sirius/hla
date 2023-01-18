@@ -53,6 +53,9 @@ class BaseWidget(QWidget):
         self.setupui()
         self.connect_signals()
 
+        self.chn_loopstate = _ConnSig(
+            self.devpref.substitute(propty='LoopState-Sts'))
+
         prefx, prefy = ('BPMX', 'BPMY') if self.is_orb else ('CH', 'CV')
         self.enbl_pvs = {
             'x': _ConnSig(self.devpref.substitute(propty=prefx+'EnblList-RB')),
@@ -337,6 +340,9 @@ class BaseWidget(QWidget):
             txt, graph, graph.geometry(), 500)
 
     def _set_enable_list(self, pln, idx):
+        # do not write in enable list when loop is closed
+        if self.chn_loopstate:
+            return
         val = self.enbl_pvs[pln].getvalue()
         val[idx] = not val[idx]
         self.enbl_pvs_set[pln].send_value_signal[_np.ndarray].emit(val)

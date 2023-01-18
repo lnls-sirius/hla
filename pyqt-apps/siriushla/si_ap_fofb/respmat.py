@@ -16,7 +16,7 @@ from ..util import connect_window, connect_newprocess
 from ..widgets.windows import create_window_from_widget
 from ..widgets import SiriusConnectionSignal as _ConnSignal, \
     SiriusLedState, SiriusEnumComboBox, SiriusLabel, \
-    SelectionMatrixWidget as SelectionWidget, CAPushButton
+    SelectionMatrixWidget as SelectionWidget
 
 from ..as_ap_sofb.ioc_control.respmat import RespMatWidget as _RespMatWidget
 from ..as_ap_sofb.ioc_control.respmat_enbllist import \
@@ -93,8 +93,7 @@ class RespMatWidget(_RespMatWidget, BaseWidget):
             SelectionMatrix,
             title=self.acc + ' - FOFB - Corrs and BPMs selection',
             icon=icon)
-        btn = CAPushButton('', sel_wid)
-        btn.rules = self._enblrule
+        btn = QPushButton('', sel_wid)
         btn.setObjectName('btn')
         btn.setIcon(qta.icon('fa5s.tasks'))
         btn.setToolTip('Open window to select BPMs and correctors')
@@ -102,7 +101,8 @@ class RespMatWidget(_RespMatWidget, BaseWidget):
             '#btn{min-width:3.8em; max-width:3.8em;\
             min-height:2em; max-height:2em; icon-size:25px;}')
         connect_window(
-            btn, window, None, device=self.device, prefix=self.prefix)
+            btn, window, None, device=self.device, prefix=self.prefix,
+            rules=self._enblrule)
         sel_lay.addWidget(btn, 0, 0)
 
         pdm_chbx = PyDMCheckbox(
@@ -155,7 +155,7 @@ class RespMatWidget(_RespMatWidget, BaseWidget):
 class SingleSelMatrix(_SingleSelMatrix, BaseObject):
     """Create the Selection Matrices for BPMs and Correctors."""
 
-    def __init__(self, parent, dev, device, prefix=''):
+    def __init__(self, parent, dev, device, prefix='', rules=None):
         """Initialize the matrix data of the specified dev."""
 
         # initialize BaseObject
@@ -177,7 +177,8 @@ class SingleSelMatrix(_SingleSelMatrix, BaseObject):
         # initialize SelectionWidget
         SelectionWidget.__init__(
             self, parent=parent, title=dev + "List",
-            has_bothplanes=dev.lower().startswith('bpm'))
+            has_bothplanes=dev.lower().startswith('bpm'),
+            rules=rules)
 
         # initialize PyDMWidget
         init_channel = self.devpref.substitute(propty=self.dev+'EnblList-RB')
@@ -216,7 +217,7 @@ class SingleSelMatrix(_SingleSelMatrix, BaseObject):
 
 class SelectionMatrix(BaseWidget):
 
-    def __init__(self, parent, device, prefix=''):
+    def __init__(self, parent, device, prefix='', rules=None):
         super().__init__(parent, device, prefix=prefix)
         tab = QTabWidget(self)
         tab.setObjectName('SITab')
@@ -225,5 +226,6 @@ class SelectionMatrix(BaseWidget):
         hbl.setContentsMargins(0, 0, 0, 0)
 
         for dev in ('BPMX', 'BPMY', 'CH', 'CV'):
-            wid = SingleSelMatrix(tab, dev, self.device, prefix=self.prefix)
+            wid = SingleSelMatrix(
+                tab, dev, self.device, prefix=self.prefix, rules=rules)
             tab.addTab(wid, dev)
