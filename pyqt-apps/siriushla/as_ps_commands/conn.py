@@ -11,7 +11,6 @@ from siriuspy.pwrsupply.csdev import Const as _PSC, ETypes as _PSE, \
 
 DEFAULT_CAP_BANK_VOLT = {
     'FBP_DCLink': 100,
-    'IA-14RaPS01:PS-DCLink-AS2': 70,
     'PA-RaPSE01:PS-DCLink-BO': 240,
     'PA-RaPSE02:PS-DCLink-BO': 240,
     'PA-RaPSE03:PS-DCLink-BO': 240,
