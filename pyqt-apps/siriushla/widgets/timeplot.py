@@ -66,8 +66,8 @@ class SiriusTimePlotItem(TimePlotCurveItem):
             if idcs.size and idcs[0] != 0 and \
                     self.data_buffer[0, idcs[0]-1] != 0:
                 idcs = _np.r_[idcs[0]-1, idcs]
-            x = self.data_buffer[0, idcs].astype(_np.float)
-            y = self.data_buffer[1, idcs].astype(_np.float)
+            x = self.data_buffer[0, idcs].astype(_np.float_)
+            y = self.data_buffer[1, idcs].astype(_np.float_)
 
             if not self._plot_by_timestamps:
                 x -= now
