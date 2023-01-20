@@ -2,12 +2,10 @@
 
 import time as _time
 import numpy as _np
-from epics import PV as _PV
 
 from siriuspy.util import get_bit
-from siriuspy.namesys import SiriusPVName as _PVName
-from siriuspy.envars import VACA_PREFIX as VACA_PREFIX
 from siriuspy.search import PSSearch
+from siriuspy.devices import Device as _Device, Devices as _Devices
 from siriuspy.pwrsupply.csdev import Const as _PSC, ETypes as _PSE, \
     PS_LI_INTLK_THRS as _PS_LI_INTLK, get_ps_interlocks
 
@@ -38,29 +36,8 @@ DEFAULT_CAP_BANK_VOLT = {
 TIMEOUT_CONN = 0.05
 
 
-class _TesterBase:
+class _TesterBase(_Device):
     """Tester base."""
-
-    def __init__(self, device):
-        """Init."""
-        self.device = _PVName(device)
-        self._pvs = dict()
-
-    @property
-    def connected(self):
-        """Return wheter PVs are connected."""
-        for pv in self._pvs.values():
-            if not pv.connected:
-                # print(self.device, pv.pvname)
-                return False
-        return True
-
-    def wait_for_connection(self, timeout=0.5):
-        for pv in self._pvs.values():
-            if not pv.wait_for_connection(timeout):
-                # print(self.device, pv.pvname)
-                return False
-        return True
 
 
 class _TesterPSBase(_TesterBase):
@@ -68,18 +45,17 @@ class _TesterPSBase(_TesterBase):
 
     def reset(self):
         """Reset."""
-        self._pvs['Reset-Cmd'].value = 1
+        self['Reset-Cmd'] = 1
 
     def set_opmode(self, state):
         """Set OpMode."""
-        self._pvs['OpMode-Sel'].value = state
+        self['OpMode-Sel'] = state
 
     def check_opmode(self, state):
         """Check OpMode."""
         if isinstance(state, (list, tuple)):
-            return self._pvs['OpMode-Sts'].value in state
-        else:
-            return self._pvs['OpMode-Sts'].value == state
+            return self['OpMode-Sts'] in state
+        return self['OpMode-Sts'] == state
 
     def set_pwrstate(self, state='on'):
         """Set PwrState."""
@@ -87,138 +63,138 @@ class _TesterPSBase(_TesterBase):
             state = _PSC.PwrStateSel.On
         else:
             state = _PSC.PwrStateSel.Off
-        self._pvs['PwrState-Sel'].value = state
+        self['PwrState-Sel'] = state
 
     def check_pwrstate(self, state='on'):
         """Check PwrState."""
         if state == 'on':
-            ok = self._pvs['PwrState-Sts'].value == _PSC.PwrStateSts.On
-            ok &= self._pvs['OpMode-Sts'].value == _PSC.States.SlowRef
+            is_ok = self['PwrState-Sts'] == _PSC.PwrStateSts.On
+            is_ok &= self['OpMode-Sts'] == _PSC.States.SlowRef
         else:
-            ok = self._pvs['PwrState-Sts'].value == _PSC.PwrStateSts.Off
-            ok &= self._pvs['OpMode-Sts'].value == _PSC.States.Off
-        return ok
+            is_ok = self['PwrState-Sts'] == _PSC.PwrStateSts.Off
+            is_ok &= self['OpMode-Sts'] == _PSC.States.Off
+        return is_ok
 
     def set_ctrlloop(self):
         """Set CtrlLoop."""
-        self._pvs['CtrlLoop-Sel'].value = _PSC.OpenLoop.Closed
+        self['CtrlLoop-Sel'] = _PSC.OpenLoop.Closed
 
     def check_ctrlloop(self):
         """Check CtrlLoop."""
-        return self._pvs['CtrlLoop-Sts'].value == _PSC.OpenLoop.Closed
+        return self['CtrlLoop-Sts'] == _PSC.OpenLoop.Closed
 
 
 class TesterDCLinkFBP(_TesterPSBase):
     """FBP DCLink tester."""
 
-    def __init__(self, device):
+    _properties = (
+        'Reset-Cmd', 'IntlkSoft-Mon', 'IntlkHard-Mon',
+        'OpMode-Sel', 'OpMode-Sts',
+        'PwrState-Sel', 'PwrState-Sts',
+        'CtrlLoop-Sel', 'CtrlLoop-Sts',
+        'Voltage-SP', 'Voltage-Mon',
+    )
+
+    def __init__(self, devname):
         """Init."""
-        super().__init__(device)
-
-        self.properties = [
-            'Reset-Cmd', 'IntlkSoft-Mon', 'IntlkHard-Mon',
-            'OpMode-Sel', 'OpMode-Sts',
-            'PwrState-Sel', 'PwrState-Sts',
-            'CtrlLoop-Sel', 'CtrlLoop-Sts',
-            'Voltage-SP', 'Voltage-Mon']
-
-        for ppty in self.properties:
-            self._pvs[ppty] = _PV(
-                _PVName(device).substitute(prefix=VACA_PREFIX, propty=ppty),
-                connection_timeout=TIMEOUT_CONN)
+        super().__init__(devname, properties=TesterDCLinkFBP._properties)
 
     def check_intlk(self):
         """Check interlocks."""
-        status = (self._pvs['IntlkHard-Mon'].value == 0)
-        status &= (self._pvs['IntlkSoft-Mon'].value == 0)
+        status = (self['IntlkHard-Mon'] == 0)
+        status &= (self['IntlkSoft-Mon'] == 0)
         return status
 
     def check_init_ok(self):
         """Check OpMode in SlowRef."""
-        status = (self._pvs['OpMode-Sts'].value == _PSC.States.SlowRef)
+        status = (self['OpMode-Sts'] == _PSC.States.SlowRef)
         return status
 
     def set_ctrlloop(self):
         """Set CtrlLoop."""
-        self._pvs['CtrlLoop-Sel'].value = _PSC.OpenLoop.Open
+        self['CtrlLoop-Sel'] = _PSC.OpenLoop.Open
 
     def check_ctrlloop(self):
         """Check CtrlLoop."""
-        return (self._pvs['CtrlLoop-Sts'].value == _PSC.OpenLoop.Open)
+        return self['CtrlLoop-Sts'] == _PSC.OpenLoop.Open
 
     def set_capvolt(self):
         """Set capacitor bank voltage."""
-        key = 'FBP_DCLink' if self.device not in DEFAULT_CAP_BANK_VOLT \
-            else self.device
-        self._pvs['Voltage-SP'].value = DEFAULT_CAP_BANK_VOLT[key]
+        key = 'FBP_DCLink' if self.devname not in DEFAULT_CAP_BANK_VOLT \
+            else self.devname
+        self['Voltage-SP'] = DEFAULT_CAP_BANK_VOLT[key]
 
     def check_capvolt(self):
         """Do not need to check."""
         return True
 
     def check_status(self):
+        """Check Status."""
         return self.check_intlk()
 
     def check_comm(self):
-        return not self._pvs['PwrState-Sts'].status != 0
+        """Check Communication."""
+        pvo = self.pv_object('PwrState-Sts')
+        return not pvo.status != 0
 
 
 class TesterDCLink(_TesterPSBase):
     """DCLink tester."""
 
-    def __init__(self, device):
+    _properties = (
+        'Reset-Cmd',
+        'OpMode-Sel', 'OpMode-Sts',
+        'PwrState-Sel', 'PwrState-Sts',
+        'CtrlLoop-Sel', 'CtrlLoop-Sts',
+        'CapacitorBankVoltage-SP', 'CapacitorBankVoltageRef-Mon',
+        'CapacitorBankVoltage-Mon')
+
+    def __init__(self, devname):
         """Init."""
-        super().__init__(device)
+        properties = list(TesterDCLink._properties)
+        self._intlk_pvs = get_ps_interlocks(psname=devname)
+        properties.extend(self._intlk_pvs)
 
-        self.properties = [
-            'Reset-Cmd',
-            'OpMode-Sel', 'OpMode-Sts',
-            'PwrState-Sel', 'PwrState-Sts',
-            'CtrlLoop-Sel', 'CtrlLoop-Sts',
-            'CapacitorBankVoltage-SP', 'CapacitorBankVoltageRef-Mon',
-            'CapacitorBankVoltage-Mon']
-        self._intlk_pvs = get_ps_interlocks(psname=self.device)
-        self.properties.extend(self._intlk_pvs)
-
-        for ppty in self.properties:
-            self._pvs[ppty] = _PV(
-                _PVName(device).substitute(prefix=VACA_PREFIX, propty=ppty),
-                connection_timeout=TIMEOUT_CONN)
+        super().__init__(devname, properties)
 
     def check_intlk(self):
         """Check interlocks."""
         status = True
         for intlk in self._intlk_pvs:
-            status &= (self._pvs[intlk].value == 0)
+            status &= (self[intlk] == 0)
         return status
 
     def check_init_ok(self):
         """Check OpMode in SlowRef."""
-        status = (self._pvs['OpMode-Sts'].value == _PSC.States.SlowRef)
-        return status
+        return self['OpMode-Sts'] == _PSC.States.SlowRef
 
     def set_capvolt(self):
         """Set capacitor bank voltage."""
-        self._pvs['CapacitorBankVoltage-SP'].value = \
-            DEFAULT_CAP_BANK_VOLT[self.device]
+        self['CapacitorBankVoltage-SP'] = DEFAULT_CAP_BANK_VOLT[self.devname]
 
     def check_capvolt(self):
         """Check capacitor bank voltage."""
-        return self._cmp(self._pvs['CapacitorBankVoltage-Mon'].value,
-                         DEFAULT_CAP_BANK_VOLT[self.device])
+        return self._cmp(
+            self['CapacitorBankVoltage-Mon'],
+            DEFAULT_CAP_BANK_VOLT[self.devname])
 
     def check_status(self):
+        """Check status."""
         status = self.check_intlk()
         if self.check_pwrstate():
             status &= self._cmp(
-                self._pvs['CapacitorBankVoltage-Mon'].value,
-                self._pvs['CapacitorBankVoltageRef-Mon'].value)
+                self['CapacitorBankVoltage-Mon'],
+                self['CapacitorBankVoltageRef-Mon'])
         return status
 
     def check_comm(self):
-        return not self._pvs['PwrState-Sts'].status != 0
+        """Check communication."""
+        pvo = self.pv_object('PwrState-Sts')
+        return not pvo.status != 0
 
     def _cmp(self, value, target):
+        if None in [value, target]:
+            return False
         return _np.isclose(value, target, rtol=0.05)
 
 
@@ -227,29 +203,23 @@ class TesterDCLinkRegatron(_TesterBase):
 
     _OPMODE_STS_OFF = 4  # READY
     _OPMODE_STS_ON = 8  # RUN
+    _properties = (
+        'Reset-Cmd', 'GenIntlk-Mon', 'GenWarn-Mon', 'OpMode-Sts',
+        'PwrState-Sel', 'PwrState-Sts',
+        'Voltage-SP', 'VoltageRef-Mon', 'Voltage-Mon')
 
-    def __init__(self, device):
+    def __init__(self, devname):
         """Init."""
-        super().__init__(device)
-
-        self.properties = [
-            'Reset-Cmd', 'GenIntlk-Mon', 'GenWarn-Mon', 'OpMode-Sts',
-            'PwrState-Sel', 'PwrState-Sts',
-            'Voltage-SP', 'VoltageRef-Mon', 'Voltage-Mon']
-
-        for ppty in self.properties:
-            self._pvs[ppty] = _PV(
-                _PVName(device).substitute(prefix=VACA_PREFIX, propty=ppty),
-                connection_timeout=TIMEOUT_CONN)
+        super().__init__(devname, TesterDCLinkRegatron._properties)
 
     def reset(self):
         """Reset."""
-        self._pvs['Reset-Cmd'].value = 1
+        self['Reset-Cmd'] = 1
 
     def check_intlk(self):
         """Check interlocks."""
-        status = (self._pvs['GenIntlk-Mon'].value == 0)
-        status &= (self._pvs['GenWarn-Mon'].value == 0)
+        status = (self['GenIntlk-Mon'] == 0)
+        status &= (self['GenWarn-Mon'] == 0)
         return status
 
     def set_pwrstate(self, state='on'):
@@ -258,65 +228,63 @@ class TesterDCLinkRegatron(_TesterBase):
             state = _PSC.OffOn.On
         else:
             state = _PSC.OffOn.Off
-        self._pvs['PwrState-Sel'].value = state
+        self['PwrState-Sel'] = state
 
     def check_pwrstate(self, state='on'):
         """Check PwrState."""
         if state == 'on':
-            ok = self._pvs['PwrState-Sts'].value == _PSC.OffOn.On
-            ok &= self._pvs['OpMode-Sts'].value == self._OPMODE_STS_ON
+            is_ok = self['PwrState-Sts'] == _PSC.OffOn.On
+            is_ok &= self['OpMode-Sts'] == self._OPMODE_STS_ON
         else:
-            ok = self._pvs['PwrState-Sts'].value == _PSC.OffOn.Off
-            ok &= self._pvs['OpMode-Sts'].value == self._OPMODE_STS_OFF
-        return ok
+            is_ok = self['PwrState-Sts'] == _PSC.OffOn.Off
+            is_ok &= self['OpMode-Sts'] == self._OPMODE_STS_OFF
+        return is_ok
 
     def check_init_ok(self):
         """Check OpMode Ok."""
-        return self._pvs['OpMode-Sts'].value == self._OPMODE_STS_ON
+        return self['OpMode-Sts'] == self._OPMODE_STS_ON
 
     def check_capvolt(self):
         """Check voltage."""
-        return _np.isclose(self._pvs['Voltage-Mon'].value,
-                           self._pvs['VoltageRef-Mon'].value,
-                           rtol=0.05)
+        return _np.isclose(
+            self['Voltage-Mon'], self['VoltageRef-Mon'], rtol=0.05)
 
     def check_status(self):
+        """Check status."""
         status = self.check_intlk()
         if self.check_pwrstate():
             status &= self.check_capvolt()
         return status
 
     def check_comm(self):
-        prob = self._pvs['GenIntlk-Mon'].status != 0 or \
-            self._pvs['Voltage-Mon'].status != 0
+        """Check commucation."""
+        pvo_intlk = self.pv_object('GenIntlk-Mon')
+        pvo_volt = self.pv_object('Voltage-Mon')
+        prob = pvo_intlk.status != 0 or pvo_volt.status != 0
         return not prob
 
 
 class TesterPS(_TesterPSBase):
     """PS tester."""
 
-    def __init__(self, device):
+    _properties = (
+        'Reset-Cmd',
+        'OpMode-Sel', 'OpMode-Sts',
+        'PwrState-Sel', 'PwrState-Sts',
+        'CtrlLoop-Sel', 'CtrlLoop-Sts',
+        'Current-SP', 'CurrentRef-Mon', 'Current-Mon')
+
+    def __init__(self, devname):
         """Init."""
-        super().__init__(device)
+        properties = list(TesterPS._properties)
+        self._intlk_pvs = get_ps_interlocks(psname=devname)
+        properties.extend(self._intlk_pvs)
+        if PSSearch.conv_psname_2_psmodel(devname) == 'FBP':
+            properties.extend(['SOFBMode-Sel', 'SOFBMode-Sts'])
 
-        self.properties = [
-            'Reset-Cmd',
-            'OpMode-Sel', 'OpMode-Sts',
-            'PwrState-Sel', 'PwrState-Sts',
-            'CtrlLoop-Sel', 'CtrlLoop-Sts',
-            'Current-SP', 'CurrentRef-Mon', 'Current-Mon']
-        self._intlk_pvs = get_ps_interlocks(psname=self.device)
-        self.properties.extend(self._intlk_pvs)
+        super().__init__(devname, properties)
 
-        if PSSearch.conv_psname_2_psmodel(self.device) == 'FBP':
-            self.properties.extend(['SOFBMode-Sel', 'SOFBMode-Sts'])
-
-        for ppty in self.properties:
-            self._pvs[ppty] = _PV(
-                _PVName(device).substitute(prefix=VACA_PREFIX, propty=ppty),
-                connection_timeout=TIMEOUT_CONN)
-
-        splims = PSSearch.conv_psname_2_splims(device)
+        splims = PSSearch.conv_psname_2_splims(devname)
         self.test_current = splims['TSTV']
         self.test_tol = splims['TSTR']
 
@@ -324,7 +292,7 @@ class TesterPS(_TesterPSBase):
         """Check interlocks."""
         status = True
         for intlk in self._intlk_pvs:
-            status &= (self._pvs[intlk].value == 0)
+            status &= (self[intlk] == 0)
         return status
 
     def set_current(self, test=False, value=None):
@@ -334,7 +302,7 @@ class TesterPS(_TesterPSBase):
                 value = self.test_current
             else:
                 value = 0
-        self._pvs['Current-SP'].value = value
+        self['Current-SP'] = value
 
     def check_current(self, test=False, value=None):
         """Check current."""
@@ -343,23 +311,24 @@ class TesterPS(_TesterPSBase):
                 value = self.test_current
             else:
                 value = 0
-        status = self._cmp(self._pvs['Current-Mon'].value, value)
-        return status
+        return self._cmp(self['Current-Mon'], value)
 
     def check_status(self):
         """Check Status."""
         status = self.check_intlk()
         if self.check_pwrstate():
             status &= self._cmp(
-                self._pvs['Current-Mon'].value,
-                self._pvs['CurrentRef-Mon'].value)
+                self['Current-Mon'], self['CurrentRef-Mon'])
         return status
 
     def check_comm(self):
-        """Check Comminication."""
-        return not self._pvs['PwrState-Sts'].status != 0
+        """Check Communication."""
+        pvo = self.pv_object('PwrState-Sts')
+        return not pvo.status != 0
 
     def _cmp(self, value, target):
+        if None in [value, target]:
+            return False
         return abs(value - target) < self.test_tol
 
 
@@ -372,7 +341,7 @@ class TesterPSFBP(TesterPS):
             state = _PSC.OffOn.On
         else:
             state = _PSC.OffOn.Off
-        self._pvs['SOFBMode-Sel'].value = state
+        self['SOFBMode-Sel'] = state
 
     def check_sofbmode(self, state='on'):
         """Check SOFBMode."""
@@ -380,35 +349,32 @@ class TesterPSFBP(TesterPS):
             state = _PSC.OffOn.On
         else:
             state = _PSC.OffOn.Off
-        return (self._pvs['SOFBMode-Sts'].value == state)
+        return self['SOFBMode-Sts'] == state
 
 
 class TesterPSLinac(_TesterBase):
     """Linac PS tester."""
 
-    def __init__(self, device):
-        super().__init__(device)
-        self.properties = [
-            'StatusIntlk-Mon', 'IntlkWarn-Mon',
-            'PwrState-Sel', 'PwrState-Sts',
-            'Current-SP', 'Current-Mon',
-            'Connected-Mon']
-        for ppty in self.properties:
-            self._pvs[ppty] = _PV(
-                _PVName(device).substitute(prefix=VACA_PREFIX, propty=ppty),
-                connection_timeout=TIMEOUT_CONN)
+    _properties = (
+        'StatusIntlk-Mon', 'IntlkWarn-Mon',
+        'PwrState-Sel', 'PwrState-Sts',
+        'Current-SP', 'Current-Mon',
+        'Connected-Mon')
+
+    def __init__(self, devname):
+        super().__init__(devname, properties=TesterPSLinac._properties)
 
         self.intlkwarn_bit = _PSE.LINAC_INTLCK_WARN.index('LoadI Over Thrs')
 
-        splims = PSSearch.conv_psname_2_splims(device)
+        splims = PSSearch.conv_psname_2_splims(devname)
         self.test_current = splims['TSTV']
         self.test_tol = splims['TSTR']
 
     def check_intlk(self):
         """Check interlocks."""
-        intlkval = self._pvs['StatusIntlk-Mon'].value
-        if self.device.dev == 'Spect':
-            intlkwarn = self._pvs['IntlkWarn-Mon'].value
+        intlkval = self['StatusIntlk-Mon']
+        if self.devname.dev == 'Spect':
+            intlkwarn = self['IntlkWarn-Mon']
             if get_bit(intlkwarn, self.intlkwarn_bit):
                 intlkval -= 2**self.intlkwarn_bit
         return intlkval < _PS_LI_INTLK
@@ -419,7 +385,7 @@ class TesterPSLinac(_TesterBase):
             state = _PSC.PwrStateSel.On
         else:
             state = _PSC.PwrStateSel.Off
-        self._pvs['PwrState-Sel'].value = state
+        self['PwrState-Sel'] = state
 
     def check_pwrstate(self, state='on'):
         """Check PwrState."""
@@ -427,7 +393,7 @@ class TesterPSLinac(_TesterBase):
             state = _PSC.PwrStateSel.On
         else:
             state = _PSC.PwrStateSel.Off
-        return (self._pvs['PwrState-Sts'].value == state)
+        return self['PwrState-Sts'] == state
 
     def set_current(self, test=False, value=None):
         """Set current."""
@@ -436,82 +402,75 @@ class TesterPSLinac(_TesterBase):
                 value = self.test_current
             else:
                 value = 0
-        self._pvs['Current-SP'].value = value
+        self['Current-SP'] = value
 
     def check_current(self, test=False, value=None):
         """Check current."""
         if value is None:
-            if test:
-                value = self.test_current
-            else:
-                value = 0
-        status = self._cmp(self._pvs['Current-Mon'].value, value)
-        return status
+            value = self.test_current if test else 0
+        return self._cmp(self['Current-Mon'], value)
 
     def check_status(self):
         """Check Status."""
         status = self.check_intlk()
         if self.check_pwrstate():
             status &= self._cmp(
-                self._pvs['Current-Mon'].value,
-                self._pvs['Current-SP'].value)
+                self['Current-Mon'], self['Current-SP'])
         return status
 
     def check_comm(self):
         """Check Comminication."""
-        prob = self._pvs['Connected-Mon'].value != 0 or \
-            self._pvs['Connected-Mon'].status != 0
+        pvo = self.pv_object('Connected-Mon')
+        prob = pvo.value != 0 or pvo.status != 0
         return not prob
 
     def _cmp(self, value, target):
+        if None in [value, target]:
+            return False
         return abs(value - target) < self.test_tol
 
 
 class TesterPSFOFB(_TesterBase):
     """FOFB PS tester."""
 
-    def __init__(self, device):
-        """Init."""
-        super().__init__(device)
-        self.properties = [
-            'AlarmsAmp-Mon',
-            'PwrState-Sel', 'PwrState-Sts',
-            'Current-SP', 'CurrentRef-Mon', 'Current-Mon',
-            'OpMode-Sel', 'OpMode-Sts',
-        ]
-        for ppty in self.properties:
-            self._pvs[ppty] = _PV(
-                _PVName(device).substitute(prefix=VACA_PREFIX, propty=ppty),
-                connection_timeout=TIMEOUT_CONN)
+    _properties = (
+        'AlarmsAmp-Mon',
+        'PwrState-Sel', 'PwrState-Sts',
+        'Current-SP', 'CurrentRef-Mon', 'Current-Mon',
+        'OpMode-Sel', 'OpMode-Sts',
+    )
 
-        splims = PSSearch.conv_psname_2_splims(device)
+    def __init__(self, devname):
+        """Init."""
+        super().__init__(devname, properties=TesterPSFOFB._properties)
+
+        splims = PSSearch.conv_psname_2_splims(devname)
         self.test_current = splims['TSTV']
         self.test_tol = splims['TSTR']
 
     def set_opmode(self, state):
         """Set opmode to 'state'."""
-        self._pvs['OpMode-Sel'].value = state
+        self['OpMode-Sel'] = state
 
     def check_opmode(self, state):
         """Check whether power supply is in opmode 'state'."""
         if isinstance(state, (list, tuple)):
-            return self._pvs['OpMode-Sts'].value in state
-        else:
-            return self._pvs['OpMode-Sts'].value == state
+            return self['OpMode-Sts'] in state
+        return self['OpMode-Sts'] == state
 
     def check_intlk(self):
         """Check interlocks."""
-        return self._pvs['AlarmsAmp-Mon'].value == 0
+        return self['AlarmsAmp-Mon'] == 0
 
     def set_pwrstate(self, state='on'):
         """Set PwrState."""
         value = _PSC.OffOn.On if state == 'on' else _PSC.OffOn.Off
-        self._pvs['PwrState-Sel'].value = value
+        self['PwrState-Sel'] = value
 
     def check_pwrstate(self, state='on'):
         """Check PwrState."""
         value = _PSC.OffOn.On if state == 'on' else _PSC.OffOn.Off
-        return self._pvs['PwrState-Sts'].value == value
+        return self['PwrState-Sts'] == value
 
     def set_current(self, test=False, value=None):
         """Set current."""
@@ -520,7 +479,7 @@ class TesterPSFOFB(_TesterBase):
                 value = self.test_current
             else:
                 value = 0
-        self._pvs['Current-SP'].value = value
+        self['Current-SP'] = value
 
     def check_current(self, test=False, value=None):
         """Check current."""
@@ -529,54 +488,54 @@ class TesterPSFOFB(_TesterBase):
                 value = self.test_current
             else:
                 value = 0
-        return self._cmp(self._pvs['Current-Mon'].value, value)
+        return self._cmp(self['Current-Mon'], value)
 
     def check_status(self):
         """Check Status."""
         status = self.check_intlk()
         if self.check_pwrstate():
             status &= self._cmp(
-                self._pvs['Current-Mon'].value,
-                self._pvs['CurrentRef-Mon'].value)
+                self['Current-Mon'], self['CurrentRef-Mon'])
         return status
 
     def check_comm(self):
-        """Check Comminication."""
-        return self._pvs['PwrState-Sts'].connected
+        """Check Communication."""
+        return self.pv_object('PwrState-Sts').connected
 
     def _cmp(self, value, target):
+        if None in [value, target]:
+            return False
         return abs(value - target) < self.test_tol
 
 
 class _TesterPUBase(_TesterBase):
     """Tester PU base."""
 
-    def __init__(self, device):
+    _properties = (
+        'Reset-Cmd',
+        'Intlk1-Mon', 'Intlk2-Mon', 'Intlk3-Mon', 'Intlk4-Mon',
+        'Intlk5-Mon', 'Intlk6-Mon', 'Intlk7-Mon',
+        'PwrState-Sel', 'PwrState-Sts',
+        'Pulse-Sel', 'Pulse-Sts',
+        'Voltage-SP', 'Voltage-RB', 'Voltage-Mon')
+    _sept_properties = _properties
+    _kckr_properties = _properties + ('Intlk8-Mon', )
+
+    def __init__(self, devname):
         """Init."""
-        super().__init__(device)
+        if 'Kckr' in devname:
+            properties = _TesterPUBase._kckr_properties
+        else:
+            properties = _TesterPUBase._sept_properties
+        super().__init__(devname, properties=properties)
 
-        self.properties = [
-            'Reset-Cmd',
-            'Intlk1-Mon', 'Intlk2-Mon', 'Intlk3-Mon', 'Intlk4-Mon',
-            'Intlk5-Mon', 'Intlk6-Mon', 'Intlk7-Mon',
-            'PwrState-Sel', 'PwrState-Sts',
-            'Pulse-Sel', 'Pulse-Sts',
-            'Voltage-SP', 'Voltage-RB', 'Voltage-Mon']
-        if 'Kckr' in self.device:
-            self.properties.append('Intlk8-Mon')
-
-        for ppty in self.properties:
-            self._pvs[ppty] = _PV(
-                _PVName(device).substitute(prefix=VACA_PREFIX, propty=ppty),
-                connection_timeout=TIMEOUT_CONN)
-
-        splims = PSSearch.conv_psname_2_splims(device)
+        splims = PSSearch.conv_psname_2_splims(devname)
         self.test_voltage = splims['TSTV']
         self.test_tol = splims['TSTR']
 
     def reset(self):
         """Reset."""
-        self._pvs['Reset-Cmd'].value = 1
+        self['Reset-Cmd'] = 1
 
     def check_intlk(self):
         """Check interlocks."""
@@ -586,16 +545,16 @@ class _TesterPUBase(_TesterBase):
         """Set Pulse."""
         # if pulsed magnet was in interlock state and was reset,
         # we need to send a Pulse-Sel = Off before continue
-        if self._pvs['Pulse-Sel'].value == _PSC.OffOn.On \
+        if self['Pulse-Sel'] == _PSC.OffOn.On \
                 and self.check_pulse('off'):
-            self._pvs['Pulse-Sel'].value = _PSC.OffOn.Off
+            self['Pulse-Sel'] = _PSC.OffOn.Off
             _time.sleep(0.5)
 
         if state == 'on':
             state = _PSC.OffOn.On
         else:
             state = _PSC.OffOn.Off
-        self._pvs['Pulse-Sel'].value = state
+        self['Pulse-Sel'] = state
 
     def check_pulse(self, state='on'):
         """Check Pulse."""
@@ -603,22 +562,22 @@ class _TesterPUBase(_TesterBase):
             state = _PSC.OffOn.On
         else:
             state = _PSC.OffOn.Off
-        return self._pvs['Pulse-Sts'].value == state
+        return self['Pulse-Sts'] == state
 
     def set_pwrstate(self, state='on'):
         """Set PwrState."""
         # if pulsed magnet was in interlock state and was reset,
         # we need to send a PwrState-Sel = Off before continue
-        if self._pvs['PwrState-Sel'].value == _PSC.OffOn.On \
+        if self['PwrState-Sel'] == _PSC.OffOn.On \
                 and self.check_pwrstate('off'):
-            self._pvs['PwrState-Sel'].value = _PSC.OffOn.Off
+            self['PwrState-Sel'] = _PSC.OffOn.Off
             _time.sleep(0.5)
 
         if state == 'on':
             state = _PSC.OffOn.On
         else:
             state = _PSC.OffOn.Off
-        self._pvs['PwrState-Sel'].value = state
+        self['PwrState-Sel'] = state
 
     def check_pwrstate(self, state='on'):
         """Check PwrState."""
@@ -626,33 +585,29 @@ class _TesterPUBase(_TesterBase):
             state = _PSC.OffOn.On
         else:
             state = _PSC.OffOn.Off
-        return self._pvs['PwrState-Sts'].value == state
+        return self['PwrState-Sts'] == state
 
     def set_voltage(self, test=False):
         """Set voltage."""
-        if test:
-            self._pvs['Voltage-SP'].value = self.test_voltage
-        else:
-            self._pvs['Voltage-SP'].value = 0
+        value = self.test_voltage if test else 0
+        self['Voltage-SP'] = value
 
     def check_voltage(self, test=False):
         """Check voltage."""
-        if test:
-            status = self._cmp(self._pvs['Voltage-Mon'].value,
-                               self.test_voltage)
-        else:
-            status = self._cmp(self._pvs['Voltage-Mon'].value, 0)
-        return status
+        value = self.test_voltage if test else 0
+        return self._cmp(self['Voltage-Mon'], value)
 
     def check_status(self):
+        """Check status."""
         status = self.check_intlk()
         if self.check_pwrstate():
             status &= self._cmp(
-                self._pvs['Voltage-Mon'].value,
-                self._pvs['Voltage-RB'].value)
+                self['Voltage-Mon'], self['Voltage-RB'])
         return status
 
     def _cmp(self, value, target):
+        if None in [value, target]:
+            return False
         return abs(value - target) < self.test_tol
 
 
@@ -661,14 +616,14 @@ class TesterPUKckr(_TesterPUBase):
 
     def check_intlk(self):
         """Check interlocks."""
-        status = (self._pvs['Intlk1-Mon'].value == 1)
-        status &= (self._pvs['Intlk2-Mon'].value == 1)
-        status &= (self._pvs['Intlk3-Mon'].value == 1)
-        status &= (self._pvs['Intlk4-Mon'].value == 1)
-        status &= (self._pvs['Intlk5-Mon'].value == 1)
-        status &= (self._pvs['Intlk6-Mon'].value == 1)
-        status &= (self._pvs['Intlk7-Mon'].value == 1)
-        status &= (self._pvs['Intlk8-Mon'].value == 1)
+        status = (self['Intlk1-Mon'] == 1)
+        status &= (self['Intlk2-Mon'] == 1)
+        status &= (self['Intlk3-Mon'] == 1)
+        status &= (self['Intlk4-Mon'] == 1)
+        status &= (self['Intlk5-Mon'] == 1)
+        status &= (self['Intlk6-Mon'] == 1)
+        status &= (self['Intlk7-Mon'] == 1)
+        status &= (self['Intlk8-Mon'] == 1)
         return status
 
 
@@ -677,11 +632,51 @@ class TesterPUSept(_TesterPUBase):
 
     def check_intlk(self):
         """Check interlocks."""
-        status = (self._pvs['Intlk1-Mon'].value == 1)
-        status &= (self._pvs['Intlk2-Mon'].value == 1)
-        status &= (self._pvs['Intlk3-Mon'].value == 1)
-        status &= (self._pvs['Intlk4-Mon'].value == 1)
-        status &= (self._pvs['Intlk5-Mon'].value == 1)
-        status &= (self._pvs['Intlk6-Mon'].value == 1)
-        status &= (self._pvs['Intlk7-Mon'].value == 1)
+        status = (self['Intlk1-Mon'] == 1)
+        status &= (self['Intlk2-Mon'] == 1)
+        status &= (self['Intlk3-Mon'] == 1)
+        status &= (self['Intlk4-Mon'] == 1)
+        status &= (self['Intlk5-Mon'] == 1)
+        status &= (self['Intlk6-Mon'] == 1)
+        status &= (self['Intlk7-Mon'] == 1)
         return status
+
+
+class Trigger(_Device):
+    """Trigger device."""
+
+    _properties = (
+        'State-Sel', 'State-Sts',
+    )
+
+    def __init__(self, devname):
+        """Init trigger."""
+        super().__init__(devname, Trigger._properties)
+
+    @property
+    def state(self):
+        """State."""
+        return self['State-Sts']
+
+    @state.setter
+    def state(self, value):
+        self['State-Sel'] = value
+
+
+class Triggers(_Devices):
+    """Triggers."""
+
+    def __init__(self, devnames):
+        """Init triggers."""
+        devices, devrefs = list(), dict()
+        for devname in devnames:
+            dev = Trigger(devname)
+            devrefs[devname] = dev
+            devices.append(dev)
+        self._devrefs = devrefs
+        super().__init__('', devices=devices)
+
+    @property
+    def triggers(self):
+        """Trigger names."""
+        return self._devrefs

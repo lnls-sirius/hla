@@ -2,7 +2,6 @@
 
 from copy import deepcopy as _dcopy
 import time as _time
-from epics import PV as _PV
 from qtpy.QtCore import Signal, QThread
 from siriuspy.search import HLTimeSearch as _HLTimeSearch, \
     PSSearch as _PSSearch
@@ -10,7 +9,7 @@ from siriuspy.csdev import Const
 from siriuspy.namesys import Filter, SiriusPVName as _PVName
 from .conn import TesterDCLink, TesterDCLinkFBP, TesterPS, TesterPSLinac, \
     TesterPSFBP, TesterPSFOFB, TesterDCLinkRegatron, DEFAULT_CAP_BANK_VOLT, \
-    TesterPUKckr, TesterPUSept
+    TesterPUKckr, TesterPUSept, Triggers
 
 
 TIMEOUT_CHECK = 10
@@ -71,8 +70,8 @@ class BaseTask(QThread):
     def _check(self, method, timeout=TIMEOUT_CHECK, **kwargs):
         """Check."""
         need_check = _dcopy(self._devices)
-        t = _time.time()
-        while _time.time() - t < timeout:
+        _t0 = _time.time()
+        while _time.time() - _t0 < timeout:
             for dev in self._devices:
                 if dev not in need_check:
                     continue
@@ -95,6 +94,7 @@ class BaseTask(QThread):
 
 
 class CreateTesters(BaseTask):
+    """Create Testers."""
 
     def function(self):
         for dev in self._devices:
@@ -102,27 +102,27 @@ class CreateTesters(BaseTask):
             if dev not in BaseTask._testers:
                 devname = _PVName(dev)
                 if devname.sec == 'LI':
-                    t = TesterPSLinac(dev)
+                    tester = TesterPSLinac(dev)
                 elif _PSSearch.conv_psname_2_psmodel(dev) == 'FOFB_PS':
-                    t = TesterPSFOFB(dev)
+                    tester = TesterPSFOFB(dev)
                 elif _PSSearch.conv_psname_2_psmodel(dev) == 'FBP_DCLink':
-                    t = TesterDCLinkFBP(dev)
+                    tester = TesterDCLinkFBP(dev)
                 elif 'bo-dclink' in _PSSearch.conv_psname_2_pstype(dev):
-                    t = TesterDCLink(dev)
+                    tester = TesterDCLink(dev)
                 elif _PSSearch.conv_psname_2_psmodel(dev) == 'REGATRON_DCLink':
-                    t = TesterDCLinkRegatron(dev)
+                    tester = TesterDCLinkRegatron(dev)
                 elif _PSSearch.conv_psname_2_psmodel(dev) == 'FBP':
-                    t = TesterPSFBP(dev)
+                    tester = TesterPSFBP(dev)
                 elif devname.dis == 'PS':
-                    t = TesterPS(dev)
+                    tester = TesterPS(dev)
                 elif devname.dis == 'PU' and 'Kckr' in devname.dev:
-                    t = TesterPUKckr(dev)
+                    tester = TesterPUKckr(dev)
                 elif devname.dis == 'PU' and 'Sept' in devname.dev:
-                    t = TesterPUSept(dev)
+                    tester = TesterPUSept(dev)
                 else:
                     raise NotImplementedError(
                         'There is no Tester defined to '+dev+'.')
-                BaseTask._testers[dev] = t
+                BaseTask._testers[dev] = tester
             self.itemDone.emit(dev, True)
             if self._quit_task:
                 break
@@ -215,20 +215,20 @@ class CheckPwrState(BaseTask):
 
     def function(self):
         """Check PS PwrState."""
+        timeout = 5
         if not self._is_test:
             timeout = 2
-        elif self._state == 'on' and \
-                ('SI-Fam:PS-B1B2-1' in self._devices or
-                 'SI-Fam:PS-B1B2-2' in self._devices):
-            timeout = 15
-        elif self._state == 'off' and \
-                (set(_PSSearch.get_pstype_2_psnames_dict()[
-                    'as-dclink-regatron-master']) & set(self._devices)):
-            timeout = 15
-        else:
-            timeout = 5
-        self._check(method='check_pwrstate', state=self._state,
-                    timeout=timeout)
+        elif self._state == 'on':
+            if ('SI-Fam:PS-B1B2-1' in self._devices or
+                    'SI-Fam:PS-B1B2-2' in self._devices):
+                timeout = 15
+        elif self._state == 'off':
+            pstype2psnames = _PSSearch.get_pstype_2_psnames_dict()
+            regatrons = pstype2psnames['as-dclink-regatron-master']
+            if set(regatrons) & set(self._devices):
+                timeout = 15
+        self._check(
+            method='check_pwrstate', state=self._state, timeout=timeout)
 
 
 class SetPulse(BaseTask):
@@ -285,8 +285,7 @@ class CheckCapBankVolt(BaseTask):
 
     def function(self):
         """Check DCLink Capacitor Bank Voltage."""
-        psn = {k for k in DEFAULT_CAP_BANK_VOLT.keys()
-               if k != 'FBP_DCLink'}
+        psn = {k for k in DEFAULT_CAP_BANK_VOLT if k != 'FBP_DCLink'}
         if any(n in self._devices for n in psn):
             timeout = 6*TIMEOUT_CHECK
         else:
@@ -356,21 +355,19 @@ class TriggerTask(QThread):
     completed = Signal()
 
     def __init__(self, parent=None, restore_initial_value=False,
-                 dis='PS', state='on', devices=list()):
+                 dis='PS', state='on', devices=None):
         """Constructor."""
         super().__init__(parent)
         self._dis = dis
         filt = {'dev': 'Mags'} if dis == 'PS' else {'dev': '.*(Kckr|Sept).*'}
         self._triggers = _HLTimeSearch.get_hl_triggers(filters=filt)
-        self._pvs_sp = {trg: _PV(trg+':State-Sel', connection_timeout=0.05)
-                        for trg in self._triggers}
-        self._pvs_rb = {trg: _PV(trg+':State-Sts', connection_timeout=0.05)
-                        for trg in self._triggers}
+        self._connectors = Triggers(self._triggers)
+        self._connectors.wait_for_connection(TIMEOUT_CONN)
 
-        for trg, pv in self._pvs_rb.items():
-            pv.wait_for_connection(TIMEOUT_CONN)
-            if trg not in TriggerTask.initial_triggers_state.keys():
-                TriggerTask.initial_triggers_state[trg] = pv.value
+        for trig in self._triggers:
+            if trig not in TriggerTask.initial_triggers_state.keys():
+                value = self._connectors.triggers[trig].state
+                TriggerTask.initial_triggers_state[trig] = value
 
         if restore_initial_value:
             self.trig2val = {
@@ -399,7 +396,8 @@ class TriggerTask(QThread):
             self.function()
         self.completed.emit()
 
-    def function(self, ):
+    def function(self):
+        """Function to implement."""
         raise NotImplementedError
 
     def _get_trigger_by_psname(self, devices):
@@ -421,27 +419,27 @@ class TriggerTask(QThread):
     def _set(self):
         for trig in self._trig2ctrl:
             self.currentItem.emit(trig)
-            pv = self._pvs_sp[trig]
+            conn = self._connectors.triggers[trig]
             val = self.trig2val[trig]
-            if not pv.wait_for_connection(TIMEOUT_CONN):
+            if not conn.wait_for_connection(TIMEOUT_CONN):
                 self.itemDone.emit(trig, False)
                 continue
             if val is not None:
-                pv.value = val
+                conn.state = val
             self.itemDone.emit(trig, True)
 
     def _check(self):
         need_check = _dcopy(self._trig2ctrl)
-        t0 = _time.time()
-        while _time.time() - t0 < TIMEOUT_CHECK/2:
+        _t0 = _time.time()
+        while _time.time() - _t0 < TIMEOUT_CHECK/2:
             for trig in self._trig2ctrl:
                 if trig not in need_check:
                     continue
-                pv = self._pvs_rb[trig]
+                conn = self._connectors.triggers[trig]
                 val = self.trig2val[trig]
-                if not pv.wait_for_connection(TIMEOUT_CONN):
+                if not conn.wait_for_connection(TIMEOUT_CONN):
                     continue
-                if pv.value == val:
+                if conn.state == val:
                     self.currentItem.emit(trig)
                     self.itemDone.emit(trig, True)
                     need_check.remove(trig)
