@@ -755,7 +755,7 @@ class BucketListGraph(BaseWidget):
         new_bunch_indices = _np.searchsorted(
             _np.nextafter(org_bunch, -_np.inf), new_bunch, side='left')
         new_bunch_indices = new_bunch_indices.clip(
-            1, len(org_bunch)).astype(_np.intp)
+            1, len(org_bunch)).astype(_np.int_)
         new_curve = org_curve[new_bunch_indices-1]
 
         curve.receiveXWaveform(new_bunch)
