@@ -182,7 +182,7 @@ class EPUControlWindow(IDCommonControlWindow):
         row = 0
         for prop in ['Phase', 'Gap']:
             ld_phsspdlim = QLabel('Max '+prop+' Speed [mm/s]', self)
-            sb_phsspdlim = PyDMLineEdit(
+            sb_phsspdlim = SiriusSpinbox(
                 self, self.dev_pref.substitute(propty='Max'+prop+'Speed-SP'))
             sb_phsspdlim.setStyleSheet('max-width:4.5em;')
             lb_phsspdlim = SiriusLabel(
@@ -249,10 +249,10 @@ class EPUSummaryBase(IDCommonSummaryBase):
 
     MODEL_WIDTHS = (
         ('Status', 4),
-        ('Phase', 6),
-        ('Phase Speed', 6),
-        ('Start Phase', 4),
-        ('Stop Phase', 4),
+        # ('Phase', 6),
+        # ('Phase Speed', 6),
+        # ('Start Phase', 4),
+        # ('Stop Phase', 4),
         ('Gap', 6),
         ('Gap Speed', 6),
         ('Start Gap', 4),
@@ -276,14 +276,14 @@ class EPUSummaryWidget(IDCommonSummaryWidget, EPUSummaryBase):
                 self, self.dev_pref.substitute(propty='Status-Mon'))
             wids.append(led)
         elif prop == 'Phase':
-            spb = PyDMLineEdit(
+            spb = SiriusSpinbox(
                 self, self.dev_pref.substitute(propty='Phase-SP'))
             wids.append(spb)
             lbl = SiriusLabel(
                 self, self.dev_pref.substitute(propty='Phase-Mon'))
             wids.append(lbl)
         elif prop == 'Phase Speed':
-            spb = PyDMLineEdit(
+            spb = SiriusSpinbox(
                 self, self.dev_pref.substitute(propty='PhaseSpeed-SP'))
             wids.append(spb)
             lbl = SiriusLabel(
@@ -309,14 +309,14 @@ class EPUSummaryWidget(IDCommonSummaryWidget, EPUSummaryBase):
                 '#Stop{min-width:30px; max-width:30px; icon-size:25px;}')
             wids.append(btn)
         elif prop == 'Gap':
-            spb = PyDMLineEdit(
+            spb = SiriusSpinbox(
                 self, self.dev_pref.substitute(propty='Gap-SP'))
             wids.append(spb)
             lbl = SiriusLabel(
                 self, self.dev_pref.substitute(propty='Gap-Mon'))
             wids.append(lbl)
         elif prop == 'Gap Speed':
-            spb = PyDMLineEdit(
+            spb = SiriusSpinbox(
                 self, self.dev_pref.substitute(propty='GapSpeed-SP'))
             wids.append(spb)
             lbl = SiriusLabel(
