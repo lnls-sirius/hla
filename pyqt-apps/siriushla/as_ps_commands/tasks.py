@@ -2,12 +2,15 @@
 
 from copy import deepcopy as _dcopy
 import time as _time
+
 from qtpy.QtCore import Signal, QThread
+
 from siriuspy.search import HLTimeSearch as _HLTimeSearch, \
     PSSearch as _PSSearch
 from siriuspy.csdev import Const
 from siriuspy.namesys import Filter, SiriusPVName as _PVName
-from .conn import TesterDCLink, TesterDCLinkFBP, TesterPS, TesterPSLinac, \
+from siriuspy.devices.pstesters import \
+    TesterDCLink, TesterDCLinkFBP, TesterPS, TesterPSLinac, \
     TesterPSFBP, TesterPSFOFB, TesterDCLinkRegatron, DEFAULT_CAP_BANK_VOLT, \
     TesterPUKckr, TesterPUSept, Triggers
 
