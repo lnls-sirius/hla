@@ -1220,15 +1220,12 @@ class PSCmdWindow(SiriusMainWindow):
             has_sifam |= item.checkState(0) != 0
 
         for proc in self.buttons['PS']:
+            index = 1
             for but in self.buttons['PS'][proc]:
                 if 'SI Fam' in but.text():
                     but.setVisible(has_sifam)
-
-        for proc in self.buttons['PS']:
-            index = 1
-            for but in self.buttons['PS'][proc]:
-                if not but.isVisible():
-                    continue
+                    if not has_sifam:
+                        continue
                 oldtext = but.text()
                 newtext = str(index) + '.' + oldtext.split('.')[1]
                 but.setText(newtext)
