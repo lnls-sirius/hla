@@ -2,14 +2,14 @@
 
 from qtpy.QtCore import Qt, Slot, Signal, QEvent
 from qtpy.QtWidgets import QWidget, QLabel, QGridLayout, QGroupBox, \
-    QHBoxLayout, QVBoxLayout, QSizePolicy as QSzPlcy
+    QHBoxLayout, QVBoxLayout, QSizePolicy as QSzPlcy, QPushButton
 
 import qtawesome as qta
 
 from siriuspy.namesys import SiriusPVName
 from siriuspy.injctrl.csdev import Const as _Const
 
-from ..util import get_appropriate_color, connect_newprocess
+from ..util import get_appropriate_color, connect_newprocess, connect_window
 from ..widgets import SiriusMainWindow, SiriusEnumComboBox, \
     PyDMLogLabel, PyDMStateButton, SiriusSpinbox, \
     SiriusConnectionSignal, SiriusLedState, SiriusLabel
@@ -17,6 +17,7 @@ from ..as_ti_control import BucketList, EVGInjectionLed, EVGInjectionButton
 from ..as_ap_machshift import MachShiftLabel
 from .widgets import InjDiagLed, MonitorSummaryWidget, \
     InjSysStbyControlWidget, ClockLabel, TaskStatusLabel
+from .auxiliary_dialogs import BiasFBDetailDialog
 
 
 class InjCtrlWindow(SiriusMainWindow):
@@ -386,7 +387,7 @@ class InjCtrlWindow(SiriusMainWindow):
         glay1.addWidget(self._ld_currtgt, 2, 0)
         glay1.addWidget(self._sb_currtgt, 2, 1)
         glay1.addWidget(self._lb_currtgt, 2, 2)
-        glay1.addWidget(self.wid_tudtls, 3, 0, 2, 3)
+        glay1.addWidget(self.wid_tudtls, 3, 0, 2, 4)
         glay1.setColumnStretch(0, 3)
         glay1.setColumnStretch(1, 2)
         glay1.setColumnStretch(2, 2)
@@ -479,7 +480,19 @@ class InjCtrlWindow(SiriusMainWindow):
         self._sb_tupustd = PyDMStateButton(self, pvname)
         self._lb_tupustd = SiriusLedState(
             self, pvname.substitute(propty_suffix='Sts'))
-        self._lb_tupustd.showUnits = True
+
+        self._ld_tubiasfb = QLabel('Bias FB', self)
+        pvname = self._inj_prefix.substitute(propty='BiasFBLoopState-Sel')
+        self._sb_tubiasfb = PyDMStateButton(self, pvname)
+        self._lb_tubiasfb = SiriusLedState(
+            self, pvname.substitute(propty_suffix='Sts'))
+        self._pb_biasfb = QPushButton(qta.icon('fa5s.ellipsis-v'), '', self)
+        self._pb_biasfb.setObjectName('btn')
+        self._pb_biasfb.setStyleSheet(
+            '#btn{min-width:18px;max-width:18px;icon-size:20px;}')
+        connect_window(
+            self._pb_biasfb, BiasFBDetailDialog, self,
+            device=self._inj_dev, prefix=self._prefix)
 
         wid = QWidget()
         lay = QGridLayout(wid)
@@ -497,6 +510,10 @@ class InjCtrlWindow(SiriusMainWindow):
         lay.addWidget(self._ld_tupustd, 3, 0)
         lay.addWidget(self._sb_tupustd, 3, 1)
         lay.addWidget(self._lb_tupustd, 3, 2)
+        lay.addWidget(self._ld_tubiasfb, 4, 0)
+        lay.addWidget(self._sb_tubiasfb, 4, 1)
+        lay.addWidget(self._lb_tubiasfb, 4, 2)
+        lay.addWidget(self._pb_biasfb, 4, 3)
         lay.setColumnStretch(0, 3)
         lay.setColumnStretch(1, 2)
         lay.setColumnStretch(2, 2)
