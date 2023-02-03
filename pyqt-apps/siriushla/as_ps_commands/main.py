@@ -196,6 +196,60 @@ class PSCmdWindow(SiriusMainWindow):
                         },
                     },
                 },
+                'Turn On': {
+                    'Check': {
+                        'Check Communication': {
+                            'cmd': self._check_comm,
+                            'tooltip': 'Check PS and DCLinks communication '
+                                       'status (verify invalid alarms and, '
+                                       'if LI, the value of Connected-Mon PV)',
+                        },
+                    },
+                    'Prepare': {
+                        'Disable PS triggers': {
+                            'cmd': _part(
+                                self._set_check_trigger_state, 'PS', 'dsbl'),
+                        },
+                        'Turn Off SOFBMode': {
+                            'cmd': _part(self._set_check_fbp_sofbmode, 'off'),
+                        },
+                        'Reset PS and DCLinks': {
+                            'cmd': _part(self._reset_intlk, 'PS'),
+                        },
+                        'Prepare SI Fam DCLinks': {
+                            'cmd': self._prepare_sidclinks,
+                        },
+                        'Initialize SI Fam PS': {
+                            'cmd': self._set_check_pwrstateinit,
+                        },
+                    },
+                    'Config DCLinks': {
+                        'Turn DCLinks On': {
+                            'cmd': _part(
+                                self._set_check_pwrstate_dclinks, 'on'),
+                        },
+                        'Check DCLinks CtrlLoop': {
+                            'cmd': _part(self._check_ctrlloop, 'dclink'),
+                        },
+                        'Set DCLinks Voltage': {
+                            'cmd': self._set_check_dclinks_capvolt,
+                        },
+                    },
+                    'Turn On': {
+                        'Turn PS On': {
+                            'cmd': _part(
+                                self._set_check_pwrstate, 'PS', 'on', True),
+                        },
+                        'Check PS CtrlLoop': {
+                            'cmd': _part(self._check_ctrlloop, 'pwrsupply'),
+                        },
+                    },
+                    'Restore': {
+                        'Restore PS triggers': {
+                            'cmd': _part(self._restore_triggers_state, 'PS'),
+                        },
+                    },
+                },
                 'Auxiliary Commands': {
                     'Show Status Summary': {
                         'cmd': _part(self._check_status, 'PS'),
@@ -266,6 +320,22 @@ class PSCmdWindow(SiriusMainWindow):
                         'Turn PU Off': {
                             'cmd': _part(
                                 self._set_check_pwrstate, 'PU', 'off', True),
+                        },
+                    },
+                },
+                'Turn On': {
+                    'Prepare': {
+                        'Reset PU': {
+                            'cmd': _part(self._reset_intlk, 'PU'),
+                        },
+                    },
+                    'Turn On': {
+                        'Turn PU On': {
+                            'cmd': _part(
+                                self._set_check_pwrstate, 'PU', 'on', True),
+                        },
+                        'Enable PU Pulse': {
+                            'cmd': _part(self._set_check_pulse, 'on'),
                         },
                     },
                 },
