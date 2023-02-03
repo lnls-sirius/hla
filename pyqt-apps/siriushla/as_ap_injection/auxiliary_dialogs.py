@@ -327,16 +327,16 @@ class BiasFBDetailDialog(SiriusDialog):
         self.graph_inf = SiriusWaveformPlot()
         self.graph_inf.addChannel(
             y_channel=self._inj_prefix.substitute(
+                propty='BiasFBGPModInferenceBias-Mon'),
+            x_channel=self._inj_prefix.substitute(
+                propty='BiasFBGPModInferenceInjCurr-Mon'),
+            name='GP', color=QColor(80, 80, 80), lineWidth=2)
+        self.graph_inf.addChannel(
+            y_channel=self._inj_prefix.substitute(
                 propty='BiasFBLinModInferenceBias-Mon'),
             x_channel=self._inj_prefix.substitute(
                 propty='BiasFBLinModInferenceInjCurr-Mon'),
             name='Linear', color='blue', lineWidth=2)
-        self.graph_inf.addChannel(
-            y_channel=self._inj_prefix.substitute(
-                propty='BiasFBGPModInferenceBias-Mon'),
-            x_channel=self._inj_prefix.substitute(
-                propty='BiasFBGPModInferenceInjCurr-Mon'),
-            name='GP', color='green', lineWidth=2)
         self.graph_inf.autoRangeX = True
         self.graph_inf.autoRangeY = True
         self.graph_inf.showXGrid = True
@@ -356,13 +356,29 @@ class BiasFBDetailDialog(SiriusDialog):
         self.graph_pred = SiriusWaveformPlot()
         self.graph_pred.addChannel(
             x_channel=self._inj_prefix.substitute(
-                propty='BiasFBModelDataBias-Mon'),
+                propty='BiasFBGPModPredBias-Mon'),
             y_channel=self._inj_prefix.substitute(
-                propty='BiasFBModelDataInjCurr-Mon'),
-            name='Model data', color='black', lineStyle=Qt.NoPen,
-            symbol='o', symbolSize=6)
-        curve = self.graph_pred.curveAtIndex(0)
-        curve.opts['symbolBrush'] = mkBrush(QColor(0, 0, 0))
+                propty='BiasFBGPModPredInjCurrAvg-Mon'),
+            name='GP with 95% Conf.', color=QColor(80, 80, 80), lineWidth=2)
+        self.graph_pred.addChannel(
+            x_channel=self._inj_prefix.substitute(
+                propty='BiasFBGPModPredBias-Mon'),
+            y_channel='FAKE:GP_Avg_plus_Std',
+            name='extra1', color='gray',
+            lineWidth=2, lineStyle=Qt.DashLine)
+        self._curve_gp_pred_avg_p_std = self.graph_pred.curveAtIndex(-1)
+        self.graph_pred.addChannel(
+            x_channel=self._inj_prefix.substitute(
+                propty='BiasFBGPModPredBias-Mon'),
+            y_channel='FAKE:GP_Avg_minus_Std',
+            name='extra2', color='gray',
+            lineWidth=2, lineStyle=Qt.DashLine)
+        self._curve_gp_pred_avg_m_std = self.graph_pred.curveAtIndex(-1)
+        self.graph_pred.legend.removeItem('extra1')
+        self.graph_pred.legend.removeItem('extra2')
+        self._curve_gp_fill_std = FillBetweenItem(
+            self._curve_gp_pred_avg_p_std, self._curve_gp_pred_avg_m_std,
+            brush=mkBrush(QColor('lightGray')))
         self.graph_pred.addChannel(
             x_channel=self._inj_prefix.substitute(
                 propty='BiasFBLinModPredBias-Mon'),
@@ -371,30 +387,13 @@ class BiasFBDetailDialog(SiriusDialog):
             name='Linear', color='blue', lineWidth=2)
         self.graph_pred.addChannel(
             x_channel=self._inj_prefix.substitute(
-                propty='BiasFBGPModPredBias-Mon'),
+                propty='BiasFBModelDataBias-Mon'),
             y_channel=self._inj_prefix.substitute(
-                propty='BiasFBGPModPredInjCurrAvg-Mon'),
-            name='GP Avg', color='green', lineWidth=2)
-        self.graph_pred.addChannel(
-            x_channel=self._inj_prefix.substitute(
-                propty='BiasFBGPModPredBias-Mon'),
-            y_channel='FAKE:GP_Avg_plus_Std',
-            name='GP - 95% Confidance', color='gray',
-            lineWidth=2, lineStyle=Qt.DashLine)
-        self._curve_gp_pred_avg_p_std = self.graph_pred.curveAtIndex(-1)
-        self.graph_pred.addChannel(
-            x_channel=self._inj_prefix.substitute(
-                propty='BiasFBGPModPredBias-Mon'),
-            y_channel='FAKE:GP_Avg_minus_Std',
-            name='extra', color='gray',
-            lineWidth=2, lineStyle=Qt.DashLine)
-        self._curve_gp_pred_avg_m_std = self.graph_pred.curveAtIndex(-1)
-        self.graph_pred.legend.removeItem('extra')
-        self._curve_gp_fill_std = FillBetweenItem(
-            self._curve_gp_pred_avg_p_std, self._curve_gp_pred_avg_m_std,
-            brush=mkBrush(QColor('lightGray')))
-        self._legitem_gp_fill_std = PlotDataItem(
-            symbol='s', symbolBrush=mkBrush(QColor('lightGray')))
+                propty='BiasFBModelDataInjCurr-Mon'),
+            name='Model data', color='black', lineStyle=Qt.NoPen,
+            symbol='o', symbolSize=6)
+        curve = self.graph_pred.curveAtIndex(-1)
+        curve.opts['symbolBrush'] = mkBrush(QColor(0, 0, 0))
         self.graph_pred.addItem(self._curve_gp_fill_std)
         self.graph_pred.autoRangeX = True
         self.graph_pred.autoRangeY = True
