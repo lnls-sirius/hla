@@ -1,6 +1,6 @@
 #!/usr/bin/env python-sirius
-"""This script is used to find a window position"""
-import subprocess, sys, re, shlex, psutil
+"""This script is used to find a window position."""
+import subprocess, sys, re, shlex
 from os import system
 
 # Make sure xdotools is installed
@@ -13,8 +13,8 @@ except OSError as e:
 		      "'sudo apt-get install xdotool' to install it.")
 		sys.exit(1)
 
-PRODUCE_SCRIPT=False
-LAUNCHED=[]
+PRODUCE_SCRIPT = False
+LAUNCHED = []
 
 def run_cmd(cmd):
 	''' Run a command '''
