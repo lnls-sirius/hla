@@ -15,6 +15,18 @@ parser = _argparse.ArgumentParser(
 parser.add_argument(
     '-p', "--prefix", type=str, default=VACA_PREFIX,
     help="Define the prefix for the PVs in the window.")
+parser.add_argument(
+    '-x', '--xpos', type=int, default=0,
+    help="Define left origin point of window")
+parser.add_argument(
+    '-y', '--ypos', type=int, default=20,
+    help="Define top origin point of window")
+parser.add_argument(
+    '-wi', '--width', type=int, default=0,
+    help="Define window width value")
+parser.add_argument(
+    '-he', '--height', type=int, default=0,
+    help="Define window height value")
 args = parser.parse_args()
 
 need_new_window = True
@@ -32,5 +44,13 @@ if returnval:
 
 if need_new_window:
     app = SiriusApplication()
-    app.open_window(MainLauncher, parent=None, prefix=args.prefix)
+    w = MainLauncher
+    position = (args.xpos, args.ypos)
+    if args.width and args.height != 0:
+        size = (args.width, args.height)
+    else:
+        size = 'default'
+    app.open_window(w, position=position, size=size, parent=None, prefix=args.prefix)
+    scrn_size = app._get_desktop_geometry()
+    print(scrn_size)
     _sys.exit(app.exec_())
