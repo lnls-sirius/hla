@@ -100,7 +100,7 @@ class SiriusApplication(PyDMApplication):
         set_style(self)
         self._windows = dict()
 
-    def open_window(self, w_class, parent=None, **kwargs):
+    def open_window(self, w_class, position=(0, 20), size='default', parent=None, **kwargs):
         """Open new window.
 
         A new window will be created if it is not already open. Otherwise, the
@@ -114,7 +114,7 @@ class SiriusApplication(PyDMApplication):
         except (KeyError, RuntimeError):
             # KeyError - Window does not exist
             # RuntimeError: wrapped C/C++ object of type x has been deleted
-            self._create_and_show(wid, w_class, parent, **kwargs)
+            self._create_and_show(wid, w_class, position, size, parent, **kwargs)
 
     def _show(self, wid):
         if self._windows[wid].isHidden():
@@ -122,11 +122,20 @@ class SiriusApplication(PyDMApplication):
         elif self._windows[wid].isMinimized():
             self._windows[wid].showNormal()
 
-    def _create_and_show(self, wid, w_class, parent, **kwargs):
+    def _create_and_show(self, wid, w_class, position, size, parent, **kwargs):
         with data_plugins.connection_queue():
             window = w_class(parent=parent, **kwargs)
             self._windows[wid] = window
-            self._windows[wid].show()
+            self._windows[wid].move(position[0], position[1])
+            if size != 'default':
+                if size == 'maximized':
+                    self._windows[wid].showMaximized()
+                elif size == 'minimized':
+                    self._windows[wid].showMinimized()
+                else:
+                    self._windows[wid].resize(size[0], size[1])
+            else:
+                self._windows[wid].show()
 
     def _get_desktop_geometry(self):
         screen = self.primaryScreen()
