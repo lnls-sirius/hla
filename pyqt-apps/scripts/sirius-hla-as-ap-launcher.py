@@ -51,6 +51,4 @@ if need_new_window:
     else:
         size = 'default'
     app.open_window(w, position=position, size=size, parent=None, prefix=args.prefix)
-    scrn_size = app._get_desktop_geometry()
-    print(scrn_size)
     _sys.exit(app.exec_())

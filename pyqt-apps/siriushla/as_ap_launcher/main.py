@@ -40,10 +40,10 @@ class MainLauncher(SiriusMainWindow):
         self.setWindowIcon(
             qta.icon('mdi.rocket', color=get_appropriate_color('AS')))
 
-        screens = QApplication.screens()
-        screen_idx = 3 if len(screens) == 8 else 0
-        topleft = screens[screen_idx].geometry().topLeft()
-        self.move(topleft.x(), topleft.y()+20)
+        # screens = QApplication.screens()
+        # screen_idx = 3 if len(screens) == 8 else 0
+        # topleft = screens[screen_idx].geometry().topLeft()
+        # self.move(topleft.x(), topleft.y()+20)
         self.setWindowFlags(Qt.WindowStaysOnTopHint)
 
         # menubar
