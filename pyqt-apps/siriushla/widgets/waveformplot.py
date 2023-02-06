@@ -17,3 +17,8 @@ class SiriusWaveformPlot(PyDMWaveformPlot):
 
         # use pan mouse mode (3-button)
         self.plotItem.getViewBox().setMouseMode(ViewBox.PanMode)
+
+    @property
+    def legend(self):
+        """Legend object."""
+        return self._legend
