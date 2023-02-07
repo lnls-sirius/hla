@@ -4,7 +4,7 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGroupBox, QGridLayout, QLabel, \
     QHBoxLayout, QSizePolicy as QSzPlcy, QSpacerItem, QPushButton
 import qtawesome as qta
-from pydm.widgets import PyDMPushButton, PyDMLineEdit
+from pydm.widgets import PyDMPushButton
 
 from siriushla.util import connect_window
 from siriushla.widgets import PyDMLogLabel, SiriusLedAlert, PyDMLed, \
@@ -24,7 +24,7 @@ class EPUControlWindow(IDCommonControlWindow):
         row = 0
         for prop in ['Phase', 'Gap']:
             ld_prop = QLabel(prop+' [mm]', self)
-            sb_prop = PyDMLineEdit(
+            sb_prop = SiriusSpinbox(
                 self, self.dev_pref.substitute(propty=prop+'-SP'))
             lb_prop = SiriusLabel(
                 self, self.dev_pref.substitute(propty=prop+'-RB'))
@@ -32,7 +32,7 @@ class EPUControlWindow(IDCommonControlWindow):
                 self, self.dev_pref.substitute(propty=prop+'-Mon'))
 
             ld_propspd = QLabel(prop+' Speed [mm/s]', self)
-            sb_propspd = PyDMLineEdit(
+            sb_propspd = SiriusSpinbox(
                 self, self.dev_pref.substitute(propty=prop+'Speed-SP'))
             lb_propspd = SiriusLabel(
                 self, self.dev_pref.substitute(propty=prop+'Speed-RB'))
@@ -154,7 +154,8 @@ class EPUControlWindow(IDCommonControlWindow):
 
         self._log = PyDMLogLabel(
             self, init_channel=self.dev_pref.substitute(propty='Log-Mon'))
-        self._log.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.MinimumExpanding)
+        self._log.setSizePolicy(
+            QSzPlcy.MinimumExpanding, QSzPlcy.MinimumExpanding)
         self._log.setAlternatingRowColors(True)
         self._log.maxCount = 2000
 
@@ -162,6 +163,7 @@ class EPUControlWindow(IDCommonControlWindow):
         self._bt_logclear.clicked.connect(self._log.clear)
 
         gbox = QGroupBox('Status')
+        gbox.setSizePolicy(QSzPlcy.MinimumExpanding, QSzPlcy.Preferred)
         lay = QGridLayout(gbox)
         lay.addWidget(self._led_isbusy, 0, 0, alignment=Qt.AlignRight)
         lay.addWidget(self._ld_isbusy, 0, 1)
