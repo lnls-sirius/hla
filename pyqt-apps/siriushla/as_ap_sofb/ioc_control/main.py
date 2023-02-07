@@ -177,7 +177,7 @@ class SOFBControl(BaseWidget):
         """."""
         corr_wid = QGroupBox('Correction', parent)
         lay = QVBoxLayout(corr_wid)
-        lay.setContentsMargins(0, 0, 0, 0)
+        lay.setContentsMargins(0, 6, 0, 6)
 
         if self.acc == 'SI':
             lbl = QLabel('Auto Correction State:', corr_wid)
