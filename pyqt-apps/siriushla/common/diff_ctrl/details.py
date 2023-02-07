@@ -55,7 +55,7 @@ class DiffCtrlDetails(SiriusDialog):
 
         self.setStyleSheet("""
             SiriusSpinbox, SiriusLabel{
-                min-width: 5em; max-width: 5em;
+                min-width: 7em; max-width: 7em;
             }""")
         self.setLayout(lay)
 
@@ -132,6 +132,12 @@ class DiffCtrlDetails(SiriusDialog):
             pressValue=1, init_channel=self.dev_prefix.substitute(
                 propty='ForcePositiveEdgePos-Cmd'))
 
+        for btn in [self.PyDMPushButton_DoHome,
+                    self.PyDMPushButton_NegDoneMov,
+                    self.PyDMPushButton_PosDoneMov]:
+            btn.setDefault(False)
+            btn.setAutoDefault(False)
+
         label_ForceComplete = QLabel('Force Commands Completed? ', self)
         self.PyDMLed_ForceComplete = PyDMLed(
             parent=self, init_channel=self.dev_prefix.substitute(
@@ -153,19 +159,27 @@ class DiffCtrlDetails(SiriusDialog):
         self.sb_PosEdgeInnerLim = SiriusSpinbox(
             self, self.dev_prefix.substitute(propty='PosEdgeInnerLim-SP'))
         self.lb_PosEdgeInnerLim = SiriusLabel(
-            self, self.dev_prefix.substitute(propty='PosEdgeInnerLim-RB'))
+            self, self.dev_prefix.substitute(propty='PosEdgeInnerLim-RB'),
+            keep_unit=True)
+        self.lb_PosEdgeInnerLim.showUnits = True
         self.sb_NegEdgeInnerLim = SiriusSpinbox(
             self, self.dev_prefix.substitute(propty='NegEdgeInnerLim-SP'))
         self.lb_NegEdgeInnerLim = SiriusLabel(
-            self, self.dev_prefix.substitute(propty='NegEdgeInnerLim-RB'))
+            self, self.dev_prefix.substitute(propty='NegEdgeInnerLim-RB'),
+            keep_unit=True)
+        self.lb_NegEdgeInnerLim.showUnits = True
         self.sb_LowOuterLim = SiriusSpinbox(
             self, self.dev_prefix.substitute(propty='LowOuterLim-SP'))
         self.lb_LowOuterLim = SiriusLabel(
-            self, self.dev_prefix.substitute(propty='LowOuterLim-RB'))
+            self, self.dev_prefix.substitute(propty='LowOuterLim-RB'),
+            keep_unit=True)
+        self.lb_LowOuterLim.showUnits = True
         self.sb_HighOuterLim = SiriusSpinbox(
             self, self.dev_prefix.substitute(propty='HighOuterLim-SP'))
         self.lb_HighOuterLim = SiriusLabel(
-            self, self.dev_prefix.substitute(propty='HighOuterLim-RB'))
+            self, self.dev_prefix.substitute(propty='HighOuterLim-RB'),
+            keep_unit=True)
+        self.lb_HighOuterLim.showUnits = True
 
         lay = QGridLayout()
         lay.setVerticalSpacing(15)
@@ -195,13 +209,15 @@ class DiffCtrlDetails(SiriusDialog):
                 propty='PositiveEdgeBacklashDist-SP'))
         self.lb_PosEdgeBacklashDist = SiriusLabel(
             self, self.dev_prefix.substitute(
-                propty='PositiveEdgeBacklashDist-RB'))
+                propty='PositiveEdgeBacklashDist-RB'), keep_unit=True)
+        self.lb_PosEdgeBacklashDist.showUnits = True
         self.sb_NegEdgeBacklashDist = SiriusSpinbox(
             self, self.dev_prefix.substitute(
                 propty='NegativeEdgeBacklashDist-SP'))
         self.lb_NegEdgeBacklashDist = SiriusLabel(
             self, self.dev_prefix.substitute(
-                propty='NegativeEdgeBacklashDist-RB'))
+                propty='NegativeEdgeBacklashDist-RB'), keep_unit=True)
+        self.lb_NegEdgeBacklashDist.showUnits = True
 
         lay = QGridLayout()
         lay.setVerticalSpacing(15)

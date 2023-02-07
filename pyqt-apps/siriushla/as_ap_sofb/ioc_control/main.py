@@ -177,7 +177,7 @@ class SOFBControl(BaseWidget):
         """."""
         corr_wid = QGroupBox('Correction', parent)
         lay = QVBoxLayout(corr_wid)
-        lay.setContentsMargins(0, 0, 0, 0)
+        lay.setContentsMargins(0, 6, 0, 6)
 
         if self.acc == 'SI':
             lbl = QLabel('Auto Correction State:', corr_wid)
@@ -535,14 +535,22 @@ class PerformanceWidget(QWidget):
         lbl_main = QLabel(
             '<h3>Loop Performance</h3>', self, alignment=Qt.AlignCenter)
 
-        lbl_prnt = QLabel('Number of Iter. Between Updates', self)
-        lbl_rate = QLabel('Effective Rate', self)
-        slsh = QLabel('/', self, alignment=Qt.AlignCenter)
-        slsh.setStyleSheet('min-width:0.7em; max-width:0.7em;')
-
+        lbl_prnt = QLabel(
+            'Number of Iter. Between Updates', self, alignment=Qt.AlignCenter)
         spb = SiriusSpinbox(self, lamb('LoopPrintEveryNumIters-SP'))
         ldrb = SiriusLabel(self, lamb('LoopPrintEveryNumIters-RB'))
+        slsh = QLabel('/', self, alignment=Qt.AlignCenter)
+        slsh.setStyleSheet('min-width:0.7em; max-width:0.7em;')
         ldmon = SiriusLabel(self, lamb('LoopNumIters-Mon'))
+
+        lbl_tout = QLabel(
+            'SlowOrb\nTimeouts', self, alignment=Qt.AlignCenter)
+        ld_tout = SiriusLabel(self, lamb('SlowOrbTimeout-Mon'))
+        ld_tout.showUnits = True
+        ld_tout.setAlignment(Qt.AlignCenter)
+
+        lbl_rate = QLabel(
+            'Effective\nRate', self, alignment=Qt.AlignCenter)
         ld_rate = SiriusLabel(self, lamb('LoopEffectiveRate-Mon'))
         ld_rate.showUnits = True
 
@@ -552,7 +560,8 @@ class PerformanceWidget(QWidget):
         lay_niter.addWidget(ldrb, 1, 1)
         lay_niter.addWidget(slsh, 1, 2)
         lay_niter.addWidget(ldmon, 1, 3)
-        lay_niter.setColumnStretch(4, 3)
+        lay_niter.addWidget(lbl_tout, 0, 4, alignment=Qt.AlignCenter)
+        lay_niter.addWidget(ld_tout, 1, 4)
         lay_niter.addWidget(lbl_rate, 0, 5, alignment=Qt.AlignCenter)
         lay_niter.addWidget(ld_rate, 1, 5)
 
