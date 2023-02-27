@@ -340,7 +340,7 @@ class MacReportWindow(SiriusMainWindow):
             'commi': 'commissioning',
             'condi': 'conditioning',
             'stord': 'ebeam',
-            'user': 'user'}
+            'user': 'users'}
         fillmode = {
             'mb': 'multibunch',
             'sb': 'singlebunch',
@@ -458,7 +458,7 @@ class MacReportWindow(SiriusMainWindow):
             'commi': 'commissioning',
             'condi': 'conditioning',
             'maint': 'maintenance',
-            'user': 'user'}
+            'user': 'users'}
         intervaltype = {
             'fail': '_failures',
             'oper': '_operational',
