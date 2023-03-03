@@ -287,13 +287,13 @@ class BPMIntlkLimSPWidget(BaseObject, QWidget):
 
         row = 0
         if 'sum' in self.metric:
-            text = '\nThresholds must be set in Monit1 rate\n'\
-                'counts. Here we make available you \n'\
-                'to read Sum-Mon values, in Monit rate\n'\
-                'counts, and convert them to Monit1\n'\
-                'rate counts using calibration curves.\n'\
-                'You can also apply a scale factor to\n'\
-                'the values read.\n\n'
+            text = '\nThresholds must be set in Monit1 rate counts,\n'\
+                'considering polynomial calibration disabled.\n'\
+                'Here we make available you to read Sum-Mon\n'\
+                'values, in Monit rate counts, and convert them\n'\
+                'to orbit interlock counts using Monit/Monit1\n'\
+                'ratio. You can also apply a scale factor to the\n'\
+                'values read.\n\n'
             self._label_help = QLabel(text, self)
             lay_lims.addWidget(self._label_help, row, 0, 1, 2)
 
@@ -418,9 +418,11 @@ class BPMIntlkLimSPWidget(BaseObject, QWidget):
             return
 
         if 'sum' in self.metric:
-            _av = self.CONV_POLY_MONIT1_2_MONIT[0, :]
-            _bv = self.CONV_POLY_MONIT1_2_MONIT[1, :]
-            allvals = self._spin_scl.value() * (self._summon - _bv)/_av
+            summonit = self._summon
+            sumintlk = summonit * self.get_monitsum2intlksum_factor()
+            allvals = self._spin_scl.value() * sumintlk
+            reso = self.MINSUM_RESO
+            allvals = _np.ceil(allvals / reso) * reso
             values = allvals[_np.array(idxsel)]
             pvs = [b.substitute(propty=self.lim_sp[0]) for b in namesel]
         else:

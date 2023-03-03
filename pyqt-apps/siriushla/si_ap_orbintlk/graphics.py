@@ -646,12 +646,11 @@ class _UpdateGraphThread(BaseObject, QThread):
                 symb_propty = self.meas_symb[
                     self._propintlktype][self._propcomptype]
                 if isinstance(symb_propty, dict):
-                    _var = symb_propty['var']
-                    for var in _var:
+                    for var in symb_propty['var']:
                         self._create_pvs(var)
-                    vals0 = _np.array(self._get_values(_var[0]))
-                    vals1 = _np.array(self._get_values(_var[1]))
-                    symb_values = list(_np.logical_or(vals0, vals1))
+                    vals = [_np.array(self._get_values(var))
+                            for var in symb_propty['var']]
+                    symb_values = list(symb_propty['op'](*vals))
                 else:
                     self._create_pvs(symb_propty)
                     symb_values = self._get_values(symb_propty)
@@ -661,18 +660,15 @@ class _UpdateGraphThread(BaseObject, QThread):
 
             # data meas
             self._create_pvs(self.meas_data)
+            vals = _np.array(self._get_values(self.meas_data), dtype=float)
             if self.metric in ['pos', 'ang']:
-                vals = _np.array(self._get_values(self.meas_data), dtype=float)
                 vals -= self._reforb
                 vals = _np.array(self.calc_intlk_metric(
                     vals, metric=self.metric), dtype=float)
-                vals = vals * self.CONV_NM2M
+                vals *= self.CONV_NM2M
             else:
                 # sum case
-                _av = self.CONV_POLY_MONIT1_2_MONIT[0, :]
-                _bv = self.CONV_POLY_MONIT1_2_MONIT[1, :]
-                vals = _np.array(self._get_values(self.meas_data), dtype=float)
-                vals = (vals - _bv)/_av
+                vals *= self.get_monitsum2intlksum_factor()
             y_data_meas = list(vals)
 
             self.dataChanged.emit(['meas', symbols_meas, y_data_meas])
@@ -695,7 +691,7 @@ class _UpdateGraphThread(BaseObject, QThread):
             if self.metric in ['pos', 'ang']:
                 ref = self.calc_intlk_metric(self._reforb, metric=self.metric)
                 vals -= ref
-                vals = vals * self.CONV_NM2M
+                vals *= self.CONV_NM2M
             y_data_min = list(vals)
 
             self.dataChanged.emit(['min', symbols_min, y_data_min])
@@ -718,7 +714,7 @@ class _UpdateGraphThread(BaseObject, QThread):
             if self.metric in ['pos', 'ang']:
                 ref = self.calc_intlk_metric(self._reforb, metric=self.metric)
                 vals -= ref
-                vals = vals * self.CONV_NM2M
+                vals *= self.CONV_NM2M
             y_data_max = list(vals)
 
             self.dataChanged.emit(['max', symbols_max, y_data_max])
@@ -748,7 +744,7 @@ class PosXGraphWidget(_BaseGraphWidget):
             'Lower': 'IntlkPosLower-Mon',
             'Upper | Lower': {
                 'var': ['IntlkPosUpper-Mon', 'IntlkPosLower-Mon'],
-                'op': 'or'},
+                'op': _np.logical_or},
         },
         'Latch': {
             'General': 'IntlkLtc-Mon',
@@ -756,7 +752,7 @@ class PosXGraphWidget(_BaseGraphWidget):
             'Lower': 'IntlkPosLowerLtc-Mon',
             'Upper | Lower': {
                 'var': ['IntlkPosUpperLtc-Mon', 'IntlkPosLowerLtc-Mon'],
-                'op': 'or'},
+                'op': _np.logical_or},
         },
     }
     PROPTY_MIN_DATA = 'IntlkLmtPosMinX-RB'
@@ -781,7 +777,7 @@ class PosYGraphWidget(_BaseGraphWidget):
             'Lower': 'IntlkPosLower-Mon',
             'Upper | Lower': {
                 'var': ['IntlkPosUpper-Mon', 'IntlkPosLower-Mon'],
-                'op': 'or'},
+                'op': _np.logical_or},
         },
         'Latch': {
             'General': 'IntlkLtc-Mon',
@@ -789,7 +785,7 @@ class PosYGraphWidget(_BaseGraphWidget):
             'Lower': 'IntlkPosLowerLtc-Mon',
             'Upper | Lower': {
                 'var': ['IntlkPosUpperLtc-Mon', 'IntlkPosLowerLtc-Mon'],
-                'op': 'or'},
+                'op': _np.logical_or},
         },
     }
     PROPTY_MIN_DATA = 'IntlkLmtPosMinY-RB'
@@ -816,7 +812,7 @@ class AngXGraphWidget(_BaseGraphWidget):
             'Lower': 'IntlkAngLower-Mon',
             'Upper | Lower': {
                 'var': ['IntlkAngUpper-Mon', 'IntlkAngLower-Mon'],
-                'op': 'or'},
+                'op': _np.logical_or},
         },
         'Latch': {
             'General': 'IntlkLtc-Mon',
@@ -824,7 +820,7 @@ class AngXGraphWidget(_BaseGraphWidget):
             'Lower': 'IntlkAngLowerLtc-Mon',
             'Upper | Lower': {
                 'var': ['IntlkAngUpperLtc-Mon', 'IntlkAngLowerLtc-Mon'],
-                'op': 'or'},
+                'op': _np.logical_or},
         },
     }
     PROPTY_MIN_DATA = 'IntlkLmtAngMinX-RB'
@@ -851,7 +847,7 @@ class AngYGraphWidget(_BaseGraphWidget):
             'Lower': 'IntlkAngLower-Mon',
             'Upper | Lower': {
                 'var': ['IntlkAngUpper-Mon', 'IntlkAngLower-Mon'],
-                'op': 'or'},
+                'op': _np.logical_or},
         },
         'Latch': {
             'General': 'IntlkLtc-Mon',
@@ -859,7 +855,7 @@ class AngYGraphWidget(_BaseGraphWidget):
             'Lower': 'IntlkAngLowerLtc-Mon',
             'Upper | Lower': {
                 'var': ['IntlkAngUpperLtc-Mon', 'IntlkAngLowerLtc-Mon'],
-                'op': 'or'},
+                'op': _np.logical_or},
         },
     }
     PROPTY_MIN_DATA = 'IntlkLmtAngMinY-RB'

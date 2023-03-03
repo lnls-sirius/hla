@@ -1,12 +1,15 @@
 """Base Object."""
 
+import math as _math
 import numpy as _np
+
 from epics.ca import ChannelAccessException
+
 from siriuspy.epics import PV as _PV
 from siriuspy.envars import VACA_PREFIX
 from siriuspy.namesys import SiriusPVName
 from siriuspy.clientconfigdb import ConfigDBClient
-from siriuspy.devices.orbit_interlock import BaseOrbitIntlk, OrbitInterlock
+from siriuspy.devices.orbit_interlock import BaseOrbitIntlk
 
 
 class BaseObject(BaseOrbitIntlk):
@@ -14,8 +17,7 @@ class BaseObject(BaseOrbitIntlk):
 
     CONV_NM2M = 1e-9  # [nm] --> [m]
     CONV_UM2NM = 1e+3  # [um] --> [nm]
-
-    CONV_POLY_MONIT1_2_MONIT = OrbitInterlock.CONV_POLY_MONIT1_2_MONIT
+    MINSUM_RESO = 2**24
 
     _pvs = dict()
 
@@ -23,6 +25,15 @@ class BaseObject(BaseOrbitIntlk):
         super().__init__()
         self._client = ConfigDBClient(config_type='si_orbit')
         self._prefix = prefix
+
+        pvname = SiriusPVName(
+            self.BPM_NAMES[0]).substitute(
+                propty='INFOMONITRate-RB', prefix=prefix)
+        self._pv_monitrate = _PV(pvname)
+        pvname = SiriusPVName(
+            self.BPM_NAMES[0]).substitute(
+                propty='INFOMONIT1Rate-RB', prefix=prefix)
+        self._pv_monit1rate = _PV(pvname)
 
     def get_ref_orb(self, configname):
         """Get reference orbit from config [um].
@@ -38,11 +49,21 @@ class BaseObject(BaseOrbitIntlk):
             value = dict()
             value['x'] = _np.array(configvalue['x']) * self.CONV_UM2NM
             value['y'] = _np.array(configvalue['y']) * self.CONV_UM2NM
-        except:
+        except Exception:
             value = dict()
             value['x'] = _np.zeros(len(self.BPM_NAMES), dtype=float)
             value['y'] = _np.zeros(len(self.BPM_NAMES), dtype=float)
         return value
+
+    def get_monitsum2intlksum_factor(self):
+        """Return factor between BPM Monit Sum and interlock Sum."""
+        monit = self._pv_monitrate.value
+        monit1 = self._pv_monit1rate.value
+        if None in [monit, monit1]:  # connecting
+            return 1
+        frac = monit/monit1
+        factor = 2**_math.ceil(_math.log2(frac)) / frac
+        return factor
 
     # --- pv handler methods ---
 
