@@ -527,6 +527,7 @@ class _BaseGraphWidget(BaseObject, QWidget):
         self.propCompTypeChanged.connect(self._thread.set_propcomptype)
         self.refOrbChanged.connect(self._thread.set_reforb)
         self._thread.dataChanged.connect(self._update_curve)
+        self._thread.finished.connect(self._thread.deleteLater)
         self._thread.start()
 
     @Slot(str)
@@ -571,7 +572,6 @@ class _BaseGraphWidget(BaseObject, QWidget):
         """Finish thread on close."""
         self._thread.exit_task()
         self._wait_thread()
-        self._thread.deleteLater()
         super().closeEvent(event)
 
     def _wait_thread(self):
