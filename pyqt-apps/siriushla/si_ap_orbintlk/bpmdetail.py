@@ -141,6 +141,17 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
     def _setupIntlkTypeLayout(self, intlk):
         unit = 'nm'
 
+        ld_valx = QLabel(
+            intlk+'. X ['+unit+']: ', self,
+            alignment=Qt.AlignRight | Qt.AlignBottom)
+        lb_valx = SiriusLabel(
+            self, self.devpref.substitute(propty='Intlk'+intlk+'X-Mon'))
+        ld_valy = QLabel(
+            intlk+'. Y ['+unit+']: ', self,
+            alignment=Qt.AlignRight | Qt.AlignBottom)
+        lb_valy = SiriusLabel(
+            self, self.devpref.substitute(propty='Intlk'+intlk+'Y-Mon'))
+
         ld_enbl = QLabel(
             'Enable: ', self, alignment=Qt.AlignRight | Qt.AlignBottom)
         sb_enbl = PyDMStateButton(
@@ -276,29 +287,33 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
         lay_mon.addWidget(ld_legltc_x, 7, 0)
         lay_mon.addWidget(led_ltc_xlow, 7, 1)
         lay_mon.addWidget(led_ltc_xhigh, 7, 2)
-        lay_mon.addWidget(ld_legltc_y,8, 0)
-        lay_mon.addWidget(led_ltc_ylow,8, 1)
-        lay_mon.addWidget(led_ltc_yhigh,8, 2)
+        lay_mon.addWidget(ld_legltc_y, 8, 0)
+        lay_mon.addWidget(led_ltc_ylow, 8, 1)
+        lay_mon.addWidget(led_ltc_yhigh, 8, 2)
 
         lay = QGridLayout()
         lay.setAlignment(Qt.AlignTop)
-        lay.addWidget(ld_enbl, 0, 0)
-        lay.addWidget(sb_enbl, 0, 1)
-        lay.addWidget(led_enbl, 0, 2)
-        lay.addWidget(ld_clr, 1, 0)
-        lay.addWidget(bt_clr, 1, 1, alignment=Qt.AlignCenter)
-        lay.addWidget(ld_minx, 2, 0)
-        lay.addWidget(sb_minx, 2, 1)
-        lay.addWidget(lb_minx, 2, 2)
-        lay.addWidget(ld_maxx, 3, 0)
-        lay.addWidget(sb_maxx, 3, 1)
-        lay.addWidget(lb_maxx, 3, 2)
-        lay.addWidget(ld_miny, 4, 0)
-        lay.addWidget(sb_miny, 4, 1)
-        lay.addWidget(lb_miny, 4, 2)
-        lay.addWidget(ld_maxy, 5, 0)
-        lay.addWidget(sb_maxy, 5, 1)
-        lay.addWidget(lb_maxy, 5, 2)
-        lay.addItem(QSpacerItem(1, 15, QSzPlc.Ignored, QSzPlc.Fixed), 6, 0)
-        lay.addLayout(lay_mon, 7, 0, 1, 3)
+        lay.addWidget(ld_valx, 0, 0)
+        lay.addWidget(lb_valx, 0, 1)
+        lay.addWidget(ld_valy, 1, 0)
+        lay.addWidget(lb_valy, 1, 1)
+        lay.addWidget(ld_enbl, 2, 0)
+        lay.addWidget(sb_enbl, 2, 1)
+        lay.addWidget(led_enbl, 2, 2)
+        lay.addWidget(ld_clr, 3, 0)
+        lay.addWidget(bt_clr, 3, 1, alignment=Qt.AlignCenter)
+        lay.addWidget(ld_minx, 4, 0)
+        lay.addWidget(sb_minx, 4, 1)
+        lay.addWidget(lb_minx, 4, 2)
+        lay.addWidget(ld_maxx, 5, 0)
+        lay.addWidget(sb_maxx, 5, 1)
+        lay.addWidget(lb_maxx, 5, 2)
+        lay.addWidget(ld_miny, 6, 0)
+        lay.addWidget(sb_miny, 6, 1)
+        lay.addWidget(lb_miny, 6, 2)
+        lay.addWidget(ld_maxy, 7, 0)
+        lay.addWidget(sb_maxy, 7, 1)
+        lay.addWidget(lb_maxy, 7, 2)
+        lay.addItem(QSpacerItem(1, 15, QSzPlc.Ignored, QSzPlc.Fixed), 8, 0)
+        lay.addLayout(lay_mon, 9, 0, 1, 3)
         return lay
