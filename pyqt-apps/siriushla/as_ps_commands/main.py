@@ -1189,7 +1189,10 @@ class PSCmdWindow(SiriusMainWindow):
             {'sec': 'SI', 'dis': 'PS', 'dev': 'QS'}))
         # add SI Fast Corrs
         psnames.extend(PSSearch.get_psnames(
-            {'sec': 'SI', 'dis': 'PS', 'dev': 'FC.*'}))
+            {'sec': 'SI', 'sub': '(?!01M).*', 'dis': 'PS', 'dev': 'FC.*'}))
+        # add SI SeptaFF Corrs
+        psnames.extend(PSSearch.get_psnames(
+            {'sec': 'SI', 'dis': 'PS', 'dev': 'FFC.*'}))
         return psnames
 
     def _get_pu_tree_names(self):
