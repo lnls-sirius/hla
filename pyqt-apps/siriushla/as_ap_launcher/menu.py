@@ -723,16 +723,22 @@ def get_object(ismenubar=True, parent=None):
                     'device': 'corrector-fast',
                     'graphs': {'All': 'FC(H|V)', 'FCH': 'FCH', 'FCV': 'FCV'},
                 },
+                'Septa Feedforward Correctors': {
+                    'device': 'corrector-septff',
+                    'graphs': {
+                        'All': 'FFC(H|V)', 'FFCH': 'FFCH', 'FFCV': 'FFCV',
+                    },
+                },
             }
             if sec != 'li':
                 for pstype, data in ps_indiv.items():
                     type_menu = psmenu.addMenu(pstype)
                     type_menu.setObjectName(sec.upper()+'App')
 
-                    if sec == 'si':
+                    if sec == 'si' and 'Feedforward' not in pstype:
                         all_menu = type_menu.addMenu('All')
                         all_menu.setObjectName(sec.upper()+'App')
-                    elif pstype == 'Correctors':
+                    elif 'Correctors' in pstype:
                         all_menu = type_menu
 
                     # list
@@ -761,7 +767,7 @@ def get_object(ismenubar=True, parent=None):
                              data['graphs']['All']])
                         all_menu.addAction(all_gph_act)
 
-                    if sec != 'si':
+                    if sec != 'si' or 'Feedforward' in pstype:
                         break
 
                     # subsectors
