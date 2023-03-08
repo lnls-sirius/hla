@@ -27,6 +27,7 @@ class PSTabControlWindow(PSControlWindow):
                "solenoid": "Solenoids",
                "corrector-slow": "Slow Correctors",
                "corrector-fast": "Fast Correctors",
+               "corrector-septff": "Septa FF Correctors",
                "skew-quadrupole": "Quadrupoles Skew",
                "trim-quadrupole": "Trims",
                "lens": "Lens",

@@ -49,7 +49,7 @@ class DetailWidgetFactory:
                 raise ValueError('Undefined PS model: {}'.format(model))
         elif 'LI' in psname:
             return LIPSDetailWidget(psname, parent)
-        elif 'FCH' in psname or 'FCV' in psname:
+        elif '-FCH' in psname or '-FCV' in psname:
             return FastCorrPSDetailWidget(psname, parent)
         else:
             return PSDetailWidget(psname, parent)
