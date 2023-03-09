@@ -52,11 +52,11 @@ class ACQTrigConfigs(BaseWidget):
                 ('Channel-Sel', 'Acquisition Rate'),
                 ('Shots-SP', 'Number of Shots'),
                 ('UpdateTime-SP', 'Update Interval'),
-                ('TbtTagEn-Sel', 'Sync Timing', False),
-                ('TbtTagDly-SP', 'TbT Delay', False),
-                ('TbtDataMaskEn-Sel', 'Mask Data', False),
-                ('TbtDataMaskSamplesBeg-SP', 'Mask Begin', False),
-                ('TbtDataMaskSamplesEnd-SP', 'Mask End', False),
+                ('TbTTagEn-Sel', 'Sync Timing', False),
+                ('TbTTagDly-SP', 'TbT Delay', False),
+                ('TbTDataMaskEn-Sel', 'Mask Data', False),
+                ('TbTDataMaskSamplesBeg-SP', 'Mask Begin', False),
+                ('TbTDataMaskSamplesEnd-SP', 'Mask End', False),
                 ))
         grpbx.rules = self.basic_rule('BPMMode-Sts', True)
         self.layoutg.addWidget(grpbx, 2, 0)

@@ -81,7 +81,7 @@ class ParamsSettings(BaseWidget):
             ('INFOHarmonicNumber-SP', 'Harmonic Number'),
             ('INFOFOFBRate-SP', 'FOFB Rate'),
             ('INFOMONITRate-SP', 'Monitor Rate'),
-            ('INFOTBTRate-SP', 'TbT Rate'),
+            ('INFOTbTRate-SP', 'TbT Rate'),
             ('RFFEAtt-SP', 'RFFE Attenuation')))
         vbl.addWidget(grpbx)
         vbl.addSpacing(20)
