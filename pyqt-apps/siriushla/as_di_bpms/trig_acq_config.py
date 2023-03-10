@@ -1,4 +1,4 @@
-from qtpy.QtWidgets import QHBoxLayout, QGridLayout, QLabel, QGroupBox
+from qtpy.QtWidgets import QGridLayout, QLabel, QGroupBox
 from qtpy.QtCore import Qt
 from pydm.widgets import PyDMPushButton
 from siriushla.widgets import SiriusLabel
@@ -45,6 +45,12 @@ class ACQTrigConfigs(BaseWidget):
         lab = SiriusLabel(grpbx, init_channel=self.get_pvname('Status-Sts'))
         lab.setAlignment(Qt.AlignCenter)
         gdl.addWidget(lab, 2, 1)
+        lab = QLabel('Count:')
+        lab.setAlignment(Qt.AlignCenter)
+        gdl.addWidget(lab, 3, 0)
+        lab = SiriusLabel(grpbx, init_channel=self.get_pvname('Count-Mon'))
+        lab.setAlignment(Qt.AlignCenter)
+        gdl.addWidget(lab, 3, 1)
         self.layoutg.addWidget(grpbx, 1, 0)
 
         grpbx = self._create_formlayout_groupbox(
