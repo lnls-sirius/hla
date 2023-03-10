@@ -81,7 +81,7 @@ class ParamsSettings(BaseWidget):
             ('INFOHarmonicNumber-SP', 'Harmonic Number'),
             ('INFOFOFBRate-SP', 'FOFB Rate'),
             ('INFOMONITRate-SP', 'Monitor Rate'),
-            ('INFOTBTRate-SP', 'TbT Rate'),
+            ('INFOTbTRate-SP', 'TbT Rate'),
             ('RFFEAtt-SP', 'RFFE Attenuation')))
         vbl.addWidget(grpbx)
         vbl.addSpacing(20)
@@ -100,19 +100,28 @@ class AdvancedSettings(BaseWidget):
         lab.setAlignment(Qt.AlignCenter)
         gdl.addWidget(lab, 0, 0, 1, 2)
 
-        grpbx = self._create_formlayout_groupbox('Monit', (
-            ('MonitEnable-Sel', 'Enable'),
-            ('MONITUpdtTime-SP', 'Update Time')))
-        gdl.addWidget(grpbx, 1, 0)
-
         grpbx = self._create_formlayout_groupbox('Switching', (
             ('SwMode-Sel', 'Mode'),
             ('SwTagEn-Sel', 'Tag Enable'),
             ('SwDataMaskEn-Sel', 'Data Mask Enable'),
             ('SwDataMaskSamples-SP', 'Data Mask Samples'),
             ('SwDly-SP', 'Delay'),
-            ('SwDivClk-SP', 'Division Clock')))
-        gdl.addWidget(grpbx, 2, 0)
+            ('SwDivClk-SP', 'Division Clock'),
+            ('SwDirGainA-SP', 'Direct Gain A'),
+            ('SwDirGainB-SP', 'Direct Gain B'),
+            ('SwDirGainC-SP', 'Direct Gain C'),
+            ('SwDirGainD-SP', 'Direct Gain D'),
+            ('SwInvGainA-SP', 'Inverse Gain A'),
+            ('SwInvGainB-SP', 'Inverse Gain B'),
+            ('SwInvGainC-SP', 'Inverse Gain C'),
+            ('SwInvGainD-SP', 'Inverse Gain D'),
+        ))
+        gdl.addWidget(grpbx, 1, 0, 2, 1)
+
+        grpbx = self._create_formlayout_groupbox('Monit', (
+            ('MonitEnable-Sel', 'Enable'),
+            ('MONITUpdtTime-SP', 'Update Time')))
+        gdl.addWidget(grpbx, 1, 1)
 
         grpbx = self._create_formlayout_groupbox('RFFE', (
             ('RFFEAtt-SP', 'Attenuation'),
@@ -126,7 +135,7 @@ class AdvancedSettings(BaseWidget):
             ('RFFEPidBDTi-SP', 'Pid BD Ti'),
             ('RFFEPidACTd-SP', 'Pid AC Td'),
             ('RFFEPidBDTd-SP', 'Pid BD Td')))
-        gdl.addWidget(grpbx, 1, 1, 2, 1)
+        gdl.addWidget(grpbx, 2, 1)
 
         grpbx = CustomGroupBox('Triggers Configuration', self)
         hbl = QHBoxLayout(grpbx)
