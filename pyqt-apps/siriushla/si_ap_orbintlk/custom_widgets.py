@@ -287,11 +287,11 @@ class BPMIntlkLimSPWidget(BaseObject, QWidget):
 
         row = 0
         if 'sum' in self.metric:
-            text = '\nThresholds must be set in Monit1 rate counts,\n'\
+            text = '\nThresholds must be set in FAcq rate counts,\n'\
                 'considering polynomial calibration disabled.\n'\
                 'Here we make available you to read Sum-Mon\n'\
                 'values, in Monit rate counts, and convert them\n'\
-                'to orbit interlock counts using Monit/Monit1\n'\
+                'to orbit interlock counts using Monit/FAcq\n'\
                 'ratio. You can also apply a scale factor to the\n'\
                 'values read.\n\n'
             self._label_help = QLabel(text, self)

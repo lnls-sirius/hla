@@ -32,8 +32,8 @@ class BaseObject(BaseOrbitIntlk):
         self._pv_monitrate = _PV(pvname)
         pvname = SiriusPVName(
             self.BPM_NAMES[0]).substitute(
-                propty='INFOMONIT1Rate-RB', prefix=prefix)
-        self._pv_monit1rate = _PV(pvname)
+                propty='INFOFAcqRate-RB', prefix=prefix)
+        self._pv_facqrate = _PV(pvname)
 
     def get_ref_orb(self, configname):
         """Get reference orbit from config [um].
@@ -58,10 +58,10 @@ class BaseObject(BaseOrbitIntlk):
     def get_monitsum2intlksum_factor(self):
         """Return factor between BPM Monit Sum and interlock Sum."""
         monit = self._pv_monitrate.value
-        monit1 = self._pv_monit1rate.value
-        if None in [monit, monit1]:  # connecting
+        facq = self._pv_facqrate.value
+        if None in [monit, facq]:  # connecting
             return 1
-        frac = monit/monit1
+        frac = monit/facq
         factor = 2**_math.ceil(_math.log2(frac)) / frac
         return factor
 
