@@ -40,11 +40,14 @@ class BaseWidget(QWidget):
         grpbx.layoutf = fbl
         fbl.setLabelAlignment(Qt.AlignVCenter)
         for prop in props:
+            prec = None
             if len(prop) == 2:
                 pv1, txt = prop
                 isdata = True
             elif len(prop) == 3:
                 pv1, txt, isdata = prop
+            elif len(prop) == 4:
+                pv1, txt, isdata, prec = prop
             hbl = QHBoxLayout()
             not_enum = pv1.endswith('-SP')
             pv2 = pv1.replace('-SP', '-RB').replace('-Sel', '-Sts')
@@ -57,6 +60,9 @@ class BaseWidget(QWidget):
                     pvn = self.data_prefix + pv1
                     wid.setMinimum(self.bpmdb[pvn].get('low', -1e10))
                     wid.setMaximum(self.bpmdb[pvn].get('high', 1e10))
+                    if prec is not None:
+                        wid.precisionFromPV = False
+                        wid.precision = prec
                 else:
                     wid = PyDMEnumComboBox(
                         self,
@@ -69,6 +75,9 @@ class BaseWidget(QWidget):
                 self, init_channel=self.get_pvname(pv2, is_data=isdata))
             lab.setObjectName(pv2.replace('-', ''))
             lab.showUnits = True
+            if prec is not None:
+                lab.precisionFromPV = False
+                lab.precision = prec
             lab.setStyleSheet("min-width:5em;")
             hbl.addWidget(lab)
             lab = QLabel(txt)

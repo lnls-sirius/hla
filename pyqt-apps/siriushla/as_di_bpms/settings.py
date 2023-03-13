@@ -107,14 +107,14 @@ class AdvancedSettings(BaseWidget):
             ('SwDataMaskSamples-SP', 'Data Mask Samples'),
             ('SwDly-SP', 'Delay'),
             ('SwDivClk-SP', 'Division Clock'),
-            ('SwDirGainA-SP', 'Direct Gain A'),
-            ('SwDirGainB-SP', 'Direct Gain B'),
-            ('SwDirGainC-SP', 'Direct Gain C'),
-            ('SwDirGainD-SP', 'Direct Gain D'),
-            ('SwInvGainA-SP', 'Inverse Gain A'),
-            ('SwInvGainB-SP', 'Inverse Gain B'),
-            ('SwInvGainC-SP', 'Inverse Gain C'),
-            ('SwInvGainD-SP', 'Inverse Gain D'),
+            ('SwDirGainA-SP', 'Direct Gain A', False, 12),
+            ('SwDirGainB-SP', 'Direct Gain B', False, 12),
+            ('SwDirGainC-SP', 'Direct Gain C', False, 12),
+            ('SwDirGainD-SP', 'Direct Gain D', False, 12),
+            ('SwInvGainA-SP', 'Inverse Gain A', False, 12),
+            ('SwInvGainB-SP', 'Inverse Gain B', False, 12),
+            ('SwInvGainC-SP', 'Inverse Gain C', False, 12),
+            ('SwInvGainD-SP', 'Inverse Gain D', False, 12),
         ))
         gdl.addWidget(grpbx, 1, 0, 2, 1)
 

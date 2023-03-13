@@ -111,8 +111,9 @@ class PSMonitor(QWidget):
                     aux = devices.pop(-1)
                     devices.insert(0, aux)
             elif sec == 'SI':
-                aux = devices.pop(-1)
-                devices.insert(0, aux)
+                if label not in ['FCH', 'FCV']:
+                    aux = devices.pop(-1)
+                    devices.insert(0, aux)
                 if label == 'Trims':
                     aux = devices.pop(-1)
                     devices.insert(0, aux)
@@ -139,6 +140,9 @@ class PSMonitor(QWidget):
                         and aux_col in (0, 3):
                     grid.addWidget(QLabel(''), aux_row, aux_col)
                     aux_col += 1
+                elif label in ['FCH', 'FCV'] and aux_row == 2 and aux_col == 0:
+                    grid.addWidget(QLabel(''), aux_row, aux_col, 1, 2)
+                    aux_col += 2
                 led = MyLed(self, SiriusPVName(name).substitute(
                     prefix=self._prefix, propty='DiagStatus-Mon'), name)
                 grid.addWidget(led, aux_row, aux_col)

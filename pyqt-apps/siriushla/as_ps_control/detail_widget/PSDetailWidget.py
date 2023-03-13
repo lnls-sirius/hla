@@ -1682,6 +1682,8 @@ class FastCorrPSDetailWidget(PSDetailWidget):
         # # loop parameters
         ctlmode_lb = QLabel(
             'CurrLoopMode', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+        self.ctlmode_cb = PyDMEnumComboBox(
+            self, self._prefixed_psname + ':CurrLoopMode-Sel')
         self.ctlmode_lb = SiriusLabel(
             self, self._prefixed_psname + ':CurrLoopMode-Sts')
 
@@ -1723,15 +1725,11 @@ class FastCorrPSDetailWidget(PSDetailWidget):
             'CurrOffset', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         self.coffs_sp = SiriusSpinbox(
             self, self._prefixed_psname + ':CurrOffset-SP')
-        self.coffs_sp.precisionFromPV = False
-        self.coffs_sp.precision = 8
         self.coffs_sp.limitsFromChannel = False
         self.coffs_sp.setMinimum(-100)
         self.coffs_sp.setMaximum(+100)
         self.coffs_rb = SiriusLabel(
             self, self._prefixed_psname + ':CurrOffset-RB')
-        self.coffs_rb.precisionFromPV = False
-        self.coffs_rb.precision = 8
 
         vgain_lb = QLabel(
             'VoltGain', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
@@ -1751,21 +1749,18 @@ class FastCorrPSDetailWidget(PSDetailWidget):
             'VoltOffset', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         self.voffs_sp = SiriusSpinbox(
             self, self._prefixed_psname + ':VoltOffset-SP')
-        self.voffs_sp.precisionFromPV = False
-        self.voffs_sp.precision = 8
         self.voffs_sp.limitsFromChannel = False
         self.voffs_sp.setMinimum(-100)
         self.voffs_sp.setMaximum(+100)
         self.voffs_rb = SiriusLabel(
             self, self._prefixed_psname + ':VoltOffset-RB')
-        self.voffs_rb.precisionFromPV = False
-        self.voffs_rb.precision = 8
 
         widgetparms = QWidget()
         lay = QGridLayout(widgetparms)
         lay.setAlignment(Qt.AlignTop)
         lay.addWidget(ctlmode_lb, 0, 0, Qt.AlignRight)
-        lay.addWidget(self.ctlmode_lb, 0, 1)
+        lay.addWidget(self.ctlmode_cb, 0, 1)
+        lay.addWidget(self.ctlmode_lb, 0, 2)
         lay.addWidget(ctlkp_lb, 1, 0, Qt.AlignRight)
         lay.addWidget(self.ctlkp_sp, 1, 1)
         lay.addWidget(self.ctlkp_rb, 1, 2)
@@ -1873,20 +1868,25 @@ class FastCorrPSDetailWidget(PSDetailWidget):
         timespan = 5*60  # 5min
         self.graph_chist.timeSpan = timespan  # [s]
         self.graph_chist.bufferSize = 5*timespan  # [max 5 samples/s]
-        self.graph_chist.addYChannel(
-            y_channel=self._prefixed_psname.substitute(propty='Current-SP'),
-            name='SP', color='red', lineWidth=2)
-        self.graph_chist.addYChannel(
-            y_channel=self._prefixed_psname.substitute(propty='Current-RB'),
-            name='RB', color='blue', lineWidth=2)
-        self.chn_chist = SiriusConnectionSignal(fofbctrl.substitute(
-            propty='GENConvArrayDataCH'+str(chn)))
-        self.chn_chist.new_value_signal[_np.ndarray].connect(
-            self._plot_currhist)
-        self.graph_chist.addYChannel(
-            y_channel='FAKE:CurrentHistory',
-            name='Mon', color='black', lineWidth=2)
-        self.curve_chist = self.graph_chist.curveAtIndex(2)
+        pvsuf2color = {
+            '-SP': 'red',
+            '-RB': 'blue',
+            'Ref-Mon': 'green',
+            '-Mon': 'black',
+        }
+        hbox_show = QHBoxLayout()
+        hbox_show.setSpacing(9)
+        for pvs, color in pvsuf2color.items():
+            pvname = self._prefixed_psname.substitute(propty='Current'+pvs)
+            legtxt = pvs.replace('-', '')
+            self.graph_chist.addYChannel(
+                y_channel=pvname, name=legtxt, color=color, lineWidth=2)
+            curve = self.graph_chist.curveAtIndex(-1)
+            cb_show = QCheckBox(legtxt)
+            cb_show.setChecked(True)
+            cb_show.setStyleSheet('color: '+color+';')
+            cb_show.stateChanged.connect(curve.setVisible)
+            hbox_show.addWidget(cb_show)
         self.graph_chist.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
         self.graph_chist.autoRangeX = True
         self.graph_chist.autoRangeY = True
@@ -1896,7 +1896,12 @@ class FastCorrPSDetailWidget(PSDetailWidget):
         self.graph_chist.setLabel('left', text='Current [A]', color='gray')
         self.graph_chist.showLegend = True
         self.graph_chist.setBackgroundColor(QColor(255, 255, 255))
-        tabmon.addTab(self.graph_chist, 'Curr.Hist.')
+        wid_currhist = QWidget()
+        lay_currhist = QVBoxLayout(wid_currhist)
+        lay_currhist.setContentsMargins(0, 0, 0, 0)
+        lay_currhist.addWidget(self.graph_chist)
+        lay_currhist.addLayout(hbox_show)
+        tabmon.addTab(wid_currhist, 'Curr.Hist.')
         tabmon.setCurrentIndex(2)
 
         layout = QHBoxLayout()
@@ -2016,10 +2021,6 @@ class FastCorrPSDetailWidget(PSDetailWidget):
         layout.addWidget(widctrl)
         layout.addWidget(widmon)
         return layout
-
-    def _plot_currhist(self, new_array):
-        mean = _np.mean(new_array)
-        self.curve_chist.receiveNewValue(mean)
 
 
 class PSAuxMeasWidget(SiriusDialog):
