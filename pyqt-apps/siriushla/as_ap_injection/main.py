@@ -596,8 +596,6 @@ class InjCtrlWindow(SiriusMainWindow):
         tooltip = ('Hide' if show else 'Show')+' TopUp Configurations.'
         self._pb_show_topup.setText(text)
         self._pb_show_topup.setToolTip(tooltip)
-        self.centralWidget().adjustSize()
-        self.adjustSize()
 
     def _handle_injsys_details_vis(self):
         exp = self.wid_is_summ.isVisible()
