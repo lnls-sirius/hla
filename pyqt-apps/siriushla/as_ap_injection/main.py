@@ -240,7 +240,6 @@ class InjCtrlWindow(SiriusMainWindow):
 
         # Target current
         self._ld_currtgt = QLabel('Target Curr.', self)
-        labelsdesc.append(self._ld_currtgt)
         self._sb_currtgt = SiriusSpinbox(
             self, self._inj_prefix.substitute(propty='TargetCurrent-SP'))
         self._lb_currtgt = SiriusLabel(
@@ -248,6 +247,23 @@ class InjCtrlWindow(SiriusMainWindow):
             keep_unit=True)
         self._lb_currtgt.showUnits = True
         labelsmon.append(self._lb_currtgt)
+
+        self._pb_show_topup = QPushButton('v', self)
+        self._pb_show_topup.setToolTip('Show TopUp Configurations.')
+        self._pb_show_topup.clicked.connect(self._handle_topup_details_vis)
+        self._pb_show_topup.setStyleSheet('QPushButton{max-width: 0.8em;}')
+        self._wid_currtgt = QWidget(self)
+        self._wid_currtgt.setLayout(QHBoxLayout())
+        self._wid_currtgt.layout().addWidget(self._pb_show_topup)
+        self._wid_currtgt.layout().addStretch()
+        self._wid_currtgt.layout().addWidget(self._ld_currtgt)
+        self._wid_currtgt.setObjectName('WidCurrtgt')
+        self._wid_currtgt.setStyleSheet(
+            """
+            #WidCurrtgt{
+                min-width: 7em; max-width: 7em; min-height: 1.5em;
+                qproperty-alignment: 'AlignRight | AlignVCenter';
+            }""")
 
         # mode specific configurations
         self.wid_tudtls = self._setupTopUpModeWidget()
@@ -384,7 +400,7 @@ class InjCtrlWindow(SiriusMainWindow):
         glay1.addWidget(self._ld_injmode, 1, 0)
         glay1.addWidget(self._cb_injmode, 1, 1)
         glay1.addWidget(self._lb_injmode, 1, 2)
-        glay1.addWidget(self._ld_currtgt, 2, 0)
+        glay1.addWidget(self._wid_currtgt, 2, 0)
         glay1.addWidget(self._sb_currtgt, 2, 1)
         glay1.addWidget(self._lb_currtgt, 2, 2)
         glay1.addWidget(self.wid_tudtls, 3, 0, 2, 4)
@@ -563,11 +579,25 @@ class InjCtrlWindow(SiriusMainWindow):
 
     @Slot(int)
     def _handle_injmode_settings_vis(self, new_mode):
-        is_topoup = new_mode == _Const.InjMode.TopUp
-        self.wid_tudtls.setVisible(is_topoup)
-        self._pb_topup.setVisible(is_topoup)
-        self._pb_tiinj.setVisible(not is_topoup)
-        self.wid_tusts.setVisible(is_topoup)
+        is_topup = new_mode == _Const.InjMode.TopUp
+        self._handle_topup_details_vis(False, is_topup=is_topup)
+        self._pb_topup.setVisible(is_topup)
+        self._pb_tiinj.setVisible(not is_topup)
+        self.wid_tusts.setVisible(is_topup)
+
+    def _handle_topup_details_vis(self, val, is_topup=None):
+        _ = val
+        if is_topup is None:
+            show = self.wid_tudtls.isHidden()
+        else:
+            show = is_topup
+        self.wid_tudtls.setVisible(show)
+        text = '^' if show else 'v'
+        tooltip = ('Hide' if show else 'Show')+' TopUp Configurations.'
+        self._pb_show_topup.setText(text)
+        self._pb_show_topup.setToolTip(tooltip)
+        self.centralWidget().adjustSize()
+        self.adjustSize()
 
     def _handle_injsys_details_vis(self):
         exp = self.wid_is_summ.isVisible()
