@@ -254,16 +254,10 @@ class InjCtrlWindow(SiriusMainWindow):
         self._pb_show_topup.setStyleSheet('QPushButton{max-width: 0.8em;}')
         self._wid_currtgt = QWidget(self)
         self._wid_currtgt.setLayout(QHBoxLayout())
-        self._wid_currtgt.layout().addWidget(self._pb_show_topup)
-        self._wid_currtgt.layout().addStretch()
+        self._wid_currtgt.layout().setContentsMargins(0, 0, 0, 0)
+        self._wid_currtgt.layout().addWidget(
+            self._pb_show_topup, alignment=Qt.AlignLeft)
         self._wid_currtgt.layout().addWidget(self._ld_currtgt)
-        self._wid_currtgt.setObjectName('WidCurrtgt')
-        self._wid_currtgt.setStyleSheet(
-            """
-            #WidCurrtgt{
-                min-width: 7em; max-width: 7em; min-height: 1.5em;
-                qproperty-alignment: 'AlignRight | AlignVCenter';
-            }""")
 
         # mode specific configurations
         self.wid_tudtls = self._setupTopUpModeWidget()
