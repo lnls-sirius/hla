@@ -73,42 +73,58 @@ class PUDetailWidget(QWidget):
         self._trigname = self._devname.substitute(dis='TI')
 
     def _setup_ui(self):
-        self.header_label = QLabel("<h1>" + self._devname + "</h1>")
-        self.header_label.setObjectName("header_label")
-        interlock_box = QGroupBox(parent=self, title="Interlock")
-        interlock_box.setObjectName("interlock_box")
+        self.header_label = QLabel('<h1>' + self._devname + '</h1>')
+        self.header_label.setObjectName('header_label')
+        interlock_box = QGroupBox('Interlock', self)
+        interlock_box.setObjectName('interlock_box')
         interlock_box.setLayout(self._interlock_layout())
-        pwrstate_box = QGroupBox(parent=self, title="Power")
-        pwrstate_box.setObjectName("pwrstate_box")
+        pwrstate_box = QGroupBox('Power', self)
+        pwrstate_box.setObjectName('pwrstate_box')
         pwrstate_box.setLayout(self._pwrstate_layout())
-        pulses_box = QGroupBox(parent=self, title="Pulses")
-        pulses_box.setObjectName("pulses_box")
+        pulses_box = QGroupBox('Pulses', self)
+        pulses_box.setObjectName('pulses_box')
         pulses_box.setLayout(self._pulses_layout())
-        voltage_box = QGroupBox(parent=self, title="Voltage")
-        voltage_box.setObjectName("voltage_box")
+        voltage_box = QGroupBox('Voltage', self)
+        voltage_box.setObjectName('voltage_box')
         voltage_box.setLayout(self._voltage_layout())
-        kick_box = QGroupBox(parent=self, title="Kick")
-        kick_box.setObjectName("kick_box")
+        kick_box = QGroupBox('Kick', self)
+        kick_box.setObjectName('kick_box')
         kick_box.setLayout(self._kick_layout())
-        timing_box = QGroupBox(parent=self, title='Trigger')
+        if 'NLK' in self._devname:
+            ccvh_box = QGroupBox('C.Coil H Voltage', self)
+            ccvh_box.setLayout(self._voltage_layout(coil='CCoilH'))
+            cckh_box = QGroupBox('C.Coil H Kick', self)
+            cckh_box.setLayout(self._kick_layout(coil='CCoilH'))
+            ccvv_box = QGroupBox('C.Coil V Voltage', self)
+            ccvv_box.setLayout(self._voltage_layout(coil='CCoilV'))
+            cckv_box = QGroupBox('C.Coil V Kick', self)
+            cckv_box.setLayout(self._kick_layout(coil='CCoilV'))
+        timing_box = QGroupBox('Trigger', self)
         timing_box.setObjectName('timing_box')
         hbl = QHBoxLayout(timing_box)
         hbl.addWidget(HLTriggerSimple(
             timing_box, self._trigname, self._prefix, delay=False,
             delayraw=True, src=True))
 
-        self.layout = QGridLayout(self)
-        self.layout.addWidget(self.header_label, 0, 0, 1, 3)
-        self.layout.addWidget(interlock_box, 1, 0, 3, 1)
         vbl1 = QVBoxLayout()
         vbl1.addWidget(pwrstate_box)
         vbl1.addWidget(pulses_box)
+
+        gbl2 = QGridLayout()
+        gbl2.addWidget(voltage_box, 0, 0)
+        gbl2.addWidget(kick_box, 1, 0)
+        if 'NLK' in self._devname:
+            gbl2.addWidget(ccvh_box, 0, 1)
+            gbl2.addWidget(cckh_box, 1, 1)
+            gbl2.addWidget(ccvv_box, 0, 2)
+            gbl2.addWidget(cckv_box, 1, 2)
+
+        self.layout = QGridLayout(self)
+        self.layout.addWidget(self.header_label, 0, 0, 1, 3)
+        self.layout.addWidget(interlock_box, 1, 0, 3, 1)
         self.layout.addLayout(vbl1, 1, 1, 2, 1)
-        vbl2 = QVBoxLayout()
-        vbl2.addWidget(voltage_box)
-        vbl2.addWidget(kick_box)
-        self.layout.addLayout(vbl2, 1, 2, 2, 1)
-        self.layout.addWidget(timing_box, 3, 1, 1, 3)
+        self.layout.addLayout(gbl2, 1, 2, 2, 3)
+        self.layout.addWidget(timing_box, 3, 1, 1, 4)
         self.layout.addLayout(self._ctrlmode_layout(), 4, 1, 1, 3)
 
     def _interlock_layout(self):
@@ -161,48 +177,43 @@ class PUDetailWidget(QWidget):
 
         return pulses_layout
 
-    def _voltage_layout(self):
-        voltage_layout = QVBoxLayout()
+    def _voltage_layout(self, coil=''):
+        sp_pv = self._voltage_sp_pv.substitute(propty_name=coil+'Voltage')
+        rb_pv = self._voltage_rb_pv.substitute(propty_name=coil+'Voltage')
+        mon_pv = self._voltage_mon_pv.substitute(propty_name=coil+'Voltage')
 
-        self.voltage_sp_widget = PyDMSpinboxScrollbar(
-            self, self._voltage_sp_pv)
-        self.voltage_rb_label = SiriusLabel(
-            self, self._voltage_rb_pv, keep_unit=True)
-        self.voltage_rb_label.showUnits = True
-        self.voltage_rb_label.precisionFromPV = True
-        self.voltage_mon_label = SiriusLabel(
-            self, self._voltage_mon_pv, keep_unit=True)
-        self.voltage_mon_label.showUnits = True
-        self.voltage_mon_label.precisionFromPV = True
+        sp_widget = PyDMSpinboxScrollbar(self, sp_pv)
+        rb_label = SiriusLabel(self, rb_pv, keep_unit=True)
+        rb_label.showUnits = True
+        mon_label = SiriusLabel(self, mon_pv, keep_unit=True)
+        mon_label.showUnits = True
 
-        voltage_layout = QFormLayout()
-        voltage_layout.setLabelAlignment(Qt.AlignRight)
-        voltage_layout.setFormAlignment(Qt.AlignHCenter)
-        voltage_layout.addRow('SP:', self.voltage_sp_widget)
-        voltage_layout.addRow('RB:', self.voltage_rb_label)
-        voltage_layout.addRow('Mon:', self.voltage_mon_label)
+        lay = QFormLayout()
+        lay.setLabelAlignment(Qt.AlignRight)
+        lay.setFormAlignment(Qt.AlignHCenter)
+        lay.addRow('SP:', sp_widget)
+        lay.addRow('RB:', rb_label)
+        lay.addRow('Mon:', mon_label)
+        return lay
 
-        return voltage_layout
+    def _kick_layout(self, coil=''):
+        sp_pv = self._kick_sp_pv.substitute(propty_name=coil+'Kick')
+        rb_pv = self._kick_rb_pv.substitute(propty_name=coil+'Kick')
+        mon_pv = self._kick_mon_pv.substitute(propty_name=coil+'Kick')
 
-    def _kick_layout(self):
-        self.kick_sp_widget = PyDMSpinboxScrollbar(self, self._kick_sp_pv)
-        self.kick_rb_label = SiriusLabel(
-            self, self._kick_rb_pv, keep_unit=True)
-        self.kick_rb_label.showUnits = True
-        self.kick_rb_label.precisionFromPV = True
-        self.kick_mon_label = SiriusLabel(
-            self, self._kick_mon_pv, keep_unit=True)
-        self.kick_mon_label.showUnits = True
-        self.kick_mon_label.precisionFromPV = True
+        sp_widget = PyDMSpinboxScrollbar(self, sp_pv)
+        rb_label = SiriusLabel(self, rb_pv, keep_unit=True)
+        rb_label.showUnits = True
+        mon_label = SiriusLabel(self, mon_pv, keep_unit=True)
+        mon_label.showUnits = True
 
-        kick_layout = QFormLayout()
-        kick_layout.setLabelAlignment(Qt.AlignRight)
-        kick_layout.setFormAlignment(Qt.AlignHCenter)
-        kick_layout.addRow('SP:', self.kick_sp_widget)
-        kick_layout.addRow('RB:', self.kick_rb_label)
-        kick_layout.addRow('Mon:', self.kick_mon_label)
-
-        return kick_layout
+        lay = QFormLayout()
+        lay.setLabelAlignment(Qt.AlignRight)
+        lay.setFormAlignment(Qt.AlignHCenter)
+        lay.addRow('SP:', sp_widget)
+        lay.addRow('RB:', rb_label)
+        lay.addRow('Mon:', mon_label)
+        return lay
 
     def _ctrlmode_layout(self):
         ctrlmode_layout = QHBoxLayout()
