@@ -18,7 +18,7 @@ asps2filters = {'B': {'sub': '.*', 'dev': 'B.*'},
                 'S': {'sub': '.*', 'dev': 'S.*'},
                 'CH': {'sub': '.*', 'dev': 'CH'},
                 'CV': {'sub': '.*', 'dev': 'CV'},
-                'PM': {'sub': '.*', 'dev': '(Inj|Eje).*'},
+                'PM': {'sub': '.*', 'dev': '.*(Sept|Kckr)'},
                 }
 
 sips2filters = {'B': {'sec': 'SI', 'sub': '.*', 'dev': 'B.*'},
@@ -32,7 +32,8 @@ sips2filters = {'B': {'sec': 'SI', 'sub': '.*', 'dev': 'B.*'},
                 'Trims': {'sec': 'SI', 'sub': '[0-2][0-9].*',
                           'dev': 'Q(F|D|[1-4]).*'},
                 'QS': {'sec': 'SI', 'sub': '[0-2][0-9](M|C).*', 'dev': 'QS'},
-                'PM': {'sec': 'SI', 'sub': '.*', 'dev': '(Inj|Eje).*'},
+                'PM': {'sec': 'SI', 'sub': '.*', 'dev': '.*(Sept|Kckr)',
+                       'propty_name': '(?!:CCoil).*'},
                 'FCH': {'sec': 'SI', 'sub': '(?!01M).*', 'dev': 'FCH'},
                 'FCV': {'sec': 'SI', 'sub': '(?!01M).*', 'dev': 'FCV'},
                 }
