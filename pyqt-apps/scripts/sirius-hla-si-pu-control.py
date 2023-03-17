@@ -10,7 +10,7 @@ from siriushla.as_pu_control import PUControlWindow
 parser = _argparse.ArgumentParser(description="Run PU Interface.")
 parser.add_argument(
     '-s', "--section", type=str, default='SI',
-    choices=('SI', 'InjSI', 'Ping'))
+    choices=('SI', 'InjSI', 'PingSI'))
 args = parser.parse_args()
 
 app = SiriusApplication()
