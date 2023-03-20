@@ -462,9 +462,8 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
         lay.setSpacing(1)
         lay.setAlignment(Qt.AlignLeft | Qt.AlignTop)
 
-        lpart_pvs = [
-            'BPMId-RB', 'LinkPartnerCH0-Mon', 'LinkPartnerCH1-Mon',
-            'LinkPartnerCH2-Mon', 'LinkPartnerCH3-Mon']
+        lpart_pvs = ['BPMId-RB', ] + [
+            'LinkPartnerCH'+str(idx)+'-Mon' for idx in range(8)]
 
         # header
         lay.addWidget(
@@ -478,8 +477,6 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
         # table
         row = 1
         for dcc in self.dccnames:
-            if 'FMC' not in dcc:
-                continue
             lbl = QLabel(dcc, self, alignment=Qt.AlignCenter)
             lay.addWidget(lbl, row, 0)
             for idx, link in enumerate(lpart_pvs):
