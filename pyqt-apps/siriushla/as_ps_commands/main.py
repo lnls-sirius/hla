@@ -1197,7 +1197,8 @@ class PSCmdWindow(SiriusMainWindow):
 
     def _get_pu_tree_names(self):
         punames = PSSearch.get_psnames(
-            {'sec': '(TB|BO|TS|SI)', 'dis': 'PU', 'dev': '.*(Kckr|Sept).*'})
+            {'sec': '(TB|BO|TS|SI)', 'dis': 'PU',
+             'dev': '.*(Kckr|Sept)((?!:CCoil).)*$'})
         return punames
 
     def _get_selected_ps(self):
