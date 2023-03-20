@@ -29,7 +29,7 @@ class PUControlWindow(SiriusMainWindow):
         if section in {'InjBO', 'EjeBO'}:
             color = get_appropriate_color('BO')
             self.setObjectName('BOApp')
-        elif section in {'InjSI', 'Ping'}:
+        elif section in {'InjSI', 'PingSI'}:
             color = get_appropriate_color('SI')
             self.setObjectName('SIApp')
         else:
