@@ -74,8 +74,8 @@ class PUControlWindow(SiriusMainWindow):
 
         if sec in {'TB', 'BO', 'TS', 'SI'}:
             devices = PSSearch.get_psnames({
-                'sec': sec, 'dis': 'PU',
-                'dev': '.*(Sept|Kckr|Ping)((?!:CCoil).)*$'})
+                'sec': sec, 'dis': 'PU', 'dev': '.*(Sept|Kckr|Ping)',
+                'propty_name': '(?!:CCoil).*'})
         elif sec == 'InjBO':
             devices = PSSearch.get_psnames(
                 {'sec': '(TB|BO)', 'dis': 'PU', 'dev': 'Inj'})
@@ -83,9 +83,9 @@ class PUControlWindow(SiriusMainWindow):
             devices = PSSearch.get_psnames(
                 {'sec': '(BO|TS)', 'dis': 'PU', 'dev': 'Eje'})
         elif sec == 'InjSI':
-            devices = PSSearch.get_psnames(
-                {'sec': '(TS|SI)', 'dis': 'PU',
-                 'dev': 'Inj.*(Sept|Kckr)((?!:CCoil).)*$'})
+            devices = PSSearch.get_psnames({
+                'sec': '(TS|SI)', 'dis': 'PU', 'dev': 'Inj.*(Sept|Kckr)',
+                'propty_name': '(?!:CCoil).*'})
         elif sec == 'PingSI':
             devices = PSSearch.get_psnames(
                 {'sec': 'SI', 'dis': 'PU', 'dev': 'Ping'})
