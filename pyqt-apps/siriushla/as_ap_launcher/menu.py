@@ -833,7 +833,7 @@ def get_object(ismenubar=True, parent=None):
                 self.connect_newprocess(pmag, [script, '-s', 'InjSI'])
                 pumenu.addAction(pmag)
                 pmag = QAction('Pingers', pumenu)
-                self.connect_newprocess(pmag, [script, '-s', 'Ping'])
+                self.connect_newprocess(pmag, [script, '-s', 'PingSI'])
                 pumenu.addAction(pmag)
             elif sec == 'bo':
                 pmag = QAction('Injection', pumenu)
@@ -843,7 +843,7 @@ def get_object(ismenubar=True, parent=None):
                 self.connect_newprocess(pmag, [script, '-s', 'EjeBO'])
                 pumenu.addAction(pmag)
             elif sec == 'as':
-                pmag = QAction('InjBO, EjeBO, InjSI && Ping', pumenu)
+                pmag = QAction('InjBO, EjeBO, InjSI && PingSI', pumenu)
                 self.connect_newprocess(
                     pmag, 'sirius-hla-as-pu-control.py')
                 pumenu.addAction(pmag)
