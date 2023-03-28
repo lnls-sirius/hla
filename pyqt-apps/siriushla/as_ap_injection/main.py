@@ -491,6 +491,12 @@ class InjCtrlWindow(SiriusMainWindow):
         self._lb_tupustd = SiriusLedState(
             self, pvname.substitute(propty_suffix='Sts'))
 
+        self._ld_tulistd = QLabel('LI Standby', self)
+        pvname = self._inj_prefix.substitute(propty='TopUpLIStandbyEnbl-Sel')
+        self._sb_tulistd = PyDMStateButton(self, pvname)
+        self._lb_tulistd = SiriusLedState(
+            self, pvname.substitute(propty_suffix='Sts'))
+
         self._ld_tubiasfb = QLabel('Bias FB', self)
         pvname = self._inj_prefix.substitute(propty='BiasFBLoopState-Sel')
         self._sb_tubiasfb = PyDMStateButton(self, pvname)
@@ -520,10 +526,13 @@ class InjCtrlWindow(SiriusMainWindow):
         lay.addWidget(self._ld_tupustd, 3, 0)
         lay.addWidget(self._sb_tupustd, 3, 1)
         lay.addWidget(self._lb_tupustd, 3, 2)
-        lay.addWidget(self._ld_tubiasfb, 4, 0)
-        lay.addWidget(self._sb_tubiasfb, 4, 1)
-        lay.addWidget(self._lb_tubiasfb, 4, 2)
-        lay.addWidget(self._pb_biasfb, 4, 3)
+        lay.addWidget(self._ld_tulistd, 4, 0)
+        lay.addWidget(self._sb_tulistd, 4, 1)
+        lay.addWidget(self._lb_tulistd, 4, 2)
+        lay.addWidget(self._ld_tubiasfb, 5, 0)
+        lay.addWidget(self._sb_tubiasfb, 5, 1)
+        lay.addWidget(self._lb_tubiasfb, 5, 2)
+        lay.addWidget(self._pb_biasfb, 5, 3)
         lay.setColumnStretch(0, 3)
         lay.setColumnStretch(1, 2)
         lay.setColumnStretch(2, 2)
