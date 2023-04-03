@@ -8,7 +8,7 @@ from qtpy.QtWidgets import QVBoxLayout, QHBoxLayout, QGridLayout, \
     QTabWidget, QWidget, QLabel, QGroupBox, QSizePolicy as QSzPlcy, \
     QSpacerItem
 
-from pyqtgraph import mkBrush, FillBetweenItem, PlotDataItem
+from pyqtgraph import mkBrush, FillBetweenItem
 
 from pydm.widgets import PyDMPushButton
 
