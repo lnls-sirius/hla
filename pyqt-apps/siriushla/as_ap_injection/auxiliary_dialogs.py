@@ -525,3 +525,55 @@ class TopUpSettingsDialog(SiriusDialog):
 
         self.setStyleSheet('QLabel{qproperty-alignment: AlignCenter;}')
 
+
+class PUModeSettingsDialog(SiriusDialog):
+    """PU Mode settings dialog."""
+
+    def __init__(self, parent=None, device='', prefix=''):
+        """Init."""
+        super().__init__(parent)
+        self._prefix = prefix
+        self._inj_dev = SiriusPVName(device)
+        self._inj_prefix = device.substitute(prefix=prefix)
+        self.setObjectName('ASApp')
+        self.setWindowTitle('Injection Controls - PU Mode Settings')
+        self._setupUi()
+        self.setFocus(True)
+        self.setFocusPolicy(Qt.StrongFocus)
+
+    def _setupUi(self):
+        title = QLabel(
+            '<h4>PU Mode Settings</h4>', self,
+            alignment=Qt.AlignCenter)
+
+        pvname = self._inj_prefix.substitute(propty='PUModeDeltaPosAng-SP')
+        self._sb_dltposang = SiriusSpinbox(self, pvname)
+        self._lb_dltposang = SiriusLabel(
+            self, pvname.substitute(propty_suffix='RB'), keep_unit=True)
+        self._lb_dltposang.showUnits = True
+
+        pvname = self._inj_prefix.substitute(propty='PUModeDpKckrDlyRef-SP')
+        self._sb_pudlyref = SiriusSpinbox(self, pvname)
+        self._lb_pudlyref = SiriusLabel(
+            self, pvname.substitute(propty_suffix='RB'), keep_unit=True)
+        self._lb_pudlyref.showUnits = True
+
+        pvname = self._inj_prefix.substitute(propty='PUModeDpKckrKick-SP')
+        self._sb_pukick = SiriusSpinbox(self, pvname)
+        self._lb_pukick = SiriusLabel(
+            self, pvname.substitute(propty_suffix='RB'), keep_unit=True)
+        self._lb_pukick.showUnits = True
+
+        lay = QGridLayout(self)
+        lay.addWidget(title, 0, 0, 1, 5)
+        lay.addWidget(QLabel('Delta PosAng'), 1, 0)
+        lay.addWidget(self._sb_dltposang, 1, 1)
+        lay.addWidget(self._lb_dltposang, 1, 2)
+        lay.addWidget(QLabel('DpKckr Delay Ref.'), 2, 0)
+        lay.addWidget(self._sb_pudlyref, 2, 1)
+        lay.addWidget(self._lb_pudlyref, 2, 2)
+        lay.addWidget(QLabel('DpKckr Kick'), 3, 0)
+        lay.addWidget(self._sb_pukick, 3, 1)
+        lay.addWidget(self._lb_pukick, 3, 2)
+
+        self.setStyleSheet('QLabel{qproperty-alignment: AlignCenter;}')

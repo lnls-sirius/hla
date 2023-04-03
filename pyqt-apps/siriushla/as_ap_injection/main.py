@@ -17,7 +17,8 @@ from ..as_ti_control import BucketList, EVGInjectionLed, EVGInjectionButton
 from ..as_ap_machshift import MachShiftLabel
 from .widgets import InjDiagLed, MonitorSummaryWidget, \
     InjSysStbyControlWidget, ClockLabel, TaskStatusLabel
-from .auxiliary_dialogs import BiasFBDetailDialog, TopUpSettingsDialog
+from .auxiliary_dialogs import BiasFBDetailDialog, TopUpSettingsDialog, \
+    PUModeSettingsDialog
 
 
 class InjCtrlWindow(SiriusMainWindow):
@@ -296,6 +297,13 @@ class InjCtrlWindow(SiriusMainWindow):
             self._inj_prefix.substitute(propty='PUMode-Sel'))
         self._ind_pumode_mon = TaskStatusLabel(
             self, self._inj_prefix.substitute(propty='PUModeCmdSts-Mon'))
+        self._pb_pumdt = QPushButton(qta.icon('fa5s.ellipsis-v'), '', self)
+        self._pb_pumdt.setObjectName('btn')
+        self._pb_pumdt.setStyleSheet(
+            '#btn{min-width:18px;max-width:18px;icon-size:20px;}')
+        connect_window(
+            self._pb_pumdt, PUModeSettingsDialog, self,
+            device=self._inj_dev, prefix=self._prefix)
 
         # Single bunch bias voltage
         self._ld_sbbias = QLabel('SB Bias Voltage', self)
@@ -410,12 +418,13 @@ class InjCtrlWindow(SiriusMainWindow):
         glay2.addWidget(self._cb_injtype, 1, 1)
         glay2.addWidget(self._lb_injtype, 1, 2)
         glay2.addWidget(self._lb_injtype_mon, 1, 3)
-        glay2.addWidget(self._ind_injtype_mon, 1, 4)
+        glay2.addWidget(self._ind_injtype_mon, 1, 5)
         glay2.addWidget(self._ld_pumode, 2, 0)
         glay2.addWidget(self._cb_pumode, 2, 1)
         glay2.addWidget(self._lb_pumode, 2, 2)
         glay2.addWidget(self._lb_pumode_mon, 2, 3)
-        glay2.addWidget(self._ind_pumode_mon, 2, 4)
+        glay2.addWidget(self._pb_pumdt, 2, 4)
+        glay2.addWidget(self._ind_pumode_mon, 2, 5)
         glay2.addWidget(self._ld_sbbias, 3, 0)
         glay2.addWidget(self._sb_sbbias, 3, 1)
         glay2.addWidget(self._lb_sbbias, 3, 2)
@@ -428,17 +437,18 @@ class InjCtrlWindow(SiriusMainWindow):
         glay2.addWidget(self._sb_filaopcurr, 4, 1)
         glay2.addWidget(self._lb_filaopcurr, 4, 2)
         glay2.addWidget(self._lb_filaopcurr_mon, 4, 3)
-        glay2.addWidget(self._ind_filaopcurr_mon, 4, 4)
+        glay2.addWidget(self._ind_filaopcurr_mon, 4, 5)
         glay2.addWidget(self._ld_hvopvolt, 5, 0)
         glay2.addWidget(self._sb_hvopvolt, 5, 1)
         glay2.addWidget(self._lb_hvopvolt, 5, 2)
         glay2.addWidget(self._lb_hvopvolt_mon, 5, 3)
-        glay2.addWidget(self._ind_hvopvolt_mon, 5, 4)
+        glay2.addWidget(self._ind_hvopvolt_mon, 5, 5)
         glay2.setColumnStretch(0, 5)
         glay2.setColumnStretch(1, 3)
         glay2.setColumnStretch(2, 3)
         glay2.setColumnStretch(3, 3)
-        glay2.setColumnStretch(3, 1)
+        glay2.setColumnStretch(4, 1)
+        glay2.setColumnStretch(5, 1)
 
         wid = QGroupBox('Settings')
         lay = QGridLayout(wid)
