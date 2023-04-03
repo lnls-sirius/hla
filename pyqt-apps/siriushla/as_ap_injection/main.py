@@ -17,7 +17,7 @@ from ..as_ti_control import BucketList, EVGInjectionLed, EVGInjectionButton
 from ..as_ap_machshift import MachShiftLabel
 from .widgets import InjDiagLed, MonitorSummaryWidget, \
     InjSysStbyControlWidget, ClockLabel, TaskStatusLabel
-from .auxiliary_dialogs import BiasFBDetailDialog
+from .auxiliary_dialogs import BiasFBDetailDialog, TopUpSettingsDialog
 
 
 class InjCtrlWindow(SiriusMainWindow):
@@ -240,6 +240,7 @@ class InjCtrlWindow(SiriusMainWindow):
 
         # Target current
         self._ld_currtgt = QLabel('Target Curr.', self)
+        labelsdesc.append(self._ld_currtgt)
         self._sb_currtgt = SiriusSpinbox(
             self, self._inj_prefix.substitute(propty='TargetCurrent-SP'))
         self._lb_currtgt = SiriusLabel(
@@ -252,12 +253,6 @@ class InjCtrlWindow(SiriusMainWindow):
         self._pb_show_topup.setToolTip('Show TopUp Configurations.')
         self._pb_show_topup.clicked.connect(self._handle_topup_details_vis)
         self._pb_show_topup.setStyleSheet('QPushButton{max-width: 0.8em;}')
-        self._wid_currtgt = QWidget(self)
-        self._wid_currtgt.setLayout(QHBoxLayout())
-        self._wid_currtgt.layout().setContentsMargins(0, 0, 0, 0)
-        self._wid_currtgt.layout().addWidget(
-            self._pb_show_topup, alignment=Qt.AlignLeft)
-        self._wid_currtgt.layout().addWidget(self._ld_currtgt)
 
         # mode specific configurations
         self.wid_tudtls = self._setupTopUpModeWidget()
@@ -391,16 +386,18 @@ class InjCtrlWindow(SiriusMainWindow):
         glay1.setAlignment(Qt.AlignTop)
         glay1.addWidget(self._ld_injset, 0, 0)
         glay1.addWidget(self._led_injset, 0, 1)
-        glay1.addWidget(self._ld_injmode, 1, 0)
-        glay1.addWidget(self._cb_injmode, 1, 1)
-        glay1.addWidget(self._lb_injmode, 1, 2)
-        glay1.addWidget(self._wid_currtgt, 2, 0)
-        glay1.addWidget(self._sb_currtgt, 2, 1)
-        glay1.addWidget(self._lb_currtgt, 2, 2)
+        glay1.addWidget(self._ld_currtgt, 1, 0)
+        glay1.addWidget(self._sb_currtgt, 1, 1)
+        glay1.addWidget(self._lb_currtgt, 1, 2)
+        glay1.addWidget(self._ld_injmode, 2, 0)
+        glay1.addWidget(self._cb_injmode, 2, 1)
+        glay1.addWidget(self._lb_injmode, 2, 2)
+        glay1.addWidget(self._pb_show_topup, 2, 3)
         glay1.addWidget(self.wid_tudtls, 3, 0, 2, 4)
-        glay1.setColumnStretch(0, 3)
-        glay1.setColumnStretch(1, 2)
-        glay1.setColumnStretch(2, 2)
+        glay1.setColumnStretch(0, 5)
+        glay1.setColumnStretch(1, 3)
+        glay1.setColumnStretch(2, 3)
+        glay1.setColumnStretch(3, 1)
 
         wid2 = QWidget()
         wid2.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Fixed)
@@ -485,18 +482,6 @@ class InjCtrlWindow(SiriusMainWindow):
             self, self._inj_prefix.substitute(propty='TopUpNrPulses-RB'))
         self._lb_tunrpu.showUnits = True
 
-        self._ld_tupustd = QLabel('PU Standby', self)
-        pvname = self._inj_prefix.substitute(propty='TopUpPUStandbyEnbl-Sel')
-        self._sb_tupustd = PyDMStateButton(self, pvname)
-        self._lb_tupustd = SiriusLedState(
-            self, pvname.substitute(propty_suffix='Sts'))
-
-        self._ld_tuliwup = QLabel('LI Warm Up', self)
-        pvname = self._inj_prefix.substitute(propty='TopUpLIWarmUpEnbl-Sel')
-        self._sb_tuliwup = PyDMStateButton(self, pvname)
-        self._lb_tuliwup = SiriusLedState(
-            self, pvname.substitute(propty_suffix='Sts'))
-
         self._ld_tubiasfb = QLabel('Bias FB', self)
         pvname = self._inj_prefix.substitute(propty='BiasFBLoopState-Sel')
         self._sb_tubiasfb = PyDMStateButton(self, pvname)
@@ -508,6 +493,14 @@ class InjCtrlWindow(SiriusMainWindow):
             '#btn{min-width:18px;max-width:18px;icon-size:20px;}')
         connect_window(
             self._pb_biasfb, BiasFBDetailDialog, self,
+            device=self._inj_dev, prefix=self._prefix)
+
+        self._pb_tuset = QPushButton(
+            qta.icon('fa5s.ellipsis-h'), ' Standby && warm up settings', self)
+        self._pb_tuset.setObjectName('btn')
+        self._pb_tuset.setStyleSheet('#btn{icon-size:20px;}')
+        connect_window(
+            self._pb_tuset, TopUpSettingsDialog, self,
             device=self._inj_dev, prefix=self._prefix)
 
         wid = QWidget()
@@ -523,16 +516,11 @@ class InjCtrlWindow(SiriusMainWindow):
         lay.addWidget(self._ld_tunrpu, 2, 0)
         lay.addWidget(self._sb_tunrpu, 2, 1)
         lay.addWidget(self._lb_tunrpu, 2, 2)
-        lay.addWidget(self._ld_tupustd, 3, 0)
-        lay.addWidget(self._sb_tupustd, 3, 1)
-        lay.addWidget(self._lb_tupustd, 3, 2)
-        lay.addWidget(self._ld_tuliwup, 4, 0)
-        lay.addWidget(self._sb_tuliwup, 4, 1)
-        lay.addWidget(self._lb_tuliwup, 4, 2)
-        lay.addWidget(self._ld_tubiasfb, 5, 0)
-        lay.addWidget(self._sb_tubiasfb, 5, 1)
-        lay.addWidget(self._lb_tubiasfb, 5, 2)
-        lay.addWidget(self._pb_biasfb, 5, 3)
+        lay.addWidget(self._ld_tubiasfb, 3, 0)
+        lay.addWidget(self._sb_tubiasfb, 3, 1)
+        lay.addWidget(self._lb_tubiasfb, 3, 2)
+        lay.addWidget(self._pb_biasfb, 3, 3)
+        lay.addWidget(self._pb_tuset, 4, 0, 1, 4)
         lay.setColumnStretch(0, 3)
         lay.setColumnStretch(1, 2)
         lay.setColumnStretch(2, 2)
