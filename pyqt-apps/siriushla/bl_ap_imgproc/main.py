@@ -20,7 +20,8 @@ class CaxImgProc(QWidget):
         self._setupUi()
 
     def add_prefixes(self, sufix):
-        return self.beamline+":"+self.hutch+":"+self.basler+":"+sufix
+        return self.prefix + self.beamline + ":" + \
+            self.hutch + ":" + self.basler + ":" + sufix
 
     def generate_pv_name(self, sufix):
         if len(sufix) != 2:
@@ -53,6 +54,8 @@ class CaxImgProc(QWidget):
             wid = PyDMStateButton(init_channel=pvname)
         elif widget_type == 'image':
             wid = PyDMImageView(image_channel=pvname[0])
+        else:
+            wid = QLabel("Widget has not been implemented yet!")
         return wid
 
     def setpoint_readback_widget(self, pv_list, sprb_type):
@@ -60,13 +63,10 @@ class CaxImgProc(QWidget):
         hlay = QHBoxLayout()
         wid.setLayout(hlay)
 
-        setpoint = self.select_widget(
-            pv_list[0], sprb_type[0])
-        hlay.addWidget(setpoint)
-
-        readback = self.select_widget(
-            pv_list[1], sprb_type[1])
-        hlay.addWidget(readback)
+        for x in range(0, 2):
+            widget = self.select_widget(
+                pv_list[x], sprb_type[x])
+            hlay.addWidget(widget)
 
         wid.setMaximumWidth(400)
         return wid
@@ -89,24 +89,29 @@ class CaxImgProc(QWidget):
 
         return hlay
 
+    def get_special_wid(self, pvname, title):
+        if title in LOG_PV:
+            pv_type = 'log'
+        else:
+            pv_type = 'image'
+        return self.select_widget(pvname, pv_type)
+
     def create_box_group(self, title, pv_info):
         wid = QGroupBox()
         vbox = QVBoxLayout()
         wid.setLayout(vbox)
-        wid.setStyleSheet("QGroupBox{ border: 4px groove #777777 }")
+        wid.setStyleSheet(
+            "QGroupBox{ border: 4px groove #777777 }")
         wid.setTitle(title)
 
         for title, pv in pv_info.items():
-            special_wid = IMG_PVS+LOG_PV
-            if title not in special_wid:
+            special_list = IMG_PVS+LOG_PV
+            if title not in special_list:
                 pv_lay = self.create_widget_w_title(title, pv)
                 vbox.addLayout(pv_lay)
             else:
-                if title in LOG_PV:
-                    pv_type = 'log'
-                else:
-                    pv_type = 'image'
-                vbox.addWidget(self.select_widget(pv, pv_type))
+                spec_wid = self.get_special_wid(pv, title)
+                vbox.addWidget(spec_wid)
 
         return wid
 
