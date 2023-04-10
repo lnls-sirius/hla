@@ -27,10 +27,10 @@ PVS = {
             'Intensity Min': 'ImgIntensityMin-Mon',
             'Intensity Max': 'ImgIntensityMax-Mon',
             'Intensity Threshold': [
-                'PV_Setpoint', 'PV_Readback'
+                'ImgIsWithBeamThreshold-SP', 'ImgIsWithBeamThreshold-RB'
             ],
             'Saturated': 'ImgIsSaturated-Mon',
-            'With Beam': 'PV with beam'
+            'With Beam': 'ImgIsWithBeam-Mon'
         }
     ],
     'ROI': [
