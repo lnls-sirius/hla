@@ -70,22 +70,22 @@ class DiffCtrlDevMonitor(QWidget):
             prefix=self.prefix, device=self.device,
             neg_label=self.neg_label, pos_label=self.pos_label)
 
-        self.lb_descCtrl1 = QLabel(
+        self.lb_descctrl1 = QLabel(
             '', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
-        self.sb_Ctrl1 = SiriusSpinbox(self)
-        self.sb_Ctrl1.precisionFromPV = False
-        self.sb_Ctrl1.precision = 3
-        self.lb_Ctrl1 = SiriusLabel(self)
-        self.lb_Ctrl1.precisionFromPV = False
-        self.lb_Ctrl1.precision = 3
-        self.lb_descCtrl2 = QLabel(
+        self.sb_ctrl1 = SiriusSpinbox(self)
+        self.sb_ctrl1.precisionFromPV = False
+        self.sb_ctrl1.precision = 3
+        self.lb_ctrl1 = SiriusLabel(self)
+        self.lb_ctrl1.precisionFromPV = False
+        self.lb_ctrl1.precision = 3
+        self.lb_descctrl2 = QLabel(
             '', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
-        self.sb_Ctrl2 = SiriusSpinbox(self)
-        self.sb_Ctrl2.precisionFromPV = False
-        self.sb_Ctrl2.precision = 3
-        self.lb_Ctrl2 = SiriusLabel(self)
-        self.lb_Ctrl2.precisionFromPV = False
-        self.lb_Ctrl2.precision = 3
+        self.sb_ctrl2 = SiriusSpinbox(self)
+        self.sb_ctrl2.precisionFromPV = False
+        self.sb_ctrl2.precision = 3
+        self.lb_ctrl2 = SiriusLabel(self)
+        self.lb_ctrl2.precisionFromPV = False
+        self.lb_ctrl2.precision = 3
 
         tmp_file = _substitute_in_file(
             _os.path.abspath(_os.path.dirname(__file__))+'/ui_as_ap_dev' +
@@ -106,12 +106,12 @@ class DiffCtrlDevMonitor(QWidget):
         lay.addWidget(label_status, 0, 0)
         lay.addWidget(self.multiled_status, 0, 1)
         lay.addWidget(self.pb_details, 0, 2, alignment=Qt.AlignRight)
-        lay.addWidget(self.lb_descCtrl1, 1, 0)
-        lay.addWidget(self.sb_Ctrl1, 1, 1)
-        lay.addWidget(self.lb_Ctrl1, 1, 2)
-        lay.addWidget(self.lb_descCtrl2, 2, 0)
-        lay.addWidget(self.sb_Ctrl2, 2, 1)
-        lay.addWidget(self.lb_Ctrl2, 2, 2)
+        lay.addWidget(self.lb_descctrl1, 1, 0)
+        lay.addWidget(self.sb_ctrl1, 1, 1)
+        lay.addWidget(self.lb_ctrl1, 1, 2)
+        lay.addWidget(self.lb_descctrl2, 2, 0)
+        lay.addWidget(self.sb_ctrl2, 2, 1)
+        lay.addWidget(self.lb_ctrl2, 2, 2)
         lay.addWidget(self.dev_widget_scrarea, 0, 3, 4, 1)
 
     def _createConnectors(self):

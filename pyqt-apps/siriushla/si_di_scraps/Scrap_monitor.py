@@ -1,4 +1,3 @@
-#!/usr/bin/env python-sirius
 """HLA SI Scrapers monitoring Window."""
 
 from qtpy.QtCore import QPoint
@@ -30,19 +29,19 @@ class ScraperMonitoring(DiffCtrlDevMonitor):
 
     def _setupControlWidgets(self):
         """Setup control widgets channels/labels."""
-        self.lb_descCtrl1.setText(self.pos_label+' Pos.[mm]:')
-        self.lb_descCtrl1.setStyleSheet(
+        self.lb_descctrl1.setText(self.pos_label+' Pos.[mm]:')
+        self.lb_descctrl1.setStyleSheet(
             'min-width: 10.5em; max-width: 10.5em;')
-        self.sb_Ctrl1.channel = \
+        self.sb_ctrl1.channel = \
             self.device.substitute(propty='PositiveEdgePos-SP')
-        self.lb_Ctrl1.channel = \
+        self.lb_ctrl1.channel = \
             self.device.substitute(propty='PositiveEdgePos-RB')
-        self.lb_descCtrl2.setText(self.neg_label+' Pos.[mm]:')
-        self.lb_descCtrl2.setStyleSheet(
+        self.lb_descctrl2.setText(self.neg_label+' Pos.[mm]:')
+        self.lb_descctrl2.setStyleSheet(
             'min-width: 10.5em; max-width: 10.5em;')
-        self.sb_Ctrl2.channel = \
+        self.sb_ctrl2.channel = \
             self.device.substitute(propty='NegativeEdgePos-SP')
-        self.lb_Ctrl2.channel = \
+        self.lb_ctrl2.channel = \
             self.device.substitute(propty='NegativeEdgePos-RB')
 
     def updateDevWidget(self):
@@ -77,12 +76,12 @@ class ScraperMonitoring(DiffCtrlDevMonitor):
             factor = circle_d/vacuum_chamber_d
             xpos = widget_h/2 - self._scrap_pospos*factor
             xneg = widget_h/2 - self._scrap_negpos*factor
-            up = round(xpos - rect_h)
+            upp = round(xpos - rect_h)
             down = round(xneg)
 
             self.dev_widget.PyDMDrawingRectangle_VUp.resize(rect_w, rect_h)
             self.dev_widget.PyDMDrawingRectangle_VUp.move(
-                QPoint((widget_w-rect_w)/2, up))
+                QPoint((widget_w-rect_w)/2, upp))
             self.dev_widget.PyDMDrawingRectangle_VDown.resize(rect_w, rect_h)
             self.dev_widget.PyDMDrawingRectangle_VDown.move(
                 QPoint((widget_w-rect_w)/2, down))
