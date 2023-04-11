@@ -2,7 +2,8 @@ from datetime import datetime
 from qtpy.QtWidgets import QWidget, QGridLayout, QHBoxLayout, \
     QVBoxLayout, QGroupBox, QLabel
 from siriushla.widgets import SiriusLabel, SiriusLedState, \
-    SiriusLineEdit, PyDMLogLabel, PyDMStateButton, SiriusConnectionSignal
+    SiriusLineEdit, PyDMLogLabel, PyDMStateButton, \
+    SiriusConnectionSignal, SiriusSpinbox
 from pydm.widgets import PyDMImageView
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from .util import PVS, IMG_PVS, LED_PVS, LOG_PV
@@ -57,9 +58,13 @@ class CaxImgProc(QWidget):
             wid.showUnits = units
         elif widget_type == 'setpoint_readback':
             if 'Sel' in pv_name[0]:
-                sprb_type = ['switch', 'led']
+                sprb_type = ['switch', 'led', True]
             else:
-                sprb_type = ['edit', 'label']
+                isSpin = 'FWHM' in pv_name[0] or 'Intensity' in pv_name[0]
+                setwid = 'edit'
+                if isSpin:
+                    setwid = 'spin'
+                sprb_type = [setwid, 'label', False]
             wid = self.setpoint_readback_widget(pv_name, sprb_type)
         elif widget_type == 'led':
             wid = SiriusLedState(init_channel=pvname)
@@ -70,25 +75,29 @@ class CaxImgProc(QWidget):
         elif widget_type == 'switch':
             wid = PyDMStateButton(init_channel=pvname)
         elif widget_type == 'image':
-            wid = PyDMImageView(image_channel=pvname[0])
+            wid = PyDMImageView(image_channel=pvname)
         elif widget_type == 'time':
             wid = self.create_time_widget(pvname)
+        elif widget_type == 'spin':
+            wid = SiriusSpinbox(init_channel=pv_name)
         else:
             wid = QLabel("Widget has not been implemented yet!")
         return wid
 
     def setpoint_readback_widget(self, pv_list, sprb_type):
         wid = QWidget()
-        hlay = QHBoxLayout()
-        wid.setLayout(hlay)
+        if sprb_type[2]:
+            lay = QHBoxLayout()
+        else:
+            lay = QVBoxLayout()
+
+        wid.setLayout(lay)
 
         for x in range(0, 2):
             widget = self.select_widget(
                 pv_list[x], sprb_type[x], units=False)
-            widget.setMaximumWidth(200)
-            hlay.addWidget(widget)
+            lay.addWidget(widget)
 
-        wid.setMaximumWidth(400)
         return wid
 
     def create_widget_w_title(self, title, pv_name):
