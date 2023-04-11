@@ -13,6 +13,7 @@ class CaxImgProc(QWidget):
     def __init__(self, parent=None, prefix=_VACA_PREFIX):
         """."""
         super().__init__(parent=parent)
+        self.setObjectName('SIApp')
         self.prefix = prefix + ('-' if prefix else '')
         self.beamline = 'CAX'
         self.hutch = 'A'
@@ -84,6 +85,7 @@ class CaxImgProc(QWidget):
         for x in range(0, 2):
             widget = self.select_widget(
                 pv_list[x], sprb_type[x], units=False)
+            widget.setMaximumWidth(200)
             hlay.addWidget(widget)
 
         wid.setMaximumWidth(400)
