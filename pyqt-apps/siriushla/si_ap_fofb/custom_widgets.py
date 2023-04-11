@@ -546,6 +546,7 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
                 visisel[ctrl].stateChanged.connect(curve.setVisible)
 
         # led
+        self.led_reforb_c2v = c2v
         self.led_ref = PyDMLedMultiChannel(self, c2v)
 
         # curves
@@ -568,11 +569,11 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
         self._refimpl[plane] = value
         self.curve_hlref[plane].receiveYWaveform(value)
         prop = 'RefOrb'+plane.upper()+'-RB'
-        c2v = {
+        self.led_reforb_c2v.update({
             _PVName(ctrl).substitute(
                 prefix=self.prefix, propty=prop): value
-            for ctrl in self.ctrlrs}
-        self.led_ref.set_channels2values(c2v)
+            for ctrl in self.ctrlrs})
+        self.led_ref.set_channels2values(self.led_reforb_c2v)
 
     def _setupTimeFrameLenTab(self):
         wid = QWidget()
