@@ -124,7 +124,7 @@ class DiffCtrlDetails(SiriusDialog):
 
     def _setupPositionsLayout(self):
         self.pb_home = PyDMPushButton(
-            parent=self, label='Do Homing', pressValue=1,
+            parent=self, label='Go to maximum aperture', pressValue=1,
             init_channel=self.dev_prefix.substitute(propty='Home-Cmd'))
 
         self.pb_negdonemov = PyDMPushButton(

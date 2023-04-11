@@ -7,6 +7,7 @@ from qtpy.QtCore import Qt, QEvent
 from qtpy.QtWidgets import QWidget, QVBoxLayout, QGroupBox, QPushButton, \
     QLabel, QGridLayout, QScrollArea, QSizePolicy
 import qtawesome as qta
+from pydm.widgets import PyDMPushButton
 from pydm.utilities.macro import substitute_in_file as _substitute_in_file
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriuspy.namesys import SiriusPVName as _PVName
@@ -89,6 +90,10 @@ class DiffCtrlDevMonitor(QWidget):
         self.lb_ctrl2.precisionFromPV = False
         self.lb_ctrl2.precision = 3
 
+        self.pb_open = PyDMPushButton(
+            parent=self, label='Go to maximum aperture', pressValue=1,
+            init_channel=self.device.substitute(propty='Home-Cmd'))
+
         tmp_file = _substitute_in_file(
             _os.path.abspath(_os.path.dirname(__file__))+'/ui_as_ap_dev' +
             self.orientation.lower()+'mon.ui', {'PREFIX': self.prefix})
@@ -114,6 +119,7 @@ class DiffCtrlDevMonitor(QWidget):
         lay.addWidget(self.lb_descctrl2, 2, 0)
         lay.addWidget(self.sb_ctrl2, 2, 1)
         lay.addWidget(self.lb_ctrl2, 2, 2)
+        lay.addWidget(self.pb_open, 3, 0, 1, 3)
         lay.addWidget(self.dev_widget_scrarea, 0, 3, 4, 1)
 
     def _createConnectors(self):
