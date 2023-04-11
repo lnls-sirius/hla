@@ -29,14 +29,16 @@ class DiffCtrlDevMonitor(QWidget):
         self.device = self.device.substitute(prefix=self.prefix)
         self.section = self.device.sec
         self.orientation = self.device.dev[-1]
-        if self.orientation == 'H':
-            self.neg_label = 'Inner'
-            self.pos_label = 'Outer'
+        if 'Scrap' in self.device.device_name:
+            self.neg_name = 'Inner' if self.orientation == 'H' else 'Bottom'
+            self.pos_name = 'Outer' if self.orientation == 'H' else 'Top'
+            self.slit_name = 'Slit'
         else:
-            self.neg_label = 'Bottom'
-            self.pos_label = 'Top'
-        self.neg_label += ' Slit'
-        self.pos_label += ' Slit'
+            self.neg_name = 'Negative'
+            self.pos_name = 'Positive'
+            self.slit_name = 'Edge'
+        self.neg_label = self.neg_name + ' ' + self.slit_name
+        self.pos_label = self.pos_name + ' ' + self.slit_name
         self.setObjectName(self.section+'App')
         self._setupUi()
         self._createConnectors()
@@ -54,8 +56,8 @@ class DiffCtrlDevMonitor(QWidget):
             'Status: ', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         channels2values = {
             self.device.substitute(propty='ForceComplete-Mon'): 1,
-            self.device.substitute(propty='NegativeDoneMov-Mon'): 1,
-            self.device.substitute(propty='PositiveDoneMov-Mon'): 1}
+            self.device.substitute(propty=self.neg_name+'DoneMov-Mon'): 1,
+            self.device.substitute(propty=self.pos_name+'DoneMov-Mon'): 1}
         self.multiled_status = PyDMLedMultiChannel(self, channels2values)
         self.multiled_status.setStyleSheet('max-width: 1.29em;')
 

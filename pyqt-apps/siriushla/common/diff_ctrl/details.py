@@ -19,7 +19,10 @@ class DiffCtrlDetails(SiriusDialog):
         self.dev_prefix = _PVName(device).substitute(prefix=prefix)
         self.setObjectName(self.dev_prefix.sec+'App')
         self.neg_label = neg_label
+        self.neg_name = self.neg_label.split(' ')[0]
         self.pos_label = pos_label
+        self.pos_name = self.pos_label.split(' ')[0]
+        self.slit_name = self.pos_label.split(' ')[1]
         self._setupUi()
 
     def _setupUi(self):
@@ -63,14 +66,16 @@ class DiffCtrlDetails(SiriusDialog):
         label_negmtrctrlpref = QLabel(
             self.neg_label + ' Motion Control: ', self)
         self.lb_negmtrctrlpref = SiriusLabel(
-            self, self.dev_prefix.substitute(propty='NegativeMotionCtrl-Cte'))
+            self, self.dev_prefix.substitute(
+                propty=self.neg_name+'MotionCtrl-Cte'))
         self.lb_negmtrctrlpref.setStyleSheet("""
             max-width:14.20em; max-height:1.29em;""")
 
         label_posmtrctrlpref = QLabel(
             self.pos_label + ' Motion Control: ', self)
         self.lb_posmtrctrlpref = SiriusLabel(
-            self, self.dev_prefix.substitute(propty='PositiveMotionCtrl-Cte'))
+            self, self.dev_prefix.substitute(
+                propty=self.pos_name+'MotionCtrl-Cte'))
         self.lb_posmtrctrlpref.setStyleSheet("""
             max-width:14.20em; max-height:1.29em;""")
 
@@ -86,7 +91,7 @@ class DiffCtrlDetails(SiriusDialog):
             self.neg_label + ' Motor Finished Move? ', self)
         self.led_negdonemov = PyDMLed(
             parent=self, init_channel=self.dev_prefix.substitute(
-                propty='NegativeDoneMov-Mon'),
+                propty=self.neg_name+'DoneMov-Mon'),
             color_list=[PyDMLed.Red, PyDMLed.LightGreen])
         self.led_negdonemov.setStyleSheet("""
             max-width:7.10em; max-height:1.29em;""")
@@ -95,7 +100,7 @@ class DiffCtrlDetails(SiriusDialog):
             self.pos_label + ' Motor Finished Move? ', self)
         self.led_posdonemov = PyDMLed(
             parent=self, init_channel=self.dev_prefix.substitute(
-                propty='PositiveDoneMov-Mon'),
+                propty=self.pos_name+'DoneMov-Mon'),
             color_list=[PyDMLed.Red, PyDMLed.LightGreen])
         self.led_posdonemov.setStyleSheet("""
             max-width:7.10em; max-height:1.29em;""")
@@ -125,12 +130,12 @@ class DiffCtrlDetails(SiriusDialog):
         self.pb_negdonemov = PyDMPushButton(
             parent=self, label='Force ' + self.neg_label + ' Position',
             pressValue=1, init_channel=self.dev_prefix.substitute(
-                propty='ForceNegativeEdgePos-Cmd'))
+                propty='Force'+self.neg_name+self.slit_name+'Pos-Cmd'))
 
         self.pb_posdonemov = PyDMPushButton(
             parent=self, label='Force ' + self.pos_label + ' Position',
             pressValue=1, init_channel=self.dev_prefix.substitute(
-                propty='ForcePositiveEdgePos-Cmd'))
+                propty='Force'+self.pos_name+self.slit_name+'Pos-Cmd'))
 
         for btn in [self.pb_home,
                     self.pb_negdonemov,
@@ -156,28 +161,37 @@ class DiffCtrlDetails(SiriusDialog):
         return flay
 
     def _setupLimitsLayout(self):
+        prefposi = self.pos_name if 'Scrap' in self.dev_prefix else 'Pos'
+        prefposi += self.slit_name
+        prefposo = self.pos_name if 'Scrap' in self.dev_prefix else 'High'
+        prefposo += self.slit_name if 'Scrap' in self.dev_prefix else ''
+        prefnegi = self.neg_name if 'Scrap' in self.dev_prefix else 'Neg'
+        prefnegi += self.slit_name
+        prefnego = self.neg_name if 'Scrap' in self.dev_prefix else 'Low'
+        prefnego += self.slit_name if 'Scrap' in self.dev_prefix else ''
+
         self.sb_posinnerlim = SiriusSpinbox(
-            self, self.dev_prefix.substitute(propty='PosEdgeInnerLim-SP'))
+            self, self.dev_prefix.substitute(propty=prefposi+'InnerLim-SP'))
         self.lb_posinnerlim = SiriusLabel(
-            self, self.dev_prefix.substitute(propty='PosEdgeInnerLim-RB'),
+            self, self.dev_prefix.substitute(propty=prefposi+'InnerLim-RB'),
             keep_unit=True)
         self.lb_posinnerlim.showUnits = True
         self.sb_posouterlim = SiriusSpinbox(
-            self, self.dev_prefix.substitute(propty='NegEdgeInnerLim-SP'))
+            self, self.dev_prefix.substitute(propty=prefposo+'OuterLim-SP'))
         self.lb_posouterlim = SiriusLabel(
-            self, self.dev_prefix.substitute(propty='NegEdgeInnerLim-RB'),
+            self, self.dev_prefix.substitute(propty=prefposo+'OuterLim-RB'),
             keep_unit=True)
         self.lb_posouterlim.showUnits = True
         self.sb_neginnerlim = SiriusSpinbox(
-            self, self.dev_prefix.substitute(propty='LowOuterLim-SP'))
+            self, self.dev_prefix.substitute(propty=prefnegi+'InnerLim-SP'))
         self.lb_neginnerlim = SiriusLabel(
-            self, self.dev_prefix.substitute(propty='LowOuterLim-RB'),
+            self, self.dev_prefix.substitute(propty=prefnegi+'InnerLim-RB'),
             keep_unit=True)
         self.lb_neginnerlim.showUnits = True
         self.sb_negouterlim = SiriusSpinbox(
-            self, self.dev_prefix.substitute(propty='HighOuterLim-SP'))
+            self, self.dev_prefix.substitute(propty=prefnego+'OuterLim-SP'))
         self.lb_negouterlim = SiriusLabel(
-            self, self.dev_prefix.substitute(propty='HighOuterLim-RB'),
+            self, self.dev_prefix.substitute(propty=prefnego+'OuterLim-RB'),
             keep_unit=True)
         self.lb_negouterlim.showUnits = True
 
@@ -206,17 +220,19 @@ class DiffCtrlDetails(SiriusDialog):
                 propty='EnblBacklashComp-Sts'))
         self.sb_posbacklashdist = SiriusSpinbox(
             self, self.dev_prefix.substitute(
-                propty='PositiveEdgeBacklashDist-SP'))
+                propty=self.pos_name+self.slit_name+'BacklashDist-SP'))
         self.lb_posbacklashdist = SiriusLabel(
             self, self.dev_prefix.substitute(
-                propty='PositiveEdgeBacklashDist-RB'), keep_unit=True)
+                propty=self.pos_name+self.slit_name+'BacklashDist-RB'),
+            keep_unit=True)
         self.lb_posbacklashdist.showUnits = True
         self.sb_negbacklashdist = SiriusSpinbox(
             self, self.dev_prefix.substitute(
-                propty='NegativeEdgeBacklashDist-SP'))
+                propty=self.neg_name+self.slit_name+'BacklashDist-SP'))
         self.lb_negbacklashdist = SiriusLabel(
             self, self.dev_prefix.substitute(
-                propty='NegativeEdgeBacklashDist-RB'), keep_unit=True)
+                propty=self.neg_name+self.slit_name+'BacklashDist-RB'),
+            keep_unit=True)
         self.lb_negbacklashdist.showUnits = True
 
         lay = QGridLayout()

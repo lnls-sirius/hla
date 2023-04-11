@@ -12,18 +12,18 @@ class ScraperMonitoring(DiffCtrlDevMonitor):
         """Create connectors to monitor device positions."""
         self._scrap_pospos = 0
         self.conn_scrap_pospos = SiriusConnectionSignal(
-            self.device.substitute(propty='PositiveEdgePos-RB'))
+            self.device.substitute(propty=self.pos_name+'SlitPos-RB'))
         self.conn_scrap_pospos.new_value_signal[float].connect(self._setDevPos)
         self._scrap_negpos = 0
         self.conn_scrap_negpos = SiriusConnectionSignal(
-            self.device.substitute(propty='NegativeEdgePos-RB'))
+            self.device.substitute(propty=self.neg_name+'SlitPos-RB'))
         self.conn_scrap_negpos.new_value_signal[float].connect(self._setDevPos)
 
     def _setDevPos(self, new_value):
         """Set Scraper Widget positions."""
-        if 'Positive' in self.sender().address:
+        if self.pos_name in self.sender().address:
             self._scrap_pospos = new_value
-        elif 'Negative' in self.sender().address:
+        elif self.neg_name in self.sender().address:
             self._scrap_negpos = new_value
         self.updateDevWidget()
 
@@ -33,16 +33,16 @@ class ScraperMonitoring(DiffCtrlDevMonitor):
         self.lb_descctrl1.setStyleSheet(
             'min-width: 10.5em; max-width: 10.5em;')
         self.sb_ctrl1.channel = \
-            self.device.substitute(propty='PositiveEdgePos-SP')
+            self.device.substitute(propty=self.pos_name+'SlitPos-SP')
         self.lb_ctrl1.channel = \
-            self.device.substitute(propty='PositiveEdgePos-RB')
+            self.device.substitute(propty=self.pos_name+'SlitPos-RB')
         self.lb_descctrl2.setText(self.neg_label+' Pos.[mm]:')
         self.lb_descctrl2.setStyleSheet(
             'min-width: 10.5em; max-width: 10.5em;')
         self.sb_ctrl2.channel = \
-            self.device.substitute(propty='NegativeEdgePos-SP')
+            self.device.substitute(propty=self.neg_name+'SlitPos-SP')
         self.lb_ctrl2.channel = \
-            self.device.substitute(propty='NegativeEdgePos-RB')
+            self.device.substitute(propty=self.neg_name+'SlitPos-RB')
 
     def updateDevWidget(self):
         """Update Scraper illustration."""
