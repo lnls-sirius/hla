@@ -4,8 +4,6 @@ LED_PVS = [
     'Saturated', 'With Beam'
 ]
 
-SPRB_LED_PV = 'Update'
-
 LOG_PV = ['Log']
 
 PVS = {

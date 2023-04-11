@@ -1,11 +1,11 @@
-from qtpy.QtWidgets import QSizePolicy
+from datetime import datetime
 from qtpy.QtWidgets import QWidget, QGridLayout, QHBoxLayout, \
     QVBoxLayout, QGroupBox, QLabel
 from siriushla.widgets import SiriusLabel, SiriusLedState, \
-    SiriusLineEdit, PyDMLogLabel, PyDMStateButton
+    SiriusLineEdit, PyDMLogLabel, PyDMStateButton, SiriusConnectionSignal
 from pydm.widgets import PyDMImageView
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
-from .util import PVS, IMG_PVS, LED_PVS, LOG_PV, SPRB_LED_PV
+from .util import PVS, IMG_PVS, LED_PVS, LOG_PV
 
 class CaxImgProc(QWidget):
     """."""
@@ -15,8 +15,10 @@ class CaxImgProc(QWidget):
         super().__init__(parent=parent)
         self.prefix = prefix + ('-' if prefix else '')
         self.beamline = 'CAX'
-        self.hutch = 'B'
+        self.hutch = 'A'
         self.basler = 'BASLER01'
+        self._lbl_timestamp = {}
+        self.timestamp = {}
         self._setupUi()
 
     def add_prefixes(self, sufix):
@@ -33,11 +35,25 @@ class CaxImgProc(QWidget):
             pv_list.append(pvname)
         return pv_list
 
-    def select_widget(self, pv_name, widget_type='label'):
+    def format_datetime_lbl(self, value, pvname):
+        dtval = datetime.fromtimestamp(value)
+        datetime_lbl = dtval.strftime("%m/%d/%Y, %H:%M:%S")
+        self._lbl_timestamp[pvname].setText(datetime_lbl)
+
+    def create_time_widget(self, pvname):
+        lbl_time = QLabel('0000-00-00 0:00:00', self)
+        self._lbl_timestamp[pvname] = lbl_time
+        self._lbl_timestamp[pvname].channel = pvname
+        self.timestamp[pvname] = SiriusConnectionSignal(pvname)
+        self.timestamp[pvname].new_value_signal[float].connect(
+            lambda value: self.format_datetime_lbl(value, pvname))
+        return self._lbl_timestamp[pvname]
+
+    def select_widget(self, pv_name, widget_type='label', units=True):
         pvname = self.generate_pv_name(pv_name)
         if widget_type == 'label':
             wid = SiriusLabel(init_channel=pvname)
-            wid.showUnits = True
+            wid.showUnits = units
         elif widget_type == 'setpoint_readback':
             if 'Sel' in pv_name[0]:
                 sprb_type = ['switch', 'led']
@@ -54,6 +70,8 @@ class CaxImgProc(QWidget):
             wid = PyDMStateButton(init_channel=pvname)
         elif widget_type == 'image':
             wid = PyDMImageView(image_channel=pvname[0])
+        elif widget_type == 'time':
+            wid = self.create_time_widget(pvname)
         else:
             wid = QLabel("Widget has not been implemented yet!")
         return wid
@@ -65,7 +83,7 @@ class CaxImgProc(QWidget):
 
         for x in range(0, 2):
             widget = self.select_widget(
-                pv_list[x], sprb_type[x])
+                pv_list[x], sprb_type[x], units=False)
             hlay.addWidget(widget)
 
         wid.setMaximumWidth(400)
@@ -79,6 +97,8 @@ class CaxImgProc(QWidget):
 
         if title in LED_PVS:
             wid_type = 'led'
+        elif "Time" in pv_name:
+            wid_type = 'time'
         elif len(pv_name) != 2:
             wid_type = 'label'
         else:
