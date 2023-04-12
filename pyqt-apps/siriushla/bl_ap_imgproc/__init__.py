@@ -1,1 +1,1 @@
-from .main import CaxImgProc
+from .main import BLImgProc

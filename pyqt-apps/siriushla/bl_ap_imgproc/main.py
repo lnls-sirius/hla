@@ -1,6 +1,7 @@
 from datetime import datetime
+from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QGridLayout, QHBoxLayout, \
-    QVBoxLayout, QGroupBox, QLabel
+    QVBoxLayout, QGroupBox, QLabel, QSizePolicy
 from siriushla.widgets import SiriusLabel, SiriusLedState, \
     SiriusLineEdit, PyDMLogLabel, PyDMStateButton, \
     SiriusConnectionSignal, SiriusSpinbox
@@ -8,7 +9,7 @@ from pydm.widgets import PyDMImageView
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from .util import PVS, IMG_PVS, LED_PVS, LOG_PV
 
-class CaxImgProc(QWidget):
+class BLImgProc(QWidget):
     """."""
 
     def __init__(self, parent=None, prefix=_VACA_PREFIX):
@@ -56,6 +57,7 @@ class CaxImgProc(QWidget):
         if widget_type == 'label':
             wid = SiriusLabel(init_channel=pvname)
             wid.showUnits = units
+            wid.setAlignment(Qt.AlignCenter)
         elif widget_type == 'setpoint_readback':
             if 'Sel' in pv_name[0]:
                 sprb_type = ['switch', 'led', True]
@@ -72,14 +74,16 @@ class CaxImgProc(QWidget):
             wid = PyDMLogLabel(init_channel=pvname)
         elif widget_type == 'edit':
             wid = SiriusLineEdit(init_channel=pvname)
+            wid.setAlignment(Qt.AlignCenter)
         elif widget_type == 'switch':
             wid = PyDMStateButton(init_channel=pvname)
         elif widget_type == 'image':
             wid = PyDMImageView(image_channel=pvname)
         elif widget_type == 'time':
             wid = self.create_time_widget(pvname)
+            wid.setAlignment(Qt.AlignCenter)
         elif widget_type == 'spin':
-            wid = SiriusSpinbox(init_channel=pv_name)
+            wid = SiriusSpinbox(init_channel=pvname)
         else:
             wid = QLabel("Widget has not been implemented yet!")
         return wid
@@ -96,14 +100,15 @@ class CaxImgProc(QWidget):
         for x in range(0, 2):
             widget = self.select_widget(
                 pv_list[x], sprb_type[x], units=False)
+            widget.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
             lay.addWidget(widget)
-
         return wid
 
     def create_widget_w_title(self, title, pv_name):
         hlay = QHBoxLayout()
 
         title_wid = QLabel(title)
+        title_wid.setAlignment(Qt.AlignCenter)
         hlay.addWidget(title_wid)
 
         if title in LED_PVS:
