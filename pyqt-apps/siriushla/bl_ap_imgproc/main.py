@@ -12,13 +12,13 @@ from .util import PVS, IMG_PVS, LED_PVS, LOG_PV
 class BLImgProc(QWidget):
     """."""
 
-    def __init__(self, parent=None, prefix=_VACA_PREFIX):
+    def __init__(self, hutch, parent=None, prefix=_VACA_PREFIX):
         """."""
         super().__init__(parent=parent)
         self.setObjectName('SIApp')
         self.prefix = prefix + ('-' if prefix else '')
         self.beamline = 'CAX'
-        self.hutch = 'A'
+        self.hutch = hutch
         self.basler = 'BASLER01'
         self._lbl_timestamp = {}
         self.timestamp = {}

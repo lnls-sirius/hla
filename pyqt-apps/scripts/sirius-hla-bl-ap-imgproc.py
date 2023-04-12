@@ -11,11 +11,12 @@ from siriushla.bl_ap_imgproc import BLImgProc
 
 parser = argparse.ArgumentParser(
     description="Run Carcará X Image Processing GUI.")
+parser.add_argument('hutch', type=str, help='Select a hutch.')
 parser.add_argument(
     '-p', "--prefix", type=str, default=VACA_PREFIX,
     help="Define the prefix for the PVs in the window.")
 args = parser.parse_args()
 
 app = SiriusApplication()
-app.open_window(BLImgProc, parent=None, prefix=args.prefix)
+app.open_window(BLImgProc, parent=None, hutch=args.hutch, prefix=args.prefix)
 sys.exit(app.exec_())
