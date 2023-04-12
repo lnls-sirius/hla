@@ -15,18 +15,23 @@ PVS = {
         }
     ],
     'Img': [
-        (1, 2, 3, 8),
+        (1, 2, 3, 6),
         {
             'Size X': 'ImgSizeX-Cte',
             'Size Y': 'ImgSizeY-Cte',
             'Projection': 'image1:ArrayData',
+            'Saturated': 'ImgIsSaturated-Mon',
+            'With Beam': 'ImgIsWithBeam-Mon'
+        }
+    ],
+    'Intensity': [
+        (1, 8, 3, 1),
+        {
             'Intensity Min': 'ImgIntensityMin-Mon',
             'Intensity Max': 'ImgIntensityMax-Mon',
             'Intensity Threshold': [
                 'ImgIsWithBeamThreshold-SP', 'ImgIsWithBeamThreshold-RB'
-            ],
-            'Saturated': 'ImgIsSaturated-Mon',
-            'With Beam': 'ImgIsWithBeam-Mon'
+            ]
         }
     ],
     'ROI': [
@@ -74,7 +79,7 @@ PVS = {
         }
     ],
     'Log': [
-        (4, 9, 2, 1),
+        (1, 9, 5, 1),
         {
             'Log': 'ImgLog-Mon'
         }

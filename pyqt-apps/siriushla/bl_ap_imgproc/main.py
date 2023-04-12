@@ -148,6 +148,8 @@ class BLImgProc(QWidget):
             else:
                 spec_wid = self.get_special_wid(pv, title)
                 vbox.addWidget(spec_wid)
+                if title in LOG_PV:
+                    wid.setMaximumHeight(175)
 
         return wid
 
