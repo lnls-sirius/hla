@@ -27,9 +27,9 @@ PVS = {
     'Intensity': [
         (1, 8, 3, 1),
         {
-            'Intensity Min': 'ImgIntensityMin-Mon',
-            'Intensity Max': 'ImgIntensityMax-Mon',
-            'Intensity Threshold': [
+            'Min': 'ImgIntensityMin-Mon',
+            'Max': 'ImgIntensityMax-Mon',
+            'Threshold': [
                 'ImgIsWithBeamThreshold-SP', 'ImgIsWithBeamThreshold-RB'
             ]
         }
@@ -37,16 +37,16 @@ PVS = {
     'ROI': [
         (4, 1, 2, 3),
         {
-            'ROI X': [
+            'X Min Max': [
                 'ImgROIX-SP', 'ImgROIX-RB'
             ],
-            'ROI Y': [
+            'Y Min Max': [
                 'ImgROIY-SP', 'ImgROIY-RB'
             ],
-            'ROI X Center': 'ImgROIXCenter-Mon',
-            'ROI Y Center': 'ImgROIYCenter-Mon',
-            'ROI X FWHM': 'ImgROIXFWHM-Mon',
-            'ROI Y FWHM': 'ImgROIYFWHM-Mon'
+            'X Center': 'ImgROIXCenter-Mon',
+            'Y Center': 'ImgROIYCenter-Mon',
+            'X FWHM': 'ImgROIXFWHM-Mon',
+            'Y FWHM': 'ImgROIYFWHM-Mon'
         }
     ],
     'ROI Update': [
