@@ -601,6 +601,17 @@ def get_object(ismenubar=True, parent=None):
                 self.connect_newprocess(Scrap, 'sirius-hla-si-di-scraps.py')
                 diag.addAction(Scrap)
 
+                Dvf = QMenu('CAX DVFs', diag)
+                Dvf.setObjectName('SIApp')
+
+                Dvf1 = Dvf.addAction('DVF 1')
+                self.connect_newprocess(Dvf1, ['sirius-hla-bl-ap-imgproc.py', 'A'])
+
+                Dvf2 = Dvf.addAction('DVF 2')
+                self.connect_newprocess(Dvf2, ['sirius-hla-bl-ap-imgproc.py', 'B'])
+
+                diag.addMenu(Dvf)
+
                 BbB = QMenu('BbB', diag)
                 BbB.setObjectName(sec.upper()+'App')
 
