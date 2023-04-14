@@ -9,7 +9,7 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QGroupBox, QPushButton, QLabel, \
     QGridLayout, QVBoxLayout, QHBoxLayout, QFormLayout, QTabWidget, \
     QSizePolicy as QSzPlcy, QCheckBox, QHeaderView, QAbstractItemView, \
-    QScrollArea, QFrame
+    QScrollArea, QFrame, QComboBox
 from qtpy.QtGui import QColor
 
 import qtawesome as qta
@@ -23,14 +23,14 @@ from siriuspy.envars import VACA_PREFIX
 from siriuspy.search import PSSearch
 from siriuspy.pwrsupply.csdev import get_ps_propty_database, get_ps_modules, \
     DEF_WFMSIZE_FBP, DEF_WFMSIZE_OTHERS, PS_LI_INTLK_THRS as _PS_LI_INTLK, \
-    ETypes as _PSet
+    ETypes as _PSet, get_ps_scopesourcemap
 from siriuspy.devices import PowerSupply
 
 from ... import util
 from ...widgets import PyDMStateButton, PyDMSpinboxScrollbar, SiriusTimePlot, \
     SiriusConnectionSignal, SiriusLedState, SiriusLedAlert, SiriusLabel, \
     PyDMLedMultiChannel, SiriusDialog, SiriusWaveformTable, SiriusSpinbox, \
-    SiriusHexaSpinbox, SiriusWaveformPlot, PyDMLed
+    SiriusHexaSpinbox, SiriusWaveformPlot, PyDMLed, SiriusStringComboBox
 from .InterlockWindow import InterlockWindow, LIInterlockWindow
 from .custom_widgets import LISpectIntlkLed
 
@@ -945,14 +945,32 @@ class PSDetailWidget(QWidget):
         layout.setAlignment(Qt.AlignTop)
         layout.setContentsMargins(0, 6, 0, 0)
         layout.addWidget(self.scope_src_label, 0, 0, Qt.AlignRight)
-        layout.addWidget(self.scope_src_sp_sb, 0, 1)
-        layout.addWidget(self.scope_src_rb_lb, 0, 2)
-        layout.addWidget(self.scope_freq_label, 1, 0, Qt.AlignRight)
-        layout.addWidget(self.scope_freq_sp_sb, 1, 1)
-        layout.addWidget(self.scope_freq_rb_label, 1, 2)
-        layout.addWidget(self.scope_dur_label, 2, 0, Qt.AlignRight)
-        layout.addWidget(self.scope_dur_sp_sb, 2, 1)
-        layout.addWidget(self.scope_dur_rb_label, 2, 2)
+        layout.addWidget(self.scope_src_rb_lb, 0, 3)
+        layout.addWidget(self.scope_freq_label, 1, 0, 1, 2, Qt.AlignRight)
+        layout.addWidget(self.scope_freq_sp_sb, 1, 2)
+        layout.addWidget(self.scope_freq_rb_label, 1, 3)
+        layout.addWidget(self.scope_dur_label, 2, 0, 1, 2, Qt.AlignRight)
+        layout.addWidget(self.scope_dur_sp_sb, 2, 2)
+        layout.addWidget(self.scope_dur_rb_label, 2, 3)
+
+        try:
+            self.scope_src_sp_cb = SiriusStringComboBox(
+                self, src_sp, items=get_ps_scopesourcemap(self._psname))
+            self.scope_src_sp_opt = QComboBox(self)
+            self.scope_src_sp_opt.addItems(['[list]', '[0x]'])
+            self.scope_src_sp_opt.currentIndexChanged.connect(
+                self.scope_src_sp_cb.setHidden)
+            self.scope_src_sp_opt.currentIndexChanged.connect(
+                self.scope_src_sp_sb.setVisible)
+
+            self.scope_src_sp_sb.setVisible(False)
+            layout.addWidget(self.scope_src_label, 0, 0, Qt.AlignRight)
+            layout.addWidget(self.scope_src_sp_opt, 0, 1)
+            layout.addWidget(self.scope_src_sp_cb, 0, 2)
+            layout.addWidget(self.scope_src_sp_sb, 0, 2)
+        except KeyError:
+            layout.addWidget(self.scope_src_label, 0, 0, 1, 2, Qt.AlignRight)
+            layout.addWidget(self.scope_src_sp_sb, 0, 2)
         return layout
 
     def _wfmUpdAxisLabel(self, state):
