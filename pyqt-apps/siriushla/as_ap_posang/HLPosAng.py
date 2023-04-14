@@ -253,42 +253,12 @@ class PosAngCorr(SiriusMainWindow):
             lay.addWidget(lb_ref, idx, 4, alignment=Qt.AlignTop)
             idx += 1
 
-        if self._tl == 'TB':
-            pref = self._prefix + ('-' if self._prefix else '')
-            lay.addItem(QSpacerItem(0, 8, QSzPlcy.Ignored, QSzPlcy.Fixed))
+        lay.addItem(
+            QSpacerItem(0, 15, QSzPlcy.Preferred, QSzPlcy.Fixed), idx, 0)
 
-            label_voltsp = QLabel('<h4>Amplitude-SP</h4>', self)
-            label_voltrb = QLabel('<h4>Amplitude-RB</h4>', self)
-            lay.addWidget(label_voltsp, idx+2, 2)
-            lay.addWidget(label_voltrb, idx+2, 3)
-
-            lb_kly2_name = QLabel('Klystron 2', self)
-            le_kly2_sp = PyDMSpinboxScrollbar(
-                self, pref+'LA-RF:LLRF:KLY2:SET_AMP')
-            le_kly2_sp.spinbox.precisionFromPV = False
-            le_kly2_sp.spinbox.precision = 2
-            le_kly2_sp.spinbox.setAlignment(Qt.AlignCenter)
-            le_kly2_sp.scrollbar.limitsFromPV = True
-            lb_kly2_rb = SiriusLabel(
-                self, pref+'LA-RF:LLRF:KLY2:GET_AMP', keep_unit=True)
-            lb_kly2_rb.precisionFromPV = False
-            lb_kly2_rb.precision = 2
-            lb_kly2_rb.showUnits = True
-            lay.addWidget(lb_kly2_name, idx+3, 1,
-                          alignment=Qt.AlignLeft | Qt.AlignTop)
-            lay.addWidget(le_kly2_sp, idx+3, 2, alignment=Qt.AlignTop)
-            lay.addWidget(lb_kly2_rb, idx+3, 3, alignment=Qt.AlignTop)
-            self._kckr_name = _PVName('BO-01D:PU-InjKckr')
-        else:
-            self._kckr_name = _PVName('SI-01SA:PU-InjNLKckr')
-
-        label_voltsp = QLabel('<h4>Voltage-SP</h4>', self)
-        label_voltrb = QLabel('<h4>Voltage-RB</h4>', self)
-        label_voltmn = QLabel('<h4>Voltage-Mon</h4>', self)
-        lay.addWidget(label_voltsp, idx+4, 2)
-        lay.addWidget(label_voltrb, idx+4, 3)
-        lay.addWidget(label_voltmn, idx+4, 4)
-
+        kckr = 'BO-01D:PU-InjKckr' if self._tl == 'TB' \
+            else 'SI-01SA:PU-InjNLKckr'
+        self._kckr_name = _PVName(kckr)
         lay.addItem(QSpacerItem(0, 8, QSzPlcy.Ignored, QSzPlcy.Fixed))
         pb_kckr = QPushButton(qta.icon('fa5s.list-ul'), '', self)
         pb_kckr.setObjectName('pb')
@@ -303,20 +273,46 @@ class PosAngCorr(SiriusMainWindow):
             pb_kckr, _PUDetailWindow, self, devname=self._kckr_name)
         lb_kckr_sp = PyDMSpinboxScrollbar(
             self, self._kckr_name.substitute(
-                prefix=self._prefix, propty='Voltage-SP'))
+                prefix=self._prefix, propty='Kick-SP'))
         lb_kckr_sp.scrollbar.limitsFromPV = True
         lb_kckr_rb = SiriusLabel(self, self._kckr_name.substitute(
-            prefix=self._prefix, propty='Voltage-RB'), keep_unit=True)
+            prefix=self._prefix, propty='Kick-RB'), keep_unit=True)
         lb_kckr_rb.showUnits = True
         lb_kckr_mn = SiriusLabel(self, self._kckr_name.substitute(
-            prefix=self._prefix, propty='Voltage-Mon'), keep_unit=True)
+            prefix=self._prefix, propty='Kick-Mon'), keep_unit=True)
         lb_kckr_mn.showUnits = True
-        lay.addWidget(pb_kckr, idx+5, 0, alignment=Qt.AlignTop)
+        lay.addWidget(pb_kckr, idx+2, 0, alignment=Qt.AlignTop)
         lay.addWidget(
-            lb_kckr_name, idx+5, 1, alignment=Qt.AlignLeft | Qt.AlignTop)
-        lay.addWidget(lb_kckr_sp, idx+5, 2, alignment=Qt.AlignTop)
-        lay.addWidget(lb_kckr_rb, idx+5, 3, alignment=Qt.AlignTop)
-        lay.addWidget(lb_kckr_mn, idx+5, 4, alignment=Qt.AlignTop)
+            lb_kckr_name, idx+2, 1, alignment=Qt.AlignLeft | Qt.AlignTop)
+        lay.addWidget(lb_kckr_sp, idx+2, 2, alignment=Qt.AlignTop)
+        lay.addWidget(lb_kckr_rb, idx+2, 3, alignment=Qt.AlignTop)
+        lay.addWidget(lb_kckr_mn, idx+2, 4, alignment=Qt.AlignTop)
+
+        if self._tl == 'TB':
+            pref = self._prefix + ('-' if self._prefix else '')
+            lay.addItem(QSpacerItem(0, 8, QSzPlcy.Ignored, QSzPlcy.Fixed))
+
+            label_voltsp = QLabel('<h4>Amplitude-SP</h4>', self)
+            label_voltrb = QLabel('<h4>Amplitude-RB</h4>', self)
+            lay.addWidget(label_voltsp, idx+3, 2)
+            lay.addWidget(label_voltrb, idx+3, 3)
+
+            lb_kly2_name = QLabel('Klystron 2', self)
+            le_kly2_sp = PyDMSpinboxScrollbar(
+                self, pref+'LA-RF:LLRF:KLY2:SET_AMP')
+            le_kly2_sp.spinbox.precisionFromPV = False
+            le_kly2_sp.spinbox.precision = 2
+            le_kly2_sp.spinbox.setAlignment(Qt.AlignCenter)
+            le_kly2_sp.scrollbar.limitsFromPV = True
+            lb_kly2_rb = SiriusLabel(
+                self, pref+'LA-RF:LLRF:KLY2:GET_AMP', keep_unit=True)
+            lb_kly2_rb.precisionFromPV = False
+            lb_kly2_rb.precision = 2
+            lb_kly2_rb.showUnits = True
+            lay.addWidget(lb_kly2_name, idx+4, 1,
+                          alignment=Qt.AlignLeft | Qt.AlignTop)
+            lay.addWidget(le_kly2_sp, idx+4, 2, alignment=Qt.AlignTop)
+            lay.addWidget(lb_kly2_rb, idx+4, 3, alignment=Qt.AlignTop)
         return lay
 
     def _setupStatusLayout(self):
