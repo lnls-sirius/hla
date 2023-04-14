@@ -2,6 +2,7 @@
 
 import re
 from datetime import datetime as _datetime
+from functools import partial as _part
 import numpy as _np
 
 from qtpy.QtCore import Qt
@@ -848,8 +849,11 @@ class PSDetailWidget(QWidget):
         # reimplement fourier transform to use ScopeFreq-RB
         ch_scopefreq = self._prefixed_psname + ":ScopeFreq-RB"
         self._scopefreq_ch_rb = SiriusConnectionSignal(ch_scopefreq)
-        for curve in self._wfm_curves.values():
-            curve._fourierTransform = self._wfmFourierData
+        ch_wfmfreq = self._prefixed_psname + ':ParamWfmRefFreq-Cte'
+        self._wfmfreq_ch_rb = SiriusConnectionSignal(ch_wfmfreq)
+        for propty, curve in self._wfm_curves.items():
+            curvetype = 'scope' if propty == 'Wfm-Mon' else 'wfm'
+            curve._fourierTransform = _part(self._wfmFourierData, curvetype)
 
         # Show
         self.show_wfm_sp = QCheckBox('SP')
@@ -962,7 +966,7 @@ class PSDetailWidget(QWidget):
             curve.receiveXWaveform(xdata)
             curve.redrawCurve()
 
-    def _wfmFourierData(self, x, y):
+    def _wfmFourierData(self, curvetype, x, y):
         """Perform Fourier transform.
 
         This code is a copy of pyqtgraph.graphicsItems.PlotDataItem, just
@@ -980,8 +984,11 @@ class PSDetailWidget(QWidget):
         n = y.size
         f = _np.fft.rfft(y) / n
         # Diff: use scope frequency
-        scopefreq = self._scopefreq_ch_rb.value
-        d = 1./scopefreq if scopefreq is not None else 1
+        chfreq = self._scopefreq_ch_rb if curvetype else self._wfmfreq_ch_rb
+        freq = chfreq.value
+        if isinstance(freq, _np.ndarray):
+            freq = freq[0]
+        d = 1./freq if freq is not None else 1
         x = _np.fft.rfftfreq(n, d)
         y = _np.abs(f)
         return x, y
