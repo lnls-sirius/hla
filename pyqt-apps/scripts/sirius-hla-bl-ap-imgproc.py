@@ -1,6 +1,6 @@
 #!/usr/bin/env python-sirius
 
-"""High Level Application to Current and Lifetime Monitoring."""
+""" GUI with Carcará Image Processing information."""
 
 import sys as sys
 import argparse as argparse
@@ -11,12 +11,16 @@ from siriushla.bl_ap_imgproc import BLImgProc
 
 parser = argparse.ArgumentParser(
     description="Run Carcará X Image Processing GUI.")
+parser.add_argument('beamline', type=str, help='Select a beamline.')
 parser.add_argument('hutch', type=str, help='Select a hutch.')
+parser.add_argument('cam', type=str, help='Select a camera.')
 parser.add_argument(
     '-p', "--prefix", type=str, default=VACA_PREFIX,
     help="Define the prefix for the PVs in the window.")
 args = parser.parse_args()
 
 app = SiriusApplication()
-app.open_window(BLImgProc, parent=None, hutch=args.hutch, prefix=args.prefix)
+app.open_window(
+    BLImgProc, parent=None, prefix=args.prefix,
+    beamline=args.beamline, hutch=args.hutch, cam=args.cam)
 sys.exit(app.exec_())

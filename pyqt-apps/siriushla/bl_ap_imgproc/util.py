@@ -8,14 +8,14 @@ LOG_PV = ['Log']
 
 PVS = {
     'IOC':  [
-        (1, 1, 3, 1),
+        (0, 0, 3, 1),
         {
             'Boot Time': 'ImgTimestampBoot-Cte',
             'Update Time': 'ImgTimestampUpdate-Mon'
         }
     ],
     'Img': [
-        (1, 2, 3, 6),
+        (0, 1, 3, 7),
         {
             'Size X': 'ImgSizeX-Cte',
             'Size Y': 'ImgSizeY-Cte',
@@ -24,33 +24,27 @@ PVS = {
             'With Beam': 'ImgIsWithBeam-Mon'
         }
     ],
-    'Intensity': [
-        (1, 8, 3, 1),
-        {
-            'Min': 'ImgIntensityMin-Mon',
-            'Max': 'ImgIntensityMax-Mon',
-            'Threshold': [
-                'ImgIsWithBeamThreshold-SP', 'ImgIsWithBeamThreshold-RB'
-            ]
-        }
-    ],
     'ROI': [
-        (4, 1, 2, 3),
+        (3, 0, 2, 3),
         {
-            'X Min Max': [
-                'ImgROIX-SP', 'ImgROIX-RB'
-            ],
-            'Y Min Max': [
-                'ImgROIY-SP', 'ImgROIY-RB'
-            ],
-            'X Center': 'ImgROIXCenter-Mon',
-            'Y Center': 'ImgROIYCenter-Mon',
-            'X FWHM': 'ImgROIXFWHM-Mon',
-            'Y FWHM': 'ImgROIYFWHM-Mon'
+            'X': {
+                'Min Max': [
+                    'ImgROIX-SP', 'ImgROIX-RB'
+                ],
+                'Center': 'ImgROIXCenter-Mon',
+                'FWHM': 'ImgROIXFWHM-Mon'
+            },
+            'Y': {
+                'Min Max': [
+                    'ImgROIY-SP', 'ImgROIY-RB'
+                ],
+                'Center': 'ImgROIYCenter-Mon',
+                'FWHM': 'ImgROIYFWHM-Mon'
+            }
         }
     ],
     'ROI Update': [
-        (4, 4, 2, 1),
+        (3, 3, 1, 2),
         {
             'ROI X FWHM Factor': [
                 'ImgROIXUpdateWithFWHMFactor-SP',
@@ -66,20 +60,34 @@ PVS = {
             ]
         }
     ],
-    'Fit': [
-        (4, 5, 2, 4),
+    'Intensity': [
+        (4, 3, 1, 2),
         {
-            'ROI X Mean': 'ImgROIXFitMean-Mon',
-            'ROI Y Mean': 'ImgROIYFitMean-Mon',
-            'ROI X Sigma': 'ImgROIXFitSigma-Mon',
-            'ROI Y Sigma': 'ImgROIYFitSigma-Mon',
-            'ROI X Error': 'ImgROIXFitError-Mon',
-            'ROI Y Error': 'ImgROIYFitError-Mon',
+            'Min': 'ImgIntensityMin-Mon',
+            'Max': 'ImgIntensityMax-Mon',
+            'Threshold': [
+                'ImgIsWithBeamThreshold-SP', 'ImgIsWithBeamThreshold-RB'
+            ]
+        }
+    ],
+    'Fit': [
+        (3, 5, 2, 3),
+        {
+            'X': {
+                'ROI Mean': 'ImgROIXFitMean-Mon',
+                'ROI Sigma': 'ImgROIXFitSigma-Mon',
+                'ROI Error': 'ImgROIXFitError-Mon'
+            },
+            'Y': {
+                'ROI Mean': 'ImgROIYFitMean-Mon',
+                'ROI Sigma': 'ImgROIYFitSigma-Mon',
+                'ROI Error': 'ImgROIYFitError-Mon'
+            },
             'Angle': 'ImgFitAngle-Mon'
         }
     ],
     'Log': [
-        (1, 9, 5, 1),
+        (0, 8, 5, 1),
         {
             'Log': 'ImgLog-Mon'
         }

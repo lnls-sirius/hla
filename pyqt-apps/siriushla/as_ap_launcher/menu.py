@@ -605,10 +605,14 @@ def get_object(ismenubar=True, parent=None):
                 Dvf.setObjectName('SIApp')
 
                 Dvf1 = Dvf.addAction('DVF 1')
-                self.connect_newprocess(Dvf1, ['sirius-hla-bl-ap-imgproc.py', 'A'])
+                self.connect_newprocess(
+                    Dvf1, ['sirius-hla-bl-ap-imgproc.py',
+                    'CAX', 'A', 'BASLER01'])
 
                 Dvf2 = Dvf.addAction('DVF 2')
-                self.connect_newprocess(Dvf2, ['sirius-hla-bl-ap-imgproc.py', 'B'])
+                self.connect_newprocess(
+                    Dvf2, ['sirius-hla-bl-ap-imgproc.py',
+                    'CAX', 'B', 'BASLER01'])
 
                 diag.addMenu(Dvf)
 

@@ -9,24 +9,25 @@ from pydm.widgets import PyDMImageView
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from .util import PVS, IMG_PVS, LED_PVS, LOG_PV
 
-class BLImgProc(QWidget):
-    """."""
 
-    def __init__(self, hutch, parent=None, prefix=_VACA_PREFIX):
-        """."""
+class BLImgProc(QWidget):
+    ''' Carcará Image Processing GUI '''
+
+    def __init__(self, beamline, hutch, cam, parent=None, prefix=_VACA_PREFIX):
+        '''.'''
         super().__init__(parent=parent)
         self.setObjectName('SIApp')
         self.prefix = prefix + ('-' if prefix else '')
-        self.beamline = 'CAX'
+        self.beamline = beamline
         self.hutch = hutch
-        self.basler = 'BASLER01'
+        self.cam = cam
         self._lbl_timestamp = {}
         self.timestamp = {}
         self._setupUi()
 
     def add_prefixes(self, sufix):
         return self.prefix + self.beamline + ":" + \
-            self.hutch + ":" + self.basler + ":" + sufix
+            self.hutch + ":" + self.cam + ":" + sufix
 
     def generate_pv_name(self, sufix):
         if len(sufix) != 2:
@@ -58,6 +59,7 @@ class BLImgProc(QWidget):
             wid = SiriusLabel(init_channel=pvname)
             wid.showUnits = units
             wid.setAlignment(Qt.AlignCenter)
+            wid.setMaximumHeight(50)
         elif widget_type == 'setpoint_readback':
             if 'Sel' in pv_name[0]:
                 sprb_type = ['switch', 'led', True]
@@ -90,11 +92,11 @@ class BLImgProc(QWidget):
 
     def setpoint_readback_widget(self, pv_list, sprb_type):
         wid = QWidget()
+        wid.setContentsMargins(0, 0, 0, 0)
         if sprb_type[2]:
             lay = QHBoxLayout()
         else:
             lay = QVBoxLayout()
-
         wid.setLayout(lay)
 
         for x in range(0, 2):
@@ -122,7 +124,6 @@ class BLImgProc(QWidget):
 
         wid = self.select_widget(pv_name, wid_type)
         hlay.addWidget(wid)
-
         return hlay
 
     def get_special_wid(self, pvname, title):
@@ -134,22 +135,31 @@ class BLImgProc(QWidget):
 
     def create_box_group(self, title, pv_info):
         wid = QGroupBox()
-        vbox = QVBoxLayout()
-        wid.setLayout(vbox)
+        gbox = QGridLayout()
+        wid.setLayout(gbox)
         wid.setStyleSheet(
             "QGroupBox{ border: 4px groove #777777 }")
         wid.setTitle(title)
 
+        count = 0
         for title, pv in pv_info.items():
             special_list = IMG_PVS+LOG_PV
-            if title not in special_list:
+            if title in ['X', 'Y']:
+                widget = self.create_box_group(title, pv)
+                hpos = 0 if title == 'X' else 1
+                gbox.addWidget(widget, count, hpos, 1, 1)
+                if title == 'Y':
+                    count += 1
+            elif title not in special_list:
                 pv_lay = self.create_widget_w_title(title, pv)
-                vbox.addLayout(pv_lay)
+                gbox.addLayout(pv_lay, count, 0, 1, 2)
+                count += 1
             else:
                 spec_wid = self.get_special_wid(pv, title)
-                vbox.addWidget(spec_wid)
+                gbox.addWidget(spec_wid, count, 0, 1, 2)
                 if title in LOG_PV:
                     wid.setMaximumHeight(175)
+                count += 1
 
         return wid
 
