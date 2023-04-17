@@ -1,6 +1,6 @@
 #!/usr/bin/env python-sirius
 
-""" GUI with Carcará Image Processing information."""
+""" Carcará Image Processing GUI."""
 
 import sys as sys
 import argparse as argparse
