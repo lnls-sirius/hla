@@ -24,9 +24,6 @@ from siriushla.as_pu_control import PUDetailWindow as _PUDetailWindow
 from siriushla.as_ap_configdb import LoadConfigDialog as _LoadConfigDialog
 
 
-UI_FILE = (_os.path.abspath(_os.path.dirname(__file__))+'/ui_as_ap_posang.ui')
-
-
 class PosAngCorr(SiriusMainWindow):
     """Main Class."""
 
