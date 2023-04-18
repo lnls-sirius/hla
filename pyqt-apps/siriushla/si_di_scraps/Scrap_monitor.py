@@ -1,4 +1,3 @@
-#!/usr/bin/env python-sirius
 """HLA SI Scrapers monitoring Window."""
 
 from qtpy.QtCore import QPoint
@@ -13,37 +12,37 @@ class ScraperMonitoring(DiffCtrlDevMonitor):
         """Create connectors to monitor device positions."""
         self._scrap_pospos = 0
         self.conn_scrap_pospos = SiriusConnectionSignal(
-            self.device.substitute(propty='PositiveEdgePos-RB'))
+            self.device.substitute(propty=self.pos_name+'SlitPos-RB'))
         self.conn_scrap_pospos.new_value_signal[float].connect(self._setDevPos)
         self._scrap_negpos = 0
         self.conn_scrap_negpos = SiriusConnectionSignal(
-            self.device.substitute(propty='NegativeEdgePos-RB'))
+            self.device.substitute(propty=self.neg_name+'SlitPos-RB'))
         self.conn_scrap_negpos.new_value_signal[float].connect(self._setDevPos)
 
     def _setDevPos(self, new_value):
         """Set Scraper Widget positions."""
-        if 'Positive' in self.sender().address:
+        if self.pos_name in self.sender().address:
             self._scrap_pospos = new_value
-        elif 'Negative' in self.sender().address:
+        elif self.neg_name in self.sender().address:
             self._scrap_negpos = new_value
         self.updateDevWidget()
 
     def _setupControlWidgets(self):
         """Setup control widgets channels/labels."""
-        self.lb_descCtrl1.setText(self.pos_label+' Pos.[mm]:')
-        self.lb_descCtrl1.setStyleSheet(
+        self.lb_descctrl1.setText(self.pos_label+' Pos.[mm]:')
+        self.lb_descctrl1.setStyleSheet(
             'min-width: 10.5em; max-width: 10.5em;')
-        self.sb_Ctrl1.channel = \
-            self.device.substitute(propty='PositiveEdgePos-SP')
-        self.lb_Ctrl1.channel = \
-            self.device.substitute(propty='PositiveEdgePos-RB')
-        self.lb_descCtrl2.setText(self.neg_label+' Pos.[mm]:')
-        self.lb_descCtrl2.setStyleSheet(
+        self.sb_ctrl1.channel = \
+            self.device.substitute(propty=self.pos_name+'SlitPos-SP')
+        self.lb_ctrl1.channel = \
+            self.device.substitute(propty=self.pos_name+'SlitPos-RB')
+        self.lb_descctrl2.setText(self.neg_label+' Pos.[mm]:')
+        self.lb_descctrl2.setStyleSheet(
             'min-width: 10.5em; max-width: 10.5em;')
-        self.sb_Ctrl2.channel = \
-            self.device.substitute(propty='NegativeEdgePos-SP')
-        self.lb_Ctrl2.channel = \
-            self.device.substitute(propty='NegativeEdgePos-RB')
+        self.sb_ctrl2.channel = \
+            self.device.substitute(propty=self.neg_name+'SlitPos-SP')
+        self.lb_ctrl2.channel = \
+            self.device.substitute(propty=self.neg_name+'SlitPos-RB')
 
     def updateDevWidget(self):
         """Update Scraper illustration."""
@@ -77,12 +76,12 @@ class ScraperMonitoring(DiffCtrlDevMonitor):
             factor = circle_d/vacuum_chamber_d
             xpos = widget_h/2 - self._scrap_pospos*factor
             xneg = widget_h/2 - self._scrap_negpos*factor
-            up = round(xpos - rect_h)
+            upp = round(xpos - rect_h)
             down = round(xneg)
 
             self.dev_widget.PyDMDrawingRectangle_VUp.resize(rect_w, rect_h)
             self.dev_widget.PyDMDrawingRectangle_VUp.move(
-                QPoint((widget_w-rect_w)/2, up))
+                QPoint((widget_w-rect_w)/2, upp))
             self.dev_widget.PyDMDrawingRectangle_VDown.resize(rect_w, rect_h)
             self.dev_widget.PyDMDrawingRectangle_VDown.move(
                 QPoint((widget_w-rect_w)/2, down))
