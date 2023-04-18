@@ -163,6 +163,15 @@ class SiriusSpinbox(PyDMSpinbox):
         else:
             super().wheelEvent(event)
 
+    def focusOutEvent(self, event):
+        """
+        Overwrites the function called when a user leaves the widget
+        without pressing return.  Resets the value of the text field
+        to the current channel value.
+        """
+        self.value_changed(self.value)
+        super().focusOutEvent(event)
+
 
 class SiriusHexaSpinbox(SiriusSpinbox):
     """Custom Hexa Spinbox."""
