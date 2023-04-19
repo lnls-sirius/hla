@@ -99,6 +99,7 @@ setup(
         'scripts/sirius-hla-si-ap-currlt.py',
         'scripts/sirius-hla-si-ap-fofb.py',
         'scripts/sirius-hla-si-ap-genstatus.py',
+        'scripts/sirius-hla-si-ap-idff.py',
         'scripts/sirius-hla-si-ap-orbintlk.py',
         'scripts/sirius-hla-si-ap-sofb.py',
         'scripts/sirius-hla-si-ap-tunecorr.py',
