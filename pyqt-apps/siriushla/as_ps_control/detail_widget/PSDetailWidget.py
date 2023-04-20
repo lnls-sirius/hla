@@ -1981,31 +1981,36 @@ class FastCorrPSDetailWidget(PSDetailWidget):
         lay.addWidget(self.fofbaccminsat_rb, 4, 2)
 
         # coefficients
-        self.gph_fofbcoeff = SiriusWaveformPlot()
-        self.gph_fofbcoeff.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
-        self.gph_fofbcoeff.autoRangeX = True
-        self.gph_fofbcoeff.autoRangeY = True
-        self.gph_fofbcoeff.showXGrid = True
-        self.gph_fofbcoeff.showYGrid = True
-        self.gph_fofbcoeff.title = 'InvRespMatRow Coefficients'
-        self.gph_fofbcoeff.setBackgroundColor(QColor(255, 255, 255))
-        self.gph_fofbcoeff.addChannel(
-            y_channel=self._prefixed_psname+':InvRespMatRow-SP', name='SP',
-            color='red', lineWidth=2)
-        self.gph_fofbcoeff.addChannel(
-            y_channel=self._prefixed_psname+':InvRespMatRow-RB', name='RB',
-            color='blue', lineWidth=2)
+        gph_fofbcoeffs = dict()
+        for plane in ['X', 'Y']:
+            colorsp = 'darkBlue' if plane == 'X' else 'darkRed'
+            colorrb = 'blue' if plane == 'X' else 'red'
+            gph_fofbcoeffs[plane] = SiriusWaveformPlot()
+            gph_fofbcoeffs[plane].setSizePolicy(
+                QSzPlcy.Maximum, QSzPlcy.Maximum)
+            gph_fofbcoeffs[plane].showLegend = True
+            gph_fofbcoeffs[plane].autoRangeX = True
+            gph_fofbcoeffs[plane].autoRangeY = True
+            gph_fofbcoeffs[plane].showXGrid = True
+            gph_fofbcoeffs[plane].showYGrid = True
+            gph_fofbcoeffs[plane].title = 'InvRespMatRow'+plane+' Coefficients'
+            gph_fofbcoeffs[plane].setBackgroundColor(QColor(255, 255, 255))
+            gph_fofbcoeffs[plane].addChannel(
+                y_channel=self._prefixed_psname+':InvRespMatRow'+plane+'-SP',
+                name='SP', color=colorsp, lineWidth=2, symbol='o')
+            gph_fofbcoeffs[plane].addChannel(
+                y_channel=self._prefixed_psname+':InvRespMatRow'+plane+'-RB',
+                name='RB', color=colorrb, lineWidth=2, symbol='o')
 
         self.show_coeff_sp = QCheckBox('SP')
         self.show_coeff_sp.setChecked(True)
-        self.show_coeff_sp.setStyleSheet('color: red;')
-        self.show_coeff_sp.stateChanged.connect(
-            self.gph_fofbcoeff.curveAtIndex(0).setVisible)
         self.show_coeff_rb = QCheckBox('RB')
         self.show_coeff_rb.setChecked(True)
-        self.show_coeff_rb.setStyleSheet('color: blue;')
-        self.show_coeff_rb.stateChanged.connect(
-            self.gph_fofbcoeff.curveAtIndex(1).setVisible)
+        for plane in ['X', 'Y']:
+            self.show_coeff_sp.stateChanged.connect(
+                gph_fofbcoeffs[plane].curveAtIndex(0).setVisible)
+            self.show_coeff_rb.stateChanged.connect(
+                gph_fofbcoeffs[plane].curveAtIndex(1).setVisible)
         hbox_show = QHBoxLayout()
         hbox_show.setAlignment(Qt.AlignCenter)
         hbox_show.addWidget(self.show_coeff_sp)
@@ -2014,7 +2019,8 @@ class FastCorrPSDetailWidget(PSDetailWidget):
         widmon = QWidget()
         lay = QVBoxLayout(widmon)
         lay.setAlignment(Qt.AlignTop)
-        lay.addWidget(self.gph_fofbcoeff)
+        for plane in ['X', 'Y']:
+            lay.addWidget(gph_fofbcoeffs[plane])
         lay.addLayout(hbox_show)
 
         layout = QHBoxLayout()
