@@ -28,7 +28,8 @@ class HLTriggerSimple(BaseWidget):
 
     def __init__(
             self, parent, device='', prefix='', delay=True, delayraw=False,
-            duration=False, widthraw=False, nrpulses=False, src=False):
+            duration=False, widthraw=False, nrpulses=False, src=False,
+            deltadelay=False, deltadelayraw=False):
         super().__init__(parent, device, prefix)
         flay = QFormLayout(self)
         flay.setLabelAlignment(Qt.AlignRight)
@@ -95,6 +96,51 @@ class HLTriggerSimple(BaseWidget):
             l_src.setStyleSheet("min-width:5em;")
             hlay_src = self._create_propty_layout(propty='Src-Sel')
             flay.addRow(l_src, hlay_src)
+
+        if deltadelay or deltadelayraw:
+            tab_deltadelay = QTabWidget(self)
+            tab_deltadelay.setObjectName(self.device.sec+'Tab')
+            tab_deltadelay.setStyleSheet("""
+                #{}Tab::pane {{
+                    border-left: 2px solid gray;
+                    border-bottom: 2px solid gray;
+                    border-right: 2px solid gray;
+                }}""".format(self.device.sec))
+            for tab in ['DeltaDelay', 'DeltaDelayRaw']:
+                if 'Raw' not in tab and not deltadelay:
+                    continue
+                if 'Raw' in tab and not deltadelayraw:
+                    continue
+                unit = '' if 'Raw' in tab else ' [us]'
+                wid = QWidget(self)
+                lay = QGridLayout(wid)
+                lay.setAlignment(Qt.AlignTop)
+                lay.addWidget(
+                    QLabel('<h4>Low Level</h4>'), 0, 0, Qt.AlignCenter)
+                lay.addWidget(
+                    QLabel(f'<h4>SP{unit:s}</h4>'), 0, 1, Qt.AlignCenter)
+                lay.addWidget(
+                    QLabel(f'<h4>RB{unit:s}</h4>'), 0, 2, Qt.AlignCenter)
+                devname = self.device.device_name
+                ll_obj_names = HLTimeSearch.get_ll_trigger_names(devname)
+                hl_obj_names = HLTimeSearch.get_hl_trigger_channels(devname)
+                for idx, objs in enumerate(zip(ll_obj_names, hl_obj_names)):
+                    nam = QLabel(
+                        objs[0] + '\n(' + objs[1] + ')', wid,
+                        alignment=Qt.AlignCenter)
+                    spin = _SpinBox(
+                        wid, init_channel=self.get_pvname(tab+'-SP'),
+                        index=idx)
+                    spin.setStyleSheet('min-width:7em;')
+                    lbl = _Label(
+                        wid, init_channel=self.get_pvname(tab+'-RB'),
+                        index=idx)
+                    lbl.setStyleSheet('min-width:6em;')
+                    lay.addWidget(nam, idx+1, 0)
+                    lay.addWidget(spin, idx+1, 1)
+                    lay.addWidget(lbl, idx+1, 2)
+                tab_deltadelay.addTab(wid, tab)
+            flay.addRow(tab_deltadelay)
 
 
 class HLTriggerDetailed(BaseWidget):
