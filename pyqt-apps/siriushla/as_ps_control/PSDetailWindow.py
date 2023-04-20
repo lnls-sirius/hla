@@ -13,15 +13,17 @@ from .detail_widget.DetailWidgetFactory import DetailWidgetFactory
 class PSDetailWindow(SiriusMainWindow):
     """Window to control a detailed widget."""
 
-    def __init__(self, psname, parent=None):
+    def __init__(self, psname, parent=None, psmodel=None, pstype=None):
         """Init UI."""
         super(PSDetailWindow, self).__init__(parent)
         if isinstance(psname, str):
             self._psname = [_PVName(psname), ]
         else:
             self._psname = [_PVName(psn) for psn in psname]
+        self._psmodel = psmodel
+        self._pstype = pstype
         name = self._psname[0]
-        self._is_dclink = 'dclink' in PSSearch.conv_psname_2_pstype(name)
+        self._is_dclink = 'dclink' in name.lower()
         secs = {'AS', 'LI', 'TB', 'BO', 'TS', 'SI', 'IT'}
         if name.sub.endswith(('SA', 'SB', 'SP', 'ID')):
             sec = 'ID'
@@ -43,7 +45,9 @@ class PSDetailWindow(SiriusMainWindow):
         else:
             self.setWindowTitle(self._psname[0])
         # Set window layout
-        self.widget = DetailWidgetFactory.factory(self._psname, self)
+        self.widget = DetailWidgetFactory.factory(
+            self._psname, parent=self,
+            psmodel=self._psmodel, pstype=self._pstype)
         self._connect_buttons(self.widget)
         self.setCentralWidget(self.widget)
 
@@ -51,7 +55,10 @@ class PSDetailWindow(SiriusMainWindow):
         w = widget.findChild(QPushButton, 'dclink_button')
         if w:
             psname = self._psname[0]
-            dclinks = PSSearch.conv_psname_2_dclink(psname)
+            try:
+                dclinks = PSSearch.conv_psname_2_dclink(psname)
+            except KeyError:
+                dclinks = []
             if dclinks:
                 dclink_type = PSSearch.conv_psname_2_psmodel(dclinks[0])
                 if dclink_type != 'REGATRON_DCLink':
