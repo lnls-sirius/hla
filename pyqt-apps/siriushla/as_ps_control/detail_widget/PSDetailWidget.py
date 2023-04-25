@@ -486,7 +486,7 @@ class PSDetailWidget(_BaseDetailWidget):
             '#soft_intlk_bt{min-width:25px; max-width:25px; icon-size:20px;}')
         util.connect_window(
             self.soft_intlk_bt, InterlockWindow, self,
-            devname=self._psname, interlock='IntlkSoft',
+            devname=self._psname, database=self._db, interlock='IntlkSoft',
             auxdev=self._auxdev, auxdev2mod=self._auxdev2mod)
         self.soft_intlk_led = SiriusLedAlert(
             parent=self, init_channel=self._prefixed_psname + ":IntlkSoft-Mon")
@@ -498,7 +498,7 @@ class PSDetailWidget(_BaseDetailWidget):
             '#hard_intlk_bt{min-width:25px; max-width:25px; icon-size:20px;}')
         util.connect_window(
             self.hard_intlk_bt, InterlockWindow, self,
-            devname=self._psname, interlock='IntlkHard',
+            devname=self._psname, database=self._db, interlock='IntlkHard',
             auxdev=self._auxdev, auxdev2mod=self._auxdev2mod)
         self.hard_intlk_led = SiriusLedAlert(
             parent=self, init_channel=self._prefixed_psname + ":IntlkHard-Mon")
@@ -514,7 +514,7 @@ class PSDetailWidget(_BaseDetailWidget):
                 "#iib_intlk_bt{min-width:25px;max-width:25px;icon-size:20px;}")
             util.connect_window(
                 self.iib_intlk_bt, InterlockWindow, self,
-                devname=self._psname, interlock=iib_intlks,
+                devname=self._psname, database=self._db, interlock=iib_intlks,
                 auxdev=self._auxdev, auxdev2mod=self._auxdev2mod)
 
             chs2vals = dict()
@@ -535,7 +535,7 @@ class PSDetailWidget(_BaseDetailWidget):
                 '#alarm_bt{min-width:25px;max-width:25px;icon-size:20px;}')
             util.connect_window(
                 self.alarm_bt, InterlockWindow, self,
-                devname=self._psname, interlock=alarms,
+                devname=self._psname, database=self._db, interlock=alarms,
                 auxdev=self._auxdev, auxdev2mod=self._auxdev2mod)
 
             chs2vals = dict()
@@ -1546,6 +1546,9 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
     def __init__(self, psname, parent=None):
         """Class constructor."""
         super(FastCorrPSDetailWidget, self).__init__(psname, parent=parent)
+        self._psmodel = 'FOFB_PS'
+        self._pstype = 'si-corrector-fc1-ch'
+        self._db = get_ps_propty_database(self._psmodel, self._pstype)
         self._setup_ui()
 
     def _setup_ui(self):
@@ -1736,7 +1739,7 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
             '#alarm_bt{min-width:25px; max-width:25px; icon-size:20px;}')
         util.connect_window(
             self.alarm_bt, InterlockWindow, self,
-            devname=self._psname, interlock='AlarmsAmp')
+            devname=self._psname, database=self._db, interlock='AlarmsAmp')
         self.alarm_led = SiriusLedAlert(
             parent=self, init_channel=self._prefixed_psname + ":AlarmsAmp-Mon")
 
