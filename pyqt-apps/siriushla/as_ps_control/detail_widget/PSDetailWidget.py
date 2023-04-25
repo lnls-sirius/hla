@@ -30,7 +30,8 @@ from ... import util
 from ...widgets import PyDMStateButton, PyDMSpinboxScrollbar, SiriusTimePlot, \
     SiriusConnectionSignal, SiriusLedState, SiriusLedAlert, SiriusLabel, \
     PyDMLedMultiChannel, SiriusDialog, SiriusWaveformTable, SiriusSpinbox, \
-    SiriusHexaSpinbox, SiriusWaveformPlot, PyDMLed, SiriusStringComboBox
+    SiriusHexaSpinbox, SiriusWaveformPlot, PyDMLed, SiriusStringComboBox, \
+    PyDMLinEditScrollbar
 from .InterlockWindow import InterlockWindow, LIInterlockWindow
 from .custom_widgets import LISpectIntlkLed
 
@@ -1676,10 +1677,10 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
         voltage_rb_label = QLabel("Readback")
         voltage_mn_label = QLabel("Mon")
 
-        self.voltage_sp = PyDMSpinboxScrollbar(
+        self.voltage_sp = PyDMLinEditScrollbar(
             self, self._prefixed_psname + ":Voltage-SP")
-        self.voltage_sp.spinbox.precisionFromPV = False
-        self.voltage_sp.spinbox.precision = 6
+        self.voltage_sp.lineedit.precisionFromPV = False
+        self.voltage_sp.lineedit.precision = 6
         self.voltage_rb = SiriusLabel(
             self, self._prefixed_psname+":Voltage-RB", keep_unit=True)
         self.voltage_rb.precisionFromPV = False
@@ -1707,19 +1708,13 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
         voltage_rb_label = QLabel("Readback")
         voltage_mn_label = QLabel("Mon")
 
-        self.voltage_raw_sp = PyDMSpinboxScrollbar(
-            self, self._prefixed_psname + ":Voltage-SP")
-        self.voltage_raw_sp.spinbox.precisionFromPV = False
-        self.voltage_raw_sp.spinbox.precision = 6
+        self.voltage_raw_sp = PyDMLinEditScrollbar(
+            self, self._prefixed_psname + ":VoltageRaw-SP")
         self.voltage_raw_rb = SiriusLabel(
-            self, self._prefixed_psname+":Voltage-RB", keep_unit=True)
-        self.voltage_raw_rb.precisionFromPV = False
-        self.voltage_raw_rb.precision = 6
+            self, self._prefixed_psname+":VoltageRaw-RB", keep_unit=True)
         self.voltage_rb.showUnits = True
         self.voltage_raw_mn = SiriusLabel(
-            self, self._prefixed_psname+":Voltage-Mon", keep_unit=True)
-        self.voltage_raw_mn.precisionFromPV = False
-        self.voltage_raw_mn.precision = 6
+            self, self._prefixed_psname+":VoltageRaw-Mon", keep_unit=True)
         self.voltage_raw_mn.showUnits = True
 
         layout = QGridLayout()
