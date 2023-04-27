@@ -11,12 +11,12 @@ class SlitMonitoring(DiffCtrlDevMonitor):
 
     def _setupControlWidgets(self):
         """Setup control widgets channels/labels."""
-        self.lb_descCtrl1.setText('Center [mm]:')
-        self.sb_Ctrl1.channel = self.device.substitute(propty='Center-SP')
-        self.lb_Ctrl1.channel = self.device.substitute(propty='Center-RB')
-        self.lb_descCtrl2.setText('Width [mm]:')
-        self.sb_Ctrl2.channel = self.device.substitute(propty='Width-SP')
-        self.lb_Ctrl2.channel = self.device.substitute(propty='Width-RB')
+        self.lb_descctrl1.setText('Center [mm]:')
+        self.sb_ctrl1.channel = self.device.substitute(propty='Center-SP')
+        self.lb_ctrl1.channel = self.device.substitute(propty='Center-RB')
+        self.lb_descctrl2.setText('Width [mm]:')
+        self.sb_ctrl2.channel = self.device.substitute(propty='Width-SP')
+        self.lb_ctrl2.channel = self.device.substitute(propty='Width-RB')
 
     def _createConnectors(self):
         """Create connectors to monitor device positions."""

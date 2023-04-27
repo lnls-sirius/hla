@@ -18,13 +18,15 @@ class SiriusStringComboBox(QComboBox, PyDMWritableWidget):
         PyDMWritableWidget.__init__(self, init_channel=init_channel)
         self._has_items = False
         self.set_items(items)
-        self.currentTextChanged.connect(self._send_value)
+        self.activated.connect(self._send_value)
         self.setContextMenuPolicy(Qt.DefaultContextMenu)
         self.contextMenuEvent = self.open_context_menu
 
     def value_changed(self, new_val):
         """Handle PV value changed in widget."""
         if new_val is not None:
+            if isinstance(self._items, dict):
+                new_val = self._values2items.get(new_val, 'UNDEF')
             idx = self.findText(new_val)
             if idx == -1:
                 logger.error("Can not change value to %r. "
@@ -38,6 +40,7 @@ class SiriusStringComboBox(QComboBox, PyDMWritableWidget):
         if items is None:
             return
         elif isinstance(items, list):
+            items.append('UNDEF')
             for item in items:
                 try:
                     self.addItem(item)
@@ -46,6 +49,7 @@ class SiriusStringComboBox(QComboBox, PyDMWritableWidget):
                         "Invalid type '{0}'. The expected type is 'string'. "
                         "Exception: {1}".format(type(item), error))
         elif isinstance(items, dict):
+            items['UNDEF'] = -1
             for item_text, data in items.items():
                 try:
                     self.addItem(item_text, data)
@@ -53,6 +57,7 @@ class SiriusStringComboBox(QComboBox, PyDMWritableWidget):
                     logger.error(
                         "Invalid type '{0}'. The expected type is 'string'. "
                         "Exception: {1}".format(type(item), error))
+            self._values2items = {v: t for t, v in items.items()}
         self._items = items
         self._has_items = True
         self.check_enable_state()
@@ -71,8 +76,12 @@ class SiriusStringComboBox(QComboBox, PyDMWritableWidget):
         self.setToolTip(tooltip)
         self.setEnabled(status)
 
-    def _send_value(self, text):
+    def _send_value(self, index):
+        text = self.itemText(index)
+        if text == 'UNDEF':
+            return
         if isinstance(self._items, list):
             self.send_value_signal[str].emit(text)
         elif isinstance(self._items, dict):
-            self.send_value_signal[str].emit(self._items[text])
+            value = self._items[text]
+            self.send_value_signal[type(value)].emit(value)

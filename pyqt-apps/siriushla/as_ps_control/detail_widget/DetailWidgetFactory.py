@@ -9,7 +9,7 @@ class DetailWidgetFactory:
     """Return a detail widget."""
 
     @staticmethod
-    def factory(psname, parent=None):
+    def factory(psname, parent=None, psmodel=None, pstype=None):
         """Return a DetailWidget."""
         if isinstance(psname, (list, tuple)):
             if len(psname) > 1:
@@ -35,21 +35,28 @@ class DetailWidgetFactory:
                 return widget
             else:
                 psname = psname[0]
-        return DetailWidgetFactory._item(psname, parent)
+        return DetailWidgetFactory._item(
+            psname, parent=parent, psmodel=psmodel, pstype=pstype)
 
     @staticmethod
-    def _item(psname, parent=None):
-        if 'DCLink' in psname:
-            model = PSSearch.conv_psname_2_psmodel(psname)
-            if model == 'FBP_DCLink':
-                return FBPDCLinkDetailWidget(psname, parent)
-            elif model in ('FAC_ACDC', 'FAC_2S_ACDC', 'FAC_2P4S_ACDC'):
-                return FACDCLinkDetailWidget(psname, parent)
-            else:
-                raise ValueError('Undefined PS model: {}'.format(model))
-        elif 'LI' in psname:
+    def _item(psname, parent=None, psmodel=None, pstype=None):
+        if not psmodel:
+            try:
+                psmodel = PSSearch.conv_psname_2_psmodel(psname)
+            except (ValueError, KeyError):
+                if psname.startswith('LI'):
+                    psmodel = 'LINAC_PS'
+                elif '-FC' in psname:
+                    psmodel = 'FOFB_PS'
+                else:
+                    raise ValueError(f'Undefined PS model for psname {psname}')
+        if psmodel == 'FBP_DCLink':
+            return FBPDCLinkDetailWidget(psname, parent)
+        if psmodel in ('FAC_2S_ACDC', 'FAC_2P4S_ACDC'):
+            return FACDCLinkDetailWidget(psname, parent)
+        if psmodel == 'LINAC_PS':
             return LIPSDetailWidget(psname, parent)
-        elif '-FCH' in psname or '-FCV' in psname:
+        if psmodel == 'FOFB_PS':
             return FastCorrPSDetailWidget(psname, parent)
-        else:
-            return PSDetailWidget(psname, parent)
+        return PSDetailWidget(
+            psname, parent=parent, psmodel=psmodel, pstype=pstype)
