@@ -18,6 +18,7 @@ from .LensControlWidget import LILensControlWidget, ITLensControlWidget
 from .FastCorrectorControlWidget import \
     SIFastCorrectorControlWidget
 from .SeptFFCorrectorControlWidget import SISeptFFCorrectorControlWidget
+from .IDFFCorrectorControlWidget import IDFFCorrectorControlWidget
 
 
 class ControlWidgetFactory:
@@ -116,6 +117,10 @@ class ControlWidgetFactory:
                     parent=parent)
             elif device == "corrector-septff":
                 return SISeptFFCorrectorControlWidget(
+                    subsection=subsection, orientation=orientation,
+                    parent=parent)
+            elif device == "corrector-idff":
+                return IDFFCorrectorControlWidget(
                     subsection=subsection, orientation=orientation,
                     parent=parent)
             elif device == "skew-quadrupole":

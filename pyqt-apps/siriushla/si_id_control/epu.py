@@ -6,8 +6,8 @@ from qtpy.QtWidgets import QGroupBox, QGridLayout, QLabel, \
 import qtawesome as qta
 from pydm.widgets import PyDMPushButton
 
-from siriushla.util import connect_window
-from siriushla.widgets import PyDMLogLabel, SiriusLedAlert, PyDMLed, \
+from ..util import connect_newprocess, connect_window
+from ..widgets import PyDMLogLabel, SiriusLedAlert, PyDMLed, \
     SiriusLedState, PyDMLedMultiChannel, SiriusLabel, SiriusSpinbox
 
 from .base import IDCommonControlWindow, IDCommonDialog, \
@@ -110,7 +110,7 @@ class EPUControlWindow(IDCommonControlWindow):
 
         self._ld_stopall = QLabel('Stop All Motion', self)
         self._pb_stopall = PyDMPushButton(
-                self, label='', icon=qta.icon('fa5s.times'))
+            self, label='', icon=qta.icon('fa5s.times'))
         self._pb_stopall.setToolTip('Stop all motion, lock all brakes.')
         pvname = self.dev_pref.substitute(propty='Stop-Cmd')
         self._pb_stopall.channel = pvname
@@ -173,9 +173,6 @@ class EPUControlWindow(IDCommonControlWindow):
         lay.addWidget(self._log, 2, 0, 1, 3)
         lay.addWidget(self._bt_logclear, 3, 0, 1, 3, alignment=Qt.AlignCenter)
         return gbox
-
-    def _ctrlModeWidget(self):
-        return None
 
     def _auxCommandsWidget(self):
         gbox = QGroupBox('Auxiliary Commands', self)
@@ -244,6 +241,12 @@ class EPUControlWindow(IDCommonControlWindow):
         gbox.setStyleSheet(
             '.QLabel{qproperty-alignment: "AlignRight | AlignVCenter";}')
         return gbox
+
+    def _ffSettingsWidget(self):
+        but = QPushButton('Feedforward Settings', self)
+        connect_newprocess(
+            but, ['sirius-hla-si-ap-idff.py', self._device])
+        return but
 
 
 class EPUSummaryBase(IDCommonSummaryBase):
@@ -350,6 +353,7 @@ class EPUDriveDetails(IDCommonDialog):
     """EPU Drive Details."""
 
     def __init__(self, parent=None, prefix='', device=''):
+        """Init."""
         super().__init__(
             parent, prefix, device, title=device+' Drive Details')
 

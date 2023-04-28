@@ -239,10 +239,11 @@ class BasePSControlWidget(QWidget):
         """Class constructor.
 
         Parameters:
-        psname_list - a list of power supplies, will be filtered based on
-                      patterns defined in the subclass;
-        orientation - how the different groups(defined in subclasses) will be
-                      laid out.
+        subsection
+            Default to None. To be used in filters defined in subclass.
+        orientation
+            Default to HORIZONTAL. Define how the different groups
+            (defined in subclasses) will be laid out.
         """
         super(BasePSControlWidget, self).__init__(parent)
         self._orientation = orientation
