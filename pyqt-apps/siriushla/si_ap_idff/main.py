@@ -98,15 +98,13 @@ class IDFFWindow(SiriusMainWindow):
         pparam = _PVName(self._idffdata['pparameter'])
         ld_pparam = QLabel(
             pparam.propty_name + ': ', self, alignment=Qt.AlignRight)
-        self._lb_pparam = SiriusLabel(
-            self, pparam.substitute(propty_suffix='Mon'), keep_unit=True)
+        self._lb_pparam = SiriusLabel(self, pparam, keep_unit=True)
         self._lb_pparam.showUnits = True
 
         kparam = _PVName(self._idffdata['kparameter'])
         ld_kparam = QLabel(
             kparam.propty_name + ': ', self, alignment=Qt.AlignRight)
-        self._lb_kparam = SiriusLabel(
-            self, kparam.substitute(propty_suffix='Mon'), keep_unit=True)
+        self._lb_kparam = SiriusLabel(self, kparam, keep_unit=True)
         self._lb_kparam.showUnits = True
 
         gbox = QGroupBox('ID Status', self)
