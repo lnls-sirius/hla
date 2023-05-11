@@ -26,10 +26,11 @@ class InjCtrlWindow(SiriusMainWindow):
     showStatus = Signal()
     showEgun = Signal()
 
-    def __init__(self, parent=None, prefix=''):
+    def __init__(self, parent=None, prefix='', args=None):
         """Init."""
         super().__init__(parent)
         self._prefix = prefix
+        self._args = args
         self._inj_dev = SiriusPVName('AS-Glob:AP-InjCtrl')
         self._inj_prefix = self._inj_dev.substitute(prefix=prefix)
         self.setWindowTitle('Injection Controls')

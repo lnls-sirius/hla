@@ -25,9 +25,10 @@ Trim = re.compile("^SI-.*[0-2][0-9].*:MA-Q(D|F|[1-4]).*$")
 class MagOffConvApp(SiriusMainWindow):
     """Offline converter interface."""
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, args=None):
         """Init."""
         super().__init__(parent)
+        self._args = args
         self._normalizer = None
         self._last_edited = None
         self._setupUi()

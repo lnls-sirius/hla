@@ -145,6 +145,10 @@ def get_object(ismenubar=True, parent=None):
             self.connect_newprocess(macreport, 'sirius-hla-as-ap-macreport.py')
             self.add_object_to_level1(menu, macreport)
 
+            windowpos = LEVEL2A('WindowPos', menu)
+            self.connect_newprocess(windowpos, 'sirius-hla-as-ap-macreport.py')
+            self.add_object_to_level1(menu, windowpos)
+
             osci = LEVEL2M('Osc.View', menu)
             asdifctdig = QAction('AS-DI-FCT', osci)
             util.connect_newprocess(

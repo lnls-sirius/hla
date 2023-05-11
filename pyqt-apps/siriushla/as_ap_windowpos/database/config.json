@@ -1,0 +1,45 @@
+[
+{"name": "Test Configuration",
+"created": 1647328110,
+"modified": 1657328110,
+"computer": "optiplex-7070-sc-2",
+"config": [
+               {"window": "sirius-hla-si-di-tune.py",
+                "args": [],
+                "size": [698, 833],
+                "position": [982, 178]},
+               {"window": "sirius-hla-as-ap-launcher.py",
+                "args": [],
+                "size": [1032, 171],
+                "position": [10, 109]}
+            ],
+"discarded": "False"
+},
+{"name": "Test Configuration 2",
+"created": 1627328210,
+"modified": 1637328210,
+"computer": "optiplex-7070-sc-2",
+"config": [
+               {"window": "sirius-hla-si-di-tune.py",
+                "args": ["--no-expand1", "--no-expand2"],
+                "size": [698, 833],
+                "position": [974, 148]},
+               {"window": "sirius-hla-as-ap-launcher.py",
+                "args": ["--no-expand1", "--no-expand2", "--no-expand3"],
+                "size": [1032, 171],
+                "position": [0, 0]}],
+"discarded": "False"
+},
+{"name": "Test Configuration 3",
+"created": 1647328310,
+"modified": 1647328410,
+"computer": "optiplex-7070-sc-1",
+"config": [
+             {"window": "sirius-hla-as-ap-launcher.py",
+              "args": [],
+              "size": [1032, 171],
+              "position": [10, 109]}
+          ],
+"discarded": "False"
+}
+]

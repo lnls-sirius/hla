@@ -203,3 +203,8 @@ class LoadingThread(_QThread):
                 break
             _time.sleep(0.01)
         self.closemessage.emit()
+
+def isVisibleWidget(widget):
+    if not widget.visibleRegion().isEmpty():
+        return True
+    return False

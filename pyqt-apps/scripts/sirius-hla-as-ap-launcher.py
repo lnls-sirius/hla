@@ -27,6 +27,24 @@ parser.add_argument(
 parser.add_argument(
     '-he', '--height', type=int, default=0,
     help="Define window height value")
+parser.add_argument(
+    '--expand1', default=False, action='store_true',
+    help="Expand pointer 1")
+parser.add_argument(
+    '--no-expand1', dest='expand1', action='store_false',
+    help="Do not expand pointer 1")
+parser.add_argument(
+    '--expand2', default=False, action='store_true',
+    help="Expand pointer 2")
+parser.add_argument(
+    '--no-expand2', dest='expand2', action='store_false',
+    help="Do not expand pointer 2")
+parser.add_argument(
+    '--expand3', default=False, action='store_true',
+    help="Expand pointer 3")
+parser.add_argument(
+    '--no-expand3', dest='expand3', action='store_false',
+    help="Do not expand pointer 3")
 args = parser.parse_args()
 
 need_new_window = True
@@ -44,11 +62,5 @@ if returnval:
 
 if need_new_window:
     app = SiriusApplication()
-    w = MainLauncher
-    position = (args.xpos, args.ypos)
-    if args.width and args.height != 0:
-        size = (args.width, args.height)
-    else:
-        size = 'default'
-    app.open_window(w, position=position, size=size, parent=None, prefix=args.prefix)
+    app.open_window(MainLauncher, parent=None, prefix=args.prefix, args=args)
     _sys.exit(app.exec_())

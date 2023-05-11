@@ -10,9 +10,10 @@ from siriushla.as_ap_energybutton.energy_button import EnergyButton
 class EnergySetterWindow(SiriusMainWindow):
     """."""
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, args=None):
         """."""
         super().__init__(parent)
+        self._args = args
         self._setup_ui()
         self.setWindowTitle('Energy Button Application')
         self.setFocusPolicy(Qt.StrongFocus)

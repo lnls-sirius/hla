@@ -200,9 +200,10 @@ class ConfigurationManager(SiriusMainWindow):
     NAME_COL = None
     CONFIG_TYPE_COL = None
 
-    def __init__(self, model, parent=None):
+    def __init__(self, model, parent=None, args=None):
         """Constructor."""
         super().__init__(parent)
+        self._args = args
         self._model = model
         self._logger = logging.getLogger(__name__)
         self._logger.setLevel(logging.INFO)

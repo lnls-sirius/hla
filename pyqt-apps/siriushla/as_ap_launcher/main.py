@@ -29,10 +29,11 @@ class MainLauncher(SiriusMainWindow):
     showStatus = Signal()
     showEgun = Signal()
 
-    def __init__(self, parent=None, prefix=VACA_PREFIX):
+    def __init__(self, parent=None, prefix=VACA_PREFIX, args=None):
         """Init."""
         super().__init__(parent)
         self._prefix = prefix
+        self._args = args
 
         # window settings
         self.setObjectName('ASApp')
@@ -40,10 +41,10 @@ class MainLauncher(SiriusMainWindow):
         self.setWindowIcon(
             qta.icon('mdi.rocket', color=get_appropriate_color('AS')))
 
-        # screens = QApplication.screens()
-        # screen_idx = 3 if len(screens) == 8 else 0
-        # topleft = screens[screen_idx].geometry().topLeft()
-        # self.move(topleft.x(), topleft.y()+20)
+        screens = QApplication.screens()
+        screen_idx = 3 if len(screens) == 8 else 0
+        topleft = screens[screen_idx].geometry().topLeft()
+        self.move(topleft.x(), topleft.y()+20)
         self.setWindowFlags(Qt.WindowStaysOnTopHint)
 
         # menubar
@@ -291,6 +292,40 @@ class MainLauncher(SiriusMainWindow):
         lay.addWidget(
             self.wid_pbt, 0, 1, 2, 1, alignment=Qt.AlignRight | Qt.AlignBottom)
         self.setCentralWidget(cwid)
+
+        # test for expander1 - bucket list
+        if self._args is not None:
+            if 'expand1' in vars(self._args):
+                _args = vars(self._args)
+                if _args['expand1']:
+                    self.wid_fill.setVisible(True)
+                    text = '<'
+                    tooltip = 'Hide bucket list and target current controls.'
+                    pbt_bl.setToolTip(tooltip)
+                    pbt_bl.setText(text)
+                    self.centralWidget().adjustSize()
+                    self.adjustSize()
+
+            if 'expand2' in vars(self._args):
+                _args = vars(self._args)
+                if _args['expand2']:
+                    self.wid_mon.setVisible(True)
+                    self.wid_injlog.setVisible(True)
+                    text = '^'
+                    tooltip = 'Hide Injection Auxiliary section.'
+                    pbt_aux.setText(text)
+                    pbt_aux.setToolTip(tooltip)
+                    self.centralWidget().adjustSize()
+                    self.adjustSize()
+
+            if 'expand3' in vars(self._args):
+                _args = vars(self._args)
+                if _args['expand3']:
+                    self._menubutton.setVisible(True)
+                    text = '^'
+                    self.wid_pbt.setText(text)
+                    self.centralWidget().adjustSize()
+                    self.adjustSize()
 
     def _toggle_show_menubutton(self):
         self._menubutton.setVisible(self._menubutton.isHidden())

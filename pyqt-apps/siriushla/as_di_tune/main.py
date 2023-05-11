@@ -15,10 +15,11 @@ from .controls import TuneControls, SITuneMonitor
 class Tune(SiriusMainWindow):
     """Tune Window."""
 
-    def __init__(self, parent=None, prefix=VACA_PREFIX, section=''):
+    def __init__(self, parent=None, prefix=VACA_PREFIX, section='', args=None):
         super().__init__(parent)
         self.prefix = prefix
         self.section = section.upper()
+        self.args = vars(args)
         self.setObjectName(self.section+'App')
         self.setWindowTitle(self.section+' Tune')
         self.setWindowIcon(
@@ -68,7 +69,7 @@ class Tune(SiriusMainWindow):
 
         # Spectra view
         self.spectra_view = TuneSpectraControls(
-            self, self.prefix, self.section)
+            self, self.prefix, self.section, self.args)
         self.spectra_view.setObjectName('spectra_view')
 
         if self.section == 'BO':
@@ -125,6 +126,13 @@ class Tune(SiriusMainWindow):
         self.pb_showsett.released.connect(self._handle_settings_vis)
         hbox_vis = QHBoxLayout()
         hbox_vis.addWidget(self.pb_showsett, alignment=Qt.AlignLeft)
+
+        if 'expand1' in self.args:
+            if not self.args['expand1']:
+                self.settings.setVisible(False)
+                self.pb_showsett.setText('<')
+                self.pb_showsett.setToolTip('Show settings')
+                self.adjustSize()
 
         self.setStyleSheet(
             "#specH, #specV {min-width:40em; min-height: 18em;}"

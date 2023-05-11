@@ -16,13 +16,14 @@ from siriushla.util import get_appropriate_color
 class EfficiencyMonitor(SiriusMainWindow):
     """Efficiency monitor."""
 
-    def __init__(self, parent=None, prefix=VACA_PREFIX):
+    def __init__(self, parent=None, prefix=VACA_PREFIX, args=None):
         super().__init__(parent)
         self.setObjectName('ASApp')
         self.setWindowTitle('Efficiency Monitor')
         color = get_appropriate_color('AS')
         self.setWindowIcon(qta.icon('mdi.percent-outline', color=color))
         self._prefix = prefix
+        self._args = args
         self._eff_list = (
             # ('LI-SI Inj', 'AS-Glob:AP-CurrInfo:InjEff-Mon', 'magenta'),
             ('BO-SI Inj', 'SI-Glob:AP-CurrInfo:InjEff-Mon', 'blue'),

@@ -240,11 +240,12 @@ class TuneSpectraView(SiriusWaveformPlot):
 class TuneSpectraControls(QWidget):
     """Tune Spectra Controls."""
 
-    def __init__(self, parent=None, prefix='', section=''):
+    def __init__(self, parent=None, prefix='', section='', args=None):
         """Init."""
         super().__init__(parent)
         self.prefix = prefix
         self.section = section
+        self.args = args
         self._setupUi()
 
     def _setupUi(self):
@@ -341,6 +342,13 @@ class TuneSpectraControls(QWidget):
         lay.addWidget(self.spectra)
         lay.addLayout(hbox_ctrls)
         lay.addWidget(self.registers_widget)
+
+        if 'expand2' in self.args:
+            if not self.args['expand2']:
+                self.registers_widget.setVisible(False)
+                self.pb_showregs.setText('v')
+                self.pb_showregs.setToolTip('Show registers')
+                self.adjustSize()
 
     def _registerData(self, idx, tune):
         curve = self.spectra.curveH if tune == 'H' else self.spectra.curveV

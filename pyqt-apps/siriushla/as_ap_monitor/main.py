@@ -14,10 +14,11 @@ from .util import get_label2devices, get_sec2dev_laypos
 class SiriusMonitor(QWidget):
     """Sirius Monitor."""
 
-    def __init__(self, parent=None, prefix=VACA_PREFIX):
+    def __init__(self, parent=None, prefix=VACA_PREFIX, args=None):
         """Init."""
         super().__init__(parent)
         self._prefix = prefix
+        self._args = args
         self.setObjectName('ASApp')
         self._setupUi()
 

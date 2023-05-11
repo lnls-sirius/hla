@@ -18,9 +18,10 @@ from ..widgets import SiriusMainWindow, MatplotlibWidget
 class MacReportWindow(SiriusMainWindow):
     """Machine Report Window."""
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, args=None):
         """Init."""
         super().__init__(parent)
+        self._args = args
         self._macreport = MacReport()
         self._macreport.connector.timeout = 5*60
 
