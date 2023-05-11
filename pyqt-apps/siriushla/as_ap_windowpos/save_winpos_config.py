@@ -149,7 +149,7 @@ class WinPosSave(SiriusMainWindow):
     @Slot()
     def _save(self):
         # Save button def
-        selected = self._table.
+        # selected = self._table.
         if self.namebox.text() != '':
             configdict = dict.fromkeys(['name',
                                         'created',
