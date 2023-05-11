@@ -102,9 +102,12 @@ class PUDetailWidget(QWidget):
         timing_box = QGroupBox('Trigger', self)
         timing_box.setObjectName('timing_box')
         hbl = QHBoxLayout(timing_box)
+        hbl.setContentsMargins(0, 0, 0, 0)
+        show_deltadelay = 'NLK' in self._devname
         hbl.addWidget(HLTriggerSimple(
             timing_box, self._trigname, self._prefix, delay=False,
-            delayraw=True, src=True))
+            delayraw=True, src=True, deltadelay=show_deltadelay,
+            deltadelayraw=show_deltadelay))
 
         vbl1 = QVBoxLayout()
         vbl1.addWidget(pwrstate_box)
@@ -125,7 +128,7 @@ class PUDetailWidget(QWidget):
         self.layout.addLayout(vbl1, 1, 1, 2, 1)
         self.layout.addLayout(gbl2, 1, 2, 2, 3)
         self.layout.addWidget(timing_box, 3, 1, 1, 4)
-        self.layout.addLayout(self._ctrlmode_layout(), 4, 1, 1, 3)
+        self.layout.addLayout(self._ctrlmode_layout(), 4, 1, 1, 4)
 
     def _interlock_layout(self):
         interlock_layout = QGridLayout()

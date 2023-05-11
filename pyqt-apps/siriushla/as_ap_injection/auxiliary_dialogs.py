@@ -8,7 +8,7 @@ from qtpy.QtWidgets import QVBoxLayout, QHBoxLayout, QGridLayout, \
     QTabWidget, QWidget, QLabel, QGroupBox, QSizePolicy as QSzPlcy, \
     QSpacerItem
 
-from pyqtgraph import mkBrush, FillBetweenItem, PlotDataItem
+from pyqtgraph import mkBrush, FillBetweenItem
 
 from pydm.widgets import PyDMPushButton
 
@@ -431,3 +431,149 @@ class BiasFBDetailDialog(SiriusDialog):
             return
         self._curve_gp_pred_avg_p_std.receiveYWaveform(avg + 1.96*std)
         self._curve_gp_pred_avg_m_std.receiveYWaveform(avg - 1.96*std)
+
+
+class TopUpSettingsDialog(SiriusDialog):
+    """Top up settings dialog."""
+
+    def __init__(self, parent=None, device='', prefix=''):
+        """Init."""
+        super().__init__(parent)
+        self._prefix = prefix
+        self._inj_dev = SiriusPVName(device)
+        self._inj_prefix = device.substitute(prefix=prefix)
+        self.setObjectName('ASApp')
+        self.setWindowTitle(
+            'Injection Controls - Top Up Standby and Warm Up Settings')
+        self._setupUi()
+        self.setFocus(True)
+        self.setFocusPolicy(Qt.StrongFocus)
+
+    def _setupUi(self):
+        title = QLabel(
+            '<h4>Top Up Standby and Warm Up Settings</h4>', self,
+            alignment=Qt.AlignCenter)
+
+        pvname = self._inj_prefix.substitute(propty='TopUpPUStandbyEnbl-Sel')
+        self._sb_tupuenb = PyDMStateButton(self, pvname)
+        self._led_tupuenb = SiriusLedState(
+            self, pvname.substitute(propty_suffix='Sts'))
+
+        pvname = self._inj_prefix.substitute(propty='TopUpPUWarmUpTime-SP')
+        self._sb_tuputim = SiriusSpinbox(self, pvname)
+        self._lb_tuputim = SiriusLabel(
+            self, pvname.substitute(propty_suffix='RB'), keep_unit=True)
+        self._lb_tuputim.showUnits = True
+
+        pvname = self._inj_prefix.substitute(propty='TopUpLIWarmUpEnbl-Sel')
+        self._sb_tulienb = PyDMStateButton(self, pvname)
+        self._led_tulienb = SiriusLedState(
+            self, pvname.substitute(propty_suffix='Sts'))
+
+        pvname = self._inj_prefix.substitute(propty='TopUpLIWarmUpTime-SP')
+        self._sb_tulitim = SiriusSpinbox(self, pvname)
+        self._lb_tulitim = SiriusLabel(
+            self, pvname.substitute(propty_suffix='RB'), keep_unit=True)
+        self._lb_tulitim.showUnits = True
+
+        pvname = self._inj_prefix.substitute(propty='TopUpBOPSStandbyEnbl-Sel')
+        self._sb_tubopsenb = PyDMStateButton(self, pvname)
+        self._led_tubopsenb = SiriusLedState(
+            self, pvname.substitute(propty_suffix='Sts'))
+
+        pvname = self._inj_prefix.substitute(propty='TopUpBOPSWarmUpTime-SP')
+        self._sb_tubopstim = SiriusSpinbox(self, pvname)
+        self._lb_tubopstim = SiriusLabel(
+            self, pvname.substitute(propty_suffix='RB'), keep_unit=True)
+        self._lb_tubopstim.showUnits = True
+
+        pvname = self._inj_prefix.substitute(propty='TopUpBORFStandbyEnbl-Sel')
+        self._sb_tuborfenb = PyDMStateButton(self, pvname)
+        self._led_tuborfenb = SiriusLedState(
+            self, pvname.substitute(propty_suffix='Sts'))
+
+        pvname = self._inj_prefix.substitute(propty='TopUpBORFWarmUpTime-SP')
+        self._sb_tuborftim = SiriusSpinbox(self, pvname)
+        self._lb_tuborftim = SiriusLabel(
+            self, pvname.substitute(propty_suffix='RB'), keep_unit=True)
+        self._lb_tuborftim.showUnits = True
+
+        lay = QGridLayout(self)
+        lay.addWidget(title, 0, 0, 1, 5)
+        lay.addWidget(QLabel('Enable State'), 1, 1, 1, 2)
+        lay.addWidget(QLabel('Warm Up Time'), 1, 3, 1, 2)
+        lay.addWidget(QLabel('AS PU Standby'), 2, 0)
+        lay.addWidget(self._sb_tupuenb, 2, 1)
+        lay.addWidget(self._led_tupuenb, 2, 2)
+        lay.addWidget(self._sb_tuputim, 2, 3)
+        lay.addWidget(self._lb_tuputim, 2, 4)
+        lay.addWidget(QLabel('LI PU/RF Warm Up'), 3, 0)
+        lay.addWidget(self._sb_tulienb, 3, 1)
+        lay.addWidget(self._led_tulienb, 3, 2)
+        lay.addWidget(self._sb_tulitim, 3, 3)
+        lay.addWidget(self._lb_tulitim, 3, 4)
+        lay.addWidget(QLabel('BO PS Standby'), 4, 0)
+        lay.addWidget(self._sb_tubopsenb, 4, 1)
+        lay.addWidget(self._led_tubopsenb, 4, 2)
+        lay.addWidget(self._sb_tubopstim, 4, 3)
+        lay.addWidget(self._lb_tubopstim, 4, 4)
+        lay.addWidget(QLabel('BO RF Standby'), 5, 0)
+        lay.addWidget(self._sb_tuborfenb, 5, 1)
+        lay.addWidget(self._led_tuborfenb, 5, 2)
+        lay.addWidget(self._sb_tuborftim, 5, 3)
+        lay.addWidget(self._lb_tuborftim, 5, 4)
+
+        self.setStyleSheet('QLabel{qproperty-alignment: AlignCenter;}')
+
+
+class PUModeSettingsDialog(SiriusDialog):
+    """PU Mode settings dialog."""
+
+    def __init__(self, parent=None, device='', prefix=''):
+        """Init."""
+        super().__init__(parent)
+        self._prefix = prefix
+        self._inj_dev = SiriusPVName(device)
+        self._inj_prefix = device.substitute(prefix=prefix)
+        self.setObjectName('ASApp')
+        self.setWindowTitle('Injection Controls - PU Mode Settings')
+        self._setupUi()
+        self.setFocus(True)
+        self.setFocusPolicy(Qt.StrongFocus)
+
+    def _setupUi(self):
+        title = QLabel(
+            '<h4>PU Mode Settings</h4>', self,
+            alignment=Qt.AlignCenter)
+
+        pvname = self._inj_prefix.substitute(propty='PUModeDeltaPosAng-SP')
+        self._sb_dltposang = SiriusSpinbox(self, pvname)
+        self._lb_dltposang = SiriusLabel(
+            self, pvname.substitute(propty_suffix='RB'), keep_unit=True)
+        self._lb_dltposang.showUnits = True
+
+        pvname = self._inj_prefix.substitute(propty='PUModeDpKckrDlyRef-SP')
+        self._sb_pudlyref = SiriusSpinbox(self, pvname)
+        self._lb_pudlyref = SiriusLabel(
+            self, pvname.substitute(propty_suffix='RB'), keep_unit=True)
+        self._lb_pudlyref.showUnits = True
+
+        pvname = self._inj_prefix.substitute(propty='PUModeDpKckrKick-SP')
+        self._sb_pukick = SiriusSpinbox(self, pvname)
+        self._lb_pukick = SiriusLabel(
+            self, pvname.substitute(propty_suffix='RB'), keep_unit=True)
+        self._lb_pukick.showUnits = True
+
+        lay = QGridLayout(self)
+        lay.addWidget(title, 0, 0, 1, 5)
+        lay.addWidget(QLabel('Delta PosAng'), 1, 0)
+        lay.addWidget(self._sb_dltposang, 1, 1)
+        lay.addWidget(self._lb_dltposang, 1, 2)
+        lay.addWidget(QLabel('DpKckr Delay Ref.'), 2, 0)
+        lay.addWidget(self._sb_pudlyref, 2, 1)
+        lay.addWidget(self._lb_pudlyref, 2, 2)
+        lay.addWidget(QLabel('DpKckr Kick'), 3, 0)
+        lay.addWidget(self._sb_pukick, 3, 1)
+        lay.addWidget(self._lb_pukick, 3, 2)
+
+        self.setStyleSheet('QLabel{qproperty-alignment: AlignCenter;}')
