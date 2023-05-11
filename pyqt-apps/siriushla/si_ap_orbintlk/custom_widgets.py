@@ -248,11 +248,11 @@ class BPMIntlkLimSPWidget(BaseObject, QWidget):
         if 'sum' in self.metric:
             self.lim_sp = ['IntlkLmtMinSum-SP', ]
             self.title = 'Min.Sum. Thresholds'
-        elif 'trans' in self.metric:
+        elif 'pos' in self.metric:
             self.lim_sp = [
-                'IntlkLmtTransMinX-SP', 'IntlkLmtTransMaxX-SP',
-                'IntlkLmtTransMinY-SP', 'IntlkLmtTransMaxY-SP']
-            self.title = 'Translation Thresholds'
+                'IntlkLmtPosMinX-SP', 'IntlkLmtPosMaxX-SP',
+                'IntlkLmtPosMinY-SP', 'IntlkLmtPosMaxY-SP']
+            self.title = 'Position Thresholds'
         elif 'ang' in self.metric:
             self.lim_sp = [
                 'IntlkLmtAngMinX-SP', 'IntlkLmtAngMaxX-SP',
@@ -287,13 +287,13 @@ class BPMIntlkLimSPWidget(BaseObject, QWidget):
 
         row = 0
         if 'sum' in self.metric:
-            text = '\nThresholds must be set in Monit1 rate\n'\
-                'counts. Here we make available you \n'\
-                'to read Sum-Mon values, in Monit rate\n'\
-                'counts, and convert them to Monit1\n'\
-                'rate counts using calibration curves.\n'\
-                'You can also apply a scale factor to\n'\
-                'the values read.\n\n'
+            text = '\nThresholds must be set in FAcq rate counts,\n'\
+                'considering polynomial calibration disabled.\n'\
+                'Here we make available you to read Sum-Mon\n'\
+                'values, in Monit rate counts, and convert them\n'\
+                'to orbit interlock counts using Monit/FAcq\n'\
+                'ratio. You can also apply a scale factor to the\n'\
+                'values read.\n\n'
             self._label_help = QLabel(text, self)
             lay_lims.addWidget(self._label_help, row, 0, 1, 2)
 
@@ -347,8 +347,8 @@ class BPMIntlkLimSPWidget(BaseObject, QWidget):
             self._cb_reforb.refOrbChanged.connect(self._set_ref_orb)
             lay_lims.addWidget(self._cb_reforb, row, 0, 1, 3)
 
-            if 'trans' in self.metric:
-                text = '\n\nBPM calculation consider the translation\n' \
+            if 'pos' in self.metric:
+                text = '\n\nBPM calculation consider the position\n' \
                     'estimative:' \
                     '\n\n(pos@downstream+pos@upstream)/2\n\n' \
                     'where the pairs upstream/downstream\nfolow:\n' \
@@ -418,9 +418,11 @@ class BPMIntlkLimSPWidget(BaseObject, QWidget):
             return
 
         if 'sum' in self.metric:
-            _av = self.CONV_POLY_MONIT1_2_MONIT[0, :]
-            _bv = self.CONV_POLY_MONIT1_2_MONIT[1, :]
-            allvals = self._spin_scl.value() * (self._summon - _bv)/_av
+            summonit = self._summon
+            sumintlk = summonit * self.get_monitsum2intlksum_factor()
+            allvals = self._spin_scl.value() * sumintlk
+            reso = self.MINSUM_RESO
+            allvals = _np.ceil(allvals / reso) * reso
             values = allvals[_np.array(idxsel)]
             pvs = [b.substitute(propty=self.lim_sp[0]) for b in namesel]
         else:

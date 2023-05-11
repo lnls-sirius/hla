@@ -68,15 +68,18 @@ class ProgressDialog(QDialog):
             for i in range(1, len(self._task)):
                 self._task[i].currentItem.connect(self.cur_item_label.setText)
                 self._task[i].itemDone.connect(self.inc_value)
-                self._task[i - 1].completed.connect(self._update_label)
-                self._task[i - 1].completed.connect(self._task[i].start)
+                self._task[i-1].completed.connect(self._update_label)
+                self._task[i-1].completed.connect(self._task[i].start)
+                self._task[i-1].finished.connect(self._task[i-1].deleteLater)
                 pb_max += self._task[i].size()
             self.progress_bar.setMaximum(pb_max)
             self._task[-1].completed.connect(lambda: self._exit_dlg(1))
+            self._task[-1].finished.connect(self._task[-1].deleteLater)
         else:
             self.dlg_label.setText(self._label)
             self._task.currentItem.connect(self.cur_item_label.setText)
             self._task.itemDone.connect(self.inc_value)
+            self._task.finished.connect(self._task.deleteLater)
             self._task.completed.connect(lambda: self._exit_dlg(1))
             self.progress_bar.setMaximum(self._task.size())
 
@@ -94,11 +97,9 @@ class ProgressDialog(QDialog):
             for task in self._task:
                 task.exit_task()
             self._wait_task(self._task[-1])
-            self._task[-1].deleteLater()
         else:
             self._task.exit_task()
             self._wait_task(self._task)
-            self._task.deleteLater()
         if result == 1:
             self.accept()
         elif result == 0:

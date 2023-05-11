@@ -28,12 +28,14 @@ sips2filters = {'B': {'sec': 'SI', 'sub': '.*', 'dev': 'B.*'},
                 'CH': {'sec': 'SI', 'sub': '.*(M|C).*', 'dev': 'CH.*'},
                 'ID-CH/CV/QS': {'sec': 'SI', 'sub': '.*S(A|B|P)',
                                 'dev': '(CH|CV|QS)'},
+                'FFCH/FFCV': {'sec': 'SI', 'dev': 'FFC.*'},
                 'Trims': {'sec': 'SI', 'sub': '[0-2][0-9].*',
                           'dev': 'Q(F|D|[1-4]).*'},
                 'QS': {'sec': 'SI', 'sub': '[0-2][0-9](M|C).*', 'dev': 'QS'},
-                'PM': {'sec': 'SI', 'sub': '.*', 'dev': '(Inj|Eje).*'},
-                'FCH': {'sec': 'SI', 'sub': '.*', 'dev': 'FCH'},
-                'FCV': {'sec': 'SI', 'sub': '.*', 'dev': 'FCV'},
+                'PM': {'sec': 'SI', 'sub': '.*', 'dev': '.*(Kckr|Sept)',
+                       'propty_name': '(?!:CCoil).*'},
+                'FCH': {'sec': 'SI', 'sub': '(?!01M).*', 'dev': 'FCH'},
+                'FCV': {'sec': 'SI', 'sub': '(?!01M).*', 'dev': 'FCV'},
                 }
 
 
@@ -90,6 +92,7 @@ SEC2LABEL2SECPOS = {
         'Q': (0, 4, 1, 1),
         'S': (0, 5, 1, 1),
         'ID-CH/CV/QS': (0, 6, 1, 2),
+        'FFCH/FFCV': (0, 7, 1, 2),
         'QS': (1, 1, 1, 1),
         'CH': (1, 2, 1, 2),
         'CV': (1, 4, 1, 1),
@@ -113,6 +116,10 @@ def get_col2dev_count(sec, label):
         return 8 if sec == 'SI' else 5 if sec == 'BO' else 10
     elif 'Trims' in label:
         return 14
+    elif 'FFC' in label:
+        return 4
+    elif 'ID' in label:
+        return 4
     elif 'FC' in label:
         return 4
     elif label == 'S':

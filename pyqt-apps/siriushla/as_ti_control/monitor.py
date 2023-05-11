@@ -127,18 +127,18 @@ class MonitorHL(QGroupBox):
         lay = QGridLayout()
         self.setLayout(lay)
         hltrigs = HLTimeSearch.get_hl_triggers()
-        secs = set(map(lambda x: x.sec, hltrigs))
+        secs = sorted(set(map(lambda x: x.sec, hltrigs)))
         secs = {sec: [] for sec in secs}
         nrcols = 10
         for trig in hltrigs:
             secs[trig.sec].append(trig)
 
-        for sec in ('AS', 'LI', 'TB', 'BO', 'TS', 'SI'):
+        for sec, trigs in secs.items():
             lab = QLabel(sec)
             lab.setStyleSheet('font-weight: bold;')
             lay.addWidget(lab, lay.rowCount(), 0, 1, nrcols)
             row = lay.rowCount()
-            for i, trig in enumerate(sorted(secs[sec])):
+            for i, trig in enumerate(sorted(trigs)):
                 if i and not i % nrcols:
                     row = lay.rowCount()
                 but = HLButton(trig, self.prefix, self)

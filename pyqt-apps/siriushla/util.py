@@ -153,6 +153,8 @@ def get_appropriate_color(section='SI'):
         'ID': '#bbbbdd',
         'IT': '#ffece6',
     }
+    if section not in dic:
+        return '#d7d6d5'
     return dic[section]
 
 

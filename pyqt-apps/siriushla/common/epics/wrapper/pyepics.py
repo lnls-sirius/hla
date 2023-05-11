@@ -1,5 +1,8 @@
-import epics
+"""PyEpicsWrapper."""
+
 from math import isclose
+import epics
+from epics.ca import ChannelAccessGetFailure, CASeverityException
 import numpy as _np
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 
@@ -54,8 +57,16 @@ class PyEpicsWrapper:
 
     def get(self, wait=_TIMEOUT):
         """Return PV value."""
-        if self._pv.wait_for_connection(wait):
-            return self._pv.get(timeout=wait)
+        if not self._pv.wait_for_connection(wait):
+            return None
+        try:
+            value = self._pv.get(timeout=wait)
+        except (ChannelAccessGetFailure, CASeverityException):
+            # exceptions raised in a Virtual Circuit Disconnect (192)
+            # event. If the PV IOC goes down, for example.
+            print('Could not get value of {}'.format(self._pv.pvname))
+            value = None
+        return value
 
     def _isarray(self, value):
         return isinstance(value, (_np.ndarray, list, tuple))

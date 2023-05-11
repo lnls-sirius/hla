@@ -6,7 +6,8 @@ from functools import partial as _part
 from qtpy.QtCore import Qt, QTimer
 from qtpy.QtWidgets import QFrame, QGridLayout, QVBoxLayout, QHBoxLayout, \
     QSizePolicy, QGroupBox, QPushButton, QListWidget, QLabel, QApplication, \
-    QMessageBox, QTabWidget, QWidget, QInputDialog, QAbstractItemView
+    QMessageBox, QTabWidget, QWidget, QInputDialog, QAbstractItemView, \
+    QComboBox, QStackedLayout
 from qtpy.QtGui import QKeySequence
 import qtawesome as qta
 
@@ -35,19 +36,18 @@ from .tasks import CreateTesters, \
     SetTriggerState, CheckTriggerState
 
 
-class PSTestWindow(SiriusMainWindow):
-    """PS test window."""
+class PSCmdWindow(SiriusMainWindow):
+    """PS commands window."""
 
-    def __init__(self, parent=None, adv_mode=False):
+    def __init__(self, parent=None):
         """Constructor."""
         super().__init__(parent)
-        self.setWindowTitle('PS/PU Test')
+        self.setWindowTitle('Power Supply Commands')
         self.setObjectName('ASApp')
         cor = get_appropriate_color(section='AS')
-        self.setWindowIcon(qta.icon('mdi.test-tube', color=cor))
+        self.setWindowIcon(qta.icon('mdi.format-list-numbered', color=cor))
 
         # auxiliar data for initializing SI Fam PS
-        self._is_adv_mode = adv_mode
         self._si_fam_psnames = PSSearch.get_psnames(
             filters={'sec': 'SI', 'sub': 'Fam', 'dis': 'PS'})
 
@@ -82,296 +82,391 @@ class PSTestWindow(SiriusMainWindow):
             }""")
         self.setCentralWidget(self.central_widget)
 
+        self.title = QLabel(
+            '<h3>Power Supply Commands</h3>', self, alignment=Qt.AlignCenter)
+
+        # data
+        cmddata = {
+            'PS': {
+                'Selection': {
+                    'devices': self._get_ps_tree_names(),
+                    'levels': ('sec', 'mag_group'),
+                },
+                'Test': {
+                    'Check': {
+                        'Check Communication': {
+                            'cmd': self._check_comm,
+                            'tooltip': 'Check PS and DCLinks communication '
+                                       'status (verify invalid alarms and, '
+                                       'if LI, the value of Connected-Mon PV)',
+                        },
+                    },
+                    'Prepare': {
+                        'Disable PS triggers': {
+                            'cmd': _part(
+                                self._set_check_trigger_state, 'PS', 'dsbl'),
+                        },
+                        'Turn Off SOFBMode': {
+                            'cmd': _part(self._set_check_fbp_sofbmode, 'off'),
+                        },
+                        'Set PS and DCLinks to SlowRef': {
+                            'cmd': self._set_check_opmode_slowref,
+                        },
+                        'Set PS Current to zero': {
+                            'cmd': self._set_zero_ps,
+                        },
+                        'Reset PS and DCLinks': {
+                            'cmd': _part(self._reset_intlk, 'PS'),
+                        },
+                        'Prepare SI Fam DCLinks': {
+                            'cmd': self._prepare_sidclinks,
+                        },
+                        'Initialize SI Fam PS': {
+                            'cmd': self._set_check_pwrstateinit,
+                        },
+                    },
+                    'Config DCLinks': {
+                        'Turn DCLinks On': {
+                            'cmd': _part(
+                                self._set_check_pwrstate_dclinks, 'on'),
+                        },
+                        'Check DCLinks CtrlLoop': {
+                            'cmd': _part(self._check_ctrlloop, 'dclink'),
+                        },
+                        'Set DCLinks Voltage': {
+                            'cmd': self._set_check_dclinks_capvolt,
+                        },
+                    },
+                    'Test': {
+                        'Turn PS On': {
+                            'cmd': _part(
+                                self._set_check_pwrstate, 'PS', 'on', True),
+                        },
+                        'Check PS CtrlLoop': {
+                            'cmd': _part(self._check_ctrlloop, 'pwrsupply'),
+                        },
+                        'Set PS Current to test value': {
+                            'cmd': self._set_test_ps,
+                        },
+                        'Set PS Current to zero': {
+                            'cmd': self._set_zero_ps,
+                        },
+                    },
+                    'Restore': {
+                        'Restore PS triggers': {
+                            'cmd': _part(self._restore_triggers_state, 'PS'),
+                        },
+                    },
+                },
+                'Turn Off': {
+                    'Check': {
+                        'Check Communication': {
+                            'cmd': self._check_comm,
+                            'tooltip': 'Check PS and DCLinks communication '
+                                       'status (verify invalid alarms and, '
+                                       'if LI, the value of Connected-Mon PV)',
+                        },
+                    },
+                    'Prepare': {
+                        'Disable PS triggers': {
+                            'cmd': _part(
+                                self._set_check_trigger_state, 'PS', 'dsbl'),
+                        },
+                        'Turn Off SOFBMode': {
+                            'cmd': _part(self._set_check_fbp_sofbmode, 'off'),
+                        },
+                        'Set PS and DCLinks to SlowRef': {
+                            'cmd': self._set_check_opmode_slowref,
+                        },
+                        'Set PS Current to zero': {
+                            'cmd': self._set_zero_ps,
+                        },
+                        'Reset PS and DCLinks': {
+                            'cmd': _part(self._reset_intlk, 'PS'),
+                        },
+                    },
+                    'Turn Off': {
+                        'Turn PS Off': {
+                            'cmd': _part(
+                                self._set_check_pwrstate, 'PS', 'off', True),
+                        },
+                        'Turn DCLinks Off': {
+                            'cmd': _part(
+                                self._set_check_pwrstate_dclinks, 'off'),
+                        },
+                    },
+                },
+                'Turn On': {
+                    'Check': {
+                        'Check Communication': {
+                            'cmd': self._check_comm,
+                            'tooltip': 'Check PS and DCLinks communication '
+                                       'status (verify invalid alarms and, '
+                                       'if LI, the value of Connected-Mon PV)',
+                        },
+                    },
+                    'Prepare': {
+                        'Disable PS triggers': {
+                            'cmd': _part(
+                                self._set_check_trigger_state, 'PS', 'dsbl'),
+                        },
+                        'Turn Off SOFBMode': {
+                            'cmd': _part(self._set_check_fbp_sofbmode, 'off'),
+                        },
+                        'Reset PS and DCLinks': {
+                            'cmd': _part(self._reset_intlk, 'PS'),
+                        },
+                        'Prepare SI Fam DCLinks': {
+                            'cmd': self._prepare_sidclinks,
+                        },
+                        'Initialize SI Fam PS': {
+                            'cmd': self._set_check_pwrstateinit,
+                        },
+                    },
+                    'Config DCLinks': {
+                        'Turn DCLinks On': {
+                            'cmd': _part(
+                                self._set_check_pwrstate_dclinks, 'on'),
+                        },
+                        'Check DCLinks CtrlLoop': {
+                            'cmd': _part(self._check_ctrlloop, 'dclink'),
+                        },
+                        'Set DCLinks Voltage': {
+                            'cmd': self._set_check_dclinks_capvolt,
+                        },
+                    },
+                    'Turn On': {
+                        'Turn PS On': {
+                            'cmd': _part(
+                                self._set_check_pwrstate, 'PS', 'on', True),
+                        },
+                        'Check PS CtrlLoop': {
+                            'cmd': _part(self._check_ctrlloop, 'pwrsupply'),
+                        },
+                    },
+                    'Restore': {
+                        'Restore PS triggers': {
+                            'cmd': _part(self._restore_triggers_state, 'PS'),
+                        },
+                    },
+                },
+                'Auxiliary Commands': {
+                    'Show Status Summary': {
+                        'cmd': _part(self._check_status, 'PS'),
+                        'tooltip': 'Check PS and DCLinks interlock status'
+                                   ' and, if powered on, check if it is '
+                                   'following reference',
+                    },
+                    'Set PS Current': {
+                        'cmd': self._set_check_current,
+                    },
+                    'Set PS OpMode': {
+                        'cmd': self._set_check_opmode,
+                    },
+                },
+            },
+            'PU': {
+                'Selection': {
+                    'devices': self._get_pu_tree_names(),
+                    'levels': ('sec', ),
+                },
+                'Test': {
+                    'Prepare': {
+                        'Set PU Voltage to zero': {
+                            'cmd': _part(self._set_zero_pu, False),
+                        },
+                        'Reset PU': {
+                            'cmd': _part(self._reset_intlk, 'PU'),
+                        },
+                    },
+                    'Test': {
+                        'Turn PU On': {
+                            'cmd': _part(
+                                self._set_check_pwrstate, 'PU', 'on', True),
+                        },
+                        'Enable PU Pulse': {
+                            'cmd': _part(self._set_check_pulse, 'on'),
+                        },
+                        'Enable PU triggers': {
+                            'cmd': _part(
+                                self._set_check_trigger_state, 'PU', 'on'),
+                        },
+                        'Set PU Voltage to test value': {
+                            'cmd': self._set_test_pu,
+                        },
+                        'Set PU Voltage to zero': {
+                            'cmd': _part(self._set_zero_pu, True),
+                        },
+                    },
+                    'Restore': {
+                        'Restore PU triggers': {
+                            'cmd': _part(self._restore_triggers_state, 'PU'),
+                        },
+                    },
+                },
+                'Turn Off': {
+                    'Prepare': {
+                        'Set PU Voltage to zero': {
+                            'cmd': _part(self._set_zero_pu, False),
+                        },
+                        'Reset PU': {
+                            'cmd': _part(self._reset_intlk, 'PU'),
+                        },
+                    },
+                    'Turn Off': {
+                        'Disable PU Pulse': {
+                            'cmd': _part(self._set_check_pulse, 'off'),
+                        },
+                        'Turn PU Off': {
+                            'cmd': _part(
+                                self._set_check_pwrstate, 'PU', 'off', True),
+                        },
+                    },
+                },
+                'Turn On': {
+                    'Prepare': {
+                        'Reset PU': {
+                            'cmd': _part(self._reset_intlk, 'PU'),
+                        },
+                    },
+                    'Turn On': {
+                        'Turn PU On': {
+                            'cmd': _part(
+                                self._set_check_pwrstate, 'PU', 'on', True),
+                        },
+                        'Enable PU Pulse': {
+                            'cmd': _part(self._set_check_pulse, 'on'),
+                        },
+                    },
+                },
+                'Auxiliary Commands': {
+                    'Show Status Summary': {
+                        'cmd': _part(self._check_status, 'PU'),
+                        'tooltip': 'Check PU interlock status and, if '
+                                   'powered on, check if it is following '
+                                   'voltage setpoint'
+                    },
+                }
+            },
+        }
+        procedures = sorted(
+            {proc for data in cmddata.values() for proc in data})
+        procedures.remove('Selection')
+        procedures.remove('Auxiliary Commands')
+        init_index = procedures.index('Test')
+
+        # menu
+        self.menu = self.menuBar()
+
+        self.act_cycle = self.menu.addAction('Open Cycle Window')
+        connect_newprocess(
+            self.act_cycle, 'sirius-hla-as-ps-cycle.py', parent=self)
+
+        self.aux_comm = self.menu.addMenu('Auxiliary Commands')
+        for group, props in cmddata.items():
+            menu = self.aux_comm.addMenu(group)
+            for cmd, data in props['Auxiliary Commands'].items():
+                act = menu.addAction(cmd)
+                act.triggered.connect(_part(self._set_lastcomm, group))
+                act.triggered.connect(data['cmd'])
+                if 'tooltip' in data:
+                    act.setToolTip(data['tooltip'])
+
+        # selection and commands
+        self.wid_procs = QWidget(self)
+
+        self.ld_procs = QLabel(
+            'Select a procedure: ', self, alignment=Qt.AlignRight)
+        self.cb_procs = QComboBox(self)
+        self.cb_procs.addItems(procedures)
+        self.cb_procs.setCurrentIndex(init_index)
         self.tab = QTabWidget(self)
         self.tab.setObjectName('ASTab')
 
-        # # PS
-        self.ps_wid = QWidget(self)
-        lay_ps = QGridLayout(self.ps_wid)
-        lay_ps.setContentsMargins(0, 9, 0, 0)
-        lay_ps.setHorizontalSpacing(0)
+        lay_procs = QGridLayout(self.wid_procs)
+        lay_procs.addWidget(self.ld_procs, 0, 0, alignment=Qt.AlignRight)
+        lay_procs.addWidget(self.cb_procs, 0, 1, alignment=Qt.AlignLeft)
+        lay_procs.addWidget(self.tab, 1, 0, 1, 2)
 
-        # PS selection
-        self.ps_tree = PVNameTree(
-            items=self._get_ps_tree_names(),
-            tree_levels=('sec', 'mag_group'), parent=self)
-        self.ps_tree.tree.setHeaderHidden(True)
-        self.ps_tree.setSizePolicy(
-            QSizePolicy.Preferred, QSizePolicy.Preferred)
-        self.ps_tree.tree.setColumnCount(1)
-        self.ps_tree.tree.doubleClicked.connect(self._open_detail)
-        self.ps_tree.tree.itemChanged.connect(
-            self._handle_checked_items_changed)
+        self.seltrees = dict()
+        self.buttons = dict()
+        for group, props in cmddata.items():
+            self.buttons[group] = dict()
 
-        gbox_ps_select = QGroupBox('Select PS: ', self)
-        gbox_ps_select.setObjectName('select')
-        gbox_ps_select.setStyleSheet("""
-            #select{
-                border-top: 0px solid transparent;
-                border-left: 0px solid transparent;
-                border-bottom: 0px solid transparent;
-            }""")
-        lay_ps_select = QVBoxLayout(gbox_ps_select)
-        lay_ps_select.addWidget(self.ps_tree)
-        lay_ps.addWidget(gbox_ps_select, 0, 0)
-        lay_ps.setColumnStretch(0, 1)
+            # select
+            selection = props['Selection']
+            tree = PVNameTree(
+                items=selection['devices'],
+                tree_levels=selection['levels'],
+                parent=self,
+            )
+            tree.setStyleSheet(".QLabel{min-width: 8.5em;}")
+            tree.tree.setHeaderHidden(True)
+            tree.setSizePolicy(
+                QSizePolicy.Preferred, QSizePolicy.Preferred)
+            tree.tree.setColumnCount(1)
+            tree.tree.doubleClicked.connect(self._open_detail)
+            tree.tree.itemChanged.connect(
+                self._handle_checked_items_changed)
+            self.seltrees[group] = tree
 
-        # PS commands
-        self.checkcomm_ps_bt = QPushButton('1. Check Communication', self)
-        self.checkcomm_ps_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
-        self.checkcomm_ps_bt.clicked.connect(self._check_comm)
-        self.checkcomm_ps_bt.setToolTip(
-            'Check PS and DCLinks communication status (verify invalid alarms '
-            'and, if LI, the value of Connected-Mon PV)')
+            gbox_select = QGroupBox('Select '+group+': ', self)
+            gbox_select.setObjectName('select')
+            gbox_select.setStyleSheet("""
+                #select{
+                    border-top: 0px solid transparent;
+                    border-left: 0px solid transparent;
+                    border-bottom: 0px solid transparent;
+                }""")
+            lay_select = QVBoxLayout(gbox_select)
+            lay_select.addWidget(tree)
 
-        self.checkstatus_ps_bt = QPushButton('2. Show Status Summary', self)
-        self.checkstatus_ps_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
-        self.checkstatus_ps_bt.clicked.connect(_part(self._check_status, 'PS'))
-        self.checkstatus_ps_bt.setToolTip(
-            'Check PS and DCLinks interlock status and, if powered on, '
-            'check if it is following reference')
+            # commands
+            gbox_comm = QGroupBox('Commands', self)
+            gbox_comm.setObjectName('comm')
+            gbox_comm.setStyleSheet(
+                '#comm{border: 0px solid transparent;}')
+            stack_procs = QStackedLayout(gbox_comm)
+            self.cb_procs.currentIndexChanged.connect(
+                stack_procs.setCurrentIndex)
+            for proc in procedures:
+                wid_comm = QWidget()
+                lay_comm = QVBoxLayout(wid_comm)
+                lay_comm.setContentsMargins(20, 9, 20, 9)
+                cmdidx, cmdbuttons = 1, list()
+                for cmdgroup, cmdlist in props[proc].items():
+                    label = QLabel(
+                        '<h4>'+cmdgroup+'</h4>', self,
+                        alignment=Qt.AlignCenter)
+                    lay_comm.addWidget(label)
+                    for cmd, data in cmdlist.items():
+                        btn = QPushButton(str(cmdidx) + '. ' + cmd, self)
+                        btn.setSizePolicy(
+                            QSizePolicy.Minimum, QSizePolicy.Maximum)
+                        btn.clicked.connect(_part(self._set_lastcomm, group))
+                        btn.clicked.connect(data['cmd'])
+                        if 'tooltip' in data:
+                            btn.setToolTip(data['tooltip'])
+                        cmdbuttons.append(btn)
+                        if 'SI Fam' in cmd:
+                            btn.setVisible(False)
+                        else:
+                            cmdidx += 1
+                        lay_comm.addWidget(btn)
+                    lay_comm.addWidget(QLabel(''))
+                self.buttons[group][proc] = cmdbuttons
+                stack_procs.addWidget(wid_comm)
+            stack_procs.setCurrentIndex(init_index)
 
-        self.dsbltrigger_ps_bt = QPushButton('3. Disable PS triggers', self)
-        self.dsbltrigger_ps_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
-        self.dsbltrigger_ps_bt.clicked.connect(
-            _part(self._set_check_trigger_state, 'PS', 'dsbl'))
-
-        self.setsofbmode_ps_bt = QPushButton('4. Turn Off SOFBMode', self)
-        self.setsofbmode_ps_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
-        self.setsofbmode_ps_bt.clicked.connect(
-            _part(self._set_check_fbp_sofbmode, 'off'))
-
-        self.setslowref_ps_bt = QPushButton(
-            '5. Set PS and DCLinks to SlowRef', self)
-        self.setslowref_ps_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
-        self.setslowref_ps_bt.clicked.connect(self._set_check_opmode_slowref)
-
-        self.currzero_ps_bt1 = QPushButton('6. Set PS Current to zero', self)
-        self.currzero_ps_bt1.clicked.connect(_part(self._set_lastcomm, 'PS'))
-        self.currzero_ps_bt1.clicked.connect(self._set_zero_ps)
-
-        self.reset_ps_bt = QPushButton('7. Reset PS and DCLinks', self)
-        self.reset_ps_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
-        self.reset_ps_bt.clicked.connect(_part(self._reset_intlk, 'PS'))
-
-        self.prep_sidclink_bt = QPushButton('8. Prepare SI Fam DCLinks', self)
-        self.prep_sidclink_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
-        self.prep_sidclink_bt.clicked.connect(self._prepare_sidclinks)
-        self.prep_sidclink_bt.setVisible(False)
-
-        self.init_sips_bt = QPushButton('9. Initialize SI Fam PS', self)
-        self.init_sips_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
-        self.init_sips_bt.clicked.connect(self._set_check_pwrstateinit)
-        self.init_sips_bt.setVisible(False)
-
-        self.aux_label = QLabel('')
-        self.aux_label.setVisible(False)
-
-        self.turnon_dcl_bt = QPushButton('8. Turn DCLinks On', self)
-        self.turnon_dcl_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
-        self.turnon_dcl_bt.clicked.connect(
-            _part(self._set_check_pwrstate_dclinks, 'on'))
-
-        self.checkctrlloop_dcl_bt = QPushButton(
-            '9. Check DCLinks CtrlLoop', self)
-        self.checkctrlloop_dcl_bt.clicked.connect(
-            _part(self._set_lastcomm, 'PS'))
-        self.checkctrlloop_dcl_bt.clicked.connect(
-            _part(self._check_ctrlloop, 'dclink'))
-
-        self.setvolt_dcl_bt = QPushButton('10. Set DCLinks Voltage', self)
-        self.setvolt_dcl_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
-        self.setvolt_dcl_bt.clicked.connect(
-            self._set_check_dclinks_capvolt)
-
-        self.turnon_ps_bt = QPushButton('11. Turn PS On', self)
-        self.turnon_ps_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
-        self.turnon_ps_bt.clicked.connect(
-            _part(self._set_check_pwrstate, 'PS', 'on', True))
-
-        self.checkctrlloop_ps_bt = QPushButton('12. Check PS CtrlLoop', self)
-        self.checkctrlloop_ps_bt.clicked.connect(
-            _part(self._set_lastcomm, 'PS'))
-        self.checkctrlloop_ps_bt.clicked.connect(
-            _part(self._check_ctrlloop, 'pwrsupply'))
-
-        self.test_ps_bt = QPushButton(
-            '13. Set PS Current to test value', self)
-        self.test_ps_bt.clicked.connect(_part(self._set_lastcomm, 'PS'))
-        self.test_ps_bt.clicked.connect(self._set_test_ps)
-
-        self.currzero_ps_bt2 = QPushButton('14. Set PS Current to zero', self)
-        self.currzero_ps_bt2.clicked.connect(_part(self._set_lastcomm, 'PS'))
-        self.currzero_ps_bt2.clicked.connect(self._set_zero_ps)
-
-        self.restoretrigger_ps_bt = QPushButton(
-            '15. Restore PS triggers', self)
-        self.restoretrigger_ps_bt.clicked.connect(
-            _part(self._set_lastcomm, 'PS'))
-        self.restoretrigger_ps_bt.clicked.connect(
-            _part(self._restore_triggers_state, 'PS'))
-
-        self._ps_buttons = [
-            self.checkcomm_ps_bt, self.checkstatus_ps_bt,
-            self.dsbltrigger_ps_bt, self.setsofbmode_ps_bt,
-            self.setslowref_ps_bt, self.currzero_ps_bt1,
-            self.reset_ps_bt, self.prep_sidclink_bt,
-            self.init_sips_bt, self.turnon_dcl_bt,
-            self.checkctrlloop_dcl_bt, self.setvolt_dcl_bt,
-            self.turnon_ps_bt, self.checkctrlloop_ps_bt,
-            self.test_ps_bt, self.currzero_ps_bt2,
-            self.restoretrigger_ps_bt,
-        ]
-
-        gbox_ps_comm = QGroupBox('Commands', self)
-        gbox_ps_comm.setObjectName('comm')
-        gbox_ps_comm.setStyleSheet('#comm{border: 0px solid transparent;}')
-        lay_ps_comm = QVBoxLayout(gbox_ps_comm)
-        lay_ps_comm.setContentsMargins(20, 9, 20, 9)
-        lay_ps_comm.addWidget(QLabel(''))
-        lay_ps_comm.addWidget(QLabel('<h4>Check</h4>', self,
-                                     alignment=Qt.AlignCenter))
-        lay_ps_comm.addWidget(self.checkcomm_ps_bt)
-        lay_ps_comm.addWidget(self.checkstatus_ps_bt)
-        lay_ps_comm.addWidget(QLabel(''))
-        lay_ps_comm.addWidget(QLabel('<h4>Prepare</h4>', self,
-                                     alignment=Qt.AlignCenter))
-        lay_ps_comm.addWidget(self.dsbltrigger_ps_bt)
-        lay_ps_comm.addWidget(self.setsofbmode_ps_bt)
-        lay_ps_comm.addWidget(self.setslowref_ps_bt)
-        lay_ps_comm.addWidget(self.currzero_ps_bt1)
-        lay_ps_comm.addWidget(self.reset_ps_bt)
-        lay_ps_comm.addWidget(QLabel(''))
-        lay_ps_comm.addWidget(self.prep_sidclink_bt)
-        lay_ps_comm.addWidget(self.init_sips_bt)
-        lay_ps_comm.addWidget(self.aux_label)
-        lay_ps_comm.addWidget(QLabel('<h4>Config DCLinks</h4>', self,
-                                     alignment=Qt.AlignCenter))
-        lay_ps_comm.addWidget(self.turnon_dcl_bt)
-        lay_ps_comm.addWidget(self.checkctrlloop_dcl_bt)
-        lay_ps_comm.addWidget(self.setvolt_dcl_bt)
-        lay_ps_comm.addWidget(QLabel(''))
-        lay_ps_comm.addWidget(QLabel('<h4>Test</h4>', self,
-                                     alignment=Qt.AlignCenter))
-        lay_ps_comm.addWidget(self.turnon_ps_bt)
-        lay_ps_comm.addWidget(self.checkctrlloop_ps_bt)
-        lay_ps_comm.addWidget(self.test_ps_bt)
-        lay_ps_comm.addWidget(self.currzero_ps_bt2)
-        lay_ps_comm.addWidget(QLabel(''))
-        lay_ps_comm.addWidget(QLabel('<h4>Restore</h4>', self,
-                                     alignment=Qt.AlignCenter))
-        lay_ps_comm.addWidget(self.restoretrigger_ps_bt)
-        lay_ps_comm.addWidget(QLabel(''))
-        lay_ps.addWidget(gbox_ps_comm, 0, 1)
-        lay_ps.setColumnStretch(1, 1)
-
-        self.tab.addTab(self.ps_wid, 'PS')
-
-        # # PU
-        self.pu_wid = QWidget(self)
-        lay_pu = QGridLayout(self.pu_wid)
-        lay_pu.setContentsMargins(0, 9, 0, 0)
-        lay_pu.setHorizontalSpacing(0)
-
-        # PU selection
-        self.pu_tree = PVNameTree(
-            items=self._get_pu_tree_names(),
-            tree_levels=('sec', ), parent=self)
-        self.pu_tree.tree.setHeaderHidden(True)
-        self.pu_tree.setSizePolicy(
-            QSizePolicy.Preferred, QSizePolicy.Preferred)
-        self.pu_tree.tree.setColumnCount(1)
-        self.pu_tree.tree.doubleClicked.connect(self._open_detail)
-
-        gbox_pu_select = QGroupBox('Select PU: ', self)
-        gbox_pu_select.setObjectName('select')
-        gbox_pu_select.setStyleSheet("""
-            #select{
-                border-top: 0px solid transparent;
-                border-left: 0px solid transparent;
-                border-bottom: 0px solid transparent;
-            }""")
-        lay_pu_select = QVBoxLayout(gbox_pu_select)
-        lay_pu_select.addWidget(self.pu_tree)
-        lay_pu.addWidget(gbox_pu_select, 0, 0)
-        lay_pu.setColumnStretch(0, 1)
-
-        # PU commands
-        self.checkstatus_pu_bt = QPushButton('1. Show Status Summary', self)
-        self.checkstatus_pu_bt.clicked.connect(_part(self._set_lastcomm, 'PU'))
-        self.checkstatus_pu_bt.clicked.connect(_part(self._check_status, 'PU'))
-        self.checkstatus_pu_bt.setToolTip(
-            'Check PU interlock status and, if powered on, '
-            'check if it is following voltage setpoint')
-
-        self.voltzero_pu_bt1 = QPushButton('2. Set PU Voltage to zero', self)
-        self.voltzero_pu_bt1.clicked.connect(_part(self._set_lastcomm, 'PU'))
-        self.voltzero_pu_bt1.clicked.connect(_part(self._set_zero_pu, False))
-
-        self.reset_pu_bt = QPushButton('3. Reset PU', self)
-        self.reset_pu_bt.clicked.connect(_part(self._set_lastcomm, 'PU'))
-        self.reset_pu_bt.clicked.connect(_part(self._reset_intlk, 'PU'))
-
-        self.turnon_pu_bt = QPushButton('4. Turn PU On', self)
-        self.turnon_pu_bt.clicked.connect(_part(self._set_lastcomm, 'PU'))
-        self.turnon_pu_bt.clicked.connect(
-            _part(self._set_check_pwrstate, 'PU', 'on', True))
-
-        self.enblpulse_pu_bt = QPushButton('5. Enable PU Pulse', self)
-        self.enblpulse_pu_bt.clicked.connect(_part(self._set_lastcomm, 'PU'))
-        self.enblpulse_pu_bt.clicked.connect(
-            _part(self._set_check_pulse, 'on'))
-
-        self.enbltrigger_pu_bt = QPushButton('6. Enable PU triggers', self)
-        self.enbltrigger_pu_bt.clicked.connect(_part(self._set_lastcomm, 'PU'))
-        self.enbltrigger_pu_bt.clicked.connect(
-            _part(self._set_check_trigger_state, 'PU', 'on'))
-
-        self.test_pu_bt = QPushButton('7. Set PU Voltage to test value', self)
-        self.test_pu_bt.clicked.connect(_part(self._set_lastcomm, 'PU'))
-        self.test_pu_bt.clicked.connect(self._set_test_pu)
-
-        self.voltzero_pu_bt2 = QPushButton('8. Set PU Voltage to zero', self)
-        self.voltzero_pu_bt2.clicked.connect(_part(self._set_lastcomm, 'PU'))
-        self.voltzero_pu_bt2.clicked.connect(_part(self._set_zero_pu, True))
-
-        self.restoretrigger_pu_bt = QPushButton('9. Restore PU triggers', self)
-        self.restoretrigger_pu_bt.clicked.connect(
-            _part(self._set_lastcomm, 'PU'))
-        self.restoretrigger_pu_bt.clicked.connect(
-            _part(self._restore_triggers_state, 'PU'))
-
-        gbox_pu_comm = QGroupBox('Commands', self)
-        gbox_pu_comm.setObjectName('comm')
-        gbox_pu_comm.setStyleSheet('#comm{border: 0px solid transparent;}')
-        lay_pu_comm = QVBoxLayout(gbox_pu_comm)
-        lay_pu_comm.setContentsMargins(20, 9, 20, 9)
-        lay_pu_comm.addWidget(QLabel(''))
-        lay_pu_comm.addWidget(QLabel('<h4>Check</h4>', self,
-                                     alignment=Qt.AlignCenter))
-        lay_pu_comm.addWidget(self.checkstatus_pu_bt)
-        lay_pu_comm.addWidget(QLabel(''))
-        lay_pu_comm.addWidget(QLabel('<h4>Prepare</h4>', self,
-                                     alignment=Qt.AlignCenter))
-        lay_pu_comm.addWidget(self.voltzero_pu_bt1)
-        lay_pu_comm.addWidget(self.reset_pu_bt)
-        lay_pu_comm.addWidget(QLabel(''))
-        lay_pu_comm.addWidget(QLabel('<h4>Test</h4>', self,
-                                     alignment=Qt.AlignCenter))
-        lay_pu_comm.addWidget(self.turnon_pu_bt)
-        lay_pu_comm.addWidget(self.enblpulse_pu_bt)
-        lay_pu_comm.addWidget(self.enbltrigger_pu_bt)
-        lay_pu_comm.addWidget(self.test_pu_bt)
-        lay_pu_comm.addWidget(self.voltzero_pu_bt2)
-        lay_pu_comm.addWidget(QLabel(''))
-        lay_pu_comm.addWidget(QLabel('<h4>Restore</h4>', self,
-                                     alignment=Qt.AlignCenter))
-        lay_pu_comm.addWidget(self.restoretrigger_pu_bt)
-        lay_pu_comm.addWidget(QLabel(''))
-        lay_pu.addWidget(gbox_pu_comm, 0, 1)
-        lay_pu.setColumnStretch(1, 1)
-
-        self.tab.addTab(self.pu_wid, 'PU')
+            wid = QWidget(self)
+            lay = QGridLayout(wid)
+            lay.setContentsMargins(0, 9, 0, 0)
+            lay.setHorizontalSpacing(0)
+            lay.addWidget(gbox_select, 0, 0)
+            lay.addWidget(gbox_comm, 0, 1)
+            lay.setColumnStretch(0, 1)
+            lay.setColumnStretch(1, 1)
+            self.tab.addTab(wid, group)
 
         # lists
         self.label_lastcomm = QLabel('Last Command: ', self)
@@ -406,62 +501,12 @@ class PSTestWindow(SiriusMainWindow):
                                      alignment=Qt.AlignCenter), 1, 1)
         list_layout.addWidget(self.nok_ps, 2, 1)
 
-        # menu
-        self.menu = self.menuBar()
-
-        self.act_cycle = self.menu.addAction('Open Cycle Window')
-        connect_newprocess(
-            self.act_cycle, 'sirius-hla-as-ps-cycle.py', parent=self)
-
-        self.aux_comm = self.menu.addMenu('Auxiliary commands')
-
-        # # auxiliary PS
-        self.ps_menu = self.aux_comm.addMenu('PS')
-
-        self.act_turnoff_ps = self.ps_menu.addAction('Turn PS Off')
-        self.act_turnoff_ps.triggered.connect(_part(self._set_lastcomm, 'PS'))
-        self.act_turnoff_ps.triggered.connect(
-            _part(self._set_check_pwrstate, 'PS', 'off', True))
-
-        self.act_turnoff_dclink = self.ps_menu.addAction('Turn DCLinks Off')
-        self.act_turnoff_dclink.triggered.connect(
-            _part(self._set_lastcomm, 'PS'))
-        self.act_turnoff_dclink.triggered.connect(
-            _part(self._set_check_pwrstate_dclinks, 'off'))
-
-        self.act_setcurrent_ps = self.ps_menu.addAction('Set PS Current')
-        self.act_setcurrent_ps.triggered.connect(
-            _part(self._set_lastcomm, 'PS'))
-        self.act_setcurrent_ps.triggered.connect(self._set_check_current)
-
-        self.act_opmode_ps = self.ps_menu.addAction('Set PS OpMode')
-        self.act_opmode_ps.triggered.connect(
-            _part(self._set_lastcomm, 'PS'))
-        self.act_opmode_ps.triggered.connect(self._set_check_opmode)
-
-        # # auxiliary PU
-        self.pu_menu = self.aux_comm.addMenu('PU')
-
-        self.act_turnoff_pu = self.pu_menu.addAction('Turn PU Off')
-        self.act_turnoff_pu.triggered.connect(
-            _part(self._set_lastcomm, 'PU'))
-        self.act_turnoff_pu.triggered.connect(
-            _part(self._set_check_pwrstate, 'PU', 'off', True))
-
-        self.act_dsblpulse_pu = self.pu_menu.addAction('Disable PU Pulse')
-        self.act_dsblpulse_pu.triggered.connect(
-            _part(self._set_lastcomm, 'PU'))
-        self.act_dsblpulse_pu.triggered.connect(
-            _part(self._set_check_pulse, 'off'))
-
         # layout
         lay = QGridLayout()
         lay.setHorizontalSpacing(15)
         lay.setVerticalSpacing(5)
-        lay.addWidget(QLabel(
-            '<h3>Power Supply Test</h3>', self, alignment=Qt.AlignCenter),
-            0, 0, 1, 3)
-        lay.addWidget(self.tab, 1, 0)
+        lay.addWidget(self.title, 0, 0, 1, 3)
+        lay.addWidget(self.wid_procs, 1, 0)
         lay.addLayout(list_layout, 1, 1)
         lay.setColumnStretch(0, 2)
         lay.setColumnStretch(1, 2)
@@ -737,7 +782,7 @@ class PSTestWindow(SiriusMainWindow):
         self.ok_ps_aux_list.clear()
         self.nok_ps_aux_list.clear()
         self._check_pwrstate(dcl2check, state='off', is_test=False, show=False)
-        if len(self.nok_ps_aux_list) > 0:
+        if self.nok_ps_aux_list:
             for dev in self.ok_ps_aux_list:
                 self._log(dev, True)
             for dev in self.nok_ps_aux_list:
@@ -807,7 +852,7 @@ class PSTestWindow(SiriusMainWindow):
             self.ok_ps_aux_list.clear()
             self.nok_ps_aux_list.clear()
             self._check_pwrstate(ps2check, state='offintlk', show=False)
-            if len(self.nok_ps_aux_list) > 0:
+            if self.nok_ps_aux_list:
                 for dev in self.ok_ps_aux_list:
                     self._log(dev, True)
                 for dev in self.nok_ps_aux_list:
@@ -981,9 +1026,9 @@ class PSTestWindow(SiriusMainWindow):
         if not devices:
             return
 
-        value, ok = QInputDialog.getDouble(
+        value, res = QInputDialog.getDouble(
             self, "Setpoint Input", "Insert current setpoint: ")
-        if not ok:
+        if not res:
             return
 
         task0 = CreateTesters(devices, parent=self)
@@ -1009,10 +1054,10 @@ class PSTestWindow(SiriusMainWindow):
         if not devices:
             return
 
-        state, ok = QInputDialog.getItem(
+        state, res = QInputDialog.getItem(
             self, "OpMode Input", "Select OpMode: ",
             _PSE.OPMODES, editable=False)
-        if not ok:
+        if not res:
             return
         state2set = getattr(_PSC.OpMode, state)
         state2check = getattr(_PSC.States, state)
@@ -1144,16 +1189,20 @@ class PSTestWindow(SiriusMainWindow):
             {'sec': 'SI', 'dis': 'PS', 'dev': 'QS'}))
         # add SI Fast Corrs
         psnames.extend(PSSearch.get_psnames(
-            {'sec': 'SI', 'dis': 'PS', 'dev': 'FC.*'}))
+            {'sec': 'SI', 'sub': '(?!01M).*', 'dis': 'PS', 'dev': 'FC.*'}))
+        # add SI SeptaFF Corrs
+        psnames.extend(PSSearch.get_psnames(
+            {'sec': 'SI', 'dis': 'PS', 'dev': 'FFC.*'}))
         return psnames
 
     def _get_pu_tree_names(self):
-        punames = PSSearch.get_psnames(
-            {'sec': '(TB|BO|TS|SI)', 'dis': 'PU', 'dev': '.*(Kckr|Sept).*'})
+        punames = PSSearch.get_psnames({
+            'sec': '(TB|BO|TS|SI)', 'dis': 'PU', 'dev': '.*(Kckr|Sept)',
+            'propty_name': '(?!:CCoil).*'})
         return punames
 
     def _get_selected_ps(self):
-        devices = self.ps_tree.checked_items()
+        devices = self.seltrees['PS'].checked_items()
         if not devices:
             QMessageBox.critical(self, 'Message', 'No power supply selected!')
             return False
@@ -1161,7 +1210,7 @@ class PSTestWindow(SiriusMainWindow):
         return devices
 
     def _get_selected_pu(self):
-        devices = self.pu_tree.checked_items()
+        devices = self.seltrees['PU'].checked_items()
         if not devices:
             QMessageBox.critical(
                 self, 'Message', 'No pulsed power supply selected!')
@@ -1216,7 +1265,7 @@ class PSTestWindow(SiriusMainWindow):
         state2set = item.checkState(0)
 
         # ensure power supplies that share dclinks are checked together
-        if devname in self._si_fam_psnames and not self._is_adv_mode:
+        if devname in self._si_fam_psnames:
             dclinks = PSSearch.conv_psname_2_dclink(devname)
             if dclinks:
                 psname2check = set()
@@ -1224,12 +1273,12 @@ class PSTestWindow(SiriusMainWindow):
                     relps = PSSearch.conv_dclink_2_psname(dcl)
                     relps.remove(devname)
                     psname2check.update(relps)
-                self.ps_tree.tree.blockSignals(True)
+                self.seltrees['PS'].tree.blockSignals(True)
                 for psn in psname2check:
-                    item2check = self.ps_tree._item_map[psn]
+                    item2check = self.seltrees['PS']._item_map[psn]
                     if item2check.checkState(0) != state2set:
                         item2check.setData(0, Qt.CheckStateRole, state2set)
-                self.ps_tree.tree.blockSignals(False)
+                self.seltrees['PS'].tree.blockSignals(False)
 
         self._needs_update_setup = True
 
@@ -1241,20 +1290,20 @@ class PSTestWindow(SiriusMainWindow):
         # show/hide buttons to initialize SI Fam PS
         has_sifam = False
         for psn in self._si_fam_psnames:
-            item = self.ps_tree._item_map[psn]
+            item = self.seltrees['PS']._item_map[psn]
             has_sifam |= item.checkState(0) != 0
 
-        self.prep_sidclink_bt.setVisible(has_sifam)
-        self.init_sips_bt.setVisible(has_sifam)
-        self.aux_label.setVisible(has_sifam)
-        index = 1
-        for but in self._ps_buttons:
-            if not but.isVisible():
-                continue
-            oldtext = but.text()
-            newtext = str(index) + '.' + oldtext.split('.')[1]
-            but.setText(newtext)
-            index += 1
+        for proc in self.buttons['PS']:
+            index = 1
+            for but in self.buttons['PS'][proc]:
+                if 'SI Fam' in but.text():
+                    but.setVisible(has_sifam)
+                    if not has_sifam:
+                        continue
+                oldtext = but.text()
+                newtext = str(index) + '.' + oldtext.split('.')[1]
+                but.setText(newtext)
+                index += 1
 
     # ---------- events ----------
 

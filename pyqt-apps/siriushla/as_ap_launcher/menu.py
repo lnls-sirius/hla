@@ -237,9 +237,9 @@ def get_object(ismenubar=True, parent=None):
             psdiag = QAction('Diag', pwrsupply)
             psdiag.setIcon(qta.icon('mdi.stethoscope'))
             self.connect_newprocess(psdiag, 'sirius-hla-as-ps-diag.py')
-            pstest = QAction('Test', pwrsupply)
-            pstest.setIcon(qta.icon('mdi.test-tube'))
-            self.connect_newprocess(pstest, 'sirius-hla-as-ps-test.py')
+            pscmd = QAction('Commands', pwrsupply)
+            pscmd.setIcon(qta.icon('mdi.format-list-numbered'))
+            self.connect_newprocess(pscmd, 'sirius-hla-as-ps-commands.py')
             psgraph = QAction('Graph', pwrsupply)
             psgraph.setIcon(qta.icon('mdi.chart-line'))
             self.connect_newprocess(psgraph, 'sirius-hla-as-ps-graphmon.py')
@@ -248,7 +248,7 @@ def get_object(ismenubar=True, parent=None):
             self.connect_newprocess(psmonitor, 'sirius-hla-as-ps-monitor.py')
             pwrsupply.addAction(pscycle)
             pwrsupply.addAction(psdiag)
-            pwrsupply.addAction(pstest)
+            pwrsupply.addAction(pscmd)
             pwrsupply.addAction(psgraph)
             pwrsupply.addAction(psmonitor)
 
@@ -727,16 +727,22 @@ def get_object(ismenubar=True, parent=None):
                     'device': 'corrector-fast',
                     'graphs': {'All': 'FC(H|V)', 'FCH': 'FCH', 'FCV': 'FCV'},
                 },
+                'Septa Feedforward Correctors': {
+                    'device': 'corrector-septff',
+                    'graphs': {
+                        'All': 'FFC(H|V)', 'FFCH': 'FFCH', 'FFCV': 'FFCV',
+                    },
+                },
             }
             if sec != 'li':
                 for pstype, data in ps_indiv.items():
                     type_menu = psmenu.addMenu(pstype)
                     type_menu.setObjectName(sec.upper()+'App')
 
-                    if sec == 'si':
+                    if sec == 'si' and 'Feedforward' not in pstype:
                         all_menu = type_menu.addMenu('All')
                         all_menu.setObjectName(sec.upper()+'App')
-                    elif pstype == 'Correctors':
+                    elif 'Correctors' in pstype:
                         all_menu = type_menu
 
                     # list
@@ -765,7 +771,7 @@ def get_object(ismenubar=True, parent=None):
                              data['graphs']['All']])
                         all_menu.addAction(all_gph_act)
 
-                    if sec != 'si':
+                    if sec != 'si' or 'Feedforward' in pstype:
                         break
 
                     # subsectors
@@ -831,7 +837,7 @@ def get_object(ismenubar=True, parent=None):
                 self.connect_newprocess(pmag, [script, '-s', 'InjSI'])
                 pumenu.addAction(pmag)
                 pmag = QAction('Pingers', pumenu)
-                self.connect_newprocess(pmag, [script, '-s', 'Ping'])
+                self.connect_newprocess(pmag, [script, '-s', 'PingSI'])
                 pumenu.addAction(pmag)
             elif sec == 'bo':
                 pmag = QAction('Injection', pumenu)
@@ -841,7 +847,7 @@ def get_object(ismenubar=True, parent=None):
                 self.connect_newprocess(pmag, [script, '-s', 'EjeBO'])
                 pumenu.addAction(pmag)
             elif sec == 'as':
-                pmag = QAction('InjBO, EjeBO, InjSI && Ping', pumenu)
+                pmag = QAction('InjBO, EjeBO, InjSI && PingSI', pumenu)
                 self.connect_newprocess(
                     pmag, 'sirius-hla-as-pu-control.py')
                 pumenu.addAction(pmag)

@@ -126,6 +126,11 @@ class SiriusTimePlot(PyDMTimePlot):
         tsp_act.triggered.connect(self._changeTimeSpan)
         self.plotItem.scene().contextMenu.extend([rst_act, tsp_act])
 
+    @property
+    def legend(self):
+        """Legend object."""
+        return self._legend
+
     @Property(bool)
     def showToolTip(self):
         """

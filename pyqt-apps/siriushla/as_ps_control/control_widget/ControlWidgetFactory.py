@@ -17,6 +17,7 @@ from .SolenoidControlWidget import LISolenoidControlWidget
 from .LensControlWidget import LILensControlWidget, ITLensControlWidget
 from .FastCorrectorControlWidget import \
     SIFastCorrectorControlWidget
+from .SeptFFCorrectorControlWidget import SISeptFFCorrectorControlWidget
 
 
 class ControlWidgetFactory:
@@ -24,7 +25,6 @@ class ControlWidgetFactory:
 
     def __init__(self):
         """Static class."""
-        pass
 
     @staticmethod
     def _device_not_found(section, device):
@@ -112,6 +112,10 @@ class ControlWidgetFactory:
                     parent=parent)
             elif device == "corrector-fast":
                 return SIFastCorrectorControlWidget(
+                    subsection=subsection, orientation=orientation,
+                    parent=parent)
+            elif device == "corrector-septff":
+                return SISeptFFCorrectorControlWidget(
                     subsection=subsection, orientation=orientation,
                     parent=parent)
             elif device == "skew-quadrupole":

@@ -79,9 +79,9 @@ class RFMainControl(SiriusMainWindow):
             wid_rampctrl = QWidget(self)
             wid_rampctrl.setLayout(self._rampControlLayout())
             wid_startctrl.addTab(wid_rampctrl, 'Ramp Controls')
-            wid_autostart = QWidget(self)
-            wid_autostart.setLayout(self._autoStartLayout())
-            wid_startctrl.addTab(wid_autostart, 'Auto Start')
+            # wid_autostart = QWidget(self)
+            # wid_autostart.setLayout(self._autoStartLayout())
+            # wid_startctrl.addTab(wid_autostart, 'Auto Start')
 
         if self.section == 'SI':
             wid_pwrmon = QGroupBox('Power Meter', self)

@@ -2,13 +2,14 @@
 
 import re
 from datetime import datetime as _datetime
+from functools import partial as _part
 import numpy as _np
 
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QGroupBox, QPushButton, QLabel, \
     QGridLayout, QVBoxLayout, QHBoxLayout, QFormLayout, QTabWidget, \
     QSizePolicy as QSzPlcy, QCheckBox, QHeaderView, QAbstractItemView, \
-    QScrollArea, QFrame
+    QScrollArea, QFrame, QComboBox
 from qtpy.QtGui import QColor
 
 import qtawesome as qta
@@ -22,20 +23,21 @@ from siriuspy.envars import VACA_PREFIX
 from siriuspy.search import PSSearch
 from siriuspy.pwrsupply.csdev import get_ps_propty_database, get_ps_modules, \
     DEF_WFMSIZE_FBP, DEF_WFMSIZE_OTHERS, PS_LI_INTLK_THRS as _PS_LI_INTLK, \
-    ETypes as _PSet
+    ETypes as _PSet, get_ps_scopesourcemap
 from siriuspy.devices import PowerSupply
 
 from ... import util
 from ...widgets import PyDMStateButton, PyDMSpinboxScrollbar, SiriusTimePlot, \
     SiriusConnectionSignal, SiriusLedState, SiriusLedAlert, SiriusLabel, \
     PyDMLedMultiChannel, SiriusDialog, SiriusWaveformTable, SiriusSpinbox, \
-    SiriusHexaSpinbox, SiriusWaveformPlot, PyDMLed
+    SiriusHexaSpinbox, SiriusWaveformPlot, PyDMLed, SiriusStringComboBox, \
+    PyDMLinEditScrollbar
 from .InterlockWindow import InterlockWindow, LIInterlockWindow
 from .custom_widgets import LISpectIntlkLed
 
 
-class PSDetailWidget(QWidget):
-    """Widget with control interface for a given magnet."""
+class _BaseDetailWidget(QWidget):
+    """Widget with some common layouts."""
 
     StyleSheet = """
         #opmode_sp_cbox{
@@ -84,6 +86,161 @@ class PSDetailWidget(QWidget):
         }
     """
 
+    def __init__(self, psname, parent=None):
+        """Class constructor."""
+        super(_BaseDetailWidget, self).__init__(parent)
+        self._prefix = VACA_PREFIX
+        self._psname = SiriusPVName(psname)
+
+        try:
+            self._metric = get_strength_label(
+                PSSearch.conv_psname_2_magfunc(self._psname))
+        except (ValueError, KeyError):
+            self._metric = ''
+
+        self._prefixed_psname = self._psname.substitute(prefix=self._prefix)
+
+        self.setObjectName(parent.objectName())
+
+        self.setFocus(True)
+        self.setFocusPolicy(Qt.StrongFocus)
+        self.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
+
+    @staticmethod
+    def conv_time_string(value):
+        time_str = _datetime.fromtimestamp(value).strftime('%Y-%m-%d %H:%M:%S')
+        time_str += '.{:03d}'.format(int(1e3*(value % 1)))
+        return time_str
+
+    def _powerStateLayout(self):
+        self.state_button = PyDMStateButton(
+            parent=self, init_channel=self._prefixed_psname + ":PwrState-Sel")
+        self.pwrstate_led = SiriusLedState(
+            parent=self, init_channel=self._prefixed_psname + ":PwrState-Sts")
+        self.pwrstate_label = SiriusLabel(
+            parent=self, init_channel=self._prefixed_psname + ":PwrState-Sts")
+        self.pwrstate_label.setObjectName("pwrstate_label")
+
+        layout = QGridLayout()
+        layout.setAlignment(Qt.AlignCenter)
+        layout.setHorizontalSpacing(4)
+        layout.addWidget(self.state_button, 0, 0, 1, 2, Qt.AlignHCenter)
+        layout.addWidget(self.pwrstate_led, 1, 0, Qt.AlignRight)
+        layout.addWidget(self.pwrstate_label, 1, 1, Qt.AlignLeft)
+        return layout
+
+    def _currentLayout(self, prec=None, has_refmon=True):
+        current_sp_label = QLabel("Setpoint")
+        current_rb_label = QLabel("Readback")
+        current_mon_label = QLabel("Mon")
+
+        self.current_sp_wid = PyDMSpinboxScrollbar(
+            self, self._prefixed_psname + ":Current-SP")
+        self.current_rb_val = SiriusLabel(
+            self, self._prefixed_psname+":Current-RB", keep_unit=True)
+        self.current_rb_val.showUnits = True
+        self.current_mon_val = SiriusLabel(
+            self, self._prefixed_psname+":Current-Mon", keep_unit=True)
+        self.current_mon_val.showUnits = True
+
+        if has_refmon:
+            current_ref_label = QLabel("Ref Mon")
+            self.current_ref_val = SiriusLabel(
+                self, self._prefixed_psname+":CurrentRef-Mon", keep_unit=True)
+            self.current_ref_val.showUnits = True
+
+        if prec is not None:
+            self.current_sp_wid.spinbox.precisionFromPV = False
+            self.current_sp_wid.spinbox.precision = prec
+            self.current_rb_val.precisionFromPV = False
+            self.current_rb_val.precision = prec
+            self.current_mon_val.precisionFromPV = False
+            self.current_mon_val.precision = prec
+            if has_refmon:
+                self.current_ref_val.precisionFromPV = False
+                self.current_ref_val.precision = prec
+        else:
+            self.current_rb_val.precisionFromPV = True
+            self.current_mon_val.precisionFromPV = True
+            if has_refmon:
+                self.current_ref_val.precisionFromPV = True
+
+        layout = QGridLayout()
+        layout.addWidget(current_sp_label, 0, 0, Qt.AlignRight)
+        layout.addWidget(self.current_sp_wid, 0, 1)
+        layout.addWidget(current_rb_label, 1, 0, Qt.AlignRight)
+        layout.addWidget(self.current_rb_val, 1, 1)
+        if has_refmon:
+            layout.addWidget(current_ref_label, 2, 0, Qt.AlignRight)
+            layout.addWidget(self.current_ref_val, 2, 1)
+            layout.addWidget(current_mon_label, 3, 0, Qt.AlignRight)
+            layout.addWidget(self.current_mon_val, 3, 1)
+        else:
+            layout.addWidget(current_mon_label, 2, 0, Qt.AlignRight)
+            layout.addWidget(self.current_mon_val, 2, 1)
+        layout.setColumnStretch(2, 1)
+        return layout
+
+    def _metricLayout(self, prec=None, has_refmon=True):
+        metric_sp_ch = self._prefixed_psname+":"+self._metric+"-SP"
+        metric_rb_ch = self._prefixed_psname+":"+self._metric+"-RB"
+        metric_mon_ch = self._prefixed_psname+":"+self._metric+"-Mon"
+
+        metric_sp_label = QLabel("Setpoint")
+        metric_rb_label = QLabel("Readback")
+        metric_mon_label = QLabel("Mon")
+
+        self.metric_sp_wid = PyDMSpinboxScrollbar(self, metric_sp_ch)
+        self.metric_rb_val = SiriusLabel(
+            parent=self, init_channel=metric_rb_ch, keep_unit=True)
+        self.metric_rb_val.showUnits = True
+        self.metric_mon_val = SiriusLabel(
+            parent=self, init_channel=metric_mon_ch, keep_unit=True)
+        self.metric_mon_val.showUnits = True
+
+        if has_refmon:
+            metric_ref_ch = self._prefixed_psname+":"+self._metric+"Ref-Mon"
+            metric_ref_label = QLabel("Ref Mon")
+            self.metric_ref_val = SiriusLabel(
+                parent=self, init_channel=metric_ref_ch, keep_unit=True)
+            self.metric_ref_val.showUnits = True
+
+        if prec is not None:
+            self.metric_sp_wid.spinbox.precisionFromPV = False
+            self.metric_sp_wid.spinbox.precision = prec
+            self.metric_rb_val.precisionFromPV = False
+            self.metric_rb_val.precision = prec
+            self.metric_mon_val.precisionFromPV = False
+            self.metric_mon_val.precision = prec
+            if has_refmon:
+                self.metric_ref_val.precisionFromPV = False
+                self.metric_ref_val.precision = prec
+        else:
+            self.metric_rb_val.precFromPV = True
+            self.metric_mon_val.precFromPV = True
+            if has_refmon:
+                self.metric_ref_val.precFromPV = True
+
+        layout = QGridLayout()
+        layout.addWidget(metric_sp_label, 0, 0, Qt.AlignRight)
+        layout.addWidget(self.metric_sp_wid, 0, 1)
+        layout.addWidget(metric_rb_label, 1, 0, Qt.AlignRight)
+        layout.addWidget(self.metric_rb_val, 1, 1)
+        if has_refmon:
+            layout.addWidget(metric_ref_label, 2, 0, Qt.AlignRight)
+            layout.addWidget(self.metric_ref_val, 2, 1)
+            layout.addWidget(metric_mon_label, 3, 0, Qt.AlignRight)
+            layout.addWidget(self.metric_mon_val, 3, 1)
+        else:
+            layout.addWidget(metric_mon_label, 2, 0, Qt.AlignRight)
+            layout.addWidget(self.metric_mon_val, 2, 1)
+        layout.setColumnStretch(3, 1)
+        return layout
+
+
+class PSDetailWidget(_BaseDetailWidget):
+    """Widget with control interface for a given magnet."""
+
     AuxDev2ModDict = {
         'BO-Fam:PS-B-1': {'A': '1', 'B': '2'},
         'BO-Fam:PS-B-1a': {'A': '3', 'B': '4'},
@@ -123,18 +280,11 @@ class PSDetailWidget(QWidget):
         'ScopeDuration-SP', 'ScopeDuration-RB',
     ]
 
-    def __init__(self, psname, parent=None):
+    def __init__(self, psname, parent=None, psmodel=None, pstype=None):
         """Class constructor."""
-        super(PSDetailWidget, self).__init__(parent)
-        self._prefix = VACA_PREFIX
-        self._psname = SiriusPVName(psname)
-        self._psmodel = PSSearch.conv_psname_2_psmodel(psname)
-        self._pstype = PSSearch.conv_psname_2_pstype(self._psname)
-        try:
-            self._metric = get_strength_label(
-                PSSearch.conv_psname_2_magfunc(self._psname))
-        except ValueError:
-            self._metric = ''
+        super(PSDetailWidget, self).__init__(psname, parent=parent)
+        self._psmodel = psmodel or PSSearch.conv_psname_2_psmodel(psname)
+        self._pstype = pstype or PSSearch.conv_psname_2_pstype(psname)
 
         self._db = get_ps_propty_database(self._psmodel, self._pstype)
         self._mods = get_ps_modules(psmodel=self._psmodel)
@@ -165,18 +315,11 @@ class PSDetailWidget(QWidget):
 
         self._auxdev = ['', ]
         self._auxdev2mod = self.AuxDev2ModDict
-        if self._psname in self._auxdev2mod:
+        if psname in self._auxdev2mod:
             self._auxdev = ['', 'a', 'b', 'c']
 
-        self._prefixed_psname = self._psname.substitute(prefix=self._prefix)
-
-        self.setObjectName(parent.objectName())
-
         self._setup_ui()
-        self.setFocus(True)
-        self.setFocusPolicy(Qt.StrongFocus)
         self.setStyleSheet(self.StyleSheet)
-        self.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
 
     def _setup_ui(self):
         # Group boxes that compose the widget
@@ -207,13 +350,12 @@ class PSDetailWidget(QWidget):
         self.scope_tab = QWidget()
         self.scope_tab.setObjectName('scope_tab')
         self.curve_tabs = QTabWidget()
-        self.curve_tabs.setObjectName('curve_tabs')
-        self.curve_tabs.setStyleSheet("""
-            #curve_tabs::pane {
-                border-left: 2px solid gray;
-                border-bottom: 2px solid gray;
-                border-right: 2px solid gray;
-        }""")
+        self.curve_tabs.setObjectName(self._psname.sec+'Tab')
+        self.curve_tabs.setStyleSheet(
+            '#'+self._psname.sec+'Tab::pane {'
+            '    border-left: 2px solid gray;'
+            '    border-bottom: 2px solid gray;'
+            '    border-right: 2px solid gray;}')
         self.curve_tabs.addTab(self.siggen_tab, 'SigGen')
         self.curve_tabs.addTab(self.wfm_tab, 'Wfm')
         self.curve_tabs.addTab(self.scope_tab, 'Scope')
@@ -288,7 +430,8 @@ class PSDetailWidget(QWidget):
 
         self.version_cte = SiriusLabel(
             self, self._prefixed_psname + ":Version-Cte")
-        self.version_cte.displayFormat = SiriusLabel.DisplayFormat.BSMPUDCVersion
+        self.version_cte.displayFormat = \
+            SiriusLabel.DisplayFormat.BSMPUDCVersion
         self.version_cte.setObjectName("version_cte_label")
         self.version_cte.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.Maximum)
 
@@ -326,12 +469,6 @@ class PSDetailWidget(QWidget):
         layout.addWidget(self.tstamp_update, 2, 1, Qt.AlignHCenter)
         return layout
 
-    @staticmethod
-    def conv_time_string(value):
-        time_str = _datetime.fromtimestamp(value).strftime('%Y-%m-%d %H:%M:%S')
-        time_str += '.{:03d}'.format(int(1e3*(value % 1)))
-        return time_str
-
     def _tstamp_update_met(self, value):
         time_str = self.conv_time_string(value)
         self.tstamp_update.setText(time_str)
@@ -349,7 +486,7 @@ class PSDetailWidget(QWidget):
             '#soft_intlk_bt{min-width:25px; max-width:25px; icon-size:20px;}')
         util.connect_window(
             self.soft_intlk_bt, InterlockWindow, self,
-            devname=self._psname, interlock='IntlkSoft',
+            devname=self._psname, database=self._db, interlock='IntlkSoft',
             auxdev=self._auxdev, auxdev2mod=self._auxdev2mod)
         self.soft_intlk_led = SiriusLedAlert(
             parent=self, init_channel=self._prefixed_psname + ":IntlkSoft-Mon")
@@ -361,7 +498,7 @@ class PSDetailWidget(QWidget):
             '#hard_intlk_bt{min-width:25px; max-width:25px; icon-size:20px;}')
         util.connect_window(
             self.hard_intlk_bt, InterlockWindow, self,
-            devname=self._psname, interlock='IntlkHard',
+            devname=self._psname, database=self._db, interlock='IntlkHard',
             auxdev=self._auxdev, auxdev2mod=self._auxdev2mod)
         self.hard_intlk_led = SiriusLedAlert(
             parent=self, init_channel=self._prefixed_psname + ":IntlkHard-Mon")
@@ -377,7 +514,7 @@ class PSDetailWidget(QWidget):
                 "#iib_intlk_bt{min-width:25px;max-width:25px;icon-size:20px;}")
             util.connect_window(
                 self.iib_intlk_bt, InterlockWindow, self,
-                devname=self._psname, interlock=iib_intlks,
+                devname=self._psname, database=self._db, interlock=iib_intlks,
                 auxdev=self._auxdev, auxdev2mod=self._auxdev2mod)
 
             chs2vals = dict()
@@ -398,7 +535,7 @@ class PSDetailWidget(QWidget):
                 '#alarm_bt{min-width:25px;max-width:25px;icon-size:20px;}')
             util.connect_window(
                 self.alarm_bt, InterlockWindow, self,
-                devname=self._psname, interlock=alarms,
+                devname=self._psname, database=self._db, interlock=alarms,
                 auxdev=self._auxdev, auxdev2mod=self._auxdev2mod)
 
             chs2vals = dict()
@@ -434,23 +571,6 @@ class PSDetailWidget(QWidget):
             layout.addWidget(self.alarm_label, 3, 1)
             layout.addWidget(self.alarm_led, 3, 2)
         layout.addWidget(self.reset_bt, 4, 2)
-        return layout
-
-    def _powerStateLayout(self):
-        self.state_button = PyDMStateButton(
-            parent=self, init_channel=self._prefixed_psname + ":PwrState-Sel")
-        self.pwrstate_led = SiriusLedState(
-            parent=self, init_channel=self._prefixed_psname + ":PwrState-Sts")
-        self.pwrstate_label = SiriusLabel(
-            parent=self, init_channel=self._prefixed_psname + ":PwrState-Sts")
-        self.pwrstate_label.setObjectName("pwrstate_label")
-
-        layout = QGridLayout()
-        layout.setAlignment(Qt.AlignCenter)
-        layout.setHorizontalSpacing(4)
-        layout.addWidget(self.state_button, 0, 0, 1, 2, Qt.AlignHCenter)
-        layout.addWidget(self.pwrstate_led, 1, 0, Qt.AlignRight)
-        layout.addWidget(self.pwrstate_label, 1, 1, Qt.AlignLeft)
         return layout
 
     def _opModeLayout(self):
@@ -499,77 +619,11 @@ class PSDetailWidget(QWidget):
         layout.addLayout(lay_sts, 1, 0)
         return layout
 
-    def _currentLayout(self):
-        self.current_sp_label = QLabel("Setpoint")
-        self.current_rb_label = QLabel("Readback")
-        self.current_ref_label = QLabel("Ref Mon")
-        self.current_mon_label = QLabel("Mon")
-
-        self.current_sp_widget = PyDMSpinboxScrollbar(
-            self, self._prefixed_psname + ":Current-SP")
-        self.current_rb_val = SiriusLabel(
-            self, self._prefixed_psname+":Current-RB", keep_unit=True)
-        self.current_rb_val.showUnits = True
-        self.current_rb_val.precFromPV = True
-        self.current_ref_val = SiriusLabel(
-            self, self._prefixed_psname+":CurrentRef-Mon", keep_unit=True)
-        self.current_ref_val.showUnits = True
-        self.current_ref_val.precFromPV = True
-        self.current_mon_val = SiriusLabel(
-            self, self._prefixed_psname+":Current-Mon", keep_unit=True)
-        self.current_mon_val.showUnits = True
-        self.current_mon_val.precFromPV = True
-
-        layout = QGridLayout()
-        layout.addWidget(self.current_sp_label, 0, 0, Qt.AlignRight)
-        layout.addWidget(self.current_sp_widget, 0, 1)
-        layout.addWidget(self.current_rb_label, 1, 0, Qt.AlignRight)
-        layout.addWidget(self.current_rb_val, 1, 1)
-        layout.addWidget(self.current_ref_label, 2, 0, Qt.AlignRight)
-        layout.addWidget(self.current_ref_val, 2, 1)
-        layout.addWidget(self.current_mon_label, 3, 0, Qt.AlignRight)
-        layout.addWidget(self.current_mon_val, 3, 1)
-        layout.setColumnStretch(2, 1)
-        return layout
-
-    def _metricLayout(self):
-        metric_sp_ch = self._prefixed_psname+":"+self._metric+"-SP"
-        metric_rb_ch = self._prefixed_psname+":"+self._metric+"-RB"
-        metric_ref_ch = self._prefixed_psname+":"+self._metric+"Ref-Mon"
-        metric_mon_ch = self._prefixed_psname+":"+self._metric+"-Mon"
-
-        self.metric_sp_label = QLabel("Setpoint")
-        self.metric_rb_label = QLabel("Readback")
-        self.metric_ref_label = QLabel("Ref Mon")
-        self.metric_mon_label = QLabel("Mon")
-
-        self.metric_sp_widget = PyDMSpinboxScrollbar(self, metric_sp_ch)
-        self.metric_rb_val = SiriusLabel(
-            parent=self, init_channel=metric_rb_ch, keep_unit=True)
-        self.metric_rb_val.showUnits = True
-        self.metric_rb_val.precFromPV = True
-        self.metric_ref_val = SiriusLabel(
-            parent=self, init_channel=metric_ref_ch, keep_unit=True)
-        self.metric_ref_val.showUnits = True
-        self.metric_ref_val.precFromPV = True
-        self.metric_mon_val = SiriusLabel(
-            parent=self, init_channel=metric_mon_ch, keep_unit=True)
-        self.metric_mon_val.showUnits = True
-        self.metric_mon_val.precFromPV = True
-
-        layout = QGridLayout()
-        layout.addWidget(self.metric_sp_label, 0, 0, Qt.AlignRight)
-        layout.addWidget(self.metric_sp_widget, 0, 1)
-        layout.addWidget(self.metric_rb_label, 1, 0, Qt.AlignRight)
-        layout.addWidget(self.metric_rb_val, 1, 1)
-        layout.addWidget(self.metric_ref_label, 2, 0, Qt.AlignRight)
-        layout.addWidget(self.metric_ref_val, 2, 1)
-        layout.addWidget(self.metric_mon_label, 3, 0, Qt.AlignRight)
-        layout.addWidget(self.metric_mon_val, 3, 1)
-        layout.setColumnStretch(3, 1)
-        return layout
-
     def _siggenLayout(self):
+        # Tab
+        self.tab_siggen = QTabWidget(self)
+        self.tab_siggen.setObjectName(self._psname.sec+'Tab')
+
         enbl_mon_ca = self._prefixed_psname + ':CycleEnbl-Mon'
         type_sp_ca = self._prefixed_psname + ':CycleType-Sel'
         type_rb_ca = self._prefixed_psname + ':CycleType-Sts'
@@ -660,40 +714,44 @@ class PSDetailWidget(QWidget):
         lay_parms.addWidget(self.cycle_auxparam_rb_label, 7, 2)
         lay_parms.addWidget(self.cycle_auxparam_helpbut, 7, 3)
 
-        # Default Curve
-        self._siggen = PSSearch.conv_psname_2_siggenconf(self._psname)
-        self._siggen_nrpts = DEF_WFMSIZE_FBP if self._psmodel == 'FBP' \
-            else DEF_WFMSIZE_OTHERS
-        self._siggen_w = self._siggen.get_waveform(self._siggen_nrpts)
-
-        self.curve_siggen = SiriusWaveformPlot()
-        self.curve_siggen.setObjectName('graph')
-        self.curve_siggen.setStyleSheet(
-            '#graph{max-height:15em; max-width:16.5em;}')
-        self.curve_siggen.setLabel('left', text='Current [A]', color='gray')
-        self.curve_siggen.setLabel('bottom', text='Time [s]', color='gray')
-        self.curve_siggen.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
-        self.curve_siggen.autoRangeX = True
-        self.curve_siggen.autoRangeY = True
-        self.curve_siggen.showXGrid = True
-        self.curve_siggen.showYGrid = True
-        self.curve_siggen.setBackgroundColor(QColor(255, 255, 255))
-        self.curve_siggen.addChannel(
-            y_channel='SigGen', x_channel='T [s]',
-            color='black', lineWidth=2)
-        self.curve_siggen.curve = self.curve_siggen.curveAtIndex(0)
-        self.curve_siggen.curve.receiveXWaveform(_np.array(self._siggen_w[1]))
-        self.curve_siggen.curve.receiveYWaveform(_np.array(self._siggen_w[0]))
-        self.curve_siggen.curve.redrawCurve()
-
-        defcurve = QWidget()
-        lay_defcurve = QGridLayout(defcurve)
-        lay_defcurve.addWidget(self.curve_siggen)
-
-        # Tab
-        self.tab_siggen = QTabWidget(self)
         self.tab_siggen.addTab(parms, 'Params')
-        self.tab_siggen.addTab(defcurve, 'Default Curve')
+
+        # Default Curve
+        try:
+            self._siggen = PSSearch.conv_psname_2_siggenconf(self._psname)
+        except KeyError:
+            self._siggen = None
+
+        if self._siggen is not None:
+            self._siggen_nrpts = DEF_WFMSIZE_FBP if self._psmodel == 'FBP' \
+                else DEF_WFMSIZE_OTHERS
+            self._siggen_w = self._siggen.get_waveform(self._siggen_nrpts)
+
+            self.curve_siggen = SiriusWaveformPlot()
+            self.curve_siggen.setObjectName('graph')
+            self.curve_siggen.setStyleSheet(
+                '#graph{max-height:15em; max-width:16.5em;}')
+            self.curve_siggen.setLabel('left', text='Current [A]', color='gray')
+            self.curve_siggen.setLabel('bottom', text='Time [s]', color='gray')
+            self.curve_siggen.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
+            self.curve_siggen.autoRangeX = True
+            self.curve_siggen.autoRangeY = True
+            self.curve_siggen.showXGrid = True
+            self.curve_siggen.showYGrid = True
+            self.curve_siggen.setBackgroundColor(QColor(255, 255, 255))
+            self.curve_siggen.addChannel(
+                y_channel='SigGen', x_channel='T [s]',
+                color='black', lineWidth=2)
+            self.curve_siggen.curve = self.curve_siggen.curveAtIndex(0)
+            self.curve_siggen.curve.receiveXWaveform(_np.array(self._siggen_w[1]))
+            self.curve_siggen.curve.receiveYWaveform(_np.array(self._siggen_w[0]))
+            self.curve_siggen.curve.redrawCurve()
+
+            defcurve = QWidget()
+            lay_defcurve = QGridLayout(defcurve)
+            lay_defcurve.addWidget(self.curve_siggen)
+
+            self.tab_siggen.addTab(defcurve, 'Default Curve')
 
         layout = QGridLayout()
         layout.setContentsMargins(0, 6, 0, 0)
@@ -848,8 +906,11 @@ class PSDetailWidget(QWidget):
         # reimplement fourier transform to use ScopeFreq-RB
         ch_scopefreq = self._prefixed_psname + ":ScopeFreq-RB"
         self._scopefreq_ch_rb = SiriusConnectionSignal(ch_scopefreq)
-        for curve in self._wfm_curves.values():
-            curve._fourierTransform = self._wfmFourierData
+        ch_wfmfreq = self._prefixed_psname + ':ParamWfmRefFreq-Cte'
+        self._wfmfreq_ch_rb = SiriusConnectionSignal(ch_wfmfreq)
+        for propty, curve in self._wfm_curves.items():
+            curvetype = 'scope' if propty == 'Wfm-Mon' else 'wfm'
+            curve._fourierTransform = _part(self._wfmFourierData, curvetype)
 
         # Show
         self.show_wfm_sp = QCheckBox('SP')
@@ -888,31 +949,92 @@ class PSDetailWidget(QWidget):
         layout.addLayout(hbox_show)
         return layout
 
-    def _set_wfm_nrpts_label(self):
-        self.wfm_nrpts.setText(
-            "Nrpts (SP|RB|Ref-Mon|Mon): {}|{}|{}|{}".format(
-                self._wfm_nrpts_sp,
-                self._wfm_nrpts_rb,
-                self._wfm_nrpts_rm,
-                self._wfm_nrpts_mo))
+    def _wfmLayout(self):
+        # graph
+        self.wfm_graph = SiriusWaveformPlot()
+        self.wfm_graph.setObjectName('graph')
+        self.wfm_graph.setStyleSheet(
+            '#graph{max-height:15em; max-width:16.5em;}')
+        self.wfm_graph.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
+        self.wfm_graph.autoRangeX = True
+        self.wfm_graph.autoRangeY = True
+        self.wfm_graph.showXGrid = True
+        self.wfm_graph.showYGrid = True
+        self.wfm_graph.setLabel('left', text='Current [A]', color='gray')
+        self.wfm_graph.setLabel('bottom', text='Time [s]')
+        self.wfm_graph.plotItem.ctrl.fftCheck.toggled.connect(
+            self._wfmUpdAxisLabel)
+        self.wfm_graph.setBackgroundColor(QColor(255, 255, 255))
 
-    def _wfm_update_rb(self, value):
-        self._wfm_nrpts_rb = len(value)
-        self._set_wfm_nrpts_label()
+        # nrpts label
+        self.wfm_nrpts_lb = QLabel('Nrpts (SP|RB|Ref-Mon|Mon):', self)
+        self.wfm_nrpts_lb.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
 
-    def _wfm_update_sp(self, value):
-        self._wfm_nrpts_sp = len(value)
-        self._set_wfm_nrpts_label()
+        # checkbox layout
+        hbox_show = QHBoxLayout()
+        hbox_show.setSpacing(9)
 
-    def _wfm_update_rm(self, value):
-        self._wfm_data_rm = value
-        self._wfm_nrpts_rm = len(value)
-        self._set_wfm_nrpts_label()
+        # create auxiliary channels
+        self._scopedur_ch_rb = SiriusConnectionSignal(
+            self._prefixed_psname + ':ScopeDuration-RB')
+        self._scopefreq_ch_rb = SiriusConnectionSignal(
+            self._prefixed_psname + ':ScopeFreq-RB')
+        self._wfmfreq_ch_rb = SiriusConnectionSignal(
+            self._prefixed_psname + ':ParamWfmRefFreq-Cte')
 
-    def _wfm_update_mo(self, value):
-        self._wfm_data_mo = value
-        self._wfm_nrpts_mo = len(value)
-        self._set_wfm_nrpts_label()
+        # fill graph, label and show layout
+        self._wfm_chs, self._wfm_nrpts = dict(), dict()
+        self._wfm_curves, self._wfm_show_cbs = dict(), dict()
+        suf2color = {
+            '-SP': 'red',
+            '-RB': 'blue',
+            'Ref-Mon': 'green',
+            '-Mon': 'black',
+        }
+        for idx, suf in enumerate(suf2color):
+            propty = 'Wfm' + suf
+            color = suf2color[suf]
+            channel = self._prefixed_psname + ':' + propty
+
+            # initialize nrpts
+            self._wfm_nrpts[suf] = 0
+
+            # create channel to listen curve updates
+            self._wfm_chs[suf] = SiriusConnectionSignal(channel)
+
+            # listen to curve channel to update NrPts label
+            self._wfm_chs[suf].new_value_signal[_np.ndarray].connect(
+                self._update_wfm_nrpts_label)
+
+            # add curve to wfm_graph
+            self.wfm_graph.addChannel(
+                y_channel=channel, name=propty, color=color, lineWidth=2)
+            curve = self.wfm_graph.curveAtIndex(idx)
+
+            # change xdata to show time indices according to ScopeDuration-RB
+            curvetype = 'scope' if propty == 'Wfm-Mon' else 'wfm'
+            self._scopedur_ch_rb.new_value_signal[float].connect(
+                _part(self._wfmTimeData, propty))
+            self._wfm_chs[suf].new_value_signal[_np.ndarray].connect(
+                _part(self._wfmTimeData, propty))
+            # reimplement fourier transform to use ScopeFreq-RB
+            curve._fourierTransform = _part(self._wfmFourierData, curvetype)
+            self._wfm_curves[propty] = curve
+
+            # fill checkbox layout
+            cbx = QCheckBox(suf.strip('-'))
+            cbx.setChecked(True)
+            cbx.setStyleSheet('color: '+color+';')
+            cbx.stateChanged.connect(self._wfm_curves[propty].setVisible)
+            self._wfm_show_cbs[propty] = cbx
+            hbox_show.addWidget(cbx)
+
+        layout = QVBoxLayout()
+        layout.setAlignment(Qt.AlignTop)
+        layout.addWidget(self.wfm_graph)
+        layout.addWidget(self.wfm_nrpts_lb)
+        layout.addLayout(hbox_show)
+        return layout
 
     def _scopeLayout(self):
         src_sp = self._prefixed_psname + ':ScopeSrcAddr-SP'
@@ -941,28 +1063,65 @@ class PSDetailWidget(QWidget):
         layout.setAlignment(Qt.AlignTop)
         layout.setContentsMargins(0, 6, 0, 0)
         layout.addWidget(self.scope_src_label, 0, 0, Qt.AlignRight)
-        layout.addWidget(self.scope_src_sp_sb, 0, 1)
-        layout.addWidget(self.scope_src_rb_lb, 0, 2)
-        layout.addWidget(self.scope_freq_label, 1, 0, Qt.AlignRight)
-        layout.addWidget(self.scope_freq_sp_sb, 1, 1)
-        layout.addWidget(self.scope_freq_rb_label, 1, 2)
-        layout.addWidget(self.scope_dur_label, 2, 0, Qt.AlignRight)
-        layout.addWidget(self.scope_dur_sp_sb, 2, 1)
-        layout.addWidget(self.scope_dur_rb_label, 2, 2)
+        layout.addWidget(self.scope_src_rb_lb, 0, 3)
+        layout.addWidget(self.scope_freq_label, 1, 0, 1, 2, Qt.AlignRight)
+        layout.addWidget(self.scope_freq_sp_sb, 1, 2)
+        layout.addWidget(self.scope_freq_rb_label, 1, 3)
+        layout.addWidget(self.scope_dur_label, 2, 0, 1, 2, Qt.AlignRight)
+        layout.addWidget(self.scope_dur_sp_sb, 2, 2)
+        layout.addWidget(self.scope_dur_rb_label, 2, 3)
+
+        try:
+            self.scope_src_sp_cb = SiriusStringComboBox(
+                self, src_sp, items=get_ps_scopesourcemap(self._psname))
+            self.scope_src_sp_opt = QComboBox(self)
+            self.scope_src_sp_opt.addItems(['[list]', '[0x]'])
+            self.scope_src_sp_opt.currentIndexChanged.connect(
+                self.scope_src_sp_cb.setHidden)
+            self.scope_src_sp_opt.currentIndexChanged.connect(
+                self.scope_src_sp_sb.setVisible)
+
+            self.scope_src_sp_sb.setVisible(False)
+            layout.addWidget(self.scope_src_label, 0, 0, Qt.AlignRight)
+            layout.addWidget(self.scope_src_sp_opt, 0, 1)
+            layout.addWidget(self.scope_src_sp_cb, 0, 2)
+            layout.addWidget(self.scope_src_sp_sb, 0, 2)
+        except KeyError:
+            layout.addWidget(self.scope_src_label, 0, 0, 1, 2, Qt.AlignRight)
+            layout.addWidget(self.scope_src_sp_sb, 0, 2)
         return layout
+
+    def _update_wfm_nrpts_label(self, value):
+        pvtype = self.sender().address.split('Wfm')[-1]
+        self._wfm_nrpts[pvtype] = len(value)
+        self.wfm_nrpts_lb.setText(
+            "Nrpts (SP|RB|Ref-Mon|Mon): {}|{}|{}|{}".format(
+                self._wfm_nrpts['-SP'],
+                self._wfm_nrpts['-RB'],
+                self._wfm_nrpts['Ref-Mon'],
+                self._wfm_nrpts['-Mon']))
 
     def _wfmUpdAxisLabel(self, state):
         xlabel = 'Frequency [Hz]' if state else 'Time [s]'
-        self.wfm.setLabel('bottom', text=xlabel)
+        self.wfm_graph.setLabel('bottom', text=xlabel)
 
-    def _wfmTimeData(self, value):
-        for curve in self._wfm_curves.values():
-            size = curve.latest_y.size
-            xdata = _np.linspace(0, value, size)
-            curve.receiveXWaveform(xdata)
-            curve.redrawCurve()
+    def _wfmTimeData(self, propty, value):
+        if value is None:
+            return
+        channel = self.sender().address
+        curve = self._wfm_curves[propty]
+        if 'Duration' in channel:
+            duration = value
+            latest_y = curve.latest_y
+        else:
+            duration = self._scopedur_ch_rb.value
+            latest_y = value
+        if latest_y is None:
+            return
+        curve.receiveXWaveform(_np.linspace(0, duration, len(latest_y)))
+        curve.redrawCurve()
 
-    def _wfmFourierData(self, x, y):
+    def _wfmFourierData(self, curvetype, x, y):
         """Perform Fourier transform.
 
         This code is a copy of pyqtgraph.graphicsItems.PlotDataItem, just
@@ -980,14 +1139,23 @@ class PSDetailWidget(QWidget):
         n = y.size
         f = _np.fft.rfft(y) / n
         # Diff: use scope frequency
-        scopefreq = self._scopefreq_ch_rb.value
-        d = 1./scopefreq if scopefreq is not None else 1
+        chfreq = self._scopefreq_ch_rb if curvetype else self._wfmfreq_ch_rb
+        freq = chfreq.value
+        if isinstance(freq, _np.ndarray):
+            freq = freq[0]
+        d = 1./freq if freq is not None else 1
         x = _np.fft.rfftfreq(n, d)
         y = _np.abs(f)
         return x, y
 
 
-class LIPSDetailWidget(PSDetailWidget):
+class LIPSDetailWidget(_BaseDetailWidget):
+
+    def __init__(self, psname, parent=None):
+        """Class constructor."""
+        super(LIPSDetailWidget, self).__init__(psname, parent=parent)
+        self._setup_ui()
+        self.setStyleSheet(self.StyleSheet)
 
     def _setup_ui(self):
         # Group boxes that compose the widget
@@ -1011,9 +1179,9 @@ class LIPSDetailWidget(PSDetailWidget):
         self.pwrstate_box.setLayout(self._powerStateLayout())
         self.interlock_box.setLayout(self._interlockLayout())
         self.params_box.setLayout(self._paramsLayout())
-        self.current_box.setLayout(self._currentLayout())
+        self.current_box.setLayout(self._currentLayout(has_refmon=False))
         if self._metric:
-            self.metric_box.setLayout(self._metricLayout())
+            self.metric_box.setLayout(self._metricLayout(has_refmon=False))
 
         # Add group boxes to laytout
         self.layout = self._setWidgetLayout()
@@ -1107,59 +1275,6 @@ class LIPSDetailWidget(PSDetailWidget):
     def _tstamp_boot_cte_met(self, value):
         time_str = self.conv_time_string(value)
         self.tstamp_boot_cte.setText(time_str)
-
-    def _currentLayout(self):
-        self.current_sp_label = QLabel("Setpoint")
-        self.current_rb_label = QLabel("Readback")
-        self.current_mon_label = QLabel("Mon")
-
-        self.current_sp_widget = PyDMSpinboxScrollbar(
-            self, self._prefixed_psname + ":Current-SP")
-        self.current_rb_val = SiriusLabel(
-            self, self._prefixed_psname+":Current-RB", keep_unit=True)
-        self.current_rb_val.showUnits = True
-        self.current_rb_val.precFromPV = True
-        self.current_mon_val = SiriusLabel(
-            self, self._prefixed_psname+":Current-Mon", keep_unit=True)
-        self.current_mon_val.showUnits = True
-        self.current_mon_val.precFromPV = True
-
-        layout = QGridLayout()
-        layout.addWidget(self.current_sp_label, 0, 0, Qt.AlignRight)
-        layout.addWidget(self.current_sp_widget, 0, 1)
-        layout.addWidget(self.current_rb_label, 1, 0, Qt.AlignRight)
-        layout.addWidget(self.current_rb_val, 1, 1)
-        layout.addWidget(self.current_mon_label, 3, 0, Qt.AlignRight)
-        layout.addWidget(self.current_mon_val, 3, 1)
-        layout.setColumnStretch(2, 1)
-        return layout
-
-    def _metricLayout(self):
-        metric_sp_ch = self._prefixed_psname+":"+self._metric+"-SP"
-        metric_rb_ch = self._prefixed_psname+":"+self._metric+"-RB"
-        metric_mon_ch = self._prefixed_psname+":"+self._metric+"-Mon"
-
-        self.metric_sp_label = QLabel("Setpoint")
-        self.metric_rb_label = QLabel("Readback")
-        self.metric_mon_label = QLabel("Mon")
-
-        self.metric_sp_widget = PyDMSpinboxScrollbar(self, metric_sp_ch)
-        self.metric_rb_val = SiriusLabel(self, metric_rb_ch, keep_unit=True)
-        self.metric_rb_val.showUnits = True
-        self.metric_rb_val.precFromPV = True
-        self.metric_mon_val = SiriusLabel(self, metric_mon_ch, keep_unit=True)
-        self.metric_mon_val.showUnits = True
-        self.metric_mon_val.precFromPV = True
-
-        layout = QGridLayout()
-        layout.addWidget(self.metric_sp_label, 0, 0, Qt.AlignRight)
-        layout.addWidget(self.metric_sp_widget, 0, 1)
-        layout.addWidget(self.metric_rb_label, 1, 0, Qt.AlignRight)
-        layout.addWidget(self.metric_rb_val, 1, 1)
-        layout.addWidget(self.metric_mon_label, 3, 0, Qt.AlignRight)
-        layout.addWidget(self.metric_mon_val, 3, 1)
-        layout.setColumnStretch(3, 1)
-        return layout
 
     def _interlockLayout(self):
         self.intlk_bt = QPushButton(qta.icon('fa5s.list-ul'), '', self)
@@ -1415,7 +1530,7 @@ class FACDCLinkDetailWidget(DCLinkDetailWidget):
         return layout
 
 
-class FastCorrPSDetailWidget(PSDetailWidget):
+class FastCorrPSDetailWidget(_BaseDetailWidget):
 
     CONV_CORR2CHANNEL = {
         'M1-FCH': 0,
@@ -1428,6 +1543,14 @@ class FastCorrPSDetailWidget(PSDetailWidget):
         'C3-FCV': 7,
     }
 
+    def __init__(self, psname, parent=None):
+        """Class constructor."""
+        super(FastCorrPSDetailWidget, self).__init__(psname, parent=parent)
+        self._psmodel = 'FOFB_PS'
+        self._pstype = 'si-corrector-fc1-ch'
+        self._db = get_ps_propty_database(self._psmodel, self._pstype)
+        self._setup_ui()
+
     def _setup_ui(self):
         # Group boxes that compose the widget
         self.opmode_box = QGroupBox('OpMode')
@@ -1437,7 +1560,7 @@ class FastCorrPSDetailWidget(PSDetailWidget):
         self.interlock_box = QGroupBox('Interlock')
         self.interlock_box.setObjectName('interlock')
         self.analogtab = QTabWidget()
-        self.analogtab.setObjectName('SITab')
+        self.analogtab.setObjectName(self._psname.sec+'Tab')
         self.current_box = QWidget()
         self.current_box.setObjectName('current')
         self.analogtab.addTab(self.current_box, 'Current [A]')
@@ -1450,10 +1573,11 @@ class FastCorrPSDetailWidget(PSDetailWidget):
         self.voltage_raw_box = QWidget()
         self.voltage_raw_box.setObjectName('voltage')
         self.analogtab.addTab(self.voltage_raw_box, 'Volt.[Raw]')
-        self.metric_box = QGroupBox(self._metric)
-        self.metric_box.setObjectName('metric')
+        if self._metric:
+            self.metric_box = QGroupBox(self._metric)
+            self.metric_box.setObjectName('metric')
         self.paramstab = QTabWidget()
-        self.paramstab.setObjectName('SITab')
+        self.paramstab.setObjectName(self._psname.sec+'Tab')
         self.currloop_box = QWidget()
         self.currloop_box.setObjectName('currloop_box')
         self.paramstab.addTab(self.currloop_box, 'Current Loop Controls')
@@ -1465,20 +1589,20 @@ class FastCorrPSDetailWidget(PSDetailWidget):
         self.opmode_box.setLayout(self._opModeLayout())
         self.pwrstate_box.setLayout(self._powerStateLayout())
         self.interlock_box.setLayout(self._interlockLayout())
-        self.current_box.setLayout(self._currentLayout())
+        self.current_box.setLayout(self._currentLayout(prec=6))
         self.current_raw_box.setLayout(self._currentRawLayout())
         self.voltage_box.setLayout(self._voltageLayout())
         self.voltage_raw_box.setLayout(self._voltageRawLayout())
-        self.metric_box.setLayout(self._metricLayout())
+        if self._metric:
+            self.metric_box.setLayout(self._metricLayout())
         self.currloop_box.setLayout(self._currLoopLayout())
         self.fofbctrl_box.setLayout(self._fofbctrlLayout())
 
-        self.setStyleSheet("""
-            #SITab::pane {
-                border-left: 2px solid gray;
-                border-bottom: 2px solid gray;
-                border-right: 2px solid gray;
-            }""")
+        self.setStyleSheet(
+            '#'+self._psname.sec+'Tab::pane {'
+            ' border-left: 2px solid gray;'
+            ' border-bottom: 2px solid gray;'
+            ' border-right: 2px solid gray;}')
 
         # Add group boxes to laytout
         self.layout = self._setWidgetLayout()
@@ -1487,29 +1611,26 @@ class FastCorrPSDetailWidget(PSDetailWidget):
         self.setLayout(self.layout)
 
     def _setWidgetLayout(self):
+        lay1 = QGridLayout()
+        lay1.setContentsMargins(0, 0, 0, 0)
+        lay1.addWidget(self.opmode_box, 0, 0)
+        lay1.addWidget(self.pwrstate_box, 0, 1)
+        lay1.addWidget(self.interlock_box, 1, 0, 1, 2)
+
+        lay2 = QVBoxLayout()
+        lay2.setContentsMargins(0, 0, 0, 0)
+        lay2.addWidget(self.analogtab)
+        if self._metric:
+            lay2.addWidget(self.metric_box)
+
         boxes_layout = QGridLayout()
-        boxes_layout.addWidget(self.opmode_box, 0, 0)
-        boxes_layout.addWidget(self.pwrstate_box, 0, 1)
-        boxes_layout.addWidget(self.interlock_box, 1, 0, 1, 2)
-        boxes_layout.addWidget(self.analogtab, 0, 2)
-        boxes_layout.addWidget(self.metric_box, 1, 2)
-        boxes_layout.addWidget(self.paramstab, 2, 0, 1, 3)
+        boxes_layout.addLayout(lay1, 0, 0)
+        boxes_layout.addLayout(lay2, 0, 1)
+        boxes_layout.addWidget(self.paramstab, 2, 0, 1, 2)
 
         layout = QVBoxLayout()
         layout.addWidget(QLabel("<h2>" + self._psname + "</h2>", self))
         layout.addLayout(boxes_layout)
-        return layout
-
-    def _powerStateLayout(self):
-        self.state_button = PyDMStateButton(
-            parent=self, init_channel=self._prefixed_psname + ':PwrState-Sel')
-        self.pwrstate_led = SiriusLedState(
-            parent=self, init_channel=self._prefixed_psname + ':PwrState-Sts')
-
-        layout = QVBoxLayout()
-        layout.setAlignment(Qt.AlignCenter)
-        layout.addWidget(self.state_button)
-        layout.addWidget(self.pwrstate_led)
         return layout
 
     def _opModeLayout(self):
@@ -1524,45 +1645,6 @@ class FastCorrPSDetailWidget(PSDetailWidget):
         layout.setAlignment(Qt.AlignCenter)
         layout.addWidget(self.opmode_sp, 0, 0, Qt.AlignHCenter)
         layout.addWidget(self.opmode_rb, 1, 0, Qt.AlignHCenter)
-        return layout
-
-    def _currentLayout(self):
-        current_sp_label = QLabel("Setpoint")
-        current_rb_label = QLabel("Readback")
-        current_ref_label = QLabel("Ref Mon")
-        current_mon_label = QLabel("Mon")
-
-        self.current_sp = PyDMSpinboxScrollbar(
-            self, self._prefixed_psname + ":Current-SP")
-        self.current_sp.spinbox.precisionFromPV = False
-        self.current_sp.spinbox.precision = 6
-        self.current_rb = SiriusLabel(
-            self, self._prefixed_psname+":Current-RB", keep_unit=True)
-        self.current_rb.precisionFromPV = False
-        self.current_rb.precision = 6
-        self.current_rb.showUnits = True
-        self.current_ref = SiriusLabel(
-            self, self._prefixed_psname+":CurrentRef-Mon", keep_unit=True)
-        self.current_ref.precisionFromPV = False
-        self.current_ref.precision = 6
-        self.current_ref.showUnits = True
-        self.current_mon = SiriusLabel(
-            self, self._prefixed_psname+":Current-Mon", keep_unit=True)
-        self.current_mon.precisionFromPV = False
-        self.current_mon.precision = 6
-        self.current_mon.showUnits = True
-
-        layout = QGridLayout()
-        layout.setAlignment(Qt.AlignTop)
-        layout.addWidget(current_sp_label, 0, 0, Qt.AlignRight)
-        layout.addWidget(self.current_sp, 0, 1)
-        layout.addWidget(current_rb_label, 1, 0, Qt.AlignRight)
-        layout.addWidget(self.current_rb, 1, 1)
-        layout.addWidget(current_ref_label, 2, 0, Qt.AlignRight)
-        layout.addWidget(self.current_ref, 2, 1)
-        layout.addWidget(current_mon_label, 3, 0, Qt.AlignRight)
-        layout.addWidget(self.current_mon, 3, 1)
-        layout.setColumnStretch(2, 1)
         return layout
 
     def _currentRawLayout(self):
@@ -1598,10 +1680,10 @@ class FastCorrPSDetailWidget(PSDetailWidget):
         voltage_rb_label = QLabel("Readback")
         voltage_mn_label = QLabel("Mon")
 
-        self.voltage_sp = PyDMSpinboxScrollbar(
+        self.voltage_sp = PyDMLinEditScrollbar(
             self, self._prefixed_psname + ":Voltage-SP")
-        self.voltage_sp.spinbox.precisionFromPV = False
-        self.voltage_sp.spinbox.precision = 6
+        self.voltage_sp.lineedit.precisionFromPV = False
+        self.voltage_sp.lineedit.precision = 6
         self.voltage_rb = SiriusLabel(
             self, self._prefixed_psname+":Voltage-RB", keep_unit=True)
         self.voltage_rb.precisionFromPV = False
@@ -1629,19 +1711,13 @@ class FastCorrPSDetailWidget(PSDetailWidget):
         voltage_rb_label = QLabel("Readback")
         voltage_mn_label = QLabel("Mon")
 
-        self.voltage_raw_sp = PyDMSpinboxScrollbar(
-            self, self._prefixed_psname + ":Voltage-SP")
-        self.voltage_raw_sp.spinbox.precisionFromPV = False
-        self.voltage_raw_sp.spinbox.precision = 6
+        self.voltage_raw_sp = PyDMLinEditScrollbar(
+            self, self._prefixed_psname + ":VoltageRaw-SP")
         self.voltage_raw_rb = SiriusLabel(
-            self, self._prefixed_psname+":Voltage-RB", keep_unit=True)
-        self.voltage_raw_rb.precisionFromPV = False
-        self.voltage_raw_rb.precision = 6
+            self, self._prefixed_psname+":VoltageRaw-RB", keep_unit=True)
         self.voltage_rb.showUnits = True
         self.voltage_raw_mn = SiriusLabel(
-            self, self._prefixed_psname+":Voltage-Mon", keep_unit=True)
-        self.voltage_raw_mn.precisionFromPV = False
-        self.voltage_raw_mn.precision = 6
+            self, self._prefixed_psname+":VoltageRaw-Mon", keep_unit=True)
         self.voltage_raw_mn.showUnits = True
 
         layout = QGridLayout()
@@ -1663,7 +1739,7 @@ class FastCorrPSDetailWidget(PSDetailWidget):
             '#alarm_bt{min-width:25px; max-width:25px; icon-size:20px;}')
         util.connect_window(
             self.alarm_bt, InterlockWindow, self,
-            devname=self._psname, interlock='AlarmsAmp')
+            devname=self._psname, database=self._db, interlock='AlarmsAmp')
         self.alarm_led = SiriusLedAlert(
             parent=self, init_channel=self._prefixed_psname + ":AlarmsAmp-Mon")
 
@@ -1677,11 +1753,13 @@ class FastCorrPSDetailWidget(PSDetailWidget):
     def _currLoopLayout(self):
         # controls
         tabctrl = QTabWidget()
-        tabctrl.setObjectName('SITab')
+        tabctrl.setObjectName(self._psname.sec+'Tab')
 
         # # loop parameters
         ctlmode_lb = QLabel(
             'CurrLoopMode', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+        self.ctlmode_cb = PyDMEnumComboBox(
+            self, self._prefixed_psname + ':CurrLoopMode-Sel')
         self.ctlmode_lb = SiriusLabel(
             self, self._prefixed_psname + ':CurrLoopMode-Sts')
 
@@ -1723,15 +1801,11 @@ class FastCorrPSDetailWidget(PSDetailWidget):
             'CurrOffset', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         self.coffs_sp = SiriusSpinbox(
             self, self._prefixed_psname + ':CurrOffset-SP')
-        self.coffs_sp.precisionFromPV = False
-        self.coffs_sp.precision = 8
         self.coffs_sp.limitsFromChannel = False
         self.coffs_sp.setMinimum(-100)
         self.coffs_sp.setMaximum(+100)
         self.coffs_rb = SiriusLabel(
             self, self._prefixed_psname + ':CurrOffset-RB')
-        self.coffs_rb.precisionFromPV = False
-        self.coffs_rb.precision = 8
 
         vgain_lb = QLabel(
             'VoltGain', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
@@ -1751,21 +1825,18 @@ class FastCorrPSDetailWidget(PSDetailWidget):
             'VoltOffset', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         self.voffs_sp = SiriusSpinbox(
             self, self._prefixed_psname + ':VoltOffset-SP')
-        self.voffs_sp.precisionFromPV = False
-        self.voffs_sp.precision = 8
         self.voffs_sp.limitsFromChannel = False
         self.voffs_sp.setMinimum(-100)
         self.voffs_sp.setMaximum(+100)
         self.voffs_rb = SiriusLabel(
             self, self._prefixed_psname + ':VoltOffset-RB')
-        self.voffs_rb.precisionFromPV = False
-        self.voffs_rb.precision = 8
 
         widgetparms = QWidget()
         lay = QGridLayout(widgetparms)
         lay.setAlignment(Qt.AlignTop)
         lay.addWidget(ctlmode_lb, 0, 0, Qt.AlignRight)
-        lay.addWidget(self.ctlmode_lb, 0, 1)
+        lay.addWidget(self.ctlmode_cb, 0, 1)
+        lay.addWidget(self.ctlmode_lb, 0, 2)
         lay.addWidget(ctlkp_lb, 1, 0, Qt.AlignRight)
         lay.addWidget(self.ctlkp_sp, 1, 1)
         lay.addWidget(self.ctlkp_rb, 1, 2)
@@ -1824,7 +1895,7 @@ class FastCorrPSDetailWidget(PSDetailWidget):
 
         # monitoring
         tabmon = QTabWidget(self)
-        tabmon.setObjectName('SITab')
+        tabmon.setObjectName(self._psname.sec+'Tab')
 
         fofbctrl = SiriusPVName('IA-99RaBPM:BS-FOFBCtrl')
         subnum = self._prefixed_psname.sub[:2]
@@ -1832,7 +1903,7 @@ class FastCorrPSDetailWidget(PSDetailWidget):
         dev = self._prefixed_psname.dev
         fofbctrl = fofbctrl.replace('99', subnum)
         # fofbctrl = fofbctrl.replace('IA-'+subnum, 'XX-99SL01')  # comment
-        chn = FastCorrPSDetailWidget.CONV_CORR2CHANNEL[subnam+'-'+dev]
+        chn = FastCorrPSDetailWidget.CONV_CORR2CHANNEL.get(subnam+'-'+dev, 0)
 
         # # current waveform
         self.graph_curr = SiriusWaveformPlot()
@@ -1873,20 +1944,25 @@ class FastCorrPSDetailWidget(PSDetailWidget):
         timespan = 5*60  # 5min
         self.graph_chist.timeSpan = timespan  # [s]
         self.graph_chist.bufferSize = 5*timespan  # [max 5 samples/s]
-        self.graph_chist.addYChannel(
-            y_channel=self._prefixed_psname.substitute(propty='Current-SP'),
-            name='SP', color='red', lineWidth=2)
-        self.graph_chist.addYChannel(
-            y_channel=self._prefixed_psname.substitute(propty='Current-RB'),
-            name='RB', color='blue', lineWidth=2)
-        self.chn_chist = SiriusConnectionSignal(fofbctrl.substitute(
-            propty='GENConvArrayDataCH'+str(chn)))
-        self.chn_chist.new_value_signal[_np.ndarray].connect(
-            self._plot_currhist)
-        self.graph_chist.addYChannel(
-            y_channel='FAKE:CurrentHistory',
-            name='Mon', color='black', lineWidth=2)
-        self.curve_chist = self.graph_chist.curveAtIndex(2)
+        pvsuf2color = {
+            '-SP': 'red',
+            '-RB': 'blue',
+            'Ref-Mon': 'green',
+            '-Mon': 'black',
+        }
+        hbox_show = QHBoxLayout()
+        hbox_show.setSpacing(9)
+        for pvs, color in pvsuf2color.items():
+            pvname = self._prefixed_psname.substitute(propty='Current'+pvs)
+            legtxt = pvs.replace('-', '')
+            self.graph_chist.addYChannel(
+                y_channel=pvname, name=legtxt, color=color, lineWidth=2)
+            curve = self.graph_chist.curveAtIndex(-1)
+            cb_show = QCheckBox(legtxt)
+            cb_show.setChecked(True)
+            cb_show.setStyleSheet('color: '+color+';')
+            cb_show.stateChanged.connect(curve.setVisible)
+            hbox_show.addWidget(cb_show)
         self.graph_chist.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
         self.graph_chist.autoRangeX = True
         self.graph_chist.autoRangeY = True
@@ -1896,7 +1972,12 @@ class FastCorrPSDetailWidget(PSDetailWidget):
         self.graph_chist.setLabel('left', text='Current [A]', color='gray')
         self.graph_chist.showLegend = True
         self.graph_chist.setBackgroundColor(QColor(255, 255, 255))
-        tabmon.addTab(self.graph_chist, 'Curr.Hist.')
+        wid_currhist = QWidget()
+        lay_currhist = QVBoxLayout(wid_currhist)
+        lay_currhist.setContentsMargins(0, 0, 0, 0)
+        lay_currhist.addWidget(self.graph_chist)
+        lay_currhist.addLayout(hbox_show)
+        tabmon.addTab(wid_currhist, 'Curr.Hist.')
         tabmon.setCurrentIndex(2)
 
         layout = QHBoxLayout()
@@ -1976,31 +2057,36 @@ class FastCorrPSDetailWidget(PSDetailWidget):
         lay.addWidget(self.fofbaccminsat_rb, 4, 2)
 
         # coefficients
-        self.gph_fofbcoeff = SiriusWaveformPlot()
-        self.gph_fofbcoeff.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
-        self.gph_fofbcoeff.autoRangeX = True
-        self.gph_fofbcoeff.autoRangeY = True
-        self.gph_fofbcoeff.showXGrid = True
-        self.gph_fofbcoeff.showYGrid = True
-        self.gph_fofbcoeff.title = 'InvRespMatRow Coefficients'
-        self.gph_fofbcoeff.setBackgroundColor(QColor(255, 255, 255))
-        self.gph_fofbcoeff.addChannel(
-            y_channel=self._prefixed_psname+':InvRespMatRow-SP', name='SP',
-            color='red', lineWidth=2)
-        self.gph_fofbcoeff.addChannel(
-            y_channel=self._prefixed_psname+':InvRespMatRow-RB', name='RB',
-            color='blue', lineWidth=2)
+        gph_fofbcoeffs = dict()
+        for plane in ['X', 'Y']:
+            colorsp = 'darkBlue' if plane == 'X' else 'darkRed'
+            colorrb = 'blue' if plane == 'X' else 'red'
+            gph_fofbcoeffs[plane] = SiriusWaveformPlot()
+            gph_fofbcoeffs[plane].setSizePolicy(
+                QSzPlcy.Maximum, QSzPlcy.Maximum)
+            gph_fofbcoeffs[plane].showLegend = True
+            gph_fofbcoeffs[plane].autoRangeX = True
+            gph_fofbcoeffs[plane].autoRangeY = True
+            gph_fofbcoeffs[plane].showXGrid = True
+            gph_fofbcoeffs[plane].showYGrid = True
+            gph_fofbcoeffs[plane].title = 'InvRespMatRow'+plane+' Coefficients'
+            gph_fofbcoeffs[plane].setBackgroundColor(QColor(255, 255, 255))
+            gph_fofbcoeffs[plane].addChannel(
+                y_channel=self._prefixed_psname+':InvRespMatRow'+plane+'-SP',
+                name='SP', color=colorsp, lineWidth=2, symbol='o')
+            gph_fofbcoeffs[plane].addChannel(
+                y_channel=self._prefixed_psname+':InvRespMatRow'+plane+'-RB',
+                name='RB', color=colorrb, lineWidth=2, symbol='o')
 
         self.show_coeff_sp = QCheckBox('SP')
         self.show_coeff_sp.setChecked(True)
-        self.show_coeff_sp.setStyleSheet('color: red;')
-        self.show_coeff_sp.stateChanged.connect(
-            self.gph_fofbcoeff.curveAtIndex(0).setVisible)
         self.show_coeff_rb = QCheckBox('RB')
         self.show_coeff_rb.setChecked(True)
-        self.show_coeff_rb.setStyleSheet('color: blue;')
-        self.show_coeff_rb.stateChanged.connect(
-            self.gph_fofbcoeff.curveAtIndex(1).setVisible)
+        for plane in ['X', 'Y']:
+            self.show_coeff_sp.stateChanged.connect(
+                gph_fofbcoeffs[plane].curveAtIndex(0).setVisible)
+            self.show_coeff_rb.stateChanged.connect(
+                gph_fofbcoeffs[plane].curveAtIndex(1).setVisible)
         hbox_show = QHBoxLayout()
         hbox_show.setAlignment(Qt.AlignCenter)
         hbox_show.addWidget(self.show_coeff_sp)
@@ -2009,17 +2095,14 @@ class FastCorrPSDetailWidget(PSDetailWidget):
         widmon = QWidget()
         lay = QVBoxLayout(widmon)
         lay.setAlignment(Qt.AlignTop)
-        lay.addWidget(self.gph_fofbcoeff)
+        for plane in ['X', 'Y']:
+            lay.addWidget(gph_fofbcoeffs[plane])
         lay.addLayout(hbox_show)
 
         layout = QHBoxLayout()
         layout.addWidget(widctrl)
         layout.addWidget(widmon)
         return layout
-
-    def _plot_currhist(self, new_array):
-        mean = _np.mean(new_array)
-        self.curve_chist.receiveNewValue(mean)
 
 
 class PSAuxMeasWidget(SiriusDialog):

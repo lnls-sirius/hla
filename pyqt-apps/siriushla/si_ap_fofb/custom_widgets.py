@@ -166,8 +166,6 @@ class RefOrbWidget(BaseObject, QWidget):
         # send
         self._ch_refx.send_value_signal[_np.ndarray].emit(self._refx)
         self._ch_refy.send_value_signal[_np.ndarray].emit(self._refy)
-        _time.sleep(0.05)
-        self._ch_syncref.send_value_signal[int].emit(1)
 
         self._show_response_icon(ok=True)
 
@@ -425,7 +423,7 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
             lay.addWidget(lbl, row, 0)
             lay.addWidget(plb, row, 1)
 
-            pvn = _PVName(dcc).substitute(prefix=self.prefix) + 'CCEnable-RB'
+            pvn = _PVName(dcc).substitute(prefix=self.prefix) + 'CCEnable-Sts'
             led = PyDMLed(self, pvn)
             led.setObjectName('led_status')
             led.shape = led.ShapeMap.Square
@@ -462,9 +460,8 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
         lay.setSpacing(1)
         lay.setAlignment(Qt.AlignLeft | Qt.AlignTop)
 
-        lpart_pvs = [
-            'BPMId-RB', 'LinkPartnerCH0-Mon', 'LinkPartnerCH1-Mon',
-            'LinkPartnerCH2-Mon', 'LinkPartnerCH3-Mon']
+        lpart_pvs = ['BPMId-RB', ] + [
+            'LinkPartnerCH'+str(idx)+'-Mon' for idx in range(8)]
 
         # header
         lay.addWidget(
@@ -478,8 +475,6 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
         # table
         row = 1
         for dcc in self.dccnames:
-            if 'FMC' not in dcc:
-                continue
             lbl = QLabel(dcc, self, alignment=Qt.AlignCenter)
             lay.addWidget(lbl, row, 0)
             for idx, link in enumerate(lpart_pvs):
@@ -492,7 +487,9 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
         return self._build_scroll_area(wid)
 
     def _setupRefOrbTab(self):
-        self._refimpl = _np.zeros(2*self._csorb.nr_bpms)
+        self._refimpl = {
+            plane: _np.zeros(2*self._csorb.nr_bpms)
+            for plane in ['x', 'y']}
         self._ch_refx = _ConnSignal(
             self.devpref.substitute(propty='RefOrbHwX-Mon'))
         self._ch_refx.new_value_signal[_np.ndarray].connect(
@@ -508,75 +505,75 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
             alignment=Qt.AlignCenter)
 
         # graph
-        self.graph_ref = Graph(self)
-        self.graph_ref.showLegend = False
-
-        opts = dict(
-            y_channel='', name='HL RefOrb',
-            color='black', redraw_mode=2,
-            lineStyle=1, lineWidth=2,
-            symbol='o', symbolSize=10)
-        self.graph_ref.addChannel(**opts)
-        self.curve_hlref = self.graph_ref.curveAtIndex(0)
-
-        c2v = dict()
-        visisel = list()
+        self.curve_hlref = dict()
         colors = cm.jet(_np.linspace(0, 1, len(self.ctrlrs)))*255
-        for ctrl, color in zip(self.ctrlrs, colors):
-            pvn = _PVName(ctrl).substitute(
-                prefix=self.prefix, propty='RefOrb-RB')
-            coloro = QColor(*color)
-
-            c2v[pvn] = self._refimpl
+        coloros = [QColor(*color) for color in colors]
+        graph_refs, c2v, visisel = dict(), dict(), dict()
+        for plane in ['x', 'y']:
+            graph_refs[plane] = Graph(self)
+            graph_refs[plane].showLegend = False
+            graph_refs[plane].setTitle('RefOrb'+plane.upper())
 
             opts = dict(
-                y_channel=pvn, name='',
-                color=coloro, redraw_mode=2,
+                y_channel='', name='HL RefOrb'+plane.upper(),
+                color='black', redraw_mode=2,
                 lineStyle=1, lineWidth=2,
                 symbol='o', symbolSize=10)
-            self.graph_ref.addChannel(**opts)
-            curve = self.graph_ref.curveAtIndex(-1)
+            graph_refs[plane].addChannel(**opts)
+            self.curve_hlref[plane] = graph_refs[plane].curveAtIndex(0)
 
-            cbx = QCheckBox(ctrl[3:5], self)
-            cbx.setChecked(True)
-            cbx.stateChanged.connect(curve.setVisible)
-            cbx.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
-            pal = cbx.palette()
-            pal.setColor(QPalette.Base, coloro)
-            pal.setColor(QPalette.Text, Qt.white)
-            cbx.setPalette(pal)
-            visisel.append(cbx)
+            for ctrl, coloro in zip(self.ctrlrs, coloros):
+                pvn = _PVName(ctrl).substitute(
+                    prefix=self.prefix, propty='RefOrb'+plane.upper()+'-RB')
+
+                c2v[pvn] = self._refimpl[plane]
+
+                opts = dict(
+                    y_channel=pvn, name='', color=coloro, redraw_mode=2,
+                    lineStyle=1, lineWidth=2, symbol='o', symbolSize=10)
+                graph_refs[plane].addChannel(**opts)
+                curve = graph_refs[plane].curveAtIndex(-1)
+
+                if ctrl not in visisel:
+                    cbx = QCheckBox(ctrl[3:5], self)
+                    cbx.setChecked(True)
+                    cbx.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
+                    pal = cbx.palette()
+                    pal.setColor(QPalette.Base, coloro)
+                    pal.setColor(QPalette.Text, Qt.white)
+                    cbx.setPalette(pal)
+                    visisel[ctrl] = cbx
+                visisel[ctrl].stateChanged.connect(curve.setVisible)
 
         # led
+        self.led_reforb_c2v = c2v
         self.led_ref = PyDMLedMultiChannel(self, c2v)
 
         # curves
         lay_sel = QGridLayout()
         lay_sel.setContentsMargins(0, 0, 0, 0)
         colsel = 2
-        for idx, cbx in enumerate(visisel):
+        for idx, cbx in enumerate(visisel.values()):
             lay_sel.addWidget(cbx, idx // colsel, idx % colsel)
 
         wid = QWidget()
         lay = QGridLayout(wid)
         lay.addWidget(title, 0, 0)
         lay.addWidget(self.led_ref, 0, 1, alignment=Qt.AlignRight)
-        lay.addWidget(self.graph_ref, 1, 0)
-        lay.addLayout(lay_sel, 1, 1)
+        for idx, graph in enumerate(graph_refs.values()):
+            lay.addWidget(graph, idx+1, 0)
+        lay.addLayout(lay_sel, 1, 1, len(graph_refs), 1)
         return wid
 
     def _update_reforb(self, plane, value):
-        if plane == 'x':
-            self._refimpl[:self._csorb.nr_bpms] = value
-        else:
-            self._refimpl[self._csorb.nr_bpms:] = value
-        self.curve_hlref.receiveYWaveform(self._refimpl)
-
-        c2v = {
+        self._refimpl[plane] = value
+        self.curve_hlref[plane].receiveYWaveform(value)
+        prop = 'RefOrb'+plane.upper()+'-RB'
+        self.led_reforb_c2v.update({
             _PVName(ctrl).substitute(
-                prefix=self.prefix, propty='RefOrb-RB'): self._refimpl
-            for ctrl in self.ctrlrs}
-        self.led_ref.set_channels2values(c2v)
+                prefix=self.prefix, propty=prop): value
+            for ctrl in self.ctrlrs})
+        self.led_ref.set_channels2values(self.led_reforb_c2v)
 
     def _setupTimeFrameLenTab(self):
         wid = QWidget()

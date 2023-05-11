@@ -139,7 +139,7 @@ class DCCTMonitor(QWidget):
         # Smoothing
         evgname = SiriusPVName(_LLTimeSearch.get_evg_name())
         self._evnt_dly = SignalChannel(evgname.substitute(
-            prefix=self.prefix, propty='Dig'+self.device.sec+'Delay-RB'))
+            prefix=self.prefix, propty='LinacDelay-RB'))
         self._evnt_dly.new_value_signal[float].connect(self.updateRawXAxis)
         self._trig_dly = SignalChannel(
             self.dcct_prefix.substitute(dis='TI', propty='Delay-RB'))

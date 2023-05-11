@@ -2,14 +2,14 @@
 
 from qtpy.QtCore import Qt, Slot, Signal, QEvent
 from qtpy.QtWidgets import QWidget, QLabel, QGridLayout, QGroupBox, \
-    QHBoxLayout, QVBoxLayout, QSizePolicy as QSzPlcy
+    QHBoxLayout, QVBoxLayout, QSizePolicy as QSzPlcy, QPushButton
 
 import qtawesome as qta
 
 from siriuspy.namesys import SiriusPVName
 from siriuspy.injctrl.csdev import Const as _Const
 
-from ..util import get_appropriate_color, connect_newprocess
+from ..util import get_appropriate_color, connect_newprocess, connect_window
 from ..widgets import SiriusMainWindow, SiriusEnumComboBox, \
     PyDMLogLabel, PyDMStateButton, SiriusSpinbox, \
     SiriusConnectionSignal, SiriusLedState, SiriusLabel
@@ -17,6 +17,8 @@ from ..as_ti_control import BucketList, EVGInjectionLed, EVGInjectionButton
 from ..as_ap_machshift import MachShiftLabel
 from .widgets import InjDiagLed, MonitorSummaryWidget, \
     InjSysStbyControlWidget, ClockLabel, TaskStatusLabel
+from .auxiliary_dialogs import BiasFBDetailDialog, TopUpSettingsDialog, \
+    PUModeSettingsDialog
 
 
 class InjCtrlWindow(SiriusMainWindow):
@@ -249,6 +251,11 @@ class InjCtrlWindow(SiriusMainWindow):
         self._lb_currtgt.showUnits = True
         labelsmon.append(self._lb_currtgt)
 
+        self._pb_show_topup = QPushButton('v', self)
+        self._pb_show_topup.setToolTip('Show TopUp Configurations.')
+        self._pb_show_topup.clicked.connect(self._handle_topup_details_vis)
+        self._pb_show_topup.setStyleSheet('QPushButton{max-width: 0.8em;}')
+
         # mode specific configurations
         self.wid_tudtls = self._setupTopUpModeWidget()
         self.wid_tudtls.setVisible(False)
@@ -291,6 +298,13 @@ class InjCtrlWindow(SiriusMainWindow):
             self._inj_prefix.substitute(propty='PUMode-Sel'))
         self._ind_pumode_mon = TaskStatusLabel(
             self, self._inj_prefix.substitute(propty='PUModeCmdSts-Mon'))
+        self._pb_pumdt = QPushButton(qta.icon('fa5s.ellipsis-v'), '', self)
+        self._pb_pumdt.setObjectName('btn')
+        self._pb_pumdt.setStyleSheet(
+            '#btn{min-width:18px;max-width:18px;icon-size:20px;}')
+        connect_window(
+            self._pb_pumdt, PUModeSettingsDialog, self,
+            device=self._inj_dev, prefix=self._prefix)
 
         # Single bunch bias voltage
         self._ld_sbbias = QLabel('SB Bias Voltage', self)
@@ -381,16 +395,18 @@ class InjCtrlWindow(SiriusMainWindow):
         glay1.setAlignment(Qt.AlignTop)
         glay1.addWidget(self._ld_injset, 0, 0)
         glay1.addWidget(self._led_injset, 0, 1)
-        glay1.addWidget(self._ld_injmode, 1, 0)
-        glay1.addWidget(self._cb_injmode, 1, 1)
-        glay1.addWidget(self._lb_injmode, 1, 2)
-        glay1.addWidget(self._ld_currtgt, 2, 0)
-        glay1.addWidget(self._sb_currtgt, 2, 1)
-        glay1.addWidget(self._lb_currtgt, 2, 2)
-        glay1.addWidget(self.wid_tudtls, 3, 0, 2, 3)
-        glay1.setColumnStretch(0, 3)
-        glay1.setColumnStretch(1, 2)
-        glay1.setColumnStretch(2, 2)
+        glay1.addWidget(self._ld_currtgt, 1, 0)
+        glay1.addWidget(self._sb_currtgt, 1, 1)
+        glay1.addWidget(self._lb_currtgt, 1, 2)
+        glay1.addWidget(self._ld_injmode, 2, 0)
+        glay1.addWidget(self._cb_injmode, 2, 1)
+        glay1.addWidget(self._lb_injmode, 2, 2)
+        glay1.addWidget(self._pb_show_topup, 2, 3)
+        glay1.addWidget(self.wid_tudtls, 3, 0, 2, 4)
+        glay1.setColumnStretch(0, 5)
+        glay1.setColumnStretch(1, 3)
+        glay1.setColumnStretch(2, 3)
+        glay1.setColumnStretch(3, 1)
 
         wid2 = QWidget()
         wid2.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Fixed)
@@ -403,12 +419,13 @@ class InjCtrlWindow(SiriusMainWindow):
         glay2.addWidget(self._cb_injtype, 1, 1)
         glay2.addWidget(self._lb_injtype, 1, 2)
         glay2.addWidget(self._lb_injtype_mon, 1, 3)
-        glay2.addWidget(self._ind_injtype_mon, 1, 4)
+        glay2.addWidget(self._ind_injtype_mon, 1, 5)
         glay2.addWidget(self._ld_pumode, 2, 0)
         glay2.addWidget(self._cb_pumode, 2, 1)
         glay2.addWidget(self._lb_pumode, 2, 2)
         glay2.addWidget(self._lb_pumode_mon, 2, 3)
-        glay2.addWidget(self._ind_pumode_mon, 2, 4)
+        glay2.addWidget(self._pb_pumdt, 2, 4)
+        glay2.addWidget(self._ind_pumode_mon, 2, 5)
         glay2.addWidget(self._ld_sbbias, 3, 0)
         glay2.addWidget(self._sb_sbbias, 3, 1)
         glay2.addWidget(self._lb_sbbias, 3, 2)
@@ -421,17 +438,18 @@ class InjCtrlWindow(SiriusMainWindow):
         glay2.addWidget(self._sb_filaopcurr, 4, 1)
         glay2.addWidget(self._lb_filaopcurr, 4, 2)
         glay2.addWidget(self._lb_filaopcurr_mon, 4, 3)
-        glay2.addWidget(self._ind_filaopcurr_mon, 4, 4)
+        glay2.addWidget(self._ind_filaopcurr_mon, 4, 5)
         glay2.addWidget(self._ld_hvopvolt, 5, 0)
         glay2.addWidget(self._sb_hvopvolt, 5, 1)
         glay2.addWidget(self._lb_hvopvolt, 5, 2)
         glay2.addWidget(self._lb_hvopvolt_mon, 5, 3)
-        glay2.addWidget(self._ind_hvopvolt_mon, 5, 4)
+        glay2.addWidget(self._ind_hvopvolt_mon, 5, 5)
         glay2.setColumnStretch(0, 5)
         glay2.setColumnStretch(1, 3)
         glay2.setColumnStretch(2, 3)
         glay2.setColumnStretch(3, 3)
-        glay2.setColumnStretch(3, 1)
+        glay2.setColumnStretch(4, 1)
+        glay2.setColumnStretch(5, 1)
 
         wid = QGroupBox('Settings')
         lay = QGridLayout(wid)
@@ -475,12 +493,26 @@ class InjCtrlWindow(SiriusMainWindow):
             self, self._inj_prefix.substitute(propty='TopUpNrPulses-RB'))
         self._lb_tunrpu.showUnits = True
 
-        self._ld_tupustd = QLabel('PU Standby', self)
-        pvname = self._inj_prefix.substitute(propty='TopUpPUStandbyEnbl-Sel')
-        self._sb_tupustd = PyDMStateButton(self, pvname)
-        self._lb_tupustd = SiriusLedState(
+        self._ld_tubiasfb = QLabel('Bias FB', self)
+        pvname = self._inj_prefix.substitute(propty='BiasFBLoopState-Sel')
+        self._sb_tubiasfb = PyDMStateButton(self, pvname)
+        self._lb_tubiasfb = SiriusLedState(
             self, pvname.substitute(propty_suffix='Sts'))
-        self._lb_tupustd.showUnits = True
+        self._pb_biasfb = QPushButton(qta.icon('fa5s.ellipsis-v'), '', self)
+        self._pb_biasfb.setObjectName('btn')
+        self._pb_biasfb.setStyleSheet(
+            '#btn{min-width:18px;max-width:18px;icon-size:20px;}')
+        connect_window(
+            self._pb_biasfb, BiasFBDetailDialog, self,
+            device=self._inj_dev, prefix=self._prefix)
+
+        self._pb_tuset = QPushButton(
+            qta.icon('fa5s.ellipsis-h'), ' Standby && warm up settings', self)
+        self._pb_tuset.setObjectName('btn')
+        self._pb_tuset.setStyleSheet('#btn{icon-size:20px;}')
+        connect_window(
+            self._pb_tuset, TopUpSettingsDialog, self,
+            device=self._inj_dev, prefix=self._prefix)
 
         wid = QWidget()
         lay = QGridLayout(wid)
@@ -495,9 +527,11 @@ class InjCtrlWindow(SiriusMainWindow):
         lay.addWidget(self._ld_tunrpu, 2, 0)
         lay.addWidget(self._sb_tunrpu, 2, 1)
         lay.addWidget(self._lb_tunrpu, 2, 2)
-        lay.addWidget(self._ld_tupustd, 3, 0)
-        lay.addWidget(self._sb_tupustd, 3, 1)
-        lay.addWidget(self._lb_tupustd, 3, 2)
+        lay.addWidget(self._ld_tubiasfb, 3, 0)
+        lay.addWidget(self._sb_tubiasfb, 3, 1)
+        lay.addWidget(self._lb_tubiasfb, 3, 2)
+        lay.addWidget(self._pb_biasfb, 3, 3)
+        lay.addWidget(self._pb_tuset, 4, 0, 1, 4)
         lay.setColumnStretch(0, 3)
         lay.setColumnStretch(1, 2)
         lay.setColumnStretch(2, 2)
@@ -547,11 +581,23 @@ class InjCtrlWindow(SiriusMainWindow):
 
     @Slot(int)
     def _handle_injmode_settings_vis(self, new_mode):
-        is_topoup = new_mode == _Const.InjMode.TopUp
-        self.wid_tudtls.setVisible(is_topoup)
-        self._pb_topup.setVisible(is_topoup)
-        self._pb_tiinj.setVisible(not is_topoup)
-        self.wid_tusts.setVisible(is_topoup)
+        is_topup = new_mode == _Const.InjMode.TopUp
+        self._handle_topup_details_vis(False, is_topup=is_topup)
+        self._pb_topup.setVisible(is_topup)
+        self._pb_tiinj.setVisible(not is_topup)
+        self.wid_tusts.setVisible(is_topup)
+
+    def _handle_topup_details_vis(self, val, is_topup=None):
+        _ = val
+        if is_topup is None:
+            show = self.wid_tudtls.isHidden()
+        else:
+            show = is_topup
+        self.wid_tudtls.setVisible(show)
+        text = '^' if show else 'v'
+        tooltip = ('Hide' if show else 'Show')+' TopUp Configurations.'
+        self._pb_show_topup.setText(text)
+        self._pb_show_topup.setToolTip(tooltip)
 
     def _handle_injsys_details_vis(self):
         exp = self.wid_is_summ.isVisible()

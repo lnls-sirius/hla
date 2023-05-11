@@ -55,8 +55,8 @@ class BPMOrbIntlkMainWindow(BaseObject, SiriusMainWindow):
         # Min.Sum. Threshold
         self._gb_minsum = self._setupIntlkGroup('Min.Sum.Threshold')
 
-        # Translation
-        self._gb_trans = self._setupIntlkGroup('Translation')
+        # Position
+        self._gb_pos = self._setupIntlkGroup('Position')
 
         # Angulation
         self._gb_ang = self._setupIntlkGroup('Angulation')
@@ -68,7 +68,7 @@ class BPMOrbIntlkMainWindow(BaseObject, SiriusMainWindow):
         lay.addWidget(self.title, 0, 0, 1, 4)
         lay.addWidget(self._gb_gen, 1, 0)
         lay.addWidget(self._gb_minsum, 1, 1)
-        lay.addWidget(self._gb_trans, 1, 2)
+        lay.addWidget(self._gb_pos, 1, 2)
         lay.addWidget(self._gb_ang, 1, 3)
         lay.addWidget(self._graphs, 2, 0, 1, 4)
 
@@ -77,8 +77,8 @@ class BPMOrbIntlkMainWindow(BaseObject, SiriusMainWindow):
             pvstr = ''
         elif 'Sum' in intlktype:
             pvstr = 'MinSum'
-        elif 'Translation' in intlktype:
-            pvstr = 'Trans'
+        elif 'Position' in intlktype:
+            pvstr = 'Pos'
         elif 'Angulation' in intlktype:
             pvstr = 'Ang'
 
@@ -141,7 +141,7 @@ class BPMOrbIntlkMainWindow(BaseObject, SiriusMainWindow):
             lay.addWidget(ld_clr, row, 0)
 
             bt_clr = FamBPMButton(
-                self, self.prefix, 'Intlk'+pvstr+'Clr-Sel', '', value=1)
+                self, self.prefix, 'Intlk'+pvstr+'Clr-Cmd', '', value=1)
             bt_clr.setIcon(qta.icon('fa5s.sync'))
             bt_clr.setObjectName('clr')
             bt_clr.setStyleSheet(

@@ -12,7 +12,7 @@ import qtawesome as qta
 from siriuspy.clientarch import Time
 from siriuspy.machshift.macreport import MacReport
 
-from ..widgets import SiriusMainWindow, MatplotlibWidget
+from ..widgets import SiriusMainWindow, MatplotlibWidget, SiriusDialog
 
 
 class MacReportWindow(SiriusMainWindow):
@@ -341,7 +341,7 @@ class MacReportWindow(SiriusMainWindow):
             'commi': 'commissioning',
             'condi': 'conditioning',
             'stord': 'ebeam',
-            'user': 'user'}
+            'user': 'users'}
         fillmode = {
             'mb': 'multibunch',
             'sb': 'singlebunch',
@@ -459,7 +459,7 @@ class MacReportWindow(SiriusMainWindow):
             'commi': 'commissioning',
             'condi': 'conditioning',
             'maint': 'maintenance',
-            'user': 'user'}
+            'user': 'users'}
         intervaltype = {
             'fail': '_failures',
             'oper': '_operational',
@@ -548,22 +548,29 @@ class MacReportWindow(SiriusMainWindow):
             self.pb_search.setText('Abort')
 
     def _show_raw_data(self):
-        fig = self._macreport.plot_raw_data()
-        wid = MatplotlibWidget(fig)
-        wid.setWindowTitle(
+        dialog = SiriusDialog()
+        dialog.setWindowTitle(
             'Machine Reports - Raw Data (' +
             str(self._macreport.time_start) + ' -> ' +
             str(self._macreport.time_stop) + ')')
-        wid.show()
+        dialog.setWindowIcon(self.windowIcon())
+        fig = self._macreport.plot_raw_data()
+        wid = MatplotlibWidget(fig)
+        lay = QGridLayout(dialog)
+        lay.addWidget(wid)
+        dialog.exec_()
 
     def _show_progmd_vs_delivd(self):
-        fig = self._macreport.plot_progmd_vs_delivd_hours()
-        wid = MatplotlibWidget(fig)
-        wid.setWindowTitle(
+        dialog = SiriusDialog()
+        dialog.setWindowTitle(
             'Machine Reports - Programmed vs. Delivered Hours (' +
             str(self._macreport.time_start) + ' -> ' +
             str(self._macreport.time_stop) + ')')
-        wid.show()
+        fig = self._macreport.plot_progmd_vs_delivd_hours()
+        wid = MatplotlibWidget(fig)
+        lay = QGridLayout(dialog)
+        lay.addWidget(wid)
+        dialog.exec_()
 
 
 class UpdateTask(QThread):

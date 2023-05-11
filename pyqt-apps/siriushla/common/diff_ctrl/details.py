@@ -19,7 +19,10 @@ class DiffCtrlDetails(SiriusDialog):
         self.dev_prefix = _PVName(device).substitute(prefix=prefix)
         self.setObjectName(self.dev_prefix.sec+'App')
         self.neg_label = neg_label
+        self.neg_name = self.neg_label.split(' ')[0]
         self.pos_label = pos_label
+        self.pos_name = self.pos_label.split(' ')[0]
+        self.slit_name = self.pos_label.split(' ')[1]
         self._setupUi()
 
     def _setupUi(self):
@@ -55,163 +58,192 @@ class DiffCtrlDetails(SiriusDialog):
 
         self.setStyleSheet("""
             SiriusSpinbox, SiriusLabel{
-                min-width: 5em; max-width: 5em;
+                min-width: 7em; max-width: 7em;
             }""")
         self.setLayout(lay)
 
     def _setupGeneralInfoLayout(self):
-        label_NegMtrCtrlPrefix = QLabel(
+        label_negmtrctrlpref = QLabel(
             self.neg_label + ' Motion Control: ', self)
-        self.lb_NegMtrCtrlPrefix = SiriusLabel(
-            self, self.dev_prefix.substitute(propty='NegativeMotionCtrl-Cte'))
-        self.lb_NegMtrCtrlPrefix.setStyleSheet("""
+        self.lb_negmtrctrlpref = SiriusLabel(
+            self, self.dev_prefix.substitute(
+                propty=self.neg_name+'MotionCtrl-Cte'))
+        self.lb_negmtrctrlpref.setStyleSheet("""
             max-width:14.20em; max-height:1.29em;""")
 
-        label_PosMtrCtrlPrefix = QLabel(
+        label_posmtrctrlpref = QLabel(
             self.pos_label + ' Motion Control: ', self)
-        self.lb_PosMtrCtrlPrefix = SiriusLabel(
-            self, self.dev_prefix.substitute(propty='PositiveMotionCtrl-Cte'))
-        self.lb_PosMtrCtrlPrefix.setStyleSheet("""
+        self.lb_posmtrctrlpref = SiriusLabel(
+            self, self.dev_prefix.substitute(
+                propty=self.pos_name+'MotionCtrl-Cte'))
+        self.lb_posmtrctrlpref.setStyleSheet("""
             max-width:14.20em; max-height:1.29em;""")
 
         flay = QFormLayout()
-        flay.addRow(label_NegMtrCtrlPrefix, self.lb_NegMtrCtrlPrefix)
-        flay.addRow(label_PosMtrCtrlPrefix, self.lb_PosMtrCtrlPrefix)
+        flay.addRow(label_negmtrctrlpref, self.lb_negmtrctrlpref)
+        flay.addRow(label_posmtrctrlpref, self.lb_posmtrctrlpref)
         flay.setLabelAlignment(Qt.AlignRight)
         flay.setFormAlignment(Qt.AlignCenter)
         return flay
 
     def _setupDetailedStatusLayout(self):
-        label_NegDoneMov = QLabel(
+        label_negdonemov = QLabel(
             self.neg_label + ' Motor Finished Move? ', self)
-        self.PyDMLed_NegDoneMov = PyDMLed(
+        self.led_negdonemov = PyDMLed(
             parent=self, init_channel=self.dev_prefix.substitute(
-                propty='NegativeDoneMov-Mon'),
+                propty=self.neg_name+'DoneMov-Mon'),
             color_list=[PyDMLed.Red, PyDMLed.LightGreen])
-        self.PyDMLed_NegDoneMov.setStyleSheet("""
+        self.led_negdonemov.setStyleSheet("""
             max-width:7.10em; max-height:1.29em;""")
 
-        label_PosDoneMov = QLabel(
+        label_posdonemov = QLabel(
             self.pos_label + ' Motor Finished Move? ', self)
-        self.PyDMLed_PosDoneMov = PyDMLed(
+        self.led_posdonemov = PyDMLed(
             parent=self, init_channel=self.dev_prefix.substitute(
-                propty='PositiveDoneMov-Mon'),
+                propty=self.pos_name+'DoneMov-Mon'),
             color_list=[PyDMLed.Red, PyDMLed.LightGreen])
-        self.PyDMLed_PosDoneMov.setStyleSheet("""
+        self.led_posdonemov.setStyleSheet("""
             max-width:7.10em; max-height:1.29em;""")
 
-        label_ConvOk = QLabel('Convertion from virtual to measured'
+        label_convok = QLabel('Convertion from virtual to measured'
                               '\ncoordinates was succesfully done? ', self)
-        self.PyDMLed_ConvOk = PyDMLed(
+        self.led_convok = PyDMLed(
             parent=self, init_channel=self.dev_prefix.substitute(
                 propty='CoordConvErr-Mon'),
             color_list=[PyDMLed.LightGreen, PyDMLed.Red])
-        self.PyDMLed_ConvOk.setStyleSheet("""
+        self.led_convok.setStyleSheet("""
             max-width:7.10em; max-height:1.29em;""")
 
         flay = QFormLayout()
-        flay.addRow(label_NegDoneMov, self.PyDMLed_NegDoneMov)
-        flay.addRow(label_PosDoneMov, self.PyDMLed_PosDoneMov)
-        flay.addRow(label_ConvOk, self.PyDMLed_ConvOk)
+        flay.addRow(label_negdonemov, self.led_negdonemov)
+        flay.addRow(label_posdonemov, self.led_posdonemov)
+        flay.addRow(label_convok, self.led_convok)
         flay.setLabelAlignment(Qt.AlignRight)
         flay.setFormAlignment(Qt.AlignCenter)
         return flay
 
     def _setupPositionsLayout(self):
-        self.PyDMPushButton_DoHome = PyDMPushButton(
-            parent=self, label='Do Homing', pressValue=1,
+        self.pb_home = PyDMPushButton(
+            parent=self, label='Go to maximum aperture', pressValue=1,
             init_channel=self.dev_prefix.substitute(propty='Home-Cmd'))
 
-        self.PyDMPushButton_NegDoneMov = PyDMPushButton(
+        self.pb_negdonemov = PyDMPushButton(
             parent=self, label='Force ' + self.neg_label + ' Position',
             pressValue=1, init_channel=self.dev_prefix.substitute(
-                propty='ForceNegativeEdgePos-Cmd'))
+                propty='Force'+self.neg_name+self.slit_name+'Pos-Cmd'))
 
-        self.PyDMPushButton_PosDoneMov = PyDMPushButton(
+        self.pb_posdonemov = PyDMPushButton(
             parent=self, label='Force ' + self.pos_label + ' Position',
             pressValue=1, init_channel=self.dev_prefix.substitute(
-                propty='ForcePositiveEdgePos-Cmd'))
+                propty='Force'+self.pos_name+self.slit_name+'Pos-Cmd'))
 
-        label_ForceComplete = QLabel('Force Commands Completed? ', self)
-        self.PyDMLed_ForceComplete = PyDMLed(
+        for btn in [self.pb_home,
+                    self.pb_negdonemov,
+                    self.pb_posdonemov]:
+            btn.setDefault(False)
+            btn.setAutoDefault(False)
+
+        label_forcecomplete = QLabel('Force Commands Completed? ', self)
+        self.led_forcecomplete = PyDMLed(
             parent=self, init_channel=self.dev_prefix.substitute(
                 propty='ForceComplete-Mon'),
             color_list=[PyDMLed.Red, PyDMLed.LightGreen])
-        self.PyDMLed_ForceComplete.setStyleSheet("""
+        self.led_forcecomplete.setStyleSheet("""
             max-width:7.10em; max-height:1.29em;""")
 
         flay = QFormLayout()
-        flay.addRow(self.PyDMPushButton_DoHome)
-        flay.addRow(self.PyDMPushButton_NegDoneMov)
-        flay.addRow(self.PyDMPushButton_PosDoneMov)
-        flay.addRow(label_ForceComplete, self.PyDMLed_ForceComplete)
+        flay.addRow(self.pb_home)
+        flay.addRow(self.pb_negdonemov)
+        flay.addRow(self.pb_posdonemov)
+        flay.addRow(label_forcecomplete, self.led_forcecomplete)
         flay.setLabelAlignment(Qt.AlignRight)
         flay.setFormAlignment(Qt.AlignCenter)
         return flay
 
     def _setupLimitsLayout(self):
-        self.sb_PosEdgeInnerLim = SiriusSpinbox(
-            self, self.dev_prefix.substitute(propty='PosEdgeInnerLim-SP'))
-        self.lb_PosEdgeInnerLim = SiriusLabel(
-            self, self.dev_prefix.substitute(propty='PosEdgeInnerLim-RB'))
-        self.sb_NegEdgeInnerLim = SiriusSpinbox(
-            self, self.dev_prefix.substitute(propty='NegEdgeInnerLim-SP'))
-        self.lb_NegEdgeInnerLim = SiriusLabel(
-            self, self.dev_prefix.substitute(propty='NegEdgeInnerLim-RB'))
-        self.sb_LowOuterLim = SiriusSpinbox(
-            self, self.dev_prefix.substitute(propty='LowOuterLim-SP'))
-        self.lb_LowOuterLim = SiriusLabel(
-            self, self.dev_prefix.substitute(propty='LowOuterLim-RB'))
-        self.sb_HighOuterLim = SiriusSpinbox(
-            self, self.dev_prefix.substitute(propty='HighOuterLim-SP'))
-        self.lb_HighOuterLim = SiriusLabel(
-            self, self.dev_prefix.substitute(propty='HighOuterLim-RB'))
+        prefposi = self.pos_name if 'Scrap' in self.dev_prefix else 'Pos'
+        prefposi += self.slit_name
+        prefposo = self.pos_name if 'Scrap' in self.dev_prefix else 'High'
+        prefposo += self.slit_name if 'Scrap' in self.dev_prefix else ''
+        prefnegi = self.neg_name if 'Scrap' in self.dev_prefix else 'Neg'
+        prefnegi += self.slit_name
+        prefnego = self.neg_name if 'Scrap' in self.dev_prefix else 'Low'
+        prefnego += self.slit_name if 'Scrap' in self.dev_prefix else ''
+
+        self.sb_posinnerlim = SiriusSpinbox(
+            self, self.dev_prefix.substitute(propty=prefposi+'InnerLim-SP'))
+        self.lb_posinnerlim = SiriusLabel(
+            self, self.dev_prefix.substitute(propty=prefposi+'InnerLim-RB'),
+            keep_unit=True)
+        self.lb_posinnerlim.showUnits = True
+        self.sb_posouterlim = SiriusSpinbox(
+            self, self.dev_prefix.substitute(propty=prefposo+'OuterLim-SP'))
+        self.lb_posouterlim = SiriusLabel(
+            self, self.dev_prefix.substitute(propty=prefposo+'OuterLim-RB'),
+            keep_unit=True)
+        self.lb_posouterlim.showUnits = True
+        self.sb_neginnerlim = SiriusSpinbox(
+            self, self.dev_prefix.substitute(propty=prefnegi+'InnerLim-SP'))
+        self.lb_neginnerlim = SiriusLabel(
+            self, self.dev_prefix.substitute(propty=prefnegi+'InnerLim-RB'),
+            keep_unit=True)
+        self.lb_neginnerlim.showUnits = True
+        self.sb_negouterlim = SiriusSpinbox(
+            self, self.dev_prefix.substitute(propty=prefnego+'OuterLim-SP'))
+        self.lb_negouterlim = SiriusLabel(
+            self, self.dev_prefix.substitute(propty=prefnego+'OuterLim-RB'),
+            keep_unit=True)
+        self.lb_negouterlim.showUnits = True
 
         lay = QGridLayout()
         lay.setVerticalSpacing(15)
         lay.addWidget(QLabel(self.pos_label+' Inner Limit:', self), 0, 0)
-        lay.addWidget(self.sb_PosEdgeInnerLim, 0, 1)
-        lay.addWidget(self.lb_PosEdgeInnerLim, 0, 2)
+        lay.addWidget(self.sb_posinnerlim, 0, 1)
+        lay.addWidget(self.lb_posinnerlim, 0, 2)
         lay.addWidget(QLabel(self.pos_label+' Outer Limit:', self), 1, 0)
-        lay.addWidget(self.sb_HighOuterLim, 1, 1)
-        lay.addWidget(self.lb_HighOuterLim, 1, 2)
+        lay.addWidget(self.sb_posouterlim, 1, 1)
+        lay.addWidget(self.lb_posouterlim, 1, 2)
         lay.addWidget(QLabel(self.neg_label+' Inner Limit:', self), 2, 0)
-        lay.addWidget(self.sb_NegEdgeInnerLim, 2, 1)
-        lay.addWidget(self.lb_NegEdgeInnerLim, 2, 2)
+        lay.addWidget(self.sb_neginnerlim, 2, 1)
+        lay.addWidget(self.lb_neginnerlim, 2, 2)
         lay.addWidget(QLabel(self.neg_label+' Outer Limit:', self), 3, 0)
-        lay.addWidget(self.sb_LowOuterLim, 3, 1)
-        lay.addWidget(self.lb_LowOuterLim, 3, 2)
+        lay.addWidget(self.sb_negouterlim, 3, 1)
+        lay.addWidget(self.lb_negouterlim, 3, 2)
         return lay
 
     def _setupBacklashCompLayout(self):
-        self.sb_EnblBacklashComp = PyDMStateButton(
+        self.sb_enblbacklashcomp = PyDMStateButton(
             self, self.dev_prefix.substitute(
                 propty='EnblBacklashComp-Sel'))
-        self.led_EnblBacklashComp = SiriusLedState(
+        self.led_enblbacklashcomp = SiriusLedState(
             self, self.dev_prefix.substitute(
                 propty='EnblBacklashComp-Sts'))
-        self.sb_PosEdgeBacklashDist = SiriusSpinbox(
+        self.sb_posbacklashdist = SiriusSpinbox(
             self, self.dev_prefix.substitute(
-                propty='PositiveEdgeBacklashDist-SP'))
-        self.lb_PosEdgeBacklashDist = SiriusLabel(
+                propty=self.pos_name+self.slit_name+'BacklashDist-SP'))
+        self.lb_posbacklashdist = SiriusLabel(
             self, self.dev_prefix.substitute(
-                propty='PositiveEdgeBacklashDist-RB'))
-        self.sb_NegEdgeBacklashDist = SiriusSpinbox(
+                propty=self.pos_name+self.slit_name+'BacklashDist-RB'),
+            keep_unit=True)
+        self.lb_posbacklashdist.showUnits = True
+        self.sb_negbacklashdist = SiriusSpinbox(
             self, self.dev_prefix.substitute(
-                propty='NegativeEdgeBacklashDist-SP'))
-        self.lb_NegEdgeBacklashDist = SiriusLabel(
+                propty=self.neg_name+self.slit_name+'BacklashDist-SP'))
+        self.lb_negbacklashdist = SiriusLabel(
             self, self.dev_prefix.substitute(
-                propty='NegativeEdgeBacklashDist-RB'))
+                propty=self.neg_name+self.slit_name+'BacklashDist-RB'),
+            keep_unit=True)
+        self.lb_negbacklashdist.showUnits = True
 
         lay = QGridLayout()
         lay.setVerticalSpacing(15)
         lay.addWidget(QLabel('Enable Backlash Compensation:', self), 0, 0)
-        lay.addWidget(self.sb_EnblBacklashComp, 0, 1)
-        lay.addWidget(self.led_EnblBacklashComp, 0, 2)
+        lay.addWidget(self.sb_enblbacklashcomp, 0, 1)
+        lay.addWidget(self.led_enblbacklashcomp, 0, 2)
         lay.addWidget(QLabel(self.pos_label+' Backlash Distance:', self), 1, 0)
-        lay.addWidget(self.sb_PosEdgeBacklashDist, 1, 1)
-        lay.addWidget(self.lb_PosEdgeBacklashDist, 1, 2)
+        lay.addWidget(self.sb_posbacklashdist, 1, 1)
+        lay.addWidget(self.lb_posbacklashdist, 1, 2)
         lay.addWidget(QLabel(self.neg_label+' Backlash Distance:', self), 2, 0)
-        lay.addWidget(self.sb_NegEdgeBacklashDist, 2, 1)
-        lay.addWidget(self.lb_NegEdgeBacklashDist, 2, 2)
+        lay.addWidget(self.sb_negbacklashdist, 2, 1)
+        lay.addWidget(self.lb_negbacklashdist, 2, 2)
         return lay

@@ -7,6 +7,7 @@ from qtpy.QtCore import Qt, QEvent
 from qtpy.QtWidgets import QWidget, QVBoxLayout, QGroupBox, QPushButton, \
     QLabel, QGridLayout, QScrollArea, QSizePolicy
 import qtawesome as qta
+from pydm.widgets import PyDMPushButton
 from pydm.utilities.macro import substitute_in_file as _substitute_in_file
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriuspy.namesys import SiriusPVName as _PVName
@@ -29,14 +30,16 @@ class DiffCtrlDevMonitor(QWidget):
         self.device = self.device.substitute(prefix=self.prefix)
         self.section = self.device.sec
         self.orientation = self.device.dev[-1]
-        if self.orientation == 'H':
-            self.neg_label = 'Inner'
-            self.pos_label = 'Outer'
+        if 'Scrap' in self.device.device_name:
+            self.neg_name = 'Inner' if self.orientation == 'H' else 'Bottom'
+            self.pos_name = 'Outer' if self.orientation == 'H' else 'Top'
+            self.slit_name = 'Slit'
         else:
-            self.neg_label = 'Bottom'
-            self.pos_label = 'Top'
-        self.neg_label += ' Slit'
-        self.pos_label += ' Slit'
+            self.neg_name = 'Negative'
+            self.pos_name = 'Positive'
+            self.slit_name = 'Edge'
+        self.neg_label = self.neg_name + ' ' + self.slit_name
+        self.pos_label = self.pos_name + ' ' + self.slit_name
         self.setObjectName(self.section+'App')
         self._setupUi()
         self._createConnectors()
@@ -54,8 +57,8 @@ class DiffCtrlDevMonitor(QWidget):
             'Status: ', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         channels2values = {
             self.device.substitute(propty='ForceComplete-Mon'): 1,
-            self.device.substitute(propty='NegativeDoneMov-Mon'): 1,
-            self.device.substitute(propty='PositiveDoneMov-Mon'): 1}
+            self.device.substitute(propty=self.neg_name+'DoneMov-Mon'): 1,
+            self.device.substitute(propty=self.pos_name+'DoneMov-Mon'): 1}
         self.multiled_status = PyDMLedMultiChannel(self, channels2values)
         self.multiled_status.setStyleSheet('max-width: 1.29em;')
 
@@ -70,22 +73,26 @@ class DiffCtrlDevMonitor(QWidget):
             prefix=self.prefix, device=self.device,
             neg_label=self.neg_label, pos_label=self.pos_label)
 
-        self.lb_descCtrl1 = QLabel(
+        self.lb_descctrl1 = QLabel(
             '', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
-        self.sb_Ctrl1 = SiriusSpinbox(self)
-        self.sb_Ctrl1.precisionFromPV = False
-        self.sb_Ctrl1.precision = 3
-        self.lb_Ctrl1 = SiriusLabel(self)
-        self.lb_Ctrl1.precisionFromPV = False
-        self.lb_Ctrl1.precision = 3
-        self.lb_descCtrl2 = QLabel(
+        self.sb_ctrl1 = SiriusSpinbox(self)
+        self.sb_ctrl1.precisionFromPV = False
+        self.sb_ctrl1.precision = 3
+        self.lb_ctrl1 = SiriusLabel(self)
+        self.lb_ctrl1.precisionFromPV = False
+        self.lb_ctrl1.precision = 3
+        self.lb_descctrl2 = QLabel(
             '', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
-        self.sb_Ctrl2 = SiriusSpinbox(self)
-        self.sb_Ctrl2.precisionFromPV = False
-        self.sb_Ctrl2.precision = 3
-        self.lb_Ctrl2 = SiriusLabel(self)
-        self.lb_Ctrl2.precisionFromPV = False
-        self.lb_Ctrl2.precision = 3
+        self.sb_ctrl2 = SiriusSpinbox(self)
+        self.sb_ctrl2.precisionFromPV = False
+        self.sb_ctrl2.precision = 3
+        self.lb_ctrl2 = SiriusLabel(self)
+        self.lb_ctrl2.precisionFromPV = False
+        self.lb_ctrl2.precision = 3
+
+        self.pb_open = PyDMPushButton(
+            parent=self, label='Go to maximum aperture', pressValue=1,
+            init_channel=self.device.substitute(propty='Home-Cmd'))
 
         tmp_file = _substitute_in_file(
             _os.path.abspath(_os.path.dirname(__file__))+'/ui_as_ap_dev' +
@@ -106,12 +113,13 @@ class DiffCtrlDevMonitor(QWidget):
         lay.addWidget(label_status, 0, 0)
         lay.addWidget(self.multiled_status, 0, 1)
         lay.addWidget(self.pb_details, 0, 2, alignment=Qt.AlignRight)
-        lay.addWidget(self.lb_descCtrl1, 1, 0)
-        lay.addWidget(self.sb_Ctrl1, 1, 1)
-        lay.addWidget(self.lb_Ctrl1, 1, 2)
-        lay.addWidget(self.lb_descCtrl2, 2, 0)
-        lay.addWidget(self.sb_Ctrl2, 2, 1)
-        lay.addWidget(self.lb_Ctrl2, 2, 2)
+        lay.addWidget(self.lb_descctrl1, 1, 0)
+        lay.addWidget(self.sb_ctrl1, 1, 1)
+        lay.addWidget(self.lb_ctrl1, 1, 2)
+        lay.addWidget(self.lb_descctrl2, 2, 0)
+        lay.addWidget(self.sb_ctrl2, 2, 1)
+        lay.addWidget(self.lb_ctrl2, 2, 2)
+        lay.addWidget(self.pb_open, 3, 0, 1, 3)
         lay.addWidget(self.dev_widget_scrarea, 0, 3, 4, 1)
 
     def _createConnectors(self):

@@ -177,8 +177,7 @@ class SingleSelMatrix(_SingleSelMatrix, BaseObject):
         # initialize SelectionWidget
         SelectionWidget.__init__(
             self, parent=parent, title=dev + "List",
-            has_bothplanes=dev.lower().startswith('bpm'),
-            rules=rules)
+            has_bothplanes=True, rules=rules)
 
         # initialize PyDMWidget
         init_channel = self.devpref.substitute(propty=self.dev+'EnblList-RB')
