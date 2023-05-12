@@ -19,7 +19,7 @@ PVS = {
         {
             'Size X': 'ImgSizeX-Cte',
             'Size Y': 'ImgSizeY-Cte',
-            'Projection': 'image1:ArrayData',
+            'Projection': ['image1:ArrayData', 'ImgSizeX-Cte'],
             'Saturated': 'ImgIsSaturated-Mon',
             'With Beam': 'ImgIsWithBeam-Mon'
         }

@@ -92,7 +92,9 @@ class BLImgProc(QWidget):
         elif widget_type == 'switch':
             wid = PyDMStateButton(init_channel=pvname)
         elif widget_type == 'image':
-            wid = PyDMImageView(image_channel=pvname)
+            wid = PyDMImageView(
+                image_channel=pvname[0],
+                width_channel=pvname[1])
         elif widget_type == 'time':
             wid = self.create_time_widget(pvname)
             wid.setAlignment(Qt.AlignCenter)
