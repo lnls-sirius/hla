@@ -73,6 +73,10 @@ PVS = {
     'Fit': [
         (6, 1, 2, 2),
         {
+            'Use SVD': [
+                'ImgFitAngleUseCMomSVD-Sel',
+                'ImgFitAngleUseCMomSVD-Sts',
+            ],
             'X': {
                 'ROI Mean': 'ImgROIXFitMean-Mon',
                 'ROI Sigma': 'ImgROIXFitSigma-Mon',
