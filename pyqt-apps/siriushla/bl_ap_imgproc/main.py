@@ -176,10 +176,14 @@ class BLImgProc(QWidget):
     def _setupUi(self):
         glay = QGridLayout()
 
+        title = QLabel(
+            '<h3>'+self.device+' Image Processing<h3>', self,
+            alignment=Qt.AlignCenter)
+        glay.addWidget(title, 0, 0, 1, 3)
+
         for title, pv_data in PVS.items():
             loc = pv_data[0]
             wid = self.create_box_group(title, pv_data[1])
-            glay.addWidget(
-                wid, loc[1], loc[0], loc[3], loc[2])
+            glay.addWidget(wid, *loc)
 
         self.setLayout(glay)

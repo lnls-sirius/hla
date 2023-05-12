@@ -8,14 +8,14 @@ LOG_PV = ['Log']
 
 PVS = {
     'IOC':  [
-        (0, 0, 3, 1),
+        (1, 0, 1, 1),
         {
             'Boot Time': 'ImgTimestampBoot-Cte',
             'Update Time': 'ImgTimestampUpdate-Mon'
         }
     ],
     'Img': [
-        (0, 1, 3, 7),
+        (2, 0, 6, 1),
         {
             'Size X': 'ImgSizeX-Cte',
             'Size Y': 'ImgSizeY-Cte',
@@ -25,7 +25,7 @@ PVS = {
         }
     ],
     'ROI': [
-        (3, 0, 2, 3),
+        (1, 1, 2, 2),
         {
             'X': {
                 'Min Max': [
@@ -44,7 +44,7 @@ PVS = {
         }
     ],
     'ROI Update': [
-        (3, 3, 1, 2),
+        (3, 1, 3, 1),
         {
             'ROI X FWHM Factor': [
                 'ImgROIXUpdateWithFWHMFactor-SP',
@@ -61,7 +61,7 @@ PVS = {
         }
     ],
     'Intensity': [
-        (4, 3, 1, 2),
+        (3, 2, 3, 1),
         {
             'Min': 'ImgIntensityMin-Mon',
             'Max': 'ImgIntensityMax-Mon',
@@ -71,7 +71,7 @@ PVS = {
         }
     ],
     'Fit': [
-        (3, 5, 2, 3),
+        (6, 1, 2, 2),
         {
             'X': {
                 'ROI Mean': 'ImgROIXFitMean-Mon',
@@ -87,7 +87,7 @@ PVS = {
         }
     ],
     'Log': [
-        (0, 8, 5, 1),
+        (8, 0, 1, 3),
         {
             'Log': 'ImgLog-Mon'
         }
