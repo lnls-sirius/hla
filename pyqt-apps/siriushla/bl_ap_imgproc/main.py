@@ -53,7 +53,7 @@ class BLImgProc(QWidget):
 
     def format_datetime_lbl(self, value, pvname):
         dtval = datetime.fromtimestamp(value)
-        datetime_lbl = dtval.strftime("%m/%d/%Y, %H:%M:%S")
+        datetime_lbl = dtval.strftime("%d/%m/%Y, %H:%M:%S")
         self._lbl_timestamp[pvname].setText(datetime_lbl)
 
     def create_time_widget(self, pvname):
