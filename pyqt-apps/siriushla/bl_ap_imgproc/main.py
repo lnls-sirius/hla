@@ -187,4 +187,8 @@ class BLImgProc(QWidget):
             wid = self.create_box_group(title, pv_data[1])
             glay.addWidget(wid, *loc)
 
+        glay.setColumnStretch(0, 3)
+        glay.setColumnStretch(1, 1)
+        glay.setColumnStretch(2, 1)
+
         self.setLayout(glay)
