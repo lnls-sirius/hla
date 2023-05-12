@@ -1,33 +1,45 @@
 from datetime import datetime
+
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QGridLayout, QHBoxLayout, \
     QVBoxLayout, QGroupBox, QLabel, QSizePolicy
-from siriushla.widgets import SiriusLabel, SiriusLedState, \
+
+import qtawesome as qta
+
+from pydm.widgets import PyDMImageView
+
+from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
+
+from ..util import get_appropriate_color
+from ..widgets import SiriusLabel, SiriusLedState, \
     SiriusLineEdit, PyDMLogLabel, PyDMStateButton, \
     SiriusConnectionSignal, SiriusSpinbox
-from pydm.widgets import PyDMImageView
-from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
+
 from .util import PVS, IMG_PVS, LED_PVS, LOG_PV
 
 
 class BLImgProc(QWidget):
-    ''' Carcará Image Processing GUI '''
+    """Image Processing Window."""
 
     def __init__(self, beamline, hutch, cam, parent=None, prefix=_VACA_PREFIX):
-        '''.'''
         super().__init__(parent=parent)
         self.setObjectName('SIApp')
         self.prefix = prefix + ('-' if prefix else '')
         self.beamline = beamline
         self.hutch = hutch
         self.cam = cam
+        self.device = self.prefix + self.beamline + ":" + \
+            self.hutch + ":" + self.cam
+        self.setWindowTitle(self.device + ' Image Processing Window')
+        self.setWindowIcon(
+            qta.icon('mdi.camera-metering-center',
+                     color=get_appropriate_color('SI')))
         self._lbl_timestamp = {}
         self.timestamp = {}
         self._setupUi()
 
     def add_prefixes(self, sufix):
-        return self.prefix + self.beamline + ":" + \
-            self.hutch + ":" + self.cam + ":" + sufix
+        return self.device + ":" + sufix
 
     def generate_pv_name(self, sufix):
         if len(sufix) != 2:
@@ -134,12 +146,8 @@ class BLImgProc(QWidget):
         return self.select_widget(pvname, pv_type)
 
     def create_box_group(self, title, pv_info):
-        wid = QGroupBox()
-        gbox = QGridLayout()
-        wid.setLayout(gbox)
-        wid.setStyleSheet(
-            "QGroupBox{ border: 4px groove #777777 }")
-        wid.setTitle(title)
+        wid = QGroupBox(title)
+        gbox = QGridLayout(wid)
 
         count = 0
         for title, pv in pv_info.items():

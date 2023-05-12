@@ -1,6 +1,6 @@
 #!/usr/bin/env python-sirius
 
-""" Carcará Image Processing GUI."""
+"""Image Processing Window."""
 
 import sys as sys
 import argparse as argparse
@@ -10,7 +10,7 @@ from siriushla.bl_ap_imgproc import BLImgProc
 
 
 parser = argparse.ArgumentParser(
-    description="Run Carcará X Image Processing GUI.")
+    description="Run Image Processing Window.")
 parser.add_argument('beamline', type=str, help='Select a beamline.')
 parser.add_argument('hutch', type=str, help='Select a hutch.')
 parser.add_argument('cam', type=str, help='Select a camera.')
