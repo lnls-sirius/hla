@@ -95,6 +95,7 @@ class BLImgProc(QWidget):
             wid = PyDMImageView(
                 image_channel=pvname[0],
                 width_channel=pvname[1])
+            wid.readingOrder = wid.ReadingOrder.Clike
         elif widget_type == 'time':
             wid = self.create_time_widget(pvname)
             wid.setAlignment(Qt.AlignCenter)
