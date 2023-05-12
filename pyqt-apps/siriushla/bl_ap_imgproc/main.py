@@ -99,6 +99,7 @@ class BLImgProc(QWidget):
             wid.readingOrder = wid.ReadingOrder.Clike
             wid.getView().getViewBox().setAspectLocked(True)
             wid.colorMap = wid.Jet
+            wid.maxRedrawRate = 10  # [Hz]
         elif widget_type == 'time':
             wid = self.create_time_widget(pvname)
             wid.setAlignment(Qt.AlignCenter)
