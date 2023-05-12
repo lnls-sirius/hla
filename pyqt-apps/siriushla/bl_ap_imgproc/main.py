@@ -54,10 +54,11 @@ class BLImgProc(QWidget):
     def format_datetime_lbl(self, value, pvname):
         dtval = datetime.fromtimestamp(value)
         datetime_lbl = dtval.strftime("%d/%m/%Y, %H:%M:%S")
+        datetime_lbl += '.{:03d}'.format(int(1e3*(value % 1)))
         self._lbl_timestamp[pvname].setText(datetime_lbl)
 
     def create_time_widget(self, pvname):
-        lbl_time = QLabel('0000-00-00 0:00:00', self)
+        lbl_time = QLabel('0000-00-00 0:00:00.0', self)
         self._lbl_timestamp[pvname] = lbl_time
         self._lbl_timestamp[pvname].channel = pvname
         self.timestamp[pvname] = SiriusConnectionSignal(pvname)
@@ -68,7 +69,7 @@ class BLImgProc(QWidget):
     def select_widget(self, pv_name, widget_type='label', units=True):
         pvname = self.generate_pv_name(pv_name)
         if widget_type == 'label':
-            wid = SiriusLabel(init_channel=pvname)
+            wid = SiriusLabel(init_channel=pvname, keep_unit=True)
             wid.showUnits = units
             wid.setAlignment(Qt.AlignCenter)
             wid.setMaximumHeight(50)
