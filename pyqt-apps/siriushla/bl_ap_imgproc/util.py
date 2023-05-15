@@ -73,6 +73,7 @@ PVS = {
     'Fit': [
         (6, 1, 2, 2),
         {
+            'Proc. Time': 'ImgFitProcTime-Mon',
             'Use SVD': [
                 'ImgFitAngleUseCMomSVD-Sel',
                 'ImgFitAngleUseCMomSVD-Sts',
