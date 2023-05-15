@@ -134,7 +134,7 @@ class BLImgProc(QWidget):
 
         if title in LED_PVS:
             wid_type = 'led'
-        elif "Time" in pv_name:
+        elif 'Time' in pv_name and 'Proc' not in pv_name:
             wid_type = 'time'
         elif len(pv_name) != 2:
             wid_type = 'label'
