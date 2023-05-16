@@ -17,11 +17,11 @@ PVS = {
     'Img': [
         (2, 0, 6, 1),
         {
-            'Size X': 'ImgSizeX-Cte',
-            'Size Y': 'ImgSizeY-Cte',
+            'DVF Size X': 'ImgDVFSizeX-Cte',
+            'DVF Size Y': 'ImgDVFSizeY-Cte',
+            'Img Size X': 'ImgSizeX-Mon',
+            'Img Size Y': 'ImgSizeY-Mon',
             'Projection': ['image1:ArrayData', 'ImgSizeX-Cte'],
-            'Saturated': 'ImgIsSaturated-Mon',
-            'With Beam': 'ImgIsWithBeam-Mon'
         }
     ],
     'ROI': [
@@ -65,9 +65,11 @@ PVS = {
         {
             'Min': 'ImgIntensityMin-Mon',
             'Max': 'ImgIntensityMax-Mon',
-            'Threshold': [
-                'ImgIsWithBeamThreshold-SP', 'ImgIsWithBeamThreshold-RB'
-            ]
+            'Beam Threshold': [
+                'ImgIsWithBeamThreshold-SP', 'ImgIsWithBeamThreshold-RB',
+            ],
+            'With Beam': 'ImgIsWithBeam-Mon',
+            'Saturated': 'ImgIsSaturated-Mon',
         }
     ],
     'Fit': [
