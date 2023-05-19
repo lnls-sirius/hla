@@ -142,6 +142,7 @@ SEC_2_CHANNELS = {
             },
             'PinSw': 'RA-RaBO01:RF-LLRFPreAmp:PinSw-Mon',
             'PreDrive': 'BR-RF-DLLRF-01:INPRE:AMP',
+            'PreDriveThrs': 4,  # mV
         },
         'SL': {
             'Enbl': 'BR-RF-DLLRF-01:SL',
@@ -365,6 +366,7 @@ SEC_2_CHANNELS = {
                 },
                 'PinSw': 'RA-RaSIA01:RF-LLRFPreAmp-1:PINSw1-Mon',
                 'PreDrive': 'SR-RF-DLLRF-01:INPRE1:AMP',
+                'PreDriveThrs': 4,  # mV
             },
             '2': {
                 'Name': 'SSA 02',
@@ -380,6 +382,7 @@ SEC_2_CHANNELS = {
                 },
                 'PinSw': 'RA-RaSIA01:RF-LLRFPreAmp-1:PINSw2-Mon',
                 'PreDrive': 'SR-RF-DLLRF-01:INPRE2:AMP',
+                'PreDriveThrs': 4,  # mV
             }
         },
         'SL': {
