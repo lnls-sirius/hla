@@ -12,10 +12,11 @@ from pyqtgraph import mkBrush, mkPen
 
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.devices import StrengthConv
+from siriuspy.optics.constants import SI as SICte
 
 from ..widgets import SiriusConnectionSignal as _ConnSig, QDoubleSpinBoxPlus,\
     SiriusDialog, SiriusSpinbox, SiriusLabel
-from ..as_ap_sofb.graphics.base import Graph
+from ..as_ap_sofb.graphics.base import Graph, InfLine
 from .base import BaseObject
 
 
@@ -30,6 +31,7 @@ class MatrixWidget(BaseObject, QWidget):
         self._is_inv = 'Inv' in propty
         self._is_coeff = 'Coeff' in propty
         self._is_hw = 'Hw' in propty
+        self._inflines = []
         self._setupui()
         self.mat = _ConnSig(self.devpref.substitute(propty=propty))
         self.mat.new_value_signal[_np.ndarray].connect(self._update_graph)
@@ -141,6 +143,8 @@ class MatrixWidget(BaseObject, QWidget):
 
     def _update_horizontal(self):
         bpm_pos = _np.array(self._csorb.bpm_pos)
+        bpm_pos = [bpm_pos + i*SICte.length for i in range(2)]
+        bpm_pos = _np.hstack(bpm_pos)
         ncorr = self._csorb.nr_chcv if self._is_coeff else self._csorb.nr_corrs
         for i in range(ncorr):
             cur = self.graph.curveAtIndex(i)
@@ -148,6 +152,18 @@ class MatrixWidget(BaseObject, QWidget):
             if self._is_inv or self._is_coeff:
                 pos = _np.hstack([-1, bpm_pos])
             cur.receiveXWaveform(pos)
+
+        for cur in self._inflines:
+            self.graph.removeItem(cur)
+        self._inflines = []
+        for i in range(3):
+            dic = {'style': 2, 'width': 2, 'color': '000'}
+            if i == 1:
+                dic = {'style': 1, 'width': 3, 'color': '000'}
+            pen = mkPen(**dic)
+            line = InfLine(pos=i*SICte.length+bpm_pos[0]/2, pen=pen)
+            self._inflines.append(line)
+            self.graph.addItem(line)
 
 
 class CorrGainWidget(BaseObject, QWidget):
