@@ -97,7 +97,7 @@ class BLImgProc(QWidget):
             wid.getView().getViewBox().setAspectLocked(True)
             wid.colorMap = wid.Jet
             wid.maxRedrawRate = 10  # [Hz]
-            wid.colorMapMax = 2**16-1
+            wid.colorMapMax = 65520
         elif widget_type == 'time':
             wid = self.create_time_widget(pvname)
             wid.setAlignment(Qt.AlignCenter)
