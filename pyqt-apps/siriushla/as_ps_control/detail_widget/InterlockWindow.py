@@ -30,20 +30,15 @@ class InterlockWidget(QWidget):
 class InterlockListWidget(QWidget):
     """Widget with interlock information."""
 
-    def __init__(self, parent=None, devname='', interlock=''):
+    def __init__(self, parent=None, devname='', interlock='', labels=None):
         """."""
         super().__init__(parent)
         self._devname = _PVName(devname)
         self._interlock = interlock
+        self._labels = labels
         self._setup_ui()
 
     def _setup_ui(self):
-        key = self._interlock+'Labels-Cte'
-        psmodel = PSSearch.conv_psname_2_psmodel(self._devname)
-        pstype = PSSearch.conv_psname_2_pstype(self._devname)
-        db = get_ps_propty_database(psmodel, pstype)
-        labels = db[key]['value']
-
         ch = self._devname.substitute(
             prefix=_VACA_PREFIX, propty=self._interlock+'-Mon')
         lay = QGridLayout()
@@ -51,8 +46,8 @@ class InterlockListWidget(QWidget):
         hbox.addWidget(QLabel('Value: ', self))
         hbox.addWidget(SiriusLabel(self, ch))
         hbox.addStretch()
-        lay.addLayout(hbox, 0, 0, 1, len(labels)/8)
-        for bit, label in enumerate(labels):
+        lay.addLayout(hbox, 0, 0, 1, len(self._labels)/8)
+        for bit, label in enumerate(self._labels):
             # Add led and label to layout
             line = (bit % 8) + 1
             column = int(bit / 8)
@@ -63,11 +58,12 @@ class InterlockListWidget(QWidget):
 class InterlockWindow(SiriusMainWindow):
     """InterlockWindow class."""
 
-    def __init__(self, parent=None, devname='', interlock=None, auxdev=list(),
-                 auxdev2mod=dict()):
+    def __init__(self, parent=None, devname='', database=None,
+                 interlock=None, auxdev=None, auxdev2mod=None):
         """Init."""
         super().__init__(parent)
         self._devname = _PVName(devname)
+        self._db = database
         self._auxdev = auxdev
         self._auxdev2mod = auxdev2mod
         self._interlock = interlock
@@ -107,8 +103,10 @@ class InterlockWindow(SiriusMainWindow):
         lay.addWidget(QLabel("<h3>" + self._intlkname + "</h3>"))
 
         if len(self._interlock) == 1:
-            wid = InterlockListWidget(parent=self, devname=self._devname,
-                                      interlock=self._interlock[0])
+            labels = self._db[self._interlock[0]+'Labels-Cte']['value']
+            wid = InterlockListWidget(
+                parent=self, devname=self._devname,
+                interlock=self._interlock[0], labels=labels)
             lay.addWidget(wid)
         else:
             self._tab_widget = QTabWidget(self)
@@ -125,8 +123,10 @@ class InterlockWindow(SiriusMainWindow):
                         tab_lbl = 'IIB' if 'IIB' in intlk else 'Main'
                     if tab_lbl == 'Main' and aux:
                         continue
+                    labels = self._db[intlk+'Labels-Cte']['value']
                     wid = InterlockListWidget(
-                        parent=self, devname=devaux, interlock=intlk)
+                        parent=self, devname=devaux, interlock=intlk,
+                        labels=labels)
                     self._tab_widget.addTab(wid, tab_lbl)
             lay.addWidget(self._tab_widget)
 
