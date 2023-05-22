@@ -21,7 +21,7 @@ PVS = {
             'DVF Size Y': 'ImgDVFSizeY-Cte',
             'Img Size X': 'ImgSizeX-Mon',
             'Img Size Y': 'ImgSizeY-Mon',
-            'Projection': ['image1:ArrayData', 'ImgSizeX-Cte'],
+            'Projection': ['image1:ArrayData', 'ImgSizeX-Mon'],
         }
     ],
     'ROI': [
