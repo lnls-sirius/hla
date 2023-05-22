@@ -636,8 +636,7 @@ class PSCmdWindow(SiriusMainWindow):
                 return
             dev_label = 'PU'
         devices_rst = {
-            dev for dev in devices if dev.sec != 'LI' and
-            dev.dev not in ('FCH', 'FCV')}
+            dev for dev in devices if dev.sec != 'LI'}
 
         task0 = CreateTesters(devices, parent=self)
         task1 = ResetIntlk(devices_rst, parent=self)
