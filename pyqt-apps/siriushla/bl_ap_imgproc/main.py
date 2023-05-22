@@ -21,15 +21,12 @@ from .util import PVS, IMG_PVS, LED_PVS, LOG_PV
 class BLImgProc(QWidget):
     """Image Processing Window."""
 
-    def __init__(self, beamline, hutch, cam, parent=None, prefix=_VACA_PREFIX):
+    def __init__(self, dvf, parent=None, prefix=_VACA_PREFIX):
         super().__init__(parent=parent)
         self.setObjectName('SIApp')
         self.prefix = prefix + ('-' if prefix else '')
-        self.beamline = beamline
-        self.hutch = hutch
-        self.cam = cam
-        self.device = self.prefix + self.beamline + ":" + \
-            self.hutch + ":" + self.cam
+        self.dvf = dvf
+        self.device = self.prefix + self.dvf
         self.setWindowTitle(self.device + ' Image Processing Window')
         self.setWindowIcon(
             qta.icon('mdi.camera-metering-center',
@@ -100,6 +97,7 @@ class BLImgProc(QWidget):
             wid.getView().getViewBox().setAspectLocked(True)
             wid.colorMap = wid.Jet
             wid.maxRedrawRate = 10  # [Hz]
+            wid.colorMapMax = 2**16-1
         elif widget_type == 'time':
             wid = self.create_time_widget(pvname)
             wid.setAlignment(Qt.AlignCenter)

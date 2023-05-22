@@ -11,9 +11,7 @@ from siriushla.bl_ap_imgproc import BLImgProc
 
 parser = argparse.ArgumentParser(
     description="Run Image Processing Window.")
-parser.add_argument('beamline', type=str, help='Select a beamline.')
-parser.add_argument('hutch', type=str, help='Select a hutch.')
-parser.add_argument('cam', type=str, help='Select a camera.')
+parser.add_argument('dvf', type=str, help='Select a DVF')
 parser.add_argument(
     '-p', "--prefix", type=str, default=VACA_PREFIX,
     help="Define the prefix for the PVs in the window.")
@@ -21,6 +19,5 @@ args = parser.parse_args()
 
 app = SiriusApplication()
 app.open_window(
-    BLImgProc, parent=None, prefix=args.prefix,
-    beamline=args.beamline, hutch=args.hutch, cam=args.cam)
+    BLImgProc, parent=None, prefix=args.prefix, dvf=args.dvf)
 sys.exit(app.exec_())
