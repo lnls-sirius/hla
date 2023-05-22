@@ -460,6 +460,7 @@ class KickWidget(BaseObject, QWidget):
             curve.opts['symbolBrush'] = brss
             curve.opts['symbolPen'] = pens
             curve.opts['symbolSize'] = sizes
+            curve.redrawCurve()
         else:
             if data == 'energy':
                 value = self.limh.value if plane == 'h' \
