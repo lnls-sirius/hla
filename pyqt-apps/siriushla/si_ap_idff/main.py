@@ -35,7 +35,7 @@ class IDFFWindow(SiriusMainWindow):
         self._const = IDFFConst(idname)
         self._idffdata = IDSearch.conv_idname_2_idff(self.idname)
         self.device = _PVName(self._const.idffname)
-        self.dev_pref = self.device.substitute(prefix='ana')
+        self.dev_pref = self.device.substitute(prefix=prefix)
         self.setObjectName('IDApp')
         self.setWindowTitle(self.device)
         self.setWindowIcon(get_idff_icon())
