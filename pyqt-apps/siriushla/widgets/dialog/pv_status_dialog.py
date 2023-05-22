@@ -14,10 +14,12 @@ from siriushla.widgets.led import SiriusLedAlert
 class StatusDetailDialog(SiriusDialog):
     """Status Detail Dialog."""
 
-    def __init__(self, pvname='', labels=None, parent=None, title=''):
+    def __init__(self, pvname='', labels=None, section='', parent=None, title=''):
         super().__init__(parent)
         self.pvname = SiriusPVName(pvname)
-        self.section = self.pvname.sec
+        self.section = section
+        if not section:
+            self.section = self.pvname.sec
         self.setObjectName(self.section+'App')
         self.labels = list() if labels is None else labels
         self.title = title
