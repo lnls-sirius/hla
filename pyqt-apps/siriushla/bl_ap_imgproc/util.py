@@ -1,7 +1,7 @@
 IMG_PVS = ['Projection']
 
 LED_PVS = [
-    'Saturated', 'With Beam'
+    'Saturated', 'With Beam', 'DVF Status',
 ]
 
 LOG_PV = ['Log']
@@ -14,11 +14,18 @@ PVS = {
             'Update Time': 'ImgTimestampUpdate-Mon'
         }
     ],
-    'Img': [
-        (2, 0, 6, 1),
+    'DVF': [
+        (2, 0, 1, 1),
         {
+            'DVF Status': 'ImgDVFStatus-Mon',
             'DVF Size X': 'ImgDVFSizeX-Cte',
             'DVF Size Y': 'ImgDVFSizeY-Cte',
+            'DVF Acquire': 'ImgDVFAcquire-Cmd',
+        }
+    ],
+    'Img': [
+        (3, 0, 6, 1),
+        {
             'Img Size X': 'ImgSizeX-Mon',
             'Img Size Y': 'ImgSizeY-Mon',
             'Projection': ['image1:ArrayData', 'ImgSizeX-Mon'],
@@ -44,7 +51,7 @@ PVS = {
         }
     ],
     'ROI Update': [
-        (3, 1, 3, 1),
+        (3, 1, 4, 1),
         {
             'ROI X FWHM Factor': [
                 'ImgROIXUpdateWithFWHMFactor-SP',
@@ -61,7 +68,7 @@ PVS = {
         }
     ],
     'Intensity': [
-        (3, 2, 3, 1),
+        (3, 2, 4, 1),
         {
             'Min': 'ImgIntensityMin-Mon',
             'Max': 'ImgIntensityMax-Mon',
@@ -73,7 +80,7 @@ PVS = {
         }
     ],
     'Fit': [
-        (6, 1, 2, 2),
+        (7, 1, 2, 2),
         {
             'Proc. Time': 'ImgFitProcTime-Mon',
             'Use SVD': [
@@ -90,11 +97,13 @@ PVS = {
                 'ROI Sigma': 'ImgROIYFitSigma-Mon',
                 'ROI Error': 'ImgROIYFitError-Mon'
             },
-            'Angle': 'ImgFitAngle-Mon'
+            'Angle': 'ImgFitAngle-Mon',
+            'Sigma1': 'ImgFitSigma1-Mon',
+            'Sigma2': 'ImgFitSigma2-Mon',
         }
     ],
     'Log': [
-        (8, 0, 1, 3),
+        (9, 0, 1, 3),
         {
             'Log': 'ImgLog-Mon'
         }

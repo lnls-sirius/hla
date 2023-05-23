@@ -1,3 +1,5 @@
+"""BL AP ImgProc."""
+
 from datetime import datetime
 
 from qtpy.QtCore import Qt
@@ -6,7 +8,7 @@ from qtpy.QtWidgets import QWidget, QGridLayout, QHBoxLayout, \
 
 import qtawesome as qta
 
-from pydm.widgets import PyDMImageView
+from pydm.widgets import PyDMImageView, PyDMPushButton
 
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 
@@ -22,6 +24,7 @@ class BLImgProc(QWidget):
     """Image Processing Window."""
 
     def __init__(self, dvf, parent=None, prefix=_VACA_PREFIX):
+        """."""
         super().__init__(parent=parent)
         self.setObjectName('SIApp')
         self.prefix = prefix + ('-' if prefix else '')
@@ -103,6 +106,9 @@ class BLImgProc(QWidget):
             wid.setAlignment(Qt.AlignCenter)
         elif widget_type == 'spin':
             wid = SiriusSpinbox(init_channel=pvname)
+        elif widget_type == 'cmd':
+            wid = PyDMPushButton(init_channel=pvname, pressValue=1)
+            wid.setIcon(qta.icon('fa5s.sync'))
         else:
             wid = QLabel("Widget has not been implemented yet!")
         return wid
@@ -134,6 +140,8 @@ class BLImgProc(QWidget):
             wid_type = 'led'
         elif 'Time' in pv_name and 'Proc' not in pv_name:
             wid_type = 'time'
+        elif '-Cmd' in pv_name:
+            wid_type = 'cmd'
         elif len(pv_name) != 2:
             wid_type = 'label'
         else:
@@ -151,12 +159,13 @@ class BLImgProc(QWidget):
         return self.select_widget(pvname, pv_type)
 
     def create_box_group(self, title, pv_info):
+        """."""
         wid = QGroupBox(title)
         gbox = QGridLayout(wid)
 
         count = 0
+        special_list = IMG_PVS + LOG_PV
         for title, pv in pv_info.items():
-            special_list = IMG_PVS+LOG_PV
             if title in ['X', 'Y']:
                 widget = self.create_box_group(title, pv)
                 hpos = 0 if title == 'X' else 1
