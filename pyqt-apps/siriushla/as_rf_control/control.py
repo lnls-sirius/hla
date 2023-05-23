@@ -1383,9 +1383,9 @@ class RFMainControl(SiriusMainWindow):
                 'off': self.prefix+chs_dict['PinSw'].replace(
                     '-Mon', 'Dsbl-Cmd')})
         rules = (
-            '[{"name": "EnblRule", "property": "Enable", ' +
-            '"expression": "ch[0] < 3.5", "channels": [' +
-            '{"channel": "'+self.prefix+chs_dict['PreDrive'] +
+            '[{"name": "EnblRule", "property": "Enable", "expression":' +
+            '"ch[0] < ' + str(chs_dict['PreDriveThrs']) + '", "channels":' +
+            '[{"channel": "'+self.prefix+chs_dict['PreDrive'] +
             '", "trigger": true}]}]')
         bt_pinsw.pb_on.rules = rules
         led_pinsw = SiriusLedState(self, self.prefix+chs_dict['PinSw'])
@@ -1395,7 +1395,8 @@ class RFMainControl(SiriusMainWindow):
         lb_drive.showUnits = True
         led_drive = PyDMLedMultiChannel(
             parent=self, channels2values={
-                self.prefix+chs_dict['PreDrive']: {'comp': 'lt', 'value': 3}})
+                self.prefix+chs_dict['PreDrive']: {
+                    'comp': 'lt', 'value': chs_dict['PreDriveThrs']}})
         lay_amp.addLayout(self._create_vlay(lb_drive, led_drive), row, 7)
 
         ch_pinsw = SiriusConnectionSignal(self.prefix+chs_dict['PinSw'])
@@ -1425,7 +1426,7 @@ class RFMainControl(SiriusMainWindow):
         curve.setVisible(state)
 
     def _handle_predrive_led_channels(self, led_drive, chs_dict, value):
-        val = 100 if value == 1 else 3
+        val = 100 if value == 1 else chs_dict['PreDriveThrs']
         ch2vals = {
             self.prefix+chs_dict['PreDrive']: {
                 'comp': 'lt', 'value': val}
