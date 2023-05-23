@@ -38,18 +38,24 @@ class IDCommonControlWindow(SiriusMainWindow):
 
         vlay1 = QVBoxLayout()
         vlay1.addWidget(self._mainControlsWidget())
-        aux_cmds = self._auxCommandsWidget()
-        if aux_cmds is not None:
+        try:
+            aux_cmds = self._auxCommandsWidget()
             vlay1.addWidget(aux_cmds)
+        except NotImplementedError:
+            pass
 
         vlay2 = QVBoxLayout()
-        ctrl_mode = self._ctrlModeWidget()
-        if ctrl_mode is not None:
+        try:
+            ctrl_mode = self._ctrlModeWidget()
             vlay2.addWidget(ctrl_mode)
+        except NotImplementedError:
+            pass
         vlay2.addWidget(self._beamLinesCtrlWidget())
-        status = self._statusWidget()
-        if status is not None:
+        try:
+            status = self._statusWidget()
             vlay2.addWidget(status)
+        except NotImplementedError:
+            pass
 
         cwid = QWidget()
         self.setCentralWidget(cwid)
@@ -57,6 +63,12 @@ class IDCommonControlWindow(SiriusMainWindow):
         lay.addWidget(self._label_title, 0, 0, 1, 2)
         lay.addLayout(vlay1, 1, 0)
         lay.addLayout(vlay2, 1, 1)
+
+        try:
+            ffsett = self._ffSettingsWidget()
+            lay.addWidget(ffsett, 2, 0, 1, 2)
+        except NotImplementedError:
+            pass
 
     def _mainControlsWidget(self):
         raise NotImplementedError
@@ -87,6 +99,9 @@ class IDCommonControlWindow(SiriusMainWindow):
         return gbox_blines
 
     def _auxCommandsWidget(self):
+        raise NotImplementedError
+
+    def _ffSettingsWidget(self):
         raise NotImplementedError
 
 
