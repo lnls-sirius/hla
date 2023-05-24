@@ -102,12 +102,6 @@ class CavityStatusDetails(SiriusDialog):
             led.channel = self.prefix+disc
             lay_dtemp.addRow('Disc '+str(idx)+': ', led)
 
-        self.led_hdflwrt1 = SiriusLedAlert(
-            self, self.prefix+self.chs['Cav Sts']['FlwRt'][0])
-        self.led_hdflwrt2 = SiriusLedAlert(
-            self, self.prefix+self.chs['Cav Sts']['FlwRt'][1])
-        self.led_hdflwrt3 = SiriusLedAlert(
-            self, self.prefix+self.chs['Cav Sts']['FlwRt'][2])
         lay_flwrt = QFormLayout()
         lay_flwrt.setHorizontalSpacing(9)
         lay_flwrt.setVerticalSpacing(9)
@@ -117,9 +111,9 @@ class CavityStatusDetails(SiriusDialog):
         lb_flwrf.setStyleSheet(
             'font-weight:bold; qproperty-alignment:AlignCenter;')
         lay_flwrt.addRow(lb_flwrf)
-        lay_flwrt.addRow('Flow Switch 1: ', self.led_hdflwrt1)
-        lay_flwrt.addRow('Flow Switch 2: ', self.led_hdflwrt2)
-        lay_flwrt.addRow('Flow Switch 3: ', self.led_hdflwrt3)
+        for flwsw, pvn in self.chs['Cav Sts']['FlwRt'].items():
+            led = SiriusLedAlert(self, self.prefix+pvn)
+            lay_flwrt.addRow(flwsw+': ', led)
 
         self.led_couppressure = SiriusLedAlert(
             self, self.prefix+self.chs['Cav Sts']['Vac']['Coupler ok'])
