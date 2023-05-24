@@ -1,7 +1,9 @@
+"""Utilities."""
+
 IMG_PVS = ['Projection']
 
 LED_PVS = [
-    'Saturated', 'With Beam',
+    'IsSaturated Ok', 'IsWithBeam Ok', 'DVF Status',
 ]
 
 LED_ALARM = ['DVF Status']
@@ -78,8 +80,8 @@ PVS = {
             'Beam Threshold': [
                 'ImgIsWithBeamThreshold-SP', 'ImgIsWithBeamThreshold-RB',
             ],
-            'With Beam': 'ImgIsWithBeam-Mon',
-            'Saturated': 'ImgIsSaturated-Mon',
+            'IsWithBeam Ok': 'ImgIsWithBeam-Mon',
+            'IsSaturated Ok': 'ImgIsSaturated-Mon',
         }
     ],
     'Fit': [

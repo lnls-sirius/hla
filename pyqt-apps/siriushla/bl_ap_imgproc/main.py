@@ -89,7 +89,16 @@ class BLImgProc(QWidget):
                 sprb_type = [setwid, 'label', False]
             wid = self.setpoint_readback_widget(pv_name, sprb_type)
         elif widget_type == 'led':
-            wid = SiriusLedState(init_channel=pvname)
+            if 'Saturated' in pv_name:
+                wid = SiriusLedAlert(init_channel=pvname)
+                wid.onColor = wid.Yellow
+            elif 'WithBeam' in pv_name:
+                wid = SiriusLedState(init_channel=pvname)
+                wid.offColor = wid.Yellow
+            elif 'DVFStatus' in pv_name:
+                wid = SiriusLedAlert(init_channel=pvname)
+            else:
+                wid = SiriusLedState(init_channel=pvname)
         elif widget_type == 'alarm':
             wid = SiriusLedAlert(init_channel=pvname)
         elif widget_type == 'log':
