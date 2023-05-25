@@ -26,6 +26,7 @@ PVS = {
             'DVF Size Y': 'ImgDVFSizeY-Cte',
             'DVF Acquire': 'ImgDVFAcquire-Cmd',
             'DVF Reset': 'ImgDVFReset-Cmd',
+            'Exposure Time': ['cam1:AcquireTime', 'cam1:AcquireTime_RBV'],
         }
     ],
     'Img': [
