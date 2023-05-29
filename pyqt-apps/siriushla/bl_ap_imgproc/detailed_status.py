@@ -23,8 +23,7 @@ class DetailedStatusWindow(SiriusMainWindow):
         self.setupUi()
 
     def bit_indicator(self):
-        # pvname = self.device + ':' + DVF_STATUS[0]
-        pvname = DVF_STATUS[0]
+        pvname = self.device + ':' + DVF_STATUS[0]
         bit_wid = PyDMByteIndicator(init_channel=pvname)
         bit_wid.numBits = 8
         bit_wid.onColor = QColor(0, 190, 0)
