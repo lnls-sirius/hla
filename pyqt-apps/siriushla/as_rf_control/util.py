@@ -106,11 +106,12 @@ SEC_2_CHANNELS = {
                     'BO-05D:RF-P5Cav:Disc6Tms-Mon',
                 ),
             },
-            'FlwRt': (
-                'BO-05D:RF-P5Cav:Hd1FlwRt-Mon',
-                'BO-05D:RF-P5Cav:Hd2FlwRt-Mon',
-                'BO-05D:RF-P5Cav:Hd3FlwRt-Mon',
-            ),
+            'FlwRt': {
+                'Flow Switch 1': 'BO-05D:RF-P5Cav:Hd1FlwRt-Mon',
+                'Flow Switch 2': 'BO-05D:RF-P5Cav:Hd2FlwRt-Mon',
+                'Flow Switch 3': 'BO-05D:RF-P5Cav:Hd3FlwRt-Mon',
+                'Flow Switch 4': 'BO-05D:RF-P5Cav:Hd4FlwRt-Mon',
+            },
             'Vac': {
                 'Cells': 'BO-05D:VA-CCG-RFC:Pressure-Mon',
                 'Cond': 'BR-RF-DLLRF-01:VACUUM',
@@ -328,11 +329,11 @@ SEC_2_CHANNELS = {
                     'SI-02SB:RF-P7Cav:Disc8Tms-Mon',
                 ),
             },
-            'FlwRt': (
-                'SI-02SB:RF-P7Cav:HDFlwRt1-Mon',
-                'SI-02SB:RF-P7Cav:HDFlwRt2-Mon',
-                'SI-02SB:RF-P7Cav:HDFlwRt3-Mon',
-            ),
+            'FlwRt': {
+                'Flow Switch 1': 'SI-02SB:RF-P7Cav:HDFlwRt1-Mon',
+                'Flow Switch 2': 'SI-02SB:RF-P7Cav:HDFlwRt2-Mon',
+                'Flow Switch 3': 'SI-02SB:RF-P7Cav:HDFlwRt3-Mon',
+            },
             'Vac': {
                 'Cells': 'SI-02SB:VA-CCG-CAV:Pressure-Mon',
                 'Cond': 'SR-RF-DLLRF-01:VACUUM',
