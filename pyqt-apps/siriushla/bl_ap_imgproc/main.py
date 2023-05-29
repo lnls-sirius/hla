@@ -4,7 +4,8 @@ from datetime import datetime
 
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QGridLayout, QHBoxLayout, \
-    QVBoxLayout, QGroupBox, QLabel, QSizePolicy
+    QVBoxLayout, QGroupBox, QLabel, QSizePolicy, QTabWidget, \
+    QPushButton
 
 import qtawesome as qta
 
@@ -12,12 +13,14 @@ from pydm.widgets import PyDMImageView, PyDMPushButton
 
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 
+from .. import util as _util
 from ..util import get_appropriate_color
 from ..widgets import SiriusLabel, SiriusLedState, \
     SiriusLineEdit, PyDMLogLabel, PyDMStateButton, \
-    SiriusConnectionSignal, SiriusSpinbox
+    SiriusConnectionSignal, SiriusSpinbox, SiriusLedAlert
 
-from .util import PVS, IMG_PVS, LED_PVS, LOG_PV
+from .detailed_status import DetailedStatusWindow
+from .util import LED_ALARM, PVS, IMG_PVS, LED_PVS, LOG_PV, PVS_DVF
 
 
 class BLImgProc(QWidget):
@@ -85,6 +88,8 @@ class BLImgProc(QWidget):
             wid = self.setpoint_readback_widget(pv_name, sprb_type)
         elif widget_type == 'led':
             wid = SiriusLedState(init_channel=pvname)
+        elif widget_type == 'alarm':
+            wid = SiriusLedAlert(init_channel=pvname)
         elif widget_type == 'log':
             wid = PyDMLogLabel(init_channel=pvname)
         elif widget_type == 'edit':
@@ -134,10 +139,12 @@ class BLImgProc(QWidget):
 
         title_wid = QLabel(title)
         title_wid.setAlignment(Qt.AlignCenter)
-        hlay.addWidget(title_wid)
+        hlay.addWidget(title_wid, 2)
 
         if title in LED_PVS:
             wid_type = 'led'
+        elif title in LED_ALARM:
+            wid_type = 'alarm'
         elif 'Time' in pv_name and 'Proc' not in pv_name:
             wid_type = 'time'
         elif '-Cmd' in pv_name:
@@ -148,7 +155,13 @@ class BLImgProc(QWidget):
             wid_type = 'setpoint_readback'
 
         wid = self.select_widget(pv_name, wid_type)
-        hlay.addWidget(wid)
+        hlay.addWidget(wid, 2)
+
+        if title in LED_ALARM:
+            details = QPushButton(qta.icon('fa5s.ellipsis-h'), '', self)
+            _util.connect_window(
+                details, DetailedStatusWindow, device=self.device,parent=self)
+            hlay.addWidget(details, 1)
         return hlay
 
     def get_special_wid(self, pvname, title):
@@ -185,15 +198,11 @@ class BLImgProc(QWidget):
 
         return wid
 
-    def _setupUi(self):
+    def page(self, content):
+        cont_wid = QWidget()
         glay = QGridLayout()
 
-        title = QLabel(
-            '<h3>'+self.device+' Image Processing<h3>', self,
-            alignment=Qt.AlignCenter)
-        glay.addWidget(title, 0, 0, 1, 3)
-
-        for title, pv_data in PVS.items():
+        for title, pv_data in content.items():
             loc = pv_data[0]
             wid = self.create_box_group(title, pv_data[1])
             glay.addWidget(wid, *loc)
@@ -201,5 +210,24 @@ class BLImgProc(QWidget):
         glay.setColumnStretch(0, 3)
         glay.setColumnStretch(1, 1)
         glay.setColumnStretch(2, 1)
+        cont_wid.setLayout(glay)
+        return cont_wid
 
-        self.setLayout(glay)
+    def _setupUi(self):
+        main_lay = QVBoxLayout()
+        tab = QTabWidget()
+        tab.setObjectName('SITab')
+
+        title = QLabel(
+            '<h3>'+self.device+' Image Processing<h3>', self,
+            alignment=Qt.AlignCenter)
+        main_lay.addWidget(title)
+
+        main_page_wid = self.page(PVS)
+        tab.addTab(main_page_wid, "DVFImgProc")
+        dvf_page_wid = self.page(PVS_DVF)
+        dvf_page_wid.setMaximumHeight(250)
+        tab.addTab(dvf_page_wid, "DVF")
+
+        main_lay.addWidget(tab)
+        self.setLayout(main_lay)

@@ -1,8 +1,10 @@
 IMG_PVS = ['Projection']
 
 LED_PVS = [
-    'Saturated', 'With Beam', 'DVF Status',
+    'Saturated', 'With Beam',
 ]
+
+LED_ALARM = ['DVF Status']
 
 LOG_PV = ['Log']
 
@@ -108,4 +110,33 @@ PVS = {
             'Log': 'ImgLog-Mon'
         }
     ]
+}
+
+DVF_STATUS = [
+    "ImgDVFStatus-Mon",
+    "ImgDVFStatusLabels-Cte"
+]
+
+PVS_DVF = {
+    'ROI Control': [
+        (1, 0, 1, 3),
+        {
+            'X': {
+                'Size': [
+                    'ROI1:SizeX-Mon', 'ROI1:SizeX_RBV-Mon'
+                ],
+                'Min': [
+                    'ROI1:MinX-Mon', 'ROI1:MinX_RBV-Mon'
+                ]
+            },
+            'Y': {
+                'Size': [
+                    'ROI1:SizeY-Mon', 'ROI1:SizeY_RBV-Mon'
+                ],
+                'Min': [
+                    'ROI1:MinY-Mon', 'ROI1:MinY_RBV-Mon'
+                ]
+            }
+        }
+    ],
 }
