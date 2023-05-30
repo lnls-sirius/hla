@@ -25,8 +25,11 @@ class DetailedStatusWindow(SiriusMainWindow):
         labels = caget(pvname)
 
         label_list = []
-        for label in labels.tolist():
-            label_list.append(label)
+        try:
+            for label in labels.tolist():
+                label_list.append(label)
+        except:
+            raise ConnectionError(pvname + ' not connected!')
 
         return label_list
 
