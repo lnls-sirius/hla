@@ -1,10 +1,8 @@
+import time as _time
 from epics import caget
 
-from qtpy.QtCore import Qt
-from qtpy.QtWidgets import QHBoxLayout, QWidget, \
-    QVBoxLayout, QLabel
-from qtpy.QtGui import QColor
-from pydm.widgets import PyDMByteIndicator
+from qtpy.QtWidgets import QWidget, QLabel, QGridLayout
+from siriushla.widgets.led import SiriusLedAlert
 
 from ..widgets.windows import SiriusMainWindow
 
@@ -17,46 +15,30 @@ class DetailedStatusWindow(SiriusMainWindow):
         """."""
         super().__init__(parent=parent)
         self.device = device
+        self.pvname = self.device + ':' + DVF_STATUS[0]
         self.setWindowTitle("DVF Status Detailed")
         self.setObjectName("SIApp")
-
         self.setupUi()
-
-    def bit_indicator(self):
-        pvname = self.device + ':' + DVF_STATUS[0]
-        bit_wid = PyDMByteIndicator(init_channel=pvname)
-        bit_wid.numBits = 8
-        bit_wid.onColor = QColor(0, 190, 0)
-        bit_wid.offColor = QColor(20, 80, 10)
-        return bit_wid
 
     def detailed_labels(self):
         pvname = self.device + ':' + DVF_STATUS[1]
         labels = caget(pvname)
 
-        count = 0
-        vlay = QVBoxLayout()
-        label_list = labels.tolist()
-        for label in label_list:
-            txt_wid = QLabel(label)
-            txt_wid.setAlignment(Qt.AlignVCenter)
-            vlay.addWidget(txt_wid)
-            count += 1
+        label_list = []
+        for label in labels.tolist():
+            label_list.append(label)
 
-        for label in range(count, 8):
-            txt_wid = QLabel("")
-            vlay.addWidget(txt_wid)
-        return vlay
+        return label_list
 
     def setupUi(self):
         wid = QWidget()
-        hlay = QHBoxLayout()
-        wid.setLayout(hlay)
-
-        bit_ind = self.bit_indicator()
-        hlay.addWidget(bit_ind)
-
-        labels = self.detailed_labels()
-        hlay.addLayout(labels)
+        self.labels = self.detailed_labels()
+        lay = QGridLayout(self)
+        for idx, desc in enumerate(self.labels):
+            led = SiriusLedAlert(self, self.pvname, bit=idx)
+            lbl = QLabel(desc, self)
+            lay.addWidget(led, idx+1, 0)
+            lay.addWidget(lbl, idx+1, 1)
+        wid.setLayout(lay)
 
         self.setCentralWidget(wid)

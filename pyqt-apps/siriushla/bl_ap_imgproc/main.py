@@ -160,7 +160,7 @@ class BLImgProc(QWidget):
         if title in LED_ALARM:
             details = QPushButton(qta.icon('fa5s.ellipsis-h'), '', self)
             _util.connect_window(
-                details, DetailedStatusWindow, device=self.device,parent=self)
+                details, DetailedStatusWindow, device=self.device, parent=self)
             hlay.addWidget(details, 1)
         return hlay
 
