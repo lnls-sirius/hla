@@ -1,4 +1,3 @@
-import time as _time
 from epics import caget
 
 from qtpy.QtWidgets import QWidget, QLabel, QGridLayout
