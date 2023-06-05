@@ -468,14 +468,20 @@ class KickWidget(BaseObject, QWidget):
                     return
             psnames = self._csorb.ch_names if plane == 'h' \
                 else self._csorb.cv_names
-            maxlim = _np.array([
+            maxlim = [
                 self._psconv[psn].conv_current_2_strength(value)
-                for psn in psnames])*self.URAD2RAD
+                for psn in psnames]
+            if None in maxlim:
+                return
+            maxlim = _np.array(maxlim)*self.URAD2RAD
             maxc = graph.curveAtIndex(1)
             maxc.receiveYWaveform(maxlim)
-            minlim = _np.array([
+            minlim = [
                 self._psconv[psn].conv_current_2_strength(-value)
-                for psn in psnames])*self.URAD2RAD
+                for psn in psnames]
+            if None in minlim:
+                return
+            minlim = _np.array(minlim)*self.URAD2RAD
             minc = graph.curveAtIndex(2)
             minc.receiveYWaveform(minlim)
 
