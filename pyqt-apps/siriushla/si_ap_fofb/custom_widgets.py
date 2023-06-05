@@ -160,9 +160,6 @@ class RefOrbWidget(BaseObject, QWidget):
         self._refx = _np.asarray(refx)
         self._refy = _np.asarray(refy)
 
-        # update graph
-        self.graph.update_new_value_curves(self._refx, self._refy)
-
         # send
         self._ch_refx.send_value_signal[_np.ndarray].emit(self._refx)
         self._ch_refy.send_value_signal[_np.ndarray].emit(self._refy)

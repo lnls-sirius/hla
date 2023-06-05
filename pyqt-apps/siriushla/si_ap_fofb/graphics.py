@@ -254,8 +254,6 @@ class RefOrbViewWidget(BaseObject, SiriusDialog):
         self.refy = _ConnSig(self.devpref.substitute(propty='RefOrbY-RB'))
         self.refy.new_value_signal[_np.ndarray].connect(
             _part(self._update_implemented_ref, 'y'))
-        ref = _np.zeros(self._csorb.nr_bpms, dtype=float)
-        self.update_new_value_curves(ref, ref)
         self._update_horizontal()
 
     def _setupui(self):
@@ -281,16 +279,9 @@ class RefOrbViewWidget(BaseObject, SiriusDialog):
                 lineStyle=1, lineWidth=2,
                 symbol='o', symbolSize=10)
             graph.addChannel(**opts)
-            color = QColor(0, 125, 255) if plane == 'x' \
-                else QColor(255, 125, 0)
-            opts = dict(
-                y_channel='', x_channel='', name='New Value',
-                color=color, redraw_mode=2,
-                lineStyle=1, lineWidth=2,
-                symbol='o', symbolSize=10)
-            graph.addChannel(**opts)
             graph.plotItem.scene().sigMouseMoved.connect(
                 _part(self._show_tooltip, plane))
+            graph.setShowLegend(False)
             vbl.addWidget(graph)
 
     def _show_tooltip(self, plane, pos):
@@ -306,9 +297,8 @@ class RefOrbViewWidget(BaseObject, SiriusDialog):
     def _update_horizontal(self):
         bpm_pos = _np.array(self._csorb.bpm_pos)
         for graph in [self.graph_x, self.graph_y]:
-            for idx in [0, 1]:
-                curve = graph.curveAtIndex(idx)
-                curve.receiveXWaveform(bpm_pos)
+            curve = graph.curveAtIndex(0)
+            curve.receiveXWaveform(bpm_pos)
 
     def _update_implemented_ref(self, plane, *args):
         ref = getattr(self, 'ref' + plane)
@@ -318,13 +308,6 @@ class RefOrbViewWidget(BaseObject, SiriusDialog):
         graph = getattr(self, 'graph_' + plane)
         curve = graph.curveAtIndex(0)
         curve.receiveYWaveform(self.UM2M*_np.array(value))
-
-    def update_new_value_curves(self, refx, refy):
-        """Update new value curves."""
-        curve = self.graph_x.curveAtIndex(1)
-        curve.receiveYWaveform(self.UM2M*_np.array(refx))
-        curve = self.graph_y.curveAtIndex(1)
-        curve.receiveYWaveform(self.UM2M*_np.array(refy))
 
 
 class KickWidget(BaseObject, QWidget):
