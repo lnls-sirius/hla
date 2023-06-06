@@ -1531,18 +1531,6 @@ class FACDCLinkDetailWidget(DCLinkDetailWidget):
 
 
 class FastCorrPSDetailWidget(_BaseDetailWidget):
-
-    CONV_CORR2CHANNEL = {
-        'M1-FCH': 0,
-        'M1-FCV': 1,
-        'M2-FCH': 2,
-        'M2-FCV': 3,
-        'C2-FCH': 4,
-        'C2-FCV': 5,
-        'C3-FCH': 6,
-        'C3-FCV': 7,
-    }
-
     def __init__(self, psname, parent=None):
         """Class constructor."""
         super(FastCorrPSDetailWidget, self).__init__(psname, parent=parent)
@@ -1897,19 +1885,10 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
         tabmon = QTabWidget(self)
         tabmon.setObjectName(self._psname.sec+'Tab')
 
-        fofbctrl = SiriusPVName('IA-99RaBPM:BS-FOFBCtrl')
-        subnum = self._prefixed_psname.sub[:2]
-        subnam = self._prefixed_psname.sub[2:]
-        dev = self._prefixed_psname.dev
-        fofbctrl = fofbctrl.replace('99', subnum)
-        # fofbctrl = fofbctrl.replace('IA-'+subnum, 'XX-99SL01')  # comment
-        chn = FastCorrPSDetailWidget.CONV_CORR2CHANNEL.get(subnam+'-'+dev, 0)
-
         # # current waveform
         self.graph_curr = SiriusWaveformPlot()
         self.graph_curr.addChannel(
-            y_channel=fofbctrl.substitute(
-                propty='GENConvArrayDataCH'+str(chn)),
+            y_channel=self._prefixed_psname + ':LAMPCurrentData',
             name='Current', color='blue', lineWidth=2)
         # self.graph_curr.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
         self.graph_curr.autoRangeX = True
@@ -1925,8 +1904,7 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
         # # voltage waveform
         self.graph_volt = SiriusWaveformPlot()
         self.graph_volt.addChannel(
-            y_channel=fofbctrl.substitute(
-                propty='GENConvArrayDataCH'+str(chn+12)),
+            y_channel=self._prefixed_psname + ':LAMPVoltageData',
             name='Voltage', color='blue', lineWidth=2)
         # self.graph_volt.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
         self.graph_volt.autoRangeX = True
