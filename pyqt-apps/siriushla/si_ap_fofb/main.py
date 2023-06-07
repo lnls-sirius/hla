@@ -131,6 +131,7 @@ class MainWindow(BaseObject, SiriusMainWindow):
         cmds[8] = self.devpref.substitute(
             propty='CtrlrSyncPacketLossDetec-Cmd')
         cmds[9] = self.devpref.substitute(propty='CtrlrReset-Cmd')
+        cmds[10] = self.devpref.substitute(propty='CtrlrDsblSYSIDExc-Cmd')
         dtl_ctrl = QPushButton('Details')
         dtl_ctrl.setDefault(False)
         dtl_ctrl.setAutoDefault(False)
