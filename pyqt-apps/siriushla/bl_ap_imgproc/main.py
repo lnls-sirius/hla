@@ -9,7 +9,9 @@ from qtpy.QtWidgets import QWidget, QGridLayout, QHBoxLayout, \
 
 import qtawesome as qta
 
+from epics import caget
 from pydm.widgets import PyDMImageView, PyDMPushButton
+from siriushla.widgets.dialog.pv_status_dialog import StatusDetailDialog
 
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 
@@ -19,8 +21,8 @@ from ..widgets import SiriusLabel, SiriusLedState, \
     SiriusLineEdit, PyDMLogLabel, PyDMStateButton, \
     SiriusConnectionSignal, SiriusSpinbox, SiriusLedAlert
 
-from .detailed_status import DetailedStatusWindow
-from .util import LED_ALARM, PVS, IMG_PVS, LED_PVS, LOG_PV, PVS_DVF
+from .util import LED_ALARM, PVS, IMG_PVS, LED_PVS, \
+    LOG_PV, PVS_DVF, DVF_STATUS
 
 
 class BLImgProc(QWidget):
@@ -134,6 +136,19 @@ class BLImgProc(QWidget):
             lay.addWidget(widget)
         return wid
 
+    def detailed_labels(self, pvname):
+        pvname = pvname.replace("-Mon", "Labels-Cte")
+        labels = caget(pvname)
+
+        label_list = []
+        try:
+            for label in labels.tolist():
+                label_list.append(label)
+        except:
+            print(pvname + ' not connected!')
+
+        return label_list
+
     def create_widget_w_title(self, title, pv_name):
         hlay = QHBoxLayout()
 
@@ -159,8 +174,11 @@ class BLImgProc(QWidget):
 
         if title in LED_ALARM:
             details = QPushButton(qta.icon('fa5s.ellipsis-h'), '', self)
+            pvname = self.generate_pv_name(DVF_STATUS)
+            labels = self.detailed_labels(pvname)
             _util.connect_window(
-                details, DetailedStatusWindow, device=self.device, parent=self)
+                details, StatusDetailDialog, pvname=pvname, parent=self,
+                labels=labels, section="01", title='DVF Status Detailed')
             hlay.addWidget(details, 1)
         return hlay
 

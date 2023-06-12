@@ -112,10 +112,7 @@ PVS = {
     ]
 }
 
-DVF_STATUS = [
-    "ImgDVFStatus-Mon",
-    "ImgDVFStatusLabels-Cte"
-]
+DVF_STATUS = "ImgDVFStatus-Mon"
 
 PVS_DVF = {
     'ROI Control': [
