@@ -56,6 +56,8 @@ class LLButton(QWidget):
                 'DCCT' if self.device.sub[:2] == '14' else
                 'Tune' if self.device.sub[:2] == '18' else
                 'TL' if self.device.sub[:2] == '20' else '?')
+        elif self.device.sec == 'BA':
+            name = self.device.sec + '-' + self.device.sub
         else:
             name = self.device.dev
         clss = self._dic[self.device.dev]
