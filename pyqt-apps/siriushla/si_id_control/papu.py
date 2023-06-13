@@ -291,7 +291,7 @@ class PAPUDetails(IDCommonDialog):
         flay = QFormLayout(drivebox)
         flay.setLabelAlignment(Qt.AlignRight)
         for pvn in ['ResolverPos-Mon', 'Code-Mon', 'Torque-Mon',
-                    'Speed-Mon', 'MotorTemp-Mon']:
+                    'MotorTemp-Mon']:
             lbl = pvn.split('-')[0] + ':'
             wid = SiriusLabel(self, self.dev_pref.substitute(propty=pvn))
             flay.addRow(lbl, wid)
