@@ -89,16 +89,16 @@ SEC2LABEL2SECPOS = {
     'SI': {
         'B': (0, 1, 1, 1),
         'PM': (0, 2, 1, 1),
+        'FFCH/FFCV': (0, 3, 1, 1),
         'Q': (0, 4, 1, 1),
         'S': (0, 5, 1, 1),
-        'ID-CH/CV/QS': (0, 6, 1, 2),
-        'FFCH/FFCV': (0, 7, 1, 2),
-        'QS': (1, 1, 1, 1),
-        'CH': (1, 2, 1, 2),
+        'ID-CH/CV/QS': (0, 7, 1, 2),
+        'QS': (1, 1, 1, 2),
+        'CH': (1, 3, 1, 1),
         'CV': (1, 4, 1, 1),
-        'Trims': (1, 5, 1, 1),
-        'FCH': (1, 6, 1, 1),
-        'FCV': (1, 7, 1, 1),
+        'Trims': (1, 5, 1, 2),
+        'FCH': (1, 7, 1, 1),
+        'FCV': (1, 8, 1, 1),
     },
 }
 
@@ -110,26 +110,25 @@ def get_sec2dev_laypos(sec, label):
 def get_col2dev_count(sec, label):
     if label == 'QS':
         return 5
-    elif label == 'CH':
+    if label == 'CH':
         return 6 if sec == 'SI' else 5 if sec == 'BO' else 7
-    elif label == 'CV':
+    if label == 'CV':
         return 8 if sec == 'SI' else 5 if sec == 'BO' else 10
-    elif 'Trims' in label:
+    if 'Trims' in label:
         return 14
-    elif 'FFC' in label:
+    if 'FFC' in label:
         return 4
-    elif 'ID' in label:
+    if 'ID' in label:
+        return 8
+    if 'FC' in label:
         return 4
-    elif 'FC' in label:
-        return 4
-    elif label == 'S':
+    if label == 'S':
         return 11
-    elif label == 'Q':
+    if label == 'Q':
         return 10 if sec != 'SI' else 6
-    elif label == 'Slnd':
+    if label == 'Slnd':
         return 21
-    else:
-        return 10
+    return 10
 
 
 def get_dev2sub_labels(label):
