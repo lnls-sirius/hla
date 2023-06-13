@@ -120,18 +120,18 @@ PVS_DVF = {
         {
             'X': {
                 'Size': [
-                    'ROI1:SizeX-Mon', 'ROI1:SizeX_RBV-Mon'
+                    'ROI1:SizeX', 'ROI1:SizeX_RBV'
                 ],
                 'Min': [
-                    'ROI1:MinX-Mon', 'ROI1:MinX_RBV-Mon'
+                    'ROI1:MinX', 'ROI1:MinX_RBV'
                 ]
             },
             'Y': {
                 'Size': [
-                    'ROI1:SizeY-Mon', 'ROI1:SizeY_RBV-Mon'
+                    'ROI1:SizeY', 'ROI1:SizeY_RBV'
                 ],
                 'Min': [
-                    'ROI1:MinY-Mon', 'ROI1:MinY_RBV-Mon'
+                    'ROI1:MinY', 'ROI1:MinY_RBV'
                 ]
             }
         }
