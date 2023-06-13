@@ -7,7 +7,7 @@ import qtawesome as qta
 from pydm.widgets import PyDMPushButton
 
 from ..util import connect_newprocess, connect_window
-from ..widgets import PyDMLogLabel, PyDMLed, \
+from ..widgets import PyDMLogLabel, PyDMLed, PyDMLedMultiChannel, \
     SiriusLedState, SiriusLabel, SiriusSpinbox
 
 from .base import IDCommonControlWindow, IDCommonDialog, \
@@ -288,13 +288,19 @@ class PAPUDetails(IDCommonDialog):
             flay.addRow(lbl, wid)
 
         drivebox = QGroupBox('Drive Status', self)
-        flay = QFormLayout(drivebox)
-        flay.setLabelAlignment(Qt.AlignRight)
-        for pvn in ['ResolverPos-Mon', 'Code-Mon', 'Torque-Mon',
-                    'MotorTemp-Mon']:
-            lbl = pvn.split('-')[0] + ':'
+        glay = QGridLayout(drivebox)
+        propties = ['ResolverPos-Mon', 'Code-Mon', 'Torque-Mon',
+                    'MotorTemp-Mon']
+        for row, pvn in enumerate(propties):
+            lbl = QLabel(pvn.split('-')[0] + ':', self)
+            glay.addWidget(lbl, row, 0, alignment=Qt.AlignRight)
             wid = SiriusLabel(self, self.dev_pref.substitute(propty=pvn))
-            flay.addRow(lbl, wid)
+            glay.addWidget(wid, row, 1)
+            if pvn == 'MotorTemp-Mon':
+                c2v = {self.dev_pref.substitute(
+                    propty=pvn): {'comp': 'lt', 'value': 90}}
+                led = PyDMLedMultiChannel(self, c2v)
+                glay.addWidget(led, row, 2, alignment=Qt.AlignLeft)
 
         self.setStyleSheet(
             'QLabel{qproperty-alignment: AlignCenter; max-width: 12em;}')
