@@ -4,7 +4,7 @@ import time as _time
 
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QPushButton, QWidget, QGridLayout, QMenu, \
-    QLabel, QVBoxLayout, QGroupBox, QMenuBar, QAction, \
+    QLabel, QVBoxLayout, QGroupBox, QMenuBar, QAction, QHBoxLayout, \
     QSizePolicy as QSzPlcy, QDockWidget, QTabWidget
 import qtawesome as qta
 
@@ -14,9 +14,9 @@ from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.fofb.csdev import ETypes as _FOFBEnums
 
 from ..util import connect_window
-from ..widgets import SiriusLedAlert, SiriusLabel, SiriusSpinbox, \
+from ..widgets import SiriusLedAlert, SiriusLabel, SiriusSpinbox, CALabel, \
     PyDMLogLabel, SiriusMainWindow, PyDMStateButton, SiriusLedState, \
-    SiriusConnectionSignal as _ConnSignal, CAPushButton
+    SiriusConnectionSignal as _ConnSignal, CAPushButton, SiriusEnumComboBox
 
 from .base import BaseObject, get_fofb_icon
 from .custom_widgets import RefOrbWidget, StatusDialog, BPMSwModeWidget, \
@@ -131,6 +131,7 @@ class MainWindow(BaseObject, SiriusMainWindow):
         cmds[8] = self.devpref.substitute(
             propty='CtrlrSyncPacketLossDetec-Cmd')
         cmds[9] = self.devpref.substitute(propty='CtrlrReset-Cmd')
+        cmds[10] = self.devpref.substitute(propty='CtrlrDsblSYSIDExc-Cmd')
         dtl_ctrl = QPushButton('Details')
         dtl_ctrl.setDefault(False)
         dtl_ctrl.setAutoDefault(False)
@@ -305,6 +306,46 @@ class MainWindow(BaseObject, SiriusMainWindow):
                 glay2.addWidget(lbl, 2, 0)
                 glay2.addWidget(spw, 2, 1)
                 glay2.addWidget(rbw, 2, 2)
+
+                lbl = QLabel(
+                    'Decimation [count]: ', self,
+                    alignment=Qt.AlignRight | Qt.AlignVCenter)
+                pref = self.devpref
+                visrule = (
+                    '[{"name": "VisRule", "property": "Visible", ' +
+                    '"expression": "ch[0] == 2", "channels": ' +
+                    '[{"channel": "' +
+                    pref.substitute(propty='FOFBAccDecimation-Sel') +
+                    '", "trigger": true}]}]')
+                selw = SiriusEnumComboBox(
+                    self, pref.substitute(propty='FOFBAccDecimation-Sel'))
+                stsw = SiriusLabel(
+                    self, pref.substitute(propty='FOFBAccDecimation-Sts'))
+                stsw.rules = visrule.replace('==', '!=')
+                lbldiv = CALabel(':')
+                lbldiv.rules = visrule
+                spw = SiriusSpinbox(
+                    self, pref.substitute(propty='FOFBAccDecimation-SP'))
+                spw.rules = visrule
+                spw.setVisible(False)
+                lblpro = CALabel('(')
+                lblpro.rules = visrule.replace('==', '!=')
+                rbw = SiriusLabel(
+                    self, pref.substitute(propty='FOFBAccDecimation-RB'))
+                rbw.setStyleSheet('min-width: 4em;')
+                rbw.setAlignment(Qt.AlignCenter)
+                lblprc = CALabel(')')
+                lblprc.rules = visrule.replace('==', '!=')
+                hbox = QHBoxLayout()
+                hbox.addWidget(selw)
+                hbox.addWidget(stsw)
+                hbox.addWidget(lbldiv)
+                hbox.addWidget(spw)
+                hbox.addWidget(lblpro)
+                hbox.addWidget(rbw)
+                hbox.addWidget(lblprc)
+                glay2.addWidget(lbl, 3, 0)
+                glay2.addLayout(hbox, 3, 1, 1, 2)
 
                 glay.addLayout(glay2)
 

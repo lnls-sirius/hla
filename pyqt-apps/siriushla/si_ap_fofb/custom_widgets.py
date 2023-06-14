@@ -160,9 +160,6 @@ class RefOrbWidget(BaseObject, QWidget):
         self._refx = _np.asarray(refx)
         self._refy = _np.asarray(refy)
 
-        # update graph
-        self.graph.update_new_value_curves(self._refx, self._refy)
-
         # send
         self._ch_refx.send_value_signal[_np.ndarray].emit(self._refx)
         self._ch_refy.send_value_signal[_np.ndarray].emit(self._refy)
@@ -368,6 +365,7 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
         tab.addTab(self._setupOrbDistTab(), 'Orbit Distortion Detection')
         tab.addTab(self._setupPacketLossTab(), 'Packet Loss Detection')
         tab.addTab(self._setupIntlkTab(), 'Loop Interlock')
+        tab.addTab(self._setupSYSIDExc(), 'SYSID Excitation States')
 
         lay = QVBoxLayout(self)
         lay.addWidget(tab)
@@ -819,6 +817,45 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
                     lay.addWidget(plb, row, idx1*2+1+idx2)
             led = PyDMLedMultiChannel(self, c2v)
             lay.addWidget(led, row, 7)
+
+        return self._build_scroll_area(wid)
+
+    def _setupSYSIDExc(self):
+        wid = QWidget()
+        lay = QGridLayout(wid)
+        lay.setSpacing(1)
+        lay.setAlignment(Qt.AlignLeft | Qt.AlignTop)
+
+        # header
+        lay.addWidget(
+            QLabel('<h4>Device</h4>', self, alignment=Qt.AlignCenter), 0, 0)
+        lay.addWidget(
+            QLabel('<h4>FOFBAcc.Enbl.</h4>', self, alignment=Qt.AlignCenter),
+            0, 1)
+        lay.addWidget(
+            QLabel('<h4>BPMPos.Enbl.</h4>', self, alignment=Qt.AlignCenter),
+            0, 2)
+
+        # table
+        self._led_timeframelen = dict()
+        for idx, ctl in enumerate(self.ctrlrs):
+            row = idx + 1
+            lbl = QLabel(ctl, self, alignment=Qt.AlignCenter)
+            pvnacc = _PVName(ctl).substitute(
+                prefix=self.prefix, propty='SYSIDPRBSFOFBAccEn-Sts')
+            ledacc = SiriusLedState(self, pvnacc)
+            ledacc.shape = ledacc.ShapeMap.Square
+            ledacc.setObjectName('led_status')
+            pvnbpm = _PVName(ctl).substitute(
+                prefix=self.prefix, propty='SYSIDPRBSBPMPosEn-Sts')
+            ledbpm = SiriusLedState(self, pvnbpm)
+            ledbpm.shape = ledbpm.ShapeMap.Square
+            ledbpm.setObjectName('led_status')
+            ledsum = PyDMLedMultiChannel(self, {pvnacc: 0, pvnbpm: 0})
+            lay.addWidget(lbl, row, 0)
+            lay.addWidget(ledacc, row, 1, alignment=Qt.AlignTop)
+            lay.addWidget(ledbpm, row, 2, alignment=Qt.AlignTop)
+            lay.addWidget(ledsum, row, 3)
 
         return self._build_scroll_area(wid)
 
