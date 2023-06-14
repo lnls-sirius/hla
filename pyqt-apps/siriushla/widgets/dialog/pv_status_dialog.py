@@ -16,7 +16,10 @@ class StatusDetailDialog(SiriusDialog):
 
     def __init__(self, pvname='', labels=None, section='', parent=None, title=''):
         super().__init__(parent)
-        self.pvname = SiriusPVName(pvname)
+        try:
+            self.pvname = SiriusPVName(pvname)
+        except:
+            self.pvname = pvname
         self.section = section
         if not section:
             self.section = self.pvname.sec
