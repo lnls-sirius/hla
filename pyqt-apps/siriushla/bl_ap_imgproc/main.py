@@ -203,7 +203,7 @@ class BLImgProc(QWidget):
 
         return wid
 
-    def page(self, content):
+    def _setupTab(self, content):
         cont_wid = QWidget()
         glay = QGridLayout()
 
@@ -228,11 +228,10 @@ class BLImgProc(QWidget):
             alignment=Qt.AlignCenter)
         main_lay.addWidget(title)
 
-        main_page_wid = self.page(PVS)
-        tab.addTab(main_page_wid, "DVFImgProc")
-        dvf_page_wid = self.page(PVS_DVF)
-        dvf_page_wid.setMaximumHeight(250)
-        tab.addTab(dvf_page_wid, "DVF")
+        imgproc_wid = self._setupTab(PVS)
+        tab.addTab(imgproc_wid, "DVFImgProc")
+        dvf_wid = self._setupTab(PVS_DVF)
+        tab.addTab(dvf_wid, "DVF")
 
         main_lay.addWidget(tab)
         self.setLayout(main_lay)
