@@ -28,6 +28,7 @@ class PAPUControlWindow(IDCommonControlWindow):
             self, self.dev_pref.substitute(propty='Phase-RB'))
         self._lb_phsmon = SiriusLabel(
             self, self.dev_pref.substitute(propty='Phase-Mon'))
+        self._lb_phsmon.setStyleSheet('QLabel{min-width:6em;}')
 
         self._ld_phsspd = QLabel('Phase Speed [mm/s]', self)
         self._sb_phsspd = SiriusSpinbox(
@@ -36,6 +37,7 @@ class PAPUControlWindow(IDCommonControlWindow):
             self, self.dev_pref.substitute(propty='PhaseSpeed-RB'))
         self._lb_phsspdmon = SiriusLabel(
             self, self.dev_pref.substitute(propty='PhaseSpeed-Mon'))
+        self._lb_phsspdmon.setStyleSheet('QLabel{min-width:6em;}')
 
         self._ld_enbl = QLabel('Allow Phase Motion', self)
         self._ld_enbl.setToolTip('Enable Axis and Release Brakes')
@@ -284,7 +286,7 @@ class PAPUDetails(IDCommonDialog):
         for pvn in ['Connected-Mon', 'MsgServerConnected-Mon',
                     'IoServerConnected-Mon', 'SerialConnected-Mon']:
             lbl = pvn.split('-')[0] + ':'
-            wid = SiriusLabel(self, self.dev_pref.substitute(propty=pvn))
+            wid = SiriusLedState(self, self.dev_pref.substitute(propty=pvn))
             flay.addRow(lbl, wid)
 
         drivebox = QGroupBox('Drive Status', self)
@@ -296,10 +298,17 @@ class PAPUDetails(IDCommonDialog):
             glay.addWidget(lbl, row, 0, alignment=Qt.AlignRight)
             wid = SiriusLabel(self, self.dev_pref.substitute(propty=pvn))
             glay.addWidget(wid, row, 1)
-            if pvn == 'MotorTemp-Mon':
+
+            c2v = None
+            if pvn == 'Code-Mon':
+                c2v = {self.dev_pref.substitute(
+                    propty=pvn): {'comp': 'eq', 'value': 'A211'}}
+            elif pvn == 'MotorTemp-Mon':
                 c2v = {self.dev_pref.substitute(
                     propty=pvn): {'comp': 'lt', 'value': 90}}
+            if c2v:
                 led = PyDMLedMultiChannel(self, c2v)
+                led.offColor = led.Yellow
                 glay.addWidget(led, row, 2, alignment=Qt.AlignLeft)
 
         self.setStyleSheet(
