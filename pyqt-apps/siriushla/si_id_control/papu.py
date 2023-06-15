@@ -291,12 +291,14 @@ class PAPUDetails(IDCommonDialog):
 
         drivebox = QGroupBox('Drive Status', self)
         glay = QGridLayout(drivebox)
-        propties = ['ResolverPos-Mon', 'Code-Mon', 'Torque-Mon',
-                    'MotorTemp-Mon']
+        propties = ['ResolverPos-Mon', 'Torque-Mon', 'MotorTemp-Mon',
+                    'Code-Mon', 'DiagMessage-Mon']
         for row, pvn in enumerate(propties):
             lbl = QLabel(pvn.split('-')[0] + ':', self)
             glay.addWidget(lbl, row, 0, alignment=Qt.AlignRight)
             wid = SiriusLabel(self, self.dev_pref.substitute(propty=pvn))
+            if pvn == 'DiagMessage-Mon':
+                wid.displayFormat = wid.DisplayFormat.String
             glay.addWidget(wid, row, 1)
 
             c2v = None
