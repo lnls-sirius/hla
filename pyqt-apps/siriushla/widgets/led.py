@@ -31,12 +31,8 @@ class PyDMLed(QLed, PyDMWidget):
         List of QColor objects for each state the channel can assume.
     """
 
-    DarkGreen = QColor(20, 80, 10)
-    LightGreen = QColor(0, 140, 0)
-    Yellow = QColor(210, 205, 0)
-    Red = QColor(207, 0, 0)
-    DarkRed = QColor(120, 0, 0)
-    default_colorlist = [DarkGreen, LightGreen, Yellow, Red]
+    default_colorlist = [
+        QLed.DarkGreen, QLed.LightGreen, QLed.Yellow, QLed.Red]
 
     def __init__(self, parent=None, init_channel=None, bit=-1,
                  color_list=None):
