@@ -110,6 +110,17 @@ class PAPUControlWindow(IDCommonControlWindow):
         return gbox
 
     def _statusWidget(self):
+        self._ld_drivests = QLabel(
+            'Drive Status:', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+        self._lb_drivests = SiriusLabel(
+            self, self.dev_pref.substitute(propty='DiagMessage-Mon'))
+        self._lb_drivests.setStyleSheet('QLabel{min-width: 10em;}')
+        self._lb_drivests.displayFormat = SiriusLabel.DisplayFormat.String
+        self._led_drivests = PyDMLedMultiChannel(
+            self, {
+                self.dev_pref.substitute(propty='Code-Mon'): {
+                    'comp': 'in', 'value': ['A211', 'A012']}})
+
         self._pb_dtlsts = QPushButton('', self)
         self._pb_dtlsts.setIcon(qta.icon('fa5s.list-ul'))
         self._pb_dtlsts.setToolTip('Open Detailed Status View')
@@ -133,12 +144,18 @@ class PAPUControlWindow(IDCommonControlWindow):
         gbox = QGroupBox('Status')
         gbox.setSizePolicy(QSzPlcy.MinimumExpanding, QSzPlcy.Preferred)
         lay = QGridLayout(gbox)
-        lay.addWidget(self._log, 0, 0, 1, 2)
-        lay.addWidget(self._bt_logclear, 1, 0, alignment=Qt.AlignCenter)
-        lay.addWidget(self._pb_dtlsts, 1, 1, alignment=Qt.AlignRight)
+        lay.addWidget(self._ld_drivests, 0, 0)
+        lay.addWidget(self._lb_drivests, 0, 1)
+        lay.addWidget(self._led_drivests, 0, 2)
+        lay.addWidget(self._pb_dtlsts, 0, 3, alignment=Qt.AlignRight)
+        lay.addWidget(self._log, 1, 0, 1, 4)
+        lay.addWidget(self._bt_logclear, 2, 0, 1, 4, alignment=Qt.AlignCenter)
         return gbox
 
     def _auxCommandsWidget(self):
+        btnname = 'btn'
+        btnsty = '#btn{min-width:30px; max-width:30px; icon-size:25px;}'
+
         gbox = QGroupBox('Auxiliary Commands', self)
 
         self._ld_phsspdlim = QLabel('Max Phase Speed [mm/s]', self)
@@ -153,9 +170,8 @@ class PAPUControlWindow(IDCommonControlWindow):
         self._pb_pwrenbl = PyDMPushButton(
             parent=self, label='', icon=qta.icon('fa5s.plug'),
             init_channel=pvname, pressValue=1)
-        self._pb_pwrenbl.setObjectName('btn')
-        self._pb_pwrenbl.setStyleSheet(
-            '#btn{min-width:30px; max-width:30px; icon-size:25px;}')
+        self._pb_pwrenbl.setObjectName(btnname)
+        self._pb_pwrenbl.setStyleSheet(btnsty)
         self._led_pwrsts = SiriusLedState(
             self, self.dev_pref.substitute(propty='PwrPhase-Mon'))
         self._led_pwrsts.offColor = PyDMLed.Red
@@ -166,34 +182,71 @@ class PAPUControlWindow(IDCommonControlWindow):
         self._pb_home.setToolTip('Execute homing for selected axis.')
         self._pb_home.channel = self.dev_pref.substitute(propty='Home-Cmd')
         self._pb_home.pressValue = 1
-        self._pb_home.setObjectName('btn')
-        self._pb_home.setStyleSheet(
-            '#btn{min-width:30px; max-width:30px; icon-size:25px;}')
-        self._led_home = SiriusLedState(
+        self._pb_home.setObjectName(btnname)
+        self._pb_home.setStyleSheet(btnsty)
+        self._led_home = SiriusLabel(
             self, self.dev_pref.substitute(propty='Home-Mon'))
+
+        self._ld_parkspd = QLabel('Park Speed [mm/s]', self)
+        self._sb_parkspd = SiriusSpinbox(
+            self, self.dev_pref.substitute(propty='ParkSpeed-SP'))
+        self._sb_parkspd.setStyleSheet('max-width:4.5em;')
+        self._lb_parkspd = SiriusLabel(
+            self, self.dev_pref.substitute(propty='ParkSpeed-RB'))
+
+        self._ld_park = QLabel('Do parking', self)
+        pvname = self.dev_pref.substitute(propty='Park-Cmd')
+        self._pb_park = PyDMPushButton(
+            parent=self, label='', icon=qta.icon('fa5s.parking'),
+            init_channel=pvname, pressValue=1)
+        self._pb_park.setObjectName(btnname)
+        self._pb_park.setStyleSheet(btnsty)
+
+        self._ld_gotomin = QLabel('Go to minimum Phase', self)
+        pvname = self.dev_pref.substitute(propty='GoToMinPhase-Cmd')
+        self._pb_gotomin = PyDMPushButton(
+            parent=self, label='Go to minimum',
+            init_channel=pvname, pressValue=1)
+        self._ld_gotoop = QLabel('Go to operation Phase', self)
+        pvname = self.dev_pref.substitute(propty='GoToOpPhase-Cmd')
+        self._pb_gotoop = PyDMPushButton(
+            parent=self, label='Go to operation',
+            init_channel=pvname, pressValue=1)
 
         self._ld_clrerr = QLabel('Clear Drive Errors', self)
         pvname = self.dev_pref.substitute(propty='ClearErr-Cmd')
         self._pb_clrerr = PyDMPushButton(
             parent=self, label='', icon=qta.icon('fa5s.sync'),
             init_channel=pvname, pressValue=1)
-        self._pb_clrerr.setObjectName('btn')
-        self._pb_clrerr.setStyleSheet(
-            '#btn{min-width:30px; max-width:30px; icon-size:25px;}')
+        self._pb_clrerr.setObjectName(btnname)
+        self._pb_clrerr.setStyleSheet(btnsty)
 
         lay = QGridLayout(gbox)
         lay.addWidget(self._ld_phsspdlim, 0, 0)
         lay.addWidget(self._sb_phsspdlim, 0, 1)
         lay.addWidget(self._lb_phsspdlim, 0, 2)
-        lay.addWidget(self._ld_pwrenbl, 1, 0)
-        lay.addWidget(self._pb_pwrenbl, 1, 1)
-        lay.addWidget(self._led_pwrsts, 1, 2, alignment=Qt.AlignLeft)
-        lay.addWidget(self._ld_homeaxis, 2, 0)
-        lay.addWidget(self._pb_home, 2, 1)
-        lay.addWidget(self._led_home, 2, 2, alignment=Qt.AlignLeft)
-        lay.addItem(QSpacerItem(1, 15, QSzPlcy.Ignored, QSzPlcy.Fixed), 3, 0)
-        lay.addWidget(self._ld_clrerr, 4, 0)
-        lay.addWidget(self._pb_clrerr, 4, 1)
+        lay.addItem(QSpacerItem(1, 8, QSzPlcy.Ignored, QSzPlcy.Fixed), 1, 0)
+        lay.addWidget(self._ld_pwrenbl, 2, 0)
+        lay.addWidget(self._pb_pwrenbl, 2, 1)
+        lay.addWidget(self._led_pwrsts, 2, 2, alignment=Qt.AlignLeft)
+        lay.addItem(QSpacerItem(1, 8, QSzPlcy.Ignored, QSzPlcy.Fixed), 3, 0)
+        lay.addWidget(self._ld_homeaxis, 4, 0)
+        lay.addWidget(self._pb_home, 4, 1)
+        lay.addWidget(self._led_home, 4, 2, alignment=Qt.AlignLeft)
+        lay.addItem(QSpacerItem(1, 8, QSzPlcy.Ignored, QSzPlcy.Fixed), 5, 0)
+        lay.addWidget(self._ld_parkspd, 6, 0)
+        lay.addWidget(self._sb_parkspd, 6, 1)
+        lay.addWidget(self._lb_parkspd, 6, 2)
+        lay.addWidget(self._ld_park, 7, 0)
+        lay.addWidget(self._pb_park, 7, 1)
+        lay.addItem(QSpacerItem(1, 8, QSzPlcy.Ignored, QSzPlcy.Fixed), 8, 0)
+        lay.addWidget(self._ld_gotomin, 9, 0)
+        lay.addWidget(self._pb_gotomin, 9, 1, 1, 2)
+        lay.addWidget(self._ld_gotoop, 10, 0)
+        lay.addWidget(self._pb_gotoop, 10, 1, 1, 2)
+        lay.addItem(QSpacerItem(1, 8, QSzPlcy.Ignored, QSzPlcy.Fixed), 11, 0)
+        lay.addWidget(self._ld_clrerr, 12, 0)
+        lay.addWidget(self._pb_clrerr, 12, 1)
 
         gbox.setStyleSheet(
             '.QLabel{qproperty-alignment: "AlignRight | AlignVCenter";}')
@@ -297,6 +350,7 @@ class PAPUDetails(IDCommonDialog):
             lbl = QLabel(pvn.split('-')[0] + ':', self)
             glay.addWidget(lbl, row, 0, alignment=Qt.AlignRight)
             wid = SiriusLabel(self, self.dev_pref.substitute(propty=pvn))
+            wid.showUnits = True
             if pvn == 'DiagMessage-Mon':
                 wid.displayFormat = wid.DisplayFormat.String
             glay.addWidget(wid, row, 1)
@@ -304,7 +358,7 @@ class PAPUDetails(IDCommonDialog):
             c2v = None
             if pvn == 'Code-Mon':
                 c2v = {self.dev_pref.substitute(
-                    propty=pvn): {'comp': 'eq', 'value': 'A211'}}
+                    propty=pvn): {'comp': 'in', 'value': ['A211', 'A012']}}
             elif pvn == 'MotorTemp-Mon':
                 c2v = {self.dev_pref.substitute(
                     propty=pvn): {'comp': 'lt', 'value': 90}}
