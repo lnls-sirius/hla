@@ -14,6 +14,7 @@ from ..widgets import SiriusMainWindow, SiriusConnectionSignal
 
 from .apu import APUSummaryHeader, APUSummaryWidget
 from .epu import EPUSummaryHeader, EPUSummaryWidget
+from .papu import PAPUSummaryHeader, PAPUSummaryWidget
 from .util import get_id_icon
 
 
@@ -59,12 +60,16 @@ class IDControl(SiriusMainWindow):
         self._gbox_epu = QGroupBox('EPU', self)
         self._gbox_epu.setLayout(self._setupEPULayout())
 
+        self._gbox_papu = QGroupBox('PAPU', self)
+        self._gbox_papu.setLayout(self._setupPAPULayout())
+
         lay = QGridLayout(cwid)
         lay.addWidget(self.label_mov1, 0, 0)
         lay.addWidget(label, 0, 1)
         lay.addWidget(self.label_mov2, 0, 2)
         lay.addWidget(self._gbox_apu, 1, 0, 1, 3)
         lay.addWidget(self._gbox_epu, 2, 0, 1, 3)
+        lay.addWidget(self._gbox_papu, 3, 0, 1, 3)
         lay.setColumnStretch(0, 1)
         lay.setColumnStretch(1, 15)
         lay.setColumnStretch(2, 1)
@@ -100,6 +105,25 @@ class IDControl(SiriusMainWindow):
         idlist = ['SI-10SB:ID-EPU50', ]
         for idname in idlist:
             epu_wid = EPUSummaryWidget(self, self._prefix, idname)
+            lay.addWidget(epu_wid)
+            self._id_widgets.append(epu_wid)
+            ch_mov = SiriusConnectionSignal(_PVName(idname).substitute(
+                prefix=self._prefix, propty='Moving-Mon'))
+            ch_mov.new_value_signal[int].connect(self._handle_moving_vis)
+            self._channels_mov.append(ch_mov)
+
+        return lay
+
+    def _setupPAPULayout(self):
+        lay = QVBoxLayout()
+        lay.setAlignment(Qt.AlignTop)
+
+        self._epu_header = PAPUSummaryHeader(self)
+        lay.addWidget(self._epu_header)
+
+        idlist = ['SI-17SA:ID-PAPU50', ]
+        for idname in idlist:
+            epu_wid = PAPUSummaryWidget(self, self._prefix, idname)
             lay.addWidget(epu_wid)
             self._id_widgets.append(epu_wid)
             ch_mov = SiriusConnectionSignal(_PVName(idname).substitute(

@@ -49,11 +49,15 @@ class QLed(QFrame, ShapeMap):
     f.close()
 
     Green = QColor(15, 105, 0)
+    DarkGreen = QColor(20, 80, 10)
+    LightGreen = QColor(0, 140, 0)
     Red = QColor(207, 0, 0)
+    DarkRed = QColor(120, 0, 0)
     Gray = QColor(90, 90, 90)
     SelColor = QColor(0, 0, 0)
     NotSelColor1 = QColor(251, 244, 252)
     NotSelColor2 = QColor(173, 173, 173)
+    Yellow = QColor(210, 205, 0)
 
     clicked = Signal()
     selected = Signal(bool)

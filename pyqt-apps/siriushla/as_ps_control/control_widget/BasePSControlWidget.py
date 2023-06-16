@@ -275,8 +275,20 @@ class BasePSControlWidget(QWidget):
         self.containers_dict = dict()
         self.filtered_widgets = set()  # Set with key of visible widgets
 
+        # Get groups and respective power supplies
+        self.groups, self.groups2devs = list(), dict()
+        for group in self._getGroups():
+            pwrsupplies = list()
+            pattern = re.compile(group[1])
+            for el in self._dev_list:
+                if pattern.search(el):
+                    pwrsupplies.append(el)
+            if not pwrsupplies:
+                continue
+            self.groups.append(group)
+            self.groups2devs[group[0]] = pwrsupplies
+
         # Setup the UI
-        self.groups = self._getGroups()
         self._setup_ui()
         self._create_actions()
         self._enable_actions()
@@ -318,13 +330,7 @@ class BasePSControlWidget(QWidget):
         # Build power supply Layout
         # Create group boxes and pop. layout
         for idx, group in enumerate(self.groups):
-
-            # Get power supplies that belong to group
-            pwrsupplies = list()
-            pattern = re.compile(group[1])
-            for el in self._dev_list:
-                if pattern.search(el):
-                    pwrsupplies.append(el)
+            pwrsupplies = self.groups2devs[group[0]]
 
             # Create header
             header = SummaryHeader(pwrsupplies[0],

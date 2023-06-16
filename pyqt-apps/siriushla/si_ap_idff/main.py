@@ -80,13 +80,6 @@ class IDFFWindow(SiriusMainWindow):
         self.lb_loopfreq = SiriusLabel(
             self, self.dev_pref.substitute(propty='LoopFreq-RB'))
 
-        ld_controlqs = QLabel(
-            'Control QS: ', self, alignment=Qt.AlignRight)
-        self.sb_controlqs = PyDMStateButton(
-            self, self.dev_pref.substitute(propty='ControlQS-Sel'))
-        self.lb_controlqs = SiriusLedState(
-            self, self.dev_pref.substitute(propty='ControlQS-Sts'))
-
         ld_usepssofb = QLabel(
             'Use PSSOFB: ', self, alignment=Qt.AlignRight)
         self.sb_usepssofb = PyDMStateButton(
@@ -106,13 +99,23 @@ class IDFFWindow(SiriusMainWindow):
         lay.addWidget(ld_configname, 3, 0)
         lay.addWidget(self.le_configname, 3, 1, 1, 3)
         lay.addWidget(self.lb_configname, 4, 1, 1, 3)
-        lay.addWidget(ld_controlqs, 5, 0)
-        lay.addWidget(self.sb_controlqs, 5, 1)
-        lay.addWidget(self.lb_controlqs, 5, 2)
         lay.addItem(QSpacerItem(0, 15, QSzPlcy.Ignored, QSzPlcy.Fixed), 6, 0)
         lay.addWidget(ld_usepssofb, 7, 0)
         lay.addWidget(self.sb_usepssofb, 7, 1)
         lay.addWidget(self.lb_usepssofb, 7, 2)
+
+        if IDSearch.conv_idname_2_idff_qsnames(self.idname):
+            ld_controlqs = QLabel(
+                'Control QS: ', self, alignment=Qt.AlignRight)
+            self.sb_controlqs = PyDMStateButton(
+                self, self.dev_pref.substitute(propty='ControlQS-Sel'))
+            self.lb_controlqs = SiriusLedState(
+                self, self.dev_pref.substitute(propty='ControlQS-Sts'))
+
+            lay.addWidget(ld_controlqs, 5, 0)
+            lay.addWidget(self.sb_controlqs, 5, 1)
+            lay.addWidget(self.lb_controlqs, 5, 2)
+
         return gbox
 
     def _corrStatusWidget(self):
@@ -149,29 +152,31 @@ class IDFFWindow(SiriusMainWindow):
         return gbox
 
     def _idStatusWidget(self):
-        pparam = _PVName(self._idffdata['pparameter'])
-        ld_pparam = QLabel(
-            pparam.propty_name + ': ', self, alignment=Qt.AlignRight)
-        self._lb_pparam = SiriusLabel(self, pparam, keep_unit=True)
-        self._lb_pparam.showUnits = True
+        gbox = QGroupBox('ID Status', self)
+        lay = QGridLayout(gbox)
 
-        kparam = _PVName(self._idffdata['kparameter'])
-        ld_kparam = QLabel(
-            kparam.propty_name + ': ', self, alignment=Qt.AlignRight)
-        self._lb_kparam = SiriusLabel(self, kparam, keep_unit=True)
-        self._lb_kparam.showUnits = True
+        if self._idffdata['pparameter']:
+            pparam = _PVName(self._idffdata['pparameter'])
+            ld_pparam = QLabel(
+                pparam.propty_name + ': ', self, alignment=Qt.AlignRight)
+            self._lb_pparam = SiriusLabel(self, pparam, keep_unit=True)
+            self._lb_pparam.showUnits = True
+            lay.addWidget(ld_pparam, 0, 0)
+            lay.addWidget(self._lb_pparam, 0, 1)
+
+        if self._idffdata['kparameter']:
+            kparam = _PVName(self._idffdata['kparameter'])
+            ld_kparam = QLabel(
+                kparam.propty_name + ': ', self, alignment=Qt.AlignRight)
+            self._lb_kparam = SiriusLabel(self, kparam, keep_unit=True)
+            self._lb_kparam.showUnits = True
+            lay.addWidget(ld_kparam, 1, 0)
+            lay.addWidget(self._lb_kparam, 1, 1)
 
         ld_polar = QLabel(
             'Polarization: ', self, alignment=Qt.AlignRight)
         self.lb_polar = SiriusLabel(
             self, self.dev_pref.substitute(propty='Polarization-Mon'))
-
-        gbox = QGroupBox('ID Status', self)
-        lay = QGridLayout(gbox)
-        lay.addWidget(ld_pparam, 0, 0)
-        lay.addWidget(self._lb_pparam, 0, 1)
-        lay.addWidget(ld_kparam, 1, 0)
-        lay.addWidget(self._lb_kparam, 1, 1)
         lay.addItem(QSpacerItem(0, 15, QSzPlcy.Ignored, QSzPlcy.Fixed), 2, 0)
         lay.addWidget(ld_polar, 3, 0)
         lay.addWidget(self.lb_polar, 3, 1, 1, 3)
