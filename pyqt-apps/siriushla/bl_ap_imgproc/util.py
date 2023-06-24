@@ -22,6 +22,7 @@ PVS = {
             'DVF Status': 'ImgDVFStatus-Mon',
             'DVF Size X': 'ImgDVFSizeX-Cte',
             'DVF Size Y': 'ImgDVFSizeY-Cte',
+            'DVF Reset': 'ImgDVFReset-Cmd',
             'DVF Acquire': 'ImgDVFAcquire-Cmd',
         }
     ],
