@@ -149,6 +149,10 @@ class InjCtrlWindow(SiriusMainWindow):
             self, init_channel=self._inj_prefix.substitute(
                 propty='TopUpState-Sel'))
         self._pb_topup.setVisible(False)
+        self._pb_accum = PyDMStateButton(
+            self, init_channel=self._inj_prefix.substitute(
+                propty='AccumState-Sel'))
+        self._pb_accum.setVisible(False)
         self._led_injti = EVGInjectionLed(self, self._prefix)
         self._lb_injcnt = SiriusLabel(self)
         self._lb_injcnt.setToolTip(
@@ -166,6 +170,7 @@ class InjCtrlWindow(SiriusMainWindow):
         lay_inj.setAlignment(Qt.AlignCenter)
         lay_inj.addWidget(self._pb_tiinj, 0, 0)
         lay_inj.addWidget(self._pb_topup, 0, 0)
+        lay_inj.addWidget(self._pb_accum, 0, 0)
         lay_inj.addLayout(hbox_injsts, 1, 0)
 
         # Current
@@ -207,6 +212,16 @@ class InjCtrlWindow(SiriusMainWindow):
         lay_tusts.addWidget(self._ld_tunxt, 2, 0)
         lay_tusts.addWidget(self._lb_tunxt, 2, 1)
 
+        # Accum status
+        self._lb_acsts = SiriusLabel(
+            self, self._inj_prefix.substitute(propty='AccumState-Sts'))
+        self._lb_tusts.setAlignment(Qt.AlignCenter)
+        self._lb_tusts.setStyleSheet('QLabel{max-height:2em;}')
+        self.wid_acsts = QGroupBox('Accum status')
+        self.wid_acsts.setVisible(False)
+        lay_acsts = QGridLayout(self.wid_acsts)
+        lay_acsts.addWidget(self._lb_acsts, 0, 0)
+
         wid = QWidget()
         lay = QGridLayout(wid)
         lay.setContentsMargins(0, 0, 0, 0)
@@ -215,6 +230,7 @@ class InjCtrlWindow(SiriusMainWindow):
         lay.addWidget(self.wid_egun, 0, 2)
         lay.addWidget(self.wid_inj, 0, 3)
         lay.addWidget(self.wid_tusts, 0, 4)
+        lay.addWidget(self.wid_acsts, 0, 4)
         lay.addWidget(self.wid_curr, 0, 5)
         lay.setColumnStretch(0, 3)
         lay.setColumnStretch(1, 2)
@@ -238,6 +254,19 @@ class InjCtrlWindow(SiriusMainWindow):
             self, self._inj_prefix.substitute(propty='Mode-Sts'))
         self._lb_injmode.showUnits = True
         labelsmon.append(self._lb_injmode)
+
+        # Accum Period
+        self._ld_accumper = QLabel('Accum. Period', self)
+        labelsdesc.append(self._ld_accumper)
+        self._sp_accumper = SiriusSpinbox(
+            self, self._inj_prefix.substitute(propty='AccumPeriod-SP'))
+        self._lb_accumper = SiriusLabel(
+            self, self._inj_prefix.substitute(propty='AccumPeriod-RB'))
+        self._lb_accumper.showUnits = True
+        labelsmon.append(self._lb_accumper)
+        self._ld_accumper.setVisible(False)
+        self._sp_accumper.setVisible(False)
+        self._lb_accumper.setVisible(False)
 
         # Target current
         self._ld_currtgt = QLabel('Target Curr.', self)
@@ -401,7 +430,10 @@ class InjCtrlWindow(SiriusMainWindow):
         glay1.addWidget(self._cb_injmode, 2, 1)
         glay1.addWidget(self._lb_injmode, 2, 2)
         glay1.addWidget(self._pb_show_topup, 2, 3)
-        glay1.addWidget(self.wid_tudtls, 3, 0, 2, 4)
+        glay1.addWidget(self._ld_accumper, 3, 0)
+        glay1.addWidget(self._sp_accumper, 3, 1)
+        glay1.addWidget(self._lb_accumper, 3, 2)
+        glay1.addWidget(self.wid_tudtls, 4, 0, 2, 4)
         glay1.setColumnStretch(0, 5)
         glay1.setColumnStretch(1, 3)
         glay1.setColumnStretch(2, 3)
@@ -470,7 +502,7 @@ class InjCtrlWindow(SiriusMainWindow):
         return wid
 
     def _setupTopUpModeWidget(self):
-        self._ld_tuperd = QLabel('Period', self)
+        self._ld_tuperd = QLabel('TopUp Period', self)
         self._sb_tuperd = SiriusSpinbox(
             self, self._inj_prefix.substitute(propty='TopUpPeriod-SP'))
         self._lb_tuperd = SiriusLabel(
@@ -581,10 +613,19 @@ class InjCtrlWindow(SiriusMainWindow):
     @Slot(int)
     def _handle_injmode_settings_vis(self, new_mode):
         is_topup = new_mode == _Const.InjMode.TopUp
+        is_accum = new_mode == _Const.InjMode.Accum
+
         self._handle_topup_details_vis(False, is_topup=is_topup)
-        self._pb_topup.setVisible(is_topup)
-        self._pb_tiinj.setVisible(not is_topup)
         self.wid_tusts.setVisible(is_topup)
+        self.wid_acsts.setVisible(is_accum)
+
+        self._pb_topup.setVisible(is_topup)
+        self._pb_accum.setVisible(is_accum)
+        self._pb_tiinj.setVisible(not is_topup and not is_accum)
+
+        self._ld_accumper.setVisible(is_accum)
+        self._sp_accumper.setVisible(is_accum)
+        self._lb_accumper.setVisible(is_accum)
 
     def _handle_topup_details_vis(self, val, is_topup=None):
         _ = val
