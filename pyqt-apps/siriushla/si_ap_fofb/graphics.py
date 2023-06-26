@@ -320,7 +320,7 @@ class KickWidget(BaseObject, QWidget):
         self.setObjectName('SIApp')
         self._setupui()
         self._psconv = {
-            psn: StrengthConv(psn, 'Ref-Mon', auto_mon=True)
+            psn: StrengthConv(psn, 'Ref-Mon', auto_monitor_mon=True)
             for psn in self._csorb.ch_names + self._csorb.cv_names}
 
         for suffix in ['-Mon', 'Acc-Mon', 'Ref-Mon']:
