@@ -545,7 +545,7 @@ class PerformanceWidget(QWidget):
 
         lbl_tout = QLabel(
             'SlowOrb\nTimeouts', self, alignment=Qt.AlignCenter)
-        ld_tout = SiriusLabel(self, lamb('SlowOrbTimeout-Mon'))
+        ld_tout = SiriusLabel(self, lamb('SlowOrbTimeoutCnt-Mon'))
         ld_tout.showUnits = True
         ld_tout.setAlignment(Qt.AlignCenter)
 
