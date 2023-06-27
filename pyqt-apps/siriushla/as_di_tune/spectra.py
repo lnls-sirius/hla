@@ -388,7 +388,7 @@ class TuneSpectraControls(QWidget):
         folder_month = datetime.now().strftime('%Y-%m')
         folder_day = datetime.now().strftime('%Y-%m-%d')
         path = os.path.join(
-            home, 'mounts', 'screens-iocs', folder_month, folder_day)
+            home, 'shared', 'screens-iocs', folder_month, folder_day)
         if not os.path.exists(path):
             os.makedirs(path)
         fn, _ = QFileDialog.getSaveFileName(self, 'Save as...', path, '*.txt')

@@ -110,7 +110,7 @@ class OrbitRegisters(QWidget):
 class OrbitRegister(QWidget):
     """Create the Context Menu for the Registers."""
 
-    DEFAULT_DIR = '/home/sirius/mounts/screens-iocs'
+    DEFAULT_DIR = '/home/sirius/shared/screens-iocs'
 
     MAX_BUMP_CURR = 10  # [mA]
 

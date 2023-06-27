@@ -520,7 +520,7 @@ class SiriusScrnView(QWidget):
         folder_month = datetime.now().strftime('%Y-%m')
         folder_day = datetime.now().strftime('%Y-%m-%d')
         path = os.path.join(
-            home, 'mounts', 'screens-iocs', folder_month, folder_day)
+            home, 'shared', 'screens-iocs', folder_month, folder_day)
         if not os.path.exists(path):
             os.makedirs(path)
         fn, _ = QFileDialog.getSaveFileName(
@@ -529,7 +529,7 @@ class SiriusScrnView(QWidget):
         if not fn:
             return False
 
-        path_default = os.path.join(home, 'mounts', 'screens-iocs', 'default')
+        path_default = os.path.join(home, 'shared', 'screens-iocs', 'default')
         if not os.path.exists(path_default):
             os.makedirs(path_default)
         fn_default = path_default + '/' + self.device
@@ -545,7 +545,7 @@ class SiriusScrnView(QWidget):
         if not default:
             folder_month = datetime.now().strftime('%Y-%m')
             path = os.path.join(
-                home, 'mounts', 'screens-iocs', folder_month)
+                home, 'shared', 'screens-iocs', folder_month)
             fn, _ = QFileDialog.getOpenFileName(
                 self, 'Load Grid...', path, '*.npy')
             if not fn:
@@ -560,7 +560,7 @@ class SiriusScrnView(QWidget):
                     return
         else:
             path = os.path.join(
-                home, 'mounts', 'screens-iocs', 'default')
+                home, 'shared', 'screens-iocs', 'default')
             fn = path + '/' + self.device + '.npy'
 
         try:
