@@ -362,6 +362,17 @@ class KickWidget(BaseObject, QWidget):
             '<h4>Fast Corrector Kicks</h4>', self, alignment=Qt.AlignCenter)
         lay.addWidget(lab, 0, 0, 1, 2)
 
+        cbkicks = dict()
+        hview = QHBoxLayout()
+        hview.addWidget(QLabel('Show: ', self))
+        for curve in ['Acc', 'Ref', 'Mon']:
+            cbx = QCheckBox(curve, self)
+            checked = curve == 'Acc'
+            cbx.setChecked(checked)
+            cbkicks[curve] = cbx
+            hview.addWidget(cbx)
+        lay.addLayout(hview, 1, 0, alignment=Qt.AlignLeft)
+
         cblim = QCheckBox('Show Kick Limits', self)
         cblim.setChecked(True)
         lay.addWidget(cblim, 1, 1, alignment=Qt.AlignRight)
@@ -387,15 +398,23 @@ class KickWidget(BaseObject, QWidget):
             opts['color'] = 'gray'
             opts['name'] = 'Mon'
             graph.addChannel(**opts)
+            curve = graph.curveAtIndex(0)
+            curve.setVisible(False)
+            cbkicks[opts['name']].toggled.connect(curve.setVisible)
             # CurrentRef-Mon
             opts['color'] = QColor(0, 125, 255) if plane == 'h' \
                 else QColor(255, 125, 0)
             opts['name'] = 'Ref'
             graph.addChannel(**opts)
+            curve = graph.curveAtIndex(1)
+            curve.setVisible(False)
+            cbkicks[opts['name']].toggled.connect(curve.setVisible)
             # FOFBAcc-Mon
             opts['color'] = 'blue' if plane == 'h' else 'red'
             opts['name'] = 'Acc'
             graph.addChannel(**opts)
+            curve = graph.curveAtIndex(2)
+            cbkicks[opts['name']].toggled.connect(curve.setVisible)
 
             # limits
             opts = dict(
