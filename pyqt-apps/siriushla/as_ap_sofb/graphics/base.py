@@ -22,7 +22,7 @@ from siriushla.widgets import SiriusConnectionSignal as _ConnSig, \
 class BaseWidget(QWidget):
     """."""
 
-    DEFAULT_DIR = '/home/sirius/mounts/screens-iocs'
+    DEFAULT_DIR = '/home/sirius/shared/screens-iocs'
 
     def __init__(self, parent, device, ctrls, names, is_orb, prefix='',
                  acc='SI'):
