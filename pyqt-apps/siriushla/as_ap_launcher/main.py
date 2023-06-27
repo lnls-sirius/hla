@@ -155,10 +155,14 @@ class MainLauncher(SiriusMainWindow):
         self.but_topup = PyDMStateButton(
             self, injctrl_dev.substitute(propty='TopUpState-Sel'))
         self.but_topup.setVisible(False)
+        self.but_accum = PyDMStateButton(
+            self, injctrl_dev.substitute(propty='AccumState-Sel'))
+        self.but_accum.setVisible(False)
         lay_inject_sel = QGridLayout()
         lay_inject_sel.setAlignment(Qt.AlignCenter)
         lay_inject_sel.addWidget(self.but_tiinj, 0, 0)
         lay_inject_sel.addWidget(self.but_topup, 0, 0)
+        lay_inject_sel.addWidget(self.but_accum, 0, 0)
         led_injsts = EVGInjectionLed(self, self._prefix)
         label_injcnt = SiriusLabel(self)
         label_injcnt.setToolTip(
@@ -325,9 +329,11 @@ class MainLauncher(SiriusMainWindow):
     @Slot(int)
     def _handle_injmode_settings_vis(self, new_mode):
         is_topup = new_mode == _InjConst.InjMode.TopUp
+        is_accum = new_mode == _InjConst.InjMode.Accum
         self.wid_tusts.setVisible(is_topup)
-        self.but_tiinj.setVisible(not is_topup)
+        self.but_tiinj.setVisible(not is_topup and not is_accum)
         self.but_topup.setVisible(is_topup)
+        self.but_accum.setVisible(is_accum)
 
     def mouseDoubleClickEvent(self, event):
         """Implement mouseDoubleClickEvent."""
