@@ -160,8 +160,6 @@ class EnergyMeasure(QWidget):
         self.plt_spread.setTimeSpan(val)
 
     def pb_reset_data_clicked(self):
-        """."""
-        c = self.plt_energy.curveAtIndex(0)
-        c.points_accumulated = 0
-        c = self.plt_spread.curveAtIndex(0)
-        c.points_accumulated = 0
+        """Reset buffers."""
+        self.plt_energy._resetBuffers()
+        self.plt_spread._resetBuffers()
