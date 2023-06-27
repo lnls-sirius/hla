@@ -163,6 +163,7 @@ class SIGenStatusWindow(SiriusMainWindow):
         for axis in ['H', 'V', 'L']:
             bbb_pref = _PVName('SI-Glob:DI-BbBProc-'+axis)
             bbb_pref = bbb_pref.substitute(prefix=self.prefix)
+            stab_pref = _PVName('SI-Glob:AP-StabilityInfo')
             chs2vals = {
                 bbb_pref.substitute(propty_name='FBCTRL'): 1,
                 bbb_pref.substitute(propty_name='CLKMISS'): 0,
@@ -170,7 +171,9 @@ class SIGenStatusWindow(SiriusMainWindow):
                 bbb_pref.substitute(propty_name='DCM_UNLOCK'): 0,
                 bbb_pref.substitute(propty_name='ADC_OVR'): 0,
                 bbb_pref.substitute(propty_name='SAT'): 0,
-                bbb_pref.substitute(propty_name='FID_ERR'): 0}
+                bbb_pref.substitute(propty_name='FID_ERR'): 0,
+                stab_pref.substitute(propty='BbB'+axis+'Status-Mon'): 0,
+            }
             led = PyDMLedMultiChannel(self, chs2vals)
             led.setStyleSheet(
                 'QLed{min-width:3em;min-height:3em;'

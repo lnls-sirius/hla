@@ -483,7 +483,7 @@ class Graph(BaseObject, SiriusWaveformPlot):
         super().mouseDoubleClickEvent(event)
 
     def _open_detail(self, bpmname):
-        """Open PSDetailWindow."""
+        """Open BPM detail window."""
         run_newprocess(['sirius-hla-as-di-bpm.py', bpmname])
 
 
