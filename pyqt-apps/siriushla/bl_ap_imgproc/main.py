@@ -5,13 +5,14 @@ from datetime import datetime
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QGridLayout, QHBoxLayout, \
     QVBoxLayout, QGroupBox, QLabel, QSizePolicy, QTabWidget, \
-    QPushButton
+    QPushButton, QScrollArea
 
 import qtawesome as qta
 
-from siriuspy.dvfimgproc.csdev import ETypes
 from pydm.widgets import PyDMImageView, PyDMPushButton
-from siriushla.widgets.dialog.pv_status_dialog import StatusDetailDialog
+
+from ..widgets import SiriusEnumComboBox
+from ..widgets.dialog import StatusDetailDialog
 
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 
@@ -21,8 +22,9 @@ from ..widgets import SiriusLabel, SiriusLedState, \
     SiriusLineEdit, PyDMLogLabel, PyDMStateButton, \
     SiriusConnectionSignal, SiriusSpinbox, SiriusLedAlert
 
-from .util import LED_ALARM, PVS, IMG_PVS, LED_PVS, \
-    LOG_PV, PVS_DVF, DVF_STATUS
+from .util import PVS_IMGPROC, PVS_DVF, \
+    IMG_PVS, LOG_PV, COMBOBOX_PVS, LINEEDIT_PVS, STATEBUT_PVS, \
+    LED_ALERT_PVS, LED_STATE_PVS, LED_DETAIL_PVS
 
 
 class BLImgProc(QWidget):
@@ -52,8 +54,11 @@ class BLImgProc(QWidget):
 
         pv_list = []
         for sf in sufix:
-            pvname = self.add_prefixes(sf)
-            pv_list.append(pvname)
+            try:
+                pvname = self.add_prefixes(sf)
+                pv_list.append(pvname)
+            except:
+                pv_list.append(sf)
         return pv_list
 
     def format_datetime_lbl(self, value, pvname):
@@ -71,34 +76,55 @@ class BLImgProc(QWidget):
             lambda value: self.format_datetime_lbl(value, pvname))
         return self._lbl_timestamp[pvname]
 
-    def select_widget(self, pv_name, widget_type='label', units=True):
+    def select_widget(
+            self, pv_name, widget_type='label', units=True, labels=None):
         pvname = self.generate_pv_name(pv_name)
         if widget_type == 'label':
             wid = SiriusLabel(init_channel=pvname, keep_unit=True)
             wid.showUnits = units
             wid.setAlignment(Qt.AlignCenter)
             wid.setMaximumHeight(50)
-        elif widget_type == 'setpoint_readback':
-            if 'Sel' in pv_name[0]:
-                sprb_type = ['switch', 'led', True]
-            else:
-                isSpin = 'FWHM' in pv_name[0] or 'Intensity' in pv_name[0]
-                setwid = 'edit'
-                if isSpin:
-                    setwid = 'spin'
-                sprb_type = [setwid, 'label', False]
+        elif widget_type == 'setpoint_readback_combo':
+            sprb_type = ['enumcombo', 'label', True]
             wid = self.setpoint_readback_widget(pv_name, sprb_type)
-        elif widget_type == 'led':
+        elif widget_type == 'setpoint_readback_edit':
+            sprb_type = ['edit', 'label', False]
+            wid = self.setpoint_readback_widget(pv_name, sprb_type)
+        elif widget_type == 'setpoint_readback_sbut':
+            sprb_type = ['switch', 'led_state', True]
+            wid = self.setpoint_readback_widget(pv_name, sprb_type)
+        elif widget_type == 'setpoint_readback_spin':
+            sprb_type = ['spin', 'label', True]
+            wid = self.setpoint_readback_widget(pv_name, sprb_type)
+        elif widget_type == 'led_state':
             wid = SiriusLedState(init_channel=pvname)
-        elif widget_type == 'alarm':
+            wid.offColor = wid.Yellow
+        elif widget_type == 'led_alert':
             wid = SiriusLedAlert(init_channel=pvname)
+            wid.onColor = wid.Yellow
+        elif widget_type == 'leddetail':
+            led = SiriusLedAlert(init_channel=pvname[0])
+            details = QPushButton(qta.icon('fa5s.ellipsis-h'), '', self)
+            details.setObjectName('bt')
+            details.setStyleSheet(
+                '#bt{min-width:25px;max-width:25px;icon-size:20px;}')
+            _util.connect_window(
+                details, StatusDetailDialog, pvname=pvname[0], parent=self,
+                labels=pvname[1], section="SI", title='Status Detailed')
+            wid = QWidget()
+            hlay = QHBoxLayout(wid)
+            hlay.addWidget(led)
+            hlay.addWidget(details)
         elif widget_type == 'log':
             wid = PyDMLogLabel(init_channel=pvname)
+            wid.setMaximumHeight(175)
         elif widget_type == 'edit':
             wid = SiriusLineEdit(init_channel=pvname)
             wid.setAlignment(Qt.AlignCenter)
         elif widget_type == 'switch':
             wid = PyDMStateButton(init_channel=pvname)
+        elif widget_type == 'enumcombo':
+            wid = SiriusEnumComboBox(self, init_channel=pvname)
         elif widget_type == 'image':
             wid = PyDMImageView(
                 image_channel=pvname[0],
@@ -116,6 +142,9 @@ class BLImgProc(QWidget):
         elif widget_type == 'cmd':
             wid = PyDMPushButton(init_channel=pvname, pressValue=1)
             wid.setIcon(qta.icon('fa5s.sync'))
+            wid.setObjectName('bt')
+            wid.setStyleSheet(
+                '#bt{min-width:25px;max-width:25px;icon-size:20px;}')
         else:
             wid = QLabel("Widget has not been implemented yet!")
         return wid
@@ -136,45 +165,44 @@ class BLImgProc(QWidget):
             lay.addWidget(widget)
         return wid
 
-    def create_widget_w_title(self, title, pv_name):
-        hlay = QHBoxLayout()
-
-        title_wid = QLabel(title)
-        title_wid.setAlignment(Qt.AlignCenter)
-        hlay.addWidget(title_wid, 2)
-
-        if title in LED_PVS:
-            wid_type = 'led'
-        elif title in LED_ALARM:
-            wid_type = 'alarm'
+    def create_widget(self, title, pv_name):
+        if title in LED_ALERT_PVS:
+            wid_type = 'led_alert'
+        elif title in LED_STATE_PVS:
+            wid_type = 'led_state'
+        elif title in LED_DETAIL_PVS:
+            wid_type = 'leddetail'
         elif 'Time' in pv_name and 'Proc' not in pv_name:
             wid_type = 'time'
         elif '-Cmd' in pv_name:
             wid_type = 'cmd'
+        elif title in LOG_PV:
+            wid_type = 'log'
+        elif title in IMG_PVS:
+            wid_type = 'image'
         elif len(pv_name) != 2:
             wid_type = 'label'
+        elif title in COMBOBOX_PVS:
+            wid_type = 'setpoint_readback_combo'
+        elif title in LINEEDIT_PVS:
+            wid_type = 'setpoint_readback_edit'
+        elif title in STATEBUT_PVS:
+            wid_type = 'setpoint_readback_sbut'
         else:
-            wid_type = 'setpoint_readback'
+            wid_type = 'setpoint_readback_spin'
 
+        hlay = QHBoxLayout()
         wid = self.select_widget(pv_name, wid_type)
-        hlay.addWidget(wid, 2)
-
-        if title in LED_ALARM:
-            details = QPushButton(qta.icon('fa5s.ellipsis-h'), '', self)
-            pvname = self.generate_pv_name(DVF_STATUS)
-            labels = ETypes.STS_LBLS_DVF
-            _util.connect_window(
-                details, StatusDetailDialog, pvname=pvname, parent=self,
-                labels=labels, section="SI", title='DVF Status Detailed')
-            hlay.addWidget(details, 1)
-        return hlay
-
-    def get_special_wid(self, pvname, title):
-        if title in LOG_PV:
-            pv_type = 'log'
+        if wid_type not in ['log', 'image']:
+            title_wid = QLabel(title + ': ')
+            title_wid.setAlignment(Qt.AlignRight)
+            hlay.addWidget(
+                title_wid, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            hlay.addWidget(wid, alignment=Qt.AlignLeft)
         else:
-            pv_type = 'image'
-        return self.select_widget(pvname, pv_type)
+            hlay.addWidget(wid)
+
+        return hlay
 
     def create_box_group(self, title, pv_info):
         """."""
@@ -182,7 +210,6 @@ class BLImgProc(QWidget):
         gbox = QGridLayout(wid)
 
         count = 0
-        special_list = IMG_PVS + LOG_PV
         for title, pv in pv_info.items():
             if title in ['X', 'Y']:
                 widget = self.create_box_group(title, pv)
@@ -190,21 +217,16 @@ class BLImgProc(QWidget):
                 gbox.addWidget(widget, count, hpos, 1, 1)
                 if title == 'Y':
                     count += 1
-            elif title not in special_list:
-                pv_lay = self.create_widget_w_title(title, pv)
-                gbox.addLayout(pv_lay, count, 0, 1, 2)
-                count += 1
             else:
-                spec_wid = self.get_special_wid(pv, title)
-                gbox.addWidget(spec_wid, count, 0, 1, 2)
-                if title in LOG_PV:
-                    wid.setMaximumHeight(175)
+                pv_lay = self.create_widget(title, pv)
+                gbox.addLayout(pv_lay, count, 0, 1, 2)
                 count += 1
 
         return wid
 
-    def _setupTab(self, content):
+    def _setupTab(self, content, use_scroll=False):
         cont_wid = QWidget()
+        cont_wid.setObjectName('wid')
         glay = QGridLayout()
 
         for title, pv_data in content.items():
@@ -216,6 +238,13 @@ class BLImgProc(QWidget):
         glay.setColumnStretch(1, 1)
         glay.setColumnStretch(2, 1)
         cont_wid.setLayout(glay)
+
+        if use_scroll:
+            sc_area = QScrollArea()
+            sc_area.setWidgetResizable(True)
+            cont_wid.setStyleSheet('#wid{background-color: transparent;}')
+            sc_area.setWidget(cont_wid)
+            return sc_area
         return cont_wid
 
     def _setupUi(self):
@@ -228,9 +257,9 @@ class BLImgProc(QWidget):
             alignment=Qt.AlignCenter)
         main_lay.addWidget(title)
 
-        imgproc_wid = self._setupTab(PVS)
+        imgproc_wid = self._setupTab(PVS_IMGPROC)
         tab.addTab(imgproc_wid, "DVFImgProc")
-        dvf_wid = self._setupTab(PVS_DVF)
+        dvf_wid = self._setupTab(PVS_DVF, use_scroll=True)
         tab.addTab(dvf_wid, "DVF")
 
         main_lay.addWidget(tab)
