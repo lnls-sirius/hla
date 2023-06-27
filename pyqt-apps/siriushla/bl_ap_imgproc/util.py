@@ -1,16 +1,40 @@
 """Utilities."""
 
-IMG_PVS = ['Projection']
+from siriuspy.dvfimgproc.csdev import ETypes
 
-LED_PVS = [
-    'IsSaturated Ok', 'IsWithBeam Ok', 'DVF Status',
+IMG_PVS = ['Projection']
+LOG_PV = ['Log']
+LED_ALERT_PVS = ['IsSaturated Ok']
+LED_STATE_PVS = ['IsWithBeam Ok']
+LED_DETAIL_PVS = ['DVF Status']
+COMBOBOX_PVS = [
+    'Enable',
+    'Acquire',
+    'Image Mode',
+    'Gain Auto',
+    'Data Type',
+    'Pixel Format',
+    'Pixel Size',
+    'ArrayCallbacks',
+    'EnableCallbacks',
+    'ffmstream1 - EnableCallbacks',
+    'Trans1 - EnableCallbacks',
+    'HDF1 - EnableCallbacks',
+]
+LINEEDIT_PVS = [
+    'Min Max',
+    'Beam Threshold',
+    'NDArrayPort',
+    'Acquire Time',
+    'Acquire Period',
+    'Gain',
+]
+STATEBUT_PVS = [
+    'Update',
+    'Use SVD',
 ]
 
-LED_ALARM = ['DVF Status']
-
-LOG_PV = ['Log']
-
-PVS = {
+PVS_IMGPROC = {
     'IOC':  [
         (1, 0, 1, 1),
         {
@@ -21,16 +45,15 @@ PVS = {
     'DVF': [
         (2, 0, 1, 1),
         {
-            'DVF Status': 'ImgDVFStatus-Mon',
+            'DVF Status': ['ImgDVFStatus-Mon', ETypes.STS_LBLS_DVF],
             'DVF Size X': 'ImgDVFSizeX-Cte',
             'DVF Size Y': 'ImgDVFSizeY-Cte',
             'DVF Acquire': 'ImgDVFAcquire-Cmd',
             'DVF Reset': 'ImgDVFReset-Cmd',
-            'Exposure Time': ['cam1:AcquireTime', 'cam1:AcquireTime_RBV'],
         }
     ],
     'Img': [
-        (3, 0, 6, 1),
+        (3, 0, 7, 1),
         {
             'Img Size X': 'ImgSizeX-Mon',
             'Img Size Y': 'ImgSizeY-Mon',
@@ -109,35 +132,100 @@ PVS = {
         }
     ],
     'Log': [
-        (9, 0, 1, 3),
+        (9, 1, 1, 2),
         {
             'Log': 'ImgLog-Mon'
         }
     ]
 }
 
-DVF_STATUS = "ImgDVFStatus-Mon"
-
 PVS_DVF = {
     'ROI Control': [
         (1, 0, 1, 3),
         {
             'X': {
-                'Size': [
-                    'ROI1:SizeX', 'ROI1:SizeX_RBV'
-                ],
-                'Min': [
-                    'ROI1:MinX', 'ROI1:MinX_RBV'
-                ]
+                'Enable': ['ROI1:EnableX', 'ROI1:EnableX_RBV'],
+                'Min': ['ROI1:MinX', 'ROI1:MinX_RBV'],
+                'Size': ['ROI1:SizeX', 'ROI1:SizeX_RBV'],
             },
             'Y': {
-                'Size': [
-                    'ROI1:SizeY', 'ROI1:SizeY_RBV'
-                ],
-                'Min': [
-                    'ROI1:MinY', 'ROI1:MinY_RBV'
-                ]
-            }
+                'Enable': ['ROI1:EnableY', 'ROI1:EnableY_RBV'],
+                'Min': ['ROI1:MinY', 'ROI1:MinY_RBV'],
+                'Size': ['ROI1:SizeY', 'ROI1:SizeY_RBV'],
+            },
+            'NDArrayPort': ['ROI1:NDArrayPort', 'ROI1:NDArrayPort_RBV'],
+            'EnableCallbacks': [
+                'ROI1:EnableCallbacks', 'ROI1:EnableCallbacks_RBV'],
+            'ArrayCallbacks': [
+                'ROI1:ArrayCallbacks', 'ROI1:ArrayCallbacks_RBV'],
         }
+    ],
+    'Camera General Status': [
+        (2, 0, 1, 1),
+        {
+            'Max Size X': 'cam1:MaxSizeX_RBV',
+            'Max Size Y': 'cam1:MaxSizeY_RBV',
+            'Size X': 'cam1:SizeX_RBV',
+            'Size Y': 'cam1:SizeY_RBV',
+            'Temperature': 'cam1:Temperature',
+            'Failures': 'cam1:FAILURES_RBV',
+            'Completed': 'cam1:COMPLETED_RBV',
+        }
+    ],
+    'Camera Acquisition': [
+        (2, 1, 1, 2),
+        {
+            'Acquire Time': [
+                'cam1:AcquireTime', 'cam1:AcquireTime_RBV'],
+            'Acquire Period': [
+                'cam1:AcquirePeriod', 'cam1:AcquirePeriod_RBV'],
+            'Acquire': [
+                'cam1:Acquire', 'cam1:Acquire_RBV'],
+            'Image Mode': [
+                'cam1:ImageMode', 'cam1:ImageMode_RBV'],
+        }
+    ],
+    'Camera Gain': [
+        (3, 0, 1, 1),
+        {
+            'Gain': [
+                'cam1:Gain', 'cam1:Gain_RBV'],
+            'Gain Auto': [
+                'cam1:GainAuto', 'cam1:GainAuto_RBV'],
+        }
+    ],
+    'Camera Data Settings': [
+        (3, 1, 1, 2),
+        {
+            'Data Type': [
+                'cam1:DataType', 'cam1:DataType_RBV'],
+            'Pixel Format': [
+                'cam1:PixelFormat', 'cam1:PixelFormat_RBV'],
+            'Pixel Size': [
+                'cam1:PixelSize', 'cam1:PixelSize_RBV'],
+            'ArrayCallbacks': [
+                'cam1:ArrayCallbacks', 'cam1:ArrayCallbacks_RBV'],
+        }
+    ],
+    'Image Control': [
+        (4, 0, 1, 1),
+        {
+            'NDArrayPort': ['image1:NDArrayPort', 'image1:NDArrayPort_RBV'],
+            'ArraySize0': 'image1:ArraySize0_RBV',
+            'ArraySize1': 'image1:ArraySize1_RBV',
+            'EnableCallbacks': [
+                'image1:EnableCallbacks', 'image1:EnableCallbacks_RBV'],
+        },
+    ],
+    'Other Pluggins Settings': [
+        (4, 1, 1, 2),
+        {
+            'ffmstream1 - EnableCallbacks': [
+                'ffmstream1:EnableCallbacks', 'ffmstream1:EnableCallbacks_RBV'],
+            'Trans1 - EnableCallbacks': [
+                'Trans1:EnableCallbacks', 'Trans1:EnableCallbacks_RBV'],
+            'HDF1 - EnableCallbacks': [
+                'HDF1:EnableCallbacks', 'HDF1:EnableCallbacks_RBV'],
+        },
     ],
 }
