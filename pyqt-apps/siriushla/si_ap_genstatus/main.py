@@ -132,7 +132,7 @@ class SIGenStatusWindow(SiriusMainWindow):
             'Sirius Interlock', self._led_siriusintlk)
 
         # injection system
-        self._led_injsyssts = InjSysStbyLed(self, self.prefix)
+        self._led_injsyssts = InjSysStbyLed(self)
         self._led_injsyssts.setStyleSheet(
             'QLed{min-width:3em;min-height:3em;max-width:3em;max-height:3em;}')
         self._gbox_injsyssts = self._create_groupbox(
