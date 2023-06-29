@@ -44,7 +44,7 @@ class ParamsSettings(BaseWidget):
         grpbx = CustomGroupBox('Advanced Settings', self)
         vbl2 = QVBoxLayout(grpbx)
         vbl2.setSpacing(10)
-        pbt = QPushButton('Software')
+        pbt = QPushButton('Details')
         Window = create_window_from_widget(
             AdvancedSettings, title=self.bpm+': Advanced Settings')
         util.connect_window(
