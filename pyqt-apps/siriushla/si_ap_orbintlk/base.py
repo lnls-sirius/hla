@@ -73,8 +73,10 @@ class BaseObject(BaseOrbitIntlk):
                 prefix=self._prefix, propty=propty)
             if pvname in self._pvs:
                 continue
+            auto_monitor = not pvname.endswith('-Mon') or 'Ltc' in pvname
             new_pvs[pvname] = _PV(
-                pvname, auto_monitor=False, connection_timeout=0.01)
+                pvname, auto_monitor=auto_monitor,
+                connection_timeout=0.01)
         self._pvs.update(new_pvs)
 
     def _get_values(self, propty):
