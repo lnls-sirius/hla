@@ -94,7 +94,8 @@ class BaseObject(BaseOrbitIntlk):
                 val = None
             if val is None:
                 val = 0
-            elif propty.startswith('Intlk') and propty.endswith('-Mon'):
+            elif propty in ['Intlk-Mon', 'IntlkLtc-Mon'] or \
+                    'Lower' in propty or 'Upper' in propty:
                 val = 1 if val == 0 else 0
             values.append(val)
         return values

@@ -663,13 +663,9 @@ class _UpdateGraphThread(BaseObject, QThread):
             self._create_pvs(self.meas_data)
             vals = _np.array(self._get_values(self.meas_data), dtype=float)
             if self.metric in ['pos', 'ang']:
-                vals -= self._reforb
-                vals = _np.array(self.calc_intlk_metric(
-                    vals, metric=self.metric), dtype=float)
-                # use BPM IOC pos & ang
-                # ref = self.calc_intlk_metric(
-                #     self._reforb, metric=self.metric)
-                # vals -= ref
+                ref = self.calc_intlk_metric(
+                    self._reforb, metric=self.metric)
+                vals -= ref
                 vals *= self.CONV_NM2M
             else:
                 # sum case
@@ -741,8 +737,7 @@ class PosXGraphWidget(_BaseGraphWidget):
     """Position Graph Widget."""
 
     INTLKTYPE = 'PosX'
-    PROPTY_MEAS_DATA = 'PosX-Mon'
-    # PROPTY_MEAS_DATA = 'IntlkPosX-Mon'
+    PROPTY_MEAS_DATA = 'IntlkPosX-Mon'
     PROPTY_MEAS_SYMB = {
         'Instantaneous': {
             'General': 'Intlk-Mon',
@@ -775,8 +770,7 @@ class PosYGraphWidget(_BaseGraphWidget):
     """Position Graph Widget."""
 
     INTLKTYPE = 'PosY'
-    PROPTY_MEAS_DATA = 'PosY-Mon'
-    # PROPTY_MEAS_DATA = 'IntlkPosY-Mon'
+    PROPTY_MEAS_DATA = 'IntlkPosY-Mon'
     PROPTY_MEAS_SYMB = {
         'Instantaneous': {
             'General': 'Intlk-Mon',
@@ -811,8 +805,7 @@ class AngXGraphWidget(_BaseGraphWidget):
     """Angulation Graph Widget."""
 
     INTLKTYPE = 'AngX'
-    PROPTY_MEAS_DATA = 'PosX-Mon'
-    # PROPTY_MEAS_DATA = 'IntlkPosX-Mon'
+    PROPTY_MEAS_DATA = 'IntlkAngX-Mon'
     PROPTY_MEAS_SYMB = {
         'Instantaneous': {
             'General': 'Intlk-Mon',
@@ -847,8 +840,7 @@ class AngYGraphWidget(_BaseGraphWidget):
     """Angulation Graph Widget."""
 
     INTLKTYPE = 'AngY'
-    PROPTY_MEAS_DATA = 'PosY-Mon'
-    # PROPTY_MEAS_DATA = 'IntlkPosY-Mon'
+    PROPTY_MEAS_DATA = 'IntlkAngY-Mon'
     PROPTY_MEAS_SYMB = {
         'Instantaneous': {
             'General': 'Intlk-Mon',
