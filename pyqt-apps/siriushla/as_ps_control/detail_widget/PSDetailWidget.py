@@ -1905,7 +1905,7 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
         self.graph_curr = SiriusWaveformPlot()
         self.graph_curr.addChannel(
             y_channel=self._prefixed_psname + ':LAMPCurrentData',
-            name='Current', color='blue', lineWidth=2)
+            name='Current', color='blue', lineWidth=1)
         # self.graph_curr.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
         self.graph_curr.autoRangeX = True
         self.graph_curr.autoRangeY = True
@@ -1915,13 +1915,13 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
         self.graph_curr.setLabel('left', text='Current [A]', color='gray')
         self.graph_curr.setLabel('bottom', text='Index')
         self.graph_curr.setBackgroundColor(QColor(255, 255, 255))
-        tabmon.addTab(self.graph_curr, 'Curr.')
+        tabmon.addTab(self.graph_curr, 'Current Acq.')
 
         # # voltage waveform
         self.graph_volt = SiriusWaveformPlot()
         self.graph_volt.addChannel(
             y_channel=self._prefixed_psname + ':LAMPVoltageData',
-            name='Voltage', color='blue', lineWidth=2)
+            name='Voltage', color='blue', lineWidth=1)
         # self.graph_volt.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
         self.graph_volt.autoRangeX = True
         self.graph_volt.autoRangeY = True
@@ -1931,7 +1931,7 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
         self.graph_volt.setLabel('left', text='Voltage [V]', color='gray')
         self.graph_volt.setLabel('bottom', text='Index')
         self.graph_volt.setBackgroundColor(QColor(255, 255, 255))
-        tabmon.addTab(self.graph_volt, 'Volt.')
+        tabmon.addTab(self.graph_volt, 'Voltage Acq.')
 
         # # current history
         self.graph_chist = SiriusTimePlot()
@@ -1950,7 +1950,7 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
             pvname = self._prefixed_psname.substitute(propty='Current'+pvs)
             legtxt = pvs.replace('-', '')
             self.graph_chist.addYChannel(
-                y_channel=pvname, name=legtxt, color=color, lineWidth=2)
+                y_channel=pvname, name=legtxt, color=color, lineWidth=1)
             curve = self.graph_chist.curveAtIndex(-1)
             cb_show = QCheckBox(legtxt)
             cb_show.setChecked(True)
@@ -1962,6 +1962,7 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
         self.graph_chist.autoRangeY = True
         self.graph_chist.showXGrid = True
         self.graph_chist.showYGrid = True
+        self.graph_chist.timeSpan = 30  # [s]
         self.graph_chist.title = 'Current Mean History'
         self.graph_chist.setLabel('left', text='Current [A]', color='gray')
         self.graph_chist.showLegend = True
@@ -1971,7 +1972,7 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
         lay_currhist.setContentsMargins(0, 0, 0, 0)
         lay_currhist.addWidget(self.graph_chist)
         lay_currhist.addLayout(hbox_show)
-        tabmon.addTab(wid_currhist, 'Curr.Hist.')
+        tabmon.addTab(wid_currhist, 'Current Hist.')
         tabmon.setCurrentIndex(2)
 
         layout = QHBoxLayout()
