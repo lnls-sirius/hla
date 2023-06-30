@@ -588,6 +588,7 @@ class _BaseGraphWidget(BaseObject, QWidget):
 class _UpdateGraphThread(BaseObject, QThread):
     """Update Graph Thread."""
 
+    UPDATE_FREQ = 0.5  # [Hz]
     dataChanged = Signal(list)
 
     def __init__(self, intlktype, meas_data, meas_symb,
@@ -635,7 +636,7 @@ class _UpdateGraphThread(BaseObject, QThread):
             self._update_data()
             _dt = _time.time() - _t0
 
-            sleep = 2 - _dt
+            sleep = 1/self.UPDATE_FREQ - _dt
             if sleep > 0:
                 _time.sleep(sleep)
 
