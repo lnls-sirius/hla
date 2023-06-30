@@ -609,6 +609,8 @@ class _UpdateGraphThread(BaseObject, QThread):
         self._propintlktype = propintlktype
         self._propcomptype = propcomptype
         self._reforb = reforb
+        self._refmetric = _np.array(self.calc_intlk_metric(
+            self._reforb, metric=self.metric))
         self._prefix = prefix
 
         self._quit_task = False
@@ -624,6 +626,8 @@ class _UpdateGraphThread(BaseObject, QThread):
     def set_reforb(self, new):
         """Update reference orbit."""
         self._reforb = new
+        self._refmetric = _np.array(self.calc_intlk_metric(
+            self._reforb, metric=self.metric))
 
     def exit_task(self):
         """Set flag to quit thread."""
@@ -663,13 +667,11 @@ class _UpdateGraphThread(BaseObject, QThread):
             self._create_pvs(self.meas_data)
             vals = _np.array(self._get_values(self.meas_data), dtype=float)
             if self.metric in ['pos', 'ang']:
-                ref = self.calc_intlk_metric(
-                    self._reforb, metric=self.metric)
-                vals -= ref
+                vals -= self._refmetric
                 vals *= self.CONV_NM2M
             else:
                 # sum case
-                vals *= self.get_monitsum2intlksum_factor()
+                vals *= self.monitsum2intlksum_factor
             y_data_meas = list(vals)
 
             self.dataChanged.emit(['meas', symbols_meas, y_data_meas])
@@ -690,8 +692,7 @@ class _UpdateGraphThread(BaseObject, QThread):
             # data min
             vals = _np.array(self._get_values(self.min_data), dtype=float)
             if self.metric in ['pos', 'ang']:
-                ref = self.calc_intlk_metric(self._reforb, metric=self.metric)
-                vals -= ref
+                vals -= self._refmetric
                 vals *= self.CONV_NM2M
             y_data_min = list(vals)
 
@@ -713,8 +714,7 @@ class _UpdateGraphThread(BaseObject, QThread):
             # data max
             vals = _np.array(self._get_values(self.max_data), dtype=float)
             if self.metric in ['pos', 'ang']:
-                ref = self.calc_intlk_metric(self._reforb, metric=self.metric)
-                vals -= ref
+                vals -= self._refmetric
                 vals *= self.CONV_NM2M
             y_data_max = list(vals)
 
