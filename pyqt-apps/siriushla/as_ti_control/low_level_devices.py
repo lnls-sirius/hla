@@ -406,13 +406,13 @@ class EVG(BaseWidget):
         lb = QLabel("<b>FRMVERSION</b>")
         pvname = self.get_pvname(propty='FrmVersionA-Cte')
         frma = SiriusLabel(self, init_channel=pvname)
-        frma.displayFormat = frma.DisplayFormat.Hex
+        frma.displayFormat = frma.DisplayFormat.TIFRMVersion
         pvname = self.get_pvname(propty='FrmVersionB-Cte')
         frmb = SiriusLabel(self, init_channel=pvname)
-        frmb.displayFormat = frmb.DisplayFormat.Hex
+        frmb.displayFormat = frmb.DisplayFormat.TIFRMVersion
         pvname = self.get_pvname(propty='FrmVersionC-Cte')
         frmc = SiriusLabel(self, init_channel=pvname)
-        frmc.displayFormat = frmc.DisplayFormat.Hex
+        frmc.displayFormat = frmc.DisplayFormat.TIFRMVersion
         gb = self._create_small_group(
             '', info_wid, (lb, frma, frmb, frmc))
         gb.layout().setSpacing(3)
@@ -1230,13 +1230,13 @@ class FOUT(BaseWidget):
         lb = QLabel("<b>FRMVERSION</b>")
         pvname = self.get_pvname(propty='FrmVersionA-Cte')
         frma = SiriusLabel(self, init_channel=pvname)
-        frma.displayFormat = frma.DisplayFormat.Hex
+        frma.displayFormat = frma.DisplayFormat.TIFRMVersion
         pvname = self.get_pvname(propty='FrmVersionB-Cte')
         frmb = SiriusLabel(self, init_channel=pvname)
-        frmb.displayFormat = frmb.DisplayFormat.Hex
+        frmb.displayFormat = frmb.DisplayFormat.TIFRMVersion
         pvname = self.get_pvname(propty='FrmVersionC-Cte')
         frmc = SiriusLabel(self, init_channel=pvname)
-        frmc.displayFormat = frmc.DisplayFormat.Hex
+        frmc.displayFormat = frmc.DisplayFormat.TIFRMVersion
         gb = self._create_small_group(
             '', info_wid, (lb, frma, frmb, frmc))
         gb.layout().setSpacing(3)
@@ -1837,13 +1837,13 @@ class _EVR_EVE(BaseWidget):
         lb = QLabel("<b>FRMVERSION</b>")
         pvname = self.get_pvname(propty='FrmVersionA-Cte')
         frma = SiriusLabel(self, init_channel=pvname)
-        frma.displayFormat = frma.DisplayFormat.Hex
+        frma.displayFormat = frma.DisplayFormat.TIFRMVersion
         pvname = self.get_pvname(propty='FrmVersionB-Cte')
         frmb = SiriusLabel(self, init_channel=pvname)
-        frmb.displayFormat = frmb.DisplayFormat.Hex
+        frmb.displayFormat = frmb.DisplayFormat.TIFRMVersion
         pvname = self.get_pvname(propty='FrmVersionC-Cte')
         frmc = SiriusLabel(self, init_channel=pvname)
-        frmc.displayFormat = frmc.DisplayFormat.Hex
+        frmc.displayFormat = frmc.DisplayFormat.TIFRMVersion
         gb = self._create_small_group(
             '', info_wid, (lb, frma, frmb, frmc))
         gb.layout().setSpacing(3)
