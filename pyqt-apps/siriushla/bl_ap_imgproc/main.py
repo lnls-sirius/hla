@@ -25,7 +25,7 @@ from ..widgets import SiriusLabel, SiriusLedState, \
 from .util import PVS_IMGPROC, PVS_DVF, \
     IMG_PVS, LOG_PV, COMBOBOX_PVS, LINEEDIT_PVS, STATEBUT_PVS, \
     LED_ALERT_PVS, LED_STATE_PVS, LED_DETAIL_PVS
-from .image import SiriusImageView
+from .image import DVFImageView
 
 class BLImgProc(QWidget):
     """Image Processing Window."""
@@ -128,7 +128,7 @@ class BLImgProc(QWidget):
         elif widget_type == 'enumcombo':
             wid = SiriusEnumComboBox(self, init_channel=pvname)
         elif widget_type == 'image':
-            wid = SiriusImageView(self.device, pvname)
+            wid = DVFImageView(self.device, pvname)
         elif widget_type == 'time':
             wid = self.create_time_widget(pvname)
             wid.setAlignment(Qt.AlignCenter)

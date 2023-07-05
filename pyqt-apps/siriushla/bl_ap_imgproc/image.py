@@ -14,7 +14,7 @@ from ..widgets import SiriusConnectionSignal
 from .util import PVS_IMGPROC
 
 
-class SiriusImageView(PyDMImageView):
+class DVFImageView(PyDMImageView):
     """Image Processing Window."""
 
     def __init__(self, device, pvname, parent=None):
