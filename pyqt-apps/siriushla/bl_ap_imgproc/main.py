@@ -6,8 +6,11 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QGridLayout, QHBoxLayout, \
     QVBoxLayout, QGroupBox, QLabel, QSizePolicy, QTabWidget, \
     QPushButton, QScrollArea
+from qtpy.QtGui import QColor
+from pyqtgraph import PlotCurveItem, mkPen
 
 import qtawesome as qta
+import numpy as _np
 
 from pydm.widgets import PyDMImageView, PyDMPushButton
 
@@ -43,6 +46,9 @@ class BLImgProc(QWidget):
                      color=get_appropriate_color('SI')))
         self._lbl_timestamp = {}
         self.timestamp = {}
+        self.img_view = None
+        self.roi = None
+        self.roi_con = {}
         self._setupUi()
 
     def add_prefixes(self, sufix):
@@ -75,6 +81,57 @@ class BLImgProc(QWidget):
         self.timestamp[pvname].new_value_signal[float].connect(
             lambda value: self.format_datetime_lbl(value, pvname))
         return self._lbl_timestamp[pvname]
+
+    def plot_roi(self, value, pvname):
+        point_list = _np.zeros(5)
+        if 'ROIX' in pvname:
+            id_data = 0
+            change_point = [
+                [0, 1, 4], [2, 3]]
+        else:
+            id_data = 1
+            change_point = [
+                [0, 3, 4], [1, 2]]
+
+        for idx, val in enumerate(value):
+            for point in change_point[idx]:
+                point_list[point] = val
+
+        cur_data = self.roi.getData()
+        x_points = point_list if id_data == 0 else cur_data[0]
+        y_points = point_list if id_data == 1 else cur_data[1]
+        self.roi.setData(x=x_points, y=y_points)
+
+    def add_plot_curve(self):
+        pen = mkPen(QColor('red'))
+        x_points = [0, 400, 400, 0, 0]
+        y_points = [0, 0, 400, 400, 0]
+        self.roi = PlotCurveItem(x_points, y_points)
+        self.roi.setPen(pen)
+        self.img_view.addItem(self.roi)
+
+    def add_roi_connection(self, axis):
+        roi_pvs = PVS_IMGPROC['ROI'][1]
+        roi_pv = self.add_prefixes(roi_pvs[axis]['Min Max'][1])
+        self.roi_con[axis] = SiriusConnectionSignal(roi_pv)
+        self.roi_con[axis].new_value_signal[_np.ndarray].connect(
+            lambda value: self.plot_roi(value, roi_pv))
+
+    def get_image_widget(self, pvname):
+        self.img_view = PyDMImageView(
+            image_channel=pvname[0],
+            width_channel=pvname[1])
+
+        self.add_plot_curve()
+        self.add_roi_connection('X')
+        self.add_roi_connection('Y')
+
+        self.img_view.readingOrder = self.img_view.ReadingOrder.Clike
+        self.img_view.getView().getViewBox().setAspectLocked(True)
+        self.img_view.colorMap = self.img_view.Jet
+        self.img_view.maxRedrawRate = 10  # [Hz]
+        self.img_view.normalizeData = True
+        return self.img_view
 
     def select_widget(
             self, pv_name, widget_type='label', units=True, labels=None):
@@ -126,14 +183,7 @@ class BLImgProc(QWidget):
         elif widget_type == 'enumcombo':
             wid = SiriusEnumComboBox(self, init_channel=pvname)
         elif widget_type == 'image':
-            wid = PyDMImageView(
-                image_channel=pvname[0],
-                width_channel=pvname[1])
-            wid.readingOrder = wid.ReadingOrder.Clike
-            wid.getView().getViewBox().setAspectLocked(True)
-            wid.colorMap = wid.Jet
-            wid.maxRedrawRate = 10  # [Hz]
-            wid.normalizeData = True
+            wid = self.get_image_widget(pvname)
         elif widget_type == 'time':
             wid = self.create_time_widget(pvname)
             wid.setAlignment(Qt.AlignCenter)
