@@ -146,7 +146,7 @@ class BLImgProc(QWidget):
         self.fit_mean.setData(x=x_points, y=y_points)
 
     def add_fit_mean(self):
-        pen = mkPen(QColor('red'))
+        pen = mkPen(QColor('white'))
         center = 200
         dist = 20
         x_points = _np.full(7, center)
@@ -193,7 +193,7 @@ class BLImgProc(QWidget):
         self.fit_ellipse.setData(x=x_centered, y=y_centered)
 
     def add_fit_ellipse(self):
-        pen = mkPen(QColor('red'))
+        pen = mkPen(QColor('white'))
         x_mean = 200
         y_mean = 200
 
