@@ -47,10 +47,16 @@ class BLImgProc(QWidget):
         self._lbl_timestamp = {}
         self.timestamp = {}
         self.img_view = None
+
         self.roi = None
         self.roi_con = {}
         self.fit_mean = None
         self.fit_mean_con = {}
+        self.fit_ellipse = None
+        self.fit_ellipse_con = {}
+        self.angle = 0
+        self.sigma = [200, 200]
+
         self._setupUi()
 
     def add_prefixes(self, sufix):
@@ -162,6 +168,53 @@ class BLImgProc(QWidget):
         self.fit_mean_con[axis].new_value_signal[float].connect(
             lambda value: self.plot_fit_mean(value, fit_mean_pv))
 
+    def plot_fit_ellipse(self, value, pvname):
+        theta = _np.linspace(0, 2*_np.pi, 100)
+        centroid_raw = self.fit_mean.getData()
+        centroid = [centroid_raw[0][3], centroid_raw[1][3]]
+
+        if 'Angle' in pvname:
+            self.angle = value
+        elif 'Sigma1' in pvname:
+            self.sigma[0] = value
+        else:
+            self.sigma[1] = value
+
+        theta = _np.linspace(0, 2*_np.pi, 100)
+        x_points = self.sigma[0] * _np.cos(theta)
+        y_points = self.sigma[1] * _np.sin(theta)
+
+        x_rotated = x_points * _np.cos(self.angle) - y_points * _np.sin(self.angle)
+        y_rotated = x_points * _np.sin(self.angle) + y_points * _np.cos(self.angle)
+
+        x_centered = x_rotated + centroid[0]
+        y_centered = y_rotated + centroid[1]
+
+        self.fit_ellipse.setData(x=x_centered, y=y_centered)
+
+    def add_fit_ellipse(self):
+        pen = mkPen(QColor('red'))
+        x_mean = 200
+        y_mean = 200
+
+        theta = _np.linspace(0, 2*_np.pi, 100)
+        x_points = self.sigma[0] * _np.cos(theta)
+        y_points = self.sigma[1] * _np.sin(theta)
+
+        x_centered = x_points + x_mean
+        y_centered = y_points + y_mean
+
+        self.fit_ellipse = PlotCurveItem(x_centered, y_centered)
+        self.fit_ellipse.setPen(pen)
+        self.img_view.addItem(self.fit_ellipse)
+
+    def add_fit_ellipse_connection(self, param):
+        fit_pvs = PVS_IMGPROC['Fit'][1]
+        fit_ellipse_pv = self.add_prefixes(fit_pvs[param])
+        self.fit_ellipse_con[param] = SiriusConnectionSignal(fit_ellipse_pv)
+        self.fit_ellipse_con[param].new_value_signal[float].connect(
+            lambda value: self.plot_fit_ellipse(value, fit_ellipse_pv))
+
     def get_image_widget(self, pvname):
         self.img_view = PyDMImageView(
             image_channel=pvname[0],
@@ -174,6 +227,11 @@ class BLImgProc(QWidget):
         self.add_fit_mean()
         self.add_fit_mean_connection('X')
         self.add_fit_mean_connection('Y')
+
+        self.add_fit_ellipse()
+        self.add_fit_ellipse_connection('Angle')
+        self.add_fit_ellipse_connection('Sigma1')
+        self.add_fit_ellipse_connection('Sigma2')
 
         self.img_view.readingOrder = self.img_view.ReadingOrder.Clike
         self.img_view.getView().getViewBox().setAspectLocked(True)
