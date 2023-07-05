@@ -49,6 +49,8 @@ class BLImgProc(QWidget):
         self.img_view = None
         self.roi = None
         self.roi_con = {}
+        self.fit_mean = None
+        self.fit_mean_con = {}
         self._setupUi()
 
     def add_prefixes(self, sufix):
@@ -117,6 +119,49 @@ class BLImgProc(QWidget):
         self.roi_con[axis].new_value_signal[_np.ndarray].connect(
             lambda value: self.plot_roi(value, roi_pv))
 
+    def plot_fit_mean(self, value, pvname):
+        if 'ROIX' in pvname:
+            id_data = 0
+            point_list = _np.full(7, value)
+            change_point = [2, 6]
+        else:
+            id_data = 1
+            point_list = _np.full(7, value)
+            change_point = [0, 4]
+
+        dist = 20
+        for point in change_point:
+            point_list[point] = value - dist
+            dist *= -1
+
+        cur_data = self.fit_mean.getData()
+        x_points = point_list if id_data == 0 else cur_data[0]
+        y_points = point_list if id_data == 1 else cur_data[1]
+        self.fit_mean.setData(x=x_points, y=y_points)
+
+    def add_fit_mean(self):
+        pen = mkPen(QColor('red'))
+        center = 200
+        dist = 20
+        x_points = _np.full(7, center)
+        x_points[2] = center-dist
+        x_points[6] = center+dist
+
+        y_points = _np.full(7, center)
+        y_points[0] = center-dist
+        y_points[4] = center+dist
+
+        self.fit_mean = PlotCurveItem(x_points, y_points)
+        self.fit_mean.setPen(pen)
+        self.img_view.addItem(self.fit_mean)
+
+    def add_fit_mean_connection(self, axis):
+        fit_pvs = PVS_IMGPROC['Fit'][1]
+        fit_mean_pv = self.add_prefixes(fit_pvs[axis]['ROI Mean'])
+        self.fit_mean_con[axis] = SiriusConnectionSignal(fit_mean_pv)
+        self.fit_mean_con[axis].new_value_signal[float].connect(
+            lambda value: self.plot_fit_mean(value, fit_mean_pv))
+
     def get_image_widget(self, pvname):
         self.img_view = PyDMImageView(
             image_channel=pvname[0],
@@ -125,6 +170,10 @@ class BLImgProc(QWidget):
         self.add_plot_curve()
         self.add_roi_connection('X')
         self.add_roi_connection('Y')
+
+        self.add_fit_mean()
+        self.add_fit_mean_connection('X')
+        self.add_fit_mean_connection('Y')
 
         self.img_view.readingOrder = self.img_view.ReadingOrder.Clike
         self.img_view.getView().getViewBox().setAspectLocked(True)
