@@ -127,7 +127,7 @@ class SiriusImageView(PyDMImageView):
         centroid = [centroid_raw[0][3], centroid_raw[1][3]]
 
         if 'Angle' in pvname:
-            self.angle = value
+            self.angle = _np.pi*value/180
         elif 'Sigma1' in pvname:
             self.sigma[0] = value
         else:
