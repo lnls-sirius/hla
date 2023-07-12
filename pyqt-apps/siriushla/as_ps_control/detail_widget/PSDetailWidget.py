@@ -1537,6 +1537,7 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
         self._psmodel = 'FOFB_PS'
         self._pstype = 'si-corrector-fc1-ch'
         self._db = get_ps_propty_database(self._psmodel, self._pstype)
+        self._db['AlarmsAmpLtcLabels-Cte'] = self._db['AlarmsAmpLabels-Cte']
         self._setup_ui()
 
     def _setup_ui(self):
@@ -1720,22 +1721,37 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
         return layout
 
     def _interlockLayout(self):
-        self.alarm_label = QLabel('AlarmsAmp', self, alignment=Qt.AlignCenter)
-        self.alarm_bt = QPushButton(qta.icon('fa5s.list-ul'), '', self)
-        self.alarm_bt.setObjectName('alarm_bt')
-        self.alarm_bt.setStyleSheet(
-            '#alarm_bt{min-width:25px; max-width:25px; icon-size:20px;}')
-        util.connect_window(
-            self.alarm_bt, InterlockWindow, self,
-            devname=self._psname, database=self._db, interlock='AlarmsAmp')
-        self.alarm_led = SiriusLedAlert(
-            parent=self, init_channel=self._prefixed_psname + ":AlarmsAmp-Mon")
-
         layout = QGridLayout()
         layout.setAlignment(Qt.AlignCenter)
-        layout.addWidget(self.alarm_bt, 0, 0)
-        layout.addWidget(self.alarm_label, 0, 1)
-        layout.addWidget(self.alarm_led, 0, 2)
+
+        row = 0
+        for pvn in ['AlarmsAmp', 'AlarmsAmpLtc']:
+            alarm_label = QLabel(pvn, self, alignment=Qt.AlignCenter)
+            alarm_bt = QPushButton(qta.icon('fa5s.list-ul'), '', self)
+            alarm_bt.setObjectName('alarm_bt')
+            alarm_bt.setStyleSheet(
+                '#alarm_bt{min-width:25px; max-width:25px; icon-size:20px;}')
+
+            util.connect_window(
+                alarm_bt, InterlockWindow, self,
+                devname=self._psname, database=self._db, interlock=pvn)
+            alarm_led = SiriusLedAlert(
+                parent=self, init_channel=self._prefixed_psname+':'+pvn+'-Mon')
+            alarm_led.onColor = alarm_led.Yellow
+
+            layout.addWidget(alarm_bt, row, 0)
+            layout.addWidget(alarm_label, row, 1)
+            layout.addWidget(alarm_led, row, 2)
+            row += 1
+
+        self.reset_bt = PyDMPushButton(
+            parent=self, icon=qta.icon('fa5s.sync'), pressValue=1,
+            init_channel=self._prefixed_psname + ":AlarmsAmpLtcRst-Cmd")
+        self.reset_bt.setObjectName('reset_bt')
+        self.reset_bt.setStyleSheet(
+            '#reset_bt{min-width:25px; max-width:25px; icon-size:20px;}')
+        layout.addWidget(self.reset_bt, row, 2)
+
         return layout
 
     def _currLoopLayout(self):
@@ -1889,7 +1905,7 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
         self.graph_curr = SiriusWaveformPlot()
         self.graph_curr.addChannel(
             y_channel=self._prefixed_psname + ':LAMPCurrentData',
-            name='Current', color='blue', lineWidth=2)
+            name='Current', color='blue', lineWidth=1)
         # self.graph_curr.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
         self.graph_curr.autoRangeX = True
         self.graph_curr.autoRangeY = True
@@ -1899,13 +1915,13 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
         self.graph_curr.setLabel('left', text='Current [A]', color='gray')
         self.graph_curr.setLabel('bottom', text='Index')
         self.graph_curr.setBackgroundColor(QColor(255, 255, 255))
-        tabmon.addTab(self.graph_curr, 'Curr.')
+        tabmon.addTab(self.graph_curr, 'Current Acq.')
 
         # # voltage waveform
         self.graph_volt = SiriusWaveformPlot()
         self.graph_volt.addChannel(
             y_channel=self._prefixed_psname + ':LAMPVoltageData',
-            name='Voltage', color='blue', lineWidth=2)
+            name='Voltage', color='blue', lineWidth=1)
         # self.graph_volt.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
         self.graph_volt.autoRangeX = True
         self.graph_volt.autoRangeY = True
@@ -1915,7 +1931,7 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
         self.graph_volt.setLabel('left', text='Voltage [V]', color='gray')
         self.graph_volt.setLabel('bottom', text='Index')
         self.graph_volt.setBackgroundColor(QColor(255, 255, 255))
-        tabmon.addTab(self.graph_volt, 'Volt.')
+        tabmon.addTab(self.graph_volt, 'Voltage Acq.')
 
         # # current history
         self.graph_chist = SiriusTimePlot()
@@ -1934,7 +1950,7 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
             pvname = self._prefixed_psname.substitute(propty='Current'+pvs)
             legtxt = pvs.replace('-', '')
             self.graph_chist.addYChannel(
-                y_channel=pvname, name=legtxt, color=color, lineWidth=2)
+                y_channel=pvname, name=legtxt, color=color, lineWidth=1)
             curve = self.graph_chist.curveAtIndex(-1)
             cb_show = QCheckBox(legtxt)
             cb_show.setChecked(True)
@@ -1946,6 +1962,7 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
         self.graph_chist.autoRangeY = True
         self.graph_chist.showXGrid = True
         self.graph_chist.showYGrid = True
+        self.graph_chist.timeSpan = 30  # [s]
         self.graph_chist.title = 'Current Mean History'
         self.graph_chist.setLabel('left', text='Current [A]', color='gray')
         self.graph_chist.showLegend = True
@@ -1955,7 +1972,7 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
         lay_currhist.setContentsMargins(0, 0, 0, 0)
         lay_currhist.addWidget(self.graph_chist)
         lay_currhist.addLayout(hbox_show)
-        tabmon.addTab(wid_currhist, 'Curr.Hist.')
+        tabmon.addTab(wid_currhist, 'Current Hist.')
         tabmon.setCurrentIndex(2)
 
         layout = QHBoxLayout()
