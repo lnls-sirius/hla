@@ -25,10 +25,12 @@ from ..widgets import SiriusConnectionSignal as _ConnSignal, SiriusLedAlert, \
     SiriusDialog, PyDMLedMultiChannel, SiriusLabel, PyDMLed, SiriusLedState
 from ..widgets.windows import create_window_from_widget
 from ..as_ap_configdb import LoadConfigDialog
-from ..as_di_bpms.triggers import LogicalTriggers
+from ..common.afc_acq_core import LogicalTriggers
 from ..as_ap_sofb.graphics.base import Graph
 from .base import BaseObject
 from .graphics import RefOrbViewWidget
+
+_BPMDB = _csbpm.get_bpm_database()
 
 
 class RefOrbWidget(BaseObject, QWidget):
@@ -795,7 +797,9 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
             btn.setAutoDefault(False)
             win = create_window_from_widget(
                 LogicalTriggers, title=bpm+': ACQ Logical Triggers')
-            connect_window(btn, win, parent=self, prefix=self.prefix, bpm=bpm)
+            connect_window(
+                btn, win, parent=self, prefix=self.prefix, device=bpm,
+                database=_BPMDB, names=_csbpm.LogTrigIntern._fields)
             lbl = QLabel(bpm, self, alignment=Qt.AlignCenter)
             lbl.setObjectName('lbl_bpmname')
             hwid = QWidget()

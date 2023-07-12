@@ -1,11 +1,14 @@
 from qtpy.QtWidgets import QHBoxLayout, QVBoxLayout, QGridLayout, \
     QLabel, QPushButton
 from qtpy.QtCore import Qt
+
+from siriuspy.diagbeam.bpm.csdev import Const as _csbpm
+
 from siriushla.widgets import SiriusLedState
 from siriushla import util
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla.as_di_bpms.base import BaseWidget, CustomGroupBox
-from siriushla.as_di_bpms.triggers import PhysicalTriggers, LogicalTriggers
+from siriushla.common.afc_acq_core import PhysicalTriggers, LogicalTriggers
 
 
 class ParamsSettings(BaseWidget):
@@ -151,14 +154,16 @@ class AdvancedSettings(BaseWidget):
         Window = create_window_from_widget(
             PhysicalTriggers, title=self.bpm+': Physical Triggers')
         util.connect_window(
-            pbt, Window, parent=grpbx, prefix=self.prefix, bpm=self.bpm)
+            pbt, Window, parent=grpbx, prefix=self.prefix, device=self.bpm,
+            database=self.bpmdb, names=_csbpm.TrigExtern._fields)
         hbl.addWidget(pbt)
         hbl.addStretch()
         pbt = QPushButton('ACQ Logical Triggers')
         Window = create_window_from_widget(
             LogicalTriggers, title=self.bpm+': ACQ Logical Triggers')
         util.connect_window(
-            pbt, Window, parent=grpbx, prefix=self.prefix, bpm=self.bpm,
+            pbt, Window, parent=grpbx, prefix=self.prefix, device=self.bpm,
+            database=self.bpmdb, names=_csbpm.LogTrigIntern._fields,
             trig_tp='')
         hbl.addWidget(pbt)
         hbl.addStretch()
@@ -166,8 +171,8 @@ class AdvancedSettings(BaseWidget):
         Window = create_window_from_widget(
             LogicalTriggers, title=self.bpm+': Post-Mortem Logical Triggers')
         util.connect_window(
-            pbt, Window, parent=grpbx, prefix=self.prefix, bpm=self.bpm,
-            trig_tp='_PM')
+            pbt, Window, parent=grpbx, prefix=self.prefix, device=self.bpm,
+            database=self.bpmdb, trig_tp='_PM')
         hbl.addWidget(pbt)
         hbl.addStretch()
         gdl.addWidget(grpbx, 3, 0, 1, 2)
