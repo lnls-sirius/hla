@@ -1,6 +1,5 @@
 """Custom widgets."""
 
-import time as _time
 from functools import partial as _part
 import numpy as _np
 
