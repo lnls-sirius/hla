@@ -841,7 +841,6 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
             0, 2)
 
         # table
-        self._led_timeframelen = dict()
         for idx, ctl in enumerate(self.ctrlrs):
             row = idx + 1
             lbl = QLabel(ctl, self, alignment=Qt.AlignCenter)
