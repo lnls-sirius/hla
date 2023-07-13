@@ -17,7 +17,10 @@ class DVFImageView(PyDMImageView):
 
     def __init__(self, device, pvname, parent=None):
         """."""
-        super().__init__(parent=parent)
+        super().__init__(
+            parent=parent,
+            image_channel=pvname[0],
+            width_channel=pvname[1])
 
         self.device = device
 
@@ -32,7 +35,7 @@ class DVFImageView(PyDMImageView):
         self.angle = 0
         self.sigma = [200, 200]
 
-        self._setupUi(pvname)
+        self._setupUi()
 
     def add_prefixes(self, sufix):
         return self.device + ":" + sufix
@@ -162,10 +165,7 @@ class DVFImageView(PyDMImageView):
         self.fit_ellipse_con[param].new_value_signal[float].connect(
             lambda value: self.plot_fit_ellipse(value, fit_ellipse_pv))
 
-    def _setupUi(self, pvname):
-        self.image_channel = pvname[0]
-        self.width_channel = pvname[1]
-
+    def _setupUi(self):
         self.add_plot_curve()
         self.add_roi_connection('X')
         self.add_roi_connection('Y')
