@@ -1,14 +1,12 @@
 """BL AP ImgProc."""
 
-from qtpy.QtWidgets import QWidget
+import numpy as _np
+
 from qtpy.QtGui import QColor
 from pyqtgraph import PlotCurveItem, mkPen
 
-import qtawesome as qta
-import numpy as _np
-
 from pydm.widgets import PyDMImageView
-from ..util import get_appropriate_color
+
 from ..widgets import SiriusConnectionSignal
 
 from .util import PVS_IMGPROC
@@ -20,10 +18,6 @@ class DVFImageView(PyDMImageView):
     def __init__(self, device, pvname, parent=None):
         """."""
         super().__init__(parent=parent)
-        self.setObjectName('SIApp')
-        self.setWindowIcon(
-            qta.icon('mdi.camera-metering-center',
-                     color=get_appropriate_color('SI')))
 
         self.device = device
 
