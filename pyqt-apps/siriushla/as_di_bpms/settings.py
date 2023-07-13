@@ -155,7 +155,7 @@ class AdvancedSettings(BaseWidget):
             PhysicalTriggers, title=self.bpm+': Physical Triggers')
         util.connect_window(
             pbt, Window, parent=grpbx, prefix=self.prefix, device=self.bpm,
-            database=self.bpmdb, names=_csbpm.TrigExtern._fields)
+            database=self.bpmdb)
         hbl.addWidget(pbt)
         hbl.addStretch()
         pbt = QPushButton('ACQ Logical Triggers')

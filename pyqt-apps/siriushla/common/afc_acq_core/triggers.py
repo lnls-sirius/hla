@@ -6,6 +6,9 @@ from qtpy.QtCore import Qt
 
 from pydm.widgets import PyDMPushButton, PyDMEnumComboBox
 
+from siriuspy.namesys import SiriusPVName
+from siriuspy.search import HLTimeSearch
+
 from ...widgets import SiriusLabel, SiriusSpinbox, pydmwidget_factory
 
 from .base import BaseWidget
@@ -14,12 +17,11 @@ from .base import BaseWidget
 class PhysicalTriggers(BaseWidget):
     """Physical triggers."""
 
-    def __init__(
-            self, parent=None, prefix='', device='', database=dict(),
-            names=None):
+    def __init__(self, parent=None, prefix='', device='', database=dict()):
         super().__init__(
             parent=parent, prefix=prefix, device=device, database=database)
-        self.names = names
+        self.afctiming = SiriusPVName(
+            f'IA-{self.device.sub[:2]}RaBPM:TI-AMCFPGAEVR')
         self.setupui()
 
     def setupui(self):
@@ -33,7 +35,9 @@ class PhysicalTriggers(BaseWidget):
 
     def get_trigger_groupbox(self, idx):
         trig = 'TRIGGER{0:d}'.format(idx)
-        name = trig + (': ' + self.names[idx] if self.names else '')
+        hltrig = 'Monit' if idx == 7 else HLTimeSearch.get_hl_from_ll_triggers(
+            self.afctiming.substitute(propty_name=f'CRT{idx}'))
+        name = trig + (': ' + hltrig if hltrig else '')
         grpbx = pydmwidget_factory(QGroupBox, pydm_class='primi')(name, self)
         fbl = QFormLayout(grpbx)
 
