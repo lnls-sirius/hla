@@ -9,7 +9,7 @@ from qtpy.QtWidgets import QWidget, QGridLayout, QHBoxLayout, \
 
 import qtawesome as qta
 
-from pydm.widgets import PyDMImageView, PyDMPushButton
+from pydm.widgets import PyDMPushButton
 
 from ..widgets import SiriusEnumComboBox
 from ..widgets.dialog import StatusDetailDialog
@@ -25,7 +25,7 @@ from ..widgets import SiriusLabel, SiriusLedState, \
 from .util import PVS_IMGPROC, PVS_DVF, \
     IMG_PVS, LOG_PV, COMBOBOX_PVS, LINEEDIT_PVS, STATEBUT_PVS, \
     LED_ALERT_PVS, LED_STATE_PVS, LED_DETAIL_PVS
-
+from .image import DVFImageView
 
 class BLImgProc(QWidget):
     """Image Processing Window."""
@@ -43,6 +43,8 @@ class BLImgProc(QWidget):
                      color=get_appropriate_color('SI')))
         self._lbl_timestamp = {}
         self.timestamp = {}
+        self.img_view = None
+
         self._setupUi()
 
     def add_prefixes(self, sufix):
@@ -126,14 +128,7 @@ class BLImgProc(QWidget):
         elif widget_type == 'enumcombo':
             wid = SiriusEnumComboBox(self, init_channel=pvname)
         elif widget_type == 'image':
-            wid = PyDMImageView(
-                image_channel=pvname[0],
-                width_channel=pvname[1])
-            wid.readingOrder = wid.ReadingOrder.Clike
-            wid.getView().getViewBox().setAspectLocked(True)
-            wid.colorMap = wid.Jet
-            wid.maxRedrawRate = 10  # [Hz]
-            wid.normalizeData = True
+            wid = DVFImageView(self.device, pvname)
         elif widget_type == 'time':
             wid = self.create_time_widget(pvname)
             wid.setAlignment(Qt.AlignCenter)
