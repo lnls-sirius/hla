@@ -143,7 +143,7 @@ class DVFImageView(PyDMImageView):
         self.fit_ellipse.setData(x=x_centered, y=y_centered)
 
     def add_fit_ellipse(self):
-        pen = mkPen(QColor('white'))
+        pen = mkPen(QColor('black'))
         x_mean = 200
         y_mean = 200
 
