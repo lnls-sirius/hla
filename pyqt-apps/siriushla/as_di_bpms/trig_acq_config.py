@@ -19,7 +19,7 @@ class ACQTrigConfigs(BaseWidget):
             'General Configurations', (
                 ('BPMMode-Sel', 'Operation Mode'),
                 ('TriggerRep-Sel', 'Repeat Acquisitions'),
-                ('TriggerHwDly-SP', 'Delay [us]'),
+                ('TriggerHwDly-SP', 'Delay [adc counts]'),
                 ('SamplesPre-SP', 'Pre-Trigger NrSamples'),
                 ('SamplesPost-SP', 'Post-Trigger NrSamples'),
                 ('Trigger-Sel', 'Trigger Type')))
@@ -57,9 +57,9 @@ class ACQTrigConfigs(BaseWidget):
             'MultiBunch Configurations', (
                 ('Channel-Sel', 'Acquisition Rate'),
                 ('Shots-SP', 'Number of Shots'),
-                ('UpdateTime-SP', 'Update Interval'),
+                ('UpdateTime-SP', 'Update Interval [s]'),
                 ('TbTTagEn-Sel', 'Sync Timing', False),
-                ('TbTTagDly-SP', 'TbT Delay', False),
+                ('TbTTagDly-SP', 'TbT Delay [adc counts]', False),
                 ('TbTDataMaskEn-Sel', 'Mask Data', False),
                 ('TbTDataMaskSamplesBeg-SP', 'Mask Begin', False),
                 ('TbTDataMaskSamplesEnd-SP', 'Mask End', False),

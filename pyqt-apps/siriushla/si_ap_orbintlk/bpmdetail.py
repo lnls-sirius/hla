@@ -12,7 +12,7 @@ from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 from siriuspy.namesys import SiriusPVName
 
 from ..widgets import SiriusMainWindow, SiriusLedState, SiriusLabel, \
-    PyDMStateButton, SiriusLedAlert, SiriusSpinbox
+    PyDMStateButton, SiriusLedAlert, SiriusSpinbox, SiriusLineEdit
 from .base import BaseObject
 
 
@@ -110,11 +110,9 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
         self._ld_minsumlim = QLabel(
             'Min.Sum.Thres.[sum count]: ', self,
             alignment=Qt.AlignRight | Qt.AlignVCenter)
-        self._sb_minsumlim = SiriusSpinbox(
+        self._le_minsumlim = SiriusLineEdit(
             self, self.devpref.substitute(propty='IntlkLmtMinSum-SP'))
-        self._sb_minsumlim.limitsFromChannel = False
-        self._sb_minsumlim.setMinimum(-1e12)
-        self._sb_minsumlim.setMaximum(+1e12)
+        self._le_minsumlim.setStyleSheet('QLineEdit{max-width: 12em;}')
         self._lb_minsumlim = SiriusLabel(
             self, self.devpref.substitute(propty='IntlkLmtMinSum-RB'))
 
@@ -122,7 +120,7 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
         lay.setAlignment(Qt.AlignCenter)
         lay.addWidget(self._ld_genenbl, 0, 0)
         lay.addWidget(self._sb_genenbl, 0, 1)
-        lay.addWidget(self._led_genenbl, 0, 2)
+        lay.addWidget(self._led_genenbl, 0, 2, alignment=Qt.AlignLeft)
         lay.addWidget(self._ld_genclr, 1, 0)
         lay.addWidget(self._bt_genclr, 1, 1, alignment=Qt.AlignCenter)
         lay.addWidget(self._ld_intlkinst, 2, 0)
@@ -132,9 +130,9 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
         lay.addItem(QSpacerItem(1, 15, QSzPlc.Ignored, QSzPlc.Fixed), 4, 0)
         lay.addWidget(self._ld_minsumenbl, 5, 0)
         lay.addWidget(self._sb_minsumenbl, 5, 1)
-        lay.addWidget(self._led_minsumenbl, 5, 2)
+        lay.addWidget(self._led_minsumenbl, 5, 2, alignment=Qt.AlignLeft)
         lay.addWidget(self._ld_minsumlim, 6, 0)
-        lay.addWidget(self._sb_minsumlim, 6, 1)
+        lay.addWidget(self._le_minsumlim, 6, 1)
         lay.addWidget(self._lb_minsumlim, 6, 2)
         return lay
 

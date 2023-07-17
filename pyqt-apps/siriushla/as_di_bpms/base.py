@@ -82,7 +82,7 @@ class BaseWidget(QWidget):
             hbl.addWidget(lab)
             lab = QLabel(txt)
             lab.setObjectName(pv1.split('-')[0])
-            lab.setStyleSheet("min-width:8em;")
+            lab.setStyleSheet("min-width:10em;")
             fbl.addRow(lab, hbl)
         return grpbx
 

@@ -93,7 +93,7 @@ class EVG(BaseWidget):
         self.configs_wid = self._setup_configs_wid()
         maintab.addTab(self.configs_wid, 'Main')
         self.info_wid = self._setup_info_wid()
-        maintab.addTab(self.info_wid, 'FRM && IOC')
+        maintab.addTab(self.info_wid, 'Fw && IOC')
         conflay.addWidget(maintab)
         self.bucketlist_wid = BucketList(self, self.device, self.prefix)
         conflay.addWidget(self.bucketlist_wid)
@@ -403,16 +403,16 @@ class EVG(BaseWidget):
         gb = self._create_small_group('', info_wid, (lb, mon, inp))
         lay.addWidget(gb, 1, 2, alignment=Qt.AlignHCenter)
 
-        lb = QLabel("<b>FRMVERSION</b>")
+        lb = QLabel("<b>Fw.Version</b>")
         pvname = self.get_pvname(propty='FrmVersionA-Cte')
         frma = SiriusLabel(self, init_channel=pvname)
-        frma.displayFormat = frma.DisplayFormat.Hex
+        frma.displayFormat = frma.DisplayFormat.TIFwVersion
         pvname = self.get_pvname(propty='FrmVersionB-Cte')
         frmb = SiriusLabel(self, init_channel=pvname)
-        frmb.displayFormat = frmb.DisplayFormat.Hex
+        frmb.displayFormat = frmb.DisplayFormat.TIFwVersion
         pvname = self.get_pvname(propty='FrmVersionC-Cte')
         frmc = SiriusLabel(self, init_channel=pvname)
-        frmc.displayFormat = frmc.DisplayFormat.Hex
+        frmc.displayFormat = frmc.DisplayFormat.TIFwVersion
         gb = self._create_small_group(
             '', info_wid, (lb, frma, frmb, frmc))
         gb.layout().setSpacing(3)
@@ -1083,7 +1083,7 @@ class FOUT(BaseWidget):
         self.status_wid = self._setup_status_wid()
         stattab.addTab(self.status_wid, 'Status')
         self.info_wid = self._setup_info_wid()
-        stattab.addTab(self.info_wid, 'FRM && IOC')
+        stattab.addTab(self.info_wid, 'Fw && IOC')
         self.my_layout.addWidget(stattab, 2, 0)
         stattab.setSizePolicy(QSzPol.Preferred, QSzPol.Maximum)
 
@@ -1227,16 +1227,16 @@ class FOUT(BaseWidget):
         gb = self._create_small_group('', info_wid, (lb, sp))
         info_lay.addWidget(gb, 1, 1, alignment=Qt.AlignTop)
 
-        lb = QLabel("<b>FRMVERSION</b>")
+        lb = QLabel("<b>Fw.Version</b>")
         pvname = self.get_pvname(propty='FrmVersionA-Cte')
         frma = SiriusLabel(self, init_channel=pvname)
-        frma.displayFormat = frma.DisplayFormat.Hex
+        frma.displayFormat = frma.DisplayFormat.TIFwVersion
         pvname = self.get_pvname(propty='FrmVersionB-Cte')
         frmb = SiriusLabel(self, init_channel=pvname)
-        frmb.displayFormat = frmb.DisplayFormat.Hex
+        frmb.displayFormat = frmb.DisplayFormat.TIFwVersion
         pvname = self.get_pvname(propty='FrmVersionC-Cte')
         frmc = SiriusLabel(self, init_channel=pvname)
-        frmc.displayFormat = frmc.DisplayFormat.Hex
+        frmc.displayFormat = frmc.DisplayFormat.TIFwVersion
         gb = self._create_small_group(
             '', info_wid, (lb, frma, frmb, frmc))
         gb.layout().setSpacing(3)
@@ -1303,7 +1303,7 @@ class AFC(BaseWidget):
         self.status_wid = self._setup_status_wid()
         stattab.addTab(self.status_wid, 'Status')
         self.info_wid = self._setup_info_wid()
-        stattab.addTab(self.info_wid, 'FRM && IOC')
+        stattab.addTab(self.info_wid, 'Fw && IOC')
         self.my_layout.addWidget(stattab, 2, 0)
         stattab.setSizePolicy(QSzPol.Preferred, QSzPol.Maximum)
 
@@ -1640,7 +1640,7 @@ class _EVR_EVE(BaseWidget):
         self.status_wid = self._setup_status_wid()
         stattab.addTab(self.status_wid, 'Status')
         self.info_wid = self._setup_info_wid()
-        stattab.addTab(self.info_wid, 'FRM && IOC')
+        stattab.addTab(self.info_wid, 'Fw && IOC')
         self.my_layout.addWidget(stattab, 2, 0)
         stattab.setSizePolicy(QSzPol.Preferred, QSzPol.Maximum)
 
@@ -1834,16 +1834,16 @@ class _EVR_EVE(BaseWidget):
         gb = self._create_small_group('', info_wid, (lb, mon, inp))
         info_lay.addWidget(gb, 0, 6, alignment=Qt.AlignTop)
 
-        lb = QLabel("<b>FRMVERSION</b>")
+        lb = QLabel("<b>Fw.Version</b>")
         pvname = self.get_pvname(propty='FrmVersionA-Cte')
         frma = SiriusLabel(self, init_channel=pvname)
-        frma.displayFormat = frma.DisplayFormat.Hex
+        frma.displayFormat = frma.DisplayFormat.TIFwVersion
         pvname = self.get_pvname(propty='FrmVersionB-Cte')
         frmb = SiriusLabel(self, init_channel=pvname)
-        frmb.displayFormat = frmb.DisplayFormat.Hex
+        frmb.displayFormat = frmb.DisplayFormat.TIFwVersion
         pvname = self.get_pvname(propty='FrmVersionC-Cte')
         frmc = SiriusLabel(self, init_channel=pvname)
-        frmc.displayFormat = frmc.DisplayFormat.Hex
+        frmc.displayFormat = frmc.DisplayFormat.TIFwVersion
         gb = self._create_small_group(
             '', info_wid, (lb, frma, frmb, frmc))
         gb.layout().setSpacing(3)

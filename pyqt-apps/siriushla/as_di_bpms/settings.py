@@ -44,7 +44,7 @@ class ParamsSettings(BaseWidget):
         grpbx = CustomGroupBox('Advanced Settings', self)
         vbl2 = QVBoxLayout(grpbx)
         vbl2.setSpacing(10)
-        pbt = QPushButton('Software')
+        pbt = QPushButton('Details')
         Window = create_window_from_widget(
             AdvancedSettings, title=self.bpm+': Advanced Settings')
         util.connect_window(
@@ -78,11 +78,17 @@ class ParamsSettings(BaseWidget):
         vbl.addSpacing(20)
         vbl.addStretch()
         grpbx = self._create_formlayout_groupbox('Informations', (
-            ('INFOHarmonicNumber-SP', 'Harmonic Number'),
-            ('INFOFOFBRate-SP', 'FOFB Rate'),
-            ('INFOMONITRate-SP', 'Monitor Rate'),
-            ('INFOTbTRate-SP', 'TbT Rate'),
-            ('RFFEAtt-SP', 'RFFE Attenuation')))
+            ('INFOHarmonicNumber-RB', 'Harmonic Number'),
+            ('INFOFOFBRate-RB', 'FOFB Rate'),
+            ('INFOMONITRate-RB', 'Monitor Rate'),
+            ('INFOTbTRate-RB', 'TbT Rate')))
+        vbl.addWidget(grpbx)
+        vbl.addSpacing(20)
+        vbl.addStretch()
+        grpbx = self._create_formlayout_groupbox(
+            'RFFE and Switching Settings', (
+                ('RFFEAtt-SP', 'RFFE Attenuation'),
+                ('SwMode-Sel', 'Switching Mode')))
         vbl.addWidget(grpbx)
         vbl.addSpacing(20)
         vbl.addStretch()
