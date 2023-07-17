@@ -114,22 +114,22 @@ class InjCtrlWindow(SiriusMainWindow):
         lay_injsys = QGridLayout(self.wid_injsys)
         lay_injsys.setContentsMargins(0, 0, 0, 0)
         lay_injsys.addWidget(self.wid_is_summ, 0, 0)
-        # self.wid_is_full = InjSysStbyControlWidget(self, is_summary=False)
-        # self.wid_is_full.setVisible(False)
-        # lay_injsys.addWidget(self.wid_is_full, 0, 0)
-        # self._icon_expd = qta.icon('fa5s.plus')
-        # self._icon_comp = qta.icon('fa5s.minus')
-        # self.bt_is_tgl = QPushButton(self._icon_expd, '', self)
-        # self.bt_is_tgl.clicked.connect(self._handle_injsys_details_vis)
-        # self.bt_is_tgl.setObjectName('bt')
-        # self.bt_is_tgl.setStyleSheet("""
-        #     #bt{
-        #         min-width: 0.8em; max-width: 0.8em;
-        #         min-height: 0.8em; max-height: 0.8em;
-        #         icon-size:12px;}
-        # """)
-        # lay_injsys.addWidget(
-        #     self.bt_is_tgl, 0, 1, alignment=Qt.AlignRight | Qt.AlignBottom)
+        self.wid_is_full = InjSysStbyControlWidget(self, is_summary=False)
+        self.wid_is_full.setVisible(False)
+        lay_injsys.addWidget(self.wid_is_full, 0, 0)
+        self._icon_expd = qta.icon('fa5s.plus')
+        self._icon_comp = qta.icon('fa5s.minus')
+        self.bt_is_tgl = QPushButton(self._icon_expd, '', self)
+        self.bt_is_tgl.clicked.connect(self._handle_injsys_details_vis)
+        self.bt_is_tgl.setObjectName('bt')
+        self.bt_is_tgl.setStyleSheet("""
+            #bt{
+                min-width: 0.8em; max-width: 0.8em;
+                min-height: 0.8em; max-height: 0.8em;
+                icon-size:12px;}
+        """)
+        lay_injsys.addWidget(
+            self.bt_is_tgl, 0, 1, alignment=Qt.AlignRight | Qt.AlignBottom)
 
         # EGun
         egun_dev = SiriusPVName(
