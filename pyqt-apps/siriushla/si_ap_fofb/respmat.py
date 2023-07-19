@@ -124,7 +124,7 @@ class RespMatWidget(_RespMatWidget, BaseWidget):
         btn.setObjectName('btn')
         btn.setStyleSheet('#btn{max-width:40px; icon-size:40px;}')
         btnmenu = QMenu(btn)
-        cmd = ['sirius-hla-si-ap-fofb.py', '--matrix', '--property']
+        cmd = ['sirius-hla-si-ap-fofb.py', '--matrix', '--matrixproperty']
         act_respm = QAction('RespMat - Physiscs Units', self)
         connect_newprocess(act_respm, cmd + ['RespMat-Mon', ])
         btnmenu.addAction(act_respm)
