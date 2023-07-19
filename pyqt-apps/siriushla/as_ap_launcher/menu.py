@@ -251,6 +251,10 @@ def get_object(ismenubar=True, parent=None):
             pulsedps = self._set_pu_menu('as')
             pulsedps.setIcon(qta.icon('mdi.current-ac'))
 
+            cratemon = LEVEL2A('Crates', menu)
+            cratemon.setIcon(qta.icon('mdi.developer-board'))
+            self.connect_newprocess(cratemon, 'sirius-hla-as-ap-cratemon.py')
+
             vacuum = LEVEL2M('VA', menu)
             vacuum.setIcon(qta.icon('mdi.network-outline', vflip=True))
             vacuum.setObjectName('ASApp')
@@ -293,6 +297,7 @@ def get_object(ismenubar=True, parent=None):
             self.add_object_to_level1(menu, timing)
             self.add_object_to_level1(menu, pwrsupply)
             self.add_object_to_level1(menu, pulsedps)
+            self.add_object_to_level1(menu, cratemon)
             self.add_object_to_level1(menu, termo)
             self.add_object_to_level1(menu, vacuum)
             self.add_object_to_level1(menu, radmon)
