@@ -15,7 +15,7 @@ from siriuspy.namesys import SiriusPVName as _PVName, join_name
 from ..util import connect_window
 from ..widgets import SiriusMainWindow, SiriusLabel, \
     SiriusEnumComboBox, SiriusSpinbox, PyDMStateButton, \
-    SiriusLedState
+    SiriusLedState, SiriusWaveformPlot
 from ..widgets.windows import create_window_from_widget
 from ..as_di_bpms.base import GraphWave
 from ..common.afc_acq_core import LogicalTriggers, PhysicalTriggers
@@ -254,6 +254,19 @@ class FOFBAcqSYSIDWindow(_AcqBaseWindow):
         self.setCentralWidget(wid)
 
     def _PRBSSettingsWidget(self):
+        tabs = QTabWidget()
+        tabs.setObjectName(self.sec+'Tab')
+        tabs.addTab(self._PRBSGeneralSettingsWidget(), 'General')
+        tabs.addTab(self._PRBSFOFBAccSettingsWidget(), 'FOFBAcc Levels')
+        tabs.addTab(self._PRBSBPMsSettingsWidget(), 'BPM Levels')
+
+        wid = QGroupBox('PRBS Settings', self)
+        lay = QHBoxLayout(wid)
+        lay.setContentsMargins(0, 9, 0, 9)
+        lay.addWidget(tabs)
+        return wid
+
+    def _PRBSGeneralSettingsWidget(self):
         ld_syncenb = QLabel('Sync Enable', self)
         self.sb_syncenb = PyDMStateButton(
             self, self._get_pvname('PRBSSyncEn-Sel'))
@@ -284,7 +297,7 @@ class FOFBAcqSYSIDWindow(_AcqBaseWindow):
         self.led_bpmenbl = SiriusLedState(
             self, self._get_pvname('PRBSBPMPosEn-Sts'))
 
-        wid = QGroupBox('PRBS Settings', self)
+        wid = QWidget(self)
         lay = QGridLayout(wid)
         lay.addWidget(ld_syncenb, 0, 0)
         lay.addWidget(self.sb_syncenb, 0, 1)
@@ -302,6 +315,94 @@ class FOFBAcqSYSIDWindow(_AcqBaseWindow):
         lay.addWidget(self.sb_bpmenbl, 4, 1)
         lay.addWidget(self.led_bpmenbl, 4, 2, alignment=Qt.AlignLeft)
         return wid
+
+    def _PRBSFOFBAccSettingsWidget(self):
+        wid = QWidget()
+        lay = QGridLayout(wid)
+
+        for ridx, sub in enumerate(['M1', 'M2', 'C2', 'C3']):
+            row = ridx + 1
+
+            # row header
+            lblr = QLabel(
+                '<h4>'+sub+'</h4>', self,
+                alignment=Qt.AlignRight | Qt.AlignVCenter)
+            lblr.setObjectName('rowhead')
+            lay.addWidget(lblr, row, 0)
+
+            for cidx, plan in enumerate(['H', 'V']):
+                col = cidx + 1
+                if ridx == 0:
+                    # column header
+                    lblp = QLabel(
+                        '<h4>FC'+plan+'</h4>', self, alignment=Qt.AlignCenter)
+                    lbl0 = QLabel(
+                        '<h4>Level 0</h4>', self, alignment=Qt.AlignCenter)
+                    lbl1 = QLabel(
+                        '<h4>Level 1</h4>', self, alignment=Qt.AlignCenter)
+                    gridhead = QGridLayout()
+                    gridhead.setContentsMargins(0, 0, 0, 0)
+                    gridhead.addWidget(lblp, 0, 0, 1, 2)
+                    gridhead.addWidget(lbl0, 1, 0)
+                    gridhead.addWidget(lbl1, 1, 1)
+                    lay.addLayout(gridhead, 0, col)
+
+                # levels grid
+                gridlvls = QGridLayout()
+                gridlvls.setContentsMargins(6, 0, 6, 0)
+                gridlvls.setHorizontalSpacing(12)
+                gridlvls.setVerticalSpacing(6)
+                for lvl in range(2):
+                    pvsp = join_name(
+                        sec='SI', sub=self.device.sub[:2]+sub,
+                        dis='PS', dev='FC'+plan,
+                        propty_name=f'SYSIDPRBSFOFBAccLvl{lvl}',
+                        propty_suffix='SP')
+                    wsp = PyDMLineEdit(self, pvsp)
+                    pvrb = pvsp.substitute(propty_suffix='RB')
+                    wrb = SiriusLabel(self, pvrb)
+                    gridlvls.addWidget(wsp, 0, lvl)
+                    gridlvls.addWidget(wrb, 1, lvl)
+                lay.addLayout(gridlvls, row, col)
+
+        wid.setStyleSheet(
+            'QLineEdit{max-width: 5em;}'
+            '#rowhead{max-width:3.5em;}')
+
+        return wid
+
+    def _PRBSBPMsSettingsWidget(self):
+        graph = SiriusWaveformPlot()
+        graph.setObjectName('graph')
+        graph.setStyleSheet('#graph {min-height: 15em; min-width: 25em;}')
+        graph.maxRedrawRate = 2
+        graph.mouseEnabledX = True
+        graph.setShowXGrid(True)
+        graph.setShowYGrid(True)
+        graph.setBackgroundColor(QColor(255, 255, 255))
+        graph.setShowLegend(True)
+        graph.setAutoRangeX(True)
+        graph.setAutoRangeY(True)
+        graph.setAxisColor(QColor(0, 0, 0))
+        graph.plotItem.getAxis('bottom').setStyle(tickTextOffset=15)
+        graph.plotItem.getAxis('left').setStyle(tickTextOffset=5)
+
+        for plidx, plan in enumerate(['X', 'Y']):
+            for lvl in range(2):
+                for pvidx, suf in enumerate(['SP', 'RB']):
+                    pvn = self._get_pvname(f'PRBSBPMPos{plan}Lvl{lvl}-{suf}')
+                    color = self.DEFAULT_COLORS[pvidx + 2*lvl + 4*plidx]
+                    opts = dict(
+                        y_channel=pvn,
+                        name=f'{plan} - Level {lvl} ({suf})',
+                        color=color,
+                        redraw_mode=2,
+                        lineStyle=1,
+                        lineWidth=1,
+                        symbol=None,
+                        symbolSize=None)
+                    graph.addChannel(**opts)
+        return graph
 
     def _graphsWidget(self):
         # PRBSData
