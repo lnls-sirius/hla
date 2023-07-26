@@ -1,4 +1,4 @@
-"""Custom widgets for crate monitor."""
+"""Custom widgets for RaBPM monitor."""
 
 import numpy as np
 

@@ -1,4 +1,4 @@
-"""Crate utilities."""
+"""RaBPM monitor utilities."""
 
 SEC_2_SLOT = {
     'IA': (

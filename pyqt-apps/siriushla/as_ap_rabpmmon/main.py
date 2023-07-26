@@ -1,4 +1,4 @@
-"""Crates monitor window."""
+"""RaBPM monitor window."""
 
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QGridLayout, QLabel, QVBoxLayout, \
@@ -16,8 +16,8 @@ from .custom_widgets import BPMMonLed, RFFEMonLed, PBPMMonLed, \
     EVRMonLed, FOFBCtrlMonLed
 
 
-class CratesMonitor(SiriusMainWindow):
-    """Crates monitor."""
+class RaBPMMonitor(SiriusMainWindow):
+    """RaBPM monitor."""
 
     def __init__(self, parent, prefix=''):
         super().__init__(parent)
@@ -25,7 +25,7 @@ class CratesMonitor(SiriusMainWindow):
 
         self.setWindowIcon(
             qta.icon('mdi.developer-board', color=get_appropriate_color('AS')))
-        self.setWindowTitle('Crates Monitor')
+        self.setWindowTitle('RaBPM Monitor')
         self.setObjectName('ASApp')
 
         self.crates_mapping = LLTimeSearch.get_crates_mapping()
@@ -47,7 +47,7 @@ class CratesMonitor(SiriusMainWindow):
 
     def _setupUi(self):
         self.title = QLabel(
-            '<h3>Crates Monitor</h3>', self, alignment=Qt.AlignCenter)
+            '<h3>RaBPM Monitor</h3>', self, alignment=Qt.AlignCenter)
         self.title.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
 
         self.monitor = self._setupMonitorWidget()
@@ -127,14 +127,14 @@ class CratesMonitor(SiriusMainWindow):
             afc = SiriusPVName(afc)
             devices = [afc] + [SiriusPVName(d) for d in devs]
 
-            # determine sector, crate name and grid column
+            # determine sector, rabpm name and grid column
             sec = 'IA' if afc.sub[-2:] != 'TL' else 'TL'
-            crate = afc.sub[:2] if sec == 'IA' else 'TL'
-            col = 21 if sec == 'TL' else int(crate)
+            rabpm = afc.sub[:2] if sec == 'IA' else 'TL'
+            col = 21 if sec == 'TL' else int(rabpm)
 
             # add SI subsector header
             label = QLabel(
-                '<h4>'+crate+'</h4>', self, alignment=Qt.AlignCenter)
+                '<h4>'+rabpm+'</h4>', self, alignment=Qt.AlignCenter)
             label.setObjectName('siheader')
             label.setStyleSheet('#siheader{border: 1px solid gray;}')
             grid.addWidget(label, 0, col)

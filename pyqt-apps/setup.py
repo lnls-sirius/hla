@@ -44,7 +44,6 @@ setup(
     include_package_data=True,
     scripts=[
         'scripts/sirius-hla-as-ap-configdb.py',
-        'scripts/sirius-hla-as-ap-cratemon.py',
         'scripts/sirius-hla-as-ap-effmon.py',
         'scripts/sirius-hla-as-ap-energybutton.py',
         'scripts/sirius-hla-as-ap-injection.py',
@@ -55,6 +54,7 @@ setup(
         'scripts/sirius-hla-as-ap-pvsconfigs.py',
         'scripts/sirius-hla-as-ap-pvsconfigs-save.py',
         'scripts/sirius-hla-as-ap-pvsconfigs-load.py',
+        'scripts/sirius-hla-as-ap-rabpmmon.py',
         'scripts/sirius-hla-as-ap-radmon.py',
         'scripts/sirius-hla-as-di-bpm.py',
         'scripts/sirius-hla-as-di-dcct.py',
