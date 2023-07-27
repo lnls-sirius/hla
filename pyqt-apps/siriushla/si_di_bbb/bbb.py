@@ -208,7 +208,8 @@ class BbBMainSettingsWidget(QWidget):
                 self.dev_pref+':FID_ERR': 0,
             }
             led_status = PyDMLedMultiChannel(self, chs2vals)
-            led_status.setStyleSheet('min-width:1.29em; max-width:1.29em;')
+            led_status.setStyleSheet(
+                'QLed{min-width:1.29em; max-width:1.29em;}')
             wind = create_window_from_widget(
                 BbBStatusWidget, title='BbB Status Details')
             connect_window(
