@@ -15,7 +15,8 @@ from siriuspy.diagbeam.bpm.csdev import Const as _csbpm
 
 from siriushla.widgets import SiriusConnectionSignal, SiriusLabel, \
     SiriusSpinbox, SiriusTimePlot, SiriusWaveformPlot, SiriusLedState, \
-    SiriusLedAlert, PyDMStateButton, SiriusEnumComboBox, SiriusPushButton
+    SiriusLedAlert, PyDMStateButton, SiriusEnumComboBox, SiriusPushButton, \
+    pydmwidget_factory
 
 _BPMDB = _csbpm.get_bpm_database()
 
@@ -148,11 +149,8 @@ class BaseWidget(QWidget):
         wid.setObjectName(str(pvname).replace('-', ''))
         return wid
 
-class CustomGroupBox(QGroupBox, PyDMPrimitiveWidget):
 
-    def __init__(self, title, parent=None):
-        QGroupBox.__init__(self, title, parent)
-        PyDMPrimitiveWidget.__init__(self)
+CustomGroupBox = pydmwidget_factory(QGroupBox, pydm_class='primi')
 
 
 def get_custom_widget_class(CLASS):

@@ -9,7 +9,7 @@ from pydm.widgets import PyDMPushButton, PyDMEnumComboBox
 from siriuspy.namesys import SiriusPVName
 from siriuspy.search import HLTimeSearch
 
-from ...widgets import SiriusLabel, SiriusSpinbox, pydmwidget_factory
+from ...widgets import SiriusLabel, SiriusSpinbox
 
 from .base import BaseWidget
 
@@ -38,7 +38,7 @@ class PhysicalTriggers(BaseWidget):
         hltrig = 'Monit' if idx == 7 else HLTimeSearch.get_hl_from_ll_triggers(
             self.afctiming.substitute(propty_name=f'CRT{idx}'))
         name = trig + (': ' + hltrig if hltrig else '')
-        grpbx = pydmwidget_factory(QGroupBox, pydm_class='primi')(name, self)
+        grpbx = QGroupBox(name, self)
         fbl = QFormLayout(grpbx)
 
         hbl = QHBoxLayout()
@@ -162,7 +162,7 @@ class LogicalTriggers(BaseWidget):
 
     def get_trigger_groupbox(self, idx):
         trig = 'TRIGGER{0:s}{1:d}'.format(self.trig_tp, idx)
-        grpbx = pydmwidget_factory(QGroupBox, pydm_class='primi')(trig, self)
+        grpbx = QGroupBox(trig, self)
         fbl = QFormLayout(grpbx)
 
         lab = QLabel('', grpbx)
