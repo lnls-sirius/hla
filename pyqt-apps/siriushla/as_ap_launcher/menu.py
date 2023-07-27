@@ -193,10 +193,11 @@ def get_object(ismenubar=True, parent=None):
 
             try:
                 host = _sbp.getoutput('hostname')
+                exist_xrandr = not bool(_sbp.getoutput('xrandr | grep missing'))
                 hosts = {'lnls449-linux', 'lnls451-linux', 'lnls454-linux'}
             except Exception:
                 return menu
-            if host not in hosts:
+            if not exist_xrandr or host not in hosts:
                 return menu
 
             scrn = LEVEL2M('Screen Res.', menu)
