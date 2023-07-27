@@ -26,7 +26,7 @@ from ..widgets.windows import create_window_from_widget
 from ..as_ap_configdb import LoadConfigDialog
 from ..common.afc_acq_core import LogicalTriggers
 from ..as_ap_sofb.graphics.base import Graph
-from .base import BaseObject
+from .base import BaseObject, get_fofb_icon
 from .graphics import RefOrbViewWidget
 
 _BPMDB = _csbpm.get_bpm_database()
@@ -325,11 +325,13 @@ class BPMSwModeWidget(BaseObject, QWidget):
 class ControllersDetailDialog(BaseObject, SiriusDialog):
     """Controllers detail dialog."""
 
-    def __init__(self, parent, device, prefix=''):
+    def __init__(self, parent, device, prefix='', tab_selected=0):
         BaseObject.__init__(self, device, prefix)
         SiriusDialog.__init__(self, parent)
+        self.tab_selected = tab_selected
         self.setObjectName('SIApp')
         self.setWindowTitle('SI - FOFB - Controllers Details Dialog')
+        self.setWindowIcon(get_fofb_icon())
 
         self.ctrlrs = FOFBCtrlDCC.DEVICES
         ctrlr_offset = FamFOFBControllers.FOFBCTRL_BPMID_OFFSET
@@ -368,6 +370,7 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
         tab.addTab(self._setupPacketLossTab(), 'Packet Loss Detection')
         tab.addTab(self._setupIntlkTab(), 'Loop Interlock')
         tab.addTab(self._setupSYSIDExc(), 'SYSID Excitation States')
+        tab.setCurrentIndex(self.tab_selected)
 
         lay = QVBoxLayout(self)
         lay.addWidget(tab)
