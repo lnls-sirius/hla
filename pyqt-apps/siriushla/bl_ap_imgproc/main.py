@@ -23,7 +23,7 @@ from ..widgets import SiriusLabel, SiriusLedState, \
     SiriusConnectionSignal, SiriusSpinbox, SiriusLedAlert
 
 from .util import PVS_IMGPROC, PVS_DVF, \
-    IMG_PVS, LOG_PV, COMBOBOX_PVS, LINEEDIT_PVS, STATEBUT_PVS, \
+    IMG_PVS, PVS_CAX, LOG_PV, COMBOBOX_PVS, LINEEDIT_PVS, STATEBUT_PVS, \
     LED_ALERT_PVS, LED_STATE_PVS, LED_DETAIL_PVS
 from .image import DVFImageView
 
@@ -257,6 +257,8 @@ class BLImgProc(QWidget):
         tab.addTab(imgproc_wid, "DVFImgProc")
         dvf_wid = self._setupTab(PVS_DVF, use_scroll=True)
         tab.addTab(dvf_wid, "DVF")
+        cax_wid = self._setupTab(PVS_CAX, use_scroll=True)
+        tab.addTab(cax_wid, "CAX")
 
         main_lay.addWidget(tab)
         self.setLayout(main_lay)

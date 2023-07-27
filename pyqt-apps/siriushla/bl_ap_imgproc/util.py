@@ -165,6 +165,8 @@ PVS_DVF = {
         {
             'Max Size X': 'cam1:MaxSizeX_RBV',
             'Max Size Y': 'cam1:MaxSizeY_RBV',
+            'Offset X': 'cam1:OffsetX_RBV',
+            'Offset Y': 'cam1:OffsetY_RBV',
             'Size X': 'cam1:SizeX_RBV',
             'Size Y': 'cam1:SizeY_RBV',
             'Temperature': 'cam1:Temperature',
@@ -227,5 +229,14 @@ PVS_DVF = {
             'HDF1 - EnableCallbacks': [
                 'HDF1:EnableCallbacks', 'HDF1:EnableCallbacks_RBV'],
         },
+    ],
+}
+
+PVS_CAX = {
+    'Beamline PPS': [
+        (0, 0, 1, 1),
+        {
+                'Open beamline': 'OpenBeamline'
+        }
     ],
 }
