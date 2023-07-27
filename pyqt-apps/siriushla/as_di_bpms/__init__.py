@@ -5,5 +5,6 @@ from .main import BPMMain, TriggeredAcquisition, PostMortemAcquisition
 from .monit import MonitData
 from .multiturn_data import MultiTurnData
 from .singlepass_data import SinglePassData
-from .settings import ParamsSettings, AdvancedSettings, HardwareSettings
+from .settings import ParamsSettings, \
+    BPMAdvancedSettings, RFFEAdvancedSettings, HardwareSettings
 from .trig_acq_config import ACQTrigConfigs
