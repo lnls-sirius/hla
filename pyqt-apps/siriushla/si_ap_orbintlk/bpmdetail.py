@@ -123,6 +123,10 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
         self._le_minsumlim.setStyleSheet('QLineEdit{max-width: 12em;}')
         self._lb_minsumlim = SiriusLabel(
             self, self.devpref.substitute(propty='IntlkLmtMinSum-RB'))
+        self._lb_minsumlim.displayFormat = SiriusLabel.Exponential
+        self._lb_minsumlim.precisionFromPV = False
+        self._lb_minsumlim.precision = 16
+        self._lb_minsumlim.showUnits = True
 
         lay = QGridLayout()
         lay.setAlignment(Qt.AlignCenter)
