@@ -28,7 +28,7 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
         self.device = SiriusPVName(device)
         self.devpref = self.device.substitute(prefix=prefix)
 
-        self.setObjectName('SIApp')
+        self.setObjectName(self.device.sec+'App')
         self.setWindowTitle(device+' Orbit Interlock Control Window')
 
         self._setupUi()
