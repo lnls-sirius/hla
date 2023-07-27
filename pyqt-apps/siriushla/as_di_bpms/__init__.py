@@ -7,4 +7,3 @@ from .multiturn_data import MultiTurnData
 from .singlepass_data import SinglePassData
 from .settings import ParamsSettings, AdvancedSettings, HardwareSettings
 from .trig_acq_config import ACQTrigConfigs
-from .triggers import PhysicalTriggers, LogicalTriggers

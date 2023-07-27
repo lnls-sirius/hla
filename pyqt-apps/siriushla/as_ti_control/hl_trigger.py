@@ -311,6 +311,15 @@ class HLTriggerDetailed(BaseWidget):
                 'Delay Type', self.ll_list_wid, (sp, rb))
             ll_list_layout.addWidget(gb, 2, 2)
 
+        if HLTimeSearch.has_direction(self.device.device_name):
+            init_channel = self.get_pvname('Direction-Sel')
+            sp = SiriusEnumComboBox(self, init_channel=init_channel)
+            init_channel = self.get_pvname('Direction-Sts')
+            rb = SiriusLabel(self, init_channel=init_channel)
+            gb = self._create_small_group(
+                'Direction', self.ll_list_wid, (sp, rb))
+            ll_list_layout.addWidget(gb, 2, 2)
+
         tabdelta = QTabWidget(self)
         tabdelta.setObjectName(self.device.sec + 'Tab')
         deltaus = self._create_deltadelay(israw=False)
@@ -488,6 +497,7 @@ class HLTriggerList(BaseList):
         'widthraw': 8,
         'polarity': 6,
         'delay_type': 4.2,
+        'direction': 4.2,
         'delay': 5.5,
         'delayraw': 5.5,
         'total_delay': 6,
@@ -505,6 +515,7 @@ class HLTriggerList(BaseList):
         'widthraw': 'WidthRaw',
         'polarity': 'Polarity',
         'delay_type': 'Type',
+        'direction': 'Direction',
         'delay': 'Delay [us]',
         'delayraw': 'DelayRaw',
         'total_delay': 'Total Dly [us]',
@@ -513,7 +524,7 @@ class HLTriggerList(BaseList):
         }
     _ALL_PROPS = (
         'detailed', 'status', 'name', 'state', 'source', 'polarity', 'pulses',
-        'duration', 'widthraw', 'delay_type', 'delay', 'delayraw',
+        'duration', 'widthraw', 'delay_type', 'direction', 'delay', 'delayraw',
         'total_delay', 'total_delayraw', 'ininjtable')
 
     def __init__(self, **kwargs):
@@ -583,6 +594,11 @@ class HLTriggerList(BaseList):
             init_channel = device.substitute(propty='RFDelayType-Sel')
             sp = SiriusEnumComboBox(self, init_channel=init_channel)
             init_channel = device.substitute(propty='RFDelayType-Sts')
+            rb = SiriusLabel(self, init_channel=init_channel)
+        elif prop == 'direction':
+            init_channel = device.substitute(propty='Direction-Sel')
+            sp = SiriusEnumComboBox(self, init_channel=init_channel)
+            init_channel = device.substitute(propty='Direction-Sts')
             rb = SiriusLabel(self, init_channel=init_channel)
         elif prop == 'delay':
             init_channel = device.substitute(propty='Delay-SP')
