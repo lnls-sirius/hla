@@ -486,12 +486,14 @@ class RFMainControl(SiriusMainWindow):
             self, self.prefix+self.chs['Tun']['Oversht']+':S')
         lb_oversht = SiriusLabel(
             self, self.prefix+self.chs['Tun']['Oversht'])
+        lb_oversht.showUnits = True
         ld_margin = QLabel(
             'Deadband: ', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         sb_margin = SiriusSpinbox(
             self, self.prefix+self.chs['Tun']['Deadbnd']+':S')
         lb_margin = SiriusLabel(
             self, self.prefix+self.chs['Tun']['Deadbnd'])
+        lb_margin.showUnits = True
         lay_tunset = QGridLayout()
         lay_tunset.setAlignment(Qt.AlignTop | Qt.AlignHCenter)
         lay_tunset.setVerticalSpacing(12)
