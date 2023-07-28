@@ -27,6 +27,7 @@ from .util import PVS_IMGPROC, PVS_DVF, \
     LED_ALERT_PVS, LED_STATE_PVS, LED_DETAIL_PVS
 from .image import DVFImageView
 
+
 class BLImgProc(QWidget):
     """Image Processing Window."""
 

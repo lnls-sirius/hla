@@ -1,6 +1,5 @@
 """Custom widgets."""
 
-import time as _time
 from functools import partial as _part
 import numpy as _np
 
@@ -25,10 +24,12 @@ from ..widgets import SiriusConnectionSignal as _ConnSignal, SiriusLedAlert, \
     SiriusDialog, PyDMLedMultiChannel, SiriusLabel, PyDMLed, SiriusLedState
 from ..widgets.windows import create_window_from_widget
 from ..as_ap_configdb import LoadConfigDialog
-from ..as_di_bpms.triggers import LogicalTriggers
+from ..common.afc_acq_core import LogicalTriggers
 from ..as_ap_sofb.graphics.base import Graph
-from .base import BaseObject
+from .base import BaseObject, get_fofb_icon
 from .graphics import RefOrbViewWidget
+
+_BPMDB = _csbpm.get_bpm_database()
 
 
 class RefOrbWidget(BaseObject, QWidget):
@@ -324,11 +325,13 @@ class BPMSwModeWidget(BaseObject, QWidget):
 class ControllersDetailDialog(BaseObject, SiriusDialog):
     """Controllers detail dialog."""
 
-    def __init__(self, parent, device, prefix=''):
+    def __init__(self, parent, device, prefix='', tab_selected=0):
         BaseObject.__init__(self, device, prefix)
         SiriusDialog.__init__(self, parent)
+        self.tab_selected = tab_selected
         self.setObjectName('SIApp')
         self.setWindowTitle('SI - FOFB - Controllers Details Dialog')
+        self.setWindowIcon(get_fofb_icon())
 
         self.ctrlrs = FOFBCtrlDCC.DEVICES
         ctrlr_offset = FamFOFBControllers.FOFBCTRL_BPMID_OFFSET
@@ -367,6 +370,7 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
         tab.addTab(self._setupPacketLossTab(), 'Packet Loss Detection')
         tab.addTab(self._setupIntlkTab(), 'Loop Interlock')
         tab.addTab(self._setupSYSIDExc(), 'SYSID Excitation States')
+        tab.setCurrentIndex(self.tab_selected)
 
         lay = QVBoxLayout(self)
         lay.addWidget(tab)
@@ -795,7 +799,9 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
             btn.setAutoDefault(False)
             win = create_window_from_widget(
                 LogicalTriggers, title=bpm+': ACQ Logical Triggers')
-            connect_window(btn, win, parent=self, prefix=self.prefix, bpm=bpm)
+            connect_window(
+                btn, win, parent=self, prefix=self.prefix, device=bpm,
+                database=_BPMDB, names=_csbpm.LogTrigIntern._fields)
             lbl = QLabel(bpm, self, alignment=Qt.AlignCenter)
             lbl.setObjectName('lbl_bpmname')
             hwid = QWidget()
@@ -838,7 +844,6 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
             0, 2)
 
         # table
-        self._led_timeframelen = dict()
         for idx, ctl in enumerate(self.ctrlrs):
             row = idx + 1
             lbl = QLabel(ctl, self, alignment=Qt.AlignCenter)

@@ -124,7 +124,7 @@ class DVFImageView(PyDMImageView):
         centroid = [centroid_raw[0][3], centroid_raw[1][3]]
 
         if 'Angle' in pvname:
-            self.angle = _np.pi*value/180
+            self.angle = - _np.pi*value/180
         elif 'Sigma1' in pvname:
             self.sigma[0] = value
         else:
@@ -134,8 +134,10 @@ class DVFImageView(PyDMImageView):
         x_points = self.sigma[0] * _np.cos(theta)
         y_points = self.sigma[1] * _np.sin(theta)
 
-        x_rotated = x_points * _np.cos(self.angle) - y_points * _np.sin(self.angle)
-        y_rotated = x_points * _np.sin(self.angle) + y_points * _np.cos(self.angle)
+        ang = self.angle
+        cosa, sina = _np.cos(ang), _np.sin(ang)
+        x_rotated = x_points * cosa - y_points * sina
+        y_rotated = x_points * sina + y_points * cosa
 
         x_centered = x_rotated + centroid[0]
         y_centered = y_rotated + centroid[1]
