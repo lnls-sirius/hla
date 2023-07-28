@@ -317,24 +317,24 @@ class RFFEAdvancedSettings(BaseWidget):
         gdl = QGridLayout(self)
         lab = QLabel('<h2>' + self.bpm + ':RFFE Advanced Settings</h2>')
         lab.setAlignment(Qt.AlignCenter)
-        gdl.addWidget(lab, 0, 0)
+        gdl.addWidget(lab, 0, 0, 1, 2)
 
-        grpbx = self._create_formlayout_groupbox('RFFE', (
+        grpbx = self._create_formlayout_groupbox('General', (
             ('RFFEAtt-SP', 'Attenuation'),
             ('RFFETempCtl-SP', 'Temp. Control', ['statebutton', 'ledstate']),
-            ('RFFETempAC-Mon', 'Temp. AC'),
-            ('RFFETempBD-Mon', 'Temp. BD'),
-            ('RFFEPidSpAC-SP', 'Pid Setpoint AC'),
-            ('RFFEPidSpBD-SP', 'Pid Setpoint BD'),
-            ('RFFEHeaterAC-SP', 'Heater AC'),
-            ('RFFEHeaterBD-SP', 'Heater BD'),
-            ('RFFEPidACKp-SP', 'Pid AC Kp'),
-            ('RFFEPidBDKp-SP', 'Pid BD Kp'),
-            ('RFFEPidACTi-SP', 'Pid AC Ti'),
-            ('RFFEPidBDTi-SP', 'Pid BD Ti'),
-            ('RFFEPidACTd-SP', 'Pid AC Td'),
-            ('RFFEPidBDTd-SP', 'Pid BD Td')))
-        gdl.addWidget(grpbx, 1, 0)
+        ))
+        gdl.addWidget(grpbx, 1, 0, 1, 2)
+
+        for i, pair in enumerate(['AC', 'BD']):
+            grpbx = self._create_formlayout_groupbox(pair, (
+                (f'RFFETemp{pair}-Mon', 'Temperature'),
+                (f'RFFEPidSp{pair}-SP', 'PID Setpoint'),
+                (f'RFFEHeater{pair}-SP', 'Heater'),
+                (f'RFFEPid{pair}Kp-SP', 'PID Kp'),
+                (f'RFFEPid{pair}Ti-SP', 'PID Ti'),
+                (f'RFFEPid{pair}Td-SP', 'PID Td'),
+            ))
+            gdl.addWidget(grpbx, 2, i)
 
 
 class HardwareSettings(BaseWidget):
