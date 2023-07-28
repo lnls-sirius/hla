@@ -34,7 +34,7 @@ class PhysicalTriggers(BaseWidget):
 
     def get_trigger_groupbox(self, idx):
         trig = 'TRIGGER{0:d}'.format(idx)
-        hltrig = 'Monit' if idx == 7 else HLTimeSearch.get_hl_from_ll_triggers(
+        hltrig = HLTimeSearch.get_hl_from_ll_triggers(
             self.afctiming.substitute(propty_name=f'CRT{idx}'))
         name = trig + (': ' + hltrig if hltrig else '')
         grpbx = QGroupBox(name, self)
