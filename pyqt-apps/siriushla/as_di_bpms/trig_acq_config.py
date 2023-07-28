@@ -60,10 +60,13 @@ class ACQTrigConfigs(BaseWidget):
                 ('Shots-SP', 'Number of Shots'),
                 ('UpdateTime-SP', 'Update Interval [s]'),
                 ('TbTTagEn-Sel', 'Sync Timing', False),
-                ('TbTTagDly-SP', 'TbT Delay [adc counts]', False),
+                ('TbTTagDly-SP', 'TbT Delay [adc counts]',
+                 dict(isdata=False, widgets=['lineedit', 'label'])),
                 ('TbTDataMaskEn-Sel', 'Mask Data', False),
-                ('TbTDataMaskSamplesBeg-SP', 'Mask Begin', False),
-                ('TbTDataMaskSamplesEnd-SP', 'Mask End', False),
+                ('TbTDataMaskSamplesBeg-SP', 'Mask Begin',
+                 dict(isdata=False, widgets=['lineedit', 'label'])),
+                ('TbTDataMaskSamplesEnd-SP', 'Mask End',
+                 dict(isdata=False, widgets=['lineedit', 'label'])),
                 ))
         grpbx.rules = self.basic_rule('BPMMode-Sts', True)
         self.layoutg.addWidget(grpbx, 2, 0)

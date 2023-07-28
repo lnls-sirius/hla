@@ -5,20 +5,15 @@ import numpy as np
 
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QCheckBox, \
-    QFormLayout, QGroupBox, QLabel
+    QFormLayout, QGroupBox, QLabel, QSizePolicy as QSzPlcy
 from qtpy.QtGui import QColor
 
-from pydm.widgets import PyDMLineEdit
-
 from siriuspy.namesys import SiriusPVName as _PVName
-from siriuspy.diagbeam.bpm.csdev import Const as _csbpm
 
 from siriushla.widgets import SiriusConnectionSignal, SiriusLabel, \
     SiriusSpinbox, SiriusTimePlot, SiriusWaveformPlot, SiriusLedState, \
     SiriusLedAlert, PyDMStateButton, SiriusEnumComboBox, SiriusPushButton, \
-    pydmwidget_factory
-
-_BPMDB = _csbpm.get_bpm_database()
+    SiriusLineEdit, pydmwidget_factory
 
 
 class BaseWidget(QWidget):
@@ -29,7 +24,6 @@ class BaseWidget(QWidget):
         self.bpm = _PVName(bpm)
         self.setObjectName(self.bpm.sec+'App')
         self.data_prefix = data_prefix
-        self.bpmdb = _BPMDB
         self._chans = []
 
     def channels(self):
@@ -56,6 +50,10 @@ class BaseWidget(QWidget):
                     isdata, prec, widgets = aux, None, None
                 elif isinstance(aux, int):
                     isdata, prec, widgets = True, aux, None
+                elif isinstance(aux, dict):
+                    isdata = aux.get('isdata', True)
+                    prec = aux.get('prec', None)
+                    widgets = aux.get('widgets', None)
                 else:
                     isdata, prec, widgets = True, None, aux
 
@@ -90,8 +88,6 @@ class BaseWidget(QWidget):
         return grpbx
 
     def _get_widget(self, widtype, pvname, isdata, prec):
-        propty = self.data_prefix + pvname
-        pvdb = self.bpmdb.get(propty, dict())
         pvname = self.get_pvname(pvname, is_data=isdata)
 
         if widtype == 'combo':
@@ -100,15 +96,13 @@ class BaseWidget(QWidget):
         elif widtype == 'spin':
             wid = SiriusSpinbox(self, pvname)
             wid.setStyleSheet("QWidget{min-width:5em;}")
-            wid.limitsFromChannel = False
-            wid.setMinimum(pvdb.get('low', -1e10))
-            wid.setMaximum(pvdb.get('high', 1e10))
             if prec is not None:
                 wid.precisionFromPV = False
                 wid.precision = prec
         elif widtype == 'lineedit':
-            wid = PyDMLineEdit(self, pvname)
+            wid = SiriusLineEdit(self, pvname)
             wid.setStyleSheet("QWidget{min-width:5em;}")
+            wid.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Preferred)
             if prec is not None:
                 wid.precisionFromPV = False
                 wid.precision = prec

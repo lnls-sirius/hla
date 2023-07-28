@@ -72,17 +72,17 @@ class ParamsSettings(BaseWidget):
         vbl.addStretch()
 
         grpbx = self._create_formlayout_groupbox('Offset Parameters', (
-            ('PosQOffset-SP', 'Offset PosQ'),
-            ('PosXOffset-SP', 'Offset PosX'),
-            ('PosYOffset-SP', 'Offset PosY')))
+            ('PosQOffset-SP', 'Offset PosQ', ['lineedit', 'label']),
+            ('PosXOffset-SP', 'Offset PosX', ['lineedit', 'label']),
+            ('PosYOffset-SP', 'Offset PosY', ['lineedit', 'label'])))
         vbl.addWidget(grpbx)
         vbl.addSpacing(20)
         vbl.addStretch()
         grpbx = self._create_formlayout_groupbox('Gain Parameters', (
-            ('PosKq-SP', 'Gain PosQ'),
-            ('PosKsum-SP', 'Gain Sum'),
-            ('PosKx-SP', 'Gain PosX'),
-            ('PosKy-SP', 'Gain PosY')))
+            ('PosKq-SP', 'Gain PosQ', ['lineedit', 'label']),
+            ('PosKsum-SP', 'Gain Sum', ['lineedit', 'label']),
+            ('PosKx-SP', 'Gain PosX', ['lineedit', 'label']),
+            ('PosKy-SP', 'Gain PosY', ['lineedit', 'label'])))
         vbl.addWidget(grpbx)
         vbl.addSpacing(20)
         vbl.addStretch()
@@ -119,12 +119,13 @@ class BPMAdvancedSettings(BaseWidget):
 
         grpbx = self._create_formlayout_groupbox('Switching', (
             ('SwMode-Sel', 'Mode'),
-            ('SwDly-SP', 'Delay'),
+            ('SwDly-SP', 'Delay', ['lineedit', 'label']),
             ('SwTagEn-Sel', 'Sync Enable', ['statebutton', 'ledstate']),
-            ('SwDivClk-SP', 'Division Clock'),
+            ('SwDivClk-SP', 'Division Clock', ['lineedit', 'label']),
             ('SwDataMaskEn-Sel', 'Data Mask Enable',
              ['statebutton', 'ledstate']),
-            ('SwDataMaskSamples-SP', 'Data Mask Samples'),
+            ('SwDataMaskSamples-SP', 'Data Mask Samples',
+             ['lineedit', 'label']),
             (('SwTagDesyncCnt-Mon', 'SwTagDesyncCntRst-Sel'), 'Desync. Count',
              ['label', ('pushbutton', 'Reset Count', None, 1, 0)]),
             ('', '', ()),
@@ -148,7 +149,7 @@ class BPMAdvancedSettings(BaseWidget):
                     ('MONITUpdtTime-SP', 'Update Time'),
                 ])
             items.extend([
-                (f'{rate}TagDly-SP', 'Delay'),
+                (f'{rate}TagDly-SP', 'Delay', ['lineedit', 'label']),
                 (f'{rate}TagEn-Sel', 'Sync Enable',
                  ['statebutton', 'ledstate']),
                 ((f'{rate}TagDesyncCnt-Mon', f'{rate}TagDesyncCntRst-Sel'),
@@ -156,8 +157,10 @@ class BPMAdvancedSettings(BaseWidget):
                  ['label', ('pushbutton', 'Reset Count', None, 1, 0)]),
                 (f'{rate}DataMaskEn-Sel', 'Data Mask Enable',
                  ['statebutton', 'ledstate']),
-                (f'{rate}DataMaskSamplesBeg-SP', 'Data Mask Samples Begin'),
-                (f'{rate}DataMaskSamplesEnd-SP', 'Data Mask Samples End'),
+                (f'{rate}DataMaskSamplesBeg-SP', 'Data Mask Samples Begin',
+                 ['lineedit', 'label']),
+                (f'{rate}DataMaskSamplesEnd-SP', 'Data Mask Samples End',
+                 ['lineedit', 'label']),
             ])
             grpbx = self._create_formlayout_groupbox(rate, items)
             gdl.addWidget(grpbx, idx+1, 2, 1, 2)
@@ -202,8 +205,7 @@ class TriggersLauncherWidget(BaseWidget):
         wind = create_window_from_widget(
             PhysicalTriggers, title=self.bpm+': Physical Triggers')
         util.connect_window(
-            pbt, wind, parent=self, prefix=self.prefix, device=self.bpm,
-            database=self.bpmdb)
+            pbt, wind, parent=self, prefix=self.prefix, device=self.bpm)
         hbl.addWidget(pbt)
         hbl.addStretch()
         if 'ACQ' in self.acqcores:
@@ -212,8 +214,7 @@ class TriggersLauncherWidget(BaseWidget):
                 LogicalTriggers, title=self.bpm+': ACQ Logical Triggers')
             util.connect_window(
                 pbt, wind, parent=self, prefix=self.prefix, device=self.bpm,
-                database=self.bpmdb, names=_csbpm.LogTrigIntern._fields,
-                trig_tp='')
+                names=_csbpm.LogTrigIntern._fields, trig_tp='')
             hbl.addWidget(pbt)
             hbl.addStretch()
         if 'ACQ_PM' in self.acqcores:
@@ -223,7 +224,7 @@ class TriggersLauncherWidget(BaseWidget):
                 title=self.bpm+': Post-Mortem Logical Triggers')
             util.connect_window(
                 pbt, wind, parent=self, prefix=self.prefix, device=self.bpm,
-                database=self.bpmdb, trig_tp='_PM')
+                trig_tp='_PM')
             hbl.addWidget(pbt)
             hbl.addStretch()
 
@@ -328,7 +329,8 @@ class RFFEAdvancedSettings(BaseWidget):
         for i, pair in enumerate(['AC', 'BD']):
             grpbx = self._create_formlayout_groupbox(pair, (
                 (f'RFFETemp{pair}-Mon', 'Temperature'),
-                (f'RFFEPidSp{pair}-SP', 'PID Setpoint'),
+                (f'RFFEPidSp{pair}-SP', 'PID Setpoint',
+                 ['lineedit', 'label']),
                 (f'RFFEHeater{pair}-SP', 'Heater'),
                 (f'RFFEPid{pair}Kp-SP', 'PID Kp'),
                 (f'RFFEPid{pair}Ti-SP', 'PID Ti'),
@@ -373,27 +375,28 @@ class HardwareSettings(BaseWidget):
              [('ledstate', SiriusLedState.Red, SiriusLedState.LightGreen)]),
             ('ADCAD9510Defaults-Sel', 'Reset',
              [('pushbutton', 'Reset', None, 1, 0)]),
-            ('ADCAD9510PllFunc-SP', 'PLL Function'),
+            ('ADCAD9510PllFunc-SP', 'PLL Function', ['lineedit', 'label']),
             ('ADCAD9510ClkSel-Sel', 'Reference Clock'),
             ('ADCAD9510PllPDown-Sel', 'PLL Power Down'),
             ('ADCAD9510CpCurrent-Sel', 'CP Current'),
-            ('ADCAD9510ADiv-SP', 'A divider'),
-            ('ADCAD9510BDiv-SP', 'B divider'),
-            ('ADCAD9510Prescaler-SP', 'Prescaler'),
-            ('ADCAD9510RDiv-SP', 'R divider'),
-            ('ADCAD9510MuxStatus-SP', 'Mux status'),
-            ('ADCAD9510Outputs-SP', 'Outputs'),
+            ('ADCAD9510ADiv-SP', 'A divider', ['lineedit', 'label']),
+            ('ADCAD9510BDiv-SP', 'B divider', ['lineedit', 'label']),
+            ('ADCAD9510Prescaler-SP', 'Prescaler', ['lineedit', 'label']),
+            ('ADCAD9510RDiv-SP', 'R divider', ['lineedit', 'label']),
+            ('ADCAD9510MuxStatus-SP', 'Mux status', ['lineedit', 'label']),
+            ('ADCAD9510Outputs-SP', 'Outputs', ['lineedit', 'label']),
         ))
 
     def _setupActiveClockWidget(self):
         return self._create_formlayout_groupbox('Active Clock', (
-            ('INFOClkFreq-SP', 'Clock Frequency [Hz]'),
+            ('INFOClkFreq-SP', 'Clock Frequency [Hz]', ['lineedit', 'label']),
             ('ADCSi57xOe-Sel', 'Osc. output enable',
              ['statebutton', 'ledstate']),
             ('INFOClkProp-Sel', 'Link Frequency',
              ['statebutton', 'ledstate']),
-            ('ADCSi57xFreq-SP', 'Osc. Frequency [Hz]'),
-            ('ADCSi57xFStartup-SP', 'Osc. Frequency [Hz]\nStartup '),
+            ('ADCSi57xFreq-SP', 'Osc. Frequency [Hz]', ['lineedit', 'label']),
+            ('ADCSi57xFStartup-SP', 'Osc. Frequency [Hz]\nStartup ',
+             ['lineedit', 'label']),
         ))
 
     def _setupFMC250MWidget(self):
