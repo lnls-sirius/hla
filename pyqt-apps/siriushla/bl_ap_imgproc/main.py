@@ -26,6 +26,7 @@ from .util import PVS_IMGPROC, PVS_DVF, \
     IMG_PVS, PVS_CAX, LOG_PV, COMBOBOX_PVS, LINEEDIT_PVS, STATEBUT_PVS, \
     LED_ALERT_PVS, LED_STATE_PVS, LED_DETAIL_PVS
 from .image import DVFImageView
+from .blpps import BLPPS
 
 
 class BLImgProc(QWidget):
@@ -38,6 +39,7 @@ class BLImgProc(QWidget):
         self.prefix = prefix + ('-' if prefix else '')
         self.dvf = dvf
         self.device = self.prefix + self.dvf
+        self.blpps = BLPPS(self.device)
         self.setWindowTitle(self.device + ' Image Processing Window')
         self.setWindowIcon(
             qta.icon('mdi.camera-metering-center',
