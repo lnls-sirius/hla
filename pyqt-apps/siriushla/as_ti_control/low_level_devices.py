@@ -17,7 +17,7 @@ from siriuspy.timesys import csdev as _cstime
 from ..widgets import PyDMLed, PyDMStateButton, SiriusLedState, \
     SiriusEnumComboBox, SiriusLedAlert, SiriusLabel, \
     SiriusSpinbox, SiriusConnectionSignal, SiriusWaveformTable, \
-    SiriusPushButton, SiriusHexaSpinbox, SiriusWaveformPlot
+    SiriusPushButton, SiriusWaveformPlot
 from ..widgets.windows import create_window_from_widget, SiriusDialog
 from ..util import connect_window, get_appropriate_color
 
@@ -1346,7 +1346,6 @@ class AFC(BaseWidget):
             prefix=self.prefix, obj_names=obj_names)
         self.crts_wid.setObjectName('crts_wid')
         outtab.addTab(self.crts_wid, 'CRT Outputs')
-        outtab.setSizePolicy(QSzPol.Preferred, QSzPol.MinimumExpanding)
 
     def _setupmenus(self):
         main_menu = QMenuBar()
@@ -1403,21 +1402,12 @@ class AFC(BaseWidget):
         info_lay = QGridLayout(info_wid)
         info_lay.setHorizontalSpacing(30)
 
-        lb = QLabel("<b>Save Settings</b>")
-        pvname = self.get_pvname('Save-Cmd')
-        sp = PyDMPushButton(
-            self, label='Save', init_channel=pvname, pressValue=1)
-        gb = self._create_small_group('', info_wid, (lb, sp))
-        info_lay.addWidget(gb, 0, 0)
-
         lb = QLabel("<b>FPGA Clk</b>")
         pvname = self.get_pvname('FPGAClk-Cte')
         mon = SiriusLabel(self, init_channel=pvname)
         mon.showUnits = True
-        pvname = self.get_pvname('FPGAClk-Cte', field='INP')
-        inp = PyDMLineEdit(self, init_channel=pvname)
-        gb = self._create_small_group('', info_wid, (lb, mon, inp))
-        info_lay.addWidget(gb, 0, 1)
+        gb = self._create_small_group('', info_wid, (lb, mon))
+        info_lay.addWidget(gb, 0, 0)
 
         return info_wid
 
@@ -1481,41 +1471,23 @@ class AFC(BaseWidget):
             self, self.get_pvname(propty=subdev+'PhaseDiv-RB'))
 
         ld_rfrlo = QLabel('<b>RFReqLo</b>', self, alignment=Qt.AlignCenter)
-        sb_rfrlo = SiriusHexaSpinbox(
-            self, self.get_pvname(propty=subdev+'RFReqLo-SP'))
-        sb_rfrlo.limitsFromChannel = False
-        sb_rfrlo.setMinimum(-2**31)
-        sb_rfrlo.setMaximum(2**31-1)
         lb_rfrlo = SiriusLabel(
             self, self.get_pvname(propty=subdev+'RFReqLo-RB'))
         lb_rfrlo.displayFormat = SiriusLabel.DisplayFormat.Hex
 
         ld_rfrhi = QLabel('<b>RFReqHi</b>', self, alignment=Qt.AlignCenter)
-        sb_rfrhi = SiriusHexaSpinbox(
-            self, self.get_pvname(propty=subdev+'RFReqHi-SP'))
-        sb_rfrhi.limitsFromChannel = False
-        sb_rfrhi.setMinimum(-2**31)
-        sb_rfrhi.setMaximum(2**31-1)
         lb_rfrhi = SiriusLabel(
             self, self.get_pvname(propty=subdev+'RFReqHi-RB'))
         lb_rfrhi.displayFormat = SiriusLabel.DisplayFormat.Hex
 
         ld_n1 = QLabel('<b>N1</b>', self, alignment=Qt.AlignCenter)
         ld_n1.setObjectName('n1')
-        sb_n1 = SiriusHexaSpinbox(
-            self, self.get_pvname(propty=subdev+'n1-SP'))
-        sb_n1.setObjectName('n1')
-        sb_n1.limitsFromChannel = False
-        sb_n1.setMinimum(-2**31)
-        sb_n1.setMaximum(2**31-1)
         lb_n1 = SiriusLabel(
             self, self.get_pvname(propty=subdev+'n1-RB'))
         lb_n1.setObjectName('n1')
         lb_n1.displayFormat = SiriusLabel.DisplayFormat.Hex
 
         ld_hsdiv = QLabel('<b>HS_DIV</b>', self, alignment=Qt.AlignCenter)
-        cb_hsdiv = SiriusEnumComboBox(
-            self, self.get_pvname(propty=subdev+'hs_div-SP'))
         lb_hsdiv = SiriusLabel(
             self, self.get_pvname(propty=subdev+'hs_div-RB'))
 
@@ -1563,19 +1535,14 @@ class AFC(BaseWidget):
 
         lay_sett2 = QGridLayout()
         lay_sett2.setHorizontalSpacing(30)
-        lay_sett2.setVerticalSpacing(6)
         lay_sett2.addWidget(ld_rfrlo, 0, 0)
-        lay_sett2.addWidget(sb_rfrlo, 1, 0, alignment=Qt.AlignCenter)
-        lay_sett2.addWidget(lb_rfrlo, 2, 0)
+        lay_sett2.addWidget(lb_rfrlo, 1, 0)
         lay_sett2.addWidget(ld_rfrhi, 0, 1)
-        lay_sett2.addWidget(sb_rfrhi, 1, 1, alignment=Qt.AlignCenter)
-        lay_sett2.addWidget(lb_rfrhi, 2, 1)
+        lay_sett2.addWidget(lb_rfrhi, 1, 1)
         lay_sett2.addWidget(ld_n1, 0, 2)
-        lay_sett2.addWidget(sb_n1, 1, 2, alignment=Qt.AlignCenter)
-        lay_sett2.addWidget(lb_n1, 2, 2)
+        lay_sett2.addWidget(lb_n1, 1, 2)
         lay_sett2.addWidget(ld_hsdiv, 0, 3)
-        lay_sett2.addWidget(cb_hsdiv, 1, 3, alignment=Qt.AlignCenter)
-        lay_sett2.addWidget(lb_hsdiv, 2, 3)
+        lay_sett2.addWidget(lb_hsdiv, 1, 3)
 
         lay_eq = QGridLayout()
         lay_eq.setHorizontalSpacing(12)
@@ -1597,7 +1564,6 @@ class AFC(BaseWidget):
 
         gbox.setStyleSheet("""
             .SiriusSpinbox{max-width: 4.5em;}
-            SiriusHexaSpinbox{max-width: 4.5em;}
             QComboBox, #n1 {max-width: 2.7em;}
             #frac {max-width: 1.5em;}
             #freq, #fpgaclk {max-width: 6.5em;}
