@@ -29,10 +29,7 @@ class BPMMain(BaseWidget):
         hbl = QHBoxLayout(grpbx)
         hbl.addSpacing(10)
         hbl.addStretch()
-        chan2vals = {
-            'asyn.CNCT': 1, 'asyn.ENBL': 1,
-            'RFFEasyn.CNCT': 1, 'RFFEasyn.ENBL': 1,
-            'ADCAD9510PllStatus-Mon': 1}
+        chan2vals = {'RFFEasyn.CNCT': 1, 'ADCAD9510PllStatus-Mon': 1}
         chan2vals = {self.get_pvname(k): v for k, v in chan2vals.items()}
         led = PyDMLedMultiChannel(self, channels2values=chan2vals)
         hbl.addWidget(led)
@@ -95,7 +92,7 @@ class BPMMain(BaseWidget):
         self.layoutv.addSpacing(20)
         self.layoutv.addStretch()
 
-        if 'SI' in self.bpm:
+        if self.bpm.sec not in ['TB', 'BO', 'TS']:
             grpbx = CustomGroupBox('Orbit Interlock', self)
             hbl = QHBoxLayout(grpbx)
             pbt = QPushButton('Open Interlock Settings', grpbx)
