@@ -1406,7 +1406,9 @@ class AFC(BaseWidget):
         pvname = self.get_pvname('FPGAClk-Cte')
         mon = SiriusLabel(self, init_channel=pvname)
         mon.showUnits = True
-        gb = self._create_small_group('', info_wid, (lb, mon))
+        pvname = self.get_pvname('FPGAClk-Cte', field='DOL')
+        inp = PyDMLineEdit(self, init_channel=pvname)
+        gb = self._create_small_group('', info_wid, (lb, mon, inp))
         info_lay.addWidget(gb, 0, 0)
 
         return info_wid
