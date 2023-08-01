@@ -376,6 +376,8 @@ class EVG(BaseWidget):
         pvname = self.get_pvname('FPGAClk-Cte')
         mon = SiriusLabel(self, init_channel=pvname)
         mon.showUnits = True
+        mon.precisionFromPV = False
+        mon.precision = 3
         gb = self._create_small_group('', info_wid, (lb, mon))
         lay.addWidget(gb, 0, 3, alignment=Qt.AlignCenter)
 
@@ -1406,7 +1408,19 @@ class AFC(BaseWidget):
         pvname = self.get_pvname('FPGAClk-Cte')
         mon = SiriusLabel(self, init_channel=pvname)
         mon.showUnits = True
-        gb = self._create_small_group('', info_wid, (lb, mon))
+        mon.precisionFromPV = False
+        mon.precision = 3
+        pvname = self.get_pvname('FPGAClk-Cte', field='DOL')
+        dol = PyDMLineEdit(self, init_channel=pvname)
+        omsl = SiriusPushButton(
+            self, label='', icon=qta.icon('fa5s.sync'), pressValue=1,
+            init_channel=self.get_pvname('FPGAClk-Cte', field='OMSL'))
+        proc = QWidget()
+        hlproc = QHBoxLayout(proc)
+        hlproc.setContentsMargins(0, 0, 0, 0)
+        hlproc.addWidget(dol)
+        hlproc.addWidget(omsl)
+        gb = self._create_small_group('', info_wid, (lb, mon, proc))
         info_lay.addWidget(gb, 0, 0)
 
         return info_wid

@@ -1982,9 +1982,15 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
 
     def _fofbctrlLayout(self):
         # controls
+        fofbacc_lb = QLabel(
+            'Accumulator', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+        self.fofbacc_mon = SiriusLabel(
+            self, self._prefixed_psname + ':FOFBAcc-Mon')
+        self.fofbacc_mon.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
+
         fofbaccgain_lb = QLabel(
             'Acc. Gain', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
-        self.fofbaccgain_sp = SiriusSpinbox(
+        self.fofbaccgain_sp = PyDMLineEdit(
             self, self._prefixed_psname + ':FOFBAccGain-SP')
         self.fofbaccgain_sp.precisionFromPV = False
         self.fofbaccgain_sp.precision = 8
@@ -2035,21 +2041,22 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
 
         widctrl = QWidget()
         lay = QGridLayout(widctrl)
-        # lay.setAlignment(Qt.AlignTop)
-        lay.addWidget(fofbaccgain_lb, 0, 0, Qt.AlignRight)
-        lay.addWidget(self.fofbaccgain_sp, 0, 1)
-        lay.addWidget(self.fofbaccgain_rb, 0, 2)
-        lay.addWidget(fofbaccfreeze_lb, 1, 0, Qt.AlignRight)
-        lay.addWidget(self.fofbaccfreeze_sp, 1, 1)
-        lay.addWidget(self.fofbaccfreeze_rb, 1, 2)
-        lay.addWidget(fofbaccclear_lb, 2, 0, Qt.AlignRight)
-        lay.addWidget(self.fofbaccclear_bt, 2, 1)
-        lay.addWidget(fofbaccmaxsat_lb, 3, 0, Qt.AlignRight)
-        lay.addWidget(self.fofbaccmaxsat_sp, 3, 1)
-        lay.addWidget(self.fofbaccmaxsat_rb, 3, 2)
-        lay.addWidget(fofbaccminsat_lb, 4, 0, Qt.AlignRight)
-        lay.addWidget(self.fofbaccminsat_sp, 4, 1)
-        lay.addWidget(self.fofbaccminsat_rb, 4, 2)
+        lay.addWidget(fofbacc_lb, 0, 0, Qt.AlignRight)
+        lay.addWidget(self.fofbacc_mon, 0, 1)
+        lay.addWidget(fofbaccgain_lb, 1, 0, Qt.AlignRight)
+        lay.addWidget(self.fofbaccgain_sp, 1, 1)
+        lay.addWidget(self.fofbaccgain_rb, 1, 2)
+        lay.addWidget(fofbaccfreeze_lb, 2, 0, Qt.AlignRight)
+        lay.addWidget(self.fofbaccfreeze_sp, 2, 1)
+        lay.addWidget(self.fofbaccfreeze_rb, 2, 2)
+        lay.addWidget(fofbaccclear_lb, 3, 0, Qt.AlignRight)
+        lay.addWidget(self.fofbaccclear_bt, 3, 1)
+        lay.addWidget(fofbaccmaxsat_lb, 4, 0, Qt.AlignRight)
+        lay.addWidget(self.fofbaccmaxsat_sp, 4, 1)
+        lay.addWidget(self.fofbaccmaxsat_rb, 4, 2)
+        lay.addWidget(fofbaccminsat_lb, 5, 0, Qt.AlignRight)
+        lay.addWidget(self.fofbaccminsat_sp, 5, 1)
+        lay.addWidget(self.fofbaccminsat_rb, 5, 2)
 
         # coefficients
         gph_fofbcoeffs = dict()

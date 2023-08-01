@@ -74,9 +74,9 @@ class PhysicalTriggers(BaseWidget):
         hbl.addWidget(lab)
 
         lab = QLabel('Counter', grpbx)
+        suf = 'SP' if self.device.dev == 'BPM' else 'Cmd'
         hbl = QHBoxLayout()
         fbl.addRow(lab, hbl)
-        suf = 'SP' if 'BPM' in self.device else 'Cmd'
         pbt = PyDMPushButton(
             grpbx, label='Reset', pressValue=1,
             init_channel=self.get_pvname(trig+'RcvCntRst-'+suf))
@@ -86,7 +86,6 @@ class PhysicalTriggers(BaseWidget):
         lab.setAlignment(Qt.AlignCenter)
         hbl.addWidget(lab)
         hbl.addSpacing(20)
-        suf = 'SP' if 'BPM' in self.device else 'Cmd'
         pbt = PyDMPushButton(
             grpbx, label='Reset', pressValue=1,
             init_channel=self.get_pvname(trig+'TrnCntRst-'+suf))
