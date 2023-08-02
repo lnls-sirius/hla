@@ -423,6 +423,14 @@ class BiasFBDetailDialog(SiriusDialog):
             symbol='o', symbolSize=6)
         curve = self.graph_pred.curveAtIndex(-1)
         curve.opts['symbolBrush'] = mkBrush(QColor(0, 0, 0))
+        self.graph_pred.addChannel(
+            x_channel=self._inj_prefix.substitute(propty='MultBunBiasVolt-RB'),
+            y_channel='SI-Glob:AP-CurrInfo:InjCurr-Mon',
+            name='extra3', color='red', lineStyle=Qt.NoPen,
+            symbol='o', symbolSize=8, redraw_mode=2)
+        self.graph_pred.legend.removeItem('extra3')
+        curve = self.graph_pred.curveAtIndex(-1)
+        curve.opts['symbolBrush'] = mkBrush(QColor(255, 0, 0))
         self.graph_pred.addItem(self._curve_gp_fill_std)
         self.graph_pred.autoRangeX = True
         self.graph_pred.autoRangeY = True
