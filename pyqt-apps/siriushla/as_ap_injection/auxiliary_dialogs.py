@@ -274,6 +274,10 @@ class BiasFBDetailDialog(SiriusDialog):
         lb_likehdvar_mon = SiriusLabel(
             self, self._inj_prefix.substitute(
                 propty='BiasFBGPModNoiseStd-Mon'))
+        pb_likehdvarfit = PyDMStateButton(self, self._inj_prefix.substitute(
+            propty='BiasFBGPModNoiseStdFit-Sel'))
+        lb_likehdvarfit = SiriusLabel(self, self._inj_prefix.substitute(
+            propty='BiasFBGPModNoiseStdFit-Sts'))
 
         ld_kernvar = QLabel(
             'Kernel std.:', self, alignment=Qt.AlignRight)
@@ -286,6 +290,10 @@ class BiasFBDetailDialog(SiriusDialog):
         lb_kernvar_mon = SiriusLabel(
             self, self._inj_prefix.substitute(
                 propty='BiasFBGPModKernStd-Mon'))
+        pb_kernvarfit = PyDMStateButton(self, self._inj_prefix.substitute(
+            propty='BiasFBGPModKernStdFit-Sel'))
+        lb_kernvarfit = SiriusLabel(self, self._inj_prefix.substitute(
+            propty='BiasFBGPModKernStdFit-Sts'))
 
         ld_kernlenscl = QLabel(
             'Kernel length scale:', self, alignment=Qt.AlignRight)
@@ -298,27 +306,48 @@ class BiasFBDetailDialog(SiriusDialog):
         lb_kernlenscl_mon = SiriusLabel(
             self, self._inj_prefix.substitute(
                 propty='BiasFBGPModKernLenScl-Mon'))
+        pb_kernlensclfit = PyDMStateButton(self, self._inj_prefix.substitute(
+            propty='BiasFBGPModKernLenSclFit-Sel'))
+        lb_kernlensclfit = SiriusLabel(self, self._inj_prefix.substitute(
+            propty='BiasFBGPModKernLenSclFit-Sts'))
+
+        ld_dofit = QLabel('  Fit?', self)
+        ld_dofit.setStyleSheet("""
+            min-width: 3em; min-height: 1.5em; max-height: 1.5em;
+            qproperty-alignment: 'AlignRight | AlignVCenter';""")
 
         wid = QWidget()
         lay = QGridLayout(wid)
         lay.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
-        lay.addWidget(ld_likehdvar, 0, 0)
-        lay.addWidget(sb_likehdvar, 0, 1)
-        lay.addWidget(lb_likehdvar, 0, 2)
-        lay.addWidget(lb_likehdvar_mon, 0, 3)
-        lay.addWidget(ld_kernvar, 1, 0)
-        lay.addWidget(sb_kernvar, 1, 1)
-        lay.addWidget(lb_kernvar, 1, 2)
-        lay.addWidget(lb_kernvar_mon, 1, 3)
-        lay.addWidget(ld_kernlenscl, 2, 0)
-        lay.addWidget(sb_kernlenscl, 2, 1)
-        lay.addWidget(lb_kernlenscl, 2, 2)
-        lay.addWidget(lb_kernlenscl_mon, 2, 3)
+        lay.addWidget(ld_likehdvar, 0, 1)
+        lay.addWidget(sb_likehdvar, 0, 2)
+        lay.addWidget(lb_likehdvar, 0, 3)
+        lay.addWidget(lb_likehdvar_mon, 0, 4)
+        lay.addWidget(pb_likehdvarfit, 0, 6)
+        lay.addWidget(lb_likehdvarfit, 0, 7)
+        lay.addWidget(ld_kernvar, 1, 1)
+        lay.addWidget(sb_kernvar, 1, 2)
+        lay.addWidget(lb_kernvar, 1, 3)
+        lay.addWidget(lb_kernvar_mon, 1, 4)
+        lay.addWidget(pb_kernvarfit, 1, 6)
+        lay.addWidget(lb_kernvarfit, 1, 7)
+        lay.addWidget(ld_kernlenscl, 2, 1)
+        lay.addWidget(sb_kernlenscl, 2, 2)
+        lay.addWidget(lb_kernlenscl, 2, 3)
+        lay.addWidget(lb_kernlenscl_mon, 2, 4)
+        lay.addWidget(pb_kernlensclfit, 2, 6)
+        lay.addWidget(lb_kernlensclfit, 2, 7)
+        lay.addWidget(ld_dofit, 0, 5, 3, 1)
+        lay.setColumnStretch(0, 2)
+        lay.setColumnStretch(8, 2)
 
         wid.setStyleSheet("""
             .QLabel{
                 min-width: 7em; min-height: 1.5em; max-height: 1.5em;
                 qproperty-alignment: 'AlignRight | AlignVCenter';
+            }
+            .PyDMStateButton{
+                min-width: 3.2em; min-height: 1.5em; max-height: 1.5em;
             }""")
         return wid
 
