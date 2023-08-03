@@ -389,31 +389,35 @@ class BiasFBDetailDialog(SiriusDialog):
             y_channel=self._inj_prefix.substitute(
                 propty='BiasFBGPModPredInjCurrAvg-Mon'),
             name='GP with 95% Conf.', color=QColor(80, 80, 80), lineWidth=2)
+
         self.graph_pred.addChannel(
             x_channel=self._inj_prefix.substitute(
                 propty='BiasFBGPModPredBias-Mon'),
             y_channel='FAKE:GP_Avg_plus_Std',
             name='extra1', color='gray',
             lineWidth=2, lineStyle=Qt.DashLine)
+        self.graph_pred.legend.removeItem('extra1')
         self._curve_gp_pred_avg_p_std = self.graph_pred.curveAtIndex(-1)
+
         self.graph_pred.addChannel(
             x_channel=self._inj_prefix.substitute(
                 propty='BiasFBGPModPredBias-Mon'),
-            y_channel='FAKE:GP_Avg_minus_Std',
-            name='extra2', color='gray',
+            y_channel='FAKE:GP_Avg_minus_Std', name='extra2', color='gray',
             lineWidth=2, lineStyle=Qt.DashLine)
-        self._curve_gp_pred_avg_m_std = self.graph_pred.curveAtIndex(-1)
-        self.graph_pred.legend.removeItem('extra1')
         self.graph_pred.legend.removeItem('extra2')
+        self._curve_gp_pred_avg_m_std = self.graph_pred.curveAtIndex(-1)
+
         self._curve_gp_fill_std = FillBetweenItem(
             self._curve_gp_pred_avg_p_std, self._curve_gp_pred_avg_m_std,
             brush=mkBrush(QColor('lightGray')))
+
         self.graph_pred.addChannel(
             x_channel=self._inj_prefix.substitute(
                 propty='BiasFBLinModPredBias-Mon'),
             y_channel=self._inj_prefix.substitute(
                 propty='BiasFBLinModPredInjCurrAvg-Mon'),
             name='Linear', color='blue', lineWidth=2)
+
         self.graph_pred.addChannel(
             x_channel=self._inj_prefix.substitute(
                 propty='BiasFBModelDataBias-Mon'),
@@ -423,14 +427,16 @@ class BiasFBDetailDialog(SiriusDialog):
             symbol='o', symbolSize=6)
         curve = self.graph_pred.curveAtIndex(-1)
         curve.opts['symbolBrush'] = mkBrush(QColor(0, 0, 0))
+
         self.graph_pred.addChannel(
-            x_channel=self._inj_prefix.substitute(propty='MultBunBiasVolt-RB'),
-            y_channel='SI-Glob:AP-CurrInfo:InjCurr-Mon',
+            x_channel='FAKE:Bias', y_channel='FAKE:InjCurr',
             name='extra3', color='red', lineStyle=Qt.NoPen,
             symbol='o', symbolSize=8, redraw_mode=2)
         self.graph_pred.legend.removeItem('extra3')
         curve = self.graph_pred.curveAtIndex(-1)
         curve.opts['symbolBrush'] = mkBrush(QColor(255, 0, 0))
+        self._curve_bias_vs_injcurr = curve
+
         self.graph_pred.addItem(self._curve_gp_fill_std)
         self.graph_pred.autoRangeX = True
         self.graph_pred.autoRangeY = True
@@ -438,8 +444,7 @@ class BiasFBDetailDialog(SiriusDialog):
         self.graph_pred.showYGrid = True
         self.graph_pred.showLegend = True
         self.graph_pred.title = 'Model prediction: Bias Voltage X Inj.Current'
-        self.graph_pred.setLabel(
-            'bottom', text='Bias voltage [V]')
+        self.graph_pred.setLabel('bottom', text='Bias voltage [V]')
         self.graph_pred.setLabel(
             'left', text='Inj. current [mA]', color='gray')
         self.graph_pred.setBackgroundColor(QColor(255, 255, 255))
@@ -455,6 +460,13 @@ class BiasFBDetailDialog(SiriusDialog):
         self._chn_gp_injcurr_std.new_value_signal[_np.ndarray].connect(
             self._plot_gp_prediction_confidance)
 
+        self._chn_bias = SiriusConnectionSignal(
+            self._inj_prefix.substitute(propty='MultBunBiasVolt-RB'))
+        self._chn_injcurr = SiriusConnectionSignal(
+            'SI-Glob:AP-CurrInfo:InjCurr-Mon')
+        self._chn_injcurr.new_value_signal[float].connect(
+            self._plot_bias_vs_injcurr)
+
         return self.graph_pred
 
     def _plot_gp_prediction_confidance(self, _):
@@ -468,6 +480,14 @@ class BiasFBDetailDialog(SiriusDialog):
             return
         self._curve_gp_pred_avg_p_std.receiveYWaveform(avg + 1.96*std)
         self._curve_gp_pred_avg_m_std.receiveYWaveform(avg - 1.96*std)
+
+    def _plot_bias_vs_injcurr(self, _):
+        bias = self._chn_bias.value
+        injcurr = self._chn_injcurr.value
+        if None in {bias, injcurr}:
+            return
+        self._curve_bias_vs_injcurr.receiveXWaveform(_np.array([bias]))
+        self._curve_bias_vs_injcurr.receiveYWaveform(_np.array([injcurr]))
 
 
 class TopUpSettingsDialog(SiriusDialog):
