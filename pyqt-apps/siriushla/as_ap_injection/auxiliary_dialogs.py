@@ -430,9 +430,8 @@ class BiasFBDetailDialog(SiriusDialog):
 
         self.graph_pred.addChannel(
             x_channel='FAKE:Bias', y_channel='FAKE:InjCurr',
-            name='extra3', color='red', lineStyle=Qt.NoPen,
+            name='Last Inj.', color='red', lineStyle=Qt.NoPen,
             symbol='o', symbolSize=8, redraw_mode=2)
-        self.graph_pred.legend.removeItem('extra3')
         curve = self.graph_pred.curveAtIndex(-1)
         curve.opts['symbolBrush'] = mkBrush(QColor(255, 0, 0))
         self._curve_bias_vs_injcurr = curve
@@ -443,6 +442,7 @@ class BiasFBDetailDialog(SiriusDialog):
         self.graph_pred.showXGrid = True
         self.graph_pred.showYGrid = True
         self.graph_pred.showLegend = True
+        self.graph_pred.legend.setOffset((1, 1))
         self.graph_pred.title = 'Model prediction: Bias Voltage X Inj.Current'
         self.graph_pred.setLabel('bottom', text='Bias voltage [V]')
         self.graph_pred.setLabel(
