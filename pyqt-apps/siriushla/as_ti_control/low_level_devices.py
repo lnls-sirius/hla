@@ -130,12 +130,13 @@ class EVG(BaseWidget):
     def _setupmenus(self):
         main_menu = QMenuBar()
         main_menu.setNativeMenuBar(False)
-        menu = main_menu.addMenu('&Downlinks')
 
         try:
             fouts = LLTimeSearch.get_evg2fout_mapping()
         except KeyError:
-            fouts = dict()
+            return main_menu
+
+        menu = main_menu.addMenu('&Downlinks')
         for out, down in sorted(fouts.items()):
             action = menu.addAction(out + ' --> ' + down)
             icon = qta.icon('mdi.timer', color=get_appropriate_color('AS'))
@@ -1105,31 +1106,29 @@ class FOUT(BaseWidget):
             mapping = LLTimeSearch.get_fout2trigsrc_mapping()
             downs = mapping[self.device.device_name]
             downs = sorted([(ou, dwn) for ou, dwn in downs.items()])
+            menu = main_menu.addMenu('&Downlinks')
         except KeyError:
             downs = list()
-        if downs:
-            menu = main_menu.addMenu('&Downlinks')
-            for out, dwn in downs:
-                dev, down = dwn.dev, dwn.device_name
-                devt = EVR if dev == 'EVR' else EVE if dev == 'EVE' else AFC
-                action = menu.addAction(out + ' --> ' + down)
-                Win = create_window_from_widget(devt, title=down, icon=icon)
-                connect_window(
-                    action, Win, None, device=down, prefix=self.prefix)
+
+        for out, dwn in downs:
+            dev, down = dwn.dev, dwn.device_name
+            devt = EVR if dev == 'EVR' else EVE if dev == 'EVE' else AFC
+            action = menu.addAction(out + ' --> ' + down)
+            Win = create_window_from_widget(devt, title=down, icon=icon)
+            connect_window(action, Win, None, device=down, prefix=self.prefix)
 
         try:
             link = list(LLTimeSearch.In2OutMap[self.device.dev])[0]
             evg = LLTimeSearch.get_evg_channel(
                 self.device.device_name.substitute(propty=link))
         except KeyError:
-            evg = None
-        if evg:
-            menu = main_menu.addMenu('&Uplink')
-            action = menu.addAction(evg)
-            Win = create_window_from_widget(
-                EVG, title=evg.device_name, icon=icon)
-            connect_window(
-                action, Win, None, device=evg.device_name, prefix=self.prefix)
+            return main_menu
+
+        menu = main_menu.addMenu('&Uplink')
+        action = menu.addAction(evg)
+        Win = create_window_from_widget(EVG, title=evg.device_name, icon=icon)
+        connect_window(
+            action, Win, None, device=evg.device_name, prefix=self.prefix)
 
         return main_menu
 
@@ -1374,15 +1373,15 @@ class AFC(BaseWidget):
             fout = LLTimeSearch.get_fout_channel(
                 self.device.substitute(propty='CRT0'))
         except KeyError:
-            fout = None
-        if fout:
-            menu = main_menu.addMenu('&Uplink')
-            action = menu.addAction(fout)
-            icon = qta.icon('mdi.timer', color=get_appropriate_color('AS'))
-            Win = create_window_from_widget(
-                FOUT, title=fout.device_name, icon=icon)
-            connect_window(
-                action, Win, None, device=fout.device_name, prefix=self.prefix)
+            return main_menu
+
+        menu = main_menu.addMenu('&Uplink')
+        action = menu.addAction(fout)
+        icon = qta.icon('mdi.timer', color=get_appropriate_color('AS'))
+        Win = create_window_from_widget(
+            FOUT, title=fout.device_name, icon=icon)
+        connect_window(
+            action, Win, None, device=fout.device_name, prefix=self.prefix)
         return main_menu
 
     def _setup_status_wid(self):
@@ -1683,15 +1682,15 @@ class _EVR_EVE(BaseWidget):
             fout = LLTimeSearch.get_fout_channel(
                 self.device.substitute(propty='OTP0'))
         except KeyError:
-            fout = None
-        if fout:
-            menu = main_menu.addMenu('&Uplink')
-            action = menu.addAction(fout)
-            icon = qta.icon('mdi.timer', color=get_appropriate_color('AS'))
-            Win = create_window_from_widget(
-                FOUT, title=fout.device_name, icon=icon)
-            connect_window(
-                action, Win, None, device=fout.device_name, prefix=self.prefix)
+            return main_menu
+
+        menu = main_menu.addMenu('&Uplink')
+        action = menu.addAction(fout)
+        icon = qta.icon('mdi.timer', color=get_appropriate_color('AS'))
+        Win = create_window_from_widget(
+            FOUT, title=fout.device_name, icon=icon)
+        connect_window(
+            action, Win, None, device=fout.device_name, prefix=self.prefix)
         return main_menu
 
     def _setup_status_wid(self):
