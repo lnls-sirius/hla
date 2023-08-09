@@ -132,7 +132,10 @@ class EVG(BaseWidget):
         main_menu.setNativeMenuBar(False)
         menu = main_menu.addMenu('&Downlinks')
 
-        fouts = LLTimeSearch.get_evg2fout_mapping()
+        try:
+            fouts = LLTimeSearch.get_evg2fout_mapping()
+        except KeyError:
+            fouts = dict()
         for out, down in sorted(fouts.items()):
             action = menu.addAction(out + ' --> ' + down)
             icon = qta.icon('mdi.timer', color=get_appropriate_color('AS'))
@@ -319,8 +322,11 @@ class EVG(BaseWidget):
         status_layout.addWidget(gb, 2, 2)
 
         wids = list()
-        conn = LLTimeSearch.get_connections_from_evg()
-        conn = {int(dev.propty[-1]) for dev in conn if dev.dev == 'EVG'}
+        try:
+            conn = LLTimeSearch.get_connections_from_evg()
+            conn = {int(dev.propty[-1]) for dev in conn if dev.dev == 'EVG'}
+        except KeyError:
+            conn = set()
         for i in range(8):
             pvname = self.get_pvname(propty='Los-Mon')
             if i in conn:
@@ -1092,32 +1098,39 @@ class FOUT(BaseWidget):
     def _setupmenus(self):
         main_menu = QMenuBar()
         main_menu.setNativeMenuBar(False)
-        menu = main_menu.addMenu('&Downlinks')
 
         icon = qta.icon('mdi.timer', color=get_appropriate_color('AS'))
-        mapping = LLTimeSearch.get_fout2trigsrc_mapping()
-        downs = mapping[self.device.device_name]
-        downs = sorted([(ou, dwn) for ou, dwn in downs.items()])
-        for out, dwn in downs:
-            dev, down = dwn.dev, dwn.device_name
-            if dev == 'EVR':
-                devt = EVR
-            elif dev == 'EVE':
-                devt = EVE
-            else:
-                devt = AFC
-            action = menu.addAction(out + ' --> ' + down)
-            Win = create_window_from_widget(devt, title=down, icon=icon)
-            connect_window(action, Win, None, device=down, prefix=self.prefix)
 
-        menu = main_menu.addMenu('&Uplink')
-        link = list(LLTimeSearch.In2OutMap[self.device.dev])[0]
-        evg = LLTimeSearch.get_evg_channel(
-            self.device.device_name.substitute(propty=link))
-        action = menu.addAction(evg)
-        Win = create_window_from_widget(EVG, title=evg.device_name, icon=icon)
-        connect_window(
-            action, Win, None, device=evg.device_name, prefix=self.prefix)
+        try:
+            mapping = LLTimeSearch.get_fout2trigsrc_mapping()
+            downs = mapping[self.device.device_name]
+            downs = sorted([(ou, dwn) for ou, dwn in downs.items()])
+        except KeyError:
+            downs = list()
+        if downs:
+            menu = main_menu.addMenu('&Downlinks')
+            for out, dwn in downs:
+                dev, down = dwn.dev, dwn.device_name
+                devt = EVR if dev == 'EVR' else EVE if dev == 'EVE' else AFC
+                action = menu.addAction(out + ' --> ' + down)
+                Win = create_window_from_widget(devt, title=down, icon=icon)
+                connect_window(
+                    action, Win, None, device=down, prefix=self.prefix)
+
+        try:
+            link = list(LLTimeSearch.In2OutMap[self.device.dev])[0]
+            evg = LLTimeSearch.get_evg_channel(
+                self.device.device_name.substitute(propty=link))
+        except KeyError:
+            evg = None
+        if evg:
+            menu = main_menu.addMenu('&Uplink')
+            action = menu.addAction(evg)
+            Win = create_window_from_widget(
+                EVG, title=evg.device_name, icon=icon)
+            connect_window(
+                action, Win, None, device=evg.device_name, prefix=self.prefix)
+
         return main_menu
 
     def _setup_status_wid(self):
@@ -1159,8 +1172,12 @@ class FOUT(BaseWidget):
         status_lay.addWidget(gb, 0, 3)
 
         wids = list()
-        conn = LLTimeSearch.get_fout2trigsrc_mapping()[self.device.device_name]
-        conn = {int(dev[-1]) for dev in conn}
+        try:
+            mapping = LLTimeSearch.get_fout2trigsrc_mapping()
+            conn = mapping[self.device.device_name]
+            conn = {int(dev[-1]) for dev in conn}
+        except KeyError:
+            conn = set()
         for i in range(8):
             pvname = self.get_pvname(propty='Los-Mon')
             if i in conn:
@@ -1352,16 +1369,20 @@ class AFC(BaseWidget):
     def _setupmenus(self):
         main_menu = QMenuBar()
         main_menu.setNativeMenuBar(False)
-        menu = main_menu.addMenu('&Uplink')
 
-        fout = LLTimeSearch.get_fout_channel(
-            self.device.substitute(propty='CRT0'))
-        action = menu.addAction(fout)
-        icon = qta.icon('mdi.timer', color=get_appropriate_color('AS'))
-        Win = create_window_from_widget(
-            FOUT, title=fout.device_name, icon=icon)
-        connect_window(
-            action, Win, None, device=fout.device_name, prefix=self.prefix)
+        try:
+            fout = LLTimeSearch.get_fout_channel(
+                self.device.substitute(propty='CRT0'))
+        except KeyError:
+            fout = None
+        if fout:
+            menu = main_menu.addMenu('&Uplink')
+            action = menu.addAction(fout)
+            icon = qta.icon('mdi.timer', color=get_appropriate_color('AS'))
+            Win = create_window_from_widget(
+                FOUT, title=fout.device_name, icon=icon)
+            connect_window(
+                action, Win, None, device=fout.device_name, prefix=self.prefix)
         return main_menu
 
     def _setup_status_wid(self):
@@ -1657,16 +1678,20 @@ class _EVR_EVE(BaseWidget):
     def setupmenus(self):
         main_menu = QMenuBar()
         main_menu.setNativeMenuBar(False)
-        menu = main_menu.addMenu('&Uplink')
 
-        fout = LLTimeSearch.get_fout_channel(
-            self.device.substitute(propty='OTP0'))
-        action = menu.addAction(fout)
-        icon = qta.icon('mdi.timer', color=get_appropriate_color('AS'))
-        Win = create_window_from_widget(
-            FOUT, title=fout.device_name, icon=icon)
-        connect_window(
-            action, Win, None, device=fout.device_name, prefix=self.prefix)
+        try:
+            fout = LLTimeSearch.get_fout_channel(
+                self.device.substitute(propty='OTP0'))
+        except KeyError:
+            fout = None
+        if fout:
+            menu = main_menu.addMenu('&Uplink')
+            action = menu.addAction(fout)
+            icon = qta.icon('mdi.timer', color=get_appropriate_color('AS'))
+            Win = create_window_from_widget(
+                FOUT, title=fout.device_name, icon=icon)
+            connect_window(
+                action, Win, None, device=fout.device_name, prefix=self.prefix)
         return main_menu
 
     def _setup_status_wid(self):
@@ -1718,11 +1743,14 @@ class _EVR_EVE(BaseWidget):
 
         if self.device_type == 'EVR':
             wids = list()
-            conn = LLTimeSearch.get_connections_from_evg()
-            conn = {
-                dev.propty for dev in conn
-                if dev.device_name == self.device.device_name}
-            conn = {int(p[-1]) for p in conn if p.startswith('OUT')}
+            try:
+                conn = LLTimeSearch.get_connections_from_evg()
+                conn = {
+                    dev.propty for dev in conn
+                    if dev.device_name == self.device.device_name}
+                conn = {int(p[-1]) for p in conn if p.startswith('OUT')}
+            except KeyError:
+                conn = set()
             for i in range(8):
                 pvname = self.get_pvname('Los-Mon')
                 if i in conn:
@@ -2076,12 +2104,15 @@ class EVGFOUTOUTList(BaseList):
 
     def _get_connections(self, device):
         if not hasattr(self, 'conn_idcs'):
-            if device.dev == 'EVG':
-                conn_names = LLTimeSearch.get_evg2fout_mapping()
-            else:
-                conn_map = LLTimeSearch.get_fout2trigsrc_mapping()
-                conn_names = conn_map[device.device_name]
-            conn_idcs = [int(dev[-1]) for dev in conn_names]
+            try:
+                if device.dev == 'EVG':
+                    conn_names = LLTimeSearch.get_evg2fout_mapping()
+                else:
+                    conn_map = LLTimeSearch.get_fout2trigsrc_mapping()
+                    conn_names = conn_map[device.device_name]
+                conn_idcs = [int(dev[-1]) for dev in conn_names]
+            except KeyError:
+                conn_idcs, conn_names = list(), list()
             self.conn_idcs, self.conn_names = conn_idcs, conn_names
 
         return self.conn_idcs, self.conn_names
