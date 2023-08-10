@@ -1403,19 +1403,41 @@ class AFC(BaseWidget):
         gb = self._create_small_group('', status_wid, (lb, rb))
         status_lay.addWidget(gb, 0, 1)
 
-        lb = QLabel("<b>Locked</b>")
-        pvname = self.get_pvname('RefClkLocked-Mon')
-        rb = SiriusLedAlert(self, init_channel=pvname)
-        rb.offColor, rb.onColor = rb.onColor, rb.offColor
-        gb = self._create_small_group('', status_wid, (lb, rb))
-        status_lay.addWidget(gb, 0, 2)
+        for i, locktype in enumerate(['', 'Ltc']):
+            lb = QLabel(
+                '<b>Locked' + (' Latch' if locktype else '') + '</b>')
+            widlbl = QWidget()
+            hbxlbl = QHBoxLayout(widlbl)
+            hbxlbl.setSpacing(10)
+            hbxlbl.setContentsMargins(0, 0, 0, 0)
+            hbxlbl.setAlignment(Qt.AlignLeft)
+            widctl = QWidget()
+            hbxctl = QHBoxLayout(widctl)
+            hbxctl.setSpacing(1)
+            hbxctl.setContentsMargins(0, 0, 0, 0)
+            for dev in ['AFC', 'RTM', 'GT0']:
+                pvname = self.get_pvname(f'{dev}ClkLocked{locktype}-Mon')
+                rb = SiriusLedAlert(self, init_channel=pvname)
+                rb.offColor, rb.onColor = rb.onColor, rb.offColor
+                hbxctl.addWidget(rb)
+                hbxlbl.addWidget(QLabel(dev, self))
+
+            if locktype == 'Ltc':
+                rst = SiriusPushButton(
+                    self, label='', icon=qta.icon('fa5s.sync'), pressValue=1,
+                    init_channel=self.get_pvname('ClkLockedLtcRst-Cmd'))
+                hbxctl.addWidget(rst)
+                hbxlbl.addWidget(QLabel('   ', self))
+
+            gb = self._create_small_group('', status_wid, (lb, widctl, widlbl))
+            status_lay.addWidget(gb, 0, 2+i)
 
         lb = QLabel("<b>UP Link</b>")
         pvname = self.get_pvname('LinkStatus-Mon')
         rb = SiriusLedAlert(self, init_channel=pvname)
         rb.offColor, rb.onColor = rb.onColor, rb.offColor
         gb = self._create_small_group('', status_wid, (lb, rb))
-        status_lay.addWidget(gb, 0, 3)
+        status_lay.addWidget(gb, 0, 4)
 
         return status_wid
 
