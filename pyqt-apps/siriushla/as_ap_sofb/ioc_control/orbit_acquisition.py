@@ -88,6 +88,11 @@ class AcqControlWidget(BaseWidget):
         fbl.addRow(lab, wid)
         self._set_detailed([lab, wid])
 
+        lab = QLabel('Test Data', grp_bx, alignment=Qt.AlignCenter)
+        wid = self.create_pair_butled(grp_bx, 'TestDataEnbl-Sel')
+        fbl.addRow(lab, wid)
+        self._set_detailed([lab, wid])
+
         lbl = QLabel('Channel Rate', grp_bx, alignment=Qt.AlignCenter)
         wid = self.create_pair_sel(grp_bx, 'TrigAcqChan')
         fbl.addRow(lbl, wid)
@@ -219,11 +224,6 @@ class AcqControlWidget(BaseWidget):
         hbl.addWidget(pdm_lbl)
         hbl.addWidget(conf)
         fbl.addRow(lbl, wid)
-
-        lbl = QLabel('TbT Sync', grp_bx, alignment=Qt.AlignCenter)
-        wid = self.create_pair_butled(grp_bx, 'MTurnSyncTim')
-        fbl.addRow(lbl, wid)
-        self._set_detailed([lbl, wid])
 
         lbl = QLabel('TbT Mask', grp_bx, alignment=Qt.AlignCenter)
         wid = self.create_pair_butled(grp_bx, 'MTurnUseMask')
