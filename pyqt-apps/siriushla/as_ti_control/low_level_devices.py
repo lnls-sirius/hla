@@ -1309,8 +1309,8 @@ class AFC(BaseWidget):
         self.my_layout.addWidget(stattab, 2, 0)
         stattab.setSizePolicy(QSzPol.Preferred, QSzPol.Maximum)
 
-        # frequency feadback
-        self.freqff_wid = QGroupBox('Frequency feadback', self)
+        # frequency feedback
+        self.freqff_wid = QGroupBox('Frequency feedback', self)
         freqtab = QTabWidget(self)
         freqtab.setObjectName('ASTab')
         afcfrefb_wid = self._setup_freqfb_wid('AFC')
