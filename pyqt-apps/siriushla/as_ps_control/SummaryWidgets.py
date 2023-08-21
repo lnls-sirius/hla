@@ -81,20 +81,27 @@ def get_prop2width(psname):
     dic = {
         'detail': detail_wid,
         'state': 6,
-        'intlk':  5,
         'setpoint': 6,
     }
     if psmodel != 'REGATRON_DCLink':
         dic.update({'readback': 6})
     dic.update({'monitor': 6})
     if psmodel != 'FOFB_PS':
-        dic.update({'ctrlloop': 8})
+        dic.update({
+            'intlk': 5,
+            'alarm': 5,
+            'ctrlloop': 8,
+        })
+    else:
+        dic.update({'alarm': 5})
     if psname.sec == 'LI':
         dic['conn'] = 5
     else:
-        dic.update({'opmode': 8})
+        dic.update({
+            'opmode': 8,
+            'reset': 4
+        })
         if psmodel != 'FOFB_PS':
-            dic.update({'reset': 4})
             if psmodel != 'REGATRON_DCLink':
                 dic.update({
                     'bbb': 12,
@@ -133,20 +140,26 @@ def get_prop2label(psname):
     dic = {
         'detail': 'Detail',
         'state': 'PwrState',
-        'intlk': 'Interlocks',
         'setpoint': analog + '-SP',
     }
     if psmodel != 'REGATRON_DCLink':
         dic.update({'readback': analog + '-RB'})
     dic.update({'monitor': analog + '-Mon'})
     if psmodel != 'FOFB_PS':
-        dic.update({'ctrlloop': 'Control Loop'})
+        dic.update({
+            'intlk': 'Interlocks',
+            'alarm': 'Alarms',
+            'ctrlloop': 'Control Loop'})
+    else:
+        dic.update({'alarm': 'Alarms'})
     if psname.sec == 'LI':
         dic['conn'] = 'Connected'
     else:
-        dic.update({'opmode': 'OpMode'})
+        dic.update({
+            'opmode': 'OpMode',
+            'reset': 'Reset',
+        })
         if psmodel != 'FOFB_PS':
-            dic.update({'reset': 'Reset'})
             if psmodel != 'REGATRON_DCLink':
                 dic.update({
                     'bbb': 'Beagle Bone',
@@ -180,8 +193,8 @@ def get_prop2label(psname):
 def sort_propties(labels):
     default_order = (
         'detail', 'bbb', 'udc', 'opmode', 'ctrlmode', 'state', 'pulse',
-        'intlk', 'reset', 'conn', 'ctrlloop', 'wfmupdate', 'updparms',
-        'sofbmode', 'accgain', 'accfreeze', 'accclear',
+        'intlk', 'alarm', 'reset', 'conn', 'ctrlloop', 'wfmupdate',
+        'updparms', 'sofbmode', 'accgain', 'accfreeze', 'accclear',
         'setpoint', 'readback', 'monitor', 'strength_sp',
         'strength_rb', 'strength_mon', 'trim')
     idcs = list()
@@ -189,7 +202,7 @@ def sort_propties(labels):
         idcs.append(default_order.index(lbl))
     if isinstance(labels, list):
         return [x for _, x in sorted(zip(idcs, labels))]
-    elif isinstance(labels, dict):
+    if isinstance(labels, dict):
         return {x: labels[x] for _, x in sorted(zip(idcs, labels.keys()))}
 
 
@@ -227,8 +240,9 @@ class SummaryWidget(QWidget):
         self._has_ctrlmode = not self._is_regatron and not self._is_linac\
             and not self._is_fofb
         self._has_pwrstate = not self._is_reg_slave
-        self._has_reset = not self._is_linac and not self._is_fofb\
-            and not self._is_reg_slave
+        self._has_intlk = not self._is_fofb
+        self._has_alarms = not self._is_linac and not self._is_regatron
+        self._has_reset = not self._is_linac and not self._is_reg_slave
         self._has_ctrlloop = not self._is_linac and not self._is_pulsed\
             and not self._is_regatron and not self._is_fofb
         self._has_parmupdt = not self._is_linac and not self._is_regatron\
@@ -301,9 +315,15 @@ class SummaryWidget(QWidget):
             self._widgets_dict['pulse'] = self.pulse_wid
             lay.addWidget(self.pulse_wid)
 
-        self.intlk_wid = self._build_widget(name='intlk')
-        self._widgets_dict['intlk'] = self.intlk_wid
-        lay.addWidget(self.intlk_wid)
+        if self._has_intlk:
+            self.intlk_wid = self._build_widget(name='intlk')
+            self._widgets_dict['intlk'] = self.intlk_wid
+            lay.addWidget(self.intlk_wid)
+
+        if self._has_alarms:
+            self.alarm_wid = self._build_widget(name='alarm')
+            self._widgets_dict['alarm'] = self.alarm_wid
+            lay.addWidget(self.alarm_wid)
 
         if self._is_linac:
             self.conn_wid = self._build_widget(name='conn')
@@ -465,22 +485,29 @@ class SummaryWidget(QWidget):
                     propty='GenIntlk-Mon')
                 self._genwrn = self._prefixed_name.substitute(
                     propty='GenWarn-Mon')
-        elif self._is_fofb:
-            self._intlk = self._prefixed_name.substitute(
-                propty='AlarmsAmp-Mon')
-        else:
+        elif self._has_intlk:
             self._soft_intlk = self._prefixed_name.substitute(
                 propty='IntlkSoft-Mon')
             self._hard_intlk = self._prefixed_name.substitute(
                 propty='IntlkHard-Mon')
+
+        # alarms
+        if self._is_fofb:
+            self._alarm_amp = self._prefixed_name.substitute(
+                propty='AlarmsAmp-Mon')
+            self._alarm_amp_ltc = self._prefixed_name.substitute(
+                propty='AlarmsAmpLtc-Mon')
+        else:
+            self._alarm = self._prefixed_name.substitute(
+                propty='Alarms-Mon')
 
         if self._is_linac:
             self._conn = self._prefixed_name.substitute(
                 propty='Connected-Mon')
 
         if self._has_reset:
-            self._reset_intlk = self._prefixed_name.substitute(
-                propty='Reset-Cmd')
+            propty = 'AlarmsAmpLtcRst-Cmd' if self._is_fofb else 'Reset-Cmd'
+            self._reset_intlk = self._prefixed_name.substitute(propty=propty)
 
         if self._has_ctrlloop:
             self._ctrlloop_sel = self._prefixed_name.substitute(
@@ -590,7 +617,7 @@ class SummaryWidget(QWidget):
             self.pulse_led = SiriusLedState(self, self._pulse_sts)
             self.pulse_wid.layout().addWidget(self.pulse_bt)
             self.pulse_wid.layout().addWidget(self.pulse_led)
-        elif name == 'intlk':
+        elif name == 'intlk' and self._has_intlk:
             if self._is_pulsed:
                 self.intlk_led = PyDMLedMultiChannel(
                     self, channels2values={ch: 1 for ch in self._intlk})
@@ -610,14 +637,20 @@ class SummaryWidget(QWidget):
                     self.genwrn_led = SiriusLedAlert(self, self._genwrn)
                     self.intlk_wid.layout().addWidget(self.generr_led)
                     self.intlk_wid.layout().addWidget(self.genwrn_led)
-            elif self._is_fofb:
-                self.intlk_led = SiriusLedAlert(self, self._intlk)
-                self.intlk_wid.layout().addWidget(self.intlk_led)
             else:
                 self.soft_intlk_led = SiriusLedAlert(self, self._soft_intlk)
                 self.hard_intlk_led = SiriusLedAlert(self, self._hard_intlk)
                 self.intlk_wid.layout().addWidget(self.soft_intlk_led)
                 self.intlk_wid.layout().addWidget(self.hard_intlk_led)
+        elif name == 'alarm' and self._has_alarms:
+            if self._is_fofb:
+                self.alarm_led = SiriusLedAlert(self, self._alarm_amp)
+                self.alarmltc_led = SiriusLedAlert(self, self._alarm_amp_ltc)
+                self.alarm_wid.layout().addWidget(self.alarm_led)
+                self.alarm_wid.layout().addWidget(self.alarmltc_led)
+            else:
+                self.alarm_led = SiriusLedAlert(self, self._alarm)
+                self.alarm_wid.layout().addWidget(self.alarm_led)
         elif name == 'conn' and self._is_linac:
             self.conn_led = PyDMLedMultiChannel(
                 self, channels2values={self._conn: 0})
