@@ -213,7 +213,7 @@ class PSGraphProptySelWidget(QWidget):
         'DiagCurrentDiff-Mon', 'WfmSyncPulseCount-Mon',
         'PRUCtrlQueueSize-Mon']
     PROP_SYMB_FASTCORR = [
-        'DiagStatus-Mon', 'AlarmsAmp-Mon', 'PwrState-Sel', 'PwrState-Sts']
+        'DiagStatus-Mon', 'AlarmsAmpLtc-Mon', 'PwrState-Sel', 'PwrState-Sts']
     PROP_LINE_FASTCORR = [
         'Current-Mon', 'Current-SP', 'Current-RB', 'CurrentRef-Mon',
         'DiagCurrentDiff-Mon']
@@ -554,26 +554,6 @@ class PSGraphMonWidget(QWidget):
         self.cmd_reset_act.triggered.connect(
             self._pvhandler.cmd_reset)
 
-        self.cmd_acqtrigrep_act = QAction(
-            "Set ACQTriggerRep to repetitive", self)
-        self.cmd_acqtrigrep_act.triggered.connect(
-            self._pvhandler.cmd_acqtrigrep_repetitive)
-
-        self.cmd_acqtrigstart_act = QAction(
-            "Set ACQTriggerEvent to start", self)
-        self.cmd_acqtrigstart_act.triggered.connect(
-            self._pvhandler.cmd_acqtrigevt_start)
-
-        self.cmd_acqtrigstop_act = QAction(
-            "Set ACQTriggerEvent to stop", self)
-        self.cmd_acqtrigstop_act.triggered.connect(
-            self._pvhandler.cmd_acqtrigevt_stop)
-
-        self.cmd_acqtrigabort_act = QAction(
-            "Set ACQTriggerEvent to abort", self)
-        self.cmd_acqtrigabort_act.triggered.connect(
-            self._pvhandler.cmd_acqtrigevt_abort)
-
     def contextMenuEvent(self, event, return_menu=False):
         """Show a custom context menu."""
         point = event.pos()
@@ -581,17 +561,12 @@ class PSGraphMonWidget(QWidget):
             menu = QMenu("Actions", self)
             menu.addAction(self.cmd_turnon_act)
             menu.addAction(self.cmd_turnoff_act)
-            if SiriusPVName(self._psnames[0]).dev in ('FCH', 'FCV'):
-                menu.addAction(self.cmd_acqtrigrep_act)
-                menu.addAction(self.cmd_acqtrigstart_act)
-                menu.addAction(self.cmd_acqtrigstop_act)
-                menu.addAction(self.cmd_acqtrigabort_act)
-            else:
+            menu.addAction(self.cmd_setcurrent_act)
+            menu.addAction(self.cmd_reset_act)
+            if not SiriusPVName(self._psnames[0]).dev in ('FCH', 'FCV'):
                 menu.addAction(self.cmd_ctrlloopclose_act)
                 menu.addAction(self.cmd_ctrlloopopen_act)
                 menu.addAction(self.cmd_setslowref_act)
-                menu.addAction(self.cmd_setcurrent_act)
-                menu.addAction(self.cmd_reset_act)
 
             if return_menu:
                 return menu
@@ -618,19 +593,9 @@ class _PVHandler:
     }
     PROPSYMB_2_DEFVAL_FCS = {
         'DiagStatus-Mon': 0,
-        'AlarmsAmp-Mon': 0,
+        'AlarmsAmpLtc-Mon': 0,
         'PwrState-Sel': _PSConst.PwrStateSel.On,
         'PwrState-Sts': _PSConst.PwrStateSts.On,
-    }
-    CONV_FASTCORR2CHANNEL = {
-        'M1-FCH': 0,
-        'M1-FCV': 1,
-        'M2-FCH': 2,
-        'M2-FCV': 3,
-        'C2-FCH': 4,
-        'C2-FCV': 5,
-        'C3-FCH': 6,
-        'C3-FCV': 7,
     }
 
     def __init__(self, psnames=list(), prefix=_vaca_prefix, parent=None):
@@ -676,16 +641,8 @@ class _PVHandler:
 
     def _get_pvname(self, psname, propty):
         """Get PV name for psname and propty."""
-        psname = SiriusPVName(psname)
-        if psname.dev in ('FCH', 'FCV'):
-            fofbctl = SiriusPVName('IA-'+psname.sub[:2]+'RaBPM:BS-FOFBCtrl')
-            if propty in ['ACQTriggerRep-Sel', 'ACQTriggerEvent-Sel']:
-                pvname = fofbctl.substitute(prefix=self._prefix, propty=propty)
-            else:
-                pvname = psname.substitute(prefix=self._prefix, propty=propty)
-        else:
-            pvname = psname.substitute(prefix=self._prefix, propty=propty)
-        return pvname
+        return SiriusPVName(psname).substitute(
+            prefix=self._prefix, propty=propty)
 
     def _create_pvs(self, psnames, propty):
         """Create PVs."""
@@ -746,22 +703,6 @@ class _PVHandler:
     def cmd_reset(self):
         """Reset power supplies."""
         self.set_values('Reset-Cmd', 1)
-
-    def cmd_acqtrigrep_repetitive(self):
-        """Set acquisition trigger repitition to repetitive."""
-        self.set_values('ACQTriggerRep-Sel', 1)
-
-    def cmd_acqtrigevt_start(self):
-        """Set acquisition trigger evento to start."""
-        self.set_values('ACQTriggerEvent-Sel', 0)
-
-    def cmd_acqtrigevt_stop(self):
-        """Set acquisition trigger evento to stop."""
-        self.set_values('ACQTriggerEvent-Sel', 1)
-
-    def cmd_acqtrigevt_abort(self):
-        """Set acquisition trigger evento to abort."""
-        self.set_values('ACQTriggerEvent-Sel', 2)
 
 
 class _UpdateGraphThread(QThread):
