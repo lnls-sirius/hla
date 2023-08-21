@@ -1537,7 +1537,6 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
         self._psmodel = 'FOFB_PS'
         self._pstype = 'si-corrector-fc1-ch'
         self._db = get_ps_propty_database(self._psmodel, self._pstype)
-        self._db['AlarmsAmpLtcLabels-Cte'] = self._db['AlarmsAmpLabels-Cte']
         self._setup_ui()
 
     def _setup_ui(self):
