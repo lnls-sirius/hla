@@ -213,7 +213,8 @@ class PSGraphProptySelWidget(QWidget):
         'DiagCurrentDiff-Mon', 'WfmSyncPulseCount-Mon',
         'PRUCtrlQueueSize-Mon']
     PROP_SYMB_FASTCORR = [
-        'DiagStatus-Mon', 'AlarmsAmpLtc-Mon', 'PwrState-Sel', 'PwrState-Sts']
+        'DiagStatus-Mon', 'AlarmsAmp-Mon', 'AlarmsAmpLtc-Mon',
+        'PwrState-Sel', 'PwrState-Sts']
     PROP_LINE_FASTCORR = [
         'Current-Mon', 'Current-SP', 'Current-RB', 'CurrentRef-Mon',
         'DiagCurrentDiff-Mon']
@@ -593,6 +594,7 @@ class _PVHandler:
     }
     PROPSYMB_2_DEFVAL_FCS = {
         'DiagStatus-Mon': 0,
+        'AlarmsAmp-Mon': 0,
         'AlarmsAmpLtc-Mon': 0,
         'PwrState-Sel': _PSConst.PwrStateSel.On,
         'PwrState-Sts': _PSConst.PwrStateSts.On,
