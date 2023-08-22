@@ -87,12 +87,8 @@ def get_prop2width(psname):
         dic.update({'readback': 6})
     dic.update({'monitor': 6})
     if psmodel != 'FOFB_PS':
-        dic.update({
-            'intlk': 5,
-            'alarm': 5,
-            'ctrlloop': 8,
-        })
-    else:
+        dic.update({'intlk': 5})
+    if psname.sec != 'LI' and psmodel != 'REGATRON_DCLink':
         dic.update({'alarm': 5})
     if psname.sec == 'LI':
         dic['conn'] = 5
@@ -146,11 +142,8 @@ def get_prop2label(psname):
         dic.update({'readback': analog + '-RB'})
     dic.update({'monitor': analog + '-Mon'})
     if psmodel != 'FOFB_PS':
-        dic.update({
-            'intlk': 'Interlocks',
-            'alarm': 'Alarms',
-            'ctrlloop': 'Control Loop'})
-    else:
+        dic.update({'intlk': 'Interlocks'})
+    if psname.sec != 'LI' and psmodel != 'REGATRON_DCLink':
         dic.update({'alarm': 'Alarms'})
     if psname.sec == 'LI':
         dic['conn'] = 'Connected'
