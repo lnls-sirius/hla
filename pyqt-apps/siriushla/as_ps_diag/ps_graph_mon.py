@@ -702,7 +702,10 @@ class _PVHandler:
 
     def cmd_reset(self):
         """Reset power supplies."""
-        self.set_values('Reset-Cmd', 1)
+        pvn = 'AlarmsAmpLtcRst-Cmd' \
+            if self._psnames[0].endswith(('-FCH', '-FCV')) \
+            else 'Reset-Cmd'
+        self.set_values(pvn, 1)
 
 
 class _UpdateGraphThread(QThread):
