@@ -492,14 +492,15 @@ class SummaryWidget(QWidget):
                 propty='IntlkHard-Mon')
 
         # alarms
-        if self._is_fofb:
-            self._alarm_amp = self._prefixed_name.substitute(
-                propty='AlarmsAmp-Mon')
-            self._alarm_amp_ltc = self._prefixed_name.substitute(
-                propty='AlarmsAmpLtc-Mon')
-        else:
-            self._alarm = self._prefixed_name.substitute(
-                propty='Alarms-Mon')
+        if self._has_alarms:
+            if self._is_fofb:
+                self._alarm_amp = self._prefixed_name.substitute(
+                    propty='AlarmsAmp-Mon')
+                self._alarm_amp_ltc = self._prefixed_name.substitute(
+                    propty='AlarmsAmpLtc-Mon')
+            else:
+                self._alarm = self._prefixed_name.substitute(
+                    propty='Alarms-Mon')
 
         if self._is_linac:
             self._conn = self._prefixed_name.substitute(
