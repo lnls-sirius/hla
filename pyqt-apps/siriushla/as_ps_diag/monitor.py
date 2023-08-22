@@ -248,5 +248,5 @@ class MyLed(PyDMLed):
                     if get_bit(int(new_val), bit)]
         state = 0 if len(bits_set) == 0 \
             else 1 if len(bits_set) == 1 and \
-            bits_set[0] == 'Alarms' else 2
+            bits_set[0] in ['Alarms', 'Alarms - Latch'] else 2
         self.setState(state)
