@@ -468,28 +468,29 @@ class SummaryWidget(QWidget):
                 propty='Pulse-Sts')
 
         # interlock
-        if self._is_pulsed:
-            self._intlk = list()
-            for i in range(1, 8):
-                self._intlk.append(self._prefixed_name.substitute(
-                    propty='Intlk'+str(i)+'-Mon'))
-            if 'Sept' not in self._name.dev:
-                self._intlk.append(self._prefixed_name.substitute(
-                    propty='Intlk8-Mon'))
-        elif self._is_linac:
-            self._intlk = self._prefixed_name.substitute(
-                propty='StatusIntlk-Mon')
-        elif self._is_regatron:
-            if not self._is_reg_slave:
-                self._generr = self._prefixed_name.substitute(
-                    propty='GenIntlk-Mon')
-                self._genwrn = self._prefixed_name.substitute(
-                    propty='GenWarn-Mon')
-        elif self._has_intlk:
-            self._soft_intlk = self._prefixed_name.substitute(
-                propty='IntlkSoft-Mon')
-            self._hard_intlk = self._prefixed_name.substitute(
-                propty='IntlkHard-Mon')
+        if self._has_intlk:
+            if self._is_pulsed:
+                self._intlk = list()
+                self._intlk.extend([
+                    self._prefixed_name.substitute(propty=f'Intlk{i}-Mon')
+                    for i in range(1, 8)])
+                if 'Sept' not in self._name.dev:
+                    self._intlk.append(self._prefixed_name.substitute(
+                        propty='Intlk8-Mon'))
+            elif self._is_linac:
+                self._intlk = self._prefixed_name.substitute(
+                    propty='StatusIntlk-Mon')
+            elif self._is_regatron:
+                if not self._is_reg_slave:
+                    self._generr = self._prefixed_name.substitute(
+                        propty='GenIntlk-Mon')
+                    self._genwrn = self._prefixed_name.substitute(
+                        propty='GenWarn-Mon')
+            else:
+                self._soft_intlk = self._prefixed_name.substitute(
+                    propty='IntlkSoft-Mon')
+                self._hard_intlk = self._prefixed_name.substitute(
+                    propty='IntlkHard-Mon')
 
         # alarms
         if self._has_alarms:
