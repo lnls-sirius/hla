@@ -241,7 +241,7 @@ class BPMSwModeWidget(BaseObject, QWidget):
         QWidget.__init__(self, parent)
         props = ['SwMode-Sel', ]
         self._bpm_devs = [
-            Device(b, props, auto_monitor_mon=True)
+            Device(b, props2init=props, auto_monitor_mon=True)
             for b in self._csorb.bpm_names]
         self._setupUi()
         self._init_dict = {}
