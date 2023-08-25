@@ -296,6 +296,12 @@ class FOFBAcqSYSIDWindow(_AcqBaseWindow):
         self.lb_lfsrlen = SiriusLabel(
             self, self._get_pvname('PRBSLFSRLength-RB'))
 
+        ld_movavgtap = QLabel('FOFBAcc. Mov. Avg. Taps', self)
+        self.sb_movavgtap = PyDMLineEdit(
+            self, self._get_pvname('PRBSFOFBAccMovAvgTaps-SP'))
+        self.lb_movavgtap = SiriusLabel(
+            self, self._get_pvname('PRBSFOFBAccMovAvgTaps-RB'))
+
         ld_correnb = QLabel('Enable Corrs.', self)
         self.sb_correnb = PyDMStateButton(
             self, self._get_pvname('PRBSFOFBAccEn-Sel'))
@@ -319,12 +325,15 @@ class FOFBAcqSYSIDWindow(_AcqBaseWindow):
         lay.addWidget(ld_lfsrlen, 2, 0)
         lay.addWidget(self.sb_lfsrlen, 2, 1)
         lay.addWidget(self.lb_lfsrlen, 2, 2)
-        lay.addWidget(ld_correnb, 3, 0)
-        lay.addWidget(self.sb_correnb, 3, 1)
-        lay.addWidget(self.led_correnb, 3, 2, alignment=Qt.AlignLeft)
-        lay.addWidget(ld_bpmenbl, 4, 0)
-        lay.addWidget(self.sb_bpmenbl, 4, 1)
-        lay.addWidget(self.led_bpmenbl, 4, 2, alignment=Qt.AlignLeft)
+        lay.addWidget(ld_movavgtap, 3, 0)
+        lay.addWidget(self.sb_movavgtap, 3, 1)
+        lay.addWidget(self.lb_movavgtap, 3, 2)
+        lay.addWidget(ld_correnb, 4, 0)
+        lay.addWidget(self.sb_correnb, 4, 1)
+        lay.addWidget(self.led_correnb, 4, 2, alignment=Qt.AlignLeft)
+        lay.addWidget(ld_bpmenbl, 5, 0)
+        lay.addWidget(self.sb_bpmenbl, 5, 1)
+        lay.addWidget(self.led_bpmenbl, 5, 2, alignment=Qt.AlignLeft)
         return wid
 
     def _PRBSFOFBAccSettingsWidget(self):
