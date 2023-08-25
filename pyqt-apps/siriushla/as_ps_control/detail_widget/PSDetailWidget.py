@@ -1799,6 +1799,9 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
         self.graph_curr.addChannel(
             y_channel=self._prefixed_psname + ':LAMPCurrentData',
             name='Current', color='blue', lineWidth=1)
+        self.graph_curr.addChannel(
+            y_channel=self._prefixed_psname + ':LAMPCurrentRefData',
+            name='CurrentRef', color='green', lineWidth=1)
         # self.graph_curr.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
         self.graph_curr.autoRangeX = True
         self.graph_curr.autoRangeY = True
