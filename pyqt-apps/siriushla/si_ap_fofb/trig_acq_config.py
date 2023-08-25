@@ -500,6 +500,12 @@ class FOFBAcqLAMPWindow(_AcqBaseWindow):
             {c.substitute(propty_name=pvname.format('Current')):
              c.sub[2:]+'-'+c.dev[-1] for c in self.corrs})
 
+        # CurrentRef
+        gp_currref = self._create_graph(
+            'CurrentRef' + ('' if is_raw else ' [A]'),
+            {c.substitute(propty_name=pvname.format('CurrentRef')):
+             c.sub[2:]+'-'+c.dev[-1] for c in self.corrs})
+
         # Voltage
         gp_volt = self._create_graph(
             'Voltage' + ('' if is_raw else ' [V]'),
@@ -514,6 +520,7 @@ class FOFBAcqLAMPWindow(_AcqBaseWindow):
         wid = QWidget()
         lay = QVBoxLayout(wid)
         lay.addWidget(gp_curr)
+        lay.addWidget(gp_currref)
         lay.addWidget(gp_volt)
         lay.addWidget(cb_linkxaxis, alignment=Qt.AlignLeft)
         return wid
