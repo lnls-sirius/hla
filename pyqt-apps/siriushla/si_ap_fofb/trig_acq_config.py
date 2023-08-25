@@ -12,10 +12,10 @@ from pydm.widgets import PyDMPushButton, PyDMLineEdit
 
 from siriuspy.namesys import SiriusPVName as _PVName, join_name
 
-from ..util import connect_window
+from ..util import connect_window, get_appropriate_color
 from ..widgets import SiriusMainWindow, SiriusLabel, \
     SiriusEnumComboBox, SiriusSpinbox, PyDMStateButton, \
-    SiriusLedState, SiriusWaveformPlot
+    SiriusLedState, SiriusWaveformPlot, SiriusAlarmFrame
 from ..widgets.windows import create_window_from_widget
 from ..as_di_bpms.base import GraphWave
 from ..common.afc_acq_core import LogicalTriggers, PhysicalTriggers
@@ -61,8 +61,9 @@ class _AcqBaseWindow(SiriusMainWindow):
             for sub in ['M1', 'M2', 'C2', 'C3'] for plane in ['H', 'V']]
         self.setWindowTitle('SI - FOFB Acquisitions - ' + self.ACQCORE)
         self.sec = 'SI' if self.device.sec == 'IA' else self.device.sec
+        self.app_color = get_appropriate_color(self.sec)
         self.setObjectName(self.sec+'App')
-        self.setWindowIcon(get_fofb_icon())
+        self.setWindowIcon(get_fofb_icon(color=self.app_color))
         self._setupUi()
         self.setFocusPolicy(Qt.StrongFocus)
 
@@ -117,11 +118,21 @@ class _AcqBaseWindow(SiriusMainWindow):
         self.sb_nrpre = SiriusSpinbox(self, self._get_pvname('SamplesPre-SP'))
         self.lb_nrpre = SiriusLabel(
             self, self._get_pvname('SamplesPre-RB'), keep_unit=True)
+        self.lb_nrpre.setStyleSheet(
+            'QLabel{background-color: '+self.app_color+';}')
+        self.fr_nrpre = SiriusAlarmFrame(
+            self, self._get_pvname('SamplesTotal-Mon'))
+        self.fr_nrpre.add_widget(self.lb_nrpre)
 
         ld_nrpos = QLabel('Post-Trigger Nr.Samples', self)
         self.sb_nrpos = SiriusSpinbox(self, self._get_pvname('SamplesPost-SP'))
         self.lb_nrpos = SiriusLabel(
             self, self._get_pvname('SamplesPost-RB'), keep_unit=True)
+        self.lb_nrpos.setStyleSheet(
+            'QLabel{background-color: '+self.app_color+';}')
+        self.fr_nrpos = SiriusAlarmFrame(
+            self, self._get_pvname('SamplesTotal-Mon'))
+        self.fr_nrpos.add_widget(self.lb_nrpos)
 
         ld_trig = QLabel('Trigger Type', self)
         self.ec_trig = SiriusEnumComboBox(
@@ -172,10 +183,10 @@ class _AcqBaseWindow(SiriusMainWindow):
         lay.addWidget(self.lb_rep, 3, 2)
         lay.addWidget(ld_nrpre, 4, 0)
         lay.addWidget(self.sb_nrpre, 4, 1)
-        lay.addWidget(self.lb_nrpre, 4, 2)
+        lay.addWidget(self.fr_nrpre, 4, 2)
         lay.addWidget(ld_nrpos, 5, 0)
         lay.addWidget(self.sb_nrpos, 5, 1)
-        lay.addWidget(self.lb_nrpos, 5, 2)
+        lay.addWidget(self.fr_nrpos, 5, 2)
         lay.addWidget(ld_trig, 6, 0)
         lay.addWidget(self.ec_trig, 6, 1)
         lay.addWidget(self.lb_trig, 6, 2)
