@@ -117,22 +117,25 @@ class _AcqBaseWindow(SiriusMainWindow):
         ld_nrpre = QLabel('Pre-Trigger Nr.Samples', self)
         self.sb_nrpre = SiriusSpinbox(self, self._get_pvname('SamplesPre-SP'))
         self.lb_nrpre = SiriusLabel(
-            self, self._get_pvname('SamplesPre-RB'), keep_unit=True)
+            self, self._get_pvname('SamplesPre-RB'), keep_unit=True,
+            alignment=Qt.AlignTop)
         self.lb_nrpre.setStyleSheet(
             'QLabel{background-color: '+self.app_color+';}')
-        self.fr_nrpre = SiriusAlarmFrame(
-            self, self._get_pvname('SamplesTotal-Mon'))
-        self.fr_nrpre.add_widget(self.lb_nrpre)
 
         ld_nrpos = QLabel('Post-Trigger Nr.Samples', self)
         self.sb_nrpos = SiriusSpinbox(self, self._get_pvname('SamplesPost-SP'))
         self.lb_nrpos = SiriusLabel(
-            self, self._get_pvname('SamplesPost-RB'), keep_unit=True)
+            self, self._get_pvname('SamplesPost-RB'), keep_unit=True,
+            alignment=Qt.AlignBottom)
         self.lb_nrpos.setStyleSheet(
             'QLabel{background-color: '+self.app_color+';}')
-        self.fr_nrpos = SiriusAlarmFrame(
-            self, self._get_pvname('SamplesTotal-Mon'))
-        self.fr_nrpos.add_widget(self.lb_nrpos)
+
+        self.fr_nrtot = SiriusAlarmFrame(
+            self, self._get_pvname('SamplesTotal-Mon'),
+            orientation='V')
+        self.fr_nrtot.layout().setSpacing(0)
+        self.fr_nrtot.add_widget(self.lb_nrpre)
+        self.fr_nrtot.add_widget(self.lb_nrpos)
 
         ld_trig = QLabel('Trigger Type', self)
         self.ec_trig = SiriusEnumComboBox(
@@ -183,10 +186,9 @@ class _AcqBaseWindow(SiriusMainWindow):
         lay.addWidget(self.lb_rep, 3, 2)
         lay.addWidget(ld_nrpre, 4, 0)
         lay.addWidget(self.sb_nrpre, 4, 1)
-        lay.addWidget(self.fr_nrpre, 4, 2)
         lay.addWidget(ld_nrpos, 5, 0)
         lay.addWidget(self.sb_nrpos, 5, 1)
-        lay.addWidget(self.fr_nrpos, 5, 2)
+        lay.addWidget(self.fr_nrtot, 4, 2, 2, 1)
         lay.addWidget(ld_trig, 6, 0)
         lay.addWidget(self.ec_trig, 6, 1)
         lay.addWidget(self.lb_trig, 6, 2)
