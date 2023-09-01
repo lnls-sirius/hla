@@ -119,15 +119,8 @@ class BPMAdvancedSettings(BaseWidget):
 
         grpbx = self._create_formlayout_groupbox('Switching', (
             ('SwMode-Sel', 'Mode'),
-            ('SwDly-SP', 'Delay', ['lineedit', 'label']),
-            ('SwTagEn-Sel', 'Sync Enable', ['statebutton', 'ledstate']),
+            ('SwDeswapDly-SP', 'Delay', ['lineedit', 'label']),
             ('SwDivClk-SP', 'Division Clock', ['lineedit', 'label']),
-            ('SwDataMaskEn-Sel', 'Data Mask Enable',
-             ['statebutton', 'ledstate']),
-            ('SwDataMaskSamples-SP', 'Data Mask Samples',
-             ['lineedit', 'label']),
-            (('SwTagDesyncCnt-Mon', 'SwTagDesyncCntRst-Sel'), 'Desync. Count',
-             ['label', ('pushbutton', 'Reset Count', None, 1, 0)]),
             ('', '', ()),
             ('', '<h4>Antenna Gains</h4>', ()),
             ('SwDirGainA-SP', 'Direct Gain A', 12),
@@ -139,9 +132,16 @@ class BPMAdvancedSettings(BaseWidget):
             ('SwInvGainC-SP', 'Inverse Gain C', 12),
             ('SwInvGainD-SP', 'Inverse Gain D', 12),
         ))
-        gdl.addWidget(grpbx, 1, 0, 3, 2)
+        gdl.addWidget(grpbx, 1, 0, 2, 2)
 
-        for idx, rate in enumerate(['Monit', 'FAcq', 'TbT']):
+        rate2pos = {
+            'Monit': (3, 0, 1, 2),
+            'FAcq': (1, 2, 1, 2),
+            'FOFB': (2, 2, 1, 2),
+            'TbT': (3, 2, 1, 2),
+        }
+
+        for rate, pos in rate2pos.items():
             items = list()
             if rate == 'Monit':
                 items.extend([
@@ -149,21 +149,29 @@ class BPMAdvancedSettings(BaseWidget):
                     ('MONITUpdtTime-SP', 'Update Time'),
                 ])
             items.extend([
-                (f'{rate}TagDly-SP', 'Delay', ['lineedit', 'label']),
-                (f'{rate}TagEn-Sel', 'Sync Enable',
+                (f'{rate}PhaseSyncDly-SP', 'Delay', ['lineedit', 'label']),
+                (f'{rate}PhaseSyncEn-Sel', 'Sync Enable',
                  ['statebutton', 'ledstate']),
-                ((f'{rate}TagDesyncCnt-Mon', f'{rate}TagDesyncCntRst-Sel'),
+                ((f'{rate}PhaseDesyncCnt-Mon', f'{rate}PhaseDesyncCntRst-Cmd'),
                  'Desync. Count',
                  ['label', ('pushbutton', 'Reset Count', None, 1, 0)]),
                 (f'{rate}DataMaskEn-Sel', 'Data Mask Enable',
                  ['statebutton', 'ledstate']),
-                (f'{rate}DataMaskSamplesBeg-SP', 'Data Mask Samples Begin',
-                 ['lineedit', 'label']),
-                (f'{rate}DataMaskSamplesEnd-SP', 'Data Mask Samples End',
-                 ['lineedit', 'label']),
             ])
+            if rate == 'FOFB':
+                items.extend([
+                    (f'{rate}DataMaskSamples-SP', 'Data Mask Samples',
+                     ['lineedit', 'label']),
+                ])
+            else:
+                items.extend([
+                    (f'{rate}DataMaskSamplesBeg-SP', 'Data Mask Samples Begin',
+                     ['lineedit', 'label']),
+                    (f'{rate}DataMaskSamplesEnd-SP', 'Data Mask Samples End',
+                     ['lineedit', 'label']),
+                ])
             grpbx = self._create_formlayout_groupbox(rate, items)
-            gdl.addWidget(grpbx, idx+1, 2, 1, 2)
+            gdl.addWidget(grpbx, *pos)
 
             grpbx = TriggersLauncherWidget(
                 self, prefix=self.prefix, bpm=self.bpm)
