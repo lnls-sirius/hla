@@ -119,6 +119,7 @@ class BPMAdvancedSettings(BaseWidget):
 
         grpbx = self._create_formlayout_groupbox('Switching', (
             ('SwMode-Sel', 'Mode'),
+            ('SwPhaseSyncEn-Sel', 'Sync Enable', ['statebutton', 'ledstate']),
             ('SwDeswapDly-SP', 'Delay', ['lineedit', 'label']),
             ('SwDivClk-SP', 'Division Clock', ['lineedit', 'label']),
             ('', '', ()),
