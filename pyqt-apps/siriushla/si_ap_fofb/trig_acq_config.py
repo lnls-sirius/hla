@@ -136,6 +136,10 @@ class _AcqBaseWindow(SiriusMainWindow):
         self.fr_nrtot.layout().setSpacing(0)
         self.fr_nrtot.add_widget(self.lb_nrpre)
         self.fr_nrtot.add_widget(self.lb_nrpos)
+        self.fr_nrtot.stateColors = [
+            QColor(self.app_color),
+            SiriusAlarmFrame.DarkYellow, SiriusAlarmFrame.Red,
+            SiriusAlarmFrame.Magenta, SiriusAlarmFrame.LightGray]
 
         ld_trig = QLabel('Trigger Type', self)
         self.ec_trig = SiriusEnumComboBox(
