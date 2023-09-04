@@ -413,17 +413,9 @@ class EVG(BaseWidget):
         lay.addWidget(gb, 1, 2, alignment=Qt.AlignHCenter)
 
         lb = QLabel("<b>Fw.Version</b>")
-        pvname = self.get_pvname(propty='FrmVersionA-Cte')
-        frma = SiriusLabel(self, init_channel=pvname)
-        frma.displayFormat = frma.DisplayFormat.TIFwVersion
-        pvname = self.get_pvname(propty='FrmVersionB-Cte')
-        frmb = SiriusLabel(self, init_channel=pvname)
-        frmb.displayFormat = frmb.DisplayFormat.TIFwVersion
-        pvname = self.get_pvname(propty='FrmVersionC-Cte')
-        frmc = SiriusLabel(self, init_channel=pvname)
-        frmc.displayFormat = frmc.DisplayFormat.TIFwVersion
-        gb = self._create_small_group(
-            '', info_wid, (lb, frma, frmb, frmc))
+        pvname = self.get_pvname(propty='FwVersion-Cte.SVAL')
+        frmv = SiriusLabel(self, init_channel=pvname)
+        gb = self._create_small_group('', info_wid, (lb, frmv))
         gb.layout().setSpacing(3)
         lay.addWidget(gb, 1, 3, alignment=Qt.AlignHCenter)
 
@@ -1246,17 +1238,9 @@ class FOUT(BaseWidget):
         info_lay.addWidget(gb, 1, 1, alignment=Qt.AlignTop)
 
         lb = QLabel("<b>Fw.Version</b>")
-        pvname = self.get_pvname(propty='FrmVersionA-Cte')
-        frma = SiriusLabel(self, init_channel=pvname)
-        frma.displayFormat = frma.DisplayFormat.TIFwVersion
-        pvname = self.get_pvname(propty='FrmVersionB-Cte')
-        frmb = SiriusLabel(self, init_channel=pvname)
-        frmb.displayFormat = frmb.DisplayFormat.TIFwVersion
-        pvname = self.get_pvname(propty='FrmVersionC-Cte')
-        frmc = SiriusLabel(self, init_channel=pvname)
-        frmc.displayFormat = frmc.DisplayFormat.TIFwVersion
-        gb = self._create_small_group(
-            '', info_wid, (lb, frma, frmb, frmc))
+        pvname = self.get_pvname(propty='FwVersion-Cte.SVAL')
+        frmv = SiriusLabel(self, init_channel=pvname)
+        gb = self._create_small_group('', info_wid, (lb, frmv))
         gb.layout().setSpacing(3)
         info_lay.addWidget(gb, 1, 2, alignment=Qt.AlignTop)
 
@@ -1526,26 +1510,26 @@ class AFC(BaseWidget):
         lb_phdiv = SiriusLabel(
             self, self.get_pvname(propty=subdev+'PhaseDiv-RB'))
 
-        ld_rfrlo = QLabel('<b>RFReqLo</b>', self, alignment=Qt.AlignCenter)
+        ld_rfrlo = QLabel('<b>RFreqLo</b>', self, alignment=Qt.AlignCenter)
         lb_rfrlo = SiriusLabel(
-            self, self.get_pvname(propty=subdev+'RFReqLo-RB'))
+            self, self.get_pvname(propty=subdev+'RFreqLo-Mon'))
         lb_rfrlo.displayFormat = SiriusLabel.DisplayFormat.Hex
 
-        ld_rfrhi = QLabel('<b>RFReqHi</b>', self, alignment=Qt.AlignCenter)
+        ld_rfrhi = QLabel('<b>RFreqHi</b>', self, alignment=Qt.AlignCenter)
         lb_rfrhi = SiriusLabel(
-            self, self.get_pvname(propty=subdev+'RFReqHi-RB'))
+            self, self.get_pvname(propty=subdev+'RFreqHi-Mon'))
         lb_rfrhi.displayFormat = SiriusLabel.DisplayFormat.Hex
 
         ld_n1 = QLabel('<b>N1</b>', self, alignment=Qt.AlignCenter)
         ld_n1.setObjectName('n1')
         lb_n1 = SiriusLabel(
-            self, self.get_pvname(propty=subdev+'n1-RB'))
+            self, self.get_pvname(propty=subdev+'N1-Mon'))
         lb_n1.setObjectName('n1')
         lb_n1.displayFormat = SiriusLabel.DisplayFormat.Hex
 
-        ld_hsdiv = QLabel('<b>HS_DIV</b>', self, alignment=Qt.AlignCenter)
+        ld_hsdiv = QLabel('<b>HSDiv</b>', self, alignment=Qt.AlignCenter)
         lb_hsdiv = SiriusLabel(
-            self, self.get_pvname(propty=subdev+'hs_div-RB'))
+            self, self.get_pvname(propty=subdev+'HSDiv-Mon'))
 
         # Equation
         ld_fpgaclk = QLabel('(FPGA Clk) x ', self, alignment=Qt.AlignRight)
@@ -1864,17 +1848,9 @@ class _EVR_EVE(BaseWidget):
         info_lay.addWidget(gb, 0, 6, alignment=Qt.AlignTop)
 
         lb = QLabel("<b>Fw.Version</b>")
-        pvname = self.get_pvname(propty='FrmVersionA-Cte')
-        frma = SiriusLabel(self, init_channel=pvname)
-        frma.displayFormat = frma.DisplayFormat.TIFwVersion
-        pvname = self.get_pvname(propty='FrmVersionB-Cte')
-        frmb = SiriusLabel(self, init_channel=pvname)
-        frmb.displayFormat = frmb.DisplayFormat.TIFwVersion
-        pvname = self.get_pvname(propty='FrmVersionC-Cte')
-        frmc = SiriusLabel(self, init_channel=pvname)
-        frmc.displayFormat = frmc.DisplayFormat.TIFwVersion
-        gb = self._create_small_group(
-            '', info_wid, (lb, frma, frmb, frmc))
+        pvname = self.get_pvname(propty='FwVersion-Cte.SVAL')
+        frmv = SiriusLabel(self, init_channel=pvname)
+        gb = self._create_small_group('', info_wid, (lb, frmv))
         gb.layout().setSpacing(3)
         info_lay.addWidget(gb, 0, 7, alignment=Qt.AlignTop)
 
