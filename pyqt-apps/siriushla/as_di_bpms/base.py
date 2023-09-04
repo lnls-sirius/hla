@@ -133,11 +133,11 @@ class BaseWidget(QWidget):
             elif widtype[0] == 'ledstate':
                 wid = SiriusLedState(self, pvname)
                 wid.offColor = widtype[1]
-                wid.offColor = widtype[2]
+                wid.onColor = widtype[2]
             elif widtype[0] == 'ledalert':
                 wid = SiriusLedAlert(self, pvname)
                 wid.offColor = widtype[1]
-                wid.offColor = widtype[2]
+                wid.onColor = widtype[2]
         else:
             raise NotImplementedError(f'widget not defined for type {widtype}')
         wid.setObjectName(str(pvname).replace('-', ''))

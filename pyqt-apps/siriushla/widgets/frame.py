@@ -2,7 +2,7 @@
 
 from qtpy.QtCore import Property
 from qtpy.QtGui import QColor
-from qtpy.QtWidgets import QHBoxLayout
+from qtpy.QtWidgets import QHBoxLayout, QVBoxLayout
 from pydm.widgets.frame import PyDMFrame
 
 
@@ -28,7 +28,7 @@ class _BaseFrame(PyDMFrame):
     Magenta = QColor('magenta')
 
     def __init__(self, parent=None, init_channel=None,
-                 color_list=None, is_float=True):
+                 color_list=None, is_float=True, orientation='H'):
         """Init."""
         super().__init__(parent, init_channel)
         self._border_color = _BaseFrame.LightGray
@@ -36,7 +36,8 @@ class _BaseFrame(PyDMFrame):
         self._is_float = is_float
         self.stateColors = color_list
 
-        lay = QHBoxLayout(self)
+        layclass = self._get_layout_class(orientation)
+        lay = layclass(self)
         lay.setContentsMargins(4, 4, 4, 4)
         self.setObjectName('frame')
 
@@ -157,6 +158,11 @@ class _BaseFrame(PyDMFrame):
 
         self.setStyleSheet(stylesheet)
 
+    def _get_layout_class(self, orientation):
+        if orientation == 'H':
+            return QHBoxLayout
+        return QVBoxLayout
+
     def add_widget(self, widget):
         self.layout().addWidget(widget)
 
@@ -167,12 +173,13 @@ class SiriusFrame(_BaseFrame):
     default_colorlist = [_BaseFrame.LightGreen, _BaseFrame.Red]
 
     def __init__(self, parent=None, init_channel=None,
-                 color_list=None, is_float=True):
+                 color_list=None, is_float=True, orientation='H'):
         """Init."""
         color_list = color_list or SiriusFrame.default_colorlist
         super().__init__(
             parent=parent, init_channel=init_channel,
-            color_list=color_list, is_float=is_float)
+            color_list=color_list, is_float=is_float,
+            orientation=orientation)
 
     def _update_border_color(self):
         if self.value is None or not hasattr(self, '_is_float') or \
@@ -199,12 +206,12 @@ class SiriusAlarmFrame(_BaseFrame):
         _BaseFrame.LightGreen, _BaseFrame.DarkYellow, _BaseFrame.Red,
         _BaseFrame.Magenta, _BaseFrame.LightGray]
 
-    def __init__(self, parent=None, init_channel=None):
+    def __init__(self, parent=None, init_channel=None, orientation='H'):
         """Init."""
         super().__init__(
             parent=parent, init_channel=init_channel,
             color_list=SiriusAlarmFrame.default_colorlist,
-            is_float=False)
+            is_float=False, orientation=orientation)
 
     def _update_border_color(self):
         if not hasattr(self, '_stateColors'):

@@ -12,10 +12,10 @@ from pydm.widgets import PyDMPushButton, PyDMLineEdit
 
 from siriuspy.namesys import SiriusPVName as _PVName, join_name
 
-from ..util import connect_window
+from ..util import connect_window, get_appropriate_color
 from ..widgets import SiriusMainWindow, SiriusLabel, \
     SiriusEnumComboBox, SiriusSpinbox, PyDMStateButton, \
-    SiriusLedState, SiriusWaveformPlot
+    SiriusLedState, SiriusWaveformPlot, SiriusAlarmFrame
 from ..widgets.windows import create_window_from_widget
 from ..as_di_bpms.base import GraphWave
 from ..common.afc_acq_core import LogicalTriggers, PhysicalTriggers
@@ -61,8 +61,9 @@ class _AcqBaseWindow(SiriusMainWindow):
             for sub in ['M1', 'M2', 'C2', 'C3'] for plane in ['H', 'V']]
         self.setWindowTitle('SI - FOFB Acquisitions - ' + self.ACQCORE)
         self.sec = 'SI' if self.device.sec == 'IA' else self.device.sec
+        self.app_color = get_appropriate_color(self.sec)
         self.setObjectName(self.sec+'App')
-        self.setWindowIcon(get_fofb_icon())
+        self.setWindowIcon(get_fofb_icon(color=self.app_color))
         self._setupUi()
         self.setFocusPolicy(Qt.StrongFocus)
 
@@ -116,12 +117,29 @@ class _AcqBaseWindow(SiriusMainWindow):
         ld_nrpre = QLabel('Pre-Trigger Nr.Samples', self)
         self.sb_nrpre = SiriusSpinbox(self, self._get_pvname('SamplesPre-SP'))
         self.lb_nrpre = SiriusLabel(
-            self, self._get_pvname('SamplesPre-RB'), keep_unit=True)
+            self, self._get_pvname('SamplesPre-RB'), keep_unit=True,
+            alignment=Qt.AlignTop)
+        self.lb_nrpre.setStyleSheet(
+            'QLabel{background-color: '+self.app_color+';}')
 
         ld_nrpos = QLabel('Post-Trigger Nr.Samples', self)
         self.sb_nrpos = SiriusSpinbox(self, self._get_pvname('SamplesPost-SP'))
         self.lb_nrpos = SiriusLabel(
-            self, self._get_pvname('SamplesPost-RB'), keep_unit=True)
+            self, self._get_pvname('SamplesPost-RB'), keep_unit=True,
+            alignment=Qt.AlignBottom)
+        self.lb_nrpos.setStyleSheet(
+            'QLabel{background-color: '+self.app_color+';}')
+
+        self.fr_nrtot = SiriusAlarmFrame(
+            self, self._get_pvname('SamplesTotal-Mon'),
+            orientation='V')
+        self.fr_nrtot.layout().setSpacing(0)
+        self.fr_nrtot.add_widget(self.lb_nrpre)
+        self.fr_nrtot.add_widget(self.lb_nrpos)
+        self.fr_nrtot.stateColors = [
+            QColor(self.app_color),
+            SiriusAlarmFrame.DarkYellow, SiriusAlarmFrame.Red,
+            SiriusAlarmFrame.Magenta, SiriusAlarmFrame.LightGray]
 
         ld_trig = QLabel('Trigger Type', self)
         self.ec_trig = SiriusEnumComboBox(
@@ -172,10 +190,9 @@ class _AcqBaseWindow(SiriusMainWindow):
         lay.addWidget(self.lb_rep, 3, 2)
         lay.addWidget(ld_nrpre, 4, 0)
         lay.addWidget(self.sb_nrpre, 4, 1)
-        lay.addWidget(self.lb_nrpre, 4, 2)
         lay.addWidget(ld_nrpos, 5, 0)
         lay.addWidget(self.sb_nrpos, 5, 1)
-        lay.addWidget(self.lb_nrpos, 5, 2)
+        lay.addWidget(self.fr_nrtot, 4, 2, 2, 1)
         lay.addWidget(ld_trig, 6, 0)
         lay.addWidget(self.ec_trig, 6, 1)
         lay.addWidget(self.lb_trig, 6, 2)
@@ -285,6 +302,12 @@ class FOFBAcqSYSIDWindow(_AcqBaseWindow):
         self.lb_lfsrlen = SiriusLabel(
             self, self._get_pvname('PRBSLFSRLength-RB'))
 
+        ld_movavgtap = QLabel('FOFBAcc. Mov. Avg. Taps', self)
+        self.sb_movavgtap = PyDMLineEdit(
+            self, self._get_pvname('PRBSFOFBAccMovAvgTaps-SP'))
+        self.lb_movavgtap = SiriusLabel(
+            self, self._get_pvname('PRBSFOFBAccMovAvgTaps-RB'))
+
         ld_correnb = QLabel('Enable Corrs.', self)
         self.sb_correnb = PyDMStateButton(
             self, self._get_pvname('PRBSFOFBAccEn-Sel'))
@@ -308,12 +331,15 @@ class FOFBAcqSYSIDWindow(_AcqBaseWindow):
         lay.addWidget(ld_lfsrlen, 2, 0)
         lay.addWidget(self.sb_lfsrlen, 2, 1)
         lay.addWidget(self.lb_lfsrlen, 2, 2)
-        lay.addWidget(ld_correnb, 3, 0)
-        lay.addWidget(self.sb_correnb, 3, 1)
-        lay.addWidget(self.led_correnb, 3, 2, alignment=Qt.AlignLeft)
-        lay.addWidget(ld_bpmenbl, 4, 0)
-        lay.addWidget(self.sb_bpmenbl, 4, 1)
-        lay.addWidget(self.led_bpmenbl, 4, 2, alignment=Qt.AlignLeft)
+        lay.addWidget(ld_movavgtap, 3, 0)
+        lay.addWidget(self.sb_movavgtap, 3, 1)
+        lay.addWidget(self.lb_movavgtap, 3, 2)
+        lay.addWidget(ld_correnb, 4, 0)
+        lay.addWidget(self.sb_correnb, 4, 1)
+        lay.addWidget(self.led_correnb, 4, 2, alignment=Qt.AlignLeft)
+        lay.addWidget(ld_bpmenbl, 5, 0)
+        lay.addWidget(self.sb_bpmenbl, 5, 1)
+        lay.addWidget(self.led_bpmenbl, 5, 2, alignment=Qt.AlignLeft)
         return wid
 
     def _PRBSFOFBAccSettingsWidget(self):
@@ -489,6 +515,12 @@ class FOFBAcqLAMPWindow(_AcqBaseWindow):
             {c.substitute(propty_name=pvname.format('Current')):
              c.sub[2:]+'-'+c.dev[-1] for c in self.corrs})
 
+        # CurrentRef
+        gp_currref = self._create_graph(
+            'CurrentRef' + ('' if is_raw else ' [A]'),
+            {c.substitute(propty_name=pvname.format('CurrentRef')):
+             c.sub[2:]+'-'+c.dev[-1] for c in self.corrs})
+
         # Voltage
         gp_volt = self._create_graph(
             'Voltage' + ('' if is_raw else ' [V]'),
@@ -503,6 +535,7 @@ class FOFBAcqLAMPWindow(_AcqBaseWindow):
         wid = QWidget()
         lay = QVBoxLayout(wid)
         lay.addWidget(gp_curr)
+        lay.addWidget(gp_currref)
         lay.addWidget(gp_volt)
         lay.addWidget(cb_linkxaxis, alignment=Qt.AlignLeft)
         return wid
