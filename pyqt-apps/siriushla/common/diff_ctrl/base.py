@@ -31,8 +31,8 @@ class DiffCtrlDevMonitor(QWidget):
         self.section = self.device.sec
         self.orientation = self.device.dev[-1]
         if 'Scrap' in self.device.device_name:
-            self.neg_name = 'Inner' if self.orientation == 'H' else 'Bottom'
-            self.pos_name = 'Outer' if self.orientation == 'H' else 'Top'
+            self.neg_name = 'Right' if self.orientation == 'H' else 'Bottom'
+            self.pos_name = 'Left' if self.orientation == 'H' else 'Top'
             self.slit_name = 'Slit'
         else:
             self.neg_name = 'Negative'
