@@ -1,6 +1,5 @@
 """Sirius Label."""
 
-import ctypes
 from pyqtgraph import functions as func
 from qtpy.QtWidgets import QLabel, QApplication
 from qtpy.QtCore import Qt, Property, Q_ENUMS
@@ -31,7 +30,6 @@ class SiriusLabel(QLabel, TextFormatter, PyDMWidget, DisplayFormat):
     DisplayFormat = DisplayFormat
     DisplayFormat.Time = 6
     DisplayFormat.BSMPUDCVersion = 7
-    DisplayFormat.TIFwVersion = 8
 
     def __init__(self, parent=None, init_channel=None, keep_unit=False, **kws):
         """Init."""
@@ -114,18 +112,6 @@ class SiriusLabel(QLabel, TextFormatter, PyDMWidget, DisplayFormat):
             version = new_value[:16] + " " + new_value[16:] \
                 if new_value is not None else ''
             version = " ".join(version.split())
-            self.setText(version)
-            return
-
-        # If it is a timing firmware version string, convert to unsigned int
-        # and represent in hex
-        if self._display_format_type == self.DisplayFormat.TIFwVersion:
-            new_value = ctypes.c_uint32(new_value).value \
-                if new_value is not None else ''
-            version = parse_value_for_display(
-                value=new_value, precision=self.precision,
-                display_format_type=self.DisplayFormat.Hex,
-                string_encoding=self._string_encoding, widget=self)
             self.setText(version)
             return
 
