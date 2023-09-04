@@ -60,7 +60,7 @@ class DiffCtrlDevMonitor(QWidget):
             self.device.substitute(propty=self.neg_name+'DoneMov-Mon'): 1,
             self.device.substitute(propty=self.pos_name+'DoneMov-Mon'): 1}
         self.multiled_status = PyDMLedMultiChannel(self, channels2values)
-        self.multiled_status.setStyleSheet('max-width: 1.29em;')
+        self.multiled_status.setStyleSheet('QLed{max-width: 1.29em;}')
 
         self.pb_details = QPushButton(qta.icon('fa5s.ellipsis-h'), '', self)
         self.pb_details.setToolTip('Open details')
