@@ -149,8 +149,10 @@ class BPMAdvancedSettings(BaseWidget):
                     ('MonitEnable-Sel', 'Enable', ['statebutton', 'ledstate']),
                     ('MONITUpdtTime-SP', 'Update Time'),
                 ])
+            if rate != 'FOFB':
+                items.append(
+                    (f'{rate}PhaseSyncDly-SP', 'Delay', ['lineedit', 'label']))
             items.extend([
-                (f'{rate}PhaseSyncDly-SP', 'Delay', ['lineedit', 'label']),
                 (f'{rate}PhaseSyncEn-Sel', 'Sync Enable',
                  ['statebutton', 'ledstate']),
                 ((f'{rate}PhaseDesyncCnt-Mon', f'{rate}PhaseDesyncCntRst-Cmd'),
