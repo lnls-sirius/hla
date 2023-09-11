@@ -8,7 +8,8 @@ from pydm.widgets import PyDMPushButton
 
 from ..util import connect_newprocess, connect_window
 from ..widgets import PyDMLogLabel, SiriusLedAlert, PyDMLed, \
-    SiriusLedState, PyDMLedMultiChannel, SiriusLabel, SiriusSpinbox
+    SiriusLedState, PyDMLedMultiChannel, SiriusLabel, SiriusSpinbox, \
+    SiriusEnumComboBox
 
 from .base import IDCommonControlWindow, IDCommonDialog, \
     IDCommonSummaryBase, IDCommonSummaryHeader, IDCommonSummaryWidget
@@ -108,6 +109,24 @@ class EPUControlWindow(IDCommonControlWindow):
 
             row += 5
 
+        self._ld_pol = QLabel('Polarization', self)
+        self._cb_pol = SiriusEnumComboBox(
+            self, self.dev_pref.substitute(propty='Polarization-Sel'))
+        self._lb_prop = SiriusLabel(
+            self, self.dev_pref.substitute(propty='Polarization-Sts'))
+        self._ld_polmov = QLabel('Polarization Motion', self)
+        self._pb_polstart = PyDMPushButton(
+            self, label='', icon=qta.icon('fa5s.play'))
+        self._pb_polstart.setToolTip(
+            'Start automatic Polarization motion towards previously '
+            'entered setpoint.')
+        pvname = self.dev_pref.substitute(propty='ChangePolarization-Cmd')
+        self._pb_polstart.channel = pvname
+        self._pb_polstart.pressValue = 1
+        self._pb_polstart.setObjectName('Start')
+        self._pb_polstart.setStyleSheet(
+            '#Start{min-width:30px; max-width:30px; icon-size:25px;}')
+
         self._ld_stopall = QLabel('Stop All Motion', self)
         self._pb_stopall = PyDMPushButton(
             self, label='', icon=qta.icon('fa5s.times'))
@@ -123,10 +142,15 @@ class EPUControlWindow(IDCommonControlWindow):
         self._led_ismov = SiriusLedState(
             self, self.dev_pref.substitute(propty='Moving-Mon'))
 
-        lay.addWidget(self._ld_stopall, row, 0)
-        lay.addWidget(self._pb_stopall, row, 1)
-        lay.addWidget(self._ld_ismov, row+1, 0)
-        lay.addWidget(self._led_ismov, row+1, 1, alignment=Qt.AlignLeft)
+        lay.addWidget(self._ld_pol, row, 0)
+        lay.addWidget(self._cb_pol, row, 1)
+        lay.addWidget(self._lb_prop, row, 2)
+        lay.addWidget(self._ld_polmov, row+1, 0)
+        lay.addWidget(self._pb_polstart, row+1, 1)
+        lay.addWidget(self._ld_stopall, row+2, 0)
+        lay.addWidget(self._pb_stopall, row+2, 1)
+        lay.addWidget(self._ld_ismov, row+3, 0)
+        lay.addWidget(self._led_ismov, row+3, 1, alignment=Qt.AlignLeft)
 
         gbox.setStyleSheet(
             '.QLabel{qproperty-alignment: "AlignRight | AlignVCenter";}')
