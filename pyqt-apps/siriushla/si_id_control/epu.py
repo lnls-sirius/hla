@@ -147,10 +147,12 @@ class EPUControlWindow(IDCommonControlWindow):
         lay.addWidget(self._lb_prop, row, 2)
         lay.addWidget(self._ld_polmov, row+1, 0)
         lay.addWidget(self._pb_polstart, row+1, 1)
-        lay.addWidget(self._ld_stopall, row+2, 0)
-        lay.addWidget(self._pb_stopall, row+2, 1)
-        lay.addWidget(self._ld_ismov, row+3, 0)
-        lay.addWidget(self._led_ismov, row+3, 1, alignment=Qt.AlignLeft)
+        lay.addItem(
+            QSpacerItem(1, 15, QSzPlcy.Ignored, QSzPlcy.Fixed), row+2, 0)
+        lay.addWidget(self._ld_stopall, row+3, 0)
+        lay.addWidget(self._pb_stopall, row+3, 1)
+        lay.addWidget(self._ld_ismov, row+4, 0)
+        lay.addWidget(self._led_ismov, row+4, 1, alignment=Qt.AlignLeft)
 
         gbox.setStyleSheet(
             '.QLabel{qproperty-alignment: "AlignRight | AlignVCenter";}')
