@@ -1,7 +1,7 @@
 """BL AP ImgProc."""
 
 from datetime import datetime
-
+import threading
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QGridLayout, QHBoxLayout, \
     QVBoxLayout, QGroupBox, QLabel, QSizePolicy, QTabWidget, \
@@ -24,7 +24,7 @@ from ..widgets import SiriusLabel, SiriusLedState, \
 
 from .util import PVS_IMGPROC, PVS_DVF, \
     IMG_PVS, LOG_PV, COMBOBOX_PVS, LINEEDIT_PVS, STATEBUT_PVS, \
-    LED_ALERT_PVS, LED_STATE_PVS, LED_DETAIL_PVS
+    LED_ALERT_PVS, LED_STATE_PVS, LED_DETAIL_PVS, CAX_PVS
 from .image import DVFImageView
 from .blintlkctl import BLIntckCtrl
 
@@ -47,6 +47,7 @@ class BLImgProc(QWidget):
         self._lbl_timestamp = {}
         self.timestamp = {}
         self.img_view = None
+        self.timer = threading.Timer(1, self.update_bl_open_led)
 
         self._setupUi()
 
@@ -245,7 +246,6 @@ class BLImgProc(QWidget):
             return sc_area
         return cont_wid
 
-
     def gamma_control(self):
         wid = QGroupBox()
         lay = QHBoxLayout()
@@ -261,11 +261,18 @@ class BLImgProc(QWidget):
         widget.clicked.connect(self.blpps.gamma_disable)
         lay.addWidget(widget)
 
+        pvname = CAX_PVS["gamma"]
         widget = SiriusLedState(
-            init_channel="self.blpps.gamma_enabled")
+            init_channel=pvname)
         lay.addWidget(widget)
 
         return wid
+
+    def update_bl_open_led(self):
+        if self.pydm_led != None:
+            self.pydm_led.value_changed(self.blpps.beamline_opened)
+        self.timer = threading.Timer(1, self.update_bl_open_led)
+        self.timer.start()
 
     def enable_beamline(self):
         wid = QGroupBox()
@@ -279,9 +286,9 @@ class BLImgProc(QWidget):
         widget.clicked.connect(self.blpps.beamline_open)
         lay.addWidget(widget)
 
-        widget = SiriusLedState(
-            init_channel="self.blpps.beamline_opened")
-        lay.addWidget(widget)
+        self.pydm_led = SiriusLedState()
+        self.timer.start()
+        lay.addWidget(self.pydm_led)
 
         return wid
 

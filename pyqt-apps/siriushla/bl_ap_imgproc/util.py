@@ -231,3 +231,7 @@ PVS_DVF = {
         },
     ],
 }
+
+CAX_PVS = {
+    "gamma": "AS-Glob:MP-Summary:AlarmGammaShutter-Mon"
+}
