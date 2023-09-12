@@ -15,6 +15,7 @@ from .details import DeviceParamSettingWindow
 from .widgets import DeltaIQPhaseCorrButton
 from .chart import ChartWindow
 
+
 class DEVICES(_enum.IntEnum):
     """."""
 
@@ -30,6 +31,7 @@ class DEVICES(_enum.IntEnum):
         self.pvname = pvname
         self.nickname = nickname
         return self
+
 
 class ControlBox(QWidget):
     """."""

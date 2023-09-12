@@ -74,6 +74,8 @@ class MultiTurnData(BaseWidget):
             hbl2.addStretch()
             vbl.addItem(hbl2)
             pb = QPushButton('Open FFT Data', stack1)
+            pb.setDefault(False)
+            pb.setAutoDefault(False)
             hbl2.addWidget(pb)
             hbl2.addStretch()
             Window = create_window_from_widget(

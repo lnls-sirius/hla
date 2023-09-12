@@ -1,6 +1,8 @@
 #!/usr/bin/env python-sirius
 
 """Mock application launcher."""
+import re as _re
+import subprocess as _sbp
 
 from epics import PV as _PV
 
@@ -188,6 +190,23 @@ def get_object(ismenubar=True, parent=None):
             osci.addAction(tspuinjsi)
             osci.addAction(sipuinjsi)
             self.add_object_to_level1(menu, osci)
+
+            try:
+                host = _sbp.getoutput('hostname')
+                exist_xrandr = not bool(_sbp.getoutput('xrandr | grep missing'))
+                hosts = {'lnls449-linux', 'lnls451-linux', 'lnls454-linux'}
+            except Exception:
+                return menu
+            if not exist_xrandr or host not in hosts:
+                return menu
+
+            scrn = LEVEL2M('Screen Res.', menu)
+            resolutions = ['3840x2160', '2560x1440', '1920x1080']
+            for res in resolutions:
+                act = QAction(res, scrn)
+                act.triggered.connect(self._change_resolution)
+                scrn.addAction(act)
+            self.add_object_to_level1(menu, scrn)
             return menu
 
         def _create_as_menu(self):
@@ -951,5 +970,24 @@ def get_object(ismenubar=True, parent=None):
             wind.widget.settingFinished.connect(wind.close)
             wind.widget.fill_config('global_config', config_name)
             wind.exec_()
+
+        def _change_resolution(self):
+            res = self.sender().text()
+            out = _sbp.getoutput('xrandr').splitlines()
+            disps = [o for o in out if ' connected' in o]
+            ds_names = [d.split(' ')[0] for d in disps]
+
+            reg = '[0-9]{4}x[0-9]{4}\+([0-9]{1,4})\+[0-9]{1,4}'
+            ds_pos = [
+                _re.findall(reg, d)[0] for di in disps
+                for d in di.split(' ') if _re.match(reg, d)]
+
+            _, ds_names = list(zip(*sorted(zip(ds_pos, ds_names))))
+            for i, name in enumerate(ds_names):
+                cmd = f'xrandr --auto --output {name:s} --mode {res:s}'
+                if i:
+                    oname = ds_names[i-1]
+                    cmd += f' --right-of {oname:s}'
+                _sbp.getoutput(cmd)
 
     return MainMenuBar(parent=parent)

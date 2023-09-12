@@ -54,7 +54,8 @@ class BaseWidget(_BaseWidget, BaseObject):
 
 def get_fofb_icon(color=True):
     """Return default icon."""
-    iconcolor = get_appropriate_color('SI') if color else None
+    iconcolor = color if isinstance(color, str) else \
+        get_appropriate_color('SI') if color else None
     return qta.icon(
         'fa5s.hammer', 'fa5s.signal', options=[
             dict(scale_factor=0.85, offset=(0.15, 0.0)),

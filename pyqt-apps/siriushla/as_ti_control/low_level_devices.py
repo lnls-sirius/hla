@@ -17,7 +17,7 @@ from siriuspy.timesys import csdev as _cstime
 from ..widgets import PyDMLed, PyDMStateButton, SiriusLedState, \
     SiriusEnumComboBox, SiriusLedAlert, SiriusLabel, \
     SiriusSpinbox, SiriusConnectionSignal, SiriusWaveformTable, \
-    SiriusPushButton, SiriusHexaSpinbox, SiriusWaveformPlot
+    SiriusPushButton, SiriusWaveformPlot
 from ..widgets.windows import create_window_from_widget, SiriusDialog
 from ..util import connect_window, get_appropriate_color
 
@@ -130,9 +130,13 @@ class EVG(BaseWidget):
     def _setupmenus(self):
         main_menu = QMenuBar()
         main_menu.setNativeMenuBar(False)
-        menu = main_menu.addMenu('&Downlinks')
 
-        fouts = LLTimeSearch.get_evg2fout_mapping()
+        try:
+            fouts = LLTimeSearch.get_evg2fout_mapping()
+        except KeyError:
+            return main_menu
+
+        menu = main_menu.addMenu('&Downlinks')
         for out, down in sorted(fouts.items()):
             action = menu.addAction(out + ' --> ' + down)
             icon = qta.icon('mdi.timer', color=get_appropriate_color('AS'))
@@ -319,8 +323,11 @@ class EVG(BaseWidget):
         status_layout.addWidget(gb, 2, 2)
 
         wids = list()
-        conn = LLTimeSearch.get_connections_from_evg()
-        conn = {int(dev.propty[-1]) for dev in conn if dev.dev == 'EVG'}
+        try:
+            conn = LLTimeSearch.get_connections_from_evg()
+            conn = {int(dev.propty[-1]) for dev in conn if dev.dev == 'EVG'}
+        except KeyError:
+            conn = set()
         for i in range(8):
             pvname = self.get_pvname(propty='Los-Mon')
             if i in conn:
@@ -376,6 +383,8 @@ class EVG(BaseWidget):
         pvname = self.get_pvname('FPGAClk-Cte')
         mon = SiriusLabel(self, init_channel=pvname)
         mon.showUnits = True
+        mon.precisionFromPV = False
+        mon.precision = 3
         gb = self._create_small_group('', info_wid, (lb, mon))
         lay.addWidget(gb, 0, 3, alignment=Qt.AlignCenter)
 
@@ -404,17 +413,9 @@ class EVG(BaseWidget):
         lay.addWidget(gb, 1, 2, alignment=Qt.AlignHCenter)
 
         lb = QLabel("<b>Fw.Version</b>")
-        pvname = self.get_pvname(propty='FrmVersionA-Cte')
-        frma = SiriusLabel(self, init_channel=pvname)
-        frma.displayFormat = frma.DisplayFormat.TIFwVersion
-        pvname = self.get_pvname(propty='FrmVersionB-Cte')
-        frmb = SiriusLabel(self, init_channel=pvname)
-        frmb.displayFormat = frmb.DisplayFormat.TIFwVersion
-        pvname = self.get_pvname(propty='FrmVersionC-Cte')
-        frmc = SiriusLabel(self, init_channel=pvname)
-        frmc.displayFormat = frmc.DisplayFormat.TIFwVersion
-        gb = self._create_small_group(
-            '', info_wid, (lb, frma, frmb, frmc))
+        pvname = self.get_pvname(propty='FwVersion-Cte.SVAL')
+        frmv = SiriusLabel(self, init_channel=pvname)
+        gb = self._create_small_group('', info_wid, (lb, frmv))
         gb.layout().setSpacing(3)
         lay.addWidget(gb, 1, 3, alignment=Qt.AlignHCenter)
 
@@ -1090,32 +1091,37 @@ class FOUT(BaseWidget):
     def _setupmenus(self):
         main_menu = QMenuBar()
         main_menu.setNativeMenuBar(False)
-        menu = main_menu.addMenu('&Downlinks')
 
         icon = qta.icon('mdi.timer', color=get_appropriate_color('AS'))
-        mapping = LLTimeSearch.get_fout2trigsrc_mapping()
-        downs = mapping[self.device.device_name]
-        downs = sorted([(ou, dwn) for ou, dwn in downs.items()])
+
+        try:
+            mapping = LLTimeSearch.get_fout2trigsrc_mapping()
+            downs = mapping[self.device.device_name]
+            downs = sorted([(ou, dwn) for ou, dwn in downs.items()])
+            menu = main_menu.addMenu('&Downlinks')
+        except KeyError:
+            downs = list()
+
         for out, dwn in downs:
             dev, down = dwn.dev, dwn.device_name
-            if dev == 'EVR':
-                devt = EVR
-            elif dev == 'EVE':
-                devt = EVE
-            else:
-                devt = AFC
+            devt = EVR if dev == 'EVR' else EVE if dev == 'EVE' else AFC
             action = menu.addAction(out + ' --> ' + down)
             Win = create_window_from_widget(devt, title=down, icon=icon)
             connect_window(action, Win, None, device=down, prefix=self.prefix)
 
+        try:
+            link = list(LLTimeSearch.In2OutMap[self.device.dev])[0]
+            evg = LLTimeSearch.get_evg_channel(
+                self.device.device_name.substitute(propty=link))
+        except KeyError:
+            return main_menu
+
         menu = main_menu.addMenu('&Uplink')
-        link = list(LLTimeSearch.In2OutMap[self.device.dev])[0]
-        evg = LLTimeSearch.get_evg_channel(
-            self.device.device_name.substitute(propty=link))
         action = menu.addAction(evg)
         Win = create_window_from_widget(EVG, title=evg.device_name, icon=icon)
         connect_window(
             action, Win, None, device=evg.device_name, prefix=self.prefix)
+
         return main_menu
 
     def _setup_status_wid(self):
@@ -1157,8 +1163,12 @@ class FOUT(BaseWidget):
         status_lay.addWidget(gb, 0, 3)
 
         wids = list()
-        conn = LLTimeSearch.get_fout2trigsrc_mapping()[self.device.device_name]
-        conn = {int(dev[-1]) for dev in conn}
+        try:
+            mapping = LLTimeSearch.get_fout2trigsrc_mapping()
+            conn = mapping[self.device.device_name]
+            conn = {int(dev[-1]) for dev in conn}
+        except KeyError:
+            conn = set()
         for i in range(8):
             pvname = self.get_pvname(propty='Los-Mon')
             if i in conn:
@@ -1228,17 +1238,9 @@ class FOUT(BaseWidget):
         info_lay.addWidget(gb, 1, 1, alignment=Qt.AlignTop)
 
         lb = QLabel("<b>Fw.Version</b>")
-        pvname = self.get_pvname(propty='FrmVersionA-Cte')
-        frma = SiriusLabel(self, init_channel=pvname)
-        frma.displayFormat = frma.DisplayFormat.TIFwVersion
-        pvname = self.get_pvname(propty='FrmVersionB-Cte')
-        frmb = SiriusLabel(self, init_channel=pvname)
-        frmb.displayFormat = frmb.DisplayFormat.TIFwVersion
-        pvname = self.get_pvname(propty='FrmVersionC-Cte')
-        frmc = SiriusLabel(self, init_channel=pvname)
-        frmc.displayFormat = frmc.DisplayFormat.TIFwVersion
-        gb = self._create_small_group(
-            '', info_wid, (lb, frma, frmb, frmc))
+        pvname = self.get_pvname(propty='FwVersion-Cte.SVAL')
+        frmv = SiriusLabel(self, init_channel=pvname)
+        gb = self._create_small_group('', info_wid, (lb, frmv))
         gb.layout().setSpacing(3)
         info_lay.addWidget(gb, 1, 2, alignment=Qt.AlignTop)
 
@@ -1307,8 +1309,8 @@ class AFC(BaseWidget):
         self.my_layout.addWidget(stattab, 2, 0)
         stattab.setSizePolicy(QSzPol.Preferred, QSzPol.Maximum)
 
-        # frequency feadback
-        self.freqff_wid = QGroupBox('Frequency feadback', self)
+        # frequency feedback
+        self.freqff_wid = QGroupBox('Frequency feedback', self)
         freqtab = QTabWidget(self)
         freqtab.setObjectName('ASTab')
         afcfrefb_wid = self._setup_freqfb_wid('AFC')
@@ -1346,15 +1348,18 @@ class AFC(BaseWidget):
             prefix=self.prefix, obj_names=obj_names)
         self.crts_wid.setObjectName('crts_wid')
         outtab.addTab(self.crts_wid, 'CRT Outputs')
-        outtab.setSizePolicy(QSzPol.Preferred, QSzPol.MinimumExpanding)
 
     def _setupmenus(self):
         main_menu = QMenuBar()
         main_menu.setNativeMenuBar(False)
-        menu = main_menu.addMenu('&Uplink')
 
-        fout = LLTimeSearch.get_fout_channel(
-            self.device.substitute(propty='CRT0'))
+        try:
+            fout = LLTimeSearch.get_fout_channel(
+                self.device.substitute(propty='CRT0'))
+        except KeyError:
+            return main_menu
+
+        menu = main_menu.addMenu('&Uplink')
         action = menu.addAction(fout)
         icon = qta.icon('mdi.timer', color=get_appropriate_color('AS'))
         Win = create_window_from_widget(
@@ -1382,19 +1387,41 @@ class AFC(BaseWidget):
         gb = self._create_small_group('', status_wid, (lb, rb))
         status_lay.addWidget(gb, 0, 1)
 
-        lb = QLabel("<b>Locked</b>")
-        pvname = self.get_pvname('RefClkLocked-Mon')
-        rb = SiriusLedAlert(self, init_channel=pvname)
-        rb.offColor, rb.onColor = rb.onColor, rb.offColor
-        gb = self._create_small_group('', status_wid, (lb, rb))
-        status_lay.addWidget(gb, 0, 2)
+        for i, locktype in enumerate(['', 'Ltc']):
+            lb = QLabel(
+                '<b>Locked' + (' Latch' if locktype else '') + '</b>')
+            widlbl = QWidget()
+            hbxlbl = QHBoxLayout(widlbl)
+            hbxlbl.setSpacing(10)
+            hbxlbl.setContentsMargins(0, 0, 0, 0)
+            hbxlbl.setAlignment(Qt.AlignLeft)
+            widctl = QWidget()
+            hbxctl = QHBoxLayout(widctl)
+            hbxctl.setSpacing(1)
+            hbxctl.setContentsMargins(0, 0, 0, 0)
+            for dev in ['AFC', 'RTM', 'GT0']:
+                pvname = self.get_pvname(f'{dev}ClkLocked{locktype}-Mon')
+                rb = SiriusLedAlert(self, init_channel=pvname)
+                rb.offColor, rb.onColor = rb.onColor, rb.offColor
+                hbxctl.addWidget(rb)
+                hbxlbl.addWidget(QLabel(dev, self))
+
+            if locktype == 'Ltc':
+                rst = SiriusPushButton(
+                    self, label='', icon=qta.icon('fa5s.sync'), pressValue=1,
+                    init_channel=self.get_pvname('ClkLockedLtcRst-Cmd'))
+                hbxctl.addWidget(rst)
+                hbxlbl.addWidget(QLabel('   ', self))
+
+            gb = self._create_small_group('', status_wid, (lb, widctl, widlbl))
+            status_lay.addWidget(gb, 0, 2+i)
 
         lb = QLabel("<b>UP Link</b>")
         pvname = self.get_pvname('LinkStatus-Mon')
         rb = SiriusLedAlert(self, init_channel=pvname)
         rb.offColor, rb.onColor = rb.onColor, rb.offColor
         gb = self._create_small_group('', status_wid, (lb, rb))
-        status_lay.addWidget(gb, 0, 3)
+        status_lay.addWidget(gb, 0, 4)
 
         return status_wid
 
@@ -1403,21 +1430,24 @@ class AFC(BaseWidget):
         info_lay = QGridLayout(info_wid)
         info_lay.setHorizontalSpacing(30)
 
-        lb = QLabel("<b>Save Settings</b>")
-        pvname = self.get_pvname('Save-Cmd')
-        sp = PyDMPushButton(
-            self, label='Save', init_channel=pvname, pressValue=1)
-        gb = self._create_small_group('', info_wid, (lb, sp))
-        info_lay.addWidget(gb, 0, 0)
-
         lb = QLabel("<b>FPGA Clk</b>")
         pvname = self.get_pvname('FPGAClk-Cte')
         mon = SiriusLabel(self, init_channel=pvname)
         mon.showUnits = True
-        pvname = self.get_pvname('FPGAClk-Cte', field='INP')
-        inp = PyDMLineEdit(self, init_channel=pvname)
-        gb = self._create_small_group('', info_wid, (lb, mon, inp))
-        info_lay.addWidget(gb, 0, 1)
+        mon.precisionFromPV = False
+        mon.precision = 3
+        pvname = self.get_pvname('FPGAClk-Cte', field='DOL')
+        dol = PyDMLineEdit(self, init_channel=pvname)
+        omsl = SiriusPushButton(
+            self, label='', icon=qta.icon('fa5s.sync'), pressValue=1,
+            init_channel=self.get_pvname('FPGAClk-Cte', field='OMSL'))
+        proc = QWidget()
+        hlproc = QHBoxLayout(proc)
+        hlproc.setContentsMargins(0, 0, 0, 0)
+        hlproc.addWidget(dol)
+        hlproc.addWidget(omsl)
+        gb = self._create_small_group('', info_wid, (lb, mon, proc))
+        info_lay.addWidget(gb, 0, 0)
 
         return info_wid
 
@@ -1480,44 +1510,26 @@ class AFC(BaseWidget):
         lb_phdiv = SiriusLabel(
             self, self.get_pvname(propty=subdev+'PhaseDiv-RB'))
 
-        ld_rfrlo = QLabel('<b>RFReqLo</b>', self, alignment=Qt.AlignCenter)
-        sb_rfrlo = SiriusHexaSpinbox(
-            self, self.get_pvname(propty=subdev+'RFReqLo-SP'))
-        sb_rfrlo.limitsFromChannel = False
-        sb_rfrlo.setMinimum(-2**31)
-        sb_rfrlo.setMaximum(2**31-1)
+        ld_rfrlo = QLabel('<b>RFreqLo</b>', self, alignment=Qt.AlignCenter)
         lb_rfrlo = SiriusLabel(
-            self, self.get_pvname(propty=subdev+'RFReqLo-RB'))
+            self, self.get_pvname(propty=subdev+'RFreqLo-Mon'))
         lb_rfrlo.displayFormat = SiriusLabel.DisplayFormat.Hex
 
-        ld_rfrhi = QLabel('<b>RFReqHi</b>', self, alignment=Qt.AlignCenter)
-        sb_rfrhi = SiriusHexaSpinbox(
-            self, self.get_pvname(propty=subdev+'RFReqHi-SP'))
-        sb_rfrhi.limitsFromChannel = False
-        sb_rfrhi.setMinimum(-2**31)
-        sb_rfrhi.setMaximum(2**31-1)
+        ld_rfrhi = QLabel('<b>RFreqHi</b>', self, alignment=Qt.AlignCenter)
         lb_rfrhi = SiriusLabel(
-            self, self.get_pvname(propty=subdev+'RFReqHi-RB'))
+            self, self.get_pvname(propty=subdev+'RFreqHi-Mon'))
         lb_rfrhi.displayFormat = SiriusLabel.DisplayFormat.Hex
 
         ld_n1 = QLabel('<b>N1</b>', self, alignment=Qt.AlignCenter)
         ld_n1.setObjectName('n1')
-        sb_n1 = SiriusHexaSpinbox(
-            self, self.get_pvname(propty=subdev+'n1-SP'))
-        sb_n1.setObjectName('n1')
-        sb_n1.limitsFromChannel = False
-        sb_n1.setMinimum(-2**31)
-        sb_n1.setMaximum(2**31-1)
         lb_n1 = SiriusLabel(
-            self, self.get_pvname(propty=subdev+'n1-RB'))
+            self, self.get_pvname(propty=subdev+'N1-Mon'))
         lb_n1.setObjectName('n1')
         lb_n1.displayFormat = SiriusLabel.DisplayFormat.Hex
 
-        ld_hsdiv = QLabel('<b>HS_DIV</b>', self, alignment=Qt.AlignCenter)
-        cb_hsdiv = SiriusEnumComboBox(
-            self, self.get_pvname(propty=subdev+'hs_div-SP'))
+        ld_hsdiv = QLabel('<b>HSDiv</b>', self, alignment=Qt.AlignCenter)
         lb_hsdiv = SiriusLabel(
-            self, self.get_pvname(propty=subdev+'hs_div-RB'))
+            self, self.get_pvname(propty=subdev+'HSDiv-Mon'))
 
         # Equation
         ld_fpgaclk = QLabel('(FPGA Clk) x ', self, alignment=Qt.AlignRight)
@@ -1563,19 +1575,14 @@ class AFC(BaseWidget):
 
         lay_sett2 = QGridLayout()
         lay_sett2.setHorizontalSpacing(30)
-        lay_sett2.setVerticalSpacing(6)
         lay_sett2.addWidget(ld_rfrlo, 0, 0)
-        lay_sett2.addWidget(sb_rfrlo, 1, 0, alignment=Qt.AlignCenter)
-        lay_sett2.addWidget(lb_rfrlo, 2, 0)
+        lay_sett2.addWidget(lb_rfrlo, 1, 0)
         lay_sett2.addWidget(ld_rfrhi, 0, 1)
-        lay_sett2.addWidget(sb_rfrhi, 1, 1, alignment=Qt.AlignCenter)
-        lay_sett2.addWidget(lb_rfrhi, 2, 1)
+        lay_sett2.addWidget(lb_rfrhi, 1, 1)
         lay_sett2.addWidget(ld_n1, 0, 2)
-        lay_sett2.addWidget(sb_n1, 1, 2, alignment=Qt.AlignCenter)
-        lay_sett2.addWidget(lb_n1, 2, 2)
+        lay_sett2.addWidget(lb_n1, 1, 2)
         lay_sett2.addWidget(ld_hsdiv, 0, 3)
-        lay_sett2.addWidget(cb_hsdiv, 1, 3, alignment=Qt.AlignCenter)
-        lay_sett2.addWidget(lb_hsdiv, 2, 3)
+        lay_sett2.addWidget(lb_hsdiv, 1, 3)
 
         lay_eq = QGridLayout()
         lay_eq.setHorizontalSpacing(12)
@@ -1597,7 +1604,6 @@ class AFC(BaseWidget):
 
         gbox.setStyleSheet("""
             .SiriusSpinbox{max-width: 4.5em;}
-            SiriusHexaSpinbox{max-width: 4.5em;}
             QComboBox, #n1 {max-width: 2.7em;}
             #frac {max-width: 1.5em;}
             #freq, #fpgaclk {max-width: 6.5em;}
@@ -1677,10 +1683,14 @@ class _EVR_EVE(BaseWidget):
     def setupmenus(self):
         main_menu = QMenuBar()
         main_menu.setNativeMenuBar(False)
-        menu = main_menu.addMenu('&Uplink')
 
-        fout = LLTimeSearch.get_fout_channel(
-            self.device.substitute(propty='OTP0'))
+        try:
+            fout = LLTimeSearch.get_fout_channel(
+                self.device.substitute(propty='OTP0'))
+        except KeyError:
+            return main_menu
+
+        menu = main_menu.addMenu('&Uplink')
         action = menu.addAction(fout)
         icon = qta.icon('mdi.timer', color=get_appropriate_color('AS'))
         Win = create_window_from_widget(
@@ -1738,11 +1748,14 @@ class _EVR_EVE(BaseWidget):
 
         if self.device_type == 'EVR':
             wids = list()
-            conn = LLTimeSearch.get_connections_from_evg()
-            conn = {
-                dev.propty for dev in conn
-                if dev.device_name == self.device.device_name}
-            conn = {int(p[-1]) for p in conn if p.startswith('OUT')}
+            try:
+                conn = LLTimeSearch.get_connections_from_evg()
+                conn = {
+                    dev.propty for dev in conn
+                    if dev.device_name == self.device.device_name}
+                conn = {int(p[-1]) for p in conn if p.startswith('OUT')}
+            except KeyError:
+                conn = set()
             for i in range(8):
                 pvname = self.get_pvname('Los-Mon')
                 if i in conn:
@@ -1835,17 +1848,9 @@ class _EVR_EVE(BaseWidget):
         info_lay.addWidget(gb, 0, 6, alignment=Qt.AlignTop)
 
         lb = QLabel("<b>Fw.Version</b>")
-        pvname = self.get_pvname(propty='FrmVersionA-Cte')
-        frma = SiriusLabel(self, init_channel=pvname)
-        frma.displayFormat = frma.DisplayFormat.TIFwVersion
-        pvname = self.get_pvname(propty='FrmVersionB-Cte')
-        frmb = SiriusLabel(self, init_channel=pvname)
-        frmb.displayFormat = frmb.DisplayFormat.TIFwVersion
-        pvname = self.get_pvname(propty='FrmVersionC-Cte')
-        frmc = SiriusLabel(self, init_channel=pvname)
-        frmc.displayFormat = frmc.DisplayFormat.TIFwVersion
-        gb = self._create_small_group(
-            '', info_wid, (lb, frma, frmb, frmc))
+        pvname = self.get_pvname(propty='FwVersion-Cte.SVAL')
+        frmv = SiriusLabel(self, init_channel=pvname)
+        gb = self._create_small_group('', info_wid, (lb, frmv))
         gb.layout().setSpacing(3)
         info_lay.addWidget(gb, 0, 7, alignment=Qt.AlignTop)
 
@@ -2096,12 +2101,15 @@ class EVGFOUTOUTList(BaseList):
 
     def _get_connections(self, device):
         if not hasattr(self, 'conn_idcs'):
-            if device.dev == 'EVG':
-                conn_names = LLTimeSearch.get_evg2fout_mapping()
-            else:
-                conn_map = LLTimeSearch.get_fout2trigsrc_mapping()
-                conn_names = conn_map[device.device_name]
-            conn_idcs = [int(dev[-1]) for dev in conn_names]
+            try:
+                if device.dev == 'EVG':
+                    conn_names = LLTimeSearch.get_evg2fout_mapping()
+                else:
+                    conn_map = LLTimeSearch.get_fout2trigsrc_mapping()
+                    conn_names = conn_map[device.device_name]
+                conn_idcs = [int(dev[-1]) for dev in conn_names]
+            except KeyError:
+                conn_idcs, conn_names = list(), list()
             self.conn_idcs, self.conn_names = conn_idcs, conn_names
 
         return self.conn_idcs, self.conn_names

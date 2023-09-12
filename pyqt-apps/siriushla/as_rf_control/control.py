@@ -106,12 +106,13 @@ class RFMainControl(SiriusMainWindow):
 
         lay = QGridLayout(cwid)
         lay.addWidget(label, 0, 0, 1, 4)
-        lay.addWidget(gbox_intlks, 1, 0, 1, 1)
-        lay.addWidget(gbox_rfgen, 2, 0, 1, 1)
+        lay.addWidget(gbox_intlks, 1, 0)
+        lay.addWidget(gbox_rfgen, 2, 0)
         lay.addWidget(wid_startctrl, 1, 1, 2, 1)
         lay.addWidget(wid_pwrmon, 1, 2, 2, 1)
         lay.addWidget(gbox_graphs, 1, 3, 2, 1)
-        lay.setColumnStretch(0, 2)
+        lay.setRowStretch(1, 1)
+        lay.setColumnStretch(0, 0)
         lay.setColumnStretch(1, 5)
         lay.setColumnStretch(2, 3)
         lay.setColumnStretch(3, 4)
@@ -163,9 +164,6 @@ class RFMainControl(SiriusMainWindow):
             '#dtls{min-width:18px;max-width:18px;icon-size:20px;}')
         connect_window(self.pb_intlkdtls, LLRFInterlockDetails, parent=self,
                        section=self.section, prefix=self.prefix)
-        hlay_intlksts = QHBoxLayout()
-        hlay_intlksts.addWidget(self.led_intlk)
-        hlay_intlksts.addWidget(self.pb_intlkdtls)
 
         # Status
         self._ld_stats = QLabel(
@@ -181,9 +179,6 @@ class RFMainControl(SiriusMainWindow):
             '#dtls{min-width:18px;max-width:18px;icon-size:20px;}')
         connect_window(self.pb_cavdtls, CavityStatusDetails, parent=self,
                        section=self.section, prefix=self.prefix)
-        hlay_cavsts = QHBoxLayout()
-        hlay_cavsts.addWidget(self.led_cavsts)
-        hlay_cavsts.addWidget(self.pb_cavdtls)
 
         # # Status Transmission Line
         self.ld_tlsts = QLabel('Transm. Line', self, alignment=Qt.AlignRight)
@@ -195,9 +190,6 @@ class RFMainControl(SiriusMainWindow):
             '#dtls{min-width:18px;max-width:18px;icon-size:20px;}')
         connect_window(self.pb_tldtls, TransmLineStatusDetails, parent=self,
                        section=self.section, prefix=self.prefix)
-        hlay_tlsts = QHBoxLayout()
-        hlay_tlsts.addWidget(self.led_tlsts)
-        hlay_tlsts.addWidget(self.pb_tldtls)
 
         # Reset
         self._ld_reset = QLabel('<h4>Reset</h4>', self, alignment=Qt.AlignLeft)
@@ -222,19 +214,23 @@ class RFMainControl(SiriusMainWindow):
             '#pb_llrfreset{min-width:25px; max-width:25px; icon-size:20px;}')
 
         lay = QGridLayout()
-        lay.addWidget(self._ld_intlks, 0, 0, 1, 2)
+        lay.setAlignment(Qt.AlignTop)
+        lay.addWidget(self._ld_intlks, 0, 0, 1, 3)
         lay.addWidget(self.ld_emerg, 1, 0)
         lay.addWidget(self.led_emerg, 1, 1)
         lay.addWidget(self.ld_siriusintlk, 2, 0)
         lay.addWidget(self.led_siriusintlk, 2, 1)
         lay.addWidget(self.ld_intlk, 3, 0)
-        lay.addLayout(hlay_intlksts, 3, 1)
-        lay.addWidget(self._ld_stats, 4, 0, 1, 2)
+        lay.addWidget(self.led_intlk, 3, 1)
+        lay.addWidget(self.pb_intlkdtls, 3, 2)
+        lay.addWidget(self._ld_stats, 4, 0, 1, 3)
         lay.addWidget(self.ld_cavsts, 5, 0)
-        lay.addLayout(hlay_cavsts, 5, 1)
+        lay.addWidget(self.led_cavsts, 5, 1)
+        lay.addWidget(self.pb_cavdtls, 5, 2)
         lay.addWidget(self.ld_tlsts, 6, 0)
-        lay.addLayout(hlay_tlsts, 6, 1)
-        lay.addWidget(self._ld_reset, 7, 0, 1, 2)
+        lay.addWidget(self.led_tlsts, 6, 1)
+        lay.addWidget(self.pb_tldtls, 6, 2)
+        lay.addWidget(self._ld_reset, 7, 0, 1, 3)
         lay.addWidget(self.ld_globreset, 8, 0)
         lay.addWidget(self.pb_globreset, 8, 1)
         lay.addWidget(self.ld_llrfreset, 9, 0)
@@ -242,11 +238,12 @@ class RFMainControl(SiriusMainWindow):
         return lay
 
     def _rfGenLayout(self):
+        ld_align = Qt.AlignRight | Qt.AlignVCenter
         # On/Off
-        self.ld_genenbl = QLabel('Enable', self, alignment=Qt.AlignCenter)
+        self.ld_genenbl = QLabel('Enable', self, alignment=ld_align)
         # self.bt_genenbl = PyDMStateButton(
         #    self, self.prefix+'RF-Gen:GeneralRF-Sel')
-        self.lb_genenbl = SiriusLedState(
+        self.led_genenbl = SiriusLedState(
             self, self.prefix+'RF-Gen:GeneralRF-Sts')
 
         # Frequência
@@ -266,26 +263,25 @@ class RFMainControl(SiriusMainWindow):
 
         # Phase Continuous State
         self.ld_genphscont = QLabel(
-            'Phase Cont.', self, alignment=Qt.AlignCenter)
+            'Phase Cont.', self, alignment=ld_align)
         # self.bt_genphscont = PyDMStateButton(
         #    self, self.prefix+'RF-Gen:FreqPhsCont-Sel')
         self.lb_genphscont = SiriusLedState(
             self, self.prefix+'RF-Gen:FreqPhsCont-Sts')
 
-        lay = QVBoxLayout()
+        lay = QGridLayout()
         lay.setAlignment(Qt.AlignCenter)
-        lay.addWidget(self.ld_genenbl)
+        lay.addWidget(self.ld_genenbl, 0, 0)
         # lay.addWidget(self.bt_genenbl)
-        lay.addWidget(self.lb_genenbl, alignment=Qt.AlignCenter)
-        lay.addStretch()
-        lay.addWidget(self.ld_genfreq)
-        lay.addWidget(self.le_genfreq)
-        lay.addWidget(self.lb_genfreq)
-        lay.addStretch()
-        lay.addWidget(self.ld_genphscont)
+        lay.addWidget(self.led_genenbl, 0, 1, alignment=Qt.AlignLeft)
+        lay.setRowMinimumHeight(1, 10)
+        lay.addWidget(self.ld_genfreq, 2, 0, 1, 2)
+        lay.addWidget(self.le_genfreq, 3, 0, 1, 2)
+        lay.addWidget(self.lb_genfreq, 4, 0, 1, 2)
+        lay.setRowMinimumHeight(5, 10)
+        lay.addWidget(self.ld_genphscont, 6, 0)
         # lay.addWidget(self.bt_genphscont)
-        lay.addWidget(self.lb_genphscont, alignment=Qt.AlignCenter)
-        lay.addStretch()
+        lay.addWidget(self.lb_genphscont, 6, 1, alignment=Qt.AlignLeft)
         return lay
 
     def _startControlLayout(self):
@@ -461,42 +457,60 @@ class RFMainControl(SiriusMainWindow):
 
         # # Tuning
         # # # Tuning settings
-        lb_autotun = QLabel('Auto Tuning: ', self, alignment=Qt.AlignRight)
-        self.bt_autotun = PyDMStateButton(
+        ld_autotun = QLabel('Auto Tuning: ', self, alignment=Qt.AlignRight)
+        bt_autotun = PyDMStateButton(
             self, self.prefix+self.chs['Tun']['Auto']+':S')
-        self.lb_autotun = SiriusLedState(
+        lb_autotun = SiriusLedState(
             self, self.prefix+self.chs['Tun']['Auto'])
-        lb_dtune = QLabel('DTune: ', self, alignment=Qt.AlignRight)
-        self.sb_dtune = SiriusSpinbox(
+        ld_dtune = QLabel('DTune: ', self, alignment=Qt.AlignRight)
+        sb_dtune = SiriusSpinbox(
             self, self.prefix+self.chs['Tun']['DTune'].replace('RB', 'SP'))
-        self.lb_dtune = SiriusLabel(
+        lb_dtune = SiriusLabel(
             self, self.prefix+self.chs['Tun']['DTune'])
-        self.lb_dtune.showUnits = True
-        lb_dphase = QLabel('Dephase: ', self, alignment=Qt.AlignRight)
-        self.lb_dphase = SiriusLabel(
+        lb_dtune.showUnits = True
+        ld_dphase = QLabel('Dephase: ', self, alignment=Qt.AlignRight)
+        lb_dphase = SiriusLabel(
             self, self.prefix+self.chs['Tun']['DPhase'])
-        self.lb_dphase.showUnits = True
-        lb_tunact = QLabel(
+        lb_dphase.showUnits = True
+        ld_tunact = QLabel(
             'Acting: ', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
-        self.led_tunact = SiriusLedState(
+        led_tunact = SiriusLedState(
             self, self.prefix+self.chs['Tun']['Acting'])
+        ld_oversht = QLabel(
+            'Overshoot: ', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+        sb_oversht = SiriusSpinbox(
+            self, self.prefix+self.chs['Tun']['Oversht']+':S')
+        lb_oversht = SiriusLabel(
+            self, self.prefix+self.chs['Tun']['Oversht'])
+        lb_oversht.showUnits = True
+        ld_margin = QLabel(
+            'Deadband: ', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+        sb_margin = SiriusSpinbox(
+            self, self.prefix+self.chs['Tun']['Deadbnd']+':S')
+        lb_margin = SiriusLabel(
+            self, self.prefix+self.chs['Tun']['Deadbnd'])
+        lb_margin.showUnits = True
         lay_tunset = QGridLayout()
         lay_tunset.setAlignment(Qt.AlignTop | Qt.AlignHCenter)
         lay_tunset.setVerticalSpacing(12)
-        lay_tunset.addItem(
-            QSpacerItem(10, 0, QSzPlcy.Expanding, QSzPlcy.Ignored), 1, 0)
-        lay_tunset.addWidget(lb_autotun, 1, 1)
-        lay_tunset.addWidget(self.bt_autotun, 1, 2)
-        lay_tunset.addWidget(self.lb_autotun, 1, 3)
-        lay_tunset.addWidget(lb_dtune, 2, 1)
-        lay_tunset.addWidget(self.sb_dtune, 2, 2)
-        lay_tunset.addWidget(self.lb_dtune, 2, 3)
-        lay_tunset.addWidget(lb_dphase, 3, 1)
-        lay_tunset.addWidget(self.lb_dphase, 3, 2)
-        lay_tunset.addWidget(lb_tunact, 4, 1)
-        lay_tunset.addWidget(self.led_tunact, 4, 2, alignment=Qt.AlignCenter)
-        lay_tunset.addItem(
-            QSpacerItem(10, 0, QSzPlcy.Expanding, QSzPlcy.Ignored), 1, 4)
+        lay_tunset.setColumnStretch(0, 3)
+        lay_tunset.addWidget(ld_autotun, 1, 1)
+        lay_tunset.addWidget(bt_autotun, 1, 2)
+        lay_tunset.addWidget(lb_autotun, 1, 3)
+        lay_tunset.addWidget(ld_dtune, 2, 1)
+        lay_tunset.addWidget(sb_dtune, 2, 2)
+        lay_tunset.addWidget(lb_dtune, 2, 3)
+        lay_tunset.addWidget(ld_margin, 3, 1)
+        lay_tunset.addWidget(sb_margin, 3, 2)
+        lay_tunset.addWidget(lb_margin, 3, 3)
+        lay_tunset.addWidget(ld_oversht, 4, 1)
+        lay_tunset.addWidget(sb_oversht, 4, 2)
+        lay_tunset.addWidget(lb_oversht, 4, 3)
+        lay_tunset.addWidget(ld_dphase, 5, 1)
+        lay_tunset.addWidget(lb_dphase, 5, 2)
+        lay_tunset.addWidget(ld_tunact, 6, 1)
+        lay_tunset.addWidget(led_tunact, 6, 2, alignment=Qt.AlignCenter)
+        lay_tunset.setColumnStretch(4, 3)
 
         # # # Plungers motors
         lb_plg1 = QLabel('Plunger 1')
@@ -559,13 +573,13 @@ class RFMainControl(SiriusMainWindow):
 
         wid_tun = QWidget()
         lay_plun = QGridLayout(wid_tun)
-        lay_plun.addWidget(QLabel('<h3> • Settings</h3>', self,
-                                  alignment=Qt.AlignLeft), 0, 0, 1, 3)
+        lay_plun.addWidget(QLabel(
+            '<h3> • Settings</h3>', self, alignment=Qt.AlignLeft), 0, 0, 1, 3)
         lay_plun.addLayout(lay_tunset, 1, 0, 1, 3)
         lay_plun.addItem(
             QSpacerItem(0, 25, QSzPlcy.Ignored, QSzPlcy.Fixed), 2, 0)
-        lay_plun.addWidget(QLabel('<h3> • Plungers</h3>', self,
-                                  alignment=Qt.AlignLeft), 3, 0)
+        lay_plun.addWidget(QLabel(
+            '<h3> • Plungers</h3>', self, alignment=Qt.AlignLeft), 3, 0)
         lay_plun.addLayout(lay_plunmon, 4, 0)
         lay_plun.addWidget(self.graph_plunmotors, 4, 1, 1, 2)
 

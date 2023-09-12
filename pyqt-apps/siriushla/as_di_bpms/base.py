@@ -1,17 +1,19 @@
+"""Base module."""
+
 from functools import partial as _part
 import numpy as np
+
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QCheckBox, \
-    QFormLayout, QGroupBox, QLabel
+    QFormLayout, QGroupBox, QLabel, QSizePolicy as QSzPlcy
 from qtpy.QtGui import QColor
-from pydm.widgets import PyDMEnumComboBox
-from pydm.widgets.base import PyDMPrimitiveWidget
-from siriuspy.namesys import SiriusPVName as _PVName
-from siriuspy.diagbeam.bpm.csdev import Const as _csbpm
-from siriushla.widgets import SiriusConnectionSignal, SiriusLabel, \
-    SiriusSpinbox, SiriusTimePlot, SiriusWaveformPlot
 
-_BPMDB = _csbpm.get_bpm_database()
+from siriuspy.namesys import SiriusPVName as _PVName
+
+from siriushla.widgets import SiriusConnectionSignal, SiriusLabel, \
+    SiriusSpinbox, SiriusTimePlot, SiriusWaveformPlot, SiriusLedState, \
+    SiriusLedAlert, PyDMStateButton, SiriusEnumComboBox, SiriusPushButton, \
+    SiriusLineEdit, pydmwidget_factory
 
 
 class BaseWidget(QWidget):
@@ -22,7 +24,6 @@ class BaseWidget(QWidget):
         self.bpm = _PVName(bpm)
         self.setObjectName(self.bpm.sec+'App')
         self.data_prefix = data_prefix
-        self.bpmdb = _BPMDB
         self._chans = []
 
     def channels(self):
@@ -40,58 +41,110 @@ class BaseWidget(QWidget):
         grpbx.layoutf = fbl
         fbl.setLabelAlignment(Qt.AlignVCenter)
         for prop in props:
-            prec = None
             if len(prop) == 2:
-                pv1, txt = prop
-                isdata = True
+                pvs, txt = prop
+                isdata, prec, widgets = True, None, None
             elif len(prop) == 3:
-                pv1, txt, isdata = prop
-            elif len(prop) == 4:
-                pv1, txt, isdata, prec = prop
-            hbl = QHBoxLayout()
-            not_enum = pv1.endswith('-SP')
-            pv2 = pv1.replace('-SP', '-RB').replace('-Sel', '-Sts')
-            if pv2 != pv1:
-                if not_enum:
-                    chan1 = self.get_pvname(pv1, is_data=isdata)
-                    wid = SiriusSpinbox(self, init_channel=chan1)
-                    wid.setStyleSheet("min-width:5em;")
-                    wid.limitsFromChannel = False
-                    pvn = self.data_prefix + pv1
-                    wid.setMinimum(self.bpmdb[pvn].get('low', -1e10))
-                    wid.setMaximum(self.bpmdb[pvn].get('high', 1e10))
-                    if prec is not None:
-                        wid.precisionFromPV = False
-                        wid.precision = prec
+                pvs, txt, aux = prop
+                if isinstance(aux, bool):
+                    isdata, prec, widgets = aux, None, None
+                elif isinstance(aux, int):
+                    isdata, prec, widgets = True, aux, None
+                elif isinstance(aux, dict):
+                    isdata = aux.get('isdata', True)
+                    prec = aux.get('prec', None)
+                    widgets = aux.get('widgets', None)
                 else:
-                    wid = PyDMEnumComboBox(
-                        self,
-                        init_channel=self.get_pvname(pv1, is_data=isdata))
-                    wid.setStyleSheet("min-width:5em;")
-                wid.setObjectName(pv1.replace('-', ''))
-                hbl.addWidget(wid)
+                    isdata, prec, widgets = True, None, aux
 
-            lab = SiriusLabel(
-                self, init_channel=self.get_pvname(pv2, is_data=isdata))
-            lab.setObjectName(pv2.replace('-', ''))
-            lab.showUnits = True
-            if prec is not None:
-                lab.precisionFromPV = False
-                lab.precision = prec
-            lab.setStyleSheet("min-width:5em;")
-            hbl.addWidget(lab)
+            if isinstance(pvs, str):
+                pv1 = pvs
+                pv2 = pv1.replace('-SP', '-RB').replace('-Sel', '-Sts')
+                pvs = [pv1, ]
+                if pv2 != pv1:
+                    pvs.append(pv2)
+            else:
+                pv1 = pvs[0]
+
+            if widgets is None:
+                if pv2 != pv1:
+                    if pv1.endswith('-SP'):
+                        widgets = ['spin', 'label']
+                    else:
+                        widgets = ['combo', 'label']
+                else:
+                    widgets = ['label', ]
+
             lab = QLabel(txt)
             lab.setObjectName(pv1.split('-')[0])
             lab.setStyleSheet("min-width:10em;")
+
+            hbl = QHBoxLayout()
+            for i, wid in enumerate(widgets):
+                hbl.addWidget(self._get_widget(wid, pvs[i], isdata, prec))
+
             fbl.addRow(lab, hbl)
+
         return grpbx
 
+    def _get_widget(self, widtype, pvname, isdata, prec):
+        pvname = self.get_pvname(pvname, is_data=isdata)
 
-class CustomGroupBox(QGroupBox, PyDMPrimitiveWidget):
+        if widtype == 'combo':
+            wid = SiriusEnumComboBox(self, pvname)
+            wid.setStyleSheet("QWidget{min-width:5em;}")
+        elif widtype == 'spin':
+            wid = SiriusSpinbox(self, pvname)
+            wid.setStyleSheet("QWidget{min-width:5em;}")
+            if prec is not None:
+                wid.precisionFromPV = False
+                wid.precision = prec
+        elif widtype == 'lineedit':
+            wid = SiriusLineEdit(self, pvname)
+            wid.setStyleSheet("QWidget{min-width:5em;}")
+            wid.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Preferred)
+            if prec is not None:
+                wid.precisionFromPV = False
+                wid.precision = prec
+        elif widtype == 'label':
+            wid = SiriusLabel(self, pvname)
+            wid.showUnits = True
+            if prec is not None:
+                wid.precisionFromPV = False
+                wid.precision = prec
+            wid.setStyleSheet("QLabel{min-width:6em;}")
+        elif widtype == 'ledstate':
+            wid = SiriusLedState(self, pvname)
+        elif widtype == 'ledalert':
+            wid = SiriusLedAlert(self, pvname)
+        elif widtype == 'statebutton':
+            wid = PyDMStateButton(self, pvname)
+        elif isinstance(widtype, (list, tuple)):
+            if widtype[0] == 'pushbutton':
+                kws = dict(
+                    label=widtype[1], icon=widtype[2],
+                    pressValue=widtype[3] if len(widtype) > 3 else 1,
+                    init_channel=pvname)
+                if len(widtype) > 4:
+                    kws['releaseValue'] = widtype[4]
+                wid = SiriusPushButton(self, **kws)
+                wid.setDefault(False)
+                wid.setAutoDefault(False)
+            elif widtype[0] == 'ledstate':
+                wid = SiriusLedState(self, pvname)
+                wid.offColor = widtype[1]
+                wid.onColor = widtype[2]
+            elif widtype[0] == 'ledalert':
+                wid = SiriusLedAlert(self, pvname)
+                wid.offColor = widtype[1]
+                wid.onColor = widtype[2]
+        else:
+            raise NotImplementedError(f'widget not defined for type {widtype}')
+        wid.setObjectName(str(pvname).replace('-', ''))
+        return wid
 
-    def __init__(self, title, parent=None):
-        QGroupBox.__init__(self, title, parent)
-        PyDMPrimitiveWidget.__init__(self)
+
+CustomGroupBox = pydmwidget_factory(QGroupBox, pydm_class='primi')
 
 
 def get_custom_widget_class(CLASS):

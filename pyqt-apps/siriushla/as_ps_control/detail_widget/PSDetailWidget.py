@@ -844,112 +844,6 @@ class PSDetailWidget(_BaseDetailWidget):
         return layout
 
     def _wfmLayout(self):
-        # Channels
-        wfm_data_sp_ch = self._prefixed_psname + ":Wfm-SP"
-        wfm_data_rb_ch = self._prefixed_psname + ":Wfm-RB"
-        wfm_data_rm_ch = self._prefixed_psname + ":WfmRef-Mon"
-        wfm_data_mo_ch = self._prefixed_psname + ":Wfm-Mon"
-
-        # Constants
-        self._wfm_data_rm = _np.array([])
-        self._wfm_data_mo = _np.array([])
-        self._wfm_nrpts_sp = 0
-        self._wfm_nrpts_rb = 0
-        self._wfm_nrpts_rm = 0
-        self._wfm_nrpts_mo = 0
-
-        # NrPoints
-        self.wfm_nrpts = QLabel('Nrpts (SP|RB|Ref-Mon|Mon):', self)
-        self.wfm_nrpts.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
-        self.wfm_nrpts_ch_rb = SiriusConnectionSignal(wfm_data_rb_ch)
-        self.wfm_nrpts_ch_rb.new_value_signal[_np.ndarray].connect(
-            self._wfm_update_rb)
-        self.wfm_nrpts_ch_sp = SiriusConnectionSignal(wfm_data_sp_ch)
-        self.wfm_nrpts_ch_sp.new_value_signal[_np.ndarray].connect(
-            self._wfm_update_sp)
-        self.wfm_nrpts_ch_rm = SiriusConnectionSignal(wfm_data_rm_ch)
-        self.wfm_nrpts_ch_rm.new_value_signal[_np.ndarray].connect(
-            self._wfm_update_rm)
-        self.wfm_nrpts_ch_mo = SiriusConnectionSignal(wfm_data_mo_ch)
-        self.wfm_nrpts_ch_mo.new_value_signal[_np.ndarray].connect(
-            self._wfm_update_mo)
-
-        # Plot
-        self.wfm = SiriusWaveformPlot()
-        self.wfm.setObjectName('graph')
-        self.wfm.setStyleSheet('#graph{max-height:15em; max-width:16.5em;}')
-        self.wfm.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
-        self.wfm.autoRangeX = True
-        self.wfm.autoRangeY = True
-        self.wfm.showXGrid = True
-        self.wfm.showYGrid = True
-        self.wfm.setLabel('left', text='Current [A]', color='gray')
-        self.wfm.setLabel('bottom', text='Time [s]')
-        self.wfm.plotItem.ctrl.fftCheck.toggled.connect(self._wfmUpdAxisLabel)
-        self.wfm.setBackgroundColor(QColor(255, 255, 255))
-        self.wfm.addChannel(y_channel=wfm_data_sp_ch, name='Wfm-SP',
-                            color='red', lineWidth=2)
-        self.wfm.addChannel(y_channel=wfm_data_rb_ch, name='Wfm-RB',
-                            color='blue', lineWidth=2)
-        self.wfm.addChannel(y_channel=wfm_data_rm_ch, name='WfmRef-Mon',
-                            color='green', lineWidth=2)
-        self.wfm.addChannel(y_channel=wfm_data_mo_ch, name='Wfm-Mon',
-                            color='black', lineWidth=2)
-        self._wfm_curves = {'Wfm-SP': self.wfm.curveAtIndex(0),
-                            'Wfm-RB': self.wfm.curveAtIndex(1),
-                            'WfmRef-Mon': self.wfm.curveAtIndex(2),
-                            'Wfm-Mon': self.wfm.curveAtIndex(3)}
-        # change xdata to show time indices according to ScopeDuration-RB
-        ch_scopedur = self._prefixed_psname + ":ScopeDuration-RB"
-        self._scopedur_ch_rb = SiriusConnectionSignal(ch_scopedur)
-        self._scopedur_ch_rb.new_value_signal[float].connect(self._wfmTimeData)
-        # reimplement fourier transform to use ScopeFreq-RB
-        ch_scopefreq = self._prefixed_psname + ":ScopeFreq-RB"
-        self._scopefreq_ch_rb = SiriusConnectionSignal(ch_scopefreq)
-        ch_wfmfreq = self._prefixed_psname + ':ParamWfmRefFreq-Cte'
-        self._wfmfreq_ch_rb = SiriusConnectionSignal(ch_wfmfreq)
-        for propty, curve in self._wfm_curves.items():
-            curvetype = 'scope' if propty == 'Wfm-Mon' else 'wfm'
-            curve._fourierTransform = _part(self._wfmFourierData, curvetype)
-
-        # Show
-        self.show_wfm_sp = QCheckBox('SP')
-        self.show_wfm_sp.setChecked(True)
-        self.show_wfm_sp.setStyleSheet('color: red;')
-        self.show_wfm_sp.stateChanged.connect(
-            self._wfm_curves['Wfm-SP'].setVisible)
-        self.show_wfm_rb = QCheckBox('RB')
-        self.show_wfm_rb.setChecked(True)
-        self.show_wfm_rb.setStyleSheet('color: blue;')
-        self.show_wfm_rb.stateChanged.connect(
-            self._wfm_curves['Wfm-RB'].setVisible)
-        self.show_wfm_rm = QCheckBox('Ref-Mon')
-        self.show_wfm_rm.setChecked(True)
-        self.show_wfm_rm.setStyleSheet('color: green;')
-        self.show_wfm_rm.stateChanged.connect(
-            self._wfm_curves['WfmRef-Mon'].setVisible)
-        monlabel = 'Mon' + (' (Error)' if self._psname.sec == 'BO' else '')
-        self.show_wfm_mo = QCheckBox(monlabel)
-        self.show_wfm_mo.setChecked(True)
-        self.show_wfm_mo.setStyleSheet('color: black;')
-        self.show_wfm_mo.stateChanged.connect(
-            self._wfm_curves['Wfm-Mon'].setVisible)
-        hbox_show = QHBoxLayout()
-        hbox_show.setSpacing(9)
-        hbox_show.addWidget(self.show_wfm_sp)
-        hbox_show.addWidget(self.show_wfm_rb)
-        hbox_show.addWidget(self.show_wfm_rm)
-        hbox_show.addWidget(self.show_wfm_mo)
-
-        # Add widgets
-        layout = QVBoxLayout()
-        layout.setAlignment(Qt.AlignTop)
-        layout.addWidget(self.wfm)
-        layout.addWidget(self.wfm_nrpts)
-        layout.addLayout(hbox_show)
-        return layout
-
-    def _wfmLayout(self):
         # graph
         self.wfm_graph = SiriusWaveformPlot()
         self.wfm_graph.setObjectName('graph')
@@ -1537,7 +1431,6 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
         self._psmodel = 'FOFB_PS'
         self._pstype = 'si-corrector-fc1-ch'
         self._db = get_ps_propty_database(self._psmodel, self._pstype)
-        self._db['AlarmsAmpLtcLabels-Cte'] = self._db['AlarmsAmpLabels-Cte']
         self._setup_ui()
 
     def _setup_ui(self):
@@ -1906,6 +1799,9 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
         self.graph_curr.addChannel(
             y_channel=self._prefixed_psname + ':LAMPCurrentData',
             name='Current', color='blue', lineWidth=1)
+        self.graph_curr.addChannel(
+            y_channel=self._prefixed_psname + ':LAMPCurrentRefData',
+            name='CurrentRef', color='green', lineWidth=1)
         # self.graph_curr.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
         self.graph_curr.autoRangeX = True
         self.graph_curr.autoRangeY = True
@@ -1982,9 +1878,15 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
 
     def _fofbctrlLayout(self):
         # controls
+        fofbacc_lb = QLabel(
+            'Accumulator', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+        self.fofbacc_mon = SiriusLabel(
+            self, self._prefixed_psname + ':FOFBAcc-Mon')
+        self.fofbacc_mon.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
+
         fofbaccgain_lb = QLabel(
             'Acc. Gain', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
-        self.fofbaccgain_sp = SiriusSpinbox(
+        self.fofbaccgain_sp = PyDMLineEdit(
             self, self._prefixed_psname + ':FOFBAccGain-SP')
         self.fofbaccgain_sp.precisionFromPV = False
         self.fofbaccgain_sp.precision = 8
@@ -2035,21 +1937,22 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
 
         widctrl = QWidget()
         lay = QGridLayout(widctrl)
-        # lay.setAlignment(Qt.AlignTop)
-        lay.addWidget(fofbaccgain_lb, 0, 0, Qt.AlignRight)
-        lay.addWidget(self.fofbaccgain_sp, 0, 1)
-        lay.addWidget(self.fofbaccgain_rb, 0, 2)
-        lay.addWidget(fofbaccfreeze_lb, 1, 0, Qt.AlignRight)
-        lay.addWidget(self.fofbaccfreeze_sp, 1, 1)
-        lay.addWidget(self.fofbaccfreeze_rb, 1, 2)
-        lay.addWidget(fofbaccclear_lb, 2, 0, Qt.AlignRight)
-        lay.addWidget(self.fofbaccclear_bt, 2, 1)
-        lay.addWidget(fofbaccmaxsat_lb, 3, 0, Qt.AlignRight)
-        lay.addWidget(self.fofbaccmaxsat_sp, 3, 1)
-        lay.addWidget(self.fofbaccmaxsat_rb, 3, 2)
-        lay.addWidget(fofbaccminsat_lb, 4, 0, Qt.AlignRight)
-        lay.addWidget(self.fofbaccminsat_sp, 4, 1)
-        lay.addWidget(self.fofbaccminsat_rb, 4, 2)
+        lay.addWidget(fofbacc_lb, 0, 0, Qt.AlignRight)
+        lay.addWidget(self.fofbacc_mon, 0, 1)
+        lay.addWidget(fofbaccgain_lb, 1, 0, Qt.AlignRight)
+        lay.addWidget(self.fofbaccgain_sp, 1, 1)
+        lay.addWidget(self.fofbaccgain_rb, 1, 2)
+        lay.addWidget(fofbaccfreeze_lb, 2, 0, Qt.AlignRight)
+        lay.addWidget(self.fofbaccfreeze_sp, 2, 1)
+        lay.addWidget(self.fofbaccfreeze_rb, 2, 2)
+        lay.addWidget(fofbaccclear_lb, 3, 0, Qt.AlignRight)
+        lay.addWidget(self.fofbaccclear_bt, 3, 1)
+        lay.addWidget(fofbaccmaxsat_lb, 4, 0, Qt.AlignRight)
+        lay.addWidget(self.fofbaccmaxsat_sp, 4, 1)
+        lay.addWidget(self.fofbaccmaxsat_rb, 4, 2)
+        lay.addWidget(fofbaccminsat_lb, 5, 0, Qt.AlignRight)
+        lay.addWidget(self.fofbaccminsat_sp, 5, 1)
+        lay.addWidget(self.fofbaccminsat_rb, 5, 2)
 
         # coefficients
         gph_fofbcoeffs = dict()

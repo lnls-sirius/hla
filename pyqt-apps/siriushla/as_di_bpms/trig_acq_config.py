@@ -3,6 +3,7 @@ from qtpy.QtCore import Qt
 from pydm.widgets import PyDMPushButton
 from siriushla.widgets import SiriusLabel
 from siriushla.as_di_bpms.base import BaseWidget
+from siriushla.as_di_bpms.settings import TriggersLauncherWidget
 
 
 class ACQTrigConfigs(BaseWidget):
@@ -58,11 +59,14 @@ class ACQTrigConfigs(BaseWidget):
                 ('Channel-Sel', 'Acquisition Rate'),
                 ('Shots-SP', 'Number of Shots'),
                 ('UpdateTime-SP', 'Update Interval [s]'),
-                ('TbTTagEn-Sel', 'Sync Timing', False),
-                ('TbTTagDly-SP', 'TbT Delay [adc counts]', False),
+                ('TbTPhaseSyncEn-Sel', 'Sync Timing', False),
+                ('TbTPhaseSyncDly-SP', 'TbT Delay [adc counts]',
+                 dict(isdata=False, widgets=['lineedit', 'label'])),
                 ('TbTDataMaskEn-Sel', 'Mask Data', False),
-                ('TbTDataMaskSamplesBeg-SP', 'Mask Begin', False),
-                ('TbTDataMaskSamplesEnd-SP', 'Mask End', False),
+                ('TbTDataMaskSamplesBeg-SP', 'Mask Begin',
+                 dict(isdata=False, widgets=['lineedit', 'label'])),
+                ('TbTDataMaskSamplesEnd-SP', 'Mask End',
+                 dict(isdata=False, widgets=['lineedit', 'label'])),
                 ))
         grpbx.rules = self.basic_rule('BPMMode-Sts', True)
         self.layoutg.addWidget(grpbx, 2, 0)
@@ -76,6 +80,11 @@ class ACQTrigConfigs(BaseWidget):
                 ('TriggerDataHyst-SP', 'Hysteresis')))
         grpbx.rules = self.basic_rule('Trigger-Sts', True, val=2)
         self.layoutg.addWidget(grpbx, 3, 0)
+
+        grpbx = TriggersLauncherWidget(
+            self, prefix=self.prefix, bpm=self.bpm,
+            acqcores=[self.data_prefix, ])
+        self.layoutg.addWidget(grpbx, 4, 0)
 
     def basic_rule(self, channel, flag, val=0):
         chan = self.get_pvname(channel)

@@ -102,8 +102,8 @@ class FOFBCtrlMonLed(QLed, PyDMWidget):
         self.device = SiriusPVName(device)
         self.setToolTip(device)
         connect_newprocess(
-            self, ['sirius-hla-si-ap-fofb.py', '--lowleveldetails'], parent=self,
-            signal=self.doubleClicked)
+            self, ['sirius-hla-si-ap-fofb.py', '--lowleveldetails'],
+            parent=self, signal=self.doubleClicked)
 
         idx = int(self.device.sub[:2]) - 1
         self._values = set([
@@ -127,8 +127,7 @@ class FOFBCtrlMonLed(QLed, PyDMWidget):
 
         self._channels = list(self._address2channel.values())
 
-        self.setOnColor(self.LightGreen)
-        self.setOffColor(self.Red)
+        self.stateColors = [self.Red, self.LightGreen, self.Gray]
 
     def value_changed(self, new_val):
         """Receive new value and set led color accordingly."""

@@ -29,8 +29,6 @@ from ..as_ap_sofb.graphics.base import Graph
 from .base import BaseObject, get_fofb_icon
 from .graphics import RefOrbViewWidget
 
-_BPMDB = _csbpm.get_bpm_database()
-
 
 class RefOrbWidget(BaseObject, QWidget):
     """Reference Orbit widget."""
@@ -801,7 +799,7 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
                 LogicalTriggers, title=bpm+': ACQ Logical Triggers')
             connect_window(
                 btn, win, parent=self, prefix=self.prefix, device=bpm,
-                database=_BPMDB, names=_csbpm.LogTrigIntern._fields)
+                names=_csbpm.LogTrigIntern._fields)
             lbl = QLabel(bpm, self, alignment=Qt.AlignCenter)
             lbl.setObjectName('lbl_bpmname')
             hwid = QWidget()

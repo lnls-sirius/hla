@@ -31,8 +31,8 @@ class DiffCtrlDevMonitor(QWidget):
         self.section = self.device.sec
         self.orientation = self.device.dev[-1]
         if 'Scrap' in self.device.device_name:
-            self.neg_name = 'Inner' if self.orientation == 'H' else 'Bottom'
-            self.pos_name = 'Outer' if self.orientation == 'H' else 'Top'
+            self.neg_name = 'Right' if self.orientation == 'H' else 'Bottom'
+            self.pos_name = 'Left' if self.orientation == 'H' else 'Top'
             self.slit_name = 'Slit'
         else:
             self.neg_name = 'Negative'
@@ -60,7 +60,7 @@ class DiffCtrlDevMonitor(QWidget):
             self.device.substitute(propty=self.neg_name+'DoneMov-Mon'): 1,
             self.device.substitute(propty=self.pos_name+'DoneMov-Mon'): 1}
         self.multiled_status = PyDMLedMultiChannel(self, channels2values)
-        self.multiled_status.setStyleSheet('max-width: 1.29em;')
+        self.multiled_status.setStyleSheet('QLed{max-width: 1.29em;}')
 
         self.pb_details = QPushButton(qta.icon('fa5s.ellipsis-h'), '', self)
         self.pb_details.setToolTip('Open details')

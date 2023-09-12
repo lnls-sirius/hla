@@ -28,7 +28,7 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
         self.device = SiriusPVName(device)
         self.devpref = self.device.substitute(prefix=prefix)
 
-        self.setObjectName('SIApp')
+        self.setObjectName(self.device.sec+'App')
         self.setWindowTitle(device+' Orbit Interlock Control Window')
 
         self._setupUi()
@@ -38,32 +38,40 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
     def _setupUi(self):
         wid = QWidget(self)
         self.setCentralWidget(wid)
+        lay = QGridLayout(wid)
 
         title = QLabel(
             '<h3>' + self.device + ' Orbit Interlock Control</h3>',
             self, alignment=Qt.AlignCenter)
-        title.setStyleSheet("font-weight: bold;")
+        lay.addWidget(title, 0, 0, 1, 2)
+
+        try:
+            down, up = self.get_down_up_bpms(self.device)
+            other = down if self.device == up else up
+            titlehelp = QLabel(
+                '<h3>(also refers to ' + other + ')</h3>',
+                self, alignment=Qt.AlignCenter)
+            lay.addWidget(titlehelp, 1, 0, 1, 2)
+        except ValueError:
+            pass
 
         # General Interlock
         self._gb_gen = QGroupBox('General Interlock')
         lay_gen = self._setupIntlkGenLayout()
         self._gb_gen.setLayout(lay_gen)
+        lay.addWidget(self._gb_gen, 2, 0, 1, 2)
 
         # Position Interlock
         self._gb_pos = QGroupBox('Position Interlock')
         lay_pos = self._setupIntlkTypeLayout('Pos')
         self._gb_pos.setLayout(lay_pos)
+        lay.addWidget(self._gb_pos, 3, 0)
 
         # Angulation Interlock
         self._gb_ang = QGroupBox('Angulation Interlock')
         lay_ang = self._setupIntlkTypeLayout('Ang')
         self._gb_ang.setLayout(lay_ang)
-
-        lay = QGridLayout(wid)
-        lay.addWidget(title, 0, 0, 1, 2)
-        lay.addWidget(self._gb_gen, 1, 0, 1, 2)
-        lay.addWidget(self._gb_pos, 2, 0)
-        lay.addWidget(self._gb_ang, 2, 1)
+        lay.addWidget(self._gb_ang, 3, 1)
 
     def _setupIntlkGenLayout(self):
         self._ld_genenbl = QLabel(
@@ -115,6 +123,10 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
         self._le_minsumlim.setStyleSheet('QLineEdit{max-width: 12em;}')
         self._lb_minsumlim = SiriusLabel(
             self, self.devpref.substitute(propty='IntlkLmtMinSum-RB'))
+        self._lb_minsumlim.displayFormat = SiriusLabel.Exponential
+        self._lb_minsumlim.precisionFromPV = False
+        self._lb_minsumlim.precision = 16
+        self._lb_minsumlim.showUnits = True
 
         lay = QGridLayout()
         lay.setAlignment(Qt.AlignCenter)
