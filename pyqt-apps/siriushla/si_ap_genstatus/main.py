@@ -360,6 +360,7 @@ class SIGenStatusWindow(SiriusMainWindow):
             self._gbox_siriusintlk.setStyleSheet(sty)
             self._gbox_injsyssts.setStyleSheet(sty)
             self._gbox_sofbloop.setStyleSheet(sty)
+            self._gbox_fofbloop.setStyleSheet(sty)
             self._gbox_bbbloop.setStyleSheet(sty)
             self._gbox_topup.setStyleSheet(sty)
 
