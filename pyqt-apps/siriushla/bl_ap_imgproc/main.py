@@ -23,7 +23,7 @@ from ..widgets import SiriusLabel, SiriusLedState, \
     SiriusConnectionSignal, SiriusSpinbox, SiriusLedAlert
 
 from .util import PVS_IMGPROC, PVS_DVF, \
-    IMG_PVS, PVS_CAX, LOG_PV, COMBOBOX_PVS, LINEEDIT_PVS, STATEBUT_PVS, \
+    IMG_PVS, LOG_PV, COMBOBOX_PVS, LINEEDIT_PVS, STATEBUT_PVS, \
     LED_ALERT_PVS, LED_STATE_PVS, LED_DETAIL_PVS
 from .image import DVFImageView
 from .blintlkctl import BLIntckCtrl
@@ -245,6 +245,60 @@ class BLImgProc(QWidget):
             return sc_area
         return cont_wid
 
+
+    def gamma_control(self):
+        wid = QGroupBox()
+        lay = QHBoxLayout()
+        wid.setLayout(lay)
+        wid.setTitle("Gamma")
+        wid.setMaximumHeight(200)
+
+        widget = QPushButton("Enable")
+        widget.clicked.connect(self.blpps.gamma_enable)
+        lay.addWidget(widget)
+
+        widget = QPushButton("Disable")
+        widget.clicked.connect(self.blpps.gamma_disable)
+        lay.addWidget(widget)
+
+        widget = SiriusLedState(
+            init_channel="self.blpps.gamma_enabled")
+        lay.addWidget(widget)
+
+        return wid
+
+    def enable_beamline(self):
+        wid = QGroupBox()
+        lay = QHBoxLayout()
+        wid.setLayout(lay)
+        wid.setTitle("Open Beamline")
+        wid.setMaximumHeight(200)
+
+
+        widget = QPushButton("Open")
+        widget.clicked.connect(self.blpps.beamline_open)
+        lay.addWidget(widget)
+
+        widget = SiriusLedState(
+            init_channel="self.blpps.beamline_opened")
+        lay.addWidget(widget)
+
+        return wid
+
+    def beamline_controls(self):
+        wid = QGroupBox()
+        lay = QVBoxLayout()
+        wid.setLayout(lay)
+
+        widget = self.gamma_control()
+        lay.setAlignment(Qt.AlignTop)
+        lay.addWidget(widget)
+
+        widget = self.enable_beamline()
+        lay.addWidget(widget)
+
+        return wid
+
     def _setupUi(self):
         main_lay = QVBoxLayout()
         tab = QTabWidget()
@@ -259,7 +313,7 @@ class BLImgProc(QWidget):
         tab.addTab(imgproc_wid, "DVFImgProc")
         dvf_wid = self._setupTab(PVS_DVF, use_scroll=True)
         tab.addTab(dvf_wid, "DVF")
-        cax_wid = self._setupTab(PVS_CAX, use_scroll=True)
+        cax_wid = self.beamline_controls()
         tab.addTab(cax_wid, "CAX")
 
         main_lay.addWidget(tab)

@@ -231,12 +231,3 @@ PVS_DVF = {
         },
     ],
 }
-
-PVS_CAX = {
-    'Beamline PPS': [
-        (0, 0, 1, 1),
-        {
-                'Open beamline': 'OpenBeamline'
-        }
-    ],
-}
