@@ -771,20 +771,19 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
         lay.setSpacing(1)
         lay.setAlignment(Qt.AlignLeft | Qt.AlignTop)
 
-        triggers = FamFOFBControllers.BPM_TRIGS_IDS
+        trigid = FamFOFBControllers.BPM_TRIGS_ID
         propties = ['RcvSrc-Sts', 'RcvInSel-RB']
 
         # header
         devlbl = QLabel('<h4>BPM</h4>', self, alignment=Qt.AlignCenter)
         lay.addWidget(devlbl, 0, 0, 2, 1)
-        for idx1, trigid in enumerate(triggers):
-            text = f'<h4>TRIGGER {trigid}</h4>'
+        text = f'<h4>TRIGGER {trigid}</h4>'
+        lbl = QLabel(text, self, alignment=Qt.AlignCenter)
+        lay.addWidget(lbl, 0, 1, 1, 2)
+        for idx, prop in enumerate(propties):
+            text = prop.split('-')[0]
             lbl = QLabel(text, self, alignment=Qt.AlignCenter)
-            lay.addWidget(lbl, 0, idx1*2+1, 1, 2)
-            for idx2, prop in enumerate(propties):
-                text = prop.split('-')[0]
-                lbl = QLabel(text, self, alignment=Qt.AlignCenter)
-                lay.addWidget(lbl, 1, idx1*2+1+idx2)
+            lay.addWidget(lbl, 1, idx+1)
 
         # table
         for idxr, bpm in enumerate(self._csorb.bpm_names):
@@ -811,15 +810,14 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
             hlay.addWidget(lbl)
             lay.addWidget(hwid, row, 0)
             c2v = dict()
-            for idx1, trigid in enumerate(triggers):
-                for idx2, prop in enumerate(propties):
-                    pvn = _PVName(bpm).substitute(
-                        prefix=self.prefix, propty='TRIGGER'+str(trigid)+prop)
-                    dval = FamFOFBControllers.DEF_BPMTRIG_RCVIN if 'RcvIn' \
-                        in prop else FamFOFBControllers.DEF_BPMTRIG_RCVSRC
-                    c2v[pvn] = dval
-                    plb = SiriusLabel(self, pvn)
-                    lay.addWidget(plb, row, idx1*2+1+idx2)
+            for idx, prop in enumerate(propties):
+                pvn = _PVName(bpm).substitute(
+                    prefix=self.prefix, propty='TRIGGER'+str(trigid)+prop)
+                dval = FamFOFBControllers.DEF_BPMTRIG_RCVIN if 'RcvIn' \
+                    in prop else FamFOFBControllers.DEF_BPMTRIG_RCVSRC
+                c2v[pvn] = dval
+                plb = SiriusLabel(self, pvn)
+                lay.addWidget(plb, row, idx+1)
             led = PyDMLedMultiChannel(self, c2v)
             lay.addWidget(led, row, 7)
 
