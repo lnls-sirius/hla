@@ -1,8 +1,7 @@
 """BL AP ImgProc."""
 
 from datetime import datetime
-import threading
-from qtpy.QtCore import Qt
+from qtpy.QtCore import Qt, QTimer
 from qtpy.QtWidgets import QWidget, QGridLayout, QHBoxLayout, \
     QVBoxLayout, QGroupBox, QLabel, QSizePolicy, QTabWidget, \
     QPushButton, QScrollArea
@@ -53,7 +52,8 @@ class BLImgProc(QWidget):
         self.enable_gamma_btn = None
         self.disable_gamma_btn = None
         self.gamma_enabled_conn = None
-        self.timer = threading.Timer(1, self.update_bl_open_led)
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.update_bl_open_led)
 
         self._setupUi()
 
@@ -315,8 +315,6 @@ class BLImgProc(QWidget):
             self.pydm_led.value_changed(status_bl)
             if old_val != status_bl:
                 self.end_processing_cmd()
-        self.timer = threading.Timer(1, self.update_bl_open_led)
-        self.timer.start()
 
     def enable_beamline(self):
         wid = QGroupBox()
@@ -332,7 +330,7 @@ class BLImgProc(QWidget):
         lay.addWidget(self.open_beamline_btn)
 
         self.pydm_led = SiriusLedState()
-        self.timer.start()
+        self.timer.start(1000)
         lay.addWidget(self.pydm_led)
 
         return wid
