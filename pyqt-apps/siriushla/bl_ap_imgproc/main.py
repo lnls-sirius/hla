@@ -24,7 +24,7 @@ from ..widgets import SiriusLabel, SiriusLedState, \
 
 from .util import PVS_IMGPROC, PVS_DVF, \
     IMG_PVS, LOG_PV, COMBOBOX_PVS, LINEEDIT_PVS, STATEBUT_PVS, \
-    LED_ALERT_PVS, LED_STATE_PVS, LED_DETAIL_PVS, CAX_PVS
+    LED_ALERT_PVS, LED_STATE_PVS, LED_DETAIL_PVS, INTLK_PVS
 from .image import DVFImageView
 from .blintlkctl import BLIntckCtrl
 
@@ -261,7 +261,7 @@ class BLImgProc(QWidget):
         widget.clicked.connect(self.blpps.gamma_disable)
         lay.addWidget(widget)
 
-        pvname = CAX_PVS["gamma"]
+        pvname = INTLK_PVS["gamma"]
         widget = SiriusLedState(
             init_channel=pvname)
         lay.addWidget(widget)

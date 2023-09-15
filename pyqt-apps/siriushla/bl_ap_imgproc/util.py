@@ -232,6 +232,6 @@ PVS_DVF = {
     ],
 }
 
-CAX_PVS = {
+INTLK_PVS = {
     "gamma": "AS-Glob:MP-Summary:AlarmGammaShutter-Mon"
 }
