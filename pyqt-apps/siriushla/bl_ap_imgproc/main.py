@@ -262,8 +262,7 @@ class BLImgProc(QWidget):
         lay.addWidget(widget)
 
         pvname = INTLK_PVS["gamma"]
-        widget = SiriusLedState(
-            init_channel=pvname)
+        widget = SiriusLedState(init_channel=pvname)
         lay.addWidget(widget)
 
         return wid
