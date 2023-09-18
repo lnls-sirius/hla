@@ -205,7 +205,7 @@ class TransmLineStatusDetails(SiriusDialog):
             lay.addRow('Load Arc Detector: ', self.led_loadarc)
         lay.addRow('Circulator Flow: ', self.led_circflwrt)
         lay.addRow('Load Flow: ', self.led_loadflwrt)
-        lay.addRow('Circulator Intlk: ', self.led_circintlkop)
+        lay.addRow('TCU Status: ', self.led_circintlkop)
 
         self.setStyleSheet("""
             SiriusLabel{
