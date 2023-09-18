@@ -282,7 +282,7 @@ class BLImgProc(QWidget):
         elif cmd == "open_beamline":
             self.blpps.beamline_open()
 
-    def gamma_control(self):
+    def _setup_gamma_control_widget(self):
         wid = QGroupBox()
         lay = QHBoxLayout()
         wid.setLayout(lay)
@@ -316,7 +316,7 @@ class BLImgProc(QWidget):
             if old_val != status_bl:
                 self.end_processing_cmd()
 
-    def enable_beamline(self):
+    def _setup_enable_beamline_widgets(self):
         wid = QGroupBox()
         lay = QHBoxLayout()
         wid.setLayout(lay)
@@ -335,7 +335,7 @@ class BLImgProc(QWidget):
 
         return wid
 
-    def beamline_controls(self):
+    def _setup_beamline_controls_widgets(self):
         wid = QGroupBox()
         lay = QVBoxLayout()
         wid.setLayout(lay)
@@ -346,11 +346,11 @@ class BLImgProc(QWidget):
         self.loading.setFlat(True)
         lay.addWidget(self.loading)
 
-        widget = self.gamma_control()
+        widget = self._setup_gamma_control_widget()
         lay.setAlignment(Qt.AlignTop)
         lay.addWidget(widget)
 
-        widget = self.enable_beamline()
+        widget = self._setup_enable_beamline_widgets()
         lay.addWidget(widget)
 
         return wid
@@ -369,7 +369,7 @@ class BLImgProc(QWidget):
         tab.addTab(imgproc_wid, "DVFImgProc")
         dvf_wid = self._setupTab(PVS_DVF, use_scroll=True)
         tab.addTab(dvf_wid, "DVF")
-        cax_wid = self.beamline_controls()
+        cax_wid = self._setup_beamline_controls_widgets()
         tab.addTab(cax_wid, "CAX")
 
         main_lay.addWidget(tab)
