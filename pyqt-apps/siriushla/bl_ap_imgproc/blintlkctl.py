@@ -31,13 +31,6 @@ class BLIntckCtrl:
         else:
             return False
 
-    def gamma_disable(self):
-        """."""
-        if self.mps and self.mps.connected:
-            return self.mps.cmd_gamma_disable()
-        else:
-            return False
-
     def beamline_open(self):
         """."""
         if self.blintlk and self.blintlk.connected:
