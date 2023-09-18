@@ -342,9 +342,9 @@ class RFMainControl(SiriusMainWindow):
             self, self.prefix+self.chs['SL']['ASet'][0]+'-SP')
         self.lb_amp1 = SiriusLabel(
             self, self.prefix+self.chs['SL']['ASet'][0]+'-RB')
-        self.sb_amp2 = SiriusSpinbox(
-            self, self.prefix+self.chs['SL']['ASet'][1]+'-SP')
-        self.sb_amp2.setVisible(False)
+        # self.sb_amp2 = SiriusSpinbox(
+        #     self, self.prefix+self.chs['SL']['ASet'][1]+'-SP')
+        # self.sb_amp2.setVisible(False)
         self.lb_amp2 = SiriusLabel(
             self, self.prefix+self.chs['SL']['ASet'][1]+'-RB')
         self.lb_amp2.setVisible(False)
@@ -373,9 +373,9 @@ class RFMainControl(SiriusMainWindow):
         lay_slctrl.addWidget(QLabel('<h4>Phase [DEG]</h4>', self,
                                     alignment=Qt.AlignCenter), 2, 0, 1, 2)
         lay_slctrl.addWidget(self.sb_amp1, 1, 2, alignment=Qt.AlignRight)
-        lay_slctrl.addWidget(self.sb_amp2, 1, 2, alignment=Qt.AlignRight)
+        # lay_slctrl.addWidget(self.sb_amp2, 1, 2, alignment=Qt.AlignRight)
         lay_slctrl.addWidget(self.lb_amp1, 1, 3, alignment=Qt.AlignLeft)
-        lay_slctrl.addWidget(self.lb_amp2, 1, 3, alignment=Qt.AlignLeft)
+        lay_slctrl.addWidget(self.lb_amp2, 1, 2, 1, 2, alignment=Qt.AlignCenter)
         lay_slctrl.addWidget(self.cb_ampincrate, 1, 4, alignment=Qt.AlignRight)
         lay_slctrl.addWidget(self.lb_ampincrate, 1, 5, alignment=Qt.AlignLeft)
         lay_slctrl.addWidget(self.sb_phs, 2, 2, alignment=Qt.AlignRight)
@@ -736,9 +736,9 @@ class RFMainControl(SiriusMainWindow):
         self.lb_rmpvolttop1 = SiriusLabel(
             self, self.prefix+'BR-RF-DLLRF-01:mV:RAMP:AMP:TOP-RB')
         self.lb_rmpvolttop1.showUnits = True
-        self.le_rmpvolttop2 = PyDMLineEdit(
-            self, self.prefix+'RA-RaBO01:RF-LLRF:RmpAmpVCavTop-SP')
-        self.le_rmpvolttop2.setVisible(False)
+        # self.le_rmpvolttop2 = PyDMLineEdit(
+        #     self, self.prefix+'RA-RaBO01:RF-LLRF:RmpAmpVCavTop-SP')
+        # self.le_rmpvolttop2.setVisible(False)
         self.lb_rmpvolttop2 = SiriusLabel(
             self, self.prefix+'RA-RaBO01:RF-LLRF:RmpAmpVCavTop-RB')
         self.lb_rmpvolttop2.setVisible(False)
@@ -764,9 +764,9 @@ class RFMainControl(SiriusMainWindow):
         self.lb_rmpvoltbot1 = SiriusLabel(
             self, self.prefix+'BR-RF-DLLRF-01:mV:RAMP:AMP:BOT-RB')
         self.lb_rmpvoltbot1.showUnits = True
-        self.le_rmpvoltbot2 = PyDMLineEdit(
-            self, self.prefix+'RA-RaBO01:RF-LLRF:RmpAmpVCavBot-SP')
-        self.le_rmpvoltbot2.setVisible(False)
+        # self.le_rmpvoltbot2 = PyDMLineEdit(
+        #     self, self.prefix+'RA-RaBO01:RF-LLRF:RmpAmpVCavBot-SP')
+        # self.le_rmpvoltbot2.setVisible(False)
         self.lb_rmpvoltbot2 = SiriusLabel(
             self, self.prefix+'RA-RaBO01:RF-LLRF:RmpAmpVCavBot-RB')
         self.lb_rmpvoltbot2.setVisible(False)
@@ -818,9 +818,9 @@ class RFMainControl(SiriusMainWindow):
         lay.addWidget(self.lb_rmpphsbot, 14, 2)
         lay.addLayout(lay_rmpphsbotdesc, 15, 0)
         lay.addWidget(self.le_rmpvoltbot1, 15, 1)
-        lay.addWidget(self.le_rmpvoltbot2, 15, 1)
+        # lay.addWidget(self.le_rmpvoltbot2, 15, 1)
         lay.addWidget(self.lb_rmpvoltbot1, 15, 2)
-        lay.addWidget(self.lb_rmpvoltbot2, 15, 2)
+        lay.addWidget(self.lb_rmpvoltbot2, 15, 1, 1, 2)
         lay.addWidget(QLabel('<h4>Top</h4>', self), 16, 0, 1, 3)
         lay.addWidget(QLabel('Phase', self,
                              alignment=Qt.AlignRight), 17, 0)
@@ -828,9 +828,9 @@ class RFMainControl(SiriusMainWindow):
         lay.addWidget(self.lb_rmpphstop, 17, 2)
         lay.addLayout(lay_rmpphstopdesc, 18, 0)
         lay.addWidget(self.le_rmpvolttop1, 18, 1)
-        lay.addWidget(self.le_rmpvolttop2, 18, 1)
+        # lay.addWidget(self.le_rmpvolttop2, 18, 1)
         lay.addWidget(self.lb_rmpvolttop1, 18, 2)
-        lay.addWidget(self.lb_rmpvolttop2, 18, 2)
+        lay.addWidget(self.lb_rmpvolttop2, 18, 1, 1, 2)
         lay.addItem(QSpacerItem(
             200, 10, QSzPlcy.Fixed, QSzPlcy.MinimumExpanding), 19, 3)
         return lay
@@ -1484,7 +1484,7 @@ class RFMainControl(SiriusMainWindow):
     def _handle_ampl_unit_visibility(self, text):
         self.sb_amp1.setVisible(text == '[mV]')
         self.lb_amp1.setVisible(text == '[mV]')
-        self.sb_amp2.setVisible(text == '[V]')
+        # self.sb_amp2.setVisible(text == '[V]')
         self.lb_amp2.setVisible(text == '[V]')
 
     def _handle_rmpampl_unit_visibility(self, text):
@@ -1495,8 +1495,8 @@ class RFMainControl(SiriusMainWindow):
         self.lb_rmpvolttop1.setVisible(text == '[mV]')
         self.le_rmpvoltbot1.setVisible(text == '[mV]')
         self.lb_rmpvoltbot1.setVisible(text == '[mV]')
-        self.le_rmpvolttop2.setVisible(text == '[V]')
+        # self.le_rmpvolttop2.setVisible(text == '[V]')
         self.lb_rmpvolttop2.setVisible(text == '[V]')
-        self.le_rmpvoltbot2.setVisible(text == '[V]')
+        # self.le_rmpvoltbot2.setVisible(text == '[V]')
         self.lb_rmpvoltbot2.setVisible(text == '[V]')
         self.blockSignals(False)
