@@ -50,7 +50,6 @@ class BLImgProc(QWidget):
         self.loading = QPushButton("")
         self.open_beamline_btn = None
         self.enable_gamma_btn = None
-        self.disable_gamma_btn = None
         self.gamma_enabled_conn = None
         self.timer = QTimer()
         self.timer.timeout.connect(self.update_bl_open_led)
@@ -263,21 +262,17 @@ class BLImgProc(QWidget):
 
     def end_processing_cmd(self):
         self.enable_gamma_btn.setEnabled(True)
-        self.disable_gamma_btn.setEnabled(True)
         self.open_beamline_btn.setEnabled(True)
         self.loading.setVisible(False)
 
     def start_processing_cmd(self):
         self.enable_gamma_btn.setEnabled(False)
-        self.disable_gamma_btn.setEnabled(False)
         self.open_beamline_btn.setEnabled(False)
         self.loading.setVisible(True)
 
     def intlk_cmd(self, cmd):
         self.start_processing_cmd()
-        if cmd == "disable_gamma":
-            self.blpps.gamma_disable()
-        elif cmd == "enable_gamma":
+        if cmd == "enable_gamma":
             self.blpps.gamma_enable()
         elif cmd == "open_beamline":
             self.blpps.beamline_open()
@@ -293,11 +288,6 @@ class BLImgProc(QWidget):
         self.enable_gamma_btn.clicked.connect(
             lambda: self.intlk_cmd("enable_gamma"))
         lay.addWidget(self.enable_gamma_btn)
-
-        self.disable_gamma_btn = QPushButton("Disable")
-        self.disable_gamma_btn.clicked.connect(
-            lambda: self.intlk_cmd("disable_gamma"))
-        lay.addWidget(self.disable_gamma_btn)
 
         pvname = INTLK_PVS["gamma"]
         widget = SiriusLedState(init_channel=pvname)
