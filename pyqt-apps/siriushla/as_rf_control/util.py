@@ -374,6 +374,8 @@ SEC_2_CHANNELS = {
             'Circ TIn': 'RA-TLSIA:RF-Circulator:Tin-Mon',
             'Circ TOut': 'RA-TLSIA:RF-Circulator:Tout-Mon',
             'Circ Arc': 'RA-TLSIA:RF-Circulator:Arc-Mon',
+            'Load Sply Fail': 'RA-RaSIA02:RF-ArcDetec-Load:PwrFail-Mon',
+            'Circ Sply Fail': 'RA-RaSIA02:RF-ArcDetec-Circ:PwrFail-Mon',
             'Load Arc': 'RA-TLSIA:RF-Load:Arc-Mon',
             'Circ FlwRt': 'RA-TLSIA:RF-Circulator:FlwRt-Mon',
             'Load FlwRt': 'RA-TLSIA:RF-Load:FlwRt-Mon',

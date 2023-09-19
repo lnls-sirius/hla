@@ -192,6 +192,10 @@ class TransmLineStatusDetails(SiriusDialog):
             self, self.prefix+self.chs['TL Sts']['Load FlwRt'])
         self.led_circintlkop = SiriusLedAlert(
             self, self.prefix+self.chs['TL Sts']['Circ Intlk'])
+        self.led_circsplyfail = SiriusLedAlert(
+            self, self.prefix+self.chs['TL Sts']['Circ Sply Fail'])
+        self.led_loadsplyfail = SiriusLedAlert(
+            self, self.prefix+self.chs['TL Sts']['Circ Sply Fail'])
 
         lay = QFormLayout(self)
         lay.setLabelAlignment(Qt.AlignRight)
@@ -202,7 +206,9 @@ class TransmLineStatusDetails(SiriusDialog):
         lay.addItem(QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed))
         lay.addRow('Circulator Arc Detector: ', self.led_circarc)
         if self.section == 'SI':
+            lay.addRow('Circulator Supply Fail Arc Detector: ', self.led_circsplyfail)
             lay.addRow('Load Arc Detector: ', self.led_loadarc)
+            lay.addRow('Load Supply Fail Arc Detector: ', self.led_loadsplyfail)
         lay.addRow('Circulator Flow: ', self.led_circflwrt)
         lay.addRow('Load Flow: ', self.led_loadflwrt)
         lay.addRow('TCU Status: ', self.led_circintlkop)
