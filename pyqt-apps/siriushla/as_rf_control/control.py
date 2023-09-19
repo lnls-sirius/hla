@@ -911,23 +911,18 @@ class RFMainControl(SiriusMainWindow):
         self.ramp_chn_wid = {}
 
         for unit_type, rmp_channels in self.chs['Ramp'].items():
-            idy = 1
             self.ramp_chn_wid[unit_type] = {}
-            for pos, rmp_ch_pvs in rmp_channels.items():
+            for idy, (pos, rmp_ch_pvs) in enumerate(rmp_channels.items(), 1):
                 self.ramp_chn_wid[unit_type][pos] = {}
                 wid_dict = self.ramp_chn_wid[unit_type][pos]
-                idx = 2
 
-                for pv_id, pv_val in rmp_ch_pvs.items():
+                for idx, (pv_id, pv_val) in enumerate(rmp_ch_pvs.items(), 2):
                     wid_dict[pv_id] = SiriusLabel(
                         self, self.prefix+pv_val)
                     wid_dict[pv_id].showUnits = True
                     lay.addWidget(wid_dict[pv_id], idx, idy)
                     if unit_type == 'mV':
                         wid_dict[pv_id].setVisible(False)
-
-                    idx += 1
-                idy += 1
 
         self.lb_c3phstop = SiriusLabel(
             self, self.prefix+'BR-RF-DLLRF-01:TOP:CELL3:PHS')
