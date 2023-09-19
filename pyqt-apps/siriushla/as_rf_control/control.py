@@ -835,6 +835,17 @@ class RFMainControl(SiriusMainWindow):
             200, 10, QSzPlcy.Fixed, QSzPlcy.MinimumExpanding), 19, 3)
         return lay
 
+    def _handle_rmptab_visibility(self, unit_type):
+        for pos in ['Top', 'Bottom']:
+            for pv_id in ['CavPwr', 'PowFwd', 'PowRev']:
+                self.ramp_chn_wid[unit_type][pos][pv_id].setVisible(True)
+        cur_unit = 'mV'
+        if unit_type == 'mV':
+            cur_unit = 'W'
+        for pos in ['Top', 'Bottom']:
+            for pv_id in ['CavPwr', 'PowFwd', 'PowRev']:
+                self.ramp_chn_wid[cur_unit][pos][pv_id].setVisible(False)
+
     def _rampMonLayout(self):
         self.ramp_graph = SiriusWaveformPlot(
             parent=self, background=QColor(255, 255, 255))
@@ -883,18 +894,11 @@ class RFMainControl(SiriusMainWindow):
         self.curve_vgav.setVisible(False)
         self.curve_pwr.setVisible(False)
 
-        self.lb_vgapdesc = QLabel(
-            '<h4>Gap Voltage:</h4>', self, alignment=Qt.AlignCenter)
+        self.cb_ramp = QComboBox()
+        self.cb_ramp.setStyleSheet("QComboBox{max-width: 3.5em; font-weight: bold;}")
+        self.cb_ramp.addItems(["W", "mV"])
+        self.cb_ramp.currentTextChanged.connect(self._handle_rmptab_visibility)
 
-        self.lb_c3pwrbot = SiriusLabel(
-            self, self.prefix+'BO-05D:RF-P5Cav:Cell3PwrBot-Mon')
-        self.lb_c3pwrbot.showUnits = True
-        self.lb_pwrfwdbot = SiriusLabel(
-            self, self.prefix+'BO-05D:RF-P5Cav:PwrFwdBot-Mon')
-        self.lb_pwrfwdbot.showUnits = True
-        self.lb_pwrrevbot = SiriusLabel(
-            self, self.prefix+'BO-05D:RF-P5Cav:PwrRevBot-Mon')
-        self.lb_pwrrevbot.showUnits = True
         self.lb_c3phsbot = SiriusLabel(
             self, self.prefix+'BR-RF-DLLRF-01:BOT:CELL3:PHS')
         self.lb_c3phsbot.showUnits = True
@@ -902,15 +906,31 @@ class RFMainControl(SiriusMainWindow):
             self, self.prefix+'BO-05D:RF-P5Cav:RmpAmpVCavBot-Mon')
         self.lb_cavvgapbot.showUnits = True
 
-        self.lb_c3pwrtop = SiriusLabel(
-            self, self.prefix+'BO-05D:RF-P5Cav:Cell3PwrTop-Mon')
-        self.lb_c3pwrtop.showUnits = True
-        self.lb_pwrfwdtop = SiriusLabel(
-            self, self.prefix+'BO-05D:RF-P5Cav:PwrFwdTop-Mon')
-        self.lb_pwrfwdtop.showUnits = True
-        self.lb_pwrrevtop = SiriusLabel(
-            self, self.prefix+'BO-05D:RF-P5Cav:PwrRevTop-Mon')
-        self.lb_pwrrevtop.showUnits = True
+
+        lay = QGridLayout()
+        self.ramp_chn_wid = {}
+
+        for unit_type in ['W', 'mV']:
+            idy = 1
+            self.ramp_chn_wid[unit_type] = {}
+            rmp_channels = self.chs['Ramp'][unit_type]
+            for pos in ['Bottom', 'Top']:
+                self.ramp_chn_wid[unit_type][pos] = {}
+                wid_dict = self.ramp_chn_wid[unit_type][pos]
+                rmp_ch_pvs = rmp_channels[pos]
+                idx = 2
+
+                for pv_id in ['CavPwr', 'PowFwd', 'PowRev']:
+                    wid_dict[pv_id] = SiriusLabel(
+                        self, self.prefix+rmp_ch_pvs[pv_id])
+                    wid_dict[pv_id].showUnits = True
+                    lay.addWidget(wid_dict[pv_id], idx, idy)
+                    if unit_type == 'mV':
+                        wid_dict[pv_id].setVisible(False)
+
+                    idx += 1
+                idy += 1
+
         self.lb_c3phstop = SiriusLabel(
             self, self.prefix+'BR-RF-DLLRF-01:TOP:CELL3:PHS')
         self.lb_c3phstop.showUnits = True
@@ -918,7 +938,6 @@ class RFMainControl(SiriusMainWindow):
             self, self.prefix+'BO-05D:RF-P5Cav:RmpAmpVCavTop-Mon')
         self.lb_cavvgaptop.showUnits = True
 
-        lay = QGridLayout()
         lay.setVerticalSpacing(15)
         lay.addWidget(QLabel(
             '<h4>Bottom</h4>', self, alignment=Qt.AlignCenter), 1, 1)
@@ -930,24 +949,23 @@ class RFMainControl(SiriusMainWindow):
             '<h4>Power Fwd.</h4>', self, alignment=Qt.AlignCenter), 3, 0)
         lay.addWidget(QLabel(
             '<h4>Power Rev.</h4>', self, alignment=Qt.AlignCenter), 4, 0)
-        lay.addWidget(QLabel(
-            '<h4>Phase</h4>', self, alignment=Qt.AlignCenter), 5, 0)
-        lay.addWidget(self.lb_vgapdesc, 6, 0)
-        lay.addWidget(self.lb_c3pwrbot, 2, 1)
-        lay.addWidget(self.lb_pwrfwdbot, 3, 1)
-        lay.addWidget(self.lb_pwrrevbot, 4, 1)
-        lay.addWidget(self.lb_c3phsbot, 5, 1)
-        lay.addWidget(self.lb_cavvgapbot, 6, 1, alignment=Qt.AlignCenter)
-        lay.addWidget(self.lb_c3pwrtop, 2, 2)
-        lay.addWidget(self.lb_pwrfwdtop, 3, 2)
-        lay.addWidget(self.lb_pwrrevtop, 4, 2)
-        lay.addWidget(self.lb_c3phstop, 5, 2)
-        lay.addWidget(self.lb_cavvgaptop, 6, 2, alignment=Qt.AlignCenter)
-        lay.addItem(QSpacerItem(0, 20, QSzPlcy.Ignored, QSzPlcy.Fixed), 7, 0)
-        lay.addWidget(self.ramp_graph, 8, 0, 1, 3)
-        lay.addLayout(hbox_rb, 9, 0, 1, 3)
         lay.addItem(
-            QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Expanding), 10, 0)
+            QSpacerItem(0, 20, QSzPlcy.Ignored, QSzPlcy.Ignored), 5, 0)
+        lay.addWidget(QLabel(
+            '<h4>Phase</h4>', self, alignment=Qt.AlignCenter), 6, 0)
+        lay.addWidget(QLabel(
+            '<h4>Gap Voltage:</h4>', self, alignment=Qt.AlignCenter), 7, 0)
+
+        lay.addWidget(self.cb_ramp, 1, 0)
+        lay.addWidget(self.lb_c3phsbot, 6, 1)
+        lay.addWidget(self.lb_cavvgapbot, 7, 1, alignment=Qt.AlignCenter)
+        lay.addWidget(self.lb_c3phstop, 6, 2)
+        lay.addWidget(self.lb_cavvgaptop, 7, 2, alignment=Qt.AlignCenter)
+        lay.addItem(QSpacerItem(0, 20, QSzPlcy.Ignored, QSzPlcy.Fixed), 8, 0)
+        lay.addWidget(self.ramp_graph, 9, 0, 1, 3)
+        lay.addLayout(hbox_rb, 10, 0, 1, 3)
+        lay.addItem(
+            QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Expanding), 11, 0)
         return lay
 
     def _autoStartLayout(self):

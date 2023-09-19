@@ -220,8 +220,34 @@ SEC_2_CHANNELS = {
                     'Cell 4': 'BO-05D:RF-P5Cav:Cylin4T-Mon',
                     'Cell 5': 'BO-05D:RF-P5Cav:Cylin5T-Mon',
                 },
-            },
+            }
         },
+        'Ramp': {
+            'W': {
+                'Top': {
+                    'CavPwr': 'BO-05D:RF-P5Cav:Cell3PwrTop-Mon',
+                    'PowFwd': 'BO-05D:RF-P5Cav:PwrFwdTop-Mon',
+                    'PowRev': 'BO-05D:RF-P5Cav:PwrRevTop-Mon'
+                },
+                'Bottom': {
+                    'CavPwr': 'BO-05D:RF-P5Cav:Cell3PwrBot-Mon',
+                    'PowFwd': 'BO-05D:RF-P5Cav:PwrFwdBot-Mon',
+                    'PowRev': 'BO-05D:RF-P5Cav:PwrRevBot-Mon'
+                }
+            },
+            'mV': {
+                'Top': {
+                    'CavPwr': 'BR-RF-DLLRF-01:TOP:CELL3:AMP',
+                    'PowFwd': 'BR-RF-DLLRF-01:TOP:FWDCAV:AMP',
+                    'PowRev': 'BR-RF-DLLRF-01:TOP:REVCAV:AMP'
+                },
+                'Bottom': {
+                    'CavPwr': 'BR-RF-DLLRF-01:BOT:CELL3:AMP',
+                    'PowFwd': 'BR-RF-DLLRF-01:BOT:FWDCAV:AMP',
+                    'PowRev': 'BR-RF-DLLRF-01:BOT:REVCAV:AMP'
+                }
+            }
+        }
     },
     'SI': {
         'Emergency': 'RA-RaSIA02:RF-IntlkCtrl:EStop-Mon',
