@@ -114,6 +114,8 @@ class EPUControlWindow(IDCommonControlWindow):
             self, self.dev_pref.substitute(propty='Polarization-Sel'))
         self._lb_prop = SiriusLabel(
             self, self.dev_pref.substitute(propty='Polarization-Sts'))
+        self._lb_propmon = SiriusLabel(
+            self, self.dev_pref.substitute(propty='Polarization-Mon'))
         self._ld_polmov = QLabel('Polarization Motion', self)
         self._pb_polstart = PyDMPushButton(
             self, label='', icon=qta.icon('fa5s.play'))
@@ -145,6 +147,7 @@ class EPUControlWindow(IDCommonControlWindow):
         lay.addWidget(self._ld_pol, row, 0)
         lay.addWidget(self._cb_pol, row, 1)
         lay.addWidget(self._lb_prop, row, 2)
+        lay.addWidget(self._lb_propmon, row, 3)
         lay.addWidget(self._ld_polmov, row+1, 0)
         lay.addWidget(self._pb_polstart, row+1, 1)
         lay.addItem(
