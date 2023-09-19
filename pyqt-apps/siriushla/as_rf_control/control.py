@@ -910,19 +910,17 @@ class RFMainControl(SiriusMainWindow):
         lay = QGridLayout()
         self.ramp_chn_wid = {}
 
-        for unit_type in ['W', 'mV']:
+        for unit_type, rmp_channels in self.chs['Ramp'].items():
             idy = 1
             self.ramp_chn_wid[unit_type] = {}
-            rmp_channels = self.chs['Ramp'][unit_type]
-            for pos in ['Bottom', 'Top']:
+            for pos, rmp_ch_pvs in rmp_channels.items():
                 self.ramp_chn_wid[unit_type][pos] = {}
                 wid_dict = self.ramp_chn_wid[unit_type][pos]
-                rmp_ch_pvs = rmp_channels[pos]
                 idx = 2
 
-                for pv_id in ['CavPwr', 'PowFwd', 'PowRev']:
+                for pv_id, pv_val in rmp_ch_pvs.items():
                     wid_dict[pv_id] = SiriusLabel(
-                        self, self.prefix+rmp_ch_pvs[pv_id])
+                        self, self.prefix+pv_val)
                     wid_dict[pv_id].showUnits = True
                     lay.addWidget(wid_dict[pv_id], idx, idy)
                     if unit_type == 'mV':
