@@ -121,12 +121,38 @@ SEC_2_CHANNELS = {
         },
         'TL Sts': {
             'Geral': 'RA-TLBO:RF-TrLine:Sts-Mon',
-            'Circ TIn': 'RA-TLBO:RF-Circulator:Tin-Mon',
-            'Circ TOut': 'RA-TLBO:RF-Circulator:Tout-Mon',
-            'Circ Arc': 'RA-TLBO:RF-Circulator:Arc-Mon',
-            'Circ FlwRt': 'RA-TLBO:RF-Circulator:FlwRt-Mon',
-            'Load FlwRt': 'RA-TLBO:RF-Load:FlwRt-Mon',
-            'Circ Intlk': 'RA-TLBO:RF-Circulator:IntlkOp-Mon',
+            'label_led': {
+                'Circ TDrift': {
+                    'label': 'RA-TLBO:RF-Circulator:dT-Mon',
+                    'led': 'RA-TLBO:RF-Circulator:TDrift-Mon'
+                },
+                'Circ Coil': {
+                    'label': 'RA-TLBO:RF-Circulator:Current-Mon',
+                    'led': 'RA-TLBO:RF-Circulator:Sts-Mon'
+                },
+                'Room Temp': {
+                    'label': 'RA-TLBO:RF-Circulator:Tamb-Mon',
+                    'led': 'RA-TLBO:RF-Circulator:TEnv-Mon'
+                }
+            },
+            'Circ TIn': {
+                'label': 'RA-TLBO:RF-Circulator:Tin-Mon',
+                'led': {
+                    'RA-TLBO:RF-Circulator:TinDown-Mon': 0,
+                    'RA-TLBO:RF-Circulator:TinUp-Mon': 0
+                }
+            },
+            'label': {
+                'Circulator T Out': 'RA-TLBO:RF-Circulator:Tout-Mon',
+                'Circulator In Reflected Power': 'RA-TLBO:RF-Circulator:PwrRevIndBm-Mon'
+            },
+            'led': {
+                'Circulator Arc Detector': 'RA-TLBO:RF-Circulator:Arc-Mon',
+                'Circulator Arc Detector Supply Fail': 'RA-TLBO02:RF-ArcDetec-Circ:PwrFail-Mon',
+                'Circulator Flow': 'RA-TLBO:RF-Circulator:FlwRt-Mon',
+                'Load Flow': 'RA-TLBO:RF-Load:FlwRt-Mon',
+                'TCU Status': 'RA-TLBO:RF-Circulator:IntlkOp-Mon',
+            },
             'Circ Limits': (19.0, 23.0),
         },
         'SSA': {
@@ -224,27 +250,27 @@ SEC_2_CHANNELS = {
         },
         'Ramp': {
             'W': {
-                'Top': {
-                    'CavPwr': 'BO-05D:RF-P5Cav:Cell3PwrTop-Mon',
-                    'PowFwd': 'BO-05D:RF-P5Cav:PwrFwdTop-Mon',
-                    'PowRev': 'BO-05D:RF-P5Cav:PwrRevTop-Mon'
-                },
                 'Bottom': {
                     'CavPwr': 'BO-05D:RF-P5Cav:Cell3PwrBot-Mon',
                     'PowFwd': 'BO-05D:RF-P5Cav:PwrFwdBot-Mon',
                     'PowRev': 'BO-05D:RF-P5Cav:PwrRevBot-Mon'
+                },
+                'Top': {
+                    'CavPwr': 'BO-05D:RF-P5Cav:Cell3PwrTop-Mon',
+                    'PowFwd': 'BO-05D:RF-P5Cav:PwrFwdTop-Mon',
+                    'PowRev': 'BO-05D:RF-P5Cav:PwrRevTop-Mon'
                 }
             },
             'mV': {
-                'Top': {
-                    'CavPwr': 'BR-RF-DLLRF-01:TOP:CELL3:AMP',
-                    'PowFwd': 'BR-RF-DLLRF-01:TOP:FWDCAV:AMP',
-                    'PowRev': 'BR-RF-DLLRF-01:TOP:REVCAV:AMP'
-                },
                 'Bottom': {
                     'CavPwr': 'BR-RF-DLLRF-01:BOT:CELL3:AMP',
                     'PowFwd': 'BR-RF-DLLRF-01:BOT:FWDCAV:AMP',
                     'PowRev': 'BR-RF-DLLRF-01:BOT:REVCAV:AMP'
+                },
+                'Top': {
+                    'CavPwr': 'BR-RF-DLLRF-01:TOP:CELL3:AMP',
+                    'PowFwd': 'BR-RF-DLLRF-01:TOP:FWDCAV:AMP',
+                    'PowRev': 'BR-RF-DLLRF-01:TOP:REVCAV:AMP'
                 }
             }
         }
@@ -371,15 +397,41 @@ SEC_2_CHANNELS = {
         },
         'TL Sts': {
             'Geral': 'RA-TLSIA:RF-TrLine:Sts-Mon',
-            'Circ TIn': 'RA-TLSIA:RF-Circulator:Tin-Mon',
-            'Circ TOut': 'RA-TLSIA:RF-Circulator:Tout-Mon',
-            'Circ Arc': 'RA-TLSIA:RF-Circulator:Arc-Mon',
-            'Load Sply Fail': 'RA-RaSIA02:RF-ArcDetec-Load:PwrFail-Mon',
-            'Circ Sply Fail': 'RA-RaSIA02:RF-ArcDetec-Circ:PwrFail-Mon',
-            'Load Arc': 'RA-TLSIA:RF-Load:Arc-Mon',
-            'Circ FlwRt': 'RA-TLSIA:RF-Circulator:FlwRt-Mon',
-            'Load FlwRt': 'RA-TLSIA:RF-Load:FlwRt-Mon',
-            'Circ Intlk': 'RA-TLSIA:RF-Circulator:IntlkOp-Mon',
+            'Circ TIn': {
+                'label': 'RA-TLSIA:RF-Circulator:Tin-Mon',
+                'led': {
+                    'RA-TLSIA:RF-Circulator:TinDown-Mon': 0,
+                    'RA-TLSIA:RF-Circulator:TinUp-Mon': 0
+                }
+            },
+            'label_led': {
+                'Circ TDrift': {
+                    'label': 'RA-TLSIA:RF-Circulator:dT-Mon',
+                    'led': 'RA-TLSIA:RF-Circulator:TDrift-Mon'
+                },
+                'Circ Coil': {
+                    'label': 'RA-TLSIA:RF-Circulator:Current-Mon',
+                    'led': 'RA-TLSIA:RF-Circulator:Sts-Mon'
+                },
+                'Room Temp': {
+                    'label': 'RA-TLSIA:RF-Circulator:Tamb-Mon',
+                    'led': 'RA-TLSIA:RF-Circulator:TEnv-Mon'
+                }
+            },
+            'label': {
+                'Circulator T Out': 'RA-TLSIA:RF-Circulator:Tout-Mon',
+                'Circulator In Reflected Power': 'RA-TLSIA:RF-Circulator:PwrRevIndBm-Mon',
+                'Combiner': 'RA-TLSIA:RF-Combiner:T-Mon'
+            },
+            'led': {
+                'Circulator Arc Detector': 'RA-TLSIA:RF-Circulator:Arc-Mon',
+                'Circulator Arc Detector Supply Fail': 'RA-RaSIA02:RF-ArcDetec-Circ:PwrFail-Mon',
+                'Arc Detector Load': 'RA-TLSIA:RF-Load:Arc-Mon',
+                'Arc Detector Load Supply Fail': 'RA-RaSIA02:RF-ArcDetec-Load:PwrFail-Mon',
+                'Circulator Flow': 'RA-TLSIA:RF-Circulator:FlwRt-Mon',
+                'Load Flow': 'RA-TLSIA:RF-Load:FlwRt-Mon',
+                'TCU Status': 'RA-TLSIA:RF-Circulator:IntlkOp-Mon',
+            },
             'Circ Limits': (19.0, 23.0),
         },
         'SSA': {

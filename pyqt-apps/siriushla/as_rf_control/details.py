@@ -2,7 +2,7 @@
 
 from qtpy.QtCore import Qt, QTimer
 from qtpy.QtWidgets import QFormLayout, QLabel, QSpacerItem, QTabWidget, \
-    QSizePolicy as QSzPlcy, QGridLayout, QHBoxLayout, QGroupBox
+    QSizePolicy as QSzPlcy, QGridLayout, QHBoxLayout, QGroupBox, QWidget
 
 from pyqtgraph import PlotWidget, BarGraphItem
 
@@ -173,45 +173,62 @@ class TransmLineStatusDetails(SiriusDialog):
         self._setupUi()
 
     def _setupUi(self):
-        self.lb_circtin = SiriusLabel(
-            self, self.prefix+self.chs['TL Sts']['Circ TIn'])
-        self.lb_circtin.showUnits = True
-        self.lb_circtin.setStyleSheet('qproperty-alignment: AlignLeft;')
-        self.lb_circtout = SiriusLabel(
-            self, self.prefix+self.chs['TL Sts']['Circ TOut'])
-        self.lb_circtout.showUnits = True
-        self.lb_circtout.setStyleSheet('qproperty-alignment: AlignLeft;')
-        self.led_circarc = SiriusLedAlert(
-            self, self.prefix+self.chs['TL Sts']['Circ Arc'])
-        if self.section == 'SI':
-            self.led_loadarc = SiriusLedAlert(
-                self, self.prefix+self.chs['TL Sts']['Load Arc'])
-        self.led_circflwrt = SiriusLedAlert(
-            self, self.prefix+self.chs['TL Sts']['Circ FlwRt'])
-        self.led_loadflwrt = SiriusLedAlert(
-            self, self.prefix+self.chs['TL Sts']['Load FlwRt'])
-        self.led_circintlkop = SiriusLedAlert(
-            self, self.prefix+self.chs['TL Sts']['Circ Intlk'])
-        self.led_circsplyfail = SiriusLedAlert(
-            self, self.prefix+self.chs['TL Sts']['Circ Sply Fail'])
-        self.led_loadsplyfail = SiriusLedAlert(
-            self, self.prefix+self.chs['TL Sts']['Circ Sply Fail'])
-
         lay = QFormLayout(self)
         lay.setLabelAlignment(Qt.AlignRight)
         lay.addRow(QLabel('<h4>Transm. Line - Detailed Status</h4>'))
         lay.addItem(QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed))
-        lay.addRow('Circulator T In: ', self.lb_circtin)
-        lay.addRow('Circulator T Out: ', self.lb_circtout)
+
+        for widget_id, pvname in self.chs['TL Sts']['label_led'].items():
+            wid = QWidget()
+            hlay = QHBoxLayout()
+            wid.setLayout(hlay)
+            hlay.setContentsMargins(0, 0, 0, 0)
+
+            si_lbl_wid = SiriusLabel(
+                self, self.prefix+pvname['label'])
+            si_lbl_wid.showUnits = True
+            si_lbl_wid.setMaximumWidth(100)
+            si_lbl_wid.setStyleSheet('qproperty-alignment: AlignLeft;')
+            hlay.addWidget(si_lbl_wid)
+
+            si_led_wid = SiriusLedAlert(
+                self, self.prefix+pvname['led'])
+            hlay.addWidget(si_led_wid)
+
+            lay.addRow(widget_id, wid)
+
+        wid = QWidget()
+        hlay = QHBoxLayout()
+        wid.setLayout(hlay)
+        hlay.setContentsMargins(0, 0, 0, 0)
+
+        lb_circtin = SiriusLabel(
+            self, self.prefix+self.chs['TL Sts']['Circ TIn']['label'])
+        lb_circtin.showUnits = True
+        lb_circtin.setStyleSheet('qproperty-alignment: AlignLeft;')
+        hlay.addWidget(lb_circtin)
+
+        si_led_wid = PyDMLedMultiChannel(
+            self, self.chs['TL Sts']['Circ TIn']['led'])
+        hlay.addWidget(si_led_wid)
+
+        lay.addRow('Circulator T In: ', wid)
+
+        for widget_id, pvname in self.chs['TL Sts']['label'].items():
+            if not ((self.section == 'BO') and ('Combiner' == widget_id)):
+                si_lbl_wid = SiriusLabel(
+                    self, self.prefix+pvname)
+                si_lbl_wid.showUnits = True
+                si_lbl_wid.setStyleSheet('qproperty-alignment: AlignLeft;')
+                lay.addRow(widget_id, si_lbl_wid)
+
         lay.addItem(QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed))
-        lay.addRow('Circulator Arc Detector: ', self.led_circarc)
-        if self.section == 'SI':
-            lay.addRow('Circulator Supply Fail Arc Detector: ', self.led_circsplyfail)
-            lay.addRow('Load Arc Detector: ', self.led_loadarc)
-            lay.addRow('Load Supply Fail Arc Detector: ', self.led_loadsplyfail)
-        lay.addRow('Circulator Flow: ', self.led_circflwrt)
-        lay.addRow('Load Flow: ', self.led_loadflwrt)
-        lay.addRow('TCU Status: ', self.led_circintlkop)
+
+        for widget_id, pvname in self.chs['TL Sts']['led'].items():
+            if not ((self.section == 'BO') and ('Detector Load' in widget_id)):
+                si_led_wid = SiriusLedAlert(
+                    self, self.prefix+pvname)
+                lay.addRow(widget_id + ": ", si_led_wid)
 
         self.setStyleSheet("""
             SiriusLabel{

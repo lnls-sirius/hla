@@ -1265,9 +1265,9 @@ class RFMainControl(SiriusMainWindow):
         lb_tempcirc = QLabel('<h3> • Circulator</h3>', self)
         lims_circ = self.chs['TL Sts']['Circ Limits']
         ch2vals = {
-            self.prefix+self.chs['TL Sts']['Circ TIn']: {
+            self.prefix+self.chs['TL Sts']['Circ TIn']['label']: {
                 'comp': 'wt', 'value': lims_circ},
-            self.prefix+self.chs['TL Sts']['Circ TOut']: {
+            self.prefix+self.chs['TL Sts']['label']['Circulator T Out']: {
                 'comp': 'wt', 'value': lims_circ}
         }
         self.led_tempcircok = PyDMLedMultiChannel(self, ch2vals)
@@ -1286,11 +1286,11 @@ class RFMainControl(SiriusMainWindow):
         self.tempcirc_graph.timeSpan = 1800
         self.tempcirc_graph.maxRedrawRate = 1
         self.tempcirc_graph.addYChannel(
-            y_channel=self.prefix+self.chs['TL Sts']['Circ TIn'],
+            y_channel=self.prefix+self.chs['TL Sts']['Circ TIn']['label'],
             name='CTIn', color='magenta',
             lineStyle=Qt.SolidLine, lineWidth=1)
         self.tempcirc_graph.addYChannel(
-            y_channel=self.prefix+self.chs['TL Sts']['Circ TOut'],
+            y_channel=self.prefix+self.chs['TL Sts']['label']['Circulator T Out'],
             name='CTOut', color='darkRed',
             lineStyle=Qt.SolidLine, lineWidth=1)
         self.tempcirc_graph.setLabel('left', '')
