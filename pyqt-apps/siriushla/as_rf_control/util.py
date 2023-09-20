@@ -122,20 +122,20 @@ SEC_2_CHANNELS = {
         'TL Sts': {
             'Geral': 'RA-TLBO:RF-TrLine:Sts-Mon',
             'label_led': {
-                'Circ TDrift': {
+                'Circulator Temp. Drift': {
                     'label': 'RA-TLBO:RF-Circulator:dT-Mon',
                     'led': 'RA-TLBO:RF-Circulator:TDrift-Mon'
                 },
-                'Circ Coil': {
+                'Circulator Coil': {
                     'label': 'RA-TLBO:RF-Circulator:Current-Mon',
                     'led': 'RA-TLBO:RF-Circulator:Sts-Mon'
                 },
-                'Room Temp': {
+                'Room Temp.': {
                     'label': 'RA-TLBO:RF-Circulator:Tamb-Mon',
                     'led': 'RA-TLBO:RF-Circulator:TEnv-Mon'
                 }
             },
-            'Circ TIn': {
+            'Circulator Temp. In': {
                 'label': 'RA-TLBO:RF-Circulator:Tin-Mon',
                 'led': {
                     'RA-TLBO:RF-Circulator:TinDown-Mon': 0,
@@ -143,7 +143,7 @@ SEC_2_CHANNELS = {
                 }
             },
             'label': {
-                'Circulator T Out': 'RA-TLBO:RF-Circulator:Tout-Mon',
+                'Circulator Temp. Out': 'RA-TLBO:RF-Circulator:Tout-Mon',
                 'Circulator In Reflected Power': 'RA-TLBO:RF-Circulator:PwrRevIndBm-Mon'
             },
             'led': {
@@ -397,7 +397,7 @@ SEC_2_CHANNELS = {
         },
         'TL Sts': {
             'Geral': 'RA-TLSIA:RF-TrLine:Sts-Mon',
-            'Circ TIn': {
+            'Circulator Temp. In': {
                 'label': 'RA-TLSIA:RF-Circulator:Tin-Mon',
                 'led': {
                     'RA-TLSIA:RF-Circulator:TinDown-Mon': 0,
@@ -405,21 +405,21 @@ SEC_2_CHANNELS = {
                 }
             },
             'label_led': {
-                'Circ TDrift': {
+                'Circulator Temp. Drift': {
                     'label': 'RA-TLSIA:RF-Circulator:dT-Mon',
                     'led': 'RA-TLSIA:RF-Circulator:TDrift-Mon'
                 },
-                'Circ Coil': {
+                'Circulator Coil': {
                     'label': 'RA-TLSIA:RF-Circulator:Current-Mon',
                     'led': 'RA-TLSIA:RF-Circulator:Sts-Mon'
                 },
-                'Room Temp': {
+                'Room Temp.': {
                     'label': 'RA-TLSIA:RF-Circulator:Tamb-Mon',
                     'led': 'RA-TLSIA:RF-Circulator:TEnv-Mon'
                 }
             },
             'label': {
-                'Circulator T Out': 'RA-TLSIA:RF-Circulator:Tout-Mon',
+                'Circulator Temp. Out': 'RA-TLSIA:RF-Circulator:Tout-Mon',
                 'Circulator In Reflected Power': 'RA-TLSIA:RF-Circulator:PwrRevIndBm-Mon',
                 'Combiner': 'RA-TLSIA:RF-Combiner:T-Mon'
             },

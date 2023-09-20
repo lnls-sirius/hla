@@ -203,13 +203,13 @@ class TransmLineStatusDetails(SiriusDialog):
         hlay.setContentsMargins(0, 0, 0, 0)
 
         lb_circtin = SiriusLabel(
-            self, self.prefix+self.chs['TL Sts']['Circ TIn']['label'])
+            self, self.prefix+self.chs['TL Sts']['Circulator Temp. In']['label'])
         lb_circtin.showUnits = True
         lb_circtin.setStyleSheet('qproperty-alignment: AlignLeft;')
         hlay.addWidget(lb_circtin)
 
         si_led_wid = PyDMLedMultiChannel(
-            self, self.chs['TL Sts']['Circ TIn']['led'])
+            self, self.chs['TL Sts']['Circulator Temp. In']['led'])
         hlay.addWidget(si_led_wid)
 
         lay.addRow('Circulator T In: ', wid)
