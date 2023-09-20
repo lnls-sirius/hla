@@ -252,7 +252,7 @@ class BLImgProc(QWidget):
         return cont_wid
 
     def toggle_beamline_btns(self, value):
-        if value == 0:
+        if value == 1:
             state = True
         else:
             state = False
@@ -320,6 +320,8 @@ class BLImgProc(QWidget):
         lay.addWidget(self.open_beamline_btn)
 
         self.pydm_led = SiriusLedState()
+        self.pydm_led.stateColors = [
+            self.pydm_led.DarkGreen, self.pydm_led.LightGreen, self.pydm_led.Gray]
         self.timer.start(1000)
         lay.addWidget(self.pydm_led)
 

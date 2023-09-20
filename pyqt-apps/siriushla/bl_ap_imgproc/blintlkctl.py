@@ -22,7 +22,7 @@ class BLIntckCtrl:
         if self.blintlk and self.blintlk.connected:
             return self.blintlk.is_beamline_opened
         else:
-            return False
+            return 2
 
     def gamma_enable(self):
         """."""
