@@ -148,7 +148,7 @@ SEC_2_CHANNELS = {
             },
             'led': {
                 'Circulator Arc Detector': 'RA-TLBO:RF-Circulator:Arc-Mon',
-                'Circulator Arc Detector Supply Fail': 'RA-TLBO02:RF-ArcDetec-Circ:PwrFail-Mon',
+                'Circulator Arc Detector Supply Fail': 'RA-RaBO02:RF-ArcDetec-Circ:PwrFail-Mon',
                 'Circulator Flow': 'RA-TLBO:RF-Circulator:FlwRt-Mon',
                 'Load Flow': 'RA-TLBO:RF-Load:FlwRt-Mon',
                 'TCU Status': 'RA-TLBO:RF-Circulator:IntlkOp-Mon',
