@@ -707,14 +707,8 @@ class RFMainControl(SiriusMainWindow):
             self, self.prefix+'BR-RF-DLLRF-01:RmpPhsTop-RB')
         self.lb_rmpphstop.showUnits = True
         self.ld_rmpphstop = QLabel('Amplitude', self, alignment=Qt.AlignRight)
-        self.cb_rmpphstop = QComboBox()
-        self.cb_rmpphstop.addItems(['[mV]', '[V]'])
-        self.cb_rmpphstop.setStyleSheet('QComboBox{max-width: 3.5em;}')
-        self.cb_rmpphstop.currentTextChanged.connect(
-            self._handle_rmpampl_unit_visibility)
         lay_rmpphstopdesc = QHBoxLayout()
         lay_rmpphstopdesc.addWidget(self.ld_rmpphstop)
-        lay_rmpphstopdesc.addWidget(self.cb_rmpphstop)
         lay_rmpphstopdesc.setAlignment(Qt.AlignRight)
         self.le_rmpvolttop1 = PyDMLineEdit(
             self, self.prefix+'BR-RF-DLLRF-01:mV:RAMP:AMP:TOP-SP')
@@ -723,7 +717,6 @@ class RFMainControl(SiriusMainWindow):
         self.lb_rmpvolttop1.showUnits = True
         self.lb_rmpvolttop2 = SiriusLabel(
             self, self.prefix+'RA-RaBO01:RF-LLRF:RmpAmpVCavTop-RB')
-        self.lb_rmpvolttop2.setVisible(False)
         self.lb_rmpvolttop2.showUnits = True
 
         self.sb_rmpphsbot = SiriusSpinbox(
@@ -732,14 +725,8 @@ class RFMainControl(SiriusMainWindow):
             self, self.prefix+'BR-RF-DLLRF-01:RmpPhsBot-RB')
         self.lb_rmpphsbot.showUnits = True
         self.ld_rmpphsbot = QLabel('Amplitude', self, alignment=Qt.AlignRight)
-        self.cb_rmpphsbot = QComboBox()
-        self.cb_rmpphsbot.addItems(['[mV]', '[V]'])
-        self.cb_rmpphsbot.setStyleSheet('QComboBox{max-width: 3.5em;}')
-        self.cb_rmpphsbot.currentTextChanged.connect(
-            self._handle_rmpampl_unit_visibility)
         lay_rmpphsbotdesc = QHBoxLayout()
         lay_rmpphsbotdesc.addWidget(self.ld_rmpphsbot)
-        lay_rmpphsbotdesc.addWidget(self.cb_rmpphsbot)
         lay_rmpphsbotdesc.setAlignment(Qt.AlignRight)
         self.le_rmpvoltbot1 = PyDMLineEdit(
             self, self.prefix+'BR-RF-DLLRF-01:mV:RAMP:AMP:BOT-SP')
@@ -748,7 +735,6 @@ class RFMainControl(SiriusMainWindow):
         self.lb_rmpvoltbot1.showUnits = True
         self.lb_rmpvoltbot2 = SiriusLabel(
             self, self.prefix+'RA-RaBO01:RF-LLRF:RmpAmpVCavBot-RB')
-        self.lb_rmpvoltbot2.setVisible(False)
         self.lb_rmpvoltbot2.showUnits = True
 
         lay = QGridLayout()
@@ -758,7 +744,7 @@ class RFMainControl(SiriusMainWindow):
             QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), 1, 0)
         lay.addWidget(QLabel('Enable: ', self,
                              alignment=Qt.AlignRight), 2, 0)
-        lay.addWidget(self.bt_rmpenbl, 2, 1)
+        lay.addWidget(self.bt_rmpenbl, 2, 2)
         lay.addWidget(self.lb_rmpenbl, 2, 2, alignment=Qt.AlignLeft)
         lay.addWidget(QLabel('Ramp Ready: ', self,
                              alignment=Qt.AlignRight), 3, 0)
@@ -771,45 +757,57 @@ class RFMainControl(SiriusMainWindow):
         lay.addWidget(QLabel('<h4>Durations</h4>', self), 6, 0, 1, 3)
         lay.addWidget(QLabel('Bottom: ', self,
                              alignment=Qt.AlignRight), 7, 0)
-        lay.addWidget(self.sb_rmpts1, 7, 1)
-        lay.addWidget(self.lb_rmpts1, 7, 2)
+        lay.addWidget(self.sb_rmpts1, 7, 2)
+        lay.addWidget(self.lb_rmpts1, 7, 3)
         lay.addWidget(QLabel('Rampup: ', self,
                              alignment=Qt.AlignRight), 8, 0)
-        lay.addWidget(self.sb_rmpts2, 8, 1)
-        lay.addWidget(self.lb_rmpts2, 8, 2)
+        lay.addWidget(self.sb_rmpts2, 8, 2)
+        lay.addWidget(self.lb_rmpts2, 8, 3)
         lay.addWidget(QLabel('Top: ', self,
                              alignment=Qt.AlignRight), 9, 0)
-        lay.addWidget(self.sb_rmpts3, 9, 1)
-        lay.addWidget(self.lb_rmpts3, 9, 2)
+        lay.addWidget(self.sb_rmpts3, 9, 2)
+        lay.addWidget(self.lb_rmpts3, 9, 3)
         lay.addWidget(QLabel('Rampdown:', self,
                              alignment=Qt.AlignRight), 10, 0)
-        lay.addWidget(self.sb_rmpts4, 10, 1)
-        lay.addWidget(self.lb_rmpts4, 10, 2)
+        lay.addWidget(self.sb_rmpts4, 10, 2)
+        lay.addWidget(self.lb_rmpts4, 10, 3)
         lay.addWidget(QLabel('Ramp Inc. Rate: ', self,
                              alignment=Qt.AlignRight), 11, 0)
-        lay.addWidget(self.cb_rmpincts, 11, 1)
-        lay.addWidget(self.lb_rmpincts, 11, 2)
+        lay.addWidget(self.cb_rmpincts, 11, 2)
+        lay.addWidget(self.lb_rmpincts, 11, 3)
         lay.addItem(QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), 12, 0)
         lay.addWidget(QLabel('<h4>Bottom</h4>', self), 13, 0, 1, 3)
         lay.addWidget(QLabel('Phase', self,
                              alignment=Qt.AlignRight), 14, 0)
-        lay.addWidget(self.sb_rmpphsbot, 14, 1)
-        lay.addWidget(self.lb_rmpphsbot, 14, 2)
+        lay.addWidget(self.sb_rmpphsbot, 14, 2)
+        lay.addWidget(self.lb_rmpphsbot, 14, 3)
         lay.addLayout(lay_rmpphsbotdesc, 15, 0)
-        lay.addWidget(self.le_rmpvoltbot1, 15, 1)
-        lay.addWidget(self.lb_rmpvoltbot1, 15, 2)
-        lay.addWidget(self.lb_rmpvoltbot2, 15, 1, 1, 2)
-        lay.addWidget(QLabel('<h4>Top</h4>', self), 16, 0, 1, 3)
+        lbl = QLabel('[mV]', self, alignment=Qt.AlignCenter)
+        lbl.setMaximumWidth(25)
+        lay.addWidget(lbl, 15, 1)
+        lay.addWidget(self.le_rmpvoltbot1, 15, 2)
+        lay.addWidget(self.lb_rmpvoltbot1, 15, 3)
+        lbl = QLabel('[V]', self, alignment=Qt.AlignCenter)
+        lbl.setMaximumWidth(25)
+        lay.addWidget(lbl, 16, 1)
+        lay.addWidget(self.lb_rmpvoltbot2, 16, 1, 1, 3)
+        lay.addWidget(QLabel('<h4>Top</h4>', self), 17, 0, 1, 3)
         lay.addWidget(QLabel('Phase', self,
-                             alignment=Qt.AlignRight), 17, 0)
-        lay.addWidget(self.sb_rmpphstop, 17, 1)
-        lay.addWidget(self.lb_rmpphstop, 17, 2)
-        lay.addLayout(lay_rmpphstopdesc, 18, 0)
-        lay.addWidget(self.le_rmpvolttop1, 18, 1)
-        lay.addWidget(self.lb_rmpvolttop1, 18, 2)
-        lay.addWidget(self.lb_rmpvolttop2, 18, 1, 1, 2)
+                             alignment=Qt.AlignRight), 18, 0)
+        lay.addWidget(self.sb_rmpphstop, 18, 2)
+        lay.addWidget(self.lb_rmpphstop, 18, 3)
+        lay.addLayout(lay_rmpphstopdesc, 19, 0)
+        lbl = QLabel('[mV]', self, alignment=Qt.AlignCenter)
+        lbl.setMaximumWidth(25)
+        lay.addWidget(lbl, 19, 1)
+        lay.addWidget(self.le_rmpvolttop1, 19, 2)
+        lay.addWidget(self.lb_rmpvolttop1, 19, 3)
+        lbl = QLabel('[V]', self, alignment=Qt.AlignCenter)
+        lbl.setMaximumWidth(25)
+        lay.addWidget(lbl, 20, 1)
+        lay.addWidget(self.lb_rmpvolttop2, 20, 1, 1, 3)
         lay.addItem(QSpacerItem(
-            200, 10, QSzPlcy.Fixed, QSzPlcy.MinimumExpanding), 19, 3)
+            200, 10, QSzPlcy.Fixed, QSzPlcy.MinimumExpanding), 21, 3)
         return lay
 
     def _handle_rmptab_visibility(self, unit_type):
@@ -1477,15 +1475,3 @@ class RFMainControl(SiriusMainWindow):
             self.led_tempcoupok.set_channels2values(ch2vals)
             self.line_cell_minlim.setPos(lims[0])
             self.line_cell_maxlim.setPos(lims[1])
-
-    def _handle_rmpampl_unit_visibility(self, text):
-        self.blockSignals(True)
-        self.cb_rmpphsbot.setCurrentText(text)
-        self.cb_rmpphstop.setCurrentText(text)
-        self.le_rmpvolttop1.setVisible(text == '[mV]')
-        self.lb_rmpvolttop1.setVisible(text == '[mV]')
-        self.le_rmpvoltbot1.setVisible(text == '[mV]')
-        self.lb_rmpvoltbot1.setVisible(text == '[mV]')
-        self.lb_rmpvolttop2.setVisible(text == '[V]')
-        self.lb_rmpvoltbot2.setVisible(text == '[V]')
-        self.blockSignals(False)
