@@ -1102,9 +1102,10 @@ class RFMainControl(SiriusMainWindow):
         self.lb_cavvgap.showUnits = True
 
         self.lbl_refvol = QLabel(
-            'Ref Voltage [V]:', self, alignment=Qt.AlignCenter)
+            'Ref Voltage:', self, alignment=Qt.AlignCenter)
         self.rb_refvol = SiriusLabel(
             self, self.prefix+self.chs['SL']['ASet'][1]+'-RB')
+        self.rb_refvol.showUnits = True
 
         lay_cavvgap = QGridLayout()
         lay_cavvgap.addWidget(self.ld_cavvgap, 0, 0)
