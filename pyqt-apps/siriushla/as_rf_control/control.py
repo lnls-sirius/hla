@@ -332,19 +332,10 @@ class RFMainControl(SiriusMainWindow):
         lay_over.addWidget(self.bt_slenbl, 1, 1)
         lay_over.addWidget(self.led_slenbl, 1, 2, alignment=Qt.AlignLeft)
 
-        self.cb_amp = QComboBox()
-        self.cb_amp.addItems(['[mV]', '[V]'])
-        self.cb_amp.setStyleSheet(
-            'QComboBox{max-width: 3.8em; font-weight: bold;}')
-        self.cb_amp.currentTextChanged.connect(
-            self._handle_ampl_unit_visibility)
         self.sb_amp1 = SiriusSpinbox(
             self, self.prefix+self.chs['SL']['ASet'][0]+'-SP')
         self.lb_amp1 = SiriusLabel(
             self, self.prefix+self.chs['SL']['ASet'][0]+'-RB')
-        self.lb_amp2 = SiriusLabel(
-            self, self.prefix+self.chs['SL']['ASet'][1]+'-RB')
-        self.lb_amp2.setVisible(False)
         self.cb_ampincrate = PyDMEnumComboBox(
             self, self.prefix+self.chs['SL']['AInc']+':S')
         self.lb_ampincrate = SiriusLabel(
@@ -364,14 +355,12 @@ class RFMainControl(SiriusMainWindow):
                                     alignment=Qt.AlignCenter), 0, 2, 1, 2)
         lay_slctrl.addWidget(QLabel('<h4>Inc. Rate SP/RB</h4>', self,
                                     alignment=Qt.AlignCenter), 0, 4, 1, 2)
-        lay_slctrl.addWidget(QLabel('<h4>Amplitude</h4>', self,
-                                    alignment=Qt.AlignCenter), 1, 0)
-        lay_slctrl.addWidget(self.cb_amp, 1, 1)
+        lay_slctrl.addWidget(QLabel('<h4>Amplitude [mV]</h4>', self,
+                                    alignment=Qt.AlignCenter), 1, 0, 1, 2)
         lay_slctrl.addWidget(QLabel('<h4>Phase [DEG]</h4>', self,
                                     alignment=Qt.AlignCenter), 2, 0, 1, 2)
         lay_slctrl.addWidget(self.sb_amp1, 1, 2, alignment=Qt.AlignRight)
         lay_slctrl.addWidget(self.lb_amp1, 1, 3, alignment=Qt.AlignLeft)
-        lay_slctrl.addWidget(self.lb_amp2, 1, 2, 1, 2, alignment=Qt.AlignCenter)
         lay_slctrl.addWidget(self.cb_ampincrate, 1, 4, alignment=Qt.AlignRight)
         lay_slctrl.addWidget(self.lb_ampincrate, 1, 5, alignment=Qt.AlignLeft)
         lay_slctrl.addWidget(self.sb_phs, 2, 2, alignment=Qt.AlignRight)
@@ -1111,9 +1100,17 @@ class RFMainControl(SiriusMainWindow):
         self.lb_cavvgap = SiriusLabel(self, self.prefix+self.chs['CavVGap'])
         self.lb_cavvgap.setStyleSheet('QLabel{font-size: 20pt;}')
         self.lb_cavvgap.showUnits = True
-        lay_cavvgap = QHBoxLayout()
-        lay_cavvgap.addWidget(self.ld_cavvgap)
-        lay_cavvgap.addWidget(self.lb_cavvgap)
+
+        self.lbl_refvol = QLabel(
+            'Ref Voltage [V]:', self, alignment=Qt.AlignCenter)
+        self.rb_refvol = SiriusLabel(
+            self, self.prefix+self.chs['SL']['ASet'][1]+'-RB')
+
+        lay_cavvgap = QGridLayout()
+        lay_cavvgap.addWidget(self.ld_cavvgap, 0, 0)
+        lay_cavvgap.addWidget(self.lb_cavvgap, 0, 1)
+        lay_cavvgap.addWidget(self.lbl_refvol, 1, 0)
+        lay_cavvgap.addWidget(self.rb_refvol, 1, 1)
 
         lay = QGridLayout()
         lay.setHorizontalSpacing(25)
@@ -1479,11 +1476,6 @@ class RFMainControl(SiriusMainWindow):
             self.led_tempcoupok.set_channels2values(ch2vals)
             self.line_cell_minlim.setPos(lims[0])
             self.line_cell_maxlim.setPos(lims[1])
-
-    def _handle_ampl_unit_visibility(self, text):
-        self.sb_amp1.setVisible(text == '[mV]')
-        self.lb_amp1.setVisible(text == '[mV]')
-        self.lb_amp2.setVisible(text == '[V]')
 
     def _handle_rmpampl_unit_visibility(self, text):
         self.blockSignals(True)
