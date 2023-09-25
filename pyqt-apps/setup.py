@@ -102,6 +102,7 @@ setup(
         'scripts/sirius-hla-li-pu-modltr.py',
         'scripts/sirius-hla-li-rf-llrf.py',
         'scripts/sirius-hla-li-va-control.py',
+        'scripts/sirius-hla-si-ap-cryo.py',
         'scripts/sirius-hla-si-ap-chromcorr.py',
         'scripts/sirius-hla-si-ap-currlt.py',
         'scripts/sirius-hla-si-ap-fofb.py',
