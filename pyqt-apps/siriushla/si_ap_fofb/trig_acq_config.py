@@ -529,7 +529,7 @@ class FOFBAcqLAMPWindow(_AcqBaseWindow):
 
         cb_linkxaxis = QCheckBox('Link X axis', self)
         cb_linkxaxis.stateChanged.connect(_part(
-            self._handle_graph_xaxis_link, gp_curr, [gp_volt, ]))
+            self._handle_graph_xaxis_link, gp_curr, [gp_currref, gp_volt, ]))
         cb_linkxaxis.setChecked(True)
 
         wid = QWidget()
