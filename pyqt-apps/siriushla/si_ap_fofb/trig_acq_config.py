@@ -75,7 +75,7 @@ class _AcqBaseWindow(SiriusMainWindow):
         graph = GraphWave()
         graph.graph.setTitle(title)
         graph.graph.plotItem.getAxis('left').setStyle(
-            tickTextOffset=5, autoExpandTextSpace=False, tickTextWidth=50)
+            tickTextOffset=5, autoExpandTextSpace=False, tickTextWidth=70)
         graph.graph.setStyleSheet('PlotWidget{min-width: 30em;}')
         for i, chn in enumerate(channels2names):
             opts = dict(
