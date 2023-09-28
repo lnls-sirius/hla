@@ -57,8 +57,12 @@ class CryoMain(SiriusMainWindow):
 
     def handle_highlight(self, config, lbl):
         if isinstance(config, dict):
+            border = 0
+            if config["shape"]=="round":
+                border = 8
             lbl.setStyleSheet("""
                 background-color: """+config["color"]+""";
+                border-radius: """+str(border)+"""px;
                 color: #ffffff;
                 font-size: 12px;
             """)
@@ -70,7 +74,7 @@ class CryoMain(SiriusMainWindow):
         lbl = QLabel(text)
         lbl.setAlignment(Qt.AlignCenter)
         position = self.handle_highlight(config, lbl)
-        self.save_relative_widget(lbl, [7.5, 4], position)
+        self.save_relative_widget(lbl, [7.8, 4], position)
 
     def add_labels(self):
         for text, config in LABELS.items():
@@ -94,6 +98,8 @@ class CryoMain(SiriusMainWindow):
     def create_pydm_group(self, config):
         lay = QVBoxLayout()
         lay.setContentsMargins(0, 0, 0, 0)
+        lay.setSpacing(0)
+        lay.addStretch(1)
 
         pvname = config["pvname"]
         color = config["color"]
@@ -106,6 +112,8 @@ class CryoMain(SiriusMainWindow):
         pydm_lbl = self.add_sirius_label(
             pvname, color)
         lay.addWidget(pydm_lbl)
+
+        lay.addStretch(1)
 
         return lay
 
@@ -122,7 +130,7 @@ class CryoMain(SiriusMainWindow):
             else:
                 height = 7
             self.save_relative_widget(
-                group, [7.5, height], config["position"])
+                group, [7.8, height], config["position"])
 
     def _setupUi(self):
         bg_img = self.add_image("cryo1")
