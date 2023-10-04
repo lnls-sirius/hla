@@ -190,6 +190,10 @@ SEC_2_CHANNELS = {
             'PSet': 'BR-RF-DLLRF-01:PL:REF',
             'AInc': 'BR-RF-DLLRF-01:AMPREF:INCRATE',
             'PInc': 'BR-RF-DLLRF-01:PHSREF:INCRATE',
+            'Inp': 'BR-RF-DLLRF-01:SL:SEL',
+            'PIL': 'BR-RF-DLLRF-01:SL:PILIMIT',
+            'KI': 'BR-RF-DLLRF-01:SL:KI',
+            'KP': 'BR-RF-DLLRF-01:SL:KP',
         },
         'Tun': {
             'Auto': 'BR-RF-DLLRF-01:TUNE',
@@ -487,6 +491,10 @@ SEC_2_CHANNELS = {
             'PSet': 'SR-RF-DLLRF-01:PL:REF',
             'AInc': 'SR-RF-DLLRF-01:AMPREF:INCRATE',
             'PInc': 'SR-RF-DLLRF-01:PHSREF:INCRATE',
+            'Inp': 'SR-RF-DLLRF-01:SL:SEL',
+            'PIL': 'SR-RF-DLLRF-01:SL:PILIMIT',
+            'KI': 'SR-RF-DLLRF-01:SL:KI',
+            'KP': 'SR-RF-DLLRF-01:SL:KP',
         },
         'Tun': {
             'Auto': 'SR-RF-DLLRF-01:TUNE',
