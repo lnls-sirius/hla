@@ -1,13 +1,14 @@
 import os as _os
 from qtpy.QtCore import QEvent, Qt
-from qtpy.QtWidgets import QLabel, QSizePolicy, QGroupBox, \
-    QVBoxLayout
+from qtpy.QtWidgets import QLabel, QSizePolicy, QWidget, \
+    QGridLayout
 from qtpy.QtGui import QPixmap
 
 from siriushla.widgets.windows import SiriusMainWindow
 from siriushla.widgets import RelativeWidget, SiriusLabel
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from .util import LABELS, PVS
+from .background import PolygonWidget
 
 
 class CryoMain(SiriusMainWindow):
@@ -25,7 +26,7 @@ class CryoMain(SiriusMainWindow):
                 relative_item.relativeResize()
         return super().eventFilter(obj, event)
 
-    def add_image(self, img_path):
+    def add_background_image(self, img_path):
         self.image_container = QLabel()
         img_file = (img_path + ".png")
         pixmap = QPixmap(_os.path.join(
@@ -55,14 +56,25 @@ class CryoMain(SiriusMainWindow):
                 config = config[1]
             self.create_label(text, config)
 
+    def get_label(self, text, config):
+        if isinstance(config, dict):
+            if config["shape"]=="round":
+                color = config["color"]
+                lbl = PolygonWidget(
+                    text, color, self.image_container)
+            else:
+                lbl = QLabel(text)
+                lbl.setAlignment(Qt.AlignCenter)
+        else:
+            lbl = QLabel(text)
+            lbl.setAlignment(Qt.AlignCenter)
+
+        return lbl
+
     def handle_highlight(self, config, lbl):
         if isinstance(config, dict):
-            border = 0
-            if config["shape"]=="round":
-                border = 8
             lbl.setStyleSheet("""
                 background-color: """+config["color"]+""";
-                border-radius: """+str(border)+"""px;
                 color: #ffffff;
                 font-size: 12px;
             """)
@@ -71,8 +83,7 @@ class CryoMain(SiriusMainWindow):
         return config
 
     def create_label(self, text, config):
-        lbl = QLabel(text)
-        lbl.setAlignment(Qt.AlignCenter)
+        lbl = self.get_label(text, config)
         position = self.handle_highlight(config, lbl)
         self.save_relative_widget(lbl, [7.8, 4], position)
 
@@ -83,57 +94,65 @@ class CryoMain(SiriusMainWindow):
                 config = config[1]
             self.create_label(text, config)
 
-    def add_sirius_label(self, pvname, color):
-        pydm_lbl = SiriusLabel(init_channel=pvname)
-        pydm_lbl.showUnits = True
+    def add_label_egu(self, pvname, lay, line):
+        pydm_lbl = SiriusLabel(
+            init_channel=pvname)
+        pydm_lbl.setAlignment(Qt.AlignCenter)
+        lay.addWidget(pydm_lbl, line, 0, 1, 1)
 
-        pydm_lbl.setStyleSheet("""
-            background-color: """+color+""";
-            color: #ffffff;
-            margin-top: 2px;
-        """)
+        pydm_lbl = SiriusLabel(
+            init_channel=pvname+".EGU")
+        pydm_lbl.setAlignment(Qt.AlignCenter)
+        lay.addWidget(pydm_lbl, line, 1, 1, 1)
 
-        return pydm_lbl
+        return lay
 
-    def create_pydm_group(self, config):
-        lay = QVBoxLayout()
-        lay.setContentsMargins(0, 0, 0, 0)
-        lay.setSpacing(0)
-        lay.addStretch(1)
-
+    def create_pydm_group(self, config, lay):
+        line = 1
         pvname = config["pvname"]
-        color = config["color"]
         if isinstance(pvname, tuple):
-            pydm_lbl = self.add_sirius_label(
-                pvname[0], color)
-            lay.addWidget(pydm_lbl)
+            lay = self.add_label_egu(
+                pvname[0], lay, line)
             pvname = pvname[1]
+            line += 1
 
-        pydm_lbl = self.add_sirius_label(
-            pvname, color)
-        lay.addWidget(pydm_lbl)
-
-        lay.addStretch(1)
+        lay = self.add_label_egu(
+            pvname, lay, line)
 
         return lay
 
     def add_pvs(self):
         for text, config in PVS.items():
-            group = QGroupBox()
-            group.setTitle(text)
+            wid = QWidget()
+            glay = QGridLayout()
+            glay.setContentsMargins(0, 0, 0, 0)
+            glay.setSpacing(0)
+            wid.setLayout(glay)
 
-            lay = self.create_pydm_group(config)
-            group.setLayout(lay)
+            color = config["color"]
+            wid.setStyleSheet("""
+                background-color: """+color+""";
+                color: #ffffff;
+                border-bottom: 1px solid #ffffff;
+                border-right: 1px solid #ffffff;
+            """)
+
+            lbl = QLabel(text)
+            lbl.setAlignment(Qt.AlignCenter)
+            glay.addWidget(lbl, 0, 0, 1, 2)
+
+            glay = self.create_pydm_group(config, glay)
+            wid.setLayout(glay)
 
             if isinstance(config["pvname"], tuple):
-                height = 10
+                height = 8
             else:
-                height = 7
+                height = 6
             self.save_relative_widget(
-                group, [7.8, height], config["position"])
+                wid, [7.25, height], config["position"])
 
     def _setupUi(self):
-        bg_img = self.add_image("cryo1")
+        bg_img = self.add_background_image("cryo1")
         self.add_labels()
         self.add_pvs()
 

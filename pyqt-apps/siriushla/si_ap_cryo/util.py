@@ -7,9 +7,9 @@ class COLOR:
 
 
 LABELS = {
-    "CP1.CW1.GQ050": [8, 20],
-    "Master Mode": [8, 22],
-    "CP2.CW1.GQ050": [8, 63],
+    "CP1.CW1.GQ050": [11, 11],
+    "Master Mode": [10.5, 20],
+    "CP2.CW1.GQ050": [11, 54],
     "OC1.HP1.HQ010": [28.5, 1],
     "OC1.HP1.HQ020": [35.5, 1],
     "OC1.HP1.010.L": [31.75, 12],
@@ -40,12 +40,12 @@ LABELS = {
         "color": COLOR.blue
     },
     "CI2.LP1.016.U.PC": {
-        "position": [16, 74],
+        "position": [16, 75],
         "shape": "round",
         "color": COLOR.blue
     },
     "CI2.LP1.015.U.PC": {
-        "position": [16, 77],
+        "position": [16, 78],
         "shape": "round",
         "color": COLOR.blue
     },
@@ -85,7 +85,7 @@ LABELS = {
         "color": COLOR.blue
     },
     "GP2.HP1.010.U.PC": {
-        "position": [59, 51],
+        "position": [58.25, 51],
         "shape": "round",
         "color": COLOR.blue
     },
@@ -128,96 +128,96 @@ LABELS = {
 
 PVS = {
     "CP1.CW1.035.T": {
-        "position": [5.25, 10],
+        "position": [4.75, 11],
         "pvname": "RAD:Thermo1:Gamma",
         "color": COLOR.dark_red
     },
     "CP1.CW1.065.P": {
-        "position": [16, 5.25],
+        "position": [18, 6.25],
         "pvname": "RAD:Thermo1:Gamma",
         "color": COLOR.blue
     },
     "CP1.CW1.065.T": {
-        "position": [16, 10],
+        "position": [18, 11],
         "pvname": "RAD:Thermo1:Gamma",
         "color": COLOR.dark_red
     },
     "CP1.CW1.GQ050": {
-        "position": [16, 17],
+        "position": [16.5, 18],
         "pvname": "RAD:Thermo1:Gamma",
         "color": COLOR.black
     },
     "CP1.CW1.050.S": {
-        "position": [16, 22],
+        "position": [16.5, 23],
         "pvname": "RAD:Thermo1:Gamma",
         "color": COLOR.gold
     },
     "CP1.LP1.015.P": {
-        "position": [4.5, 27.5],
+        "position": [4.75, 29],
         "pvname": (
             "RAD:Thermo1:Gamma", "RAD:Thermo1:Gamma"),
         "color": COLOR.blue
     },
     "CP2.CW1.035.T": {
-        "position": [5.25, 53],
+        "position": [4.75, 54],
         "pvname": "RAD:Thermo1:Gamma",
         "color": COLOR.dark_red
     },
     "CP2.CW1.065.P": {
-        "position": [16, 48.25],
+        "position": [18, 49.25],
         "pvname": "RAD:Thermo1:Gamma",
         "color": COLOR.blue
     },
     "CP2.CW1.065.T": {
-        "position": [16, 53],
+        "position": [18, 54],
         "pvname": "RAD:Thermo1:Gamma",
         "color": COLOR.dark_red
     },
     "CP2.CW1.GQ050": {
-        "position": [16, 60],
+        "position": [16.5, 61],
         "pvname": "RAD:Thermo1:Gamma",
         "color": COLOR.black
     },
     "CP2.CW1.050.S": {
-        "position": [16, 65],
+        "position": [16.5, 66],
         "pvname": "RAD:Thermo1:Gamma",
         "color": COLOR.gold
     },
     "CP2.LP1.015.P": {
-        "position": [16, 79],
+        "position": [16.25, 81],
         "pvname": (
             "RAD:Thermo1:Gamma", "RAD:Thermo1:Gamma"),
         "color": COLOR.blue
     },
     "GP1.HP1.010.P": {
-        "position": [51.25, 3],
+        "position": [51.8, 5],
         "pvname": (
             "RAD:Thermo1:Gamma", "RAD:Thermo1:Gamma"),
         "color": COLOR.blue
     },
     "GP2.HP1.010.P": {
-        "position": [52, 45],
+        "position": [51.8, 47],
         "pvname": (
             "RAD:Thermo1:Gamma", "RAD:Thermo1:Gamma"),
         "color": COLOR.blue
     },
     "MC1.051.A": {
-        "position": [37, 72],
+        "position": [37, 73],
         "pvname": "RAD:Thermo1:Gamma",
         "color": COLOR.gold
     },
     "MC1.052.A": {
-        "position": [44, 72],
+        "position": [44, 73],
         "pvname": "RAD:Thermo1:Gamma",
         "color": COLOR.gold
     },
     "MC1.053.A": {
-        "position": [37, 77],
+        "position": [37, 78],
         "pvname": "RAD:Thermo1:Gamma",
         "color": COLOR.gold
     },
     "MC1.054.A": {
-        "position": [44, 77],
+        "position": [44, 78],
         "pvname": "RAD:Thermo1:Gamma",
         "color": COLOR.gold
     },
@@ -227,17 +227,17 @@ PVS = {
         "color": COLOR.dark_blue
     },
     "GP1.HP1.QN050": {
-        "position": [71.25, 30.5],
+        "position": [71.25, 31.75],
         "pvname": "RAD:Thermo1:Gamma",
         "color": COLOR.dark_blue
     },
     "GP1.HP1.QN070": {
-        "position": [71.25, 37],
+        "position": [71.25, 38],
         "pvname": "RAD:Thermo1:Gamma",
         "color": COLOR.dark_blue
     },
     "GP1.HP1.040.P": {
-        "position": [78.5, 21],
+        "position": [79, 22],
         "pvname": "RAD:Thermo1:Gamma",
         "color": COLOR.blue
     },
@@ -247,17 +247,17 @@ PVS = {
         "color": COLOR.dark_blue
     },
     "GP2.HP1.QN050": {
-        "position": [71.25, 72.5],
+        "position": [71.25, 73.75],
         "pvname": "RAD:Thermo1:Gamma",
         "color": COLOR.dark_blue
     },
     "GP2.HP1.QN070": {
-        "position": [71.25, 79],
+        "position": [71.25, 80],
         "pvname": "RAD:Thermo1:Gamma",
         "color": COLOR.dark_blue
     },
     "GP2.HP1.040.P": {
-        "position": [78.5, 56.5],
+        "position": [79, 57.5],
         "pvname": "RAD:Thermo1:Gamma",
         "color": COLOR.blue
     }
