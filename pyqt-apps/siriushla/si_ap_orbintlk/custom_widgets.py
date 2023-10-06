@@ -11,6 +11,7 @@ from qtpy.QtWidgets import QPushButton, QComboBox, QSizePolicy as QSzPlcy, \
 from siriuspy.epics import PV as _PV
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 from siriuspy.namesys import SiriusPVName
+from siriuspy.orbintlk.csdev import Const as _Const
 
 from ..widgets import PyDMLedMultiChannel, PyDMLed, SiriusLedState, QLed, \
     SelectionMatrixWidget
@@ -246,22 +247,23 @@ class BPMIntlkLimSPWidget(BaseObject, QWidget):
         # initialize auxiliary attributes
         self.metric = metric.lower()
         if 'sum' in self.metric:
-            self.lim_sp = ['IntlkLmtMinSum-SP', ]
+            self.lim_sp = ['MinSumLim-SP', ]
             self.title = 'Min.Sum. Thresholds'
         elif 'pos' in self.metric:
             self.lim_sp = [
-                'IntlkLmtPosMinX-SP', 'IntlkLmtPosMaxX-SP',
-                'IntlkLmtPosMinY-SP', 'IntlkLmtPosMaxY-SP']
+                'PosXMinLim-SP', 'PosXMaxLim-SP',
+                'PosYMinLim-SP', 'PosYMaxLim-SP']
             self.title = 'Position Thresholds'
         elif 'ang' in self.metric:
             self.lim_sp = [
-                'IntlkLmtAngMinX-SP', 'IntlkLmtAngMaxX-SP',
-                'IntlkLmtAngMinY-SP', 'IntlkLmtAngMaxY-SP']
+                'AngXMinLim-SP', 'AngXMaxLim-SP',
+                'AngYMinLim-SP', 'AngYMaxLim-SP']
             self.title = 'Angulation Thresholds'
         else:
             raise ValueError(metric)
 
         if 'sum' in self.metric:
+            # NOTE: Ask Érico to make an IOC for this vector
             self._create_pvs('Sum-Mon')
             self._summon = _np.zeros(len(self.BPM_NAMES), dtype=float)
         else:
@@ -323,7 +325,7 @@ class BPMIntlkLimSPWidget(BaseObject, QWidget):
             self._spins, self._checks = dict(), dict()
             for lsp in self.lim_sp:
                 row += 1
-                text = lsp.split('-')[0].split('Lmt')[1]+' [nm]: '
+                text = lsp.split('-')[0].split('Lim')[0]+' [nm]: '
                 label = QLabel(text, self, alignment=Qt.AlignRight)
                 lay_lims.addWidget(label, row, 0)
                 spin = QSpinBox(self)
@@ -406,27 +408,26 @@ class BPMIntlkLimSPWidget(BaseObject, QWidget):
 
     def send_value(self):
         """Send new value."""
-        idxsel, namesel = list(), list()
+        idxsel = list()
         for idx, wid in enumerate(self._bpm_sel.widgets):
-            name = self.BPM_NAMES[idx]
             check = wid.findChild(QCheckBox)
             if check.isChecked():
                 idxsel.append(idx)
-                namesel.append(name)
                 check.setChecked(False)
-        if not namesel:
+        idxsel = _np.array(idxsel, dtype=int)
+        if not idxsel.size:
             return
 
         if 'sum' in self.metric:
-            summonit = self._summon
-            sumintlk = summonit * self.monitsum2intlksum_factor
-            allvals = self._spin_scl.value() * sumintlk
+            sumintlk = self._summon * self.monitsum2intlksum_factor
+            allvals = _np.full(sumintlk.shape, fill_value=_np.nan)
+            allvals[idxsel] = self._spin_scl.value() * sumintlk[idxsel]
             reso = self.MINSUM_RESO
-            allvals = _np.ceil(allvals / reso) * reso
-            allvals = _np.array(self.calc_intlk_metric(
-                allvals, operation='min'))
-            values = allvals[_np.array(idxsel)]
-            pvs = [b.substitute(propty=self.lim_sp[0]) for b in namesel]
+            allvals[idxsel] = _np.ceil(allvals[idxsel] / reso) * reso
+            allvals[idxsel] = self.calc_intlk_metric(
+                allvals, operation='min')[idxsel]
+            values = [allvals, ]
+            pvs = [_Const.IOC_PREFIX.substitute(propty=self.lim_sp[0]), ]
         else:
             pvs, values = list(), list()
             for lsp in self.lim_sp:
@@ -436,10 +437,10 @@ class BPMIntlkLimSPWidget(BaseObject, QWidget):
                 plan = 'y' if 'y' in lsp.lower() else 'x'
                 metric = self.calc_intlk_metric(
                     self._reforb[plan], metric=self.metric)
-                allvals = _np.round(_np.array(metric) + lval)
-                allvals = allvals[_np.array(idxsel)]
-                values.extend(allvals)
-                pvs.extend([b.substitute(propty=lsp) for b in namesel])
+                allvals = _np.full(metric.shape, fill_value=_np.nan)
+                allvals[idxsel] = _np.round(metric[idxsel] + lval)
+                values.append(allvals)
+                pvs.append(_Const.IOC_PREFIX.substitute(propty=lsp))
 
         delays = [0.0, ] * len(pvs)
 
