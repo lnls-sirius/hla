@@ -24,7 +24,7 @@ class BaseObject(BaseOrbitIntlk):
     def __init__(self, prefix=VACA_PREFIX):
         super().__init__()
         self._client = ConfigDBClient(config_type='si_orbit')
-        self._prefix = prefix
+        self.prefix = prefix
 
         self._pv_facqrate_value = None
         self._pv_monitrate_value = None
@@ -70,7 +70,7 @@ class BaseObject(BaseOrbitIntlk):
         new_pvs = dict()
         for psn in self.BPM_NAMES:
             pvname = SiriusPVName(psn).substitute(
-                prefix=self._prefix, propty=propty)
+                prefix=self.prefix, propty=propty)
             if pvname in self._pvs:
                 continue
             auto_monitor = not pvname.endswith('-Mon') or 'Ltc' in pvname
@@ -82,13 +82,13 @@ class BaseObject(BaseOrbitIntlk):
     def _get_values(self, propty):
         for psn in self.BPM_NAMES:
             pvname = SiriusPVName(psn).substitute(
-                prefix=self._prefix, propty=propty)
+                prefix=self.prefix, propty=propty)
             self._pvs[pvname].wait_for_connection()
 
         values = list()
         for psn in self.BPM_NAMES:
             pvname = SiriusPVName(psn).substitute(
-                prefix=self._prefix, propty=propty)
+                prefix=self.prefix, propty=propty)
             try:
                 val = self._pvs[pvname].get()
             except ChannelAccessException:

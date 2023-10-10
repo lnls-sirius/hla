@@ -32,7 +32,6 @@ class FamBPMButton(BaseObject, QPushButton):
         BaseObject.__init__(self, prefix)
         QPushButton.__init__(self, text, parent)
 
-        self.prefix = prefix
         self.propty = propty
         self.value = value
         self.pvs, self.pvs2conn = dict(), dict()
@@ -147,7 +146,6 @@ class _BPMSelectionWidget(BaseObject, SelectionMatrixWidget):
         BaseObject.__init__(self, prefix)
 
         self.propty = propty
-        self.prefix = prefix
 
         SelectionMatrixWidget.__init__(
             self, parent=parent, title=title, **kwargs)
@@ -210,11 +208,9 @@ class BPMIntlkEnblWidget(_BPMSelectionWidget):
         self.propty = propty
 
         # create channels
-        self.pvs_sel = dict()
-        for bpm in self.BPM_NAMES:
-            self.pvs_sel[bpm] = _PV(
-                bpm.substitute(prefix=self.prefix, propty=propty),
-                connection_timeout=0.05)
+        self.pv_sel = _PV(
+            _Const.IOC_PREFIX.substitute(prefix=self.prefix, propty=propty),
+            connection_timeout=0.05)
 
         self.setObjectName('SIApp')
         self.setStyleSheet(
@@ -225,15 +221,15 @@ class BPMIntlkEnblWidget(_BPMSelectionWidget):
 
     def send_value(self):
         """Send new value."""
+        if self.pv_sel.wait_for_connection():
+            val = self.pv_sel.value
         for idx, wid in enumerate(self.widgets):
-            name = self.BPM_NAMES[idx]
             led = wid.findChild(QLed)
             if led.isSelected():
-                new_state = int(not led.state)
-                pvo = self.pvs_sel[name]
-                if pvo.wait_for_connection():
-                    pvo.put(int(new_state))
-                    led.setSelected(False)
+                val[idx] = int(not led.state)
+                led.setSelected(False)
+        if self.pv_sel.wait_for_connection():
+            self.pv_sel.put(val)
 
 
 class BPMIntlkLimSPWidget(BaseObject, QWidget):
@@ -268,8 +264,6 @@ class BPMIntlkLimSPWidget(BaseObject, QWidget):
             self._summon = _np.zeros(len(self.BPM_NAMES), dtype=float)
         else:
             self._set_ref_orb('ref_orb')
-
-        self.prefix = prefix
 
         # initialize super
         self.setObjectName('SIApp')

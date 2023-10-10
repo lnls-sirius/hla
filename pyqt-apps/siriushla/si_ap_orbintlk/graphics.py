@@ -26,7 +26,7 @@ class GraphMonitorWidget(QWidget):
 
     def __init__(self, parent=None, prefix=_vaca_prefix):
         super().__init__(parent)
-        self._prefix = prefix
+        self.prefix = prefix
         self.setObjectName('SIApp')
         self._setupUi()
 
@@ -57,17 +57,17 @@ class GraphMonitorWidget(QWidget):
         lay.addWidget(label, 0, 0)
 
         if intlktype == 'Min.Sum. Threshold':
-            graph = MinSumGraphWidget(self, self._prefix)
+            graph = MinSumGraphWidget(self, self.prefix)
             lay.addWidget(graph, 2, 0)
         elif intlktype == 'Position':
             propty_sel = GraphProptySelWidget(self)
             lay.addWidget(propty_sel, 1, 0)
 
-            graphx = PosXGraphWidget(self, self._prefix)
+            graphx = PosXGraphWidget(self, self.prefix)
             lay.addWidget(graphx, 2, 0)
             legx = GraphLegendWidget(self, 'Pos', 'X')
             lay.addWidget(legx, 3, 0)
-            graphy = PosYGraphWidget(self, self._prefix)
+            graphy = PosYGraphWidget(self, self.prefix)
             lay.addWidget(graphy, 4, 0)
             legy = GraphLegendWidget(self, 'Pos', 'Y')
             lay.addWidget(legy, 5, 0)
@@ -88,11 +88,11 @@ class GraphMonitorWidget(QWidget):
             propty_sel = GraphProptySelWidget(self)
             lay.addWidget(propty_sel, 1, 0)
 
-            graphx = AngXGraphWidget(self, self._prefix)
+            graphx = AngXGraphWidget(self, self.prefix)
             lay.addWidget(graphx, 2, 0)
             legx = GraphLegendWidget(self, 'Ang', 'X')
             lay.addWidget(legx, 3, 0)
-            graphy = AngYGraphWidget(self, self._prefix)
+            graphy = AngYGraphWidget(self, self.prefix)
             lay.addWidget(graphy, 4, 0)
             legy = GraphLegendWidget(self, 'Ang', 'Y')
             lay.addWidget(legy, 5, 0)
@@ -506,8 +506,6 @@ class _BaseGraphWidget(BaseObject, QWidget):
         BaseObject.__init__(self, prefix)
         QWidget.__init__(self, parent)
 
-        self._prefix = prefix
-
         self._property_intlktype = 'Latch'
         self._property_comptype = 'General'
         self._plan = '' if 'Sum' in self.INTLKTYPE else self.INTLKTYPE[-1]
@@ -522,7 +520,7 @@ class _BaseGraphWidget(BaseObject, QWidget):
             self.PROPTY_MIN_DATA, self.PROPTY_MIN_SYMB,
             self.PROPTY_MAX_DATA, self.PROPTY_MAX_SYMB,
             self._property_intlktype, self._property_comptype, self._reforb,
-            prefix=self._prefix, parent=self)
+            prefix=self.prefix, parent=self)
         self.propIntlkTypeChanged.connect(self._thread.set_propintlktype)
         self.propCompTypeChanged.connect(self._thread.set_propcomptype)
         self.refOrbChanged.connect(self._thread.set_reforb)
@@ -611,7 +609,6 @@ class _UpdateGraphThread(BaseObject, QThread):
         self._reforb = reforb
         self._refmetric = _np.array(self.calc_intlk_metric(
             self._reforb, metric=self.metric))
-        self._prefix = prefix
 
         self._quit_task = False
 

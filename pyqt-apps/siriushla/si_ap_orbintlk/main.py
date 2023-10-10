@@ -7,13 +7,13 @@ from qtpy.QtWidgets import QWidget, QGridLayout, QLabel, QGroupBox, \
 import qtawesome as qta
 
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
+from siriuspy.orbintlk.csdev import Const as _Const
 
-from ..widgets import SiriusMainWindow
+from ..widgets import SiriusMainWindow, SiriusPushButton
 from ..widgets.windows import create_window_from_widget
 from ..util import get_appropriate_color, connect_window
 from .base import BaseObject
-from .custom_widgets import FamBPMButton, FamBPMIntlkEnblStateLed, \
-    BPMIntlkEnblWidget, BPMIntlkLimSPWidget
+from .custom_widgets import BPMIntlkEnblWidget, BPMIntlkLimSPWidget
 from .graphics import GraphMonitorWidget
 
 
@@ -24,8 +24,6 @@ class BPMOrbIntlkMainWindow(BaseObject, SiriusMainWindow):
         """Init."""
         BaseObject.__init__(self, prefix)
         SiriusMainWindow.__init__(self, parent)
-
-        self.prefix = prefix
 
         self.setObjectName('SIApp')
         self.setWindowTitle('Orbit Interlock Control Window')
@@ -101,17 +99,9 @@ class BPMOrbIntlkMainWindow(BaseObject, SiriusMainWindow):
             '#sel{min-width:25px; max-width:25px; icon-size:20px;}')
         connect_window(
             bt_enblsel, sel_enbl_wind, parent=self,
-            propty='Intlk'+pvstr+'En-Sel', title=intlktype + ' Enable',
+            propty=pvstr+'EnblList-Sel', title=intlktype + ' Enable',
             prefix=self.prefix)
         lay.addWidget(bt_enblsel, row, 1)
-
-        ch2vals = dict()
-        for bpm in self.BPM_NAMES:
-            chn = bpm.substitute(
-                prefix=self.prefix, propty='Intlk'+pvstr+'En-Sts')
-            ch2vals[chn] = 1
-        led_enblsts = FamBPMIntlkEnblStateLed(self, ch2vals)
-        lay.addWidget(led_enblsts, row, 2)
 
         if 'General' not in intlktype:
             row += 1
@@ -136,13 +126,16 @@ class BPMOrbIntlkMainWindow(BaseObject, SiriusMainWindow):
 
         if 'Sum' not in intlktype:
             row += 1
+            propty = intlktype[:3]
+            propty = f'ResetBPM{propty}-Cmd'
             ld_clr = QLabel(
                 'Reset All: ', self, alignment=Qt.AlignRight | Qt.AlignBottom)
             lay.addWidget(ld_clr, row, 0)
 
-            bt_clr = FamBPMButton(
-                self, self.prefix, 'Intlk'+pvstr+'Clr-Cmd', '', value=1)
-            bt_clr.setIcon(qta.icon('fa5s.sync'))
+            bt_clr = SiriusPushButton(
+                parent=self, pressValue=1, icon=qta.icon('fa5s.sync'),
+                init_channel=_Const.IOC_PREFIX.substitute(
+                    prefix=self.prefix, propty=propty))
             bt_clr.setObjectName('clr')
             bt_clr.setStyleSheet(
                 '#clr{min-width:25px; max-width:25px; icon-size:20px;}')
