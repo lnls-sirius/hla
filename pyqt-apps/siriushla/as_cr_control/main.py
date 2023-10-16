@@ -8,7 +8,7 @@ from siriushla.widgets.windows import SiriusMainWindow
 from siriushla.widgets import RelativeWidget, SiriusLabel
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from .util import LABELS, PVS
-from .background import PolygonWidget
+from .polygon import PolygonWidget
 
 
 class CryoMain(SiriusMainWindow):

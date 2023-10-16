@@ -5,7 +5,7 @@
 import sys
 import argparse as _argparse
 from siriushla.sirius_application import SiriusApplication
-from siriushla.si_ap_cryo import CryoMain
+from siriushla.as_cr_control import CryoMain
 
 parser = _argparse.ArgumentParser(description="Run Cryogenic Interface.")
 
