@@ -1,22 +1,23 @@
 import os as _os
 from qtpy.QtCore import QEvent, Qt
 from qtpy.QtWidgets import QLabel, QSizePolicy, QWidget, \
-    QGridLayout
+    QGridLayout, QTabWidget
 from qtpy.QtGui import QPixmap
 
 from siriushla.widgets.windows import SiriusMainWindow
 from siriushla.widgets import RelativeWidget, SiriusLabel
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
-from .util import LABELS, PVS
+from .util import SCREENS
 from .polygon import PolygonWidget
 
 
-class CryoMain(SiriusMainWindow):
+class CryoControl(SiriusMainWindow):
 
-    def __init__(self, parent=None, prefix=_VACA_PREFIX):
+    def __init__(self, parent=None, screen="All", prefix=_VACA_PREFIX):
         super().__init__(parent=parent)
         self.prefix = prefix + ('-' if prefix else '')
         self.relative_widgets = []
+        self.screen = screen
         self._setupUi()
 
     def eventFilter(self, obj, event):
@@ -26,7 +27,8 @@ class CryoMain(SiriusMainWindow):
                 relative_item.relativeResize()
         return super().eventFilter(obj, event)
 
-    def add_background_image(self, img_path):
+    def add_background_image(self):
+        img_path = SCREENS[self.screen]["image"]
         self.image_container = QLabel()
         img_file = (img_path + ".png")
         pixmap = QPixmap(_os.path.join(
@@ -50,7 +52,8 @@ class CryoMain(SiriusMainWindow):
         self.relative_widgets.append(rel_wid)
 
     def add_labels(self):
-        for text, config in LABELS.items():
+        labels = SCREENS[self.screen]["labels"]
+        for text, config in labels.items():
             if isinstance(config, tuple):
                 self.create_label(text, config[0])
                 config = config[1]
@@ -58,7 +61,7 @@ class CryoMain(SiriusMainWindow):
 
     def get_label(self, text, config):
         if isinstance(config, dict):
-            if config["shape"]=="round":
+            if config["shape"]=="side_arrows":
                 color = config["color"]
                 lbl = PolygonWidget(
                     text, color, self.image_container)
@@ -88,7 +91,8 @@ class CryoMain(SiriusMainWindow):
         self.save_relative_widget(lbl, [7.8, 4], position)
 
     def add_labels(self):
-        for text, config in LABELS.items():
+        labels = SCREENS[self.screen]["labels"]
+        for text, config in labels.items():
             if isinstance(config, tuple):
                 self.create_label(text, config[0])
                 config = config[1]
@@ -122,7 +126,8 @@ class CryoMain(SiriusMainWindow):
         return lay
 
     def add_pvs(self):
-        for text, config in PVS.items():
+        pvs = SCREENS[self.screen]["pvs"]
+        for text, config in pvs.items():
             wid = QWidget()
             glay = QGridLayout()
             glay.setContentsMargins(0, 0, 0, 0)
@@ -151,9 +156,27 @@ class CryoMain(SiriusMainWindow):
             self.save_relative_widget(
                 wid, [7.25, height], config["position"])
 
-    def _setupUi(self):
-        bg_img = self.add_background_image("cryo1")
+    def setup_one_screen(self):
+
+        bg_img = self.add_background_image()
         self.add_labels()
         self.add_pvs()
 
-        self.setCentralWidget(bg_img)
+        return bg_img
+
+    def setup_all_screens(self):
+        tabs = QTabWidget()
+        for title in SCREENS.keys():
+            self.screen = title
+            bg_img = self.setup_one_screen()
+            tabs.addTab(bg_img, title)
+
+        return tabs
+
+    def _setupUi(self):
+        if self.screen != "All":
+            wid = self.setup_one_screen()
+        else:
+            wid = self.setup_all_screens()
+
+        self.setCentralWidget(wid)

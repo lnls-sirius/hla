@@ -1,1 +1,1 @@
-from .main import CryoMain
+from .main import CryoControl
