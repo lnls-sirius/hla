@@ -4,15 +4,15 @@ LABELS_1 = {
     "CP1.CW1.GQ050": [11, 11],
     "Master Mode": [10.5, 20],
     "CP2.CW1.GQ050": [11, 54],
-    "OC1.HP1.HQ010": [28.5, 1],
+    "OC1.HP1.HQ010": [25.5, 1],
     "OC1.HP1.HQ020": [35.5, 1],
-    "OC1.HP1.010.L": [31.75, 12],
-    "OC1.HP1.020.L": [38.75, 12],
+    "OC1.HP1.010.L": [28.75, 13.5],
+    "OC1.HP1.020.L": [39, 13.5],
     "TUI.QN020": [31.5, 29.5],
-    "OC2.HP1.HQ010": [28.5, 43],
+    "OC2.HP1.HQ010": [25.5, 43],
     "OC2.HP1.HQ020": [35.5, 43],
-    "OC2.HP1.010.L": [31.75, 54],
-    "OC2.HP1.020.L": [38.75, 54],
+    "OC2.HP1.010.L": [28.75, 55.5],
+    "OC2.HP1.020.L": [39, 55.5],
     "OC1.HP1.HP050": [45.25, 1],
     "LS1.010.U.LC": (
         [62.5, 7], [62.5, 49]),
@@ -44,14 +44,14 @@ LABELS_1 = {
         "color": COLOR.blue
     },
     "OC1.HP1.QM010": {
-        "position": [31.75, 21.85],
+        "position": [29.25, 20.5],
         "shape": "line",
-        "color": COLOR.dark_red
+        "color": COLOR.wine
     },
     "OC1.HP1.QM020": {
-        "position": [39.25, 21.85],
+        "position": [39.5, 20.5],
         "shape": "line",
-        "color": COLOR.dark_red
+        "color": COLOR.wine
     },
     "CW1.050.U.SC": {
         "position": [25.25, 25.8],
@@ -64,14 +64,14 @@ LABELS_1 = {
         "color": COLOR.gold
     },
     "OC2.HP1.QM010": {
-        "position": [31.75, 63.85],
+        "position": [29.25, 62.5],
         "shape": "line",
-        "color": COLOR.dark_red
+        "color": COLOR.wine
     },
     "OC2.HP1.QM020": {
-        "position": [39.25, 63.85],
+        "position": [39.5, 62.5],
         "shape": "line",
-        "color": COLOR.dark_red
+        "color": COLOR.wine
     },
     "GP1.HP1.010.U.PC": {
         "position": [58.25, 9],
@@ -84,7 +84,7 @@ LABELS_1 = {
         "color": COLOR.blue
     },
     "MC1.HP1.QM010": {
-        "position": [43.25, 59],
+        "position": [43, 59],
         "shape": "line",
         "color": COLOR.dark_blue
     },
@@ -99,7 +99,7 @@ LABELS_1 = {
         "color": COLOR.dark_blue
     },
     "MC1.LP1.QM010": {
-        "position": [43.25, 84],
+        "position": [43, 84],
         "shape": "line",
         "color": COLOR.dark_blue
     },
