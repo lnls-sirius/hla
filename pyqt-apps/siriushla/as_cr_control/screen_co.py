@@ -1,6 +1,6 @@
 from .colors import COLOR
 
-LABELS_1 = {
+LABELS_CO = {
     "CP1.CW1.GQ050": [11, 11],
     "Master Mode": [10.5, 20],
     "CP2.CW1.GQ050": [11, 54],
@@ -120,7 +120,7 @@ LABELS_1 = {
     }
 }
 
-PVS_1 = {
+PVS_CO = {
     "CP1.CW1.035.T": {
         "position": [4.75, 11],
         "pvname": "",
