@@ -5,10 +5,11 @@ from qtpy.QtWidgets import QLabel, QSizePolicy, QWidget, \
 from qtpy.QtGui import QPixmap
 
 from siriushla.widgets.windows import SiriusMainWindow
-from siriushla.widgets import RelativeWidget, SiriusLabel
+from siriushla.widgets import RelativeWidget, SiriusLabel, \
+    SiriusLedAlert
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from .util import SCREENS
-from .polygon import PolygonWidget
+from .widgets import PolygonWidget, RotatedQLabel
 
 
 class CryoControl(SiriusMainWindow):
@@ -54,49 +55,59 @@ class CryoControl(SiriusMainWindow):
     def add_labels(self):
         labels = SCREENS[self.screen]["labels"]
         for text, config in labels.items():
-            if isinstance(config, tuple):
+            isTuple = isinstance(config, tuple)
+            if isTuple:
                 self.create_label(text, config[0])
                 config = config[1]
             self.create_label(text, config)
 
-    def get_label(self, text, config):
-        if isinstance(config, dict):
-            if config["shape"]=="side_arrows":
+    def get_label_widget(self, text, config):
+        isDict = isinstance(config, dict)
+        if isDict:
+            hasSideArrows = (config["shape"] == "side_arrows")
+            isRotated = "rotation" in config
+            if hasSideArrows:
                 color = config["color"]
-                lbl = PolygonWidget(
+                return PolygonWidget(
                     text, color, self.image_container)
-            else:
-                lbl = QLabel(text)
-                lbl.setAlignment(Qt.AlignCenter)
-        else:
-            lbl = QLabel(text)
-            lbl.setAlignment(Qt.AlignCenter)
-
+            if isRotated:
+                return RotatedQLabel(text)
+        lbl = QLabel(text)
+        lbl.setAlignment(Qt.AlignCenter)
         return lbl
 
-    def handle_highlight(self, config, lbl):
-        if isinstance(config, dict):
+    def handle_label_highlight(self, config, lbl):
+        isDict = isinstance(config, dict)
+        if isDict:
             lbl.setStyleSheet("""
                 background-color: """+config["color"]+""";
                 color: #ffffff;
                 font-size: 12px;
             """)
-
             return config["position"]
         return config
 
-    def create_label(self, text, config):
-        lbl = self.get_label(text, config)
-        position = self.handle_highlight(config, lbl)
-        self.save_relative_widget(lbl, [7.8, 4], position)
+    def get_label_height(self, text, config):
+        hasJumpLine = "\n" in text
+        isRotated = "rotation" in config
+        if hasJumpLine:
+            return 6
+        if isRotated:
+            return 20
+        return 4
 
-    def add_labels(self):
-        labels = SCREENS[self.screen]["labels"]
-        for text, config in labels.items():
-            if isinstance(config, tuple):
-                self.create_label(text, config[0])
-                config = config[1]
-            self.create_label(text, config)
+    def get_label_width(self, config):
+        isRotated = "rotation" in config
+        if isRotated:
+            return 4
+        return 7.9
+
+    def create_label(self, text, config):
+        lbl = self.get_label_widget(text, config)
+        position = self.handle_label_highlight(config, lbl)
+        height = self.get_label_height(text, config)
+        width = self.get_label_width(config)
+        self.save_relative_widget(lbl, [width, height], position)
 
     def add_label_egu(self, pvname, lay, line):
         pydm_lbl = SiriusLabel(
@@ -111,10 +122,11 @@ class CryoControl(SiriusMainWindow):
 
         return lay
 
-    def create_pydm_group(self, config, lay):
+    def set_pydm_widget(self, config, lay):
         line = 1
         pvname = config["pvname"]
-        if isinstance(pvname, tuple):
+        isTuple = isinstance(pvname, tuple)
+        if isTuple:
             lay = self.add_label_egu(
                 pvname[0], lay, line)
             pvname = pvname[1]
@@ -125,42 +137,68 @@ class CryoControl(SiriusMainWindow):
 
         return lay
 
+    def get_pv_height(self, config):
+        isTuple = isinstance(config["pvname"], tuple)
+        if isTuple:
+            return 8
+        return 6
+
+    def create_pv_group(self):
+        wid = QWidget()
+        lay = QGridLayout()
+        lay.setContentsMargins(0, 0, 0, 0)
+        lay.setSpacing(0)
+        wid.setLayout(lay)
+
+        return wid, lay
+
+    def handle_group_highlight(self, config, group):
+        color = config["color"]
+        group.setStyleSheet("""
+            background-color: """+color+""";
+            color: #ffffff;
+            border-bottom: 1px solid #ffffff;
+            border-right: 1px solid #ffffff;
+        """)
+
+    def set_group_title(self, title, glay):
+        lbl = QLabel(title)
+        lbl.setAlignment(Qt.AlignCenter)
+        glay.addWidget(lbl, 0, 0, 1, 2)
+
     def add_pvs(self):
         pvs = SCREENS[self.screen]["pvs"]
         for text, config in pvs.items():
-            wid = QWidget()
-            glay = QGridLayout()
-            glay.setContentsMargins(0, 0, 0, 0)
-            glay.setSpacing(0)
-            wid.setLayout(glay)
-
-            color = config["color"]
-            wid.setStyleSheet("""
-                background-color: """+color+""";
-                color: #ffffff;
-                border-bottom: 1px solid #ffffff;
-                border-right: 1px solid #ffffff;
-            """)
-
-            lbl = QLabel(text)
-            lbl.setAlignment(Qt.AlignCenter)
-            glay.addWidget(lbl, 0, 0, 1, 2)
-
-            glay = self.create_pydm_group(config, glay)
-            wid.setLayout(glay)
-
-            if isinstance(config["pvname"], tuple):
-                height = 8
-            else:
-                height = 6
+            wid, glay = self.create_pv_group()
+            self.handle_group_highlight(config, wid)
+            self.set_group_title(text, glay)
+            self.set_pydm_widget(config, glay)
+            height = self.get_pv_height(config)
             self.save_relative_widget(
                 wid, [7.25, height], config["position"])
+
+    def get_led(self, pvname):
+        led = SiriusLedAlert(
+            init_channel=pvname)
+        led.shape = 3
+        led.setFixedSize(7, 7)
+        return led
+
+    def add_leds(self):
+        ledsExist = "leds" in SCREENS[self.screen]
+        if ledsExist:
+            leds = SCREENS[self.screen]["leds"]
+            for config in leds.values():
+                wid = self.get_led(config["pvname"])
+                self.save_relative_widget(
+                    wid, [10, 10], config["position"])
 
     def setup_one_screen(self):
 
         bg_img = self.add_background_image()
         self.add_labels()
         self.add_pvs()
+        self.add_leds()
 
         return bg_img
 

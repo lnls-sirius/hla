@@ -1,3 +1,5 @@
+import typing
+from PyQt5 import QtCore
 from PyQt5.QtWidgets import QWidget
 from PyQt5.QtGui import QPainter, QPolygon, QColor, \
     QBrush, QFont
@@ -54,3 +56,16 @@ class PolygonWidget(QWidget):
             Qt.AlignCenter, self.text)
 
         super().paintEvent(event)
+
+class RotatedQLabel(QWidget):
+    def __init__(self, text) -> None:
+        super().__init__()
+        self.text = text
+
+    def paintEvent(self, event):
+        painter = QPainter(self)
+        painter.setPen(Qt.black)
+        painter.translate(self.width()/2, self.height()/2)
+        painter.rotate(-90)
+        painter.drawText(0, 0, self.text)
+        painter.end()

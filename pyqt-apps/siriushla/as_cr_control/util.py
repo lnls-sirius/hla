@@ -1,20 +1,21 @@
-from .screen_co import LABELS_1, PVS_1
-from .screen_cbx1 import LABELS_2, PVS_2
+from .screen_co import LABELS_CO, PVS_CO
+from .screen_cbx1 import LABELS_CBX1, PVS_CBX1, LEDS_CBX1
 
 SCREENS = {
     "Co": {
         "image": "cryo1",
-        "labels": LABELS_1,
-        "pvs": PVS_1
+        "labels": LABELS_CO,
+        "pvs": PVS_CO
     },
     "CBx 1": {
         "image": "cryo2",
-        "labels": LABELS_2,
-        "pvs": PVS_2
+        "labels": LABELS_CBX1,
+        "pvs": PVS_CBX1,
+        "leds": LEDS_CBX1
     },
-    "CBx 2": {
+    "Manifold Box": {
         "image": "cryo1",
-        "labels": LABELS_1,
-        "pvs": PVS_1
+        "labels": LABELS_CO,
+        "pvs": PVS_CO
     }
 }
