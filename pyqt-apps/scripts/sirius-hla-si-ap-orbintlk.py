@@ -17,5 +17,5 @@ parser.add_argument(
 args = parser.parse_args()
 
 app = SiriusApplication()
-app.open_window(BPMOrbIntlkMainWindow, parent=None, prefix='')
+app.open_window(BPMOrbIntlkMainWindow, parent=None, prefix=args.prefix)
 sys.exit(app.exec_())
