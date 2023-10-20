@@ -9,6 +9,7 @@ from siriuspy.epics import PV as _PV
 from siriuspy.envars import VACA_PREFIX
 from siriuspy.namesys import SiriusPVName
 from siriuspy.clientconfigdb import ConfigDBClient
+from siriuspy.orbintlk.csdev import Const as _Const
 from siriuspy.devices.orbit_interlock import BaseOrbitIntlk
 
 
@@ -25,6 +26,7 @@ class BaseObject(BaseOrbitIntlk):
         super().__init__()
         self._client = ConfigDBClient(config_type='si_orbit')
         self.prefix = prefix
+        self.hlprefix = _Const.IOC_PREFIX.substitute(prefix=prefix)
 
         self._pv_facqrate_value = None
         self._pv_monitrate_value = None

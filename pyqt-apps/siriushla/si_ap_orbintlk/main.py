@@ -2,14 +2,18 @@
 
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QGridLayout, QLabel, QGroupBox, \
-    QPushButton
+    QPushButton, QSizePolicy as QSzPlcy, QVBoxLayout
 
 import qtawesome as qta
 
-from siriuspy.envars import VACA_PREFIX as _vaca_prefix
-from siriuspy.orbintlk.csdev import Const as _Const
+from pydm.widgets import PyDMPushButton
 
-from ..widgets import SiriusMainWindow, SiriusPushButton
+from siriuspy.envars import VACA_PREFIX as _vaca_prefix
+from siriuspy.orbintlk.csdev import ETypes as _ETypes
+
+from ..widgets import SiriusMainWindow, SiriusPushButton, SiriusLedAlert, \
+    PyDMLogLabel, SiriusEnumComboBox, SiriusSpinbox, SiriusLabel
+from ..widgets.dialog import StatusDetailDialog
 from ..widgets.windows import create_window_from_widget
 from ..util import get_appropriate_color, connect_window
 from .base import BaseObject
@@ -47,98 +51,231 @@ class BPMOrbIntlkMainWindow(BaseObject, SiriusMainWindow):
         self.title = QLabel(
             '<h3>Orbit Interlock</h3>', self, alignment=Qt.AlignCenter)
 
-        # General
-        self._gb_gen = self._setupIntlkGroup('General')
-
-        # Min.Sum. Threshold
-        self._gb_minsum = self._setupIntlkGroup('Min.Sum.Threshold')
-
-        # Position
-        self._gb_pos = self._setupIntlkGroup('Position')
-
-        # Angulation
-        self._gb_ang = self._setupIntlkGroup('Angulation')
+        # Log
+        self._log = self._setupLogWidget()
 
         # Graphs
         self._graphs = GraphMonitorWidget(self, self.prefix)
 
+        # high level control
+        self._gb_ctrl = self._setupHLGroup()
+
         # layout
-        lay.addWidget(self.title, 0, 0, 1, 4)
-        lay.addWidget(self._gb_gen, 1, 0)
-        lay.addWidget(self._gb_minsum, 1, 1)
-        lay.addWidget(self._gb_pos, 1, 2)
-        lay.addWidget(self._gb_ang, 1, 3)
-        lay.addWidget(self._graphs, 2, 0, 1, 4)
+        lay.addWidget(self.title, 0, 0, 1, 3)
+        lay.addWidget(self._log, 1, 0)
+        lay.addWidget(self._graphs, 1, 1)
+        lay.addWidget(self._gb_ctrl, 1, 2)
 
-    def _setupIntlkGroup(self, intlktype):
-        if 'General' in intlktype:
-            pvstr = ''
-        elif 'Sum' in intlktype:
-            pvstr = 'MinSum'
-        elif 'Position' in intlktype:
-            pvstr = 'Pos'
-        elif 'Angulation' in intlktype:
-            pvstr = 'Ang'
+    def _setupLogWidget(self):
+        loglabel = PyDMLogLabel(
+            self, init_channel=self.hlprefix.substitute(propty='Log-Mon'))
+        loglabel.setObjectName('log')
+        loglabel.setStyleSheet('#log{min-width: 20em;}')
+        loglabel.setSizePolicy(QSzPlcy.Minimum, QSzPlcy.MinimumExpanding)
+        loglabel.setAlternatingRowColors(True)
+        loglabel.maxCount = 2000
 
-        wid = QGroupBox(intlktype)
+        bt_clear = QPushButton('Clear Log', self)
+        bt_clear.clicked.connect(loglabel.clear)
+
+        wid = QGroupBox('IOC Log')
+        lay = QVBoxLayout(wid)
+        lay.addWidget(loglabel)
+        lay.addWidget(bt_clear, alignment=Qt.AlignCenter)
+        return wid
+
+    def _setupGlobStatusGroup(self):
+        wid = QGroupBox('Global Status')
         lay = QGridLayout(wid)
         lay.setAlignment(Qt.AlignTop | Qt.AlignHCenter)
 
-        row = 0
-        ld_enblsel = QLabel(
-            'Enable: ', alignment=Qt.AlignRight | Qt.AlignBottom)
-        lay.addWidget(ld_enblsel, row, 0)
-
-        sel_enbl_wind = create_window_from_widget(
-            BPMIntlkEnblWidget,
-            title='BPM Orbit Interlock - '+intlktype+' Enable State')
-        bt_enblsel = QPushButton(qta.icon('fa5s.tasks'), '', self)
-        bt_enblsel.setToolTip('Open window to set BPMs enable state.')
-        bt_enblsel.setObjectName('sel')
-        bt_enblsel.setStyleSheet(
-            '#sel{min-width:25px; max-width:25px; icon-size:20px;}')
-        connect_window(
-            bt_enblsel, sel_enbl_wind, parent=self,
-            propty=pvstr+'EnblList-Sel', title=intlktype + ' Enable',
-            prefix=self.prefix)
-        lay.addWidget(bt_enblsel, row, 1)
-
-        if 'General' not in intlktype:
-            row += 1
-            ld_lim = QLabel(
-                'Thresholds: ', alignment=Qt.AlignRight | Qt.AlignBottom)
-            lay.addWidget(ld_lim, row, 0)
-
-            sel_lim_wind = create_window_from_widget(
-                BPMIntlkLimSPWidget,
-                title='BPM Orbit Interlock - '+intlktype +
-                (' Threshold' if 'Thres' not in intlktype else '') +
-                ' Setpoint')
-            bt_lim = QPushButton(qta.icon('fa5s.tasks'), '', self)
-            bt_lim.setToolTip('Open window to set BPMs thresholds.')
-            bt_lim.setObjectName('sel')
-            bt_lim.setStyleSheet(
-                '#sel{min-width:25px; max-width:25px; icon-size:20px;}')
+        for i, sts in enumerate(['BPM', 'Timing', 'LLRF']):
+            lblsprop = f'STS_LBLS_{sts.upper()}'
+            lbl = QLabel(
+                f'{sts}: ', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            pvname = self.hlprefix.substitute(propty=f'{sts}Status-Mon')
+            led = SiriusLedAlert(self, pvname)
+            pbt = self._create_detail_button()
             connect_window(
-                bt_lim, sel_lim_wind, parent=self,
-                metric=intlktype, prefix=self.prefix)
-            lay.addWidget(bt_lim, row, 1)
-
-        if 'Sum' not in intlktype:
-            row += 1
-            propty = intlktype[:3]
-            propty = f'ResetBPM{propty}-Cmd'
-            ld_clr = QLabel(
-                'Reset All: ', self, alignment=Qt.AlignRight | Qt.AlignBottom)
-            lay.addWidget(ld_clr, row, 0)
-
-            bt_clr = SiriusPushButton(
-                parent=self, pressValue=1, icon=qta.icon('fa5s.sync'),
-                init_channel=_Const.IOC_PREFIX.substitute(
-                    prefix=self.prefix, propty=propty))
-            bt_clr.setObjectName('clr')
-            bt_clr.setStyleSheet(
-                '#clr{min-width:25px; max-width:25px; icon-size:20px;}')
-            lay.addWidget(bt_clr, row, 1)
+                pbt, StatusDetailDialog, parent=self, pvname=pvname,
+                labels=getattr(_ETypes, lblsprop), title=f'{sts} Status')
+            lay.addWidget(lbl, i, 0)
+            lay.addWidget(led, i, 1)
+            lay.addWidget(pbt, i, 2)
 
         return wid
+
+    def _setupGlobSettingsGroup(self):
+        wid = QGroupBox('Global Settings')
+        lay = QGridLayout(wid)
+        lay.setAlignment(Qt.AlignTop | Qt.AlignHCenter)
+
+        lbl_conf = QLabel(
+            'Configure devices: ', self,
+            alignment=Qt.AlignRight | Qt.AlignVCenter)
+        pvname = self.hlprefix.substitute(propty='IntlkStateConfig-Cmd')
+        pb_conf = PyDMPushButton(self, pressValue=1, init_channel=pvname)
+        pb_conf.setToolTip(
+            'Send BPM orbit interlock enable and limits, '
+            'timing and LLRF configurations')
+        pb_conf.setIcon(qta.icon('fa5s.sync'))
+        pb_conf.setObjectName('conf')
+        pb_conf.setStyleSheet(
+            '#conf{min-width:25px; max-width:25px; icon-size:20px;}')
+        lay.addWidget(lbl_conf, 0, 0, 1, 2)
+        lay.addWidget(pb_conf, 0, 2)
+
+        lbl_rst = QLabel(
+            'Reset all interlocks: ', self,
+            alignment=Qt.AlignRight | Qt.AlignVCenter)
+        pvname = self.hlprefix.substitute(propty='Reset-Cmd')
+        pb_rst = PyDMPushButton(self, pressValue=1, init_channel=pvname)
+        pb_rst.setToolTip('Send reset for BPM flags, EVG and LLRF')
+        pb_rst.setIcon(qta.icon('fa5s.sync'))
+        pb_rst.setObjectName('rst')
+        pb_rst.setStyleSheet(
+            '#rst{min-width:25px; max-width:25px; icon-size:20px;}')
+        lay.addWidget(lbl_rst, 1, 0, 1, 2)
+        lay.addWidget(pb_rst, 1, 2)
+
+        return wid
+
+    def _setupBPMIntlkSettingsGroup(self):
+        intlk2pvstr = {
+            'Min.Sum.': 'MinSum',
+            'Pos.': 'Pos',
+            'Ang.': 'Ang',
+        }
+        ld_enblsel = QLabel(
+            'Enable: ', alignment=Qt.AlignRight | Qt.AlignVCenter)
+        ld_lim = QLabel(
+            'Thresholds: ', alignment=Qt.AlignRight | Qt.AlignVCenter)
+        ld_clr = QLabel(
+            'Reset: ', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+
+        wid = QGroupBox('BPM Settings')
+        lay = QGridLayout(wid)
+        lay.setAlignment(Qt.AlignTop | Qt.AlignRight)
+        lay.addWidget(ld_enblsel, 1, 0)
+        lay.addWidget(ld_lim, 2, 0)
+        lay.addWidget(ld_clr, 3, 0)
+
+        col = 1
+        for intlktype, pvstr in intlk2pvstr.items():
+            lblcol = QLabel(
+                f'<h4>{intlktype}</h4>', self,
+                alignment=Qt.AlignRight | Qt.AlignVCenter)
+            lay.addWidget(lblcol, 0, col, alignment=Qt.AlignCenter)
+
+            if intlktype.startswith(('Min', 'Pos', 'Ang')):
+                sel_enbl_wind = create_window_from_widget(
+                    BPMIntlkEnblWidget,
+                    title='BPM Orbit Interlock - '+intlktype+' Enable State')
+                bt_enblsel = QPushButton(qta.icon('fa5s.tasks'), '', self)
+                bt_enblsel.setToolTip('Open window to set BPMs enable state.')
+                bt_enblsel.setObjectName('sel')
+                bt_enblsel.setStyleSheet(
+                    '#sel{min-width:25px; max-width:25px; icon-size:20px;}')
+                connect_window(
+                    bt_enblsel, sel_enbl_wind, parent=self,
+                    propty=pvstr+'EnblList-SP', title=intlktype + ' Enable',
+                    prefix=self.prefix)
+                lay.addWidget(bt_enblsel, 1, col, alignment=Qt.AlignCenter)
+
+                sel_lim_wind = create_window_from_widget(
+                    BPMIntlkLimSPWidget,
+                    title='BPM Orbit Interlock - '+intlktype +
+                    (' Threshold' if 'Thres' not in intlktype else '') +
+                    ' Setpoint')
+                bt_lim = QPushButton(qta.icon('fa5s.tasks'), '', self)
+                bt_lim.setToolTip('Open window to set BPMs thresholds.')
+                bt_lim.setObjectName('sel')
+                bt_lim.setStyleSheet(
+                    '#sel{min-width:25px; max-width:25px; icon-size:20px;}')
+                connect_window(
+                    bt_lim, sel_lim_wind, parent=self,
+                    metric=intlktype, prefix=self.prefix)
+                lay.addWidget(bt_lim, 2, col, alignment=Qt.AlignCenter)
+
+            if 'Sum' not in intlktype:
+                propty = f'ResetBPM{pvstr}-Cmd'
+                bt_clr = SiriusPushButton(
+                    parent=self, pressValue=1, icon=qta.icon('fa5s.sync'),
+                    init_channel=self.hlprefix.substitute(
+                        prefix=self.prefix, propty=propty))
+                bt_clr.setObjectName('clr')
+                bt_clr.setStyleSheet(
+                    '#clr{min-width:25px; max-width:25px; icon-size:20px;}')
+                lay.addWidget(bt_clr, 3, col, alignment=Qt.AlignCenter)
+
+            col += 1
+
+        return wid
+
+    def _setupBPMAcqSettingsGroup(self):
+        wid = QGroupBox('BPM Acq. Settings')
+        lay = QGridLayout(wid)
+        lay.setAlignment(Qt.AlignTop | Qt.AlignHCenter)
+
+        props = [
+            'PsMtmAcqChannel-Sel',
+            'PsMtmAcqSamplesPre-SP',
+            'PsMtmAcqSamplesPost-SP',
+        ]
+        for row, prop in enumerate(props):
+            desc = prop.split('-')[0].split('Acq')[1]+':'
+            spn = self.hlprefix.substitute(prefix=self.prefix, propty=prop)
+            rbn = spn.substitute(
+                propty=prop.replace('Sel', 'Sts').replace('SP', 'RB'))
+
+            ldw = QLabel(desc, self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            spw = SiriusEnumComboBox if spn.endswith('Sel') else SiriusSpinbox
+            widsp = spw(self, spn)
+            widrb = SiriusLabel(self, rbn)
+            lay.addWidget(ldw, row, 0)
+            lay.addWidget(widsp, row, 1)
+            lay.addWidget(widrb, row, 2)
+
+        ld_config = QLabel(
+            'Send Acq. Config.', self,
+            alignment=Qt.AlignRight | Qt.AlignVCenter)
+        bt_config = SiriusPushButton(
+            parent=self, pressValue=1, icon=qta.icon('fa5s.sync'),
+            init_channel=self.hlprefix.substitute(
+                prefix=self.prefix, propty='PsMtmAcqConfig-Cmd'))
+        lay.addWidget(ld_config, 3, 0)
+        lay.addWidget(bt_config, 3, 1, alignment=Qt.AlignCenter)
+
+        return wid
+
+    def _setupHLGroup(self):
+        wid = QGroupBox('IOC Control')
+        lay = QGridLayout(wid)
+        lay.setAlignment(Qt.AlignTop | Qt.AlignHCenter)
+
+        # Global Status
+        self._gb_globsts = self._setupGlobStatusGroup()
+
+        # Global Settings
+        self._gb_globsett = self._setupGlobSettingsGroup()
+
+        # BPM Interlock Settings
+        self._gb_bpmintlk = self._setupBPMIntlkSettingsGroup()
+
+        # BPM Acquisition Settings
+        self._gb_bpmacq = self._setupBPMAcqSettingsGroup()
+
+        lay.addWidget(self._gb_globsts)
+        lay.addWidget(self._gb_globsett)
+        lay.addWidget(self._gb_bpmintlk)
+        lay.addWidget(self._gb_bpmacq)
+
+        return wid
+
+    def _create_detail_button(self):
+        pbt = QPushButton('', self)
+        pbt.setIcon(qta.icon('fa5s.list-ul'))
+        pbt.setObjectName('sts')
+        pbt.setStyleSheet(
+            '#sts{min-width:25px; max-width:25px; icon-size:20px;}')
+        return pbt

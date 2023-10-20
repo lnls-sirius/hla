@@ -39,9 +39,9 @@ class GraphMonitorWidget(QWidget):
                 border-bottom: 2px solid gray;
                 border-left: 2px solid gray;
             }""")
-        tab.addTab(self._setupTab('Min.Sum. Threshold'), 'Min.Sum. Threshold')
         tab.addTab(self._setupTab('Position'), 'Position')
-        tab.addTab(self._setupTab('Angulation'), 'Angulation')
+        tab.addTab(self._setupTab('Angle'), 'Angle')
+        tab.addTab(self._setupTab('Min.Sum. Threshold'), 'Min.Sum. Threshold')
 
         lay = QGridLayout(self)
         lay.setContentsMargins(0, 0, 0, 0)
@@ -84,7 +84,7 @@ class GraphMonitorWidget(QWidget):
                 graphy.update_propty_reforb)
             propty_sel.propty_comp_changed.connect(
                 graphy.update_propty_comptype)
-        elif intlktype == 'Angulation':
+        elif intlktype == 'Angle':
             propty_sel = GraphProptySelWidget(self)
             lay.addWidget(propty_sel, 1, 0)
 
