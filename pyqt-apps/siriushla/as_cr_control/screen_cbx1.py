@@ -19,10 +19,10 @@ LABELS_CBX1 = {
         "color": COLOR.dark_red
     },
     "HP1.EQ100": {
-        "position": [17.5, 60],
+        "position": [17.5, 57.5],
         "shape": "line",
-        "color": COLOR.dark_red,
-        "rotation": 90
+        "color": COLOR.transparent,
+        "rotation": -90
     },
     "AE1.050.U.TC": {
         "position": [47.75, 46.6],

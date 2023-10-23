@@ -4,6 +4,7 @@ from qtpy.QtWidgets import QLabel, QSizePolicy, QWidget, \
     QGridLayout, QTabWidget
 from qtpy.QtGui import QPixmap
 
+from pydm.widgets import PyDMLineEdit
 from siriushla.widgets.windows import SiriusMainWindow
 from siriushla.widgets import RelativeWidget, SiriusLabel, \
     SiriusLedAlert
@@ -71,7 +72,7 @@ class CryoControl(SiriusMainWindow):
                 return PolygonWidget(
                     text, color, self.image_container)
             if isRotated:
-                return RotatedQLabel(text)
+                return RotatedQLabel(text, config["rotation"])
         lbl = QLabel(text)
         lbl.setAlignment(Qt.AlignCenter)
         return lbl
@@ -93,7 +94,7 @@ class CryoControl(SiriusMainWindow):
         if hasJumpLine:
             return 6
         if isRotated:
-            return 20
+            return 25
         return 4
 
     def get_label_width(self, config):
@@ -109,11 +110,19 @@ class CryoControl(SiriusMainWindow):
         width = self.get_label_width(config)
         self.save_relative_widget(lbl, [width, height], position)
 
-    def add_label_egu(self, pvname, lay, line):
+    def get_pydm_widget(self, pvname, isEditable):
+        if isEditable:
+            pydm_line = PyDMLineEdit(init_channel=pvname)
+            pydm_line.setStyleSheet("background-color: #ffffff;")
+            return pydm_line
         pydm_lbl = SiriusLabel(
             init_channel=pvname)
         pydm_lbl.setAlignment(Qt.AlignCenter)
-        lay.addWidget(pydm_lbl, line, 0, 1, 1)
+        return pydm_lbl
+
+    def add_label_egu(self, pvname, lay, line, isEditable=False):
+        wid = self.get_pydm_widget(pvname, isEditable)
+        lay.addWidget(wid, line, 0, 1, 1)
 
         pydm_lbl = SiriusLabel(
             init_channel=pvname+".EGU")
@@ -125,6 +134,7 @@ class CryoControl(SiriusMainWindow):
     def set_pydm_widget(self, config, lay):
         line = 1
         pvname = config["pvname"]
+        isEditable = ("editable" in config)
         isTuple = isinstance(pvname, tuple)
         if isTuple:
             lay = self.add_label_egu(
@@ -133,7 +143,7 @@ class CryoControl(SiriusMainWindow):
             line += 1
 
         lay = self.add_label_egu(
-            pvname, lay, line)
+            pvname, lay, line, isEditable)
 
         return lay
 
@@ -153,10 +163,14 @@ class CryoControl(SiriusMainWindow):
         return wid, lay
 
     def handle_group_highlight(self, config, group):
-        color = config["color"]
+        bg_color = config["color"]
+        isTransparent = len(bg_color)>=8
+        white = "#ffffff"
+        black = "#000000"
+        txt_color = black if isTransparent else white
         group.setStyleSheet("""
-            background-color: """+color+""";
-            color: #ffffff;
+            background-color: """+bg_color+""";
+            color: """+txt_color+""";
             border-bottom: 1px solid #ffffff;
             border-right: 1px solid #ffffff;
         """)

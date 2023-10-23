@@ -5,3 +5,4 @@ class COLOR:
     blue = "#0000ff"
     gold = "#808000"
     wine = "#6b1c40"
+    transparent = "#00000000"

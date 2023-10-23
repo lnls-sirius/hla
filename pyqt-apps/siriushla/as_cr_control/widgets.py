@@ -58,14 +58,15 @@ class PolygonWidget(QWidget):
         super().paintEvent(event)
 
 class RotatedQLabel(QWidget):
-    def __init__(self, text) -> None:
+    def __init__(self, text, rotation) -> None:
         super().__init__()
         self.text = text
+        self.rotation = rotation
 
     def paintEvent(self, event):
         painter = QPainter(self)
         painter.setPen(Qt.black)
         painter.translate(self.width()/2, self.height()/2)
-        painter.rotate(-90)
+        painter.rotate(self.rotation)
         painter.drawText(0, 0, self.text)
         painter.end()
