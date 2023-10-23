@@ -141,7 +141,7 @@ PVS_IMGPROC = {
 
 PVS_DVF = {
     'ROI Control': [
-        (1, 0, 1, 3),
+        (0, 0, 1, 3),
         {
             'X': {
                 'Enable': ['ROI1:EnableX', 'ROI1:EnableX_RBV'],
@@ -161,10 +161,12 @@ PVS_DVF = {
         }
     ],
     'Camera General Status': [
-        (2, 0, 1, 1),
+        (1, 0, 1, 1),
         {
             'Max Size X': 'cam1:MaxSizeX_RBV',
             'Max Size Y': 'cam1:MaxSizeY_RBV',
+            'Offset X': 'cam1:OffsetX_RBV',
+            'Offset Y': 'cam1:OffsetY_RBV',
             'Size X': 'cam1:SizeX_RBV',
             'Size Y': 'cam1:SizeY_RBV',
             'Temperature': 'cam1:Temperature',
@@ -173,7 +175,7 @@ PVS_DVF = {
         }
     ],
     'Camera Acquisition': [
-        (2, 1, 1, 2),
+        (1, 1, 1, 2),
         {
             'Acquire Time': [
                 'cam1:AcquireTime', 'cam1:AcquireTime_RBV'],
@@ -186,7 +188,7 @@ PVS_DVF = {
         }
     ],
     'Camera Gain': [
-        (3, 0, 1, 1),
+        (2, 0, 1, 1),
         {
             'Gain': [
                 'cam1:Gain', 'cam1:Gain_RBV'],
@@ -195,7 +197,7 @@ PVS_DVF = {
         }
     ],
     'Camera Data Settings': [
-        (3, 1, 1, 2),
+        (2, 1, 1, 2),
         {
             'Data Type': [
                 'cam1:DataType', 'cam1:DataType_RBV'],
@@ -208,7 +210,7 @@ PVS_DVF = {
         }
     ],
     'Image Control': [
-        (4, 0, 1, 1),
+        (3, 0, 1, 1),
         {
             'NDArrayPort': ['image1:NDArrayPort', 'image1:NDArrayPort_RBV'],
             'ArraySize0': 'image1:ArraySize0_RBV',
@@ -218,7 +220,7 @@ PVS_DVF = {
         },
     ],
     'Other Pluggins Settings': [
-        (4, 1, 1, 2),
+        (3, 1, 1, 2),
         {
             'ffmstream1 - EnableCallbacks': [
                 'ffmstream1:EnableCallbacks', 'ffmstream1:EnableCallbacks_RBV'],
@@ -228,4 +230,8 @@ PVS_DVF = {
                 'HDF1:EnableCallbacks', 'HDF1:EnableCallbacks_RBV'],
         },
     ],
+}
+
+INTLK_PVS = {
+    "gamma": "AS-Glob:MP-Summary:AlarmGammaShutter-Mon"
 }

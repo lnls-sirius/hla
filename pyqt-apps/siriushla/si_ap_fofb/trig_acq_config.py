@@ -75,7 +75,7 @@ class _AcqBaseWindow(SiriusMainWindow):
         graph = GraphWave()
         graph.graph.setTitle(title)
         graph.graph.plotItem.getAxis('left').setStyle(
-            tickTextOffset=5, autoExpandTextSpace=False, tickTextWidth=50)
+            tickTextOffset=5, autoExpandTextSpace=False, tickTextWidth=70)
         graph.graph.setStyleSheet('PlotWidget{min-width: 30em;}')
         for i, chn in enumerate(channels2names):
             opts = dict(
@@ -529,7 +529,7 @@ class FOFBAcqLAMPWindow(_AcqBaseWindow):
 
         cb_linkxaxis = QCheckBox('Link X axis', self)
         cb_linkxaxis.stateChanged.connect(_part(
-            self._handle_graph_xaxis_link, gp_curr, [gp_volt, ]))
+            self._handle_graph_xaxis_link, gp_curr, [gp_currref, gp_volt, ]))
         cb_linkxaxis.setChecked(True)
 
         wid = QWidget()
