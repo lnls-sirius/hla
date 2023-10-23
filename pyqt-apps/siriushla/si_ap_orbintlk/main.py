@@ -12,7 +12,8 @@ from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 from siriuspy.orbintlk.csdev import ETypes as _ETypes
 
 from ..widgets import SiriusMainWindow, SiriusPushButton, SiriusLedAlert, \
-    PyDMLogLabel, SiriusEnumComboBox, SiriusSpinbox, SiriusLabel
+    PyDMLogLabel, SiriusEnumComboBox, SiriusSpinbox, SiriusLabel, \
+    SiriusLedState, PyDMStateButton
 from ..widgets.dialog import StatusDetailDialog
 from ..widgets.windows import create_window_from_widget
 from ..util import get_appropriate_color, connect_window
@@ -110,6 +111,16 @@ class BPMOrbIntlkMainWindow(BaseObject, SiriusMainWindow):
         lay = QGridLayout(wid)
         lay.setAlignment(Qt.AlignTop | Qt.AlignHCenter)
 
+        ld_enbl = QLabel(
+            'Enable: ', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+        sb_enbl = PyDMStateButton(
+            self, self.hlprefix.substitute(propty='Enable-Sel'))
+        lb_enbl = SiriusLedState(
+            self, self.hlprefix.substitute(propty='Enable-Sts'))
+        lay.addWidget(ld_enbl, 0, 0)
+        lay.addWidget(sb_enbl, 0, 1)
+        lay.addWidget(lb_enbl, 0, 2)
+
         lbl_conf = QLabel(
             'Configure devices: ', self,
             alignment=Qt.AlignRight | Qt.AlignVCenter)
@@ -122,8 +133,8 @@ class BPMOrbIntlkMainWindow(BaseObject, SiriusMainWindow):
         pb_conf.setObjectName('conf')
         pb_conf.setStyleSheet(
             '#conf{min-width:25px; max-width:25px; icon-size:20px;}')
-        lay.addWidget(lbl_conf, 0, 0, 1, 2)
-        lay.addWidget(pb_conf, 0, 2)
+        lay.addWidget(lbl_conf, 1, 0)
+        lay.addWidget(pb_conf, 1, 1)
 
         lbl_rst = QLabel(
             'Reset all interlocks: ', self,
@@ -135,8 +146,8 @@ class BPMOrbIntlkMainWindow(BaseObject, SiriusMainWindow):
         pb_rst.setObjectName('rst')
         pb_rst.setStyleSheet(
             '#rst{min-width:25px; max-width:25px; icon-size:20px;}')
-        lay.addWidget(lbl_rst, 1, 0, 1, 2)
-        lay.addWidget(pb_rst, 1, 2)
+        lay.addWidget(lbl_rst, 2, 0)
+        lay.addWidget(pb_rst, 2, 1)
 
         return wid
 
