@@ -8,7 +8,7 @@ LABELS_MANBOX = {
     "1906\nCbx entry": [35, 13],
     "1923\nCGR": [55, 19],
     "1921\nDewar": [57.9, 19],
-    "PR1.CM050": [10.75, 19],
+    "PR1.CM050": [41, 65],
     "LN2 Supply 1": {
         "position": [48, 75],
         "shape": "line",
