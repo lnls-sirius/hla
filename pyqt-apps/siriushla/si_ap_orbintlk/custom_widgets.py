@@ -351,7 +351,7 @@ class BPMIntlkLimSPWidget(BaseObject, QWidget):
 
         if 'sum' in self.metric:
             sumintlk = self._summon * self.monitsum2intlksum_factor
-            allvals = self.lim_pvs[self.lim_sp[0]].getvalue()
+            allvals = self.lim_pvs[self.lim_sp[0]].getvalue().astype(_np.int_)
             allvals[idxsel] = self._spin_scl.value() * sumintlk[idxsel]
             reso = self.MINSUM_RESO
             allvals[idxsel] = _np.ceil(allvals[idxsel] / reso) * reso
