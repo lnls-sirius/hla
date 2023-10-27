@@ -246,7 +246,7 @@ class GraphLegendWidget(QWidget):
         pixmap_nok = icon_nok.pixmap(icon_nok.actualSize(QSize(20, 20)))
         self._label_symnok.setPixmap(pixmap_nok)
         self._label_symnok.setSizePolicy(QSzPlcy.Fixed, QSzPlcy.Fixed)
-        self._label_labnok = QLabel('Intlk On (Limit exceeded)')
+        self._label_labnok = QLabel('Intlk Triggered (Limit exceeded)')
 
         self._label_symok = QLabel()
         icon_ok = qta.icon('mdi.square', color='#00d900')
