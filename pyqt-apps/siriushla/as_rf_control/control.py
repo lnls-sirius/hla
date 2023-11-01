@@ -350,6 +350,29 @@ class RFMainControl(SiriusMainWindow):
             self, self.prefix+self.chs['SL']['PInc']+':S')
         self.lb_phsincrate = SiriusLabel(
             self, self.prefix+self.chs['SL']['PInc'])
+        lay_slctrl = QGridLayout()
+        lay_slctrl.setHorizontalSpacing(9)
+        lay_slctrl.setVerticalSpacing(9)
+        lay_slctrl.addWidget(QLabel(
+            '<h4>SP/RB</h4>', self, alignment=Qt.AlignCenter), 0, 2, 1, 2)
+        lay_slctrl.addWidget(
+            QLabel('<h4>Inc. Rate SP/RB</h4>', self, alignment=Qt.AlignCenter),
+            0, 4, 1, 2)
+        lay_slctrl.addWidget(
+            QLabel('<h4>Amplitude [mV]</h4>', self, alignment=Qt.AlignCenter),
+            1, 0, 1, 2)
+        lay_slctrl.addWidget(
+            QLabel('<h4>Phase [DEG]</h4>', self, alignment=Qt.AlignCenter),
+            2, 0, 1, 2)
+        lay_slctrl.addWidget(self.sb_amp1, 1, 2, alignment=Qt.AlignRight)
+        lay_slctrl.addWidget(self.lb_amp1, 1, 3, alignment=Qt.AlignLeft)
+        lay_slctrl.addWidget(self.cb_ampincrate, 1, 4, alignment=Qt.AlignRight)
+        lay_slctrl.addWidget(self.lb_ampincrate, 1, 5, alignment=Qt.AlignLeft)
+        lay_slctrl.addWidget(self.sb_phs, 2, 2, alignment=Qt.AlignRight)
+        lay_slctrl.addWidget(self.lb_phs, 2, 3, alignment=Qt.AlignLeft)
+        lay_slctrl.addWidget(self.cb_phsincrate, 2, 4, alignment=Qt.AlignRight)
+        lay_slctrl.addWidget(self.lb_phsincrate, 2, 5, alignment=Qt.AlignLeft)
+
         self.cb_inpsel = PyDMEnumComboBox(
             self, self.prefix+self.chs['SL']['Inp']+':S')
         self.lb_inpsel = SiriusLabel(
@@ -366,42 +389,25 @@ class RFMainControl(SiriusMainWindow):
             self, self.prefix+self.chs['SL']['KP']+':S')
         self.lb_kp = SiriusLabel(
             self, self.prefix+self.chs['SL']['KP'])
-        lay_slctrl = QGridLayout()
-        lay_slctrl.setHorizontalSpacing(9)
-        lay_slctrl.setVerticalSpacing(9)
-        lay_slctrl.addWidget(QLabel(
-            '<h4>SP/RB</h4>', self, alignment=Qt.AlignCenter), 0, 2, 1, 2)
-        lay_slctrl.addWidget(
-            QLabel('<h4>Inc. Rate SP/RB</h4>', self, alignment=Qt.AlignCenter),
-            0, 4, 1, 2)
-        lay_slctrl.addWidget(
-            QLabel('<h4>Amplitude [mV]</h4>', self, alignment=Qt.AlignCenter),
-            1, 0, 1, 2)
-        lay_slctrl.addWidget(
-            QLabel('<h4>Phase [DEG]</h4>', self, alignment=Qt.AlignCenter),
-            2, 0, 1, 2)
-        lay_slctrl.addWidget(
+        lay_slctrl2 = QGridLayout()
+        lay_slctrl2.setHorizontalSpacing(9)
+        lay_slctrl2.setVerticalSpacing(9)
+        lay_slctrl2.addWidget(
+            QLabel('<h4>SP/RB</h4>', self, alignment=Qt.AlignCenter),
+            0, 2, 1, 2)
+        lay_slctrl2.addWidget(
             QLabel('<h4>PI Limit</h4>', self, alignment=Qt.AlignCenter),
-            4, 0, 1, 2)
-        lay_slctrl.addWidget(
-            QLabel('<h4>Ki</h4>', self, alignment=Qt.AlignCenter), 5, 0, 1, 2)
-        lay_slctrl.addWidget(
-            QLabel('<h4>Kp</h4>', self, alignment=Qt.AlignCenter), 6, 0, 1, 2)
-        lay_slctrl.addWidget(self.sb_amp1, 1, 2, alignment=Qt.AlignRight)
-        lay_slctrl.addWidget(self.lb_amp1, 1, 3, alignment=Qt.AlignLeft)
-        lay_slctrl.addWidget(self.cb_ampincrate, 1, 4, alignment=Qt.AlignRight)
-        lay_slctrl.addWidget(self.lb_ampincrate, 1, 5, alignment=Qt.AlignLeft)
-        lay_slctrl.addWidget(self.sb_phs, 2, 2, alignment=Qt.AlignRight)
-        lay_slctrl.addWidget(self.lb_phs, 2, 3, alignment=Qt.AlignLeft)
-        lay_slctrl.addWidget(self.cb_phsincrate, 2, 4, alignment=Qt.AlignRight)
-        lay_slctrl.addWidget(self.lb_phsincrate, 2, 5, alignment=Qt.AlignLeft)
-        lay_slctrl.setRowMinimumHeight(3, 20)
-        lay_slctrl.addWidget(self.sb_pilimit, 4, 2, alignment=Qt.AlignRight)
-        lay_slctrl.addWidget(self.lb_pilimit, 4, 3, alignment=Qt.AlignLeft)
-        lay_slctrl.addWidget(self.sb_ki, 5, 2, alignment=Qt.AlignRight)
-        lay_slctrl.addWidget(self.lb_ki, 5, 3, alignment=Qt.AlignLeft)
-        lay_slctrl.addWidget(self.sb_kp, 6, 2, alignment=Qt.AlignRight)
-        lay_slctrl.addWidget(self.lb_kp, 6, 3, alignment=Qt.AlignLeft)
+            1, 0, 1, 2)
+        lay_slctrl2.addWidget(
+            QLabel('<h4>Ki</h4>', self, alignment=Qt.AlignCenter), 2, 0, 1, 2)
+        lay_slctrl2.addWidget(
+            QLabel('<h4>Kp</h4>', self, alignment=Qt.AlignCenter), 3, 0, 1, 2)
+        lay_slctrl2.addWidget(self.sb_pilimit, 1, 2, alignment=Qt.AlignRight)
+        lay_slctrl2.addWidget(self.lb_pilimit, 1, 3, alignment=Qt.AlignLeft)
+        lay_slctrl2.addWidget(self.sb_ki, 2, 2, alignment=Qt.AlignRight)
+        lay_slctrl2.addWidget(self.lb_ki, 2, 3, alignment=Qt.AlignLeft)
+        lay_slctrl2.addWidget(self.sb_kp, 3, 2, alignment=Qt.AlignRight)
+        lay_slctrl2.addWidget(self.lb_kp, 3, 3, alignment=Qt.AlignLeft)
 
         lay = QGridLayout()
         lay.addWidget(
@@ -411,8 +417,7 @@ class RFMainControl(SiriusMainWindow):
         lay.addWidget(self.lb_inpsel, 2, 1, alignment=Qt.AlignLeft)
         lay.setRowStretch(0, 2)
         lay.setRowStretch(3, 2)
-        lay_slctrl.addLayout(lay, 4, 4, 3, 2)
-
+        lay_slctrl2.addLayout(lay, 1, 4, 3, 2)
 
         self.lb_iref = SiriusLabel(self, self.prefix+self.chs['SL']['IRef'])
         self.lb_iref.showUnits = True
@@ -467,24 +472,17 @@ class RFMainControl(SiriusMainWindow):
         lay_slmon.addWidget(self.lb_phsref, 1, 4)
         lay_slmon.addWidget(self.lb_phsinp, 2, 4)
         lay_slmon.addWidget(self.lb_phserr, 3, 4)
-        lay_slmon.addItem(
-            QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Expanding), 4, 0)
 
         wid_sl = QWidget()
         lay_sl = QGridLayout(wid_sl)
-        lay_sl.setAlignment(Qt.AlignTop)
-        lay_sl.setSpacing(20)
-        lay_sl.addItem(
-            QSpacerItem(10, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 1, 0)
+        # lay_sl.setAlignment(Qt.AlignTop)
+        lay_sl.setSpacing(7)
         lay_sl.addLayout(lay_over, 1, 1)
-        lay_sl.addItem(
-            QSpacerItem(0, 25, QSzPlcy.Ignored, QSzPlcy.Fixed), 2, 1)
         lay_sl.addLayout(lay_slctrl, 3, 1)
-        lay_sl.addItem(
-            QSpacerItem(0, 25, QSzPlcy.Ignored, QSzPlcy.Fixed), 4, 1)
-        lay_sl.addLayout(lay_slmon, 5, 1)
-        lay_sl.addItem(
-            QSpacerItem(10, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 1, 3)
+        lay_sl.addLayout(lay_slmon, 4, 1)
+        lay_sl.addLayout(lay_slctrl2, 6, 1)
+        lay_sl.setRowStretch(2, 4)
+        lay_sl.setRowStretch(5, 4)
 
         # # Tuning
         # # # Tuning settings
