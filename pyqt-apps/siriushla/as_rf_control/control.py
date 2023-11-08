@@ -1359,45 +1359,39 @@ class RFMainControl(SiriusMainWindow):
         bt_src1 = RFEnblDsblButton(
             parent=self,
             channels={
-                'on': self.prefix+chs_dict['SRC 1']['PV'].replace(
-                    '-Sts', 'Enbl-Sel'),
-                'off': self.prefix+chs_dict['SRC 1']['PV'].replace(
-                    '-Sts', 'Dsbl-Sel')})
+                'on': self.prefix+chs_dict['SRC 1']['Enable'],
+                'off': self.prefix+chs_dict['SRC 1']['Disable']})
         if self.section == 'BO':
             ch2vals = {
                 self.prefix+'BO-ToBO:RF-ACDCPanel:300Vdc-Mon': {
                     'comp': 'gt', 'value': 280.0},
-                self.prefix+chs_dict['SRC 1']['PV']: 1}
+                self.prefix+chs_dict['SRC 1']['Mon']: 1}
             led_src1 = PyDMLedMultiChannel(self, ch2vals)
         else:
             led_src1 = SiriusLedState(
-                self, self.prefix+chs_dict['SRC 1']['PV'])
+                self, self.prefix+chs_dict['SRC 1']['Mon'])
         lay_amp.addLayout(self._create_vlay(bt_src1, led_src1), row, 4)
 
         bt_src2 = RFEnblDsblButton(
             parent=self,
             channels={
-                'on': self.prefix+chs_dict['SRC 2']['PV'].replace(
-                    '-Sts', 'Enbl-Sel'),
-                'off': self.prefix+chs_dict['SRC 2']['PV'].replace(
-                    '-Sts', 'Dsbl-Sel')})
-        led_src2 = SiriusLedState(self, self.prefix+chs_dict['SRC 2']['PV'])
+                'on': self.prefix+chs_dict['SRC 2']['Enable'],
+                'off': self.prefix+chs_dict['SRC 2']['Disable']})
+        led_src2 = SiriusLedState(self, self.prefix+chs_dict['SRC 2']['Mon'])
         lay_amp.addLayout(self._create_vlay(bt_src2, led_src2), row, 5)
 
         bt_pinsw = RFEnblDsblButton(
             parent=self,
             channels={
-                'on': self.prefix+chs_dict['PinSw'].replace(
-                    '-Mon', 'Enbl-Cmd'),
-                'off': self.prefix+chs_dict['PinSw'].replace(
-                    '-Mon', 'Dsbl-Cmd')})
+                'on': self.prefix+chs_dict['PinSw']['Enable'],
+                'off': self.prefix+chs_dict['PinSw']['Disable']})
         rules = (
             '[{"name": "EnblRule", "property": "Enable", "expression":' +
             '"ch[0] < ' + str(chs_dict['PreDriveThrs']) + '", "channels":' +
             '[{"channel": "'+self.prefix+chs_dict['PreDrive'] +
             '", "trigger": true}]}]')
         bt_pinsw.pb_on.rules = rules
-        led_pinsw = SiriusLedState(self, self.prefix+chs_dict['PinSw'])
+        led_pinsw = SiriusLedState(self, self.prefix+chs_dict['PinSw']['Mon'])
         lay_amp.addLayout(self._create_vlay(bt_pinsw, led_pinsw), row, 6)
 
         lb_drive = SiriusLabel(self, self.prefix+chs_dict['PreDrive'])
@@ -1408,7 +1402,7 @@ class RFMainControl(SiriusMainWindow):
                     'comp': 'lt', 'value': chs_dict['PreDriveThrs']}})
         lay_amp.addLayout(self._create_vlay(lb_drive, led_drive), row, 7)
 
-        ch_pinsw = SiriusConnectionSignal(self.prefix+chs_dict['PinSw'])
+        ch_pinsw = SiriusConnectionSignal(self.prefix+chs_dict['PinSw']['Mon'])
         ch_pinsw.new_value_signal[int].connect(
             _part(self._handle_predrive_led_channels, led_drive, chs_dict))
 
