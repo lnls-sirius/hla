@@ -172,7 +172,7 @@ SEC_2_CHANNELS = {
                 'Mon': 'RA-ToBO:RF-SSAmpTower:PwrCnv-Sts'
             },
             'PinSw': {
-                'Label': 'DC/DC',
+                'Label': 'PinSw',
                 'Enable': 'RA-RaBO01:RF-LLRFPreAmp:PinSwEnbl-Cmd',
                 'Disable': 'RA-RaBO01:RF-LLRFPreAmp:PinSwDsbl-Cmd',
                 'Mon': 'RA-RaBO01:RF-LLRFPreAmp:PinSw-Mon'
