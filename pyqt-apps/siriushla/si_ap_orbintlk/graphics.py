@@ -441,7 +441,7 @@ class Graph(BaseObject, SiriusWaveformPlot):
         return _np.array(new)
 
     def _set_symbols(self, new):
-        if new:
+        if new is not None:
             all_brush, all_pen = [], []
             for sym in new:
                 if sym:
@@ -722,7 +722,7 @@ class MinSumGraphWidget(_BaseGraphWidget):
     """MinSum Graph Widget."""
 
     INTLKTYPE = 'MinSum'
-    PROPTY_MEAS_DATA = 'Sum-Mon'
+    PROPTY_MEAS_DATA = 'SlowSumRaw-Mon'
     PROPTY_MEAS_SYMB = ''
     PROPTY_MIN_DATA = 'IntlkLmtMinSum-RB'
     PROPTY_MIN_SYMB = ''

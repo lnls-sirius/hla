@@ -77,7 +77,7 @@ class _BPMSelectionWidget(BaseObject, SelectionMatrixWidget):
         side_headers.append(side_headers[0])
         return top_headers, side_headers
 
-    def get_widgets(self):  # TODO: add log
+    def get_widgets(self):
         widgets = list()
         sz_polc = QSzPlcy(QSzPlcy.Fixed, QSzPlcy.Fixed)
         for idx, nick in enumerate(self.BPM_NICKNAMES):
@@ -192,8 +192,7 @@ class BPMIntlkLimSPWidget(BaseObject, QWidget):
             raise ValueError(metric)
 
         if 'sum' in self.metric:
-            # NOTE: Ask Érico to make an IOC for this vector
-            self._create_pvs('Sum-Mon')
+            self._create_pvs('SlowSumRaw-Mon')
             self._summon = _np.zeros(len(self.BPM_NAMES), dtype=float)
         else:
             self._set_ref_orb('ref_orb')
@@ -332,7 +331,8 @@ class BPMIntlkLimSPWidget(BaseObject, QWidget):
             self._reforb['y'] = data['y']
 
     def _get_new_sum(self):
-        self._summon = _np.array(self._get_values('Sum-Mon'), dtype=float)
+        self._summon = _np.array(
+            self._get_values('SlowSumRaw-Mon'), dtype=float)
         text = 'Read at ' + _time.strftime(
             '%d/%m/%Y %H:%M:%S\n', _time.localtime(_time.time()))
         self._label_getsts.setText(text)

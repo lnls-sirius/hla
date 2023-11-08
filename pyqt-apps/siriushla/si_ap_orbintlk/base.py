@@ -32,13 +32,11 @@ class BaseObject(BaseOrbitIntlk):
         self._pv_monitrate_value = None
         self._monitsum2intlksum_factor = 1
 
-        pvname = SiriusPVName(
-            self.BPM_NAMES[0]).substitute(
-                propty='INFOMONITRate-RB', prefix=prefix)
+        pvname = SiriusPVName(self.BPM_NAMES[0]).substitute(
+            propty='INFOMONITRate-RB', prefix=prefix)
         self._pv_monitrate = _PV(pvname, callback=self._callback_get_rate)
-        pvname = SiriusPVName(
-            self.BPM_NAMES[0]).substitute(
-                propty='INFOFAcqRate-RB', prefix=prefix)
+        pvname = SiriusPVName(self.BPM_NAMES[0]).substitute(
+            propty='INFOFAcqRate-RB', prefix=prefix)
         self._pv_facqrate = _PV(pvname, callback=self._callback_get_rate)
 
     @property
@@ -69,38 +67,33 @@ class BaseObject(BaseOrbitIntlk):
     # --- pv handler methods ---
 
     def _create_pvs(self, propty):
-        new_pvs = dict()
-        for psn in self.BPM_NAMES:
-            pvname = SiriusPVName(psn).substitute(
-                prefix=self.prefix, propty=propty)
-            if pvname in self._pvs:
-                continue
-            auto_monitor = not pvname.endswith('-Mon') or 'Ltc' in pvname
-            new_pvs[pvname] = _PV(
-                pvname, auto_monitor=auto_monitor,
-                connection_timeout=0.01)
-        self._pvs.update(new_pvs)
+        if 'SlowSum' in propty:
+            pvname = SiriusPVName('SI-Glob:AP-SOFB').substitute(propty=propty)
+        else:
+            pvname = self.hlprefix.substitute(propty=propty)
+        if pvname in self._pvs:
+            return
+        auto_monitor = True
+        new_pv = _PV(
+            pvname, auto_monitor=auto_monitor, connection_timeout=0.01)
+        self._pvs[pvname] = new_pv
 
     def _get_values(self, propty):
-        for psn in self.BPM_NAMES:
-            pvname = SiriusPVName(psn).substitute(
-                prefix=self.prefix, propty=propty)
-            self._pvs[pvname].wait_for_connection()
+        if 'SlowSum' in propty:
+            pvname = SiriusPVName('SI-Glob:AP-SOFB').substitute(propty=propty)
+        else:
+            pvname = self.hlprefix.substitute(propty=propty)
+        self._pvs[pvname].wait_for_connection()
 
-        values = list()
-        for psn in self.BPM_NAMES:
-            pvname = SiriusPVName(psn).substitute(
-                prefix=self.prefix, propty=propty)
-            try:
-                val = self._pvs[pvname].get()
-            except ChannelAccessException:
-                val = None
-            if val is None:
-                val = 0
-            elif propty in ['Intlk-Mon', 'IntlkLtc-Mon'] or \
-                    'Lower' in propty or 'Upper' in propty:
-                val = 1 if val == 0 else 0
-            values.append(val)
+        try:
+            values = self._pvs[pvname].get()
+        except ChannelAccessException:
+            values = None
+        if values is None:
+            values = _np.zeros(len(self.BPM_NAMES), dtype=float)
+        elif propty in ['Intlk-Mon', 'IntlkLtc-Mon'] or \
+                'Lower' in propty or 'Upper' in propty:
+            values = 1 * _np.logical_not(values)
         return values
 
     def _callback_get_rate(self, pvname, value, **kws):
