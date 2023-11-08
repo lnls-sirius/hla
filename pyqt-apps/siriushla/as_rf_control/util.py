@@ -446,7 +446,7 @@ SEC_2_CHANNELS = {
         'SSA': {
             '1': {
                 'Name': 'SSA 01',
-                'Status': 'RA-ToSIA03:RF-ACPanel:PwrACOp-Mon',
+                'Status': 'RA-ToSIA03:RF-SSAmpTower:Sts-Mon',
                 'Power': 'RA-ToSIA03:RF-SSAmpTower:PwrFwdOut-Mon',
                 'SRC 1': {
                     'Label': 'AC TDK',
@@ -471,7 +471,7 @@ SEC_2_CHANNELS = {
             },
             '2': {
                 'Name': 'SSA 02',
-                'Status': 'RA-ToSIA04:RF-ACPanel:PwrACOp-Mon',
+                'Status': 'RA-ToSIA04:RF-SSAmpTower:Sts-Mon',
                 'Power': 'RA-ToSIA04:RF-SSAmpTower:PwrFwdOut-Mon',
                 'SRC 1': {
                     'Label': 'AC TDK',
