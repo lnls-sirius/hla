@@ -437,8 +437,8 @@ SEC_2_CHANNELS = {
         'SSA': {
             '1': {
                 'Name': 'SSA 01',
-                'Status': 'RA-ToSIA01:RF-SSAmpTower:Sts-Mon',
-                'Power': 'RA-ToSIA01:RF-SSAmpTower:PwrFwdOutdBm-Mon',
+                'Status': 'RA-ToSIA03:RF-ACPanel:PwrACOp-Mon',
+                'Power': 'RA-ToSIA03:RF-SSAmpTower:PwrFwdOut-Mon',
                 'SRC 1': {
                     'Label': 'AC TDK',
                     'PV': 'RA-ToSIA01:RF-ACPanel:PwrAC-Sts'
@@ -453,8 +453,8 @@ SEC_2_CHANNELS = {
             },
             '2': {
                 'Name': 'SSA 02',
-                'Status': 'RA-ToSIA02:RF-SSAmpTower:Sts-Mon',
-                'Power': 'RA-ToSIA02:RF-SSAmpTower:PwrFwdOutdBm-Mon',
+                'Status': 'RA-ToSIA04:RF-ACPanel:PwrACOp-Mon',
+                'Power': 'RA-ToSIA04:RF-SSAmpTower:PwrFwdOut-Mon',
                 'SRC 1': {
                     'Label': 'AC TDK',
                     'PV': 'RA-ToSIA02:RF-ACPanel:PwrAC-Sts',
@@ -545,26 +545,26 @@ SEC_2_CHANNELS = {
                 'color': 'red',
             },
             'SSA1 - Fwd Out': {
-                'W': 'RA-ToSIA01:RF-SSAmpTower:PwrFwdOutLLRF-Mon',
-                'dBm': 'RA-ToSIA01:RF-SSAmpTower:PwrFwdOutdBm-Mon',
+                'W': 'RA-ToSIA03:RF-SSAmpTower:PwrFwdOutLLRF-Mon',
+                'dBm': 'RA-ToSIA03:RF-SSAmpTower:PwrFwdOutdBm-Mon',
                 'mV': 'SR-RF-DLLRF-01:FWDSSA1:AMP',
                 'color': 'magenta',
             },
             'SSA1 - Rev Out': {
-                'W': 'RA-ToSIA01:RF-SSAmpTower:PwrRevOutLLRF-Mon',
-                'dBm': 'RA-ToSIA01:RF-SSAmpTower:PwrRevOutdBm-Mon',
+                'W': 'RA-ToSIA03:RF-SSAmpTower:PwrRevOutLLRF-Mon',
+                'dBm': 'RA-ToSIA03:RF-SSAmpTower:PwrRevOutdBm-Mon',
                 'mV': 'SR-RF-DLLRF-01:REVSSA1:AMP',
                 'color': 'darkGreen',
             },
             'SSA2 - Fwd Out': {
-                'W': 'RA-ToSIA02:RF-SSAmpTower:PwrFwdOutLLRF-Mon',
-                'dBm': 'RA-ToSIA02:RF-SSAmpTower:PwrFwdOutdBm-Mon',
+                'W': 'RA-ToSIA04:RF-SSAmpTower:PwrFwdOutLLRF-Mon',
+                'dBm': 'RA-ToSIA04:RF-SSAmpTower:PwrFwdOutdBm-Mon',
                 'mV': 'SR-RF-DLLRF-01:FWDSSA2:AMP',
                 'color': 'yellow',
             },
             'SSA2 - Rev Out': {
-                'W': 'RA-ToSIA02:RF-SSAmpTower:PwrRevOutLLRF-Mon',
-                'dBm': 'RA-ToSIA02:RF-SSAmpTower:PwrRevOutdBm-Mon',
+                'W': 'RA-ToSIA04:RF-SSAmpTower:PwrRevOutLLRF-Mon',
+                'dBm': 'RA-ToSIA04:RF-SSAmpTower:PwrRevOutdBm-Mon',
                 'mV': 'SR-RF-DLLRF-01:REVSSA2:AMP',
                 'color': 'cyan',
             },
