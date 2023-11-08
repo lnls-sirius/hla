@@ -38,12 +38,12 @@ class BPMsEqualizeSwitching(SiriusMainWindow):
         super().__init__(parent=parent)
 
         root = _log.getLogger()
-        handler = root.handlers[0]
+        handler = _log.StreamHandler(_sys.stdout)
         root.setLevel(_log.INFO)
         handler.setLevel(_log.INFO)
-        handler.setStream(_sys.stdout)
         formatter = _log.Formatter('%(levelname)7s ::: %(message)s')
         handler.setFormatter(formatter)
+        root.addHandler(handler)
 
         self.bpms_eq = EqualizeBPMs(logger=root)
         self._last_dir = self.DEFAULT_DIR
