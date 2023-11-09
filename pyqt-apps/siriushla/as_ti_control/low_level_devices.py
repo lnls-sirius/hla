@@ -2013,9 +2013,13 @@ class _EVR_EVE(BaseWidget):
         lay_timlog.addWidget(gbox_buf)
 
         # Digital Inputs
-        obj_names = [self.device.substitute(idx=str(i)) for i in range(3)]
+        obj_names = [
+            self.device.substitute(propty=f'DIN{i:d}') for i in range(3)]
+        props = set(EVREVEDIList._ALL_PROPS)
+        props.discard('device')
         self.dis_wid = EVREVEDIList(
-            name='', parent=self, prefix=self.prefix, obj_names=obj_names)
+            name='', parent=self, prefix=self.prefix, obj_names=obj_names,
+            props=props)
         self.dis_wid.setObjectName('dis_wid')
 
         # tab and layout
@@ -2422,6 +2426,7 @@ class EVREVEDIList(BaseList):
 
     _MIN_WIDs = {
         'name': 3,
+        'device': 14,
         'state': 5.8,
         'polarity': 5,
         'event': 4.8,
@@ -2429,12 +2434,13 @@ class EVREVEDIList(BaseList):
     }
     _LABELS = {
         'name': 'Name',
+        'device': 'Device',
         'state': 'State',
         'polarity': 'Polarity',
         'event': 'Event',
         'timestamp': 'Log',
     }
-    _ALL_PROPS = ('name', 'state', 'polarity', 'event', 'timestamp')
+    _ALL_PROPS = ('device', 'name', 'state', 'polarity', 'event', 'timestamp')
 
     def __init__(self, **kwargs):
         srch = {'name', 'polarity'}
@@ -2442,36 +2448,50 @@ class EVREVEDIList(BaseList):
         super().__init__(**kwargs)
 
     def _createObjs(self, device, prop):
-        di_idx = device.idx
-        device = device.substitute(idx='')
+        di_idx = device.propty[3:]
+        device = device.substitute(propty='')
         sp = rb = None
-        if prop == 'name':
-            sp = QLabel('DI'+di_idx, self)
+        if prop == 'device':
+            devt = device.dev
+            if devt == 'EVR':
+                devt = EVR
+            elif devt == 'EVE':
+                devt = EVE
+            sp = QPushButton(device.device_name, self)
+            sp.setAutoDefault(False)
+            sp.setDefault(False)
+            icon = qta.icon('mdi.timer', color=get_appropriate_color('AS'))
+            Win = create_window_from_widget(
+                devt, title=device.device_name, icon=icon)
+            connect_window(
+                sp, Win, None, device=device.device_name, prefix=self.prefix)
+        elif prop == 'name':
+            sp = QLabel('DIN'+di_idx, self)
             sp.setAlignment(Qt.AlignCenter)
         elif prop == 'state':
-            pvname = device.substitute(propty='DIEnbl'+di_idx+'-Sel')
+            pvname = device.substitute(propty='DIN'+di_idx+'State-Sel')
             sp = PyDMStateButton(self, init_channel=pvname)
-            pvname = device.substitute(propty='DIEnbl'+di_idx+'-Sts')
+            pvname = device.substitute(propty='DIN'+di_idx+'State-Sts')
             rb = PyDMLed(self, init_channel=pvname)
         elif prop == 'polarity':
-            pvname = device.substitute(propty='DIPol'+di_idx+'-Sel')
+            pvname = device.substitute(propty='DIN'+di_idx+'Polarity-Sel')
             sp = SiriusEnumComboBox(self, init_channel=pvname)
-            pvname = device.substitute(propty='DIPol'+di_idx+'-Sts')
+            pvname = device.substitute(propty='DIN'+di_idx+'Polarity-Sts')
             rb = SiriusLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'event':
-            pvname = device.substitute(propty='DIEvent'+di_idx+'-SP')
+            pvname = device.substitute(propty='DIN'+di_idx+'Evt-SP')
             sp = SiriusSpinbox(self, init_channel=pvname)
             sp.limitsFromChannel = False
             sp.setMinimum(0)
             sp.setMaximum(255)
-            pvname = device.substitute(propty='DIEvent'+di_idx+'-RB')
+            pvname = device.substitute(propty='DIN'+di_idx+'Evt-RB')
             rb = SiriusLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'timestamp':
-            pvname = device.substitute(propty='DILog'+di_idx+'-Sel')
+            pvname = device.substitute(propty='DIN'+di_idx+'Log-Sel')
             sp = PyDMStateButton(self, init_channel=pvname)
-            pvname = device.substitute(propty='DILog'+di_idx+'-Sts')
+            pvname = device.substitute(propty='DIN'+di_idx+'Log-Sts')
             rb = PyDMLed(self, init_channel=pvname)
         if rb is None:
             return (sp, )

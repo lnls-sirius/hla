@@ -21,7 +21,7 @@ from ..widgets.windows import create_window_from_widget
 
 from .base import BaseList, BaseWidget
 from .low_level_devices import LLTriggerList, \
-    EVREVEOTPList, EVREVEOUTList, AFCOUTList
+    EVREVEOTPList, EVREVEOUTList, AFCOUTList, EVREVEDIList
 
 
 class HLTriggerSimple(BaseWidget):
@@ -239,6 +239,9 @@ class HLTriggerDetailed(BaseWidget):
         gb = self._create_small_group('Source', self.ll_list_wid, (sp, rb))
         ll_list_layout.addWidget(gb, 2, 0)
 
+        if HLTimeSearch.is_digital_input(self.device.device_name):
+            return
+
         init_channel = self.get_pvname('NrPulses-SP')
         sp = SiriusSpinbox(self, init_channel=init_channel)
         init_channel = self.get_pvname('NrPulses-RB')
@@ -441,6 +444,7 @@ class LLTriggers(QWidget):
         amc_list = set()
         otp_list = set()
         out_list = set()
+        din_list = set()
         for name in obj_names:
             if 'AMC' in name.dev:
                 amc_list.add(name)
@@ -448,6 +452,8 @@ class LLTriggers(QWidget):
                 otp_list.add(name)
             elif 'OUT' in name.propty_name:
                 out_list.add(name)
+            elif 'DIN' in name.propty_name:
+                din_list.add(name)
         if amc_list:
             props = set(AFCOUTList._ALL_PROPS)
             props.discard('widthraw')
@@ -481,7 +487,12 @@ class LLTriggers(QWidget):
                 prefix=prefix, obj_names=sorted(out_list))
             out_wid.setObjectName('out_wid')
             vl.addWidget(out_wid)
-
+        if din_list:
+            din_wid = EVREVEDIList(
+                name='DINs', parent=self, prefix=prefix,
+                obj_names=sorted(din_list))
+            din_wid.setObjectName('din_wid')
+            vl.addWidget(din_wid)
 
 class HLTriggerList(BaseList):
     """Template for control of High Level Triggers."""
