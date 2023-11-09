@@ -282,15 +282,12 @@ class DeltaSummaryBase(IDCommonSummaryBase):
     """Delta Summary Base Widget."""
 
     MODEL_WIDTHS = (
-        ('Status', 4),
-        # ('Phase', 6),
-        # ('Phase Speed', 6),
-        # ('Start Phase', 4),
-        # ('Stop Phase', 4),
-        ('Gap', 6),
-        ('Gap Speed', 6),
-        ('Start Gap', 4),
-        ('Stop Gap', 4),
+        ('Alarms', 4),
+        ('Interlock', 4),
+        ('Shift', 6),
+        ('Shift Speed', 6),
+        ('Start', 4),
+        ('Stop', 4),
     )
 
 
@@ -305,38 +302,40 @@ class DeltaSummaryWidget(IDCommonSummaryWidget, DeltaSummaryBase):
         wids, orientation = super()._get_widgets(prop)
         if not wids:
             orientation = 'v'
-        if prop == 'Status':
+        if prop == 'Alarms':
             led = SiriusLedAlert(
-                self, self.dev_pref.substitute(propty='Status-Mon'))
+                self, self.dev_pref.substitute(propty='Alarm-Mon'))
             wids.append(led)
-        elif prop == 'Phase':
+        if prop == 'Interlock':
+            led = SiriusLedAlert(
+                self, self.dev_pref.substitute(propty='Intlk-Mon'))
+            wids.append(led)
+        elif prop == 'Shift':
             spb = SiriusSpinbox(
-                self, self.dev_pref.substitute(propty='Phase-SP'))
+                self, self.dev_pref.substitute(propty='Shift-SP'))
             wids.append(spb)
             lbl = SiriusLabel(
-                self, self.dev_pref.substitute(propty='Phase-Mon'))
+                self, self.dev_pref.substitute(propty='Shift-Mon'))
             wids.append(lbl)
-        elif prop == 'Phase Speed':
+        elif prop == 'Shift Speed':
             spb = SiriusSpinbox(
-                self, self.dev_pref.substitute(propty='PhaseSpeed-SP'))
+                self, self.dev_pref.substitute(propty='GainModeVelo-SP'))
             wids.append(spb)
             lbl = SiriusLabel(
-                self, self.dev_pref.substitute(propty='PhaseSpeed-Mon'))
+                self, self.dev_pref.substitute(propty='GainModeVelo-Mon'))
             wids.append(lbl)
-        elif prop == 'Start Phase':
+        elif prop == 'Start':
             btn = PyDMPushButton(self, label='', icon=qta.icon('fa5s.play'))
-            btn.setToolTip(
-                'Start automatic motion towards previously entered setpoint.')
-            btn.channel = self.dev_pref.substitute(propty='ChangePhase-Cmd')
+            btn.channel = self.dev_pref.substitute(propty='ChangeGain-Cmd')
             btn.pressValue = 1
             btn.setObjectName('Start')
             btn.setStyleSheet(
                 '#Start{min-width:30px; max-width:30px; icon-size:25px;}')
             wids.append(btn)
-        elif prop == 'Stop Phase':
+        elif prop == 'Stop':
             btn = PyDMPushButton(self, label='', icon=qta.icon('fa5s.stop'))
             btn.setToolTip('Stop all motion, lock all brakes.')
-            btn.channel = self.dev_pref.substitute(propty='StopPhase-Cmd')
+            btn.channel = self.dev_pref.substitute(propty='Abort-Cmd')
             btn.pressValue = 1
             btn.setObjectName('Stop')
             btn.setStyleSheet(
