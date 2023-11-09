@@ -6,12 +6,12 @@ import numpy as _np
 from qtpy.QtCore import Qt, Signal, Slot, QSize
 from qtpy.QtWidgets import QPushButton, QComboBox, QSizePolicy as QSzPlcy, \
     QWidget, QHBoxLayout, QCheckBox, QLabel, QGridLayout, QSpinBox, QGroupBox,\
-    QDoubleSpinBox, QDialog
+    QDoubleSpinBox, QDialog, QVBoxLayout
 
 from pydm.widgets.base import PyDMWidget
 
 from ..widgets import SiriusLedState, QLed, SelectionMatrixWidget, \
-    SiriusConnectionSignal
+    SiriusConnectionSignal, SiriusLabel
 from ..widgets.dialog import ReportDialog, ProgressDialog
 from ..common.epics.task import EpicsConnector, EpicsSetter, \
     EpicsChecker, EpicsWait
@@ -401,3 +401,25 @@ class BPMIntlkLimSPWidget(BaseObject, QWidget):
             self._items_success.append((item, True))
         else:
             self._items_fail.append(item)
+
+
+class TimingMonitoredDevicesDialog(BaseObject, QDialog):
+    """Timing Monitored Devices Detail Dialog."""
+
+    def __init__(self, parent=None, prefix=''):
+        """Init."""
+        BaseObject.__init__(self, prefix)
+        QWidget.__init__(self, parent)
+        title = 'Timing Monitored Devices'
+        self.setObjectName('SIApp')
+        self.setWindowTitle(title)
+
+        self._desc = QLabel('<h4>'+title+'</h4>')
+        self._label = SiriusLabel(
+            self, self.hlprefix.substitute(
+                propty='TimingMonitoredDevices-Mon'))
+        self._label.displayFormat = SiriusLabel.DisplayFormat.String
+
+        lay = QVBoxLayout(self)
+        lay.addWidget(self._desc)
+        lay.addWidget(self._label)

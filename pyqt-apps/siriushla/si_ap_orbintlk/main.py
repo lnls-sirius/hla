@@ -18,7 +18,8 @@ from ..widgets.dialog import StatusDetailDialog
 from ..widgets.windows import create_window_from_widget
 from ..util import get_appropriate_color, connect_window, connect_newprocess
 from .base import BaseObject
-from .custom_widgets import BPMIntlkEnblWidget, BPMIntlkLimSPWidget
+from .custom_widgets import BPMIntlkEnblWidget, BPMIntlkLimSPWidget, \
+    TimingMonitoredDevicesDialog
 from .graphics import GraphMonitorWidget
 
 
@@ -102,9 +103,20 @@ class BPMOrbIntlkMainWindow(BaseObject, SiriusMainWindow):
             connect_window(
                 pbt, StatusDetailDialog, parent=self, pvname=pvname,
                 labels=getattr(_ETypes, lblsprop), title=f'{sts} Status')
-            lay.addWidget(lbl, i, 0)
-            lay.addWidget(led, i, 1)
-            lay.addWidget(pbt, i, 2)
+            lay.addWidget(lbl, i, 1)
+            lay.addWidget(led, i, 2)
+            lay.addWidget(pbt, i, 3)
+
+            if sts == 'Timing':
+                pbt = QPushButton('', self)
+                pbt.setIcon(qta.icon('fa5s.ellipsis-v'))
+                pbt.setObjectName('sts')
+                pbt.setStyleSheet(
+                    '#sts{min-width:18px; max-width:18px; icon-size:20px;}')
+                connect_window(
+                    pbt, TimingMonitoredDevicesDialog, parent=self,
+                    prefix=self.prefix)
+                lay.addWidget(pbt, i, 0)
 
         return wid
 
