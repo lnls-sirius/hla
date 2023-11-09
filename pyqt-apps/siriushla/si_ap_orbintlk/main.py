@@ -2,7 +2,7 @@
 
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QGridLayout, QLabel, QGroupBox, \
-    QPushButton, QSizePolicy as QSzPlcy, QVBoxLayout
+    QPushButton, QSizePolicy as QSzPlcy, QVBoxLayout, QMenuBar, QAction
 
 import qtawesome as qta
 
@@ -16,7 +16,7 @@ from ..widgets import SiriusMainWindow, SiriusPushButton, SiriusLedAlert, \
     SiriusLedState, PyDMStateButton
 from ..widgets.dialog import StatusDetailDialog
 from ..widgets.windows import create_window_from_widget
-from ..util import get_appropriate_color, connect_window
+from ..util import get_appropriate_color, connect_window, connect_newprocess
 from .base import BaseObject
 from .custom_widgets import BPMIntlkEnblWidget, BPMIntlkLimSPWidget
 from .graphics import GraphMonitorWidget
@@ -66,6 +66,8 @@ class BPMOrbIntlkMainWindow(BaseObject, SiriusMainWindow):
         lay.addWidget(self._log, 1, 0)
         lay.addWidget(self._graphs, 1, 1)
         lay.addWidget(self._gb_ctrl, 1, 2)
+
+        self._create_menu()
 
     def _setupLogWidget(self):
         loglabel = PyDMLogLabel(
@@ -290,3 +292,11 @@ class BPMOrbIntlkMainWindow(BaseObject, SiriusMainWindow):
         pbt.setStyleSheet(
             '#sts{min-width:25px; max-width:25px; icon-size:20px;}')
         return pbt
+
+    def _create_menu(self):
+        menubar = QMenuBar(self)
+        timon = QAction('Open Timing Monitor', menubar)
+        connect_newprocess(
+            timon, [f'sirius-hla-as-ti-control.py', '-t', 'monitor'])
+        menubar.addAction(timon)
+        self.layout().setMenuBar(menubar)
