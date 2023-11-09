@@ -545,6 +545,10 @@ class HLTriggerList(BaseList):
         self.setObjectName('ASApp')
 
     def _createObjs(self, device, prop):
+        devname = device.device_name
+        has_delay_type = HLTimeSearch.has_delay_type(devname)
+        has_direction = HLTimeSearch.has_direction(devname)
+        is_digital_input = HLTimeSearch.is_digital_input(devname)
         sp = rb = None
         if prop == 'name':
             sp = QLabel(device.device_name, self, alignment=Qt.AlignCenter)
@@ -581,17 +585,17 @@ class HLTriggerList(BaseList):
             sp = SiriusEnumComboBox(self, init_channel=init_channel)
             init_channel = device.substitute(propty='Src-Sts')
             rb = SiriusLabel(self, init_channel=init_channel)
-        elif prop == 'pulses':
+        elif prop == 'pulses' and not is_digital_input:
             init_channel = device.substitute(propty='NrPulses-SP')
             sp = SiriusSpinbox(self, init_channel=init_channel)
             init_channel = device.substitute(propty='NrPulses-RB')
             rb = SiriusLabel(self, init_channel=init_channel)
-        elif prop == 'duration':
+        elif prop == 'duration' and not is_digital_input:
             init_channel = device.substitute(propty='Duration-SP')
             sp = SiriusSpinbox(self, init_channel=init_channel)
             init_channel = device.substitute(propty='Duration-RB')
             rb = SiriusLabel(self, init_channel=init_channel)
-        elif prop == 'widthraw':
+        elif prop == 'widthraw' and not is_digital_input:
             init_channel = device.substitute(propty='WidthRaw-SP')
             sp = SiriusSpinbox(self, init_channel=init_channel)
             init_channel = device.substitute(propty='WidthRaw-RB')
@@ -601,35 +605,37 @@ class HLTriggerList(BaseList):
             sp = SiriusEnumComboBox(self, init_channel=init_channel)
             init_channel = device.substitute(propty='Polarity-Sts')
             rb = SiriusLabel(self, init_channel=init_channel)
-        elif prop == 'delay_type':
+        elif prop == 'delay_type' and has_delay_type:
             init_channel = device.substitute(propty='RFDelayType-Sel')
             sp = SiriusEnumComboBox(self, init_channel=init_channel)
             init_channel = device.substitute(propty='RFDelayType-Sts')
             rb = SiriusLabel(self, init_channel=init_channel)
-        elif prop == 'direction':
+        elif prop == 'direction'and has_direction:
             init_channel = device.substitute(propty='Direction-Sel')
             sp = SiriusEnumComboBox(self, init_channel=init_channel)
             init_channel = device.substitute(propty='Direction-Sts')
             rb = SiriusLabel(self, init_channel=init_channel)
-        elif prop == 'delay':
+        elif prop == 'delay' and not is_digital_input:
             init_channel = device.substitute(propty='Delay-SP')
             sp = SiriusSpinbox(self, init_channel=init_channel)
             init_channel = device.substitute(propty='Delay-RB')
             rb = SiriusLabel(self, init_channel=init_channel)
-        elif prop == 'delayraw':
+        elif prop == 'delayraw' and not is_digital_input:
             init_channel = device.substitute(propty='DelayRaw-SP')
             sp = SiriusSpinbox(self, init_channel=init_channel)
             init_channel = device.substitute(propty='DelayRaw-RB')
             rb = SiriusLabel(self, init_channel=init_channel)
-        elif prop == 'total_delay':
+        elif prop == 'total_delay' and not is_digital_input:
             init_channel = device.substitute(propty='TotalDelay-Mon')
             sp = SiriusLabel(self, init_channel=init_channel)
-        elif prop == 'total_delayraw':
+        elif prop == 'total_delayraw' and not is_digital_input:
             init_channel = device.substitute(propty='TotalDelayRaw-Mon')
             sp = SiriusLabel(self, init_channel=init_channel)
         elif prop == 'ininjtable':
             init_channel = device.substitute(propty='InInjTable-Mon')
             sp = SiriusLedState(self, init_channel=init_channel)
+        elif prop in self._ALL_PROPS:
+            return ()
         else:
             raise Exception('Property unknown')
         if rb is None:
