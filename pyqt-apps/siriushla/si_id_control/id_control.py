@@ -125,11 +125,11 @@ class IDControl(SiriusMainWindow):
         for idname in idlist:
             delta_wid = DeltaSummaryWidget(self, self._prefix, idname)
             lay.addWidget(delta_wid)
-            # self._id_widgets.append(epu_wid)
-            # ch_mov = SiriusConnectionSignal(_PVName(idname).substitute(
-            #     prefix=self._prefix, propty='Moving-Mon'))
-            # ch_mov.new_value_signal[int].connect(self._handle_moving_vis)
-            # self._channels_mov.append(ch_mov)
+            self._id_widgets.append(delta_wid)
+            ch_mov = SiriusConnectionSignal(_PVName(idname).substitute(
+                prefix=self._prefix, propty='Moving-Mon'))
+            ch_mov.new_value_signal[int].connect(self._handle_moving_vis)
+            self._channels_mov.append(ch_mov)
 
         return lay
 
