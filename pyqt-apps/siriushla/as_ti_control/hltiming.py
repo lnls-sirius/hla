@@ -136,8 +136,7 @@ class TimingMain(SiriusMainWindow):
 
     def settriggers(self):
         props = {
-            'detailed', 'status', 'name', 'state', 'source',
-            'pulses', 'duration', 'delay'}
+            'detailed', 'status', 'name', 'state', 'source', 'delay'}
         names = HLTimeSearch.get_hl_triggers()
         trigs = _HLTriggerList(
             name='High Level Triggers', parent=self, prefix=self.prefix,
