@@ -169,7 +169,7 @@ class DeltaControlWindow(IDCommonControlWindow):
         self._pb_dtlsts.setStyleSheet(
             '#sts{min-width:25px; max-width:25px; icon-size:20px;}')
         connect_window(
-            self._pb_dtlsts, EPUDriveDetails, self,
+            self._pb_dtlsts, DeltaDriveDetails, self,
             prefix=self._prefix, device=self._device)
 
         self._ld_isbusy = QLabel('Is Busy', self)
@@ -279,7 +279,7 @@ class DeltaControlWindow(IDCommonControlWindow):
 
 
 class DeltaSummaryBase(IDCommonSummaryBase):
-    """EPU Summary Base Widget."""
+    """Delta Summary Base Widget."""
 
     MODEL_WIDTHS = (
         ('Status', 4),
@@ -295,11 +295,11 @@ class DeltaSummaryBase(IDCommonSummaryBase):
 
 
 class DeltaSummaryHeader(IDCommonSummaryHeader, DeltaSummaryBase):
-    """EPU Summary Header."""
+    """Delta Summary Header."""
 
 
 class DeltaSummaryWidget(IDCommonSummaryWidget, DeltaSummaryBase):
-    """EPU Summary Widget."""
+    """Delta Summary Widget."""
 
     def _get_widgets(self, prop):
         wids, orientation = super()._get_widgets(prop)
@@ -379,7 +379,7 @@ class DeltaSummaryWidget(IDCommonSummaryWidget, DeltaSummaryBase):
 
 
 class DeltaDriveDetails(IDCommonDialog):
-    """EPU Drive Details."""
+    """Delta Drive Details."""
 
     def __init__(self, parent=None, prefix='', device=''):
         """Init."""

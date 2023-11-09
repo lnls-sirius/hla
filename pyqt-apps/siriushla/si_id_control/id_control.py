@@ -13,7 +13,7 @@ from siriuspy.namesys import SiriusPVName as _PVName
 from ..widgets import SiriusMainWindow, SiriusConnectionSignal
 
 from .apu import APUSummaryHeader, APUSummaryWidget
-from .epu import EPUSummaryHeader, EPUSummaryWidget
+from .delta import DeltaSummaryHeader, DeltaSummaryWidget
 from .papu import PAPUSummaryHeader, PAPUSummaryWidget
 from .util import get_id_icon
 
@@ -57,8 +57,8 @@ class IDControl(SiriusMainWindow):
         self._gbox_apu = QGroupBox('APU', self)
         self._gbox_apu.setLayout(self._setupAPULayout())
 
-        self._gbox_epu = QGroupBox('EPU', self)
-        self._gbox_epu.setLayout(self._setupEPULayout())
+        self._gbox_epu = QGroupBox('DELTA', self)
+        self._gbox_epu.setLayout(self._setupDeltaLayout())
 
         self._gbox_papu = QGroupBox('PAPU', self)
         self._gbox_papu.setLayout(self._setupPAPULayout())
@@ -95,22 +95,41 @@ class IDControl(SiriusMainWindow):
 
         return lay
 
-    def _setupEPULayout(self):
+    # def _setupEPULayout(self):
+    #     lay = QVBoxLayout()
+    #     lay.setAlignment(Qt.AlignTop)
+
+    #     self._epu_header = EPUSummaryHeader(self)
+    #     lay.addWidget(self._epu_header)
+
+    #     idlist = ['SI-10SB:ID-EPU50', ]
+    #     for idname in idlist:
+    #         epu_wid = EPUSummaryWidget(self, self._prefix, idname)
+    #         lay.addWidget(epu_wid)
+    #         self._id_widgets.append(epu_wid)
+    #         ch_mov = SiriusConnectionSignal(_PVName(idname).substitute(
+    #             prefix=self._prefix, propty='Moving-Mon'))
+    #         ch_mov.new_value_signal[int].connect(self._handle_moving_vis)
+    #         self._channels_mov.append(ch_mov)
+
+    #     return lay
+
+    def _setupDeltaLayout(self):
         lay = QVBoxLayout()
         lay.setAlignment(Qt.AlignTop)
 
-        self._epu_header = EPUSummaryHeader(self)
-        lay.addWidget(self._epu_header)
+        self._delta_header = DeltaSummaryHeader(self)
+        lay.addWidget(self._delta_header)
 
-        idlist = ['SI-10SB:ID-EPU50', ]
+        idlist = ['SI-10SB:ID-DELTA52', ]
         for idname in idlist:
-            epu_wid = EPUSummaryWidget(self, self._prefix, idname)
-            lay.addWidget(epu_wid)
-            self._id_widgets.append(epu_wid)
-            ch_mov = SiriusConnectionSignal(_PVName(idname).substitute(
-                prefix=self._prefix, propty='Moving-Mon'))
-            ch_mov.new_value_signal[int].connect(self._handle_moving_vis)
-            self._channels_mov.append(ch_mov)
+            delta_wid = DeltaSummaryWidget(self, self._prefix, idname)
+            lay.addWidget(delta_wid)
+            # self._id_widgets.append(epu_wid)
+            # ch_mov = SiriusConnectionSignal(_PVName(idname).substitute(
+            #     prefix=self._prefix, propty='Moving-Mon'))
+            # ch_mov.new_value_signal[int].connect(self._handle_moving_vis)
+            # self._channels_mov.append(ch_mov)
 
         return lay
 
