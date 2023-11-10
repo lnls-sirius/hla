@@ -467,7 +467,7 @@ SEC_2_CHANNELS = {
                     'Mon': 'RA-ToSIA03:RF-CtrlPanel:PINSwSts-Mon'
                 },
                 'PreDrive': 'SR-RF-DLLRF-01:INPRE1:AMP',
-                'PreDriveThrs': 4,  # mV
+                'PreDriveThrs': 5,  # mV
             },
             '2': {
                 'Name': 'SSA 02',
@@ -492,7 +492,7 @@ SEC_2_CHANNELS = {
                     'Mon': 'RA-ToSIA04:RF-CtrlPanel:PINSwSts-Mon'
                 },
                 'PreDrive': 'SR-RF-DLLRF-01:INPRE2:AMP',
-                'PreDriveThrs': 4,  # mV
+                'PreDriveThrs': 5,  # mV
             }
         },
         'SL': {
