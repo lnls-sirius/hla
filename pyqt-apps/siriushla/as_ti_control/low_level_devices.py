@@ -6,7 +6,7 @@ from qtpy.QtCore import Qt, Slot
 from qtpy.QtGui import QColor, QBrush
 from qtpy.QtWidgets import QLabel, QPushButton, QGroupBox, QVBoxLayout, \
     QHBoxLayout, QGridLayout, QMenuBar, QSplitter, QTabWidget, QWidget, \
-    QSizePolicy as QSzPol, QCheckBox, QFrame, QAbstractItemView, QHeaderView
+    QSizePolicy as QSzPol, QCheckBox, QFrame
 import qtawesome as qta
 from pydm.widgets import PyDMLineEdit, PyDMPushButton
 
@@ -16,7 +16,7 @@ from siriuspy.timesys import csdev as _cstime
 
 from ..widgets import PyDMLed, PyDMStateButton, SiriusLedState, \
     SiriusEnumComboBox, SiriusLedAlert, SiriusLabel, \
-    SiriusSpinbox, SiriusConnectionSignal, SiriusWaveformTable, \
+    SiriusSpinbox, SiriusConnectionSignal, \
     SiriusPushButton, SiriusWaveformPlot
 from ..widgets.windows import create_window_from_widget, SiriusDialog
 from ..util import connect_window, get_appropriate_color
@@ -518,8 +518,8 @@ class EVG(BaseWidget):
             sp.setStyleSheet(
                 'PyDMStateButton{min-height: 0.98em; max-height: 0.98em;}')
 
-            pvrb = self.get_pvname('IntlkTbl'+bitg+'-Sts')
-            rb = SiriusLedState(self, pvrb, bit=biti)
+            pvrb = pvsp.substitute(propty_suffix='Sts')
+            rb = SiriusLedState(self, pvrb)
             rb.setStyleSheet(
                 'SiriusLedState{min-width: 0.98em; max-width: 0.98em;}')
 
@@ -567,38 +567,32 @@ class EVG(BaseWidget):
         dialog.setWindowIcon(self.windowIcon())
         lay = QVBoxLayout(dialog)
 
-        gbox = QGroupBox('Timestamp', self)
-        lay.addWidget(gbox)
-        lay_box = QGridLayout(gbox)
-        lay_box.setHorizontalSpacing(30)
+        gbox_tim = QGroupBox('Timestamp', self)
+        lay.addWidget(gbox_tim)
 
         lb = QLabel('<b>Get UTC</b>')
         pvname = self.get_pvname('GetUTC-Cmd')
         sp = PyDMPushButton(
             self, label='Get UTC', init_channel=pvname,
             pressValue=1)  # ?
-        gb = self._create_small_group('', gbox, (lb, sp))
-        lay_box.addWidget(gb, 0, 0, alignment=Qt.AlignTop)
+        gb_getutc = self._create_small_group('', gbox_tim, (lb, sp))
 
         lb = QLabel("<b>Mismatch</b>")
         pvname = self.get_pvname(propty='UTCMismatch-Mon')
         rb = SiriusLedAlert(self, init_channel=pvname)
-        gb = self._create_small_group('', gbox, (lb, rb))
-        lay_box.addWidget(gb, 0, 1, alignment=Qt.AlignTop)
+        gb_utcmis = self._create_small_group('', gbox_tim, (lb, rb))
 
         lb = QLabel("<b>UTC Source</b>")
         pvname = self.get_pvname(propty='UTCRefSrc-Sel')
         sp = SiriusEnumComboBox(self, init_channel=pvname)
-        gb = self._create_small_group('', gbox, (lb, sp))
-        lay_box.addWidget(gb, 1, 0, alignment=Qt.AlignTop)
+        gb_utcsrc = self._create_small_group('', gbox_tim, (lb, sp))
 
         lb = QLabel("<b>PPS Source</b>")
         pvname = self.get_pvname(propty='TimestampSrc-Sel')
         sp = SiriusEnumComboBox(self, init_channel=pvname)
         pvname = self.get_pvname(propty='TimestampSrc-Sts')
         rb = SiriusLabel(self, init_channel=pvname)
-        gb = self._create_small_group('', gbox, (lb, sp, rb))
-        lay_box.addWidget(gb, 1, 1, alignment=Qt.AlignTop)
+        gb_ppssrc = self._create_small_group('', gbox_tim, (lb, sp, rb))
 
         lb = QLabel("<b>UTC</b>")
         pvname = self.get_pvname(propty='UTC-SP')
@@ -606,20 +600,167 @@ class EVG(BaseWidget):
         pvname = self.get_pvname(propty='UTC-RB')
         rb = SiriusLabel(self, init_channel=pvname)
         rb.showUnits = True
-        gb = self._create_small_group('', gbox, (lb, sp, rb))
-        lay_box.addWidget(gb, 2, 0, alignment=Qt.AlignTop)
+        gb_utc = self._create_small_group('', gbox_tim, (lb, sp, rb))
 
         lb = QLabel('<b>Subsec</b>')
         mon = SiriusLabel(self, self.get_pvname('SubSecond-Mon'))
         mon.showUnits = True
-        gb = self._create_small_group('', gbox, (lb, mon))
-        lay_box.addWidget(gb, 2, 1, alignment=Qt.AlignTop)
+        gb_subsec = self._create_small_group('', gbox_tim, (lb, mon))
 
         lb = QLabel('<b>Control Room UTC</b>')
         mon = SiriusLabel(self, self.get_pvname('CtrlRoomUTC'))
         mon.showUnits = True
-        gb = self._create_small_group('', gbox, (lb, mon))
-        lay_box.addWidget(gb, 3, 0, alignment=Qt.AlignTop)
+        gb_ctrlutc = self._create_small_group('', gbox_tim, (lb, mon))
+
+        lay_tim = QGridLayout(gbox_tim)
+        lay_tim.setHorizontalSpacing(30)
+        lay_tim.addWidget(gb_getutc, 0, 0)
+        lay_tim.addWidget(gb_utcmis, 0, 1)
+        lay_tim.addWidget(gb_utcsrc, 0, 2)
+        lay_tim.addWidget(gb_ppssrc, 0, 3)
+        lay_tim.addWidget(gb_utc, 1, 0)
+        lay_tim.addWidget(gb_subsec, 1, 1)
+        lay_tim.addWidget(gb_ctrlutc, 1, 2)
+
+        # Timestamp Log enable
+        gbox_enbl = QGroupBox('Timestamp Log Enable', self)
+        lay.addWidget(gbox_enbl)
+
+        lay_enbl = QGridLayout(gbox_enbl)
+        lay_enbl.setHorizontalSpacing(15)
+        for bit in range(8):
+            bitname = 'Out' if bit == 7 else f'In{bit}'
+            lb = QLabel(f'Evt{bitname}', self, alignment=Qt.AlignCenter)
+            pvsp = self.get_pvname('IntlkLogEnbl-SP', field=f'B{bit}')
+            sp = PyDMStateButton(self, pvsp)
+            sp.setStyleSheet(
+                'PyDMStateButton{min-height: 0.98em; max-height: 0.98em;}')
+            pvrb = pvsp.substitute(propty_suffix='RB')
+            rb = SiriusLedState(self, pvrb)
+            rb.setStyleSheet(
+                'SiriusLedState{min-width: 0.98em; max-width: 0.98em;}')
+            gb = self._create_small_group(
+                '', gbox_enbl, (lb, sp, rb), align_ver=True)
+            gb.layout().setSpacing(3)
+            gb.layout().setContentsMargins(3, 1, 3, 1)
+            gb.setSizePolicy(QSzPol.Preferred, QSzPol.Maximum)
+            lay_enbl.addWidget(gb, 0, bit)
+
+        # Timestamp Log
+        gbox_log = QGroupBox('Timestamp Log', self)
+        lay.addWidget(gbox_log)
+
+        ld_logstp = QLabel('<b>Stop Log</b>', self)
+        self.sb_logstp = PyDMStateButton(self, self.get_pvname('stoplog'))
+        self.led_logstp = SiriusLedState(self, self.get_pvname('STOPLOGRBV'))
+        gb_logstp = self._create_small_group(
+            '', gbox_log, (ld_logstp, self.sb_logstp, self.led_logstp))
+
+        ld_logrst = QLabel('<b>Reset Log</b>', self)
+        self.sb_logrst = PyDMStateButton(self, self.get_pvname('rstlog'))
+        self.led_logrst = SiriusLedState(self, self.get_pvname('RSTLOGRBV'))
+        gb_logrst = self._create_small_group(
+            '', gbox_log, (ld_logrst, self.sb_logrst, self.led_logrst))
+
+        ld_logpul = QLabel('<b>Pull</b>', self)
+        self.bt_logpul = SiriusPushButton(
+            parent=self, init_channel=self.get_pvname('pull'),
+            pressValue=1, releaseValue=0)  # ?
+        self.bt_logpul.setIcon(qta.icon('fa5s.arrow-down'))
+        self.bt_logpul.setObjectName('bt')
+        self.bt_logpul.setStyleSheet(
+            '#bt{min-width:25px; max-width:25px; icon-size:20px;}')
+        gb_logpul = self._create_small_group(
+            '', gbox_log, (ld_logpul, self.bt_logpul))
+
+        ld_logcnt = QLabel('<b>Log Count</b>', self, alignment=Qt.AlignCenter)
+        self.lb_logcnt = SiriusLabel(self, self.get_pvname('LOGCOUNT'))
+        self.lb_logcnt.showUnits = True
+        self.lb_logcnt.setAlignment(Qt.AlignCenter)
+        ld_logful = QLabel('Full', self)
+        self.led_logful = SiriusLedState(self, self.get_pvname('FULL'))
+        ld_logemp = QLabel('Empty', self)
+        self.led_logemp = SiriusLedState(self, self.get_pvname('EMPTY'))
+        fr_logcnt = QFrame(gbox_log)
+        fr_logcnt.setStyleSheet('.QFrame{border: 1px solid gray;}')
+        lay_logcnt = QGridLayout(fr_logcnt)
+        lay_logcnt.setAlignment(Qt.AlignCenter)
+        lay_logcnt.setContentsMargins(0, 0, 0, 0)
+        lay_logcnt.addWidget(ld_logcnt, 0, 0, 1, 4)
+        lay_logcnt.addWidget(self.lb_logcnt, 1, 0, 1, 4)
+        lay_logcnt.addWidget(ld_logful, 2, 0, alignment=Qt.AlignRight)
+        lay_logcnt.addWidget(self.led_logful, 2, 1, alignment=Qt.AlignTop)
+        lay_logcnt.addWidget(ld_logemp, 2, 2, alignment=Qt.AlignRight)
+        lay_logcnt.addWidget(self.led_logemp, 2, 3, alignment=Qt.AlignTop)
+
+        ld_logevt = QLabel('<b>Event</b>', self)
+        self.lb_logevt = SiriusLabel(self, self.get_pvname('LOGEVENT'))
+        gb_logevt = self._create_small_group(
+            '', gbox_log, (ld_logevt, self.lb_logevt))
+
+        ld_logutc = QLabel('<b>Log UTC</b>', self)
+        self.lb_logutc = SiriusLabel(self, self.get_pvname('LOGUTC'))
+        self.lb_logutc.showUnits = True
+        gb_logutc = self._create_small_group(
+            '', gbox_log, (ld_logutc, self.lb_logutc))
+
+        ld_logsub = QLabel('<b>Log Subsec</b>', self)
+        self.lb_logsub = SiriusLabel(self, self.get_pvname('LOGSUBSEC'))
+        self.lb_logsub.showUnits = True
+        gb_logsub = self._create_small_group(
+            '', gbox_log, (ld_logsub, self.lb_logsub))
+
+        lay_log = QGridLayout(gbox_log)
+        lay_log.addWidget(gb_logstp, 0, 0, alignment=Qt.AlignTop)
+        lay_log.addWidget(gb_logrst, 0, 1, alignment=Qt.AlignTop)
+        lay_log.addWidget(gb_logpul, 0, 2, alignment=Qt.AlignTop)
+        lay_log.addWidget(gb_logevt, 1, 0, alignment=Qt.AlignTop)
+        lay_log.addWidget(gb_logutc, 1, 1, alignment=Qt.AlignTop)
+        lay_log.addWidget(gb_logsub, 1, 2, alignment=Qt.AlignTop)
+        lay_log.addWidget(fr_logcnt, 1, 3, alignment=Qt.AlignCenter)
+
+        # Timestamp Log Buffer
+        gbox_buf = QGroupBox('Timestamp Log Buffer', self)
+        lay.addWidget(gbox_buf)
+
+        ld_bufcnt = QLabel('<b>Log Count</b>', self)
+        self.lb_bufcnt = SiriusLabel(self, self.get_pvname('LOGSOFTCNT'))
+        self.lb_bufcnt.showUnits = True
+        gb_bufcnt = self._create_small_group(
+            '', gbox_buf, (ld_bufcnt, self.lb_bufcnt))
+
+        ld_bufrst = QLabel('<b>Reset</b>', self)
+        self.bt_bufrst = SiriusPushButton(
+            parent=self, init_channel=self.get_pvname('rstSoftBuff'),
+            pressValue=1, releaseValue=0)  # ?
+        self.bt_bufrst.setIcon(qta.icon('fa5s.sync'))
+        self.bt_bufrst.setObjectName('bt')
+        self.bt_bufrst.setStyleSheet(
+            '#bt{min-width:25px; max-width:25px; icon-size:20px;}')
+        gb_bufrst = self._create_small_group(
+            '', gbox_buf, (ld_bufrst, self.bt_bufrst))
+
+        ld_bufutc = QLabel('<b>UTC buffer</b>', self)
+        self.tb_bufutc = self._create_logbuffer_table('UTCbuffer')
+        gb_bufutc = self._create_small_group(
+            '', gbox_buf, (ld_bufutc, self.tb_bufutc))
+
+        ld_bufsub = QLabel('<b>Subsec buffer</b>', self)
+        self.tb_bufsub = self._create_logbuffer_table('SUBSECbuffer')
+        gb_bufsub = self._create_small_group(
+            '', gbox_buf, (ld_bufsub, self.tb_bufsub))
+
+        ld_bufevt = QLabel('<b>Event buffer</b>', self)
+        self.tb_bufevt = self._create_logbuffer_table('EVENTbuffer')
+        gb_bufevt = self._create_small_group(
+            '', gbox_buf, (ld_bufevt, self.tb_bufevt))
+
+        lay_logbuf = QGridLayout(gbox_buf)
+        lay_logbuf.addWidget(gb_bufcnt, 0, 0, 1, 3)
+        lay_logbuf.addWidget(gb_bufrst, 0, 3, 1, 3)
+        lay_logbuf.addWidget(gb_bufutc, 1, 0, 1, 2)
+        lay_logbuf.addWidget(gb_bufsub, 1, 2, 1, 2)
+        lay_logbuf.addWidget(gb_bufevt, 1, 4, 1, 2)
 
         return dialog
 
@@ -2053,21 +2194,6 @@ class _EVR_EVE(BaseWidget):
         lay.addWidget(tab)
 
         return dialog
-
-    def _create_logbuffer_table(self, prop):
-        table = SiriusWaveformTable(self, self.get_pvname(prop))
-        table.setObjectName('tb')
-        table.setEnabled(False)
-        table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-        table.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        table.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
-        table.horizontalHeader().setVisible(False)
-        table.setStyleSheet(
-            '#tb{min-width:6em; max-width:12em; max-height: 16em;}')
-        table.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        table.setColumnCount(1)
-        table.setSizePolicy(QSzPol.MinimumExpanding, QSzPol.Preferred)
-        return table
 
     def _open_detail_dialog(self):
         if not hasattr(self, 'detail_wind'):
