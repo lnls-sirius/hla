@@ -7,7 +7,7 @@ import argparse as _argparse
 from siriushla.sirius_application import SiriusApplication
 from siriuspy.envars import VACA_PREFIX
 from siriushla.si_id_control import IDControl, APUControlWindow, \
-    PAPUControlWindow, DeltaControlWindow
+    PAPUControlWindow, DELTAControlWindow
 
 
 parser = _argparse.ArgumentParser(
@@ -33,7 +33,7 @@ elif 'APU' in args.device:
         APUControlWindow, parent=None, prefix=prefix, device=device)
 elif 'DELTA' in args.device:
     app.open_window(
-        DeltaControlWindow, parent=None, prefix=prefix, device=device)
+        DELTAControlWindow, parent=None, prefix=prefix, device=device)
 elif not device or isall:
     app.open_window(IDControl, parent=None, prefix=prefix)
 sys.exit(app.exec_())

@@ -13,7 +13,7 @@ from siriuspy.namesys import SiriusPVName as _PVName
 from ..widgets import SiriusMainWindow, SiriusConnectionSignal
 
 from .apu import APUSummaryHeader, APUSummaryWidget
-from .delta import DeltaSummaryHeader, DeltaSummaryWidget
+from .delta import DELTASummaryHeader, DELTASummaryWidget
 from .papu import PAPUSummaryHeader, PAPUSummaryWidget
 from .util import get_id_icon
 
@@ -58,7 +58,7 @@ class IDControl(SiriusMainWindow):
         self._gbox_apu.setLayout(self._setupAPULayout())
 
         self._gbox_epu = QGroupBox('DELTA', self)
-        self._gbox_epu.setLayout(self._setupDeltaLayout())
+        self._gbox_epu.setLayout(self._setupDELTALayout())
 
         self._gbox_papu = QGroupBox('PAPU', self)
         self._gbox_papu.setLayout(self._setupPAPULayout())
@@ -114,16 +114,16 @@ class IDControl(SiriusMainWindow):
 
     #     return lay
 
-    def _setupDeltaLayout(self):
+    def _setupDELTALayout(self):
         lay = QVBoxLayout()
         lay.setAlignment(Qt.AlignTop)
 
-        self._delta_header = DeltaSummaryHeader(self)
+        self._delta_header = DELTASummaryHeader(self)
         lay.addWidget(self._delta_header)
 
         idlist = ['SI-10SB:ID-DELTA52', ]
         for idname in idlist:
-            delta_wid = DeltaSummaryWidget(self, self._prefix, idname)
+            delta_wid = DELTASummaryWidget(self, self._prefix, idname)
             lay.addWidget(delta_wid)
             self._id_widgets.append(delta_wid)
             ch_mov = SiriusConnectionSignal(_PVName(idname).substitute(

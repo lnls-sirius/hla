@@ -15,7 +15,8 @@ from .base import IDCommonControlWindow, IDCommonDialog, \
     IDCommonSummaryBase, IDCommonSummaryHeader, IDCommonSummaryWidget
 
 
-class DeltaControlWindow(IDCommonControlWindow):
+
+class DELTAControlWindow(IDCommonControlWindow, DELTAControlWindowUtils):
     """DELTA Control Window."""
 
     def _mainControlsWidget(self):
@@ -278,8 +279,8 @@ class DeltaControlWindow(IDCommonControlWindow):
         return but
 
 
-class DeltaSummaryBase(IDCommonSummaryBase):
-    """Delta Summary Base Widget."""
+class DELTASummaryBase(IDCommonSummaryBase):
+    """DELTA Summary Base Widget."""
 
     MODEL_WIDTHS = (
         ('Alarms', 4),
@@ -291,12 +292,12 @@ class DeltaSummaryBase(IDCommonSummaryBase):
     )
 
 
-class DeltaSummaryHeader(IDCommonSummaryHeader, DeltaSummaryBase):
-    """Delta Summary Header."""
+class DELTASummaryHeader(IDCommonSummaryHeader, DELTASummaryBase):
+    """DELTA Summary Header."""
 
 
-class DeltaSummaryWidget(IDCommonSummaryWidget, DeltaSummaryBase):
-    """Delta Summary Widget."""
+class DELTASummaryWidget(IDCommonSummaryWidget, DELTASummaryBase):
+    """DELTA Summary Widget."""
 
     def _get_widgets(self, prop):
         wids, orientation = super()._get_widgets(prop)
@@ -377,8 +378,8 @@ class DeltaSummaryWidget(IDCommonSummaryWidget, DeltaSummaryBase):
         return wids, orientation
 
 
-class DeltaDriveDetails(IDCommonDialog):
-    """Delta Drive Details."""
+class DELTADriveDetails(IDCommonDialog):
+    """DELTA Drive Details."""
 
     def __init__(self, parent=None, prefix='', device=''):
         """Init."""
