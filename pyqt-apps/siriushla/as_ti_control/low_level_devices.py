@@ -1560,6 +1560,16 @@ class AFC(BaseWidget):
             self, self.get_pvname(propty=subdev+'Freq-RB'), keep_unit=True)
         ld_freqrb.setObjectName('freq')
         ld_freqrb.showUnits = True
+        pb_clkrst = SiriusPushButton(
+            self, init_channel=self.get_pvname(propty='RTMClkRst-Cmd'),
+            pressValue=1, label='', icon=qta.icon('fa5s.sync'))
+        pb_clkrst.setDefault(False)
+        pb_clkrst.setAutoDefault(False)
+        pb_clkrst.setObjectName('pb')
+        pb_clkrst.setStyleSheet(
+            '#pb{min-width:25px; max-width:25px;\
+            min-height:25px; max-height:25px;\
+            icon-size:20px;}')
 
         lay_sett1 = QGridLayout()
         lay_sett1.setHorizontalSpacing(30)
@@ -1604,6 +1614,7 @@ class AFC(BaseWidget):
         lay_eq.addWidget(ld_freqdsc, 0, 2)
         lay_eq.addWidget(ld_freqsp, 1, 2)
         lay_eq.addWidget(ld_freqrb, 2, 2)
+        lay_eq.addWidget(pb_clkrst, 1, 3)
 
         lay = QGridLayout(gbox)
         lay.setHorizontalSpacing(30)
