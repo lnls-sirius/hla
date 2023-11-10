@@ -239,6 +239,13 @@ class HLTriggerDetailed(BaseWidget):
         gb = self._create_small_group('Source', self.ll_list_wid, (sp, rb))
         ll_list_layout.addWidget(gb, 2, 0)
 
+        init_channel = self.get_pvname('Log-Sel')
+        sp = PyDMStateButton(self, init_channel=init_channel)
+        init_channel = self.get_pvname('Log-Sts')
+        rb = PyDMLed(self, init_channel=init_channel)
+        gb = self._create_small_group('Log', self.ll_list_wid, (sp, rb))
+        ll_list_layout.addWidget(gb, 3, 0)
+
         if HLTimeSearch.is_digital_input(self.device.device_name):
             return
 
@@ -267,7 +274,7 @@ class HLTriggerDetailed(BaseWidget):
         widd.setLayout(QHBoxLayout())
         widd.layout().addWidget(gbdur)
         widd.layout().addWidget(gbwid)
-        ll_list_layout.addWidget(widd, 3, 0, 1, 3)
+        ll_list_layout.addWidget(widd, 3, 1, 1, 2)
 
         init_channel = self.get_pvname('Delay-SP')
         sp = SiriusSpinbox(self, init_channel=init_channel)
@@ -507,6 +514,7 @@ class HLTriggerList(BaseList):
         'duration': 8,
         'widthraw': 8,
         'polarity': 6,
+        'log': 6,
         'delay_type': 4.2,
         'direction': 4.2,
         'delay': 5.5,
@@ -525,6 +533,7 @@ class HLTriggerList(BaseList):
         'duration': 'Duration [us]',
         'widthraw': 'WidthRaw',
         'polarity': 'Polarity',
+        'log': 'Log',
         'delay_type': 'Type',
         'direction': 'Direction',
         'delay': 'Delay [us]',
@@ -536,7 +545,7 @@ class HLTriggerList(BaseList):
     _ALL_PROPS = (
         'detailed', 'status', 'name', 'state', 'source', 'polarity', 'pulses',
         'duration', 'widthraw', 'delay_type', 'direction', 'delay', 'delayraw',
-        'total_delay', 'total_delayraw', 'ininjtable')
+        'total_delay', 'total_delayraw', 'ininjtable', 'log')
 
     def __init__(self, **kwargs):
         srch = set(('source', 'name', 'polarity', 'state'))
@@ -605,6 +614,11 @@ class HLTriggerList(BaseList):
             sp = SiriusEnumComboBox(self, init_channel=init_channel)
             init_channel = device.substitute(propty='Polarity-Sts')
             rb = SiriusLabel(self, init_channel=init_channel)
+        elif prop == 'log':
+            init_channel = device.substitute(propty='Log-Sel')
+            sp = PyDMStateButton(self, init_channel=init_channel)
+            init_channel = device.substitute(propty='Log-Sts')
+            rb = PyDMLed(self, init_channel=init_channel)
         elif prop == 'delay_type' and has_delay_type:
             init_channel = device.substitute(propty='RFDelayType-Sel')
             sp = SiriusEnumComboBox(self, init_channel=init_channel)
