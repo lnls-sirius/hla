@@ -39,22 +39,22 @@ class DELTAControlWindowUtils():
 
     MAIN_CONTROL_PVS = {
         "Shift": {
+            "Cmd": "ChangeGain-Cmd",
             "SP": "Shift-SP",
             "SP_RB": "Shift-RB",
-            "RB": "GainShift-Mon",
-            "Cmd": "ChangeGain-Cmd"
+            "RB": "GainShift-Mon"
         },
         "Motion": {
-            "SP": "ChangePol-Cmd",
             "SP_RB": "MotorsEnbld-Mon",
             "RB": "Moving-Mon"
         },
         "Polarization": {
+            "Set": "ChangePol-Cmd",
             "SP": "Pol-Sel",
             "SP_RB": "Pol-Sts",
-            "RB": "Pol-Mon",
-            "Shift": "PolShift-Mon"
+            "RB": "Pol-Mon"
         },
+        "Polarization Shift": "PolShift-Mon"
     }
 
     AUX_CONTROL_PVS = {
@@ -95,11 +95,17 @@ class DELTAControlWindow(IDCommonControlWindow, DELTAControlWindowUtils):
     """DELTA Control Window."""
 
     def _createShift(self, pv_info, lay, row):
+        btn = PyDMPushButton(self, label='', icon=qta.icon('fa5s.play'))
+        btn.channel = self.dev_pref.substitute(propty=pv_info["Cmd"])
+        btn.pressValue = 1
+        btn.setStyleSheet('min-width:30px; max-width:30px; icon-size:25px;')
+        lay.addWidget(btn, row, 1, 1, 1)
+
         pvname = self.dev_pref.substitute(propty=pv_info["SP"])
         cb = SiriusLineEdit(self, init_channel=pvname)
-        lay.addWidget(cb, row, 1, 1, 1)
+        lay.addWidget(cb, row, 2, 1, 1)
 
-        col = 2
+        col = 3
         for key in ["SP_RB", "RB"]:
             pvname = self.dev_pref.substitute(propty=pv_info[key])
             lbl = SiriusLabel(self, init_channel=pvname)
@@ -109,34 +115,29 @@ class DELTAControlWindow(IDCommonControlWindow, DELTAControlWindowUtils):
             lay.addWidget(lbl, row, col, 1, 1)
             col += 1
 
-        btn = PyDMPushButton(self, label='', icon=qta.icon('fa5s.play'))
-        btn.channel = self.dev_pref.substitute(propty=pv_info["Cmd"])
-        btn.pressValue = 1
-        btn.setStyleSheet(
-            '#Start{min-width:30px; max-width:30px; icon-size:25px;}')
-        lay.addWidget(btn, row, 4, 1, 1)
 
     def _createMotion(self, pv_info, lay, row):
-        pvname = self.dev_pref.substitute(propty=pv_info["SP"])
-        btn = PyDMPushButton('Change Polarization', init_channel=pvname)
-        btn.pressValue = 1
-        lay.addWidget(btn, row, 1, 1, 2)
-
         pvname = self.dev_pref.substitute(propty=pv_info["SP_RB"])
         led = PyDMLed(self, init_channel=pvname)
-        lay.addWidget(led, row, 3, 1, 1)
+        lay.addWidget(led, row, 1, 1, 1)
 
         pvname = self.dev_pref.substitute(propty=pv_info["RB"])
         led = PyDMLed(self, init_channel=pvname)
-        lay.addWidget(led, row, 4, 1, 1)
+        lay.addWidget(led, row, 2, 1, 1)
 
     def _createPolarization(self, pv_info, lay, row):
+        btn = PyDMPushButton(self, label='', icon=qta.icon('fa5s.play'))
+        btn.pressValue = 1
+        btn.channel = self.dev_pref.substitute(propty=pv_info["SP"])
+        btn.setStyleSheet('min-width:30px; max-width:30px; icon-size:25px;')
+        lay.addWidget(btn, row, 1, 1, 2)
+
         pvname = self.dev_pref.substitute(propty=pv_info["SP"])
         cb = SiriusEnumComboBox(self, init_channel=pvname)
-        lay.addWidget(cb, row, 1, 1, 1)
+        lay.addWidget(cb, row, 2, 1, 1)
 
-        col = 2
-        for key in ["SP_RB", "RB", "Shift"]:
+        col = 3
+        for key in ["SP_RB", "RB"]:
             pvname = self.dev_pref.substitute(propty=pv_info[key])
             lbl = SiriusLabel(self, init_channel=pvname)
             lbl.setMinimumWidth(125)
@@ -162,8 +163,16 @@ class DELTAControlWindow(IDCommonControlWindow, DELTAControlWindowUtils):
                 self._createMotion(pv_info, lay, row)
             elif title == "Shift":
                 self._createShift(pv_info, lay, row)
-            else:
+            elif title == "Polarization":
                 self._createPolarization(pv_info, lay, row)
+            else:
+                pvname = self.dev_pref.substitute(propty=pv_info)
+                lbl = SiriusLabel(self, init_channel=pvname)
+                lbl.setMinimumWidth(125)
+                lbl.showUnits = True
+                lbl.setAlignment(Qt.AlignCenter)
+                lbl.setMaximumHeight(40)
+                lay.addWidget(lbl, row, 1, 1, 2)
             row += 1
 
         return group
