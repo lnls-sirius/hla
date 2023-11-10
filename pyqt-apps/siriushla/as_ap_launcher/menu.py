@@ -662,6 +662,11 @@ def get_object(ismenubar=True, parent=None):
             menu = QMenu('BPMs', self)
             menu.setObjectName(sec.upper()+'App')
             menu.setIcon(qta.icon('mdi.currency-sign'))
+            if sec == 'si':
+                action = menu.addAction('Equalize Switching')
+                action.setIcon(qta.icon('mdi.approximately-equal-box'))
+                self.connect_newprocess(
+                    action, 'sirius-hla-si-di-equalize_bpms_switching.py')
             action = menu.addAction('Monitor')
             action.setIcon(util.get_monitor_icon('mdi.currency-sign'))
             self.connect_newprocess(action, cmd + ['-w', 'Monitor', ])
