@@ -44,17 +44,21 @@ class DELTAControlWindowUtils():
             "SP_RB": "Shift-RB",
             "RB": "GainShift-Mon"
         },
-        "Motion": {
-            "SP_RB": "MotorsEnbld-Mon",
-            "RB": "Moving-Mon"
-        },
         "Polarization": {
             "Set": "ChangePol-Cmd",
             "SP": "Pol-Sel",
             "SP_RB": "Pol-Sts",
             "RB": "Pol-Mon"
         },
-        "Polarization Shift": "PolShift-Mon"
+        "Polarization Shift": "PolShift-Mon",
+        "Motion": {
+            "SP_RB": "MotorsEnbld-Mon",
+            "RB": "Moving-Mon"
+        },
+        "Abort": {
+            "pvname": "Abort-Cmd",
+            "icon": "fa5s.stop"
+        }
     }
 
     AUX_CONTROL_PVS = {
@@ -80,10 +84,6 @@ class DELTAControlWindowUtils():
             "PosTolerance-RB", "PosTolerance-SP",
             "PolPosTolerance-RB", "PolPosTolerance-SP"
         ),
-        "Abort": {
-            "pvname": "Abort-Cmd",
-            "icon": "fa5s.stop"
-        },
         "Start Parking": {
             "pvname": "StartParking-Cmd",
             "icon": "ri.parking-box-fill"
@@ -99,13 +99,13 @@ class DELTAControlWindow(IDCommonControlWindow, DELTAControlWindowUtils):
         btn.channel = self.dev_pref.substitute(propty=pv_info["Cmd"])
         btn.pressValue = 1
         btn.setStyleSheet('min-width:30px; max-width:30px; icon-size:25px;')
-        lay.addWidget(btn, row, 1, 1, 1)
+        lay.addWidget(btn, row+1, 0, 1, 2)
 
         pvname = self.dev_pref.substitute(propty=pv_info["SP"])
         cb = SiriusLineEdit(self, init_channel=pvname)
-        lay.addWidget(cb, row, 2, 1, 1)
+        lay.addWidget(cb, row, 1, 1, 1)
 
-        col = 3
+        col = 2
         for key in ["SP_RB", "RB"]:
             pvname = self.dev_pref.substitute(propty=pv_info[key])
             lbl = SiriusLabel(self, init_channel=pvname)
@@ -130,13 +130,14 @@ class DELTAControlWindow(IDCommonControlWindow, DELTAControlWindowUtils):
         btn.pressValue = 1
         btn.channel = self.dev_pref.substitute(propty=pv_info["SP"])
         btn.setStyleSheet('min-width:30px; max-width:30px; icon-size:25px;')
-        lay.addWidget(btn, row, 1, 1, 2)
+        lay.addWidget(btn, row+1, 0, 1, 2)
 
         pvname = self.dev_pref.substitute(propty=pv_info["SP"])
         cb = SiriusEnumComboBox(self, init_channel=pvname)
-        lay.addWidget(cb, row, 2, 1, 1)
+        cb.setMinimumWidth(50)
+        lay.addWidget(cb, row, 1, 1, 1)
 
-        col = 3
+        col = 2
         for key in ["SP_RB", "RB"]:
             pvname = self.dev_pref.substitute(propty=pv_info[key])
             lbl = SiriusLabel(self, init_channel=pvname)
@@ -163,8 +164,12 @@ class DELTAControlWindow(IDCommonControlWindow, DELTAControlWindowUtils):
                 self._createMotion(pv_info, lay, row)
             elif title == "Shift":
                 self._createShift(pv_info, lay, row)
+                row += 1
             elif title == "Polarization":
                 self._createPolarization(pv_info, lay, row)
+                row += 1
+            elif title == "Abort":
+                self._createIconBtns(pv_info, lay, row)
             else:
                 pvname = self.dev_pref.substitute(propty=pv_info)
                 lbl = SiriusLabel(self, init_channel=pvname)
@@ -259,6 +264,7 @@ class DELTAControlWindow(IDCommonControlWindow, DELTAControlWindowUtils):
         btn.channel = self.dev_pref.substitute(propty=pv_info["pvname"])
         btn.pressValue = 1
         btn.setIconSize(QSize(20, 20))
+        btn.setMaximumWidth(25)
         btn.setStyleSheet(
             '#Start{min-width:30px; max-width:30px; icon-size:25px;}')
         lay.addWidget(btn, row, 1, 1, 4)
