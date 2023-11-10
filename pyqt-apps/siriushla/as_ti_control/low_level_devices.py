@@ -717,7 +717,7 @@ class EVG(BaseWidget):
         lay_log.addWidget(gb_logevt, 1, 0, alignment=Qt.AlignTop)
         lay_log.addWidget(gb_logutc, 1, 1, alignment=Qt.AlignTop)
         lay_log.addWidget(gb_logsub, 1, 2, alignment=Qt.AlignTop)
-        lay_log.addWidget(fr_logcnt, 1, 3, alignment=Qt.AlignCenter)
+        lay_log.addWidget(fr_logcnt, 0, 3, 2, 1, alignment=Qt.AlignCenter)
 
         # Timestamp Log Buffer
         gbox_buf = QGroupBox('Timestamp Log Buffer', self)
