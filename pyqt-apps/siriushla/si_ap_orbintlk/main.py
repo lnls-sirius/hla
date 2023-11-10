@@ -163,6 +163,18 @@ class BPMOrbIntlkMainWindow(BaseObject, SiriusMainWindow):
         lay.addWidget(lbl_rst, 2, 0)
         lay.addWidget(pb_rst, 2, 1)
 
+        pvname = self.hlprefix.substitute(propty='ResetTimingLockLatches-Cmd')
+        pb_rstrtm = PyDMPushButton(
+            self, pressValue=1, init_channel=pvname,
+            label='Reset Timing Lock Latches')
+        lay.addWidget(pb_rstrtm, 3, 0, 1, 3)
+
+        pvname = self.hlprefix.substitute(propty='ResetAFCTimingRTMClk-Cmd')
+        pb_rstltc = PyDMPushButton(
+            self, pressValue=1, init_channel=pvname,
+            label='Reset AFC timing RTM Clocks')
+        lay.addWidget(pb_rstltc, 4, 0, 1, 3)
+
         return wid
 
     def _setupBPMIntlkSettingsGroup(self):
