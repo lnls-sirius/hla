@@ -1481,7 +1481,7 @@ class AFC(BaseWidget):
 
         props = {
             'name', 'state', 'event', 'source', 'width', 'polarity', 'pulses',
-            'delay', 'timestamp'}
+            'delay', 'evtcnt', 'evtcntrst', 'hl_trigger'}
         set_ = LLTimeSearch.In2OutMap['AMCFPGAEVR']['SFP8']
 
         obj_names = sorted([out for out in set_ if out.startswith('FMC')])
@@ -1820,7 +1820,7 @@ class _EVR_EVE(BaseWidget):
 
         props = {
             'name', 'state', 'event', 'widthraw', 'polarity', 'pulses',
-            'delayraw', 'timestamp'}
+            'delayraw', 'evtcnt', 'evtcntrst', 'hl_trigger'}
         obj_names = ['OTP{0:02d}'.format(i) for i in range(24)]
         obj_names = [self.device.substitute(propty=o) for o in obj_names]
         self.otps_wid = EVREVEOTPList(
@@ -1831,7 +1831,7 @@ class _EVR_EVE(BaseWidget):
 
         props = {
             'name', 'source', 'trigger', 'rf_delayraw', 'rf_delay_type',
-            'fine_delayraw'}
+            'fine_delayraw', 'hl_trigger'}
         obj_names = ['OUT{0:d}'.format(i) for i in range(8)]
         obj_names = [self.device.substitute(propty=o) for o in obj_names]
         self.outs_wid = EVREVEOUTList(
@@ -2358,7 +2358,7 @@ class LLTriggerList(BaseList):
         'pulses': 4.8,
         'delayraw': 4.8,
         'delay': 4.8,
-        'timestamp': 3.2,
+        'log': 3.2,
         'source': 6.5,
         'trigger': 4,
         'rf_delayraw': 4.8,
@@ -2382,7 +2382,7 @@ class LLTriggerList(BaseList):
         'pulses': 'Nr Pulses',
         'delayraw': 'Delay',
         'delay': 'Delay [us]',
-        'timestamp': 'Log',
+        'log': 'Log',
         'source': 'Source',
         'trigger': 'Trigger',
         'rf_delayraw': 'RF Delay',
@@ -2397,7 +2397,7 @@ class LLTriggerList(BaseList):
         }
     _ALL_PROPS = (
         'device', 'name', 'state', 'event', 'widthraw', 'width',
-        'polarity', 'pulses', 'delayraw', 'delay', 'timestamp', 'source',
+        'polarity', 'pulses', 'delayraw', 'delay', 'log', 'source',
         'trigger', 'rf_delayraw', 'rf_delay', 'rf_delay_type', 'fine_delayraw',
         'fine_delay', 'hl_trigger', 'dir', 'evtcnt', 'evtcntrst')
 
@@ -2492,7 +2492,7 @@ class LLTriggerList(BaseList):
             pvname = intlb.substitute(propty=intlb.propty+'Delay-RB')
             rb = SiriusLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
-        elif prop == 'timestamp':
+        elif prop == 'log':
             pvname = intlb.substitute(propty=intlb.propty+'Log-Sel')
             sp = PyDMStateButton(self, init_channel=pvname)
             pvname = intlb.substitute(propty=intlb.propty+'Log-Sts')
@@ -2567,7 +2567,7 @@ class EVREVEOTPList(LLTriggerList):
 
     _ALL_PROPS = (
         'name', 'state', 'event', 'widthraw', 'width', 'polarity', 'pulses',
-        'delayraw', 'delay', 'evtcnt', 'evtcntrst', 'timestamp', 'hl_trigger')
+        'delayraw', 'delay', 'evtcnt', 'evtcntrst', 'log', 'hl_trigger')
 
 
 class EVREVEOUTList(LLTriggerList):
@@ -2584,7 +2584,7 @@ class AFCOUTList(LLTriggerList):
     _ALL_PROPS = (
         'name', 'state', 'event', 'source', 'widthraw', 'width', 'polarity',
         'pulses', 'delayraw', 'delay', 'dir', 'evtcnt', 'evtcntrst',
-        'timestamp', 'hl_trigger')
+        'log', 'hl_trigger')
 
 
 # ###################### Digital Inputs ######################
@@ -2598,7 +2598,7 @@ class EVREVEDIList(BaseList):
         'state': 5.8,
         'polarity': 5,
         'event': 4.8,
-        'timestamp': 3.2,
+        'log': 3.2,
     }
     _LABELS = {
         'name': 'Name',
@@ -2606,9 +2606,9 @@ class EVREVEDIList(BaseList):
         'state': 'State',
         'polarity': 'Polarity',
         'event': 'Event',
-        'timestamp': 'Log',
+        'log': 'Log',
     }
-    _ALL_PROPS = ('device', 'name', 'state', 'polarity', 'event', 'timestamp')
+    _ALL_PROPS = ('device', 'name', 'state', 'polarity', 'event', 'log')
 
     def __init__(self, **kwargs):
         srch = {'name', 'polarity'}
@@ -2656,7 +2656,7 @@ class EVREVEDIList(BaseList):
             pvname = device.substitute(propty='DIN'+di_idx+'Evt-RB')
             rb = SiriusLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
-        elif prop == 'timestamp':
+        elif prop == 'log':
             pvname = device.substitute(propty='DIN'+di_idx+'Log-Sel')
             sp = PyDMStateButton(self, init_channel=pvname)
             pvname = device.substitute(propty='DIN'+di_idx+'Log-Sts')
