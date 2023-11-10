@@ -5,16 +5,12 @@ import logging as _log
 from threading import Thread
 import pathlib as _pathlib
 
-import matplotlib.pyplot as mplt
-
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QPushButton, QGridLayout, QSpinBox, \
-    QLabel, QGroupBox, QDoubleSpinBox, QComboBox, QFileDialog, QVBoxLayout, \
-    QMessageBox
+    QLabel, QGroupBox, QDoubleSpinBox, QComboBox, QFileDialog, QMessageBox
 
 import qtawesome as qta
 
-from mathphys.functions import save_pickle, load_pickle
 from siriuspy.devices import EqualizeBPMs
 from siriuspy.clientconfigdb import ConfigDBException
 from siriushla import util
@@ -27,8 +23,10 @@ from siriushla.as_ap_configdb import LoadConfigDialog, SaveConfigDialog
 class BPMsEqualizeSwitching(SiriusMainWindow):
     """."""
 
-    EXT = 'pickle'
-    EXT_FLT = f'Pickle Files (*.{EXT:s})'
+    EXTS = '.pickle', '.pkl', '.h5', '.hdf5', '.hdf', '.hd5'
+    EXT_FLT = (
+        'Pickle Files (*.pickle *.pkl);;'
+        'HDF5 file (*.h5 *.hdf5 *.hdf *.hd5)')
     DEFAULT_DIR = _pathlib.Path.home().as_posix()
     DEFAULT_DIR += _os.path.sep + _os.path.join(
         'shared', 'screens-iocs', 'data_by_day')
@@ -274,8 +272,7 @@ class BPMsEqualizeSwitching(SiriusMainWindow):
         if not fname:
             return
         self._last_dir, _ = _os.path.split(fname)
-        fname += '' if fname.endswith(self.EXT) else ('.' + self.EXT)
-        save_pickle(self.bpms_eq.data, fname, overwrite=True)
+        self.bpms_eq.save_data(fname, overwrite=True)
         _log.info(f'File Saved ... {fname.split("/")[-1]}')
 
     def _load_data_from_file(self):
@@ -286,9 +283,7 @@ class BPMsEqualizeSwitching(SiriusMainWindow):
         if not fname:
             return
         self._last_dir, _ = _os.path.split(fname)
-
-        self.bpms_eq.data = load_pickle(fname)
-
+        self.bpms_eq.load_data(fname)
         _log.info(f'File Loaded ... {fname.split("/")[-1]}')
         self.cb_acqstrat.setCurrentIndex(self.bpms_eq.acq_strategy)
         self.sp_nrpoints.setValue(self.bpms_eq.acq_nrpoints)
