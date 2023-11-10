@@ -147,6 +147,13 @@ class BPMsEqualizeSwitching(SiriusMainWindow):
         self.cb_procmeth.addItems(self.bpms_eq.ProcMethods._fields)
         self.cb_procmeth.setCurrentIndex(self.bpms_eq.proc_method)
 
+        self.lb_procmeth = QLabel(wid)
+        self.lb_procmeth.setText(
+            self.bpms_eq.PROCMETHODSMEANING[self.bpms_eq.proc_method_str])
+        self.cb_procmeth.currentTextChanged.connect(
+            lambda x: self.lb_procmeth.setText(
+                self.bpms_eq.PROCMETHODSMEANING[x]))
+
         pusb_proc = QPushButton(qta.icon('mdi.chart-line'), 'Process', wid)
         pusb_proc.clicked.connect(self._start_activity)
         pusb_proc.setObjectName('proc')
@@ -154,6 +161,7 @@ class BPMsEqualizeSwitching(SiriusMainWindow):
         lay.addWidget(QLabel('Process Method:', wid), 0, 0)
         lay.addWidget(self.cb_procmeth, 0, 1)
         lay.addWidget(pusb_proc, 0, 3)
+        lay.addWidget(self.lb_procmeth, 1, 0, 1, 4)
         lay.setColumnStretch(2, 2)
         lay.setColumnStretch(4, 2)
         return wid
