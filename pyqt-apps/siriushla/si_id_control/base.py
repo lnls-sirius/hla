@@ -131,8 +131,8 @@ class IDCommonSummaryBase(QWidget):
         super().__init__(parent)
         self.setObjectName('IDApp')
         self.prop2width = (
-            ('Beamline', 8),
-            ('Device', 8),
+            ('Beamline', 9),
+            ('Device', 9),
         ) + self.MODEL_WIDTHS + (
             ('Moving', 4),
             ('BeamLine Enable', 6),

@@ -457,7 +457,7 @@ def get_object(ismenubar=True, parent=None):
 
             idlist = ['SI-06SB:ID-APU22', 'SI-07SP:ID-APU22',
                       'SI-08SB:ID-APU22', 'SI-09SA:ID-APU22',
-                      'SI-11SP:ID-APU58', 'SI-10SB:ID-EPU50',
+                      'SI-11SP:ID-APU58', 'SI-10SB:ID-DELTA52',
                       'SI-17SA:ID-PAPU50']
             for idname in idlist:
                 idname = SiriusPVName(idname)
