@@ -1,6 +1,6 @@
 #!/usr/bin/env python-sirius
 
-"""SI Injection Trajectory Fitting Application."""
+"""Window to equalize switching semicycles of BPM antennas."""
 
 import sys
 import argparse as _argparse
