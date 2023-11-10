@@ -329,7 +329,7 @@ class EVG(BaseWidget):
         except KeyError:
             conn = set()
         for i in range(8):
-            pvname = self.get_pvname(propty='Los-Mon')
+            pvname = self.get_pvname(propty='DownlinkStatus-Mon')
             if i in conn:
                 rb = SiriusLedAlert(self, init_channel=pvname, bit=i)
             else:
@@ -349,6 +349,11 @@ class EVG(BaseWidget):
             icon-size:20px;}')
         but.clicked.connect(self._open_downconn_dialog)
         wids.append(but)
+        pvname = self.get_pvname(propty='RxLockedLtcRst-Cmd')
+        pbt = SiriusPushButton(
+            self, init_channel=pvname, pressValue=1, label='',
+            icon=qta.icon('fa5s.sync'))
+        wids.append(pbt)
         gb = self._create_small_group(
             'Down Connection', self.status_wid, wids, align_ver=False)
         status_layout.addWidget(gb, 3, 0, 1, 3)
@@ -1170,7 +1175,7 @@ class FOUT(BaseWidget):
         except KeyError:
             conn = set()
         for i in range(8):
-            pvname = self.get_pvname(propty='Los-Mon')
+            pvname = self.get_pvname(propty='DownlinkStatus-Mon')
             if i in conn:
                 rb = SiriusLedAlert(self, init_channel=pvname, bit=i)
             else:
@@ -1190,6 +1195,11 @@ class FOUT(BaseWidget):
             icon-size:20px;}')
         but.clicked.connect(self._open_downconn_dialog)
         wids.append(but)
+        pvname = self.get_pvname(propty='RxLockedLtcRst-Cmd')
+        pbt = SiriusPushButton(
+            self, init_channel=pvname, pressValue=1, label='',
+            icon=qta.icon('fa5s.sync'))
+        wids.append(pbt)
         gb = self._create_small_group(
             'Down Connection', status_wid, wids, align_ver=False)
         gb.layout().setContentsMargins(6, 6, 0, 6)
@@ -2083,6 +2093,9 @@ class EVGFOUTOUTList(BaseList):
         'tripdelay': 4.8,
         'position': 4.8,
         'outdelay': 4.8,
+        'rxlocked': 4.8,
+        'rxlockedltc': 8,
+        'downlinksts': 6,
         'rxenbl': 4,
         'connection': 12,
     }
@@ -2092,11 +2105,15 @@ class EVGFOUTOUTList(BaseList):
         'tripdelay': 'TripDelay',
         'position': 'Position',
         'outdelay': 'OutDelay',
+        'rxlocked': 'RX Locked',
+        'rxlockedltc': 'RX Locked Lacth',
+        'downlinksts': 'Downlink',
         'rxenbl': 'RX Enbl',
         'connection': 'Connection',
     }
     _ALL_PROPS = ('name', 'connected', 'tripdelay', 'position',
-                  'outdelay', 'rxenbl', 'connection')
+                  'outdelay', 'rxlocked', 'rxlockedltc',
+                  'downlinksts', 'rxenbl', 'connection')
 
     def __init__(self, **kwargs):
         srch = set(('name', 'connection'))
@@ -2144,6 +2161,20 @@ class EVGFOUTOUTList(BaseList):
             pvname = device.substitute(propty='OUT'+str(idx)+'FramePos-Mon')
             sp = SiriusLabel(self, pvname)
             sp.setAlignment(Qt.AlignCenter)
+        elif prop == 'rxlocked':
+            pvname = device.substitute(propty='RxLocked-Mon')
+            sp = SiriusLedState(self, init_channel=pvname, bit=idx)
+        elif prop == 'rxlockedltc':
+            pvname = device.substitute(propty='RxLockedLtc-Mon')
+            sp = SiriusLedState(self, init_channel=pvname, bit=idx)
+        elif prop == 'downlinksts':
+            pvname = device.substitute(propty='DownlinkStatus-Mon')
+            if idx in conn_idcs:
+                sp = SiriusLedAlert(self, init_channel=pvname, bit=idx)
+            else:
+                sp = SiriusLedState(self, init_channel=pvname, bit=idx)
+                sp.onColor = sp.DarkGreen
+                sp.offColor = sp.LightGreen
         elif prop == 'outdelay':
             pvname = device.substitute(propty='OUT'+str(idx)+'Delay-SP')
             sp = SiriusSpinbox(self, pvname)
