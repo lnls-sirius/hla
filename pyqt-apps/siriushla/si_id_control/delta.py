@@ -194,7 +194,8 @@ class DELTAControlWindow(IDCommonControlWindow, DELTAControlWindowUtils):
         try:
             labels = caget(pvname_labels)
             connect_window(
-                btn, StatusDetailDialog, self, pvname=pvname, labels=list(labels))
+                btn, StatusDetailDialog, self, pvname=pvname, labels=list(labels),
+                section="ID")
         except:
             btn.setEnabled(False)
         return btn
