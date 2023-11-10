@@ -14,7 +14,7 @@ from siriushla.widgets.led import SiriusLedAlert
 class StatusDetailDialog(SiriusDialog):
     """Status Detail Dialog."""
 
-    def __init__(self, pvname='', labels=None, section='', parent=None, title='', pv_labels=None):
+    def __init__(self, pvname='', labels=None, section='', parent=None, title=''):
         super().__init__(parent)
         try:
             self.pvname = SiriusPVName(pvname)
@@ -27,11 +27,7 @@ class StatusDetailDialog(SiriusDialog):
         self.labels = list() if labels is None else labels
         self.title = title
         if not labels:
-            labels_pv = ''
-            if not pv_labels:
-                labels_pv = pvname.replace('-Mon', 'Labels-Cte')
-            else:
-                labels_pv = pv_labels
+            labels_pv = pvname.replace('-Mon', 'Labels-Cte')
             ch = SiriusConnectionSignal(labels_pv)
             for i in range(20):
                 if ch.connected:

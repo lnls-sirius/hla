@@ -5,11 +5,12 @@ from qtpy.QtWidgets import QGroupBox, QLabel, \
     QHBoxLayout, QVBoxLayout, QWidget, QPushButton, \
     QGridLayout
 import qtawesome as qta
+from epics import caget
 from pydm.widgets import PyDMPushButton
 
 from ..util import connect_window
 from ..widgets import SiriusLedAlert, SiriusLabel, SiriusSpinbox, \
-    PyDMLogLabel, PyDMLed, SiriusEnumComboBox, SiriusLineEdit, SiriusPushButton
+    PyDMLogLabel, PyDMLed, SiriusEnumComboBox, SiriusLineEdit, SiriusConnectionSignal
 from ..widgets.dialog import StatusDetailDialog
 
 from .base import IDCommonControlWindow, \
@@ -39,16 +40,22 @@ class DELTAControlWindowUtils():
 
     MAIN_CONTROL_PVS = {
         "Shift": {
-            "Cmd": "ChangeGain-Cmd",
             "SP": "Shift-SP",
             "SP_RB": "Shift-RB",
             "RB": "GainShift-Mon"
         },
+        "Start Shift": {
+            "pvname": "ChangeGain-Cmd",
+            "icon": "fa5s.play"
+        },
         "Polarization": {
-            "Set": "ChangePol-Cmd",
             "SP": "Pol-Sel",
             "SP_RB": "Pol-Sts",
             "RB": "Pol-Mon"
+        },
+        "Start Polarization": {
+            "pvname": "ChangePol-Cmd",
+            "icon": "fa5s.play"
         },
         "Polarization Shift": "PolShift-Mon",
         "Motion": {
@@ -95,12 +102,6 @@ class DELTAControlWindow(IDCommonControlWindow, DELTAControlWindowUtils):
     """DELTA Control Window."""
 
     def _createShift(self, pv_info, lay, row):
-        btn = PyDMPushButton(self, label='', icon=qta.icon('fa5s.play'))
-        btn.channel = self.dev_pref.substitute(propty=pv_info["Cmd"])
-        btn.pressValue = 1
-        btn.setStyleSheet('min-width:30px; max-width:30px; icon-size:25px;')
-        lay.addWidget(btn, row+1, 0, 1, 2)
-
         pvname = self.dev_pref.substitute(propty=pv_info["SP"])
         cb = SiriusLineEdit(self, init_channel=pvname)
         lay.addWidget(cb, row, 1, 1, 1)
@@ -117,20 +118,20 @@ class DELTAControlWindow(IDCommonControlWindow, DELTAControlWindowUtils):
 
 
     def _createMotion(self, pv_info, lay, row):
+        motion_lay = QHBoxLayout()
         pvname = self.dev_pref.substitute(propty=pv_info["SP_RB"])
         led = PyDMLed(self, init_channel=pvname)
-        lay.addWidget(led, row, 1, 1, 1)
+        led.setMaximumWidth(50)
+        motion_lay.addWidget(led)
 
         pvname = self.dev_pref.substitute(propty=pv_info["RB"])
         led = PyDMLed(self, init_channel=pvname)
-        lay.addWidget(led, row, 2, 1, 1)
+        led.setMaximumWidth(50)
+        motion_lay.addWidget(led)
+
+        lay.addLayout(motion_lay, row, 1, 1, 1)
 
     def _createPolarization(self, pv_info, lay, row):
-        btn = PyDMPushButton(self, label='', icon=qta.icon('fa5s.play'))
-        btn.pressValue = 1
-        btn.channel = self.dev_pref.substitute(propty=pv_info["SP"])
-        btn.setStyleSheet('min-width:30px; max-width:30px; icon-size:25px;')
-        lay.addWidget(btn, row+1, 0, 1, 2)
 
         pvname = self.dev_pref.substitute(propty=pv_info["SP"])
         cb = SiriusEnumComboBox(self, init_channel=pvname)
@@ -157,27 +158,25 @@ class DELTAControlWindow(IDCommonControlWindow, DELTAControlWindowUtils):
         row = 0
         for title, pv_info in self.MAIN_CONTROL_PVS.items():
             label = QLabel(title)
-            label.setFixedWidth(100)
+            label.setFixedWidth(150)
             lay.addWidget(label, row, 0, 1, 1)
 
             if title == "Motion":
                 self._createMotion(pv_info, lay, row)
             elif title == "Shift":
                 self._createShift(pv_info, lay, row)
-                row += 1
             elif title == "Polarization":
                 self._createPolarization(pv_info, lay, row)
-                row += 1
-            elif title == "Abort":
-                self._createIconBtns(pv_info, lay, row)
-            else:
+            elif isinstance(pv_info, str):
                 pvname = self.dev_pref.substitute(propty=pv_info)
                 lbl = SiriusLabel(self, init_channel=pvname)
+                lbl.setAlignment(Qt.AlignLeft|Qt.AlignVCenter)
                 lbl.setMinimumWidth(125)
                 lbl.showUnits = True
-                lbl.setAlignment(Qt.AlignCenter)
                 lbl.setMaximumHeight(40)
                 lay.addWidget(lbl, row, 1, 1, 2)
+            else:
+                self._createIconBtns(pv_info, lay, row)
             row += 1
 
         return group
@@ -191,8 +190,13 @@ class DELTAControlWindow(IDCommonControlWindow, DELTAControlWindowUtils):
             '#sts{min-width:25px; max-width:25px; icon-size:20px;}')
         pvname = self.dev_pref.substitute(propty=pv_tuple[1])
         pvname_labels = self.dev_pref.substitute(propty=pv_tuple[2])
-        connect_window(
-            btn, StatusDetailDialog, self, pvname=pvname, pv_labels=pvname_labels)
+
+        try:
+            labels = caget(pvname_labels)
+            connect_window(
+                btn, StatusDetailDialog, self, pvname=pvname, labels=list(labels))
+        except:
+            btn.setEnabled(False)
         return btn
 
     def _createStatusWidget(self, title, pv_suffix):
@@ -202,7 +206,7 @@ class DELTAControlWindow(IDCommonControlWindow, DELTAControlWindowUtils):
         wid.setLayout(lay)
 
         label = QLabel(title)
-        label.setFixedWidth(100)
+        label.setFixedWidth(150)
         lay.addWidget(label)
 
         if isinstance(pv_suffix, tuple):
@@ -318,15 +322,20 @@ class DELTAControlWindow(IDCommonControlWindow, DELTAControlWindowUtils):
         return group
 
     def _ctrlModeWidget(self):
+        gbox_ctrlmode = QGroupBox('Control Mode')
+        lay_ctrlmode = QHBoxLayout(gbox_ctrlmode)
+        lay_ctrlmode.setAlignment(Qt.AlignCenter)
+
+        label = QLabel("Is Remote")
+        label.setFixedWidth(100)
+        lay_ctrlmode.addWidget(label)
+
         self._led_ctrlmode = PyDMLed(
             self, self.dev_pref.substitute(propty='IsRemote-Mon'))
         self._led_ctrlmode.offColor = PyDMLed.Red
         self._led_ctrlmode.onColor = PyDMLed.LightGreen
-
-        gbox_ctrlmode = QGroupBox('Control Mode')
-        lay_ctrlmode = QHBoxLayout(gbox_ctrlmode)
-        lay_ctrlmode.setAlignment(Qt.AlignCenter)
         lay_ctrlmode.addWidget(self._led_ctrlmode)
+
         return gbox_ctrlmode
 
 
