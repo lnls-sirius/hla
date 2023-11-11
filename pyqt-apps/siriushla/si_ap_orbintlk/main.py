@@ -175,6 +175,15 @@ class BPMOrbIntlkMainWindow(BaseObject, SiriusMainWindow):
             label='Reset AFC timing RTM Clocks')
         lay.addWidget(pb_rstltc, 4, 0, 1, 3)
 
+        pvname = self.hlprefix.substitute(propty='RetryLock-Cmd')
+        pb_relock = PyDMPushButton(
+            self, pressValue=1, init_channel=pvname,
+            label='Re-Lock Configurations')
+        pvname = self.hlprefix.substitute(propty='IsLocking-Mon')
+        led_relock = SiriusLedState(self, pvname)
+        lay.addWidget(pb_relock, 5, 0, 1, 2)
+        lay.addWidget(led_relock, 5, 2)
+
         return wid
 
     def _setupBPMIntlkSettingsGroup(self):
