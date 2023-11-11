@@ -239,12 +239,13 @@ class HLTriggerDetailed(BaseWidget):
         gb = self._create_small_group('Source', self.ll_list_wid, (sp, rb))
         ll_list_layout.addWidget(gb, 2, 0)
 
-        init_channel = self.get_pvname('Log-Sel')
-        sp = PyDMStateButton(self, init_channel=init_channel)
-        init_channel = self.get_pvname('Log-Sts')
-        rb = PyDMLed(self, init_channel=init_channel)
-        gb = self._create_small_group('Log', self.ll_list_wid, (sp, rb))
-        ll_list_layout.addWidget(gb, 3, 0)
+        if HLTimeSearch.has_log(self.device.device_name):
+            init_channel = self.get_pvname('Log-Sel')
+            sp = PyDMStateButton(self, init_channel=init_channel)
+            init_channel = self.get_pvname('Log-Sts')
+            rb = PyDMLed(self, init_channel=init_channel)
+            gb = self._create_small_group('Log', self.ll_list_wid, (sp, rb))
+            ll_list_layout.addWidget(gb, 3, 0)
 
         if HLTimeSearch.is_digital_input(self.device.device_name):
             return
@@ -557,6 +558,7 @@ class HLTriggerList(BaseList):
         devname = device.device_name
         has_delay_type = HLTimeSearch.has_delay_type(devname)
         has_direction = HLTimeSearch.has_direction(devname)
+        has_log = HLTimeSearch.has_log(devname)
         is_digital_input = HLTimeSearch.is_digital_input(devname)
         sp = rb = None
         if prop == 'name':
@@ -614,7 +616,7 @@ class HLTriggerList(BaseList):
             sp = SiriusEnumComboBox(self, init_channel=init_channel)
             init_channel = device.substitute(propty='Polarity-Sts')
             rb = SiriusLabel(self, init_channel=init_channel)
-        elif prop == 'log':
+        elif prop == 'log' and has_log:
             init_channel = device.substitute(propty='Log-Sel')
             sp = PyDMStateButton(self, init_channel=init_channel)
             init_channel = device.substitute(propty='Log-Sts')
