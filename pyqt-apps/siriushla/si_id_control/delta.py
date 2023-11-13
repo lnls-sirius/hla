@@ -49,7 +49,7 @@ class DELTAControlWindowUtils():
             "RB": "KParamVelo-RB",
         },
         "Change KParam": {
-            "pvname": "ChangeKParam-Cmd",
+            "pvname": "KParamChanged-Cmd",
             "icon": "fa5s.play"
         },
         "PParam": {
@@ -67,7 +67,7 @@ class DELTAControlWindowUtils():
             "Mon": "Pol-Mon"
         },
         "Change Polarization": {
-            "pvname": "ChangePol-Cmd",
+            "pvname": "PParamChange-Cmd",
             "icon": "fa5s.play"
         },
         "Motion": {
