@@ -93,7 +93,7 @@ class DELTAControlWindowUtils():
         ),
         "Start Parking": {
             "pvname": "StartParking-Cmd",
-            "icon": "ri.parking-box-fill"
+            "icon": "fa5s.parking"
         }
     }
 
