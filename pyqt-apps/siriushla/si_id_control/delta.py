@@ -3,7 +3,7 @@
 from qtpy.QtCore import Qt, QSize
 from qtpy.QtWidgets import QGroupBox, QLabel, \
     QHBoxLayout, QVBoxLayout, QWidget, QPushButton, \
-    QGridLayout
+    QGridLayout, QSizePolicy as QSzPlcy
 import qtawesome as qta
 from epics import caget
 from pydm.widgets import PyDMPushButton
@@ -39,28 +39,40 @@ class DELTAControlWindowUtils():
     }
 
     MAIN_CONTROL_PVS = {
-        "Shift": {
-            "SP": "Shift-SP",
-            "SP_RB": "Shift-RB",
-            "RB": "GainShift-Mon"
+        "KParam": {
+            "SP": "KParam-SP",
+            "RB": "KParam-RB",
+            "Mon": "KParam-Mon"
         },
-        "Start Shift": {
-            "pvname": "ChangeGain-Cmd",
+        "KParam Speed": {
+            "SP": "KParamVelo-SP",
+            "RB": "KParamVelo-RB",
+        },
+        "Change KParam": {
+            "pvname": "ChangeKParam-Cmd",
             "icon": "fa5s.play"
+        },
+        "PParam": {
+            "SP": "PParam-SP",
+            "RB": "PParam-RB",
+            "Mon": "PParam-Mon"
+        },
+        "PParam Speed": {
+            "SP": "PParamVelo-SP",
+            "RB": "PParamVelo-RB",
         },
         "Polarization": {
             "SP": "Pol-Sel",
-            "SP_RB": "Pol-Sts",
-            "RB": "Pol-Mon"
+            "RB": "Pol-Sts",
+            "Mon": "Pol-Mon"
         },
-        "Start Polarization": {
+        "Change Polarization": {
             "pvname": "ChangePol-Cmd",
             "icon": "fa5s.play"
         },
-        "Polarization Shift": "PolShift-Mon",
         "Motion": {
-            "SP_RB": "MotorsEnbld-Mon",
-            "RB": "Moving-Mon"
+            "RB": "MotorsEnbld-Mon",
+            "Mon": "Moving-Mon"
         },
         "Abort": {
             "pvname": "Abort-Cmd",
@@ -69,27 +81,24 @@ class DELTAControlWindowUtils():
     }
 
     AUX_CONTROL_PVS = {
-        "HeaderVelAcc": (
-            "Velocity", "Acceleration"
+        "Max. Speed": {
+            "SP": "MaxVelo-SP",
+            "RB": "MaxVelo-RB",
+        },
+        "Max. Acc.": {
+            "SP": "MaxAcc-SP",
+            "RB": "MaxAcc-RB",
+        },
+        "Header": (
+            "KParam", "PParam"
         ),
-        "Polarization Mode": (
-            "PolModeVelo-RB", "PolModeVelo-SP",
-            "PolModeAcc-RB", "PolModeAcc-SP"
-        ),
-        "Gain Mode": (
-            "GainModeVelo-RB", "GainModeVelo-SP",
-            "GainModeAcc-RB", "GainModeAcc-SP"
-        ),
-        "Maximum": (
-            "MaxVelo-RB", "MaxVelo-SP",
-            "MaxAcc-RB", "MaxAcc-SP"
-        ),
-        "HeaderTol": (
-            "Position", "Position for Polarization"
+        "Acceleration": (
+            "KParamAcc-RB", "KParamAcc-SP",
+            "PParamAcc-RB", "PParamAcc-SP"
         ),
         "Tolerance": (
-            "PosTolerance-RB", "PosTolerance-SP",
-            "PolPosTolerance-RB", "PolPosTolerance-SP"
+            "KParamTolerance-RB", "KParamTolerance-SP",
+            "PParamTolerance-RB", "PParamTolerance-SP"
         ),
         "Start Parking": {
             "pvname": "StartParking-Cmd",
@@ -101,13 +110,16 @@ class DELTAControlWindowUtils():
 class DELTAControlWindow(IDCommonControlWindow, DELTAControlWindowUtils):
     """DELTA Control Window."""
 
-    def _createShift(self, pv_info, lay, row):
+    def _createParam(self, pv_info, lay, row):
         pvname = self.dev_pref.substitute(propty=pv_info["SP"])
         cb = SiriusLineEdit(self, init_channel=pvname)
         lay.addWidget(cb, row, 1, 1, 1)
+        lay.setContentsMargins(3, 3, 3, 3)
 
         col = 2
-        for key in ["SP_RB", "RB"]:
+        for key in ["RB", "Mon"]:
+            if not key in pv_info:
+                continue
             pvname = self.dev_pref.substitute(propty=pv_info[key])
             lbl = SiriusLabel(self, init_channel=pvname)
             lbl.setMinimumWidth(125)
@@ -116,20 +128,19 @@ class DELTAControlWindow(IDCommonControlWindow, DELTAControlWindowUtils):
             lay.addWidget(lbl, row, col, 1, 1)
             col += 1
 
-
     def _createMotion(self, pv_info, lay, row):
         motion_lay = QHBoxLayout()
-        pvname = self.dev_pref.substitute(propty=pv_info["SP_RB"])
-        led = PyDMLed(self, init_channel=pvname)
-        led.setMaximumWidth(50)
-        motion_lay.addWidget(led)
-
         pvname = self.dev_pref.substitute(propty=pv_info["RB"])
         led = PyDMLed(self, init_channel=pvname)
         led.setMaximumWidth(50)
         motion_lay.addWidget(led)
 
-        lay.addLayout(motion_lay, row, 1, 1, 1)
+        pvname = self.dev_pref.substitute(propty=pv_info["Mon"])
+        led = PyDMLed(self, init_channel=pvname)
+        led.setMaximumWidth(50)
+        motion_lay.addWidget(led)
+
+        lay.addLayout(motion_lay, row, 1, alignment=Qt.AlignLeft)
 
     def _createPolarization(self, pv_info, lay, row):
 
@@ -137,9 +148,10 @@ class DELTAControlWindow(IDCommonControlWindow, DELTAControlWindowUtils):
         cb = SiriusEnumComboBox(self, init_channel=pvname)
         cb.setMinimumWidth(50)
         lay.addWidget(cb, row, 1, 1, 1)
+        lay.setContentsMargins(0, 0, 0, 0)
 
         col = 2
-        for key in ["SP_RB", "RB"]:
+        for key in ["RB", "Mon"]:
             pvname = self.dev_pref.substitute(propty=pv_info[key])
             lbl = SiriusLabel(self, init_channel=pvname)
             lbl.setMinimumWidth(125)
@@ -150,21 +162,20 @@ class DELTAControlWindow(IDCommonControlWindow, DELTAControlWindowUtils):
 
     def _mainControlsWidget(self):
         group = QGroupBox('Main Controls')
-        group.setContentsMargins(2, 2, 2, 2)
         lay = QGridLayout()
-        lay.setSpacing(2)
         group.setLayout(lay)
 
         row = 0
         for title, pv_info in self.MAIN_CONTROL_PVS.items():
-            label = QLabel(title)
+            label = QLabel(
+                title, self, alignment=Qt.AlignRight | Qt.AlignVCenter)
             label.setFixedWidth(150)
-            lay.addWidget(label, row, 0, 1, 1)
+            lay.addWidget(label, row, 0)
 
             if title == "Motion":
                 self._createMotion(pv_info, lay, row)
-            elif title == "Shift":
-                self._createShift(pv_info, lay, row)
+            elif title in ["KParam", "PParam", "KParam Speed", "PParam Speed"]:
+                self._createParam(pv_info, lay, row)
             elif title == "Polarization":
                 self._createPolarization(pv_info, lay, row)
             elif isinstance(pv_info, str):
@@ -188,11 +199,11 @@ class DELTAControlWindow(IDCommonControlWindow, DELTAControlWindowUtils):
         btn.setObjectName('sts')
         btn.setStyleSheet(
             '#sts{min-width:25px; max-width:25px; icon-size:20px;}')
-        pvname = self.dev_pref.substitute(propty=pv_tuple[1])
-        pvname_labels = self.dev_pref.substitute(propty=pv_tuple[2])
+        pvname = self.dev_pref.substitute(propty=pv_tuple[0])
+        pvname_labels = self.dev_pref.substitute(propty=pv_tuple[1])
 
         try:
-            labels = caget(pvname_labels)
+            labels = caget(pvname_labels, timeout=1)
             connect_window(
                 btn, StatusDetailDialog, self, pvname=pvname, labels=list(labels),
                 section="ID")
@@ -201,36 +212,36 @@ class DELTAControlWindow(IDCommonControlWindow, DELTAControlWindowUtils):
         return btn
 
     def _createStatusWidget(self, title, pv_suffix):
+        pv_tuple = tuple()
         wid = QWidget()
-        wid.setContentsMargins(0, 0, 0, 0)
         lay = QHBoxLayout()
+        lay.setContentsMargins(0, 0, 0, 0)
         wid.setLayout(lay)
 
-        label = QLabel(title)
-        label.setFixedWidth(150)
+        label = QLabel(title, self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         lay.addWidget(label)
 
         if isinstance(pv_suffix, tuple):
-            detailed_btn = self._createDetailedLedBtn(pv_suffix)
-            lay.addWidget(detailed_btn)
+            pv_tuple = (pv_suffix[1], pv_suffix[2])
             pv_suffix = pv_suffix[0]
 
         pvname = self.dev_pref.substitute(propty=pv_suffix)
         led = SiriusLedAlert(init_channel=pvname)
-        led.setFixedWidth(100)
-        lay.addWidget(led)
+        lay.addWidget(led, alignment=Qt.AlignLeft)
+
+        if pv_tuple:
+            detailed_btn = self._createDetailedLedBtn(pv_tuple)
+            lay.addWidget(detailed_btn, alignment=Qt.AlignLeft)
 
         return wid
 
     def _createLogWidget(self, title, pv_suffix):
         wid = QWidget()
-        wid.setContentsMargins(0, 0, 0, 0)
         lay = QVBoxLayout()
-        lay.setSpacing(0)
+        lay.setContentsMargins(0, 0, 0, 0)
         wid.setLayout(lay)
 
-        label = QLabel(title)
-        label.setFixedWidth(100)
+        label = QLabel(title, self)
         lay.addWidget(label)
 
         pvname = self.dev_pref.substitute(propty=pv_suffix)
@@ -241,9 +252,7 @@ class DELTAControlWindow(IDCommonControlWindow, DELTAControlWindowUtils):
 
     def _createStatusGroup(self, title, pvs):
         group = QGroupBox()
-        group.setContentsMargins(2, 2, 2, 2)
         lay = QVBoxLayout()
-        lay.setSpacing(2)
         group.setLayout(lay)
         group.setTitle(title)
 
@@ -277,13 +286,12 @@ class DELTAControlWindow(IDCommonControlWindow, DELTAControlWindowUtils):
     def _createHeaders(self, pv_info, lay, row):
         col = 1
         for header_lbl in pv_info:
-            lbl = QLabel(header_lbl)
-            lbl.setMaximumHeight(30)
-            lbl.setAlignment(Qt.AlignCenter)
+            lbl = QLabel(header_lbl, self, alignment=Qt.AlignCenter)
+            lbl.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
             lay.addWidget(lbl, row, col, 1, 2)
             col += 2
 
-    def _createVelAcc(self, pv_info, lay, row):
+    def _createAccTol(self, pv_info, lay, row):
         col = 1
         for enum in range(0, 2):
             pvname = self.dev_pref.substitute(propty=pv_info[enum*2])
@@ -292,7 +300,6 @@ class DELTAControlWindow(IDCommonControlWindow, DELTAControlWindowUtils):
 
             pvname = self.dev_pref.substitute(propty=pv_info[(enum*2)+1])
             lbl = SiriusLabel(self, init_channel=pvname)
-            lbl.setMinimumWidth(125)
             lbl.showUnits = True
             lbl.setAlignment(Qt.AlignCenter)
             lay.addWidget(lbl, row, col+1, 1, 1)
@@ -301,23 +308,23 @@ class DELTAControlWindow(IDCommonControlWindow, DELTAControlWindowUtils):
     def _auxCommandsWidget(self):
         group = QGroupBox('Auxiliary Controls')
         lay = QGridLayout()
-        lay.setSpacing(2)
         group.setLayout(lay)
 
         row = 0
         for title, pv_info in self.AUX_CONTROL_PVS.items():
             if "Header" not in title:
-                label = QLabel(title)
-                label.setFixedWidth(150)
-                lay.addWidget(label, row, 0, 1, 1)
+                label = QLabel(
+                    title, self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+                lay.addWidget(label, row, 0)
 
-            if title in ["Abort", "Start Parking"]:
+            if title in ["Max. Speed", "Max. Acc."]:
+                self._createParam(pv_info, lay, row)
+            elif title in ["Abort", "Start Parking"]:
                 self._createIconBtns(pv_info, lay, row)
             elif "Header" in title:
                 self._createHeaders(pv_info, lay, row)
             else:
-                self._createVelAcc(pv_info, lay, row)
-                row += 1
+                self._createAccTol(pv_info, lay, row)
             row += 1
 
         return group
@@ -328,14 +335,13 @@ class DELTAControlWindow(IDCommonControlWindow, DELTAControlWindowUtils):
         lay_ctrlmode.setAlignment(Qt.AlignCenter)
 
         label = QLabel("Is Remote")
-        label.setFixedWidth(100)
-        lay_ctrlmode.addWidget(label)
+        lay_ctrlmode.addWidget(label, alignment=Qt.AlignRight)
 
         self._led_ctrlmode = PyDMLed(
             self, self.dev_pref.substitute(propty='IsRemote-Mon'))
         self._led_ctrlmode.offColor = PyDMLed.Red
         self._led_ctrlmode.onColor = PyDMLed.LightGreen
-        lay_ctrlmode.addWidget(self._led_ctrlmode)
+        lay_ctrlmode.addWidget(self._led_ctrlmode, alignment=Qt.AlignLeft)
 
         return gbox_ctrlmode
 
@@ -346,8 +352,8 @@ class DELTASummaryBase(IDCommonSummaryBase):
     MODEL_WIDTHS = (
         ('Alarms', 4),
         ('Interlock', 4),
-        ('Shift', 6),
-        ('Shift Speed', 6),
+        ('KParam', 6),
+        ('KParam Speed', 6),
         ('Start', 4),
         ('Stop', 4),
     )
@@ -370,23 +376,23 @@ class DELTASummaryWidget(IDCommonSummaryWidget, DELTASummaryBase):
             led = SiriusLedAlert(
                 self, self.dev_pref.substitute(propty='Intlk-Mon'))
             wids.append(led)
-        elif prop == 'Shift':
+        elif prop == 'KParam':
             spb = SiriusSpinbox(
-                self, self.dev_pref.substitute(propty='Shift-SP'))
+                self, self.dev_pref.substitute(propty='KParam-SP'))
             wids.append(spb)
             lbl = SiriusLabel(
-                self, self.dev_pref.substitute(propty='Shift-Mon'))
+                self, self.dev_pref.substitute(propty='KParam-Mon'))
             wids.append(lbl)
-        elif prop == 'Shift Speed':
+        elif prop == 'KParam Speed':
             spb = SiriusSpinbox(
-                self, self.dev_pref.substitute(propty='GainModeVelo-SP'))
+                self, self.dev_pref.substitute(propty='KParamVelo-SP'))
             wids.append(spb)
             lbl = SiriusLabel(
-                self, self.dev_pref.substitute(propty='GainModeVelo-Mon'))
+                self, self.dev_pref.substitute(propty='KParamVelo-Mon'))
             wids.append(lbl)
         elif prop == 'Start':
             btn = PyDMPushButton(self, label='', icon=qta.icon('fa5s.play'))
-            btn.channel = self.dev_pref.substitute(propty='ChangeGain-Cmd')
+            btn.channel = self.dev_pref.substitute(propty='ChangeKParam-Cmd')
             btn.pressValue = 1
             btn.setObjectName('Start')
             btn.setStyleSheet(
