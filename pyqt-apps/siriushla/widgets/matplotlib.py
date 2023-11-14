@@ -47,7 +47,7 @@ class MatplotlibCanvas(FigureCanvas):
 class MatplotlibWidget(QWidget):
     """MatplotlibWidget class."""
 
-    def __init__(self, figure=None, parent=None, toolbar_position='bottom'):
+    def __init__(self, parent=None, figure=None, toolbar_position='bottom'):
         """."""
         super().__init__(parent)
         self.setLayout(QVBoxLayout())

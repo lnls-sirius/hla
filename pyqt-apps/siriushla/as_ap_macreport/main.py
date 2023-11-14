@@ -554,7 +554,7 @@ class MacReportWindow(SiriusMainWindow):
             str(self._macreport.time_stop) + ')')
         dialog.setWindowIcon(self.windowIcon())
         fig = self._macreport.plot_raw_data()
-        wid = MatplotlibWidget(fig)
+        wid = MatplotlibWidget(figure=fig)
         lay = QGridLayout(dialog)
         lay.addWidget(wid)
         dialog.exec_()
@@ -566,7 +566,7 @@ class MacReportWindow(SiriusMainWindow):
             str(self._macreport.time_start) + ' -> ' +
             str(self._macreport.time_stop) + ')')
         fig = self._macreport.plot_progmd_vs_delivd_hours()
-        wid = MatplotlibWidget(fig)
+        wid = MatplotlibWidget(figure=fig)
         lay = QGridLayout(dialog)
         lay.addWidget(wid)
         dialog.exec_()

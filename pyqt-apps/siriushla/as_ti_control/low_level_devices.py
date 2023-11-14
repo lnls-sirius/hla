@@ -6,7 +6,7 @@ from qtpy.QtCore import Qt, Slot
 from qtpy.QtGui import QColor, QBrush
 from qtpy.QtWidgets import QLabel, QPushButton, QGroupBox, QVBoxLayout, \
     QHBoxLayout, QGridLayout, QMenuBar, QSplitter, QTabWidget, QWidget, \
-    QSizePolicy as QSzPol, QCheckBox, QFrame, QAbstractItemView, QHeaderView
+    QSizePolicy as QSzPol, QCheckBox, QFrame
 import qtawesome as qta
 from pydm.widgets import PyDMLineEdit, PyDMPushButton
 
@@ -16,7 +16,7 @@ from siriuspy.timesys import csdev as _cstime
 
 from ..widgets import PyDMLed, PyDMStateButton, SiriusLedState, \
     SiriusEnumComboBox, SiriusLedAlert, SiriusLabel, \
-    SiriusSpinbox, SiriusConnectionSignal, SiriusWaveformTable, \
+    SiriusSpinbox, SiriusConnectionSignal, \
     SiriusPushButton, SiriusWaveformPlot
 from ..widgets.windows import create_window_from_widget, SiriusDialog
 from ..util import connect_window, get_appropriate_color
@@ -329,7 +329,7 @@ class EVG(BaseWidget):
         except KeyError:
             conn = set()
         for i in range(8):
-            pvname = self.get_pvname(propty='Los-Mon')
+            pvname = self.get_pvname(propty='DownlinkStatus-Mon')
             if i in conn:
                 rb = SiriusLedAlert(self, init_channel=pvname, bit=i)
             else:
@@ -349,6 +349,11 @@ class EVG(BaseWidget):
             icon-size:20px;}')
         but.clicked.connect(self._open_downconn_dialog)
         wids.append(but)
+        pvname = self.get_pvname(propty='RxLockedLtcRst-Cmd')
+        pbt = SiriusPushButton(
+            self, init_channel=pvname, pressValue=1, label='',
+            icon=qta.icon('fa5s.sync'))
+        wids.append(pbt)
         gb = self._create_small_group(
             'Down Connection', self.status_wid, wids, align_ver=False)
         status_layout.addWidget(gb, 3, 0, 1, 3)
@@ -513,8 +518,8 @@ class EVG(BaseWidget):
             sp.setStyleSheet(
                 'PyDMStateButton{min-height: 0.98em; max-height: 0.98em;}')
 
-            pvrb = self.get_pvname('IntlkTbl'+bitg+'-Sts')
-            rb = SiriusLedState(self, pvrb, bit=biti)
+            pvrb = pvsp.substitute(propty_suffix='Sts')
+            rb = SiriusLedState(self, pvrb)
             rb.setStyleSheet(
                 'SiriusLedState{min-width: 0.98em; max-width: 0.98em;}')
 
@@ -562,38 +567,32 @@ class EVG(BaseWidget):
         dialog.setWindowIcon(self.windowIcon())
         lay = QVBoxLayout(dialog)
 
-        gbox = QGroupBox('Timestamp', self)
-        lay.addWidget(gbox)
-        lay_box = QGridLayout(gbox)
-        lay_box.setHorizontalSpacing(30)
+        gbox_tim = QGroupBox('Timestamp', self)
+        lay.addWidget(gbox_tim)
 
         lb = QLabel('<b>Get UTC</b>')
         pvname = self.get_pvname('GetUTC-Cmd')
         sp = PyDMPushButton(
             self, label='Get UTC', init_channel=pvname,
             pressValue=1)  # ?
-        gb = self._create_small_group('', gbox, (lb, sp))
-        lay_box.addWidget(gb, 0, 0, alignment=Qt.AlignTop)
+        gb_getutc = self._create_small_group('', gbox_tim, (lb, sp))
 
         lb = QLabel("<b>Mismatch</b>")
         pvname = self.get_pvname(propty='UTCMismatch-Mon')
         rb = SiriusLedAlert(self, init_channel=pvname)
-        gb = self._create_small_group('', gbox, (lb, rb))
-        lay_box.addWidget(gb, 0, 1, alignment=Qt.AlignTop)
+        gb_utcmis = self._create_small_group('', gbox_tim, (lb, rb))
 
         lb = QLabel("<b>UTC Source</b>")
         pvname = self.get_pvname(propty='UTCRefSrc-Sel')
         sp = SiriusEnumComboBox(self, init_channel=pvname)
-        gb = self._create_small_group('', gbox, (lb, sp))
-        lay_box.addWidget(gb, 1, 0, alignment=Qt.AlignTop)
+        gb_utcsrc = self._create_small_group('', gbox_tim, (lb, sp))
 
         lb = QLabel("<b>PPS Source</b>")
         pvname = self.get_pvname(propty='TimestampSrc-Sel')
         sp = SiriusEnumComboBox(self, init_channel=pvname)
         pvname = self.get_pvname(propty='TimestampSrc-Sts')
         rb = SiriusLabel(self, init_channel=pvname)
-        gb = self._create_small_group('', gbox, (lb, sp, rb))
-        lay_box.addWidget(gb, 1, 1, alignment=Qt.AlignTop)
+        gb_ppssrc = self._create_small_group('', gbox_tim, (lb, sp, rb))
 
         lb = QLabel("<b>UTC</b>")
         pvname = self.get_pvname(propty='UTC-SP')
@@ -601,20 +600,167 @@ class EVG(BaseWidget):
         pvname = self.get_pvname(propty='UTC-RB')
         rb = SiriusLabel(self, init_channel=pvname)
         rb.showUnits = True
-        gb = self._create_small_group('', gbox, (lb, sp, rb))
-        lay_box.addWidget(gb, 2, 0, alignment=Qt.AlignTop)
+        gb_utc = self._create_small_group('', gbox_tim, (lb, sp, rb))
 
         lb = QLabel('<b>Subsec</b>')
         mon = SiriusLabel(self, self.get_pvname('SubSecond-Mon'))
         mon.showUnits = True
-        gb = self._create_small_group('', gbox, (lb, mon))
-        lay_box.addWidget(gb, 2, 1, alignment=Qt.AlignTop)
+        gb_subsec = self._create_small_group('', gbox_tim, (lb, mon))
 
         lb = QLabel('<b>Control Room UTC</b>')
         mon = SiriusLabel(self, self.get_pvname('CtrlRoomUTC'))
         mon.showUnits = True
-        gb = self._create_small_group('', gbox, (lb, mon))
-        lay_box.addWidget(gb, 3, 0, alignment=Qt.AlignTop)
+        gb_ctrlutc = self._create_small_group('', gbox_tim, (lb, mon))
+
+        lay_tim = QGridLayout(gbox_tim)
+        lay_tim.setHorizontalSpacing(30)
+        lay_tim.addWidget(gb_getutc, 0, 0)
+        lay_tim.addWidget(gb_utcmis, 0, 1)
+        lay_tim.addWidget(gb_utcsrc, 0, 2)
+        lay_tim.addWidget(gb_ppssrc, 0, 3)
+        lay_tim.addWidget(gb_utc, 1, 0)
+        lay_tim.addWidget(gb_subsec, 1, 1)
+        lay_tim.addWidget(gb_ctrlutc, 1, 2)
+
+        # Timestamp Log enable
+        gbox_enbl = QGroupBox('Timestamp Log Enable', self)
+        lay.addWidget(gbox_enbl)
+
+        lay_enbl = QGridLayout(gbox_enbl)
+        lay_enbl.setHorizontalSpacing(15)
+        for bit in range(8):
+            bitname = 'Out' if bit == 7 else f'In{bit}'
+            lb = QLabel(f'Evt{bitname}', self, alignment=Qt.AlignCenter)
+            pvsp = self.get_pvname('IntlkLogEnbl-SP', field=f'B{bit}')
+            sp = PyDMStateButton(self, pvsp)
+            sp.setStyleSheet(
+                'PyDMStateButton{min-height: 0.98em; max-height: 0.98em;}')
+            pvrb = pvsp.substitute(propty_suffix='RB')
+            rb = SiriusLedState(self, pvrb)
+            rb.setStyleSheet(
+                'SiriusLedState{min-width: 0.98em; max-width: 0.98em;}')
+            gb = self._create_small_group(
+                '', gbox_enbl, (lb, sp, rb), align_ver=True)
+            gb.layout().setSpacing(3)
+            gb.layout().setContentsMargins(3, 1, 3, 1)
+            gb.setSizePolicy(QSzPol.Preferred, QSzPol.Maximum)
+            lay_enbl.addWidget(gb, 0, bit)
+
+        # Timestamp Log
+        gbox_log = QGroupBox('Timestamp Log', self)
+        lay.addWidget(gbox_log)
+
+        ld_logstp = QLabel('<b>Stop Log</b>', self)
+        self.sb_logstp = PyDMStateButton(self, self.get_pvname('stoplog'))
+        self.led_logstp = SiriusLedState(self, self.get_pvname('STOPLOGRBV'))
+        gb_logstp = self._create_small_group(
+            '', gbox_log, (ld_logstp, self.sb_logstp, self.led_logstp))
+
+        ld_logrst = QLabel('<b>Reset Log</b>', self)
+        self.sb_logrst = PyDMStateButton(self, self.get_pvname('rstlog'))
+        self.led_logrst = SiriusLedState(self, self.get_pvname('RSTLOGRBV'))
+        gb_logrst = self._create_small_group(
+            '', gbox_log, (ld_logrst, self.sb_logrst, self.led_logrst))
+
+        ld_logpul = QLabel('<b>Pull</b>', self)
+        self.bt_logpul = SiriusPushButton(
+            parent=self, init_channel=self.get_pvname('pull'),
+            pressValue=1, releaseValue=0)  # ?
+        self.bt_logpul.setIcon(qta.icon('fa5s.arrow-down'))
+        self.bt_logpul.setObjectName('bt')
+        self.bt_logpul.setStyleSheet(
+            '#bt{min-width:25px; max-width:25px; icon-size:20px;}')
+        gb_logpul = self._create_small_group(
+            '', gbox_log, (ld_logpul, self.bt_logpul))
+
+        ld_logcnt = QLabel('<b>Log Count</b>', self, alignment=Qt.AlignCenter)
+        self.lb_logcnt = SiriusLabel(self, self.get_pvname('LOGCOUNT'))
+        self.lb_logcnt.showUnits = True
+        self.lb_logcnt.setAlignment(Qt.AlignCenter)
+        ld_logful = QLabel('Full', self)
+        self.led_logful = SiriusLedState(self, self.get_pvname('FULL'))
+        ld_logemp = QLabel('Empty', self)
+        self.led_logemp = SiriusLedState(self, self.get_pvname('EMPTY'))
+        fr_logcnt = QFrame(gbox_log)
+        fr_logcnt.setStyleSheet('.QFrame{border: 1px solid gray;}')
+        lay_logcnt = QGridLayout(fr_logcnt)
+        lay_logcnt.setAlignment(Qt.AlignCenter)
+        lay_logcnt.setContentsMargins(0, 0, 0, 0)
+        lay_logcnt.addWidget(ld_logcnt, 0, 0, 1, 4)
+        lay_logcnt.addWidget(self.lb_logcnt, 1, 0, 1, 4)
+        lay_logcnt.addWidget(ld_logful, 2, 0, alignment=Qt.AlignRight)
+        lay_logcnt.addWidget(self.led_logful, 2, 1, alignment=Qt.AlignTop)
+        lay_logcnt.addWidget(ld_logemp, 2, 2, alignment=Qt.AlignRight)
+        lay_logcnt.addWidget(self.led_logemp, 2, 3, alignment=Qt.AlignTop)
+
+        ld_logevt = QLabel('<b>Event</b>', self)
+        self.lb_logevt = SiriusLabel(self, self.get_pvname('LOGEVENT'))
+        gb_logevt = self._create_small_group(
+            '', gbox_log, (ld_logevt, self.lb_logevt))
+
+        ld_logutc = QLabel('<b>Log UTC</b>', self)
+        self.lb_logutc = SiriusLabel(self, self.get_pvname('LOGUTC'))
+        self.lb_logutc.showUnits = True
+        gb_logutc = self._create_small_group(
+            '', gbox_log, (ld_logutc, self.lb_logutc))
+
+        ld_logsub = QLabel('<b>Log Subsec</b>', self)
+        self.lb_logsub = SiriusLabel(self, self.get_pvname('LOGSUBSEC'))
+        self.lb_logsub.showUnits = True
+        gb_logsub = self._create_small_group(
+            '', gbox_log, (ld_logsub, self.lb_logsub))
+
+        lay_log = QGridLayout(gbox_log)
+        lay_log.addWidget(gb_logstp, 0, 0, alignment=Qt.AlignTop)
+        lay_log.addWidget(gb_logrst, 0, 1, alignment=Qt.AlignTop)
+        lay_log.addWidget(gb_logpul, 0, 2, alignment=Qt.AlignTop)
+        lay_log.addWidget(gb_logevt, 1, 0, alignment=Qt.AlignTop)
+        lay_log.addWidget(gb_logutc, 1, 1, alignment=Qt.AlignTop)
+        lay_log.addWidget(gb_logsub, 1, 2, alignment=Qt.AlignTop)
+        lay_log.addWidget(fr_logcnt, 0, 3, 2, 1, alignment=Qt.AlignCenter)
+
+        # Timestamp Log Buffer
+        gbox_buf = QGroupBox('Timestamp Log Buffer', self)
+        lay.addWidget(gbox_buf)
+
+        ld_bufcnt = QLabel('<b>Log Count</b>', self)
+        self.lb_bufcnt = SiriusLabel(self, self.get_pvname('LOGSOFTCNT'))
+        self.lb_bufcnt.showUnits = True
+        gb_bufcnt = self._create_small_group(
+            '', gbox_buf, (ld_bufcnt, self.lb_bufcnt))
+
+        ld_bufrst = QLabel('<b>Reset</b>', self)
+        self.bt_bufrst = SiriusPushButton(
+            parent=self, init_channel=self.get_pvname('rstSoftBuff'),
+            pressValue=1, releaseValue=0)  # ?
+        self.bt_bufrst.setIcon(qta.icon('fa5s.sync'))
+        self.bt_bufrst.setObjectName('bt')
+        self.bt_bufrst.setStyleSheet(
+            '#bt{min-width:25px; max-width:25px; icon-size:20px;}')
+        gb_bufrst = self._create_small_group(
+            '', gbox_buf, (ld_bufrst, self.bt_bufrst))
+
+        ld_bufutc = QLabel('<b>UTC buffer</b>', self)
+        self.tb_bufutc = self._create_logbuffer_table('UTCbuffer')
+        gb_bufutc = self._create_small_group(
+            '', gbox_buf, (ld_bufutc, self.tb_bufutc))
+
+        ld_bufsub = QLabel('<b>Subsec buffer</b>', self)
+        self.tb_bufsub = self._create_logbuffer_table('SUBSECbuffer')
+        gb_bufsub = self._create_small_group(
+            '', gbox_buf, (ld_bufsub, self.tb_bufsub))
+
+        ld_bufevt = QLabel('<b>Event buffer</b>', self)
+        self.tb_bufevt = self._create_logbuffer_table('EVENTbuffer')
+        gb_bufevt = self._create_small_group(
+            '', gbox_buf, (ld_bufevt, self.tb_bufevt))
+
+        lay_logbuf = QGridLayout(gbox_buf)
+        lay_logbuf.addWidget(gb_bufcnt, 0, 0, 1, 3)
+        lay_logbuf.addWidget(gb_bufrst, 0, 3, 1, 3)
+        lay_logbuf.addWidget(gb_bufutc, 1, 0, 1, 2)
+        lay_logbuf.addWidget(gb_bufsub, 1, 2, 1, 2)
+        lay_logbuf.addWidget(gb_bufevt, 1, 4, 1, 2)
 
         return dialog
 
@@ -1170,7 +1316,7 @@ class FOUT(BaseWidget):
         except KeyError:
             conn = set()
         for i in range(8):
-            pvname = self.get_pvname(propty='Los-Mon')
+            pvname = self.get_pvname(propty='DownlinkStatus-Mon')
             if i in conn:
                 rb = SiriusLedAlert(self, init_channel=pvname, bit=i)
             else:
@@ -1190,6 +1336,11 @@ class FOUT(BaseWidget):
             icon-size:20px;}')
         but.clicked.connect(self._open_downconn_dialog)
         wids.append(but)
+        pvname = self.get_pvname(propty='RxLockedLtcRst-Cmd')
+        pbt = SiriusPushButton(
+            self, init_channel=pvname, pressValue=1, label='',
+            icon=qta.icon('fa5s.sync'))
+        wids.append(pbt)
         gb = self._create_small_group(
             'Down Connection', status_wid, wids, align_ver=False)
         gb.layout().setContentsMargins(6, 6, 0, 6)
@@ -1330,7 +1481,7 @@ class AFC(BaseWidget):
 
         props = {
             'name', 'state', 'event', 'source', 'width', 'polarity', 'pulses',
-            'delay', 'timestamp'}
+            'delay', 'evtcnt', 'evtcntrst', 'hl_trigger'}
         set_ = LLTimeSearch.In2OutMap['AMCFPGAEVR']['SFP8']
 
         obj_names = sorted([out for out in set_ if out.startswith('FMC')])
@@ -1550,6 +1701,16 @@ class AFC(BaseWidget):
             self, self.get_pvname(propty=subdev+'Freq-RB'), keep_unit=True)
         ld_freqrb.setObjectName('freq')
         ld_freqrb.showUnits = True
+        pb_clkrst = SiriusPushButton(
+            self, init_channel=self.get_pvname(propty='RTMClkRst-Cmd'),
+            pressValue=1, label='', icon=qta.icon('fa5s.sync'))
+        pb_clkrst.setDefault(False)
+        pb_clkrst.setAutoDefault(False)
+        pb_clkrst.setObjectName('pb')
+        pb_clkrst.setStyleSheet(
+            '#pb{min-width:25px; max-width:25px;\
+            min-height:25px; max-height:25px;\
+            icon-size:20px;}')
 
         lay_sett1 = QGridLayout()
         lay_sett1.setHorizontalSpacing(30)
@@ -1594,6 +1755,7 @@ class AFC(BaseWidget):
         lay_eq.addWidget(ld_freqdsc, 0, 2)
         lay_eq.addWidget(ld_freqsp, 1, 2)
         lay_eq.addWidget(ld_freqrb, 2, 2)
+        lay_eq.addWidget(pb_clkrst, 1, 3)
 
         lay = QGridLayout(gbox)
         lay.setHorizontalSpacing(30)
@@ -1658,7 +1820,7 @@ class _EVR_EVE(BaseWidget):
 
         props = {
             'name', 'state', 'event', 'widthraw', 'polarity', 'pulses',
-            'delayraw', 'timestamp'}
+            'delayraw', 'evtcnt', 'evtcntrst', 'hl_trigger'}
         obj_names = ['OTP{0:02d}'.format(i) for i in range(24)]
         obj_names = [self.device.substitute(propty=o) for o in obj_names]
         self.otps_wid = EVREVEOTPList(
@@ -1669,7 +1831,7 @@ class _EVR_EVE(BaseWidget):
 
         props = {
             'name', 'source', 'trigger', 'rf_delayraw', 'rf_delay_type',
-            'fine_delayraw'}
+            'fine_delayraw', 'hl_trigger'}
         obj_names = ['OUT{0:d}'.format(i) for i in range(8)]
         obj_names = [self.device.substitute(propty=o) for o in obj_names]
         self.outs_wid = EVREVEOUTList(
@@ -2013,9 +2175,13 @@ class _EVR_EVE(BaseWidget):
         lay_timlog.addWidget(gbox_buf)
 
         # Digital Inputs
-        obj_names = [self.device.substitute(idx=str(i)) for i in range(3)]
+        obj_names = [
+            self.device.substitute(propty=f'DIN{i:d}') for i in range(3)]
+        props = set(EVREVEDIList._ALL_PROPS)
+        props.discard('device')
         self.dis_wid = EVREVEDIList(
-            name='', parent=self, prefix=self.prefix, obj_names=obj_names)
+            name='', parent=self, prefix=self.prefix, obj_names=obj_names,
+            props=props)
         self.dis_wid.setObjectName('dis_wid')
 
         # tab and layout
@@ -2028,21 +2194,6 @@ class _EVR_EVE(BaseWidget):
         lay.addWidget(tab)
 
         return dialog
-
-    def _create_logbuffer_table(self, prop):
-        table = SiriusWaveformTable(self, self.get_pvname(prop))
-        table.setObjectName('tb')
-        table.setEnabled(False)
-        table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-        table.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        table.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
-        table.horizontalHeader().setVisible(False)
-        table.setStyleSheet(
-            '#tb{min-width:6em; max-width:12em; max-height: 16em;}')
-        table.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        table.setColumnCount(1)
-        table.setSizePolicy(QSzPol.MinimumExpanding, QSzPol.Preferred)
-        return table
 
     def _open_detail_dialog(self):
         if not hasattr(self, 'detail_wind'):
@@ -2079,6 +2230,9 @@ class EVGFOUTOUTList(BaseList):
         'tripdelay': 4.8,
         'position': 4.8,
         'outdelay': 4.8,
+        'rxlocked': 4.8,
+        'rxlockedltc': 8,
+        'downlinksts': 6,
         'rxenbl': 4,
         'connection': 12,
     }
@@ -2088,11 +2242,15 @@ class EVGFOUTOUTList(BaseList):
         'tripdelay': 'TripDelay',
         'position': 'Position',
         'outdelay': 'OutDelay',
+        'rxlocked': 'RX Locked',
+        'rxlockedltc': 'RX Locked Lacth',
+        'downlinksts': 'Downlink',
         'rxenbl': 'RX Enbl',
         'connection': 'Connection',
     }
     _ALL_PROPS = ('name', 'connected', 'tripdelay', 'position',
-                  'outdelay', 'rxenbl', 'connection')
+                  'outdelay', 'rxlocked', 'rxlockedltc',
+                  'downlinksts', 'rxenbl', 'connection')
 
     def __init__(self, **kwargs):
         srch = set(('name', 'connection'))
@@ -2140,6 +2298,20 @@ class EVGFOUTOUTList(BaseList):
             pvname = device.substitute(propty='OUT'+str(idx)+'FramePos-Mon')
             sp = SiriusLabel(self, pvname)
             sp.setAlignment(Qt.AlignCenter)
+        elif prop == 'rxlocked':
+            pvname = device.substitute(propty='RxLocked-Mon')
+            sp = SiriusLedState(self, init_channel=pvname, bit=idx)
+        elif prop == 'rxlockedltc':
+            pvname = device.substitute(propty='RxLockedLtc-Mon')
+            sp = SiriusLedState(self, init_channel=pvname, bit=idx)
+        elif prop == 'downlinksts':
+            pvname = device.substitute(propty='DownlinkStatus-Mon')
+            if idx in conn_idcs:
+                sp = SiriusLedAlert(self, init_channel=pvname, bit=idx)
+            else:
+                sp = SiriusLedState(self, init_channel=pvname, bit=idx)
+                sp.onColor = sp.DarkGreen
+                sp.offColor = sp.LightGreen
         elif prop == 'outdelay':
             pvname = device.substitute(propty='OUT'+str(idx)+'Delay-SP')
             sp = SiriusSpinbox(self, pvname)
@@ -2186,7 +2358,7 @@ class LLTriggerList(BaseList):
         'pulses': 4.8,
         'delayraw': 4.8,
         'delay': 4.8,
-        'timestamp': 3.2,
+        'log': 3.2,
         'source': 6.5,
         'trigger': 4,
         'rf_delayraw': 4.8,
@@ -2210,7 +2382,7 @@ class LLTriggerList(BaseList):
         'pulses': 'Nr Pulses',
         'delayraw': 'Delay',
         'delay': 'Delay [us]',
-        'timestamp': 'Log',
+        'log': 'Log',
         'source': 'Source',
         'trigger': 'Trigger',
         'rf_delayraw': 'RF Delay',
@@ -2225,7 +2397,7 @@ class LLTriggerList(BaseList):
         }
     _ALL_PROPS = (
         'device', 'name', 'state', 'event', 'widthraw', 'width',
-        'polarity', 'pulses', 'delayraw', 'delay', 'timestamp', 'source',
+        'polarity', 'pulses', 'delayraw', 'delay', 'log', 'source',
         'trigger', 'rf_delayraw', 'rf_delay', 'rf_delay_type', 'fine_delayraw',
         'fine_delay', 'hl_trigger', 'dir', 'evtcnt', 'evtcntrst')
 
@@ -2320,7 +2492,7 @@ class LLTriggerList(BaseList):
             pvname = intlb.substitute(propty=intlb.propty+'Delay-RB')
             rb = SiriusLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
-        elif prop == 'timestamp':
+        elif prop == 'log':
             pvname = intlb.substitute(propty=intlb.propty+'Log-Sel')
             sp = PyDMStateButton(self, init_channel=pvname)
             pvname = intlb.substitute(propty=intlb.propty+'Log-Sts')
@@ -2395,7 +2567,7 @@ class EVREVEOTPList(LLTriggerList):
 
     _ALL_PROPS = (
         'name', 'state', 'event', 'widthraw', 'width', 'polarity', 'pulses',
-        'delayraw', 'delay', 'evtcnt', 'evtcntrst', 'timestamp', 'hl_trigger')
+        'delayraw', 'delay', 'evtcnt', 'evtcntrst', 'log', 'hl_trigger')
 
 
 class EVREVEOUTList(LLTriggerList):
@@ -2412,7 +2584,7 @@ class AFCOUTList(LLTriggerList):
     _ALL_PROPS = (
         'name', 'state', 'event', 'source', 'widthraw', 'width', 'polarity',
         'pulses', 'delayraw', 'delay', 'dir', 'evtcnt', 'evtcntrst',
-        'timestamp', 'hl_trigger')
+        'log', 'hl_trigger')
 
 
 # ###################### Digital Inputs ######################
@@ -2422,19 +2594,21 @@ class EVREVEDIList(BaseList):
 
     _MIN_WIDs = {
         'name': 3,
+        'device': 14,
         'state': 5.8,
         'polarity': 5,
         'event': 4.8,
-        'timestamp': 3.2,
+        'log': 3.2,
     }
     _LABELS = {
         'name': 'Name',
+        'device': 'Device',
         'state': 'State',
         'polarity': 'Polarity',
         'event': 'Event',
-        'timestamp': 'Log',
+        'log': 'Log',
     }
-    _ALL_PROPS = ('name', 'state', 'polarity', 'event', 'timestamp')
+    _ALL_PROPS = ('device', 'name', 'state', 'polarity', 'event', 'log')
 
     def __init__(self, **kwargs):
         srch = {'name', 'polarity'}
@@ -2442,36 +2616,50 @@ class EVREVEDIList(BaseList):
         super().__init__(**kwargs)
 
     def _createObjs(self, device, prop):
-        di_idx = device.idx
-        device = device.substitute(idx='')
+        di_idx = device.propty[3:]
+        device = device.substitute(propty='')
         sp = rb = None
-        if prop == 'name':
-            sp = QLabel('DI'+di_idx, self)
+        if prop == 'device':
+            devt = device.dev
+            if devt == 'EVR':
+                devt = EVR
+            elif devt == 'EVE':
+                devt = EVE
+            sp = QPushButton(device.device_name, self)
+            sp.setAutoDefault(False)
+            sp.setDefault(False)
+            icon = qta.icon('mdi.timer', color=get_appropriate_color('AS'))
+            Win = create_window_from_widget(
+                devt, title=device.device_name, icon=icon)
+            connect_window(
+                sp, Win, None, device=device.device_name, prefix=self.prefix)
+        elif prop == 'name':
+            sp = QLabel('DIN'+di_idx, self)
             sp.setAlignment(Qt.AlignCenter)
         elif prop == 'state':
-            pvname = device.substitute(propty='DIEnbl'+di_idx+'-Sel')
+            pvname = device.substitute(propty='DIN'+di_idx+'State-Sel')
             sp = PyDMStateButton(self, init_channel=pvname)
-            pvname = device.substitute(propty='DIEnbl'+di_idx+'-Sts')
+            pvname = device.substitute(propty='DIN'+di_idx+'State-Sts')
             rb = PyDMLed(self, init_channel=pvname)
         elif prop == 'polarity':
-            pvname = device.substitute(propty='DIPol'+di_idx+'-Sel')
+            pvname = device.substitute(propty='DIN'+di_idx+'Polarity-Sel')
             sp = SiriusEnumComboBox(self, init_channel=pvname)
-            pvname = device.substitute(propty='DIPol'+di_idx+'-Sts')
+            pvname = device.substitute(propty='DIN'+di_idx+'Polarity-Sts')
             rb = SiriusLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
         elif prop == 'event':
-            pvname = device.substitute(propty='DIEvent'+di_idx+'-SP')
+            pvname = device.substitute(propty='DIN'+di_idx+'Evt-SP')
             sp = SiriusSpinbox(self, init_channel=pvname)
             sp.limitsFromChannel = False
             sp.setMinimum(0)
             sp.setMaximum(255)
-            pvname = device.substitute(propty='DIEvent'+di_idx+'-RB')
+            pvname = device.substitute(propty='DIN'+di_idx+'Evt-RB')
             rb = SiriusLabel(self, init_channel=pvname)
             rb.setAlignment(Qt.AlignCenter)
-        elif prop == 'timestamp':
-            pvname = device.substitute(propty='DILog'+di_idx+'-Sel')
+        elif prop == 'log':
+            pvname = device.substitute(propty='DIN'+di_idx+'Log-Sel')
             sp = PyDMStateButton(self, init_channel=pvname)
-            pvname = device.substitute(propty='DILog'+di_idx+'-Sts')
+            pvname = device.substitute(propty='DIN'+di_idx+'Log-Sts')
             rb = PyDMLed(self, init_channel=pvname)
         if rb is None:
             return (sp, )

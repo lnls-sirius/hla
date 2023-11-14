@@ -280,7 +280,7 @@ class EmittanceMeasure(QWidget):
     def _setupUi(self):
         gl = QGridLayout(self)
         fig = mplt.figure()
-        wid = MatplotlibWidget(fig, parent=self)
+        wid = MatplotlibWidget(parent=self, figure=fig)
         wid.setObjectName('fig_result')
         wid.setStyleSheet('#fig_result{min-width: 25em;}')
         self.fig_res = wid
