@@ -49,7 +49,7 @@ class DELTAControlWindowUtils():
             "RB": "KParamVelo-RB",
         },
         "Change KParam": {
-            "pvname": "KParamChanged-Cmd",
+            "pvname": "KParamChange-Cmd",
             "icon": "fa5s.play"
         },
         "PParam": {
@@ -67,7 +67,7 @@ class DELTAControlWindowUtils():
             "Mon": "Pol-Mon"
         },
         "Change Polarization": {
-            "pvname": "PParamChange-Cmd",
+            "pvname": "PolChange-Cmd",
             "icon": "fa5s.play"
         },
         "Motion": {
@@ -97,8 +97,8 @@ class DELTAControlWindowUtils():
             "PParamAcc-RB", "PParamAcc-SP"
         ),
         "Tolerance": (
-            "KParamTolerance-RB", "KParamTolerance-SP",
-            "PParamTolerance-RB", "PParamTolerance-SP"
+            "PosTol-RB", "PosTol-SP",
+            "PolTol-RB", "PolTol-SP"
         ),
         "Start Parking": {
             "pvname": "StartParking-Cmd",
@@ -118,7 +118,7 @@ class DELTAControlWindow(IDCommonControlWindow, DELTAControlWindowUtils):
 
         col = 2
         for key in ["RB", "Mon"]:
-            if not key in pv_info:
+            if key not in pv_info:
                 continue
             pvname = self.dev_pref.substitute(propty=pv_info[key])
             lbl = SiriusLabel(self, init_channel=pvname)
