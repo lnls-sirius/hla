@@ -21,6 +21,7 @@ class ShapeMap:
     Round = 2
     Square = 3
     Triangle = 4
+    Rectangle = 5
 
 
 class QLed(QFrame, ShapeMap):
@@ -41,7 +42,9 @@ class QLed(QFrame, ShapeMap):
     f.close()
     f = QFile(_os.path.join(abspath, 'resources/led_shapes/square.svg'))
     if f.open(QFile.ReadOnly):
-        shapesdict[ShapeMap.Square] = str(f.readAll(), 'utf-8')
+        shape = str(f.readAll(), 'utf-8')
+        shapesdict[ShapeMap.Square] = shape
+        shapesdict[ShapeMap.Rectangle] = shape
     f.close()
     f = QFile(_os.path.join(abspath, 'resources/led_shapes/triangle.svg'))
     if f.open(QFile.ReadOnly):
@@ -53,6 +56,7 @@ class QLed(QFrame, ShapeMap):
     LightGreen = QColor(0, 140, 0)
     Red = QColor(207, 0, 0)
     DarkRed = QColor(120, 0, 0)
+    Blue = QColor(0, 0, 255)
     Gray = QColor(90, 90, 90)
     SelColor = QColor(0, 0, 0)
     NotSelColor1 = QColor(251, 244, 252)
@@ -149,6 +153,8 @@ class QLed(QFrame, ShapeMap):
             return QSize(48, 36)
         elif self.m_shape == self.ShapeMap.Round:
             return QSize(72, 36)
+        elif self.m_shape == self.ShapeMap.Rectangle:
+            return QSize(36, 72)
         return QSize(36, 36)
 
     def adjust(self, r, g, b):
@@ -183,8 +189,10 @@ class QLed(QFrame, ShapeMap):
 
         h = option.rect.height()
         w = option.rect.width()
-        if self.m_shape in (self.ShapeMap.Triangle, self.ShapeMap.Round):
-            aspect = (4/3.0) if self.m_shape == self.ShapeMap.Triangle else 2.0
+        if self.m_shape in (self.Triangle, self.Round, self.Rectangle):
+            aspect = (4/3.0) if self.m_shape == self.ShapeMap.Triangle \
+                else 2.0 if self.m_shape == self.ShapeMap.Round \
+                else (1/2.0)
             ah = w/aspect
             aw = w
             if ah > h:

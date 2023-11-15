@@ -1,4 +1,4 @@
-"""EPU Control Module."""
+"""PAPU Control Module."""
 
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGroupBox, QGridLayout, QLabel, QFormLayout, \
@@ -272,11 +272,11 @@ class PAPUSummaryBase(IDCommonSummaryBase):
 
 
 class PAPUSummaryHeader(IDCommonSummaryHeader, PAPUSummaryBase):
-    """EPU Summary Header."""
+    """PAPU Summary Header."""
 
 
 class PAPUSummaryWidget(IDCommonSummaryWidget, PAPUSummaryBase):
-    """EPU Summary Widget."""
+    """PAPU Summary Widget."""
 
     def _get_widgets(self, prop):
         wids, orientation = super()._get_widgets(prop)

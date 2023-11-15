@@ -1,15 +1,14 @@
 """BL AP ImgProc."""
 
 from datetime import datetime
-
-from qtpy.QtCore import Qt
+from qtpy.QtCore import Qt, QTimer
 from qtpy.QtWidgets import QWidget, QGridLayout, QHBoxLayout, \
     QVBoxLayout, QGroupBox, QLabel, QSizePolicy, QTabWidget, \
     QPushButton, QScrollArea
 
 import qtawesome as qta
 
-from pydm.widgets import PyDMImageView, PyDMPushButton
+from pydm.widgets import PyDMPushButton
 
 from ..widgets import SiriusEnumComboBox
 from ..widgets.dialog import StatusDetailDialog
@@ -24,7 +23,9 @@ from ..widgets import SiriusLabel, SiriusLedState, \
 
 from .util import PVS_IMGPROC, PVS_DVF, \
     IMG_PVS, LOG_PV, COMBOBOX_PVS, LINEEDIT_PVS, STATEBUT_PVS, \
-    LED_ALERT_PVS, LED_STATE_PVS, LED_DETAIL_PVS
+    LED_ALERT_PVS, LED_STATE_PVS, LED_DETAIL_PVS, INTLK_PVS
+from .image import DVFImageView
+from .blintlkctl import BLIntckCtrl
 
 
 class BLImgProc(QWidget):
@@ -37,12 +38,22 @@ class BLImgProc(QWidget):
         self.prefix = prefix + ('-' if prefix else '')
         self.dvf = dvf
         self.device = self.prefix + self.dvf
+        self.blpps = BLIntckCtrl(self.device)
         self.setWindowTitle(self.device + ' Image Processing Window')
         self.setWindowIcon(
             qta.icon('mdi.camera-metering-center',
                      color=get_appropriate_color('SI')))
         self._lbl_timestamp = {}
         self.timestamp = {}
+        self.img_view = None
+
+        self.loading = QPushButton("")
+        self.open_beamline_btn = None
+        self.enable_gamma_btn = None
+        self.gamma_enabled_conn = None
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.update_bl_open_led)
+
         self._setupUi()
 
     def add_prefixes(self, sufix):
@@ -126,14 +137,7 @@ class BLImgProc(QWidget):
         elif widget_type == 'enumcombo':
             wid = SiriusEnumComboBox(self, init_channel=pvname)
         elif widget_type == 'image':
-            wid = PyDMImageView(
-                image_channel=pvname[0],
-                width_channel=pvname[1])
-            wid.readingOrder = wid.ReadingOrder.Clike
-            wid.getView().getViewBox().setAspectLocked(True)
-            wid.colorMap = wid.Jet
-            wid.maxRedrawRate = 10  # [Hz]
-            wid.normalizeData = True
+            wid = DVFImageView(self.device, pvname)
         elif widget_type == 'time':
             wid = self.create_time_widget(pvname)
             wid.setAlignment(Qt.AlignCenter)
@@ -247,6 +251,102 @@ class BLImgProc(QWidget):
             return sc_area
         return cont_wid
 
+    def toggle_beamline_btns(self, value):
+        if value == 1:
+            state = True
+        else:
+            state = False
+
+        self.end_processing_cmd()
+        self.open_beamline_btn.setEnabled(state)
+
+    def end_processing_cmd(self):
+        self.enable_gamma_btn.setEnabled(True)
+        self.open_beamline_btn.setEnabled(True)
+        self.loading.setVisible(False)
+
+    def start_processing_cmd(self):
+        self.enable_gamma_btn.setEnabled(False)
+        self.open_beamline_btn.setEnabled(False)
+        self.loading.setVisible(True)
+
+    def intlk_cmd(self, cmd):
+        self.start_processing_cmd()
+        if cmd == "enable_gamma":
+            self.blpps.gamma_enable()
+        elif cmd == "open_beamline":
+            self.blpps.beamline_open()
+
+    def _setup_gamma_control_widget(self):
+        wid = QGroupBox()
+        lay = QHBoxLayout()
+        wid.setLayout(lay)
+        wid.setTitle("Gamma")
+        wid.setMaximumHeight(200)
+
+        self.enable_gamma_btn = QPushButton("Enable")
+        self.enable_gamma_btn.clicked.connect(
+            lambda: self.intlk_cmd("enable_gamma"))
+        lay.addWidget(self.enable_gamma_btn)
+
+        pvname = INTLK_PVS["gamma"]
+        widget = SiriusLedState(init_channel=pvname)
+        self.gamma_enabled_conn = SiriusConnectionSignal(pvname)
+        self.gamma_enabled_conn.new_value_signal[int].connect(
+            self.toggle_beamline_btns)
+        lay.addWidget(widget)
+
+        return wid
+
+    def update_bl_open_led(self):
+        if self.pydm_led != None:
+            status_bl = self.blpps.beamline_opened
+            old_val = self.pydm_led.value
+            self.pydm_led.value_changed(status_bl)
+            if old_val != status_bl:
+                self.end_processing_cmd()
+
+    def _setup_enable_beamline_widgets(self):
+        wid = QGroupBox()
+        lay = QHBoxLayout()
+        wid.setLayout(lay)
+        wid.setTitle("Open Beamline")
+        wid.setMaximumHeight(200)
+
+
+        self.open_beamline_btn = QPushButton("Open")
+        self.open_beamline_btn.clicked.connect(
+            lambda: self.intlk_cmd("open_beamline"))
+        lay.addWidget(self.open_beamline_btn)
+
+        self.pydm_led = SiriusLedState()
+        self.pydm_led.stateColors = [
+            self.pydm_led.DarkGreen, self.pydm_led.LightGreen, self.pydm_led.Gray]
+        self.timer.start(1000)
+        lay.addWidget(self.pydm_led)
+
+        return wid
+
+    def _setup_beamline_controls_widgets(self):
+        wid = QGroupBox()
+        lay = QVBoxLayout()
+        wid.setLayout(lay)
+
+        self.loading.setIcon(qta.icon(
+            'fa5s.spinner', animation=qta.Spin(self.loading)))
+        self.loading.setVisible(False)
+        self.loading.setFlat(True)
+        lay.addWidget(self.loading)
+
+        widget = self._setup_gamma_control_widget()
+        lay.setAlignment(Qt.AlignTop)
+        lay.addWidget(widget)
+
+        widget = self._setup_enable_beamline_widgets()
+        lay.addWidget(widget)
+
+        return wid
+
     def _setupUi(self):
         main_lay = QVBoxLayout()
         tab = QTabWidget()
@@ -261,6 +361,8 @@ class BLImgProc(QWidget):
         tab.addTab(imgproc_wid, "DVFImgProc")
         dvf_wid = self._setupTab(PVS_DVF, use_scroll=True)
         tab.addTab(dvf_wid, "DVF")
+        cax_wid = self._setup_beamline_controls_widgets()
+        tab.addTab(cax_wid, "CAX")
 
         main_lay.addWidget(tab)
         self.setLayout(main_lay)

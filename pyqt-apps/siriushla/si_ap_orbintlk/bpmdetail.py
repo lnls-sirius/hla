@@ -12,7 +12,7 @@ from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 from siriuspy.namesys import SiriusPVName
 
 from ..widgets import SiriusMainWindow, SiriusLedState, SiriusLabel, \
-    PyDMStateButton, SiriusLedAlert, SiriusSpinbox
+    PyDMStateButton, SiriusLedAlert, SiriusSpinbox, SiriusLineEdit
 from .base import BaseObject
 
 
@@ -28,7 +28,7 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
         self.device = SiriusPVName(device)
         self.devpref = self.device.substitute(prefix=prefix)
 
-        self.setObjectName('SIApp')
+        self.setObjectName(self.device.sec+'App')
         self.setWindowTitle(device+' Orbit Interlock Control Window')
 
         self._setupUi()
@@ -38,32 +38,40 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
     def _setupUi(self):
         wid = QWidget(self)
         self.setCentralWidget(wid)
+        lay = QGridLayout(wid)
 
         title = QLabel(
             '<h3>' + self.device + ' Orbit Interlock Control</h3>',
             self, alignment=Qt.AlignCenter)
-        title.setStyleSheet("font-weight: bold;")
+        lay.addWidget(title, 0, 0, 1, 2)
+
+        try:
+            down, up = self.get_down_up_bpms(self.device)
+            other = down if self.device == up else up
+            titlehelp = QLabel(
+                '<h3>(also refers to ' + other + ')</h3>',
+                self, alignment=Qt.AlignCenter)
+            lay.addWidget(titlehelp, 1, 0, 1, 2)
+        except ValueError:
+            pass
 
         # General Interlock
         self._gb_gen = QGroupBox('General Interlock')
         lay_gen = self._setupIntlkGenLayout()
         self._gb_gen.setLayout(lay_gen)
+        lay.addWidget(self._gb_gen, 2, 0, 1, 2)
 
         # Position Interlock
         self._gb_pos = QGroupBox('Position Interlock')
         lay_pos = self._setupIntlkTypeLayout('Pos')
         self._gb_pos.setLayout(lay_pos)
+        lay.addWidget(self._gb_pos, 3, 0)
 
         # Angulation Interlock
         self._gb_ang = QGroupBox('Angulation Interlock')
         lay_ang = self._setupIntlkTypeLayout('Ang')
         self._gb_ang.setLayout(lay_ang)
-
-        lay = QGridLayout(wid)
-        lay.addWidget(title, 0, 0, 1, 2)
-        lay.addWidget(self._gb_gen, 1, 0, 1, 2)
-        lay.addWidget(self._gb_pos, 2, 0)
-        lay.addWidget(self._gb_ang, 2, 1)
+        lay.addWidget(self._gb_ang, 3, 1)
 
     def _setupIntlkGenLayout(self):
         self._ld_genenbl = QLabel(
@@ -110,19 +118,21 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
         self._ld_minsumlim = QLabel(
             'Min.Sum.Thres.[sum count]: ', self,
             alignment=Qt.AlignRight | Qt.AlignVCenter)
-        self._sb_minsumlim = SiriusSpinbox(
+        self._le_minsumlim = SiriusLineEdit(
             self, self.devpref.substitute(propty='IntlkLmtMinSum-SP'))
-        self._sb_minsumlim.limitsFromChannel = False
-        self._sb_minsumlim.setMinimum(-1e12)
-        self._sb_minsumlim.setMaximum(+1e12)
+        self._le_minsumlim.setStyleSheet('QLineEdit{max-width: 12em;}')
         self._lb_minsumlim = SiriusLabel(
             self, self.devpref.substitute(propty='IntlkLmtMinSum-RB'))
+        self._lb_minsumlim.displayFormat = SiriusLabel.Exponential
+        self._lb_minsumlim.precisionFromPV = False
+        self._lb_minsumlim.precision = 16
+        self._lb_minsumlim.showUnits = True
 
         lay = QGridLayout()
         lay.setAlignment(Qt.AlignCenter)
         lay.addWidget(self._ld_genenbl, 0, 0)
         lay.addWidget(self._sb_genenbl, 0, 1)
-        lay.addWidget(self._led_genenbl, 0, 2)
+        lay.addWidget(self._led_genenbl, 0, 2, alignment=Qt.AlignLeft)
         lay.addWidget(self._ld_genclr, 1, 0)
         lay.addWidget(self._bt_genclr, 1, 1, alignment=Qt.AlignCenter)
         lay.addWidget(self._ld_intlkinst, 2, 0)
@@ -132,9 +142,9 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
         lay.addItem(QSpacerItem(1, 15, QSzPlc.Ignored, QSzPlc.Fixed), 4, 0)
         lay.addWidget(self._ld_minsumenbl, 5, 0)
         lay.addWidget(self._sb_minsumenbl, 5, 1)
-        lay.addWidget(self._led_minsumenbl, 5, 2)
+        lay.addWidget(self._led_minsumenbl, 5, 2, alignment=Qt.AlignLeft)
         lay.addWidget(self._ld_minsumlim, 6, 0)
-        lay.addWidget(self._sb_minsumlim, 6, 1)
+        lay.addWidget(self._le_minsumlim, 6, 1)
         lay.addWidget(self._lb_minsumlim, 6, 2)
         return lay
 

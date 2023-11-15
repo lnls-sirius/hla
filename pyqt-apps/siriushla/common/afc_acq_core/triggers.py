@@ -1,21 +1,31 @@
-from qtpy.QtWidgets import QHBoxLayout, QGridLayout, QLabel, QFormLayout
+"""Trigger windows."""
+
+from qtpy.QtWidgets import QHBoxLayout, QGridLayout, QLabel, QFormLayout, \
+    QGroupBox
 from qtpy.QtCore import Qt
+
 from pydm.widgets import PyDMPushButton, PyDMEnumComboBox
-from siriuspy.diagbeam.bpm.csdev import Const as _csbpm
-from siriushla.widgets import SiriusLabel, SiriusSpinbox
-from siriushla.as_di_bpms.base import BaseWidget, CustomGroupBox
+
+from siriuspy.namesys import SiriusPVName
+from siriuspy.search import HLTimeSearch
+
+from ...widgets import SiriusLabel, SiriusLineEdit
+
+from .base import BaseWidget
 
 
 class PhysicalTriggers(BaseWidget):
+    """Physical triggers."""
 
-    def __init__(self, parent=None, prefix='', bpm=''):
-        super().__init__(
-            parent=parent, prefix=prefix, bpm=bpm)
+    def __init__(self, parent=None, prefix='', device=''):
+        super().__init__(parent=parent, prefix=prefix, device=device)
+        self.afctiming = SiriusPVName(
+            f'IA-{self.device.sub[:2]}RaBPM:TI-AMCFPGAEVR')
         self.setupui()
 
     def setupui(self):
         gdl = QGridLayout(self)
-        lab = QLabel('<h2>' + self.bpm + ' Physical Triggers</h2>')
+        lab = QLabel('<h2>' + self.device + ' Physical Triggers</h2>')
         lab.setAlignment(Qt.AlignCenter)
         gdl.addWidget(lab, 0, 0, 1, 2)
         for i in range(8):
@@ -24,8 +34,10 @@ class PhysicalTriggers(BaseWidget):
 
     def get_trigger_groupbox(self, idx):
         trig = 'TRIGGER{0:d}'.format(idx)
-        name = trig + ': ' + _csbpm.TrigExtern._fields[idx]
-        grpbx = CustomGroupBox(name, self)
+        hltrig = HLTimeSearch.get_hl_from_ll_triggers(
+            self.afctiming.substitute(propty_name=f'CRT{idx}'))
+        name = trig + (': ' + hltrig if hltrig else '')
+        grpbx = QGroupBox(name, self)
         fbl = QFormLayout(grpbx)
 
         hbl = QHBoxLayout()
@@ -62,11 +74,12 @@ class PhysicalTriggers(BaseWidget):
         hbl.addWidget(lab)
 
         lab = QLabel('Counter', grpbx)
+        suf = 'SP' if self.device.dev == 'BPM' else 'Cmd'
         hbl = QHBoxLayout()
         fbl.addRow(lab, hbl)
         pbt = PyDMPushButton(
             grpbx, label='Reset', pressValue=1,
-            init_channel=self.get_pvname(trig+'RcvCntRst-SP'))
+            init_channel=self.get_pvname(trig+'RcvCntRst-'+suf))
         hbl.addWidget(pbt)
         lab = SiriusLabel(
             grpbx, init_channel=self.get_pvname(trig+'RcvCnt-Mon'))
@@ -75,7 +88,7 @@ class PhysicalTriggers(BaseWidget):
         hbl.addSpacing(20)
         pbt = PyDMPushButton(
             grpbx, label='Reset', pressValue=1,
-            init_channel=self.get_pvname(trig+'TrnCntRst-SP'))
+            init_channel=self.get_pvname(trig+'TrnCntRst-'+suf))
         hbl.addWidget(pbt)
         lab = SiriusLabel(
             grpbx, init_channel=self.get_pvname(trig+'TrnCnt-Mon'))
@@ -87,12 +100,7 @@ class PhysicalTriggers(BaseWidget):
         fbl.addRow(lab, hbl)
         pvn = trig+'RcvLen-SP'
         chan = self.get_pvname(pvn)
-        spbx = SiriusSpinbox(
-            grpbx, init_channel=chan)
-        spbx.limitsFromChannel = False
-        low = self.bpmdb[pvn].get('low', -1e10)
-        high = self.bpmdb[pvn].get('high', 1e10)
-        spbx.setRange(low, high)
+        spbx = SiriusLineEdit(grpbx, init_channel=chan)
         hbl.addWidget(spbx)
         lab = SiriusLabel(
             grpbx, init_channel=self.get_pvname(trig+'RcvLen-RB'))
@@ -101,12 +109,7 @@ class PhysicalTriggers(BaseWidget):
         hbl.addSpacing(20)
         pvn = trig+'TrnLen-SP'
         chan = self.get_pvname(pvn)
-        spbx = SiriusSpinbox(
-            grpbx, init_channel=chan)
-        spbx.limitsFromChannel = False
-        low = self.bpmdb[pvn].get('low', -1e10)
-        high = self.bpmdb[pvn].get('high', 1e10)
-        spbx.setRange(low, high)
+        spbx = SiriusLineEdit(grpbx, init_channel=chan)
         hbl.addWidget(spbx)
         lab = SiriusLabel(
             grpbx, init_channel=self.get_pvname(trig+'TrnLen-RB'))
@@ -116,16 +119,18 @@ class PhysicalTriggers(BaseWidget):
 
 
 class LogicalTriggers(BaseWidget):
+    """Logical triggers."""
 
-    def __init__(self, parent=None, prefix='', bpm='', trig_tp=''):
-        super().__init__(
-            parent=parent, prefix=prefix, bpm=bpm)
+    def __init__(
+            self, parent=None, prefix='', device='', names=None, trig_tp=''):
+        super().__init__(parent=parent, prefix=prefix, device=device)
         self.trig_tp = trig_tp
+        self.names = names
         self.setupui()
 
     def setupui(self):
         gdl = QGridLayout(self)
-        name = self.bpm
+        name = self.device
         if self.trig_tp:
             name += ' ' + self.trig_tp[1:]
         lab = QLabel('<h2>' + name + ' Logical Triggers</h2>')
@@ -137,7 +142,7 @@ class LogicalTriggers(BaseWidget):
 
     def get_trigger_groupbox(self, idx):
         trig = 'TRIGGER{0:s}{1:d}'.format(self.trig_tp, idx)
-        grpbx = CustomGroupBox(trig, self)
+        grpbx = QGroupBox(trig, self)
         fbl = QFormLayout(grpbx)
 
         lab = QLabel('', grpbx)
@@ -145,8 +150,8 @@ class LogicalTriggers(BaseWidget):
         fbl.addRow(lab, hbl)
         name = 'Receiver'
         if not self.trig_tp:
-            tname = _csbpm.LogTrigIntern._fields[idx]
-            if not tname.startswith('Unconn'):
+            tname = self.names[idx] if self.names else ''
+            if tname and not tname.startswith('Unconn'):
                 name += ': ' + tname
         lab = QLabel(name, grpbx)
         lab.setAlignment(Qt.AlignCenter)
@@ -180,12 +185,7 @@ class LogicalTriggers(BaseWidget):
         fbl.addRow(lab, hbl)
         pvn = trig+'RcvInSel-SP'
         chan = self.get_pvname(pvn)
-        spbx = SiriusSpinbox(
-            grpbx, init_channel=chan)
-        spbx.limitsFromChannel = False
-        low = self.bpmdb[pvn].get('low', -1e10)
-        high = self.bpmdb[pvn].get('high', 1e10)
-        spbx.setRange(low, high)
+        spbx = SiriusLineEdit(grpbx, init_channel=chan)
         hbl.addWidget(spbx)
         lab = SiriusLabel(
             grpbx, init_channel=self.get_pvname(trig+'RcvInSel-RB'))
@@ -194,12 +194,7 @@ class LogicalTriggers(BaseWidget):
         hbl.addSpacing(20)
         pvn = trig+'TrnOutSel-SP'
         chan = self.get_pvname(pvn)
-        spbx = SiriusSpinbox(
-            grpbx, init_channel=chan)
-        spbx.limitsFromChannel = False
-        low = self.bpmdb[pvn].get('low', -1e10)
-        high = self.bpmdb[pvn].get('high', 1e10)
-        spbx.setRange(low, high)
+        spbx = SiriusLineEdit(grpbx, init_channel=chan)
         hbl.addWidget(spbx)
         lab = SiriusLabel(
             grpbx, init_channel=self.get_pvname(trig+'TrnOutSel-RB'))

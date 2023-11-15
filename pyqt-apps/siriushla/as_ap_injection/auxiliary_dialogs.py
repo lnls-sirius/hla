@@ -274,6 +274,10 @@ class BiasFBDetailDialog(SiriusDialog):
         lb_likehdvar_mon = SiriusLabel(
             self, self._inj_prefix.substitute(
                 propty='BiasFBGPModNoiseStd-Mon'))
+        pb_likehdvarfit = PyDMStateButton(self, self._inj_prefix.substitute(
+            propty='BiasFBGPModNoiseStdFit-Sel'))
+        lb_likehdvarfit = SiriusLabel(self, self._inj_prefix.substitute(
+            propty='BiasFBGPModNoiseStdFit-Sts'))
 
         ld_kernvar = QLabel(
             'Kernel std.:', self, alignment=Qt.AlignRight)
@@ -286,6 +290,10 @@ class BiasFBDetailDialog(SiriusDialog):
         lb_kernvar_mon = SiriusLabel(
             self, self._inj_prefix.substitute(
                 propty='BiasFBGPModKernStd-Mon'))
+        pb_kernvarfit = PyDMStateButton(self, self._inj_prefix.substitute(
+            propty='BiasFBGPModKernStdFit-Sel'))
+        lb_kernvarfit = SiriusLabel(self, self._inj_prefix.substitute(
+            propty='BiasFBGPModKernStdFit-Sts'))
 
         ld_kernlenscl = QLabel(
             'Kernel length scale:', self, alignment=Qt.AlignRight)
@@ -298,27 +306,48 @@ class BiasFBDetailDialog(SiriusDialog):
         lb_kernlenscl_mon = SiriusLabel(
             self, self._inj_prefix.substitute(
                 propty='BiasFBGPModKernLenScl-Mon'))
+        pb_kernlensclfit = PyDMStateButton(self, self._inj_prefix.substitute(
+            propty='BiasFBGPModKernLenSclFit-Sel'))
+        lb_kernlensclfit = SiriusLabel(self, self._inj_prefix.substitute(
+            propty='BiasFBGPModKernLenSclFit-Sts'))
+
+        ld_dofit = QLabel('  Fit?', self)
+        ld_dofit.setStyleSheet("""
+            min-width: 3em; min-height: 1.5em; max-height: 1.5em;
+            qproperty-alignment: 'AlignRight | AlignVCenter';""")
 
         wid = QWidget()
         lay = QGridLayout(wid)
         lay.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
-        lay.addWidget(ld_likehdvar, 0, 0)
-        lay.addWidget(sb_likehdvar, 0, 1)
-        lay.addWidget(lb_likehdvar, 0, 2)
-        lay.addWidget(lb_likehdvar_mon, 0, 3)
-        lay.addWidget(ld_kernvar, 1, 0)
-        lay.addWidget(sb_kernvar, 1, 1)
-        lay.addWidget(lb_kernvar, 1, 2)
-        lay.addWidget(lb_kernvar_mon, 1, 3)
-        lay.addWidget(ld_kernlenscl, 2, 0)
-        lay.addWidget(sb_kernlenscl, 2, 1)
-        lay.addWidget(lb_kernlenscl, 2, 2)
-        lay.addWidget(lb_kernlenscl_mon, 2, 3)
+        lay.addWidget(ld_likehdvar, 0, 1)
+        lay.addWidget(sb_likehdvar, 0, 2)
+        lay.addWidget(lb_likehdvar, 0, 3)
+        lay.addWidget(lb_likehdvar_mon, 0, 4)
+        lay.addWidget(pb_likehdvarfit, 0, 6)
+        lay.addWidget(lb_likehdvarfit, 0, 7)
+        lay.addWidget(ld_kernvar, 1, 1)
+        lay.addWidget(sb_kernvar, 1, 2)
+        lay.addWidget(lb_kernvar, 1, 3)
+        lay.addWidget(lb_kernvar_mon, 1, 4)
+        lay.addWidget(pb_kernvarfit, 1, 6)
+        lay.addWidget(lb_kernvarfit, 1, 7)
+        lay.addWidget(ld_kernlenscl, 2, 1)
+        lay.addWidget(sb_kernlenscl, 2, 2)
+        lay.addWidget(lb_kernlenscl, 2, 3)
+        lay.addWidget(lb_kernlenscl_mon, 2, 4)
+        lay.addWidget(pb_kernlensclfit, 2, 6)
+        lay.addWidget(lb_kernlensclfit, 2, 7)
+        lay.addWidget(ld_dofit, 0, 5, 3, 1)
+        lay.setColumnStretch(0, 2)
+        lay.setColumnStretch(8, 2)
 
         wid.setStyleSheet("""
             .QLabel{
                 min-width: 7em; min-height: 1.5em; max-height: 1.5em;
                 qproperty-alignment: 'AlignRight | AlignVCenter';
+            }
+            .PyDMStateButton{
+                min-width: 3.2em; min-height: 1.5em; max-height: 1.5em;
             }""")
         return wid
 
@@ -360,31 +389,35 @@ class BiasFBDetailDialog(SiriusDialog):
             y_channel=self._inj_prefix.substitute(
                 propty='BiasFBGPModPredInjCurrAvg-Mon'),
             name='GP with 95% Conf.', color=QColor(80, 80, 80), lineWidth=2)
+
         self.graph_pred.addChannel(
             x_channel=self._inj_prefix.substitute(
                 propty='BiasFBGPModPredBias-Mon'),
             y_channel='FAKE:GP_Avg_plus_Std',
             name='extra1', color='gray',
             lineWidth=2, lineStyle=Qt.DashLine)
+        self.graph_pred.legend.removeItem('extra1')
         self._curve_gp_pred_avg_p_std = self.graph_pred.curveAtIndex(-1)
+
         self.graph_pred.addChannel(
             x_channel=self._inj_prefix.substitute(
                 propty='BiasFBGPModPredBias-Mon'),
-            y_channel='FAKE:GP_Avg_minus_Std',
-            name='extra2', color='gray',
+            y_channel='FAKE:GP_Avg_minus_Std', name='extra2', color='gray',
             lineWidth=2, lineStyle=Qt.DashLine)
-        self._curve_gp_pred_avg_m_std = self.graph_pred.curveAtIndex(-1)
-        self.graph_pred.legend.removeItem('extra1')
         self.graph_pred.legend.removeItem('extra2')
+        self._curve_gp_pred_avg_m_std = self.graph_pred.curveAtIndex(-1)
+
         self._curve_gp_fill_std = FillBetweenItem(
             self._curve_gp_pred_avg_p_std, self._curve_gp_pred_avg_m_std,
             brush=mkBrush(QColor('lightGray')))
+
         self.graph_pred.addChannel(
             x_channel=self._inj_prefix.substitute(
                 propty='BiasFBLinModPredBias-Mon'),
             y_channel=self._inj_prefix.substitute(
                 propty='BiasFBLinModPredInjCurrAvg-Mon'),
             name='Linear', color='blue', lineWidth=2)
+
         self.graph_pred.addChannel(
             x_channel=self._inj_prefix.substitute(
                 propty='BiasFBModelDataBias-Mon'),
@@ -394,15 +427,24 @@ class BiasFBDetailDialog(SiriusDialog):
             symbol='o', symbolSize=6)
         curve = self.graph_pred.curveAtIndex(-1)
         curve.opts['symbolBrush'] = mkBrush(QColor(0, 0, 0))
+
+        self.graph_pred.addChannel(
+            x_channel='FAKE:Bias', y_channel='FAKE:InjCurr',
+            name='Last Inj.', color='red', lineStyle=Qt.NoPen,
+            symbol='o', symbolSize=8, redraw_mode=2)
+        curve = self.graph_pred.curveAtIndex(-1)
+        curve.opts['symbolBrush'] = mkBrush(QColor(255, 0, 0))
+        self._curve_bias_vs_injcurr = curve
+
         self.graph_pred.addItem(self._curve_gp_fill_std)
         self.graph_pred.autoRangeX = True
         self.graph_pred.autoRangeY = True
         self.graph_pred.showXGrid = True
         self.graph_pred.showYGrid = True
         self.graph_pred.showLegend = True
+        self.graph_pred.legend.setOffset((1, 1))
         self.graph_pred.title = 'Model prediction: Bias Voltage X Inj.Current'
-        self.graph_pred.setLabel(
-            'bottom', text='Bias voltage [V]')
+        self.graph_pred.setLabel('bottom', text='Bias voltage [V]')
         self.graph_pred.setLabel(
             'left', text='Inj. current [mA]', color='gray')
         self.graph_pred.setBackgroundColor(QColor(255, 255, 255))
@@ -418,6 +460,13 @@ class BiasFBDetailDialog(SiriusDialog):
         self._chn_gp_injcurr_std.new_value_signal[_np.ndarray].connect(
             self._plot_gp_prediction_confidance)
 
+        self._chn_bias = SiriusConnectionSignal(
+            self._inj_prefix.substitute(propty='MultBunBiasVolt-RB'))
+        self._chn_injcurr = SiriusConnectionSignal(
+            'SI-Glob:AP-CurrInfo:InjCurr-Mon')
+        self._chn_injcurr.new_value_signal[float].connect(
+            self._plot_bias_vs_injcurr)
+
         return self.graph_pred
 
     def _plot_gp_prediction_confidance(self, _):
@@ -431,6 +480,14 @@ class BiasFBDetailDialog(SiriusDialog):
             return
         self._curve_gp_pred_avg_p_std.receiveYWaveform(avg + 1.96*std)
         self._curve_gp_pred_avg_m_std.receiveYWaveform(avg - 1.96*std)
+
+    def _plot_bias_vs_injcurr(self, _):
+        bias = self._chn_bias.value
+        injcurr = self._chn_injcurr.value
+        if None in {bias, injcurr}:
+            return
+        self._curve_bias_vs_injcurr.receiveXWaveform(_np.array([bias]))
+        self._curve_bias_vs_injcurr.receiveYWaveform(_np.array([injcurr]))
 
 
 class TopUpSettingsDialog(SiriusDialog):

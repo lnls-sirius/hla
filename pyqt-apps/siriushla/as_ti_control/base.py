@@ -4,13 +4,14 @@ import re
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, \
     QScrollArea, QGroupBox, QLabel, QSizePolicy as QSzPol, QFrame, QMenu, \
-    QLineEdit, QPushButton
+    QLineEdit, QPushButton, QAbstractItemView, QHeaderView
 import qtawesome as qta
 from pydm.widgets.base import PyDMPrimitiveWidget
 
 from siriuspy.namesys import SiriusPVName as _PVName
 
-from ..widgets import SiriusLabel, SiriusSpinbox, SiriusEnumComboBox
+from ..widgets import SiriusLabel, SiriusSpinbox, SiriusEnumComboBox, \
+    SiriusWaveformTable
 
 
 class BaseWidget(QWidget):
@@ -69,6 +70,21 @@ class BaseWidget(QWidget):
         if no_marg:
             lay.setContentsMargins(0, 0, 0, 0)
         return group
+
+    def _create_logbuffer_table(self, prop):
+        table = SiriusWaveformTable(self, self.get_pvname(prop))
+        table.setObjectName('tb')
+        table.setEnabled(False)
+        table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        table.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        table.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+        table.horizontalHeader().setVisible(False)
+        table.setStyleSheet(
+            '#tb{min-width:6em; max-width:12em; max-height: 16em;}')
+        table.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        table.setColumnCount(1)
+        table.setSizePolicy(QSzPol.MinimumExpanding, QSzPol.Preferred)
+        return table
 
 
 class CustomGroupBox(QGroupBox, PyDMPrimitiveWidget):

@@ -419,10 +419,12 @@ class BPMIntlkLimSPWidget(BaseObject, QWidget):
 
         if 'sum' in self.metric:
             summonit = self._summon
-            sumintlk = summonit * self.get_monitsum2intlksum_factor()
+            sumintlk = summonit * self.monitsum2intlksum_factor
             allvals = self._spin_scl.value() * sumintlk
             reso = self.MINSUM_RESO
             allvals = _np.ceil(allvals / reso) * reso
+            allvals = _np.array(self.calc_intlk_metric(
+                allvals, operation='min'))
             values = allvals[_np.array(idxsel)]
             pvs = [b.substitute(propty=self.lim_sp[0]) for b in namesel]
         else:

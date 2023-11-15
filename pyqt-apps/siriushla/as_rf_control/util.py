@@ -121,12 +121,38 @@ SEC_2_CHANNELS = {
         },
         'TL Sts': {
             'Geral': 'RA-TLBO:RF-TrLine:Sts-Mon',
-            'Circ TIn': 'RA-TLBO:RF-Circulator:Tin-Mon',
-            'Circ TOut': 'RA-TLBO:RF-Circulator:Tout-Mon',
-            'Circ Arc': 'RA-TLBO:RF-Circulator:Arc-Mon',
-            'Circ FlwRt': 'RA-TLBO:RF-Circulator:FlwRt-Mon',
-            'Load FlwRt': 'RA-TLBO:RF-Load:FlwRt-Mon',
-            'Circ Intlk': 'RA-TLBO:RF-Circulator:IntlkOp-Mon',
+            'label_led': {
+                'Circulator Temp. Drift': {
+                    'label': 'RA-TLBO:RF-Circulator:dT-Mon',
+                    'led': 'RA-TLBO:RF-Circulator:TDrift-Mon'
+                },
+                'Circulator Coil': {
+                    'label': 'RA-TLBO:RF-Circulator:Current-Mon',
+                    'led': 'RA-TLBO:RF-Circulator:Sts-Mon'
+                },
+                'Room Temp.': {
+                    'label': 'RA-TLBO:RF-Circulator:Tamb-Mon',
+                    'led': 'RA-TLBO:RF-Circulator:TEnv-Mon'
+                }
+            },
+            'Circulator Temp. In': {
+                'label': 'RA-TLBO:RF-Circulator:Tin-Mon',
+                'led': {
+                    'RA-TLBO:RF-Circulator:TinDown-Mon': 0,
+                    'RA-TLBO:RF-Circulator:TinUp-Mon': 0
+                }
+            },
+            'label': {
+                'Circulator Temp. Out': 'RA-TLBO:RF-Circulator:Tout-Mon',
+                'Circulator In Reflected Power': 'RA-TLBO:RF-Circulator:PwrRevIndBm-Mon'
+            },
+            'led': {
+                'Circulator Arc Detector': 'RA-TLBO:RF-Circulator:Arc-Mon',
+                'Circulator Arc Detector Supply Fail': 'RA-RaBO02:RF-ArcDetec-Circ:PwrFail-Mon',
+                'Circulator Flow': 'RA-TLBO:RF-Circulator:FlwRt-Mon',
+                'Load Flow': 'RA-TLBO:RF-Load:FlwRt-Mon',
+                'TCU Status': 'RA-TLBO:RF-Circulator:IntlkOp-Mon',
+            },
             'Circ Limits': (19.0, 23.0),
         },
         'SSA': {
@@ -135,13 +161,22 @@ SEC_2_CHANNELS = {
             'Power': 'RA-ToBO:RF-SSAmpTower:PwrFwdOutLLRF-Mon',
             'SRC 1': {
                 'Label': '300VDC',
-                'PV': 'RA-ToBO:RF-ACDCPanel:300Vdc-Sts',
+                'Enable': 'RA-ToBO:RF-ACDCPanel:300VdcEnbl-Sel',
+                'Disable': 'RA-ToBO:RF-ACDCPanel:300VdcDsbl-Sel',
+                'Mon': 'RA-ToBO:RF-ACDCPanel:300Vdc-Sts'
             },
             'SRC 2': {
                 'Label': 'DC/DC',
-                'PV': 'RA-ToBO:RF-SSAmpTower:PwrCnv-Sts',
+                'Enable': 'RA-ToBO:RF-SSAmpTower:PwrCnvEnbl-Sel',
+                'Disable': 'RA-ToBO:RF-SSAmpTower:PwrCnvDsbl-Sel',
+                'Mon': 'RA-ToBO:RF-SSAmpTower:PwrCnv-Sts'
             },
-            'PinSw': 'RA-RaBO01:RF-LLRFPreAmp:PinSw-Mon',
+            'PinSw': {
+                'Label': 'PinSw',
+                'Enable': 'RA-RaBO01:RF-LLRFPreAmp:PinSwEnbl-Cmd',
+                'Disable': 'RA-RaBO01:RF-LLRFPreAmp:PinSwDsbl-Cmd',
+                'Mon': 'RA-RaBO01:RF-LLRFPreAmp:PinSw-Mon'
+            },
             'PreDrive': 'BR-RF-DLLRF-01:INPRE:AMP',
             'PreDriveThrs': 4,  # mV
         },
@@ -164,12 +199,18 @@ SEC_2_CHANNELS = {
             'PSet': 'BR-RF-DLLRF-01:PL:REF',
             'AInc': 'BR-RF-DLLRF-01:AMPREF:INCRATE',
             'PInc': 'BR-RF-DLLRF-01:PHSREF:INCRATE',
+            'Inp': 'BR-RF-DLLRF-01:SL:SEL',
+            'PIL': 'BR-RF-DLLRF-01:SL:PILIMIT',
+            'KI': 'BR-RF-DLLRF-01:SL:KI',
+            'KP': 'BR-RF-DLLRF-01:SL:KP',
         },
         'Tun': {
             'Auto': 'BR-RF-DLLRF-01:TUNE',
             'DTune': 'BR-RF-DLLRF-01:DTune-RB',
             'DPhase': 'BR-RF-DLLRF-01:TUNE:DEPHS',
             'Acting': 'BR-RF-DLLRF-01:TUNE:OUT',
+            'Deadbnd': 'BR-RF-DLLRF-01:TUNE:MARGIN:HI',
+            'Oversht': 'BR-RF-DLLRF-01:TUNE:MARGIN:LO',
             'Pl1Down': 'BR-RF-DLLRF-01:PLG1:MOVE:DN',
             'Pl1Up': 'BR-RF-DLLRF-01:PLG1:MOVE:UP',
             'Pl2Down': 'BR-RF-DLLRF-01:PLG2:MOVE:DN',
@@ -218,8 +259,34 @@ SEC_2_CHANNELS = {
                     'Cell 4': 'BO-05D:RF-P5Cav:Cylin4T-Mon',
                     'Cell 5': 'BO-05D:RF-P5Cav:Cylin5T-Mon',
                 },
-            },
+            }
         },
+        'Ramp': {
+            'W': {
+                'Bottom': {
+                    'CavPwr': 'BO-05D:RF-P5Cav:Cell3PwrBot-Mon',
+                    'PowFwd': 'BO-05D:RF-P5Cav:PwrFwdBot-Mon',
+                    'PowRev': 'BO-05D:RF-P5Cav:PwrRevBot-Mon'
+                },
+                'Top': {
+                    'CavPwr': 'BO-05D:RF-P5Cav:Cell3PwrTop-Mon',
+                    'PowFwd': 'BO-05D:RF-P5Cav:PwrFwdTop-Mon',
+                    'PowRev': 'BO-05D:RF-P5Cav:PwrRevTop-Mon'
+                }
+            },
+            'mV': {
+                'Bottom': {
+                    'CavPwr': 'BR-RF-DLLRF-01:BOT:CELL3:AMP',
+                    'PowFwd': 'BR-RF-DLLRF-01:BOT:FWDCAV:AMP',
+                    'PowRev': 'BR-RF-DLLRF-01:BOT:REVCAV:AMP'
+                },
+                'Top': {
+                    'CavPwr': 'BR-RF-DLLRF-01:TOP:CELL3:AMP',
+                    'PowFwd': 'BR-RF-DLLRF-01:TOP:FWDCAV:AMP',
+                    'PowRev': 'BR-RF-DLLRF-01:TOP:REVCAV:AMP'
+                }
+            }
+        }
     },
     'SI': {
         'Emergency': 'RA-RaSIA02:RF-IntlkCtrl:EStop-Mon',
@@ -343,47 +410,93 @@ SEC_2_CHANNELS = {
         },
         'TL Sts': {
             'Geral': 'RA-TLSIA:RF-TrLine:Sts-Mon',
-            'Circ TIn': 'RA-TLSIA:RF-Circulator:Tin-Mon',
-            'Circ TOut': 'RA-TLSIA:RF-Circulator:Tout-Mon',
-            'Circ Arc': 'RA-TLSIA:RF-Circulator:Arc-Mon',
-            'Load Arc': 'RA-TLSIA:RF-Load:Arc-Mon',
-            'Circ FlwRt': 'RA-TLSIA:RF-Circulator:FlwRt-Mon',
-            'Load FlwRt': 'RA-TLSIA:RF-Load:FlwRt-Mon',
-            'Circ Intlk': 'RA-TLSIA:RF-Circulator:IntlkOp-Mon',
+            'Circulator Temp. In': {
+                'label': 'RA-TLSIA:RF-Circulator:Tin-Mon',
+                'led': {
+                    'RA-TLSIA:RF-Circulator:TinDown-Mon': 0,
+                    'RA-TLSIA:RF-Circulator:TinUp-Mon': 0
+                }
+            },
+            'label_led': {
+                'Circulator Temp. Drift': {
+                    'label': 'RA-TLSIA:RF-Circulator:dT-Mon',
+                    'led': 'RA-TLSIA:RF-Circulator:TDrift-Mon'
+                },
+                'Circulator Coil': {
+                    'label': 'RA-TLSIA:RF-Circulator:Current-Mon',
+                    'led': 'RA-TLSIA:RF-Circulator:Sts-Mon'
+                },
+                'Room Temp.': {
+                    'label': 'RA-TLSIA:RF-Circulator:Tamb-Mon',
+                    'led': 'RA-TLSIA:RF-Circulator:TEnv-Mon'
+                }
+            },
+            'label': {
+                'Circulator Temp. Out': 'RA-TLSIA:RF-Circulator:Tout-Mon',
+                'Circulator In Reflected Power': 'RA-TLSIA:RF-Circulator:PwrRevIndBm-Mon',
+                'Combiner': 'RA-TLSIA:RF-Combiner:T-Mon'
+            },
+            'led': {
+                'Circulator Arc Detector': 'RA-TLSIA:RF-Circulator:Arc-Mon',
+                'Circulator Arc Detector Supply Fail': 'RA-RaSIA02:RF-ArcDetec-Circ:PwrFail-Mon',
+                'Arc Detector Load': 'RA-TLSIA:RF-Load:Arc-Mon',
+                'Arc Detector Load Supply Fail': 'RA-RaSIA02:RF-ArcDetec-Load:PwrFail-Mon',
+                'Circulator Flow': 'RA-TLSIA:RF-Circulator:FlwRt-Mon',
+                'Load Flow': 'RA-TLSIA:RF-Load:FlwRt-Mon',
+                'TCU Status': 'RA-TLSIA:RF-Circulator:IntlkOp-Mon',
+            },
             'Circ Limits': (19.0, 23.0),
         },
         'SSA': {
             '1': {
                 'Name': 'SSA 01',
-                'Status': 'RA-ToSIA01:RF-SSAmpTower:Sts-Mon',
-                'Power': 'RA-ToSIA01:RF-SSAmpTower:PwrFwdOutdBm-Mon',
+                'Status': 'RA-ToSIA03:RF-SSAmpTower:Sts-Mon',
+                'Power': 'RA-ToSIA03:RF-SSAmpTower:PwrFwdOut-Mon',
                 'SRC 1': {
                     'Label': 'AC TDK',
-                    'PV': 'RA-ToSIA01:RF-ACPanel:PwrAC-Sts'
+                    'Enable': 'RA-ToSIA03:RF-ACPanel:PwrACEnbl-Cmd',
+                    'Disable': 'RA-ToSIA03:RF-ACPanel:PwrACDsbl-Cmd',
+                    'Mon': 'RA-ToSIA03:RF-ACPanel:PwrAC-Mon'
                 },
                 'SRC 2': {
                     'Label': 'DC TDK',
-                    'PV': 'RA-ToSIA01:RF-TDKSource:PwrDC-Sts',
+                    'Enable': 'RA-ToSIA03:RF-TDKSource:PwrDCEnbl-Cmd',
+                    'Disable': 'RA-ToSIA03:RF-TDKSource:PwrDCDsbl-Cmd',
+                    'Mon': 'RA-ToSIA03:RF-TDKSource:PwrDC-Mon'
                 },
-                'PinSw': 'RA-RaSIA01:RF-LLRFPreAmp-1:PINSw1-Mon',
+                'PinSw': {
+                    'Label': 'PinSw',
+                    'Enable': 'RA-ToSIA03:RF-CtrlPanel:PINSwEnbl-Cmd',
+                    'Disable': 'RA-ToSIA03:RF-CtrlPanel:PINSwDsbl-Cmd',
+                    'Mon': 'RA-ToSIA03:RF-CtrlPanel:PINSwSts-Mon'
+                },
                 'PreDrive': 'SR-RF-DLLRF-01:INPRE1:AMP',
-                'PreDriveThrs': 4,  # mV
+                'PreDriveThrs': 5,  # mV
             },
             '2': {
                 'Name': 'SSA 02',
-                'Status': 'RA-ToSIA02:RF-SSAmpTower:Sts-Mon',
-                'Power': 'RA-ToSIA02:RF-SSAmpTower:PwrFwdOutdBm-Mon',
+                'Status': 'RA-ToSIA04:RF-SSAmpTower:Sts-Mon',
+                'Power': 'RA-ToSIA04:RF-SSAmpTower:PwrFwdOut-Mon',
                 'SRC 1': {
                     'Label': 'AC TDK',
-                    'PV': 'RA-ToSIA02:RF-ACPanel:PwrAC-Sts',
+                    'Enable': 'RA-ToSIA04:RF-ACPanel:PwrACEnbl-Cmd',
+                    'Disable': 'RA-ToSIA04:RF-ACPanel:PwrACDsbl-Cmd',
+                    'Mon': 'RA-ToSIA04:RF-ACPanel:PwrAC-Mon'
                 },
                 'SRC 2': {
                     'Label': 'DC TDK',
-                    'PV': 'RA-ToSIA02:RF-TDKSource:PwrDC-Sts',
+                    'Enable': 'RA-ToSIA04:RF-TDKSource:PwrDCEnbl-Cmd',
+                    'Disable': 'RA-ToSIA04:RF-TDKSource:PwrDCDsbl-Cmd',
+                    'Mon': 'RA-ToSIA04:RF-TDKSource:PwrDC-Mon'
                 },
-                'PinSw': 'RA-RaSIA01:RF-LLRFPreAmp-1:PINSw2-Mon',
+                'PinSw': {
+                    'Label': 'PinSw',
+                    'Enable': 'RA-ToSIA04:RF-CtrlPanel:PINSwEnbl-Cmd',
+                    'Disable': 'RA-ToSIA04:RF-CtrlPanel:PINSwDsbl-Cmd',
+                    'Mon': 'RA-ToSIA04:RF-CtrlPanel:PINSwSts-Mon'
+                },
                 'PreDrive': 'SR-RF-DLLRF-01:INPRE2:AMP',
-                'PreDriveThrs': 4,  # mV
+                'PreDriveThrs': 5,  # mV
             }
         },
         'SL': {
@@ -405,12 +518,18 @@ SEC_2_CHANNELS = {
             'PSet': 'SR-RF-DLLRF-01:PL:REF',
             'AInc': 'SR-RF-DLLRF-01:AMPREF:INCRATE',
             'PInc': 'SR-RF-DLLRF-01:PHSREF:INCRATE',
+            'Inp': 'SR-RF-DLLRF-01:SL:SEL',
+            'PIL': 'SR-RF-DLLRF-01:SL:PILIMIT',
+            'KI': 'SR-RF-DLLRF-01:SL:KI',
+            'KP': 'SR-RF-DLLRF-01:SL:KP',
         },
         'Tun': {
             'Auto': 'SR-RF-DLLRF-01:TUNE',
             'DTune': 'SR-RF-DLLRF-01:DTune-RB',
             'DPhase': 'SR-RF-DLLRF-01:TUNE:DEPHS',
             'Acting': 'SR-RF-DLLRF-01:TUNE:OUT',
+            'Deadbnd': 'SR-RF-DLLRF-01:TUNE:MARGIN:HI',
+            'Oversht': 'SR-RF-DLLRF-01:TUNE:MARGIN:LO',
             'Pl1Down': 'SR-RF-DLLRF-01:PLG1:MOVE:DN',
             'Pl1Up': 'SR-RF-DLLRF-01:PLG1:MOVE:UP',
             'Pl2Down': 'SR-RF-DLLRF-01:PLG2:MOVE:DN',
@@ -461,26 +580,26 @@ SEC_2_CHANNELS = {
                 'color': 'red',
             },
             'SSA1 - Fwd Out': {
-                'W': 'RA-ToSIA01:RF-SSAmpTower:PwrFwdOutLLRF-Mon',
-                'dBm': 'RA-ToSIA01:RF-SSAmpTower:PwrFwdOutdBm-Mon',
+                'W': 'RA-ToSIA03:RF-SSAmpTower:PwrFwdOutLLRF-Mon',
+                'dBm': 'RA-ToSIA03:RF-SSAmpTower:PwrFwdOutdBm-Mon',
                 'mV': 'SR-RF-DLLRF-01:FWDSSA1:AMP',
                 'color': 'magenta',
             },
             'SSA1 - Rev Out': {
-                'W': 'RA-ToSIA01:RF-SSAmpTower:PwrRevOutLLRF-Mon',
-                'dBm': 'RA-ToSIA01:RF-SSAmpTower:PwrRevOutdBm-Mon',
+                'W': 'RA-ToSIA03:RF-SSAmpTower:PwrRevOutLLRF-Mon',
+                'dBm': 'RA-ToSIA03:RF-SSAmpTower:PwrRevOutdBm-Mon',
                 'mV': 'SR-RF-DLLRF-01:REVSSA1:AMP',
                 'color': 'darkGreen',
             },
             'SSA2 - Fwd Out': {
-                'W': 'RA-ToSIA02:RF-SSAmpTower:PwrFwdOutLLRF-Mon',
-                'dBm': 'RA-ToSIA02:RF-SSAmpTower:PwrFwdOutdBm-Mon',
+                'W': 'RA-ToSIA04:RF-SSAmpTower:PwrFwdOutLLRF-Mon',
+                'dBm': 'RA-ToSIA04:RF-SSAmpTower:PwrFwdOutdBm-Mon',
                 'mV': 'SR-RF-DLLRF-01:FWDSSA2:AMP',
                 'color': 'yellow',
             },
             'SSA2 - Rev Out': {
-                'W': 'RA-ToSIA02:RF-SSAmpTower:PwrRevOutLLRF-Mon',
-                'dBm': 'RA-ToSIA02:RF-SSAmpTower:PwrRevOutdBm-Mon',
+                'W': 'RA-ToSIA04:RF-SSAmpTower:PwrRevOutLLRF-Mon',
+                'dBm': 'RA-ToSIA04:RF-SSAmpTower:PwrRevOutdBm-Mon',
                 'mV': 'SR-RF-DLLRF-01:REVSSA2:AMP',
                 'color': 'cyan',
             },

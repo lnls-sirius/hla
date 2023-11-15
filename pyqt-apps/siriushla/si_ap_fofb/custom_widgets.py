@@ -1,6 +1,5 @@
 """Custom widgets."""
 
-import time as _time
 from functools import partial as _part
 import numpy as _np
 
@@ -25,9 +24,9 @@ from ..widgets import SiriusConnectionSignal as _ConnSignal, SiriusLedAlert, \
     SiriusDialog, PyDMLedMultiChannel, SiriusLabel, PyDMLed, SiriusLedState
 from ..widgets.windows import create_window_from_widget
 from ..as_ap_configdb import LoadConfigDialog
-from ..as_di_bpms.triggers import LogicalTriggers
+from ..common.afc_acq_core import LogicalTriggers
 from ..as_ap_sofb.graphics.base import Graph
-from .base import BaseObject
+from .base import BaseObject, get_fofb_icon
 from .graphics import RefOrbViewWidget
 
 
@@ -242,7 +241,7 @@ class BPMSwModeWidget(BaseObject, QWidget):
         QWidget.__init__(self, parent)
         props = ['SwMode-Sel', ]
         self._bpm_devs = [
-            Device(b, props, auto_monitor_mon=True)
+            Device(b, props2init=props, auto_monitor_mon=True)
             for b in self._csorb.bpm_names]
         self._setupUi()
         self._init_dict = {}
@@ -324,11 +323,13 @@ class BPMSwModeWidget(BaseObject, QWidget):
 class ControllersDetailDialog(BaseObject, SiriusDialog):
     """Controllers detail dialog."""
 
-    def __init__(self, parent, device, prefix=''):
+    def __init__(self, parent, device, prefix='', tab_selected=0):
         BaseObject.__init__(self, device, prefix)
         SiriusDialog.__init__(self, parent)
+        self.tab_selected = tab_selected
         self.setObjectName('SIApp')
         self.setWindowTitle('SI - FOFB - Controllers Details Dialog')
+        self.setWindowIcon(get_fofb_icon())
 
         self.ctrlrs = FOFBCtrlDCC.DEVICES
         ctrlr_offset = FamFOFBControllers.FOFBCTRL_BPMID_OFFSET
@@ -367,6 +368,7 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
         tab.addTab(self._setupPacketLossTab(), 'Packet Loss Detection')
         tab.addTab(self._setupIntlkTab(), 'Loop Interlock')
         tab.addTab(self._setupSYSIDExc(), 'SYSID Excitation States')
+        tab.setCurrentIndex(self.tab_selected)
 
         lay = QVBoxLayout(self)
         lay.addWidget(tab)
@@ -769,20 +771,19 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
         lay.setSpacing(1)
         lay.setAlignment(Qt.AlignLeft | Qt.AlignTop)
 
-        triggers = FamFOFBControllers.BPM_TRIGS_IDS
+        trigid = FamFOFBControllers.BPM_TRIGS_ID
         propties = ['RcvSrc-Sts', 'RcvInSel-RB']
 
         # header
         devlbl = QLabel('<h4>BPM</h4>', self, alignment=Qt.AlignCenter)
         lay.addWidget(devlbl, 0, 0, 2, 1)
-        for idx1, trigid in enumerate(triggers):
-            text = f'<h4>TRIGGER {trigid}</h4>'
+        text = f'<h4>TRIGGER {trigid}</h4>'
+        lbl = QLabel(text, self, alignment=Qt.AlignCenter)
+        lay.addWidget(lbl, 0, 1, 1, 2)
+        for idx, prop in enumerate(propties):
+            text = prop.split('-')[0]
             lbl = QLabel(text, self, alignment=Qt.AlignCenter)
-            lay.addWidget(lbl, 0, idx1*2+1, 1, 2)
-            for idx2, prop in enumerate(propties):
-                text = prop.split('-')[0]
-                lbl = QLabel(text, self, alignment=Qt.AlignCenter)
-                lay.addWidget(lbl, 1, idx1*2+1+idx2)
+            lay.addWidget(lbl, 1, idx+1)
 
         # table
         for idxr, bpm in enumerate(self._csorb.bpm_names):
@@ -795,7 +796,9 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
             btn.setAutoDefault(False)
             win = create_window_from_widget(
                 LogicalTriggers, title=bpm+': ACQ Logical Triggers')
-            connect_window(btn, win, parent=self, prefix=self.prefix, bpm=bpm)
+            connect_window(
+                btn, win, parent=self, prefix=self.prefix, device=bpm,
+                names=_csbpm.LogTrigIntern._fields)
             lbl = QLabel(bpm, self, alignment=Qt.AlignCenter)
             lbl.setObjectName('lbl_bpmname')
             hwid = QWidget()
@@ -807,15 +810,14 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
             hlay.addWidget(lbl)
             lay.addWidget(hwid, row, 0)
             c2v = dict()
-            for idx1, trigid in enumerate(triggers):
-                for idx2, prop in enumerate(propties):
-                    pvn = _PVName(bpm).substitute(
-                        prefix=self.prefix, propty='TRIGGER'+str(trigid)+prop)
-                    dval = FamFOFBControllers.DEF_BPMTRIG_RCVIN if 'RcvIn' \
-                        in prop else FamFOFBControllers.DEF_BPMTRIG_RCVSRC
-                    c2v[pvn] = dval
-                    plb = SiriusLabel(self, pvn)
-                    lay.addWidget(plb, row, idx1*2+1+idx2)
+            for idx, prop in enumerate(propties):
+                pvn = _PVName(bpm).substitute(
+                    prefix=self.prefix, propty='TRIGGER'+str(trigid)+prop)
+                dval = FamFOFBControllers.DEF_BPMTRIG_RCVIN if 'RcvIn' \
+                    in prop else FamFOFBControllers.DEF_BPMTRIG_RCVSRC
+                c2v[pvn] = dval
+                plb = SiriusLabel(self, pvn)
+                lay.addWidget(plb, row, idx+1)
             led = PyDMLedMultiChannel(self, c2v)
             lay.addWidget(led, row, 7)
 
@@ -838,7 +840,6 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
             0, 2)
 
         # table
-        self._led_timeframelen = dict()
         for idx, ctl in enumerate(self.ctrlrs):
             row = idx + 1
             lbl = QLabel(ctl, self, alignment=Qt.AlignCenter)

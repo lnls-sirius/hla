@@ -24,7 +24,7 @@ QScrollArea {background-color: transparent;}
 QLed {
   min-height: 1.29em;
   max-height: 1.29em;
-  min-width: 1.29em;
+  min-width: 0.64em;
 }
 
 PyDMStateButton {

@@ -13,7 +13,7 @@ from pydm.widgets import PyDMPushButton
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.fofb.csdev import ETypes as _FOFBEnums
 
-from ..util import connect_window
+from ..util import connect_window, connect_newprocess
 from ..widgets import SiriusLedAlert, SiriusLabel, SiriusSpinbox, CALabel, \
     PyDMLogLabel, SiriusMainWindow, PyDMStateButton, SiriusLedState, \
     SiriusConnectionSignal as _ConnSignal, CAPushButton, SiriusEnumComboBox
@@ -59,6 +59,7 @@ class MainWindow(BaseObject, SiriusMainWindow):
         # menu
         menubar = QMenuBar(self)
         self.setMenuBar(menubar)
+
         menuopen = QMenu('Open', menubar)
         actions = (
             ('&FOFB Control', 'FOFB Control', '', True, self.control),
@@ -76,6 +77,20 @@ class MainWindow(BaseObject, SiriusMainWindow):
             doc.visibilityChanged.connect(action.setChecked)
             menuopen.addAction(action)
         menubar.addAction(menuopen.menuAction())
+
+        acq2cmd = {
+            'SYSID': 'sirius-hla-si-bs-fofbsysid.py',
+            'LAMP': 'sirius-hla-si-ps-fastcorracq.py',
+        }
+        for acq, cmd in acq2cmd.items():
+            acq_menu = menubar.addMenu(acq+' Acq.')
+            acq_menu.setObjectName('SIApp')
+            for i in range(1, 21):
+                txt = f'SI-{i:02}'
+                dev = f'IA-{i:02}RaBPM:BS-FOFBCtrl'
+                act = QAction(txt, acq_menu)
+                connect_newprocess(act, [cmd, dev])
+                acq_menu.addAction(act)
 
     def _setupStatusWidget(self):
         # correctors
