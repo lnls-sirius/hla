@@ -436,8 +436,8 @@ class BPMsEqualizeSwitching(SiriusMainWindow):
             _log.error('Must Acquire and process data first.')
             return
         data = dict()
-        data['x'] = self._orbits['x'] - dorbx
-        data['y'] = self._orbits['y'] - dorby
+        data['x'] = self._orbits['x'] + dorbx
+        data['y'] = self._orbits['y'] + dorby
 
         win = SaveConfigDialog('si_orbit', self)
 
