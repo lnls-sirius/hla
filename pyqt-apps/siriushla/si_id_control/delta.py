@@ -5,12 +5,13 @@ from qtpy.QtWidgets import QGroupBox, QLabel, \
     QHBoxLayout, QVBoxLayout, QWidget, QPushButton, \
     QGridLayout, QSizePolicy as QSzPlcy
 import qtawesome as qta
-from epics import caget
 from pydm.widgets import PyDMPushButton
 
-from ..util import connect_window
+from siriuspy.epics import PV
+
+from ..util import connect_newprocess, connect_window
 from ..widgets import SiriusLedAlert, SiriusLabel, SiriusSpinbox, \
-    PyDMLogLabel, PyDMLed, SiriusEnumComboBox, SiriusLineEdit, SiriusConnectionSignal
+    PyDMLogLabel, PyDMLed, SiriusEnumComboBox, SiriusLineEdit
 from ..widgets.dialog import StatusDetailDialog
 
 from .base import IDCommonControlWindow, \
@@ -21,10 +22,10 @@ class DELTAControlWindowUtils():
 
     STATUS_PVS = {
         "Alarms": (
-            "Alarm-Mon", "AlarmBits-Mon", "AlarmLabels-Mon"
+            "Alarm-Mon", "AlarmBits-Mon", "AlarmLabels-Cte"
         ),
         "Interlock": (
-            "Intlk-Mon", "IntlkBits-Mon", "IntlkLabels-Mon"
+            "Intlk-Mon", "IntlkBits-Mon", "IntlkLabels-Cte"
         ),
         "Is Operational": "IsOperational-Mon",
         "PLC State": "PLCState-Mon",
@@ -110,6 +111,89 @@ class DELTAControlWindowUtils():
 class DELTAControlWindow(IDCommonControlWindow, DELTAControlWindowUtils):
     """DELTA Control Window."""
 
+    def _mainControlsWidget(self):
+        group = QGroupBox('Main Controls')
+        lay = QGridLayout()
+        group.setLayout(lay)
+
+        row = 0
+        for title, pv_info in self.MAIN_CONTROL_PVS.items():
+            label = QLabel(
+                title, self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            label.setFixedWidth(150)
+            lay.addWidget(label, row, 0)
+
+            if title == "Motion":
+                self._createMotion(pv_info, lay, row)
+            elif title in ["KParam", "PParam", "KParam Speed", "PParam Speed"]:
+                self._createParam(pv_info, lay, row)
+            elif title == "Polarization":
+                self._createPolarization(pv_info, lay, row)
+            elif isinstance(pv_info, str):
+                pvname = self.dev_pref.substitute(propty=pv_info)
+                lbl = SiriusLabel(self, init_channel=pvname)
+                lbl.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+                lbl.setMinimumWidth(125)
+                lbl.showUnits = True
+                lbl.setMaximumHeight(40)
+                lay.addWidget(lbl, row, 1, 1, 2)
+            else:
+                self._createIconBtns(pv_info, lay, row)
+            row += 1
+
+        return group
+
+    def _statusWidget(self):
+        return self._createStatusGroup("Status", self.STATUS_PVS)
+
+    def _auxCommandsWidget(self):
+        group = QGroupBox('Auxiliary Controls')
+        lay = QGridLayout()
+        group.setLayout(lay)
+
+        row = 0
+        for title, pv_info in self.AUX_CONTROL_PVS.items():
+            if "Header" not in title:
+                label = QLabel(
+                    title, self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+                lay.addWidget(label, row, 0)
+
+            if title in ["Max. Speed", "Max. Acc."]:
+                self._createParam(pv_info, lay, row)
+            elif title in ["Abort", "Start Parking"]:
+                self._createIconBtns(pv_info, lay, row)
+            elif "Header" in title:
+                self._createHeaders(pv_info, lay, row)
+            else:
+                self._createAccTol(pv_info, lay, row)
+            row += 1
+
+        return group
+
+    def _ctrlModeWidget(self):
+        gbox_ctrlmode = QGroupBox('Control Mode')
+        lay_ctrlmode = QHBoxLayout(gbox_ctrlmode)
+        lay_ctrlmode.setAlignment(Qt.AlignCenter)
+
+        label = QLabel("Is Remote")
+        lay_ctrlmode.addWidget(label, alignment=Qt.AlignRight)
+
+        self._led_ctrlmode = PyDMLed(
+            self, self.dev_pref.substitute(propty='IsRemote-Mon'))
+        self._led_ctrlmode.offColor = PyDMLed.Red
+        self._led_ctrlmode.onColor = PyDMLed.LightGreen
+        lay_ctrlmode.addWidget(self._led_ctrlmode, alignment=Qt.AlignLeft)
+
+        return gbox_ctrlmode
+
+    def _ffSettingsWidget(self):
+        but = QPushButton('Feedforward Settings', self)
+        connect_newprocess(
+            but, ['sirius-hla-si-ap-idff.py', self._device])
+        return but
+
+    # --- auxiliary methods ---
+
     def _createParam(self, pv_info, lay, row):
         pvname = self.dev_pref.substitute(propty=pv_info["SP"])
         cb = SiriusLineEdit(self, init_channel=pvname)
@@ -160,38 +244,6 @@ class DELTAControlWindow(IDCommonControlWindow, DELTAControlWindowUtils):
             lay.addWidget(lbl, row, col, 1, 1)
             col += 1
 
-    def _mainControlsWidget(self):
-        group = QGroupBox('Main Controls')
-        lay = QGridLayout()
-        group.setLayout(lay)
-
-        row = 0
-        for title, pv_info in self.MAIN_CONTROL_PVS.items():
-            label = QLabel(
-                title, self, alignment=Qt.AlignRight | Qt.AlignVCenter)
-            label.setFixedWidth(150)
-            lay.addWidget(label, row, 0)
-
-            if title == "Motion":
-                self._createMotion(pv_info, lay, row)
-            elif title in ["KParam", "PParam", "KParam Speed", "PParam Speed"]:
-                self._createParam(pv_info, lay, row)
-            elif title == "Polarization":
-                self._createPolarization(pv_info, lay, row)
-            elif isinstance(pv_info, str):
-                pvname = self.dev_pref.substitute(propty=pv_info)
-                lbl = SiriusLabel(self, init_channel=pvname)
-                lbl.setAlignment(Qt.AlignLeft|Qt.AlignVCenter)
-                lbl.setMinimumWidth(125)
-                lbl.showUnits = True
-                lbl.setMaximumHeight(40)
-                lay.addWidget(lbl, row, 1, 1, 2)
-            else:
-                self._createIconBtns(pv_info, lay, row)
-            row += 1
-
-        return group
-
     def _createDetailedLedBtn(self, pv_tuple):
 
         btn = QPushButton('', self)
@@ -203,10 +255,12 @@ class DELTAControlWindow(IDCommonControlWindow, DELTAControlWindowUtils):
         pvname_labels = self.dev_pref.substitute(propty=pv_tuple[1])
 
         try:
-            labels = caget(pvname_labels, timeout=1)
+            pv = PV(pvname_labels)
+            pv.wait_for_connection(timeout=5)
+            labels = pv.get()
             connect_window(
-                btn, StatusDetailDialog, self, pvname=pvname, labels=list(labels),
-                section="ID")
+                btn, StatusDetailDialog, self, pvname=pvname,
+                labels=list(labels), section="ID")
         except:
             btn.setEnabled(False)
         return btn
@@ -270,9 +324,6 @@ class DELTAControlWindow(IDCommonControlWindow, DELTAControlWindowUtils):
 
         return group
 
-    def _statusWidget(self):
-        return self._createStatusGroup("Status", self.STATUS_PVS)
-
     def _createIconBtns(self, pv_info, lay, row):
         btn = PyDMPushButton(self, label='', icon=qta.icon(pv_info["icon"]))
         btn.channel = self.dev_pref.substitute(propty=pv_info["pvname"])
@@ -304,46 +355,6 @@ class DELTAControlWindow(IDCommonControlWindow, DELTAControlWindowUtils):
             lbl.setAlignment(Qt.AlignCenter)
             lay.addWidget(lbl, row, col+1, 1, 1)
             col += 2
-
-    def _auxCommandsWidget(self):
-        group = QGroupBox('Auxiliary Controls')
-        lay = QGridLayout()
-        group.setLayout(lay)
-
-        row = 0
-        for title, pv_info in self.AUX_CONTROL_PVS.items():
-            if "Header" not in title:
-                label = QLabel(
-                    title, self, alignment=Qt.AlignRight | Qt.AlignVCenter)
-                lay.addWidget(label, row, 0)
-
-            if title in ["Max. Speed", "Max. Acc."]:
-                self._createParam(pv_info, lay, row)
-            elif title in ["Abort", "Start Parking"]:
-                self._createIconBtns(pv_info, lay, row)
-            elif "Header" in title:
-                self._createHeaders(pv_info, lay, row)
-            else:
-                self._createAccTol(pv_info, lay, row)
-            row += 1
-
-        return group
-
-    def _ctrlModeWidget(self):
-        gbox_ctrlmode = QGroupBox('Control Mode')
-        lay_ctrlmode = QHBoxLayout(gbox_ctrlmode)
-        lay_ctrlmode.setAlignment(Qt.AlignCenter)
-
-        label = QLabel("Is Remote")
-        lay_ctrlmode.addWidget(label, alignment=Qt.AlignRight)
-
-        self._led_ctrlmode = PyDMLed(
-            self, self.dev_pref.substitute(propty='IsRemote-Mon'))
-        self._led_ctrlmode.offColor = PyDMLed.Red
-        self._led_ctrlmode.onColor = PyDMLed.LightGreen
-        lay_ctrlmode.addWidget(self._led_ctrlmode, alignment=Qt.AlignLeft)
-
-        return gbox_ctrlmode
 
 
 class DELTASummaryBase(IDCommonSummaryBase):
