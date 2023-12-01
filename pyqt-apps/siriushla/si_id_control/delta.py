@@ -399,11 +399,11 @@ class DELTASummaryWidget(IDCommonSummaryWidget, DELTASummaryBase):
                 self, self.dev_pref.substitute(propty='KParamVelo-SP'))
             wids.append(spb)
             lbl = SiriusLabel(
-                self, self.dev_pref.substitute(propty='KParamVelo-Mon'))
+                self, self.dev_pref.substitute(propty='KParamVelo-RB'))
             wids.append(lbl)
         elif prop == 'Start':
             btn = PyDMPushButton(self, label='', icon=qta.icon('fa5s.play'))
-            btn.channel = self.dev_pref.substitute(propty='ChangeKParam-Cmd')
+            btn.channel = self.dev_pref.substitute(propty='KParamChange-Cmd')
             btn.pressValue = 1
             btn.setObjectName('Start')
             btn.setStyleSheet(
