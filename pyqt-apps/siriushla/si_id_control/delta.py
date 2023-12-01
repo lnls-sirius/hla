@@ -205,7 +205,7 @@ class DELTAControlWindow(IDCommonControlWindow, DELTAControlWindowUtils):
             if key not in pv_info:
                 continue
             pvname = self.dev_pref.substitute(propty=pv_info[key])
-            lbl = SiriusLabel(self, init_channel=pvname)
+            lbl = SiriusLabel(self, init_channel=pvname, keep_unit=True)
             lbl.setMinimumWidth(125)
             lbl.showUnits = True
             lbl.setAlignment(Qt.AlignCenter)
@@ -350,7 +350,7 @@ class DELTAControlWindow(IDCommonControlWindow, DELTAControlWindowUtils):
             lay.addWidget(edit, row, col, 1, 1)
 
             pvname = self.dev_pref.substitute(propty=pv_info[(enum*2)+1])
-            lbl = SiriusLabel(self, init_channel=pvname)
+            lbl = SiriusLabel(self, init_channel=pvname, keep_unit=True)
             lbl.showUnits = True
             lbl.setAlignment(Qt.AlignCenter)
             lay.addWidget(lbl, row, col+1, 1, 1)
