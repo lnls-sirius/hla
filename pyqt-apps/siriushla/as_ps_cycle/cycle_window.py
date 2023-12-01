@@ -12,6 +12,7 @@ from qtpy.QtWidgets import QWidget, QGridLayout, QVBoxLayout, QHBoxLayout, \
     QAbstractItemView
 import qtawesome as qta
 
+import siriuspy.logging as _log
 from siriuspy.envars import VACA_PREFIX as VACA_PREFIX
 from siriuspy.namesys import Filter, SiriusPVName as PVName
 from siriuspy.cycle import get_psnames, Timing, get_sections
@@ -28,8 +29,24 @@ from .tasks import CreateCyclers, VerifyPS, \
     PreparePSParams, PreparePSOpModeCycle, Cycle, CycleTrims
 
 
-errorcolor = QColor(255, 0, 0)
-warncolor = QColor(200, 200, 0)
+ERRORCOLOR = QColor(255, 0, 0)
+WARNCOLOR = QColor(200, 200, 0)
+
+
+class ProgressListHandler(_log.logging.Handler):
+    """Class intented to run callback to update 'Log-Mon' PVs."""
+
+    def __init__(self, callback, level=_log.logging.INFO):
+        """Object that calls 'callback' to update 'Log-Mon'PVs."""
+        self.callback = callback
+        super().__init__(level)
+
+    def emit(self, record):
+        """."""
+        msg = self.format(msg)
+        error = record.levelno >= _log.logging.ERROR
+        warning = not error and record.levelno >= _log.logging.WARNING
+        self.callback(msg, warning=warning, error=error)
 
 
 class CycleWindow(SiriusMainWindow):
@@ -82,6 +99,8 @@ class CycleWindow(SiriusMainWindow):
         # Setup UI
         self._needs_update_setup = False
         self._setup_ui()
+        _log.get_logger().addHandler(ProgressListHandler(
+            self._update_progress))
         self._update_setup_timer = QTimer(self)
         self._update_setup_timer.timeout.connect(self._update_setup)
         self._update_setup_timer.setInterval(250)
@@ -188,8 +207,8 @@ class CycleWindow(SiriusMainWindow):
         self.prepare_ps_opmode_lb = QLabel(self)
         self.prepare_ps_opmode_lb.setPixmap(self._pixmap_not)
 
-        lb_cycle = QLabel('<h4>Cycle</h4>', self,
-                          alignment=Qt.AlignCenter)
+        lb_cycle = QLabel(
+            '<h4>Cycle</h4>', self, alignment=Qt.AlignCenter)
 
         self.cycle_trims_bt = QPushButton('8. Cycle Trims', self)
         self.cycle_trims_bt.setToolTip(
@@ -308,8 +327,8 @@ class CycleWindow(SiriusMainWindow):
         layout = QGridLayout()
         layout.setVerticalSpacing(10)
         layout.setHorizontalSpacing(10)
-        layout.addWidget(QLabel('<h3>PS Cycle</h3>', self,
-                                alignment=Qt.AlignCenter), 0, 0, 1, 3)
+        layout.addWidget(QLabel(
+            '<h3>PS Cycle</h3>', self, alignment=Qt.AlignCenter), 0, 0, 1, 3)
         layout.addWidget(gb_tree, 1, 0)
         layout.addWidget(gb_commsts, 1, 1)
         layout.addLayout(lay_log, 1, 2)
@@ -345,7 +364,6 @@ class CycleWindow(SiriusMainWindow):
         task = task_class(
             parent=self, psnames=pwrsupplies, timing=self._timing,
             isadv=self._is_adv_mode)
-        task.updated.connect(self._update_progress)
         duration = task.duration()
 
         self.progress_bar.setMinimum(0)
@@ -361,73 +379,58 @@ class CycleWindow(SiriusMainWindow):
         task.start()
         self.update_bar.start()
 
-    def _update_progress(self, text, done, warning=False, error=False):
+    def _update_progress(self, text: str, warning=False, error=False):
         """Update automated cycle progress list and bar."""
-        if done:
+        if text.strip().lower() == 'done':
             last_item = self.progress_list.item(self.progress_list.count()-1)
             curr_text = last_item.text()
             last_item.setText(curr_text+' done.')
-        elif 'Remaining time' in text:
-            last_item = self.progress_list.item(self.progress_list.count()-1)
-            if 'Remaining time' in last_item.text():
-                last_item.setText(text)
-            else:
-                self.progress_list.addItem(text)
-                self.progress_list.scrollToBottom()
-        elif 'Sent ' in text:
-            last_item = self.progress_list.item(self.progress_list.count()-1)
-            if 'Sent ' in last_item.text():
-                last_item.setText(text)
-            else:
-                self.progress_list.addItem(text)
-                self.progress_list.scrollToBottom()
-        elif 'Successfully checked ' in text:
-            last_item = self.progress_list.item(self.progress_list.count()-1)
-            if 'Successfully checked ' in last_item.text():
-                last_item.setText(text)
-            else:
-                self.progress_list.addItem(text)
-                self.progress_list.scrollToBottom()
-        elif 'Created connections ' in text:
-            last_item = self.progress_list.item(self.progress_list.count()-1)
-            if 'Created connections ' in last_item.text():
-                last_item.setText(text)
-            else:
-                self.progress_list.addItem(text)
-                self.progress_list.scrollToBottom()
-        else:
-            item = QListWidgetItem(text)
-            if error:
-                item.setForeground(errorcolor)
-                self.update_bar.exit_task()
-                pal = self.progress_bar.palette()
-                pal.setColor(QPalette.Highlight,
-                             self.progress_bar.warning_color)
-                self.progress_bar.setPalette(pal)
-                if self._is_preparing in self._prepared.keys():
-                    self._prepared[self._is_preparing] = False
-                cycle = all(self._prepared.values())
-                self._handle_buttons_enabled(True, cycle=cycle)
-            elif warning:
-                item.setForeground(warncolor)
-            elif 'finished' in text:
-                self.update_bar.exit_task()
-                self.progress_bar.setValue(self.progress_bar.maximum())
-                if self._is_preparing == 'cycle':
-                    self._prepared = {k: False for k in self._prepared.keys()}
-                    if not self.cycle_trims_bt.isVisible():
-                        self._prepared['trims'] = True
-                    cycle = False
-                else:
-                    if self._is_preparing in self._prepared.keys():
-                        self._prepared[self._is_preparing] = True
-                    cycle = all(self._prepared.values())
-                self._handle_buttons_enabled(True, cycle=cycle)
+            return
 
-            self._handle_stslabels_content()
-
-            self.progress_list.addItem(item)
+        especial_txt = [
+            'Remaining time', 'Sent ', 'Successfully checked ',
+            'Created connections ']
+        res = _re.findall('.*({}).*'.format('|'.join(especial_txt)), text)
+        if res:
+            last_item = self.progress_list.item(self.progress_list.count()-1)
+            if res[0] in last_item.text():
+                last_item.setText(text)
+                return
+            self.progress_list.addItem(text)
             self.progress_list.scrollToBottom()
+            return
+
+        item = QListWidgetItem(text)
+        if warning:
+            item.setForeground(WARNCOLOR)
+        elif error:
+            item.setForeground(ERRORCOLOR)
+            self.update_bar.exit_task()
+            pal = self.progress_bar.palette()
+            pal.setColor(
+                QPalette.Highlight, self.progress_bar.warning_color)
+            self.progress_bar.setPalette(pal)
+            if self._is_preparing in self._prepared.keys():
+                self._prepared[self._is_preparing] = False
+            cycle = all(self._prepared.values())
+            self._handle_buttons_enabled(True, cycle=cycle)
+        elif 'finished' in text:
+            self.update_bar.exit_task()
+            self.progress_bar.setValue(self.progress_bar.maximum())
+            if self._is_preparing == 'cycle':
+                self._prepared = {k: False for k in self._prepared.keys()}
+                if not self.cycle_trims_bt.isVisible():
+                    self._prepared['trims'] = True
+                cycle = False
+            else:
+                if self._is_preparing in self._prepared.keys():
+                    self._prepared[self._is_preparing] = True
+                cycle = all(self._prepared.values())
+            self._handle_buttons_enabled(True, cycle=cycle)
+
+        self._handle_stslabels_content()
+        self.progress_list.addItem(item)
+        self.progress_list.scrollToBottom()
 
     def _handle_buttons_enabled(self, enable, cycle=False):
         self.save_timing_bt.setEnabled(enable)
