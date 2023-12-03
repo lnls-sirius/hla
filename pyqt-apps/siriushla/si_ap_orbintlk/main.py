@@ -135,21 +135,6 @@ class BPMOrbIntlkMainWindow(BaseObject, SiriusMainWindow):
         lay.addWidget(sb_enbl, 0, 1)
         lay.addWidget(lb_enbl, 0, 2)
 
-        lbl_conf = QLabel(
-            'Configure devices: ', self,
-            alignment=Qt.AlignRight | Qt.AlignVCenter)
-        pvname = self.hlprefix.substitute(propty='IntlkStateConfig-Cmd')
-        pb_conf = PyDMPushButton(self, pressValue=1, init_channel=pvname)
-        pb_conf.setToolTip(
-            'Send BPM orbit interlock enable and limits, '
-            'timing and LLRF configurations')
-        pb_conf.setIcon(qta.icon('fa5s.sync'))
-        pb_conf.setObjectName('conf')
-        pb_conf.setStyleSheet(
-            '#conf{min-width:25px; max-width:25px; icon-size:20px;}')
-        lay.addWidget(lbl_conf, 1, 0)
-        lay.addWidget(pb_conf, 1, 1)
-
         lbl_rst = QLabel(
             'Reset all interlocks: ', self,
             alignment=Qt.AlignRight | Qt.AlignVCenter)
@@ -160,20 +145,28 @@ class BPMOrbIntlkMainWindow(BaseObject, SiriusMainWindow):
         pb_rst.setObjectName('rst')
         pb_rst.setStyleSheet(
             '#rst{min-width:25px; max-width:25px; icon-size:20px;}')
-        lay.addWidget(lbl_rst, 2, 0)
-        lay.addWidget(pb_rst, 2, 1)
+        lay.addWidget(lbl_rst, 1, 0)
+        lay.addWidget(pb_rst, 1, 1)
 
-        pvname = self.hlprefix.substitute(propty='ResetTimingLockLatches-Cmd')
-        pb_rstrtm = PyDMPushButton(
-            self, pressValue=1, init_channel=pvname,
-            label='Reset Timing Lock Latches')
-        lay.addWidget(pb_rstrtm, 3, 0, 1, 3)
-
-        pvname = self.hlprefix.substitute(propty='ResetAFCTimingRTMClk-Cmd')
-        pb_rstltc = PyDMPushButton(
-            self, pressValue=1, init_channel=pvname,
-            label='Reset AFC timing RTM Clocks')
-        lay.addWidget(pb_rstltc, 4, 0, 1, 3)
+        desc2propty = {
+            'Reset Timing Lock Latches': 'ResetTimingLockLatches-Cmd',
+            'Configure EVG interlock': 'ConfigEVG-Cmd',
+            'Configure Fout RxEnbl': 'ConfigFouts-Cmd',
+            'Configure Delta EVR': 'ConfigDeltaRedunEVR-Cmd',
+            'Configure AFC Timing RTM Loop': 'ConfigAFCTiming-Cmd',
+            'Reset AFC Timing RTM Clocks': 'ResetAFCTimingRTMClk-Cmd', 
+            'Configure HL triggers': 'ConfigHLTriggers-Cmd',
+            'Configure LLRF interlocks': 'ConfigLLRFIntlk-Cmd',
+            'Configure BPMs': 'ConfigBPMs-Cmd',
+            'Configure AFC Phys.Triggers': 'ConfigAFCPhyTrigs-Cmd',
+        }
+        row = 2
+        for desc, propty in desc2propty.items():
+            pvname = self.hlprefix.substitute(propty=propty)
+            pbt = PyDMPushButton(
+                self, pressValue=1, init_channel=pvname, label=desc)
+            lay.addWidget(pbt, row, 0, 1, 3)
+            row += 1
 
         return wid
 
