@@ -19,7 +19,7 @@ from ..widgets.windows import create_window_from_widget
 from ..util import get_appropriate_color, connect_window, connect_newprocess
 from .base import BaseObject
 from .custom_widgets import BPMIntlkEnblWidget, BPMIntlkLimSPWidget, \
-    TimingMonitoredDevicesDialog
+    MonitoredDevicesDialog
 from .graphics import GraphMonitorWidget
 
 
@@ -107,15 +107,15 @@ class BPMOrbIntlkMainWindow(BaseObject, SiriusMainWindow):
             lay.addWidget(led, i, 2)
             lay.addWidget(pbt, i, 3)
 
-            if sts == 'Timing':
+            if sts != 'LLRF':
                 pbt = QPushButton('', self)
                 pbt.setIcon(qta.icon('fa5s.ellipsis-v'))
                 pbt.setObjectName('sts')
                 pbt.setStyleSheet(
                     '#sts{min-width:18px; max-width:18px; icon-size:20px;}')
                 connect_window(
-                    pbt, TimingMonitoredDevicesDialog, parent=self,
-                    prefix=self.prefix)
+                    pbt, MonitoredDevicesDialog, parent=self,
+                    prefix=self.prefix, propty=f'{sts}MonitoredDevices-Mon')
                 lay.addWidget(pbt, i, 0)
 
         return wid

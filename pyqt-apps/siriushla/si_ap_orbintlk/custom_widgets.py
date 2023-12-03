@@ -403,21 +403,20 @@ class BPMIntlkLimSPWidget(BaseObject, QWidget):
             self._items_fail.append(item)
 
 
-class TimingMonitoredDevicesDialog(BaseObject, QDialog):
-    """Timing Monitored Devices Detail Dialog."""
+class MonitoredDevicesDialog(BaseObject, QDialog):
+    """Monitored Devices Detail Dialog."""
 
-    def __init__(self, parent=None, prefix=''):
+    def __init__(self, parent=None, prefix='', propty=''):
         """Init."""
         BaseObject.__init__(self, prefix)
         QWidget.__init__(self, parent)
-        title = 'Timing Monitored Devices'
+        title = 'Monitored Devices'
         self.setObjectName('SIApp')
         self.setWindowTitle(title)
 
         self._desc = QLabel('<h4>'+title+'</h4>')
         self._label = SiriusLabel(
-            self, self.hlprefix.substitute(
-                propty='TimingMonitoredDevices-Mon'))
+            self, self.hlprefix.substitute(propty=propty))
         self._label.displayFormat = SiriusLabel.DisplayFormat.String
 
         lay = QVBoxLayout(self)
