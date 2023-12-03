@@ -61,10 +61,11 @@ class BPMsEqualizeSwitching(SiriusMainWindow):
         self.setDocumentMode(False)
         self.setDockNestingEnabled(True)
 
-        mwid = self._create_central_widget()
+        mwid = self.create_central_widget()
         self.setCentralWidget(mwid)
 
-    def _create_central_widget(self):
+    def create_central_widget(self):
+        """."""
         wid = QWidget(self)
         lay = QGridLayout()
         wid.setLayout(lay)
@@ -79,6 +80,7 @@ class BPMsEqualizeSwitching(SiriusMainWindow):
         apply = self.get_application_widget(wid)
         saveload = self.get_saveload_widget(wid)
         plots = self.get_plots_widget(wid)
+        check = self.get_check_data_widget(wid)
         updt_orb = self.get_update_reforb_widget(wid)
 
         lay.addWidget(ctrls, 1, 0)
@@ -86,8 +88,9 @@ class BPMsEqualizeSwitching(SiriusMainWindow):
         lay.addWidget(anly, 3, 0)
         lay.addWidget(plots, 4, 0)
         lay.addWidget(apply, 5, 0)
-        lay.addWidget(updt_orb, 6, 0)
-        lay.addWidget(status, 1, 1, 6, 1)
+        lay.addWidget(check, 6, 0)
+        lay.addWidget(updt_orb, 7, 0)
+        lay.addWidget(status, 1, 1, 7, 1)
         return wid
 
     def get_acq_control_widget(self, parent):
@@ -166,6 +169,129 @@ class BPMsEqualizeSwitching(SiriusMainWindow):
         lay.setColumnStretch(4, 2)
         return wid
 
+    def get_check_data_widget(self, parent):
+        """."""
+        wid = QGroupBox('Check Equalization', parent)
+        lay = QGridLayout()
+        wid.setLayout(lay)
+
+        pusb_check = QPushButton(
+            qta.icon('mdi.play'), 'Get Data for Check', wid)
+        pusb_check.clicked.connect(self._start_activity)
+        pusb_check.setObjectName('check')
+
+        pusb_pcheck = QPushButton('Plot to Check', wid)
+        pusb_pcheck.setObjectName('check')
+        pusb_pcheck.clicked.connect(self._plot)
+
+        lay.addWidget(pusb_check, 0, 1)
+        lay.addWidget(pusb_pcheck, 0, 3)
+        lay.setColumnStretch(0, 2)
+        lay.setColumnStretch(2, 2)
+        lay.setColumnStretch(4, 2)
+        return wid
+
+    def get_status_widget(self, parent):
+        """."""
+        wid = QGroupBox('Status', parent)
+        lay = QGridLayout()
+        wid.setLayout(lay)
+
+        self.log_label = SiriusLogDisplay(wid, level=_log.INFO)
+        self.log_label.logFormat = '%(message)s'
+        lay.addWidget(self.log_label, 0, 0)
+        return wid
+
+    def get_application_widget(self, parent):
+        """."""
+        wid = QGroupBox('Apply to BPMs', parent)
+        lay = QGridLayout()
+        wid.setLayout(lay)
+        pusb_appnew = QPushButton(
+            qta.icon('ei.arrow-down'), 'Apply New Gains', wid)
+        pusb_appnew.clicked.connect(self._apply_new)
+        pusb_appold = QPushButton(
+            qta.icon('ei.arrow-down'), 'Restore Initial Gains', wid)
+        pusb_appold.clicked.connect(self._apply_old)
+        lay.addWidget(pusb_appnew, 0, 1)
+        lay.addWidget(pusb_appold, 0, 3)
+        lay.setColumnStretch(0, 2)
+        lay.setColumnStretch(2, 2)
+        lay.setColumnStretch(4, 2)
+        return wid
+
+    def get_saveload_widget(self, parent):
+        """."""
+        svld_wid = QGroupBox('Save and Load Data', parent)
+        svld_lay = QGridLayout(svld_wid)
+
+        pbld = QPushButton('Load', svld_wid)
+        pbld.setIcon(qta.icon('mdi.file-upload-outline'))
+        pbld.setToolTip('Load data from file')
+        pbld.clicked.connect(self._load_data_from_file)
+
+        pbsv = QPushButton('Save', svld_wid)
+        pbsv.setIcon(qta.icon('mdi.file-download-outline'))
+        pbsv.setToolTip('Save data to file')
+        pbsv.clicked.connect(self._save_data_to_file)
+
+        svld_lay.addWidget(pbsv, 0, 1)
+        svld_lay.addWidget(pbld, 0, 3)
+        svld_lay.setColumnStretch(0, 2)
+        svld_lay.setColumnStretch(2, 2)
+        svld_lay.setColumnStretch(4, 2)
+        return svld_wid
+
+    def get_plots_widget(self, parent):
+        """."""
+        wid = QGroupBox('Make Some Plots', parent)
+        lay = QGridLayout(wid)
+        wid.setLayout(lay)
+
+        pusb_mean = QPushButton('Antennas Mean', wid)
+        pusb_mean.clicked.connect(self._plot)
+        pusb_mean.setObjectName('mean')
+        pusb_gains = QPushButton('Antennas Gains', wid)
+        pusb_gains.clicked.connect(self._plot)
+        pusb_gains.setObjectName('gains')
+        pusb_dorb = QPushButton('Orbit Variation', wid)
+        pusb_dorb.setObjectName('dorb')
+        pusb_dorb.clicked.connect(self._plot)
+        pusb_idcs = QPushButton('Cycle Indices', wid)
+        pusb_idcs.setObjectName('idcs')
+        pusb_idcs.clicked.connect(self._plot)
+        lay.addWidget(pusb_mean, 1, 1)
+        lay.addWidget(pusb_gains, 1, 3)
+        lay.addWidget(pusb_dorb, 2, 1)
+        lay.addWidget(pusb_idcs, 2, 3)
+        lay.setRowStretch(0, 2)
+        lay.setRowStretch(3, 2)
+        lay.setColumnStretch(0, 2)
+        lay.setColumnStretch(2, 2)
+        lay.setColumnStretch(4, 2)
+        return wid
+
+    def get_update_reforb_widget(self, parent):
+        """."""
+        wid = QGroupBox('Update Orbits', parent)
+        lay = QGridLayout(wid)
+        wid.setLayout(lay)
+
+        self.cb_orb = QComboBox(wid)
+        self.cb_orb.addItems(['bba_orb', 'ref_orb', 'servconf'])
+        self.cb_orb.currentTextChanged.connect(self._load_orbit)
+        pb_orb = QPushButton(
+            qta.icon('ei.arrow-down'), 'Save New Orbit', wid)
+        pb_orb.clicked.connect(self._save_orbit)
+
+        lay.addWidget(
+            QLabel('Config to change: '), 0, 0, alignment=Qt.AlignCenter)
+        lay.addWidget(self.cb_orb, 0, 1)
+        lay.addWidget(pb_orb, 0, 3)
+        lay.setColumnStretch(2, 2)
+        lay.setRowStretch(1, 2)
+        return wid
+
     def _start_activity(self):
         """."""
         if self._thread.is_alive():
@@ -173,9 +299,18 @@ class BPMsEqualizeSwitching(SiriusMainWindow):
             return
         if self.sender().objectName().startswith('meas'):
             self._thread = Thread(target=self._do_meas, daemon=True)
+        elif self.sender().objectName().startswith('check'):
+            self._thread = Thread(target=self._do_check, daemon=True)
         else:
             self._thread = Thread(target=self._process_data, daemon=True)
         self._thread.start()
+
+    def _do_check(self):
+        try:
+            self.bpms_eq.acquire_data_for_checking()
+        except Exception as err:
+            _log.error(str(err))
+            return
 
     def _do_meas(self):
         self.bpms_eq.acq_strategy = int(self.cb_acqstrat.currentIndex())
@@ -201,34 +336,6 @@ class BPMsEqualizeSwitching(SiriusMainWindow):
             _log.error(str(err))
         _log.info('Processing Done!')
 
-    def get_status_widget(self, parent):
-        """."""
-        wid = QGroupBox('Status', parent)
-        lay = QGridLayout()
-        wid.setLayout(lay)
-
-        self.log_label = SiriusLogDisplay(wid, level=_log.INFO)
-        self.log_label.logFormat = '%(message)s'
-        lay.addWidget(self.log_label, 0, 0)
-        return wid
-
-    def get_application_widget(self, parent):
-        wid = QGroupBox('Apply to BPMs', parent)
-        lay = QGridLayout()
-        wid.setLayout(lay)
-        pusb_appnew = QPushButton(
-            qta.icon('ei.arrow-down'), 'Apply New Gains', wid)
-        pusb_appnew.clicked.connect(self._apply_new)
-        pusb_appold = QPushButton(
-            qta.icon('ei.arrow-down'), 'Restore Initial Gains', wid)
-        pusb_appold.clicked.connect(self._apply_old)
-        lay.addWidget(pusb_appnew, 0, 1)
-        lay.addWidget(pusb_appold, 0, 3)
-        lay.setColumnStretch(0, 2)
-        lay.setColumnStretch(2, 2)
-        lay.setColumnStretch(4, 2)
-        return wid
-
     def _apply_new(self):
         gains = self.bpms_eq.data.get('gains_new')
         if gains is None:
@@ -238,6 +345,7 @@ class BPMsEqualizeSwitching(SiriusMainWindow):
             self.bpms_eq.set_gains(gains)
         except Exception as err:
             _log.error(str(err))
+        _log.info('New gains applied.')
 
     def _apply_old(self):
         gains = self.bpms_eq.data.get('gains_init')
@@ -248,28 +356,7 @@ class BPMsEqualizeSwitching(SiriusMainWindow):
             self.bpms_eq.set_gains(gains)
         except Exception as err:
             _log.error(str(err))
-
-    def get_saveload_widget(self, parent):
-        """."""
-        svld_wid = QGroupBox('Save and Load Data', parent)
-        svld_lay = QGridLayout(svld_wid)
-
-        pbld = QPushButton('Load', svld_wid)
-        pbld.setIcon(qta.icon('mdi.file-upload-outline'))
-        pbld.setToolTip('Load data from file')
-        pbld.clicked.connect(self._load_data_from_file)
-
-        pbsv = QPushButton('Save', svld_wid)
-        pbsv.setIcon(qta.icon('mdi.file-download-outline'))
-        pbsv.setToolTip('Save data to file')
-        pbsv.clicked.connect(self._save_data_to_file)
-
-        svld_lay.addWidget(pbsv, 0, 1)
-        svld_lay.addWidget(pbld, 0, 3)
-        svld_lay.setColumnStretch(0, 2)
-        svld_lay.setColumnStretch(2, 2)
-        svld_lay.setColumnStretch(4, 2)
-        return svld_wid
+        _log.info('Old gains applied.')
 
     def _save_data_to_file(self, _):
         filename = QFileDialog.getSaveFileName(
@@ -299,34 +386,6 @@ class BPMsEqualizeSwitching(SiriusMainWindow):
         self.sp_acqtimeout.setValue(self.bpms_eq.acq_timeout)
         self.cb_procmeth.setCurrentIndex(self.bpms_eq.proc_method)
 
-    def get_plots_widget(self, parent):
-        wid = QGroupBox('Make Some Plots', parent)
-        lay = QGridLayout(wid)
-        wid.setLayout(lay)
-
-        pusb_mean = QPushButton('Antennas Mean', wid)
-        pusb_mean.clicked.connect(self._plot)
-        pusb_mean.setObjectName('mean')
-        pusb_gains = QPushButton('Antennas Gains', wid)
-        pusb_gains.clicked.connect(self._plot)
-        pusb_gains.setObjectName('gains')
-        pusb_dorb = QPushButton('Orbit Variation', wid)
-        pusb_dorb.setObjectName('dorb')
-        pusb_dorb.clicked.connect(self._plot)
-        pusb_idcs = QPushButton('Cycle Indices', wid)
-        pusb_idcs.setObjectName('idcs')
-        pusb_idcs.clicked.connect(self._plot)
-        lay.addWidget(pusb_mean, 1, 1)
-        lay.addWidget(pusb_gains, 1, 3)
-        lay.addWidget(pusb_dorb, 2, 1)
-        lay.addWidget(pusb_idcs, 2, 3)
-        lay.setRowStretch(0, 2)
-        lay.setRowStretch(3, 2)
-        lay.setColumnStretch(0, 2)
-        lay.setColumnStretch(2, 2)
-        lay.setColumnStretch(4, 2)
-        return wid
-
     def _plot(self):
         name = self.sender().objectName()
         fig = None
@@ -342,6 +401,9 @@ class BPMsEqualizeSwitching(SiriusMainWindow):
         elif name.startswith('idcs'):
             fig, axs = self.bpms_eq.plot_semicycle_indices()
             winname = 'Cycle Indices'
+        elif name.startswith('check'):
+            fig, axs = self.bpms_eq.plot_antennas_for_check()
+            winname = 'Check Equalization'
         if fig is None:
             _log.error('Error with plot.')
             return
@@ -351,26 +413,6 @@ class BPMsEqualizeSwitching(SiriusMainWindow):
         obj = wind(self, figure=fig)
         obj.resize(width*100, height*100)
         obj.show()
-
-    def get_update_reforb_widget(self, parent):
-        wid = QGroupBox('Update Orbits', parent)
-        lay = QGridLayout(wid)
-        wid.setLayout(lay)
-
-        self.cb_orb = QComboBox(wid)
-        self.cb_orb.addItems(['bba_orb', 'ref_orb', 'servconf'])
-        self.cb_orb.currentTextChanged.connect(self._load_orbit)
-        pb_orb = QPushButton(
-            qta.icon('ei.arrow-down'), 'Save New Orbit', wid)
-        pb_orb.clicked.connect(self._save_orbit)
-
-        lay.addWidget(
-            QLabel('Config to change: '), 0, 0, alignment=Qt.AlignCenter)
-        lay.addWidget(self.cb_orb, 0, 1)
-        lay.addWidget(pb_orb, 0, 3)
-        lay.setColumnStretch(2, 2)
-        lay.setRowStretch(1, 2)
-        return wid
 
     def _load_orbit(self, confname=None):
         if confname is None:
@@ -398,6 +440,7 @@ class BPMsEqualizeSwitching(SiriusMainWindow):
         data['y'] = self._orbits['y'] + dorby
 
         win = SaveConfigDialog('si_orbit', self)
+
         def _save(confname):
             try:
                 win.client.insert_config(
@@ -405,6 +448,7 @@ class BPMsEqualizeSwitching(SiriusMainWindow):
             except (ConfigDBException, TypeError) as err:
                 _log.warning(str(err))
                 QMessageBox.warning(self, 'Warning', str(err), QMessageBox.Ok)
+
         # win.configname.connect(_save)
         confname, status = win.exec_()
         if not status:
