@@ -19,6 +19,7 @@ from .base import IDCommonControlWindow, \
 
 
 class DELTAControlWindowUtils():
+    """."""
 
     STATUS_PVS = {
         "Alarms": (
@@ -61,6 +62,10 @@ class DELTAControlWindowUtils():
         "PParam Speed": {
             "SP": "PParamVelo-SP",
             "RB": "PParamVelo-RB",
+        },
+        "Change PParam": {
+            "pvname": "PParamChange-Cmd",
+            "icon": "fa5s.play"
         },
         "Polarization": {
             "SP": "Pol-Sel",
