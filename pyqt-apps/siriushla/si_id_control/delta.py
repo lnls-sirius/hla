@@ -99,12 +99,12 @@ class DELTAControlWindowUtils():
             "KParam", "PParam"
         ),
         "Acceleration": (
-            "KParamAcc-RB", "KParamAcc-SP",
-            "PParamAcc-RB", "PParamAcc-SP"
+            "KParamAcc-SP", "KParamAcc-RB",
+            "PParamAcc-SP", "PParamAcc-RB"
         ),
         "Tolerance": (
-            "PosTol-RB", "PosTol-SP",
-            "PolTol-RB", "PolTol-SP"
+            "PosTol-SP", "PosTol-RB",
+            "PolTol-SP", "PolTol-RB"
         ),
         "Start Parking": {
             "pvname": "StartParking-Cmd",
@@ -285,7 +285,11 @@ class DELTAControlWindow(IDCommonControlWindow, DELTAControlWindowUtils):
             pv_suffix = pv_suffix[0]
 
         pvname = self.dev_pref.substitute(propty=pv_suffix)
-        led = SiriusLedAlert(init_channel=pvname)
+        if 'PLC State' in title:
+            print(pv_suffix)
+            led = SiriusLabel(self, pvname)
+        else:
+            led = SiriusLedAlert(init_channel=pvname)
         lay.addWidget(led, alignment=Qt.AlignLeft)
 
         if pv_tuple:
