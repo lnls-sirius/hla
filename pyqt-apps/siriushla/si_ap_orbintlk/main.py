@@ -152,7 +152,6 @@ class BPMOrbIntlkMainWindow(BaseObject, SiriusMainWindow):
             'Reset Timing Lock Latches': 'ResetTimingLockLatches-Cmd',
             'Configure EVG interlock': 'ConfigEVG-Cmd',
             'Configure Fout RxEnbl': 'ConfigFouts-Cmd',
-            'Configure Delta EVR': 'ConfigDeltaRedunEVR-Cmd',
             'Configure AFC Timing RTM Loop': 'ConfigAFCTiming-Cmd',
             'Reset AFC Timing RTM Clocks': 'ResetAFCTimingRTMClk-Cmd', 
             'Configure HL triggers': 'ConfigHLTriggers-Cmd',
