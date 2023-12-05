@@ -6,7 +6,7 @@ import numpy as _np
 from qtpy.QtCore import Qt, Signal, Slot, QSize
 from qtpy.QtWidgets import QPushButton, QComboBox, QSizePolicy as QSzPlcy, \
     QWidget, QHBoxLayout, QCheckBox, QLabel, QGridLayout, QSpinBox, QGroupBox,\
-    QDoubleSpinBox, QDialog, QVBoxLayout
+    QDoubleSpinBox, QDialog, QVBoxLayout, QScrollArea
 
 from pydm.widgets.base import PyDMWidget
 
@@ -419,6 +419,20 @@ class MonitoredDevicesDialog(BaseObject, QDialog):
             self, self.hlprefix.substitute(propty=propty))
         self._label.displayFormat = SiriusLabel.DisplayFormat.String
 
+        scarea = QScrollArea(self)
+        scarea.setStyleSheet(
+            '.QScrollArea{min-height: 30em;}')
+        scarea.setSizeAdjustPolicy(scarea.AdjustToContents)
+        scarea.setWidgetResizable(True)
+
+        scr_ar_wid = QWidget()
+        scr_ar_wid.setObjectName('scrollarea')
+        scr_ar_wid.setStyleSheet(
+            '#scrollarea {background-color: transparent;}')
+        gdl = QGridLayout(scr_ar_wid)
+        gdl.addWidget(self._desc)
+        gdl.addWidget(self._label)
+        scarea.setWidget(scr_ar_wid)
+
         lay = QVBoxLayout(self)
-        lay.addWidget(self._desc)
-        lay.addWidget(self._label)
+        lay.addWidget(scarea)
