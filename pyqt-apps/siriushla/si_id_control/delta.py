@@ -76,10 +76,8 @@ class DELTAControlWindowUtils():
             "pvname": "PolChange-Cmd",
             "icon": "fa5s.play"
         },
-        "Motion": {
-            "RB": "MotorsEnbld-Mon",
-            "Mon": "Moving-Mon"
-        },
+        "Moving": "Moving-Mon",
+        "Motors Enabled": "MotorsEnbld-Mon",
         "Abort": {
             "pvname": "Abort-Cmd",
             "icon": "fa5s.stop"
@@ -128,7 +126,7 @@ class DELTAControlWindow(IDCommonControlWindow, DELTAControlWindowUtils):
             label.setFixedWidth(150)
             lay.addWidget(label, row, 0)
 
-            if title == "Motion":
+            if title in ("Moving", "Motors Enabled"):
                 self._createMotion(pv_info, lay, row)
             elif title in ["KParam", "PParam", "KParam Speed", "PParam Speed"]:
                 self._createParam(pv_info, lay, row)
@@ -218,18 +216,10 @@ class DELTAControlWindow(IDCommonControlWindow, DELTAControlWindowUtils):
             col += 1
 
     def _createMotion(self, pv_info, lay, row):
-        motion_lay = QHBoxLayout()
-        pvname = self.dev_pref.substitute(propty=pv_info["RB"])
+        pvname = self.dev_pref.substitute(propty=pv_info)
         led = PyDMLed(self, init_channel=pvname)
         led.setMaximumWidth(50)
-        motion_lay.addWidget(led)
-
-        pvname = self.dev_pref.substitute(propty=pv_info["Mon"])
-        led = PyDMLed(self, init_channel=pvname)
-        led.setMaximumWidth(50)
-        motion_lay.addWidget(led)
-
-        lay.addLayout(motion_lay, row, 1, alignment=Qt.AlignLeft)
+        lay.addWidget(led, row, 1, 1, 1)
 
     def _createPolarization(self, pv_info, lay, row):
 
@@ -286,7 +276,6 @@ class DELTAControlWindow(IDCommonControlWindow, DELTAControlWindowUtils):
 
         pvname = self.dev_pref.substitute(propty=pv_suffix)
         if 'PLC State' in title:
-            print(pv_suffix)
             led = SiriusLabel(self, pvname)
         else:
             led = SiriusLedAlert(init_channel=pvname)
