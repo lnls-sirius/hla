@@ -415,6 +415,7 @@ class MonitoredDevicesDialog(BaseObject, QDialog):
         self.setWindowTitle(title)
 
         self._desc = QLabel('<h4>'+title+'</h4>')
+        self._desc.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
         self._label = SiriusLabel(
             self, self.hlprefix.substitute(propty=propty))
         self._label.displayFormat = SiriusLabel.DisplayFormat.String
