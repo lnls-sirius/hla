@@ -26,7 +26,7 @@ class GraphMonitorWidget(QWidget):
 
     def __init__(self, parent=None, prefix=_vaca_prefix):
         super().__init__(parent)
-        self._prefix = prefix
+        self.prefix = prefix
         self.setObjectName('SIApp')
         self._setupUi()
 
@@ -39,9 +39,9 @@ class GraphMonitorWidget(QWidget):
                 border-bottom: 2px solid gray;
                 border-left: 2px solid gray;
             }""")
-        tab.addTab(self._setupTab('Min.Sum. Threshold'), 'Min.Sum. Threshold')
         tab.addTab(self._setupTab('Position'), 'Position')
-        tab.addTab(self._setupTab('Angulation'), 'Angulation')
+        tab.addTab(self._setupTab('Angle'), 'Angle')
+        tab.addTab(self._setupTab('Min.Sum. Threshold'), 'Min.Sum. Threshold')
 
         lay = QGridLayout(self)
         lay.setContentsMargins(0, 0, 0, 0)
@@ -57,17 +57,17 @@ class GraphMonitorWidget(QWidget):
         lay.addWidget(label, 0, 0)
 
         if intlktype == 'Min.Sum. Threshold':
-            graph = MinSumGraphWidget(self, self._prefix)
+            graph = MinSumGraphWidget(self, self.prefix)
             lay.addWidget(graph, 2, 0)
         elif intlktype == 'Position':
             propty_sel = GraphProptySelWidget(self)
             lay.addWidget(propty_sel, 1, 0)
 
-            graphx = PosXGraphWidget(self, self._prefix)
+            graphx = PosXGraphWidget(self, self.prefix)
             lay.addWidget(graphx, 2, 0)
             legx = GraphLegendWidget(self, 'Pos', 'X')
             lay.addWidget(legx, 3, 0)
-            graphy = PosYGraphWidget(self, self._prefix)
+            graphy = PosYGraphWidget(self, self.prefix)
             lay.addWidget(graphy, 4, 0)
             legy = GraphLegendWidget(self, 'Pos', 'Y')
             lay.addWidget(legy, 5, 0)
@@ -84,15 +84,15 @@ class GraphMonitorWidget(QWidget):
                 graphy.update_propty_reforb)
             propty_sel.propty_comp_changed.connect(
                 graphy.update_propty_comptype)
-        elif intlktype == 'Angulation':
+        elif intlktype == 'Angle':
             propty_sel = GraphProptySelWidget(self)
             lay.addWidget(propty_sel, 1, 0)
 
-            graphx = AngXGraphWidget(self, self._prefix)
+            graphx = AngXGraphWidget(self, self.prefix)
             lay.addWidget(graphx, 2, 0)
             legx = GraphLegendWidget(self, 'Ang', 'X')
             lay.addWidget(legx, 3, 0)
-            graphy = AngYGraphWidget(self, self._prefix)
+            graphy = AngYGraphWidget(self, self.prefix)
             lay.addWidget(graphy, 4, 0)
             legy = GraphLegendWidget(self, 'Ang', 'Y')
             lay.addWidget(legy, 5, 0)
@@ -246,7 +246,7 @@ class GraphLegendWidget(QWidget):
         pixmap_nok = icon_nok.pixmap(icon_nok.actualSize(QSize(20, 20)))
         self._label_symnok.setPixmap(pixmap_nok)
         self._label_symnok.setSizePolicy(QSzPlcy.Fixed, QSzPlcy.Fixed)
-        self._label_labnok = QLabel('Intlk On (Limit exceeded)')
+        self._label_labnok = QLabel('Intlk Triggered (Limit exceeded)')
 
         self._label_symok = QLabel()
         icon_ok = qta.icon('mdi.square', color='#00d900')
@@ -441,7 +441,7 @@ class Graph(BaseObject, SiriusWaveformPlot):
         return _np.array(new)
 
     def _set_symbols(self, new):
-        if new:
+        if new is not None:
             all_brush, all_pen = [], []
             for sym in new:
                 if sym:
@@ -506,8 +506,6 @@ class _BaseGraphWidget(BaseObject, QWidget):
         BaseObject.__init__(self, prefix)
         QWidget.__init__(self, parent)
 
-        self._prefix = prefix
-
         self._property_intlktype = 'Latch'
         self._property_comptype = 'General'
         self._plan = '' if 'Sum' in self.INTLKTYPE else self.INTLKTYPE[-1]
@@ -522,7 +520,7 @@ class _BaseGraphWidget(BaseObject, QWidget):
             self.PROPTY_MIN_DATA, self.PROPTY_MIN_SYMB,
             self.PROPTY_MAX_DATA, self.PROPTY_MAX_SYMB,
             self._property_intlktype, self._property_comptype, self._reforb,
-            prefix=self._prefix, parent=self)
+            prefix=self.prefix, parent=self)
         self.propIntlkTypeChanged.connect(self._thread.set_propintlktype)
         self.propCompTypeChanged.connect(self._thread.set_propcomptype)
         self.refOrbChanged.connect(self._thread.set_reforb)
@@ -588,7 +586,7 @@ class _BaseGraphWidget(BaseObject, QWidget):
 class _UpdateGraphThread(BaseObject, QThread):
     """Update Graph Thread."""
 
-    UPDATE_FREQ = 0.5  # [Hz]
+    UPDATE_FREQ = 2  # [Hz]
     dataChanged = Signal(list)
 
     def __init__(self, intlktype, meas_data, meas_symb,
@@ -611,7 +609,6 @@ class _UpdateGraphThread(BaseObject, QThread):
         self._reforb = reforb
         self._refmetric = _np.array(self.calc_intlk_metric(
             self._reforb, metric=self.metric))
-        self._prefix = prefix
 
         self._quit_task = False
 
@@ -725,7 +722,7 @@ class MinSumGraphWidget(_BaseGraphWidget):
     """MinSum Graph Widget."""
 
     INTLKTYPE = 'MinSum'
-    PROPTY_MEAS_DATA = 'Sum-Mon'
+    PROPTY_MEAS_DATA = 'SlowSumRaw-Mon'
     PROPTY_MEAS_SYMB = ''
     PROPTY_MIN_DATA = 'IntlkLmtMinSum-RB'
     PROPTY_MIN_SYMB = ''

@@ -19,6 +19,10 @@ from .custom_widgets import BPMMonLed, RFFEMonLed, PBPMMonLed, \
 class RaBPMMonitor(SiriusMainWindow):
     """RaBPM monitor."""
 
+    PBPM_MAXCOUNT_PERSEC = 4
+    PBPM_ID_MAXCOUNT_PERSEC = 2
+
+
     def __init__(self, parent, prefix=''):
         super().__init__(parent)
         self.prefix = prefix
@@ -145,11 +149,14 @@ class RaBPMMonitor(SiriusMainWindow):
                 wid = QWidget()
                 wid.setObjectName('cell')
                 wid.setStyleSheet('#cell{border: 1px solid gray;}')
-                vlay = QVBoxLayout(wid)
-                vlay.setSpacing(2)
-                vlay.setContentsMargins(0, 1 if 'BO' in group else 0, 0, 0)
-                vlay.setAlignment(Qt.AlignHCenter)
-                group2lay[group] = vlay
+                if group == 'Photon BPM':
+                    lay = QGridLayout(wid)
+                else:
+                    lay = QVBoxLayout(wid)
+                lay.setSpacing(2)
+                lay.setContentsMargins(0, 1 if 'BO' in group else 0, 0, 0)
+                lay.setAlignment(Qt.AlignHCenter)
+                group2lay[group] = lay
                 grid.addWidget(
                     wid, data['row'] + 1, col, len(data['slots']), 1)
 
@@ -162,7 +169,11 @@ class RaBPMMonitor(SiriusMainWindow):
                 elif dev.dev == 'FOFBCtrl':
                     group2lay['FOFB'].addWidget(wid)
                 elif dev.dev == 'PBPM':
-                    group2lay['Photon BPM'].addWidget(wid)
+                    row = 0
+                    row += int(dev.idx) - 1
+                    if dev.sub.endswith('BCFE'):
+                        row += self.PBPM_ID_MAXCOUNT_PERSEC
+                    group2lay['Photon BPM'].addWidget(wid, row, 0)
                 else:
                     if dev.sub.endswith(('SA', 'SB', 'SP')):
                         group2lay['ID BPM'].addWidget(wid)
@@ -172,6 +183,13 @@ class RaBPMMonitor(SiriusMainWindow):
                             bobpm_cnt += 1
 
             if sec == 'IA':
+                # add auxiliary layout element for PBPM alignment
+                lay_pbpm = group2lay['Photon BPM']
+                for row in range(self.PBPM_MAXCOUNT_PERSEC):
+                    if not lay_pbpm.itemAtPosition(row, 0):
+                        wid = self._get_monitor_widget(SiriusPVName('X-X:X-X'))
+                        lay_pbpm.addWidget(wid, row, 0)
+
                 # add auxiliary layout element for BO alignment
                 if bobpm_cnt == 2:
                     wid = self._get_monitor_widget(SiriusPVName('X-X:X-X'))
