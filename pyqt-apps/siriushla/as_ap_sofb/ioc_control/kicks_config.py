@@ -82,14 +82,6 @@ class KicksConfigWidget(BaseWidget):
         det_lay.addWidget(syn_wid, 0, 1)
         det_lay.addWidget(syn_lab, 0, 2)
 
-        enbl_wid = self.create_pair_butled(
-            det_wid, 'CorrPSSOFBEnbl', is_vert=False)
-        enbl_led = SiriusLedState(det_wid, self.device+':CorrPSSOFBEnbl-Mon')
-        enbl_wid.layout().setContentsMargins(0, 0, 0, 0)
-        det_lay.addWidget(QLabel('PSSOFB Enable:', det_wid), 1, 0)
-        det_lay.addWidget(enbl_wid, 1, 1)
-        det_lay.addWidget(enbl_led, 1, 2)
-
         del_wid = self.create_pair(
             det_wid, 'Delay', device='SI-Glob:TI-Mags-Corrs', is_vert=False)
         del_det = QPushButton(qta.icon('fa5s.ellipsis-h'), '', det_wid)
