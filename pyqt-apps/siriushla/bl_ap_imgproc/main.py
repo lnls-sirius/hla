@@ -329,7 +329,19 @@ class BLImgProc(QWidget):
         self.timer.start(1000)
         lay.addWidget(self.pydm_led)
 
-        self.pydm_lbl = QLabel('')
+        return wid
+    
+    def _setup_beamline_error_log(self):
+        wid = QGroupBox()
+        lay = QHBoxLayout()
+        wid.setLayout(lay)
+        wid.setTitle("Beamline Status")
+        wid.setMaximumHeight(200)
+
+        self.beamline_error_log = QLabel('Error log')
+        lay.addWidget(self.beamline_error_log)
+
+        self.pydm_lbl = QLabel(self.blpps.blintlk.error_log)
         lay.addWidget(self.pydm_lbl)
 
         return wid
@@ -350,6 +362,9 @@ class BLImgProc(QWidget):
         lay.addWidget(widget)
 
         widget = self._setup_enable_beamline_widgets()
+        lay.addWidget(widget)
+
+        widget = self._setup_beamline_error_log()
         lay.addWidget(widget)
 
         return wid
