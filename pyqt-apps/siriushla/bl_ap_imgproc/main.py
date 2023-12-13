@@ -305,6 +305,9 @@ class BLImgProc(QWidget):
             self.pydm_led.value_changed(status_bl)
             if old_val != status_bl:
                 self.end_processing_cmd()
+        if self.pydm_lbl != None:
+            error_bl = self.blpps.blintlk.error_log
+            self.pydm_lbl.setText(error_bl)
 
     def _setup_enable_beamline_widgets(self):
         wid = QGroupBox()
@@ -321,9 +324,13 @@ class BLImgProc(QWidget):
 
         self.pydm_led = SiriusLedState()
         self.pydm_led.stateColors = [
-            self.pydm_led.DarkGreen, self.pydm_led.LightGreen, self.pydm_led.Gray]
+            self.pydm_led.DarkGreen,
+            self.pydm_led.LightGreen, self.pydm_led.Gray]
         self.timer.start(1000)
         lay.addWidget(self.pydm_led)
+
+        self.pydm_lbl = QLabel('')
+        lay.addWidget(self.pydm_lbl)
 
         return wid
 
