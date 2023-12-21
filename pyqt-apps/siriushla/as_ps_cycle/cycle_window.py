@@ -43,7 +43,7 @@ class ProgressListHandler(_log.logging.Handler):
 
     def emit(self, record):
         """."""
-        msg = self.format(msg)
+        msg = self.format(record)
         error = record.levelno >= _log.logging.ERROR
         warning = not error and record.levelno >= _log.logging.WARNING
         self.callback(msg, warning=warning, error=error)
