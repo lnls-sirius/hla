@@ -80,42 +80,26 @@ class IDFFWindow(SiriusMainWindow):
         self.lb_loopfreq = SiriusLabel(
             self, self.dev_pref.substitute(propty='LoopFreq-RB'))
 
-        lb_ch1 = QLabel(
-            'CorrCH1: ', self, alignment=Qt.AlignRight)
-        self.lb_ch1 = SiriusLabel(
-            self, self.dev_pref.substitute(propty='CorrCH1Current-Mon'),
-            keep_unit=True)
-        self.lb_ch1.showUnits = True
-        lb_ch2 = QLabel(
-            'CorrCH2: ', self, alignment=Qt.AlignRight)
-        self.lb_ch2 = SiriusLabel(
-            self, self.dev_pref.substitute(propty='CorrCH2Current-Mon'),
-            keep_unit=True)
-        self.lb_ch2.showUnits = True
-        lb_cv1 = QLabel(
-            'CorrCV1: ', self, alignment=Qt.AlignRight)
-        self.lb_cv1 = SiriusLabel(
-            self, self.dev_pref.substitute(propty='CorrCV1Current-Mon'),
-            keep_unit=True)
-        self.lb_cv1.showUnits = True
-        lb_cv2 = QLabel(
-            'CorrCV2: ', self, alignment=Qt.AlignRight)
-        self.lb_cv2 = SiriusLabel(
-            self, self.dev_pref.substitute(propty='CorrCV2Current-Mon'),
-            keep_unit=True)
-        self.lb_cv2.showUnits = True
-        lb_qs1 = QLabel(
-            'CorrQS1: ', self, alignment=Qt.AlignRight)
-        self.lb_qs1 = SiriusLabel(
-            self, self.dev_pref.substitute(propty='CorrQS1Current-Mon'),
-            keep_unit=True)
-        self.lb_qs1.showUnits = True
-        lb_qs2 = QLabel(
-            'CorrQS2: ', self, alignment=Qt.AlignRight)
-        self.lb_qs2 = SiriusLabel(
-            self, self.dev_pref.substitute(propty='CorrQS2Current-Mon'),
-            keep_unit=True)
-        self.lb_qs2.showUnits = True
+        ld_calccorr = QLabel(
+            'Calc. values:', self, alignment=Qt.AlignRight)
+        glay_calccorr = QGridLayout()
+        glay_calccorr.addWidget(ld_calccorr, 0, 0)
+        for ridx, corr in enumerate(['CH', 'CV', 'QS']):
+            row = ridx + 1
+            hheader = QLabel(f'{corr}', alignment=Qt.AlignCenter)
+            hheader.setStyleSheet('.QLabel{font-weight: bold;}')
+            glay_calccorr.addWidget(hheader, row, 0)
+            for cidx in range(2):
+                col = cidx + 1
+                if ridx == 0:
+                    vheader = QLabel(f'{col}', alignment=Qt.AlignCenter)
+                    vheader.setStyleSheet('.QLabel{font-weight: bold;}')
+                    glay_calccorr.addWidget(vheader, 0, col)
+                propty = f'Corr{corr}{col}Current-Mon'
+                pvname = self.dev_pref.substitute(propty=propty)
+                lbl = SiriusLabel(self, pvname, keep_unit=True)
+                lbl.showUnits = True
+                glay_calccorr.addWidget(lbl, row, col)
 
         gbox = QGroupBox('Settings', self)
         lay = QGridLayout(gbox)
@@ -143,18 +127,7 @@ class IDFFWindow(SiriusMainWindow):
             lay.addWidget(self.sb_controlqs, 5, 1)
             lay.addWidget(self.lb_controlqs, 5, 2)
 
-        lay.addWidget(lb_ch1, 7, 0)
-        lay.addWidget(self.lb_ch1, 7, 1)
-        lay.addWidget(lb_ch2, 8, 0)
-        lay.addWidget(self.lb_ch2, 8, 1)
-        lay.addWidget(lb_cv1, 9, 0)
-        lay.addWidget(self.lb_cv1, 9, 1)
-        lay.addWidget(lb_cv2, 10, 0)
-        lay.addWidget(self.lb_cv2, 10, 1)
-        lay.addWidget(lb_qs1, 11, 0)
-        lay.addWidget(self.lb_qs1, 11, 1)
-        lay.addWidget(lb_qs2, 12, 0)
-        lay.addWidget(self.lb_qs2, 12, 1)
+        lay.addLayout(glay_calccorr, 7, 0, 1, 3)
 
         return gbox
 
