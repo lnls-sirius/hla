@@ -183,6 +183,16 @@ class SIGenStatusWindow(SiriusMainWindow):
         self._gbox_bbbloop = self._create_groupbox(
             'BbB', ledsbbb, orientation='H')
 
+        # orbit interlock
+        pvname = _PVName('SI-Glob:AP-OrbIntlk:Enable-Sts')
+        pvname = pvname.substitute(prefix=self.prefix)
+        self._led_orbintlk = SiriusLedState(self, pvname)
+        self._led_orbintlk.setStyleSheet(
+            'QLed{min-width:3em;min-height:3em;max-width:3em;max-height:3em;}')
+        self._led_orbintlk.offColor = SiriusLedState.Red
+        self._gbox_orbintlk = self._create_groupbox(
+            'Orbit Interlock', self._led_orbintlk)
+
         # current
         self.ld_curr = QLabel(
             '<h3>Current [mA]</h3>', self, alignment=Qt.AlignCenter)
@@ -284,11 +294,13 @@ class SIGenStatusWindow(SiriusMainWindow):
         hlay2.addWidget(self._gbox_sofbloop)
         hlay2.addWidget(self._gbox_fofbloop)
         hlay2.addWidget(self._gbox_bbbloop)
+        hlay2.addWidget(self._gbox_orbintlk)
         hlay2.setStretch(0, 1)
         hlay2.setStretch(1, 1)
         hlay2.setStretch(2, 1)
         hlay2.setStretch(3, 1)
         hlay2.setStretch(4, 1)
+        hlay2.setStretch(5, 1)
 
         cwid = QWidget()
         lay = QGridLayout(cwid)
