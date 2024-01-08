@@ -11,8 +11,12 @@ import qtawesome as qta
 
 from siriuspy.envars import VACA_PREFIX
 from siriuspy.namesys import SiriusPVName as _PVName
+from siriuspy.search import PSSearch as _PSSearch, \
+    HLTimeSearch as _HLTimeSearch
 from siriuspy.clientarch.time import Time
+from siriuspy.csdev import Const as _Const
 from siriuspy.injctrl.csdev import Const as _InjConst
+from siriuspy.pwrsupply.csdev import Const as _PSConst
 
 from ..util import get_appropriate_color
 from ..widgets import SiriusMainWindow, SiriusTimePlot, SiriusFrame, \
@@ -183,6 +187,35 @@ class SIGenStatusWindow(SiriusMainWindow):
         self._gbox_bbbloop = self._create_groupbox(
             'BbB', ledsbbb, orientation='H')
 
+        # feedforward
+        chs2vals = dict()
+        ti_pref = _PVName('SI-01:TI-Mags-FFCorrs')
+        ti_src = _HLTimeSearch.get_hl_trigger_predef_db(
+            ti_pref)['Src']['enums'].index('Linac')
+        tiprop2val = {
+            'State-Sts': _Const.OffOn.On,
+            'Src-Sts': ti_src,
+        }
+        for prop, val in tiprop2val.items():
+            pvn = ti_pref.substitute(
+                prefix=self.prefix,
+                propty=prop,
+            )
+            chs2vals[pvn] = val
+        for psn in _PSSearch.get_psnames({'sec': 'SI', 'dev': 'FFC.*'}):
+            pvn = _PVName(psn).substitute(
+                prefix=self.prefix,
+                propty='OpMode-Sts',
+            )            
+            chs2vals[pvn] = _PSConst.States.RmpWfm
+        self._led_septff = PyDMLedMultiChannel(self, chs2vals)
+        self._led_septff.setStyleSheet(
+            'QLed{min-width:3em;min-height:3em;'
+            'max-width:3em;max-height:3em;}')
+        self._led_septff.offColor = SiriusLedState.Red
+        self._gbox_septff = self._create_groupbox(
+            'Septa Feedforward', self._led_septff)
+
         # orbit interlock
         pvname = _PVName('SI-Glob:AP-OrbIntlk:Enable-Sts')
         pvname = pvname.substitute(prefix=self.prefix)
@@ -294,6 +327,7 @@ class SIGenStatusWindow(SiriusMainWindow):
         hlay2.addWidget(self._gbox_sofbloop)
         hlay2.addWidget(self._gbox_fofbloop)
         hlay2.addWidget(self._gbox_bbbloop)
+        hlay2.addWidget(self._gbox_septff)
         hlay2.addWidget(self._gbox_orbintlk)
         hlay2.setStretch(0, 1)
         hlay2.setStretch(1, 1)
@@ -301,6 +335,7 @@ class SIGenStatusWindow(SiriusMainWindow):
         hlay2.setStretch(3, 1)
         hlay2.setStretch(4, 1)
         hlay2.setStretch(5, 1)
+        hlay2.setStretch(6, 1)
 
         cwid = QWidget()
         lay = QGridLayout(cwid)
