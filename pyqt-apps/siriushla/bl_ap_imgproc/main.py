@@ -51,10 +51,11 @@ class BLImgProc(QWidget):
         self.open_beamline_btn = None
         self.enable_gamma_btn = None
         self.gamma_enabled_conn = None
-        self.timer = QTimer()
-        self.timer.timeout.connect(self.update_bl_open_led)
-
         self._setupUi()
+
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.update_bl_open_status)
+        self.timer.start(1000)
 
     def add_prefixes(self, sufix):
         return self.device + ":" + sufix
@@ -298,13 +299,17 @@ class BLImgProc(QWidget):
 
         return wid
 
-    def update_bl_open_led(self):
-        if self.pydm_led != None:
-            status_bl = self.blpps.beamline_opened
-            old_val = self.pydm_led.value
-            self.pydm_led.value_changed(status_bl)
-            if old_val != status_bl:
-                self.end_processing_cmd()
+    def update_bl_open_status(self):
+        # update open status led
+        status_bl = self.blpps.beamline_opened
+        old_val = self.pydm_led.value
+        self.pydm_led.value_changed(status_bl)
+        if old_val != status_bl:
+            self.end_processing_cmd()
+
+        # update log error label
+        error_bl = self.blpps.blintlk.error_log
+        self.pydm_lbl.setText(error_bl)
 
     def _setup_enable_beamline_widgets(self):
         wid = QGroupBox()
@@ -313,7 +318,6 @@ class BLImgProc(QWidget):
         wid.setTitle("Open Beamline")
         wid.setMaximumHeight(200)
 
-
         self.open_beamline_btn = QPushButton("Open")
         self.open_beamline_btn.clicked.connect(
             lambda: self.intlk_cmd("open_beamline"))
@@ -321,9 +325,24 @@ class BLImgProc(QWidget):
 
         self.pydm_led = SiriusLedState()
         self.pydm_led.stateColors = [
-            self.pydm_led.DarkGreen, self.pydm_led.LightGreen, self.pydm_led.Gray]
-        self.timer.start(1000)
+            self.pydm_led.DarkGreen,
+            self.pydm_led.LightGreen, self.pydm_led.Gray]
         lay.addWidget(self.pydm_led)
+
+        return wid
+
+    def _setup_beamline_error_log(self):
+        wid = QGroupBox()
+        lay = QHBoxLayout()
+        wid.setLayout(lay)
+        wid.setTitle("Beamline Status")
+        wid.setMaximumHeight(200)
+
+        self.beamline_error_log = QLabel('Error log: ')
+        lay.addWidget(self.beamline_error_log)
+
+        self.pydm_lbl = QLabel(self.blpps.blintlk.error_log)
+        lay.addWidget(self.pydm_lbl)
 
         return wid
 
@@ -343,6 +362,9 @@ class BLImgProc(QWidget):
         lay.addWidget(widget)
 
         widget = self._setup_enable_beamline_widgets()
+        lay.addWidget(widget)
+
+        widget = self._setup_beamline_error_log()
         lay.addWidget(widget)
 
         return wid
