@@ -20,6 +20,7 @@ class CryoControl(SiriusMainWindow):
         self.prefix = prefix + ('-' if prefix else '')
         self.relative_widgets = []
         self.screen = screen
+        self.prefix = 'm'
         self._setupUi()
 
     def eventFilter(self, obj, event):
@@ -28,6 +29,9 @@ class CryoControl(SiriusMainWindow):
             for relative_item in self.relative_widgets:
                 relative_item.relativeResize()
         return super().eventFilter(obj, event)
+
+    def get_pvname(self, name):
+        return self.prefix + name + "-Mon"
 
     def add_background_image(self):
         img_path = SCREENS[self.screen]["image"]
@@ -121,9 +125,9 @@ class CryoControl(SiriusMainWindow):
         return pydm_lbl
 
     def add_label_egu(self, pvname, lay, line, isEditable=False):
+        pvname = self.get_pvname(pvname)
         wid = self.get_pydm_widget(pvname, isEditable)
         lay.addWidget(wid, line, 0, 1, 1)
-
         pydm_lbl = SiriusLabel(
             init_channel=pvname+".EGU")
         pydm_lbl.setAlignment(Qt.AlignCenter)
@@ -192,6 +196,7 @@ class CryoControl(SiriusMainWindow):
                 wid, [7.25, height], config["position"])
 
     def get_led(self, pvname):
+        pvname = self.get_pvname(pvname)
         led = SiriusLedAlert(
             init_channel=pvname)
         led.shape = 3
