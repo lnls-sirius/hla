@@ -49,87 +49,87 @@ LABELS_CBX1 = {
 PVS_CBX1 = {
     "GP1.HP1.010.P": {
         "position": [0.25, 62],
-        "pvname": "",
+        "pvname": "GP1HP1010P",
         "color": COLOR.blue
     },
     "GP2.HP1.010.P": {
         "position": [6.75, 62],
-        "pvname": "",
+        "pvname": "GP2HP1010P",
         "color": COLOR.blue
     },
     "CI1.LP1.015.P": {
         "position": [0.25, 69.5],
-        "pvname": "",
+        "pvname": "CI1LP1015P",
         "color": COLOR.blue
     },
     "CI2.LP1.015.P": {
         "position": [6.75, 69.5],
-        "pvname": "",
+        "pvname": "CI2LP1015P",
         "color": COLOR.blue
     },
     "NP1.110.T": {
         "position": [15.5, 24.5],
-        "pvname": "",
+        "pvname": "NP1110T",
         "color": COLOR.dark_red
     },
     "NP1.100.T": {
         "position": [15.5, 47.5],
-        "pvname": "",
+        "pvname": "NP1100T",
         "color": COLOR.dark_red
     },
     "NP1.QN010": {
         "position": [24, 39],
-        "pvname": "",
+        "pvname": "NP1QN010",
         "color": COLOR.wine
     },
     "LP1.110.T": {
         "position": [20, 69.5],
-        "pvname": "",
+        "pvname": "LP1110T",
         "color": COLOR.dark_red
     },
     "AE1.QN020": {
         "position": [28.75, 47],
-        "pvname": "",
+        "pvname": "AE1QN020",
         "color": COLOR.blue
     },
     "AE1.QN010": {
         "position": [28.75, 58.5],
-        "pvname": "",
+        "pvname": "AE1QN010",
         "color": COLOR.blue
     },
     "AE1.035.T": {
         "position": [35.5, 39],
-        "pvname": "",
+        "pvname": "AE1035T",
         "color": COLOR.dark_red
     },
     "AE1.QN030": {
         "position": [37.25, 58.5],
-        "pvname": "",
+        "pvname": "AE1QN030",
         "color": COLOR.blue
     },
     "AE1.065.T": {
         "position": [47.5, 39],
-        "pvname": "",
+        "pvname": "AE1065T",
         "color": COLOR.dark_red
     },
     "AE1.EB050": {
         "position": [41.75, 50],
-        "pvname": "",
+        "pvname": "AE1EB050",
         "color": COLOR.black
     },
     "RU1.AE1.065.P": {
         "position": [57.5, 20.5],
-        "pvname": "",
+        "pvname": "RU1AE1065P",
         "color": COLOR.blue
     },
     "AS1.020.P": {
         "position": [90.9, 26],
-        "pvname": "",
+        "pvname": "AS1020P",
         "color": COLOR.blue
     },
     "AE1.QN080": {
         "position": [80.5, 47],
-        "pvname": "",
+        "pvname": "AE1QN080",
         "color": COLOR.blue
     }
 }
@@ -137,30 +137,30 @@ PVS_CBX1 = {
 LEDS_CBX1 = {
     "AE1.QN020.UPPER": {
         "position": [25.25, 39.8],
-        "pvname": ""
+        "pvname": "AE1QN020UPPER"
     },
     "AE1.QN020.LOWER": {
         "position": [25.25, 42],
-        "pvname": ""
+        "pvname": "AE1QN020LOWER"
     },
     "AE1.QN010.UPPER": {
         "position": [25.25, 51.25],
-        "pvname": ""
+        "pvname": "AE1QN010UPPER"
     },
     "AE1.QN010.LOWER": {
         "position": [25.25, 53.6],
-        "pvname": ""
+        "pvname": "AE1QN010LOWER"
     },
     "AE1.QN030": {
         "position": [32.25, 60],
-        "pvname": ""
+        "pvname": "AE1QN030"
     },
     "AE1.QN080.UPPER": {
         "position": [77.3, 39.8],
-        "pvname": ""
+        "pvname": "AE1QN080UPPER"
     },
     "AE1.QN080.LOWER": {
         "position": [77.3, 42],
-        "pvname": ""
+        "pvname": "AE1QN080LOWER"
     }
 }

@@ -1,5 +1,3 @@
-import typing
-from PyQt5 import QtCore
 from PyQt5.QtWidgets import QWidget
 from PyQt5.QtGui import QPainter, QPolygon, QColor, \
     QBrush, QFont

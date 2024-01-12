@@ -123,136 +123,136 @@ LABELS_CO = {
 PVS_CO = {
     "CP1.CW1.035.T": {
         "position": [4.75, 11],
-        "pvname": "",
+        "pvname": "CP1CW1035T",
         "color": COLOR.dark_red
     },
     "CP1.CW1.065.P": {
         "position": [18, 6.25],
-        "pvname": "",
+        "pvname": "CP1CW1065P",
         "color": COLOR.blue
     },
     "CP1.CW1.065.T": {
         "position": [18, 11],
-        "pvname": "",
+        "pvname": "CP1CW1065T",
         "color": COLOR.dark_red
     },
     "CP1.CW1.GQ050": {
         "position": [16.5, 18],
-        "pvname": "",
+        "pvname": "CP1CW1GQ050",
         "color": COLOR.black
     },
     "CP1.CW1.050.S": {
         "position": [16.5, 23],
-        "pvname": "",
+        "pvname": "CP1CW1050S",
         "color": COLOR.gold
     },
     "CP1.LP1.015.P": {
         "position": [4.75, 29],
         "pvname": (
-            "", ""),
+            "CP1LP1015P", ""),
         "color": COLOR.blue
     },
     "CP2.CW1.035.T": {
         "position": [4.75, 54],
-        "pvname": "",
+        "pvname": "CP2CW1035T",
         "color": COLOR.dark_red
     },
     "CP2.CW1.065.P": {
         "position": [18, 49.25],
-        "pvname": "",
+        "pvname": "CP2CW1065P",
         "color": COLOR.blue
     },
     "CP2.CW1.065.T": {
         "position": [18, 54],
-        "pvname": "",
+        "pvname": "CP2CW1065T",
         "color": COLOR.dark_red
     },
     "CP2.CW1.GQ050": {
         "position": [16.5, 61],
-        "pvname": "",
+        "pvname": "CP2CW1GQ050",
         "color": COLOR.black
     },
     "CP2.CW1.050.S": {
         "position": [16.5, 66],
-        "pvname": "",
+        "pvname": "CP2CW1050S",
         "color": COLOR.gold
     },
     "CP2.LP1.015.P": {
         "position": [16.25, 81],
         "pvname": (
-            "", ""),
+            "CP2LP1015P", ""),
         "color": COLOR.blue
     },
     "GP1.HP1.010.P": {
         "position": [51.8, 5],
         "pvname": (
-            "", ""),
+            "GP1HP1010P", ""),
         "color": COLOR.blue
     },
     "GP2.HP1.010.P": {
         "position": [51.8, 47],
         "pvname": (
-            "", ""),
+            "GP2HP1010P", ""),
         "color": COLOR.blue
     },
     "MC1.051.A": {
         "position": [37, 73],
-        "pvname": "",
+        "pvname": "MC1051A",
         "color": COLOR.gold
     },
     "MC1.052.A": {
         "position": [44, 73],
-        "pvname": "",
+        "pvname": "MC1052A",
         "color": COLOR.gold
     },
     "MC1.053.A": {
         "position": [37, 78],
-        "pvname": "",
+        "pvname": "MC1053A",
         "color": COLOR.gold
     },
     "MC1.054.A": {
         "position": [44, 78],
-        "pvname": "",
+        "pvname": "MC1054A",
         "color": COLOR.gold
     },
     "GP1.HP1.QN030": {
         "position": [71.25, 18],
-        "pvname": "",
+        "pvname": "GP1HP1QN030",
         "color": COLOR.dark_blue
     },
     "GP1.HP1.QN050": {
         "position": [71.25, 31.75],
-        "pvname": "",
+        "pvname": "GP1HP1QN050",
         "color": COLOR.dark_blue
     },
     "GP1.HP1.QN070": {
         "position": [71.25, 38],
-        "pvname": "",
+        "pvname": "GP1HP1QN070",
         "color": COLOR.dark_blue
     },
     "GP1.HP1.040.P": {
         "position": [79, 22],
-        "pvname": "",
+        "pvname": "GP1HP1040P",
         "color": COLOR.blue
     },
     "GP2.HP1.QN030": {
         "position": [71.25, 60],
-        "pvname": "",
+        "pvname": "GP2HP1QN030",
         "color": COLOR.dark_blue
     },
     "GP2.HP1.QN050": {
         "position": [71.25, 73.75],
-        "pvname": "",
+        "pvname": "GP2HP1QN050",
         "color": COLOR.dark_blue
     },
     "GP2.HP1.QN070": {
         "position": [71.25, 80],
-        "pvname": "",
+        "pvname": "GP2HP1QN070",
         "color": COLOR.dark_blue
     },
     "GP2.HP1.040.P": {
         "position": [79, 57.5],
-        "pvname": "",
+        "pvname": "GP2HP1040P",
         "color": COLOR.blue
     }
 }

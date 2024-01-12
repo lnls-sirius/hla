@@ -88,88 +88,88 @@ LABELS_MANBOX = {
 PVS_MANBOX = {
     "NS1.QN020": {
         "position": [5.5, 47.5],
-        "pvname": "",
+        "pvname": "NS1QN020",
         "color": COLOR.wine
     },
     "NS1.050.L": {
         "position": [21.25, 52.5],
-        "pvname": "",
+        "pvname": "NS1050L",
         "color": COLOR.gold
     },
     "NS1.050.T": {
         "position": [21.25, 60],
-        "pvname": "",
+        "pvname": "NS1050T",
         "color": COLOR.dark_red
     },
     "LP1.EG050": {
         "position": [43, 18],
-        "pvname": "",
+        "pvname": "LP1EG050",
         "color": COLOR.transparent,
         "editable": True
     },
     "PR1.QN080": {
         "position": [51.5, 27.5],
-        "pvname": "",
+        "pvname": "PR1QN080",
         "color": COLOR.blue
     },
     "PR1.050.P": {
         "position": [40, 34],
-        "pvname": "",
+        "pvname": "PR1050P",
         "color": COLOR.blue
     },
     "PR1.065.T": {
         "position": [49.5, 34],
-        "pvname": "",
+        "pvname": "PR1065T",
         "color": COLOR.dark_red
     },
     "PR1.050.L2": {
         "position": [37.5, 52.2],
-        "pvname": "",
+        "pvname": "PR1050L2",
         "color": COLOR.blue
     },
     "PR1.050.L": {
         "position": [37.5, 50],
-        "pvname": "",
+        "pvname": "PR1050L",
         "color": COLOR.gold
     },
     "PR1.050.J": {
         "position": [37.5, 67.5],
-        "pvname": "",
+        "pvname": "PR1050J",
         "color": COLOR.black
     },
     "PR1.EB050": {
         "position": [45, 67.5],
-        "pvname": "",
+        "pvname": "PR1EB050",
         "color": COLOR.black
     },
     "PS1.QN020": {
         "position": [62.5, 27.5],
-        "pvname": "",
+        "pvname": "PS1QN020",
         "color": COLOR.blue
     },
     "PS1.020.T": {
         "position": [63, 34],
-        "pvname": "",
+        "pvname": "PS1020T",
         "color": COLOR.dark_red
     },
     "PR1.020.T": {
         "position": [54.25, 80],
-        "pvname": "",
+        "pvname": "PR1020T",
         "color": COLOR.dark_red
     },
     "PR2.020.T": {
         "position": [74.25, 80],
-        "pvname": "",
+        "pvname": "PR2020T",
         "color": COLOR.dark_red
     },
     "PR3.020.T": {
         "position": [90.75, 80],
-        "pvname": "",
+        "pvname": "PR3020T",
         "color": COLOR.dark_red
     },
     "VU1.020.P": {
         "position": [89, 19],
-        "pvname": "",
+        "pvname": "VU1020P",
         "color": COLOR.blue
     }
 }
