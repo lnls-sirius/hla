@@ -25,12 +25,12 @@ jobs:
         run: pip install -r pyqt-apps/docs/doc_requirements.txt
 
       - name: Build HTML
-        run: sphinx-build -b html pyqt-apps/docs/source/ public
+        run: sphinx-build -b html pyqt-apps/docs/source/ public/
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           publish_branch: documentation
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: public/
+          publish_dir: ./public/
           force_orphan: true
