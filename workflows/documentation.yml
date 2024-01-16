@@ -34,7 +34,7 @@ jobs:
         run: cd source
 
       - name: Build HTML
-        run: sphinx-build -b html . ../_build
+        run: sphinx-build -b html . /_build
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
