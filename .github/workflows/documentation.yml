@@ -18,6 +18,9 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v3
 
+      - name: Checkout
+        run: ls
+
       - name: Install siriushla
         run: pip install pyqt-apps
 
