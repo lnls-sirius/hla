@@ -1,5 +1,5 @@
-siriushla.as\_ap\_sofb package
-==============================
+siriushla.as\_ap\_sofb
+======================
 
 Subpackages
 -----------
@@ -10,8 +10,8 @@ Subpackages
    siriushla.as_ap_sofb.graphics
    siriushla.as_ap_sofb.ioc_control
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.as\_ap\_sofb.main module
 ----------------------------------

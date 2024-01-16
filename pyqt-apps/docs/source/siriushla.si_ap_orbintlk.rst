@@ -1,8 +1,8 @@
-siriushla.si\_ap\_orbintlk package
-==================================
+siriushla.si\_ap\_orbintlk
+==========================
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.si\_ap\_orbintlk.base module
 --------------------------------------

@@ -1,8 +1,8 @@
-siriushla.as\_ap\_magoffconv package
-====================================
+siriushla.as\_ap\_magoffconv
+============================
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.as\_ap\_magoffconv.main module
 ----------------------------------------

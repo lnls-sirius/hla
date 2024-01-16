@@ -1,5 +1,5 @@
-siriushla.as\_ap\_configdb.pvsconfigs package
-=============================================
+siriushla.as\_ap\_configdb.pvsconfigs
+=====================================
 
 Subpackages
 -----------
@@ -9,8 +9,8 @@ Subpackages
 
    siriushla.as_ap_configdb.pvsconfigs.delegate
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.as\_ap\_configdb.pvsconfigs.load\_and\_apply module
 -------------------------------------------------------------

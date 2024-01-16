@@ -1,8 +1,8 @@
-siriushla.li\_ap\_mps package
-=============================
+siriushla.li\_ap\_mps
+=====================
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.li\_ap\_mps.bypass\_btn module
 ----------------------------------------

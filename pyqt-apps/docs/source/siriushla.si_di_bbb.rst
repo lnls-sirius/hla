@@ -1,8 +1,8 @@
-siriushla.si\_di\_bbb package
-=============================
+siriushla.si\_di\_bbb
+=====================
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.si\_di\_bbb.acquisition module
 ----------------------------------------

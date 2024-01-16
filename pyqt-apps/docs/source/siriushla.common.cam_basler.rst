@@ -1,8 +1,8 @@
-siriushla.common.cam\_basler package
-====================================
+siriushla.common.cam\_basler
+============================
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.common.cam\_basler.base module
 ----------------------------------------

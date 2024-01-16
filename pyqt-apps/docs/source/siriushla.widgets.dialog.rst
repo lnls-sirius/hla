@@ -1,8 +1,8 @@
-siriushla.widgets.dialog package
-================================
+siriushla.widgets.dialog
+========================
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.widgets.dialog.progress\_dialog module
 ------------------------------------------------

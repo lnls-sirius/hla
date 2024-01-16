@@ -1,8 +1,8 @@
-siriushla.li\_eg\_control package
-=================================
+siriushla.li\_eg\_control
+=========================
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.li\_eg\_control.main module
 -------------------------------------

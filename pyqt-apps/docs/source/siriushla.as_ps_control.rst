@@ -1,5 +1,5 @@
-siriushla.as\_ps\_control package
-=================================
+siriushla.as\_ps\_control
+=========================
 
 Subpackages
 -----------
@@ -10,8 +10,8 @@ Subpackages
    siriushla.as_ps_control.control_widget
    siriushla.as_ps_control.detail_widget
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.as\_ps\_control.PSControlWindow module
 ------------------------------------------------

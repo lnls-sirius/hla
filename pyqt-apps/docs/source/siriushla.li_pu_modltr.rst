@@ -1,8 +1,8 @@
-siriushla.li\_pu\_modltr package
-================================
+siriushla.li\_pu\_modltr
+========================
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.li\_pu\_modltr.auxiliary\_dialogs module
 --------------------------------------------------

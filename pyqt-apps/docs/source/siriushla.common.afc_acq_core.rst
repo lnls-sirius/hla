@@ -1,8 +1,8 @@
-siriushla.common.afc\_acq\_core package
-=======================================
+siriushla.common.afc\_acq\_core
+===============================
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.common.afc\_acq\_core.base module
 -------------------------------------------

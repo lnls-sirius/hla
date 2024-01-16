@@ -1,8 +1,8 @@
-siriushla.as\_rf\_control package
-=================================
+siriushla.as\_rf\_control
+=========================
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.as\_rf\_control.control module
 ----------------------------------------

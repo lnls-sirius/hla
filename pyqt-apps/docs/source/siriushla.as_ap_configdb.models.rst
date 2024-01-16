@@ -1,8 +1,14 @@
-siriushla.as\_ap\_configdb.models package
-=========================================
+siriushla.as\_ap\_configdb.models
+=================================
 
-Submodules
-----------
+.. automodule:: siriushla.as_ap_configdb.models
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Code Documentation
+------------------
+
 
 siriushla.as\_ap\_configdb.models.config\_db\_table\_model module
 -----------------------------------------------------------------
@@ -32,14 +38,6 @@ siriushla.as\_ap\_configdb.models.pv\_configuration\_model module
 -----------------------------------------------------------------
 
 .. automodule:: siriushla.as_ap_configdb.models.pv_configuration_model
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: siriushla.as_ap_configdb.models
    :members:
    :undoc-members:
    :show-inheritance:

@@ -1,8 +1,8 @@
-siriushla.bl\_ap\_imgproc package
-=================================
+siriushla.bl\_ap\_imgproc
+=========================
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.bl\_ap\_imgproc.blintlkctl module
 -------------------------------------------

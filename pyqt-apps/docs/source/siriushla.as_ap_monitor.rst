@@ -1,8 +1,8 @@
-siriushla.as\_ap\_monitor package
-=================================
+siriushla.as\_ap\_monitor
+=========================
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.as\_ap\_monitor.main module
 -------------------------------------

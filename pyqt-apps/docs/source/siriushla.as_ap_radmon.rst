@@ -1,8 +1,8 @@
-siriushla.as\_ap\_radmon package
-================================
+siriushla.as\_ap\_radmon
+========================
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.as\_ap\_radmon.main module
 ------------------------------------

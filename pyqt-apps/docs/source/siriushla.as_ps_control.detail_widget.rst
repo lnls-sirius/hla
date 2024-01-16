@@ -1,8 +1,8 @@
-siriushla.as\_ps\_control.detail\_widget package
-================================================
+siriushla.as\_ps\_control.detail\_widget
+========================================
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.as\_ps\_control.detail\_widget.DetailWidgetFactory module
 -------------------------------------------------------------------

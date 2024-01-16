@@ -1,8 +1,8 @@
-siriushla.as\_ps\_commands package
-==================================
+siriushla.as\_ps\_commands
+==========================
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.as\_ps\_commands.main module
 --------------------------------------

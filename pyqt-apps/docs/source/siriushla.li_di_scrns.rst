@@ -1,8 +1,8 @@
-siriushla.li\_di\_scrns package
-===============================
+siriushla.li\_di\_scrns
+=======================
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.li\_di\_scrns.main module
 -----------------------------------

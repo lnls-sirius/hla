@@ -1,8 +1,8 @@
-siriushla.as\_di\_vlight package
-================================
+siriushla.as\_di\_vlight
+========================
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.as\_di\_vlight.main module
 ------------------------------------

@@ -1,8 +1,8 @@
-siriushla.common.epics.task package
-===================================
+siriushla.common.epics.task
+===========================
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.common.epics.task.checker module
 ------------------------------------------

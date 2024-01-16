@@ -1,8 +1,8 @@
-siriushla.as\_ap\_sofb.graphics package
-=======================================
+siriushla.as\_ap\_sofb.graphics
+===============================
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.as\_ap\_sofb.graphics.base module
 -------------------------------------------

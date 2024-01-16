@@ -1,8 +1,8 @@
-siriushla.as\_di\_dccts package
-===============================
+siriushla.as\_di\_dccts
+=======================
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.as\_di\_dccts.graphics module
 ---------------------------------------

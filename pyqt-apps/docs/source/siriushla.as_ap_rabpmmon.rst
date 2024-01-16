@@ -1,8 +1,8 @@
-siriushla.as\_ap\_rabpmmon package
-==================================
+siriushla.as\_ap\_rabpmmon
+==========================
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.as\_ap\_rabpmmon.custom\_widgets module
 -------------------------------------------------

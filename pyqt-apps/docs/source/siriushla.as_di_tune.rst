@@ -1,8 +1,8 @@
-siriushla.as\_di\_tune package
-==============================
+siriushla.as\_di\_tune
+======================
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.as\_di\_tune.controls module
 --------------------------------------

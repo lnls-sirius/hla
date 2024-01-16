@@ -1,8 +1,8 @@
-siriushla.common.diff\_ctrl package
-===================================
+siriushla.common.diff\_ctrl
+===========================
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.common.diff\_ctrl.base module
 ---------------------------------------

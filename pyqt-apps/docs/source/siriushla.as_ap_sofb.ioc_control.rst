@@ -1,8 +1,8 @@
-siriushla.as\_ap\_sofb.ioc\_control package
-===========================================
+siriushla.as\_ap\_sofb.ioc\_control
+===================================
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.as\_ap\_sofb.ioc\_control.base module
 -----------------------------------------------

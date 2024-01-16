@@ -1,8 +1,8 @@
-siriushla.as\_ap\_measure package
-=================================
+siriushla.as\_ap\_measure
+=========================
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.as\_ap\_measure.emittance\_meas module
 ------------------------------------------------

@@ -1,8 +1,8 @@
-siriushla.as\_ap\_macreport package
-===================================
+siriushla.as\_ap\_macreport
+===========================
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.as\_ap\_macreport.main module
 ---------------------------------------

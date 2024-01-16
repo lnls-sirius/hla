@@ -1,8 +1,8 @@
-siriushla.as\_ti\_control package
-=================================
+siriushla.as\_ti\_control
+=========================
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.as\_ti\_control.base module
 -------------------------------------

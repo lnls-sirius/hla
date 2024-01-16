@@ -1,8 +1,8 @@
-siriushla.as\_ap\_injcontrol package
-====================================
+siriushla.as\_ap\_injcontrol
+============================
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.as\_ap\_injcontrol.base module
 ----------------------------------------

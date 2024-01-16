@@ -1,8 +1,8 @@
-siriushla.as\_di\_scrns package
-===============================
+siriushla.as\_di\_scrns
+=======================
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.as\_di\_scrns.list\_scrns module
 ------------------------------------------

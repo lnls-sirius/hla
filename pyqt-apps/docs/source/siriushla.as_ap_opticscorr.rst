@@ -1,8 +1,8 @@
-siriushla.as\_ap\_opticscorr package
-====================================
+siriushla.as\_ap\_opticscorr
+============================
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.as\_ap\_opticscorr.custom\_widgets module
 ---------------------------------------------------

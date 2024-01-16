@@ -1,8 +1,8 @@
-siriushla.as\_ap\_machshift package
-===================================
+siriushla.as\_ap\_machshift
+===========================
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.as\_ap\_machshift.widgets module
 ------------------------------------------

@@ -1,8 +1,8 @@
-siriushla.as\_di\_bpms package
-==============================
+siriushla.as\_di\_bpms
+======================
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.as\_di\_bpms.base module
 ----------------------------------

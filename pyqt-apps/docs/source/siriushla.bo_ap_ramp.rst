@@ -1,8 +1,8 @@
-siriushla.bo\_ap\_ramp package
-==============================
+siriushla.bo\_ap\_ramp
+======================
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.bo\_ap\_ramp.auxiliary\_dialogs module
 ------------------------------------------------

@@ -1,8 +1,8 @@
-siriushla.as\_ap\_posang package
-================================
+siriushla.as\_ap\_posang
+========================
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.as\_ap\_posang.HLPosAng module
 ----------------------------------------

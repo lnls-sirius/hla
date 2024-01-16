@@ -1,8 +1,8 @@
-siriushla.si\_ap\_genstatus package
-===================================
+siriushla.si\_ap\_genstatus
+===========================
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.si\_ap\_genstatus.main module
 ---------------------------------------

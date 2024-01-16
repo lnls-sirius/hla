@@ -9,8 +9,8 @@ Subpackages
 
    siriushla.widgets.dialog
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.widgets.QDoubleScrollBar module
 -----------------------------------------

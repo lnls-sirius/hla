@@ -1,8 +1,8 @@
-siriushla.as\_di\_icts package
-==============================
+siriushla.as\_di\_icts
+======================
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.as\_di\_icts.ICT\_monitor module
 ------------------------------------------

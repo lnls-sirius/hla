@@ -1,8 +1,8 @@
-siriushla.si\_id\_control package
-=================================
+siriushla.si\_id\_control
+=========================
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.si\_id\_control.apu module
 ------------------------------------

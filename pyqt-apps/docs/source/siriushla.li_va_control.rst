@@ -1,8 +1,8 @@
-siriushla.li\_va\_control package
-=================================
+siriushla.li\_va\_control
+=========================
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.li\_va\_control.chart module
 --------------------------------------

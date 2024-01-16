@@ -1,5 +1,5 @@
-siriushla.common.epics package
-==============================
+siriushla.common.epics
+======================
 
 Subpackages
 -----------

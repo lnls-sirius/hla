@@ -1,8 +1,8 @@
-siriushla.si\_di\_equalize\_bpms package
-========================================
+siriushla.si\_di\_equalize\_bpms
+================================
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.si\_di\_equalize\_bpms.main module
 --------------------------------------------

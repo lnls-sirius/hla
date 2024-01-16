@@ -1,8 +1,8 @@
-siriushla.as\_ap\_configdb.pvsconfigs.delegate package
-======================================================
+siriushla.as\_ap\_configdb.pvsconfigs.delegate
+==============================================
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.as\_ap\_configdb.pvsconfigs.delegate.pv\_configuration\_delegate module
 ---------------------------------------------------------------------------------

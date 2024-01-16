@@ -1,8 +1,8 @@
-siriushla.as\_ps\_control.control\_widget package
-=================================================
+siriushla.as\_ps\_control.control\_widget
+=========================================
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.as\_ps\_control.control\_widget.BasePSControlWidget module
 --------------------------------------------------------------------

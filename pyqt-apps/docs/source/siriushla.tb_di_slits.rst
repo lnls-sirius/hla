@@ -1,8 +1,8 @@
-siriushla.tb\_di\_slits package
-===============================
+siriushla.tb\_di\_slits
+=======================
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.tb\_di\_slits.Slit\_monitor module
 --------------------------------------------

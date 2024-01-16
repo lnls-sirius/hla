@@ -1,8 +1,8 @@
-siriushla.as\_pu\_control package
-=================================
+siriushla.as\_pu\_control
+=========================
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.as\_pu\_control.ControlWindow module
 ----------------------------------------------

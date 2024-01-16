@@ -1,8 +1,8 @@
-siriushla.as\_ap\_configdb.normconfigs package
-==============================================
+siriushla.as\_ap\_configdb.normconfigs
+======================================
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.as\_ap\_configdb.normconfigs.ConfigManagerWindow module
 -----------------------------------------------------------------

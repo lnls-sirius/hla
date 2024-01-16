@@ -1,8 +1,8 @@
-siriushla.common.epics.wrapper package
-======================================
+siriushla.common.epics.wrapper
+==============================
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.common.epics.wrapper.pyepics module
 ---------------------------------------------

@@ -1,8 +1,8 @@
-siriushla.as\_ap\_energybutton package
-======================================
+siriushla.as\_ap\_energybutton
+==============================
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.as\_ap\_energybutton.energy\_button module
 ----------------------------------------------------

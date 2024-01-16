@@ -1,8 +1,8 @@
-siriushla.as\_ap\_injection package
-===================================
+siriushla.as\_ap\_injection
+===========================
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.as\_ap\_injection.auxiliary\_dialogs module
 -----------------------------------------------------

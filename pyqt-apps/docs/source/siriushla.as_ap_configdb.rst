@@ -1,5 +1,5 @@
-siriushla.as\_ap\_configdb package
-==================================
+siriushla.as\_ap\_configdb
+==========================
 
 Subpackages
 -----------
@@ -11,8 +11,8 @@ Subpackages
    siriushla.as_ap_configdb.normconfigs
    siriushla.as_ap_configdb.pvsconfigs
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.as\_ap\_configdb.client\_configdb module
 --------------------------------------------------

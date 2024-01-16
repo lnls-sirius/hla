@@ -1,8 +1,8 @@
-siriushla.as\_ps\_cycle package
-===============================
+siriushla.as\_ps\_cycle
+=======================
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.as\_ps\_cycle.cycle\_window module
 --------------------------------------------

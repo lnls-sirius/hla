@@ -1,8 +1,8 @@
-siriushla.as\_ps\_diag package
-==============================
+siriushla.as\_ps\_diag
+======================
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.as\_ps\_diag.main module
 ----------------------------------

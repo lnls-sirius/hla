@@ -1,8 +1,8 @@
-siriushla.si\_di\_scraps package
-================================
+siriushla.si\_di\_scraps
+========================
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.si\_di\_scraps.Scrap\_monitor module
 ----------------------------------------------

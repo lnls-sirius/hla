@@ -1,8 +1,8 @@
-siriushla.si\_ap\_idff package
-==============================
+siriushla.si\_ap\_idff
+======================
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.si\_ap\_idff.custom\_widgets module
 ---------------------------------------------

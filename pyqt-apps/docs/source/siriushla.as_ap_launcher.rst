@@ -1,8 +1,8 @@
-siriushla.as\_ap\_launcher package
-==================================
+siriushla.as\_ap\_launcher
+==========================
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.as\_ap\_launcher.main module
 --------------------------------------

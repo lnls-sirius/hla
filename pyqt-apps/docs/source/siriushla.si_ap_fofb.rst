@@ -1,8 +1,8 @@
-siriushla.si\_ap\_fofb package
-==============================
+siriushla.si\_ap\_fofb
+======================
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.si\_ap\_fofb.base module
 ----------------------------------

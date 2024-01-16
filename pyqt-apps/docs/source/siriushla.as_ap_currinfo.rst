@@ -1,8 +1,8 @@
-siriushla.as\_ap\_currinfo package
-==================================
+siriushla.as\_ap\_currinfo
+==========================
 
-Submodules
-----------
+Code Documentation
+------------------
 
 siriushla.as\_ap\_currinfo.charge\_monitor module
 -------------------------------------------------
