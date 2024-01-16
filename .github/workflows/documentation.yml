@@ -22,7 +22,7 @@ jobs:
         run: cd pyqt-apps
 
       - name: Install siriushla
-        run: make install
+        run: pip install .
 
       - name: Go to Docs Folder
         run: cd docs
