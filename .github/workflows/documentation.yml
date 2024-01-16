@@ -18,17 +18,11 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v3
 
-      - name: Checkout
-        run: ls
-
       - name: Install siriushla
         run: pip install pyqt-apps/
 
       - name: Install dependencies
         run: pip install -r pyqt-apps/docs/doc_requirements.txt
-
-      - name: Go to Source Folder
-        run: cd source
 
       - name: Build HTML
         run: sphinx-build -b html pyqt-apps/docs/source/ public
