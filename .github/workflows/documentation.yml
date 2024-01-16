@@ -18,28 +18,22 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v3
 
-      - name: Enter pyqt-apps Folder
-        run: cd pyqt-apps
-
       - name: Install siriushla
-        run: pip install .
-
-      - name: Go to Docs Folder
-        run: cd docs
+        run: pip install pyqt-apps
 
       - name: Install dependencies
-        run: pip install -r doc_requirements.txt
+        run: pip install -r pyqt-apps/docs/doc_requirements.txt
 
       - name: Go to Source Folder
         run: cd source
 
       - name: Build HTML
-        run: sphinx-build -b html . ../../../_build
+        run: sphinx-build -b html pyqt-apps/docs/source/ public
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           publish_branch: documentation
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: _build/
+          publish_dir: public/
           force_orphan: true
