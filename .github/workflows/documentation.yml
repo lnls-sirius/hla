@@ -22,7 +22,7 @@ jobs:
         run: ls
 
       - name: Install siriushla
-        run: pip install pyqt-apps
+        run: pip install pyqt-apps/
 
       - name: Install dependencies
         run: pip install -r pyqt-apps/docs/doc_requirements.txt
