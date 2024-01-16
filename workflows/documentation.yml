@@ -1,0 +1,45 @@
+name: Documentation
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v3
+
+      - name: Enter pyqt-apps Folder
+        run: cd pyqt-apps
+
+      - name: Install siriushla
+        run: make install
+
+      - name: Go to Docs Folder
+        run: cd docs
+
+      - name: Install dependencies
+        run: pip install -r doc_requirements.txt
+
+      - name: Build HTML
+        run: cd source
+
+      - name: Build HTML
+        run: sphinx-build -b html . ../_build
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          publish_branch: documentation
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: _build/
+          force_orphan: true
