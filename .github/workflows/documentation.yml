@@ -17,9 +17,6 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v3
 
-      - name: Install pyqt5
-        run: pip install pyqt5==5.15.9
-
       - name: Install siriushla dependencies
         run: pip install -r pyqt-apps/requirements.txt
 
