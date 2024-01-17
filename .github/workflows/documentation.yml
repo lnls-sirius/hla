@@ -21,7 +21,7 @@ jobs:
         run: git clone https://github.com/lnls-sirius/dev-packages.git
 
       - name: Install siriuspy
-        run: pip install siriuspy
+        run: pip install dev-packages/siriuspy
 
       - name: Install siriushla dependencies
         run: pip install -r pyqt-apps/requirements.txt
