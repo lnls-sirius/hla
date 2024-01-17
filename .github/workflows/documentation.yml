@@ -17,10 +17,13 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v3
 
+      - name: Install siriushla dependencies
+        run: pip install -r pyqt-apps/requirements.txt
+
       - name: Install siriushla
         run: pip install pyqt-apps/
 
-      - name: Install dependencies
+      - name: Install docs dependencies
         run: pip install -r pyqt-apps/docs/doc_requirements.txt
 
       - name: Build HTML
