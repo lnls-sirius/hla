@@ -17,11 +17,14 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v3
 
+      - name: Clone siriuspy
+        run: git clone https://github.com/lnls-sirius/dev-packages.git
+
+      - name: Install siriuspy
+        run: pip install siriuspy
+
       - name: Install siriushla dependencies
         run: pip install -r pyqt-apps/requirements.txt
-
-      - name: Install siriushla pyqt5
-        run: pip install pyqt5
 
       - name: Install siriushla
         run: pip install pyqt-apps/
