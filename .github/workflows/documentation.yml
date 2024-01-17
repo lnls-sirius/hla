@@ -20,6 +20,9 @@ jobs:
       - name: Install siriushla dependencies
         run: pip install -r pyqt-apps/requirements.txt
 
+      - name: Install siriushla pyqt5
+        run: pip install pyqt5
+
       - name: Install siriushla
         run: pip install pyqt-apps/
 
