@@ -34,16 +34,33 @@ STATEBUT_PVS = [
     'Use SVD',
 ]
 
-PVS_IMGPROC = {
+
+PVS_IMGPROCOVERVIEW = {
+    'Image Info': [
+        (1, 0, 1, 3),
+        {
+            'Img Size X': 'ImgSizeX-Mon',
+            'Img Size Y': 'ImgSizeY-Mon',
+        }
+    ],
+    'Image': [
+        (2, 0, 1, 3),
+        {
+            'Projection': ['image1:ArrayData', 'ImgSizeX-Mon'],
+        }
+    ],
+}
+
+PVS_IMGPROCCTRL = {
     'IOC':  [
         (1, 0, 1, 1),
         {
             'Boot Time': 'ImgTimestampBoot-Cte',
-            'Update Time': 'ImgTimestampUpdate-Mon'
+            'Update Time': 'ImgTimestampUpdate-Mon',
         }
     ],
     'DVF': [
-        (2, 0, 1, 1),
+        (1, 1, 1, 1),
         {
             'DVF Status': ['ImgDVFStatus-Mon', ETypes.STS_LBLS_DVF],
             'DVF Size X': 'ImgDVFSizeX-Cte',
@@ -52,16 +69,8 @@ PVS_IMGPROC = {
             'DVF Reset': 'ImgDVFReset-Cmd',
         }
     ],
-    'Img': [
-        (3, 0, 7, 1),
-        {
-            'Img Size X': 'ImgSizeX-Mon',
-            'Img Size Y': 'ImgSizeY-Mon',
-            'Projection': ['image1:ArrayData', 'ImgSizeX-Mon'],
-        }
-    ],
     'ROI': [
-        (1, 1, 2, 2),
+        (2, 1, 1, 2),
         {
             'X': {
                 'Min Max': [
@@ -80,7 +89,7 @@ PVS_IMGPROC = {
         }
     ],
     'ROI Update': [
-        (3, 1, 4, 1),
+        (2, 0, 1, 1),
         {
             'ROI X FWHM Factor': [
                 'ImgROIXUpdateWithFWHMFactor-SP',
@@ -97,7 +106,7 @@ PVS_IMGPROC = {
         }
     ],
     'Intensity': [
-        (3, 2, 4, 1),
+        (1, 2, 1, 1),
         {
             'Min': 'ImgIntensityMin-Mon',
             'Max': 'ImgIntensityMax-Mon',
@@ -109,7 +118,7 @@ PVS_IMGPROC = {
         }
     ],
     'Fit': [
-        (7, 1, 2, 2),
+        (4, 0, 1, 3),
         {
             'Proc. Time': 'ImgFitProcTime-Mon',
             'Use SVD': [
@@ -132,7 +141,7 @@ PVS_IMGPROC = {
         }
     ],
     'Log': [
-        (9, 1, 1, 2),
+        (5, 0, 1, 3),
         {
             'Log': 'ImgLog-Mon'
         }

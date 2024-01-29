@@ -9,7 +9,7 @@ from pydm.widgets import PyDMImageView
 
 from ..widgets import SiriusConnectionSignal
 
-from .util import PVS_IMGPROC
+from .util import PVS_IMGPROCCTRL
 
 
 class DVFImageView(PyDMImageView):
@@ -69,7 +69,7 @@ class DVFImageView(PyDMImageView):
         self.addItem(self.roi)
 
     def add_roi_connection(self, axis):
-        roi_pvs = PVS_IMGPROC['ROI'][1]
+        roi_pvs = PVS_IMGPROCCTRL['ROI'][1]
         roi_pv = self.add_prefixes(roi_pvs[axis]['Min Max'][1])
         self.roi_con[axis] = SiriusConnectionSignal(roi_pv)
         self.roi_con[axis].new_value_signal[_np.ndarray].connect(
@@ -112,7 +112,7 @@ class DVFImageView(PyDMImageView):
         self.addItem(self.fit_mean)
 
     def add_fit_mean_connection(self, axis):
-        fit_pvs = PVS_IMGPROC['Fit'][1]
+        fit_pvs = PVS_IMGPROCCTRL['Fit'][1]
         fit_mean_pv = self.add_prefixes(fit_pvs[axis]['ROI Mean'])
         self.fit_mean_con[axis] = SiriusConnectionSignal(fit_mean_pv)
         self.fit_mean_con[axis].new_value_signal[float].connect(
@@ -161,7 +161,7 @@ class DVFImageView(PyDMImageView):
         self.addItem(self.fit_ellipse)
 
     def add_fit_ellipse_connection(self, param):
-        fit_pvs = PVS_IMGPROC['Fit'][1]
+        fit_pvs = PVS_IMGPROCCTRL['Fit'][1]
         fit_ellipse_pv = self.add_prefixes(fit_pvs[param])
         self.fit_ellipse_con[param] = SiriusConnectionSignal(fit_ellipse_pv)
         self.fit_ellipse_con[param].new_value_signal[float].connect(

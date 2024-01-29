@@ -21,7 +21,7 @@ from ..widgets import SiriusLabel, SiriusLedState, \
     SiriusLineEdit, PyDMLogLabel, PyDMStateButton, \
     SiriusConnectionSignal, SiriusSpinbox, SiriusLedAlert
 
-from .util import PVS_IMGPROC, PVS_DVF, \
+from .util import PVS_IMGPROCCTRL, PVS_IMGPROCOVERVIEW, PVS_DVF, \
     IMG_PVS, LOG_PV, COMBOBOX_PVS, LINEEDIT_PVS, STATEBUT_PVS, \
     LED_ALERT_PVS, LED_STATE_PVS, LED_DETAIL_PVS, INTLK_PVS
 from .image import DVFImageView
@@ -129,7 +129,6 @@ class BLImgProc(QWidget):
             hlay.addWidget(details)
         elif widget_type == 'log':
             wid = PyDMLogLabel(init_channel=pvname)
-            wid.setMaximumHeight(175)
         elif widget_type == 'edit':
             wid = SiriusLineEdit(init_channel=pvname)
             wid.setAlignment(Qt.AlignCenter)
@@ -379,8 +378,10 @@ class BLImgProc(QWidget):
             alignment=Qt.AlignCenter)
         main_lay.addWidget(title)
 
-        imgproc_wid = self._setupTab(PVS_IMGPROC)
-        tab.addTab(imgproc_wid, "DVFImgProc")
+        img_wid = self._setupTab(PVS_IMGPROCOVERVIEW)
+        tab.addTab(img_wid, "DVFImgProc View")
+        imgproc_wid = self._setupTab(PVS_IMGPROCCTRL, use_scroll=True)
+        tab.addTab(imgproc_wid, "DVFImgProc Settings")
         dvf_wid = self._setupTab(PVS_DVF, use_scroll=True)
         tab.addTab(dvf_wid, "DVF")
         cax_wid = self._setup_beamline_controls_widgets()
