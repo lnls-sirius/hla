@@ -39,8 +39,12 @@ PVS_IMGPROCOVERVIEW = {
     'Image Info': [
         (1, 0, 1, 3),
         {
-            'Img Size X': 'ImgSizeX-Mon',
-            'Img Size Y': 'ImgSizeY-Mon',
+            'Size X': 'ImgSizeX-Mon',
+            'Size Y': 'ImgSizeY-Mon',
+        },
+        {
+            'Center X': 'ImgROIXFitMean-Mon',
+            'Center Y': 'ImgROIYFitMean-Mon',
         },
         {
             'Sigma1': 'ImgFitSigma1-Mon',
