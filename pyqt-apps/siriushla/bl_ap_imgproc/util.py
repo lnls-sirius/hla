@@ -41,8 +41,12 @@ PVS_IMGPROCOVERVIEW = {
         {
             'Img Size X': 'ImgSizeX-Mon',
             'Img Size Y': 'ImgSizeY-Mon',
+        },
+        {
             'Sigma1': 'ImgFitSigma1-Mon',
             'Sigma2': 'ImgFitSigma2-Mon',
+        },
+        {
             'Angle': 'ImgFitAngle-Mon',
         }
     ],
@@ -56,24 +60,29 @@ PVS_IMGPROCOVERVIEW = {
 
 PVS_IMGPROCCTRL = {
     'IOC':  [
-        (1, 0, 1, 1),
+        (1, 0, 1, 2),
         {
             'Boot Time': 'ImgTimestampBoot-Cte',
             'Update Time': 'ImgTimestampUpdate-Mon',
         }
     ],
     'DVF': [
-        (1, 1, 1, 1),
+        (2, 0, 1, 2),
         {
             'DVF Status': ['ImgDVFStatus-Mon', ETypes.STS_LBLS_DVF],
-            'DVF Size X': 'ImgDVFSizeX-Cte',
-            'DVF Size Y': 'ImgDVFSizeY-Cte',
+        },
+        {
             'DVF Acquire': 'ImgDVFAcquire-Cmd',
             'DVF Reset': 'ImgDVFReset-Cmd',
+        },
+        {
+            'DVF Size X': 'ImgDVFSizeX-Cte',
+            'DVF Size Y': 'ImgDVFSizeY-Cte',
+
         }
     ],
     'ROI': [
-        (2, 1, 1, 2),
+        (3, 1, 1, 2),
         {
             'X': {
                 'Min Max': [
@@ -92,7 +101,7 @@ PVS_IMGPROCCTRL = {
         }
     ],
     'ROI Update': [
-        (2, 0, 1, 1),
+        (3, 0, 1, 1),
         {
             'ROI X FWHM Factor': [
                 'ImgROIXUpdateWithFWHMFactor-SP',
@@ -109,7 +118,7 @@ PVS_IMGPROCCTRL = {
         }
     ],
     'Intensity': [
-        (1, 2, 1, 1),
+        (1, 2, 2, 1),
         {
             'Min': 'ImgIntensityMin-Mon',
             'Max': 'ImgIntensityMax-Mon',
@@ -121,7 +130,7 @@ PVS_IMGPROCCTRL = {
         }
     ],
     'Fit': [
-        (4, 0, 1, 3),
+        (5, 0, 1, 3),
         {
             'Proc. Time': 'ImgFitProcTime-Mon',
             'Use SVD': [
@@ -144,7 +153,7 @@ PVS_IMGPROCCTRL = {
         }
     ],
     'Log': [
-        (5, 0, 1, 3),
+        (6, 0, 1, 3),
         {
             'Log': 'ImgLog-Mon'
         }

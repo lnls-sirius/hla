@@ -217,7 +217,7 @@ class BLImgProc(QWidget):
 
     def create_box_group(self, title, pv_info):
         """."""
-        wid = QGroupBox(title)
+        wid = QGroupBox(title) if title else QWidget()
         gbox = QGridLayout(wid)
 
         count = 0
@@ -242,7 +242,14 @@ class BLImgProc(QWidget):
 
         for title, pv_data in content.items():
             loc = pv_data[0]
-            wid = self.create_box_group(title, pv_data[1])
+            if len(pv_data[1:]) > 1:
+                wid = QGroupBox(title, self)
+                widlay = QHBoxLayout(wid)
+                for data in pv_data[1:]:
+                    col = self.create_box_group("", data)
+                    widlay.addWidget(col)
+            else:
+                wid = self.create_box_group(title, pv_data[1])
             glay.addWidget(wid, *loc)
 
         glay.setColumnStretch(0, 3)
