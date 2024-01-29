@@ -399,7 +399,7 @@ class BLImgProc(QWidget):
 
         img_wid = self._setupTab(PVS_IMGPROCOVERVIEW)
         tab.addTab(img_wid, "View")
-        imgproc_wid = self._setupTab(PVS_IMGPROCCTRL, use_scroll=True)
+        imgproc_wid = self._setupTab(PVS_IMGPROCCTRL)
         tab.addTab(imgproc_wid, "Settings")
         dvf_wid = self._setupTab(PVS_DVF, use_scroll=True)
         tab.addTab(dvf_wid, "DVF")
