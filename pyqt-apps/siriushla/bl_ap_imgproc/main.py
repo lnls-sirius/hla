@@ -21,7 +21,7 @@ from ..widgets import SiriusLabel, SiriusLedState, \
     SiriusLineEdit, PyDMLogLabel, PyDMStateButton, \
     SiriusConnectionSignal, SiriusSpinbox, SiriusLedAlert
 
-from .util import PVS_IMGPROC, PVS_DVF, \
+from .util import PVS_IMGPROCCTRL, PVS_IMGPROCOVERVIEW, PVS_DVF, \
     IMG_PVS, LOG_PV, COMBOBOX_PVS, LINEEDIT_PVS, STATEBUT_PVS, \
     LED_ALERT_PVS, LED_STATE_PVS, LED_DETAIL_PVS, INTLK_PVS
 from .image import DVFImageView
@@ -58,9 +58,11 @@ class BLImgProc(QWidget):
         self.timer.start(1000)
 
     def add_prefixes(self, sufix):
+        """."""
         return self.device + ":" + sufix
 
     def generate_pv_name(self, sufix):
+        """."""
         if len(sufix) != 2:
             return self.add_prefixes(sufix)
 
@@ -74,12 +76,14 @@ class BLImgProc(QWidget):
         return pv_list
 
     def format_datetime_lbl(self, value, pvname):
+        """."""
         dtval = datetime.fromtimestamp(value)
         datetime_lbl = dtval.strftime("%d/%m/%Y, %H:%M:%S")
         datetime_lbl += '.{:03d}'.format(int(1e3*(value % 1)))
         self._lbl_timestamp[pvname].setText(datetime_lbl)
 
     def create_time_widget(self, pvname):
+        """."""
         lbl_time = QLabel('0000-00-00 0:00:00.0', self)
         self._lbl_timestamp[pvname] = lbl_time
         self._lbl_timestamp[pvname].channel = pvname
@@ -90,6 +94,7 @@ class BLImgProc(QWidget):
 
     def select_widget(
             self, pv_name, widget_type='label', units=True, labels=None):
+        """."""
         pvname = self.generate_pv_name(pv_name)
         if widget_type == 'label':
             wid = SiriusLabel(init_channel=pvname, keep_unit=True)
@@ -129,7 +134,6 @@ class BLImgProc(QWidget):
             hlay.addWidget(details)
         elif widget_type == 'log':
             wid = PyDMLogLabel(init_channel=pvname)
-            wid.setMaximumHeight(175)
         elif widget_type == 'edit':
             wid = SiriusLineEdit(init_channel=pvname)
             wid.setAlignment(Qt.AlignCenter)
@@ -155,6 +159,7 @@ class BLImgProc(QWidget):
         return wid
 
     def setpoint_readback_widget(self, pv_list, sprb_type):
+        """."""
         wid = QWidget()
         wid.setContentsMargins(0, 0, 0, 0)
         if sprb_type[2]:
@@ -171,6 +176,7 @@ class BLImgProc(QWidget):
         return wid
 
     def create_widget(self, title, pv_name):
+        """."""
         if title in LED_ALERT_PVS:
             wid_type = 'led_alert'
         elif title in LED_STATE_PVS:
@@ -211,7 +217,7 @@ class BLImgProc(QWidget):
 
     def create_box_group(self, title, pv_info):
         """."""
-        wid = QGroupBox(title)
+        wid = QGroupBox(title) if title else QWidget()
         gbox = QGridLayout(wid)
 
         count = 0
@@ -236,7 +242,14 @@ class BLImgProc(QWidget):
 
         for title, pv_data in content.items():
             loc = pv_data[0]
-            wid = self.create_box_group(title, pv_data[1])
+            if len(pv_data[1:]) > 1:
+                wid = QGroupBox(title, self)
+                widlay = QHBoxLayout(wid)
+                for data in pv_data[1:]:
+                    col = self.create_box_group("", data)
+                    widlay.addWidget(col)
+            else:
+                wid = self.create_box_group(title, pv_data[1])
             glay.addWidget(wid, *loc)
 
         glay.setColumnStretch(0, 3)
@@ -253,6 +266,7 @@ class BLImgProc(QWidget):
         return cont_wid
 
     def toggle_beamline_btns(self, value):
+        """."""
         if value == 1:
             state = True
         else:
@@ -262,16 +276,19 @@ class BLImgProc(QWidget):
         self.open_beamline_btn.setEnabled(state)
 
     def end_processing_cmd(self):
+        """."""
         self.enable_gamma_btn.setEnabled(True)
         self.open_beamline_btn.setEnabled(True)
         self.loading.setVisible(False)
 
     def start_processing_cmd(self):
+        """."""
         self.enable_gamma_btn.setEnabled(False)
         self.open_beamline_btn.setEnabled(False)
         self.loading.setVisible(True)
 
     def intlk_cmd(self, cmd):
+        """."""
         self.start_processing_cmd()
         if cmd == "enable_gamma":
             self.blpps.gamma_enable()
@@ -300,6 +317,7 @@ class BLImgProc(QWidget):
         return wid
 
     def update_bl_open_status(self):
+        """."""
         # update open status led
         status_bl = self.blpps.beamline_opened
         old_val = self.pydm_led.value
@@ -379,8 +397,10 @@ class BLImgProc(QWidget):
             alignment=Qt.AlignCenter)
         main_lay.addWidget(title)
 
-        imgproc_wid = self._setupTab(PVS_IMGPROC)
-        tab.addTab(imgproc_wid, "DVFImgProc")
+        img_wid = self._setupTab(PVS_IMGPROCOVERVIEW)
+        tab.addTab(img_wid, "View")
+        imgproc_wid = self._setupTab(PVS_IMGPROCCTRL)
+        tab.addTab(imgproc_wid, "Settings")
         dvf_wid = self._setupTab(PVS_DVF, use_scroll=True)
         tab.addTab(dvf_wid, "DVF")
         cax_wid = self._setup_beamline_controls_widgets()

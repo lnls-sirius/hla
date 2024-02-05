@@ -9,7 +9,7 @@ from pydm.widgets import PyDMImageView
 
 from ..widgets import SiriusConnectionSignal
 
-from .util import PVS_IMGPROC
+from .util import PVS_IMGPROCCTRL
 
 
 class DVFImageView(PyDMImageView):
@@ -32,15 +32,20 @@ class DVFImageView(PyDMImageView):
 
         self.fit_ellipse = None
         self.fit_ellipse_con = {}
+
         self.angle = 0
         self.sigma = [200, 200]
 
         self._setupUi()
 
     def add_prefixes(self, sufix):
+        """."""
         return self.device + ":" + sufix
 
+    # --- roi ---
+
     def plot_roi(self, value, pvname):
+        """."""
         point_list = _np.zeros(5)
         if 'ROIX' in pvname:
             id_data = 0
@@ -60,7 +65,8 @@ class DVFImageView(PyDMImageView):
         y_points = point_list if id_data == 1 else cur_data[1]
         self.roi.setData(x=x_points, y=y_points)
 
-    def add_plot_curve(self):
+    def add_roi(self):
+        """."""
         pen = mkPen(QColor('red'))
         x_points = [0, 400, 400, 0, 0]
         y_points = [0, 0, 400, 400, 0]
@@ -69,13 +75,17 @@ class DVFImageView(PyDMImageView):
         self.addItem(self.roi)
 
     def add_roi_connection(self, axis):
-        roi_pvs = PVS_IMGPROC['ROI'][1]
+        """."""
+        roi_pvs = PVS_IMGPROCCTRL['ROI'][1]
         roi_pv = self.add_prefixes(roi_pvs[axis]['Min Max'][1])
         self.roi_con[axis] = SiriusConnectionSignal(roi_pv)
         self.roi_con[axis].new_value_signal[_np.ndarray].connect(
             lambda value: self.plot_roi(value, roi_pv))
 
+    # --- fit_mean ---
+
     def plot_fit_mean(self, value, pvname):
+        """."""
         if 'ROIX' in pvname:
             id_data = 0
             point_list = _np.full(7, value)
@@ -96,6 +106,7 @@ class DVFImageView(PyDMImageView):
         self.fit_mean.setData(x=x_points, y=y_points)
 
     def add_fit_mean(self):
+        """."""
         pen = mkPen(QColor('white'))
         center = 200
         dist = 20
@@ -112,13 +123,17 @@ class DVFImageView(PyDMImageView):
         self.addItem(self.fit_mean)
 
     def add_fit_mean_connection(self, axis):
-        fit_pvs = PVS_IMGPROC['Fit'][1]
+        """."""
+        fit_pvs = PVS_IMGPROCCTRL['Fit'][1]
         fit_mean_pv = self.add_prefixes(fit_pvs[axis]['ROI Mean'])
         self.fit_mean_con[axis] = SiriusConnectionSignal(fit_mean_pv)
         self.fit_mean_con[axis].new_value_signal[float].connect(
             lambda value: self.plot_fit_mean(value, fit_mean_pv))
 
+    # --- fit_ellipse ---
+
     def plot_fit_ellipse(self, value, pvname):
+        """."""
         theta = _np.linspace(0, 2*_np.pi, 100)
         centroid_raw = self.fit_mean.getData()
         centroid = [centroid_raw[0][3], centroid_raw[1][3]]
@@ -145,6 +160,7 @@ class DVFImageView(PyDMImageView):
         self.fit_ellipse.setData(x=x_centered, y=y_centered)
 
     def add_fit_ellipse(self):
+        """."""
         pen = mkPen(QColor('black'))
         x_mean = 200
         y_mean = 200
@@ -161,14 +177,17 @@ class DVFImageView(PyDMImageView):
         self.addItem(self.fit_ellipse)
 
     def add_fit_ellipse_connection(self, param):
-        fit_pvs = PVS_IMGPROC['Fit'][1]
+        """."""
+        fit_pvs = PVS_IMGPROCCTRL['Fit'][1]
         fit_ellipse_pv = self.add_prefixes(fit_pvs[param])
         self.fit_ellipse_con[param] = SiriusConnectionSignal(fit_ellipse_pv)
         self.fit_ellipse_con[param].new_value_signal[float].connect(
             lambda value: self.plot_fit_ellipse(value, fit_ellipse_pv))
 
+    # --- setup UI ---
+
     def _setupUi(self):
-        self.add_plot_curve()
+        self.add_roi()
         self.add_roi_connection('X')
         self.add_roi_connection('Y')
 
