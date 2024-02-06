@@ -1,7 +1,8 @@
 """BL AP ImgProc."""
 
+from functools import partial as _part
 from datetime import datetime
-from qtpy.QtCore import Qt, QTimer
+from qtpy.QtCore import Qt, QTimer, Signal, QThread
 from qtpy.QtWidgets import QWidget, QGridLayout, QHBoxLayout, \
     QVBoxLayout, QGroupBox, QLabel, QSizePolicy, QTabWidget, \
     QPushButton, QScrollArea
@@ -31,6 +32,8 @@ from .blintlkctl import BLIntckCtrl
 class BLImgProc(QWidget):
     """Image Processing Window."""
 
+    updateBLCmdStatus = Signal(bool)
+
     def __init__(self, dvf, parent=None, prefix=_VACA_PREFIX):
         """."""
         super().__init__(parent=parent)
@@ -50,12 +53,14 @@ class BLImgProc(QWidget):
         self.loading = QPushButton("")
         self.open_beamline_btn = None
         self.enable_gamma_btn = None
-        self.gamma_enabled_conn = None
+        # self.gamma_enabled_conn = None
         self._setupUi()
 
         self.timer = QTimer()
         self.timer.timeout.connect(self.update_bl_open_status)
         self.timer.start(1000)
+
+        self.updateBLCmdStatus.connect(self.toggle_process_bl_state)
 
     def add_prefixes(self, sufix):
         """."""
@@ -265,35 +270,32 @@ class BLImgProc(QWidget):
             return sc_area
         return cont_wid
 
-    def toggle_beamline_btns(self, value):
-        """."""
-        if value == 1:
-            state = True
-        else:
-            state = False
+    # def toggle_beamline_btns(self, value):
+    #     """."""
+    #     if value == 1:
+    #         state = True
+    #     else:
+    #         state = False
 
-        self.end_processing_cmd()
-        self.open_beamline_btn.setEnabled(state)
+    #     self.end_processing_cmd()
+    #     self.open_beamline_btn.setEnabled(state)
 
-    def end_processing_cmd(self):
+    def toggle_process_bl_state(self, state):
         """."""
-        self.enable_gamma_btn.setEnabled(True)
-        self.open_beamline_btn.setEnabled(True)
-        self.loading.setVisible(False)
-
-    def start_processing_cmd(self):
-        """."""
-        self.enable_gamma_btn.setEnabled(False)
-        self.open_beamline_btn.setEnabled(False)
-        self.loading.setVisible(True)
+        self.enable_gamma_btn.setEnabled(not state)
+        self.open_beamline_btn.setEnabled(not state)
+        self.loading.setVisible(state)
 
     def intlk_cmd(self, cmd):
         """."""
-        self.start_processing_cmd()
+        self.updateBLCmdStatus.emit(True)
         if cmd == "enable_gamma":
-            self.blpps.gamma_enable()
+            cmd_func = self.blpps.gamma_enable
         elif cmd == "open_beamline":
-            self.blpps.beamline_open()
+            cmd_func = self.blpps.beamline_open
+        qthread = BLCmd(cmd_func)
+        qthread.finished.connect(_part(self.updateBLCmdStatus.emit, False))
+        qthread.start()
 
     def _setup_gamma_control_widget(self):
         wid = QGroupBox()
@@ -309,9 +311,9 @@ class BLImgProc(QWidget):
 
         pvname = INTLK_PVS["gamma"]
         widget = SiriusLedState(init_channel=pvname)
-        self.gamma_enabled_conn = SiriusConnectionSignal(pvname)
-        self.gamma_enabled_conn.new_value_signal[int].connect(
-            self.toggle_beamline_btns)
+        # self.gamma_enabled_conn = SiriusConnectionSignal(pvname)
+        # self.gamma_enabled_conn.new_value_signal[int].connect(
+        #     self.toggle_beamline_btns)
         lay.addWidget(widget)
 
         return wid
@@ -320,10 +322,10 @@ class BLImgProc(QWidget):
         """."""
         # update open status led
         status_bl = self.blpps.beamline_opened
-        old_val = self.pydm_led.value
+        # old_val = self.pydm_led.value
         self.pydm_led.value_changed(status_bl)
-        if old_val != status_bl:
-            self.end_processing_cmd()
+        # if old_val != status_bl:
+        #     self.end_processing_cmd()
 
         # update log error label
         error_bl = self.blpps.blintlk.error_log
@@ -408,3 +410,20 @@ class BLImgProc(QWidget):
 
         main_lay.addWidget(tab)
         self.setLayout(main_lay)
+
+
+class BLCmd(QThread):
+
+    increment = Signal()
+
+    def __init__(self, cmd, parent=None):
+        super().__init__(parent)
+        self._cmd = cmd
+        self._quit_task = False
+
+    def exit_task(self):
+        """Set flag to quit thread."""
+        self._quit_task = True
+
+    def run(self):
+        self._cmd()
