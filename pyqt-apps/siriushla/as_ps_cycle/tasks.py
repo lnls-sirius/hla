@@ -22,7 +22,6 @@ class BaseTask(QThread):
     currentItem = Signal(str)
     itemDone = Signal(str, bool)
     completed = Signal()
-    updated = Signal(str, bool, bool, bool)
 
     def __init__(self, parent=None, psnames=list(), timing=None,
                  need_controller=False, isadv=False):
@@ -35,12 +34,10 @@ class BaseTask(QThread):
                 cyclers[ps] = BaseTask._cyclers[ps]
             if not BaseTask._controller:
                 BaseTask._controller = CycleController(
-                    cyclers=cyclers, timing=timing, logger=self,
-                    isadv=isadv)
+                    cyclers=cyclers, timing=timing, isadv=isadv)
             else:
                 BaseTask._controller.cyclers = cyclers
                 BaseTask._controller.timing = timing
-                BaseTask._controller.logger = self
         self._quit_task = False
 
     def size(self):
@@ -62,10 +59,6 @@ class BaseTask(QThread):
             self.function()
         if not self._interrupted:
             self.completed.emit()
-
-    def update(self, message, done, warning, error):
-        now = _datetime.now().strftime('%Y/%m/%d-%H:%M:%S')
-        self.updated.emit(now+'  '+message, done, warning, error)
 
     def function(self):
         """Must be reimplemented in each class."""
