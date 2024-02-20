@@ -2,7 +2,6 @@
 
 """HLA as_ap_posang module."""
 
-import os as _os
 from epics import PV as _PV
 from qtpy.QtWidgets import QGridLayout, QLabel, QGroupBox, QAbstractItemView, \
     QSizePolicy as QSzPlcy, QSpacerItem, QPushButton, QHeaderView, QWidget, \
