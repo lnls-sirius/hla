@@ -17,7 +17,7 @@ from siriuspy.namesys import SiriusPVName as _PVName
 from siriushla import util as _hlautil
 from siriushla.widgets import SiriusMainWindow, PyDMLogLabel, SiriusLedAlert, \
     PyDMSpinboxScrollbar, PyDMLedMultiChannel, SiriusConnectionSignal, \
-    SiriusLabel, SiriusWaveformTable, SiriusSpinbox
+    SiriusLabel, SiriusWaveformTable, SiriusSpinbox, CALabel
 from siriushla.as_ps_control import PSDetailWindow as _PSDetailWindow
 from siriushla.as_pu_control import PUDetailWindow as _PUDetailWindow
 from siriushla.as_ap_configdb import LoadConfigDialog as _LoadConfigDialog
@@ -69,6 +69,24 @@ class PosAngCorr(SiriusMainWindow):
         self._just_need_update = False
         self._update_ref_action = False
         self._my_input_widgets = list()
+
+        pvname_injmode = _PVName("AS-Glob:AP-InjCtrl:Mode-Sts")
+        pvname_injmode = pvname_injmode.substitute(prefix=self._prefix)
+        pvname_stdby = _PVName("AS-Glob:AP-InjCtrl:TopUpPUStandbyEnbl-Sts")
+        pvname_stdby = pvname_stdby.substitute(prefix=self._prefix)
+        self.injctrl_enbl_rules = (
+            '[{"name": "EnblRule", "property": "Enable", ' +
+            '"expression": "ch[1]!=1 or ch[1]==1 and not ch[0]",' +
+            '"channels": [{"channel": "' + pvname_stdby +
+            '", "trigger": true}, {"channel": "' +
+            pvname_injmode + '", "trigger": true}]}]')
+        self.injctrl_vis_rules = (
+            '[{"name": "VisibleRule", "property": "Visible", ' +
+            '"expression": "ch[1] and ch[0]", ' +
+            '"channels": [{"channel": "' + pvname_stdby +
+            '", "trigger": true}, {"channel": "' +
+            pvname_injmode + '", "trigger": true}]}]')
+
         self._setupUi()
         self.setFocus(True)
         self.setFocusPolicy(Qt.StrongFocus)
@@ -97,11 +115,19 @@ class PosAngCorr(SiriusMainWindow):
                               x2:0, y2:0, stop:0 rgba(173, 190, 207, 255),
                               stop:1 rgba(213, 213, 213, 255));""")
 
-        # apply button
+        # warning
+        self.lb_rule_warning = CALabel(self)
+        self.lb_rule_warning.setText(
+            "WARNING:Disable injection standby mode to change PosAng.")
+        self.lb_rule_warning.rules = self.injctrl_vis_rules
+        self.lb_rule_warning.setStyleSheet("color: yellow; font-weight: bold;")
+
+        # update reference button
         self.pb_updateref = PyDMPushButton(
             self, 'Update Reference', pressValue=1,
             init_channel=self.posang_prefix.substitute(
                 propty='SetNewRefKick-Cmd'))
+        self.pb_updateref.rules = self.injctrl_enbl_rules
         self.pb_updateref.setStyleSheet(
             'min-height: 2.4em; max-height: 2.4em;')
         self.led_needrefupdt = SiriusLedAlert(
@@ -136,11 +162,12 @@ class PosAngCorr(SiriusMainWindow):
         glay.setHorizontalSpacing(12)
         glay.setVerticalSpacing(12)
         glay.addWidget(lab, 0, 0, 1, 2)
-        glay.addLayout(box_ref, 1, 0, 1, 2)
-        glay.addWidget(self.hgbox, 2, 0)
-        glay.addWidget(self.vgbox, 2, 1)
-        glay.addWidget(self.corrgbox, 3, 0, 1, 2)
-        glay.addWidget(self.statgbox, 4, 0, 1, 2)
+        glay.addWidget(self.lb_rule_warning, 1, 0, 1, 2)
+        glay.addLayout(box_ref, 2, 0, 1, 2)
+        glay.addWidget(self.hgbox, 3, 0)
+        glay.addWidget(self.vgbox, 3, 1)
+        glay.addWidget(self.corrgbox, 4, 0, 1, 2)
+        glay.addWidget(self.statgbox, 5, 0, 1, 2)
 
         # menu
         act_settings = self.menuBar().addAction('Settings')
@@ -171,6 +198,7 @@ class PosAngCorr(SiriusMainWindow):
             propty='DeltaPos'+axis.upper()+'-SP'))
         sb_deltapos.step_exponent = -2
         sb_deltapos.update_step_size()
+        sb_deltapos.rules = self.injctrl_enbl_rules
         lb_deltapos = SiriusLabel(self, self.posang_prefix.substitute(
             propty='DeltaPos'+axis.upper()+'-RB'), keep_unit=True)
         lb_deltapos.showUnits = True
@@ -181,6 +209,7 @@ class PosAngCorr(SiriusMainWindow):
             propty='DeltaAng'+axis.upper()+'-SP'))
         sb_deltaang.step_exponent = -2
         sb_deltaang.update_step_size()
+        sb_deltaang.rules = self.injctrl_enbl_rules
         lb_deltaang = SiriusLabel(self, self.posang_prefix.substitute(
             propty='DeltaAng'+axis.upper()+'-RB'), keep_unit=True)
         lb_deltaang.showUnits = True
