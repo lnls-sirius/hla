@@ -119,7 +119,8 @@ class PosAngCorr(SiriusMainWindow):
         self.lb_rule_warning = CALabel(self)
         self.lb_rule_warning.setText(
             "WARNING:Disable injection standby mode to change PosAng.")
-        self.lb_rule_warning.rules = self.injctrl_vis_rules
+        if self._tl != 'TB':
+            self.lb_rule_warning.rules = self.injctrl_vis_rules
         self.lb_rule_warning.setStyleSheet("color: yellow; font-weight: bold;")
 
         # update reference button
@@ -127,7 +128,8 @@ class PosAngCorr(SiriusMainWindow):
             self, 'Update Reference', pressValue=1,
             init_channel=self.posang_prefix.substitute(
                 propty='SetNewRefKick-Cmd'))
-        self.pb_updateref.rules = self.injctrl_enbl_rules
+        if self._tl != 'TB':
+            self.pb_updateref.rules = self.injctrl_enbl_rules
         self.pb_updateref.setStyleSheet(
             'min-height: 2.4em; max-height: 2.4em;')
         self.led_needrefupdt = SiriusLedAlert(
@@ -198,7 +200,8 @@ class PosAngCorr(SiriusMainWindow):
             propty='DeltaPos'+axis.upper()+'-SP'))
         sb_deltapos.step_exponent = -2
         sb_deltapos.update_step_size()
-        sb_deltapos.rules = self.injctrl_enbl_rules
+        if self._tl != 'TB':
+            sb_deltapos.rules = self.injctrl_enbl_rules
         lb_deltapos = SiriusLabel(self, self.posang_prefix.substitute(
             propty='DeltaPos'+axis.upper()+'-RB'), keep_unit=True)
         lb_deltapos.showUnits = True
@@ -209,7 +212,8 @@ class PosAngCorr(SiriusMainWindow):
             propty='DeltaAng'+axis.upper()+'-SP'))
         sb_deltaang.step_exponent = -2
         sb_deltaang.update_step_size()
-        sb_deltaang.rules = self.injctrl_enbl_rules
+        if self._tl != 'TB':
+            sb_deltaang.rules = self.injctrl_enbl_rules
         lb_deltaang = SiriusLabel(self, self.posang_prefix.substitute(
             propty='DeltaAng'+axis.upper()+'-RB'), keep_unit=True)
         lb_deltaang.showUnits = True
