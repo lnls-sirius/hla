@@ -159,7 +159,8 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
                                  'ge': self._ge,
                                  'le': self._le,
                                  'in': self._in,
-                                 'wt': self._wt}
+                                 'wt': self._wt,
+                                 'ou': self._ou}
 
         self._address2values = dict()
         self._address2channel = dict()
@@ -353,6 +354,11 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
     @staticmethod
     def _wt(val1, val2, **kws):
         return val2[0] < val1 < val2[1]
+
+    @staticmethod
+    def _ou(val1, val2, **kws):
+        """Whether val1 is out of range (val2[0], val2[1])."""
+        return val1 < val2[0] or val1 > val2[1]
 
     def mouseDoubleClickEvent(self, ev):
         pv_groups, texts = list(), list()
