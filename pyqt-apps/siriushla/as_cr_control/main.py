@@ -18,9 +18,9 @@ class CryoControl(SiriusMainWindow):
     def __init__(self, parent=None, screen="All", prefix=_VACA_PREFIX):
         super().__init__(parent=parent)
         self.prefix = prefix + ('-' if prefix else '')
+        self.prefix += "UA-10DHall:CR-IHMCtrl:"
         self.relative_widgets = []
         self.screen = screen
-        self.prefix = 'm'
         self._setupUi()
 
     def eventFilter(self, obj, event):
