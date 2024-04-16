@@ -16,7 +16,8 @@ class EpicsSetter(EpicsTask):
                 self.currentItem.emit(pvn)
                 pv = self.get_pv(pvn)
                 try:
-                    pv.put(self._values[i])
+                    # pv.put(self._values[i])
+                    print(pv.pvname, self._values[i])
                     time.sleep(self._delays[i])
                 except (TypeError, _ChannelAccessGetFailure, _CASeverityException):
                     _log.warning('PV {} not set with value: {}'.format(

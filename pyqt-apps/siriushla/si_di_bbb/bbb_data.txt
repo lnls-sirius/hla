@@ -1,0 +1,552 @@
+# idcs_types = ['H', 'V', 'L']
+# dev_pref = 'SI-Glob:DI-BbBProc-'+idcs_types[0]
+
+# ###############################################################################
+# # Main
+# ###############################################################################
+
+# # Feedback settings
+# dev_pref+':FBCTRL'  # Enable feedback
+# dev_pref+':SETSEL'  # Coeficient Set (Enum SP)
+# dev_pref+':SHIFTGAIN'  # Shift Gain (Float SP)
+# dev_pref+':PROC_DS'  # Downsampling (Float SP)
+# dev_pref+':SAT_THRESHOLD'  # Sat. Threshold (Float SP)
+
+# # Status
+# # Clock missing
+# dev_pref+':CLKMISS'  # (Label)
+# dev_pref+':CLKMISS_COUNT'  # (Int RB)
+# # PLL Unlocked
+# dev_pref+':PLL_UNLOCK'  # (Label)
+# dev_pref+':PLL_UNLOCK_COUNT'  # (Int RB)
+# # DCM unlocked
+# dev_pref+':DCM_UNLOCK'  # (Label)
+# dev_pref+':DCM_UNLOCK_COUNT'  # (Int RB)
+# # AVC Overrange
+# dev_pref+':ADC_OVR'  # (Label)
+# dev_pref+':ADC_OVR_COUNT'  # (Int RB)
+# # Output satured
+# dev_pref+':SAT'  # (Label)
+# dev_pref+':SAT_COUNT'  # (Int RB)
+# # Fiducial Error
+# dev_pref+':FID_ERR'  # (Label)
+# dev_pref+':FID_ERR_COUNT'  # (Int RB)
+
+# # Interval (sec)
+# dev_pref+':RST_COUNT'  # (Label)
+# dev_pref+':CNTRST'  # (Enum SP)
+
+# ###############################################################################
+# # Coefficients
+# ###############################################################################
+# # New Coefficients Vector
+# dev_pref+':COEFF'  # Curve
+# dev_pref+':DESC_COEFF'  # Description (String SP)
+
+# # Generate
+# dev_pref+':FLT_GAIN'  # Gain [0-1] (Float SP)
+# dev_pref+':FLT_PHASE'  # Phase [Degrees] (Float SP)
+# dev_pref+':FLT_FREQ'  # Frequency [0-1] (Float SP)
+# dev_pref+':FLT_TAPS'  # Number of taps (Float SP)
+
+# dev_pref+':FTF_TUNE'  # Fractional Tune (Float SP)
+# dev_pref+':FTF_GTUNE'  # Fractional Tune Gain (Label)
+# dev_pref+':FTF_PTUNE'  # Fractional Tune Phase (Label)
+
+# dev_pref+':LDSET'  # Load Coefficients Set (Enum SP)
+# dev_pref+':BO_CPCOEFF'  # Copy Coefficients (Enum SP)
+# dev_pref+':BO_CVERIFY'  # Verify Coefficients (Enum SP)
+
+# dev_pref+':FTF_MAG'  # FFT Magnitude (Curve)
+# dev_pref+':FTF_PHASE'  # FFT Phase (Curve)
+
+# # Coefficient Sets
+# # Coefficient Set 0
+# dev_pref+':DESC_CSET0'  # Description (Label)
+# dev_pref+':CSET0'  # Graph
+# # Coefficient Set 1
+# dev_pref+':DESC_CSET1'  # Description (Label)
+# dev_pref+':CSET1'  # Graph
+# # Alternative Coefficient Set 2 (Expert control)
+# dev_pref+':DESC_CSET2'  # Description (Label)
+# dev_pref+':CSET2'  # Graph
+# # Alternative Coefficient Set 3 (Expert control)
+# dev_pref+':DESC_CSET3'  # Description (Label)
+# dev_pref+':CSET3'  # Graph
+
+# # Feedback pattern
+# dev_pref+':FB_PATTERN'  # Feedback pattern (String SP)
+# dev_pref+':CF_PATTERN'  # Alternative pattern (Expert control) (String SP)
+# # Bunch Cleaning
+# dev_pref+':CLEAN_ENABLE'  # Bunch Cleaning Enable (Enum SP)
+# dev_pref+':CLEAN_RENABLE'  # Bunch Cleaning Prior Settings (Enum SP)
+# dev_pref+':CLEAN_AMPL'  # Bunch Cleaning Amplitude (Float SP)
+# dev_pref+':CLEAN_TUNE'  # Bunch Cleaning Tune (Float SP)
+# dev_pref+':CLEAN_PATTERN'  # Bunch Cleaning Pattern (String SP)
+
+# ###############################################################################
+# # Devices
+# ###############################################################################
+
+# #######################################
+# # Main
+
+# # Delay lines
+# dev_pref+':ECLDEL0'  # ADC Clock (Float SP)
+# dev_pref+':ECLDEL1'  # Fiducial Clock (Float SP)
+# dev_pref+':ECLDEL2'  # Fiducial (Float SP)
+# dev_pref+':ECLDEL3'  # DAC Clock (Float SP)
+
+# # Thresholds and offsets
+# # Fiducial
+# dev_pref+':LEVEL_FID' # (Enum SP)
+# dev_pref+':LEVEL_FID_ENABLE'  # (Enum SP)
+# dev_pref+':AD5644_V_CH9'  # (Float SP)
+# # Trigger 1
+# dev_pref+':LEVEL_TRIG1'  # (Enum SP)
+# dev_pref+':LEVEL_TRIG1_ENABLE'  # (Enum SP)
+# dev_pref+':LEVEL_VTRIG1'  # (Float SP)
+# dev_pref+':TRIG1INV'  # (Enum SP)
+# # Trigger 2
+# dev_pref+':LEVEL_TRIG2'  # (Enum SP)
+# dev_pref+':LEVEL_TRIG2_ENABLE'  # (Enum SP)
+# dev_pref+':LEVEL_VTRIG2'  # (Float SP)
+# dev_pref+':TRIG2INV'  # (Enum SP)
+# # DAC Offset
+# dev_pref+':AD5644_V_CH11'  # (Float SP)
+
+# # Shaper FIR ([C0 2^17 C2])
+# dev_pref+':SHAPE_C0'  # C0 (Float SP)
+# dev_pref+':SHAPE_C2'  # C2 (Float SP)
+
+# #######################################
+# # AD5644 DACS
+
+# dev_pref+':AD5644_V_CH0'  # 0  (Float SP)
+# dev_pref+':AD5644_V_CH1'  # 1  (Float SP)
+# dev_pref+':AD5644_V_CH2'  # 2  (Float SP)
+# dev_pref+':AD5644_V_CH3'  # 3  (Float SP)
+# dev_pref+':AD5644REF0_BO'  # Ref 0-3 (Enum SP)
+# dev_pref+':AD5644_V_CH4'  # 4  (Float SP)
+# dev_pref+':AD5644_V_CH5'  # 5  (Float SP)
+# dev_pref+':AD5644_V_CH6'  # 6  (Float SP)
+# dev_pref+':AD5644CH7_SUBWR'  # 7  (Float SP)
+# dev_pref+':AD5644REF1_BO'  # Ref 4-7 (Enum SP)
+# dev_pref+':AD5644TEST_BO'  # Normal mode (Enum SP)
+
+# #######################################
+# # MAX1202 ADC
+
+# dev_pref+':MAX1202_CH0'  # (Float RB)
+# dev_pref+':MAX1202_CH1'  # (Float RB)
+# dev_pref+':MAX1202_CH2'  # (Float RB)
+# dev_pref+':MAX1202_CH3'  # (Float RB)
+# dev_pref+':MAX1202_CH4'  # (Float RB)
+# dev_pref+':MAX1202_CH5'  # (Float RB)
+# dev_pref+':MAX1202_CH6'  # (Float RB)
+# dev_pref+':MAX1202_CH7'  # (Float RB)
+
+# #######################################
+# # Power Amps
+
+# # Serial/USB amplifier
+# dev_pref+':SERIAL_CTRL_LINE'  # Line Control (Off/On)
+# dev_pref+':SERIAL_CTRL_RF'  # RF Control (Off/On)
+# dev_pref+':SERIAL_CALFREQ'  # Power Meter Calibration Frequency (Float SP)
+# dev_pref+':SERIAL_FWD'  # Forward Power (Float RB)
+# dev_pref+':SERIAL_REV'  # Reverse Power (Float RB)
+# dev_pref+':SERIAL_ID'  # ID (String RB)
+
+# # Power Amplifier 0 (Milmega via DB-15 custom cable and 8 channel ADC (unit 0))
+# dev_pref+':MMGRAW_0_RF'  # RF Status (Led, Label)
+# dev_pref+':MMGRAW_0_FAULT'  # Fault Latch (Led, Label)
+# dev_pref+':MMGRAW_0_SLOPE'  # Slope (Float SP)
+# dev_pref+':MMGRAW_0_OFFSET'  # Offset (Float SP)
+# dev_pref+':MMGRAW_0_FWD'  # Foward Power (Float RB)
+# dev_pref+':MMGRAW_0_REV'  # Reverse Power (Float RB)
+
+# # Power Amplifier 1 (Milmega via DB-15 custom cable and 8 channel ADC (unit 1))
+# dev_pref+':MMGRAW_1_RF'  # RF Status (Led, Label)
+# dev_pref+':MMGRAW_1_FAULT'  # Fault Latch (Led, Label)
+# dev_pref+':MMGRAW_1_SLOPE'  # Slope (Float SP)
+# dev_pref+':MMGRAW_1_OFFSET'  # Off (Float SP)
+# dev_pref+':MMGRAW_1_FWD'  # Foward Power (Float RB)
+# dev_pref+':MMGRAW_1_REV'  # Reverse Power (Float RB)
+
+# # Power Amplifier 0 (Mini-Circuits ZT-102 DE-9 monitoring interface (unit 0))
+# dev_pref+':MCLRAW_0_FAULT'  # Fault Latch (Led, Label)
+# dev_pref+':MCLRAW_0_TEMP'  # Temperature (Float RB)
+# dev_pref+':MCLRAW_0_FWDLOSS'  # Fwd Loss (Float SP)
+# dev_pref+':MCLRAW_0_REVLOSS'  # Rev Loss (Float SP)
+# dev_pref+':MCLRAW_0_FWD'  # Forward Power (Float RB)
+# dev_pref+':MCLRAW_0_REV'  # Reverse Power (Float RB)
+
+# # Power Amplifier 1 (Mini-Circuits ZT-102 DE-9 monitoring interface (unit 1))
+# dev_pref+':MCLRAW_1_FAULT'  # Fault Latch (Led, Label)
+# dev_pref+':MCLRAW_1_TEMP'  # Temperature (Float RB)
+# dev_pref+':MCLRAW_1_FWDLOSS'  # Fwd Loss (Float SP)
+# dev_pref+':MCLRAW_1_REVLOSS'  # Rev Loss (Float SP)
+# dev_pref+':MCLRAW_1_FWD'  # Forward Power (Float RB)
+# dev_pref+':MCLRAW_1_REV'  # Reverse Power (Float RB)
+
+# #######################################
+# # Masks (Graphs, xaxis=Bunch Number)
+
+# # Feedback mask
+# dev_pref+':FB_MASK'
+
+# # Drive Mask
+# dev_pref+':DRIVE_MASK'
+
+# # Spectrum averaging masks
+# dev_pref+':SRAM_ACQ_MASK'
+# dev_pref+':BRAM_ACQ_MASK'
+
+# #######################################
+# # System Information
+
+# dev_pref+':RF_FREQ'  # Nominal RF Frequency (Label)
+# dev_pref+':HARM_NUM'  # Harmonic Number (Label)
+# dev_pref+':REVISION'  # Gateway Revision (Label)
+# dev_pref+':GW_TYPE'  # Gateway Type (Label)
+# dev_pref+':IP_ADDR'  # IP Address (Label)
+
+# ###############################################################################
+# # Timing
+# ###############################################################################
+# # Feedback TIming
+# dev_pref+':TADC'  # ADC Delay (Float SP)
+# dev_pref+':TDAC'  # DAC Delay (Float SP)
+# dev_pref+':DELAY'  # Output Delay (Float SP)
+
+# # Timing Control
+# dev_pref+':CLKRST'  # Clock Reset (Enum SP)
+# dev_pref+':OFF_FIDS'  # FID Signal Offset (Float SP)
+# dev_pref+':FID_DELAY'  # Fiducial Delay (Float SP)
+
+# # Frequency counters
+# dev_pref+':FREQ_CNT_CH0'  # Input Clock (Label)
+# dev_pref+':FREQ_CNT_CH1'  # ACLK (RF/2) (Label)
+# dev_pref+':FREQ_CNT_CH2'  # ACLK3 (RF/3) (Label)
+# dev_pref+':FREQ_CNT_CH3'  # DAC Clock (Label)
+# dev_pref+':FREQ_CNT_CH4'  # RF/4 Processing Clock (Label)
+
+# ###############################################################################
+# # Drive
+# ###############################################################################
+
+# # Drive Pattern Generator
+# dev_pref+':DRIVE_AMPL'  # Amplitude (Float SP)
+# dev_pref+':DRIVE_FREQ'  # Frequency (Float SP)
+# dev_pref+':DRIVE_WAVEFORM'  # Waveform (Enum SP)
+# dev_pref+':DRIVE_MOD'  # TMOD (Enum SP)
+# dev_pref+':DRIVE_SPAN'  # Span (Float SP)
+# dev_pref+':DRIVE_PERIOD'  # Period (Float SP)
+# dev_pref+':DRIVE_PATTERN'  # Drive Pattern (String RB)
+# dev_pref+':DRIVE_FREQ_ACT_STRING'  # Actual Frequency (Float RB)
+# dev_pref+':DRIVE_SPAN_ACT_STRING'  # Actual Span (Float RB)
+# dev_pref+':DRIVE_PERIOD_ACT'  # Actual Period (Float RB)
+
+# ###############################################################################
+# # SRAM control
+# ###############################################################################
+
+# # Data Acquisition
+# dev_pref+':GDEN'  # Grow/Damp Enable (Enum SP)
+# dev_pref+':SRAM_REC_DS'  # Rec. Downsample (Float SP)
+# dev_pref+':SRAM_DUMP'  # Raw Data (Enum SP)
+# dev_pref+':SRAM_ACQTIME'  # Acquisition Time (Float SP)
+# dev_pref+':SRAM_HOLDTIME'  # Hold-Off Time (Float SP)
+# dev_pref+':SRAM_POSTTIME'  # Post Trigger (Float SP)
+# dev_pref+':SRAM_GDTIME'  # Growth Time (Float SP)
+# dev_pref+':SRAM_ACQ_TURNS'  # Acquisition Length (Label)
+# dev_pref+':SRAM_POST_TURNS'  # Post Trigger Length (Label)
+
+# # Acq Type
+# dev_pref+':SRAM_POSTSEL'  # (Enum SP)
+
+# # Trigger
+# dev_pref+':SRAM_EXTEN'  # Internal/External (Enum SP)
+# dev_pref+':SRAM_TRIG_IN_SEL'  # Selection (Enum SP)
+# dev_pref+':SRAM_ARM'  # Arm (Enum SP)
+# dev_pref+':SRAM_BR_ARM'  # Auto re-arm (Enum SP)
+# dev_pref+':SRAM_CAP_TRIG1'  # Reset bit 0 (Label)
+# dev_pref+':SRAM_CAP_TRIG2'  # Reset bit 1 (Label)
+
+# ###############################################################################
+# # SRAM waveforms
+# ###############################################################################
+
+# dev_pref+':SRAM_MEAN'  # Mean  (xaxis=Bunch number, yaxis=CNT)
+# dev_pref+':SRAM_MAXRMS'  # Max RMS Channel (filtered) (xaxis=Time(ms), yaxis=CNT)
+# dev_pref+':SRAM_RMS'  # RMS (xaxis=Bunch number, yaxis=CNT)
+# dev_pref+':SRAM_SPEC'  # Average spectrum (xaxis=Frequency(kHz), yaxis=dB)
+
+# # Acquisition control
+# dev_pref+':SRAM_ACQ_EN'  # Acquisition enable (Enum SP)
+# dev_pref+':SRAM_ACQ_SINGLE'  # Acquisition single (Enum SP)
+# dev_pref+':SRAM_MEANVAL'  # Mean (Label)
+# dev_pref+':SRAM_RMSVAL'  # RMS (Label)
+# dev_pref+':SRAM_AMP_PP'  # Amp P-P (Label)
+# dev_pref+':SRAM_MAXRMSVAL'  # Max RMS (Label)
+# dev_pref+':SRAM_ACQ_PATTERN'  # Bunch pattern (Float SP)
+# dev_pref+':SRAM_SP_AVG'  # Avg (Float SP)
+
+# # Markers
+# dev_pref+':SRAM_SP_LOW1'  # Min Limit (Float SP)
+# dev_pref+':SRAM_SP_HIGH1'  # Max Limit (Float SP)
+# dev_pref+':SRAM_SP_SEARCH1'  # Search Type (Enum SP)
+# dev_pref+':SRAM_PEAK1'  # Value (Label)
+# dev_pref+':SRAM_PEAKFREQ1'  # Frequency (Label)
+
+# dev_pref+':SRAM_SP_LOW2'  # Min Limit (Float SP)
+# dev_pref+':SRAM_SP_HIGH2'  # Max Limit (Float SP)
+# dev_pref+':SRAM_SP_SEARCH2'  # Search Type (Enum SP)
+# dev_pref+':SRAM_PEAK2'  # Value (Label)
+# dev_pref+':SRAM_PEAKFREQ2'  # Frequency (Label)
+
+# ###############################################################################
+# # BRAM control
+# ###############################################################################
+
+# # Data Acquisition
+# dev_pref+':GDEN'  # Grow/Damp Enable (Enum SP)
+# dev_pref+':BRAM_REC_DS'  # Rec. Downsample (Float SP)
+# dev_pref+':BRAM_DUMP'  # Raw Data (Enum SP)
+# dev_pref+':BRAM_ACQTIME'  # Acquisition Time (Float SP)
+# dev_pref+':BRAM_HOLDTIME'  # Hold-Off Time (Float SP)
+# dev_pref+':BRAM_POSTTIME'  # Post Trigger (Float SP)
+# dev_pref+':BRAM_GDTIME'  # Growth Time (Float SP)
+# dev_pref+':BRAM_ACQ_TURNS'  # Acquisition Length (Label)
+# dev_pref+':BRAM_POST_TURNS'  # Post Trigger Length (Label)
+
+# # Acq Type
+# dev_pref+':BRAM_POSTSEL'  # (Enum SP)
+
+# # Trigger
+# dev_pref+':BRAM_EXTEN'  # Internal/External (Enum SP)
+# dev_pref+':BRAM_TRIG_IN_SEL'  # Selection (Enum SP)
+# dev_pref+':BRAM_ARM'  # Arm (Enum SP)
+# dev_pref+':BRAM_BR_ARM'  # Auto re-arm (Enum SP)
+# dev_pref+':BRAM_CAP_TRIG1'  # Reset bit 0 (Label)
+# dev_pref+':BRAM_CAP_TRIG2'  # Reset bit 1 (Label)
+
+# ###############################################################################
+# # BRAM waveforms
+# ###############################################################################
+
+# dev_pref+':BRAM_MEAN'  # Mean  (xaxis=Bunch number, yaxis=CNT)
+# dev_pref+':BRAM_MAXRMS'  # Max RMS Channel (filtered) (xaxis=Time(ms), yaxis=CNT)
+# dev_pref+':BRAM_RMS'  # RMS (xaxis=Bunch number, yaxis=CNT)
+# dev_pref+':BRAM_SPEC'  # Average spectrum (xaxis=Frequency(kHz), yaxis=dB)
+
+# # Acquisition control
+# dev_pref+':BRAM_ACQ_EN'  # Acquisition enable (Enum SP)
+# dev_pref+':BRAM_ACQ_SINGLE'  # Acquisition single (Enum SP)
+# dev_pref+':BRAM_MEANVAL'  # Mean (Label)
+# dev_pref+':BRAM_RMSVAL'  # RMS (Label)
+# dev_pref+':BRAM_AMP_PP'  # Amp P-P (Label)
+# dev_pref+':BRAM_MAXRMSVAL'  # Max RMS (Label)
+# dev_pref+':BRAM_ACQ_PATTERN'  # Bunch pattern (Float SP)
+# dev_pref+':BRAM_SP_AVG'  # Avg (Float SP)
+
+# # Markers
+# dev_pref+':BRAM_SP_LOW1'  # Min Limit (Float SP)
+# dev_pref+':BRAM_SP_HIGH1'  # Max Limit (Float SP)
+# dev_pref+':BRAM_SP_SEARCH1'  # Search Type (Enum SP)
+# dev_pref+':BRAM_PEAK1'  # Value (Label)
+# dev_pref+':BRAM_PEAKFREQ1'  # Frequency (Label)
+
+# dev_pref+':BRAM_SP_LOW2'  # Min Limit (Float SP)
+# dev_pref+':BRAM_SP_HIGH2'  # Max Limit (Float SP)
+# dev_pref+':BRAM_SP_SEARCH2'  # Search Type (Enum SP)
+# dev_pref+':BRAM_PEAK2'  # Value (Label)
+# dev_pref+':BRAM_PEAKFREQ2'  # Frequency (Label)
+
+
+# ###############################################################################
+# # SB control
+# ###############################################################################
+
+# # Data Acquisition
+# dev_pref+':SB_ACQTIME'  # Acquisition Time (Float SP)
+# dev_pref+':SB_BUNCH_ID'  # Bunch Number (Float SP)
+# dev_pref+':SB_ACQ_SAMPLES'  # Acq Samples (Label)
+# dev_pref+':SB_RAW_BUNCH_ID'  # Current Bunch (Label)
+
+# # Trigger
+# dev_pref+':SR_EXTEN'  # Internal/External (Enum SP)
+# dev_pref+':SR_TRIG_IN_SEL'  # Selection (Enum SP)
+# dev_pref+':SR_ARM'  # Arm (Enum SP)
+# dev_pref+':SR_BR_ARM'  # Auto re-arm (Enum SP)
+
+# ################################
+# # Phase Tracking
+
+# # Controls
+# dev_pref+':SB_BUNCH_ID'  # Bunch Number (Float SP)
+# dev_pref+':PHTRK_GAIN'  # Gain (Float SP)
+# dev_pref+':PHTRK_SETPT'  # Setpoint (Float SP)
+# dev_pref+':PHTRK_RANGE'  # Range (Float SP)
+# dev_pref+':PHTRK_DECIM'  # Decimation (Float SP)
+# dev_pref+':PHTRK_RATE'  # Rate (Label)
+# dev_pref+':PHTRK_BANDWIDTH'  # Bandwidth (Label)
+# dev_pref+':PHTRK_LOOPCTRL'  # Loop Control (Enum SP)
+
+# # Data
+# dev_pref+':PHTRK_MAG'  # Magnitude (Label)
+# dev_pref+':PHTRK_TFGAIN'  # Transfer Gain (Label)
+# dev_pref+':PHTRK_SHIFT'  # Normalizing Shift (Label)
+# dev_pref+':PHTRK_PHASE'  # Phase (Label)
+# dev_pref+':PHTRK_ERROR'  # Error (Label)
+# dev_pref+':PHTRK_FREQ'  # Tracking Frequency (Label)
+# dev_pref+':PHTRK_TUNE'  # Tracking Tune (Label)
+
+# ###############################################################################
+# # SB waveforms
+# ###############################################################################
+
+# # Graphs (no image)
+# dev_pref+':SB_RAW'
+# dev_pref+':SB_MAG'
+# dev_pref+':SB_PHASE'
+
+# # Controls
+# dev_pref+':SB_TF_ENABLE'  # Transfer Function Enable (Enum SP)
+# dev_pref+':SB_NFFT'  # Number of points for FFT/Window (Enum SP)
+# dev_pref+':SB_NOVERLAP'  # Overlap (Autolimited to NFFT/2) (Enum SP)
+# dev_pref+':SB_DEL_CAL'  # Delay Cal (Float SP)
+# dev_pref+':SB_SP_AVG'  # Averaging (Float SP)
+# dev_pref+':SB_SP_SEARCH1'  # Marker Mode (Enum SP)
+# dev_pref+':SB_SP_LOW1'  # Min Limit (Float SP)
+# dev_pref+':SB_SP_HIGH1'  # Max Limit (Float SP)
+
+# # Acquisition control
+# dev_pref+':SB_ACQ_EN'  # Acquisition enable (Enum SP)
+# dev_pref+':SB_ACQ_SINGLE'  # Acquisition single (Enum SP)
+# dev_pref+':SB_MEANVAL'  # Mean (Label)
+# dev_pref+':SB_RMSVAL'  # RMS (Label)
+# dev_pref+':SB_AMP_PP'  # Amp P-P (Label)
+# dev_pref+':SB_RAW_BUNCH_ID'  # Bunch ID (Label)
+
+# # Marker
+# dev_pref+':SB_PEAKFREQ1'  # Frequency (Label)
+# dev_pref+':SB_PEAK1'  # Magnitude (Label)
+# dev_pref+':SB_PHASE1'  # Phase (Label)
+
+# ###############################################################################
+# # Environment
+# ###############################################################################
+
+# dev_pref+':TEMP_FPGA'  # FPGA temperature (Label)
+# dev_pref+':TEMP_AMB'  # PCB temperature (Label)
+# dev_pref+':TEMP_EXT1'  # External temperature 1 (Label)
+# dev_pref+':TEMP_EXT2'  # External temperature 2 (Label)
+# dev_pref+':VBULK'  # Bulk Supply voltage (Label)
+# dev_pref+':VCC'  # Digital 3.3V (Label)
+# dev_pref+':VINT'  # FPGA core supply voltage (Label)
+# dev_pref+':VMON33'  # Analog 3.3V (Label)
+# dev_pref+':HWMON_CPU_TEMP'  # CPU temperature (Label)
+# dev_pref+':HWMON_CPU_FAN'  # CPU fan (Label)
+# dev_pref+':HWMON_CHASSIS_FAN'  # Chassis fan (Label)
+# dev_pref+':VMON5'  # Analog 5V (Label)
+
+# ###############################################################################
+# # Config S/R
+# ###############################################################################
+# dev_pref+':SRFILEIN'
+# # feature of save/restore is implemented in the EDM interfaces
+
+# ###############################################################################
+# # Device ID
+# ###############################################################################
+# dev_pref+':FBE_DEV_ID'
+
+# ###############################################################################
+# # Front/back-end (GPIO)
+# ###############################################################################
+
+# # GPIO Selection
+# dev_pref+':GPIO_SEL'  # (Enum SP)
+
+# # Front/back end registers
+# dev_pref+':FBELT_SERVO_SETPT'  # Long Phase (Float SP)
+# dev_pref+':FBE_Z_ATT'  # Long Atten (Float SP)
+# dev_pref+':FBELT_X_PHASE_SETPT'  # Horiz. Phase (Float SP)
+# dev_pref+':FBE_X_ATT'  # Horiz. Atten (Float SP)
+# dev_pref+':FBELT_Y_PHASE_SETPT'  # Vert. Phase (Float SP)
+# dev_pref+':FBE_Y_ATT'  # Vert. Atten (Float SP)
+# dev_pref+':FBE_BE_PHASE'  # Back-end Phase (Float SP)
+# dev_pref+':FBE_BE_ATT'  # Back-end Atten (Float SP)
+# # Phases
+# dev_pref+':FBE_X_PHASE'  # (Label)
+# dev_pref+':FBE_Y_PHASE'  # (Label)
+# dev_pref+':FBE_Z_PHASE'  # (Label)
+
+# # Phase Servo Loop
+# dev_pref+':FBELT_SERVO_MODE'  # Loop Ctrl (Enum SP)
+# dev_pref+':FBELT_SERVO_SIGN'  # Loop Sign (Enum SP)
+# dev_pref+':FBELT_SERVO_GAIN'  # Gain (Float SP)
+# dev_pref+':FBELT_SERVO_OFFSET'  # Offset (Float SP)
+# dev_pref+':FBELT_SERVO_X_TRACK'  # Hor. Trk. (Enum SP)
+# dev_pref+':FBELT_SERVO_Y_TRACK'  # Vert. Trk. (Enum SP)
+
+# # DS1822 ROM/Thermometer
+# dev_pref+':FBE_DS1822_STAT'  # Status (Label)
+# dev_pref+':FBE_DS1822_XSUM'  # CheckSum (Label)
+# dev_pref+':FBE_MOD_SENSE'  # Modification (Label)
+# dev_pref+':FBE_DS1822_DEVID'  # Device ID (Label)
+# dev_pref+':FBE_DS1822_SERIAL'  # Serial (Label)
+# dev_pref+':FBE_TEMP'  # Temperature (Label)
+
+# # FBE
+# dev_pref+':FBELT_FAN_MODE'  # Mode (Enum SP)
+# dev_pref+':FBE_FANMON'  # Fan Speed (Label)
+# dev_pref+':FBELT_FAN_SETPT'  # Temperature Setpoint (Float SP)
+
+# # ADC Average
+# dev_pref+':CIC_MEAN'  # (Float RB)
+
+# # Phase servo output
+# dev_pref+':FBELT_SERVO_DELTA'  # (Float RB)
+# dev_pref+':FBELT_SERVO_MAXDELTA'  # Max (Float SP)
+
+###############################################################################
+# Borders
+###############################################################################
+
+# dev_pref+':ERRSUM'              # Setup
+
+# dev_pref+':CVERIFY.C'           # dev_pref+':CSET0'
+# dev_pref+':CVERIFY.D'           # dev_pref+':CSET1'
+# dev_pref+':CVERIFY.G'           # dev_pref+':CSET2'
+# dev_pref+':CVERIFY.H'           # dev_pref+':CSET3'
+
+# dev_pref+':ECLDEL0_SUBWR'       # dev_pref+':ECLDEL0'
+# dev_pref+':ECLDEL1_SUBWR'       # dev_pref+':ECLDEL1'
+# dev_pref+':ECLDEL2_SUBWR'       # dev_pref+':ECLDEL2'
+# dev_pref+':ECLDEL3_SUBWR'       # dev_pref+':ECLDEL3'
+
+# dev_pref+':AD5644CH9_SUBWR'     # dev_pref+':AD5644_V_CH9'
+# dev_pref+':AD5644CH10_SUBWR'    # dev_pref+':LEVEL_VTRIG1'
+# dev_pref+':AD5644CH8_SUBWR'    # dev_pref+':LEVEL_VTRIG2'
+# dev_pref+':AD5644CH11_SUBWR'    # dev_pref+':AD5644_V_CH11'
+
+# dev_pref+':SHAPE_C0_SUBWR'      # dev_pref+':SHAPE_C0'
+# dev_pref+':SHAPE_C2_SUBWR'      # dev_pref+':SHAPE_C2'
+
+# dev_pref+':AD5644CH0_SUBWR'     # dev_pref+':AD5644_V_CH0'
+# dev_pref+':AD5644CH1_SUBWR'     # dev_pref+':AD5644_V_CH1'
+# dev_pref+':AD5644CH2_SUBWR'     # dev_pref+':AD5644_V_CH2'
+# dev_pref+':AD5644CH3_SUBWR'     # dev_pref+':AD5644_V_CH3'
+# dev_pref+':AD5644CH4_SUBWR'     # dev_pref+':AD5644_V_CH4'
+# dev_pref+':AD5644CH5_SUBWR'     # dev_pref+':AD5644_V_CH5'
+# dev_pref+':AD5644CH6_SUBWR'     # dev_pref+':AD5644_V_CH6'
+# dev_pref+':AD5644CH7_SUBWR'     # dev_pref+':AD5644_V_CH7'
+
+# dev_pref+':FID_DELAY_SUBWR'     # dev_pref+':FID_DELAY'
+
+# dev_pref+':SRAM_POSTREG_SUBWR'  # dev_pref+':SRAM_POSTTIME'
+# dev_pref+':SRAM_GDREG_SUBWR'    # dev_pref+':SRAM_GDTIME'
+# dev_pref+':BRAM_POSTREG_SUBWR'  # dev_pref+':BRAM_POSTTIME'
+# dev_pref+':BRAM_GDREG_SUBWR'    # dev_pref+':BRAM_GDTIME'

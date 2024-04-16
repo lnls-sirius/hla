@@ -2,6 +2,7 @@
 
 from pydm.widgets import PyDMLineEdit
 
+from ..widgets import SiriusDialog
 from ..as_ap_configdb import LoadConfigDialog as _LoadConfigDialog
 
 
@@ -19,3 +20,7 @@ class ConfigLineEdit(PyDMLineEdit):
         self.setText(configname)
         self.send_value()
         self.value_changed(configname)
+
+
+class ConfigFFView(SiriusDialog):
+    pass
