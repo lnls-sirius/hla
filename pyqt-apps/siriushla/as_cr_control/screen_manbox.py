@@ -85,20 +85,24 @@ LABELS_MANBOX = {
     }
 }
 
+IHM_PREFIX = "dbAdsSta_strAdsA-"
+
+PREFIX =  "m13DB1"
+
 PVS_MANBOX = {
     "NS1.QN020": {
         "position": [5.5, 47.5],
-        "pvname": "m13DB1NS1QN020rPrcOut",
+        "pvname": PREFIX + "NS1QN020-rPrcOut",
         "color": COLOR.wine
     },
     "NS1.050.L": {
         "position": [21.25, 52.5],
-        "pvname": "m13DB1NS1050L",
+        "pvname": IHM_PREFIX + PREFIX + "NS1050L",
         "color": COLOR.gold
     },
     "NS1.050.T": {
         "position": [21.25, 60],
-        "pvname": "m13DB1NS1050T",
+        "pvname": IHM_PREFIX + PREFIX + "NS1050T",
         "color": COLOR.dark_red
     },
     "LP1.EG050": {
@@ -109,17 +113,17 @@ PVS_MANBOX = {
     },
     "PR1.QN080": {
         "position": [51.5, 27.5],
-        "pvname": "m13DB1PR1QN080rPrcOut",
+        "pvname": PREFIX + "PR1QN080-rPrcOut",
         "color": COLOR.blue
     },
     "PR1.050.P": {
         "position": [40, 34],
-        "pvname": "m13DB1PR1050P",
+        "pvname": IHM_PREFIX + PREFIX + "PR1050P",
         "color": COLOR.blue
     },
     "PR1.065.T": {
         "position": [49.5, 34],
-        "pvname": "m13DB1PR1065T",
+        "pvname": IHM_PREFIX + PREFIX + "PR1065T",
         "color": COLOR.dark_red
     },
     "PR1.050.L2": {
@@ -129,47 +133,47 @@ PVS_MANBOX = {
     },
     "PR1.050.L": {
         "position": [37.5, 50],
-        "pvname": "m13DB1PR1050L",
+        "pvname": IHM_PREFIX + PREFIX + "PR1050L",
         "color": COLOR.gold
     },
     "PR1.050.J": {
         "position": [37.5, 67.5],
-        "pvname": "m13DB1PR1050J",
+        "pvname": IHM_PREFIX + PREFIX + "PR1050J",
         "color": COLOR.black
     },
     "PR1.EB050": {
         "position": [45, 67.5],
-        "pvname": "m13DB1PR1EB050rPrcOut",
+        "pvname": PREFIX + "PR1EB050-rPrcOut",
         "color": COLOR.black
     },
     "PS1.QN020": {
         "position": [62.5, 27.5],
-        "pvname": "m13DB1PS1QN020rPrcOut",
+        "pvname": PREFIX + "PS1QN020-rPrcOut",
         "color": COLOR.blue
     },
     "PS1.020.T": {
         "position": [63, 34],
-        "pvname": "m13DB1PS1020T",
+        "pvname": IHM_PREFIX + PREFIX + "PS1020T",
         "color": COLOR.dark_red
     },
     "PR1.020.T": {
         "position": [54.25, 80],
-        "pvname": "m13DB1PR1020T",
+        "pvname": IHM_PREFIX + PREFIX + "PR1020T",
         "color": COLOR.dark_red
     },
     "PR2.020.T": {
         "position": [74.25, 80],
-        "pvname": "m13DB1PR2020T",
+        "pvname": IHM_PREFIX + PREFIX + "PR2020T",
         "color": COLOR.dark_red
     },
     "PR3.020.T": {
         "position": [90.75, 80],
-        "pvname": "m13DB1PR3020T",
+        "pvname": IHM_PREFIX + PREFIX + "PR3020T",
         "color": COLOR.dark_red
     },
     "VU1.020.P": {
         "position": [89, 19],
-        "pvname": "m13DB1VU1020P",
+        "pvname": IHM_PREFIX + PREFIX + "VU1020P",
         "color": COLOR.blue
     }
 }
