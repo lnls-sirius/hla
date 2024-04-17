@@ -237,17 +237,17 @@ PVS_CO = {
     },
     "GP2.HP1.QN030": {
         "position": [71.25, 60],
-        "pvname": "m12GP2HP1QN030rPrcOut",
+        "pvname": "m12GP2HP1QN030-rPrcOut",
         "color": COLOR.dark_blue
     },
     "GP2.HP1.QN050": {
         "position": [71.25, 73.75],
-        "pvname": "m12GP2HP1QN050rPrcOut",
+        "pvname": "m12GP2HP1QN050-rPrcOut",
         "color": COLOR.dark_blue
     },
     "GP2.HP1.QN070": {
         "position": [71.25, 80],
-        "pvname": "m12GP2HP1QN070rPrcOut",
+        "pvname": "m12GP2HP1QN070-rPrcOut",
         "color": COLOR.dark_blue
     },
     "GP2.HP1.040.P": {
