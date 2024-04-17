@@ -46,90 +46,92 @@ LABELS_CBX1 = {
     }
 }
 
+IHM_PREFIX = "dbAdsSta_strAdsA-"
+
 PVS_CBX1 = {
     "GP1.HP1.010.P": {
         "position": [0.25, 62],
-        "pvname": "m12GP1HP1010P",
+        "pvname": IHM_PREFIX + "m12GP1HP1010P",
         "color": COLOR.blue
     },
     "GP2.HP1.010.P": {
         "position": [6.75, 62],
-        "pvname": "m12GP2HP1010P",
+        "pvname": IHM_PREFIX + "m12GP2HP1010P",
         "color": COLOR.blue
     },
     "CI1.LP1.015.P": {
         "position": [0.25, 69.5],
-        "pvname": "m12CI1LP1015P",
+        "pvname": IHM_PREFIX + "m12CI1LP1015P",
         "color": COLOR.blue
     },
     "CI2.LP1.015.P": {
         "position": [6.75, 69.5],
-        "pvname": "m12CI2LP1015P",
+        "pvname": IHM_PREFIX + "m12CI2LP1015P",
         "color": COLOR.blue
     },
     "NP1.110.T": {
         "position": [15.5, 24.5],
-        "pvname": "m13CB1NP1110T",
+        "pvname": IHM_PREFIX + "m13CB1NP1110T",
         "color": COLOR.dark_red
     },
     "NP1.100.T": {
         "position": [15.5, 47.5],
-        "pvname": "m13CB1NP1100T",
+        "pvname": IHM_PREFIX + "m13CB1NP1100T",
         "color": COLOR.dark_red
     },
     "NP1.QN010": {
         "position": [24, 39],
-        "pvname": "m13CB1NP1QN010rPrcOut",
+        "pvname": "m13CB1NP1QN010-rPrcOut",
         "color": COLOR.wine
     },
     "LP1.110.T": {
         "position": [20, 69.5],
-        "pvname": "m13CB1LP1110T",
+        "pvname": IHM_PREFIX + "m13CB1LP1110T",
         "color": COLOR.dark_red
     },
     "AE1.QN020": {
         "position": [28.75, 47],
-        "pvname": "m13CB1AE1QN020rPrcOut",
+        "pvname": "m13CB1AE1QN020-rPrcOut",
         "color": COLOR.blue
     },
     "AE1.QN010": {
         "position": [28.75, 58.5],
-        "pvname": "m13CB1AE1QN010rPrcOut",
+        "pvname": "m13CB1AE1QN010-rPrcOut",
         "color": COLOR.blue
     },
     "AE1.035.T": {
         "position": [35.5, 39],
-        "pvname": "m13CB1AE1035T",
+        "pvname": IHM_PREFIX + "m13CB1AE1035T",
         "color": COLOR.dark_red
     },
     "AE1.QN030": {
         "position": [37.25, 58.5],
-        "pvname": "m13CB1AE1QN030rPrcOut",
+        "pvname": "m13CB1AE1QN030-rPrcOut",
         "color": COLOR.blue
     },
     "AE1.065.T": {
         "position": [47.5, 39],
-        "pvname": "m13CB1AE1065T",
+        "pvname": IHM_PREFIX + "m13CB1AE1065T",
         "color": COLOR.dark_red
     },
     "AE1.EB050": {
         "position": [41.75, 50],
-        "pvname": "m13CB1AE1EB050rPrcOut",
+        "pvname": "m13CB1AE1EB050-rPrcOut",
         "color": COLOR.black
     },
     "RU1.AE1.065.P": {
         "position": [57.5, 20.5],
-        "pvname": "m13RU1AE1065P",
+        "pvname": IHM_PREFIX + "m13RU1AE1065P",
         "color": COLOR.blue
     },
     "AS1.020.P": {
         "position": [90.9, 26],
-        "pvname": "m13VU1AS1020P",
+        "pvname": IHM_PREFIX + "m13VU1AS1020P",
         "color": COLOR.blue
     },
     "AE1.QN080": {
         "position": [80.5, 47],
-        "pvname": "m13CB1AE1QN080rPrcOut",
+        "pvname": "m13CB1AE1QN080-rPrcOut",
         "color": COLOR.blue
     }
 }
@@ -153,7 +155,7 @@ LEDS_CBX1 = {
     },
     "AE1.QN030": {
         "position": [32.25, 60],
-        "pvname": "m13CB1AE1QN030rPrcOut"
+        "pvname": "m13CB1AE1QN030-rPrcOut"
     },
     "AE1.QN080.UPPER": {
         "position": [77.3, 39.8],
