@@ -125,6 +125,8 @@ class CryoControl(SiriusMainWindow):
         return pydm_lbl
 
     def add_label_egu(self, pvname, lay, line, isEditable=False):
+        if len(pvname) == 0:
+            return lay
         pvname = self.get_pvname(pvname)
         wid = self.get_pydm_widget(pvname, isEditable)
         lay.addWidget(wid, line, 0, 1, 1)
