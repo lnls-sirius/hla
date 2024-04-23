@@ -1,7 +1,7 @@
 import os as _os
 from qtpy.QtCore import QEvent, Qt
 from qtpy.QtWidgets import QLabel, QSizePolicy, QWidget, \
-    QGridLayout, QTabWidget
+    QGridLayout, QTabWidget, QVBoxLayout
 from qtpy.QtGui import QPixmap
 
 from pydm.widgets import PyDMLineEdit
@@ -212,14 +212,49 @@ class CryoControl(SiriusMainWindow):
                 self.save_relative_widget(
                     wid, [10, 10], config["position"])
 
+    def add_header(self):
+        glay = QGridLayout()
+        header_pvs = SCREENS[self.screen]["header"]
+        pos = [0, 1]
+        for title, name in header_pvs.items():
+            pos[1] -= 1
+
+            titleWid = QLabel(title)
+            titleWid.setMinimumWidth(150)
+            titleWid.setAlignment(Qt.AlignCenter)
+            glay.addWidget(titleWid, *pos)
+
+            pos[1] += 1
+
+            pvname = self.get_pvname(name)
+            widget = self.get_pydm_widget(pvname, False)
+            widget.setMinimumWidth(150)
+            glay.addWidget(widget, *pos)
+            pos[0] += 1
+            if pos[0] >= 3:
+                pos[0] = 0
+                pos[1] += 2
+        
+        glay.setColumnStretch(pos[1]+1, 2)
+
+        return glay
+
     def setup_one_screen(self):
+        wid = QWidget()
+        lay = QVBoxLayout()
+        wid.setLayout(lay)
+        wid.setContentsMargins(0, 0, 0, 0)
+
+        header = self.add_header()
+        lay.addLayout(header, 1)
 
         bg_img = self.add_background_image()
         self.add_labels()
         self.add_pvs()
         self.add_leds()
+        lay.addWidget(bg_img, 25)
 
-        return bg_img
+        return wid
 
     def get_tab_stylesheet(self):
         return """
@@ -256,8 +291,8 @@ class CryoControl(SiriusMainWindow):
         tabs.setStyleSheet(self.get_tab_stylesheet())
         for title in SCREENS.keys():
             self.screen = title
-            bg_img = self.setup_one_screen()
-            tabs.addTab(bg_img, title)
+            one_screen = self.setup_one_screen()
+            tabs.addTab(one_screen, title)
 
         return tabs
 
