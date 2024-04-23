@@ -221,8 +221,39 @@ class CryoControl(SiriusMainWindow):
 
         return bg_img
 
+    def get_tab_stylesheet(self):
+        return """
+            QTabWidget::pane {
+                border-bottom: 2px solid black;
+            }
+
+            QTabWidget::tab-bar {
+                left: 20em;
+            }
+
+            QTabBar::tab {
+                color: black;
+                /*background-color: white;*/
+                padding: 0 1em 0 1em;
+                margin: 0em;
+                border-top-left-radius: 0px;
+                border-top-right-radius: 0px;
+                border-bottom-left-radius: 10px;
+                border-bottom-right-radius: 10px;
+                border: 0.1em solid black;
+                margin-top: 0.0em;
+            }
+            QTabBar::tab:!selected {
+                background-color: grey;
+                margin-bottom: 0.2em;
+                font-weight: 200;
+            }
+        """
+
     def setup_all_screens(self):
         tabs = QTabWidget()
+        tabs.setTabPosition(QTabWidget.TabPosition.South)
+        tabs.setStyleSheet(self.get_tab_stylesheet())
         for title in SCREENS.keys():
             self.screen = title
             bg_img = self.setup_one_screen()
