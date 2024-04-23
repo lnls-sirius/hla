@@ -256,3 +256,11 @@ PVS_CO = {
         "color": COLOR.blue
     }
 }
+
+HEADER_CO = {
+    "Compressor 1": "",
+    "Compressor 2": "",
+    "Sequence 1": "",
+    "Sequence 2": "",
+    "MCD": ""
+}

@@ -166,3 +166,14 @@ LEDS_CBX1 = {
         "pvname": "AE1QN080LOWER"
     }
 }
+
+HEADER_CBX1 = {
+    "Coldmode": "",
+    "Warmup": "",
+    "Vaccum Cbx": "",
+    "Tu 1": "",
+    "Tu 2": "",
+    "Cbx LN2": "",
+    "Adsorber": "",
+    "Cold gas return": ""
+}

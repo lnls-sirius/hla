@@ -177,3 +177,14 @@ PVS_MANBOX = {
         "color": COLOR.blue
     }
 }
+
+HEADER_MANBOX = {
+    "Coldmode": "",
+    "Warmup": "",
+    "Vaccum Mbx": "",
+    "Manifoldbox": "",
+    "Mbx SAT": "",
+    "Mbx LN2": "",
+    "AmbHtr OM": "",
+    "Cold gas return": ""
+}
