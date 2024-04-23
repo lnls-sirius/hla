@@ -217,22 +217,22 @@ PVS_CO = {
     },
     "GP1.HP1.QN030": {
         "position": [71.25, 18],
-        "pvname": "m12GP1HP1QN030",
+        "pvname": "m12GP1HP1QN030-rPrcOut",
         "color": COLOR.dark_blue
     },
     "GP1.HP1.QN050": {
         "position": [71.25, 31.75],
-        "pvname": "m12GP1HP1QN050",
+        "pvname": "m12GP1HP1QN050-rPrcOut",
         "color": COLOR.dark_blue
     },
     "GP1.HP1.QN070": {
         "position": [71.25, 38],
-        "pvname": "m12GP1HP1QN070",
+        "pvname": "m12GP1HP1QN070-rPrcOut",
         "color": COLOR.dark_blue
     },
     "GP1.HP1.040.P": {
         "position": [79, 22],
-        "pvname": "m12GP1HP1040P",
+        "pvname": "dbAdsSta_strAdsA-m12GP1HP1040P",
         "color": COLOR.blue
     },
     "GP2.HP1.QN030": {
@@ -252,7 +252,7 @@ PVS_CO = {
     },
     "GP2.HP1.040.P": {
         "position": [79, 57.5],
-        "pvname": "m12GP2HP1040P",
+        "pvname": "dbAdsSta_strAdsA-m12GP2HP1040P",
         "color": COLOR.blue
     }
 }
