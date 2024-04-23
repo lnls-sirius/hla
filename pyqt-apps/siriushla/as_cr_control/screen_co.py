@@ -120,99 +120,101 @@ LABELS_CO = {
     }
 }
 
+IHM_PREFIX = "dbAdsSta_strAdsA-"
+
 PVS_CO = {
     "CP1.CW1.035.T": {
         "position": [4.75, 11],
-        "pvname": "m12CP1CW1035T",
+        "pvname": IHM_PREFIX + "m12CP1CW1035T",
         "color": COLOR.dark_red
     },
     "CP1.CW1.065.P": {
         "position": [18, 6.25],
-        "pvname": "m12CP1CW1065P",
+        "pvname": IHM_PREFIX + "m12CP1CW1065P",
         "color": COLOR.blue
     },
     "CP1.CW1.065.T": {
         "position": [18, 11],
-        "pvname": "m12CP1CW1065T",
+        "pvname": IHM_PREFIX + "m12CP1CW1065T",
         "color": COLOR.dark_red
     },
     "CP1.CW1.GQ050": {
         "position": [16.5, 18],
-        "pvname": "m12CP1CW1GQ050",
+        "pvname": "",
         "color": COLOR.black
     },
     "CP1.CW1.050.S": {
         "position": [16.5, 23],
-        "pvname": "m12CP1CW1050S",
+        "pvname": IHM_PREFIX + "m12CP1CW1050S",
         "color": COLOR.gold
     },
     "CP1.LP1.015.P": {
         "position": [4.75, 29],
         "pvname": (
-            "CP1LP1015P", ""),
+            IHM_PREFIX + "m12CI1LP1015P", ""),
         "color": COLOR.blue
     },
     "CP2.CW1.035.T": {
         "position": [4.75, 54],
-        "pvname": "m12CP2CW1035T",
+        "pvname": IHM_PREFIX + "m12CP2CW1035T",
         "color": COLOR.dark_red
     },
     "CP2.CW1.065.P": {
         "position": [18, 49.25],
-        "pvname": "m12CP2CW1065P",
+        "pvname": IHM_PREFIX + "m12CP2CW1065P",
         "color": COLOR.blue
     },
     "CP2.CW1.065.T": {
         "position": [18, 54],
-        "pvname": "m12CP2CW1065T",
+        "pvname": IHM_PREFIX + "m12CP2CW1065T",
         "color": COLOR.dark_red
     },
     "CP2.CW1.GQ050": {
         "position": [16.5, 61],
-        "pvname": "m12CP2CW1GQ050",
+        "pvname": "",
         "color": COLOR.black
     },
     "CP2.CW1.050.S": {
         "position": [16.5, 66],
-        "pvname": "m12CP2CW1050S",
+        "pvname": IHM_PREFIX + "m12CP2CW1050S",
         "color": COLOR.gold
     },
     "CP2.LP1.015.P": {
         "position": [16.25, 81],
         "pvname": (
-            "CP2LP1015P", ""),
+            IHM_PREFIX + "m12CI2LP1015P", ""),
         "color": COLOR.blue
     },
     "GP1.HP1.010.P": {
         "position": [51.8, 5],
         "pvname": (
-            "GP1HP1010P", ""),
+            IHM_PREFIX + "m12GP1HP1010P", ""),
         "color": COLOR.blue
     },
     "GP2.HP1.010.P": {
         "position": [51.8, 47],
         "pvname": (
-            "GP2HP1010P", ""),
+            IHM_PREFIX + "m12GP2HP1010P", ""),
         "color": COLOR.blue
     },
     "MC1.051.A": {
         "position": [37, 73],
-        "pvname": "MC1051A",
+        "pvname": IHM_PREFIX + "m17MC1MC1051Q",
         "color": COLOR.gold
     },
     "MC1.052.A": {
         "position": [44, 73],
-        "pvname": "MC1052A",
+        "pvname": IHM_PREFIX + "m17MC1MC1052Q",
         "color": COLOR.gold
     },
     "MC1.053.A": {
         "position": [37, 78],
-        "pvname": "MC1053A",
+        "pvname": IHM_PREFIX + "m17MC1MC1053Q",
         "color": COLOR.gold
     },
     "MC1.054.A": {
         "position": [44, 78],
-        "pvname": "MC1054A",
+        "pvname": IHM_PREFIX + "m17MC1MC1052Q",
         "color": COLOR.gold
     },
     "GP1.HP1.QN030": {
@@ -232,7 +234,7 @@ PVS_CO = {
     },
     "GP1.HP1.040.P": {
         "position": [79, 22],
-        "pvname": "dbAdsSta_strAdsA-m12GP1HP1040P",
+        "pvname": IHM_PREFIX + "m12GP1HP1040P",
         "color": COLOR.blue
     },
     "GP2.HP1.QN030": {
@@ -252,15 +254,15 @@ PVS_CO = {
     },
     "GP2.HP1.040.P": {
         "position": [79, 57.5],
-        "pvname": "dbAdsSta_strAdsA-m12GP2HP1040P",
+        "pvname": IHM_PREFIX + "m12GP2HP1040P",
         "color": COLOR.blue
     }
 }
 
 HEADER_CO = {
-    "Compressor 1": "",
-    "Compressor 2": "",
-    "Sequence 1": "",
-    "Sequence 2": "",
-    "MCD": ""
+    "Compressor 1": "dbC1Sta_strStrtS-iSta",
+    "Compressor 2": "dbC2Sta_strStrtS-iSta",
+    "Sequence 1": IHM_PREFIX + "C1SeqSta",
+    "Sequence 2": IHM_PREFIX + "C2SeqSta",
+    "MCD": "dbMcdSta_strStrt-iSta"
 }
