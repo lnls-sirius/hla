@@ -168,12 +168,12 @@ LEDS_CBX1 = {
 }
 
 HEADER_CBX1 = {
-    "Coldmode": "",
-    "Warmup": "",
-    "Vaccum Cbx": "",
-    "Tu 1": "",
-    "Tu 2": "",
-    "Cbx LN2": "",
-    "Adsorber": "",
-    "Cold gas return": ""
+    "Coldmode": "m13CB1HP1QN410-iSta",
+    "Warmup": "AlmSpareAi6-bStpCbWuOff",
+    "Vaccum Cbx": "m13VU1AS1QM011-iSta",
+    "Tu 1": "m13CB1TU1QN050-iSta",
+    "Tu 2": "m13CB1TU2QN050-iSta",
+    "Cbx LN2": "m13CB1NP1QN010-iSta",
+    "Adsorber": "m13CB1AE1QN010-iSta",
+    "Cold gas return": "m13CB1PR1QN510-iSta"
 }
