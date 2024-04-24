@@ -395,6 +395,185 @@ class PyDMLedMultiChannel(QLed, PyDMWidget):
         dialog.exec_()
 
 
+class PyDMLedTwoChannel(QLed, PyDMWidget):
+    """
+    A QLed with support for comparing values of two Channels.
+
+    The led state notify if the two PV values are not equal.
+
+    Parameters
+    ----------
+    parent : QWidget
+        The parent widget for the led.
+    channels: list
+        A list with channels to be compared.
+    """
+
+    default_colorlist = [PyDMLed.Red, PyDMLed.LightGreen]
+
+    def __init__(
+        self,
+        channel1,
+        channel2,
+        parent=None,
+        operation='eq',
+        color_list=None
+    ):
+        """Init."""
+        QLed.__init__(self, parent)
+        PyDMWidget.__init__(self)
+        self.stateColors = _dcopy(color_list) or self.default_colorlist
+        self._connected = False
+
+        _operations_dict = {
+            'eq': self._eq,
+            'cl': self._cl,
+            'ne': self._ne,
+            'gt': self._gt,
+            'lt': self._lt,
+            'ge': self._ge,
+            'le': self._le,
+            'in': self._in,
+            'wt': self._wt,
+            'ou': self._ou
+        }
+        self._operation = _operations_dict[operation]
+
+        self._addresses = {channel1, channel2}
+        self._address2channel = {add: None for add in self._addresses}
+        self._address2conn = {add: False for add in self._addresses}
+        self._address2values = {add: 'UNDEF' for add in self._addresses}
+        self.set_channels2values(self._addresses)
+
+    @property
+    def channels2values(self):
+        """Return channels2values dict."""
+        return _dcopy(self._address2values)
+
+    def set_channels2values(self, new_channels):
+        """Set channels2values."""
+        if not new_channels:
+            self.setEnabled(False)
+        else:
+            self.setEnabled(True)
+
+        # Check which channel can be removed
+        address2pop = list()
+        for address in self._address2channel:
+            if address not in new_channels:
+                address2pop.append(address)
+
+        # Remove channels
+        for address in address2pop:
+            self._address2channel[address].disconnect()
+            self._address2channel.pop(address)
+            self._address2conn.pop(address)
+
+        # Add new channels
+        for address in new_channels:
+            if address not in self._address2channel.keys():
+                self._address2conn[address] = False
+                channel = PyDMChannel(
+                    address=address,
+                    connection_slot=self.connection_changed,
+                    value_slot=self.value_changed
+                )
+                channel.connect()
+                self._address2channel[address] = channel
+
+        self._channels = list(self._address2channel.values())
+        self._update_statuses()
+
+    def value_changed(self, new_val):
+        """Receive new value and set led color accordingly."""
+        if not self.sender():   # do nothing when sender is None
+            return
+        address = self.sender().address
+        other = (self._addresses - {address}).pop()
+        other_val = self._address2values[other]
+        self._address2values[address] = new_val
+
+        self.setState(self._check_status(other_val, new_val))
+
+    def _check_status(self, other_val, new_val):
+        if new_val is None:
+            return False
+        elif isinstance(other_val, str) and other_val == 'UNDEF':
+            return False
+
+        return self._operation(new_val, other_val)
+
+    @Slot(bool)
+    def connection_changed(self, conn):
+        """Reimplement connection_changed to handle all channels."""
+        if not self.sender():   # do nothing when sender is None
+            return
+        address = self.sender().address
+        self._address2conn[address] = conn
+        allconn = True
+        for conn in self._address2conn.values():
+            allconn &= conn
+        PyDMWidget.connection_changed(self, allconn)
+        self._connected = allconn
+
+    @staticmethod
+    def _eq(val1, val2, **kws):
+        return not PyDMLedMultiChannel._ne(val1, val2, **kws)
+
+    @staticmethod
+    def _cl(val1, val2, **kws):
+        val1 = _np.asarray(val1)
+        val2 = _np.asarray(val2)
+        if val1.dtype != val2.dtype or val1.size != val2.size:
+            return False
+        atol = kws.get('abs_tol', 1e-8)
+        rtol = kws.get('rel_tol', 1e-5)
+        return _np.allclose(val1, val2, atol=atol, rtol=rtol)
+
+    @staticmethod
+    def _ne(val1, val2, **kws):
+        val1 = _np.asarray(val1)
+        val2 = _np.asarray(val2)
+        return _np.all(val1 != val2)
+
+    @staticmethod
+    def _gt(val1, val2, **kws):
+        val1 = _np.asarray(val1)
+        val2 = _np.asarray(val2)
+        return _np.all(val1 > val2)
+
+    @staticmethod
+    def _lt(val1, val2, **kws):
+        val1 = _np.asarray(val1)
+        val2 = _np.asarray(val2)
+        return _np.all(val1 < val2)
+
+    @staticmethod
+    def _ge(val1, val2, **kws):
+        val1 = _np.asarray(val1)
+        val2 = _np.asarray(val2)
+        return _np.all(val1 >= val2)
+
+    @staticmethod
+    def _le(val1, val2, **kws):
+        val1 = _np.asarray(val1)
+        val2 = _np.asarray(val2)
+        return _np.all(val1 <= val2)
+
+    @staticmethod
+    def _in(val1, val2, **kws):
+        return val1 in val2
+
+    @staticmethod
+    def _wt(val1, val2, **kws):
+        return val2[0] < val1 < val2[1]
+
+    @staticmethod
+    def _ou(val1, val2, **kws):
+        """Whether val1 is out of range (val2[0], val2[1])."""
+        return val1 < val2[0] or val1 > val2[1]
+
+
 class PyDMLedMultiConnection(QLed, PyDMWidget):
     """
     A QLed with support for checking connection of several Channels.
