@@ -179,12 +179,12 @@ PVS_MANBOX = {
 }
 
 HEADER_MANBOX = {
-    "Coldmode": "",
-    "Warmup": "",
-    "Vaccum Mbx": "",
+    "Coldmode": "m13CB1HP1QN410-iSta",
+    "Warmup": "AlmSpareAi6-bStpCbWuOff",
+    "Vaccum Mbx": "m13DB1VU1QM010-iSta",
     "Manifoldbox": "",
     "Mbx SAT": "",
     "Mbx LN2": "",
     "AmbHtr OM": "",
-    "Cold gas return": ""
+    "Cold gas return": "AlmSpareAi6-bSdCGRviaCbM"
 }
