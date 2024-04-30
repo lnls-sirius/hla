@@ -482,7 +482,6 @@ class PyDMLedTwoChannel(QLed, PyDMWidget):
                 self._address2channel[address] = channel
 
         self._channels = list(self._address2channel.values())
-        self._update_statuses()
 
     def value_changed(self, new_val):
         """Receive new value and set led color accordingly."""
