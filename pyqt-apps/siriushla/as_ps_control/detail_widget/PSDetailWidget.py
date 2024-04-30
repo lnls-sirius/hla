@@ -339,8 +339,6 @@ class PSDetailWidget(_BaseDetailWidget):
         self.opmode_box.setObjectName("operation_mode")
         self.ctrlloop_box = QGroupBox('Control Loop')
         self.ctrlloop_box.setObjectName('ctrlloop_box')
-        self.wfmparams_box = QGroupBox('Wfm Params')
-        self.wfmparams_box.setObjectName('wfmparams_box')
         if self._psmodel == 'FBP':
             self.sofbmode_box = QGroupBox('SOFB Mode')
             self.sofbmode_box.setObjectName('sofbmode_box')
@@ -376,7 +374,6 @@ class PSDetailWidget(_BaseDetailWidget):
         self.pwrstate_box.setLayout(self._powerStateLayout())
         self.opmode_box.setLayout(self._opModeLayout())
         self.ctrlloop_box.setLayout(self._ctrlLoopLayout())
-        self.wfmparams_box.setLayout(self._wfmParamsLayout())
         if self._psmodel == 'FBP':
             self.sofbmode_box.setLayout(self._sofbModeLayout())
         self.genparams_box.setLayout(self._genParamsLayout())
@@ -405,7 +402,6 @@ class PSDetailWidget(_BaseDetailWidget):
             controls.addWidget(self.sofbmode_box, 4, 1)
         else:
             controls.addWidget(self.genparams_box, 4, 0, 1, 2)
-        controls.addWidget(self.wfmparams_box, 5, 0, 1, 2)
 
         analogs = QVBoxLayout()
         analogs.addWidget(self.current_box, Qt.AlignCenter)
@@ -763,34 +759,6 @@ class PSDetailWidget(_BaseDetailWidget):
         layout.addWidget(self.tab_siggen, 0, 0)
         return layout
 
-    def _wfmParamsLayout(self):
-        wfm_index_ca = self._prefixed_psname + ':WfmIndex-Mon'
-        wfm_count_ca = self._prefixed_psname + ':WfmSyncPulseCount-Mon'
-        wfm_updateauto_ca = self._prefixed_psname + ':WfmUpdateAuto-Sts'
-        wfm_updateauto_sel = self._prefixed_psname + ':WfmUpdateAuto-Sel'
-
-        wfm_index_label = QLabel('Wfm Index', self)
-        wfm_index_rb_label = SiriusLabel(self, wfm_index_ca)
-
-        wfm_count_label = QLabel('Wfm Pulse Count', self)
-        wfm_count_rb_label = SiriusLabel(self, wfm_count_ca)
-
-        wfm_updateauto_label = QLabel('Wfm UpdateAuto', self)
-        wfm_updateauto_sts_led = SiriusLedState(self, wfm_updateauto_ca)
-        wfm_updateauto_btn = PyDMStateButton(self, wfm_updateauto_sel)
-
-        layout = QGridLayout()
-        layout.setAlignment(Qt.AlignTop)
-        layout.setColumnStretch(3, 1)
-        layout.addWidget(wfm_index_label, 0, 0, Qt.AlignRight)
-        layout.addWidget(wfm_index_rb_label, 0, 1)
-        layout.addWidget(wfm_count_label, 1, 0, Qt.AlignRight)
-        layout.addWidget(wfm_count_rb_label, 1, 1)
-        layout.addWidget(wfm_updateauto_label, 2, 0, Qt.AlignRight)
-        layout.addWidget(wfm_updateauto_btn, 2, 1, Qt.AlignHCenter)
-        layout.addWidget(wfm_updateauto_sts_led, 2, 2)
-        return layout
-
     def _sofbModeLayout(self):
         sofb_mode_sel = self._prefixed_psname + ':SOFBMode-Sel'
         sofb_mode_sts = self._prefixed_psname + ':SOFBMode-Sts'
@@ -929,7 +897,7 @@ class PSDetailWidget(_BaseDetailWidget):
             hbox_show.addWidget(cbx)
 
         layout = QVBoxLayout()
-        layout.setAlignment(Qt.AlignTop)
+        layout.setAlignment(Qt.AlignCenter)
         layout.addWidget(self.wfm_graph)
         layout.addWidget(self.wfm_nrpts_lb)
         layout.addLayout(hbox_show)
@@ -1011,6 +979,11 @@ class PSDetailWidget(_BaseDetailWidget):
         wfm_offset_sp = self._prefixed_psname + ':WfmOffset-SP'
         wfm_offset_rb = self._prefixed_psname + ':WfmOffset-RB'
 
+        wfm_index_ca = self._prefixed_psname + ':WfmIndex-Mon'
+        wfm_count_ca = self._prefixed_psname + ':WfmSyncPulseCount-Mon'
+        wfm_updateauto_ca = self._prefixed_psname + ':WfmUpdateAuto-Sts'
+        wfm_updateauto_sel = self._prefixed_psname + ':WfmUpdateAuto-Sel'
+
         self.wfm_selected_label = QLabel('Wfm Selected', self)
         self.wfm_selected_sp_sb = SiriusSpinbox(self, wfm_selected_sp)
         self.wfm_selected_rb_lb = SiriusLabel(self, wfm_selected_rb)
@@ -1036,6 +1009,14 @@ class PSDetailWidget(_BaseDetailWidget):
         self.wfm_offset_rb_lb = SiriusLabel(self, wfm_offset_rb)
         self.wfm_offset_rb_lb.showUnits = True
 
+        wfm_index_label = QLabel('Wfm Index', self)
+        wfm_index_rb_label = SiriusLabel(self, wfm_index_ca)
+        wfm_count_label = QLabel('Wfm Pulse Count', self)
+        wfm_count_rb_label = SiriusLabel(self, wfm_count_ca)
+        wfm_updateauto_label = QLabel('Wfm UpdateAuto', self)
+        wfm_updateauto_sts_led = SiriusLedState(self, wfm_updateauto_ca)
+        wfm_updateauto_btn = PyDMStateButton(self, wfm_updateauto_sel)
+
         layout_wfm = QGridLayout()
         layout_wfm.setAlignment(Qt.AlignTop)
         layout_wfm.setContentsMargins(6, 6, 3, 3)
@@ -1057,10 +1038,20 @@ class PSDetailWidget(_BaseDetailWidget):
         layout_wfm.addWidget(self.wfm_offset_sp_sb, 7, 2)
         layout_wfm.addWidget(self.wfm_offset_rb_lb, 7, 3)
 
+        layout_wfm.addWidget(wfm_index_label, 8, 0, Qt.AlignRight)
+        layout_wfm.addWidget(wfm_index_rb_label, 8, 1)
+        layout_wfm.addWidget(wfm_count_label, 9, 0, Qt.AlignRight)
+        layout_wfm.addWidget(wfm_count_rb_label, 9, 1)
+        layout_wfm.addWidget(wfm_updateauto_label, 10, 0, Qt.AlignRight)
+        layout_wfm.addWidget(wfm_updateauto_btn, 10, 1, Qt.AlignHCenter)
+        layout_wfm.addWidget(wfm_updateauto_sts_led, 10, 2)
+
         self.wfm_box = QGroupBox("Wfm")
         self.wfm_box.setObjectName("Wfm")
         self.wfm_box.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
         self.wfm_box.setLayout(layout_wfm)
+
+        # --- wfmlayout ---
 
         layout = QGridLayout()
         layout.setAlignment(Qt.AlignTop)
@@ -1273,6 +1264,7 @@ class LIPSDetailWidget(_BaseDetailWidget):
 
         layout = QGridLayout()
         layout.setAlignment(Qt.AlignCenter)
+        layout.setContentsMargins(6, 6, 3, 3)
         layout.addWidget(self.intlk_bt, 0, 0)
         layout.addWidget(QLabel('Intlk', self, alignment=Qt.AlignCenter), 0, 1)
         layout.addWidget(self.intlk_led, 0, 2)
