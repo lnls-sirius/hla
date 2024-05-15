@@ -1,12 +1,12 @@
 from .colors import COLOR
 
 LABELS_CBX2 = {
-    "Cbx1": [19.75, 19],
-    "CW1.052.USC": [19.75, 19],
-    "761\nCbx1": [19.75, 19],
-    "1552\nCbx1": [19.75, 19],
-    "1228\nCbx1": [19.75, 19],
-    "TU1.ML050": [19.75, 19],
+    "Cbx1": [0, 2],
+    "CW1.052.USC": [1.5, 23],
+    "761\nCbx1": [0, 51.5],
+    "1552\nCbx1": [0, 70],
+    "1228\nCbx1": [0, 87.5],
+    "TU1.ML050": [22, 31],
     "TU2.ML050": [19.75, 19],
     "AT1.HP050": [19.75, 19],
     "HP1.010.UPC": [19.75, 19],
@@ -15,66 +15,66 @@ LABELS_CBX2 = {
     "Manifoldbox": [19.75, 19],
     "1923\nMfb": [19.75, 19],
     "HP1.EQ200": {
-        "position": [48, 75],
+        "position": [6.75, 50],
         "shape": "line",
         "color": COLOR.transparent,
         "rotation": 90
     },
     "HP1.EQ300": {
-        "position": [48, 75],
+        "position": [30, 50],
         "shape": "line",
         "color": COLOR.transparent,
         "rotation": 90
     },
     "HP1.EQ400": {
-        "position": [48, 75],
+        "position": [34.75, 50],
         "shape": "line",
         "color": COLOR.transparent,
         "rotation": 90
     },
     "HP1.EQ500": {
-        "position": [48, 75],
+        "position": [60.75, 50],
         "shape": "line",
         "color": COLOR.transparent,
         "rotation": 90
     },
     "WP1.QM110": {
-        "position": [16, 75],
+        "position": [14, 7.5],
         "shape": "line",
         "color": COLOR.blue
     },
     "TU1.050.U.SC": {
-        "position": [16, 75],
+        "position": [28, 22],
         "shape": "side_arrows",
         "color": COLOR.gold
     },
     "WP1.QM010": {
-        "position": [16, 75],
+        "position": [45, 7.5],
         "shape": "line",
         "color": COLOR.blue
     },
     "TU2.050.U.SC": {
-        "position": [16, 75],
+        "position": [45.5, 22],
         "shape": "side_arrows",
         "color": COLOR.gold
     },
     "TU2.065.U.TC": {
-        "position": [16, 75],
+        "position": [43, 43],
         "shape": "side_arrows",
         "color": COLOR.dark_red
     },
     "TU2.066.U.TC": {
-        "position": [16, 75],
+        "position": [43, 45.5],
         "shape": "side_arrows",
         "color": COLOR.dark_red
     },
     "TU2.067.U.TDC": {
-        "position": [16, 75],
+        "position": [43, 65],
         "shape": "side_arrows",
         "color": COLOR.dark_red
     },
     "HP1.500.U.PC": {
-        "position": [16, 75],
+        "position": [66, 49],
         "shape": "side_arrows",
         "color": COLOR.dark_blue
     },
@@ -97,87 +97,87 @@ LABELS_CBX2 = {
 
 PVS_CBX2 = {
     "TU1.QN020": {
-        "position": [4.75, 11],
+        "position": [8, 21],
         "pvname": "",
         "color": COLOR.blue
     },
     "CD1.QN110": {
-        "position": [4.75, 11],
+        "position": [8, 85],
         "pvname": "",
         "color": COLOR.blue
     },
     "TU1.035.T": {
-        "position": [4.75, 11],
+        "position": [14.5, 22.5],
         "pvname": "",
         "color": COLOR.dark_red
     },
     "TU1.035.P": {
-        "position": [4.75, 11],
+        "position": [14.5, 29],
         "pvname": "",
         "color": COLOR.dark_blue
     },
     "TU1.QN050": {
-        "position": [4.75, 11],
+        "position": [21.5, 7.5],
         "pvname": "",
         "color": COLOR.blue
     },
     "TU1.050.T": {
-        "position": [4.75, 11],
+        "position": [28.25, 15],
         "pvname": "",
         "color": COLOR.dark_red
     },
     "TU1.050.S": {
-        "position": [4.75, 11],
-        "pvname": "",
+        "position": [28.25, 26],
+        "pvname": ("",""),
         "color": COLOR.gold
     },
     "TU2.QN050": {
-        "position": [4.75, 11],
+        "position": [39, 7.5],
         "pvname": "",
         "color": COLOR.blue
     },
     "TU2.035.P": {
-        "position": [4.75, 11],
+        "position": [36, 29],
         "pvname": "",
         "color": COLOR.dark_blue
     },
     "TU2.050.T": {
-        "position": [4.75, 11],
+        "position": [45.75, 15],
         "pvname": "",
         "color": COLOR.dark_red
     },
     "TU2.050.S": {
-        "position": [4.75, 11],
-        "pvname": "",
+        "position": [45.75, 26],
+        "pvname": ("", ""),
         "color": COLOR.gold
     },
     "TU2.065.T": {
-        "position": [4.75, 11],
+        "position": [43.25, 48],
         "pvname": "",
         "color": COLOR.dark_red
     },
     "CD1.QN410": {
-        "position": [4.75, 11],
+        "position": [44.5, 83.5],
         "pvname": "",
-        "color": COLOR.dark_red
+        "color": COLOR.blue
     },
     "HP1.QN500": {
-        "position": [4.75, 11],
+        "position": [59, 34],
         "pvname": "",
         "color": COLOR.blue
     },
     "HP1.QN410": {
-        "position": [4.75, 11],
+        "position": [55, 62.5],
         "pvname": "",
         "color": COLOR.blue
     },
     "HP1.500.P": {
-        "position": [4.75, 11],
+        "position": [66, 42],
         "pvname": "",
         "color": COLOR.dark_blue
     },
     "LP1.510.T": {
-        "position": [4.75, 11],
+        "position": [64, 69],
         "pvname": "",
         "color": COLOR.dark_red
     },
@@ -225,7 +225,7 @@ PVS_CBX2 = {
 
 LEDS_CBX2 = {
     "TU1.QN020": {
-        "position": [25.25, 39.8],
+        "position": [4.75, 25],
         "pvname": "TU1QN020LOWER"
     }
 }
