@@ -230,6 +230,7 @@ class CryoControl(SiriusMainWindow):
 
             pvname = self.get_pvname(name)
             widget = self.get_pydm_widget(pvname, False)
+            widget.showUnits = True
             widget.setMinimumWidth(150)
             glay.addWidget(widget, *pos)
             pos[0] += 1
