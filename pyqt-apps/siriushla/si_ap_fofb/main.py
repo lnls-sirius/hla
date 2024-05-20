@@ -40,7 +40,8 @@ class MainWindow(BaseObject, SiriusMainWindow):
             self.devpref.substitute(propty='LoopState-Sts') +
             '", "trigger": true}]}]')
         self._setupUi()
-        self.setFocusPolicy(Qt.StrongFocus)  
+        self.setFocusPolicy(Qt.StrongFocus)
+
     def _setupUi(self):
         # layout
         self.log = self._setupLogWidget()
@@ -189,7 +190,7 @@ class MainWindow(BaseObject, SiriusMainWindow):
         lay = QVBoxLayout(wid)
         lay.addWidget(widget)
         return wid
-    
+
     def _setupLoopWidget(self):
         ld_enbl = QLabel(
             'Enable: ', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
@@ -375,14 +376,14 @@ class MainWindow(BaseObject, SiriusMainWindow):
                 sts_acc_filter = SiriusLabel(
                     self, pref.substitute(propty='FOFBAccFilter-Sts'))
                 sts_acc_filter.rules = visrule.replace('==', '!=')
-                
+
                 ld_filter_gain = QLabel(
                     'Filter Gain: ', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
                 sb_filter_gain = SiriusSpinbox(
-                    self, self.devpref.substitute(propty='FOFBAccFilterGain-SP')) 
+                    self, self.devpref.substitute(propty='FOFBAccFilterGain-SP'))
                 lb_filter_gain = SiriusLabel(
                     self, self.devpref.substitute(propty='FOFBAccFilterGain-RB'))
-                
+
                 hbox = QHBoxLayout()
                 hbox.addWidget(sel_acc_filter)
                 hbox.addWidget(sts_acc_filter)
