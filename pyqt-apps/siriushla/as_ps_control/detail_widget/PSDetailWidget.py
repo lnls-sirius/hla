@@ -968,8 +968,6 @@ class PSDetailWidget(_BaseDetailWidget):
 
         # --- wfm groupbox ---
 
-        wfm_selected_sp = self._prefixed_psname + ':WfmSelected-SP'
-        wfm_selected_rb = self._prefixed_psname + ':WfmSelected-RB'
         wfm_syncmode_sel = self._prefixed_psname + ':WfmSyncMode-Sel'
         wfm_syncmode_sts = self._prefixed_psname + ':WfmSyncMode-Sts'
         wfm_freq_sp = self._prefixed_psname + ':WfmFreq-SP'
@@ -983,11 +981,6 @@ class PSDetailWidget(_BaseDetailWidget):
         wfm_count_ca = self._prefixed_psname + ':WfmSyncPulseCount-Mon'
         wfm_updateauto_ca = self._prefixed_psname + ':WfmUpdateAuto-Sts'
         wfm_updateauto_sel = self._prefixed_psname + ':WfmUpdateAuto-Sel'
-
-        self.wfm_selected_label = QLabel('Wfm Selected', self)
-        self.wfm_selected_sp_sb = SiriusSpinbox(self, wfm_selected_sp)
-        self.wfm_selected_rb_lb = SiriusLabel(self, wfm_selected_rb)
-        self.wfm_selected_rb_lb.showUnits = True
 
         self.wfm_syncmode_label = QLabel('Wfm SyncMode', self)
         self.wfm_syncmode_sel_cb = PyDMEnumComboBox(self, wfm_syncmode_sel)
@@ -1021,30 +1014,26 @@ class PSDetailWidget(_BaseDetailWidget):
         layout_wfm.setAlignment(Qt.AlignTop)
         layout_wfm.setContentsMargins(6, 6, 3, 3)
         layout_wfm.addWidget(
-            self.wfm_selected_label, 3, 0, 1, 2, Qt.AlignRight)
-        layout_wfm.addWidget(self.wfm_selected_sp_sb, 3, 2)
-        layout_wfm.addWidget(self.wfm_selected_rb_lb, 3, 3)
-        layout_wfm.addWidget(
-            self.wfm_syncmode_label, 4, 0, 1, 2, Qt.AlignRight)
-        layout_wfm.addWidget(self.wfm_syncmode_sel_cb, 4, 2)
-        layout_wfm.addWidget(self.wfm_syncmode_sts_lb, 4, 3)
-        layout_wfm.addWidget(self.wfm_freq_label, 5, 0, 1, 2, Qt.AlignRight)
-        layout_wfm.addWidget(self.wfm_freq_sp_sb, 5, 2)
-        layout_wfm.addWidget(self.wfm_freq_rb_lb, 5, 3)
-        layout_wfm.addWidget(self.wfm_gain_label, 6, 0, 1, 2, Qt.AlignRight)
-        layout_wfm.addWidget(self.wfm_gain_sp_sb, 6, 2)
-        layout_wfm.addWidget(self.wfm_gain_rb_lb, 6, 3)
-        layout_wfm.addWidget(self.wfm_offset_label, 7, 0, 1, 2, Qt.AlignRight)
-        layout_wfm.addWidget(self.wfm_offset_sp_sb, 7, 2)
-        layout_wfm.addWidget(self.wfm_offset_rb_lb, 7, 3)
+            self.wfm_syncmode_label, 3, 0, 1, 2, Qt.AlignRight)
+        layout_wfm.addWidget(self.wfm_syncmode_sel_cb, 3, 2)
+        layout_wfm.addWidget(self.wfm_syncmode_sts_lb, 3, 3)
+        layout_wfm.addWidget(self.wfm_freq_label, 4, 0, 1, 2, Qt.AlignRight)
+        layout_wfm.addWidget(self.wfm_freq_sp_sb, 4, 2)
+        layout_wfm.addWidget(self.wfm_freq_rb_lb, 4, 3)
+        layout_wfm.addWidget(self.wfm_gain_label, 5, 0, 1, 2, Qt.AlignRight)
+        layout_wfm.addWidget(self.wfm_gain_sp_sb, 5, 2)
+        layout_wfm.addWidget(self.wfm_gain_rb_lb, 5, 3)
+        layout_wfm.addWidget(self.wfm_offset_label, 6, 0, 1, 2, Qt.AlignRight)
+        layout_wfm.addWidget(self.wfm_offset_sp_sb, 6, 2)
+        layout_wfm.addWidget(self.wfm_offset_rb_lb, 6, 3)
 
-        layout_wfm.addWidget(wfm_index_label, 8, 0, Qt.AlignRight)
-        layout_wfm.addWidget(wfm_index_rb_label, 8, 1)
-        layout_wfm.addWidget(wfm_count_label, 9, 0, Qt.AlignRight)
-        layout_wfm.addWidget(wfm_count_rb_label, 9, 1)
-        layout_wfm.addWidget(wfm_updateauto_label, 10, 0, Qt.AlignRight)
-        layout_wfm.addWidget(wfm_updateauto_btn, 10, 1, Qt.AlignHCenter)
-        layout_wfm.addWidget(wfm_updateauto_sts_led, 10, 2)
+        layout_wfm.addWidget(wfm_index_label, 7, 0, Qt.AlignRight)
+        layout_wfm.addWidget(wfm_index_rb_label, 7, 1)
+        layout_wfm.addWidget(wfm_count_label, 8, 0, Qt.AlignRight)
+        layout_wfm.addWidget(wfm_count_rb_label, 8, 1)
+        layout_wfm.addWidget(wfm_updateauto_label, 9, 0, Qt.AlignRight)
+        layout_wfm.addWidget(wfm_updateauto_btn, 9, 1, Qt.AlignHCenter)
+        layout_wfm.addWidget(wfm_updateauto_sts_led, 9, 2)
 
         self.wfm_box = QGroupBox("Wfm")
         self.wfm_box.setObjectName("Wfm")
@@ -1122,6 +1111,7 @@ class PSDetailWidget(_BaseDetailWidget):
 
 
 class LIPSDetailWidget(_BaseDetailWidget):
+    """."""
 
     def __init__(self, psname, parent=None):
         """Class constructor."""
