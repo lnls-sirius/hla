@@ -95,130 +95,133 @@ LABELS_CBX2 = {
     }
 }
 
+prc_prefix = "-rPrcOut"
+db_prefix = "dbAdsSta_strAdsA-"
+
 PVS_CBX2 = {
     "TU1.QN020": {
         "position": [8, 21],
-        "pvname": "",
+        "pvname": "m13CB1TU1QN020"+prc_prefix,
         "color": COLOR.dark_blue
     },
     "CD1.QN110": {
         "position": [8, 85],
-        "pvname": "",
+        "pvname": "m13CB1CD1QN110"+prc_prefix,
         "color": COLOR.dark_blue
     },
     "TU1.035.T": {
         "position": [14.5, 21.75],
-        "pvname": "",
+        "pvname": db_prefix+"m13CB1TU1035T",
         "color": COLOR.dark_red
     },
     "TU1.035.P": {
         "position": [14.5, 29.75],
-        "pvname": "",
+        "pvname": db_prefix+"m13CB1TU1050P",
         "color": COLOR.blue
     },
     "TU1.QN050": {
         "position": [21.5, 7.5],
-        "pvname": "",
+        "pvname": "m13CB1TU1QN050"+prc_prefix,
         "color": COLOR.dark_blue
     },
     "TU1.050.T": {
         "position": [28.25, 15],
-        "pvname": "",
+        "pvname": db_prefix+"m13CB1TU1050T",
         "color": COLOR.dark_red
     },
     "TU1.050.S": {
         "position": [28.5, 25.5],
-        "pvname": ("",""),
+        "pvname": (db_prefix+"m13CB1TU1050S",""),
         "color": COLOR.gold
     },
     "TU2.QN050": {
         "position": [39, 7.5],
-        "pvname": "",
+        "pvname": "m13CB1TU2QN050"+prc_prefix,
         "color": COLOR.dark_blue
     },
     "TU2.035.P": {
         "position": [35.5, 29.75],
-        "pvname": "",
+        "pvname": db_prefix+"m13CB1TU2050P",
         "color": COLOR.blue
     },
     "TU2.050.T": {
         "position": [46, 15],
-        "pvname": "",
+        "pvname": db_prefix+"m13CB1TU2050T",
         "color": COLOR.dark_red
     },
     "TU2.050.S": {
         "position": [46.25, 25.5],
-        "pvname": ("", ""),
+        "pvname": (db_prefix+"m13CB1TU2050S", ""),
         "color": COLOR.gold
     },
     "TU2.065.T": {
         "position": [43, 48],
-        "pvname": "",
+        "pvname": db_prefix+"m13CB1TU2065T",
         "color": COLOR.dark_red
     },
     "CD1.QN410": {
         "position": [44.5, 83.5],
-        "pvname": "",
+        "pvname": "m13CB1CD1QN410"+prc_prefix,
         "color": COLOR.dark_blue
     },
     "HP1.QN500": {
         "position": [59, 34],
-        "pvname": "",
+        "pvname": "m13CB1HP1QN500"+prc_prefix,
         "color": COLOR.dark_blue
     },
     "HP1.QN410": {
         "position": [55, 62.5],
-        "pvname": "",
+        "pvname": "m13CB1HP1QN410"+prc_prefix,
         "color": COLOR.dark_blue
     },
     "HP1.500.P": {
         "position": [66.5, 42],
-        "pvname": "",
+        "pvname": db_prefix+"m13CB1HP1500P",
         "color": COLOR.blue
     },
     "LP1.510.T": {
         "position": [64, 69],
-        "pvname": "",
+        "pvname": db_prefix+"m13CB1LP1510T",
         "color": COLOR.dark_red
     },
     "DW1.LS1.010.L": {
         "position": [73.75, 23],
-        "pvname": ("", ""),
+        "pvname": (db_prefix+"m14DW1LS1010L", ""),
         "color": COLOR.gold
     },
     "DW1.LS1.010.J": {
         "position": [73.75, 40],
-        "pvname": "",
+        "pvname": db_prefix+"m14DW1LS1010J",
         "color": COLOR.black
     },
     "LS1.EB010": {
         "position": [80, 40],
-        "pvname": "",
+        "pvname": "m14DW1LS1EB010"+prc_prefix,
         "color": COLOR.black
     },
     "HP1.QN510": {
         "position": [78, 49],
-        "pvname": "",
+        "pvname": "m13CB1HP1QN510"+prc_prefix,
         "color": COLOR.dark_blue
     },
     "LP1.QN510": {
         "position": [77.75, 67],
-        "pvname": "",
+        "pvname": "m13CB1LP1QN510"+prc_prefix,
         "color": COLOR.dark_blue
     },
     "LP1.510.P": {
         "position": [85, 69],
-        "pvname": "",
+        "pvname": db_prefix+"m13CB1LP1510P",
         "color": COLOR.blue
     },
     "PR1.QN510": {
         "position": [73, 83.5],
-        "pvname": "",
+        "pvname": "m13CB1PR1QN510"+prc_prefix,
         "color": COLOR.dark_blue
     },
     "PR1.510.T": {
         "position": [74.75, 87.5],
-        "pvname": "",
+        "pvname": db_prefix+"m13CB1PR1510T",
         "color": COLOR.dark_red
     }
 }
@@ -228,15 +231,4 @@ LEDS_CBX2 = {
         "position": [4.75, 25],
         "pvname": "TU1QN020LOWER"
     }
-}
-
-HEADER_CBX2 = {
-    "Coldmode": "",
-    "Warmup": "",
-    "Vaccum Cbx": "",
-    "Tu 1": "",
-    "Tu 2": "",
-    "Cbx LN2": "",
-    "Adsorber": "",
-    "Cold gas return": ""
 }

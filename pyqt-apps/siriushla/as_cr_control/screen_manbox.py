@@ -107,7 +107,7 @@ PVS_MANBOX = {
     },
     "LP1.EG050": {
         "position": [43, 18],
-        "pvname": "LP1EG050",
+        "pvname": "",
         "color": COLOR.transparent,
         "editable": True
     },
@@ -128,7 +128,7 @@ PVS_MANBOX = {
     },
     "PR1.050.L2": {
         "position": [37.5, 52.2],
-        "pvname": "PR1050L2",
+        "pvname": "NO_PV",
         "color": COLOR.blue
     },
     "PR1.050.L": {
@@ -182,9 +182,9 @@ HEADER_MANBOX = {
     "Coldmode": "m13CB1HP1QN410-iSta",
     "Warmup": "AlmSpareAi6-bStpCbWuOff",
     "Vaccum Mbx": "m13DB1VU1QM010-iSta",
-    "Manifoldbox": "",
-    "Mbx SAT": "",
-    "Mbx LN2": "",
-    "AmbHtr OM": "",
+    "Manifoldbox": "NO_PV",
+    "Mbx SAT": "NO_PV",
+    "Mbx LN2": "NO_PV",
+    "AmbHtr OM": "NO_PV",
     "Cold gas return": "AlmSpareAi6-bSdCGRviaCbM"
 }

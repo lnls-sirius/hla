@@ -167,7 +167,7 @@ LEDS_CBX1 = {
     }
 }
 
-HEADER_CBX1 = {
+HEADER_CBX = {
     "Coldmode": "m13CB1HP1QN410-iSta",
     "Warmup": "AlmSpareAi6-bStpCbWuOff",
     "Vaccum Cbx": "m13VU1AS1QM011-iSta",

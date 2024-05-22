@@ -214,7 +214,7 @@ PVS_CO = {
     },
     "MC1.054.A": {
         "position": [44, 78],
-        "pvname": IHM_PREFIX + "m17MC1MC1052Q",
+        "pvname": IHM_PREFIX + "m17MC1MC1054Q",
         "color": COLOR.gold
     },
     "GP1.HP1.QN030": {
