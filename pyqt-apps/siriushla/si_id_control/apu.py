@@ -419,7 +419,6 @@ class APUSummaryBase(IDCommonSummaryBase):
 
     MODEL_WIDTHS = (
         ('Alarms', 4),
-        ('Kx', 6),
         ('Phase', 6),
         ('Phase Speed', 6),
         ('Start', 4),
@@ -453,13 +452,6 @@ class APUSummaryWidget(IDCommonSummaryWidget, APUSummaryBase):
             wids.append(spb)
             lbl = SiriusLabel(
                 self, self.dev_pref.substitute(propty='Phase-Mon'))
-            wids.append(lbl)
-        elif prop == 'Kx':
-            spb = SiriusSpinbox(
-                self, self.dev_pref.substitute(propty='Kx-SP'))
-            wids.append(spb)
-            lbl = SiriusLabel(
-                self, self.dev_pref.substitute(propty='Kx-Mon'))
             wids.append(lbl)
         elif prop == 'Phase Speed':
             spb = SiriusSpinbox(

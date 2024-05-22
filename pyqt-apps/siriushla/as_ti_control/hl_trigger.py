@@ -21,7 +21,7 @@ from ..widgets.windows import create_window_from_widget
 
 from .base import BaseList, BaseWidget
 from .low_level_devices import LLTriggerList, \
-    EVREVEOTPList, EVREVEOUTList, AFCOUTList
+    EVREVEOTPList, EVREVEOUTList, AFCOUTList, EVREVEDIList
 
 
 class HLTriggerSimple(BaseWidget):
@@ -239,6 +239,17 @@ class HLTriggerDetailed(BaseWidget):
         gb = self._create_small_group('Source', self.ll_list_wid, (sp, rb))
         ll_list_layout.addWidget(gb, 2, 0)
 
+        if HLTimeSearch.has_log(self.device.device_name):
+            init_channel = self.get_pvname('Log-Sel')
+            sp = PyDMStateButton(self, init_channel=init_channel)
+            init_channel = self.get_pvname('Log-Sts')
+            rb = PyDMLed(self, init_channel=init_channel)
+            gb = self._create_small_group('Log', self.ll_list_wid, (sp, rb))
+            ll_list_layout.addWidget(gb, 3, 0)
+
+        if HLTimeSearch.is_digital_input(self.device.device_name):
+            return
+
         init_channel = self.get_pvname('NrPulses-SP')
         sp = SiriusSpinbox(self, init_channel=init_channel)
         init_channel = self.get_pvname('NrPulses-RB')
@@ -264,7 +275,7 @@ class HLTriggerDetailed(BaseWidget):
         widd.setLayout(QHBoxLayout())
         widd.layout().addWidget(gbdur)
         widd.layout().addWidget(gbwid)
-        ll_list_layout.addWidget(widd, 3, 0, 1, 3)
+        ll_list_layout.addWidget(widd, 3, 1, 1, 2)
 
         init_channel = self.get_pvname('Delay-SP')
         sp = SiriusSpinbox(self, init_channel=init_channel)
@@ -441,6 +452,7 @@ class LLTriggers(QWidget):
         amc_list = set()
         otp_list = set()
         out_list = set()
+        din_list = set()
         for name in obj_names:
             if 'AMC' in name.dev:
                 amc_list.add(name)
@@ -448,6 +460,8 @@ class LLTriggers(QWidget):
                 otp_list.add(name)
             elif 'OUT' in name.propty_name:
                 out_list.add(name)
+            elif 'DIN' in name.propty_name:
+                din_list.add(name)
         if amc_list:
             props = set(AFCOUTList._ALL_PROPS)
             props.discard('widthraw')
@@ -481,7 +495,12 @@ class LLTriggers(QWidget):
                 prefix=prefix, obj_names=sorted(out_list))
             out_wid.setObjectName('out_wid')
             vl.addWidget(out_wid)
-
+        if din_list:
+            din_wid = EVREVEDIList(
+                name='DINs', parent=self, prefix=prefix,
+                obj_names=sorted(din_list))
+            din_wid.setObjectName('din_wid')
+            vl.addWidget(din_wid)
 
 class HLTriggerList(BaseList):
     """Template for control of High Level Triggers."""
@@ -496,6 +515,7 @@ class HLTriggerList(BaseList):
         'duration': 8,
         'widthraw': 8,
         'polarity': 6,
+        'log': 6,
         'delay_type': 4.2,
         'direction': 4.2,
         'delay': 5.5,
@@ -514,6 +534,7 @@ class HLTriggerList(BaseList):
         'duration': 'Duration [us]',
         'widthraw': 'WidthRaw',
         'polarity': 'Polarity',
+        'log': 'Log',
         'delay_type': 'Type',
         'direction': 'Direction',
         'delay': 'Delay [us]',
@@ -525,7 +546,7 @@ class HLTriggerList(BaseList):
     _ALL_PROPS = (
         'detailed', 'status', 'name', 'state', 'source', 'polarity', 'pulses',
         'duration', 'widthraw', 'delay_type', 'direction', 'delay', 'delayraw',
-        'total_delay', 'total_delayraw', 'ininjtable')
+        'total_delay', 'total_delayraw', 'ininjtable', 'log')
 
     def __init__(self, **kwargs):
         srch = set(('source', 'name', 'polarity', 'state'))
@@ -534,6 +555,11 @@ class HLTriggerList(BaseList):
         self.setObjectName('ASApp')
 
     def _createObjs(self, device, prop):
+        devname = device.device_name
+        has_delay_type = HLTimeSearch.has_delay_type(devname)
+        has_direction = HLTimeSearch.has_direction(devname)
+        has_log = HLTimeSearch.has_log(devname)
+        is_digital_input = HLTimeSearch.is_digital_input(devname)
         sp = rb = None
         if prop == 'name':
             sp = QLabel(device.device_name, self, alignment=Qt.AlignCenter)
@@ -570,17 +596,17 @@ class HLTriggerList(BaseList):
             sp = SiriusEnumComboBox(self, init_channel=init_channel)
             init_channel = device.substitute(propty='Src-Sts')
             rb = SiriusLabel(self, init_channel=init_channel)
-        elif prop == 'pulses':
+        elif prop == 'pulses' and not is_digital_input:
             init_channel = device.substitute(propty='NrPulses-SP')
             sp = SiriusSpinbox(self, init_channel=init_channel)
             init_channel = device.substitute(propty='NrPulses-RB')
             rb = SiriusLabel(self, init_channel=init_channel)
-        elif prop == 'duration':
+        elif prop == 'duration' and not is_digital_input:
             init_channel = device.substitute(propty='Duration-SP')
             sp = SiriusSpinbox(self, init_channel=init_channel)
             init_channel = device.substitute(propty='Duration-RB')
             rb = SiriusLabel(self, init_channel=init_channel)
-        elif prop == 'widthraw':
+        elif prop == 'widthraw' and not is_digital_input:
             init_channel = device.substitute(propty='WidthRaw-SP')
             sp = SiriusSpinbox(self, init_channel=init_channel)
             init_channel = device.substitute(propty='WidthRaw-RB')
@@ -590,35 +616,42 @@ class HLTriggerList(BaseList):
             sp = SiriusEnumComboBox(self, init_channel=init_channel)
             init_channel = device.substitute(propty='Polarity-Sts')
             rb = SiriusLabel(self, init_channel=init_channel)
-        elif prop == 'delay_type':
+        elif prop == 'log' and has_log:
+            init_channel = device.substitute(propty='Log-Sel')
+            sp = PyDMStateButton(self, init_channel=init_channel)
+            init_channel = device.substitute(propty='Log-Sts')
+            rb = PyDMLed(self, init_channel=init_channel)
+        elif prop == 'delay_type' and has_delay_type:
             init_channel = device.substitute(propty='RFDelayType-Sel')
             sp = SiriusEnumComboBox(self, init_channel=init_channel)
             init_channel = device.substitute(propty='RFDelayType-Sts')
             rb = SiriusLabel(self, init_channel=init_channel)
-        elif prop == 'direction':
+        elif prop == 'direction'and has_direction:
             init_channel = device.substitute(propty='Direction-Sel')
             sp = SiriusEnumComboBox(self, init_channel=init_channel)
             init_channel = device.substitute(propty='Direction-Sts')
             rb = SiriusLabel(self, init_channel=init_channel)
-        elif prop == 'delay':
+        elif prop == 'delay' and not is_digital_input:
             init_channel = device.substitute(propty='Delay-SP')
             sp = SiriusSpinbox(self, init_channel=init_channel)
             init_channel = device.substitute(propty='Delay-RB')
             rb = SiriusLabel(self, init_channel=init_channel)
-        elif prop == 'delayraw':
+        elif prop == 'delayraw' and not is_digital_input:
             init_channel = device.substitute(propty='DelayRaw-SP')
             sp = SiriusSpinbox(self, init_channel=init_channel)
             init_channel = device.substitute(propty='DelayRaw-RB')
             rb = SiriusLabel(self, init_channel=init_channel)
-        elif prop == 'total_delay':
+        elif prop == 'total_delay' and not is_digital_input:
             init_channel = device.substitute(propty='TotalDelay-Mon')
             sp = SiriusLabel(self, init_channel=init_channel)
-        elif prop == 'total_delayraw':
+        elif prop == 'total_delayraw' and not is_digital_input:
             init_channel = device.substitute(propty='TotalDelayRaw-Mon')
             sp = SiriusLabel(self, init_channel=init_channel)
         elif prop == 'ininjtable':
             init_channel = device.substitute(propty='InInjTable-Mon')
             sp = SiriusLedState(self, init_channel=init_channel)
+        elif prop in self._ALL_PROPS:
+            return ()
         else:
             raise Exception('Property unknown')
         if rb is None:

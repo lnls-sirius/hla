@@ -54,6 +54,7 @@ class VLightCamView(QWidget):
                 propty='SensorWidth-Cte'),
             maxheight_channel=self.cam_prefix.substitute(
                 propty='SensorHeight-Cte'))
+        self.cam_viewer.readingOrder = self.cam_viewer.ReadingOrder.Clike
         self.cam_viewer.setObjectName('camview')
         self.cam_viewer.setStyleSheet("""
             #camview{min-width:42em; min-height:32em;}""")

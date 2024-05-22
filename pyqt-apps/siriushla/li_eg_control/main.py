@@ -2,14 +2,15 @@
 
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QWidget, QGridLayout, QLabel, QGroupBox, \
-    QSpacerItem, QSizePolicy as QSzPlcy
+    QSpacerItem, QSizePolicy as QSzPlcy, QPushButton
 import qtawesome as qta
 
 from siriuspy.envars import VACA_PREFIX
 
-from siriushla.widgets import SiriusMainWindow, SiriusLedState, \
+from ..widgets import SiriusMainWindow, SiriusLedState, \
     SiriusSpinbox, PyDMStateButton, SiriusLabel
-from siriushla.util import get_appropriate_color
+from ..util import get_appropriate_color, connect_window
+from .custom_widgets import LIEGTrigEnblDetail
 
 
 class LIEgunWindow(SiriusMainWindow):
@@ -193,13 +194,24 @@ class LIEgunWindow(SiriusMainWindow):
 
         wid = QGroupBox('Trigger', self)
         lay = QGridLayout(wid)
-        lay.addWidget(self._ld_trigsts, 0, 0, 1, 2)
-        lay.addWidget(self._led_trigsts, 1, 0, 1, 2)
-        lay.addWidget(self._ld_trigall, 2, 0, 1, 2)
-        lay.addWidget(self._led_trigall, 3, 0, 1, 2)
-        lay.addWidget(self._ld_trigenbl, 4, 0, 1, 2)
+        lay.addWidget(self._ld_trigsts, 0, 0, 1, 3)
+        lay.addWidget(self._led_trigsts, 1, 0, 1, 3)
+        lay.addWidget(self._ld_trigall, 2, 0, 1, 3)
+        lay.addWidget(self._led_trigall, 3, 0, 1, 3)
+        lay.addWidget(self._ld_trigenbl, 4, 0, 1, 3)
         lay.addWidget(self._bt_trigenblsel, 5, 0, alignment=Qt.AlignRight)
         lay.addWidget(self._led_trigenblsts, 5, 1, alignment=Qt.AlignLeft)
+
+        if 'LI' in self.dev_pref:
+            self._pb_trigenbl_dtl = QPushButton(self)
+            self._pb_trigenbl_dtl.setObjectName('dtl')
+            self._pb_trigenbl_dtl.setStyleSheet(
+                "#dtl{min-width:18px; max-width:18px; icon-size:20px;}")
+            self._pb_trigenbl_dtl.setIcon(qta.icon('fa5s.ellipsis-v'))
+            connect_window(
+                self._pb_trigenbl_dtl, LIEGTrigEnblDetail, self,
+                prefix=self.prefix, device=self.dev_pref+':EG-TriggerPS')
+            lay.addWidget(self._pb_trigenbl_dtl, 5, 2, alignment=Qt.AlignLeft)
         return wid
 
     def _setupFilaPSWidget(self):

@@ -457,7 +457,7 @@ def get_object(ismenubar=True, parent=None):
 
             idlist = ['SI-06SB:ID-APU22', 'SI-07SP:ID-APU22',
                       'SI-08SB:ID-APU22', 'SI-09SA:ID-APU22',
-                      'SI-11SP:ID-APU58', 'SI-10SB:ID-EPU50',
+                      'SI-11SP:ID-APU58', 'SI-10SB:ID-DELTA52',
                       'SI-17SA:ID-PAPU50']
             for idname in idlist:
                 idname = SiriusPVName(idname)
@@ -662,6 +662,11 @@ def get_object(ismenubar=True, parent=None):
             menu = QMenu('BPMs', self)
             menu.setObjectName(sec.upper()+'App')
             menu.setIcon(qta.icon('mdi.currency-sign'))
+            if sec == 'si':
+                action = menu.addAction('Equalize Switching')
+                action.setIcon(qta.icon('mdi.approximately-equal-box'))
+                self.connect_newprocess(
+                    action, 'sirius-hla-si-di-equalize_bpms_switching.py')
             action = menu.addAction('Monitor')
             action.setIcon(util.get_monitor_icon('mdi.currency-sign'))
             self.connect_newprocess(action, cmd + ['-w', 'Monitor', ])

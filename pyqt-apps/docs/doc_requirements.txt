@@ -1,0 +1,4 @@
+sphinx==7.2.6
+sphinx_rtd_theme==2.0.0
+pyqt5==5.15.10
+matplotlib==3.6.3

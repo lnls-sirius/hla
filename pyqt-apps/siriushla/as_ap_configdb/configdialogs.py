@@ -17,7 +17,7 @@ class _BaseConfigManipulation(SiriusDialog):
     def __init__(self, config_type, parent=None):
         """Constructor."""
         super().__init__(parent)
-        self._client = ConfigDBClient()
+        self._client = ConfigDBClient(config_type=config_type)
         self._config_type = config_type
         self._logger = logging.getLogger(__name__)
         self._logger.setLevel(logging.INFO)
@@ -67,6 +67,11 @@ class _BaseConfigManipulation(SiriusDialog):
         self.editor.configChanged.connect(self._update_selection)
         # Connect database error to slot that show messages
         self.editor.connectionError.connect(self._database_error)
+
+    @property
+    def client(self):
+        """."""
+        return self._client
 
     @property
     def config_name(self):

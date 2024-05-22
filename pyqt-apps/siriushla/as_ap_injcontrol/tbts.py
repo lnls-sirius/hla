@@ -202,7 +202,7 @@ class TLControlWindow(BaseWindow):
 #                                                     show_label=True)
 #         self.centralwidget = QWidget()
 #         self.centralwidget.setLayout(QVBoxLayout())
-#         self.canvas = MatplotlibWidget(self._fig)
+#         self.canvas = MatplotlibWidget(figure=self._fig)
 #         self.canvas.setParent(self.centralwidget)
 #         self.centralwidget.layout().addWidget(self.canvas)
 #         self.centralwidget.layout().setContentsMargins(0, 0, 0, 0)

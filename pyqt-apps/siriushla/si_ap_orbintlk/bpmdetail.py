@@ -24,7 +24,6 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
         BaseObject.__init__(self, prefix)
         SiriusMainWindow.__init__(self, parent)
 
-        self.prefix = prefix
         self.device = SiriusPVName(device)
         self.devpref = self.device.substitute(prefix=prefix)
 

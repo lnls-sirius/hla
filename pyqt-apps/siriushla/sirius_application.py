@@ -10,6 +10,8 @@ from pydm import PyDMApplication, data_plugins
 
 from .util import get_window_id, set_style
 
+# Set the process umask so we don't have problems with logfile permissions
+os.umask(0)
 
 # Create log file
 LOGFILE = '/tmp/sirius-hla.log'
