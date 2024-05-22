@@ -278,7 +278,6 @@ class PSDetailWidget(_BaseDetailWidget):
         'ScopeSrcAddr-SP', 'ScopeSrcAddr-RB',
         'ScopeFreq-SP', 'ScopeFreq-RB',
         'ScopeDuration-SP', 'ScopeDuration-RB',
-        'WfmSelected-SP', 'WfmSelected-RB',
         'WfmSyncMode-Sel', 'WfmSyncMode-Sts',
         'WfmFreq-SP', 'WfmFreq-RB',
         'WfmGain-SP', 'WfmGain-RB',
