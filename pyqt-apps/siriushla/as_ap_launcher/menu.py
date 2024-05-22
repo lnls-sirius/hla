@@ -309,6 +309,10 @@ def get_object(ismenubar=True, parent=None):
             optics.addAction(energy_button)
             optics.addAction(offconv)
 
+            cryomon = LEVEL2A('Cryogenic Plant', menu)
+            cryomon.setIcon(qta.icon('fa5.snowflake'))
+            self.connect_newprocess(cryomon, 'sirius-hla-as-cr-control.py')
+
             self.add_object_to_level1(menu, genstatus)
             self.add_object_to_level1(menu, monitor)
             self.add_object_to_level1(menu, injection)
@@ -321,6 +325,7 @@ def get_object(ismenubar=True, parent=None):
             self.add_object_to_level1(menu, vacuum)
             self.add_object_to_level1(menu, radmon)
             self.add_object_to_level1(menu, optics)
+            self.add_object_to_level1(menu, cryomon)
             return menu
 
         def _create_li_menu(self):

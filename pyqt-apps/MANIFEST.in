@@ -7,7 +7,10 @@ include siriushla/common/diff_ctrl/ui_as_ap_devvmon.ui
 include siriushla/li_di_scrns/linac.png
 include siriushla/li_rf_llrf/llrf.png
 include siriushla/li_va_control/vacuum.png
-include siriushla/as_cr_control/cryo1.png
+include siriushla/as_cr_control/cryo_cbx1.png
+include siriushla/as_cr_control/cryo_cbx2.png
+include siriushla/as_cr_control/cryo_co.png
+include siriushla/as_cr_control/cryo_manbox.png
 include siriushla/widgets/resources/led_shapes/circle.svg
 include siriushla/widgets/resources/led_shapes/round.svg
 include siriushla/widgets/resources/led_shapes/square.svg

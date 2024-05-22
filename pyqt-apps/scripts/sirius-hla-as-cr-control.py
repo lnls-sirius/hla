@@ -7,8 +7,8 @@ import argparse as _argparse
 from siriushla.sirius_application import SiriusApplication
 from siriushla.as_cr_control import CryoControl
 
-parser = _argparse.ArgumentParser(description="Run Cryogenic Interface.")
-parser.add_argument('screen', type=str, default='All',
+parser = _argparse.ArgumentParser(description="Run Cryogenic Plant Interface.")
+parser.add_argument('-screen', type=str, default='All',
     help='Select the screen of the Cryogenic GUI')
 args = parser.parse_args()
 
