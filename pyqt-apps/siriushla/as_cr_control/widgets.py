@@ -3,6 +3,7 @@ from PyQt5.QtGui import QPainter, QPolygon, QColor, \
     QBrush, QFont
 from PyQt5.QtCore import Qt, QPoint
 
+
 class PolygonWidget(QWidget):
     def __init__(self, text, color, parent):
         super().__init__()
@@ -54,6 +55,7 @@ class PolygonWidget(QWidget):
             Qt.AlignCenter, self.text)
 
         super().paintEvent(event)
+
 
 class RotatedQLabel(QWidget):
     def __init__(self, text, rotation) -> None:
