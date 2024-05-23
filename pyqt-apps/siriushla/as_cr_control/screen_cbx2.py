@@ -116,7 +116,7 @@ PVS_CBX2 = {
     },
     "TU1.035.P": {
         "position": [14.5, 29.75],
-        "pvname": db_prefix+"m13CB1TU1050P",
+        "pvname": db_prefix+"m13CB1TU1035P",
         "color": COLOR.blue
     },
     "TU1.QN050": {
@@ -141,7 +141,7 @@ PVS_CBX2 = {
     },
     "TU2.035.P": {
         "position": [35.5, 29.75],
-        "pvname": db_prefix+"m13CB1TU2050P",
+        "pvname": db_prefix+"m13CB1TU2035P",
         "color": COLOR.blue
     },
     "TU2.050.T": {
