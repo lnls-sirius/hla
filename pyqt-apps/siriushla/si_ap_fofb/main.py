@@ -364,18 +364,10 @@ class MainWindow(BaseObject, SiriusMainWindow):
 
                 ld_acc_filter = QLabel(
                     'Filter: ', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
-                pref = self.devpref
-                visrule = (
-                    '[{"name": "VisRule", "property": "Visible", ' +
-                    '"expression": "ch[0] == 2", "channels": ' +
-                    '[{"channel": "' +
-                    pref.substitute(propty='FOFBAccFilter-Sel') +
-                    '", "trigger": true}]}]')
                 sel_acc_filter = SiriusEnumComboBox(
                     self, pref.substitute(propty = 'FOFBAccFilter-Sel'))
                 sts_acc_filter = SiriusLabel(
                     self, pref.substitute(propty='FOFBAccFilter-Sts'))
-                sts_acc_filter.rules = visrule.replace('==', '!=')
 
                 ld_filter_gain = QLabel(
                     'Filter Gain: ', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
