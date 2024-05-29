@@ -14,6 +14,9 @@ from .widgets import PolygonWidget, RotatedQLabel
 
 
 class CryoControl(SiriusMainWindow):
+    """
+        General class for rendering the interfaces of the Cryogenic plant.
+    """
 
     def __init__(self, parent=None, screen="All", prefix=_VACA_PREFIX):
         super().__init__(parent=parent)

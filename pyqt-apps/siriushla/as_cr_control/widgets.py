@@ -5,6 +5,10 @@ from PyQt5.QtCore import Qt, QPoint
 
 
 class PolygonWidget(QWidget):
+    """
+        Create a square drawing behind the widget with flat or pointed sides.
+    """
+
     def __init__(self, text, color, parent):
         super().__init__()
         self.text = text
@@ -58,6 +62,10 @@ class PolygonWidget(QWidget):
 
 
 class RotatedQLabel(QWidget):
+    """
+        Add a rotation to a label widget.
+    """
+
     def __init__(self, text, rotation) -> None:
         super().__init__()
         self.text = text
