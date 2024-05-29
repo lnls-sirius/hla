@@ -707,6 +707,7 @@ class CycleWindow(SiriusMainWindow):
         super().keyPressEvent(evt)
 
     def closeEvent(self, ev):
+        """."""
         self._update_setup_timer.stop()
         super().closeEvent(ev)
 
@@ -715,13 +716,17 @@ class CycleWindow(SiriusMainWindow):
 
 
 class MyProgressBar(QProgressBar):
+    """."""
+
     def __init__(self, parent=None):
+        """."""
         super().__init__(parent)
         pal = self.palette()
         self.default_color = pal.color(QPalette.Highlight)
         self.warning_color = Qt.red
 
     def increment(self):
+        """."""
         current_val = self.value()
         max_val = self.maximum()
         if max_val > current_val:
@@ -729,9 +734,11 @@ class MyProgressBar(QProgressBar):
 
 
 class UpdateProgressBar(QThread):
+    """."""
     increment = Signal()
 
     def __init__(self, duration, parent=None):
+        """."""
         super().__init__(parent)
         self._duration = duration
         self._quit_task = False
@@ -741,6 +748,7 @@ class UpdateProgressBar(QThread):
         self._quit_task = True
 
     def run(self):
+        """."""
         t0 = _time.time()
         while _time.time() - t0 < self._duration:
             if self._quit_task:
