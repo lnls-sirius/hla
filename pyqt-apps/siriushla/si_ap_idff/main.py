@@ -80,12 +80,26 @@ class IDFFWindow(SiriusMainWindow):
         self.lb_loopfreq = SiriusLabel(
             self, self.dev_pref.substitute(propty='LoopFreq-RB'))
 
-        ld_usepssofb = QLabel(
-            'Use PSSOFB: ', self, alignment=Qt.AlignRight)
-        self.sb_usepssofb = PyDMStateButton(
-            self, self.dev_pref.substitute(propty='SOFBMode-Sel'))
-        self.lb_usepssofb = SiriusLedState(
-            self, self.dev_pref.substitute(propty='SOFBMode-Sts'))
+        ld_calccorr = QLabel(
+            'Calc. values:', self, alignment=Qt.AlignRight)
+        glay_calccorr = QGridLayout()
+        glay_calccorr.addWidget(ld_calccorr, 0, 0)
+        for ridx, corr in enumerate(['CH', 'CV', 'QS']):
+            row = ridx + 1
+            hheader = QLabel(f'{corr}', alignment=Qt.AlignCenter)
+            hheader.setStyleSheet('.QLabel{font-weight: bold;}')
+            glay_calccorr.addWidget(hheader, row, 0)
+            for cidx in range(2):
+                col = cidx + 1
+                if ridx == 0:
+                    vheader = QLabel(f'{col}', alignment=Qt.AlignCenter)
+                    vheader.setStyleSheet('.QLabel{font-weight: bold;}')
+                    glay_calccorr.addWidget(vheader, 0, col)
+                propty = f'Corr{corr}{col}Current-Mon'
+                pvname = self.dev_pref.substitute(propty=propty)
+                lbl = SiriusLabel(self, pvname, keep_unit=True)
+                lbl.showUnits = True
+                glay_calccorr.addWidget(lbl, row, col)
 
         gbox = QGroupBox('Settings', self)
         lay = QGridLayout(gbox)
@@ -100,9 +114,6 @@ class IDFFWindow(SiriusMainWindow):
         lay.addWidget(self.le_configname, 3, 1, 1, 3)
         lay.addWidget(self.lb_configname, 4, 1, 1, 3)
         lay.addItem(QSpacerItem(0, 15, QSzPlcy.Ignored, QSzPlcy.Fixed), 6, 0)
-        lay.addWidget(ld_usepssofb, 7, 0)
-        lay.addWidget(self.sb_usepssofb, 7, 1)
-        lay.addWidget(self.lb_usepssofb, 7, 2)
 
         if IDSearch.conv_idname_2_idff_qsnames(self.idname):
             ld_controlqs = QLabel(
@@ -115,6 +126,8 @@ class IDFFWindow(SiriusMainWindow):
             lay.addWidget(ld_controlqs, 5, 0)
             lay.addWidget(self.sb_controlqs, 5, 1)
             lay.addWidget(self.lb_controlqs, 5, 2)
+
+        lay.addLayout(glay_calccorr, 7, 0, 1, 3)
 
         return gbox
 

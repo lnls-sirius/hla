@@ -14,7 +14,9 @@ from siriushla.widgets.led import SiriusLedAlert
 class StatusDetailDialog(SiriusDialog):
     """Status Detail Dialog."""
 
-    def __init__(self, pvname='', labels=None, section='', parent=None, title=''):
+    def __init__(
+            self, pvname='', labels=None, pvname_labels='',
+            section='', parent=None, title=''):
         super().__init__(parent)
         try:
             self.pvname = SiriusPVName(pvname)
@@ -27,15 +29,10 @@ class StatusDetailDialog(SiriusDialog):
         self.labels = list() if labels is None else labels
         self.title = title
         if not labels:
-            labels_pv = pvname.replace('-Mon', 'Labels-Cte')
+            labels_pv = pvname_labels or pvname.replace('-Mon', 'Labels-Cte')
             ch = SiriusConnectionSignal(labels_pv)
-            for i in range(20):
-                if ch.connected:
-                    break
-                _time.sleep(0.1)
-            if not ch.connected:
-                raise ConnectionError(labels_pv + ' not connected!')
-            self.labels = ch.value.split('\n')
+            ch.new_value_signal[str].connect(self._updateLabels)
+            ch.new_value_signal[list].connect(self._updateLabels)
         self._setupUi()
 
     def _setupUi(self):
@@ -47,8 +44,17 @@ class StatusDetailDialog(SiriusDialog):
                            self, alignment=Qt.AlignCenter)
         lay = QGridLayout(self)
         lay.addWidget(label, 0, 0, 1, 2)
+        self._fillLabels()
+
+    def _updateLabels(self, labels):
+        if isinstance(labels, str):
+            labels = labels.split('\n')
+        self.labels = labels
+        self._fillLabels()
+
+    def _fillLabels(self):
         for idx, desc in enumerate(self.labels):
             led = SiriusLedAlert(self, self.pvname, bit=idx)
             lbl = QLabel(desc, self)
-            lay.addWidget(led, idx+1, 0)
-            lay.addWidget(lbl, idx+1, 1)
+            self.layout().addWidget(led, idx+1, 0)
+            self.layout().addWidget(lbl, idx+1, 1)

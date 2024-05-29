@@ -1,5 +1,4 @@
-from .custom_widgets import FamBPMButton, \
-    FamBPMIntlkEnblStateLed, \
+from .custom_widgets import \
     RefOrbComboBox, \
     BPMIntlkEnblWidget, \
     BPMIntlkLimSPWidget
