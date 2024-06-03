@@ -341,22 +341,24 @@ class PSConfigWidget(BaseObject, QWidget):
     def _setupUi(self):
         self._label_name = QLabel('')
 
+        lbl_load = QLabel('Load:', self, alignment=Qt.AlignTop)
         self._btn_load = CAPushButton('')
         self._btn_load.setIcon(qta.icon('mdi.cloud-upload-outline'))
         self._btn_load.setToolTip('Load PSConfig from ServConf')
         self._btn_load.clicked.connect(self._open_load_config_servconf)
 
+        lbl_save = QLabel('Save:', self, alignment=Qt.AlignTop)
         self._btn_save = CAPushButton('')
         self._btn_save.setIcon(qta.icon('mdi.cloud-download-outline'))
         self._btn_save.setToolTip('Save PSConfig to ServConf')
         self._btn_save.clicked.connect(self._open_save_config_servconf)
 
         lay = QGridLayout(self)
-        lay.addWidget(self._label_name, 0, 0, 1, 4)
-        lay.addWidget(QLabel('Load:'), 1, 0)
-        lay.addWidget(self._btn_load, 1, 1)
-        lay.addWidget(QLabel('Save:'), 1, 2)
-        lay.addWidget(self._btn_save, 1, 3)
+        lay.addWidget(lbl_load, 0, 0)
+        lay.addWidget(self._btn_load, 0, 1)
+        lay.addWidget(lbl_save, 0, 2)
+        lay.addWidget(self._btn_save, 0, 3)
+        lay.addWidget(self._label_name, 1, 0, 1, 4)
 
     def _open_load_config_servconf(self):
         win = LoadConfigDialog(self._config_type, self)
@@ -372,7 +374,7 @@ class PSConfigWidget(BaseObject, QWidget):
         data = self._client.get_config_value(confname)
         self._mat_sp.send_value_signal[_np.ndarray].emit(
             _np.array(data).flatten())
-        self._label_name.setText('Loaded: \n' + confname)
+        self._label_name.setText('Loaded ' + confname)
 
     def _save_psconfig(self, confname):
         val = self._mat_rb.getvalue()

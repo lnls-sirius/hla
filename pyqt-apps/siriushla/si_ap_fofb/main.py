@@ -363,7 +363,7 @@ class MainWindow(BaseObject, SiriusMainWindow):
                 glay2.addLayout(hbox, 3, 1, 1, 2)
 
                 ld_psconfig = QLabel(
-                    'PS Config.: ', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+                    'PS Config. Matrix: ', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
                 wid_psconfig = PSConfigWidget(self, self.device, prefix=self.prefix)
                 glay2.addWidget(ld_psconfig, 4, 0)
                 glay2.addWidget(wid_psconfig, 4, 1, 2, 2)
