@@ -2003,6 +2003,14 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
         self.fofbaccminsat_rb.precisionFromPV = False
         self.fofbaccminsat_rb.precision = 8
 
+        fofbaccfiltgain_lb = QLabel(
+            'Filter Gain', self,
+            alignment=Qt.AlignRight | Qt.AlignVCenter)
+        self.fofbaccfiltgain_sp = PyDMLineEdit(
+            self, self._prefixed_psname + ':FOFBAccFilterGain-SP')
+        self.fofbaccfiltgain_rb = SiriusLabel(
+            self, self._prefixed_psname + ':FOFBAccFilterGain-RB')
+
         widctrl = QWidget()
         lay = QGridLayout(widctrl)
         lay.addWidget(fofbacc_lb, 0, 0, Qt.AlignRight)
@@ -2021,6 +2029,9 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
         lay.addWidget(fofbaccminsat_lb, 5, 0, Qt.AlignRight)
         lay.addWidget(self.fofbaccminsat_sp, 5, 1)
         lay.addWidget(self.fofbaccminsat_rb, 5, 2)
+        lay.addWidget(fofbaccfiltgain_lb, 6, 0, Qt.AlignRight)
+        lay.addWidget(self.fofbaccfiltgain_sp, 6, 1)
+        lay.addWidget(self.fofbaccfiltgain_rb, 6, 2)
 
         # coefficients
         gph_fofbcoeffs = dict()
@@ -2053,17 +2064,58 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
                 gph_fofbcoeffs[plane].curveAtIndex(0).setVisible)
             self.show_coeff_rb.stateChanged.connect(
                 gph_fofbcoeffs[plane].curveAtIndex(1).setVisible)
-        hbox_show = QHBoxLayout()
-        hbox_show.setAlignment(Qt.AlignCenter)
-        hbox_show.addWidget(self.show_coeff_sp)
-        hbox_show.addWidget(self.show_coeff_rb)
+        hbox_coeffshow = QHBoxLayout()
+        hbox_coeffshow.setAlignment(Qt.AlignCenter)
+        hbox_coeffshow.addWidget(self.show_coeff_sp)
+        hbox_coeffshow.addWidget(self.show_coeff_rb)
 
-        widmon = QWidget()
-        lay = QVBoxLayout(widmon)
+        widcoeff = QWidget()
+        lay = QVBoxLayout(widcoeff)
         lay.setAlignment(Qt.AlignTop)
         for plane in ['X', 'Y']:
             lay.addWidget(gph_fofbcoeffs[plane])
-        lay.addLayout(hbox_show)
+        lay.addLayout(hbox_coeffshow)
+
+        # filters
+        gph_filt = SiriusWaveformPlot()
+        gph_filt.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Maximum)
+        gph_filt.showLegend = True
+        gph_filt.autoRangeX = True
+        gph_filt.autoRangeY = True
+        gph_filt.showXGrid = True
+        gph_filt.showYGrid = True
+        gph_filt.title = 'Filter Coefficients'
+        gph_filt.setBackgroundColor(QColor(255, 255, 255))
+        gph_filt.addChannel(
+            y_channel=self._prefixed_psname+':FOFBAccFilter-SP',
+            name='SP', color='darkBlue', lineWidth=2, symbol='o')
+        gph_filt.addChannel(
+            y_channel=self._prefixed_psname+':FOFBAccFilter-RB',
+            name='RB', color='blue', lineWidth=2, symbol='o')
+
+        self.show_filt_sp = QCheckBox('SP')
+        self.show_filt_sp.setChecked(True)
+        self.show_filt_rb = QCheckBox('RB')
+        self.show_filt_rb.setChecked(True)
+        self.show_filt_sp.stateChanged.connect(
+            gph_filt.curveAtIndex(0).setVisible)
+        self.show_filt_rb.stateChanged.connect(
+            gph_filt.curveAtIndex(1).setVisible)
+        hbox_filtshow = QHBoxLayout()
+        hbox_filtshow.setAlignment(Qt.AlignCenter)
+        hbox_filtshow.addWidget(self.show_filt_sp)
+        hbox_filtshow.addWidget(self.show_filt_rb)
+
+        widfilt = QWidget()
+        lay = QVBoxLayout(widfilt)
+        lay.setAlignment(Qt.AlignTop)
+        lay.addWidget(gph_filt)
+        lay.addLayout(hbox_filtshow)
+
+        widmon = QTabWidget()
+        widmon.setObjectName(self._psname.sec+'Tab')
+        widmon.addTab(widcoeff, 'InvRespMat')
+        widmon.addTab(widfilt, 'Filter')
 
         layout = QHBoxLayout()
         layout.addWidget(widctrl)
