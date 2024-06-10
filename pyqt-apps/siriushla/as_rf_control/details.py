@@ -2,7 +2,8 @@
 
 from qtpy.QtCore import Qt, QTimer
 from qtpy.QtWidgets import QFormLayout, QLabel, QSpacerItem, QTabWidget, \
-    QSizePolicy as QSzPlcy, QGridLayout, QHBoxLayout, QGroupBox, QWidget
+    QSizePolicy as QSzPlcy, QGridLayout, QHBoxLayout, QGroupBox, QWidget, \
+    QVBoxLayout
 
 from pyqtgraph import PlotWidget, BarGraphItem
 
@@ -411,3 +412,46 @@ class TempMonitor(SiriusDialog):
                     wid.addTab(tabwid, tabtitle)
             dettab.addTab(wid, dettabtitle)
         lay.addWidget(dettab, 1, 0)
+
+class FDLMonitor(SiriusDialog):
+
+
+    def __init__(self, parent=None, prefix='', section=''):
+        """Init."""
+        super().__init__(parent)
+        #self.prefix += ('-' if prefix and not prefix.endswith('-') else '')
+        self.section = section
+        #self.chs = SEC_2_CHANNELS[self.section]
+        self.setObjectName(self.section+'App')
+        self.setWindowTitle('FDL Monitor')
+        self._setupUi()
+
+    def _setupUi(self):
+        lay = QGridLayout(self)
+        lay.setAlignment(Qt.AlignTop)
+        lay.setHorizontalSpacing(25)
+        lay.setVerticalSpacing(15)
+
+        self.title = QLabel(
+            '<h3>RF FDL Monitor</h3>', self,
+            alignment=Qt.AlignCenter)
+        lay.addWidget(self.title, 0, 0)
+
+        lb_amplitude = QLabel('<h3> • Amplitude</h3>', self)
+
+        amplitude_wid = QWidget()
+        lay_amplitude = QVBoxLayout(amplitude_wid)
+        lay_amplitude.setAlignment(Qt.AlignTop)
+        lay_amplitude.setContentsMargins(0, 0, 0, 9)
+        lay_amplitude.addWidget(lb_amplitude)
+
+        lb_phase = QLabel('<h3> • Phase</h3>', self)
+
+        phase_wid = QWidget()
+        lay_phase = QVBoxLayout(phase_wid)
+        lay_phase.setAlignment(Qt.AlignTop)
+        lay_phase.setContentsMargins(0, 0, 0, 9)
+        lay_phase.addWidget(lb_phase)
+
+        lay.addWidget(amplitude_wid, 1, 0)
+        lay.addWidget(phase_wid, 2, 0)

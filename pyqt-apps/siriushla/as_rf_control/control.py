@@ -17,7 +17,7 @@ from ..widgets import SiriusMainWindow, PyDMStateButton, PyDMLed, \
     SiriusWaveformPlot, SiriusSpinbox
 from ..util import connect_window, get_appropriate_color
 from .details import TransmLineStatusDetails, CavityStatusDetails, \
-    LLRFInterlockDetails, TempMonitor
+    LLRFInterlockDetails, TempMonitor, FDLMonitor
 from .custom_widgets import RFEnblDsblButton
 from .util import SEC_2_CHANNELS
 
@@ -213,6 +213,15 @@ class RFMainControl(SiriusMainWindow):
         self.pb_llrfreset.setStyleSheet(
             '#pb_llrfreset{min-width:25px; max-width:25px; icon-size:20px;}')
 
+        # FDL
+        self._ld_fdl = QLabel('<h4>FDL</h4>', self, alignment=Qt.AlignLeft)
+
+        # # Open FDL
+        self.pb_openfdl = SiriusPushButton(label='Open FDL', icon=qta.icon('fa5s.external-link-alt'), releaseValue=0, parent=self)
+        connect_window(
+            self.pb_openfdl, FDLMonitor, parent=self,
+            prefix=self.prefix, section=self.section)
+
         lay = QGridLayout()
         lay.setAlignment(Qt.AlignTop)
         lay.addWidget(self._ld_intlks, 0, 0, 1, 3)
@@ -235,6 +244,10 @@ class RFMainControl(SiriusMainWindow):
         lay.addWidget(self.pb_globreset, 8, 1)
         lay.addWidget(self.ld_llrfreset, 9, 0)
         lay.addWidget(self.pb_llrfreset, 9, 1)
+        lay.addWidget(self._ld_fdl, 10, 0, 1, 3)
+        #lay.addWidget(self.ld_openfdl, 11, 0)
+        lay.addWidget(self.pb_openfdl, 11, 0, alignment=Qt.AlignRight)
+
         return lay
 
     def _rfGenLayout(self):
