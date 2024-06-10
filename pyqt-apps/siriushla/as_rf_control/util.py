@@ -288,41 +288,17 @@ SEC_2_CHANNELS = {
             }
         },
         'FDL': {
-            'Amplitude': (
-                'BR-RF-DLLRF-01:FDL:CAV:AMP',
-                'BR-RF-DLLRF-01:FDL:FWDCAV:AMP',
-                'BR-RF-DLLRF-01:FDL:REVCAV:AMP',
-                'BR-RF-DLLRF-01:FDL:FWDSSA:AMP',
-                'BR-RF-DLLRF-01:FDL:REVSSA:AMP',
-                'BR-RF-DLLRF-01:FDL:CTRL:AMP',
-                'BR-RF-DLLRF-01:FDL:SL:REF:AMP',
-                'BR-RF-DLLRF-01:FDL:SL:ERR:AMP',
-                'BR-RF-DLLRF-01:FDL:SL:ERRACC:AMP',
-                'BR-RF-DLLRF-01:FDL:MO:AMP'
-            ),
-            'Phase': (
-                'BR-RF-DLLRF-01:FDL:CAV:PHS',
-                'BR-RF-DLLRF-01:FDL:FWDCAV:PHS',
-                'BR-RF-DLLRF-01:FDL:FWDSSA:PHS',
-                'BR-RF-DLLRF-01:FDL:REVSSA:PHS',
-                'BR-RF-DLLRF-01:FDL:REVCAV:PHS',
-                'BR-RF-DLLRF-01:FDL:CTRL:PHS',
-                'BR-RF-DLLRF-01:FDL:SL:REF:PHS',
-                'BR-RF-DLLRF-01:FDL:SL:ERR:PHS',
-                'BR-RF-DLLRF-01:FDL:SL:ERRACC:PHS',
-                'BR-RF-DLLRF-01:FDL:MO:PHS'
-            ),
-            'Colors': (
-                'blue',
-                'red',
-                'yellow',
-                'darkGreen',
-                'magenta',
-                'darkCyan',
-                'darkRed',
-                'purple',
-                'brown',
-                'cyan'
+            'Signals': (
+                ('Cav', 'SR-RF-DLLRF-01:FDL:CAV:AMP', 'SR-RF-DLLRF-01:FDL:CAV:PHS', 'blue'),
+                ('Fwd Cav', 'SR-RF-DLLRF-01:FDL:FWDCAV:AMP', 'SR-RF-DLLRF-01:FDL:FWDCAV:PHS', 'red'),
+                ('Rev Cav', 'SR-RF-DLLRF-01:FDL:REVCAV:AMP', 'SR-RF-DLLRF-01:FDL:REVCAV:PHS', 'yellow'),
+                ('Fwd Ssa', 'SR-RF-DLLRF-01:FDL:FWDSSA:AMP', 'SR-RF-DLLRF-01:FDL:FWDSSA:PHS', 'darkGreen'),
+                ('Rev Ssa', 'SR-RF-DLLRF-01:FDL:REVSSA:AMP', 'SR-RF-DLLRF-01:FDL:REVSSA:PHS', 'magenta'),
+                ('Ctrl', 'SR-RF-DLLRF-01:FDL:CTRL:AMP', 'SR-RF-DLLRF-01:FDL:CTRL:PHS', 'darkCyan'),
+                ('Ref', 'SR-RF-DLLRF-01:FDL:SL:REF:AMP', 'SR-RF-DLLRF-01:FDL:SL:REF:PHS', 'darkRed'),
+                ('Err', 'SR-RF-DLLRF-01:FDL:SL:ERR:AMP', 'SR-RF-DLLRF-01:FDL:SL:ERR:PHS', 'purple'),
+                ('Err Acc', 'SR-RF-DLLRF-01:FDL:SL:ERRACC:AMP', 'SR-RF-DLLRF-01:FDL:SL:ERRACC:PHS', 'brown'),
+                ('MO', 'SR-RF-DLLRF-01:FDL:MO:AMP', 'SR-RF-DLLRF-01:FDL:MO:PHS', 'cyan')
             ),
             'Time': 'BR-RF-DLLRF-01:FDL:SCALE:32'
         }
@@ -744,43 +720,19 @@ SEC_2_CHANNELS = {
             },
         },
         'FDL': {
-            'Amplitude': (
-                'SR-RF-DLLRF-01:FDL:CAV:AMP',
-                'SR-RF-DLLRF-01:FDL:FWDCAV:AMP',
-                'SR-RF-DLLRF-01:FDL:FWDSSA:AMP',
-                'SR-RF-DLLRF-01:FDL:REVSSA:AMP',
-                'SR-RF-DLLRF-01:FDL:REVCAV:AMP',
-                'SR-RF-DLLRF-01:FDL:CTRL:AMP',
-                'SR-RF-DLLRF-01:FDL:SL:REF:AMP',
-                'SR-RF-DLLRF-01:FDL:SL:ERR:AMP',
-                'SR-RF-DLLRF-01:FDL:SL:ERRACC:AMP',
-                'SR-RF-DLLRF-01:FDL:MO:AMP'
+            'Signals': (
+                ('Cav', 'SR-RF-DLLRF-01:FDL:CAV:AMP', 'SR-RF-DLLRF-01:FDL:CAV:PHS', 'blue'),
+                ('Fwd Cav', 'SR-RF-DLLRF-01:FDL:FWDCAV:AMP', 'SR-RF-DLLRF-01:FDL:FWDCAV:PHS', 'red'),
+                ('Rev Cav', 'SR-RF-DLLRF-01:FDL:REVCAV:AMP', 'SR-RF-DLLRF-01:FDL:REVCAV:PHS', 'yellow'),
+                ('Fwd Ssa', 'SR-RF-DLLRF-01:FDL:FWDSSA:AMP', 'SR-RF-DLLRF-01:FDL:FWDSSA:PHS', 'darkGreen'),
+                ('Rev Ssa', 'SR-RF-DLLRF-01:FDL:REVSSA:AMP', 'SR-RF-DLLRF-01:FDL:REVSSA:PHS', 'magenta'),
+                ('Ctrl', 'SR-RF-DLLRF-01:FDL:CTRL:AMP', 'SR-RF-DLLRF-01:FDL:CTRL:PHS', 'darkCyan'),
+                ('Ref', 'SR-RF-DLLRF-01:FDL:SL:REF:AMP', 'SR-RF-DLLRF-01:FDL:SL:REF:PHS', 'darkRed'),
+                ('Err', 'SR-RF-DLLRF-01:FDL:SL:ERR:AMP', 'SR-RF-DLLRF-01:FDL:SL:ERR:PHS', 'purple'),
+                ('Err Acc', 'SR-RF-DLLRF-01:FDL:SL:ERRACC:AMP', 'SR-RF-DLLRF-01:FDL:SL:ERRACC:PHS', 'brown'),
+                ('MO', 'SR-RF-DLLRF-01:FDL:MO:AMP', 'SR-RF-DLLRF-01:FDL:MO:PHS', 'cyan')
             ),
-            'Phase': (
-                'SR-RF-DLLRF-01:FDL:CAV:PHS',
-                'SR-RF-DLLRF-01:FDL:FWDCAV:PHS',
-                'SR-RF-DLLRF-01:FDL:FWDSSA:PHS',
-                'SR-RF-DLLRF-01:FDL:REVSSA:PHS',
-                'SR-RF-DLLRF-01:FDL:REVCAV:PHS',
-                'SR-RF-DLLRF-01:FDL:CTRL:PHS',
-                'SR-RF-DLLRF-01:FDL:SL:REF:PHS',
-                'SR-RF-DLLRF-01:FDL:SL:ERR:PHS',
-                'SR-RF-DLLRF-01:FDL:SL:ERRACC:PHS',
-                'SR-RF-DLLRF-01:FDL:MO:PHS'
-            ),
-            'Colors': (
-                'blue',
-                'red',
-                'yellow',
-                'darkGreen',
-                'magenta',
-                'darkCyan',
-                'darkRed',
-                'purple',
-                'brown',
-                'cyan'
-            ),
-            'Time': 'SR-RF-DLLRF-01:FDL:SCALE:32'
+            'Time': 'BR-RF-DLLRF-01:FDL:SCALE:32'
         }
     },
 }

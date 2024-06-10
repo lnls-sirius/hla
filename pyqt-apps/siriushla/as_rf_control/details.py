@@ -456,8 +456,12 @@ class FDLMonitor(SiriusDialog):
 
         checks_wid = QWidget()
         self.hbox_checks = QHBoxLayout(checks_wid)
-        for idx in range(len(self.chs['FDL']['Amplitude'])):
-            self.setupCurve(idx)
+
+        for idx in range(len(self.chs['FDL']['Signals'])):
+            self.setupCurve(
+                self.chs['FDL']['Signals'][idx], 
+                self.prefix + self.chs['FDL']['Time'], 
+                idx)
 
         lay.addWidget(amplitude_wid, 1, 0)
         lay.addWidget(checks_wid, 2, 0)
@@ -490,12 +494,12 @@ class FDLMonitor(SiriusDialog):
 
         return graph
     
-    def setupCurve(self, idx):
-        cid = 'Test ' + str(idx + 1)
-        chn_amp = self.prefix + self.chs['FDL']['Amplitude'][idx]
-        chn_phs = self.prefix + self.chs['FDL']['Phase'][idx]
-        color = self.prefix + self.chs['FDL']['Colors'][idx]
-        time = self.prefix + self.chs['FDL']['Time']
+    def setupCurve(self, signal, time, idx):
+        cid = signal[0]
+        chn_amp = self.prefix + signal[1]
+        chn_phs = self.prefix + signal[2]
+        color = self.prefix + signal[3]
+        
 
         self.amplitude_graph.addChannel(
             y_channel=chn_amp,
@@ -514,13 +518,11 @@ class FDLMonitor(SiriusDialog):
         self.curves_phs[cid] = self.phase_graph.curveAtIndex(idx)   
 
         cbx = QCheckBox(cid, self)
-        cbx.setChecked(False)
+        cbx.setChecked(True)
         cbx.setObjectName(cid)
         cbx.setStyleSheet('color:' + color + ';')
         cbx.stateChanged.connect(self._handle_curves_visibility)
         self.hbox_checks.addWidget(cbx)
-        self.curves_amp[cid].setVisible(False)
-        self.curves_phs[cid].setVisible(False) 
 
     def _handle_curves_visibility(self, state):
         name = self.sender().objectName()
