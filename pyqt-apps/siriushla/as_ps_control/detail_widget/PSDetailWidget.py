@@ -967,6 +967,7 @@ class PSDetailWidget(_BaseDetailWidget):
 
         # --- wfm groupbox ---
 
+        # wfm_selected_mon = self._prefixed_psname + ':WfmSelected-Mon'
         wfm_syncmode_sel = self._prefixed_psname + ':WfmSyncMode-Sel'
         wfm_syncmode_sts = self._prefixed_psname + ':WfmSyncMode-Sts'
         wfm_freq_sp = self._prefixed_psname + ':WfmFreq-SP'
@@ -980,6 +981,9 @@ class PSDetailWidget(_BaseDetailWidget):
         wfm_count_ca = self._prefixed_psname + ':WfmSyncPulseCount-Mon'
         wfm_updateauto_ca = self._prefixed_psname + ':WfmUpdateAuto-Sts'
         wfm_updateauto_sel = self._prefixed_psname + ':WfmUpdateAuto-Sel'
+
+        # self.wfm_selected_label = QLabel('Wfm Frequency [Hz]', self)
+        # self.wfm_selected_mon = SiriusLabel(self, wfm_freq_rb)
 
         self.wfm_syncmode_label = QLabel('Wfm SyncMode', self)
         self.wfm_syncmode_sel_cb = PyDMEnumComboBox(self, wfm_syncmode_sel)
@@ -1012,6 +1016,7 @@ class PSDetailWidget(_BaseDetailWidget):
         layout_wfm = QGridLayout()
         layout_wfm.setAlignment(Qt.AlignTop)
         layout_wfm.setContentsMargins(6, 6, 3, 3)
+
         layout_wfm.addWidget(
             self.wfm_syncmode_label, 3, 0, 1, 2, Qt.AlignRight)
         layout_wfm.addWidget(self.wfm_syncmode_sel_cb, 3, 2)
@@ -1033,6 +1038,10 @@ class PSDetailWidget(_BaseDetailWidget):
         layout_wfm.addWidget(wfm_updateauto_label, 9, 0, Qt.AlignRight)
         layout_wfm.addWidget(wfm_updateauto_btn, 9, 1, Qt.AlignHCenter)
         layout_wfm.addWidget(wfm_updateauto_sts_led, 9, 2)
+
+        # layout_wfm.addWidget(
+        #     self.wfm_selected_label, 10, 0, Qt.AlignRight)
+        # layout_wfm.addWidget(self.wfm_selected_mon, 10, 1)
 
         self.wfm_box = QGroupBox("Wfm")
         self.wfm_box.setObjectName("Wfm")
