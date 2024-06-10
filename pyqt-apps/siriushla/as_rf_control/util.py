@@ -286,6 +286,45 @@ SEC_2_CHANNELS = {
                     'PowRev': 'BR-RF-DLLRF-01:TOP:REVCAV:AMP'
                 }
             }
+        },
+        'FDL': {
+            'Amplitude': (
+                'BR-RF-DLLRF-01:FDL:CAV:AMP',
+                'BR-RF-DLLRF-01:FDL:FWDCAV:AMP',
+                'BR-RF-DLLRF-01:FDL:REVCAV:AMP',
+                'BR-RF-DLLRF-01:FDL:FWDSSA:AMP',
+                'BR-RF-DLLRF-01:FDL:REVSSA:AMP',
+                'BR-RF-DLLRF-01:FDL:CTRL:AMP',
+                'BR-RF-DLLRF-01:FDL:SL:REF:AMP',
+                'BR-RF-DLLRF-01:FDL:SL:ERR:AMP',
+                'BR-RF-DLLRF-01:FDL:SL:ERRACC:AMP',
+                'BR-RF-DLLRF-01:FDL:MO:AMP'
+            ),
+            'Phase': (
+                'BR-RF-DLLRF-01:FDL:CAV:PHS',
+                'BR-RF-DLLRF-01:FDL:FWDCAV:PHS',
+                'BR-RF-DLLRF-01:FDL:FWDSSA:PHS',
+                'BR-RF-DLLRF-01:FDL:REVSSA:PHS',
+                'BR-RF-DLLRF-01:FDL:REVCAV:PHS',
+                'BR-RF-DLLRF-01:FDL:CTRL:PHS',
+                'BR-RF-DLLRF-01:FDL:SL:REF:PHS',
+                'BR-RF-DLLRF-01:FDL:SL:ERR:PHS',
+                'BR-RF-DLLRF-01:FDL:SL:ERRACC:PHS',
+                'BR-RF-DLLRF-01:FDL:MO:PHS'
+            ),
+            'Colors': (
+                'blue',
+                'red',
+                'yellow',
+                'darkGreen',
+                'magenta',
+                'darkCyan',
+                'darkRed',
+                'purple',
+                'brown',
+                'cyan'
+            ),
+            'Time': 'BR-RF-DLLRF-01:FDL:SCALE:32'
         }
     },
     'SI': {
@@ -703,6 +742,45 @@ SEC_2_CHANNELS = {
                 # 'Total': 'SI-02SB:RF-P7Cav:PwrWtTotal-Mon',
                 # 'Fwd': 'RA-RaSIA01:RF-RFCalSys:PwrW2-Mon',
             },
+        },
+        'FDL': {
+            'Amplitude': (
+                'SR-RF-DLLRF-01:FDL:CAV:AMP',
+                'SR-RF-DLLRF-01:FDL:FWDCAV:AMP',
+                'SR-RF-DLLRF-01:FDL:FWDSSA:AMP',
+                'SR-RF-DLLRF-01:FDL:REVSSA:AMP',
+                'SR-RF-DLLRF-01:FDL:REVCAV:AMP',
+                'SR-RF-DLLRF-01:FDL:CTRL:AMP',
+                'SR-RF-DLLRF-01:FDL:SL:REF:AMP',
+                'SR-RF-DLLRF-01:FDL:SL:ERR:AMP',
+                'SR-RF-DLLRF-01:FDL:SL:ERRACC:AMP',
+                'SR-RF-DLLRF-01:FDL:MO:AMP'
+            ),
+            'Phase': (
+                'SR-RF-DLLRF-01:FDL:CAV:PHS',
+                'SR-RF-DLLRF-01:FDL:FWDCAV:PHS',
+                'SR-RF-DLLRF-01:FDL:FWDSSA:PHS',
+                'SR-RF-DLLRF-01:FDL:REVSSA:PHS',
+                'SR-RF-DLLRF-01:FDL:REVCAV:PHS',
+                'SR-RF-DLLRF-01:FDL:CTRL:PHS',
+                'SR-RF-DLLRF-01:FDL:SL:REF:PHS',
+                'SR-RF-DLLRF-01:FDL:SL:ERR:PHS',
+                'SR-RF-DLLRF-01:FDL:SL:ERRACC:PHS',
+                'SR-RF-DLLRF-01:FDL:MO:PHS'
+            ),
+            'Colors': (
+                'blue',
+                'red',
+                'yellow',
+                'darkGreen',
+                'magenta',
+                'darkCyan',
+                'darkRed',
+                'purple',
+                'brown',
+                'cyan'
+            ),
+            'Time': 'SR-RF-DLLRF-01:FDL:SCALE:32'
         }
     },
 }
