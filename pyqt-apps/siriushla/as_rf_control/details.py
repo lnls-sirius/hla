@@ -431,47 +431,17 @@ class FDLMonitor(SiriusDialog):
 
     def _setupUi(self):
         wid = QWidget(self)
-        lay = QGridLayout(wid)
+        lay = QVBoxLayout(wid)
         lay.setAlignment(Qt.AlignTop)
-        lay.setHorizontalSpacing(25)
-        lay.setVerticalSpacing(15)
 
         controls = QGroupBox('Controls', self)
         controls.setLayout(self._controlsLayout())
 
-        title = QLabel(
-            '<h3>RF Graphs</h3>', self,
-            alignment=Qt.AlignCenter)
-        lay.addWidget(title, 1, 0)
-
-        self.lb_amplitude = QLabel('<h3> • Amplitude</h3>', self)
-        self.amplitude_graph = self.setupPlot()
-        self.amplitude_graph.setObjectName('amplitude_graph')
-        self.amplitude_graph.setStyleSheet(
-            '#amplitude_graph{min-height:15em;min-width:21em;max-height:15em;}')
-        amplitude_wid = self.setupWidget('Amplitude')
-
-        self.lb_phase = QLabel('<h3> • Phase</h3>', self)
-        self.phase_graph = self.setupPlot()
-        self.phase_graph.setObjectName('phase_graph')
-        self.phase_graph.setStyleSheet(
-            '#phase_graph{min-height:15em;min-width:21em;max-height:15em;}')
-        phase_wid = self.setupWidget('Phase')
-
-        checks_wid = QWidget()
-        self.hbox_checks = QHBoxLayout(checks_wid)
-
-        for idx in range(len(self.chs['FDL']['Signals'])):
-            self.setupCurve(
-                self.chs['FDL']['Signals'][idx], 
-                self.prefix + self.chs['FDL']['Time'], 
-                idx)
+        graphs = QGroupBox('Graphs', self)
+        graphs.setLayout(self._graphsLayout())
             
-        lay.addWidget(controls, 0, 0)
-
-        lay.addWidget(amplitude_wid, 2, 0)
-        lay.addWidget(checks_wid, 3, 0)
-        lay.addWidget(phase_wid, 4, 0)
+        lay.addWidget(controls)
+        lay.addWidget(graphs)
 
     def _controlsLayout(self):
         lay = QVBoxLayout()
@@ -542,19 +512,34 @@ class FDLMonitor(SiriusDialog):
         lay.addLayout(h_lay)
         return lay
 
-    def setupWidget(self, type):
-        wid = QWidget()
-        lay = QVBoxLayout(wid)
-        lay.setAlignment(Qt.AlignTop)
-        lay.setContentsMargins(0, 0, 0, 9)
-        if type == "Amplitude":
-            lay.addWidget(self.lb_amplitude)
-            lay.addWidget(self.amplitude_graph)
-        elif type == "Phase":
-            lay.addWidget(self.lb_phase)
-            lay.addWidget(self.phase_graph)
+    def _graphsLayout(self):
+        lay = QVBoxLayout()
+
+        self.amplitude_graph = self.setupPlot()
+        self.amplitude_graph.setObjectName('amplitude_graph')
+        self.amplitude_graph.setStyleSheet(
+            '#amplitude_graph{min-height:15em;min-width:21em;max-height:15em;}')
+
+        self.phase_graph = self.setupPlot()
+        self.phase_graph.setObjectName('phase_graph')
+        self.phase_graph.setStyleSheet(
+            '#phase_graph{min-height:15em;min-width:21em;max-height:15em;}')
+
+        checks_wid = QWidget()
+        self.hbox_checks = QHBoxLayout(checks_wid)
+        for idx in range(len(self.chs['FDL']['Signals'])):
+            self.setupCurve(
+                self.chs['FDL']['Signals'][idx], 
+                self.prefix + self.chs['FDL']['Time'], 
+                idx)
         
-        return wid
+        lay.addWidget(QLabel('<h4>Amplitude</h4>'))
+        lay.addWidget(self.amplitude_graph)
+        lay.addWidget(checks_wid)
+        lay.addWidget(QLabel('<h4>Phase</h4>'))
+        lay.addWidget(self.phase_graph)
+
+        return lay
 
     def setupPlot(self):
         graph = SiriusWaveformPlot(
@@ -575,7 +560,6 @@ class FDLMonitor(SiriusDialog):
         chn_phs = self.prefix + signal[2]
         color = self.prefix + signal[3]
         
-
         self.amplitude_graph.addChannel(
             y_channel=chn_amp,
             x_channel=time,
