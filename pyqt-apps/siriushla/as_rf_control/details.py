@@ -432,7 +432,7 @@ class FDLMonitor(SiriusDialog):
 
     def _setupUi(self):
         wid = QWidget(self)
-        wid.setMinimumSize(700, 800)
+        wid.setMinimumSize(820, 800)
         lay = QVBoxLayout(wid)
         lay.setAlignment(Qt.AlignTop)
 
@@ -494,7 +494,7 @@ class FDLMonitor(SiriusDialog):
         rearm_lay.addWidget(self.led_rearm)
 
         raw_lay = QHBoxLayout()
-        raw_lay.addWidget(QLabel('33 FDL ADCs Raw Data', self, alignment=Qt.AlignLeft | Qt.AlignVCenter))
+        raw_lay.addWidget(QLabel('FDL ADCs Raw Data', self, alignment=Qt.AlignLeft | Qt.AlignVCenter))
         raw_lay.addWidget(self.led_raw)
 
         grid_lay.addLayout(rearm_lay, 2, 0)
@@ -605,25 +605,26 @@ class FDLMonitor(SiriusDialog):
     
     def setupCurve(self, signal, time, idx):
         cid = signal[0]
-        chn_amp = self.prefix + signal[1]
-        chn_phs = self.prefix + signal[2]
         color = self.prefix + signal[3]
         
-        self.amplitude_graph.addChannel(
-            y_channel=chn_amp,
-            x_channel=time,
-            redraw_mode=2, name=cid, color=color,
-            lineStyle=Qt.SolidLine, lineWidth=1
-        )
-        self.phase_graph.addChannel(
-            y_channel=chn_phs,
-            x_channel=time,
-            redraw_mode=2, name=cid, color=color,
-            lineStyle=Qt.SolidLine, lineWidth=1
-        )
-
-        self.curves_amp[cid] = self.amplitude_graph.curveAtIndex(idx)
-        self.curves_phs[cid] = self.phase_graph.curveAtIndex(idx)   
+        if signal[1]:
+            chn_amp = self.prefix + signal[1]
+            self.amplitude_graph.addChannel(
+                y_channel=chn_amp,
+                x_channel=time,
+                redraw_mode=2, name=cid, color=color,
+                lineStyle=Qt.SolidLine, lineWidth=1
+            )
+            self.curves_amp[cid] = self.amplitude_graph.curveAtIndex(idx)
+        if signal[2]:
+            chn_phs = self.prefix + signal[2]
+            self.phase_graph.addChannel(
+                y_channel=chn_phs,
+                x_channel=time,
+                redraw_mode=2, name=cid, color=color,
+                lineStyle=Qt.SolidLine, lineWidth=1
+            )
+            self.curves_phs[cid] = self.phase_graph.curveAtIndex(idx)   
 
         cbx = QCheckBox(cid, self)
         cbx.setChecked(True)
@@ -634,10 +635,14 @@ class FDLMonitor(SiriusDialog):
 
     def _handle_curves_visibility(self, state):
         name = self.sender().objectName()
-        curve = self.curves_amp[name]
-        curve.setVisible(state)
-        curve = self.curves_phs[name]
-        curve.setVisible(state)
+
+        amp_curve = self.curves_amp.get(name)
+        if amp_curve:
+            amp_curve.setVisible(state)
+
+        phs_curve = self.curves_phs.get(name)
+        if phs_curve:
+            phs_curve.setVisible(state)
 
     def _handle_unit_change(self, text):
         self.sb_delay_ua.setVisible(text == 'ua' and text != 'Choose a unit')

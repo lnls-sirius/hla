@@ -298,7 +298,9 @@ SEC_2_CHANNELS = {
                 ('Ref', 'BR-RF-DLLRF-01:FDL:SL:REF:AMP', 'BR-RF-DLLRF-01:FDL:SL:REF:PHS', 'darkRed'),
                 ('Err', 'BR-RF-DLLRF-01:FDL:SL:ERR:AMP', 'BR-RF-DLLRF-01:FDL:SL:ERR:PHS', 'purple'),
                 ('Err Acc', 'BR-RF-DLLRF-01:FDL:SL:ERRACC:AMP', 'BR-RF-DLLRF-01:FDL:SL:ERRACC:PHS', 'brown'),
-                ('MO', 'BR-RF-DLLRF-01:FDL:MO:AMP', 'BR-RF-DLLRF-01:FDL:MO:PHS', 'cyan')
+                ('MO', 'BR-RF-DLLRF-01:FDL:MO:AMP', 'BR-RF-DLLRF-01:FDL:MO:PHS', 'cyan'),
+                ('Tune', None, 'BR-RF-DLLRF-01:FDL:TUNE:DEPHS', 'orange'),
+                ('Tune Filt', None, 'BR-RF-DLLRF-01:FDL:TUNE:DEPHS:FILT', 'greenyellow')
             ),
             'Time': 'BR-RF-DLLRF-01:FDL:SCALE:32',
             'Mode': 'BR-RF-DLLRF-01:FDL:MODE',
@@ -741,7 +743,9 @@ SEC_2_CHANNELS = {
                 ('Ref', 'SR-RF-DLLRF-01:FDL:SL:REF:AMP', 'SR-RF-DLLRF-01:FDL:SL:REF:PHS', 'darkRed'),
                 ('Err', 'SR-RF-DLLRF-01:FDL:SL:ERR:AMP', 'SR-RF-DLLRF-01:FDL:SL:ERR:PHS', 'purple'),
                 ('Err Acc', 'SR-RF-DLLRF-01:FDL:SL:ERRACC:AMP', 'SR-RF-DLLRF-01:FDL:SL:ERRACC:PHS', 'brown'),
-                ('MO', 'SR-RF-DLLRF-01:FDL:MO:AMP', 'SR-RF-DLLRF-01:FDL:MO:PHS', 'cyan')
+                ('MO', 'SR-RF-DLLRF-01:FDL:MO:AMP', 'SR-RF-DLLRF-01:FDL:MO:PHS', 'cyan'),
+                ('Tune', None, 'SR-RF-DLLRF-01:FDL:TUNE:DEPHS', 'orange'),
+                ('Tune Filt', None, 'SR-RF-DLLRF-01:FDL:TUNE:DEPHS:FILT', 'greenyellow')
             ),
             'Time': 'SR-RF-DLLRF-01:FDL:SCALE:32',
             'Mode': 'SR-RF-DLLRF-01:FDL:MODE',
