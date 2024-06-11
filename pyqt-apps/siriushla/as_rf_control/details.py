@@ -10,7 +10,7 @@ from pyqtgraph import PlotWidget, BarGraphItem
 
 from ..widgets import SiriusDialog, SiriusLedAlert, \
     PyDMLedMultiChannel, SiriusConnectionSignal as _ConnSignal, \
-    DetachableTabWidget, SiriusLabel, SiriusWaveformPlot
+    DetachableTabWidget, SiriusLabel, SiriusWaveformPlot, SiriusSpinbox
 from .util import SEC_2_CHANNELS
 
 class CavityStatusDetails(SiriusDialog):
@@ -430,15 +430,19 @@ class FDLMonitor(SiriusDialog):
         self._setupUi()
 
     def _setupUi(self):
-        lay = QGridLayout(self)
+        wid = QWidget(self)
+        lay = QGridLayout(wid)
         lay.setAlignment(Qt.AlignTop)
         lay.setHorizontalSpacing(25)
         lay.setVerticalSpacing(15)
 
-        self.title = QLabel(
-            '<h3>RF FDL Monitor</h3>', self,
+        controls = QGroupBox('Controls', self)
+        controls.setLayout(self._controlsLayout())
+
+        title = QLabel(
+            '<h3>RF Graphs</h3>', self,
             alignment=Qt.AlignCenter)
-        lay.addWidget(self.title, 0, 0)
+        lay.addWidget(title, 1, 0)
 
         self.lb_amplitude = QLabel('<h3> • Amplitude</h3>', self)
         self.amplitude_graph = self.setupPlot()
@@ -462,10 +466,81 @@ class FDLMonitor(SiriusDialog):
                 self.chs['FDL']['Signals'][idx], 
                 self.prefix + self.chs['FDL']['Time'], 
                 idx)
+            
+        lay.addWidget(controls, 0, 0)
 
-        lay.addWidget(amplitude_wid, 1, 0)
-        lay.addWidget(checks_wid, 2, 0)
-        lay.addWidget(phase_wid, 3, 0)
+        lay.addWidget(amplitude_wid, 2, 0)
+        lay.addWidget(checks_wid, 3, 0)
+        lay.addWidget(phase_wid, 4, 0)
+
+    def _controlsLayout(self):
+        lay = QVBoxLayout()
+        grid_lay = QGridLayout()
+
+        # First line
+        self.lb_mode = SiriusLabel(self, self.prefix + self.chs['FDL']['Mode'])
+        self.led_swtrig = SiriusLedAlert(self, self.prefix + self.chs['FDL']['SW Trig'])
+        
+        grid_lay.addWidget(QLabel(
+            'Perseus FDL Mode', self, alignment=Qt.AlignLeft),
+            0, 0)
+        grid_lay.addWidget(self.lb_mode, 0, 1)
+        grid_lay.addWidget(QLabel(
+            'Force FDL Trigger (SW Interlock)', self, alignment=Qt.AlignLeft),
+            0, 2)
+        grid_lay.addWidget(self.led_swtrig, 0, 3)
+        # # Button
+
+        # Second line
+        self.lb_processing = SiriusLabel(self, self.prefix + self.chs['FDL']['Processing'])
+        self.led_hwtrig = SiriusLedAlert(self, self.prefix + self.chs['FDL']['HW Trig'])
+        
+        grid_lay.addWidget(QLabel(
+            'IOC FDL Status', self, alignment=Qt.AlignLeft),
+            1, 0)
+        grid_lay.addWidget(self.lb_processing, 1, 1)
+        grid_lay.addWidget(QLabel(
+            'Hardware Interlock', self, alignment=Qt.AlignLeft),
+            1, 2)
+        grid_lay.addWidget(self.led_hwtrig, 1, 3)
+
+        # Third line
+        lb_rearm = QLabel('FDL Rearm', self, alignment=Qt.AlignLeft)
+        self.led_rearm = SiriusLedAlert(self, self.prefix + self.chs['FDL']['Rearm'])
+        rearm_lay = QHBoxLayout()
+        rearm_lay.addWidget(lb_rearm)
+        rearm_lay.addWidget(self.led_rearm)
+
+        grid_lay.addLayout(rearm_lay, 2, 0)
+        # # Button
+        grid_lay.addWidget(QLabel(
+            '33 FDL ADCs Raw Data', self, alignment=Qt.AlignLeft),
+            2, 2)
+        self.led_raw = SiriusLedAlert(self, self.prefix + self.chs['FDL']['Raw'])
+        grid_lay.addWidget(self.led_raw, 2, 3)
+        # # Button
+
+        # Fourth line
+        h_lay = QHBoxLayout()
+
+        self.sb_qty = SiriusSpinbox(self, 
+                                    self.prefix + self.chs['FDL']['Qty'] + 'SP')
+        self.lb_qty = SiriusLabel(self,
+                                  self.prefix + self.chs['FDL']['Qty'] + 'RB')
+        self.lb_size = SiriusLabel(self, self.prefix + self.chs['FDL']['Size'])
+        self.lb_duration = SiriusLabel(self, self.prefix + self.chs['FDL']['Duration'])
+        
+        h_lay.addWidget(QLabel('FDL Frame QTY', self, alignment=Qt.AlignLeft))
+        h_lay.addWidget(self.sb_qty)
+        h_lay.addWidget(self.lb_qty)
+        h_lay.addWidget(QLabel('Size', self, alignment=Qt.AlignLeft))
+        h_lay.addWidget(self.lb_size)
+        h_lay.addWidget(QLabel('Duration', self, alignment=Qt.AlignLeft))
+        h_lay.addWidget(self.lb_duration)
+
+        lay.addLayout(grid_lay)
+        lay.addLayout(h_lay)
+        return lay
 
     def setupWidget(self, type):
         wid = QWidget()
