@@ -10,7 +10,8 @@ from pyqtgraph import PlotWidget, BarGraphItem
 
 from ..widgets import SiriusDialog, SiriusLedAlert, \
     PyDMLedMultiChannel, SiriusConnectionSignal as _ConnSignal, \
-    DetachableTabWidget, SiriusLabel, SiriusWaveformPlot, SiriusSpinbox
+    DetachableTabWidget, SiriusLabel, SiriusWaveformPlot, SiriusSpinbox, \
+    PyDMStateButton
 from .util import SEC_2_CHANNELS
 
 class CavityStatusDetails(SiriusDialog):
@@ -453,6 +454,7 @@ class FDLMonitor(SiriusDialog):
         self.lb_mode = SiriusLabel(self, self.prefix + self.chs['FDL']['Mode'])
         self.lb_mode.setStyleSheet('background-color:#555555; color:#00cf1c;font-weight:bold;')
         self.led_swtrig = SiriusLedAlert(self, self.prefix + self.chs['FDL']['SW Trig'])
+        self.bt_swtrig = PyDMStateButton(self, self.prefix + self.chs['FDL']['Trig'])
         
         sw_lay = QHBoxLayout()
         sw_lay.addWidget(QLabel('Force FDL Trigger (SW Interlock)', self, alignment=Qt.AlignLeft | Qt.AlignVCenter))
@@ -463,7 +465,7 @@ class FDLMonitor(SiriusDialog):
             0, 0)
         grid_lay.addWidget(self.lb_mode, 0, 1)
         grid_lay.addLayout(sw_lay, 0, 2)
-        # # Button
+        grid_lay.addWidget(self.bt_swtrig, 0, 3)
 
         # Second line
         self.lb_processing = SiriusLabel(self, self.prefix + self.chs['FDL']['Processing'])
@@ -483,7 +485,9 @@ class FDLMonitor(SiriusDialog):
         # Third line
         lb_rearm = QLabel('FDL Rearm', self, alignment=Qt.AlignLeft | Qt.AlignVCenter)
         self.led_rearm = SiriusLedAlert(self, self.prefix + self.chs['FDL']['Rearm'])
+        self.bt_rearm = PyDMStateButton(self, self.prefix + self.chs['FDL']['Rearm'])
         self.led_raw = SiriusLedAlert(self, self.prefix + self.chs['FDL']['Raw'])
+        self.bt_raw = PyDMStateButton(self, self.prefix + self.chs['FDL']['Raw'] + ':S')
 
         rearm_lay = QHBoxLayout()
         rearm_lay.addWidget(lb_rearm)
@@ -494,9 +498,9 @@ class FDLMonitor(SiriusDialog):
         raw_lay.addWidget(self.led_raw)
 
         grid_lay.addLayout(rearm_lay, 2, 0)
-        # # Button
+        grid_lay.addWidget(self.bt_rearm, 2, 1)
         grid_lay.addLayout(raw_lay, 2, 2)
-        # # Button
+        grid_lay.addWidget(self.bt_raw, 2, 3)
 
         # Fourth line
         self.sb_qty = SiriusSpinbox(self, 
@@ -508,7 +512,9 @@ class FDLMonitor(SiriusDialog):
         qty_lay.addWidget(self.lb_qty)
 
         self.lb_size = SiriusLabel(self, self.prefix + self.chs['FDL']['Size'])
+        self.lb_size._show_units = True
         self.lb_duration = SiriusLabel(self, self.prefix + self.chs['FDL']['Duration'])
+        self.lb_duration._show_units = True
         h_lay = QHBoxLayout()
         h_lay.addWidget(QLabel('Size', self, alignment=Qt.AlignLeft | Qt.AlignVCenter))
         h_lay.addWidget(self.lb_size)
@@ -517,8 +523,7 @@ class FDLMonitor(SiriusDialog):
 
         grid_lay.addWidget(QLabel(
             'FDL Frame QTY', self, alignment=Qt.AlignLeft | Qt.AlignVCenter),
-            3, 0
-            )
+            3, 0)
         grid_lay.addLayout(qty_lay, 3, 1)
         grid_lay.addLayout(h_lay, 3, 2)
 
