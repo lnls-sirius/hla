@@ -311,6 +311,7 @@ SEC_2_CHANNELS = {
             'Qty': 'BR-RF-DLLRF-01:FDL:FrameQty-',
             'Size': 'BR-RF-DLLRF-01:FDL:Size-Mon',
             'Duration': 'BR-RF-DLLRF-01:FDL:Duration-Mon',
+            'Delay': 'BR-RF-DLLRF-01:FDL:TriggerDelay'
         }
     },
     'SI': {
@@ -753,6 +754,7 @@ SEC_2_CHANNELS = {
             'Qty': 'SR-RF-DLLRF-01:FDL:FrameQty-',
             'Size': 'SR-RF-DLLRF-01:FDL:Size-Mon',
             'Duration': 'SR-RF-DLLRF-01:FDL:Duration-Mon',
+            'Delay': 'SR-RF-DLLRF-01:FDL:TriggerDelay'
         }
     },
 }

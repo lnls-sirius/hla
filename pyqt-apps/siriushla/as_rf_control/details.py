@@ -3,7 +3,7 @@
 from qtpy.QtCore import Qt, QTimer
 from qtpy.QtWidgets import QFormLayout, QLabel, QSpacerItem, QTabWidget, \
     QSizePolicy as QSzPlcy, QGridLayout, QHBoxLayout, QGroupBox, QWidget, \
-    QVBoxLayout, QCheckBox
+    QVBoxLayout, QCheckBox, QComboBox
 from qtpy.QtGui import QColor
 
 from pyqtgraph import PlotWidget, BarGraphItem
@@ -527,6 +527,38 @@ class FDLMonitor(SiriusDialog):
         grid_lay.addLayout(qty_lay, 3, 1)
         grid_lay.addLayout(h_lay, 3, 2)
 
+        # Fifth line
+        self.sb_delay_ua = SiriusSpinbox(self,
+                                         self.prefix + self.chs['FDL']['Delay'] + '-SP')
+        self.lb_delay_ua = SiriusLabel(self,
+                                         self.prefix + self.chs['FDL']['Delay'] + '-RB')
+        self.sb_delay_ms = SiriusSpinbox(self,
+                                         self.prefix + self.chs['FDL']['Delay'] + 'Time-SP')
+        self.lb_delay_ms = SiriusLabel(self,
+                                         self.prefix + self.chs['FDL']['Delay'] + 'Time-RB')
+        sb_unit = QComboBox()
+        sb_unit.addItems(['Choose a unit', 'ua', 'ms'])
+        sb_unit.setMaximumWidth(120)
+        sb_unit.currentTextChanged.connect(self._handle_unit_change)
+
+        delay_lay = QHBoxLayout()
+        delay_lay.addWidget(self.sb_delay_ua)
+        delay_lay.addWidget(self.lb_delay_ua)
+        delay_lay.addWidget(self.sb_delay_ms)
+        delay_lay.addWidget(self.lb_delay_ms)
+
+        self.sb_delay_ms.setVisible(False)
+        self.lb_delay_ms.setVisible(False)
+        self.sb_delay_ua.setVisible(False)
+        self.lb_delay_ua.setVisible(False)
+
+        grid_lay.addWidget(QLabel(
+            'Trigger Delay', self, alignment=Qt.AlignLeft | Qt.AlignVCenter),
+            4, 0
+        )
+        grid_lay.addLayout(delay_lay, 4, 1)
+        grid_lay.addWidget(sb_unit, 4, 2)
+
         return grid_lay
 
     def _graphsLayout(self):
@@ -606,3 +638,9 @@ class FDLMonitor(SiriusDialog):
         curve.setVisible(state)
         curve = self.curves_phs[name]
         curve.setVisible(state)
+
+    def _handle_unit_change(self, text):
+        self.sb_delay_ua.setVisible(text == 'ua' and text != 'Choose a unit')
+        self.lb_delay_ua.setVisible(text == 'ua' and text != 'Choose a unit')
+        self.sb_delay_ms.setVisible(text == 'ms' and text != 'Choose a unit')
+        self.lb_delay_ms.setVisible(text == 'ms' and text != 'Choose a unit')
