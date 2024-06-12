@@ -452,30 +452,29 @@ class FDLMonitor(SiriusDialog):
 
         # First line
         self.lb_mode = SiriusLabel(self, self.prefix + self.chs['FDL']['Mode'])
-        self.lb_mode.setStyleSheet('background-color:#555555; color:#00cf1c;font-weight:bold;')
         self.led_swtrig = SiriusLedAlert(self, self.prefix + self.chs['FDL']['SW Trig'])
         self.bt_swtrig = PyDMStateButton(self, self.prefix + self.chs['FDL']['Trig'])
 
         lay.addWidget(QLabel(
-            'Perseus FDL Mode', self, alignment=Qt.AlignLeft | Qt.AlignVCenter),
+            '<h4>Perseus FDL Mode:</h4>', self, alignment=Qt.AlignRight | Qt.AlignVCenter),
             0, 0)
         lay.addWidget(self.lb_mode, 0, 1)
-        lay.addWidget(QLabel('Force FDL Trigger (SW Interlock)', self, alignment=Qt.AlignLeft | Qt.AlignVCenter),
-                           0, 2)
+        lay.addWidget(QLabel(
+            '<h4>Force FDL Trigger (SW Interlock):</h4>', self, alignment=Qt.AlignRight | Qt.AlignVCenter),
+            0, 2)
         lay.addWidget(self.bt_swtrig, 0, 3)
         lay.addWidget(self.led_swtrig, 0, 4)
 
         # Second line
         self.lb_processing = SiriusLabel(self, self.prefix + self.chs['FDL']['Processing'])
-        self.lb_processing.setStyleSheet('background-color:#555555; color:#00cf1c;font-weight:bold;')
         self.led_hwtrig = SiriusLedAlert(self, self.prefix + self.chs['FDL']['HW Trig'])
 
         lay.addWidget(QLabel(
-            'IOC FDL Status', self, alignment=Qt.AlignLeft | Qt.AlignVCenter),
+            '<h4>IOC FDL Status:</h4>', self, alignment=Qt.AlignRight | Qt.AlignVCenter),
             1, 0)
         lay.addWidget(self.lb_processing, 1, 1)
         lay.addWidget(QLabel(
-            'Hardware Interlock', self, alignment=Qt.AlignLeft | Qt.AlignVCenter), 
+            '<h4>Hardware Interlock:</h4>', self, alignment=Qt.AlignRight | Qt.AlignVCenter), 
             1, 2)
         lay.addWidget(self.led_hwtrig, 1, 4)
 
@@ -490,10 +489,10 @@ class FDLMonitor(SiriusDialog):
         rearm_lay.addWidget(self.led_rearm)
 
         lay.addWidget(QLabel(
-            'FDL Rearm', self, alignment=Qt.AlignLeft | Qt.AlignVCenter),
+            '<h4>FDL Rearm:</h4>', self, alignment=Qt.AlignRight | Qt.AlignVCenter),
              2, 0)
         lay.addLayout(rearm_lay, 2, 1)
-        lay.addWidget(QLabel('FDL ADCs Raw Data', self, alignment=Qt.AlignLeft | Qt.AlignVCenter),
+        lay.addWidget(QLabel('<h4>FDL ADCs Raw Data:</h4>', self, alignment=Qt.AlignRight | Qt.AlignVCenter),
                            2, 2)
         lay.addWidget(self.bt_raw, 2, 3)
         lay.addWidget(self.led_raw, 2, 4)
@@ -511,17 +510,17 @@ class FDLMonitor(SiriusDialog):
         self.lb_size._show_units = True
         self.lb_duration = SiriusLabel(self, self.prefix + self.chs['FDL']['Duration'])
         self.lb_duration._show_units = True
-        h_lay = QHBoxLayout()
-        h_lay.addWidget(QLabel('Size', self, alignment=Qt.AlignLeft | Qt.AlignVCenter))
-        h_lay.addWidget(self.lb_size)
-        h_lay.addWidget(QLabel('Duration', self, alignment=Qt.AlignLeft | Qt.AlignVCenter))
-        h_lay.addWidget(self.lb_duration)
+        size_dur_lay = QHBoxLayout()
+        size_dur_lay.addWidget(QLabel('<h4>Size:</h4>', self, alignment=Qt.AlignRight | Qt.AlignVCenter))
+        size_dur_lay.addWidget(self.lb_size)
+        size_dur_lay.addWidget(QLabel('<h4>Duration:</h4>', self, alignment=Qt.AlignRight | Qt.AlignVCenter))
+        size_dur_lay.addWidget(self.lb_duration)
 
         lay.addWidget(QLabel(
-            'FDL Frame QTY', self, alignment=Qt.AlignLeft | Qt.AlignVCenter),
+            '<h4>FDL Frame QTY:</h4>', self, alignment=Qt.AlignRight | Qt.AlignVCenter),
             3, 0)
         lay.addLayout(qty_lay, 3, 1)
-        lay.addLayout(h_lay, 3, 2)
+        lay.addLayout(size_dur_lay, 3, 2)
 
         # Fifth line
         self.sb_delay_sample = SiriusSpinbox(self,
@@ -549,7 +548,7 @@ class FDLMonitor(SiriusDialog):
         self.lb_delay_sample.setVisible(False)
 
         lay.addWidget(QLabel(
-            'Trigger Delay', self, alignment=Qt.AlignLeft | Qt.AlignVCenter),
+            '<h4>Trigger Delay:</h4>', self, alignment=Qt.AlignRight | Qt.AlignVCenter),
             4, 0
         )
         lay.addWidget(sb_unit, 4, 1)

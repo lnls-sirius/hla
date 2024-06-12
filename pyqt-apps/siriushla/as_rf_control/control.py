@@ -245,7 +245,6 @@ class RFMainControl(SiriusMainWindow):
         lay.addWidget(self.ld_llrfreset, 9, 0)
         lay.addWidget(self.pb_llrfreset, 9, 1)
         lay.addWidget(self._ld_fdl, 10, 0, 1, 3)
-        #lay.addWidget(self.ld_openfdl, 11, 0)
         lay.addWidget(self.pb_openfdl, 11, 0, alignment=Qt.AlignRight)
 
         return lay
