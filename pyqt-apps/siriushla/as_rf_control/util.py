@@ -291,16 +291,16 @@ SEC_2_CHANNELS = {
             'Signals': (
                 ('Cav', 'BR-RF-DLLRF-01:FDL:CAV:AMP', 'BR-RF-DLLRF-01:FDL:CAV:PHS', 'blue'),
                 ('Fwd Cav', 'BR-RF-DLLRF-01:FDL:FWDCAV:AMP', 'BR-RF-DLLRF-01:FDL:FWDCAV:PHS', 'red'),
-                ('Rev Cav', 'BR-RF-DLLRF-01:FDL:REVCAV:AMP', 'BR-RF-DLLRF-01:FDL:REVCAV:PHS', 'yellow'),
+                ('Rev Cav', 'BR-RF-DLLRF-01:FDL:REVCAV:AMP', 'BR-RF-DLLRF-01:FDL:REVCAV:PHS', 'darkSlateBlue'),
                 ('Fwd Ssa', 'BR-RF-DLLRF-01:FDL:FWDSSA:AMP', 'BR-RF-DLLRF-01:FDL:FWDSSA:PHS', 'darkGreen'),
                 ('Rev Ssa', 'BR-RF-DLLRF-01:FDL:REVSSA:AMP', 'BR-RF-DLLRF-01:FDL:REVSSA:PHS', 'magenta'),
                 ('Ctrl', 'BR-RF-DLLRF-01:FDL:CTRL:AMP', 'BR-RF-DLLRF-01:FDL:CTRL:PHS', 'darkCyan'),
                 ('Ref', 'BR-RF-DLLRF-01:FDL:SL:REF:AMP', 'BR-RF-DLLRF-01:FDL:SL:REF:PHS', 'darkRed'),
                 ('Err', 'BR-RF-DLLRF-01:FDL:SL:ERR:AMP', 'BR-RF-DLLRF-01:FDL:SL:ERR:PHS', 'purple'),
-                ('Err Acc', 'BR-RF-DLLRF-01:FDL:SL:ERRACC:AMP', 'BR-RF-DLLRF-01:FDL:SL:ERRACC:PHS', 'brown'),
-                ('MO', 'BR-RF-DLLRF-01:FDL:MO:AMP', 'BR-RF-DLLRF-01:FDL:MO:PHS', 'cyan'),
-                ('Tune', None, 'BR-RF-DLLRF-01:FDL:TUNE:DEPHS', 'orange'),
-                ('Tune Filt', None, 'BR-RF-DLLRF-01:FDL:TUNE:DEPHS:FILT', 'greenyellow')
+                ('Err Acc', 'BR-RF-DLLRF-01:FDL:SL:ERRACC:AMP', 'BR-RF-DLLRF-01:FDL:SL:ERRACC:PHS', 'saddlebrown'),
+                ('MO', 'BR-RF-DLLRF-01:FDL:MO:AMP', 'BR-RF-DLLRF-01:FDL:MO:PHS', 'darkBlue'),
+                ('Tune', None, 'BR-RF-DLLRF-01:FDL:TUNE:DEPHS', 'orangered'),
+                ('Tune Filt', None, 'BR-RF-DLLRF-01:FDL:TUNE:DEPHS:FILT', 'darkOliveGreen')
             ),
             'Time': 'BR-RF-DLLRF-01:FDL:SCALE:32',
             'Mode': 'BR-RF-DLLRF-01:FDL:MODE',
@@ -736,16 +736,16 @@ SEC_2_CHANNELS = {
             'Signals': (
                 ('Cav', 'SR-RF-DLLRF-01:FDL:CAV:AMP', 'SR-RF-DLLRF-01:FDL:CAV:PHS', 'blue'),
                 ('Fwd Cav', 'SR-RF-DLLRF-01:FDL:FWDCAV:AMP', 'SR-RF-DLLRF-01:FDL:FWDCAV:PHS', 'red'),
-                ('Rev Cav', 'SR-RF-DLLRF-01:FDL:REVCAV:AMP', 'SR-RF-DLLRF-01:FDL:REVCAV:PHS', 'yellow'),
+                ('Rev Cav', 'SR-RF-DLLRF-01:FDL:REVCAV:AMP', 'SR-RF-DLLRF-01:FDL:REVCAV:PHS', 'darkSlateBlue'),
                 ('Fwd Ssa', 'SR-RF-DLLRF-01:FDL:FWDSSA:AMP', 'SR-RF-DLLRF-01:FDL:FWDSSA:PHS', 'darkGreen'),
                 ('Rev Ssa', 'SR-RF-DLLRF-01:FDL:REVSSA:AMP', 'SR-RF-DLLRF-01:FDL:REVSSA:PHS', 'magenta'),
                 ('Ctrl', 'SR-RF-DLLRF-01:FDL:CTRL:AMP', 'SR-RF-DLLRF-01:FDL:CTRL:PHS', 'darkCyan'),
                 ('Ref', 'SR-RF-DLLRF-01:FDL:SL:REF:AMP', 'SR-RF-DLLRF-01:FDL:SL:REF:PHS', 'darkRed'),
                 ('Err', 'SR-RF-DLLRF-01:FDL:SL:ERR:AMP', 'SR-RF-DLLRF-01:FDL:SL:ERR:PHS', 'purple'),
                 ('Err Acc', 'SR-RF-DLLRF-01:FDL:SL:ERRACC:AMP', 'SR-RF-DLLRF-01:FDL:SL:ERRACC:PHS', 'saddlebrown'),
-                ('MO', 'SR-RF-DLLRF-01:FDL:MO:AMP', 'SR-RF-DLLRF-01:FDL:MO:PHS', 'cyan'),
+                ('MO', 'SR-RF-DLLRF-01:FDL:MO:AMP', 'SR-RF-DLLRF-01:FDL:MO:PHS', 'darkBlue'),
                 ('Tune', None, 'SR-RF-DLLRF-01:FDL:TUNE:DEPHS', 'orangered'),
-                ('Tune Filt', None, 'SR-RF-DLLRF-01:FDL:TUNE:DEPHS:FILT', 'greenyellow')
+                ('Tune Filt', None, 'SR-RF-DLLRF-01:FDL:TUNE:DEPHS:FILT', 'darkOliveGreen')
             ),
             'Time': 'SR-RF-DLLRF-01:FDL:SCALE:32',
             'Mode': 'SR-RF-DLLRF-01:FDL:MODE',

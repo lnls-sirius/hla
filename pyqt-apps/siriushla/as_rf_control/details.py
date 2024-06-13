@@ -577,9 +577,9 @@ class FDLMonitor(SiriusDialog):
                 self.prefix + self.chs['FDL']['Time'], 
                 idx)
         
+        lay.addWidget(checks_wid)
         lay.addWidget(QLabel('<h4>Amplitude</h4>'))
         lay.addWidget(self.amplitude_graph)
-        lay.addWidget(checks_wid)
         lay.addWidget(QLabel('<h4>Phase</h4>'))
         lay.addWidget(self.phase_graph)
 
