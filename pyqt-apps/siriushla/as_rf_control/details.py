@@ -414,6 +414,7 @@ class TempMonitor(SiriusDialog):
             dettab.addTab(wid, dettabtitle)
         lay.addWidget(dettab, 1, 0)
 
+
 class FDLMonitor(SiriusDialog):
     """Fast Data Logger Monitor."""
 
@@ -598,7 +599,7 @@ class FDLMonitor(SiriusDialog):
 
         return graph
     
-    def setupCurve(self, signal, time, idx):
+    def setupCurve(self, signal, timebase, idx):
         cid = signal[0]
         color = self.prefix + signal[3]
         
@@ -606,7 +607,7 @@ class FDLMonitor(SiriusDialog):
             chn_amp = self.prefix + signal[1]
             self.amplitude_graph.addChannel(
                 y_channel=chn_amp,
-                x_channel=time,
+                x_channel=timebase,
                 redraw_mode=2, name=cid, color=color,
                 lineStyle=Qt.SolidLine, lineWidth=1
             )
@@ -615,7 +616,7 @@ class FDLMonitor(SiriusDialog):
             chn_phs = self.prefix + signal[2]
             self.phase_graph.addChannel(
                 y_channel=chn_phs,
-                x_channel=time,
+                x_channel=timebase,
                 redraw_mode=2, name=cid, color=color,
                 lineStyle=Qt.SolidLine, lineWidth=1
             )
@@ -640,7 +641,7 @@ class FDLMonitor(SiriusDialog):
             phs_curve.setVisible(state)
 
     def _handle_unit_change(self, text):
-        self.sb_delay_sample.setVisible(text == 'Sample units' and text != 'Choose a unit')
-        self.lb_delay_sample.setVisible(text == 'Sample units' and text != 'Choose a unit')
-        self.sb_delay_us.setVisible(text == 'us' and text != 'Choose a unit')
-        self.lb_delay_us.setVisible(text == 'us' and text != 'Choose a unit')
+        self.sb_delay_sample.setVisible(text == 'Sample units')
+        self.lb_delay_sample.setVisible(text == 'Sample units')
+        self.sb_delay_us.setVisible(text == 'us')
+        self.lb_delay_us.setVisible(text == 'us')
