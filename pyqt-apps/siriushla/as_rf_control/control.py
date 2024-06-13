@@ -213,11 +213,11 @@ class RFMainControl(SiriusMainWindow):
         self.pb_llrfreset.setStyleSheet(
             '#pb_llrfreset{min-width:25px; max-width:25px; icon-size:20px;}')
 
-        # FDL
-        self._ld_fdl = QLabel('<h4>FDL</h4>', self, alignment=Qt.AlignLeft)
+        # Auxiliary Windows
+        self._ld_fdl = QLabel('<h4>Auxiliary Windows</h4>', self, alignment=Qt.AlignLeft)
 
         # # Open FDL
-        self.pb_openfdl = SiriusPushButton(label='Open FDL', icon=qta.icon('fa5s.external-link-alt'), releaseValue=0, parent=self)
+        self.pb_openfdl = QPushButton(text=' FDL', icon=qta.icon('fa5s.external-link-alt'), parent=self)
         connect_window(
             self.pb_openfdl, FDLMonitor, parent=self,
             prefix=self.prefix, section=self.section)
