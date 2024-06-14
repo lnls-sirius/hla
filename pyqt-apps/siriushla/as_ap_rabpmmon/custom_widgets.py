@@ -11,35 +11,59 @@ from siriuspy.namesys import SiriusPVName
 from siriuspy.devices import FamFOFBControllers as _FamFOFBCtrls
 
 from ..util import connect_newprocess
-from ..widgets import PyDMLedMultiChannel, QLed
+from ..widgets import PyDMLedMultiChannel, QLed, PyDMLedMultiConnection
 
 
-class _BaseMonLed(PyDMLedMultiChannel):
-    """Base monitor led."""
+def get_base_class(led_class):
+    """Generate base class for MonLed.
 
-    doubleClicked = Signal()
+    Args:
+        led_class (PyDMLed class):
+            led class for base, can be PyDMLedMultiChannel or
+            PyDMLedMultiConnection.
 
-    def __init__(
-            self, parent=None, device='', propties2values=None, prefix='',
-            command=None):
-        super().__init__(parent)
-        self.device = SiriusPVName(device).device_name
-        self.setToolTip(device)
-        c2v = {
-            self.device.substitute(propty=p, prefix=prefix): v
-            for p, v in propties2values.items()}
-        self.set_channels2values(c2v)
-        self.command = command
-        connect_newprocess(
-            self, [self.command, self.device], parent=self,
-            signal=self.doubleClicked)
+    Returns:
+        _BaseMonLed: base class for MonLed.
+    """
+    class _BaseMonLed(led_class):
+        """Base monitor led."""
 
-    def mouseDoubleClickEvent(self, _):
-        """Reimplement mouseDoubleClickEvent."""
-        self.doubleClicked.emit()
+        doubleClicked = Signal()
+
+        def __init__(
+                self, parent=None, device='', propties2values=None, prefix='',
+                command=None):
+            super().__init__(parent)
+            self.device = SiriusPVName(device).device_name
+            self.setToolTip(device)
+            c2v = {
+                self.device.substitute(propty=p, prefix=prefix): v
+                for p, v in propties2values.items()}
+            if led_class == PyDMLedMultiChannel:
+                self.set_channels2values(c2v)
+            elif led_class == PyDMLedMultiConnection:
+                self.set_channels(list(c2v.keys()))
+            else:
+                raise ValueError(
+                    f'base class not defined for class {led_class}'
+                )
+            self.command = command
+            connect_newprocess(
+                self, [self.command, self.device], parent=self,
+                signal=self.doubleClicked)
+
+        def mouseDoubleClickEvent(self, _):
+            """Reimplement mouseDoubleClickEvent."""
+            self.doubleClicked.emit()
+
+    return _BaseMonLed
+
+_BaseMonLedMultiChan = get_base_class(PyDMLedMultiChannel)
+_BaseMonLedMultiConn = get_base_class(PyDMLedMultiConnection)
 
 
-class BPMMonLed(_BaseMonLed):
+
+class BPMMonLed(_BaseMonLedMultiChan):
     """BPM monitor led."""
 
     def __init__(self, parent=None, device='', prefix=''):
@@ -49,7 +73,7 @@ class BPMMonLed(_BaseMonLed):
             command='sirius-hla-as-di-bpm.py')
 
 
-class RFFEMonLed(_BaseMonLed):
+class RFFEMonLed(_BaseMonLedMultiChan):
     """BPM monitor led."""
 
     def __init__(self, parent=None, device='', prefix=''):
@@ -59,17 +83,17 @@ class RFFEMonLed(_BaseMonLed):
             command='sirius-hla-as-di-bpm.py')
 
 
-class PBPMMonLed(_BaseMonLed):
+class PBPMMonLed(_BaseMonLedMultiConn):
     """Photon BPM monitor led."""
 
     def __init__(self, parent=None, device='', prefix=''):
-        p2v = {'asyn.CNCT': 1}
+        p2v = {'PosX-Mon': 'connected'}
         super().__init__(
             parent, device=device, propties2values=p2v, prefix=prefix,
             command='sirius-hla-as-di-bpm.py')
 
 
-class EVRMonLed(_BaseMonLed):
+class EVRMonLed(_BaseMonLedMultiChan):
     """BPM monitor led."""
 
     def __init__(self, parent=None, device='', prefix=''):
