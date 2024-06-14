@@ -450,11 +450,9 @@ class EVG(BaseWidget):
         gb = self._create_prop_widget('Intlk. Enable', wid, (sp, rb))
         lay.addWidget(gb, 0, 0, alignment=Qt.AlignCenter)
 
-        pvname = self.get_pvname(propty='IntlkCtrlRst-Sel')
+        pvname = self.get_pvname(propty='IntlkCtrlRst-Cmd')
         sp = PyDMStateButton(self, init_channel=pvname)
-        pvname = self.get_pvname(propty='IntlkCtrlRst-Sts')
-        rb = PyDMLed(self, init_channel=pvname)
-        gb = self._create_prop_widget('Intlk. Reset', wid, (sp, rb))
+        gb = self._create_prop_widget('Intlk. Reset', wid, (sp, ))
         lay.addWidget(gb, 1, 0, alignment=Qt.AlignCenter)
 
         pvname = self.get_pvname(propty='IntlkCtrlRepeat-Sel')
