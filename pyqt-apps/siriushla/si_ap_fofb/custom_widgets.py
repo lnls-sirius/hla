@@ -330,6 +330,11 @@ class PSConfigWidget(BaseObject, QWidget):
 
         self._config_type = 'si_fastorbcorr_psconfig'
         self._client = ConfigDBClient(config_type=self._config_type)
+        self._enblrule = (
+            '[{"name": "EnblRule", "property": "Enable", ' +
+            '"expression": "not ch[0]", "channels": [{"channel": "' +
+            self.devpref.substitute(propty='LoopState-Sts') +
+            '", "trigger": true}]}]')
 
         self._mat_sp = _ConnSignal(
             self.devpref.substitute(propty='PSConfigMat-SP'))
@@ -343,6 +348,7 @@ class PSConfigWidget(BaseObject, QWidget):
 
         lbl_load = QLabel('Load:', self, alignment=Qt.AlignTop)
         self._btn_load = CAPushButton('')
+        self._btn_load.rules = self._enblrule
         self._btn_load.setIcon(qta.icon('mdi.cloud-upload-outline'))
         self._btn_load.setToolTip('Load PSConfig from ServConf')
         self._btn_load.clicked.connect(self._open_load_config_servconf)
