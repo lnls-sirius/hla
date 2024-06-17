@@ -451,7 +451,11 @@ class EVG(BaseWidget):
         lay.addWidget(gb, 0, 0, alignment=Qt.AlignCenter)
 
         pvname = self.get_pvname(propty='IntlkCtrlRst-Cmd')
-        sp = PyDMStateButton(self, init_channel=pvname)
+        sp = SiriusPushButton(self, init_channel=pvname, pressValue=1)
+        sp.setIcon(qta.icon('fa5s.sync'))
+        sp.setObjectName('bt')
+        sp.setStyleSheet(
+            '#bt{min-width:25px; max-width:25px; icon-size:20px;}')
         gb = self._create_prop_widget('Intlk. Reset', wid, (sp, ))
         lay.addWidget(gb, 1, 0, alignment=Qt.AlignCenter)
 
