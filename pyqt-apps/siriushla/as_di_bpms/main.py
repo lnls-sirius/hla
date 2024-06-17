@@ -1,6 +1,7 @@
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QHBoxLayout, QVBoxLayout, QPushButton, \
-    QStackedLayout, QLabel, QGridLayout
+    QStackedLayout, QLabel, QGridLayout, QSizePolicy as QSzPlcy, \
+    QWidget
 from siriushla import util
 from siriushla.widgets import PyDMLedMultiChannel, SiriusConnectionSignal
 from siriushla.widgets.windows import create_window_from_widget
@@ -11,6 +12,7 @@ from siriushla.as_di_bpms.singlepass_data import SinglePassData
 from siriushla.as_di_bpms.trig_acq_config import ACQTrigConfigs
 from siriushla.as_di_bpms.monit import MonitData
 from siriushla.si_ap_orbintlk import BPMOrbIntlkDetailWindow
+from siriushla.common.afc_acq_core.trig_acq_config import AcqBaseWindow
 
 
 class BPMMain(BaseWidget):
@@ -29,12 +31,13 @@ class BPMMain(BaseWidget):
         hbl = QHBoxLayout(grpbx)
         hbl.addSpacing(10)
         hbl.addStretch()
-        chan2vals = {'RFFEasyn.CNCT': 1, 'ADCAD9510PllStatus-Mon': 1}
-        chan2vals = {self.get_pvname(k): v for k, v in chan2vals.items()}
-        led = PyDMLedMultiChannel(self, channels2values=chan2vals)
-        hbl.addWidget(led)
-        hbl.addSpacing(10)
-        hbl.addStretch()
+        if not self.is_pbpm:
+            chan2vals = {'RFFEasyn.CNCT': 1, 'ADCAD9510PllStatus-Mon': 1}
+            chan2vals = {self.get_pvname(k): v for k, v in chan2vals.items()}
+            led = PyDMLedMultiChannel(self, channels2values=chan2vals)
+            hbl.addWidget(led)
+            hbl.addSpacing(10)
+            hbl.addStretch()
         pbt = QPushButton('Open Settings')
         Window = create_window_from_widget(
             ParamsSettings, title=self.bpm+': Settings')
@@ -51,18 +54,26 @@ class BPMMain(BaseWidget):
         hbl = QHBoxLayout(grpbx)
         hbl.addSpacing(10)
         hbl.addStretch()
-        pbt = QPushButton('MultiBunch/SinglePass')
-        Window = create_window_from_widget(
-            TriggeredAcquisition,
-            title=self.bpm+': MultiBunch/SinglePass Acquisitions')
+        acqtitle = 'MultiBunch' + ('' if self.is_pbpm else '/SinglePass')
+        pbt = QPushButton(acqtitle)
+        if self.is_pbpm:
+            Window = PBPMGENAcquisition
+        else:
+            Window = create_window_from_widget(
+                TriggeredAcquisition,
+                title=f'{self.bpm}: {acqtitle} Acquisitions')
         util.connect_window(
             pbt, Window, parent=grpbx, prefix=self.prefix, bpm=self.bpm)
         hbl.addWidget(pbt)
         hbl.addSpacing(10)
         hbl.addStretch()
         pbt = QPushButton('PostMortem')
-        Window = create_window_from_widget(
-            PostMortemAcquisition, title=self.bpm+': PostMortem Acquisitions')
+        if self.is_pbpm:
+            Window = PBPMPMAcquisition
+        else:
+            Window = create_window_from_widget(
+                PostMortemAcquisition,
+                title=self.bpm+': PostMortem Acquisitions')
         util.connect_window(
             pbt, Window, parent=grpbx, prefix=self.prefix, bpm=self.bpm)
         hbl.addWidget(pbt)
@@ -92,7 +103,7 @@ class BPMMain(BaseWidget):
         self.layoutv.addSpacing(20)
         self.layoutv.addStretch()
 
-        if self.bpm.sec not in ['TB', 'BO', 'TS']:
+        if self.bpm.sec not in ['TB', 'BO', 'TS'] and not self.is_pbpm:
             grpbx = CustomGroupBox('Orbit Interlock', self)
             hbl = QHBoxLayout(grpbx)
             pbt = QPushButton('Open Interlock Settings', grpbx)
@@ -177,3 +188,60 @@ class PostMortemAcquisition(BaseWidget):
                 min-height:48em;}
             #config{
                 min-height:21em;}""")
+
+
+class PBPMBaseTriggeredAcquisition(AcqBaseWindow):
+    """Photon BPM Base Triggered Acquisition window."""
+
+    def __init__(self, parent=None, prefix='', bpm=''):
+        super().__init__(parent=parent, prefix=prefix, device=bpm)
+        self._setupUi()
+
+    def _setupUi(self):
+        self.title = QLabel(
+            '<h2>'+self.device.substitute(propty_name=self.ACQCORE) +
+            ' Acquisitions < /h2 >', alignment=Qt.AlignCenter)
+        self.title.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
+
+        self.wid_basic = self._basicSettingsWidget()
+        self.wid_trig = self._triggersWidget()
+        self.wid_graph = self._graphsWidget()
+
+        wid = QWidget()
+        lay = QGridLayout(wid)
+        lay.addWidget(self.title, 0, 0, 1, 2)
+        lay.addWidget(self.wid_graph, 1, 0, 2, 1)
+        lay.addWidget(self.wid_basic, 1, 1)
+        lay.addWidget(self.wid_trig, 2, 1)
+        lay.setColumnStretch(0, 3)
+        lay.setColumnStretch(1, 1)
+        lay.setRowStretch(0, 3)
+        lay.setRowStretch(1, 1)
+        self.setCentralWidget(wid)
+
+    def _graphsWidget(self):
+        # Antennas
+        gp_ant = self._create_graph(
+            'Antennas',
+            {
+                f'{self.device}:{self.ACQCORE}Ampl{ant}Data': f'Ant {ant}'
+                for ant in ('A', 'B', 'C', 'D')
+            }
+        )
+
+        wid = QWidget()
+        lay = QVBoxLayout(wid)
+        lay.addWidget(gp_ant)
+        return wid
+
+
+class PBPMGENAcquisition(PBPMBaseTriggeredAcquisition):
+    """PBPM General Triggered Acquisition window"""
+
+    ACQCORE = 'GEN'
+
+
+class PBPMPMAcquisition(PBPMBaseTriggeredAcquisition):
+    """PBPM Post Mortem Triggered Acquisition window"""
+
+    ACQCORE = 'PM'

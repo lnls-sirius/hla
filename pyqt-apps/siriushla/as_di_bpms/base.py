@@ -22,6 +22,7 @@ class BaseWidget(QWidget):
         super().__init__(parent)
         self.prefix = prefix
         self.bpm = _PVName(bpm)
+        self.is_pbpm = self.bpm.dev == 'PBPM'
         self.setObjectName(self.bpm.sec+'App')
         self.data_prefix = data_prefix
         self._chans = []
