@@ -20,7 +20,7 @@ from ..widgets import SiriusLedAlert, SiriusLabel, SiriusSpinbox, CALabel, \
 
 from .base import BaseObject, get_fofb_icon
 from .custom_widgets import RefOrbWidget, StatusDialog, BPMSwModeWidget, \
-    ControllersDetailDialog
+    ControllersDetailDialog, PSConfigWidget
 from .respmat import RespMatWidget
 from .graphics import KickWidget
 
@@ -362,28 +362,11 @@ class MainWindow(BaseObject, SiriusMainWindow):
                 glay2.addWidget(lbl, 3, 0)
                 glay2.addLayout(hbox, 3, 1, 1, 2)
 
-                ld_acc_filter = QLabel(
-                    'Filter: ', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
-                sel_acc_filter = SiriusEnumComboBox(
-                    self, pref.substitute(propty = 'FOFBAccFilter-Sel'))
-                sts_acc_filter = SiriusLabel(
-                    self, pref.substitute(propty='FOFBAccFilter-Sts'))
-
-                ld_filter_gain = QLabel(
-                    'Filter Gain: ', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
-                sb_filter_gain = SiriusSpinbox(
-                    self, self.devpref.substitute(propty='FOFBAccFilterGain-SP'))
-                lb_filter_gain = SiriusLabel(
-                    self, self.devpref.substitute(propty='FOFBAccFilterGain-RB'))
-
-                hbox = QHBoxLayout()
-                hbox.addWidget(sel_acc_filter)
-                hbox.addWidget(sts_acc_filter)
-                glay2.addWidget(ld_acc_filter, 4, 0)
-                glay2.addLayout(hbox, 4, 1, 1, 2)
-                glay2.addWidget(ld_filter_gain, 5, 0)
-                glay2.addWidget(sb_filter_gain, 5, 1)
-                glay2.addWidget(lb_filter_gain, 5, 2)
+                ld_psconfig = QLabel(
+                    'PS Config. Matrix: ', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+                wid_psconfig = PSConfigWidget(self, self.device, prefix=self.prefix)
+                glay2.addWidget(ld_psconfig, 4, 0)
+                glay2.addWidget(wid_psconfig, 4, 1, 2, 2)
 
                 glay.addLayout(glay2)
 

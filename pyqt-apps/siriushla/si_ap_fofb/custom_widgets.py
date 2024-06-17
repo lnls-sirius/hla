@@ -7,13 +7,13 @@ from qtpy.QtCore import Qt, Slot, QTimer
 from qtpy.QtGui import QColor, QPalette, QIcon
 from qtpy.QtWidgets import QComboBox, QSizePolicy as QSzPlcy, \
     QLabel, QGridLayout, QWidget, QHBoxLayout, QPushButton, \
-    QVBoxLayout, QTabWidget, QCheckBox, QScrollArea
+    QVBoxLayout, QTabWidget, QCheckBox, QScrollArea, QMessageBox
 
 import qtawesome as qta
 from matplotlib import cm
 
 from siriuspy.namesys import SiriusPVName as _PVName
-from siriuspy.clientconfigdb import ConfigDBClient
+from siriuspy.clientconfigdb import ConfigDBClient, ConfigDBException
 from siriuspy.devices import Device, FOFBCtrlDCC, FamFOFBControllers
 from siriuspy.diagbeam.bpm.csdev import Const as _csbpm
 
@@ -21,9 +21,10 @@ from pydm.widgets import PyDMPushButton
 
 from ..util import connect_window
 from ..widgets import SiriusConnectionSignal as _ConnSignal, SiriusLedAlert, \
-    SiriusDialog, PyDMLedMultiChannel, SiriusLabel, PyDMLed, SiriusLedState
+    SiriusDialog, PyDMLedMultiChannel, SiriusLabel, PyDMLed, SiriusLedState, \
+    CAPushButton
 from ..widgets.windows import create_window_from_widget
-from ..as_ap_configdb import LoadConfigDialog
+from ..as_ap_configdb import LoadConfigDialog, SaveConfigDialog
 from ..common.afc_acq_core import LogicalTriggers
 from ..as_ap_sofb.graphics.base import Graph
 from .base import BaseObject, get_fofb_icon
@@ -318,6 +319,76 @@ class BPMSwModeWidget(BaseObject, QWidget):
             return
         mode = _csbpm.SwModes._fields[value]
         self._set_swithing_mode(mode, do_sp=False)
+
+
+class PSConfigWidget(BaseObject, QWidget):
+    """Basic widget to set and get a configuration from ServConf."""
+
+    def __init__(self, parent, device, prefix=''):
+        BaseObject.__init__(self, device, prefix)
+        QWidget.__init__(self, parent)
+
+        self._config_type = 'si_fastorbcorr_psconfig'
+        self._client = ConfigDBClient(config_type=self._config_type)
+        self._enblrule = (
+            '[{"name": "EnblRule", "property": "Enable", ' +
+            '"expression": "not ch[0]", "channels": [{"channel": "' +
+            self.devpref.substitute(propty='LoopState-Sts') +
+            '", "trigger": true}]}]')
+
+        self._mat_sp = _ConnSignal(
+            self.devpref.substitute(propty='PSConfigMat-SP'))
+        self._mat_rb = _ConnSignal(
+            self.devpref.substitute(propty='PSConfigMat-RB'))
+
+        self._setupUi()
+
+    def _setupUi(self):
+        self._label_name = QLabel('')
+
+        lbl_load = QLabel('Load:', self, alignment=Qt.AlignTop)
+        self._btn_load = CAPushButton('')
+        self._btn_load.rules = self._enblrule
+        self._btn_load.setIcon(qta.icon('mdi.cloud-upload-outline'))
+        self._btn_load.setToolTip('Load PSConfig from ServConf')
+        self._btn_load.clicked.connect(self._open_load_config_servconf)
+
+        lbl_save = QLabel('Save:', self, alignment=Qt.AlignTop)
+        self._btn_save = CAPushButton('')
+        self._btn_save.setIcon(qta.icon('mdi.cloud-download-outline'))
+        self._btn_save.setToolTip('Save PSConfig to ServConf')
+        self._btn_save.clicked.connect(self._open_save_config_servconf)
+
+        lay = QGridLayout(self)
+        lay.addWidget(lbl_load, 0, 0)
+        lay.addWidget(self._btn_load, 0, 1)
+        lay.addWidget(lbl_save, 0, 2)
+        lay.addWidget(self._btn_save, 0, 3)
+        lay.addWidget(self._label_name, 1, 0, 1, 4)
+
+    def _open_load_config_servconf(self):
+        win = LoadConfigDialog(self._config_type, self)
+        win.configname.connect(self._set_psconfig)
+        win.show()
+
+    def _open_save_config_servconf(self):
+        win = SaveConfigDialog(self._config_type, self)
+        win.configname.connect(self._save_psconfig)
+        win.show()
+
+    def _set_psconfig(self, confname):
+        data = self._client.get_config_value(confname)
+        self._mat_sp.send_value_signal[_np.ndarray].emit(
+            _np.array(data).flatten())
+        self._label_name.setText('Loaded ' + confname)
+
+    def _save_psconfig(self, confname):
+        val = self._mat_rb.getvalue()
+        val = val.reshape(self._csorb.nr_chcv, -1)
+        try:
+            self._client.insert_config(confname, val.tolist())
+        except (ConfigDBException, TypeError) as err:
+            QMessageBox.warning(self, 'Warning', str(err), QMessageBox.Ok)
 
 
 class ControllersDetailDialog(BaseObject, SiriusDialog):

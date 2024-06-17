@@ -30,38 +30,41 @@ class ParamsSettings(BaseWidget):
         hbl = QHBoxLayout()
         hbl.setSpacing(15)
         hbl.addStretch()
-        grpbx = CustomGroupBox('Status', self)
-        gdl = QGridLayout(grpbx)
-        props = (
-            ('RFFEasyn.CNCT', 'RFFE Connected'),
-            ('ADCAD9510PllStatus-Mon', 'ADC Clock Synched'))
-        for i, prop in enumerate(props):
-            led = SiriusLedState(grpbx, init_channel=self.get_pvname(prop[0]))
-            led.setOffColor(led.Red)
-            lab = QLabel(prop[1], grpbx)
-            gdl.addWidget(led, i, 0)
-            gdl.addWidget(lab, i, 1)
-        hbl.addWidget(grpbx)
-        hbl.addStretch()
+        if not self.is_pbpm:
+            grpbx = CustomGroupBox('Status', self)
+            gdl = QGridLayout(grpbx)
+            props = (
+                ('RFFEasyn.CNCT', 'RFFE Connected'),
+                ('ADCAD9510PllStatus-Mon', 'ADC Clock Synched'))
+            for i, prop in enumerate(props):
+                led = SiriusLedState(grpbx, init_channel=self.get_pvname(prop[0]))
+                led.setOffColor(led.Red)
+                lab = QLabel(prop[1], grpbx)
+                gdl.addWidget(led, i, 0)
+                gdl.addWidget(lab, i, 1)
+            hbl.addWidget(grpbx)
+            hbl.addStretch()
 
         grpbx = CustomGroupBox('Advanced Settings', self)
         vbl2 = QVBoxLayout(grpbx)
         vbl2.setSpacing(10)
-        pbt = QPushButton('BPM')
+        pbt = QPushButton(self.bpm.dev)
         Window = create_window_from_widget(
             BPMAdvancedSettings, title=self.bpm+' Advanced Settings')
         util.connect_window(
             pbt, Window, parent=grpbx, prefix=self.prefix, bpm=self.bpm)
         vbl2.addWidget(pbt)
-        pbt = QPushButton('RFFE')
-        Window = create_window_from_widget(
-            RFFEAdvancedSettings, title=self.bpm+':RFFE Advanced Settings')
-        util.connect_window(
-            pbt, Window, parent=grpbx, prefix=self.prefix, bpm=self.bpm)
-        vbl2.addWidget(pbt)
+        if not self.is_pbpm:
+            pbt = QPushButton('RFFE')
+            Window = create_window_from_widget(
+                RFFEAdvancedSettings, title=self.bpm+':RFFE Advanced Settings')
+            util.connect_window(
+                pbt, Window, parent=grpbx, prefix=self.prefix, bpm=self.bpm)
+            vbl2.addWidget(pbt)
         pbt = QPushButton('Hardware')
         Window = create_window_from_widget(
-            HardwareSettings, title=self.bpm+': Hardware Settings')
+            PBPMHardwareSettings if self.is_pbpm else BPMHardwareSettings,
+            title=self.bpm+': Hardware Settings')
         util.connect_window(
             pbt, Window, parent=grpbx, prefix=self.prefix, bpm=self.bpm)
         vbl2.addWidget(pbt)
@@ -86,20 +89,22 @@ class ParamsSettings(BaseWidget):
         vbl.addWidget(grpbx)
         vbl.addSpacing(20)
         vbl.addStretch()
-        grpbx = self._create_formlayout_groupbox('Informations', (
-            ('INFOHarmonicNumber-RB', 'Harmonic Number'),
-            ('INFOMONITRate-RB', 'Monitor Rate'),
-            ('INFOFAcqRate-RB', 'FAcq Rate'),
-            ('INFOFOFBRate-RB', 'FOFB Rate'),
-            ('INFOTbTRate-RB', 'TbT Rate')),
-        )
-        vbl.addWidget(grpbx)
-        vbl.addSpacing(20)
-        vbl.addStretch()
-        grpbx = self._create_formlayout_groupbox(
-            'RFFE and Switching Settings', (
-                ('RFFEAtt-SP', 'RFFE Attenuation'),
-                ('SwMode-Sel', 'Switching Mode')))
+        if not self.is_pbpm:
+            grpbx = self._create_formlayout_groupbox('Informations', (
+                ('INFOHarmonicNumber-RB', 'Harmonic Number'),
+                ('INFOMONITRate-RB', 'Monitor Rate'),
+                ('INFOFAcqRate-RB', 'FAcq Rate'),
+                ('INFOFOFBRate-RB', 'FOFB Rate'),
+                ('INFOTbTRate-RB', 'TbT Rate')),
+            )
+            vbl.addWidget(grpbx)
+            vbl.addSpacing(20)
+            vbl.addStretch()
+        title = ('' if self.is_pbpm else 'RFFE and ') + 'Switching Settings'
+        formlist = (('SwMode-Sel', 'Switching Mode'), )
+        if not self.is_pbpm:
+            formlist += ('RFFEAtt-SP', 'RFFE Attenuation')
+        grpbx = self._create_formlayout_groupbox(title, formlist)
         vbl.addWidget(grpbx)
         vbl.addSpacing(20)
         vbl.addStretch()
@@ -117,7 +122,7 @@ class BPMAdvancedSettings(BaseWidget):
         lab.setAlignment(Qt.AlignCenter)
         gdl.addWidget(lab, 0, 0, 1, 4)
 
-        grpbx = self._create_formlayout_groupbox('Switching', (
+        conflist = (
             ('SwMode-Sel', 'Mode'),
             ('SwPhaseSyncEn-Sel', 'Sync Enable', ['statebutton', 'ledstate']),
             ('SwDeswapDly-SP', 'Delay', ['lineedit', 'label']),
@@ -132,23 +137,49 @@ class BPMAdvancedSettings(BaseWidget):
             ('SwInvGainB-SP', 'Inverse Gain B', 12),
             ('SwInvGainC-SP', 'Inverse Gain C', 12),
             ('SwInvGainD-SP', 'Inverse Gain D', 12),
-        ))
-        gdl.addWidget(grpbx, 1, 0, 2, 2)
+        )
+        if self.is_pbpm:
+            conflist += (
+                ('', '', ()),
+                ('', '<h4>Antenna Offsets</h4>', ()),
+                ('SwDirOffsetA-SP', 'Direct Offset A', 12),
+                ('SwDirOffsetB-SP', 'Direct Offset B', 12),
+                ('SwDirOffsetC-SP', 'Direct Offset C', 12),
+                ('SwDirOffsetD-SP', 'Direct Offset D', 12),
+                ('SwInvOffsetA-SP', 'Inverse Offset A', 12),
+                ('SwInvOffsetB-SP', 'Inverse Offset B', 12),
+                ('SwInvOffsetC-SP', 'Inverse Offset C', 12),
+                ('SwInvOffsetD-SP', 'Inverse Offset D', 12),
+            )
 
-        rate2pos = {
-            'Monit': (3, 0, 1, 2),
-            'FAcq': (1, 2, 1, 2),
-            'FOFB': (2, 2, 1, 2),
-            'TbT': (3, 2, 1, 2),
-        }
+        grpbx = self._create_formlayout_groupbox('Switching', conflist)
+
+        if self.is_pbpm:
+            gdl.addWidget(grpbx, 1, 0, 4, 2)
+            rate2pos = {
+                'Monit': (1, 2, 1, 2),
+                'FAcq': (2, 2, 1, 2),
+                'FOFB': (3, 2, 1, 2),
+                'TbT': (4, 2, 1, 2),
+            }
+        else:
+            gdl.addWidget(grpbx, 1, 0, 2, 2)
+            rate2pos = {
+                'Monit': (3, 0, 1, 2),
+                'FAcq': (1, 2, 1, 2),
+                'FOFB': (2, 2, 1, 2),
+                'TbT': (3, 2, 1, 2),
+            }
 
         for rate, pos in rate2pos.items():
             items = list()
             if rate == 'Monit':
-                items.extend([
-                    ('MonitEnable-Sel', 'Enable', ['statebutton', 'ledstate']),
-                    ('MONITUpdtTime-SP', 'Update Time'),
-                ])
+                if not self.is_pbpm:
+                    items.append(
+                        ('MonitEnable-Sel', 'Enable',
+                         ['statebutton', 'ledstate'])
+                    )
+                items.append(('MONITUpdtTime-SP', 'Update Time'))
             if rate != 'FOFB':
                 items.append(
                     (f'{rate}PhaseSyncDly-SP', 'Delay', ['lineedit', 'label']))
@@ -176,22 +207,31 @@ class BPMAdvancedSettings(BaseWidget):
             grpbx = self._create_formlayout_groupbox(rate, items)
             gdl.addWidget(grpbx, *pos)
 
-            grpbx = TriggersLauncherWidget(
-                self, prefix=self.prefix, bpm=self.bpm)
-            gdl.addWidget(grpbx, 4, 0, 1, 3)
+            hrow = QHBoxLayout()
+            hrow.setContentsMargins(0, 0, 0, 0)
 
-            grpbx = CustomGroupBox('ACQ Polynomials', self)
-            hbl = QHBoxLayout(grpbx)
-            hbl.setSpacing(10)
-            hbl.addStretch()
-            pbt = QPushButton('Settings')
-            Window = create_window_from_widget(
-                PolySettings, title=self.bpm+': ACQ Polynomials')
-            util.connect_window(
-                pbt, Window, parent=self, prefix=self.prefix, bpm=self.bpm)
-            hbl.addWidget(pbt)
-            hbl.addStretch()
-            gdl.addWidget(grpbx, 4, 3, 1, 1)
+            acqcores = ['GEN', 'PM'] if self.is_pbpm else ['ACQ', 'PM']
+            grpbx = TriggersLauncherWidget(
+                self, prefix=self.prefix, bpm=self.bpm, acqcores=acqcores)
+            hrow.addWidget(grpbx)
+
+            if not self.is_pbpm:
+                grpbx = CustomGroupBox('ACQ Polynomials', self)
+                hbl = QHBoxLayout(grpbx)
+                hbl.setSpacing(10)
+                hbl.addStretch()
+                pbt = QPushButton('Settings')
+                Window = create_window_from_widget(
+                    PolySettings, title=self.bpm+': ACQ Polynomials'
+                )
+                util.connect_window(
+                    pbt, Window, parent=self, prefix=self.prefix, bpm=self.bpm
+                )
+                hbl.addWidget(pbt)
+                hbl.addStretch()
+                hrow.addWidget(grpbx)
+
+            gdl.addLayout(hrow, 5, 0, 1, 4)
 
             gdl.setColumnStretch(0, 1)
             gdl.setColumnStretch(1, 1)
@@ -202,7 +242,7 @@ class BPMAdvancedSettings(BaseWidget):
 class TriggersLauncherWidget(BaseWidget):
 
     def __init__(
-            self, parent=None, prefix='', bpm='', acqcores=['ACQ', 'ACQ_PM']):
+            self, parent=None, prefix='', bpm='', acqcores=['ACQ', 'PM']):
         super().__init__(parent=parent, prefix=prefix, bpm=bpm)
         self.acqcores = acqcores
         self.setupui()
@@ -228,7 +268,16 @@ class TriggersLauncherWidget(BaseWidget):
                 names=_csbpm.LogTrigIntern._fields, trig_tp='')
             hbl.addWidget(pbt)
             hbl.addStretch()
-        if 'ACQ_PM' in self.acqcores:
+        if 'GEN' in self.acqcores:
+            pbt = QPushButton('General Logical Triggers')
+            wind = create_window_from_widget(
+                LogicalTriggers, title=self.bpm+': General Logical Triggers')
+            util.connect_window(
+                pbt, wind, parent=self, prefix=self.prefix, device=self.bpm,
+                names=_csbpm.LogTrigIntern._fields, trig_tp='_GEN')
+            hbl.addWidget(pbt)
+            hbl.addStretch()
+        if 'PM' in self.acqcores or 'ACQ_PM' in self.acqcores:
             pbt = QPushButton('Post-Mortem Logical Triggers')
             wind = create_window_from_widget(
                 LogicalTriggers,
@@ -350,7 +399,7 @@ class RFFEAdvancedSettings(BaseWidget):
             gdl.addWidget(grpbx, 2, i)
 
 
-class HardwareSettings(BaseWidget):
+class BPMHardwareSettings(BaseWidget):
 
     def __init__(self, parent=None, prefix='', bpm=''):
         super().__init__(parent=parent, prefix=prefix, bpm=bpm)
@@ -424,3 +473,26 @@ class HardwareSettings(BaseWidget):
             (f'ADC{chan}TestMode-SP', 'Test mode', ['lineedit', ]),
             (f'ADC{chan}RstModes-Sel', 'Reset Mode', ['combo']),
         ))
+
+
+class PBPMHardwareSettings(BaseWidget):
+
+    def __init__(self, parent=None, prefix='', bpm=''):
+        super().__init__(parent=parent, prefix=prefix, bpm=bpm)
+        self.setupui()
+
+    def setupui(self):
+        lay = QGridLayout(self)
+
+        lab = QLabel(
+            '<h2>'+self.bpm+' Hardware Settings</h2>', self,
+            alignment=Qt.AlignCenter)
+        lay.addWidget(lab, 0, 0, 1, 2)
+
+        lay.addWidget(self._setupFMCPICOWidget(), 1, 0)
+
+    def _setupFMCPICOWidget(self):
+        return self._create_formlayout_groupbox(
+            'FMCPICO',
+            ((f'FMCPICORngR{i}-Sel', f'RNG R{i}') for i in range(4))
+        )
