@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>siriushla.as_rf_control.details &mdash; siriushla 1.2.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=6efca38a"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            siriushla
+          </a>
+              <div class="version">
+                1.2.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">GUIs:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_configdb.html">siriushla.as_ap_configdb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_currinfo.html">siriushla.as_ap_currinfo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_energybutton.html">siriushla.as_ap_energybutton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_injcontrol.html">siriushla.as_ap_injcontrol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_injection.html">siriushla.as_ap_injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_launcher.html">siriushla.as_ap_launcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_machshift.html">siriushla.as_ap_machshift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_macreport.html">siriushla.as_ap_macreport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_magoffconv.html">siriushla.as_ap_magoffconv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_measure.html">siriushla.as_ap_measure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_monitor.html">siriushla.as_ap_monitor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_opticscorr.html">siriushla.as_ap_opticscorr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_posang.html">siriushla.as_ap_posang</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_rabpmmon.html">siriushla.as_ap_rabpmmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_radmon.html">siriushla.as_ap_radmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_sofb.html">siriushla.as_ap_sofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_bpms.html">siriushla.as_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_dccts.html">siriushla.as_di_dccts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_icts.html">siriushla.as_di_icts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_scrns.html">siriushla.as_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_tune.html">siriushla.as_di_tune</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_vlight.html">siriushla.as_di_vlight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_commands.html">siriushla.as_ps_commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_control.html">siriushla.as_ps_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_cycle.html">siriushla.as_ps_cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_diag.html">siriushla.as_ps_diag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_pu_control.html">siriushla.as_pu_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_rf_control.html">siriushla.as_rf_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ti_control.html">siriushla.as_ti_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.bl_ap_imgproc.html">siriushla.bl_ap_imgproc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.bo_ap_ramp.html">siriushla.bo_ap_ramp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.common.html">siriushla.common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_ap_mps.html">siriushla.li_ap_mps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_di_bpms.html">siriushla.li_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_di_scrns.html">siriushla.li_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_eg_control.html">siriushla.li_eg_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_pu_modltr.html">siriushla.li_pu_modltr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_rf_llrf.html">siriushla.li_rf_llrf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_va_control.html">siriushla.li_va_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_fofb.html">siriushla.si_ap_fofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_genstatus.html">siriushla.si_ap_genstatus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_idff.html">siriushla.si_ap_idff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_orbintlk.html">siriushla.si_ap_orbintlk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_bbb.html">siriushla.si_di_bbb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_equalize_bpms.html">siriushla.si_di_equalize_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_scraps.html">siriushla.si_di_scraps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_id_control.html">siriushla.si_id_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.tb_di_slits.html">siriushla.tb_di_slits</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Widgets:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.html">Sirius HLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.widgets.html">Widgets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Source Code:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lnls-sirius/hla">HLA Github</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">siriushla</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">siriushla.as_rf_control.details</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for siriushla.as_rf_control.details</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Detail windows.&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">pyqtgraph</span> <span class="kn">import</span> <span class="n">BarGraphItem</span><span class="p">,</span> <span class="n">PlotWidget</span>
+<span class="kn">from</span> <span class="nn">qtpy.QtCore</span> <span class="kn">import</span> <span class="n">Qt</span><span class="p">,</span> <span class="n">QTimer</span>
+<span class="kn">from</span> <span class="nn">qtpy.QtGui</span> <span class="kn">import</span> <span class="n">QColor</span>
+<span class="kn">from</span> <span class="nn">qtpy.QtWidgets</span> <span class="kn">import</span> <span class="n">QCheckBox</span><span class="p">,</span> <span class="n">QComboBox</span><span class="p">,</span> <span class="n">QFormLayout</span><span class="p">,</span> <span class="n">QGridLayout</span><span class="p">,</span> \
+    <span class="n">QGroupBox</span><span class="p">,</span> <span class="n">QHBoxLayout</span><span class="p">,</span> <span class="n">QLabel</span><span class="p">,</span> <span class="n">QSizePolicy</span> <span class="k">as</span> <span class="n">QSzPlcy</span><span class="p">,</span> <span class="n">QSpacerItem</span><span class="p">,</span> \
+    <span class="n">QTabWidget</span><span class="p">,</span> <span class="n">QVBoxLayout</span><span class="p">,</span> <span class="n">QWidget</span>
+
+<span class="kn">from</span> <span class="nn">..widgets</span> <span class="kn">import</span> <span class="n">DetachableTabWidget</span><span class="p">,</span> <span class="n">PyDMLedMultiChannel</span><span class="p">,</span> \
+    <span class="n">PyDMStateButton</span><span class="p">,</span> <span class="n">SiriusConnectionSignal</span> <span class="k">as</span> <span class="n">_ConnSignal</span><span class="p">,</span> <span class="n">SiriusDialog</span><span class="p">,</span> \
+    <span class="n">SiriusLabel</span><span class="p">,</span> <span class="n">SiriusLedAlert</span><span class="p">,</span> <span class="n">SiriusSpinbox</span><span class="p">,</span> <span class="n">SiriusWaveformPlot</span>
+<span class="kn">from</span> <span class="nn">.util</span> <span class="kn">import</span> <span class="n">SEC_2_CHANNELS</span>
+
+
+<div class="viewcode-block" id="CavityStatusDetails">
+<a class="viewcode-back" href="../../../siriushla.as_rf_control.html#siriushla.as_rf_control.details.CavityStatusDetails">[docs]</a>
+<span class="k">class</span> <span class="nc">CavityStatusDetails</span><span class="p">(</span><span class="n">SiriusDialog</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Cavity Status Datails.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">section</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="n">prefix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">+=</span> <span class="p">(</span><span class="s1">&#39;-&#39;</span> <span class="k">if</span> <span class="n">prefix</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">prefix</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">section</span> <span class="o">=</span> <span class="n">section</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">chs</span> <span class="o">=</span> <span class="n">SEC_2_CHANNELS</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">section</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">section</span> <span class="o">+</span> <span class="s1">&#39;App&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">section</span> <span class="o">+</span> <span class="s1">&#39; Cavity Detailed Status&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setupUi</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">lay_temp1</span> <span class="o">=</span> <span class="n">QFormLayout</span><span class="p">()</span>
+        <span class="n">lay_temp1</span><span class="o">.</span><span class="n">setHorizontalSpacing</span><span class="p">(</span><span class="mi">9</span><span class="p">)</span>
+        <span class="n">lay_temp1</span><span class="o">.</span><span class="n">setVerticalSpacing</span><span class="p">(</span><span class="mi">9</span><span class="p">)</span>
+        <span class="n">lay_temp1</span><span class="o">.</span><span class="n">setLabelAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span><span class="p">)</span>
+        <span class="n">lay_temp1</span><span class="o">.</span><span class="n">setFormAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignTop</span><span class="p">)</span>
+        <span class="n">lb_temp1</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Cell and Coupler</span><span class="se">\n</span><span class="s1">Temperatures</span><span class="se">\n</span><span class="s1">PT100&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">lb_temp1</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span>
+            <span class="s1">&#39;font-weight:bold; qproperty-alignment:AlignCenter;&#39;</span><span class="p">)</span>
+        <span class="n">lay_temp1</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">lb_temp1</span><span class="p">)</span>
+        <span class="n">lims</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">chs</span><span class="p">[</span><span class="s1">&#39;Cav Sts&#39;</span><span class="p">][</span><span class="s1">&#39;Temp&#39;</span><span class="p">][</span><span class="s1">&#39;Cells Limits&#39;</span><span class="p">]</span>
+        <span class="n">tooltip</span> <span class="o">=</span> <span class="s1">&#39;Interlock limits: </span><span class="se">\n</span><span class="s1">Min: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">lims</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> \
+            <span class="s1">&#39;°C, Max: &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">lims</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">+</span><span class="s1">&#39;°C&#39;</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">cell</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">chs</span><span class="p">[</span><span class="s1">&#39;Cav Sts&#39;</span><span class="p">][</span><span class="s1">&#39;Temp&#39;</span><span class="p">][</span><span class="s1">&#39;Cells&#39;</span><span class="p">]):</span>
+            <span class="n">lbl</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="o">+</span><span class="n">cell</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">lbl</span><span class="o">.</span><span class="n">showUnits</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">lbl</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s1">&#39;min-width:3.5em; max-width:3.5em;&#39;</span><span class="p">)</span>
+            <span class="n">led</span> <span class="o">=</span> <span class="n">PyDMLedMultiChannel</span><span class="p">(</span>
+                <span class="bp">self</span><span class="p">,</span>
+                <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="o">+</span><span class="n">cell</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="p">{</span><span class="s1">&#39;comp&#39;</span><span class="p">:</span> <span class="s1">&#39;wt&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="n">lims</span><span class="p">},</span>
+                 <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="o">+</span><span class="n">cell</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;T-Mon&#39;</span><span class="p">,</span> <span class="s1">&#39;TUp-Mon&#39;</span><span class="p">):</span> <span class="mi">0</span><span class="p">,</span>
+                 <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="o">+</span><span class="n">cell</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;T-Mon&#39;</span><span class="p">,</span> <span class="s1">&#39;TDown-Mon&#39;</span><span class="p">):</span> <span class="mi">0</span><span class="p">})</span>
+            <span class="n">led</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="n">tooltip</span><span class="p">)</span>
+            <span class="n">hbox</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+            <span class="n">hbox</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignLeft</span><span class="p">)</span>
+            <span class="n">hbox</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl</span><span class="p">)</span>
+            <span class="n">hbox</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">led</span><span class="p">)</span>
+            <span class="n">lay_temp1</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="s1">&#39;Cell &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;: &#39;</span><span class="p">,</span> <span class="n">hbox</span><span class="p">)</span>
+        <span class="n">ch_coup</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">chs</span><span class="p">[</span><span class="s1">&#39;Cav Sts&#39;</span><span class="p">][</span><span class="s1">&#39;Temp&#39;</span><span class="p">][</span><span class="s1">&#39;Coupler&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">lims_coup</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">chs</span><span class="p">[</span><span class="s1">&#39;Cav Sts&#39;</span><span class="p">][</span><span class="s1">&#39;Temp&#39;</span><span class="p">][</span><span class="s1">&#39;Coupler Limits&#39;</span><span class="p">]</span>
+        <span class="n">lb_coup</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="o">+</span><span class="n">ch_coup</span><span class="p">)</span>
+        <span class="n">lb_coup</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s1">&#39;min-width:3.5em; max-width:3.5em;&#39;</span><span class="p">)</span>
+        <span class="n">lb_coup</span><span class="o">.</span><span class="n">showUnits</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">led_coup</span> <span class="o">=</span> <span class="n">PyDMLedMultiChannel</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="o">+</span><span class="n">ch_coup</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;comp&#39;</span><span class="p">:</span> <span class="s1">&#39;wt&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="n">lims_coup</span><span class="p">},</span>
+             <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="o">+</span><span class="n">ch_coup</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;T-Mon&#39;</span><span class="p">,</span> <span class="s1">&#39;TUp-Mon&#39;</span><span class="p">):</span> <span class="mi">0</span><span class="p">,</span>
+             <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="o">+</span><span class="n">ch_coup</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;T-Mon&#39;</span><span class="p">,</span> <span class="s1">&#39;TDown-Mon&#39;</span><span class="p">):</span> <span class="mi">0</span><span class="p">})</span>
+        <span class="n">led_coup</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span>
+            <span class="s1">&#39;Interlock limits: </span><span class="se">\n</span><span class="s1">&#39;</span>
+            <span class="s1">&#39;Min: &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">lims_coup</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="s1">&#39;°C, Max: &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">lims_coup</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">+</span><span class="s1">&#39;°C&#39;</span><span class="p">)</span>
+        <span class="n">hb_coup</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">hb_coup</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignLeft</span><span class="p">)</span>
+        <span class="n">hb_coup</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lb_coup</span><span class="p">)</span>
+        <span class="n">hb_coup</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">led_coup</span><span class="p">)</span>
+        <span class="n">lay_temp1</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="s1">&#39;Coupler: &#39;</span><span class="p">,</span> <span class="n">hb_coup</span><span class="p">)</span>
+
+        <span class="n">lay_temp2</span> <span class="o">=</span> <span class="n">QFormLayout</span><span class="p">()</span>
+        <span class="n">lay_temp2</span><span class="o">.</span><span class="n">setHorizontalSpacing</span><span class="p">(</span><span class="mi">9</span><span class="p">)</span>
+        <span class="n">lay_temp2</span><span class="o">.</span><span class="n">setVerticalSpacing</span><span class="p">(</span><span class="mi">9</span><span class="p">)</span>
+        <span class="n">lay_temp2</span><span class="o">.</span><span class="n">setLabelAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span><span class="p">)</span>
+        <span class="n">lay_temp2</span><span class="o">.</span><span class="n">setFormAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignTop</span> <span class="o">|</span> <span class="n">Qt</span><span class="o">.</span><span class="n">AlignHCenter</span><span class="p">)</span>
+        <span class="n">lb_temp2</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Cell</span><span class="se">\n</span><span class="s1">Temperatures</span><span class="se">\n</span><span class="s1">Thermostats&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">lb_temp2</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span>
+            <span class="s1">&#39;font-weight:bold; qproperty-alignment:AlignCenter;&#39;</span><span class="p">)</span>
+        <span class="n">lay_temp2</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">lb_temp2</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">cell</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">chs</span><span class="p">[</span><span class="s1">&#39;Cav Sts&#39;</span><span class="p">][</span><span class="s1">&#39;Temp&#39;</span><span class="p">][</span><span class="s1">&#39;Cells&#39;</span><span class="p">]):</span>
+            <span class="n">led</span> <span class="o">=</span> <span class="n">SiriusLedAlert</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="n">led</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="s1">&#39;Interlock limits:</span><span class="se">\n</span><span class="s1">Max: 60°C&#39;</span><span class="p">)</span>
+            <span class="n">led</span><span class="o">.</span><span class="n">channel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="o">+</span><span class="n">cell</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;T-Mon&#39;</span><span class="p">,</span> <span class="s1">&#39;Tms-Mon&#39;</span><span class="p">)</span>
+            <span class="n">lay_temp2</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="s1">&#39;Cell &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;: &#39;</span><span class="p">,</span> <span class="n">led</span><span class="p">)</span>
+
+        <span class="n">lay_dtemp</span> <span class="o">=</span> <span class="n">QFormLayout</span><span class="p">()</span>
+        <span class="n">lay_dtemp</span><span class="o">.</span><span class="n">setHorizontalSpacing</span><span class="p">(</span><span class="mi">9</span><span class="p">)</span>
+        <span class="n">lay_dtemp</span><span class="o">.</span><span class="n">setVerticalSpacing</span><span class="p">(</span><span class="mi">9</span><span class="p">)</span>
+        <span class="n">lay_dtemp</span><span class="o">.</span><span class="n">setLabelAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span><span class="p">)</span>
+        <span class="n">lay_dtemp</span><span class="o">.</span><span class="n">setFormAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignTop</span> <span class="o">|</span> <span class="n">Qt</span><span class="o">.</span><span class="n">AlignHCenter</span><span class="p">)</span>
+        <span class="n">lb_dtemp</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Disc</span><span class="se">\n</span><span class="s1">Temperatures</span><span class="se">\n</span><span class="s1">Thermostats&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">lb_dtemp</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span>
+            <span class="s1">&#39;font-weight:bold; qproperty-alignment:AlignCenter;&#39;</span><span class="p">)</span>
+        <span class="n">lay_dtemp</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">lb_dtemp</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">disc</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">chs</span><span class="p">[</span><span class="s1">&#39;Cav Sts&#39;</span><span class="p">][</span><span class="s1">&#39;Temp&#39;</span><span class="p">][</span><span class="s1">&#39;Discs&#39;</span><span class="p">]):</span>
+            <span class="n">led</span> <span class="o">=</span> <span class="n">SiriusLedAlert</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="n">led</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="s1">&#39;Interlock limits:</span><span class="se">\n</span><span class="s1">Max: 60°C&#39;</span><span class="p">)</span>
+            <span class="n">led</span><span class="o">.</span><span class="n">channel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="o">+</span><span class="n">disc</span>
+            <span class="n">lay_dtemp</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="s1">&#39;Disc &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;: &#39;</span><span class="p">,</span> <span class="n">led</span><span class="p">)</span>
+
+        <span class="n">lay_flwrt</span> <span class="o">=</span> <span class="n">QFormLayout</span><span class="p">()</span>
+        <span class="n">lay_flwrt</span><span class="o">.</span><span class="n">setHorizontalSpacing</span><span class="p">(</span><span class="mi">9</span><span class="p">)</span>
+        <span class="n">lay_flwrt</span><span class="o">.</span><span class="n">setVerticalSpacing</span><span class="p">(</span><span class="mi">9</span><span class="p">)</span>
+        <span class="n">lay_flwrt</span><span class="o">.</span><span class="n">setLabelAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span><span class="p">)</span>
+        <span class="n">lay_flwrt</span><span class="o">.</span><span class="n">setFormAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignTop</span><span class="p">)</span>
+        <span class="n">lb_flwrf</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Flow Switches&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">lb_flwrf</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span>
+            <span class="s1">&#39;font-weight:bold; qproperty-alignment:AlignCenter;&#39;</span><span class="p">)</span>
+        <span class="n">lay_flwrt</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">lb_flwrf</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">flwsw</span><span class="p">,</span> <span class="n">pvn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">chs</span><span class="p">[</span><span class="s1">&#39;Cav Sts&#39;</span><span class="p">][</span><span class="s1">&#39;FlwRt&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">led</span> <span class="o">=</span> <span class="n">SiriusLedAlert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="o">+</span><span class="n">pvn</span><span class="p">)</span>
+            <span class="n">lay_flwrt</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">flwsw</span><span class="o">+</span><span class="s1">&#39;: &#39;</span><span class="p">,</span> <span class="n">led</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">led_couppressure</span> <span class="o">=</span> <span class="n">SiriusLedAlert</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">chs</span><span class="p">[</span><span class="s1">&#39;Cav Sts&#39;</span><span class="p">][</span><span class="s1">&#39;Vac&#39;</span><span class="p">][</span><span class="s1">&#39;Coupler ok&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">led_pressure</span> <span class="o">=</span> <span class="n">SiriusLedAlert</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">led_pressure</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="s1">&#39;Interlock limits:</span><span class="se">\n</span><span class="s1">Max: 5e-7mBar&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">led_pressure</span><span class="o">.</span><span class="n">channel</span> <span class="o">=</span> \
+            <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">chs</span><span class="p">[</span><span class="s1">&#39;Cav Sts&#39;</span><span class="p">][</span><span class="s1">&#39;Vac&#39;</span><span class="p">][</span><span class="s1">&#39;Cells ok&#39;</span><span class="p">]</span>
+        <span class="n">lay_vac</span> <span class="o">=</span> <span class="n">QFormLayout</span><span class="p">()</span>
+        <span class="n">lay_vac</span><span class="o">.</span><span class="n">setHorizontalSpacing</span><span class="p">(</span><span class="mi">9</span><span class="p">)</span>
+        <span class="n">lay_vac</span><span class="o">.</span><span class="n">setVerticalSpacing</span><span class="p">(</span><span class="mi">9</span><span class="p">)</span>
+        <span class="n">lay_vac</span><span class="o">.</span><span class="n">setLabelAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span><span class="p">)</span>
+        <span class="n">lay_vac</span><span class="o">.</span><span class="n">setFormAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignTop</span><span class="p">)</span>
+        <span class="n">lb_vac</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Vacuum&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">lb_vac</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span>
+            <span class="s1">&#39;font-weight:bold; qproperty-alignment:AlignCenter;&#39;</span><span class="p">)</span>
+        <span class="n">lay_flwrt</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">lb_vac</span><span class="p">)</span>
+        <span class="n">lay_vac</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="s1">&#39;Pressure Sensor: &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">led_couppressure</span><span class="p">)</span>
+        <span class="n">lay_vac</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="s1">&#39;Vacuum: &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">led_pressure</span><span class="p">)</span>
+
+        <span class="n">lbl</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Cavity - Detailed Status&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">lbl</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span>
+            <span class="s1">&#39;font-weight:bold; qproperty-alignment:AlignCenter;&#39;</span><span class="p">)</span>
+        <span class="n">lay</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setHorizontalSpacing</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setVerticalSpacing</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">lay_temp1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">lay_temp2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">lay_dtemp</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">lay_flwrt</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">lay_vac</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            SiriusLabel{</span>
+<span class="s2">                qproperty-alignment: AlignLeft;</span>
+<span class="s2">            }</span>
+<span class="s2">            QLed{</span>
+<span class="s2">                max-width: 1.29em;</span>
+<span class="s2">            }</span>
+<span class="s2">            .QLabel{</span>
+<span class="s2">                max-height:4em;</span>
+<span class="s2">                qproperty-alignment: AlignRight;</span>
+<span class="s2">            }&quot;&quot;&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="TransmLineStatusDetails">
+<a class="viewcode-back" href="../../../siriushla.as_rf_control.html#siriushla.as_rf_control.details.TransmLineStatusDetails">[docs]</a>
+<span class="k">class</span> <span class="nc">TransmLineStatusDetails</span><span class="p">(</span><span class="n">SiriusDialog</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Transmission Line Status Details.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">section</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="n">prefix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">+=</span> <span class="p">(</span><span class="s1">&#39;-&#39;</span> <span class="k">if</span> <span class="n">prefix</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">prefix</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">section</span> <span class="o">=</span> <span class="n">section</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">chs</span> <span class="o">=</span> <span class="n">SEC_2_CHANNELS</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">section</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">section</span> <span class="o">+</span> <span class="s1">&#39;App&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">section</span> <span class="o">+</span> <span class="s1">&#39; Transm. Line Detailed Status&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setupUi</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">lay</span> <span class="o">=</span> <span class="n">QFormLayout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setLabelAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;&lt;h4&gt;Transm. Line - Detailed Status&lt;/h4&gt;&#39;</span><span class="p">))</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="n">QSpacerItem</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">QSzPlcy</span><span class="o">.</span><span class="n">Ignored</span><span class="p">,</span> <span class="n">QSzPlcy</span><span class="o">.</span><span class="n">Fixed</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">widget_id</span><span class="p">,</span> <span class="n">pvname</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">chs</span><span class="p">[</span><span class="s1">&#39;TL Sts&#39;</span><span class="p">][</span><span class="s1">&#39;label_led&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">wid</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">()</span>
+            <span class="n">hlay</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+            <span class="n">wid</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">hlay</span><span class="p">)</span>
+            <span class="n">hlay</span><span class="o">.</span><span class="n">setContentsMargins</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+            <span class="n">si_lbl_wid</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span>
+                <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="o">+</span><span class="n">pvname</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">])</span>
+            <span class="n">si_lbl_wid</span><span class="o">.</span><span class="n">showUnits</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">si_lbl_wid</span><span class="o">.</span><span class="n">setMaximumWidth</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+            <span class="n">si_lbl_wid</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s1">&#39;qproperty-alignment: AlignLeft;&#39;</span><span class="p">)</span>
+            <span class="n">hlay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">si_lbl_wid</span><span class="p">)</span>
+
+            <span class="n">si_led_wid</span> <span class="o">=</span> <span class="n">SiriusLedAlert</span><span class="p">(</span>
+                <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="o">+</span><span class="n">pvname</span><span class="p">[</span><span class="s1">&#39;led&#39;</span><span class="p">])</span>
+            <span class="n">hlay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">si_led_wid</span><span class="p">)</span>
+
+            <span class="n">lay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">widget_id</span><span class="p">,</span> <span class="n">wid</span><span class="p">)</span>
+
+        <span class="n">wid</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">()</span>
+        <span class="n">hlay</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">wid</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">hlay</span><span class="p">)</span>
+        <span class="n">hlay</span><span class="o">.</span><span class="n">setContentsMargins</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">lb_circtin</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">chs</span><span class="p">[</span><span class="s1">&#39;TL Sts&#39;</span><span class="p">][</span><span class="s1">&#39;Circulator Temp. In&#39;</span><span class="p">][</span><span class="s1">&#39;label&#39;</span><span class="p">])</span>
+        <span class="n">lb_circtin</span><span class="o">.</span><span class="n">showUnits</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">lb_circtin</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s1">&#39;qproperty-alignment: AlignLeft;&#39;</span><span class="p">)</span>
+        <span class="n">hlay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lb_circtin</span><span class="p">)</span>
+
+        <span class="n">si_led_wid</span> <span class="o">=</span> <span class="n">PyDMLedMultiChannel</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">chs</span><span class="p">[</span><span class="s1">&#39;TL Sts&#39;</span><span class="p">][</span><span class="s1">&#39;Circulator Temp. In&#39;</span><span class="p">][</span><span class="s1">&#39;led&#39;</span><span class="p">])</span>
+        <span class="n">hlay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">si_led_wid</span><span class="p">)</span>
+
+        <span class="n">lay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="s1">&#39;Circulator T In: &#39;</span><span class="p">,</span> <span class="n">wid</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">widget_id</span><span class="p">,</span> <span class="n">pvname</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">chs</span><span class="p">[</span><span class="s1">&#39;TL Sts&#39;</span><span class="p">][</span><span class="s1">&#39;label&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">section</span> <span class="o">==</span> <span class="s1">&#39;BO&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="s1">&#39;Combiner&#39;</span> <span class="o">==</span> <span class="n">widget_id</span><span class="p">)):</span>
+                <span class="n">si_lbl_wid</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="o">+</span><span class="n">pvname</span><span class="p">)</span>
+                <span class="n">si_lbl_wid</span><span class="o">.</span><span class="n">showUnits</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="n">si_lbl_wid</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s1">&#39;qproperty-alignment: AlignLeft;&#39;</span><span class="p">)</span>
+                <span class="n">lay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">widget_id</span><span class="p">,</span> <span class="n">si_lbl_wid</span><span class="p">)</span>
+
+        <span class="n">lay</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="n">QSpacerItem</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">QSzPlcy</span><span class="o">.</span><span class="n">Ignored</span><span class="p">,</span> <span class="n">QSzPlcy</span><span class="o">.</span><span class="n">Fixed</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">widget_id</span><span class="p">,</span> <span class="n">pvname</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">chs</span><span class="p">[</span><span class="s1">&#39;TL Sts&#39;</span><span class="p">][</span><span class="s1">&#39;led&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">section</span> <span class="o">==</span> <span class="s1">&#39;BO&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="s1">&#39;Detector Load&#39;</span> <span class="ow">in</span> <span class="n">widget_id</span><span class="p">)):</span>
+                <span class="n">si_led_wid</span> <span class="o">=</span> <span class="n">SiriusLedAlert</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="o">+</span><span class="n">pvname</span><span class="p">)</span>
+                <span class="n">lay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">widget_id</span> <span class="o">+</span> <span class="s2">&quot;: &quot;</span><span class="p">,</span> <span class="n">si_led_wid</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            SiriusLabel{</span>
+<span class="s2">                qproperty-alignment: AlignLeft;</span>
+<span class="s2">            }</span>
+<span class="s2">            QLed{</span>
+<span class="s2">                max-width: 1.29em;</span>
+<span class="s2">            }</span>
+<span class="s2">            .QLabel{</span>
+<span class="s2">                max-height:2em;</span>
+<span class="s2">                qproperty-alignment: AlignRight;</span>
+<span class="s2">            }&quot;&quot;&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="LLRFInterlockDetails">
+<a class="viewcode-back" href="../../../siriushla.as_rf_control.html#siriushla.as_rf_control.details.LLRFInterlockDetails">[docs]</a>
+<span class="k">class</span> <span class="nc">LLRFInterlockDetails</span><span class="p">(</span><span class="n">SiriusDialog</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;LLRF Interlock Details.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">section</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="n">prefix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">+=</span> <span class="p">(</span><span class="s1">&#39;-&#39;</span> <span class="k">if</span> <span class="n">prefix</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">prefix</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">section</span> <span class="o">=</span> <span class="n">section</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">chs</span> <span class="o">=</span> <span class="n">SEC_2_CHANNELS</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">section</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">section</span><span class="o">+</span><span class="s1">&#39;App&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">section</span><span class="o">+</span><span class="s1">&#39; LLRF Interlock Details&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setupUi</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">lay</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignTop</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setHorizontalSpacing</span><span class="p">(</span><span class="mi">25</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setVerticalSpacing</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span>
+            <span class="s1">&#39;&lt;h4&gt;LLRF Interlock Details&lt;/h4&gt;&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span>
+            <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+
+        <span class="c1"># inputs</span>
+        <span class="n">col</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">dic</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">chs</span><span class="p">[</span><span class="s1">&#39;LLRF Intlk Details&#39;</span><span class="p">][</span><span class="s1">&#39;Inputs&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">gbox</span> <span class="o">=</span> <span class="n">QGroupBox</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+            <span class="n">lay_intlk</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">(</span><span class="n">gbox</span><span class="p">)</span>
+            <span class="n">lay_intlk</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignTop</span><span class="p">)</span>
+            <span class="n">lay_intlk</span><span class="o">.</span><span class="n">setHorizontalSpacing</span><span class="p">(</span><span class="mi">9</span><span class="p">)</span>
+            <span class="n">lay_intlk</span><span class="o">.</span><span class="n">setVerticalSpacing</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+            <span class="n">icol</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">dic</span><span class="p">[</span><span class="s1">&#39;Status&#39;</span><span class="p">]:</span>
+                <span class="n">desc</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+                <span class="n">desc</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s1">&#39;QLabel{min-width:1em; max-width:2.5em;}&#39;</span><span class="p">)</span>
+                <span class="n">lay_intlk</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">desc</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">icol</span><span class="p">)</span>
+                <span class="n">icol</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="n">labels</span> <span class="o">=</span> <span class="n">dic</span><span class="p">[</span><span class="s1">&#39;Labels&#39;</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">labels</span><span class="p">):</span>
+                <span class="n">irow</span><span class="p">,</span> <span class="n">icol</span> <span class="o">=</span> <span class="n">idx</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span>
+                <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">pvn</span> <span class="ow">in</span> <span class="n">dic</span><span class="p">[</span><span class="s1">&#39;Status&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="n">led</span> <span class="o">=</span> <span class="n">SiriusLedAlert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="o">+</span><span class="n">pvn</span><span class="p">,</span> <span class="n">bit</span><span class="o">=</span><span class="n">idx</span><span class="p">)</span>
+                    <span class="n">led</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="n">led</span><span class="o">.</span><span class="n">Square</span>
+                    <span class="k">if</span> <span class="n">key</span> <span class="o">!=</span> <span class="s1">&#39;Mon&#39;</span><span class="p">:</span>
+                        <span class="n">led</span><span class="o">.</span><span class="n">offColor</span> <span class="o">=</span> <span class="n">led</span><span class="o">.</span><span class="n">DarkRed</span>
+                    <span class="n">lay_intlk</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">led</span><span class="p">,</span> <span class="n">irow</span><span class="p">,</span> <span class="n">icol</span><span class="p">)</span>
+                    <span class="n">icol</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">lbl</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+                <span class="n">lbl</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s1">&#39;QLabel{min-width:12em;}&#39;</span><span class="p">)</span>
+                <span class="n">lay_intlk</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl</span><span class="p">,</span> <span class="n">irow</span><span class="p">,</span> <span class="n">icol</span><span class="p">)</span>
+
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">gbox</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">col</span><span class="p">)</span>
+            <span class="n">col</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="c1"># timestamps</span>
+        <span class="n">gbox_time</span> <span class="o">=</span> <span class="n">QGroupBox</span><span class="p">(</span><span class="s1">&#39;Timestamps&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">lay_time</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">(</span><span class="n">gbox_time</span><span class="p">)</span>
+        <span class="n">lay_time</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignTop</span><span class="p">)</span>
+        <span class="n">lay_time</span><span class="o">.</span><span class="n">setHorizontalSpacing</span><span class="p">(</span><span class="mi">9</span><span class="p">)</span>
+        <span class="n">lay_time</span><span class="o">.</span><span class="n">setVerticalSpacing</span><span class="p">(</span><span class="mi">9</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">pvn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">chs</span><span class="p">[</span><span class="s1">&#39;LLRF Intlk Details&#39;</span><span class="p">][</span><span class="s1">&#39;Timestamps&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">irow</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>
+            <span class="n">desc</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Interlock &#39;</span><span class="o">+</span><span class="n">idx</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+            <span class="n">desc</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s1">&#39;QLabel{min-width:6em;}&#39;</span><span class="p">)</span>
+            <span class="n">lbl</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="o">+</span><span class="n">pvn</span><span class="p">)</span>
+            <span class="n">lbl</span><span class="o">.</span><span class="n">showUnits</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">lay_time</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">desc</span><span class="p">,</span> <span class="n">irow</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">lay_time</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl</span><span class="p">,</span> <span class="n">irow</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">gbox_time</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">col</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="BarGraph">
+<a class="viewcode-back" href="../../../siriushla.as_rf_control.html#siriushla.as_rf_control.details.BarGraph">[docs]</a>
+<span class="k">class</span> <span class="nc">BarGraph</span><span class="p">(</span><span class="n">PlotWidget</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Bar Graph.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">channels</span><span class="o">=</span><span class="nb">list</span><span class="p">(),</span> <span class="n">xLabels</span><span class="o">=</span><span class="nb">list</span><span class="p">(),</span> <span class="n">yLabel</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_channels</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">chn</span> <span class="ow">in</span> <span class="n">channels</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_channels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_ConnSignal</span><span class="p">(</span><span class="n">chn</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_xLabels</span> <span class="o">=</span> <span class="n">xLabels</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_yLabel</span> <span class="o">=</span> <span class="n">yLabel</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">showGrid</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setBackground</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setXRange</span><span class="p">(</span><span class="nb">min</span><span class="o">=-</span><span class="mf">0.5</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">xLabels</span><span class="p">)</span><span class="o">-</span><span class="mf">0.5</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setTitle</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setLabel</span><span class="p">(</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_yLabel</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">getAxis</span><span class="p">(</span><span class="s1">&#39;left&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">setStyle</span><span class="p">(</span>
+            <span class="n">autoExpandTextSpace</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">tickTextWidth</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">getAxis</span><span class="p">(</span><span class="s1">&#39;bottom&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">setTicks</span><span class="p">(</span>
+            <span class="p">[[(</span><span class="n">i</span><span class="p">,</span> <span class="n">l</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_xLabels</span><span class="p">)]])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_baritems</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">lbl</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_xLabels</span><span class="p">):</span>
+            <span class="n">baritem</span> <span class="o">=</span> <span class="n">BarGraphItem</span><span class="p">(</span>
+                <span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="p">],</span> <span class="n">width</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">brush</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="n">baritem</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_baritems</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">baritem</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_timer</span> <span class="o">=</span> <span class="n">QTimer</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_timer</span><span class="o">.</span><span class="n">timeout</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_update_graph</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_timer</span><span class="o">.</span><span class="n">setInterval</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span>  <span class="c1"># ms</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_timer</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_update_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">wave</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">chn</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_channels</span><span class="p">):</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">chn</span><span class="o">.</span><span class="n">value</span> <span class="k">if</span> <span class="n">chn</span><span class="o">.</span><span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="mi">0</span>
+            <span class="n">wave</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_baritems</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">setOpts</span><span class="p">(</span><span class="n">height</span><span class="o">=</span><span class="n">value</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="TempMonitor">
+<a class="viewcode-back" href="../../../siriushla.as_rf_control.html#siriushla.as_rf_control.details.TempMonitor">[docs]</a>
+<span class="k">class</span> <span class="nc">TempMonitor</span><span class="p">(</span><span class="n">SiriusDialog</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Temperature Profile Monitor.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">section</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="n">prefix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">+=</span> <span class="p">(</span><span class="s1">&#39;-&#39;</span> <span class="k">if</span> <span class="n">prefix</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">prefix</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">section</span> <span class="o">=</span> <span class="n">section</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">chs</span> <span class="o">=</span> <span class="n">SEC_2_CHANNELS</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">section</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">section</span><span class="o">+</span><span class="s1">&#39;App&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s1">&#39;RF Temperature Monitor&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setupUi</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">lay</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignTop</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setHorizontalSpacing</span><span class="p">(</span><span class="mi">25</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setVerticalSpacing</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span>
+            <span class="s1">&#39;&lt;h3&gt;RF Temperature Monitor&lt;/h3&gt;&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span>
+            <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">chs</span><span class="p">[</span><span class="s1">&#39;TempMon&#39;</span><span class="p">])</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">dettab</span> <span class="o">=</span> <span class="n">QTabWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">dettab</span> <span class="o">=</span> <span class="n">DetachableTabWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">dettab</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">section</span><span class="o">+</span><span class="s1">&#39;Tab&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">dettabtitle</span><span class="p">,</span> <span class="n">dtcontent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">chs</span><span class="p">[</span><span class="s1">&#39;TempMon&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">dettabtitle</span> <span class="o">==</span> <span class="s1">&#39;Power (Water)&#39;</span><span class="p">:</span>
+                <span class="n">labels</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">dtcontent</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+                <span class="n">channels</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="o">+</span><span class="n">ch</span> <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">dtcontent</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
+                <span class="n">wid</span> <span class="o">=</span> <span class="n">BarGraph</span><span class="p">(</span>
+                    <span class="n">channels</span><span class="o">=</span><span class="n">channels</span><span class="p">,</span> <span class="n">xLabels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span> <span class="n">yLabel</span><span class="o">=</span><span class="s1">&#39;Power [kW]&#39;</span><span class="p">,</span>
+                    <span class="n">title</span><span class="o">=</span><span class="n">dettabtitle</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">wid</span> <span class="o">=</span> <span class="n">QTabWidget</span><span class="p">()</span>
+                <span class="k">for</span> <span class="n">tabtitle</span><span class="p">,</span> <span class="n">content</span> <span class="ow">in</span> <span class="n">dtcontent</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="n">labels</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">content</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+                    <span class="n">channels</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="o">+</span><span class="n">ch</span> <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">content</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
+                    <span class="n">ylabel</span> <span class="o">=</span> <span class="s1">&#39;Temperature [°C]&#39;</span> \
+                        <span class="k">if</span> <span class="s1">&#39;temp&#39;</span> <span class="ow">in</span> <span class="n">dettabtitle</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> \
+                        <span class="k">else</span> <span class="s1">&#39;Diss. Power [kW]&#39;</span>
+                    <span class="n">tabwid</span> <span class="o">=</span> <span class="n">BarGraph</span><span class="p">(</span>
+                        <span class="n">channels</span><span class="o">=</span><span class="n">channels</span><span class="p">,</span> <span class="n">xLabels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span>
+                        <span class="n">yLabel</span><span class="o">=</span><span class="n">ylabel</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">dettabtitle</span><span class="p">)</span>
+                    <span class="n">wid</span><span class="o">.</span><span class="n">addTab</span><span class="p">(</span><span class="n">tabwid</span><span class="p">,</span> <span class="n">tabtitle</span><span class="p">)</span>
+            <span class="n">dettab</span><span class="o">.</span><span class="n">addTab</span><span class="p">(</span><span class="n">wid</span><span class="p">,</span> <span class="n">dettabtitle</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">dettab</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="FDLMonitor">
+<a class="viewcode-back" href="../../../siriushla.as_rf_control.html#siriushla.as_rf_control.details.FDLMonitor">[docs]</a>
+<span class="k">class</span> <span class="nc">FDLMonitor</span><span class="p">(</span><span class="n">SiriusDialog</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fast Data Logger Monitor.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">section</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="n">prefix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">+=</span> <span class="p">(</span><span class="s1">&#39;-&#39;</span> <span class="k">if</span> <span class="n">prefix</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">prefix</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">section</span> <span class="o">=</span> <span class="n">section</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">chs</span> <span class="o">=</span> <span class="n">SEC_2_CHANNELS</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">section</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">section</span><span class="o">+</span><span class="s1">&#39;App&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s1">&#39;FDL Monitor&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">curves_amp</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">curves_phs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setupUi</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">wid</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">wid</span><span class="o">.</span><span class="n">setMinimumSize</span><span class="p">(</span><span class="mi">820</span><span class="p">,</span> <span class="mi">800</span><span class="p">)</span>
+        <span class="n">lay</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignTop</span><span class="p">)</span>
+
+        <span class="n">controls</span> <span class="o">=</span> <span class="n">QGroupBox</span><span class="p">(</span><span class="s1">&#39;Controls&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">controls</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_controlsLayout</span><span class="p">())</span>
+
+        <span class="n">graphs</span> <span class="o">=</span> <span class="n">QGroupBox</span><span class="p">(</span><span class="s1">&#39;Graphs&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">graphs</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_graphsLayout</span><span class="p">())</span>
+
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">controls</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">graphs</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_controlsLayout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">lay</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">()</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setVerticalSpacing</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setHorizontalSpacing</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span>
+
+        <span class="c1"># First line</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_mode</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">chs</span><span class="p">[</span><span class="s1">&#39;FDL&#39;</span><span class="p">][</span><span class="s1">&#39;Mode&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">led_swtrig</span> <span class="o">=</span> <span class="n">SiriusLedAlert</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">chs</span><span class="p">[</span><span class="s1">&#39;FDL&#39;</span><span class="p">][</span><span class="s1">&#39;SW Trig&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bt_swtrig</span> <span class="o">=</span> <span class="n">PyDMStateButton</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">chs</span><span class="p">[</span><span class="s1">&#39;FDL&#39;</span><span class="p">][</span><span class="s1">&#39;Trig&#39;</span><span class="p">])</span>
+
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span>
+            <span class="s1">&#39;&lt;h4&gt;Perseus FDL Mode:&lt;/h4&gt;&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span>
+            <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span> <span class="o">|</span> <span class="n">Qt</span><span class="o">.</span><span class="n">AlignVCenter</span><span class="p">),</span>
+            <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_mode</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span>
+            <span class="s1">&#39;&lt;h4&gt;Force FDL Trigger (SW Interlock):&lt;/h4&gt;&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span>
+            <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span> <span class="o">|</span> <span class="n">Qt</span><span class="o">.</span><span class="n">AlignVCenter</span><span class="p">),</span>
+            <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bt_swtrig</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">led_swtrig</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+
+        <span class="c1"># Second line</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_processing</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">chs</span><span class="p">[</span><span class="s1">&#39;FDL&#39;</span><span class="p">][</span><span class="s1">&#39;Processing&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">led_hwtrig</span> <span class="o">=</span> <span class="n">SiriusLedAlert</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">chs</span><span class="p">[</span><span class="s1">&#39;FDL&#39;</span><span class="p">][</span><span class="s1">&#39;HW Trig&#39;</span><span class="p">])</span>
+
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span>
+            <span class="s1">&#39;&lt;h4&gt;IOC FDL Status:&lt;/h4&gt;&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span>
+            <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span> <span class="o">|</span> <span class="n">Qt</span><span class="o">.</span><span class="n">AlignVCenter</span><span class="p">),</span>
+            <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_processing</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span>
+            <span class="s1">&#39;&lt;h4&gt;Hardware Interlock:&lt;/h4&gt;&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span>
+            <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span> <span class="o">|</span> <span class="n">Qt</span><span class="o">.</span><span class="n">AlignVCenter</span><span class="p">),</span>
+            <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">led_hwtrig</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+
+        <span class="c1"># Third line</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bt_rearm</span> <span class="o">=</span> <span class="n">PyDMStateButton</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">chs</span><span class="p">[</span><span class="s1">&#39;FDL&#39;</span><span class="p">][</span><span class="s1">&#39;Rearm&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">led_rearm</span> <span class="o">=</span> <span class="n">SiriusLedAlert</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">chs</span><span class="p">[</span><span class="s1">&#39;FDL&#39;</span><span class="p">][</span><span class="s1">&#39;Rearm&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">led_raw</span> <span class="o">=</span> <span class="n">SiriusLedAlert</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">chs</span><span class="p">[</span><span class="s1">&#39;FDL&#39;</span><span class="p">][</span><span class="s1">&#39;Raw&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bt_raw</span> <span class="o">=</span> <span class="n">PyDMStateButton</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">chs</span><span class="p">[</span><span class="s1">&#39;FDL&#39;</span><span class="p">][</span><span class="s1">&#39;Raw&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;:S&#39;</span><span class="p">)</span>
+
+        <span class="n">rearm_lay</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">rearm_lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bt_rearm</span><span class="p">)</span>
+        <span class="n">rearm_lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">led_rearm</span><span class="p">)</span>
+
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span>
+            <span class="s1">&#39;&lt;h4&gt;FDL Rearm:&lt;/h4&gt;&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span>
+            <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span> <span class="o">|</span> <span class="n">Qt</span><span class="o">.</span><span class="n">AlignVCenter</span><span class="p">),</span>
+             <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">rearm_lay</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span>
+            <span class="s1">&#39;&lt;h4&gt;FDL ADCs Raw Data:&lt;/h4&gt;&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span>
+            <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span> <span class="o">|</span> <span class="n">Qt</span><span class="o">.</span><span class="n">AlignVCenter</span><span class="p">),</span>
+            <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bt_raw</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">led_raw</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+
+        <span class="c1"># Fourth line</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sb_qty</span> <span class="o">=</span> <span class="n">SiriusSpinbox</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">chs</span><span class="p">[</span><span class="s1">&#39;FDL&#39;</span><span class="p">][</span><span class="s1">&#39;Qty&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;SP&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_qty</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">chs</span><span class="p">[</span><span class="s1">&#39;FDL&#39;</span><span class="p">][</span><span class="s1">&#39;Qty&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;RB&#39;</span><span class="p">)</span>
+        <span class="n">qty_lay</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">qty_lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sb_qty</span><span class="p">)</span>
+        <span class="n">qty_lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_qty</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_size</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">chs</span><span class="p">[</span><span class="s1">&#39;FDL&#39;</span><span class="p">][</span><span class="s1">&#39;Size&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_size</span><span class="o">.</span><span class="n">_show_units</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_duration</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">chs</span><span class="p">[</span><span class="s1">&#39;FDL&#39;</span><span class="p">][</span><span class="s1">&#39;Duration&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_duration</span><span class="o">.</span><span class="n">_show_units</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">size_dur_lay</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">size_dur_lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span>
+            <span class="s1">&#39;&lt;h4&gt;Size:&lt;/h4&gt;&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span>
+            <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span> <span class="o">|</span> <span class="n">Qt</span><span class="o">.</span><span class="n">AlignVCenter</span><span class="p">))</span>
+        <span class="n">size_dur_lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_size</span><span class="p">)</span>
+        <span class="n">size_dur_lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span>
+            <span class="s1">&#39;&lt;h4&gt;Duration:&lt;/h4&gt;&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span>
+            <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span> <span class="o">|</span> <span class="n">Qt</span><span class="o">.</span><span class="n">AlignVCenter</span><span class="p">))</span>
+        <span class="n">size_dur_lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_duration</span><span class="p">)</span>
+
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span>
+            <span class="s1">&#39;&lt;h4&gt;FDL Frame QTY:&lt;/h4&gt;&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span>
+            <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span> <span class="o">|</span> <span class="n">Qt</span><span class="o">.</span><span class="n">AlignVCenter</span><span class="p">),</span>
+            <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">qty_lay</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">size_dur_lay</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="c1"># Fifth line</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sb_delay_sample</span> <span class="o">=</span> <span class="n">SiriusSpinbox</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">chs</span><span class="p">[</span><span class="s1">&#39;FDL&#39;</span><span class="p">][</span><span class="s1">&#39;Delay&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;-SP&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_delay_sample</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">chs</span><span class="p">[</span><span class="s1">&#39;FDL&#39;</span><span class="p">][</span><span class="s1">&#39;Delay&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;-RB&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sb_delay_us</span> <span class="o">=</span> <span class="n">SiriusSpinbox</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">chs</span><span class="p">[</span><span class="s1">&#39;FDL&#39;</span><span class="p">][</span><span class="s1">&#39;Delay&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;Time-SP&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_delay_us</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">chs</span><span class="p">[</span><span class="s1">&#39;FDL&#39;</span><span class="p">][</span><span class="s1">&#39;Delay&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;Time-RB&#39;</span><span class="p">)</span>
+        <span class="n">sb_unit</span> <span class="o">=</span> <span class="n">QComboBox</span><span class="p">()</span>
+        <span class="n">sb_unit</span><span class="o">.</span><span class="n">addItems</span><span class="p">([</span><span class="s1">&#39;Choose a unit&#39;</span><span class="p">,</span> <span class="s1">&#39;Sample units&#39;</span><span class="p">,</span> <span class="s1">&#39;us&#39;</span><span class="p">])</span>
+        <span class="n">sb_unit</span><span class="o">.</span><span class="n">setMaximumWidth</span><span class="p">(</span><span class="mi">120</span><span class="p">)</span>
+        <span class="n">sb_unit</span><span class="o">.</span><span class="n">currentTextChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_handle_unit_change</span><span class="p">)</span>
+
+        <span class="n">delay_lay</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">delay_lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sb_delay_sample</span><span class="p">)</span>
+        <span class="n">delay_lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_delay_sample</span><span class="p">)</span>
+        <span class="n">delay_lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sb_delay_us</span><span class="p">)</span>
+        <span class="n">delay_lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_delay_us</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">sb_delay_us</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_delay_us</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sb_delay_sample</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_delay_sample</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span>
+            <span class="s1">&#39;&lt;h4&gt;Trigger Delay:&lt;/h4&gt;&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span>
+            <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span> <span class="o">|</span> <span class="n">Qt</span><span class="o">.</span><span class="n">AlignVCenter</span><span class="p">),</span>
+            <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span>
+        <span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">sb_unit</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">delay_lay</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">lay</span>
+
+    <span class="k">def</span> <span class="nf">_graphsLayout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">lay</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">amp_graph</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">setupPlot</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">amp_graph</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;amp_graph&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">amp_graph</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span>
+            <span class="s1">&#39;#amp_graph{min-height:15em;min-width:21em;max-height:15em;}&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">phase_graph</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">setupPlot</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">phase_graph</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;phase_graph&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">phase_graph</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span>
+            <span class="s1">&#39;#phase_graph{min-height:15em;min-width:21em;max-height:15em;}&#39;</span><span class="p">)</span>
+
+        <span class="n">checks_wid</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hbox_checks</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">(</span><span class="n">checks_wid</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">chs</span><span class="p">[</span><span class="s1">&#39;FDL&#39;</span><span class="p">][</span><span class="s1">&#39;Signals&#39;</span><span class="p">])):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setupCurve</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">chs</span><span class="p">[</span><span class="s1">&#39;FDL&#39;</span><span class="p">][</span><span class="s1">&#39;Signals&#39;</span><span class="p">][</span><span class="n">idx</span><span class="p">],</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">chs</span><span class="p">[</span><span class="s1">&#39;FDL&#39;</span><span class="p">][</span><span class="s1">&#39;Time&#39;</span><span class="p">],</span>
+                <span class="n">idx</span><span class="p">)</span>
+
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">checks_wid</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;&lt;h4&gt;Amplitude&lt;/h4&gt;&#39;</span><span class="p">))</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">amp_graph</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;&lt;h4&gt;Phase&lt;/h4&gt;&#39;</span><span class="p">))</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phase_graph</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">lay</span>
+
+<div class="viewcode-block" id="FDLMonitor.setupPlot">
+<a class="viewcode-back" href="../../../siriushla.as_rf_control.html#siriushla.as_rf_control.details.FDLMonitor.setupPlot">[docs]</a>
+    <span class="k">def</span> <span class="nf">setupPlot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">graph</span> <span class="o">=</span> <span class="n">SiriusWaveformPlot</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">background</span><span class="o">=</span><span class="n">QColor</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">))</span>
+        <span class="n">graph</span><span class="o">.</span><span class="n">maxRedrawRate</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="n">graph</span><span class="o">.</span><span class="n">setShowXGrid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">graph</span><span class="o">.</span><span class="n">setShowYGrid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">graph</span><span class="o">.</span><span class="n">setShowLegend</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">graph</span><span class="o">.</span><span class="n">setAutoRangeX</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">graph</span><span class="o">.</span><span class="n">setAutoRangeY</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">graph</span><span class="o">.</span><span class="n">setAxisColor</span><span class="p">(</span><span class="n">QColor</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">graph</span></div>
+
+
+<div class="viewcode-block" id="FDLMonitor.setupCurve">
+<a class="viewcode-back" href="../../../siriushla.as_rf_control.html#siriushla.as_rf_control.details.FDLMonitor.setupCurve">[docs]</a>
+    <span class="k">def</span> <span class="nf">setupCurve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signal</span><span class="p">,</span> <span class="n">timebase</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+        <span class="n">cid</span> <span class="o">=</span> <span class="n">signal</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">color</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">+</span> <span class="n">signal</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">signal</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="n">chn_amp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">+</span> <span class="n">signal</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">amp_graph</span><span class="o">.</span><span class="n">addChannel</span><span class="p">(</span>
+                <span class="n">y_channel</span><span class="o">=</span><span class="n">chn_amp</span><span class="p">,</span>
+                <span class="n">x_channel</span><span class="o">=</span><span class="n">timebase</span><span class="p">,</span>
+                <span class="n">redraw_mode</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">cid</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
+                <span class="n">lineStyle</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">SolidLine</span><span class="p">,</span> <span class="n">lineWidth</span><span class="o">=</span><span class="mi">1</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">curves_amp</span><span class="p">[</span><span class="n">cid</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">amp_graph</span><span class="o">.</span><span class="n">curveAtIndex</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">signal</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span>
+            <span class="n">chn_phs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">+</span> <span class="n">signal</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">phase_graph</span><span class="o">.</span><span class="n">addChannel</span><span class="p">(</span>
+                <span class="n">y_channel</span><span class="o">=</span><span class="n">chn_phs</span><span class="p">,</span>
+                <span class="n">x_channel</span><span class="o">=</span><span class="n">timebase</span><span class="p">,</span>
+                <span class="n">redraw_mode</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">cid</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
+                <span class="n">lineStyle</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">SolidLine</span><span class="p">,</span> <span class="n">lineWidth</span><span class="o">=</span><span class="mi">1</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">curves_phs</span><span class="p">[</span><span class="n">cid</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">phase_graph</span><span class="o">.</span><span class="n">curveAtIndex</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+
+        <span class="n">cbx</span> <span class="o">=</span> <span class="n">QCheckBox</span><span class="p">(</span><span class="n">cid</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">cbx</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">cbx</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="n">cid</span><span class="p">)</span>
+        <span class="n">cbx</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s1">&#39;color:&#39;</span> <span class="o">+</span> <span class="n">color</span> <span class="o">+</span> <span class="s1">&#39;;&#39;</span><span class="p">)</span>
+        <span class="n">cbx</span><span class="o">.</span><span class="n">stateChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_handle_curves_visibility</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hbox_checks</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">cbx</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_handle_curves_visibility</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sender</span><span class="p">()</span><span class="o">.</span><span class="n">objectName</span><span class="p">()</span>
+
+        <span class="n">amp_curve</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">curves_amp</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">amp_curve</span><span class="p">:</span>
+            <span class="n">amp_curve</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+
+        <span class="n">phs_curve</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">curves_phs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">phs_curve</span><span class="p">:</span>
+            <span class="n">phs_curve</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_handle_unit_change</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sb_delay_sample</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="n">text</span> <span class="o">==</span> <span class="s1">&#39;Sample units&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_delay_sample</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="n">text</span> <span class="o">==</span> <span class="s1">&#39;Sample units&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sb_delay_us</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="n">text</span> <span class="o">==</span> <span class="s1">&#39;us&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_delay_us</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="n">text</span> <span class="o">==</span> <span class="s1">&#39;us&#39;</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, lnls-sirius.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
