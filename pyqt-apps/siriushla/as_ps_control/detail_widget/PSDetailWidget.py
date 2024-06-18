@@ -278,6 +278,10 @@ class PSDetailWidget(_BaseDetailWidget):
         'ScopeSrcAddr-SP', 'ScopeSrcAddr-RB',
         'ScopeFreq-SP', 'ScopeFreq-RB',
         'ScopeDuration-SP', 'ScopeDuration-RB',
+        'WfmSyncMode-Sel', 'WfmSyncMode-Sts',
+        'WfmFreq-SP', 'WfmFreq-RB',
+        'WfmGain-SP', 'WfmGain-RB',
+        'WfmOffset-SP', 'WfmOffset-RB',
     ]
 
     def __init__(self, psname, parent=None, psmodel=None, pstype=None):
@@ -334,8 +338,6 @@ class PSDetailWidget(_BaseDetailWidget):
         self.opmode_box.setObjectName("operation_mode")
         self.ctrlloop_box = QGroupBox('Control Loop')
         self.ctrlloop_box.setObjectName('ctrlloop_box')
-        self.wfmparams_box = QGroupBox('Wfm Params')
-        self.wfmparams_box.setObjectName('wfmparams_box')
         if self._psmodel == 'FBP':
             self.sofbmode_box = QGroupBox('SOFB Mode')
             self.sofbmode_box.setObjectName('sofbmode_box')
@@ -345,10 +347,10 @@ class PSDetailWidget(_BaseDetailWidget):
         self.current_box.setObjectName("current")
         self.siggen_tab = QWidget()
         self.siggen_tab.setObjectName('cycle_tab')
-        self.wfm_tab = QWidget()
-        self.wfm_tab.setObjectName("wfm_tab")
-        self.scope_tab = QWidget()
-        self.scope_tab.setObjectName('scope_tab')
+        self.wfmplot_tab = QWidget()
+        self.wfmplot_tab.setObjectName("wfm_tab")
+        self.wfmparams_tab = QWidget()
+        self.wfmparams_tab.setObjectName('wfmparams_tab')
         self.curve_tabs = QTabWidget()
         self.curve_tabs.setObjectName(self._psname.sec+'Tab')
         self.curve_tabs.setStyleSheet(
@@ -357,8 +359,8 @@ class PSDetailWidget(_BaseDetailWidget):
             '    border-bottom: 2px solid gray;'
             '    border-right: 2px solid gray;}')
         self.curve_tabs.addTab(self.siggen_tab, 'SigGen')
-        self.curve_tabs.addTab(self.wfm_tab, 'Wfm')
-        self.curve_tabs.addTab(self.scope_tab, 'Scope')
+        self.curve_tabs.addTab(self.wfmplot_tab, 'WfmPlot')
+        self.curve_tabs.addTab(self.wfmparams_tab, 'WfmParams')
         if self._psname.sec == 'BO':
             self.curve_tabs.setCurrentIndex(1)
         if self._metric:
@@ -371,14 +373,13 @@ class PSDetailWidget(_BaseDetailWidget):
         self.pwrstate_box.setLayout(self._powerStateLayout())
         self.opmode_box.setLayout(self._opModeLayout())
         self.ctrlloop_box.setLayout(self._ctrlLoopLayout())
-        self.wfmparams_box.setLayout(self._wfmParamsLayout())
         if self._psmodel == 'FBP':
             self.sofbmode_box.setLayout(self._sofbModeLayout())
         self.genparams_box.setLayout(self._genParamsLayout())
         self.current_box.setLayout(self._currentLayout())
         self.siggen_tab.setLayout(self._siggenLayout())
-        self.wfm_tab.setLayout(self._wfmLayout())
-        self.scope_tab.setLayout(self._scopeLayout())
+        self.wfmplot_tab.setLayout(self._wfmplotLayout())
+        self.wfmparams_tab.setLayout(self._wfmparamsLayout())
         if self._metric:
             self.metric_box.setLayout(self._metricLayout())
 
@@ -400,7 +401,6 @@ class PSDetailWidget(_BaseDetailWidget):
             controls.addWidget(self.sofbmode_box, 4, 1)
         else:
             controls.addWidget(self.genparams_box, 4, 0, 1, 2)
-        controls.addWidget(self.wfmparams_box, 5, 0, 1, 2)
 
         analogs = QVBoxLayout()
         analogs.addWidget(self.current_box, Qt.AlignCenter)
@@ -758,34 +758,6 @@ class PSDetailWidget(_BaseDetailWidget):
         layout.addWidget(self.tab_siggen, 0, 0)
         return layout
 
-    def _wfmParamsLayout(self):
-        wfm_index_ca = self._prefixed_psname + ':WfmIndex-Mon'
-        wfm_count_ca = self._prefixed_psname + ':WfmSyncPulseCount-Mon'
-        wfm_updateauto_ca = self._prefixed_psname + ':WfmUpdateAuto-Sts'
-        wfm_updateauto_sel = self._prefixed_psname + ':WfmUpdateAuto-Sel'
-
-        wfm_index_label = QLabel('Wfm Index', self)
-        wfm_index_rb_label = SiriusLabel(self, wfm_index_ca)
-
-        wfm_count_label = QLabel('Wfm Pulse Count', self)
-        wfm_count_rb_label = SiriusLabel(self, wfm_count_ca)
-
-        wfm_updateauto_label = QLabel('Wfm UpdateAuto', self)
-        wfm_updateauto_sts_led = SiriusLedState(self, wfm_updateauto_ca)
-        wfm_updateauto_btn = PyDMStateButton(self, wfm_updateauto_sel)
-
-        layout = QGridLayout()
-        layout.setAlignment(Qt.AlignTop)
-        layout.setColumnStretch(3, 1)
-        layout.addWidget(wfm_index_label, 0, 0, Qt.AlignRight)
-        layout.addWidget(wfm_index_rb_label, 0, 1)
-        layout.addWidget(wfm_count_label, 1, 0, Qt.AlignRight)
-        layout.addWidget(wfm_count_rb_label, 1, 1)
-        layout.addWidget(wfm_updateauto_label, 2, 0, Qt.AlignRight)
-        layout.addWidget(wfm_updateauto_btn, 2, 1, Qt.AlignHCenter)
-        layout.addWidget(wfm_updateauto_sts_led, 2, 2)
-        return layout
-
     def _sofbModeLayout(self):
         sofb_mode_sel = self._prefixed_psname + ':SOFBMode-Sel'
         sofb_mode_sts = self._prefixed_psname + ':SOFBMode-Sts'
@@ -843,7 +815,7 @@ class PSDetailWidget(_BaseDetailWidget):
 
         return layout
 
-    def _wfmLayout(self):
+    def _wfmplotLayout(self):
         # graph
         self.wfm_graph = SiriusWaveformPlot()
         self.wfm_graph.setObjectName('graph')
@@ -924,13 +896,15 @@ class PSDetailWidget(_BaseDetailWidget):
             hbox_show.addWidget(cbx)
 
         layout = QVBoxLayout()
-        layout.setAlignment(Qt.AlignTop)
+        layout.setAlignment(Qt.AlignCenter)
         layout.addWidget(self.wfm_graph)
         layout.addWidget(self.wfm_nrpts_lb)
         layout.addLayout(hbox_show)
         return layout
 
-    def _scopeLayout(self):
+    def _wfmparamsLayout(self):
+        # --- scope groupbox ----
+
         src_sp = self._prefixed_psname + ':ScopeSrcAddr-SP'
         src_rb = self._prefixed_psname + ':ScopeSrcAddr-RB'
         freq_sp = self._prefixed_psname + ':ScopeFreq-SP'
@@ -945,25 +919,26 @@ class PSDetailWidget(_BaseDetailWidget):
 
         self.scope_freq_label = QLabel('Frequency [Hz]', self)
         self.scope_freq_sp_sb = SiriusSpinbox(self, freq_sp)
-        self.scope_freq_rb_label = SiriusLabel(self, freq_rb, keep_unit=True)
-        self.scope_freq_rb_label.showUnits = True
+        self.scope_freq_rb_lb = SiriusLabel(self, freq_rb, keep_unit=True)
+        self.scope_freq_rb_lb.showUnits = True
 
         self.scope_dur_label = QLabel('Duration [s]', self)
         self.scope_dur_sp_sb = SiriusSpinbox(self, dur_sp)
-        self.scope_dur_rb_label = SiriusLabel(self, dur_rb)
-        self.scope_dur_rb_label.showUnits = True
+        self.scope_dur_rb_lb = SiriusLabel(self, dur_rb)
+        self.scope_dur_rb_lb.showUnits = True
 
-        layout = QGridLayout()
-        layout.setAlignment(Qt.AlignTop)
-        layout.setContentsMargins(0, 6, 0, 0)
-        layout.addWidget(self.scope_src_label, 0, 0, Qt.AlignRight)
-        layout.addWidget(self.scope_src_rb_lb, 0, 3)
-        layout.addWidget(self.scope_freq_label, 1, 0, 1, 2, Qt.AlignRight)
-        layout.addWidget(self.scope_freq_sp_sb, 1, 2)
-        layout.addWidget(self.scope_freq_rb_label, 1, 3)
-        layout.addWidget(self.scope_dur_label, 2, 0, 1, 2, Qt.AlignRight)
-        layout.addWidget(self.scope_dur_sp_sb, 2, 2)
-        layout.addWidget(self.scope_dur_rb_label, 2, 3)
+        layout_scope = QGridLayout()
+        layout_scope.setAlignment(Qt.AlignTop)
+        layout_scope.setContentsMargins(6, 6, 3, 3)
+        layout_scope.addWidget(self.scope_src_label, 0, 0, Qt.AlignRight)
+        layout_scope.addWidget(self.scope_src_rb_lb, 0, 3)
+        layout_scope.addWidget(
+            self.scope_freq_label, 1, 0, 1, 2, Qt.AlignRight)
+        layout_scope.addWidget(self.scope_freq_sp_sb, 1, 2)
+        layout_scope.addWidget(self.scope_freq_rb_lb, 1, 3)
+        layout_scope.addWidget(self.scope_dur_label, 2, 0, 1, 2, Qt.AlignRight)
+        layout_scope.addWidget(self.scope_dur_sp_sb, 2, 2)
+        layout_scope.addWidget(self.scope_dur_rb_lb, 2, 3)
 
         try:
             self.scope_src_sp_cb = SiriusStringComboBox(
@@ -976,13 +951,109 @@ class PSDetailWidget(_BaseDetailWidget):
                 self.scope_src_sp_sb.setVisible)
 
             self.scope_src_sp_sb.setVisible(False)
-            layout.addWidget(self.scope_src_label, 0, 0, Qt.AlignRight)
-            layout.addWidget(self.scope_src_sp_opt, 0, 1)
-            layout.addWidget(self.scope_src_sp_cb, 0, 2)
-            layout.addWidget(self.scope_src_sp_sb, 0, 2)
+            layout_scope.addWidget(self.scope_src_label, 0, 0, Qt.AlignRight)
+            layout_scope.addWidget(self.scope_src_sp_opt, 0, 1)
+            layout_scope.addWidget(self.scope_src_sp_cb, 0, 2)
+            layout_scope.addWidget(self.scope_src_sp_sb, 0, 2)
         except KeyError:
-            layout.addWidget(self.scope_src_label, 0, 0, 1, 2, Qt.AlignRight)
-            layout.addWidget(self.scope_src_sp_sb, 0, 2)
+            layout_scope.addWidget(
+                self.scope_src_label, 0, 0, 1, 2, Qt.AlignRight)
+            layout_scope.addWidget(self.scope_src_sp_sb, 0, 2)
+
+        self.scope_box = QGroupBox("Scope")
+        self.scope_box.setObjectName("Scope")
+        self.scope_box.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
+        self.scope_box.setLayout(layout_scope)
+
+        # --- wfm groupbox ---
+
+        wfm_selected_mon = self._prefixed_psname + ':WfmSelected-Mon'
+        wfm_syncmode_sel = self._prefixed_psname + ':WfmSyncMode-Sel'
+        wfm_syncmode_sts = self._prefixed_psname + ':WfmSyncMode-Sts'
+        wfm_freq_sp = self._prefixed_psname + ':WfmFreq-SP'
+        wfm_freq_rb = self._prefixed_psname + ':WfmFreq-RB'
+        wfm_gain_sp = self._prefixed_psname + ':WfmGain-SP'
+        wfm_gain_rb = self._prefixed_psname + ':WfmGain-RB'
+        wfm_offset_sp = self._prefixed_psname + ':WfmOffset-SP'
+        wfm_offset_rb = self._prefixed_psname + ':WfmOffset-RB'
+
+        wfm_index_ca = self._prefixed_psname + ':WfmIndex-Mon'
+        wfm_count_ca = self._prefixed_psname + ':WfmSyncPulseCount-Mon'
+        wfm_updateauto_ca = self._prefixed_psname + ':WfmUpdateAuto-Sts'
+        wfm_updateauto_sel = self._prefixed_psname + ':WfmUpdateAuto-Sel'
+
+        self.wfm_selected_label = QLabel('Wfm Selected', self)
+        self.wfm_selected_mon = SiriusLabel(self, wfm_selected_mon)
+
+        self.wfm_syncmode_label = QLabel('Wfm SyncMode', self)
+        self.wfm_syncmode_sel_cb = PyDMEnumComboBox(self, wfm_syncmode_sel)
+        self.wfm_syncmode_sts_lb = SiriusLabel(self, wfm_syncmode_sts)
+        self.wfm_syncmode_sts_lb.showUnits = True
+
+        self.wfm_freq_label = QLabel('Wfm Frequency [Hz]', self)
+        self.wfm_freq_sp_sb = SiriusSpinbox(self, wfm_freq_sp)
+        self.wfm_freq_rb_lb = SiriusLabel(self, wfm_freq_rb, keep_unit=True)
+        self.wfm_freq_rb_lb.showUnits = True
+
+        self.wfm_gain_label = QLabel('Wfm Gain', self)
+        self.wfm_gain_sp_sb = SiriusSpinbox(self, wfm_gain_sp)
+        self.wfm_gain_rb_lb = SiriusLabel(self, wfm_gain_rb)
+        self.wfm_gain_rb_lb.showUnits = True
+
+        self.wfm_offset_label = QLabel('Wfm Offset [A]', self)
+        self.wfm_offset_sp_sb = SiriusSpinbox(self, wfm_offset_sp)
+        self.wfm_offset_rb_lb = SiriusLabel(self, wfm_offset_rb)
+        self.wfm_offset_rb_lb.showUnits = True
+
+        wfm_index_label = QLabel('Wfm Index', self)
+        wfm_index_rb_label = SiriusLabel(self, wfm_index_ca)
+        wfm_count_label = QLabel('Wfm Pulse Count', self)
+        wfm_count_rb_label = SiriusLabel(self, wfm_count_ca)
+        wfm_updateauto_label = QLabel('Wfm UpdateAuto', self)
+        wfm_updateauto_sts_led = SiriusLedState(self, wfm_updateauto_ca)
+        wfm_updateauto_btn = PyDMStateButton(self, wfm_updateauto_sel)
+
+        layout_wfm = QGridLayout()
+        layout_wfm.setAlignment(Qt.AlignTop)
+        layout_wfm.setContentsMargins(6, 6, 3, 3)
+
+        layout_wfm.addWidget(
+            self.wfm_selected_label, 0, 0, Qt.AlignRight)
+        layout_wfm.addWidget(self.wfm_selected_mon, 0, 1, 1, 2)
+        layout_wfm.addWidget(
+            self.wfm_syncmode_label, 1, 0, Qt.AlignRight)
+        layout_wfm.addWidget(self.wfm_syncmode_sel_cb, 1, 1)
+        layout_wfm.addWidget(self.wfm_syncmode_sts_lb, 1, 2)
+        layout_wfm.addWidget(self.wfm_freq_label, 2, 0, Qt.AlignRight)
+        layout_wfm.addWidget(self.wfm_freq_sp_sb, 2, 1)
+        layout_wfm.addWidget(self.wfm_freq_rb_lb, 2, 2)
+        layout_wfm.addWidget(self.wfm_gain_label, 3, 0, Qt.AlignRight)
+        layout_wfm.addWidget(self.wfm_gain_sp_sb, 3, 1)
+        layout_wfm.addWidget(self.wfm_gain_rb_lb, 3, 2)
+        layout_wfm.addWidget(self.wfm_offset_label, 4, 0, Qt.AlignRight)
+        layout_wfm.addWidget(self.wfm_offset_sp_sb, 4, 1)
+        layout_wfm.addWidget(self.wfm_offset_rb_lb, 4, 2)
+
+        layout_wfm.addWidget(wfm_index_label, 5, 0, Qt.AlignRight)
+        layout_wfm.addWidget(wfm_index_rb_label, 5, 1)
+        layout_wfm.addWidget(wfm_count_label, 6, 0, Qt.AlignRight)
+        layout_wfm.addWidget(wfm_count_rb_label, 6, 1)
+        layout_wfm.addWidget(wfm_updateauto_label, 7, 0, Qt.AlignRight)
+        layout_wfm.addWidget(wfm_updateauto_btn, 7, 1, Qt.AlignHCenter)
+        layout_wfm.addWidget(wfm_updateauto_sts_led, 7, 2)
+
+        self.wfm_box = QGroupBox("Wfm")
+        self.wfm_box.setObjectName("Wfm")
+        self.wfm_box.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
+        self.wfm_box.setLayout(layout_wfm)
+
+        # --- wfmlayout ---
+
+        layout = QGridLayout()
+        layout.setAlignment(Qt.AlignTop)
+        layout.setContentsMargins(6, 6, 3, 3)
+        layout.addWidget(self.scope_box, 1, 1)
+        layout.addWidget(self.wfm_box, 2, 1)
         return layout
 
     def _update_wfm_nrpts_label(self, value):
@@ -1044,6 +1115,7 @@ class PSDetailWidget(_BaseDetailWidget):
 
 
 class LIPSDetailWidget(_BaseDetailWidget):
+    """."""
 
     def __init__(self, psname, parent=None):
         """Class constructor."""
@@ -1186,6 +1258,7 @@ class LIPSDetailWidget(_BaseDetailWidget):
 
         layout = QGridLayout()
         layout.setAlignment(Qt.AlignCenter)
+        layout.setContentsMargins(6, 6, 3, 3)
         layout.addWidget(self.intlk_bt, 0, 0)
         layout.addWidget(QLabel('Intlk', self, alignment=Qt.AlignCenter), 0, 1)
         layout.addWidget(self.intlk_led, 0, 2)
