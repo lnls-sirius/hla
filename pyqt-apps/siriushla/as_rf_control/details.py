@@ -1,18 +1,17 @@
 """Detail windows."""
 
+from pyqtgraph import BarGraphItem, PlotWidget
 from qtpy.QtCore import Qt, QTimer
-from qtpy.QtWidgets import QFormLayout, QLabel, QSpacerItem, QTabWidget, \
-    QSizePolicy as QSzPlcy, QGridLayout, QHBoxLayout, QGroupBox, QWidget, \
-    QVBoxLayout, QCheckBox, QComboBox
 from qtpy.QtGui import QColor
+from qtpy.QtWidgets import QCheckBox, QComboBox, QFormLayout, QGridLayout, \
+    QGroupBox, QHBoxLayout, QLabel, QSizePolicy as QSzPlcy, QSpacerItem, \
+    QTabWidget, QVBoxLayout, QWidget
 
-from pyqtgraph import PlotWidget, BarGraphItem
-
-from ..widgets import SiriusDialog, SiriusLedAlert, \
-    PyDMLedMultiChannel, SiriusConnectionSignal as _ConnSignal, \
-    DetachableTabWidget, SiriusLabel, SiriusWaveformPlot, SiriusSpinbox, \
-    PyDMStateButton
+from ..widgets import DetachableTabWidget, PyDMLedMultiChannel, \
+    PyDMStateButton, SiriusConnectionSignal as _ConnSignal, SiriusDialog, \
+    SiriusLabel, SiriusLedAlert, SiriusSpinbox, SiriusWaveformPlot
 from .util import SEC_2_CHANNELS
+
 
 class CavityStatusDetails(SiriusDialog):
     """Cavity Status Datails."""
@@ -442,7 +441,7 @@ class FDLMonitor(SiriusDialog):
 
         graphs = QGroupBox('Graphs', self)
         graphs.setLayout(self._graphsLayout())
-            
+
         lay.addWidget(controls)
         lay.addWidget(graphs)
 
@@ -453,85 +452,107 @@ class FDLMonitor(SiriusDialog):
 
         # First line
         self.lb_mode = SiriusLabel(self, self.prefix + self.chs['FDL']['Mode'])
-        self.led_swtrig = SiriusLedAlert(self, self.prefix + self.chs['FDL']['SW Trig'])
-        self.bt_swtrig = PyDMStateButton(self, self.prefix + self.chs['FDL']['Trig'])
+        self.led_swtrig = SiriusLedAlert(
+            self, self.prefix + self.chs['FDL']['SW Trig'])
+        self.bt_swtrig = PyDMStateButton(
+            self, self.prefix + self.chs['FDL']['Trig'])
 
         lay.addWidget(QLabel(
-            '<h4>Perseus FDL Mode:</h4>', self, alignment=Qt.AlignRight | Qt.AlignVCenter),
+            '<h4>Perseus FDL Mode:</h4>', self,
+            alignment=Qt.AlignRight | Qt.AlignVCenter),
             0, 0)
         lay.addWidget(self.lb_mode, 0, 1)
         lay.addWidget(QLabel(
-            '<h4>Force FDL Trigger (SW Interlock):</h4>', self, alignment=Qt.AlignRight | Qt.AlignVCenter),
+            '<h4>Force FDL Trigger (SW Interlock):</h4>', self,
+            alignment=Qt.AlignRight | Qt.AlignVCenter),
             0, 2)
         lay.addWidget(self.bt_swtrig, 0, 3)
         lay.addWidget(self.led_swtrig, 0, 4)
 
         # Second line
-        self.lb_processing = SiriusLabel(self, self.prefix + self.chs['FDL']['Processing'])
-        self.led_hwtrig = SiriusLedAlert(self, self.prefix + self.chs['FDL']['HW Trig'])
+        self.lb_processing = SiriusLabel(
+            self, self.prefix + self.chs['FDL']['Processing'])
+        self.led_hwtrig = SiriusLedAlert(
+            self, self.prefix + self.chs['FDL']['HW Trig'])
 
         lay.addWidget(QLabel(
-            '<h4>IOC FDL Status:</h4>', self, alignment=Qt.AlignRight | Qt.AlignVCenter),
+            '<h4>IOC FDL Status:</h4>', self,
+            alignment=Qt.AlignRight | Qt.AlignVCenter),
             1, 0)
         lay.addWidget(self.lb_processing, 1, 1)
         lay.addWidget(QLabel(
-            '<h4>Hardware Interlock:</h4>', self, alignment=Qt.AlignRight | Qt.AlignVCenter), 
+            '<h4>Hardware Interlock:</h4>', self,
+            alignment=Qt.AlignRight | Qt.AlignVCenter),
             1, 2)
         lay.addWidget(self.led_hwtrig, 1, 4)
 
         # Third line
-        self.bt_rearm = PyDMStateButton(self, self.prefix + self.chs['FDL']['Rearm'])
-        self.led_rearm = SiriusLedAlert(self, self.prefix + self.chs['FDL']['Rearm'])
-        self.led_raw = SiriusLedAlert(self, self.prefix + self.chs['FDL']['Raw'])
-        self.bt_raw = PyDMStateButton(self, self.prefix + self.chs['FDL']['Raw'] + ':S')
+        self.bt_rearm = PyDMStateButton(
+            self, self.prefix + self.chs['FDL']['Rearm'])
+        self.led_rearm = SiriusLedAlert(
+            self, self.prefix + self.chs['FDL']['Rearm'])
+        self.led_raw = SiriusLedAlert(
+            self, self.prefix + self.chs['FDL']['Raw'])
+        self.bt_raw = PyDMStateButton(
+            self, self.prefix + self.chs['FDL']['Raw'] + ':S')
 
         rearm_lay = QHBoxLayout()
         rearm_lay.addWidget(self.bt_rearm)
         rearm_lay.addWidget(self.led_rearm)
 
         lay.addWidget(QLabel(
-            '<h4>FDL Rearm:</h4>', self, alignment=Qt.AlignRight | Qt.AlignVCenter),
+            '<h4>FDL Rearm:</h4>', self,
+            alignment=Qt.AlignRight | Qt.AlignVCenter),
              2, 0)
         lay.addLayout(rearm_lay, 2, 1)
-        lay.addWidget(QLabel('<h4>FDL ADCs Raw Data:</h4>', self, alignment=Qt.AlignRight | Qt.AlignVCenter),
-                           2, 2)
+        lay.addWidget(QLabel(
+            '<h4>FDL ADCs Raw Data:</h4>', self,
+            alignment=Qt.AlignRight | Qt.AlignVCenter),
+            2, 2)
         lay.addWidget(self.bt_raw, 2, 3)
         lay.addWidget(self.led_raw, 2, 4)
 
         # Fourth line
-        self.sb_qty = SiriusSpinbox(self, 
-                                    self.prefix + self.chs['FDL']['Qty'] + 'SP')
-        self.lb_qty = SiriusLabel(self, 
-                                    self.prefix + self.chs['FDL']['Qty'] + 'RB')
+        self.sb_qty = SiriusSpinbox(
+            self, self.prefix + self.chs['FDL']['Qty'] + 'SP')
+        self.lb_qty = SiriusLabel(
+            self, self.prefix + self.chs['FDL']['Qty'] + 'RB')
         qty_lay = QHBoxLayout()
         qty_lay.addWidget(self.sb_qty)
         qty_lay.addWidget(self.lb_qty)
 
-        self.lb_size = SiriusLabel(self, self.prefix + self.chs['FDL']['Size'])
+        self.lb_size = SiriusLabel(
+            self, self.prefix + self.chs['FDL']['Size'])
         self.lb_size._show_units = True
-        self.lb_duration = SiriusLabel(self, self.prefix + self.chs['FDL']['Duration'])
+        self.lb_duration = SiriusLabel(
+            self, self.prefix + self.chs['FDL']['Duration'])
         self.lb_duration._show_units = True
         size_dur_lay = QHBoxLayout()
-        size_dur_lay.addWidget(QLabel('<h4>Size:</h4>', self, alignment=Qt.AlignRight | Qt.AlignVCenter))
+        size_dur_lay.addWidget(QLabel(
+            '<h4>Size:</h4>', self,
+            alignment=Qt.AlignRight | Qt.AlignVCenter))
         size_dur_lay.addWidget(self.lb_size)
-        size_dur_lay.addWidget(QLabel('<h4>Duration:</h4>', self, alignment=Qt.AlignRight | Qt.AlignVCenter))
+        size_dur_lay.addWidget(QLabel(
+            '<h4>Duration:</h4>', self,
+            alignment=Qt.AlignRight | Qt.AlignVCenter))
         size_dur_lay.addWidget(self.lb_duration)
 
         lay.addWidget(QLabel(
-            '<h4>FDL Frame QTY:</h4>', self, alignment=Qt.AlignRight | Qt.AlignVCenter),
+            '<h4>FDL Frame QTY:</h4>', self,
+            alignment=Qt.AlignRight | Qt.AlignVCenter),
             3, 0)
         lay.addLayout(qty_lay, 3, 1)
         lay.addLayout(size_dur_lay, 3, 2)
 
         # Fifth line
-        self.sb_delay_sample = SiriusSpinbox(self,
-                                         self.prefix + self.chs['FDL']['Delay'] + '-SP')
-        self.lb_delay_sample = SiriusLabel(self,
-                                         self.prefix + self.chs['FDL']['Delay'] + '-RB')
-        self.sb_delay_us = SiriusSpinbox(self,
-                                         self.prefix + self.chs['FDL']['Delay'] + 'Time-SP')
-        self.lb_delay_us = SiriusLabel(self,
-                                         self.prefix + self.chs['FDL']['Delay'] + 'Time-RB')
+        self.sb_delay_sample = SiriusSpinbox(
+            self, self.prefix + self.chs['FDL']['Delay'] + '-SP')
+        self.lb_delay_sample = SiriusLabel(
+            self, self.prefix + self.chs['FDL']['Delay'] + '-RB')
+        self.sb_delay_us = SiriusSpinbox(
+            self, self.prefix + self.chs['FDL']['Delay'] + 'Time-SP')
+        self.lb_delay_us = SiriusLabel(
+            self, self.prefix + self.chs['FDL']['Delay'] + 'Time-RB')
         sb_unit = QComboBox()
         sb_unit.addItems(['Choose a unit', 'Sample units', 'us'])
         sb_unit.setMaximumWidth(120)
@@ -549,7 +570,8 @@ class FDLMonitor(SiriusDialog):
         self.lb_delay_sample.setVisible(False)
 
         lay.addWidget(QLabel(
-            '<h4>Trigger Delay:</h4>', self, alignment=Qt.AlignRight | Qt.AlignVCenter),
+            '<h4>Trigger Delay:</h4>', self,
+            alignment=Qt.AlignRight | Qt.AlignVCenter),
             4, 0
         )
         lay.addWidget(sb_unit, 4, 1)
@@ -560,10 +582,10 @@ class FDLMonitor(SiriusDialog):
     def _graphsLayout(self):
         lay = QVBoxLayout()
 
-        self.amplitude_graph = self.setupPlot()
-        self.amplitude_graph.setObjectName('amplitude_graph')
-        self.amplitude_graph.setStyleSheet(
-            '#amplitude_graph{min-height:15em;min-width:21em;max-height:15em;}')
+        self.amp_graph = self.setupPlot()
+        self.amp_graph.setObjectName('amp_graph')
+        self.amp_graph.setStyleSheet(
+            '#amp_graph{min-height:15em;min-width:21em;max-height:15em;}')
 
         self.phase_graph = self.setupPlot()
         self.phase_graph.setObjectName('phase_graph')
@@ -574,13 +596,13 @@ class FDLMonitor(SiriusDialog):
         self.hbox_checks = QHBoxLayout(checks_wid)
         for idx in range(len(self.chs['FDL']['Signals'])):
             self.setupCurve(
-                self.chs['FDL']['Signals'][idx], 
-                self.prefix + self.chs['FDL']['Time'], 
+                self.chs['FDL']['Signals'][idx],
+                self.prefix + self.chs['FDL']['Time'],
                 idx)
-        
+
         lay.addWidget(checks_wid)
         lay.addWidget(QLabel('<h4>Amplitude</h4>'))
-        lay.addWidget(self.amplitude_graph)
+        lay.addWidget(self.amp_graph)
         lay.addWidget(QLabel('<h4>Phase</h4>'))
         lay.addWidget(self.phase_graph)
 
@@ -598,20 +620,20 @@ class FDLMonitor(SiriusDialog):
         graph.setAxisColor(QColor(0, 0, 0))
 
         return graph
-    
+
     def setupCurve(self, signal, timebase, idx):
         cid = signal[0]
         color = self.prefix + signal[3]
-        
+
         if signal[1]:
             chn_amp = self.prefix + signal[1]
-            self.amplitude_graph.addChannel(
+            self.amp_graph.addChannel(
                 y_channel=chn_amp,
                 x_channel=timebase,
                 redraw_mode=2, name=cid, color=color,
                 lineStyle=Qt.SolidLine, lineWidth=1
             )
-            self.curves_amp[cid] = self.amplitude_graph.curveAtIndex(idx)
+            self.curves_amp[cid] = self.amp_graph.curveAtIndex(idx)
         if signal[2]:
             chn_phs = self.prefix + signal[2]
             self.phase_graph.addChannel(
@@ -620,7 +642,7 @@ class FDLMonitor(SiriusDialog):
                 redraw_mode=2, name=cid, color=color,
                 lineStyle=Qt.SolidLine, lineWidth=1
             )
-            self.curves_phs[cid] = self.phase_graph.curveAtIndex(idx)   
+            self.curves_phs[cid] = self.phase_graph.curveAtIndex(idx)
 
         cbx = QCheckBox(cid, self)
         cbx.setChecked(True)

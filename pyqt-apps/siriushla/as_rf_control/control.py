@@ -1,24 +1,24 @@
 """RF Main Control window."""
 
 from functools import partial as _part
-from qtpy.QtCore import Qt
-from qtpy.QtWidgets import QGridLayout, QFormLayout, QHBoxLayout, QVBoxLayout,\
-    QComboBox, QGroupBox, QTabWidget, QLabel, QCheckBox, QSpacerItem, QWidget,\
-    QSizePolicy as QSzPlcy, QPushButton, QRadioButton
-from qtpy.QtGui import QColor
+
 import qtawesome as qta
+from pydm.widgets import PyDMEnumComboBox, PyDMLineEdit
 from pyqtgraph import InfiniteLine, mkPen
+from qtpy.QtCore import Qt
+from qtpy.QtGui import QColor
+from qtpy.QtWidgets import QCheckBox, QComboBox, QFormLayout, QGridLayout, \
+    QGroupBox, QHBoxLayout, QLabel, QPushButton, QRadioButton, \
+    QSizePolicy as QSzPlcy, QSpacerItem, QTabWidget, QVBoxLayout, QWidget
 
-from pydm.widgets import PyDMLineEdit, PyDMEnumComboBox
-
-from ..widgets import SiriusMainWindow, PyDMStateButton, PyDMLed, \
-    SiriusLedAlert, SiriusLedState, PyDMLedMultiChannel, SiriusTimePlot, \
-    SiriusConnectionSignal, SiriusPushButton, SiriusLabel, \
-    SiriusWaveformPlot, SiriusSpinbox
 from ..util import connect_window, get_appropriate_color
-from .details import TransmLineStatusDetails, CavityStatusDetails, \
-    LLRFInterlockDetails, TempMonitor, FDLMonitor
+from ..widgets import PyDMLed, PyDMLedMultiChannel, PyDMStateButton, \
+    SiriusConnectionSignal, SiriusLabel, SiriusLedAlert, SiriusLedState, \
+    SiriusMainWindow, SiriusPushButton, SiriusSpinbox, SiriusTimePlot, \
+    SiriusWaveformPlot
 from .custom_widgets import RFEnblDsblButton
+from .details import CavityStatusDetails, FDLMonitor, LLRFInterlockDetails, \
+    TempMonitor, TransmLineStatusDetails
 from .util import SEC_2_CHANNELS
 
 
@@ -214,10 +214,12 @@ class RFMainControl(SiriusMainWindow):
             '#pb_llrfreset{min-width:25px; max-width:25px; icon-size:20px;}')
 
         # Auxiliary Windows
-        self._ld_fdl = QLabel('<h4>Auxiliary Windows</h4>', self, alignment=Qt.AlignLeft)
+        self._ld_fdl = QLabel(
+            '<h4>Auxiliary Windows</h4>', self, alignment=Qt.AlignLeft)
 
         # # Open FDL
-        self.pb_openfdl = QPushButton(text=' FDL', icon=qta.icon('fa5s.external-link-alt'), parent=self)
+        self.pb_openfdl = QPushButton(
+            qta.icon('fa5s.external-link-alt'), ' FDL', self)
         connect_window(
             self.pb_openfdl, FDLMonitor, parent=self,
             prefix=self.prefix, section=self.section)
