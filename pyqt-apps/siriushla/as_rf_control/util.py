@@ -286,6 +286,34 @@ SEC_2_CHANNELS = {
                     'PowRev': 'BR-RF-DLLRF-01:TOP:REVCAV:AMP'
                 }
             }
+        },
+        'FDL': {
+            'Signals': (
+                ('Cav', 'BR-RF-DLLRF-01:FDL:CAV:AMP', 'BR-RF-DLLRF-01:FDL:CAV:PHS', 'blue'),
+                ('Fwd Cav', 'BR-RF-DLLRF-01:FDL:FWDCAV:AMP', 'BR-RF-DLLRF-01:FDL:FWDCAV:PHS', 'red'),
+                ('Rev Cav', 'BR-RF-DLLRF-01:FDL:REVCAV:AMP', 'BR-RF-DLLRF-01:FDL:REVCAV:PHS', 'darkSlateBlue'),
+                ('Fwd Ssa', 'BR-RF-DLLRF-01:FDL:FWDSSA:AMP', 'BR-RF-DLLRF-01:FDL:FWDSSA:PHS', 'darkGreen'),
+                ('Rev Ssa', 'BR-RF-DLLRF-01:FDL:REVSSA:AMP', 'BR-RF-DLLRF-01:FDL:REVSSA:PHS', 'magenta'),
+                ('Ctrl', 'BR-RF-DLLRF-01:FDL:CTRL:AMP', 'BR-RF-DLLRF-01:FDL:CTRL:PHS', 'darkCyan'),
+                ('Ref', 'BR-RF-DLLRF-01:FDL:SL:REF:AMP', 'BR-RF-DLLRF-01:FDL:SL:REF:PHS', 'darkRed'),
+                ('Err', 'BR-RF-DLLRF-01:FDL:SL:ERR:AMP', 'BR-RF-DLLRF-01:FDL:SL:ERR:PHS', 'purple'),
+                ('Err Acc', 'BR-RF-DLLRF-01:FDL:SL:ERRACC:AMP', 'BR-RF-DLLRF-01:FDL:SL:ERRACC:PHS', 'saddlebrown'),
+                ('MO', 'BR-RF-DLLRF-01:FDL:MO:AMP', 'BR-RF-DLLRF-01:FDL:MO:PHS', 'darkBlue'),
+                ('Tune', None, 'BR-RF-DLLRF-01:FDL:TUNE:DEPHS', 'orangered'),
+                ('Tune Filt', None, 'BR-RF-DLLRF-01:FDL:TUNE:DEPHS:FILT', 'darkOliveGreen')
+            ),
+            'Time': 'BR-RF-DLLRF-01:FDL:SCALE:32',
+            'Mode': 'BR-RF-DLLRF-01:FDL:MODE',
+            'SW Trig': 'BR-RF-DLLRF-01:FDL:SWTRIG',
+            'HW Trig': 'BR-RF-DLLRF-01:FDL:HWTRIG',
+            'Trig': 'BR-RF-DLLRF-01:FDL:TRIG:S',
+            'Processing': 'BR-RF-DLLRF-01:FDL:PROCESSING',
+            'Rearm': 'BR-RF-DLLRF-01:FDL:REARM',
+            'Raw': 'BR-RF-DLLRF-01:FDL:RAW',
+            'Qty': 'BR-RF-DLLRF-01:FDL:FrameQty-',
+            'Size': 'BR-RF-DLLRF-01:FDL:Size-Mon',
+            'Duration': 'BR-RF-DLLRF-01:FDL:Duration-Mon',
+            'Delay': 'BR-RF-DLLRF-01:FDL:TriggerDelay'
         }
     },
     'SI': {
@@ -703,6 +731,34 @@ SEC_2_CHANNELS = {
                 # 'Total': 'SI-02SB:RF-P7Cav:PwrWtTotal-Mon',
                 # 'Fwd': 'RA-RaSIA01:RF-RFCalSys:PwrW2-Mon',
             },
+        },
+        'FDL': {
+            'Signals': (
+                ('Cav', 'SR-RF-DLLRF-01:FDL:CAV:AMP', 'SR-RF-DLLRF-01:FDL:CAV:PHS', 'blue'),
+                ('Fwd Cav', 'SR-RF-DLLRF-01:FDL:FWDCAV:AMP', 'SR-RF-DLLRF-01:FDL:FWDCAV:PHS', 'red'),
+                ('Rev Cav', 'SR-RF-DLLRF-01:FDL:REVCAV:AMP', 'SR-RF-DLLRF-01:FDL:REVCAV:PHS', 'darkSlateBlue'),
+                ('Fwd Ssa', 'SR-RF-DLLRF-01:FDL:FWDSSA:AMP', 'SR-RF-DLLRF-01:FDL:FWDSSA:PHS', 'darkGreen'),
+                ('Rev Ssa', 'SR-RF-DLLRF-01:FDL:REVSSA:AMP', 'SR-RF-DLLRF-01:FDL:REVSSA:PHS', 'magenta'),
+                ('Ctrl', 'SR-RF-DLLRF-01:FDL:CTRL:AMP', 'SR-RF-DLLRF-01:FDL:CTRL:PHS', 'darkCyan'),
+                ('Ref', 'SR-RF-DLLRF-01:FDL:SL:REF:AMP', 'SR-RF-DLLRF-01:FDL:SL:REF:PHS', 'darkRed'),
+                ('Err', 'SR-RF-DLLRF-01:FDL:SL:ERR:AMP', 'SR-RF-DLLRF-01:FDL:SL:ERR:PHS', 'purple'),
+                ('Err Acc', 'SR-RF-DLLRF-01:FDL:SL:ERRACC:AMP', 'SR-RF-DLLRF-01:FDL:SL:ERRACC:PHS', 'saddlebrown'),
+                ('MO', 'SR-RF-DLLRF-01:FDL:MO:AMP', 'SR-RF-DLLRF-01:FDL:MO:PHS', 'darkBlue'),
+                ('Tune', None, 'SR-RF-DLLRF-01:FDL:TUNE:DEPHS', 'orangered'),
+                ('Tune Filt', None, 'SR-RF-DLLRF-01:FDL:TUNE:DEPHS:FILT', 'darkOliveGreen')
+            ),
+            'Time': 'SR-RF-DLLRF-01:FDL:SCALE:32',
+            'Mode': 'SR-RF-DLLRF-01:FDL:MODE',
+            'SW Trig': 'SR-RF-DLLRF-01:FDL:SWTRIG',
+            'HW Trig': 'SR-RF-DLLRF-01:FDL:HWTRIG',
+            'Trig': 'SR-RF-DLLRF-01:FDL:TRIG:S',
+            'Processing': 'SR-RF-DLLRF-01:FDL:PROCESSING',
+            'Rearm': 'SR-RF-DLLRF-01:FDL:REARM',
+            'Raw': 'SR-RF-DLLRF-01:FDL:RAW',
+            'Qty': 'SR-RF-DLLRF-01:FDL:FrameQty-',
+            'Size': 'SR-RF-DLLRF-01:FDL:Size-Mon',
+            'Duration': 'SR-RF-DLLRF-01:FDL:Duration-Mon',
+            'Delay': 'SR-RF-DLLRF-01:FDL:TriggerDelay'
         }
     },
 }
