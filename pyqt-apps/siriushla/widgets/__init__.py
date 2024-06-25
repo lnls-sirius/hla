@@ -1,6 +1,7 @@
 from .QLed import QLed
 from .led import PyDMLed, SiriusLedAlert, SiriusLedState, \
-    PyDMLedMultiChannel, PyDMLedMultiConnection
+    PyDMLedTwoChannel, PyDMLedMultiChannel, \
+    PyDMLedMultiConnection
 from .log_label import PyDMLogLabel
 from .log_display import SiriusLogDisplay
 from .QDoubleScrollBar import QDoubleScrollBar
