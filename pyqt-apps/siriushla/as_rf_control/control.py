@@ -501,82 +501,52 @@ class RFMainControl(SiriusMainWindow):
         # # Tuning
         # # # Tuning settings
         ld_autotun = QLabel('Auto Tuning: ', self, alignment=Qt.AlignRight)
-        bt_autotun = PyDMStateButton(
-            self, self.prefix+self.chs['Tun']['Auto']+'-Seç')
-        lb_autotun = SiriusLedState(
-            self, self.prefix+self.chs['Tun']['Auto']+'-Sts')
         ld_dtune = QLabel('DTune: ', self, alignment=Qt.AlignRight)
-        sb_dtune = SiriusSpinbox(
-            self, self.prefix+self.chs['Tun']['DTune']+'-SP')
-        lb_dtune = SiriusLabel(
-            self, self.prefix+self.chs['Tun']['DTune']+'-RB')
-        lb_dtune.showUnits = True
         ld_dphase = QLabel('Dephase: ', self, alignment=Qt.AlignRight)
-        lb_dphase = SiriusLabel(
-            self, self.prefix+self.chs['Tun']['DPhase'])
-        lb_dphase.showUnits = True
         ld_tunact = QLabel(
             'Acting: ', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
-        led_tunact = SiriusLedState(
-            self, self.prefix+self.chs['Tun']['Acting'])
         ld_oversht = QLabel(
             'Overshoot: ', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
-        sb_oversht = SiriusSpinbox(
-            self, self.prefix+self.chs['Tun']['Oversht']+'-SP')
-        lb_oversht = SiriusLabel(
-            self, self.prefix+self.chs['Tun']['Oversht']+'-RB')
-        lb_oversht.showUnits = True
         ld_margin = QLabel(
             'Deadband: ', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
-        sb_margin = SiriusSpinbox(
-            self, self.prefix+self.chs['Tun']['Deadbnd']+'-SP')
-        lb_margin = SiriusLabel(
-            self, self.prefix+self.chs['Tun']['Deadbnd']+'-RB')
-        lb_margin.showUnits = True
         lay_tunset = QGridLayout()
         lay_tunset.setAlignment(Qt.AlignTop | Qt.AlignHCenter)
         lay_tunset.setVerticalSpacing(12)
         lay_tunset.setColumnStretch(0, 3)
         lay_tunset.addWidget(ld_autotun, 1, 1)
-        lay_tunset.addWidget(bt_autotun, 1, 2)
-        lay_tunset.addWidget(lb_autotun, 1, 3)
         lay_tunset.addWidget(ld_dtune, 2, 1)
-        lay_tunset.addWidget(sb_dtune, 2, 2)
-        lay_tunset.addWidget(lb_dtune, 2, 3)
         lay_tunset.addWidget(ld_margin, 3, 1)
-        lay_tunset.addWidget(sb_margin, 3, 2)
-        lay_tunset.addWidget(lb_margin, 3, 3)
         lay_tunset.addWidget(ld_oversht, 4, 1)
-        lay_tunset.addWidget(sb_oversht, 4, 2)
-        lay_tunset.addWidget(lb_oversht, 4, 3)
         lay_tunset.addWidget(ld_dphase, 5, 1)
-        lay_tunset.addWidget(lb_dphase, 5, 2)
         lay_tunset.addWidget(ld_tunact, 6, 1)
-        lay_tunset.addWidget(led_tunact, 6, 2, alignment=Qt.AlignCenter)
         lay_tunset.setColumnStretch(4, 3)
+        offset = 2
+        for k, val in self.chs['Tun'].items():
+            self._create_tun_set_wid(lay_tunset, k, val, offset)
+            offset += 1
 
         # # # Plungers motors
         lb_plg1 = QLabel('Plunger 1')
         lb_down = QLabel('Down')
         lb_up = QLabel('Up')
-        self.led_plg1_dn = PyDMLed(
-            self, self.prefix+self.chs['Tun']['Pl1Down'])
-        self.led_plg1_dn.offColor = QColor(64, 64, 64)
-        self.led_plg1_dn.onColor = QColor('blue')
-        self.led_plg1_dn.shape = PyDMLed.ShapeMap.Square
-        self.led_plg1_up = PyDMLed(
-            self, self.prefix+self.chs['Tun']['Pl1Up'])
-        self.led_plg1_up.offColor = QColor(64, 64, 64)
-        self.led_plg1_up.onColor = QColor('blue')
-        self.led_plg1_up.shape = PyDMLed.ShapeMap.Square
+        # self.led_plg1_dn = PyDMLed(
+        #     self, self.prefix+self.chs['Tun']['Pl1Down'])
+        # self.led_plg1_dn.offColor = QColor(64, 64, 64)
+        # self.led_plg1_dn.onColor = QColor('blue')
+        # self.led_plg1_dn.shape = PyDMLed.ShapeMap.Square
+        # self.led_plg1_up = PyDMLed(
+        #     self, self.prefix+self.chs['Tun']['Pl1Up'])
+        # self.led_plg1_up.offColor = QColor(64, 64, 64)
+        # self.led_plg1_up.onColor = QColor('blue')
+        # self.led_plg1_up.shape = PyDMLed.ShapeMap.Square
         lay_plunmon = QGridLayout()
         lay_plunmon.addItem(
             QSpacerItem(10, 10, QSzPlcy.Expanding, QSzPlcy.Expanding), 0, 0)
         lay_plunmon.addWidget(lb_down, 1, 2)
         lay_plunmon.addWidget(lb_up, 1, 3)
         lay_plunmon.addWidget(lb_plg1, 2, 1)
-        lay_plunmon.addWidget(self.led_plg1_dn, 2, 2)
-        lay_plunmon.addWidget(self.led_plg1_up, 2, 3)
+        # lay_plunmon.addWidget(self.led_plg1_dn, 2, 2)
+        # lay_plunmon.addWidget(self.led_plg1_up, 2, 3)
         lay_plunmon.addItem(
             QSpacerItem(10, 10, QSzPlcy.Expanding, QSzPlcy.Expanding), 4, 4)
 
@@ -592,9 +562,9 @@ class RFMainControl(SiriusMainWindow):
         self.graph_plunmotors.showLegend = True
         self.graph_plunmotors.timeSpan = 1800
         self.graph_plunmotors.maxRedrawRate = 2
-        self.graph_plunmotors.addYChannel(
-            y_channel=self.prefix+self.chs['Tun']['PlM1Curr'], color='blue',
-            name='Motor 1', lineStyle=Qt.SolidLine, lineWidth=1)
+        # self.graph_plunmotors.addYChannel(
+        #     y_channel=self.prefix+self.chs['Tun']['PlM1Curr'], color='blue',
+        #     name='Motor 1', lineStyle=Qt.SolidLine, lineWidth=1)
         self.graph_plunmotors.setLabel('left', '')
 
         if self.section != "SI":
@@ -622,7 +592,7 @@ class RFMainControl(SiriusMainWindow):
         lay_plun = QGridLayout(wid_tun)
         lay_plun.addWidget(QLabel(
             '<h3> • Settings</h3>', self, alignment=Qt.AlignLeft), 0, 0, 1, 3)
-        lay_plun.addLayout(lay_tunset, 1, 0, 1, 3)
+        lay_plun.addLayout(lay_tunset, 1, 0, 1, 2)
         lay_plun.addItem(
             QSpacerItem(0, 25, QSzPlcy.Ignored, QSzPlcy.Fixed), 2, 0)
         lay_plun.addWidget(QLabel(
@@ -1469,6 +1439,62 @@ class RFMainControl(SiriusMainWindow):
         ch_pinsw = SiriusConnectionSignal(self.prefix+chs_dict['PinSw']['Mon'])
         ch_pinsw.new_value_signal[int].connect(
             _part(self._handle_predrive_led_channels, led_drive, chs_dict))
+
+    def _create_tun_set_wid(self, lay_tunset, column, chs_dict, offset):
+        lay_tunset.addWidget(QLabel(
+            column, self, alignment=Qt.AlignCenter), 0, offset)
+
+        bt_autotun = PyDMStateButton(
+            self, self.prefix+chs_dict['Auto']+'-Sel')
+        lb_autotun = SiriusLedState(
+            self, self.prefix+chs_dict['Auto']+'-Sts')
+        lay_autotun = QHBoxLayout()
+        lay_autotun.setSpacing(6)
+        lay_autotun.addWidget(bt_autotun)
+        lay_autotun.addWidget(lb_autotun)
+
+        sb_dtune = SiriusSpinbox(
+            self, self.prefix+chs_dict['DTune']+'-SP')
+        lb_dtune = SiriusLabel(
+            self, self.prefix+chs_dict['DTune']+'-RB')
+        lb_dtune.showUnits = True
+        lay_dtune = QHBoxLayout()
+        lay_dtune.setSpacing(6)
+        lay_dtune.addWidget(sb_dtune)
+        lay_dtune.addWidget(lb_dtune)
+
+        sb_margin = SiriusSpinbox(
+            self, self.prefix+chs_dict['Deadbnd']+'-SP')
+        lb_margin = SiriusLabel(
+            self, self.prefix+chs_dict['Deadbnd']+'-RB')
+        lb_margin.showUnits = True
+        lay_margin = QHBoxLayout()
+        lay_margin.setSpacing(6)
+        lay_margin.addWidget(sb_margin)
+        lay_margin.addWidget(lb_margin)
+
+        sb_oversht = SiriusSpinbox(
+            self, self.prefix+chs_dict['Oversht']+'-SP')
+        lb_oversht = SiriusLabel(
+            self, self.prefix+chs_dict['Oversht']+'-RB')
+        lb_oversht.showUnits = True
+        lay_oversht = QHBoxLayout()
+        lay_oversht.setSpacing(6)
+        lay_oversht.addWidget(sb_oversht)
+        lay_oversht.addWidget(lb_oversht)
+
+        lb_dphase = SiriusLabel(
+            self, self.prefix+chs_dict['DPhase'])
+        lb_dphase.showUnits = True
+        led_tunact = SiriusLedState(
+            self, self.prefix+chs_dict['Acting'])
+
+        lay_tunset.addLayout(lay_autotun, 1, offset)
+        lay_tunset.addLayout(lay_dtune, 2, offset)
+        lay_tunset.addLayout(lay_margin, 3, offset)
+        lay_tunset.addLayout(lay_oversht, 4, offset)
+        lay_tunset.addWidget(lb_dphase, 5, offset)
+        lay_tunset.addWidget(led_tunact, 6, offset, alignment=Qt.AlignCenter)
 
     def _handle_pwrdata_visibility(self, text):
         for group, labels in self._pm_labels.items():

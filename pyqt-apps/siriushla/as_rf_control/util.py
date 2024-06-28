@@ -552,16 +552,28 @@ SEC_2_CHANNELS = {
             'KP': 'RA-RaSIA01:RF-LLRF-A:SLKP',
         },
         'Tun': {
-            'Auto': 'RA-RaSIA01:RF-LLRF-A:Tune',
-            'DTune': 'RA-RaSIA01:RF-LLRF-A:Detune',
-            'DPhase': 'RA-RaSIA01:RF-LLRF-A:TuneDephs-Mon',
-            'Acting': 'RA-RaSIA01:RF-LLRF-A:TuneOut-Mon',
-            'Deadbnd': 'RA-RaSIA01:RF-LLRF-A:TuneMarginHI',
-            'Oversht': 'RA-RaSIA01:RF-LLRF-A:TuneMarginLO',
-            'Pl1Down': 'SI-03SP:RF-SRFCav-A:TunnerMoveDown-Mon',
-            'Pl1Up': 'SI-03SP:RF-SRFCav-A:TunnerMoveUp-Mon',
-            'PlM1Curr': 'RA-RaSIA01:RF-CavPlDrivers:Dr1Current-Mon',
-            'PlM2Curr': 'RA-RaSIA01:RF-CavPlDrivers:Dr2Current-Mon',
+            'A': {
+                'Auto': 'RA-RaSIA01:RF-LLRF-A:Tune',
+                'DTune': 'RA-RaSIA01:RF-LLRF-A:Detune',
+                'DPhase': 'RA-RaSIA01:RF-LLRF-A:TuneDephs-Mon',
+                'Acting': 'RA-RaSIA01:RF-LLRF-A:TuneOut-Mon',
+                'Deadbnd': 'RA-RaSIA01:RF-LLRF-A:TuneMarginHI',
+                'Oversht': 'RA-RaSIA01:RF-LLRF-A:TuneMarginLO',
+                'Pl1Down': 'SI-03SP:RF-SRFCav-A:TunnerMoveDown-Mon',
+                'Pl1Up': 'SI-03SP:RF-SRFCav-A:TunnerMoveUp-Mon',
+                'PlM1Curr': 'RA-RaSIA01:RF-CavPlDrivers:Dr1Current-Mon',
+            },
+            'B': {
+                'Auto': 'RA-RaSIA01:RF-LLRF-B:Tune',
+                'DTune': 'RA-RaSIA01:RF-LLRF-B:Detune',
+                'DPhase': 'RA-RaSIA01:RF-LLRF-B:TuneDephs-Mon',
+                'Acting': 'RA-RaSIA01:RF-LLRF-B:TuneOut-Mon',
+                'Deadbnd': 'RA-RaSIA01:RF-LLRF-B:TuneMarginHI',
+                'Oversht': 'RA-RaSIA01:RF-LLRF-B:TuneMarginLO',
+                'Pl1Down': 'SI-03SP:RF-SRFCav-B:TunnerMoveDown-Mon',
+                'Pl1Up': 'SI-03SP:RF-SRFCav-B:TunnerMoveUp-Mon',
+                'PlM1Curr': 'RA-RaSIA01:RF-CavPlDrivers:Dr1Current-Mon',
+            }
         },
         'PwrMtr': {
             'Cav - Cell 2': {
