@@ -520,10 +520,13 @@ class RFMainControl(SiriusMainWindow):
         lay_tunset.addWidget(ld_dphase, 5, 1)
         lay_tunset.addWidget(ld_tunact, 6, 1)
         lay_tunset.setColumnStretch(4, 3)
-        offset = 2
-        for k, val in self.chs['Tun'].items():
-            self._create_tun_set_wid(lay_tunset, k, val, offset)
-            offset += 1
+        if self.section == 'SI':
+            offset = 2
+            for k, val in self.chs['Tun'].items():
+                self._create_tun_set_wid(lay_tunset, k, val, offset)
+                offset += 1
+        else:
+            self._create_tun_set_wid(lay_tunset, None, self.chs['Tun'], 2)
 
         # # # Plungers motors
         lb_plg1 = QLabel('Plunger 1')
@@ -1441,8 +1444,9 @@ class RFMainControl(SiriusMainWindow):
             _part(self._handle_predrive_led_channels, led_drive, chs_dict))
 
     def _create_tun_set_wid(self, lay_tunset, column, chs_dict, offset):
-        lay_tunset.addWidget(QLabel(
-            column, self, alignment=Qt.AlignCenter), 0, offset)
+        if column:
+            lay_tunset.addWidget(QLabel(
+                column, self, alignment=Qt.AlignCenter), 0, offset)
 
         bt_autotun = PyDMStateButton(
             self, self.prefix+chs_dict['Auto']+'-Sel')
