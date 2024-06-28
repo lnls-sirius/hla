@@ -557,7 +557,6 @@ class RFMainControl(SiriusMainWindow):
 
         # # # Plungers motors
         lb_plg1 = QLabel('Plunger 1')
-        lb_plg2 = QLabel('Plunger 2')
         lb_down = QLabel('Down')
         lb_up = QLabel('Up')
         self.led_plg1_dn = PyDMLed(
@@ -570,27 +569,14 @@ class RFMainControl(SiriusMainWindow):
         self.led_plg1_up.offColor = QColor(64, 64, 64)
         self.led_plg1_up.onColor = QColor('blue')
         self.led_plg1_up.shape = PyDMLed.ShapeMap.Square
-        self.led_plg2_dn = PyDMLed(
-            self, self.prefix+self.chs['Tun']['Pl2Down'])
-        self.led_plg2_dn.offColor = QColor(64, 64, 64)
-        self.led_plg2_dn.onColor = QColor('blue')
-        self.led_plg2_dn.shape = PyDMLed.ShapeMap.Square
-        self.led_plg2_up = PyDMLed(
-            self, self.prefix+self.chs['Tun']['Pl2Up'])
-        self.led_plg2_up.offColor = QColor(64, 64, 64)
-        self.led_plg2_up.onColor = QColor('blue')
-        self.led_plg2_up.shape = PyDMLed.ShapeMap.Square
         lay_plunmon = QGridLayout()
         lay_plunmon.addItem(
             QSpacerItem(10, 10, QSzPlcy.Expanding, QSzPlcy.Expanding), 0, 0)
         lay_plunmon.addWidget(lb_down, 1, 2)
         lay_plunmon.addWidget(lb_up, 1, 3)
         lay_plunmon.addWidget(lb_plg1, 2, 1)
-        lay_plunmon.addWidget(lb_plg2, 3, 1)
         lay_plunmon.addWidget(self.led_plg1_dn, 2, 2)
         lay_plunmon.addWidget(self.led_plg1_up, 2, 3)
-        lay_plunmon.addWidget(self.led_plg2_dn, 3, 2)
-        lay_plunmon.addWidget(self.led_plg2_up, 3, 3)
         lay_plunmon.addItem(
             QSpacerItem(10, 10, QSzPlcy.Expanding, QSzPlcy.Expanding), 4, 4)
 
@@ -609,10 +595,28 @@ class RFMainControl(SiriusMainWindow):
         self.graph_plunmotors.addYChannel(
             y_channel=self.prefix+self.chs['Tun']['PlM1Curr'], color='blue',
             name='Motor 1', lineStyle=Qt.SolidLine, lineWidth=1)
-        self.graph_plunmotors.addYChannel(
-            y_channel=self.prefix+self.chs['Tun']['PlM2Curr'], color='red',
-            name='Motor 2', lineStyle=Qt.SolidLine, lineWidth=1)
         self.graph_plunmotors.setLabel('left', '')
+
+        if self.section != "SI":
+            lb_plg2 = QLabel('Plunger 2')
+            self.led_plg2_dn = PyDMLed(
+                self, self.prefix+self.chs['Tun']['Pl2Down'])
+            self.led_plg2_dn.offColor = QColor(64, 64, 64)
+            self.led_plg2_dn.onColor = QColor('blue')
+            self.led_plg2_dn.shape = PyDMLed.ShapeMap.Square
+            self.led_plg2_up = PyDMLed(
+                self, self.prefix+self.chs['Tun']['Pl2Up'])
+            self.led_plg2_up.offColor = QColor(64, 64, 64)
+            self.led_plg2_up.onColor = QColor('blue')
+            self.led_plg2_up.shape = PyDMLed.ShapeMap.Square
+
+            lay_plunmon.addWidget(lb_plg2, 3, 1)
+            lay_plunmon.addWidget(self.led_plg2_dn, 3, 2)
+            lay_plunmon.addWidget(self.led_plg2_up, 3, 3)
+
+            self.graph_plunmotors.addYChannel(
+                y_channel=self.prefix+self.chs['Tun']['PlM2Curr'], color='red',
+                name='Motor 2', lineStyle=Qt.SolidLine, lineWidth=1)
 
         wid_tun = QWidget()
         lay_plun = QGridLayout(wid_tun)
