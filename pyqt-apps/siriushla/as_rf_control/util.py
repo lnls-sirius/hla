@@ -560,21 +560,8 @@ SEC_2_CHANNELS = {
             'Oversht': 'RA-RaSIA01:RF-LLRF-A:TuneMarginLO',
             'Pl1Down': 'SI-03SP:RF-SRFCav-A:TunnerMoveDown-Mon',
             'Pl1Up': 'SI-03SP:RF-SRFCav-A:TunnerMoveUp-Mon',
-            'Pl2Down': 'SR-RF-DLLRF-01:PLG2:MOVE:DN',
-            'Pl2Up': 'SR-RF-DLLRF-01:PLG2:MOVE:UP',
             'PlM1Curr': 'RA-RaSIA01:RF-CavPlDrivers:Dr1Current-Mon',
             'PlM2Curr': 'RA-RaSIA01:RF-CavPlDrivers:Dr2Current-Mon',
-        },
-        'FFlat': {
-            'Sts': 'SR-RF-DLLRF-01:FF:ON',
-            'Auto': 'SR-RF-DLLRF-01:FF',
-            'Pos': 'SR-RF-DLLRF-01:FF:POS',
-            'Gain1': 'SR-RF-DLLRF-01:FF:GAIN:CELL2',
-            'Gain2': 'SR-RF-DLLRF-01:FF:GAIN:CELL4',
-            'Cell1': 'SR-RF-DLLRF-01:FF:CELL2',
-            'Cell2': 'SR-RF-DLLRF-01:FF:CELL4',
-            'Deadband': 'SR-RF-DLLRF-01:FF:DEADBAND',
-            'Err': 'SR-RF-DLLRF-01:FF:ERR',
         },
         'PwrMtr': {
             'Cav - Cell 2': {
