@@ -193,25 +193,22 @@ class RFMainControl(SiriusMainWindow):
 
         # Reset
         self._ld_reset = QLabel('<h4>Reset</h4>', self, alignment=Qt.AlignLeft)
+        lay_reset = QGridLayout()
+        lay_reset.setAlignment(Qt.AlignTop)
+        lay_reset.addWidget(self._ld_reset, 0, 0)
 
-        # # Reset Global
-        self.ld_globreset = QLabel(
-            'Reset Global', self, alignment=Qt.AlignRight)
-        self.pb_globreset = SiriusPushButton(
-            label='', icon=qta.icon('fa5s.sync'), releaseValue=0,
-            parent=self, init_channel=self.prefix+self.chs['Reset']['Global'])
-        self.pb_globreset.setObjectName('pb_globreset')
-        self.pb_globreset.setStyleSheet(
-            '#pb_globreset{min-width:25px; max-width:25px; icon-size:20px;}')
+        offset = 1
+        for key, val in self.chs['Reset'].items():
+            lay_reset.addWidget(QLabel(
+                f'Reset {key}', self, alignment=Qt.AlignRight), offset, 0)
 
-        # # Reset LLRF
-        self.ld_llrfreset = QLabel('Reset LLRF', self, alignment=Qt.AlignRight)
-        self.pb_llrfreset = SiriusPushButton(
-            label='', icon=qta.icon('fa5s.sync'), releaseValue=0,
-            parent=self, init_channel=self.prefix+self.chs['Reset']['LLRF'])
-        self.pb_llrfreset.setObjectName('pb_llrfreset')
-        self.pb_llrfreset.setStyleSheet(
-            '#pb_llrfreset{min-width:25px; max-width:25px; icon-size:20px;}')
+            pb_reset = SiriusPushButton(
+                label='', icon=qta.icon('fa5s.sync'), releaseValue=0,
+                parent=self, init_channel=self.prefix+val
+            )
+            pb_reset.setStyleSheet('min-width:25px; max-width:25px; icon-size:20px;')
+            lay_reset.addWidget(pb_reset, offset, 1)
+            offset += 1
 
         # Auxiliary Windows
         self._ld_fdl = QLabel(
@@ -241,13 +238,9 @@ class RFMainControl(SiriusMainWindow):
         lay.addWidget(self.ld_tlsts, 6, 0)
         lay.addWidget(self.led_tlsts, 6, 1)
         lay.addWidget(self.pb_tldtls, 6, 2)
-        lay.addWidget(self._ld_reset, 7, 0, 1, 3)
-        lay.addWidget(self.ld_globreset, 8, 0)
-        lay.addWidget(self.pb_globreset, 8, 1)
-        lay.addWidget(self.ld_llrfreset, 9, 0)
-        lay.addWidget(self.pb_llrfreset, 9, 1)
-        lay.addWidget(self._ld_fdl, 10, 0, 1, 3)
-        lay.addWidget(self.pb_openfdl, 11, 0, alignment=Qt.AlignRight)
+        lay.addLayout(lay_reset, 7, 0, 1, 2)
+        lay.addWidget(self._ld_fdl, 8, 0, 1, 3)
+        lay.addWidget(self.pb_openfdl, 9, 0, alignment=Qt.AlignRight)
 
         return lay
 

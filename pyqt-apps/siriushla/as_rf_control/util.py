@@ -464,7 +464,8 @@ SEC_2_CHANNELS = {
         },
         'Reset': {
             'Global': 'RA-RaSIA02:RF-Intlk:Reset-Cmd',
-            'LLRF': 'RA-RaSIA01:RF-LLRF-A:IntlkReset-Cmd',
+            'LLRF A': 'RA-RaSIA01:RF-LLRF-A:IntlkReset-Cmd',
+            'LLRF B': 'RA-RaSIA01:RF-LLRF-B:IntlkReset-Cmd',
         },
         'Cav Sts': {
             'Geral': 'SI-02SB:RF-P7Cav:Sts-Mon',
