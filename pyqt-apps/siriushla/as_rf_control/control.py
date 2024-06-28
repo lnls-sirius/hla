@@ -532,24 +532,26 @@ class RFMainControl(SiriusMainWindow):
         lb_plg1 = QLabel('Plunger 1')
         lb_down = QLabel('Down')
         lb_up = QLabel('Up')
-        # self.led_plg1_dn = PyDMLed(
-        #     self, self.prefix+self.chs['Tun']['Pl1Down'])
-        # self.led_plg1_dn.offColor = QColor(64, 64, 64)
-        # self.led_plg1_dn.onColor = QColor('blue')
-        # self.led_plg1_dn.shape = PyDMLed.ShapeMap.Square
-        # self.led_plg1_up = PyDMLed(
-        #     self, self.prefix+self.chs['Tun']['Pl1Up'])
-        # self.led_plg1_up.offColor = QColor(64, 64, 64)
-        # self.led_plg1_up.onColor = QColor('blue')
-        # self.led_plg1_up.shape = PyDMLed.ShapeMap.Square
+        if self.section == 'BO':
+            self.led_plg1_dn = PyDMLed(
+                self, self.prefix+self.chs['Tun']['Pl1Down'])
+            self.led_plg1_dn.offColor = QColor(64, 64, 64)
+            self.led_plg1_dn.onColor = QColor('blue')
+            self.led_plg1_dn.shape = PyDMLed.ShapeMap.Square
+            self.led_plg1_up = PyDMLed(
+                self, self.prefix+self.chs['Tun']['Pl1Up'])
+            self.led_plg1_up.offColor = QColor(64, 64, 64)
+            self.led_plg1_up.onColor = QColor('blue')
+            self.led_plg1_up.shape = PyDMLed.ShapeMap.Square
         lay_plunmon = QGridLayout()
         lay_plunmon.addItem(
             QSpacerItem(10, 10, QSzPlcy.Expanding, QSzPlcy.Expanding), 0, 0)
         lay_plunmon.addWidget(lb_down, 1, 2)
         lay_plunmon.addWidget(lb_up, 1, 3)
         lay_plunmon.addWidget(lb_plg1, 2, 1)
-        # lay_plunmon.addWidget(self.led_plg1_dn, 2, 2)
-        # lay_plunmon.addWidget(self.led_plg1_up, 2, 3)
+        if self.section == 'BO':
+            lay_plunmon.addWidget(self.led_plg1_dn, 2, 2)
+            lay_plunmon.addWidget(self.led_plg1_up, 2, 3)
         lay_plunmon.addItem(
             QSpacerItem(10, 10, QSzPlcy.Expanding, QSzPlcy.Expanding), 4, 4)
 
@@ -565,9 +567,10 @@ class RFMainControl(SiriusMainWindow):
         self.graph_plunmotors.showLegend = True
         self.graph_plunmotors.timeSpan = 1800
         self.graph_plunmotors.maxRedrawRate = 2
-        # self.graph_plunmotors.addYChannel(
-        #     y_channel=self.prefix+self.chs['Tun']['PlM1Curr'], color='blue',
-        #     name='Motor 1', lineStyle=Qt.SolidLine, lineWidth=1)
+        if self.section == 'BO':
+            self.graph_plunmotors.addYChannel(
+                y_channel=self.prefix+self.chs['Tun']['PlM1Curr'], color='blue',
+                name='Motor 1', lineStyle=Qt.SolidLine, lineWidth=1)
         self.graph_plunmotors.setLabel('left', '')
 
         if self.section != "SI":
@@ -678,7 +681,7 @@ class RFMainControl(SiriusMainWindow):
             }""")
         wid_llrf.addTab(wid_sl, 'Slow Loop Control')
         wid_llrf.addTab(wid_tun, 'Tuning')
-        if self.section != "SI":
+        if self.section == 'BO':
             wid_llrf.addTab(wid_fflat, 'Field Flatness')
 
         # Layout
@@ -1444,9 +1447,8 @@ class RFMainControl(SiriusMainWindow):
             _part(self._handle_predrive_led_channels, led_drive, chs_dict))
 
     def _create_tun_set_wid(self, lay_tunset, column, chs_dict, offset):
-        if column:
-            lay_tunset.addWidget(QLabel(
-                column, self, alignment=Qt.AlignCenter), 0, offset)
+        lay_tunset.addWidget(QLabel(
+            column, self, alignment=Qt.AlignCenter), 0, offset)
 
         bt_autotun = PyDMStateButton(
             self, self.prefix+chs_dict['Auto']+'-Sel')
