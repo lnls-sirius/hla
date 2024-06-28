@@ -492,9 +492,9 @@ class FDLMonitor(SiriusDialog):
         self.led_rearm = SiriusLedAlert(
             self, self.prefix + self.chs['FDL']['Rearm'])
         self.led_raw = SiriusLedAlert(
-            self, self.prefix + self.chs['FDL']['Raw'])
+            self, self.prefix + self.chs['FDL']['Raw']+'-Sts')
         self.bt_raw = PyDMStateButton(
-            self, self.prefix + self.chs['FDL']['Raw'] + ':S')
+            self, self.prefix + self.chs['FDL']['Raw']+'-Sel')
 
         rearm_lay = QHBoxLayout()
         rearm_lay.addWidget(self.bt_rearm)

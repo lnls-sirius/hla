@@ -329,13 +329,13 @@ class RFMainControl(SiriusMainWindow):
 
         # LLRF
         # # Slow Loop Control
-        self.lb_slmode = SiriusLabel(self, self.prefix+self.chs['SL']['Mode'])
+        self.lb_slmode = SiriusLabel(self, self.prefix+self.chs['SL']['Mode']+'-Sts')
         self.led_slmode = PyDMLedMultiChannel(
-            self, {self.prefix+self.chs['SL']['Mode']: 0})
+            self, {self.prefix+self.chs['SL']['Mode']+'-Sts': 0})
         self.bt_slenbl = PyDMStateButton(
-            self, self.prefix+self.chs['SL']['Enbl']+':S')
+            self, self.prefix+self.chs['SL']['Enbl']+'-Sel')
         self.led_slenbl = SiriusLedState(
-            self, self.prefix+self.chs['SL']['Enbl'])
+            self, self.prefix+self.chs['SL']['Enbl']+'-Sts')
 
         lay_over = QGridLayout()
         lay_over.setAlignment(Qt.AlignCenter)
@@ -353,17 +353,17 @@ class RFMainControl(SiriusMainWindow):
         self.lb_amp1 = SiriusLabel(
             self, self.prefix+self.chs['SL']['ASet'][0]+'-RB')
         self.cb_ampincrate = PyDMEnumComboBox(
-            self, self.prefix+self.chs['SL']['AInc']+':S')
+            self, self.prefix+self.chs['SL']['AInc']+'-SP')
         self.lb_ampincrate = SiriusLabel(
-            self, self.prefix+self.chs['SL']['AInc'])
+            self, self.prefix+self.chs['SL']['AInc']+'-SP')
         self.sb_phs = SiriusSpinbox(
-            self, self.prefix+self.chs['SL']['PSet']+':S')
+            self, self.prefix+self.chs['SL']['PSet']+'-SP')
         self.lb_phs = SiriusLabel(
-            self, self.prefix+self.chs['SL']['PSet'])
+            self, self.prefix+self.chs['SL']['PSet']+'-RB')
         self.cb_phsincrate = PyDMEnumComboBox(
-            self, self.prefix+self.chs['SL']['PInc']+':S')
+            self, self.prefix+self.chs['SL']['PInc']+'-SP')
         self.lb_phsincrate = SiriusLabel(
-            self, self.prefix+self.chs['SL']['PInc'])
+            self, self.prefix+self.chs['SL']['PInc']+'-RB')
         lay_slctrl = QGridLayout()
         lay_slctrl.setHorizontalSpacing(9)
         lay_slctrl.setVerticalSpacing(9)
@@ -388,21 +388,21 @@ class RFMainControl(SiriusMainWindow):
         lay_slctrl.addWidget(self.lb_phsincrate, 2, 5, alignment=Qt.AlignLeft)
 
         self.cb_inpsel = PyDMEnumComboBox(
-            self, self.prefix+self.chs['SL']['Inp']+':S')
+            self, self.prefix+self.chs['SL']['Inp']+'-Sel')
         self.lb_inpsel = SiriusLabel(
-            self, self.prefix+self.chs['SL']['Inp'])
+            self, self.prefix+self.chs['SL']['Inp']+'-Sts')
         self.sb_pilimit = SiriusSpinbox(
-            self, self.prefix+self.chs['SL']['PIL']+':S')
+            self, self.prefix+self.chs['SL']['PIL']+'-SP')
         self.lb_pilimit = SiriusLabel(
-            self, self.prefix+self.chs['SL']['PIL'])
+            self, self.prefix+self.chs['SL']['PIL']+'-RB')
         self.sb_ki = SiriusSpinbox(
-            self, self.prefix+self.chs['SL']['KI']+':S')
+            self, self.prefix+self.chs['SL']['KI']+'-SP')
         self.lb_ki = SiriusLabel(
-            self, self.prefix+self.chs['SL']['KI'])
+            self, self.prefix+self.chs['SL']['KI']+'-RB')
         self.sb_kp = SiriusSpinbox(
-            self, self.prefix+self.chs['SL']['KP']+':S')
+            self, self.prefix+self.chs['SL']['KP']+'-SP')
         self.lb_kp = SiriusLabel(
-            self, self.prefix+self.chs['SL']['KP'])
+            self, self.prefix+self.chs['SL']['KP']+'-RB')
         lay_slctrl2 = QGridLayout()
         lay_slctrl2.setHorizontalSpacing(9)
         lay_slctrl2.setVerticalSpacing(9)
@@ -502,14 +502,14 @@ class RFMainControl(SiriusMainWindow):
         # # # Tuning settings
         ld_autotun = QLabel('Auto Tuning: ', self, alignment=Qt.AlignRight)
         bt_autotun = PyDMStateButton(
-            self, self.prefix+self.chs['Tun']['Auto']+':S')
+            self, self.prefix+self.chs['Tun']['Auto']+'-Seç')
         lb_autotun = SiriusLedState(
-            self, self.prefix+self.chs['Tun']['Auto'])
+            self, self.prefix+self.chs['Tun']['Auto']+'-Sts')
         ld_dtune = QLabel('DTune: ', self, alignment=Qt.AlignRight)
         sb_dtune = SiriusSpinbox(
-            self, self.prefix+self.chs['Tun']['DTune'].replace('RB', 'SP'))
+            self, self.prefix+self.chs['Tun']['DTune']+'-SP')
         lb_dtune = SiriusLabel(
-            self, self.prefix+self.chs['Tun']['DTune'])
+            self, self.prefix+self.chs['Tun']['DTune']+'-RB')
         lb_dtune.showUnits = True
         ld_dphase = QLabel('Dephase: ', self, alignment=Qt.AlignRight)
         lb_dphase = SiriusLabel(
@@ -522,16 +522,16 @@ class RFMainControl(SiriusMainWindow):
         ld_oversht = QLabel(
             'Overshoot: ', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         sb_oversht = SiriusSpinbox(
-            self, self.prefix+self.chs['Tun']['Oversht']+':S')
+            self, self.prefix+self.chs['Tun']['Oversht']+'-SP')
         lb_oversht = SiriusLabel(
-            self, self.prefix+self.chs['Tun']['Oversht'])
+            self, self.prefix+self.chs['Tun']['Oversht']+'-RB')
         lb_oversht.showUnits = True
         ld_margin = QLabel(
             'Deadband: ', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         sb_margin = SiriusSpinbox(
-            self, self.prefix+self.chs['Tun']['Deadbnd']+':S')
+            self, self.prefix+self.chs['Tun']['Deadbnd']+'-SP')
         lb_margin = SiriusLabel(
-            self, self.prefix+self.chs['Tun']['Deadbnd'])
+            self, self.prefix+self.chs['Tun']['Deadbnd']+'-RB')
         lb_margin.showUnits = True
         lay_tunset = QGridLayout()
         lay_tunset.setAlignment(Qt.AlignTop | Qt.AlignHCenter)
@@ -634,22 +634,22 @@ class RFMainControl(SiriusMainWindow):
         lb_ffsts = QLabel('Acting: ', self, alignment=Qt.AlignRight)
         self.lb_ffsts = SiriusLedState(self, self.prefix+pvs['Sts'])
         lb_ffen = QLabel('Enable: ', self, alignment=Qt.AlignRight)
-        self.bt_ffen = PyDMStateButton(self, self.prefix+pvs['Auto']+':S')
-        self.lb_ffen = SiriusLedState(self, self.prefix+pvs['Auto'])
+        self.bt_ffen = PyDMStateButton(self, self.prefix+pvs['Auto']+'-Sel')
+        self.lb_ffen = SiriusLedState(self, self.prefix+pvs['Auto']+'-Sts')
         lb_ffpos = QLabel('Position: ', self, alignment=Qt.AlignRight)
-        self.bt_ffpos = PyDMStateButton(self, self.prefix+pvs['Pos']+':S')
-        self.lb_ffpos = SiriusLedState(self, self.prefix+pvs['Pos'])
+        self.bt_ffpos = PyDMStateButton(self, self.prefix+pvs['Pos']+'-Sel')
+        self.lb_ffpos = SiriusLedState(self, self.prefix+pvs['Pos']+'-Sts')
         lb_ffg1 = QLabel('Gain Cell 2: ', self, alignment=Qt.AlignRight)
         lb_ffg2 = QLabel(f'Gain Cell {lb2:s}: ', self, alignment=Qt.AlignRight)
-        self.sb_ffg1 = SiriusSpinbox(self, self.prefix+pvs['Gain1']+':S')
-        self.sb_ffg2 = SiriusSpinbox(self, self.prefix+pvs['Gain2']+':S')
-        self.lb_ffg1 = SiriusLabel(self, self.prefix+pvs['Gain1'])
-        self.lb_ffg2 = SiriusLabel(self, self.prefix+pvs['Gain2'])
+        self.sb_ffg1 = SiriusSpinbox(self, self.prefix+pvs['Gain1']+'-SP')
+        self.sb_ffg2 = SiriusSpinbox(self, self.prefix+pvs['Gain2']+'-SP')
+        self.lb_ffg1 = SiriusLabel(self, self.prefix+pvs['Gain1']+'-RB')
+        self.lb_ffg2 = SiriusLabel(self, self.prefix+pvs['Gain2']+'-RB')
         self.lb_ffg1.showUnits = True
         self.lb_ffg2.showUnits = True
         lb_ffdb = QLabel('DeadBand: ', self, alignment=Qt.AlignRight)
-        self.sb_ffdb = SiriusSpinbox(self, self.prefix+pvs['Deadband']+':S')
-        self.lb_ffdb = SiriusLabel(self, self.prefix+pvs['Deadband'])
+        self.sb_ffdb = SiriusSpinbox(self, self.prefix+pvs['Deadband']+':SP')
+        self.lb_ffdb = SiriusLabel(self, self.prefix+pvs['Deadband']+':RB')
         self.lb_ffdb.showUnits = True
         lb_ffcell1 = QLabel('Cell 2: ', self, alignment=Qt.AlignRight)
         self.lb_ffcell1 = SiriusLabel(self, self.prefix+pvs['Cell1'])
@@ -718,78 +718,78 @@ class RFMainControl(SiriusMainWindow):
         ctrls_label = QLabel('<h3> • Controls</h3>', self,
                              alignment=Qt.AlignLeft)
         self.bt_rmpenbl = PyDMStateButton(
-            self, self.prefix+'BR-RF-DLLRF-01:RmpEnbl-Sel')
+            self, self.prefix+'RA-RaBO01:RF-LLRF:RmpEn-Sel')
         self.lb_rmpenbl = SiriusLedState(
-            self, self.prefix+'BR-RF-DLLRF-01:RmpEnbl-Sts')
+            self, self.prefix+'RA-RaBO01:RF-LLRF:RmpEn-Sts')
 
         self.led_rmpready = PyDMLed(
-            self, self.prefix+'BR-RF-DLLRF-01:RmpReady-Mon')
+            self, self.prefix+'RA-RaBO01:RF-LLRF:RampRdy-Mon')
         self.led_rmpready.onColor = PyDMLed.LightGreen
         self.led_rmpready.offColor = PyDMLed.Red
 
         self.led_rmptrig = PyDMLed(
-            self, self.prefix+'BR-RF-DLLRF-01:5HZTRIG')
+            self, self.prefix+'RA-RaBO01:RF-LLRF:RampTrigger-Mon')
         self.led_rmptrig.onColor = PyDMLed.LightGreen
         self.led_rmptrig.offColor = PyDMLed.Red
 
         self.cb_rmpincts = SiriusSpinbox(
-            self, self.prefix+'BR-RF-DLLRF-01:RmpIncTs-SP')
+            self, self.prefix+'RA-RaBO01:RF-LLRF:RmpIncTime-SP')
         self.lb_rmpincts = SiriusLabel(
-            self, self.prefix+'BR-RF-DLLRF-01:RmpIncTs-RB')
+            self, self.prefix+'RA-RaBO01:RF-LLRF:RmpIncTime-RB')
         self.lb_rmpincts.showUnits = True
 
         self.sb_rmpts1 = SiriusSpinbox(
-            self, self.prefix+'BR-RF-DLLRF-01:RmpTs1-SP')
+            self, self.prefix+'RA-RaBO01:RF-LLRF:RmpIncTime-SP')
         self.lb_rmpts1 = SiriusLabel(
-            self, self.prefix+'BR-RF-DLLRF-01:RmpTs1-RB')
+            self, self.prefix+'RA-RaBO01:RF-LLRF:RmpIncTime-RB')
         self.lb_rmpts1.showUnits = True
         self.sb_rmpts2 = SiriusSpinbox(
-            self, self.prefix+'BR-RF-DLLRF-01:RmpTs2-SP')
+            self, self.prefix+'RA-RaBO01:RF-LLRF:RmpTs2-SP')
         self.lb_rmpts2 = SiriusLabel(
-            self, self.prefix+'BR-RF-DLLRF-01:RmpTs2-RB')
+            self, self.prefix+'RA-RaBO01:RF-LLRF:RmpTs2-SP')
         self.lb_rmpts2.showUnits = True
         self.sb_rmpts3 = SiriusSpinbox(
-            self, self.prefix+'BR-RF-DLLRF-01:RmpTs3-SP')
+            self, self.prefix+'RA-RaBO01:RF-LLRF:RmpTs3-SP')
         self.lb_rmpts3 = SiriusLabel(
-            self, self.prefix+'BR-RF-DLLRF-01:RmpTs3-RB')
+            self, self.prefix+'RA-RaBO01:RF-LLRF:RmpTs3-RB')
         self.lb_rmpts3.showUnits = True
         self.sb_rmpts4 = SiriusSpinbox(
-            self, self.prefix+'BR-RF-DLLRF-01:RmpTs4-SP')
+            self, self.prefix+'RA-RaBO01:RF-LLRF:RmpTs4-SP')
         self.lb_rmpts4 = SiriusLabel(
-            self, self.prefix+'BR-RF-DLLRF-01:RmpTs4-RB')
+            self, self.prefix+'RA-RaBO01:RF-LLRF:RmpTs4-RB')
         self.lb_rmpts4.showUnits = True
 
         self.sb_rmpphstop = SiriusSpinbox(
-            self, self.prefix+'BR-RF-DLLRF-01:RmpPhsTop-SP')
+            self, self.prefix+'RA-RaBO01:RF-LLRF:RampPhsTop-SP')
         self.lb_rmpphstop = SiriusLabel(
-            self, self.prefix+'BR-RF-DLLRF-01:RmpPhsTop-RB')
+            self, self.prefix+'RA-RaBO01:RF-LLRF:RampPhsTop-RB')
         self.lb_rmpphstop.showUnits = True
         self.ld_rmpphstop = QLabel('Amplitude', self, alignment=Qt.AlignRight)
         lay_rmpphstopdesc = QHBoxLayout()
         lay_rmpphstopdesc.addWidget(self.ld_rmpphstop)
         lay_rmpphstopdesc.setAlignment(Qt.AlignRight)
         self.le_rmpvolttop1 = PyDMLineEdit(
-            self, self.prefix+'BR-RF-DLLRF-01:mV:RAMP:AMP:TOP-SP')
+            self, self.prefix+'RA-RaBO01:RF-LLRF:RampAmpTop-SP')
         self.lb_rmpvolttop1 = SiriusLabel(
-            self, self.prefix+'BR-RF-DLLRF-01:mV:RAMP:AMP:TOP-RB')
+            self, self.prefix+'RA-RaBO01:RF-LLRF:RampAmpTop-RB')
         self.lb_rmpvolttop1.showUnits = True
         self.lb_rmpvolttop2 = SiriusLabel(
             self, self.prefix+'RA-RaBO01:RF-LLRF:RmpAmpVCavTop-RB')
         self.lb_rmpvolttop2.showUnits = True
 
         self.sb_rmpphsbot = SiriusSpinbox(
-            self, self.prefix+'BR-RF-DLLRF-01:RmpPhsBot-SP')
+            self, self.prefix+'RA-RaBO01:RF-LLRF:RampPhsBot-SP')
         self.lb_rmpphsbot = SiriusLabel(
-            self, self.prefix+'BR-RF-DLLRF-01:RmpPhsBot-RB')
+            self, self.prefix+'RA-RaBO01:RF-LLRF:RampPhsBot-RB')
         self.lb_rmpphsbot.showUnits = True
         self.ld_rmpphsbot = QLabel('Amplitude', self, alignment=Qt.AlignRight)
         lay_rmpphsbotdesc = QHBoxLayout()
         lay_rmpphsbotdesc.addWidget(self.ld_rmpphsbot)
         lay_rmpphsbotdesc.setAlignment(Qt.AlignRight)
         self.le_rmpvoltbot1 = PyDMLineEdit(
-            self, self.prefix+'BR-RF-DLLRF-01:mV:RAMP:AMP:BOT-SP')
+            self, self.prefix+'RA-RaBO01:RF-LLRF:RampAmpBot-SP')
         self.lb_rmpvoltbot1 = SiriusLabel(
-            self, self.prefix+'BR-RF-DLLRF-01:mV:RAMP:AMP:BOT-RB')
+            self, self.prefix+'RA-RaBO01:RF-LLRF:RampAmpBot-RB')
         self.lb_rmpvoltbot1.showUnits = True
         self.lb_rmpvoltbot2 = SiriusLabel(
             self, self.prefix+'RA-RaBO01:RF-LLRF:RmpAmpVCavBot-RB')
@@ -996,37 +996,37 @@ class RFMainControl(SiriusMainWindow):
 
     def _autoStartLayout(self):
         self.bt_autostart = PyDMStateButton(
-            self, self.prefix+'BR-RF-DLLRF-01:AUTOSTART:S')
+            self, self.prefix+'RA-RaBO01:RF-LLRF:AutoStartupEn-SP')
         self.led_autostart = SiriusLedState(
-            self, self.prefix+'BR-RF-DLLRF-01:AUTOSTART')
+            self, self.prefix+'RA-RaBO01:RF-LLRF:AutoStartupEn-RB')
         hl_autostart = QHBoxLayout()
         hl_autostart.setAlignment(Qt.AlignLeft)
         hl_autostart.addWidget(self.bt_autostart)
         hl_autostart.addWidget(self.led_autostart)
 
         self.cb_comstart = PyDMEnumComboBox(
-            self, self.prefix+'BR-RF-DLLRF-01:COMMSTART:S')
+            self, self.prefix+'RA-RaBO01:RF-LLRF:AutoStartupCmdStart-Sel')
         self.cb_comstart.setStyleSheet('min-width: 15em; max-width: 15em;')
 
         self.lb_statestart = SiriusLabel(
-            self, self.prefix+'BR-RF-DLLRF-01:STATESTART')
+            self, self.prefix+'RA-RaBO01:RF-LLRF:AutoStartupCmdStart-Sts')
         self.lb_statestart.setStyleSheet(
             'qproperty-alignment: AlignLeft; min-width:15em; max-width:15em;')
 
         self.led_startok = PyDMLedMultiChannel(
             self, {self.prefix+'BR-RF-DLLRF-01:EPS': 0,
                    self.prefix+'BR-RF-DLLRF-01:FIM': 0,
-                   self.prefix+'BR-RF-DLLRF-01:TXREADY': 1,
-                   self.prefix+'BR-RF-DLLRF-01:FASTILK': 0})
+                   self.prefix+'RA-RaBO01:RF-LLRF:SSARdy-Mon': 1,
+                   self.prefix+'RA-RaBO01:RF-LLRF:IntlkAll-Mon': 0})
 
         self.led_tuneok = PyDMLedMultiChannel(
-            self, {self.prefix+'BR-RF-DLLRF-01:TUNE:FWDMIN': 1})
+            self, {self.prefix+'RA-RaBO01:RF-LLRF:TuneFwdMin-Mon': 1})
 
         self.led_closeloopok = PyDMLedMultiChannel(
-            self, {self.prefix+'BR-RF-DLLRF-01:SL:FWDMIN': 1,
-                   self.prefix+'BR-RF-DLLRF-01:FL:FWDMIN': 1,
-                   self.prefix+'BR-RF-DLLRF-01:AL:FWDMIN': 1,
-                   self.prefix+'BR-RF-DLLRF-01:PL:FWDMIN': 1})
+            self, {self.prefix+'RA-RaBO01:RF-LLRF:SLFwdMin-Mon': 1,
+                   self.prefix+'RA-RaBO01:RF-LLRF:FLFwdMin-Mon': 1,
+                   self.prefix+'RA-RaBO01:RF-LLRF:ALFwdMin-Mon': 1,
+                   self.prefix+'RA-RaBO01:RF-LLRF:PLFwdMin-Mon': 1})
 
         lay = QFormLayout()
         lay.setLabelAlignment(Qt.AlignRight)
