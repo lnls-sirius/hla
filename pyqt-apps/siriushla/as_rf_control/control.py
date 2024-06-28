@@ -193,22 +193,17 @@ class RFMainControl(SiriusMainWindow):
 
         # Reset
         self._ld_reset = QLabel('<h4>Reset</h4>', self, alignment=Qt.AlignLeft)
-        lay_reset = QGridLayout()
-        lay_reset.setAlignment(Qt.AlignTop)
-        lay_reset.addWidget(self._ld_reset, 0, 0)
-
-        offset = 1
+        reset_list = []
         for key, val in self.chs['Reset'].items():
-            lay_reset.addWidget(QLabel(
-                f'Reset {key}', self, alignment=Qt.AlignRight), offset, 0)
+            reset_list.append(QLabel(
+                f'Reset {key}', self, alignment=Qt.AlignRight))
 
             pb_reset = SiriusPushButton(
                 label='', icon=qta.icon('fa5s.sync'), releaseValue=0,
                 parent=self, init_channel=self.prefix+val
             )
             pb_reset.setStyleSheet('min-width:25px; max-width:25px; icon-size:20px;')
-            lay_reset.addWidget(pb_reset, offset, 1)
-            offset += 1
+            reset_list.append(pb_reset)
 
         # Auxiliary Windows
         self._ld_fdl = QLabel(
@@ -238,9 +233,14 @@ class RFMainControl(SiriusMainWindow):
         lay.addWidget(self.ld_tlsts, 6, 0)
         lay.addWidget(self.led_tlsts, 6, 1)
         lay.addWidget(self.pb_tldtls, 6, 2)
-        lay.addLayout(lay_reset, 7, 0, 1, 2)
-        lay.addWidget(self._ld_fdl, 8, 0, 1, 3)
-        lay.addWidget(self.pb_openfdl, 9, 0, alignment=Qt.AlignRight)
+        lay.addWidget(self._ld_reset, 7, 0, 1, 3)
+        line = 7
+        for n, wid in enumerate(reset_list):
+            if isinstance(wid, QLabel):
+                line += 1
+            lay.addWidget(wid, line, n % 2)
+        lay.addWidget(self._ld_fdl, line + 1, 0, 1, 3)
+        lay.addWidget(self.pb_openfdl, line + 2, 0, alignment=Qt.AlignRight)
 
         return lay
 
