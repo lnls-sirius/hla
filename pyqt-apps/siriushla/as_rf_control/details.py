@@ -269,9 +269,23 @@ class LLRFInterlockDetails(SiriusDialog):
             alignment=Qt.AlignCenter)
         lay.addWidget(self.title, 0, 0, 1, 3)
 
+        if self.section == 'SI':
+            offset = 1
+            for key, chs_dict in self.chs['LLRF Intlk Details'].items():
+                self._setupDetails(lay, key, chs_dict, offset)
+                offset += 2
+        else:
+            self._setupDetails(lay, None, self.chs['LLRF Intlk Details'], 1)
+
+    def _setupDetails(self, lay, key, chs_dict, offset):
+        if key:
+            lay.addWidget(QLabel(
+                f'<h4>LLRF {key}</h4>', self,
+                alignment=Qt.AlignLeft), offset, 0)
+
         # inputs
         col = 0
-        for name, dic in self.chs['LLRF Intlk Details']['Inputs'].items():
+        for name, dic in chs_dict['Inputs'].items():
             gbox = QGroupBox(name, self)
             lay_intlk = QGridLayout(gbox)
             lay_intlk.setAlignment(Qt.AlignTop)
@@ -299,7 +313,7 @@ class LLRFInterlockDetails(SiriusDialog):
                 lbl.setStyleSheet('QLabel{min-width:12em;}')
                 lay_intlk.addWidget(lbl, irow, icol)
 
-            lay.addWidget(gbox, 1, col)
+            lay.addWidget(gbox, offset+1, col)
             col += 1
 
         # timestamps
@@ -308,7 +322,7 @@ class LLRFInterlockDetails(SiriusDialog):
         lay_time.setAlignment(Qt.AlignTop)
         lay_time.setHorizontalSpacing(9)
         lay_time.setVerticalSpacing(9)
-        for idx, pvn in self.chs['LLRF Intlk Details']['Timestamps'].items():
+        for idx, pvn in chs_dict['Timestamps'].items():
             irow = int(idx)-1
             desc = QLabel('Interlock '+idx, self, alignment=Qt.AlignCenter)
             desc.setStyleSheet('QLabel{min-width:6em;}')
@@ -316,7 +330,7 @@ class LLRFInterlockDetails(SiriusDialog):
             lbl.showUnits = True
             lay_time.addWidget(desc, irow, 0)
             lay_time.addWidget(lbl, irow, 1)
-        lay.addWidget(gbox_time, 1, col)
+        lay.addWidget(gbox_time, offset+1, col)
 
 
 class BarGraph(PlotWidget):
