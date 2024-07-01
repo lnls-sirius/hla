@@ -165,13 +165,15 @@ class RFMainControl(SiriusMainWindow):
 
         if self.section == 'SI':
             lay_llrf_intlk = QGridLayout()
-            lay_llrf_intlk.addWidget(self.ld_intlk, 0, 0)
+            lay_llrf_intlk.addWidget(self.ld_intlk, 0, 0,
+                alignment=Qt.AlignVCenter)
             lay_llrf_intlk.addWidget(self.pb_intlkdtls,
                 0, 1, alignment=Qt.AlignCenter)
 
             offset = 1
             for key, val in self.chs['LLRF Intlk'].items():
-                ld_llrf = QLabel(f'• {key}', alignment=Qt.AlignRight)
+                ld_llrf = QLabel(
+                    f'• {key}', alignment=Qt.AlignRight | Qt.AlignVCenter)
                 led_llrf = SiriusLedAlert(self, self.prefix+val)
                 lay_llrf_intlk.addWidget(ld_llrf, offset, 0)
                 lay_llrf_intlk.addWidget(led_llrf, offset, 1)
@@ -227,7 +229,8 @@ class RFMainControl(SiriusMainWindow):
             for key, val in self.chs['Reset'].items():
                 if key != 'Global':
                     ld_llrf = QLabel(
-                        f'• {key}', self, alignment=Qt.AlignRight)
+                        f'• {key}', self,
+                        alignment=Qt.AlignRight | Qt.AlignVCenter)
                     pb_llrf = SiriusPushButton(
                         label='', icon=qta.icon('fa5s.sync'), releaseValue=0,
                         parent=self, init_channel=self.prefix+val)
@@ -259,40 +262,33 @@ class RFMainControl(SiriusMainWindow):
         lay.setHorizontalSpacing(6)
         lay.setAlignment(Qt.AlignTop)
         lay.addWidget(self._ld_intlks, 0, 0, 1, 3)
-        lay.addWidget(self.ld_emerg, 1, 0)
+        lay.addWidget(self.ld_emerg, 1, 0, alignment=Qt.AlignVCenter)
         lay.addWidget(self.led_emerg, 1, 1)
-        lay.addWidget(self.ld_siriusintlk, 2, 0)
+        lay.addWidget(self.ld_siriusintlk, 2, 0, alignment=Qt.AlignVCenter)
         lay.addWidget(self.led_siriusintlk, 2, 1)
         if self.section == 'SI':
             lay.addLayout(lay_llrf_intlk, 3, 0, 1, 2)
         else:
-            lay.addWidget(self.ld_intlk, 3, 0)
+            lay.addWidget(self.ld_intlk, 3, 0, alignment=Qt.AlignVCenter)
             lay.addWidget(self.led_llrf, 3, 1)
             lay.addWidget(self.pb_intlkdtls, 3, 2)
         lay.addWidget(self._ld_stats, 4, 0, 1, 3)
-        lay.addWidget(self.ld_cavsts, 5, 0)
+        lay.addWidget(self.ld_cavsts, 5, 0, alignment=Qt.AlignVCenter)
         lay.addWidget(self.led_cavsts, 5, 1)
         lay.addWidget(self.pb_cavdtls, 5, 2)
-        lay.addWidget(self.ld_tlsts, 6, 0)
+        lay.addWidget(self.ld_tlsts, 6, 0, alignment=Qt.AlignVCenter)
         lay.addWidget(self.led_tlsts, 6, 1)
         lay.addWidget(self.pb_tldtls, 6, 2)
         lay.addWidget(self._ld_reset, 7, 0, 1, 3)
-        lay.addWidget(self.ld_glbl, 8, 0)
+        lay.addWidget(self.ld_glbl, 8, 0, alignment=Qt.AlignVCenter)
         lay.addWidget(self.pb_glbl, 8, 1)
         if self.section == 'SI':
             lay.addLayout(lay_llrf_reset, 9, 0, 1, 2)
         else:
-            lay.addWidget(self.ld_llrf, 9, 0)
+            lay.addWidget(self.ld_llrf, 9, 0, alignment=Qt.AlignVCenter)
             lay.addWidget(self.pb_llrf, 9, 1)
         lay.addWidget(self._ld_fdl, 10, 0, 1, 3)
         lay.addWidget(self.pb_openfdl, 11, 0, alignment=Qt.AlignRight)
-        # line = 7
-        # for n, wid in enumerate(reset_list):
-        #     if isinstance(wid, QLabel):
-        #         line += 1
-        #     lay.addWidget(wid, line, n % 2)
-        # lay.addWidget(self._ld_fdl, line + 1, 0, 1, 3)
-        # lay.addWidget(self.pb_openfdl, line + 2, 0, alignment=Qt.AlignRight)
 
         return lay
 
