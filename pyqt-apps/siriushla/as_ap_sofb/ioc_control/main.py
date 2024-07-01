@@ -616,8 +616,8 @@ class PerformanceWidget(QWidget):
         lay_tim.addWidget(lbl_max, 1, 4)
 
         labs = [
-            'Get Orbit', 'Get Kick', 'Calculate', 'Process', 'Apply', 'Total']
-        nms = ['GetO', 'GetK', 'Calc', 'Proc', 'App', 'Tot']
+            'Get Orbit', 'Calculate', 'Process', 'Apply', 'Total']
+        nms = ['GetO', 'Calc', 'Proc', 'App', 'Tot']
         for i, (nm, lab) in enumerate(zip(nms, labs)):
             lbl = QLabel(lab, self)
             lay_tim.addWidget(lbl, i+2, 0)
