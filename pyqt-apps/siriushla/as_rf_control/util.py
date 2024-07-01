@@ -319,7 +319,10 @@ SEC_2_CHANNELS = {
     'SI': {
         'Emergency': 'RA-RaSIA02:RF-IntlkCtrl:EStop-Mon',
         'Sirius Intlk': 'RA-RaSIA02:RF-IntlkCtrl:IntlkSirius-Mon',
-        'LLRF Intlk': 'RA-RaSIA01:RF-LLRF:Intlk-Mon',
+        'LLRF Intlk': {
+            'A': 'RA-RaSIA01:RF-LLRF:Intlk-Mon',
+            'B': 'RA-RaSIB01:RF-LLRF:Intlk-Mon',
+        },
         'LLRF Intlk Details': {
             'A': {
                 'Inputs': {

@@ -156,14 +156,29 @@ class RFMainControl(SiriusMainWindow):
 
         # # LLRF Interlock
         self.ld_intlk = QLabel('LLRF Interlock', self, alignment=Qt.AlignRight)
-        self.led_intlk = SiriusLedAlert(
-            self, self.prefix+self.chs['LLRF Intlk'])
         self.pb_intlkdtls = QPushButton(qta.icon('fa5s.ellipsis-v'), '', self)
         self.pb_intlkdtls.setObjectName('dtls')
         self.pb_intlkdtls.setStyleSheet(
             '#dtls{min-width:18px;max-width:18px;icon-size:20px;}')
         connect_window(self.pb_intlkdtls, LLRFInterlockDetails, parent=self,
                        section=self.section, prefix=self.prefix)
+
+        if self.section == 'SI':
+            lay_llrf_intlk = QGridLayout()
+            lay_llrf_intlk.addWidget(self.ld_intlk, 0, 0)
+            lay_llrf_intlk.addWidget(self.pb_intlkdtls,
+                0, 1, alignment=Qt.AlignCenter)
+
+            offset = 1
+            for key, val in self.chs['LLRF Intlk'].items():
+                ld_llrf = QLabel(f'• {key}', alignment=Qt.AlignRight)
+                led_llrf = SiriusLedAlert(self, self.prefix+val)
+                lay_llrf_intlk.addWidget(ld_llrf, offset, 0)
+                lay_llrf_intlk.addWidget(led_llrf, offset, 1)
+                offset += 1
+        else:
+            self.led_llrf = SiriusLedAlert(
+                self, self.prefix+self.chs['LLRF Intlk'])
 
         # Status
         self._ld_stats = QLabel(
@@ -217,15 +232,19 @@ class RFMainControl(SiriusMainWindow):
             prefix=self.prefix, section=self.section)
 
         lay = QGridLayout()
+        lay.setHorizontalSpacing(6)
         lay.setAlignment(Qt.AlignTop)
         lay.addWidget(self._ld_intlks, 0, 0, 1, 3)
         lay.addWidget(self.ld_emerg, 1, 0)
         lay.addWidget(self.led_emerg, 1, 1)
         lay.addWidget(self.ld_siriusintlk, 2, 0)
         lay.addWidget(self.led_siriusintlk, 2, 1)
-        lay.addWidget(self.ld_intlk, 3, 0)
-        lay.addWidget(self.led_intlk, 3, 1)
-        lay.addWidget(self.pb_intlkdtls, 3, 2)
+        if self.section == 'SI':
+            lay.addLayout(lay_llrf_intlk, 3, 0, 1, 2)
+        else:
+            lay.addWidget(self.ld_intlk, 3, 0)
+            lay.addWidget(self.led_llrf, 3, 1)
+            lay.addWidget(self.pb_intlkdtls, 3, 2)
         lay.addWidget(self._ld_stats, 4, 0, 1, 3)
         lay.addWidget(self.ld_cavsts, 5, 0)
         lay.addWidget(self.led_cavsts, 5, 1)
@@ -1014,8 +1033,8 @@ class RFMainControl(SiriusMainWindow):
             'qproperty-alignment: AlignLeft; min-width:15em; max-width:15em;')
 
         self.led_startok = PyDMLedMultiChannel(
-            self, {self.prefix+'BR-RF-DLLRF-01:EPS': 0,
-                   self.prefix+'BR-RF-DLLRF-01:FIM': 0,
+            self, {self.prefix+'RA-RaSIA01:RF-LLRF-A:EPSEn-Sts': 0,
+                   self.prefix+'RA-RaSIA01:RF-LLRF-A:FIMEn-Sts': 0,
                    self.prefix+'RA-RaBO01:RF-LLRF:SSARdy-Mon': 1,
                    self.prefix+'RA-RaBO01:RF-LLRF:IntlkAll-Mon': 0})
 
