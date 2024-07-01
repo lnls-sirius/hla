@@ -208,17 +208,41 @@ class RFMainControl(SiriusMainWindow):
 
         # Reset
         self._ld_reset = QLabel('<h4>Reset</h4>', self, alignment=Qt.AlignLeft)
-        reset_list = []
-        for key, val in self.chs['Reset'].items():
-            reset_list.append(QLabel(
-                f'Reset {key}', self, alignment=Qt.AlignRight))
 
-            pb_reset = SiriusPushButton(
-                label='', icon=qta.icon('fa5s.sync'), releaseValue=0,
-                parent=self, init_channel=self.prefix+val
-            )
-            pb_reset.setStyleSheet('min-width:25px; max-width:25px; icon-size:20px;')
-            reset_list.append(pb_reset)
+        # # Reset Global
+        self.ld_glbl = QLabel('Reset Global', self, alignment=Qt.AlignRight)
+        self.pb_glbl = SiriusPushButton(
+            label='', icon=qta.icon('fa5s.sync'), releaseValue=0,
+            parent=self, init_channel=self.prefix+self.chs['Reset']['Global'])
+        self.pb_glbl.setStyleSheet(
+            'min-width:25px; max-width:25px; icon-size:20px;')
+
+        # # Reset LLRF
+        self.ld_llrf = QLabel('Reset LLRF', self, alignment=Qt.AlignRight)
+        if self.section == 'SI':
+            lay_llrf_reset = QGridLayout()
+            lay_llrf_reset.addWidget(self.ld_llrf, 0, 0)
+
+            offset = 1
+            for key, val in self.chs['Reset'].items():
+                if key != 'Global':
+                    ld_llrf = QLabel(
+                        f'• {key}', self, alignment=Qt.AlignRight)
+                    pb_llrf = SiriusPushButton(
+                        label='', icon=qta.icon('fa5s.sync'), releaseValue=0,
+                        parent=self, init_channel=self.prefix+val)
+                    pb_llrf.setStyleSheet(
+                        'min-width:25px; max-width:25px; icon-size:20px;')
+                    lay_llrf_reset.addWidget(ld_llrf, offset, 0)
+                    lay_llrf_reset.addWidget(pb_llrf, offset, 1)
+                    offset += 1
+        else:
+            self.pb_llrf = SiriusPushButton(
+                init_channel=self.prefix+self.chs['Reset']['LLRF'],
+                label='', icon=qta.icon('fa5s.sync'),
+                parent=self, releaseValue=0)
+            self.pb_llrf.setStyleSheet(
+                'min-width:25px; max-width:25px; icon-size:20px;')
 
         # Auxiliary Windows
         self._ld_fdl = QLabel(
@@ -253,13 +277,22 @@ class RFMainControl(SiriusMainWindow):
         lay.addWidget(self.led_tlsts, 6, 1)
         lay.addWidget(self.pb_tldtls, 6, 2)
         lay.addWidget(self._ld_reset, 7, 0, 1, 3)
-        line = 7
-        for n, wid in enumerate(reset_list):
-            if isinstance(wid, QLabel):
-                line += 1
-            lay.addWidget(wid, line, n % 2)
-        lay.addWidget(self._ld_fdl, line + 1, 0, 1, 3)
-        lay.addWidget(self.pb_openfdl, line + 2, 0, alignment=Qt.AlignRight)
+        lay.addWidget(self.ld_glbl, 8, 0)
+        lay.addWidget(self.pb_glbl, 8, 1)
+        if self.section == 'SI':
+            lay.addLayout(lay_llrf_reset, 9, 0, 1, 2)
+        else:
+            lay.addWidget(self.ld_llrf, 9, 0)
+            lay.addWidget(self.pb_llrf, 9, 1)
+        lay.addWidget(self._ld_fdl, 10, 0, 1, 3)
+        lay.addWidget(self.pb_openfdl, 11, 0, alignment=Qt.AlignRight)
+        # line = 7
+        # for n, wid in enumerate(reset_list):
+        #     if isinstance(wid, QLabel):
+        #         line += 1
+        #     lay.addWidget(wid, line, n % 2)
+        # lay.addWidget(self._ld_fdl, line + 1, 0, 1, 3)
+        # lay.addWidget(self.pb_openfdl, line + 2, 0, alignment=Qt.AlignRight)
 
         return lay
 
