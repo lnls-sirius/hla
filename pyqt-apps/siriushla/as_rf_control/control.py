@@ -522,29 +522,13 @@ class RFMainControl(SiriusMainWindow):
             self._create_tun_set_wid(lay_tunset, None, self.chs['Tun'], 2)
 
         # # # Plungers motors
-        lb_plg1 = QLabel('Plunger 1')
+        lay_plunmon = QGridLayout()
         lb_down = QLabel('Down')
         lb_up = QLabel('Up')
-        if self.section == 'BO':
-            self.led_plg1_dn = PyDMLed(
-                self, self.prefix+self.chs['Tun']['Pl1Down'])
-            self.led_plg1_dn.offColor = QColor(64, 64, 64)
-            self.led_plg1_dn.onColor = QColor('blue')
-            self.led_plg1_dn.shape = PyDMLed.ShapeMap.Square
-            self.led_plg1_up = PyDMLed(
-                self, self.prefix+self.chs['Tun']['Pl1Up'])
-            self.led_plg1_up.offColor = QColor(64, 64, 64)
-            self.led_plg1_up.onColor = QColor('blue')
-            self.led_plg1_up.shape = PyDMLed.ShapeMap.Square
-        lay_plunmon = QGridLayout()
         lay_plunmon.addItem(
             QSpacerItem(10, 10, QSzPlcy.Expanding, QSzPlcy.Expanding), 0, 0)
         lay_plunmon.addWidget(lb_down, 1, 2)
         lay_plunmon.addWidget(lb_up, 1, 3)
-        lay_plunmon.addWidget(lb_plg1, 2, 1)
-        if self.section == 'BO':
-            lay_plunmon.addWidget(self.led_plg1_dn, 2, 2)
-            lay_plunmon.addWidget(self.led_plg1_up, 2, 3)
         lay_plunmon.addItem(
             QSpacerItem(10, 10, QSzPlcy.Expanding, QSzPlcy.Expanding), 4, 4)
 
@@ -560,14 +544,49 @@ class RFMainControl(SiriusMainWindow):
         self.graph_plunmotors.showLegend = True
         self.graph_plunmotors.timeSpan = 1800
         self.graph_plunmotors.maxRedrawRate = 2
-        if self.section == 'BO':
+        self.graph_plunmotors.setLabel('left', '')
+
+        if self.section == 'SI':
+            offset = 2
+            for key, chs_dict in self.chs['Tun'].items():
+                lb_plg = QLabel(f'LLRF {key}')
+                led_plg_dn = PyDMLed(
+                    self, self.prefix+chs_dict['Pl1Down'])
+                led_plg_dn.offColor = QColor(64, 64, 64)
+                led_plg_dn.onColor = QColor('blue')
+                led_plg_dn.shape = PyDMLed.ShapeMap.Square
+                led_plg_up = PyDMLed(
+                    self, self.prefix+chs_dict['Pl1Up'])
+                led_plg_up.offColor = QColor(64, 64, 64)
+                led_plg_up.onColor = QColor('blue')
+                led_plg_up.shape = PyDMLed.ShapeMap.Square
+                self.graph_plunmotors.addYChannel(
+                    y_channel=self.prefix+chs_dict['PlM1Curr'],
+                    color=self.prefix+chs_dict['color'], name=f'LLRF {key}',
+                    lineStyle=Qt.SolidLine, lineWidth=1,
+                )
+
+                lay_plunmon.addWidget(lb_plg, offset, 1)
+                lay_plunmon.addWidget(led_plg_dn, offset, 2)
+                lay_plunmon.addWidget(led_plg_up, offset, 3)
+                offset += 1
+        else:
+            self.lb_plg1 = QLabel('Plunger 1')
+            self.led_plg1_dn = PyDMLed(
+                self, self.prefix+self.chs['Tun']['Pl1Down'])
+            self.led_plg1_dn.offColor = QColor(64, 64, 64)
+            self.led_plg1_dn.onColor = QColor('blue')
+            self.led_plg1_dn.shape = PyDMLed.ShapeMap.Square
+            self.led_plg1_up = PyDMLed(
+                self, self.prefix+self.chs['Tun']['Pl1Up'])
+            self.led_plg1_up.offColor = QColor(64, 64, 64)
+            self.led_plg1_up.onColor = QColor('blue')
+            self.led_plg1_up.shape = PyDMLed.ShapeMap.Square
             self.graph_plunmotors.addYChannel(
                 y_channel=self.prefix+self.chs['Tun']['PlM1Curr'], color='blue',
                 name='Motor 1', lineStyle=Qt.SolidLine, lineWidth=1)
-        self.graph_plunmotors.setLabel('left', '')
 
-        if self.section != "SI":
-            lb_plg2 = QLabel('Plunger 2')
+            self.lb_plg2 = QLabel('Plunger 2')
             self.led_plg2_dn = PyDMLed(
                 self, self.prefix+self.chs['Tun']['Pl2Down'])
             self.led_plg2_dn.offColor = QColor(64, 64, 64)
@@ -578,14 +597,16 @@ class RFMainControl(SiriusMainWindow):
             self.led_plg2_up.offColor = QColor(64, 64, 64)
             self.led_plg2_up.onColor = QColor('blue')
             self.led_plg2_up.shape = PyDMLed.ShapeMap.Square
-
-            lay_plunmon.addWidget(lb_plg2, 3, 1)
-            lay_plunmon.addWidget(self.led_plg2_dn, 3, 2)
-            lay_plunmon.addWidget(self.led_plg2_up, 3, 3)
-
             self.graph_plunmotors.addYChannel(
                 y_channel=self.prefix+self.chs['Tun']['PlM2Curr'], color='red',
                 name='Motor 2', lineStyle=Qt.SolidLine, lineWidth=1)
+
+            lay_plunmon.addWidget(self.lb_plg1, 2, 1)
+            lay_plunmon.addWidget(self.led_plg1_dn, 2, 2)
+            lay_plunmon.addWidget(self.led_plg1_up, 2, 3)
+            lay_plunmon.addWidget(self.lb_plg2, 3, 1)
+            lay_plunmon.addWidget(self.led_plg2_dn, 3, 2)
+            lay_plunmon.addWidget(self.led_plg2_up, 3, 3)
 
         wid_tun = QWidget()
         lay_plun = QGridLayout(wid_tun)
@@ -594,8 +615,12 @@ class RFMainControl(SiriusMainWindow):
         lay_plun.addLayout(lay_tunset, 1, 0, 1, 2)
         lay_plun.addItem(
             QSpacerItem(0, 25, QSzPlcy.Ignored, QSzPlcy.Fixed), 2, 0)
-        lay_plun.addWidget(QLabel(
-            '<h3> • Plungers</h3>', self, alignment=Qt.AlignLeft), 3, 0)
+        if self.section == 'SI':
+            lay_plun.addWidget(QLabel(
+                '<h3> • Tunners</h3>', self, alignment=Qt.AlignLeft), 3, 0)
+        else:
+            lay_plun.addWidget(QLabel(
+                '<h3> • Plungers</h3>', self, alignment=Qt.AlignLeft), 3, 0)
         lay_plun.addLayout(lay_plunmon, 4, 0)
         lay_plun.addWidget(self.graph_plunmotors, 4, 1, 1, 2)
 
@@ -1440,8 +1465,9 @@ class RFMainControl(SiriusMainWindow):
             _part(self._handle_predrive_led_channels, led_drive, chs_dict))
 
     def _create_tun_set_wid(self, lay_tunset, column, chs_dict, offset):
-        lay_tunset.addWidget(QLabel(
-            column, self, alignment=Qt.AlignCenter), 0, offset)
+        if column:
+            lay_tunset.addWidget(QLabel(
+                f"LLRF {column}", self, alignment=Qt.AlignCenter), 0, offset)
 
         bt_autotun = PyDMStateButton(
             self, self.prefix+chs_dict['Auto']+'-Sel')

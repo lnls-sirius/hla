@@ -635,6 +635,7 @@ SEC_2_CHANNELS = {
                 'Pl1Down': 'SI-03SP:RF-SRFCav-A:TunnerMoveDown-Mon',
                 'Pl1Up': 'SI-03SP:RF-SRFCav-A:TunnerMoveUp-Mon',
                 'PlM1Curr': 'RA-RaSIA01:RF-CavPlDrivers:Dr1Current-Mon',
+                'color': 'blue'
             },
             'B': {
                 'Auto': 'RA-RaSIA01:RF-LLRF-B:Tune',
@@ -645,7 +646,8 @@ SEC_2_CHANNELS = {
                 'Oversht': 'RA-RaSIA01:RF-LLRF-B:TuneMarginLO',
                 'Pl1Down': 'SI-03SP:RF-SRFCav-B:TunnerMoveDown-Mon',
                 'Pl1Up': 'SI-03SP:RF-SRFCav-B:TunnerMoveUp-Mon',
-                'PlM1Curr': 'RA-RaSIA01:RF-CavPlDrivers:Dr1Current-Mon',
+                'PlM1Curr': 'RA-RaSIB01:RF-CavPlDrivers:Dr1Current-Mon',
+                'color': 'red'
             }
         },
         'PwrMtr': {
