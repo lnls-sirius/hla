@@ -344,7 +344,7 @@ class RFMainControl(SiriusMainWindow):
         dic = self.chs['SSA'] if self.section == 'BO' else self.chs['SSA']['1']
         lay_amp = QGridLayout()
         lay_amp.setHorizontalSpacing(8)
-        lay_amp.setVerticalSpacing(20)
+        lay_amp.setVerticalSpacing(15)
         lay_amp.addItem(QSpacerItem(
             10, 0, QSzPlcy.Expanding, QSzPlcy.Ignored), 0, 0)
         lay_amp.addWidget(
@@ -370,7 +370,8 @@ class RFMainControl(SiriusMainWindow):
 
         # LLRF
         # # Slow Loop Control
-        self.lb_slmode = SiriusLabel(self, self.prefix+self.chs['SL']['Mode']+'-Sts')
+        self.lb_slmode = SiriusLabel(
+            self, self.prefix+self.chs['SL']['Mode']+'-Sts')
         self.led_slmode = PyDMLedMultiChannel(
             self, {self.prefix+self.chs['SL']['Mode']+'-Sts': 0})
         self.bt_slenbl = PyDMStateButton(
@@ -755,7 +756,7 @@ class RFMainControl(SiriusMainWindow):
         vlay.addWidget(QLabel('<h3> • Solid State Amplifiers</h3>', self,
                               alignment=Qt.AlignLeft))
         vlay.addLayout(lay_amp)
-        vlay.addItem(QSpacerItem(0, 50, QSzPlcy.Ignored, QSzPlcy.Fixed))
+        # vlay.addItem(QSpacerItem(0, 50, QSzPlcy.Ignored, QSzPlcy.Fixed))
         vlay.addWidget(QLabel('<h3> • LLRF</h3>', self,
                               alignment=Qt.AlignLeft))
         vlay.addWidget(wid_llrf)
@@ -1436,8 +1437,6 @@ class RFMainControl(SiriusMainWindow):
         lay.setContentsMargins(0, 0, 0, 0)
         lay.addWidget(self.temp_wid, 0, 0)
         lay.addWidget(self.vac_wid, 1, 0)
-        lay.setRowStretch(0, 7)
-        lay.setRowStretch(1, 3)
         return lay
 
     def _create_vlay(self, widget1, widget2):
@@ -1453,7 +1452,7 @@ class RFMainControl(SiriusMainWindow):
         lay_amp.addWidget(led_sts, row, 1)
 
         lb_name = QLabel('<h4>'+chs_dict['Name']+'</h4>', self,
-                         alignment=Qt.AlignLeft)
+                         alignment=Qt.AlignLeft | Qt.AlignVCenter)
         lb_name.setStyleSheet('max-height: 1.29em;')
         lay_amp.addWidget(lb_name, row, 2)
 

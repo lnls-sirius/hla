@@ -554,6 +554,56 @@ SEC_2_CHANNELS = {
         'SSA': {
             '1': {
                 'Name': 'SSA 01',
+                'Status': 'RA-ToSIA01:RF-SSAmpTower:Sts-Mon',
+                'Power': 'RA-ToSIA01:RF-SSAmpTower:PwrFwdOut-Mon',
+                'SRC 1': {
+                    'Label': 'AC TDK',
+                    'Enable': 'RA-ToSIA01:RF-ACPanel:PwrACEnbl-Cmd',
+                    'Disable': 'RA-ToSIA01:RF-ACPanel:PwrACDsbl-Cmd',
+                    'Mon': 'RA-ToSIA01:RF-ACPanel:PwrAC-Mon'
+                },
+                'SRC 2': {
+                    'Label': 'DC TDK',
+                    'Enable': 'RA-ToSIA01:RF-TDKSource:PwrDCEnbl-Cmd',
+                    'Disable': 'RA-ToSIA01:RF-TDKSource:PwrDCDsbl-Cmd',
+                    'Mon': 'RA-ToSIA01:RF-TDKSource:PwrDC-Mon'
+                },
+                'PinSw': {
+                    'Label': 'PinSw',
+                    'Enable': 'RA-ToSIA01:RF-CtrlPanel:PINSwEnbl-Cmd',
+                    'Disable': 'RA-ToSIA01:RF-CtrlPanel:PINSwDsbl-Cmd',
+                    'Mon': 'RA-ToSIA01:RF-CtrlPanel:PINSwSts-Mon'
+                },
+                'PreDrive': 'SR-RF-DLLRF-01:INPRE1:AMP',
+                'PreDriveThrs': 5,  # mV
+            },
+            '2': {
+                'Name': 'SSA 02',
+                'Status': 'RA-ToSIA02:RF-SSAmpTower:Sts-Mon',
+                'Power': 'RA-ToSIA02:RF-SSAmpTower:PwrFwdOut-Mon',
+                'SRC 1': {
+                    'Label': 'AC TDK',
+                    'Enable': 'RA-ToSIA02:RF-ACPanel:PwrACEnbl-Cmd',
+                    'Disable': 'RA-ToSIA02:RF-ACPanel:PwrACDsbl-Cmd',
+                    'Mon': 'RA-ToSIA02:RF-ACPanel:PwrAC-Mon'
+                },
+                'SRC 2': {
+                    'Label': 'DC TDK',
+                    'Enable': 'RA-ToSIA02:RF-TDKSource:PwrDCEnbl-Cmd',
+                    'Disable': 'RA-ToSIA02:RF-TDKSource:PwrDCDsbl-Cmd',
+                    'Mon': 'RA-ToSIA02:RF-TDKSource:PwrDC-Mon'
+                },
+                'PinSw': {
+                    'Label': 'PinSw',
+                    'Enable': 'RA-ToSIA02:RF-CtrlPanel:PINSwEnbl-Cmd',
+                    'Disable': 'RA-ToSIA02:RF-CtrlPanel:PINSwDsbl-Cmd',
+                    'Mon': 'RA-ToSIA02:RF-CtrlPanel:PINSwSts-Mon'
+                },
+                'PreDrive': 'SR-RF-DLLRF-01:INPRE2:AMP',
+                'PreDriveThrs': 5,  # mV
+            },
+            '3': {
+                'Name': 'SSA 03',
                 'Status': 'RA-ToSIA03:RF-SSAmpTower:Sts-Mon',
                 'Power': 'RA-ToSIA03:RF-SSAmpTower:PwrFwdOut-Mon',
                 'SRC 1': {
@@ -574,11 +624,11 @@ SEC_2_CHANNELS = {
                     'Disable': 'RA-ToSIA03:RF-CtrlPanel:PINSwDsbl-Cmd',
                     'Mon': 'RA-ToSIA03:RF-CtrlPanel:PINSwSts-Mon'
                 },
-                'PreDrive': 'SR-RF-DLLRF-01:INPRE1:AMP',
+                'PreDrive': 'SR-RF-DLLRF-01:INPRE3:AMP',
                 'PreDriveThrs': 5,  # mV
             },
-            '2': {
-                'Name': 'SSA 02',
+            '4': {
+                'Name': 'SSA 04',
                 'Status': 'RA-ToSIA04:RF-SSAmpTower:Sts-Mon',
                 'Power': 'RA-ToSIA04:RF-SSAmpTower:PwrFwdOut-Mon',
                 'SRC 1': {
@@ -599,7 +649,7 @@ SEC_2_CHANNELS = {
                     'Disable': 'RA-ToSIA04:RF-CtrlPanel:PINSwDsbl-Cmd',
                     'Mon': 'RA-ToSIA04:RF-CtrlPanel:PINSwSts-Mon'
                 },
-                'PreDrive': 'SR-RF-DLLRF-01:INPRE2:AMP',
+                'PreDrive': 'SR-RF-DLLRF-01:INPRE4:AMP',
                 'PreDriveThrs': 5,  # mV
             }
         },
