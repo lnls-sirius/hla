@@ -598,7 +598,7 @@ class RFMainControl(SiriusMainWindow):
         if self.section == 'SI':
             offset = 2
             for key, chs_dict in self.chs['Tun'].items():
-                lb_plg = QLabel(f'LLRF {key}')
+                lb_plg = QLabel(f'{key}')
                 led_plg_dn = PyDMLed(
                     self, self.prefix+chs_dict['Pl1Down'])
                 led_plg_dn.offColor = QColor(64, 64, 64)
@@ -611,7 +611,7 @@ class RFMainControl(SiriusMainWindow):
                 led_plg_up.shape = PyDMLed.ShapeMap.Square
                 self.graph_plunmotors.addYChannel(
                     y_channel=self.prefix+chs_dict['PlM1Curr'],
-                    color=self.prefix+chs_dict['color'], name=f'LLRF {key}',
+                    color=self.prefix+chs_dict['color'], name=f'{key}',
                     lineStyle=Qt.SolidLine, lineWidth=1,
                 )
 
@@ -756,7 +756,6 @@ class RFMainControl(SiriusMainWindow):
         vlay.addWidget(QLabel('<h3> • Solid State Amplifiers</h3>', self,
                               alignment=Qt.AlignLeft))
         vlay.addLayout(lay_amp)
-        # vlay.addItem(QSpacerItem(0, 50, QSzPlcy.Ignored, QSzPlcy.Fixed))
         vlay.addWidget(QLabel('<h3> • LLRF</h3>', self,
                               alignment=Qt.AlignLeft))
         vlay.addWidget(wid_llrf)
@@ -1514,7 +1513,7 @@ class RFMainControl(SiriusMainWindow):
     def _create_tun_set_wid(self, lay_tunset, column, chs_dict, offset):
         if column:
             lay_tunset.addWidget(QLabel(
-                f"LLRF {column}", self, alignment=Qt.AlignCenter), 0, offset)
+                f"{column}", self, alignment=Qt.AlignCenter), 0, offset)
 
         bt_autotun = PyDMStateButton(
             self, self.prefix+chs_dict['Auto']+'-Sel')
