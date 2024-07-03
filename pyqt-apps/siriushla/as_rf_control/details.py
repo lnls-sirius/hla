@@ -727,10 +727,10 @@ class SlowLoopErrorDetails(SiriusDialog):
 
         lay_llrf.addWidget(QLabel(
             '<h4>Reference<h4>', self, alignment=Qt.AlignCenter), 1, 0)
-        lay_llrf.addWidget(
-            QLabel('<h4>Input</h4>', self, alignment=Qt.AlignCenter), 2, 0)
-        lay_llrf.addWidget(
-            QLabel('<h4>Error</h4>', self, alignment=Qt.AlignCenter), 3, 0)
+        lay_llrf.addWidget(QLabel(
+            '<h4>Input</h4>', self, alignment=Qt.AlignCenter), 2, 0)
+        lay_llrf.addWidget(QLabel(
+            '<h4>Error</h4>', self, alignment=Qt.AlignCenter), 3, 0)
 
         # I
         lb_iref = SiriusLabel(self, self.prefix+chs_dict['IRef'])
