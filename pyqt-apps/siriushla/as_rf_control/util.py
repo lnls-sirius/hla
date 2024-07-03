@@ -189,6 +189,12 @@ SEC_2_CHANNELS = {
                 'IErr': 'RA-RaBO01:RF-LLRF:SLErrorI-Mon',
                 'QErr': 'RA-RaBO01:RF-LLRF:SLErrorQ-Mon',
             },
+            'Params': {
+                'Inp': 'RA-RaBO01:RF-LLRF:SLInp',
+                'PIL': 'RA-RaBO01:RF-LLRF:SLPILim',
+                'KI': 'RA-RaBO01:RF-LLRF:SLKI',
+                'KP': 'RA-RaBO01:RF-LLRF:SLKP',
+            },
             'Enbl': 'RA-RaBO01:RF-LLRF:SL',
             'Mode': 'RA-RaBO01:RF-LLRF:LoopMode',
             'ARef': 'BR-RF-DLLRF-01:SL:REF:AMP',
@@ -201,10 +207,6 @@ SEC_2_CHANNELS = {
             'PSet': 'RA-RaBO01:RF-LLRF:PLRef',
             'AInc': 'RA-RaBO01:RF-LLRF:AmpIncRate-Sp',
             'PInc': 'RA-RaBO01:RF-LLRF:PhsIncRate',
-            'Inp': 'RA-RaBO01:RF-LLRF:SLInp',
-            'PIL': 'RA-RaBO01:RF-LLRF:SLPILim',
-            'KI': 'RA-RaBO01:RF-LLRF:SLKI',
-            'KP': 'RA-RaBO01:RF-LLRF:SLKP',
         },
         'Tun': {
             'Auto': 'RA-RaBO01:RF-LLRF:Tune',
@@ -674,6 +676,20 @@ SEC_2_CHANNELS = {
                     'QErr': 'RA-RaSIB01:RF-LLRF-B:SLErrorQ-Mon',
                 },
             },
+            'Params': {
+                'A': {
+                    'Inp': 'RA-RaSIA01:RF-LLRF-A:SLInp',
+                    'PIL': 'RA-RaSIA01:RF-LLRF-A:SLPILim',
+                    'KI': 'RA-RaSIA01:RF-LLRF-A:SLKI',
+                    'KP': 'RA-RaSIA01:RF-LLRF-A:SLKP',
+                },
+                'B': {
+                    'Inp': 'RA-RaSIB01:RF-LLRF-B:SLInp',
+                    'PIL': 'RA-RaSIB01:RF-LLRF-B:SLPILim',
+                    'KI': 'RA-RaSIB01:RF-LLRF-B:SLKI',
+                    'KP': 'RA-RaSIB01:RF-LLRF-B:SLKP',
+                },
+            },
             'Enbl': 'RA-RaSIA01:RF-LLRF-A:SL',
             'Mode': 'RA-RaSIA01:RF-LLRF-A:LoopMode',
             'ARef': 'SR-RF-DLLRF-01:SL:REF:AMP',
@@ -686,10 +702,6 @@ SEC_2_CHANNELS = {
             'PSet': 'RA-RaSIA01:RF-LLRF-A:PLRef',
             'AInc': 'RA-RaSIA01:RF-LLRF-A:AmpIncRate',
             'PInc': 'RA-RaSIA01:RF-LLRF-A:PhsIncRate',
-            'Inp': 'RA-RaSIA01:RF-LLRF-A:SLInp',
-            'PIL': 'RA-RaSIA01:RF-LLRF-A:SLPILim',
-            'KI': 'RA-RaSIA01:RF-LLRF-A:SLKI',
-            'KP': 'RA-RaSIA01:RF-LLRF-A:SLKP',
         },
         'Tun': {
             'A': {

@@ -18,7 +18,8 @@ from ..widgets import PyDMLed, PyDMLedMultiChannel, PyDMStateButton, \
     SiriusWaveformPlot
 from .custom_widgets import RFEnblDsblButton
 from .details import CavityStatusDetails, FDLMonitor, LLRFInterlockDetails, \
-    TempMonitor, TransmLineStatusDetails, ErrorDetails
+    TransmLineStatusDetails, SlowLoopErrorDetails, SlowLoopParametersDetails, \
+    TempMonitor
 from .util import SEC_2_CHANNELS
 
 
@@ -429,55 +430,13 @@ class RFMainControl(SiriusMainWindow):
         lay_slctrl.addWidget(self.cb_phsincrate, 2, 4, alignment=Qt.AlignRight)
         lay_slctrl.addWidget(self.lb_phsincrate, 2, 5, alignment=Qt.AlignLeft)
 
-        self.cb_inpsel = PyDMEnumComboBox(
-            self, self.prefix+self.chs['SL']['Inp']+'-Sel')
-        self.lb_inpsel = SiriusLabel(
-            self, self.prefix+self.chs['SL']['Inp']+'-Sts')
-        self.sb_pilimit = SiriusSpinbox(
-            self, self.prefix+self.chs['SL']['PIL']+'-SP')
-        self.lb_pilimit = SiriusLabel(
-            self, self.prefix+self.chs['SL']['PIL']+'-RB')
-        self.sb_ki = SiriusSpinbox(
-            self, self.prefix+self.chs['SL']['KI']+'-SP')
-        self.lb_ki = SiriusLabel(
-            self, self.prefix+self.chs['SL']['KI']+'-RB')
-        self.sb_kp = SiriusSpinbox(
-            self, self.prefix+self.chs['SL']['KP']+'-SP')
-        self.lb_kp = SiriusLabel(
-            self, self.prefix+self.chs['SL']['KP']+'-RB')
-        lay_slctrl2 = QGridLayout()
-        lay_slctrl2.setHorizontalSpacing(9)
-        lay_slctrl2.setVerticalSpacing(9)
-        lay_slctrl2.addWidget(
-            QLabel('<h4>SP/RB</h4>', self, alignment=Qt.AlignCenter),
-            0, 2, 1, 2)
-        lay_slctrl2.addWidget(
-            QLabel('<h4>PI Limit</h4>', self, alignment=Qt.AlignCenter),
-            1, 0, 1, 2)
-        lay_slctrl2.addWidget(
-            QLabel('<h4>Ki</h4>', self, alignment=Qt.AlignCenter), 2, 0, 1, 2)
-        lay_slctrl2.addWidget(
-            QLabel('<h4>Kp</h4>', self, alignment=Qt.AlignCenter), 3, 0, 1, 2)
-        lay_slctrl2.addWidget(self.sb_pilimit, 1, 2, alignment=Qt.AlignRight)
-        lay_slctrl2.addWidget(self.lb_pilimit, 1, 3, alignment=Qt.AlignLeft)
-        lay_slctrl2.addWidget(self.sb_ki, 2, 2, alignment=Qt.AlignRight)
-        lay_slctrl2.addWidget(self.lb_ki, 2, 3, alignment=Qt.AlignLeft)
-        lay_slctrl2.addWidget(self.sb_kp, 3, 2, alignment=Qt.AlignRight)
-        lay_slctrl2.addWidget(self.lb_kp, 3, 3, alignment=Qt.AlignLeft)
-
-        lay = QGridLayout()
-        lay.addWidget(
-            QLabel('<h4>Loop Input</h4>', self, alignment=Qt.AlignCenter),
-            1, 0, 1, 2)
-        lay.addWidget(self.cb_inpsel, 2, 0, alignment=Qt.AlignRight)
-        lay.addWidget(self.lb_inpsel, 2, 1, alignment=Qt.AlignLeft)
-        lay.setRowStretch(0, 2)
-        lay.setRowStretch(3, 2)
-        lay_slctrl2.addLayout(lay, 1, 4, 3, 2)
-
         self.pb_errdtls = QPushButton('Errors', self)
         connect_window(
-            self.pb_errdtls, ErrorDetails, parent=self,
+            self.pb_errdtls, SlowLoopErrorDetails, parent=self,
+            prefix=self.prefix, section=self.section)
+        self.pb_paramdtls = QPushButton('Parameters', self)
+        connect_window(
+            self.pb_paramdtls, SlowLoopParametersDetails, parent=self,
             prefix=self.prefix, section=self.section)
         self.lb_ampref = SiriusLabel(self, self.prefix+self.chs['SL']['ARef'])
         self.lb_ampref.showUnits = True
@@ -498,6 +457,8 @@ class RFMainControl(SiriusMainWindow):
             '<h4>Details</h4>', self, alignment=Qt.AlignCenter), 0, 0, 1, 1)
         lay_slmon.addWidget(self.pb_errdtls, 1, 0, 1, 1,
             alignment=Qt.AlignCenter)
+        lay_slmon.addWidget(self.pb_paramdtls, 2, 0, 1, 1,
+            alignment=Qt.AlignCenter)
         lay_slmon.addWidget(QLabel(
             '<h4>Amp.</h4>', self, alignment=Qt.AlignCenter), 0, 1)
         lay_slmon.addWidget(self.lb_ampref, 1, 1)
@@ -511,12 +472,10 @@ class RFMainControl(SiriusMainWindow):
 
         wid_sl = QWidget()
         lay_sl = QGridLayout(wid_sl)
-        # lay_sl.setAlignment(Qt.AlignTop)
         lay_sl.setSpacing(7)
         lay_sl.addLayout(lay_over, 1, 1)
-        lay_sl.addLayout(lay_slctrl, 3, 1)
-        lay_sl.addLayout(lay_slmon, 4, 1)
-        lay_sl.addLayout(lay_slctrl2, 6, 1)
+        lay_sl.addLayout(lay_slctrl, 2, 1)
+        lay_sl.addLayout(lay_slmon, 3, 1)
         lay_sl.setRowStretch(2, 4)
         lay_sl.setRowStretch(5, 4)
 
