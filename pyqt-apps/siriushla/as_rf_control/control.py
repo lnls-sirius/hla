@@ -495,8 +495,9 @@ class RFMainControl(SiriusMainWindow):
         lay_slmon.setHorizontalSpacing(9)
         lay_slmon.setVerticalSpacing(9)
         lay_slmon.addWidget(QLabel(
-            '<h4>Details</h4>', self, alignment=Qt.AlignCenter), 0, 0)
-        lay_slmon.addWidget(self.pb_errdtls, 1, 0)
+            '<h4>Details</h4>', self, alignment=Qt.AlignCenter), 0, 0, 1, 1)
+        lay_slmon.addWidget(self.pb_errdtls, 1, 0, 1, 1,
+            alignment=Qt.AlignCenter)
         lay_slmon.addWidget(QLabel(
             '<h4>Amp.</h4>', self, alignment=Qt.AlignCenter), 0, 1)
         lay_slmon.addWidget(self.lb_ampref, 1, 1)
