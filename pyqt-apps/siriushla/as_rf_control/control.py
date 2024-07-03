@@ -18,7 +18,7 @@ from ..widgets import PyDMLed, PyDMLedMultiChannel, PyDMStateButton, \
     SiriusWaveformPlot
 from .custom_widgets import RFEnblDsblButton
 from .details import CavityStatusDetails, FDLMonitor, LLRFInterlockDetails, \
-    TempMonitor, TransmLineStatusDetails
+    TempMonitor, TransmLineStatusDetails, ErrorDetails
 from .util import SEC_2_CHANNELS
 
 
@@ -475,18 +475,10 @@ class RFMainControl(SiriusMainWindow):
         lay.setRowStretch(3, 2)
         lay_slctrl2.addLayout(lay, 1, 4, 3, 2)
 
-        self.lb_iref = SiriusLabel(self, self.prefix+self.chs['SL']['IRef'])
-        self.lb_iref.showUnits = True
-        self.lb_iinp = SiriusLabel(self, self.prefix+self.chs['SL']['IInp'])
-        self.lb_iinp.showUnits = True
-        self.lb_ierr = SiriusLabel(self, self.prefix+self.chs['SL']['IErr'])
-        self.lb_ierr.showUnits = True
-        self.lb_qref = SiriusLabel(self, self.prefix+self.chs['SL']['QRef'])
-        self.lb_qref.showUnits = True
-        self.lb_qinp = SiriusLabel(self, self.prefix+self.chs['SL']['QInp'])
-        self.lb_qinp.showUnits = True
-        self.lb_qerr = SiriusLabel(self, self.prefix+self.chs['SL']['QErr'])
-        self.lb_qerr.showUnits = True
+        self.pb_errdtls = QPushButton('Errors', self)
+        connect_window(
+            self.pb_errdtls, ErrorDetails, parent=self,
+            prefix=self.prefix, section=self.section)
         self.lb_ampref = SiriusLabel(self, self.prefix+self.chs['SL']['ARef'])
         self.lb_ampref.showUnits = True
         self.lb_ampinp = SiriusLabel(self, self.prefix+self.chs['SL']['AInp'])
@@ -502,32 +494,19 @@ class RFMainControl(SiriusMainWindow):
         lay_slmon = QGridLayout()
         lay_slmon.setHorizontalSpacing(9)
         lay_slmon.setVerticalSpacing(9)
+        lay_slmon.addWidget(QLabel(
+            '<h4>Details</h4>', self, alignment=Qt.AlignCenter), 0, 0)
+        lay_slmon.addWidget(self.pb_errdtls, 1, 0)
+        lay_slmon.addWidget(QLabel(
+            '<h4>Amp.</h4>', self, alignment=Qt.AlignCenter), 0, 1)
+        lay_slmon.addWidget(self.lb_ampref, 1, 1)
+        lay_slmon.addWidget(self.lb_ampinp, 2, 1)
+        lay_slmon.addWidget(self.lb_amperr, 3, 1)
         lay_slmon.addWidget(
-            QLabel('<h4>Reference</h4>', self, alignment=Qt.AlignCenter), 1, 0)
-        lay_slmon.addWidget(
-            QLabel('<h4>Input</h4>', self, alignment=Qt.AlignCenter), 2, 0)
-        lay_slmon.addWidget(
-            QLabel('<h4>Error</h4>', self, alignment=Qt.AlignCenter), 3, 0)
-        lay_slmon.addWidget(
-            QLabel('<h4>I</h4>', self, alignment=Qt.AlignCenter), 0, 1)
-        lay_slmon.addWidget(self.lb_iref, 1, 1)
-        lay_slmon.addWidget(self.lb_iinp, 2, 1)
-        lay_slmon.addWidget(self.lb_ierr, 3, 1)
-        lay_slmon.addWidget(
-            QLabel('<h4>Q</h4>', self, alignment=Qt.AlignCenter), 0, 2)
-        lay_slmon.addWidget(self.lb_qref, 1, 2)
-        lay_slmon.addWidget(self.lb_qinp, 2, 2)
-        lay_slmon.addWidget(self.lb_qerr, 3, 2)
-        lay_slmon.addWidget(
-            QLabel('<h4>Amp.</h4>', self, alignment=Qt.AlignCenter), 0, 3)
-        lay_slmon.addWidget(self.lb_ampref, 1, 3)
-        lay_slmon.addWidget(self.lb_ampinp, 2, 3)
-        lay_slmon.addWidget(self.lb_amperr, 3, 3)
-        lay_slmon.addWidget(
-            QLabel('<h4>Phase</h4>', self, alignment=Qt.AlignCenter), 0, 4)
-        lay_slmon.addWidget(self.lb_phsref, 1, 4)
-        lay_slmon.addWidget(self.lb_phsinp, 2, 4)
-        lay_slmon.addWidget(self.lb_phserr, 3, 4)
+            QLabel('<h4>Phase</h4>', self, alignment=Qt.AlignCenter), 0, 2)
+        lay_slmon.addWidget(self.lb_phsref, 1, 2)
+        lay_slmon.addWidget(self.lb_phsinp, 2, 2)
+        lay_slmon.addWidget(self.lb_phserr, 3, 2)
 
         wid_sl = QWidget()
         lay_sl = QGridLayout(wid_sl)
@@ -598,7 +577,7 @@ class RFMainControl(SiriusMainWindow):
         if self.section == 'SI':
             offset = 2
             for key, chs_dict in self.chs['Tun'].items():
-                lb_plg = QLabel(f'{key}')
+                lb_plg = QLabel(key)
                 led_plg_dn = PyDMLed(
                     self, self.prefix+chs_dict['Pl1Down'])
                 led_plg_dn.offColor = QColor(64, 64, 64)
@@ -611,7 +590,7 @@ class RFMainControl(SiriusMainWindow):
                 led_plg_up.shape = PyDMLed.ShapeMap.Square
                 self.graph_plunmotors.addYChannel(
                     y_channel=self.prefix+chs_dict['PlM1Curr'],
-                    color=self.prefix+chs_dict['color'], name=f'{key}',
+                    color=self.prefix+chs_dict['color'], name=key,
                     lineStyle=Qt.SolidLine, lineWidth=1,
                 )
 
@@ -1513,7 +1492,7 @@ class RFMainControl(SiriusMainWindow):
     def _create_tun_set_wid(self, lay_tunset, column, chs_dict, offset):
         if column:
             lay_tunset.addWidget(QLabel(
-                f"{column}", self, alignment=Qt.AlignCenter), 0, offset)
+                column, self, alignment=Qt.AlignCenter), 0, offset)
 
         bt_autotun = PyDMStateButton(
             self, self.prefix+chs_dict['Auto']+'-Sel')

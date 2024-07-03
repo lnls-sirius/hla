@@ -681,3 +681,80 @@ class FDLMonitor(SiriusDialog):
         self.lb_delay_sample.setVisible(text == 'Sample units')
         self.sb_delay_us.setVisible(text == 'us')
         self.lb_delay_us.setVisible(text == 'us')
+
+
+class ErrorDetails(SiriusDialog):
+    """Slow Loop Control Error Details."""
+    def __init__(self, parent=None, prefix='', section=''):
+        """Init."""
+        super().__init__(parent)
+        self.prefix = prefix
+        self.prefix += ('-' if prefix and not prefix.endswith('-') else '')
+        self.section = section
+        self.chs = SEC_2_CHANNELS[self.section]
+        self.setObjectName(self.section+'App')
+        self.setWindowTitle('Error Details')
+        self._setupUi()
+
+    def _setupUi(self):
+        lay = QVBoxLayout(self)
+        lay.setAlignment(Qt.AlignTop)
+        lay.setSpacing(20)
+
+        self.title = QLabel(
+            '<h3>Loop Control Error Details</h3>', self,
+            alignment=Qt.AlignCenter)
+        lay.addWidget(self.title)
+
+        if self.section == 'SI':
+            offset = 1
+            for key, chs_dict in self.chs['SL']['ErrDtls'].items():
+                self._setupDetails(lay, key, chs_dict, offset)
+                offset += 2
+        else:
+            self._setupDetails(lay, None, self.chs['SL']['ErrDtls'], 1)
+
+    def _setupDetails(self, lay, key, chs_dict, offset):
+        if key:
+            lay.addItem(QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed))
+            lay.addWidget(QLabel(
+                f'<h4>LLRF {key}</h4>', self, alignment=Qt.AlignLeft))
+
+        lay_llrf = QGridLayout()
+        lay_llrf.setAlignment(Qt.AlignTop)
+        lay_llrf.setHorizontalSpacing(9)
+        lay_llrf.setVerticalSpacing(9)
+
+        lay_llrf.addWidget(QLabel(
+            '<h4>Reference<h4>', self, alignment=Qt.AlignCenter), 1, 0)
+        lay_llrf.addWidget(
+            QLabel('<h4>Input</h4>', self, alignment=Qt.AlignCenter), 2, 0)
+        lay_llrf.addWidget(
+            QLabel('<h4>Error</h4>', self, alignment=Qt.AlignCenter), 3, 0)
+
+        # I
+        lb_iref = SiriusLabel(self, self.prefix+chs_dict['IRef'])
+        lb_iref.showUnits = True
+        lb_iinp = SiriusLabel(self, self.prefix+chs_dict['IInp'])
+        lb_iinp.showUnits = True
+        lb_ierr = SiriusLabel(self, self.prefix+chs_dict['IErr'])
+        lb_ierr.showUnits = True
+        lay_llrf.addWidget(
+            QLabel('<h4>I</h4>', self, alignment=Qt.AlignCenter), 0, 1)
+        lay_llrf.addWidget(lb_iref, 1, 1)
+        lay_llrf.addWidget(lb_iinp, 2, 1)
+        lay_llrf.addWidget(lb_ierr, 3, 1)
+
+        # Q
+        lb_qref = SiriusLabel(self, self.prefix+chs_dict['QRef'])
+        lb_qref.showUnits = True
+        lb_qinp = SiriusLabel(self, self.prefix+chs_dict['QInp'])
+        lb_qinp.showUnits = True
+        lb_qerr = SiriusLabel(self, self.prefix+chs_dict['QErr'])
+        lb_qerr.showUnits = True
+        lay_llrf.addWidget(
+            QLabel('<h4>Q</h4>', self, alignment=Qt.AlignCenter), 0, 2)
+        lay_llrf.addWidget(lb_qref, 1, 2)
+        lay_llrf.addWidget(lb_qinp, 2, 2)
+        lay_llrf.addWidget(lb_qerr, 3, 2)
+        lay.addLayout(lay_llrf)
