@@ -177,7 +177,7 @@ SEC_2_CHANNELS = {
                 'Disable': 'RA-RaBO01:RF-LLRFPreAmp:PinSwDsbl-Cmd',
                 'Mon': 'RA-RaBO01:RF-LLRFPreAmp:PinSw-Mon'
             },
-            'PreDrive': 'BR-RF-DLLRF-01:INPRE:AMP',
+            'PreDrive': 'RA-RaBO01:RF-LLRFPreAmp:PwrFwdInAmp-Mon',
             'PreDriveThrs': 4,  # mV
         },
         'SL': {
@@ -581,7 +581,7 @@ SEC_2_CHANNELS = {
                     'Disable': 'RA-ToSIA01:RF-CtrlPanel:PINSwDsbl-Cmd',
                     'Mon': 'RA-ToSIA01:RF-CtrlPanel:PINSwSts-Mon'
                 },
-                'PreDrive': 'SR-RF-DLLRF-01:INPRE1:AMP',
+                'PreDrive': 'RA-RaSIA01:RF-LLRFPreAmp:PwrFwdIn1Amp-Mon',
                 'PreDriveThrs': 5,  # mV
             },
             '2': {
@@ -606,7 +606,7 @@ SEC_2_CHANNELS = {
                     'Disable': 'RA-ToSIA02:RF-CtrlPanel:PINSwDsbl-Cmd',
                     'Mon': 'RA-ToSIA02:RF-CtrlPanel:PINSwSts-Mon'
                 },
-                'PreDrive': 'SR-RF-DLLRF-01:INPRE2:AMP',
+                'PreDrive': 'RA-RaSIA02:RF-LLRFPreAmp:PwrFwdIn2Amp-Mon',
                 'PreDriveThrs': 5,  # mV
             },
             '3': {
@@ -631,7 +631,7 @@ SEC_2_CHANNELS = {
                     'Disable': 'RA-ToSIA03:RF-CtrlPanel:PINSwDsbl-Cmd',
                     'Mon': 'RA-ToSIA03:RF-CtrlPanel:PINSwSts-Mon'
                 },
-                'PreDrive': 'SR-RF-DLLRF-01:INPRE3:AMP',
+                'PreDrive': 'RA-RaSIA03:RF-LLRFPreAmp:PwrFwdIn3Amp-Mon',
                 'PreDriveThrs': 5,  # mV
             },
             '4': {
@@ -656,7 +656,7 @@ SEC_2_CHANNELS = {
                     'Disable': 'RA-ToSIA04:RF-CtrlPanel:PINSwDsbl-Cmd',
                     'Mon': 'RA-ToSIA04:RF-CtrlPanel:PINSwSts-Mon'
                 },
-                'PreDrive': 'SR-RF-DLLRF-01:INPRE4:AMP',
+                'PreDrive': 'RA-RaSIA04:RF-LLRFPreAmp:PwrFwdIn4Amp-Mon',
                 'PreDriveThrs': 5,  # mV
             }
         },
