@@ -405,11 +405,15 @@ class RFMainControl(SiriusMainWindow):
             self._create_slc_lay(lay_slc, None, self.chs['SL']['Over'], 1)
             offset += 3
 
-        self.pb_errdtls = QPushButton('Errors', self)
+        self.pb_errdtls = QPushButton(
+            qta.icon('fa5s.external-link-alt'), ' Errors', self)
+        self.pb_errdtls.setStyleSheet('min-width: 4em')
         connect_window(
             self.pb_errdtls, SlowLoopErrorDetails, parent=self,
             prefix=self.prefix, section=self.section)
-        self.pb_paramdtls = QPushButton('Parameters', self)
+        self.pb_paramdtls = QPushButton(
+            qta.icon('fa5s.external-link-alt'), ' Parameters', self)
+        self.pb_paramdtls.setStyleSheet('min-width: 6.5em')
         connect_window(
             self.pb_paramdtls, SlowLoopParametersDetails, parent=self,
             prefix=self.prefix, section=self.section)
@@ -1120,11 +1124,12 @@ class RFMainControl(SiriusMainWindow):
             QTabWidget::pane{
                 border-bottom: 2px solid gray;}
             QPushButton{
-                min-width: 6em;}
+                min-width: 8em;}
         """)
 
         lb_temp = QLabel('<h3>Temperatures [°C]</h3>', self)
-        self.pb_wattemp = QPushButton('Temp. Monitor', self)
+        self.pb_wattemp = QPushButton(
+            qta.icon('fa5s.external-link-alt'), ' Temp. Monitor', self)
         connect_window(
             self.pb_wattemp, TempMonitor, parent=self,
             prefix=self.prefix, section=self.section)
