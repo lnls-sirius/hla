@@ -371,17 +371,39 @@ class RFMainControl(SiriusMainWindow):
 
         # LLRF
         # # Slow Loop Control
-        lay_over = QGridLayout()
-        lay_over.setAlignment(Qt.AlignCenter)
-        lay_over.setVerticalSpacing(10)
+        wid_sl = QWidget()
+        lay_slc = QGridLayout(wid_sl)
+        lay_slc.setAlignment(Qt.AlignCenter)
+        lay_slc.setVerticalSpacing(6)
+        lay_slc.setHorizontalSpacing(20)
 
-        offset = 0
+        lay_slc.addWidget(QLabel(
+            '<h4>Mode</h4>', self, alignment=Qt.AlignCenter), 1, 0)
+        lay_slc.addWidget(QLabel(
+            '<h4>Enable</h4>', self, alignment=Qt.AlignCenter), 2, 0)
+        lay_slc.addItem(QSpacerItem(
+            0, 30, QSzPlcy.Ignored, QSzPlcy.Fixed), 3, 0)
+        lay_slc.addWidget(QLabel(
+            '<h4>Amp. [mV]</h4>', self, alignment=Qt.AlignCenter), 5, 0)
+        lay_slc.addWidget(QLabel(
+            '<h4>Phase [DEG]</h4>', self, alignment=Qt.AlignCenter), 7, 0)
+        lay_slc.addItem(QSpacerItem(
+            0, 30, QSzPlcy.Ignored, QSzPlcy.Fixed), 10, 0)
+        lay_slc.addWidget(QLabel(
+            '<h4>Reference<h4>', self, alignment=Qt.AlignCenter), 12, 0)
+        lay_slc.addWidget(QLabel(
+            '<h4>Input</h4>', self, alignment=Qt.AlignCenter), 13, 0)
+        lay_slc.addWidget(QLabel(
+            '<h4>Error</h4>', self, alignment=Qt.AlignCenter), 14, 0)
+
+        offset = 1
         if self.section == 'SI':
             for key, chs_dict in self.chs['SL']['Over'].items():
-                self._create_slover_lay(lay_over, key, chs_dict, offset)
-                offset += 4
+                self._create_slc_lay(lay_slc, key, chs_dict, offset)
+                offset += 3
         else:
-            self._create_slover_lay(lay_over, None, self.chs['SL']['Over'], 0)
+            self._create_slc_lay(lay_slc, None, self.chs['SL']['Over'], 1)
+            offset += 3
 
         self.pb_errdtls = QPushButton('Errors', self)
         connect_window(
@@ -391,51 +413,13 @@ class RFMainControl(SiriusMainWindow):
         connect_window(
             self.pb_paramdtls, SlowLoopParametersDetails, parent=self,
             prefix=self.prefix, section=self.section)
-        self.lb_ampref = SiriusLabel(self, self.prefix+self.chs['SL']['ARef'])
-        self.lb_ampref.showUnits = True
-        self.lb_ampinp = SiriusLabel(self, self.prefix+self.chs['SL']['AInp'])
-        self.lb_ampinp.showUnits = True
-        self.lb_amperr = SiriusLabel(self, self.prefix+self.chs['SL']['AErr'])
-        self.lb_amperr.showUnits = True
-        self.lb_phsref = SiriusLabel(self, self.prefix+self.chs['SL']['PRef'])
-        self.lb_phsref.showUnits = True
-        self.lb_phsinp = SiriusLabel(self, self.prefix+self.chs['SL']['PInp'])
-        self.lb_phsinp.showUnits = True
-        self.lb_phserr = SiriusLabel(self, self.prefix+self.chs['SL']['PErr'])
-        self.lb_phserr.showUnits = True
-        lay_slmon = QGridLayout()
-        lay_slmon.setHorizontalSpacing(9)
-        lay_slmon.setVerticalSpacing(9)
-        lay_slmon.addWidget(QLabel(
-            '<h4>Details</h4>', self, alignment=Qt.AlignCenter), 1, 0, 1, 1)
-        lay_slmon.addWidget(self.pb_errdtls, 2, 0, 1, 1,
-            alignment=Qt.AlignCenter)
-        lay_slmon.addWidget(self.pb_paramdtls, 3, 0, 1, 1,
-            alignment=Qt.AlignCenter)
-        lay_slmon.addWidget(QLabel(
-            '<h4>Reference<h4>', self, alignment=Qt.AlignCenter), 1, 1)
-        lay_slmon.addWidget(QLabel(
-            '<h4>Input</h4>', self, alignment=Qt.AlignCenter), 2, 1)
-        lay_slmon.addWidget(QLabel(
-            '<h4>Error</h4>', self, alignment=Qt.AlignCenter), 3, 1)
-        lay_slmon.addWidget(QLabel(
-            '<h4>Amp.</h4>', self, alignment=Qt.AlignCenter), 0, 2)
-        lay_slmon.addWidget(self.lb_ampref, 1, 2)
-        lay_slmon.addWidget(self.lb_ampinp, 2, 2)
-        lay_slmon.addWidget(self.lb_amperr, 3, 2)
-        lay_slmon.addWidget(
-            QLabel('<h4>Phase</h4>', self, alignment=Qt.AlignCenter), 0, 3)
-        lay_slmon.addWidget(self.lb_phsref, 1, 3)
-        lay_slmon.addWidget(self.lb_phsinp, 2, 3)
-        lay_slmon.addWidget(self.lb_phserr, 3, 3)
 
-        wid_sl = QWidget()
-        lay_sl = QGridLayout(wid_sl)
-        lay_sl.setSpacing(7)
-        lay_sl.addLayout(lay_over, 1, 1)
-        lay_sl.addLayout(lay_slmon, 2, 1)
-        lay_sl.setRowStretch(2, 4)
-        lay_sl.setRowStretch(5, 4)
+        lay_slc.addWidget(QLabel(
+            '<h4>Details</h4>', self, alignment=Qt.AlignCenter), 0, offset)
+        lay_slc.addWidget(self.pb_errdtls, 1, offset,
+            alignment=Qt.AlignCenter)
+        lay_slc.addWidget(self.pb_paramdtls, 2, offset,
+            alignment=Qt.AlignCenter)
 
         # # Tuning
         # # # Tuning settings
@@ -1464,11 +1448,11 @@ class RFMainControl(SiriusMainWindow):
         lay_tunset.addWidget(lb_dphase, 5, offset)
         lay_tunset.addWidget(led_tunact, 6, offset, alignment=Qt.AlignCenter)
 
-    def _create_slover_lay(self, lay_over, key, chs_dict, offset):
+    def _create_slc_lay(self, lay_slc, key, chs_dict, offset):
         if key:
-            lay_over.addWidget(QLabel(
-                f'<h4>• {key}</h4>', self, alignment=Qt.AlignLeft),
-                offset, 0)
+            lay_slc.addWidget(QLabel(
+                f'<h4>{key}<h4>', self, alignment=Qt.AlignRight),
+                0, offset)
 
         lb_slmode = SiriusLabel(
             self, self.prefix+chs_dict['Mode']+'-Sts')
@@ -1479,20 +1463,11 @@ class RFMainControl(SiriusMainWindow):
         led_slenbl = SiriusLedState(
             self, self.prefix+chs_dict['Enbl']+'-Sts')
 
-        lay_over.addWidget(QLabel(
-            '<h4>Mode</h4>', self, alignment=Qt.AlignCenter),
-            offset+1, 0)
-        lay_over.addWidget(lb_slmode, offset+1, 1)
-        lay_over.addWidget(led_slmode, offset+1, 2, alignment=Qt.AlignLeft)
-        lay_over.addWidget(QLabel(
-            '<h4>Enable</h4>', self, alignment=Qt.AlignCenter),
-            offset+2, 0)
-        lay_over.addWidget(bt_slenbl, offset+2, 1)
-        lay_over.addWidget(led_slenbl, offset+2, 2, alignment=Qt.AlignLeft)
+        lay_slc.addWidget(lb_slmode, 1, offset, alignment=Qt.AlignCenter)
+        lay_slc.addWidget(led_slmode, 1, offset+1, alignment=Qt.AlignCenter)
+        lay_slc.addWidget(bt_slenbl, 2, offset, alignment=Qt.AlignCenter)
+        lay_slc.addWidget(led_slenbl, 2, offset+1, alignment=Qt.AlignCenter)
 
-        lay_slctrl = QGridLayout()
-        lay_slctrl.setHorizontalSpacing(9)
-        lay_slctrl.setVerticalSpacing(9)
         sb_amp1 = SiriusSpinbox(
             self, self.prefix+chs_dict['ASet']+'-SP')
         lb_amp1 = SiriusLabel(
@@ -1510,26 +1485,44 @@ class RFMainControl(SiriusMainWindow):
         lb_phsincrate = SiriusLabel(
             self, self.prefix+chs_dict['PInc']+'-RB')
 
-        lay_slctrl.addWidget(QLabel(
-            '<h4>SP/RB</h4>', self, alignment=Qt.AlignCenter), 0, 2, 1, 2)
-        lay_slctrl.addWidget(
+        lay_slc.addWidget(QLabel(
+            '<h4>SP/RB</h4>', self, alignment=Qt.AlignCenter), 4, offset)
+        lay_slc.addWidget(
             QLabel('<h4>Inc. Rate SP/RB</h4>', self, alignment=Qt.AlignCenter),
-            0, 4, 1, 2)
-        lay_slctrl.addWidget(
-            QLabel('<h4>Amplitude [mV]</h4>', self, alignment=Qt.AlignCenter),
-            1, 0, 1, 2)
-        lay_slctrl.addWidget(
-            QLabel('<h4>Phase [DEG]</h4>', self, alignment=Qt.AlignCenter),
-            2, 0, 1, 2)
-        lay_slctrl.addWidget(sb_amp1, 1, 2, alignment=Qt.AlignRight)
-        lay_slctrl.addWidget(lb_amp1, 1, 3, alignment=Qt.AlignLeft)
-        lay_slctrl.addWidget(cb_ampincrate, 1, 4, alignment=Qt.AlignRight)
-        lay_slctrl.addWidget(lb_ampincrate, 1, 5, alignment=Qt.AlignLeft)
-        lay_slctrl.addWidget(sb_phs, 2, 2, alignment=Qt.AlignRight)
-        lay_slctrl.addWidget(lb_phs, 2, 3, alignment=Qt.AlignLeft)
-        lay_slctrl.addWidget(cb_phsincrate, 2, 4, alignment=Qt.AlignRight)
-        lay_slctrl.addWidget(lb_phsincrate, 2, 5, alignment=Qt.AlignLeft)
-        lay_over.addLayout(lay_slctrl, offset+3, 0)
+            4, offset+1)
+        lay_slc.addWidget(sb_amp1, 5, offset, alignment=Qt.AlignCenter)
+        lay_slc.addWidget(lb_amp1, 6, offset, alignment=Qt.AlignCenter)
+        lay_slc.addWidget(cb_ampincrate, 5, offset+1, alignment=Qt.AlignCenter)
+        lay_slc.addWidget(lb_ampincrate, 6, offset+1, alignment=Qt.AlignCenter)
+        lay_slc.addWidget(sb_phs, 7, offset, alignment=Qt.AlignCenter)
+        lay_slc.addWidget(lb_phs, 8, offset, alignment=Qt.AlignCenter)
+        lay_slc.addWidget(cb_phsincrate, 7, offset+1, alignment=Qt.AlignCenter)
+        lay_slc.addWidget(lb_phsincrate, 8, offset+1, alignment=Qt.AlignCenter)
+
+        lb_ampref = SiriusLabel(self, self.prefix+chs_dict['ARef'])
+        lb_ampref.showUnits = True
+        lb_ampinp = SiriusLabel(self, self.prefix+chs_dict['AInp'])
+        lb_ampinp.showUnits = True
+        lb_amperr = SiriusLabel(self, self.prefix+chs_dict['AErr'])
+        lb_amperr.showUnits = True
+        lb_phsref = SiriusLabel(self, self.prefix+chs_dict['PRef'])
+        lb_phsref.showUnits = True
+        lb_phsinp = SiriusLabel(self, self.prefix+chs_dict['PInp'])
+        lb_phsinp.showUnits = True
+        lb_phserr = SiriusLabel(self, self.prefix+chs_dict['PErr'])
+        lb_phserr.showUnits = True
+
+        lay_slc.addWidget(QLabel(
+            '<h4>Amp.</h4>', self, alignment=Qt.AlignCenter), 11, offset)
+        lay_slc.addWidget(QLabel(
+            '<h4>Phase</h4>', self, alignment=Qt.AlignCenter), 11, offset+1)
+
+        lay_slc.addWidget(lb_ampref, 12, offset)
+        lay_slc.addWidget(lb_ampinp, 13, offset)
+        lay_slc.addWidget(lb_amperr, 14, offset)
+        lay_slc.addWidget(lb_phsref, 12, offset+1)
+        lay_slc.addWidget(lb_phsinp, 13, offset+1)
+        lay_slc.addWidget(lb_phserr, 14, offset+1)
 
     def _handle_pwrdata_visibility(self, text):
         for group, labels in self._pm_labels.items():
