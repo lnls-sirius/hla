@@ -249,15 +249,39 @@ class RFMainControl(SiriusMainWindow):
                 'min-width:25px; max-width:25px; icon-size:20px;')
 
         # Auxiliary Windows
-        self._ld_fdl = QLabel(
+        self._ld_aux = QLabel(
             '<h4>Auxiliary Windows</h4>', self, alignment=Qt.AlignLeft)
 
         # # Open FDL
-        self.pb_openfdl = QPushButton(
-            qta.icon('fa5s.external-link-alt'), ' FDL', self)
-        connect_window(
-            self.pb_openfdl, FDLMonitor, parent=self,
-            prefix=self.prefix, section=self.section)
+        self.ld_fdl = QLabel(
+            'LLRF FDL', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+        if self.section == 'SI':
+            lay_fdl = QGridLayout()
+            lay_fdl.addWidget(self.ld_fdl, 0, 0)
+            offset = 1
+            for key, val in self.chs['FDL'].items():
+                ld_llrf = QLabel(
+                    f'• {key}', self,
+                    alignment=Qt.AlignRight | Qt.AlignVCenter)
+                pb_llrf = QPushButton(
+                    qta.icon('fa5s.external-link-alt'), '', self)
+                pb_llrf.setStyleSheet(
+                    'min-width:25px; max-width:25px; icon-size:20px;')
+                connect_window(
+                pb_llrf, FDLMonitor, parent=self, prefix=self.prefix,
+                section=self.section, chs=val)
+
+                lay_fdl.addWidget(ld_llrf, offset, 0)
+                lay_fdl.addWidget(pb_llrf, offset, 1)
+                offset += 1
+        else:
+            self.pb_openfdl = QPushButton(
+                qta.icon('fa5s.external-link-alt'), '', self)
+            self.pb_openfdl.setStyleSheet(
+                'min-width:25px; max-width:25px; icon-size:20px;')
+            connect_window(
+                self.pb_openfdl, FDLMonitor, parent=self,
+                prefix=self.prefix, section=self.section, chs=self.chs['FDL'])
 
         lay = QGridLayout()
         lay.setHorizontalSpacing(6)
@@ -288,8 +312,12 @@ class RFMainControl(SiriusMainWindow):
         else:
             lay.addWidget(self.ld_llrf, 9, 0, alignment=Qt.AlignVCenter)
             lay.addWidget(self.pb_llrf, 9, 1)
-        lay.addWidget(self._ld_fdl, 10, 0, 1, 3)
-        lay.addWidget(self.pb_openfdl, 11, 0, alignment=Qt.AlignRight)
+        lay.addWidget(self._ld_aux, 10, 0, 1, 3)
+        if self.section == 'SI':
+            lay.addLayout(lay_fdl, 11, 0, 1, 2)
+        else:
+            lay.addWidget(self.ld_fdl, 11, 0)
+            lay.addWidget(self.pb_openfdl, 11, 1)
 
         return lay
 
