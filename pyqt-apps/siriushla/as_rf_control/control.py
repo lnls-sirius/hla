@@ -394,8 +394,14 @@ class RFMainControl(SiriusMainWindow):
         if self.section == 'BO':
             self._create_ssa_wid(lay_amp, 2, self.chs['SSA'])
         else:
-            for k, val in self.chs['SSA'].items():
-                self._create_ssa_wid(lay_amp, int(k)+1, val)
+            last_llrf = ''
+            for k, chs_dict in self.chs['SSA'].items():
+                if last_llrf != chs_dict['LLRF']:
+                    lay_amp.addWidget(QLabel(
+                        f"<h4>LLRF {chs_dict['LLRF']}</h4>", self,
+                        alignment=Qt.AlignCenter), int(k)+1, 0)
+                    last_llrf = chs_dict['LLRF']
+                self._create_ssa_wid(lay_amp, int(k)+1, chs_dict)
 
         # LLRF
         # # Slow Loop Control

@@ -583,6 +583,7 @@ SEC_2_CHANNELS = {
                 },
                 'PreDrive': 'RA-RaSIA01:RF-LLRFPreAmp:PwrFwdIn1Amp-Mon',
                 'PreDriveThrs': 5,  # mV
+                'LLRF': 'A'
             },
             '2': {
                 'Name': 'SSA 02',
@@ -608,6 +609,7 @@ SEC_2_CHANNELS = {
                 },
                 'PreDrive': 'RA-RaSIA01:RF-LLRFPreAmp:PwrFwdIn2Amp-Mon',
                 'PreDriveThrs': 5,  # mV
+                'LLRF': 'A'
             },
             '3': {
                 'Name': 'SSA 03',
@@ -633,6 +635,7 @@ SEC_2_CHANNELS = {
                 },
                 'PreDrive': 'RA-RaSIA01:RF-LLRFPreAmp:PwrFwdIn3Amp-Mon',
                 'PreDriveThrs': 5,  # mV
+                'LLRF': 'B'
             },
             '4': {
                 'Name': 'SSA 04',
@@ -658,6 +661,7 @@ SEC_2_CHANNELS = {
                 },
                 'PreDrive': 'RA-RaSIA01:RF-LLRFPreAmp:PwrFwdIn4Amp-Mon',
                 'PreDriveThrs': 5,  # mV
+                'LLRF': 'B'
             }
         },
         'SL': {
