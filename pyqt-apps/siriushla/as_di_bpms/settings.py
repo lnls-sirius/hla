@@ -103,7 +103,7 @@ class ParamsSettings(BaseWidget):
         title = ('' if self.is_pbpm else 'RFFE and ') + 'Switching Settings'
         formlist = (('SwMode-Sel', 'Switching Mode'), )
         if not self.is_pbpm:
-            formlist += ('RFFEAtt-SP', 'RFFE Attenuation')
+            formlist += (('RFFEAtt-SP', 'RFFE Attenuation'), )
         grpbx = self._create_formlayout_groupbox(title, formlist)
         vbl.addWidget(grpbx)
         vbl.addSpacing(20)
