@@ -418,11 +418,13 @@ class RFMainControl(SiriusMainWindow):
         lay_slc.addItem(QSpacerItem(
             0, 30, QSzPlcy.Ignored, QSzPlcy.Fixed), 10, 0)
         lay_slc.addWidget(QLabel(
-            '<h4>Reference<h4>', self, alignment=Qt.AlignCenter), 12, 0)
+            '<h4>Reference</h4>', self, alignment=Qt.AlignCenter), 12, 0)
         lay_slc.addWidget(QLabel(
             '<h4>Input</h4>', self, alignment=Qt.AlignCenter), 13, 0)
         lay_slc.addWidget(QLabel(
             '<h4>Error</h4>', self, alignment=Qt.AlignCenter), 14, 0)
+        lay_slc.addItem(QSpacerItem(
+            0, 50, QSzPlcy.Ignored, QSzPlcy.Fixed), 15, 0)
 
         offset = 1
         if self.section == 'SI':
@@ -446,12 +448,13 @@ class RFMainControl(SiriusMainWindow):
             self.pb_paramdtls, SlowLoopParametersDetails, parent=self,
             prefix=self.prefix, section=self.section)
 
-        lay_slc.addWidget(QLabel(
-            '<h4>Details</h4>', self, alignment=Qt.AlignCenter), 0, offset)
-        lay_slc.addWidget(self.pb_errdtls, 1, offset,
-            alignment=Qt.AlignCenter)
-        lay_slc.addWidget(self.pb_paramdtls, 2, offset,
-            alignment=Qt.AlignCenter)
+        gbox_details = QGroupBox('Details', self)
+        lay_details = QHBoxLayout(gbox_details)
+        lay_details.setAlignment(Qt.AlignTop)
+        lay_details.addWidget(self.pb_errdtls, alignment=Qt.AlignCenter)
+        lay_details.addWidget(self.pb_paramdtls, alignment=Qt.AlignCenter)
+
+        lay_slc.addWidget(gbox_details, 16, 0, 17, offset)
 
         # # Tuning
         # # # Tuning settings
@@ -589,7 +592,7 @@ class RFMainControl(SiriusMainWindow):
         # # FieldFlatness settings
         if self.section != "SI":
             pvs = self.chs['FFlat']
-            lb2 = '6' if self.section == 'SI' else '4'
+            lb2 = '4'
             lb_fflat = QLabel(
                 '<h3> • Field Flatness</h3>', self, alignment=Qt.AlignLeft)
             lb_ffsts = QLabel('Acting: ', self, alignment=Qt.AlignRight)
@@ -1556,6 +1559,8 @@ class RFMainControl(SiriusMainWindow):
         lay_slc.addWidget(lb_phsref, 12, offset+1)
         lay_slc.addWidget(lb_phsinp, 13, offset+1)
         lay_slc.addWidget(lb_phserr, 14, offset+1)
+        lay_slc.addItem(QSpacerItem(
+            15, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 12, offset+2)
 
     def _handle_pwrdata_visibility(self, text):
         for group, labels in self._pm_labels.items():
