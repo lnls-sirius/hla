@@ -134,15 +134,6 @@ class AcqControlWidget(BaseWidget):
         stop.setObjectName('stop')
         stop.setStyleSheet(
             '#stop{min-width:25px; max-width:25px; icon-size:20px;}')
-        abrt = PyDMPushButton(
-            grp_bx, label='',
-            init_channel=self.devpref.substitute(propty='TrigAcqCtrl-Sel'),
-            pressValue=self._csorb.TrigAcqCtrl.Abort)
-        abrt.setToolTip('Abort Acquisition')
-        abrt.setIcon(qta.icon('fa5s.ban'))
-        abrt.setObjectName('abrt')
-        abrt.setStyleSheet(
-            '#abrt{min-width:25px; max-width:25px; icon-size:20px;}')
 
         pdmlbl = SiriusLabel(
             grp_bx, self.devpref.substitute(propty='TrigAcqCtrl-Sts'))
@@ -156,7 +147,6 @@ class AcqControlWidget(BaseWidget):
         hbl.addWidget(lbl)
         hbl.addWidget(strt)
         hbl.addWidget(stop)
-        hbl.addWidget(abrt)
         hbl.addWidget(pdmlbl)
 
         conf = PyDMPushButton(
