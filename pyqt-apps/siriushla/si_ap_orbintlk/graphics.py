@@ -738,19 +738,9 @@ class PosXGraphWidget(_BaseGraphWidget):
     PROPTY_MEAS_SYMB = {
         'Instantaneous': {
             'General': 'Intlk-Mon',
-            'Upper': 'IntlkPosUpper-Mon',
-            'Lower': 'IntlkPosLower-Mon',
-            'Upper | Lower': {
-                'var': ['IntlkPosUpper-Mon', 'IntlkPosLower-Mon'],
-                'op': _np.logical_or},
         },
         'Latch': {
             'General': 'IntlkLtc-Mon',
-            'Upper': 'IntlkPosUpperLtc-Mon',
-            'Lower': 'IntlkPosLowerLtc-Mon',
-            'Upper | Lower': {
-                'var': ['IntlkPosUpperLtc-Mon', 'IntlkPosLowerLtc-Mon'],
-                'op': _np.logical_or},
         },
     }
     PROPTY_MIN_DATA = 'IntlkLmtPosMinX-RB'
@@ -771,19 +761,9 @@ class PosYGraphWidget(_BaseGraphWidget):
     PROPTY_MEAS_SYMB = {
         'Instantaneous': {
             'General': 'Intlk-Mon',
-            'Upper': 'IntlkPosUpper-Mon',
-            'Lower': 'IntlkPosLower-Mon',
-            'Upper | Lower': {
-                'var': ['IntlkPosUpper-Mon', 'IntlkPosLower-Mon'],
-                'op': _np.logical_or},
         },
         'Latch': {
             'General': 'IntlkLtc-Mon',
-            'Upper': 'IntlkPosUpperLtc-Mon',
-            'Lower': 'IntlkPosLowerLtc-Mon',
-            'Upper | Lower': {
-                'var': ['IntlkPosUpperLtc-Mon', 'IntlkPosLowerLtc-Mon'],
-                'op': _np.logical_or},
         },
     }
     PROPTY_MIN_DATA = 'IntlkLmtPosMinY-RB'
@@ -806,19 +786,9 @@ class AngXGraphWidget(_BaseGraphWidget):
     PROPTY_MEAS_SYMB = {
         'Instantaneous': {
             'General': 'Intlk-Mon',
-            'Upper': 'IntlkAngUpper-Mon',
-            'Lower': 'IntlkAngLower-Mon',
-            'Upper | Lower': {
-                'var': ['IntlkAngUpper-Mon', 'IntlkAngLower-Mon'],
-                'op': _np.logical_or},
         },
         'Latch': {
             'General': 'IntlkLtc-Mon',
-            'Upper': 'IntlkAngUpperLtc-Mon',
-            'Lower': 'IntlkAngLowerLtc-Mon',
-            'Upper | Lower': {
-                'var': ['IntlkAngUpperLtc-Mon', 'IntlkAngLowerLtc-Mon'],
-                'op': _np.logical_or},
         },
     }
     PROPTY_MIN_DATA = 'IntlkLmtAngMinX-RB'
@@ -841,19 +811,9 @@ class AngYGraphWidget(_BaseGraphWidget):
     PROPTY_MEAS_SYMB = {
         'Instantaneous': {
             'General': 'Intlk-Mon',
-            'Upper': 'IntlkAngUpper-Mon',
-            'Lower': 'IntlkAngLower-Mon',
-            'Upper | Lower': {
-                'var': ['IntlkAngUpper-Mon', 'IntlkAngLower-Mon'],
-                'op': _np.logical_or},
         },
         'Latch': {
             'General': 'IntlkLtc-Mon',
-            'Upper': 'IntlkAngUpperLtc-Mon',
-            'Lower': 'IntlkAngLowerLtc-Mon',
-            'Upper | Lower': {
-                'var': ['IntlkAngUpperLtc-Mon', 'IntlkAngLowerLtc-Mon'],
-                'op': _np.logical_or},
         },
     }
     PROPTY_MIN_DATA = 'IntlkLmtAngMinY-RB'
