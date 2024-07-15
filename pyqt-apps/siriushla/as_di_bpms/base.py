@@ -144,6 +144,16 @@ class BaseWidget(QWidget):
         wid.setObjectName(str(pvname).replace('-', ''))
         return wid
 
+    def basic_rule(self, channel, flag, val=0):
+        chan = self.get_pvname(channel)
+        opr = '==' if flag else '!='
+        val = str(val)
+        rules = (
+            '[{"name": "VisRule", "property": "Visible", ' +
+            '"expression": "ch[0] '+opr+' '+val+'", "channels": ' +
+            '[{"channel": "'+chan+'", "trigger": true}]}]')
+        return rules
+
 
 CustomGroupBox = pydmwidget_factory(QGroupBox, pydm_class='primi')
 
