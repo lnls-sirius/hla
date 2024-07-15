@@ -174,11 +174,6 @@ class BPMAdvancedSettings(BaseWidget):
         for rate, pos in rate2pos.items():
             items = list()
             if rate == 'Monit':
-                if not self.is_pbpm:
-                    items.append(
-                        ('MonitEnable-Sel', 'Enable',
-                         ['statebutton', 'ledstate'])
-                    )
                 items.append(('MONITUpdtTime-SP', 'Update Time'))
             if rate != 'FOFB':
                 items.append(
