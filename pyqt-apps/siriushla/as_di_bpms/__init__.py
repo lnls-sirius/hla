@@ -1,4 +1,3 @@
-from .fft import FFTConfig, FFTData
 from .list_bpms import SelectBPMs, SinglePassSummary, MultiTurnSummary, \
     BPMSummary
 from .main import BPMMain, TriggeredAcquisition, PostMortemAcquisition

@@ -5,7 +5,6 @@ from qtpy.QtCore import Qt
 from siriushla.widgets import SiriusConnectionSignal, SiriusLabel
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla.as_di_bpms.base import BaseWidget, GraphWave
-from siriushla.as_di_bpms.fft import FFTData
 from siriushla import util
 
 
@@ -69,21 +68,6 @@ class MultiTurnData(BaseWidget):
         stats = self.create_statistics(stack1, False)
         vbl.addWidget(stats)
 
-        if not self.data_prefix.startswith('PM'):
-            hbl2 = QHBoxLayout()
-            hbl2.addStretch()
-            vbl.addItem(hbl2)
-            pb = QPushButton('Open FFT Data', stack1)
-            pb.setDefault(False)
-            pb.setAutoDefault(False)
-            hbl2.addWidget(pb)
-            hbl2.addStretch()
-            Window = create_window_from_widget(
-                FFTData, title=self.bpm+': FFT Data')
-            util.connect_window(
-                pb, Window, parent=stack1, prefix=self.prefix,
-                bpm=self.bpm, data_prefix=self.data_prefix, position=False)
-
         # ##### Position Widget ######
         stack2 = QWidget(self.stack)
         self.stack.addWidget(stack2)
@@ -93,19 +77,6 @@ class MultiTurnData(BaseWidget):
         vbl.addWidget(graph)
         stats = self.create_statistics(stack2, True)
         vbl.addWidget(stats)
-
-        if not self.data_prefix.startswith('PM'):
-            hbl2 = QHBoxLayout()
-            hbl2.addStretch()
-            vbl.addItem(hbl2)
-            pb = QPushButton('Open FFT Data', stack2)
-            hbl2.addWidget(pb)
-            hbl2.addStretch()
-            Window = create_window_from_widget(
-                FFTData, title=self.bpm+': FFT Data')
-            util.connect_window(
-                pb, Window, parent=stack1, prefix=self.prefix,
-                bpm=self.bpm, data_prefix=self.data_prefix, position=True)
 
         self.setStyleSheet("""
             #MultiTurnDataGraph{

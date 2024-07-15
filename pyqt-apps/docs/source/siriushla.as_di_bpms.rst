@@ -12,14 +12,6 @@ siriushla.as\_di\_bpms.base module
    :undoc-members:
    :show-inheritance:
 
-siriushla.as\_di\_bpms.fft module
----------------------------------
-
-.. automodule:: siriushla.as_di_bpms.fft
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 siriushla.as\_di\_bpms.list\_bpms module
 ----------------------------------------
 
