@@ -103,7 +103,7 @@ class BPMMain(BaseWidget):
         self.layoutv.addSpacing(20)
         self.layoutv.addStretch()
 
-        if self.bpm.sec not in ['TB', 'BO', 'TS'] and not self.is_pbpm:
+        if self.bpm.sec not in ['TB', 'BO', 'TS']:
             grpbx = CustomGroupBox('Orbit Interlock', self)
             hbl = QHBoxLayout(grpbx)
             pbt = QPushButton('Open Interlock Settings', grpbx)
