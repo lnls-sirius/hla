@@ -36,13 +36,6 @@ siriushla.as\_di\_bpms.monit module
    :undoc-members:
    :show-inheritance:
 
-siriushla.as\_di\_bpms.multiturn\_data module
----------------------------------------------
-
-.. automodule:: siriushla.as_di_bpms.multiturn_data
-   :members:
-   :undoc-members:
-   :show-inheritance:
 
 siriushla.as\_di\_bpms.settings module
 --------------------------------------
@@ -52,13 +45,6 @@ siriushla.as\_di\_bpms.settings module
    :undoc-members:
    :show-inheritance:
 
-siriushla.as\_di\_bpms.singlepass\_data module
-----------------------------------------------
-
-.. automodule:: siriushla.as_di_bpms.singlepass_data
-   :members:
-   :undoc-members:
-   :show-inheritance:
 
 siriushla.as\_di\_bpms.trig\_acq\_config module
 -----------------------------------------------
