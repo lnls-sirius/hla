@@ -205,9 +205,8 @@ class BPMAdvancedSettings(BaseWidget):
             hrow = QHBoxLayout()
             hrow.setContentsMargins(0, 0, 0, 0)
 
-            acqcores = ['GEN', 'PM'] if self.is_pbpm else ['ACQ', 'PM']
             grpbx = TriggersLauncherWidget(
-                self, prefix=self.prefix, bpm=self.bpm, acqcores=acqcores)
+                self, prefix=self.prefix, bpm=self.bpm, acqcores=['GEN', 'PM'])
             hrow.addWidget(grpbx)
 
             if not self.is_pbpm:
@@ -254,15 +253,6 @@ class TriggersLauncherWidget(BaseWidget):
             pbt, wind, parent=self, prefix=self.prefix, device=self.bpm)
         hbl.addWidget(pbt)
         hbl.addStretch()
-        if 'ACQ' in self.acqcores:
-            pbt = QPushButton('ACQ Logical Triggers')
-            wind = create_window_from_widget(
-                LogicalTriggers, title=self.bpm+': ACQ Logical Triggers')
-            util.connect_window(
-                pbt, wind, parent=self, prefix=self.prefix, device=self.bpm,
-                names=_csbpm.LogTrigIntern._fields, trig_tp='')
-            hbl.addWidget(pbt)
-            hbl.addStretch()
         if 'GEN' in self.acqcores:
             pbt = QPushButton('General Logical Triggers')
             wind = create_window_from_widget(
@@ -272,7 +262,7 @@ class TriggersLauncherWidget(BaseWidget):
                 names=_csbpm.LogTrigIntern._fields, trig_tp='_GEN')
             hbl.addWidget(pbt)
             hbl.addStretch()
-        if 'PM' in self.acqcores or 'ACQ_PM' in self.acqcores:
+        if 'PM' in self.acqcores:
             pbt = QPushButton('Post-Mortem Logical Triggers')
             wind = create_window_from_widget(
                 LogicalTriggers,
