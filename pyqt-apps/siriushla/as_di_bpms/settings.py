@@ -142,14 +142,14 @@ class BPMAdvancedSettings(BaseWidget):
             conflist += (
                 ('', '', ()),
                 ('', '<h4>Antenna Offsets</h4>', ()),
-                ('SwDirOffsetA-SP', 'Direct Offset A', 12),
-                ('SwDirOffsetB-SP', 'Direct Offset B', 12),
-                ('SwDirOffsetC-SP', 'Direct Offset C', 12),
-                ('SwDirOffsetD-SP', 'Direct Offset D', 12),
-                ('SwInvOffsetA-SP', 'Inverse Offset A', 12),
-                ('SwInvOffsetB-SP', 'Inverse Offset B', 12),
-                ('SwInvOffsetC-SP', 'Inverse Offset C', 12),
-                ('SwInvOffsetD-SP', 'Inverse Offset D', 12),
+                ('SwDirOffsetA-SP', 'Direct Offset A'),
+                ('SwDirOffsetB-SP', 'Direct Offset B'),
+                ('SwDirOffsetC-SP', 'Direct Offset C'),
+                ('SwDirOffsetD-SP', 'Direct Offset D'),
+                ('SwInvOffsetA-SP', 'Inverse Offset A'),
+                ('SwInvOffsetB-SP', 'Inverse Offset B'),
+                ('SwInvOffsetC-SP', 'Inverse Offset C'),
+                ('SwInvOffsetD-SP', 'Inverse Offset D'),
             )
 
         grpbx = self._create_formlayout_groupbox('Switching', conflist)
@@ -404,42 +404,40 @@ class BPMHardwareSettings(BaseWidget):
         lay = QGridLayout(self)
 
         lab = QLabel(
-            '<h2>'+self.bpm+' Hardware Settings</h2>', self,
+            '<h2>'+self.bpm+' FMC250 Settings</h2>', self,
             alignment=Qt.AlignCenter)
         lay.addWidget(lab, 0, 0, 1, 2)
 
-        lay.addWidget(self._setupADCWidget(), 1, 0)
-        lay.addWidget(self._setupAD9510Widget(), 2, 0, 5, 1)
-        lay.addWidget(self._setupActiveClockWidget(), 1, 1)
-        lay.addWidget(self._setupFMC250MWidget(), 2, 1)
-        for chan in range(4):
-            lay.addWidget(self._setupADCChannelMWidget(chan), chan+3, 1)
+        vlay0 = QVBoxLayout()
+        vlay0.setContentsMargins(0, 0, 0, 0)
+        vlay0.addWidget(self._setupADCCommonWidget())
+        vlay0.addWidget(self._setupActiveClockWidget())
+        vlay0.addWidget(self._setupAD9510PLLWidget())
 
-    def _setupADCWidget(self):
-        return self._create_formlayout_groupbox('ADC', (
+        vlay1 = QVBoxLayout()
+        vlay1.setContentsMargins(0, 0, 0, 0)
+        vlay1.addWidget(self._setupADCsWidget())
+
+        lay.addLayout(vlay0, 1, 0)
+        lay.addLayout(vlay1, 1, 1)
+
+    def _setupADCCommonWidget(self):
+        return self._create_formlayout_groupbox('ADC Common', (
             ('ADCTrigDir-Sel', 'Trigger Direction'),
             ('ADCTrigTerm-Sel', 'Trigger Termination'),
-            ('ADCClkSel-Sel', 'Reference Clock'),
             ('ADCTestDataEn-Sel', 'Enable test data',
              ['statebutton', 'ledstate']),
         ))
 
-    def _setupAD9510Widget(self):
-        return self._create_formlayout_groupbox('ADC AD9510', (
+    def _setupAD9510PLLWidget(self):
+        return self._create_formlayout_groupbox('AD9510 PLL', (
             ('ADCAD9510PllStatus-Mon', 'PLL Status',
              [('ledstate', SiriusLedState.Red, SiriusLedState.LightGreen)]),
             ('ADCAD9510Defaults-Sel', 'Reset',
              [('pushbutton', 'Reset', None, 1, 0)]),
-            ('ADCAD9510PllFunc-SP', 'PLL Function', ['lineedit', 'label']),
-            ('ADCAD9510ClkSel-Sel', 'Reference Clock'),
-            ('ADCAD9510PllPDown-Sel', 'PLL Power Down'),
-            ('ADCAD9510CpCurrent-Sel', 'CP Current'),
             ('ADCAD9510ADiv-SP', 'A divider', ['lineedit', 'label']),
             ('ADCAD9510BDiv-SP', 'B divider', ['lineedit', 'label']),
-            ('ADCAD9510Prescaler-SP', 'Prescaler', ['lineedit', 'label']),
             ('ADCAD9510RDiv-SP', 'R divider', ['lineedit', 'label']),
-            ('ADCAD9510MuxStatus-SP', 'Mux status', ['lineedit', 'label']),
-            ('ADCAD9510Outputs-SP', 'Outputs', ['lineedit', 'label']),
         ))
 
     def _setupActiveClockWidget(self):
@@ -447,27 +445,25 @@ class BPMHardwareSettings(BaseWidget):
             ('INFOClkFreq-SP', 'Clock Frequency [Hz]', ['lineedit', 'label']),
             ('ADCSi57xOe-Sel', 'Osc. output enable',
              ['statebutton', 'ledstate']),
-            ('INFOClkProp-Sel', 'Link Frequency',
-             ['statebutton', 'ledstate']),
             ('ADCSi57xFreq-SP', 'Osc. Frequency [Hz]', ['lineedit', 'label']),
-            ('ADCSi57xFStartup-SP', 'Osc. Frequency [Hz]\nStartup ',
-             ['lineedit', 'label']),
+            ('ADCClkSel-Sel', 'Reference Clock'),
         ))
 
-    def _setupFMC250MWidget(self):
-        return self._create_formlayout_groupbox('FMC250', (
+    def _setupADCsWidget(self):
+        proplist = (
             ('ActiveClkRstAdcs-Sel', 'Reset',
              [('pushbutton', 'Reset', None, 1, 0)]),
-            (([f'ADC{i}CalStatus-Mon' for i in range(4)]), 'Calibration Done',
-             ['ledstate', 'ledstate', 'ledstate', 'ledstate']),
-        ))
-
-    def _setupADCChannelMWidget(self, chan):
-        return self._create_formlayout_groupbox(f'ADC Channel {chan}', (
-            (f'ADC{chan}Temp-Mon', 'Temp. code'),
-            (f'ADC{chan}TestMode-SP', 'Test mode', ['lineedit', ]),
-            (f'ADC{chan}RstModes-Sel', 'Reset Mode', ['combo']),
-        ))
+        )
+        for chan in range(4):
+            proplist += (
+                ('', '', ()),
+                ('', f'<h4>Channel {chan}</h4>', ()),
+                (f'ADC{chan}Temp-Mon', 'Temp. code'),
+                (f'ADC{chan}TestMode-SP', 'Test mode', ['lineedit', ]),
+                (f'ADC{chan}RstModes-Sel', 'Reset Mode', ['combo']),
+                (f'ADC{chan}CalStatus-Mon', 'Calibration Done', ['ledstate']),
+            )
+        return self._create_formlayout_groupbox('ADCs', proplist)
 
 
 class PBPMHardwareSettings(BaseWidget):
