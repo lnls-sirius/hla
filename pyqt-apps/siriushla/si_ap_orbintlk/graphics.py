@@ -124,10 +124,8 @@ class GraphProptySelWidget(QWidget):
         super().__init__(parent)
 
         self._choose_plotopt = {
-            'Instantaneous': [
-                'General', 'Upper', 'Lower', 'Upper | Lower'],
-            'Latch': [
-                'General', 'Upper', 'Lower', 'Upper | Lower'],
+            'Instantaneous': ['General', ],
+            'Latch': ['General', ],
         }
         self._init_intlkval = 'Latch'
 
@@ -593,7 +591,7 @@ class _UpdateGraphThread(BaseObject, QThread):
                  min_data, min_symb, max_data, max_symb,
                  propintlktype, propcomptype, reforb,
                  prefix='', parent=None):
-        BaseObject.__init__(self, prefix)
+        BaseObject.__init__(self, prefix='')
         QThread.__init__(self, parent)
 
         self.intlktype = intlktype
