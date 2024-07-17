@@ -48,7 +48,9 @@ class AcqBaseWindow(SiriusMainWindow):
         propty = self.ACQCORE + propty
         return self.devpref.substitute(propty=propty)
 
-    def _create_graph(self, title, channels2names, add_scale=None):
+    def _create_graph(self, title, channels2names, add_scale=None, colors=None):
+        if not colors:
+            colors = self.DEFAULT_COLORS
         graph = GraphWave()
         graph.graph.setTitle(title)
         graph.graph.plotItem.getAxis('left').setStyle(
@@ -58,7 +60,7 @@ class AcqBaseWindow(SiriusMainWindow):
             opts = dict(
                 y_channel=chn,
                 name=channels2names[chn],
-                color=self.DEFAULT_COLORS[i],
+                color=colors[i],
                 lineStyle=1,
                 lineWidth=1,
                 add_scale=add_scale)

@@ -49,7 +49,8 @@ class BPMBaseTriggeredAcquisition(AcqBaseWindow, BaseWidget):
             {
                 f'{self.device}:{self.ACQCORE}Ampl{ant}Data': f'Ant {ant}'
                 for ant in ('A', 'B', 'C', 'D')
-            }
+            },
+            colors=('blue', 'red', 'green', 'magenta'),
         )
         # Positions
         gp_pos = self._create_graph(
@@ -57,7 +58,8 @@ class BPMBaseTriggeredAcquisition(AcqBaseWindow, BaseWidget):
             {
                 f'{self.device}:{self.ACQCORE}{data}Data': f'{data}'
                 for data in ('PosX', 'PosY', 'PosQ', 'Sum')
-            }
+            },
+            colors=('blue', 'red', 'green', 'black'),
         )
 
         wid = QTabWidget(self)
@@ -140,7 +142,8 @@ class PBPMBaseTriggeredAcquisition(AcqBaseWindow):
             {
                 f'{self.device}:{self.ACQCORE}Ampl{ant}Data': f'Ant {ant}'
                 for ant in ('A', 'B', 'C', 'D')
-            }
+            },
+            colors=('blue', 'red', 'green', 'magenta'),
         )
 
         wid = QWidget()
