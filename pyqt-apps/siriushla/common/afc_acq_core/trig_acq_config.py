@@ -80,7 +80,9 @@ class AcqBaseWindow(SiriusMainWindow):
         return graph
 
     def _basicSettingsWidget(self):
-        ld_chan = QLabel('Channel', self)
+        chanlabel = 'Channel' if not self.device.dev.endswith('BPM') \
+            else 'Acquisition Rate'
+        ld_chan = QLabel(chanlabel, self)
         self.ec_chan = SiriusEnumComboBox(
             self, self._get_pvname('Channel-Sel'))
         self.lb_chan = SiriusLabel(self, self._get_pvname('Channel-Sts'))
@@ -89,6 +91,12 @@ class AcqBaseWindow(SiriusMainWindow):
         self.ec_rep = SiriusEnumComboBox(
             self, self._get_pvname('TriggerRep-Sel'))
         self.lb_rep = SiriusLabel(self, self._get_pvname('TriggerRep-Sts'))
+
+        ld_hwdly = QLabel('Delay [adc counts]', self)
+        self.sb_hwdly = SiriusSpinbox(
+            self, self._get_pvname('TriggerHwDly-SP'))
+        self.lb_hwdly = SiriusLabel(
+            self, self._get_pvname('TriggerHwDly-RB'), keep_unit=True)
 
         ld_nrpre = QLabel('Pre-Trigger Nr.Samples', self)
         self.sb_nrpre = SiriusSpinbox(self, self._get_pvname('SamplesPre-SP'))
@@ -127,7 +135,7 @@ class AcqBaseWindow(SiriusMainWindow):
         self.lb_nrshots = SiriusLabel(
             self, self._get_pvname('Shots-RB'), keep_unit=True)
 
-        ld_uptime = QLabel('Update Interval', self)
+        ld_uptime = QLabel('Update Interval [s]', self)
         self.sb_uptime = SiriusSpinbox(self, self._get_pvname('UpdateTime-SP'))
         self.lb_uptime = SiriusLabel(
             self, self._get_pvname('UpdateTime-RB'), keep_unit=True)
@@ -159,25 +167,28 @@ class AcqBaseWindow(SiriusMainWindow):
         lay.addWidget(self.ec_chan, 0, 1)
         lay.addWidget(self.lb_chan, 0, 2)
         lay.addItem(QSpacerItem(1, 10, QSzPlcy.Preferred, QSzPlcy.Fixed), 2, 0)
-        lay.addWidget(ld_rep, 3, 0)
-        lay.addWidget(self.ec_rep, 3, 1)
-        lay.addWidget(self.lb_rep, 3, 2)
-        lay.addWidget(ld_nrpre, 4, 0)
-        lay.addWidget(self.sb_nrpre, 4, 1)
-        lay.addWidget(ld_nrpos, 5, 0)
-        lay.addWidget(self.sb_nrpos, 5, 1)
-        lay.addWidget(self.fr_nrtot, 4, 2, 2, 1)
-        lay.addWidget(ld_trig, 6, 0)
-        lay.addWidget(self.ec_trig, 6, 1)
-        lay.addWidget(self.lb_trig, 6, 2)
-        lay.addWidget(ld_nrshots, 7, 0)
-        lay.addWidget(self.sb_nrshots, 7, 1)
-        lay.addWidget(self.lb_nrshots, 7, 2)
-        lay.addWidget(ld_uptime, 8, 0)
-        lay.addWidget(self.sb_uptime, 8, 1)
-        lay.addWidget(self.lb_uptime, 8, 2)
-        lay.addItem(QSpacerItem(1, 10, QSzPlcy.Preferred, QSzPlcy.Fixed), 9, 0)
-        lay.addLayout(dlay_cmd, 10, 0, 1, 3)
+        lay.addWidget(ld_hwdly, 3, 0)
+        lay.addWidget(self.sb_hwdly, 3, 1)
+        lay.addWidget(self.lb_hwdly, 3, 2)
+        lay.addWidget(ld_rep, 4, 0)
+        lay.addWidget(self.ec_rep, 4, 1)
+        lay.addWidget(self.lb_rep, 4, 2)
+        lay.addWidget(ld_nrpre, 5, 0)
+        lay.addWidget(self.sb_nrpre, 5, 1)
+        lay.addWidget(ld_nrpos, 6, 0)
+        lay.addWidget(self.sb_nrpos, 6, 1)
+        lay.addWidget(self.fr_nrtot, 5, 2, 2, 1)
+        lay.addWidget(ld_trig, 7, 0)
+        lay.addWidget(self.ec_trig, 7, 1)
+        lay.addWidget(self.lb_trig, 7, 2)
+        lay.addWidget(ld_nrshots, 8, 0)
+        lay.addWidget(self.sb_nrshots, 8, 1)
+        lay.addWidget(self.lb_nrshots, 8, 2)
+        lay.addWidget(ld_uptime, 9, 0)
+        lay.addWidget(self.sb_uptime, 9, 1)
+        lay.addWidget(self.lb_uptime, 9, 2)
+        lay.addItem(QSpacerItem(1, 10, QSzPlcy.Preferred, QSzPlcy.Fixed), 10, 0)
+        lay.addLayout(dlay_cmd, 11, 0, 1, 3)
 
         return wid
 
