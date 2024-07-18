@@ -256,7 +256,7 @@ SEC_2_CHANNELS = {
                 'color': 'red',
             },
         },
-        'CavVGap': 'BO-05D:RF-P5Cav:AmpVCav-Mon',
+        'CavVGap': 'BO-05D:RF-P5Cav:PwrCell3VCav-Mon',
         'TempMon': {
             'Temp.': {
                 'Cells': {
@@ -853,7 +853,10 @@ SEC_2_CHANNELS = {
                 'color': 'darkSlateGrey'
             },
         },
-        'CavVGap': 'SI-03SP:RF-P7Cav:AmpVCav-Mon',
+        'CavVGap': {
+            'A': 'SI-03SP:RF-SRFCav-A:PwrVCav-Mon',
+            'B': 'SI-03SP:RF-SRFCav-B:PwrVCav-Mon'
+        },
         'TempMon': {
             'Temp.': {
                 'Cells': {

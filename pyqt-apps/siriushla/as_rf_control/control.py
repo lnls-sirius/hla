@@ -1120,12 +1120,29 @@ class RFMainControl(SiriusMainWindow):
                 self.curves[name+' dBm'].setVisible(False)
                 self.curves[name+' mV'].setVisible(False)
 
-        self.ld_cavvgap = QLabel(
-            'Gap Voltage:', self, alignment=Qt.AlignCenter)
-        self.ld_cavvgap.setStyleSheet('QLabel{font-size: 15pt;}')
-        self.lb_cavvgap = SiriusLabel(self, self.prefix+self.chs['CavVGap'])
-        self.lb_cavvgap.setStyleSheet('QLabel{font-size: 20pt;}')
-        self.lb_cavvgap.showUnits = True
+        lay_cavvgap = QGridLayout()
+        offset = 0
+        if self.section == 'SI':
+            for key, val in self.chs['CavVGap'].items():
+                ld_cavvgap = QLabel(
+                    f'Gap Voltage {key}:', self, alignment=Qt.AlignCenter)
+                ld_cavvgap.setStyleSheet('QLabel{font-size: 15pt;}')
+                lb_cavvgap = SiriusLabel(self, self.prefix+val)
+                lb_cavvgap.setStyleSheet('QLabel{font-size: 15pt;}')
+                lb_cavvgap.showUnits = True
+                lay_cavvgap.addWidget(ld_cavvgap, offset, 0)
+                lay_cavvgap.addWidget(lb_cavvgap, offset, 1)
+                offset += 1
+        else:
+            self.ld_cavvgap = QLabel(
+                'Gap Voltage:', self, alignment=Qt.AlignCenter)
+            self.ld_cavvgap.setStyleSheet('QLabel{font-size: 15pt;}')
+            self.lb_cavvgap = SiriusLabel(self, self.prefix+self.chs['CavVGap'])
+            self.lb_cavvgap.setStyleSheet('QLabel{font-size: 20pt;}')
+            self.lb_cavvgap.showUnits = True
+            lay_cavvgap.addWidget(self.ld_cavvgap, 0, 0)
+            lay_cavvgap.addWidget(self.lb_cavvgap, 0, 1)
+            offset += 1
 
         self.lbl_refvol = QLabel(
             'Ref Voltage:', self, alignment=Qt.AlignCenter)
@@ -1133,11 +1150,8 @@ class RFMainControl(SiriusMainWindow):
             self, self.prefix+self.chs['SL']['ASet']+'-RB')
         self.rb_refvol.showUnits = True
 
-        lay_cavvgap = QGridLayout()
-        lay_cavvgap.addWidget(self.ld_cavvgap, 0, 0)
-        lay_cavvgap.addWidget(self.lb_cavvgap, 0, 1)
-        lay_cavvgap.addWidget(self.lbl_refvol, 1, 0)
-        lay_cavvgap.addWidget(self.rb_refvol, 1, 1)
+        lay_cavvgap.addWidget(self.lbl_refvol, offset, 0)
+        lay_cavvgap.addWidget(self.rb_refvol, offset, 1)
 
         lay = QGridLayout()
         lay.setHorizontalSpacing(25)
@@ -1146,7 +1160,7 @@ class RFMainControl(SiriusMainWindow):
         lay.addItem(QSpacerItem(0, 20, QSzPlcy.Ignored, QSzPlcy.Fixed), 3, 0)
         lay.addWidget(self.pwr_mon_graph, 4, 0)
         lay.addItem(QSpacerItem(
-            0, 30, QSzPlcy.Ignored, QSzPlcy.Minimum), 5, 0)
+            0, 20, QSzPlcy.Ignored, QSzPlcy.Minimum), 5, 0)
         lay.addLayout(lay_cavvgap, 6, 0)
         lay.addItem(QSpacerItem(
             0, 10, QSzPlcy.Ignored, QSzPlcy.MinimumExpanding), 7, 0)
