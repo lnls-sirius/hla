@@ -1110,7 +1110,7 @@ class RFMainControl(SiriusMainWindow):
 
             lb_cavphs = QLabel('Phase', self, alignment=Qt.AlignCenter)
             self.lb_cavphs = SiriusLabel(
-                self, self.prefix+'BR-RF-DLLRF-01:CAV:PHS')
+                self, self.prefix+'BO-05D:RF-P5Cav:PwrCell3Phs-Mon')
             self.lb_cavphs.showUnits = True
             lay_vals.addWidget(lb_cavphs, 5, 1, alignment=Qt.AlignCenter)
             lay_vals.addWidget(self.lb_cavphs, 5, 2)
@@ -1146,7 +1146,7 @@ class RFMainControl(SiriusMainWindow):
         lay.addItem(QSpacerItem(0, 20, QSzPlcy.Ignored, QSzPlcy.Fixed), 3, 0)
         lay.addWidget(self.pwr_mon_graph, 4, 0)
         lay.addItem(QSpacerItem(
-            0, 50, QSzPlcy.Ignored, QSzPlcy.Minimum), 5, 0)
+            0, 30, QSzPlcy.Ignored, QSzPlcy.Minimum), 5, 0)
         lay.addLayout(lay_cavvgap, 6, 0)
         lay.addItem(QSpacerItem(
             0, 10, QSzPlcy.Ignored, QSzPlcy.MinimumExpanding), 7, 0)
