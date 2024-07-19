@@ -307,7 +307,7 @@ class PolySettings(BaseWidget):
         lay.addWidget(sc_area)
 
     def _create_coeff_group(self, coeff):
-        enblctl = 'XY' if coeff in ['X', 'Y'] else coeff
+        enblctl = 'XY' if coeff in ['X', 'Y'] else coeff.capitalize()
 
         ldc_enbl = QLabel('Enable: ', self)
         but_enbl = PyDMStateButton(
