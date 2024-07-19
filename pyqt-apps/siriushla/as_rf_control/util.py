@@ -756,97 +756,97 @@ SEC_2_CHANNELS = {
             }
         },
         'PwrMtr': {
-            'Fwd SSA 1': {
+            'A - Fwd SSA 1': {
                 'mV': 'RA-ToSIA01:RF-SSAmpTower:PwrFwdOutAmp-Mon',
                 'dBm': 'RA-ToSIA01:RF-SSAmpTower:PwrFwdOutAmpdBm-Mon',
                 'W': 'RA-ToSIA01:RF-SSAmpTower:PwrFwdOutAmpW-Mon',
                 'color': 'blue'
             },
-            'Rev SSA 1': {
+            'A - Rev SSA 1': {
                 'mV': 'RA-ToSIA01:RF-SSAmpTower:PwrRevOutAmp-Mon',
                 'dBm': 'RA-ToSIA01:RF-SSAmpTower:PwrRevOutAmpdBm-Mon',
                 'W': 'RA-ToSIA01:RF-SSAmpTower:PwrRevOutAmpW-Mon',
                 'color': 'red'
             },
-            'Fwd SSA 2': {
+            'A - Fwd SSA 2': {
                 'mV': 'RA-ToSIA02:RF-SSAmpTower:PwrFwdOutAmp-Mon',
                 'dBm': 'RA-ToSIA02:RF-SSAmpTower:PwrFwdOutAmpdBm-Mon',
                 'W': 'RA-ToSIA02:RF-SSAmpTower:PwrFwdOutAmpW-Mon',
                 'color': 'magenta'
             },
-            'Rev SSA 2': {
+            'A - Rev SSA 2': {
                 'mV': 'RA-ToSIA02:RF-SSAmpTower:PwrRevOutAmp-Mon',
                 'dBm': 'RA-ToSIA02:RF-SSAmpTower:PwrRevOutAmpdBm-Mon',
                 'W': 'RA-ToSIA02:RF-SSAmpTower:PwrRevOutAmpW-Mon',
                 'color': 'darkGreen'
             },
-            'Cav A': {
+            'A - Cav': {
                 'mV': 'SI-03SP:RF-SRFCav-A:PwrAmp-Mon',
                 'dBm': 'SI-03SP:RF-SRFCav-A:PwrAmpdBm-Mon',
                 'W': 'SI-03SP:RF-SRFCav-A:PwrAmpW-Mon',
                 'color': 'darkRed'
             },
-            'Fwd Cav A': {
+            'A - Fwd Cav': {
                 'mV': 'SI-03SP:RF-SRFCav-A:PwrFwdAmp-Mon',
                 'dBm': 'SI-03SP:RF-SRFCav-A:PwrFwdAmpdBm-Mon',
                 'W': 'SI-03SP:RF-SRFCav-A:PwrFwdAmpW-Mon',
                 'color': 'black'
             },
-            'Rev Cav A': {
+            'A - Rev Cav': {
                 'mV': 'SI-03SP:RF-SRFCav-A:PwrRevAmp-Mon',
                 'dBm': 'SI-03SP:RF-SRFCav-A:PwrRevAmpdBm-Mon',
                 'W': 'SI-03SP:RF-SRFCav-A:PwrRevAmpW-Mon',
                 'color': 'darkBlue'
             },
-            'Fwd Circulator A': {
+            'A - Fwd Circulator': {
                 'mV': 'RA-TL:RF-Circulator-SIA:PwrFwdOutAmp-Mon',
                 'dBm': 'RA-TL:RF-Circulator-SIA:PwrFwdOutAmpdBm-Mon',
                 'W': 'RA-TL:RF-Circulator-SIA:PwrFwdOutAmpW-Mon',
                 'color': 'yellow'
             },
-            'Cav B': {
-                'mV': 'SI-03SP:RF-SRFCav-B:PwrAmp-Mon',
-                'dBm': 'SI-03SP:RF-SRFCav-B:PwrAmpdBm-Mon',
-                'W': 'SI-03SP:RF-SRFCav-B:PwrAmpW-Mon',
-                'color': 'cyan'
-            },
-            'Fwd Cav B': {
-                'mV': 'SI-03SP:RF-SRFCav-B:PwrFwdAmp-Mon',
-                'dBm': 'SI-03SP:RF-SRFCav-B:PwrFwdAmpdBm-Mon',
-                'W': 'SI-03SP:RF-SRFCav-B:PwrFwdAmpW-Mon',
-                'color': 'darkCyan'
-            },
-            'Rev Cav B': {
-                'mV': 'SI-03SP:RF-SRFCav-B:PwrRevAmp-Mon',
-                'dBm': 'SI-03SP:RF-SRFCav-B:PwrRevAmpdBm-Mon',
-                'W': 'SI-03SP:RF-SRFCav-B:PwrRevAmpW-Mon',
-                'color': 'saddlebrown'
-            },
-            'Fwd SSA 3': {
+            'B - Fwd SSA 3': {
                 'mV': 'RA-ToSIA03:RF-SSAmpTower:PwrFwdOutAmp-Mon',
                 'dBm': 'RA-ToSIA03:RF-SSAmpTower:PwrFwdOutAmpdBm-Mon',
                 'W': 'RA-ToSIA03:RF-SSAmpTower:PwrFwdOutAmpW-Mon',
                 'color': 'orangered'
             },
-            'Rev SSA 3': {
+            'B - Rev SSA 3': {
                 'mV': 'RA-ToSIA03:RF-SSAmpTower:PwrRevOutAmp-Mon',
                 'dBm': 'RA-ToSIA03:RF-SSAmpTower:PwrRevOutAmpdBm-Mon',
                 'W': 'RA-ToSIA03:RF-SSAmpTower:PwrRevOutAmpW-Mon',
                 'color': 'darkOliveGreen'
             },
-            'Fwd SSA 4': {
+            'B - Fwd SSA 4': {
                 'mV': 'RA-ToSIA04:RF-SSAmpTower:PwrFwdOutAmp-Mon',
                 'dBm': 'RA-ToSIA04:RF-SSAmpTower:PwrFwdOutAmpdBm-Mon',
                 'W': 'RA-ToSIA04:RF-SSAmpTower:PwrFwdOutAmpW-Mon',
                 'color': 'darkMagenta'
             },
-            'Rev SSA 4': {
+            'B - Rev SSA 4': {
                 'mV': 'RA-ToSIA04:RF-SSAmpTower:PwrRevOutAmp-Mon',
                 'dBm': 'RA-ToSIA04:RF-SSAmpTower:PwrRevOutAmpdBm-Mon',
                 'W': 'RA-ToSIA04:RF-SSAmpTower:PwrRevOutAmpW-Mon',
                 'color': 'chocolate'
             },
-            'Fwd Circulator B': {
+            'B - Cav': {
+                'mV': 'SI-03SP:RF-SRFCav-B:PwrAmp-Mon',
+                'dBm': 'SI-03SP:RF-SRFCav-B:PwrAmpdBm-Mon',
+                'W': 'SI-03SP:RF-SRFCav-B:PwrAmpW-Mon',
+                'color': 'cyan'
+            },
+            'B - Fwd Cav': {
+                'mV': 'SI-03SP:RF-SRFCav-B:PwrFwdAmp-Mon',
+                'dBm': 'SI-03SP:RF-SRFCav-B:PwrFwdAmpdBm-Mon',
+                'W': 'SI-03SP:RF-SRFCav-B:PwrFwdAmpW-Mon',
+                'color': 'darkCyan'
+            },
+            'B - Rev Cav': {
+                'mV': 'SI-03SP:RF-SRFCav-B:PwrRevAmp-Mon',
+                'dBm': 'SI-03SP:RF-SRFCav-B:PwrRevAmpdBm-Mon',
+                'W': 'SI-03SP:RF-SRFCav-B:PwrRevAmpW-Mon',
+                'color': 'saddlebrown'
+            },
+            'B - Fwd Circulator': {
                 'mV': 'RA-TL:RF-Circulator-SIB:PwrFwdOutAmp-Mon',
                 'dBm': 'RA-TL:RF-Circulator-SIB:PwrFwdOutAmpdBm-Mon',
                 'W': 'RA-TL:RF-Circulator-SIB:PwrFwdOutAmpW-Mon',
