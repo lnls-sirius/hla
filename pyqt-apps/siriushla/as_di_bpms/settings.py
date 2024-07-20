@@ -8,7 +8,7 @@ from siriuspy.diagbeam.bpm.csdev import Const as _csbpm
 
 from siriushla import util
 from siriushla.widgets import PyDMStateButton, SiriusLedState, \
-    SiriusLedAlert, SiriusLineEdit, SiriusLabel
+    SiriusLedAlert, SiriusWaveformLineEdit, SiriusLabel
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla.as_di_bpms.base import BaseWidget, CustomGroupBox
 from siriushla.common.afc_acq_core import PhysicalTriggers, LogicalTriggers
@@ -316,7 +316,7 @@ class PolySettings(BaseWidget):
             self, self.get_pvname(f'{enblctl}PosCal-Sts'))
 
         ldc_gen = QLabel('GEN: ', self)
-        but_gen = SiriusLineEdit(
+        but_gen = SiriusWaveformLineEdit(
             self, self.get_pvname(f'GEN_Poly{coeff}ArrayCoeff-SP'))
         lbl_gen = SiriusLabel(
             self, self.get_pvname(f'GEN_Poly{coeff}ArrayCoeff-RB'))
@@ -326,7 +326,7 @@ class PolySettings(BaseWidget):
             self, self.get_pvname(f'GEN_Poly{enblctl}ASubCalc.SEVR'))
 
         ldc_pm = QLabel('PM: ', self)
-        but_pm = SiriusLineEdit(
+        but_pm = SiriusWaveformLineEdit(
             self, self.get_pvname(f'PM_Poly{coeff}ArrayCoeff-SP'))
         lbl_pm = SiriusLabel(
             self, self.get_pvname(f'PM_Poly{coeff}ArrayCoeff-RB'))

@@ -8,7 +8,7 @@ from .scrollbar import PyDMScrollBar
 from .matplotlib import MatplotlibWidget
 from .state_button import PyDMStateButton
 from .windows import SiriusMainWindow, SiriusDialog
-from .line_edit import SiriusLineEdit
+from .line_edit import SiriusLineEdit, SiriusWaveformLineEdit
 from .ledit_scrollbar import PyDMLinEditScrollbar
 from .loading_dialog import LoadingDialog
 from .signal_channel import SiriusConnectionSignal
