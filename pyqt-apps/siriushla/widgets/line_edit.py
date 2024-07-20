@@ -1,5 +1,6 @@
 """PyDMLine edit with validator."""
 import locale
+import numpy as np
 
 from qtpy.QtCore import QRegExp
 from qtpy.QtGui import QRegExpValidator
@@ -31,3 +32,15 @@ class SiriusLineEdit(PyDMLineEdit):
             validator = QRegExpValidator(re, self)
             self.setValidator(validator)
         super().update_format_string()
+
+
+class SiriusWaveformLineEdit(SiriusLineEdit):
+    """Line Edit with bugfix for waveform setpoints."""
+
+    def value_changed(self, value):
+        """Force value to be a numpy array."""
+        super().value_changed(
+            np.array([value])
+            if type(value) is not np.ndarray
+            else value
+        )

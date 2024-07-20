@@ -74,12 +74,11 @@ class PhysicalTriggers(BaseWidget):
         hbl.addWidget(lab)
 
         lab = QLabel('Counter', grpbx)
-        suf = 'SP' if self.device.dev == 'BPM' else 'Cmd'
         hbl = QHBoxLayout()
         fbl.addRow(lab, hbl)
         pbt = PyDMPushButton(
             grpbx, label='Reset', pressValue=1,
-            init_channel=self.get_pvname(trig+'RcvCntRst-'+suf))
+            init_channel=self.get_pvname(trig+'RcvCntRst-Cmd'))
         hbl.addWidget(pbt)
         lab = SiriusLabel(
             grpbx, init_channel=self.get_pvname(trig+'RcvCnt-Mon'))
@@ -88,7 +87,7 @@ class PhysicalTriggers(BaseWidget):
         hbl.addSpacing(20)
         pbt = PyDMPushButton(
             grpbx, label='Reset', pressValue=1,
-            init_channel=self.get_pvname(trig+'TrnCntRst-'+suf))
+            init_channel=self.get_pvname(trig+'TrnCntRst-Cmd'))
         hbl.addWidget(pbt)
         lab = SiriusLabel(
             grpbx, init_channel=self.get_pvname(trig+'TrnCnt-Mon'))

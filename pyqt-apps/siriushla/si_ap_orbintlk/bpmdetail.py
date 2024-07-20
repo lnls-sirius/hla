@@ -229,12 +229,6 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
 
         ld_leginst = QLabel(
             '<h4>Instantaneous</h4>', self, alignment=Qt.AlignCenter)
-        ld_leginst_any = QLabel(
-            'X or Y', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
-        led_inst_anylow = SiriusLedAlert(
-            self, self.devpref.substitute(propty='Intlk'+intlk+'Lower-Mon'))
-        led_inst_anyhigh = SiriusLedAlert(
-            self, self.devpref.substitute(propty='Intlk'+intlk+'Upper-Mon'))
         ld_leginst_x = QLabel(
             'X', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         led_inst_xlow = SiriusLedAlert(
@@ -250,14 +244,6 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
 
         ld_legltc = QLabel(
             '<h4>Latch</h4>', self, alignment=Qt.AlignCenter)
-        ld_legltc_any = QLabel(
-            'X or Y', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
-        led_ltc_anylow = SiriusLedAlert(
-            self, self.devpref.substitute(
-                propty='Intlk'+intlk+'LowerLtc-Mon'))
-        led_ltc_anyhigh = SiriusLedAlert(
-            self, self.devpref.substitute(
-                propty='Intlk'+intlk+'UpperLtc-Mon'))
         ld_legltc_x = QLabel(
             'X', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         led_ltc_xlow = SiriusLedAlert(
@@ -280,25 +266,19 @@ class BPMOrbIntlkDetailWindow(BaseObject, SiriusMainWindow):
         lay_mon.addWidget(ld_leglow, 0, 1)
         lay_mon.addWidget(ld_leghigh, 0, 2)
         lay_mon.addWidget(ld_leginst, 1, 0)
-        lay_mon.addWidget(ld_leginst_any, 2, 0)
-        lay_mon.addWidget(led_inst_anylow, 2, 1)
-        lay_mon.addWidget(led_inst_anyhigh, 2, 2)
-        lay_mon.addWidget(ld_leginst_x, 3, 0)
-        lay_mon.addWidget(led_inst_xlow, 3, 1)
-        lay_mon.addWidget(led_inst_xhigh, 3, 2)
-        lay_mon.addWidget(ld_leginst_y, 4, 0)
-        lay_mon.addWidget(led_inst_ylow, 4, 1)
-        lay_mon.addWidget(led_inst_yhigh, 4, 2)
-        lay_mon.addWidget(ld_legltc, 5, 0)
-        lay_mon.addWidget(ld_legltc_any, 6, 0)
-        lay_mon.addWidget(led_ltc_anylow, 6, 1)
-        lay_mon.addWidget(led_ltc_anyhigh, 6, 2)
-        lay_mon.addWidget(ld_legltc_x, 7, 0)
-        lay_mon.addWidget(led_ltc_xlow, 7, 1)
-        lay_mon.addWidget(led_ltc_xhigh, 7, 2)
-        lay_mon.addWidget(ld_legltc_y, 8, 0)
-        lay_mon.addWidget(led_ltc_ylow, 8, 1)
-        lay_mon.addWidget(led_ltc_yhigh, 8, 2)
+        lay_mon.addWidget(ld_leginst_x, 2, 0)
+        lay_mon.addWidget(led_inst_xlow, 2, 1)
+        lay_mon.addWidget(led_inst_xhigh, 2, 2)
+        lay_mon.addWidget(ld_leginst_y, 3, 0)
+        lay_mon.addWidget(led_inst_ylow, 3, 1)
+        lay_mon.addWidget(led_inst_yhigh, 3, 2)
+        lay_mon.addWidget(ld_legltc, 4, 0)
+        lay_mon.addWidget(ld_legltc_x, 5, 0)
+        lay_mon.addWidget(led_ltc_xlow, 5, 1)
+        lay_mon.addWidget(led_ltc_xhigh, 5, 2)
+        lay_mon.addWidget(ld_legltc_y, 6, 0)
+        lay_mon.addWidget(led_ltc_ylow, 6, 1)
+        lay_mon.addWidget(led_ltc_yhigh, 6, 2)
 
         lay = QGridLayout()
         lay.setAlignment(Qt.AlignTop)
