@@ -1130,9 +1130,16 @@ class RFMainControl(SiriusMainWindow):
                 lb_cavvgap = SiriusLabel(self, self.prefix+val)
                 lb_cavvgap.setStyleSheet('QLabel{font-size: 15pt;}')
                 lb_cavvgap.showUnits = True
+                lbl_refvol = QLabel(
+                    f'Ref Voltage {key}:', self, alignment=Qt.AlignCenter)
+                rb_refvol = SiriusLabel(
+                    self, self.prefix+self.chs['SL']['ASet']+'-RB')
+                rb_refvol.showUnits = True
                 lay_cavvgap.addWidget(ld_cavvgap, offset, 0)
                 lay_cavvgap.addWidget(lb_cavvgap, offset, 1)
-                offset += 1
+                lay_cavvgap.addWidget(lbl_refvol, offset+1, 0)
+                lay_cavvgap.addWidget(rb_refvol, offset+1, 1)
+                offset += 2
         else:
             self.ld_cavvgap = QLabel(
                 'Gap Voltage:', self, alignment=Qt.AlignCenter)
@@ -1140,27 +1147,25 @@ class RFMainControl(SiriusMainWindow):
             self.lb_cavvgap = SiriusLabel(self, self.prefix+self.chs['CavVGap'])
             self.lb_cavvgap.setStyleSheet('QLabel{font-size: 20pt;}')
             self.lb_cavvgap.showUnits = True
+            self.lbl_refvol = QLabel(
+                'Ref Voltage:', self, alignment=Qt.AlignCenter)
+            self.rb_refvol = SiriusLabel(
+                self, self.prefix+self.chs['SL']['ASet']+'-RB')
+            self.rb_refvol.showUnits = True
             lay_cavvgap.addWidget(self.ld_cavvgap, 0, 0)
             lay_cavvgap.addWidget(self.lb_cavvgap, 0, 1)
-            offset += 1
-
-        self.lbl_refvol = QLabel(
-            'Ref Voltage:', self, alignment=Qt.AlignCenter)
-        self.rb_refvol = SiriusLabel(
-            self, self.prefix+self.chs['SL']['ASet']+'-RB')
-        self.rb_refvol.showUnits = True
-
-        lay_cavvgap.addWidget(self.lbl_refvol, offset, 0)
-        lay_cavvgap.addWidget(self.rb_refvol, offset, 1)
+            lay_cavvgap.addWidget(self.lbl_refvol, 1, 0)
+            lay_cavvgap.addWidget(self.rb_refvol, 1, 1)
+            offset += 2
 
         lay = QGridLayout()
         lay.setHorizontalSpacing(25)
-        lay.addItem(QSpacerItem(0, 20, QSzPlcy.Ignored, QSzPlcy.Fixed), 1, 0)
+        lay.addItem(QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), 1, 0)
         lay.addLayout(lay_vals, 2, 0)
-        lay.addItem(QSpacerItem(0, 20, QSzPlcy.Ignored, QSzPlcy.Fixed), 3, 0)
+        lay.addItem(QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), 3, 0)
         lay.addWidget(self.pwr_mon_graph, 4, 0)
         lay.addItem(QSpacerItem(
-            0, 20, QSzPlcy.Ignored, QSzPlcy.Minimum), 5, 0)
+            0, 10, QSzPlcy.Ignored, QSzPlcy.Minimum), 5, 0)
         lay.addLayout(lay_cavvgap, 6, 0)
         lay.addItem(QSpacerItem(
             0, 10, QSzPlcy.Ignored, QSzPlcy.MinimumExpanding), 7, 0)
