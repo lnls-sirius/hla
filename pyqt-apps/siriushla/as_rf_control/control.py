@@ -200,14 +200,32 @@ class RFMainControl(SiriusMainWindow):
 
         # # Status Transmission Line
         self.ld_tlsts = QLabel('Transm. Line', self, alignment=Qt.AlignRight)
-        self.led_tlsts = PyDMLedMultiChannel(
-            self, {self.prefix+self.chs['TL Sts']['Geral']: 1})
         self.pb_tldtls = QPushButton(qta.icon('fa5s.ellipsis-v'), '', self)
         self.pb_tldtls.setObjectName('dtls')
         self.pb_tldtls.setStyleSheet(
             '#dtls{min-width:18px;max-width:18px;icon-size:20px;}')
         connect_window(self.pb_tldtls, TransmLineStatusDetails, parent=self,
                        section=self.section, prefix=self.prefix)
+
+        if self.section == 'SI':
+            lay_tl = QGridLayout()
+            lay_tl.addWidget(self.ld_tlsts, 0, 0,
+                alignment=Qt.AlignVCenter)
+            lay_tl.addWidget(self.pb_tldtls, 0, 1,
+                alignment=Qt.AlignCenter)
+
+            offset = 1
+            for key, chs_dict in self.chs['TL Sts'].items():
+                ld_tlsts = QLabel(
+                    f'• {key}', alignment=Qt.AlignRight | Qt.AlignVCenter)
+                led_tlsts = PyDMLedMultiChannel(
+                    self, {self.prefix+chs_dict['Geral']: 1})
+                lay_tl.addWidget(ld_tlsts, offset, 0)
+                lay_tl.addWidget(led_tlsts, offset, 1)
+                offset += 1
+        else:
+            self.led_tlsts = PyDMLedMultiChannel(
+                self, {self.prefix+self.chs['TL Sts']['Geral']: 1})
 
         # Reset
         self._ld_reset = QLabel('<h4>Reset</h4>', self, alignment=Qt.AlignLeft)
@@ -301,9 +319,12 @@ class RFMainControl(SiriusMainWindow):
         lay.addWidget(self.ld_cavsts, 5, 0, alignment=Qt.AlignVCenter)
         lay.addWidget(self.led_cavsts, 5, 1)
         lay.addWidget(self.pb_cavdtls, 5, 2)
-        lay.addWidget(self.ld_tlsts, 6, 0, alignment=Qt.AlignVCenter)
-        lay.addWidget(self.led_tlsts, 6, 1)
-        lay.addWidget(self.pb_tldtls, 6, 2)
+        if self.section == 'SI':
+            lay.addLayout(lay_tl, 6, 0, 1, 2)
+        else:
+            lay.addWidget(self.ld_tlsts, 6, 0, alignment=Qt.AlignVCenter)
+            lay.addWidget(self.led_tlsts, 6, 1)
+            lay.addWidget(self.pb_tldtls, 6, 2)
         lay.addWidget(self._ld_reset, 7, 0, 1, 3)
         lay.addWidget(self.ld_glbl, 8, 0, alignment=Qt.AlignVCenter)
         lay.addWidget(self.pb_glbl, 8, 1)
@@ -1133,7 +1154,7 @@ class RFMainControl(SiriusMainWindow):
                 lbl_refvol = QLabel(
                     f'Ref Voltage {key}:', self, alignment=Qt.AlignCenter)
                 rb_refvol = SiriusLabel(
-                    self, self.prefix+self.chs['SL']['ASet']+'-RB')
+                    self, self.prefix+self.chs['SL']['ASet'][key]+'-RB')
                 rb_refvol.showUnits = True
                 lay_cavvgap.addWidget(ld_cavvgap, offset, 0)
                 lay_cavvgap.addWidget(lb_cavvgap, offset, 1)
@@ -1290,13 +1311,23 @@ class RFMainControl(SiriusMainWindow):
 
         # Transm.Line Temperatures
         lb_tempcirc = QLabel('<h3> • Circulator</h3>', self)
-        lims_circ = self.chs['TL Sts']['Circ Limits']
-        ch2vals = {
-            self.prefix+self.chs['TL Sts']['Circulator Temp. In']['label']: {
-                'comp': 'wt', 'value': lims_circ},
-            self.prefix+self.chs['TL Sts']['label']['Circulator Temp. Out']: {
-                'comp': 'wt', 'value': lims_circ}
-        }
+        # temporary fix
+        if self.section == 'SI':
+            lims_circ = self.chs['TL Sts']['A']['Circ Limits']
+            ch2vals = {
+                self.prefix+self.chs['TL Sts']['A']['Circulator Temp. In']['label']: {
+                    'comp': 'wt', 'value': lims_circ},
+                self.prefix+self.chs['TL Sts']['A']['label']['Circulator Temp. Out']: {
+                    'comp': 'wt', 'value': lims_circ}
+            }
+        else:
+            lims_circ = self.chs['TL Sts']['Circ Limits']
+            ch2vals = {
+                self.prefix+self.chs['TL Sts']['Circulator Temp. In']['label']: {
+                    'comp': 'wt', 'value': lims_circ},
+                self.prefix+self.chs['TL Sts']['label']['Circulator Temp. Out']: {
+                    'comp': 'wt', 'value': lims_circ}
+            }
         self.led_tempcircok = PyDMLedMultiChannel(self, ch2vals)
         hbox_tempcirc_state = QHBoxLayout()
         hbox_tempcirc_state.addWidget(lb_tempcirc, alignment=Qt.AlignLeft)
@@ -1312,14 +1343,24 @@ class RFMainControl(SiriusMainWindow):
         self.tempcirc_graph.showYGrid = True
         self.tempcirc_graph.timeSpan = 1800
         self.tempcirc_graph.maxRedrawRate = 1
-        self.tempcirc_graph.addYChannel(
-            y_channel=self.prefix+self.chs['TL Sts']['Circulator Temp. In']['label'],
-            name='CTIn', color='magenta',
-            lineStyle=Qt.SolidLine, lineWidth=1)
-        self.tempcirc_graph.addYChannel(
-            y_channel=self.prefix+self.chs['TL Sts']['label']['Circulator Temp. Out'],
-            name='CTOut', color='darkRed',
-            lineStyle=Qt.SolidLine, lineWidth=1)
+        if self.section == 'SI':
+            self.tempcirc_graph.addYChannel(
+                y_channel=self.prefix+self.chs['TL Sts']['A']['Circulator Temp. In']['label'],
+                name='CTIn', color='magenta',
+                lineStyle=Qt.SolidLine, lineWidth=1)
+            self.tempcirc_graph.addYChannel(
+                y_channel=self.prefix+self.chs['TL Sts']['A']['label']['Circulator Temp. Out'],
+                name='CTOut', color='darkRed',
+                lineStyle=Qt.SolidLine, lineWidth=1)
+        else:
+            self.tempcirc_graph.addYChannel(
+                y_channel=self.prefix+self.chs['TL Sts']['Circulator Temp. In']['label'],
+                name='CTIn', color='magenta',
+                lineStyle=Qt.SolidLine, lineWidth=1)
+            self.tempcirc_graph.addYChannel(
+                y_channel=self.prefix+self.chs['TL Sts']['label']['Circulator Temp. Out'],
+                name='CTOut', color='darkRed',
+                lineStyle=Qt.SolidLine, lineWidth=1)
         self.tempcirc_graph.setLabel('left', '')
 
         self.line_circ_maxlim = InfiniteLine(
