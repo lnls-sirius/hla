@@ -898,7 +898,10 @@ class SlowLoopErrorDetails(SiriusDialog):
         axx.setTicks([])
         axx.setHeight(0)
 
-        chs_dict = self.chs['SL']['Over'][key]
+        chs_dict = self.chs['SL']['Over']
+        if self.section == 'SI':
+            chs_dict = chs_dict[key]
+
         if mode == 'Amp':
             title = 'Amplitude'
             channels = {
