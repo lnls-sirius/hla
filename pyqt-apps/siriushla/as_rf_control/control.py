@@ -861,17 +861,28 @@ class RFMainControl(SiriusMainWindow):
 
     def _advancedDetailsLayout(self):
         lay = QGridLayout()
-        lay.setAlignment(Qt.AlignTop)
-        lay.setSpacing(9)
+        lay.setAlignment(Qt.AlignTop | Qt.AlignHCenter)
+        lay.setHorizontalSpacing(100)
+        lay.setVerticalSpacing(10)
 
-        self.pb_adcdac = QPushButton(
-            qta.icon('fa5s.external-link-alt'), ' ADCs and DACs', self)
-        self.pb_adcdac.setStyleSheet('min-width: 8em;')
-        connect_window(
-            self.pb_adcdac, ADCDACDetails, parent=self,
-            prefix=self.prefix, section=self.section)
+        if self.section == 'SI':
+            systems = ['A', 'B']
+        else:
+            systems = ['']
 
-        lay.addWidget(self.pb_adcdac, 0, 0)
+        offset = 0
+        for i in range(len(systems)):
+            pb_adcdac = QPushButton(
+                qta.icon('fa5s.external-link-alt'), ' ADCs and DACs', self)
+            pb_adcdac.setStyleSheet('min-width: 8em;')
+            connect_window(
+                pb_adcdac, ADCDACDetails, parent=self,
+                prefix=self.prefix, section=self.section, system=systems[i])
+
+            lay.addWidget(QLabel(
+                f'<h4>{systems[i]}</h4>'), 0, offset)
+            lay.addWidget(pb_adcdac, 1, offset)
+            offset += 1
 
         return lay
 

@@ -321,6 +321,29 @@ SEC_2_CHANNELS = {
             'Size': 'BR-RF-DLLRF-01:FDL:Size-Mon',
             'Duration': 'BR-RF-DLLRF-01:FDL:Duration-Mon',
             'Delay': 'BR-RF-DLLRF-01:FDL:TriggerDelay'
+        },
+        'ADCs and DACs': {
+            'ADC Enable': ['101 - ADCs Phase Shift Enable', ''],
+            '2': ['Phase Shift Cavity', ''],
+            '3': ['Phase Shift Fwd Cav', ''],
+            '8': ['Gain Fwd Cavity', ''],
+            '4': ['Phase Shift Fwd SSA 1', ''],
+            '9': ['Gain Fwd SSA 1', ''],
+            '5': ['Phase Shift Fwd SSA 2', ''],
+            '10': ['Gain Fwd SSA 2', ''],
+            '6': ['Phase Shift Fwd SSA 3', ''],
+            '11': ['Gain Fwd SSA 3', ''],
+            '7': ['Phase Shift Fwd SSA 4', ''],
+            '12': ['Gain Fwd SSA 4', ''],
+            'DAC Enable': ['102 - DACs Phase Shift Enable', ''],
+            '14': ['Phase Shift Drive SSA 1', ''],
+            '18': ['Gain Drive SSA 1', ''],
+            '15': ['Phase Shift Drive SSA 2', ''],
+            '19': ['Gain Drive SSA 2', ''],
+            '16': ['Phase Shift Drive SSA 3', ''],
+            '20': ['Gain Drive SSA 3', ''],
+            '17': ['Phase Shift Drive SSA 4', ''],
+            '21': ['Gain Drive SSA 4', '']
         }
     },
     'SI': {
@@ -1054,12 +1077,52 @@ SEC_2_CHANNELS = {
                 'Name': 'B',
             }
         },
-        'PS': {
-            'Labels': {
-            },
+        'ADCs and DACs': {
             'A': {
+                'ADC Enable': ['101 - ADCs Phase Shift Enable', ''],
+                '2': ['Phase Shift Cavity', ''],
+                '3': ['Phase Shift Fwd Cav', ''],
+                '8': ['Gain Fwd Cavity', ''],
+                '4': ['Phase Shift Fwd SSA 1', ''],
+                '9': ['Gain Fwd SSA 1', ''],
+                '5': ['Phase Shift Fwd SSA 2', ''],
+                '10': ['Gain Fwd SSA 2', ''],
+                '6': ['Phase Shift Fwd SSA 3', ''],
+                '11': ['Gain Fwd SSA 3', ''],
+                '7': ['Phase Shift Fwd SSA 4', ''],
+                '12': ['Gain Fwd SSA 4', ''],
+                'DAC Enable': ['102 - DACs Phase Shift Enable', ''],
+                '14': ['Phase Shift Drive SSA 1', ''],
+                '18': ['Gain Drive SSA 1', ''],
+                '15': ['Phase Shift Drive SSA 2', ''],
+                '19': ['Gain Drive SSA 2', ''],
+                '16': ['Phase Shift Drive SSA 3', ''],
+                '20': ['Gain Drive SSA 3', ''],
+                '17': ['Phase Shift Drive SSA 4', ''],
+                '21': ['Gain Drive SSA 4', '']
             },
             'B': {
+                'ADC Enable': ['101 - ADCs Phase Shift Enable', ''],
+                '2': ['Phase Shift Cavity', ''],
+                '3': ['Phase Shift Fwd Cav', ''],
+                '8': ['Gain Fwd Cavity', ''],
+                '4': ['Phase Shift Fwd SSA 1', ''],
+                '9': ['Gain Fwd SSA 1', ''],
+                '5': ['Phase Shift Fwd SSA 2', ''],
+                '10': ['Gain Fwd SSA 2', ''],
+                '6': ['Phase Shift Fwd SSA 3', ''],
+                '11': ['Gain Fwd SSA 3', ''],
+                '7': ['Phase Shift Fwd SSA 4', ''],
+                '12': ['Gain Fwd SSA 4', ''],
+                'DAC Enable': ['102 - DACs Phase Shift Enable', ''],
+                '14': ['Phase Shift Drive SSA 1', ''],
+                '18': ['Gain Drive SSA 1', ''],
+                '15': ['Phase Shift Drive SSA 2', ''],
+                '19': ['Gain Drive SSA 2', ''],
+                '16': ['Phase Shift Drive SSA 3', ''],
+                '20': ['Gain Drive SSA 3', ''],
+                '17': ['Phase Shift Drive SSA 4', ''],
+                '21': ['Gain Drive SSA 4', '']
             }
         }
     },
