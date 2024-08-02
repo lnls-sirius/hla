@@ -19,7 +19,7 @@ from ..widgets import PyDMLed, PyDMLedMultiChannel, PyDMStateButton, \
 from .custom_widgets import RFEnblDsblButton
 from .details import CavityStatusDetails, FDLMonitor, LLRFInterlockDetails, \
     TransmLineStatusDetails, SlowLoopErrorDetails, SlowLoopParametersDetails, \
-    TempMonitor, ADCDACDetails
+    TempMonitor, ADCDACDetails, HardwareDetails
 from .util import SEC_2_CHANNELS
 
 
@@ -81,6 +81,7 @@ class RFMainControl(SiriusMainWindow):
             # wid_autostart.setLayout(self._autoStartLayout())
             # wid_startctrl.addTab(wid_autostart, 'Auto Start')
         wid_advdtls = QWidget(self)
+        wid_advdtls.setStyleSheet("QPushButton{min-width: 8em;}")
         wid_advdtls.setLayout(self._advancedDetailsLayout())
         wid_startctrl.addTab(wid_advdtls, 'Advanced Details')
 
@@ -872,16 +873,24 @@ class RFMainControl(SiriusMainWindow):
 
         offset = 0
         for i in range(len(systems)):
+            # ADCs and DACs
             pb_adcdac = QPushButton(
                 qta.icon('fa5s.external-link-alt'), ' ADCs and DACs', self)
-            pb_adcdac.setStyleSheet('min-width: 8em;')
             connect_window(
                 pb_adcdac, ADCDACDetails, parent=self,
+                prefix=self.prefix, section=self.section, system=systems[i])
+
+            # Hardware
+            pb_hrdwr = QPushButton(
+                qta.icon('fa5s.external-link-alt'), ' Hardware', self)
+            connect_window(
+                pb_hrdwr, HardwareDetails, parent=self,
                 prefix=self.prefix, section=self.section, system=systems[i])
 
             lay.addWidget(QLabel(
                 f'<h4>{systems[i]}</h4>'), 0, offset)
             lay.addWidget(pb_adcdac, 1, offset)
+            lay.addWidget(pb_hrdwr, 2, offset)
             offset += 1
 
         return lay

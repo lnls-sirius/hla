@@ -1028,6 +1028,7 @@ class ADCDACDetails(SiriusDialog):
     """Details for ADCs and DACs."""
 
     def __init__(self, parent=None, prefix='', section='', system=''):
+        """Init."""
         super().__init__(parent)
         self.prefix = prefix
         self.prefix += ('-' if prefix and not prefix.endswith('-') else '')
@@ -1035,10 +1036,9 @@ class ADCDACDetails(SiriusDialog):
         self.system = system
         self.chs = SEC_2_CHANNELS[self.section]
         self.setObjectName(self.section+'App')
-        if self.section == 'SI':
-            self.setWindowTitle(f'ADCs and DACs Details - {self.system}')
-        else:
-            self.setWindowTitle('ADCs and DACs Details')
+        title = 'ADCs and DACs Details'
+        title += (f' - {self.system}' if self.section == 'SI' else '')
+        self.setWindowTitle(title)
         self._setupUi()
 
     def _setupUi(self):
@@ -1069,3 +1069,26 @@ class ADCDACDetails(SiriusDialog):
                 lay.addWidget(
                     SiriusLineEdit(self, self.prefix+val[1]+'-SP'), row, 3)
             row += 1
+
+
+class HardwareDetails(SiriusDialog):
+    """."""
+
+    def __init__(self, parent=None, prefix='', section='', system=''):
+        """Init."""
+        super().__init__(parent)
+        self.prefix = prefix
+        self.prefix += ('-' if prefix and not prefix.endswith('-') else '')
+        self.section = section
+        self.system = system
+        self.chs = SEC_2_CHANNELS[self.section]
+        self.setObjectName(self.section+'App')
+        title = 'Hardware Details'
+        title += (f' - {self.system}' if self.section == 'SI' else '')
+        self.setWindowTitle(title)
+        self._setupUi()
+
+    def _setupUi(self):
+        lay = QGridLayout(self)
+        lay.setAlignment(Qt.AlignTop)
+        lay.setSpacing(9)
