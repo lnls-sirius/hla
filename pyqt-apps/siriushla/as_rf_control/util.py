@@ -1053,6 +1053,14 @@ SEC_2_CHANNELS = {
                 'Delay': 'SR-RF-DLLRF-02:FDL:TriggerDelay',
                 'Name': 'B',
             }
+        },
+        'PS': {
+            'Labels': {
+            },
+            'A': {
+            },
+            'B': {
+            }
         }
     },
 }

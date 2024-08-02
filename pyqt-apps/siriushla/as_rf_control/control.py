@@ -19,7 +19,7 @@ from ..widgets import PyDMLed, PyDMLedMultiChannel, PyDMStateButton, \
 from .custom_widgets import RFEnblDsblButton
 from .details import CavityStatusDetails, FDLMonitor, LLRFInterlockDetails, \
     TransmLineStatusDetails, SlowLoopErrorDetails, SlowLoopParametersDetails, \
-    TempMonitor
+    TempMonitor, ADCDACDetails
 from .util import SEC_2_CHANNELS
 
 
@@ -63,26 +63,26 @@ class RFMainControl(SiriusMainWindow):
         gbox_rfgen.setStyleSheet('#RFGen{background-color: #d7ccc8;}')
         gbox_rfgen.setLayout(self._rfGenLayout())
 
-        if self.section == 'SI':
-            wid_startctrl = QGroupBox('Start Controls', self)
-            wid_startctrl.setLayout(self._startControlLayout())
-        else:
-            wid_startctrl = QTabWidget(self)
-            wid_startctrl.setObjectName(self.section+'Tab')
-            wid_startctrl.setStyleSheet(
-                "#"+self.section+'Tab'+"::pane {"
-                "    border-left: 2px solid gray;"
-                "    border-bottom: 2px solid gray;"
-                "    border-right: 2px solid gray;}")
-            wid_control = QWidget(self)
-            wid_control.setLayout(self._startControlLayout())
-            wid_startctrl.addTab(wid_control, 'Start Controls')
+        wid_startctrl = QTabWidget(self)
+        wid_startctrl.setObjectName(self.section+'Tab')
+        wid_startctrl.setStyleSheet(
+            "#"+self.section+'Tab'+"::pane {"
+            "    border-left: 2px solid gray;"
+            "    border-bottom: 2px solid gray;"
+            "    border-right: 2px solid gray;}")
+        wid_control = QWidget(self)
+        wid_control.setLayout(self._startControlLayout())
+        wid_startctrl.addTab(wid_control, 'Start Controls')
+        if self.section == 'BO':
             wid_rampctrl = QWidget(self)
             wid_rampctrl.setLayout(self._rampControlLayout())
             wid_startctrl.addTab(wid_rampctrl, 'Ramp Controls')
             # wid_autostart = QWidget(self)
             # wid_autostart.setLayout(self._autoStartLayout())
             # wid_startctrl.addTab(wid_autostart, 'Auto Start')
+        wid_advdtls = QWidget(self)
+        wid_advdtls.setLayout(self._advancedDetailsLayout())
+        wid_startctrl.addTab(wid_advdtls, 'Advanced Details')
 
         if self.section == 'SI':
             wid_pwrmon = QGroupBox('Power Meter', self)
@@ -857,6 +857,22 @@ class RFMainControl(SiriusMainWindow):
         lay.addWidget(self.lb_rmpvolttop2, 20, 1, 1, 3)
         lay.addItem(QSpacerItem(
             200, 10, QSzPlcy.Fixed, QSzPlcy.MinimumExpanding), 21, 3)
+        return lay
+
+    def _advancedDetailsLayout(self):
+        lay = QGridLayout()
+        lay.setAlignment(Qt.AlignTop)
+        lay.setSpacing(9)
+
+        self.pb_adcdac = QPushButton(
+            qta.icon('fa5s.external-link-alt'), ' ADCs and DACs', self)
+        self.pb_adcdac.setStyleSheet('min-width: 8em;')
+        connect_window(
+            self.pb_adcdac, ADCDACDetails, parent=self,
+            prefix=self.prefix, section=self.section)
+
+        lay.addWidget(self.pb_adcdac, 0, 0)
+
         return lay
 
     def _handle_rmptab_visibility(self, unit_type):

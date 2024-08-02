@@ -11,7 +11,7 @@ from qtpy.QtWidgets import QCheckBox, QComboBox, QFormLayout, QGridLayout, \
 from ..widgets import DetachableTabWidget, PyDMLedMultiChannel, \
     PyDMStateButton, SiriusConnectionSignal as _ConnSignal, SiriusDialog, \
     SiriusLabel, SiriusLedAlert, SiriusSpinbox, SiriusTimePlot, \
-    SiriusWaveformPlot
+    SiriusWaveformPlot, SiriusLedState
 
 from .util import SEC_2_CHANNELS
 
@@ -1022,3 +1022,77 @@ class SlowLoopParametersDetails(SiriusDialog):
         lay_input.setRowStretch(3, 2)
         lay_llrf.addLayout(lay_input, 1, 4, 3, 2)
         lay.addLayout(lay_llrf)
+
+
+class ADCDACDetails(SiriusDialog):
+    """Details for ADCs and DACs."""
+
+    def __init__(self, parent=None, prefix='', section=''):
+        super().__init__(parent)
+        self.prefix = prefix
+        self.prefix += ('-' if prefix and not prefix.endswith('-') else '')
+        self.section = section
+        self.chs = SEC_2_CHANNELS[self.section]
+        self.setObjectName(self.section+'App')
+        self.setWindowTitle('ADCs and DACs Details')
+        self._setupUi()
+
+    def _setupUi(self):
+        lay = QGridLayout(self)
+        lay.setAlignment(Qt.AlignTop)
+        lay.setSpacing(9)
+
+        # Setar linhas com labels
+
+        if self.section == 'SI':
+            offset = 0
+            for key, chs_dict in self.chs['PS'].items():
+                if key != 'Labels':
+                    self._setupDetails(lay, key, chs_dict, offset)
+                    offset += 1
+        else:
+            self._setupDetails(lay, None, self.chs['PS'], 0)
+
+    def _setupDetails(self, lay, key, chs_dict, offset):
+        pass
+        # if key:
+        #     lay.addWidget(QLabel(f'<h4>{key}</h4>', self,
+        #         alignment=Qt.AlignCenter), 0, offset)
+
+        # lay_adc = QGridLayout()
+        # lay_adc.setAlignment(Qt.AlignTop)
+        # lay_adc.setSpacing(9)
+
+        # self.pb_adc = PyDMStateButton(
+        #     self, self.prefix+chs_dict['ADC Enable']+'-SP')
+        # self.led_adc = SiriusLedState(self, self.prefix+chs_dict['ADC Enable'])
+        # lay_adc.addWidget(QLabel(
+        #     '101 - ADCs Phase Shift Enable'), 0, 0, 1, 2)
+        # lay_adc.addWidget(self.pb_adc, 0, 2)
+        # lay_adc.addWidget(self.led_adc, 0, 3)
+
+        # row = 1
+        # for k, val in chs_dict['ADC'].items():
+        #     lb_adc = SiriusLabel(self, self.prefix+val[1])
+        #     lay_adc.addWidget(QLabel(f'{val[0]}'), row, 0)
+        #     lay_adc.addWidget(QLabel(f'{k}'), row, 1)
+        #     lay_adc.addWidget(lb_adc, row, 2)
+        #     row += 1
+
+        # self.pb_dac = PyDMStateButton(
+        #     self, self.prefix+chs_dict['DAC Enable']+'-SP')
+        # self.led_dac = SiriusLedState(self, self.prefix+chs_dict['DAC Enable'])
+        # lay_adc.addWidget(QLabel(
+        #     '102 - DACs Phase Shift Enable'), row, 0, row, 2)
+        # lay_adc.addWidget(self.pb_dac, row, 2)
+        # lay_adc.addWidget(self.led_dac, row, 3)
+        # row += 1
+
+        # for k, val in chs_dict['DAC'].items():
+        #     lb_dac = SiriusLabel(self, self.prefix+val[1])
+        #     lay_adc.addWidget(QLabel(f'{val[0]}'), row, 0)
+        #     lay_adc.addWidget(QLabel(f'{k}'), row, 1)
+        #     lay_adc.addWidget(lb_dac, row, 2)
+        #     row += 1
+
+        # lay.addLayout(lay_adc, 1, offset)
