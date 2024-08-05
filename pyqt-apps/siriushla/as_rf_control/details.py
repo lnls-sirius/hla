@@ -11,7 +11,7 @@ from qtpy.QtWidgets import QCheckBox, QComboBox, QFormLayout, QGridLayout, \
 from ..widgets import DetachableTabWidget, PyDMLedMultiChannel, \
     PyDMStateButton, SiriusConnectionSignal as _ConnSignal, SiriusDialog, \
     SiriusLabel, SiriusLedAlert, SiriusSpinbox, SiriusTimePlot, \
-    SiriusWaveformPlot, SiriusLedState, SiriusLineEdit
+    SiriusWaveformPlot, SiriusLedState, SiriusLineEdit, SiriusScaleIndicator
 
 from .util import SEC_2_CHANNELS
 
@@ -1102,30 +1102,19 @@ class HardwareDetails(SiriusDialog):
 
         # FPGA Temps
         gbox_fpga = QGroupBox('FPGA Temps', self)
-        lay_fpga = QGridLayout(gbox_fpga)
-        lay_fpga.setSpacing(9)
-        lay_fpga.setAlignment(Qt.AlignTop)
-        row = 0
-        for key, val in syst_dict['FPGA'].items():
-            if key.split()[-1] == 'Max':
-                pass
-            lb_value = SiriusLabel(self, self.prefix+val)
-            lb_value.showUnits = True
-            lay_fpga.addWidget(QLabel(key), row, 0)
-            lay_fpga.addWidget(lb_value, row, 1)
-            row += 1
+        self._setupLabelsLayout(gbox_fpga, True, syst_dict['FPGA'])
 
         # Mo1000 Temps
         gbox_mo1000 = QGroupBox('Mo1000 Temps', self)
-        self._setupLabelsLayout(gbox_mo1000, syst_dict['Mo1000'])
+        self._setupLabelsLayout(gbox_mo1000, False, syst_dict['Mo1000'])
 
         # Mi125 Temps
         gbox_mi125 = QGroupBox('Mi125 Temps', self)
-        self._setupLabelsLayout(gbox_mi125, syst_dict['Mi125'])
+        self._setupLabelsLayout(gbox_mi125, False, syst_dict['Mi125'])
 
         # GPIO
         gbox_gpio = QGroupBox('GPIO', self)
-        self._setupLabelsLayout(gbox_gpio, syst_dict['GPIO'])
+        self._setupLabelsLayout(gbox_gpio, False, syst_dict['GPIO'])
 
         # Clock Src and PLL
         frame_pll = QFrame(self)
@@ -1194,7 +1183,7 @@ class HardwareDetails(SiriusDialog):
 
         # Versions
         gbox_vers = QGroupBox('Versions', self)
-        self._setupLabelsLayout(gbox_vers, syst_dict['Versions'])
+        self._setupLabelsLayout(gbox_vers, False, syst_dict['Versions'])
 
         lay_vbox = QVBoxLayout()
         lay_vbox.setSpacing(9)
@@ -1211,7 +1200,7 @@ class HardwareDetails(SiriusDialog):
         lay.addWidget(gbox_interr, 0, 3)
         lay.addWidget(gbox_init, 0, 4)
 
-    def _setupLabelsLayout(self, gbox, chs_dict):
+    def _setupLabelsLayout(self, gbox, isFPGA, chs_dict):
         lay = QGridLayout(gbox)
         lay.setSpacing(9)
         lay.setAlignment(Qt.AlignTop)
@@ -1219,9 +1208,13 @@ class HardwareDetails(SiriusDialog):
         for key, val in chs_dict.items():
             lb_value = SiriusLabel(self, self.prefix+val)
             lb_value.showUnits = True
-            lay.addWidget(QLabel(key), row, 0)
+            lay.addWidget(QLabel(key, alignment=Qt.AlignRight), row, 0)
             lay.addWidget(lb_value, row, 1)
             row += 1
+            if isFPGA and key.split()[-1] == 'Min':
+                scale = SiriusScaleIndicator(self, self.prefix+val)
+                lay.addWidget(scale, row, 1)
+                row += 1
 
     def _setupByteMonitor(self, lay, isAlert, labels, pv):
         for bit in range(len(labels)):
