@@ -8,9 +8,8 @@ from pydm.widgets import PyDMEnumComboBox
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 from siriuspy.namesys import SiriusPVName as _PVName
 
-from ..widgets import PyDMStateButton, SiriusLabel, SiriusSpinbox
-
-from .custom_widgets import MyScaleIndicator
+from ..widgets import PyDMStateButton, SiriusLabel, SiriusSpinbox, \
+    SiriusScaleIndicator
 
 
 class BbBGPIOWidget(QWidget):
@@ -219,7 +218,7 @@ class BbBGPIOWidget(QWidget):
 
     def _setupMonitorsWidget(self):
         # # ADC Average
-        si_gpioadcav = MyScaleIndicator(self, self.dev_pref+':CIC_MEAN')
+        si_gpioadcav = SiriusScaleIndicator(self, self.dev_pref+':CIC_MEAN')
         si_gpioadcav.setObjectName('si')
         si_gpioadcav.setStyleSheet('#si{min-height: 4em;}')
 
@@ -228,7 +227,7 @@ class BbBGPIOWidget(QWidget):
         lay_adcav.addWidget(si_gpioadcav)
 
         # # Phase servo output
-        si_gpioservodlt = MyScaleIndicator(
+        si_gpioservodlt = SiriusScaleIndicator(
             self, self.dev_pref+':FBELT_SERVO_DELTA')
         ld_gpioservomax = QLabel(
             '<h4>Max</h4>', self, alignment=Qt.AlignCenter)

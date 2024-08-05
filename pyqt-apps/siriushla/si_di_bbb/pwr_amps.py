@@ -11,9 +11,8 @@ from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 from siriuspy.namesys import SiriusPVName as _PVName
 
 from ..widgets import PyDMStateButton, SiriusLedState, SiriusSpinbox, \
-    SiriusLabel, PyDMLed, SiriusPushButton
+    SiriusLabel, PyDMLed, SiriusPushButton, SiriusScaleIndicator
 
-from .custom_widgets import MyScaleIndicator
 from .util import set_bbb_color
 
 
@@ -69,7 +68,7 @@ class BbBPwrAmpsWidget(QWidget):
 
         ld_fwrpwr = QLabel(
             '<h4>Forward Power</h4>', self, alignment=Qt.AlignCenter)
-        si_fwrpwr = MyScaleIndicator(self, self.dev_pref+':SERIAL_FWD')
+        si_fwrpwr = SiriusScaleIndicator(self, self.dev_pref+':SERIAL_FWD')
         si_fwrpwr.indicatorColor = QColor('blue')
         si_fwrpwr.barIndicator = True
         si_fwrpwr.showUnits = True
@@ -78,7 +77,7 @@ class BbBPwrAmpsWidget(QWidget):
 
         ld_revpwr = QLabel(
             '<h4>Reverse Power</h4>', self, alignment=Qt.AlignCenter)
-        si_revpwr = MyScaleIndicator(self, self.dev_pref+':SERIAL_REV')
+        si_revpwr = SiriusScaleIndicator(self, self.dev_pref+':SERIAL_REV')
         si_revpwr.indicatorColor = QColor('red')
         si_revpwr.barIndicator = True
         si_revpwr.showUnits = True
@@ -166,7 +165,7 @@ class BbBPwrAmpsWidget(QWidget):
 
         ld_fwrpwr = QLabel(
             '<h4>Forward Power</h4>', self, alignment=Qt.AlignCenter)
-        si_fwrpwr = MyScaleIndicator(
+        si_fwrpwr = SiriusScaleIndicator(
             self, self.dev_pref+':MMGRAW_'+unit_label+'_FWD')
         si_fwrpwr.barIndicator = True
         si_fwrpwr.indicatorColor = QColor('blue')
@@ -176,7 +175,7 @@ class BbBPwrAmpsWidget(QWidget):
 
         ld_revpwr = QLabel(
             '<h4>Reverse Power</h4>', self, alignment=Qt.AlignCenter)
-        si_revpwr = MyScaleIndicator(
+        si_revpwr = SiriusScaleIndicator(
             self, self.dev_pref+':MMGRAW_'+unit_label+'_REV')
         si_revpwr.barIndicator = True
         si_revpwr.indicatorColor = QColor('red')
@@ -245,7 +244,7 @@ class BbBPwrAmpsWidget(QWidget):
 
         ld_fwrpwr = QLabel(
             '<h4>Forward Power</h4>', self, alignment=Qt.AlignCenter)
-        si_fwrpwr = MyScaleIndicator(
+        si_fwrpwr = SiriusScaleIndicator(
             self, self.dev_pref+':MCLRAW_'+unit_label+'_FWD')
         si_fwrpwr.barIndicator = True
         si_fwrpwr.indicatorColor = QColor('blue')
@@ -255,7 +254,7 @@ class BbBPwrAmpsWidget(QWidget):
 
         ld_revpwr = QLabel(
             '<h4>Reverse Power</h4>', self, alignment=Qt.AlignCenter)
-        si_revpwr = MyScaleIndicator(
+        si_revpwr = SiriusScaleIndicator(
             self, self.dev_pref+':MCLRAW_'+unit_label+'_REV')
         si_revpwr.barIndicator = True
         si_revpwr.indicatorColor = QColor('red')
