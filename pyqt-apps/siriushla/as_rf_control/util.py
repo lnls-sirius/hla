@@ -380,6 +380,15 @@ SEC_2_CHANNELS = {
                 'Firmware': 'RA-RaBO01:RF-LLRF:FPGAVersion-Mon',
                 'IOC': 'RA-RaBO01:RF-LLRF:Version-Mon'
             },
+        },
+        'Loops': {
+            '24 mV': ['Amp Loop Ref (mV)', 'RA-Ra$(sys)$(sidx)01:$(llrf):ALRef'],
+            '24 VGap': ['Amp Loop Ref (VGap)', ''],
+            '25': ['Phase Loop Ref', 'RA-Ra$(sys)$(sidx)01:$(llrf):PLRef'],
+            '29': ['Voltage Inc. Rate', 'RA-Ra$(sys)$(sidx)01:$(llrf):AmpIncRate'],
+            '28': ['Phase Inc. Rate', 'RA-Ra$(sys)$(sidx)01:$(llrf):PhsIncRate'],
+            '106': [],
+            '114': ['Rect/Polar Mode Select', 'RA-Ra$(sys)$(sidx)01:$(llrf):LoopMode-Sel']
         }
     },
     'SI': {

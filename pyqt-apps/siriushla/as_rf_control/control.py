@@ -19,7 +19,7 @@ from ..widgets import PyDMLed, PyDMLedMultiChannel, PyDMStateButton, \
 from .custom_widgets import RFEnblDsblButton
 from .details import CavityStatusDetails, FDLMonitor, LLRFInterlockDetails, \
     TransmLineStatusDetails, SlowLoopErrorDetails, SlowLoopParametersDetails, \
-    TempMonitor, ADCDACDetails, HardwareDetails
+    TempMonitor, ADCDACDetails, HardwareDetails, LoopsDetails
 from .util import SEC_2_CHANNELS
 
 
@@ -887,10 +887,18 @@ class RFMainControl(SiriusMainWindow):
                 pb_hrdwr, HardwareDetails, parent=self,
                 prefix=self.prefix, section=self.section, system=systems[i])
 
+            # Loops
+            pb_loops = QPushButton(
+                qta.icon('fa5s.external-link-alt'), ' Loops', self)
+            connect_window(
+                pb_loops, LoopsDetails, parent=self,
+                prefix=self.prefix, section=self.section, system=systems[i])
+
             lay.addWidget(QLabel(
                 f'<h4>{systems[i]}</h4>'), 0, offset)
             lay.addWidget(pb_adcdac, 1, offset)
             lay.addWidget(pb_hrdwr, 2, offset)
+            lay.addWidget(pb_loops, 3, offset)
             offset += 1
 
         return lay

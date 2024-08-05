@@ -11,7 +11,8 @@ from qtpy.QtWidgets import QCheckBox, QComboBox, QFormLayout, QGridLayout, \
 from ..widgets import DetachableTabWidget, PyDMLedMultiChannel, \
     PyDMStateButton, SiriusConnectionSignal as _ConnSignal, SiriusDialog, \
     SiriusLabel, SiriusLedAlert, SiriusSpinbox, SiriusTimePlot, \
-    SiriusWaveformPlot, SiriusLedState, SiriusLineEdit, SiriusScaleIndicator
+    SiriusWaveformPlot, SiriusLedState, SiriusLineEdit, SiriusScaleIndicator, \
+    SiriusEnumComboBox
 
 from .util import SEC_2_CHANNELS
 
@@ -1039,6 +1040,10 @@ class ADCDACDetails(SiriusDialog):
         title = 'ADCs and DACs Details'
         title += (f' - {self.system}' if self.section == 'SI' else '')
         self.setWindowTitle(title)
+        if self.section == 'SI':
+            self.syst_dict = self.chs['ADCs and DACs'][self.system]
+        else:
+            self.syst_dict = self.chs['ADCs and DACs']
         self._setupUi()
 
     def _setupUi(self):
@@ -1046,13 +1051,9 @@ class ADCDACDetails(SiriusDialog):
         lay.setAlignment(Qt.AlignTop)
         lay.setSpacing(9)
 
-        if self.section == 'SI':
-            syst_dict = self.chs['ADCs and DACs'][self.system]
-        else:
-            syst_dict = self.chs['ADCs and DACs']
 
         row = 0
-        for key, val in syst_dict.items():
+        for key, val in self.syst_dict.items():
             if key == 'ADC Enable' or key == 'DAC Enable':
                 pb_enbl = PyDMStateButton(
                     self, self.prefix+val[1]+'-Sel')
@@ -1087,6 +1088,10 @@ class HardwareDetails(SiriusDialog):
         title = 'Hardware Details'
         title += (f' - {self.system}' if self.section == 'SI' else '')
         self.setWindowTitle(title)
+        if self.section == 'SI':
+            self.syst_dict = self.chs['Hardware'][self.system]
+        else:
+            self.syst_dict = self.chs['Hardware']
         self._setupUi()
 
     def _setupUi(self):
@@ -1095,26 +1100,21 @@ class HardwareDetails(SiriusDialog):
         lay.setHorizontalSpacing(18)
         lay.setVerticalSpacing(9)
 
-        if self.section == 'SI':
-            syst_dict = self.chs['Hardware'][self.system]
-        else:
-            syst_dict = self.chs['Hardware']
-
         # FPGA Temps
         gbox_fpga = QGroupBox('FPGA Temps', self)
-        self._setupLabelsLayout(gbox_fpga, True, syst_dict['FPGA'])
+        self._setupLabelsLayout(gbox_fpga, True, self.syst_dict['FPGA'])
 
         # Mo1000 Temps
         gbox_mo1000 = QGroupBox('Mo1000 Temps', self)
-        self._setupLabelsLayout(gbox_mo1000, False, syst_dict['Mo1000'])
+        self._setupLabelsLayout(gbox_mo1000, False, self.syst_dict['Mo1000'])
 
         # Mi125 Temps
         gbox_mi125 = QGroupBox('Mi125 Temps', self)
-        self._setupLabelsLayout(gbox_mi125, False, syst_dict['Mi125'])
+        self._setupLabelsLayout(gbox_mi125, False, self.syst_dict['Mi125'])
 
         # GPIO
         gbox_gpio = QGroupBox('GPIO', self)
-        self._setupLabelsLayout(gbox_gpio, False, syst_dict['GPIO'])
+        self._setupLabelsLayout(gbox_gpio, False, self.syst_dict['GPIO'])
 
         # Clock Src and PLL
         frame_pll = QFrame(self)
@@ -1127,9 +1127,11 @@ class HardwareDetails(SiriusDialog):
         lay_pll = QGridLayout(frame_pll)
         lay_pll.setSpacing(9)
         lay_pll.setSpacing(Qt.AlignTop)
-        pb_clock = PyDMStateButton(self, self.prefix+syst_dict['Clock Src'])
-        led_pll = SiriusLedState(self, self.prefix+syst_dict['PLL'])
-        pb_init = PyDMStateButton(self, self.prefix+syst_dict['FPGA Init'])
+        pb_clock = PyDMStateButton(
+            self, self.prefix+self.syst_dict['Clock Src'])
+        led_pll = SiriusLedState(self, self.prefix+self.syst_dict['PLL'])
+        pb_init = PyDMStateButton(
+            self, self.prefix+self.syst_dict['FPGA Init'])
         lay_pll.addWidget(QLabel('Clock Src'), 0, 0)
         lay_pll.addWidget(pb_clock, 0, 2)
         lay_pll.addWidget(QLabel('PLL'), 1, 0)
@@ -1149,7 +1151,7 @@ class HardwareDetails(SiriusDialog):
         lay_type.setSpacing(Qt.AlignTop)
         lay_type.addWidget(QLabel('Cavity Type'), 0, 0)
         lay_type.addWidget(SiriusLabel(
-            self, self.prefix+syst_dict['Cav Type']), 0, 1)
+            self, self.prefix+self.syst_dict['Cav Type']), 0, 1)
 
         # Errors
         gbox_err = QGroupBox('Errors', self)
@@ -1159,7 +1161,7 @@ class HardwareDetails(SiriusDialog):
         labels = ['EAPI', 'Mo1000', 'Mi125', 'SysMon',
             'GPIO', 'VCXO', 'Loops', 'RecPlay']
         self._setupByteMonitor(
-            lay_err, True, labels, self.prefix+syst_dict['Errors'])
+            lay_err, True, labels, self.prefix+self.syst_dict['Errors'])
 
         # Internal Errors
         gbox_interr = QGroupBox('Internal Errors', self)
@@ -1168,8 +1170,8 @@ class HardwareDetails(SiriusDialog):
         lay_interr.setAlignment(Qt.AlignTop)
         labels = ['Loop Set', 'Loop Get', 'Loop Set Inconsistency',
             'Phs Ref Inconsistency', 'Amd Ref Inconsistency', 'Diag Get']
-        self._setupByteMonitor(
-            lay_interr, True, labels, self.prefix+syst_dict['Int. Errors'])
+        self._setupByteMonitor(lay_interr, True, labels,
+            self.prefix+self.syst_dict['Int. Errors'])
 
         # Init
         gbox_init = QGroupBox('Init', self)
@@ -1179,11 +1181,11 @@ class HardwareDetails(SiriusDialog):
         labels = ['GPIO', 'DACS', 'Mo1000', 'Mi125', 'Intercore FIFO', 'FPGA',
             'Cav Type', 'Double Write', 'Initial Settings', 'Disable Cavity B']
         self._setupByteMonitor(
-            lay_init, False, labels, self.prefix+syst_dict['Init'])
+            lay_init, False, labels, self.prefix+self.syst_dict['Init'])
 
         # Versions
         gbox_vers = QGroupBox('Versions', self)
-        self._setupLabelsLayout(gbox_vers, False, syst_dict['Versions'])
+        self._setupLabelsLayout(gbox_vers, False, self.syst_dict['Versions'])
 
         lay_vbox = QVBoxLayout()
         lay_vbox.setSpacing(9)
@@ -1224,3 +1226,89 @@ class HardwareDetails(SiriusDialog):
                 led = SiriusLedState(self, pv, bit)
             lay.addWidget(led, bit, 0)
             lay.addWidget(QLabel(labels[bit]), bit, 1)
+
+
+class LoopsDetails(SiriusDialog):
+    """IQ and Polar loops details."""
+
+    def __init__(self, parent=None, prefix='', section='', system=''):
+        """Init."""
+        super().__init__(parent)
+        self.prefix = prefix
+        self.prefix += ('-' if prefix and not prefix.endswith('-') else '')
+        self.section = section
+        self.system = system
+        self.chs = SEC_2_CHANNELS[self.section]
+        self.setObjectName(self.section+'App')
+        title = 'Loops Details'
+        title += (f' - {self.system}' if self.section == 'SI' else '')
+        self.setWindowTitle(title)
+        if self.section == 'SI':
+            self.syst_dict = self.chs['Loops'][self.system]
+        else:
+            self.syst_dict = self.chs['Loops']
+        self._setupUi()
+
+    def _setupUi(self):
+        lay = QGridLayout(self)
+        lay.setAlignment(Qt.AlignTop)
+        dtls = QTabWidget(self)
+        dtls.setObjectName(self.section+'Tab')
+        dtls.setStyleSheet(
+            "#"+self.section+'Tab'+"::pane {"
+            "    border-left: 2px solid gray;"
+            "    border-bottom: 2px solid gray;"
+            "    border-right: 2px solid gray;}")
+
+        wid_controls = QWidget(self)
+        wid_controls.setLayout(self._loopsControlLayout())
+        dtls.addTab(wid_controls, 'Loops Control')
+
+        lay.addWidget(dtls, 1, 0)
+
+    def _loopsControlLayout(self):
+        lay = QGridLayout(self)
+        lay.setAlignment(Qt.AlignTop)
+        lay.setSpacing(9)
+
+        self._setupLabelEdit(lay, '24 mV', 0, 0)
+        self._setupLabelEdit(lay, '24 VGap', 1, 0)
+        self._setupLabelEdit(lay, '25', 2, 0)
+
+        lb_vinc = SiriusLabel(
+            self, self.prefix+self.syst_dict['29'][1]+'-RB')
+        lb_vinc.showUnits = True
+        lb_pinc = SiriusLabel(
+            self, self.prefix+self.syst_dict['28'][1]+'-RB')
+        lb_pinc.showUnits = True
+
+        lay.addWidget(QLabel('29'), 3, 0)
+        lay.addWidget(QLabel(self.prefix+self.syst_dict['29'][0]), 3, 1)
+        lay.addWidget(SiriusEnumComboBox(
+            self, self.prefix+self.syst_dict['29'][1]+'-SP'), 3, 2)
+        lay.addWidget(lb_vinc, 3, 3)
+        lay.addWidget(QLabel('28'), 4, 0)
+        lay.addWidget(QLabel(self.prefix+self.syst_dict['28'][0]), 4, 1)
+        lay.addWidget(SiriusEnumComboBox(
+            self, self.prefix+self.syst_dict['28'][1]+'-SP'), 4, 2)
+        lay.addWidget(lb_pinc, 4, 3)
+
+        # Look Reference
+
+        lay.addWidget(QLabel('114'), 5, 0)
+        lay.addWidget(QLabel(self.prefix+self.syst_dict['114'][0]), 5, 1)
+        lay.addWidget(PyDMStateButton(
+            self, self.prefix+self.syst_dict['114'][1]), 5, 2)
+
+        return lay
+
+    def _setupLabelEdit(self, lay, key, row, column):
+        label = SiriusLabel(self, self.prefix+self.syst_dict[key][1]+'-RB')
+        label.showUnits = True
+
+        lay.addWidget(QLabel(key.split()[0]), row, column)
+        lay.addWidget(QLabel(
+            self.prefix+self.syst_dict[key][0]), row, column+1)
+        lay.addWidget(SiriusLineEdit(
+            self, self.prefix+self.syst_dict[key][1]+'-SP'), row, column+2)
+        lay.addWidget(label, row, column+3)
