@@ -344,6 +344,42 @@ SEC_2_CHANNELS = {
             '20': ['Gain Drive SSA 3', 'RA-RaBO01:RF-LLRF:GainSSA3'],
             '17': ['Phase Shift Drive SSA 4', 'RA-RaBO01:RF-LLRF:PHSHSSA4'],
             '21': ['Gain Drive SSA 4', 'RA-RaBO01:RF-LLRF:GainSSA4']
+        },
+        'Hardware': {
+            'FPGA': {
+                'Temp': 'RA-RaBO01:RF-LLRF:FPGATemp-Mon',
+                'Temp Max': 'RA-RaBO01:RF-LLRF:FPGATempMax-Mon',
+                'Temp Min': 'RA-RaBO01:RF-LLRF:FPGATempMin-Mon',
+                'Vint': 'RA-RaBO01:RF-LLRF:FPGAVint-Mon',
+                'Vint Max': 'RA-RaBO01:RF-LLRF:FPGAVintMax-Mon',
+                'Vint Min': 'RA-RaBO01:RF-LLRF:FPGAVintMin-Mon',
+                'Vaux': 'RA-RaBO01:RF-LLRF:FPGAVaux-Mon',
+                'Vaux Max': 'RA-RaBO01:RF-LLRF:FPGAVauxMax-Mon',
+                'Vaux Min': 'RA-RaBO01:RF-LLRF:FPGAVauxMin-Mon'
+            },
+            'Mo1000': {
+                'Temp': 'RA-RaBO01:RF-LLRF:MO1000Temp-Mon',
+                'Temp DAC 1': 'RA-RaBO01:RF-LLRF:MO1000DAC1Temp-Mon',
+                'Temp DAC 2': 'RA-RaBO01:RF-LLRF:MO1000DAC2Temp-Mon'
+            },
+            'Mi125': {
+                'Temp': 'RA-RaBO01:RF-LLRF:M125Temp-Mon',
+            },
+            'GPIO': {
+                'ADC 0': 'RA-RaBO01:RF-LLRF:GPIOADC0-Mon',
+                'ADC 3': 'RA-RaBO01:RF-LLRF:GPIOADC3-Mon'
+            },
+            'Clock Src': 'RA-RaBO01:RF-LLRF:MO1000ClkSrc-Sel',
+            'PLL': 'RA-RaBO01:RF-LLRF:MO1000PLL-Mon',
+            'FPGA Init': 'RA-RaBO01:RF-LLRF:FPGAInit-Cmd',
+            'Cav Type': 'RA-RaBO01:RF-LLRF:CavType-Mon',
+            'Errors': 'RA-RaBO01:RF-LLRF:InitErrors-Mon',
+            'Int. Errors': 'RA-RaBO01:RF-LLRF:InternalErr-Mon',
+            'Init': 'RA-RaBO01:RF-LLRF:InitStatus-Mon',
+            'Versions': {
+                'Firmware': 'RA-RaBO01:RF-LLRF:FPGAVersion-Mon',
+                'IOC': 'RA-RaBO01:RF-LLRF:Version-Mon'
+            },
         }
     },
     'SI': {
@@ -1123,6 +1159,80 @@ SEC_2_CHANNELS = {
                 '20': ['Gain Drive SSA 3', 'RA-RaSIB01:RF-LLRF-B:GainSSA3'],
                 '17': ['Phase Shift Drive SSA 4', 'RA-RaSIB01:RF-LLRF-B:PHSHSSA4'],
                 '21': ['Gain Drive SSA 4', 'RA-RaSIB01:RF-LLRF-B:GainSSA4']
+            }
+        },
+        'Hardware': {
+            'A': {
+                'FPGA': {
+                    'Temp': 'RA-RaSIA01:RF-LLRF-A:FPGATemp-Mon',
+                    'Temp Max': 'RA-RaSIA01:RF-LLRF-A:FPGATempMax-Mon',
+                    'Temp Min': 'RA-RaSIA01:RF-LLRF-A:FPGATempMin-Mon',
+                    'Vint': 'RA-RaSIA01:RF-LLRF-A:FPGAVint-Mon',
+                    'Vint Max': 'RA-RaSIA01:RF-LLRF-A:FPGAVintMax-Mon',
+                    'Vint Min': 'RA-RaSIA01:RF-LLRF-A:FPGAVintMin-Mon',
+                    'Vaux': 'RA-RaSIA01:RF-LLRF-A:FPGAVaux-Mon',
+                    'Vaux Max': 'RA-RaSIA01:RF-LLRF-A:FPGAVauxMax-Mon',
+                    'Vaux Min': 'RA-RaSIA01:RF-LLRF-A:FPGAVauxMin-Mon'
+                },
+                'Mo1000': {
+                    'Temp': 'RA-RaSIA01:RF-LLRF-A:MO1000Temp-Mon',
+                    'Temp DAC 1': 'RA-RaSIA01:RF-LLRF-A:MO1000DAC1Temp-Mon',
+                    'Temp DAC 2': 'RA-RaSIA01:RF-LLRF-A:MO1000DAC2Temp-Mon'
+                },
+                'Mi125': {
+                    'Temp': 'RA-RaSIA01:RF-LLRF-A:M125Temp-Mon',
+                },
+                'GPIO': {
+                    'ADC 0': 'RA-RaSIA01:RF-LLRF-A:GPIOADC0-Mon',
+                    'ADC 3': 'RA-RaSIA01:RF-LLRF-A:GPIOADC3-Mon'
+                },
+                'Clock Src': 'RA-RaSIA01:RF-LLRF-A:MO1000ClkSrc-Sel',
+                'PLL': 'RA-RaSIA01:RF-LLRF-A:MO1000PLL-Mon',
+                'FPGA Init': 'RA-RaSIA01:RF-LLRF-A:FPGAInit-Cmd',
+                'Cav Type': 'RA-RaSIA01:RF-LLRF-A:CavType-Mon',
+                'Errors': 'RA-RaSIA01:RF-LLRF-A:InitErrors-Mon',
+                'Int. Errors': 'RA-RaSIA01:RF-LLRF-A:InternalErr-Mon',
+                'Init': 'RA-RaSIA01:RF-LLRF-A:InitStatus-Mon',
+                'Versions': {
+                    'Firmware': 'RA-RaSIA01:RF-LLRF-A:FPGAVersion-Mon',
+                    'IOC': 'RA-RaSIA01:RF-LLRF-A:Version-Mon'
+                },
+            },
+            'B': {
+                'FPGA': {
+                    'Temp': 'RA-RaSIB01:RF-LLRF-B:FPGATemp-Mon',
+                    'Temp Max': 'RA-RaSIB01:RF-LLRF-B:FPGATempMax-Mon',
+                    'Temp Min': 'RA-RaSIB01:RF-LLRF-B:FPGATempMin-Mon',
+                    'Vint': 'RA-RaSIB01:RF-LLRF-B:FPGAVint-Mon',
+                    'Vint Max': 'RA-RaSIB01:RF-LLRF-B:FPGAVintMax-Mon',
+                    'Vint Min': 'RA-RaSIB01:RF-LLRF-B:FPGAVintMin-Mon',
+                    'Vaux': 'RA-RaSIB01:RF-LLRF-B:FPGAVaux-Mon',
+                    'Vaux Max': 'RA-RaSIB01:RF-LLRF-B:FPGAVauxMax-Mon',
+                    'Vaux Min': 'RA-RaSIB01:RF-LLRF-B:FPGAVauxMin-Mon'
+                },
+                'Mo1000': {
+                    'Temp': 'RA-RaSIB01:RF-LLRF-B:MO1000Temp-Mon',
+                    'Temp DAC 1': 'RA-RaSIB01:RF-LLRF-B:MO1000DAC1Temp-Mon',
+                    'Temp DAC 2': 'RA-RaSIB01:RF-LLRF-B:MO1000DAC2Temp-Mon'
+                },
+                'Mi125': {
+                    'Temp': 'RA-RaSIB01:RF-LLRF-B:M125Temp-Mon',
+                },
+                'GPIO': {
+                    'ADC 0': 'RA-RaSIB01:RF-LLRF-B:GPIOADC0-Mon',
+                    'ADC 3': 'RA-RaSIB01:RF-LLRF-B:GPIOADC3-Mon'
+                },
+                'Clock Src': 'RA-RaSIB01:RF-LLRF-B:MO1000ClkSrc-Sel',
+                'PLL': 'RA-RaSIB01:RF-LLRF-B:MO1000PLL-Mon',
+                'FPGA Init': 'RA-RaSIB01:RF-LLRF-B:FPGAInit-Cmd',
+                'Cav Type': 'RA-RaSIB01:RF-LLRF-B:CavType-Mon',
+                'Errors': 'RA-RaSIB01:RF-LLRF-B:InitErrors-Mon',
+                'Int. Errors': 'RA-RaSIB01:RF-LLRF-B:InternalErr-Mon',
+                'Init': 'RA-RaSIB01:RF-LLRF-B:InitStatus-Mon',
+                'Versions': {
+                    'Firmware': 'RA-RaSIB01:RF-LLRF-B:FPGAVersion-Mon',
+                    'IOC': 'RA-RaSIB01:RF-LLRF-B:Version-Mon'
+                },
             }
         }
     },
