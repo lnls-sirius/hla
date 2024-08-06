@@ -382,13 +382,22 @@ SEC_2_CHANNELS = {
             },
         },
         'Loops': {
-            '24 mV': ['Amp Loop Ref (mV)', 'RA-Ra$(sys)$(sidx)01:$(llrf):ALRef'],
-            '24 VGap': ['Amp Loop Ref (VGap)', ''],
-            '25': ['Phase Loop Ref', 'RA-Ra$(sys)$(sidx)01:$(llrf):PLRef'],
-            '29': ['Voltage Inc. Rate', 'RA-Ra$(sys)$(sidx)01:$(llrf):AmpIncRate'],
-            '28': ['Phase Inc. Rate', 'RA-Ra$(sys)$(sidx)01:$(llrf):PhsIncRate'],
-            '106': [],
-            '114': ['Rect/Polar Mode Select', 'RA-Ra$(sys)$(sidx)01:$(llrf):LoopMode-Sel']
+            'Control': {
+                '24': ['Amp Loop Ref (mV)', 'RA-RaBO01:RF-LLRF:ALRef'],
+                '25': ['Phase Loop Ref', 'RA-RaBO01:RF-LLRF:PLRef'],
+                '29': ['Voltage Inc. Rate', 'RA-RaBO01:RF-LLRF:AmpIncRate'],
+                '28': ['Phase Inc. Rate', 'RA-RaBO01:RF-LLRF:PhsIncRate'],
+                '106': ['Look Reference', 'RA-RaBO01:RF-LLRF:LookRef-Cmd'],
+                '114': ['Rect/Polar Mode Select', 'RA-RaBO01:RF-LLRF:LoopMode-Sel'],
+                '107': ['Quadrant Selection', 'RA-RaBO01:RF-LLRF:Quad-Sel'],
+                '26': ['Amp Ref Min (mV)', 'RA-RaBO01:RF-LLRF:AmpRefMin'],
+                '27': ['Phase Ref Min', 'RA-RaBO01:RF-LLRF:PhsRefMin'],
+                '30': ['Open Loop Gain', 'RA-RaBO01:RF-LLRF:OLGain'],
+                '31': ['Phase Correction Control', 'RA-RaBO01:RF-LLRF:PhsCorrection'],
+                '80': ['Phase Correct Error', 'RA-RaBO01:RF-LLRF:PhsCorrErr-Mon'],
+                '81': ['Phase Correct Control', 'RA-RaBO01:RF-LLRF:PhsCorrCtrl-Mon'],
+                '125': ['Fwd Min Amp & Phs', 'RA-RaBO01:RF-LLRF:LoopFwdMin'],
+            },
         }
     },
     'SI': {
@@ -1243,6 +1252,44 @@ SEC_2_CHANNELS = {
                     'IOC': 'RA-RaSIB01:RF-LLRF-B:Version-Mon'
                 },
             }
+        },
+        'Loops': {
+            'A': {
+                'Control': {
+                    '24': ['Amp Loop Ref (mV)', 'RA-RaSIA01:RF-LLRF-A:ALRef'],
+                    '25': ['Phase Loop Ref', 'RA-RaSIA01:RF-LLRF-A:PLRef'],
+                    '29': ['Voltage Inc. Rate', 'RA-RaSIA01:RF-LLRF-A:AmpIncRate'],
+                    '28': ['Phase Inc. Rate', 'RA-RaSIA01:RF-LLRF-A:PhsIncRate'],
+                    '106': ['Look Reference', 'RA-RaSIA01:RF-LLRF-A:LookRef-Cmd'],
+                    '114': ['Rect/Polar Mode Select', 'RA-RaSIA01:RF-LLRF-A:LoopMode-Sel'],
+                    '107': ['Quadrant Selection', 'RA-RaSIA01:RF-LLRF-A:Quad-Sel'],
+                    '26': ['Amp Ref Min (mV)', 'RA-RaSIA01:RF-LLRF-A:AmpRefMin'],
+                    '27': ['Phase Ref Min', 'RA-RaSIA01:RF-LLRF-A:PhsRefMin'],
+                    '30': ['Open Loop Gain', 'RA-RaSIA01:RF-LLRF-A:OLGain'],
+                    '31': ['Phase Correction Control', 'RA-RaSIA01:RF-LLRF-A:PhsCorrection'],
+                    '80': ['Phase Correct Error', 'RA-RaSIA01:RF-LLRF-A:PhsCorrErr-Mon'],
+                    '81': ['Phase Correct Control', 'RA-RaSIA01:RF-LLRF-A:PhsCorrCtrl-Mon'],
+                    '125': ['Fwd Min Amp & Phs', 'RA-RaSIA01:RF-LLRF-A:LoopFwdMin'],
+                },
+            },
+            'B': {
+                'Control': {
+                    '24': ['Amp Loop Ref (mV)', 'RA-RaSIB01:RF-LLRF-B:ALRef'],
+                    '25': ['Phase Loop Ref', 'RA-RaSIB01:RF-LLRF-B:PLRef'],
+                    '29': ['Voltage Inc. Rate', 'RA-RaSIB01:RF-LLRF-B:AmpIncRate'],
+                    '28': ['Phase Inc. Rate', 'RA-RaSIB01:RF-LLRF-B:PhsIncRate'],
+                    '106': ['Look Reference', 'RA-RaSIB01:RF-LLRF-B:LookRef-Cmd'],
+                    '114': ['Rect/Polar Mode Select', 'RA-RaSIB01:RF-LLRF-B:LoopMode-Sel'],
+                    '107': ['Quadrant Selection', 'RA-RaSIB01:RF-LLRF-B:Quad-Sel'],
+                    '26': ['Amp Ref Min (mV)', 'RA-RaSIB01:RF-LLRF-B:AmpRefMin'],
+                    '27': ['Phase Ref Min', 'RA-RaSIB01:RF-LLRF-B:PhsRefMin'],
+                    '30': ['Open Loop Gain', 'RA-RaSIB01:RF-LLRF-B:OLGain'],
+                    '31': ['Phase Correction Control', 'RA-RaSIB01:RF-LLRF-B:PhsCorrection'],
+                    '80': ['Phase Correct Error', 'RA-RaSIB01:RF-LLRF-B:PhsCorrErr-Mon'],
+                    '81': ['Phase Correct Control', 'RA-RaSIB01:RF-LLRF-B:PhsCorrCtrl-Mon'],
+                    '125': ['Fwd Min Amp & Phs', 'RA-RaSIB01:RF-LLRF-B:LoopFwdMin'],
+                },
+            },
         }
     },
 }
