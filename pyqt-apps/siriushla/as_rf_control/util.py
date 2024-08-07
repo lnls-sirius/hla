@@ -1273,64 +1273,64 @@ SEC_2_CHANNELS = {
                     '80': ['Phase Correct Error', 'RA-RaSIA01:RF-LLRF-A:PhsCorrErr-Mon'],
                     '81': ['Phase Correct Control', 'RA-RaSIA01:RF-LLRF-A:PhsCorrCtrl-Mon'],
                     '125': ['Fwd Min Amp & Phs', 'RA-RaSIA01:RF-LLRF-A:LoopFwdMin'],
+                    'Mode': 'RA-Ra$(sys)$(sidx)01:$(llrf):LoopMode-Sts'
+                },
+                'General': {
+                    '0': {
+                        'Label': 'Cavity Voltage',
+                        'InPhs': '$(cav):PwrI-Mon',
+                        'Quad': '$(cav):PwrQ-Mon',
+                        'Amp1': '$(cav):PwrAmp-Mon',
+                        'Amp2': '',
+                        'Amp3': '',
+                        'Amp4': '',
+                        'Phs': '$(cav):PwrPhs-Mon'
+                    },
+                    '2': {
+                        'Label': 'Forward Power',
+                        'InPhs': '$(cav):PwrFwdI-Mon',
+                        'Quad': '$(cav):PwrFwdQ-Mon',
+                        'Amp1': '$(cav):PwrFwdAmp-Mon',
+                        'Amp2': '',
+                        'Amp3': '',
+                        'Amp4': '-',
+                        'Phs': '$(cav):PwrFwdPhs-Mon'
+                    },
+                    '20': {
+                        'Label': 'Fwd Pwr SSA 1',
+                        'InPhs': 'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrFwdOutI-Mon',
+                        'Quad': 'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrFwdOutQ-Mon',
+                        'Amp1': 'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrFwdOutAmp-Mon',
+                        'Amp2': '',
+                        'Amp3': '',
+                        'Amp4': '-',
+                        'Phs': 'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrFwdOutPhs-Mon'
+                    },
+                    '32': {
+                        'Label': 'Ang Cav Fwd',
+                        'InPhs': '-',
+                        'Quad': '-',
+                        'Amp1': '-',
+                        'Amp2': '-',
+                        'Amp3': '-',
+                        'Amp4': '-',
+                        'Phs': 'RA-Ra$(sys)$(sidx)01:$(llrf):Dephase-Mon'
+                    },
                 },
                 'Rect': {
-                    'General': {
-                        'RectMode': 'RA-Ra$(sys)$(sidx)01:$(llrf):LoopMode-Sts',
-                        '0': {
-                            'Label': 'Cavity Voltage',
-                            'InPhs': '$(cav):PwrI-Mon',
-                            'Quad': '$(cav):PwrQ-Mon',
-                            'Amp1': '$(cav):PwrAmp-Mon',
-                            'Amp2': '',
-                            'Amp3': '',
-                            'Amp4': '',
-                            'Phs': '$(cav):PwrPhs-Mon'
-                        },
-                        '2': {
-                            'Label': 'Forward Power',
-                            'InPhs': '$(cav):PwrFwdI-Mon',
-                            'Quad': '$(cav):PwrFwdQ-Mon',
-                            'Amp1': '$(cav):PwrFwdAmp-Mon',
-                            'Amp2': '',
-                            'Amp3': '',
-                            'Amp4': '-',
-                            'Phs': '$(cav):PwrFwdPhs-Mon'
-                        },
-                        '20': {
-                            'Label': 'Fwd Pwr SSA 1',
-                            'InPhs': 'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrFwdOutI-Mon',
-                            'Quad': 'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrFwdOutQ-Mon',
-                            'Amp1': 'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrFwdOutAmp-Mon',
-                            'Amp2': '',
-                            'Amp3': '',
-                            'Amp4': '-',
-                            'Phs': 'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrFwdOutPhs-Mon'
-                        },
-                        '30': {
-                            'Label': 'Fwd Pwr SSA 2',
-                            'InPhs': '$(cav):PwrFBTNTopI-Mon',
-                            'Quad': '$(cav):PwrFBTNTopQ-Mon',
-                            'Amp1': '$(cav):PwrFBTNTopAmp-Mon',
-                            'Amp2': '',
-                            'Amp3': '',
-                            'Amp4': '-',
-                            'Phs': '$(cav):PwrFBTNTopPhs-Mon'
-                        },
-                        '32': {
-                            'Label': 'Ang Cav Fwd',
-                            'InPhs': '-',
-                            'Quad': '-',
-                            'Amp1': '-',
-                            'Amp2': '-',
-                            'Amp3': '-',
-                            'Amp4': '-',
-                            'Phs': 'RA-Ra$(sys)$(sidx)01:$(llrf):Dephase-Mon'
-                        },
+                    '30': {
+                        'Label': 'Fwd Pwr SSA 2',
+                        'InPhs': '$(cav):PwrFBTNTopI-Mon',
+                        'Quad': '$(cav):PwrFBTNTopQ-Mon',
+                        'Amp1': '$(cav):PwrFBTNTopAmp-Mon',
+                        'Amp2': '',
+                        'Amp3': '',
+                        'Amp4': '-',
+                        'Phs': '$(cav):PwrFBTNTopPhs-Mon'
                     },
                     'Slow': {
                         'Control': {
-                            '100': ['Enable', 'A-Ra$(sys)$(sidx)01:$(llrf):SL'],
+                            '100': ['Enable', 'RA-Ra$(sys)$(sidx)01:$(llrf):SL'],
                             '110': ['Input Selection', 'RA-Ra$(sys)$(sidx)01:$(llrf):SLInp'],
                             '13': ['PI Limit', 'RA-Ra$(sys)$(sidx)01:$(llrf):SLPILim'],
                             '1': ['Ki', 'RA-Ra$(sys)$(sidx)01:$(llrf):SLKI'],
@@ -1400,6 +1400,132 @@ SEC_2_CHANNELS = {
                             'Quad': 'RA-Ra$(sys)$(sidx)01:$(llrf):FLCtrlQ-Mon',
                             'Amp': 'RA-Ra$(sys)$(sidx)01:$(llrf):FLCtrlAmp-Mon',
                             'Phs': 'RA-Ra$(sys)$(sidx)01:$(llrf):FLCtrlPhs-Mon'
+                        },
+                        '6': {
+                            'Label': 'SSA 1 Control Signal',
+                            'InPhs': 'RA-Ra$(sys)$(sidx)01:$(llrf):SSA1CtrlI-Mon',
+                            'Quad': 'RA-Ra$(sys)$(sidx)01:$(llrf):SSA1CtrlQ-Mon',
+                            'Amp': 'RA-Ra$(sys)$(sidx)01:$(llrf):SSA1CtrlAmp-Mon',
+                            'Phs': 'RA-Ra$(sys)$(sidx)01:$(llrf):SSA1CtrlPhs-Mon'
+                        },
+                        '8': {
+                            'Label': 'SSA 2 Control Signal',
+                            'InPhs': 'RA-Ra$(sys)$(sidx)01:$(llrf):SSA2CtrlI-Mon',
+                            'Quad': 'RA-Ra$(sys)$(sidx)01:$(llrf):SSA2CtrlQ-Mon',
+                            'Amp': 'RA-Ra$(sys)$(sidx)01:$(llrf):SSA2CtrlAmp-Mon',
+                            'Phs': 'RA-Ra$(sys)$(sidx)01:$(llrf):SSA2CtrlPhs-Mon'
+                        }
+                    }
+                },
+                'Polar': {
+                    '527': {
+                        'Label': 'Amp Ref',
+                        'InPhs': '-',
+                        'Quad': '-',
+                        'Amp1': 'RA-Ra$(sys)$(sidx)01:$(llrf):AmpRefOld-Mon',
+                        'Amp2': '',
+                        'Amp3': '',
+                        'Amp4': '-',
+                        'Phs': '-'
+                    },
+                    'Amp': {
+                        'Control': {
+                            '116': ['Enable', 'RA-Ra$(sys)$(sidx)01:$(llrf):AL'],
+                            '112': ['Input Selection', 'RA-Ra$(sys)$(sidx)01:$(llrf):ALInp'],
+                            '121': ['Ki', 'RA-Ra$(sys)$(sidx)01:$(llrf):ALKI'],
+                            '120': ['Kp', 'RA-Ra$(sys)$(sidx)01:$(llrf):ALKP']
+                        },
+                        '100': {
+                            'Label': 'Amp Loop Input',
+                            'InPhs': 'RA-Ra$(sys)$(sidx)01:$(llrf):ALInpI-Mon',
+                            'Quad': 'RA-Ra$(sys)$(sidx)01:$(llrf):ALInpQ-Mon',
+                            'Amp': 'RA-Ra$(sys)$(sidx)01:$(llrf):ALInpAmp-Mon',
+                            'Phs': 'RA-Ra$(sys)$(sidx)01:$(llrf):ALInpPhs-Mon'
+                        },
+                        '104': {
+                            'Label': 'Amp of Input',
+                            'InPhs': '-',
+                            'Quad': '-',
+                            'Amp': 'RA-Ra$(sys)$(sidx)01:$(llrf):ALAmpInp-Mon',
+                            'Phs': '-'
+                        },
+                        '105': {
+                            'Label': 'Phase of Input',
+                            'InPhs': '-',
+                            'Quad': '-',
+                            'Amp': '-',
+                            'Phs': 'RA-Ra$(sys)$(sidx)01:$(llrf):ALPhsInp-Mon'
+                        },
+                        '109': {
+                            'Label': 'Error',
+                            'InPhs': '-',
+                            'Quad': '-',
+                            'Amp': 'RA-Ra$(sys)$(sidx)01:$(llrf):ALErr-Mon',
+                            'Phs': '-'
+                        },
+                        '110': {
+                            'Label': 'Error Accum',
+                            'InPhs': '-',
+                            'Quad': '-',
+                            'Amp': 'RA-Ra$(sys)$(sidx)01:$(llrf):ALErrAcc-Mon',
+                            'Phs': '-'
+                        },
+                        '528': {
+                            'Label': 'Phase Ref',
+                            'InPhs': '-',
+                            'Quad': '-',
+                            'Amp': '-',
+                            'Phs': 'RA-Ra$(sys)$(sidx)01:$(llrf):PhsRefOld-Mon'
+                        }
+                    },
+                    'Phase': {
+                        'Control': {
+                            '117': ['Enable', 'RA-Ra$(sys)$(sidx)01:$(llrf):PL'],
+                            '113': ['Input Selection', 'RA-Ra$(sys)$(sidx)01:$(llrf):PLInp'],
+                            '123': ['Ki', 'RA-Ra$(sys)$(sidx)01:$(llrf):PLKI'],
+                            '122': ['Kp', 'RA-Ra$(sys)$(sidx)01:$(llrf):PLKP']
+                        },
+                        '102': {
+                            'Label': 'Phase Loop Input',
+                            'InPhs': 'RA-Ra$(sys)$(sidx)01:$(llrf):PLInpI-Mon',
+                            'Quad': 'RA-Ra$(sys)$(sidx)01:$(llrf):PLInpQ-Mon',
+                            'Amp': 'RA-Ra$(sys)$(sidx)01:$(llrf):PLInpAmp-Mon',
+                            'Phs': 'RA-Ra$(sys)$(sidx)01:$(llrf):PLInpPhs-Mon'
+                        },
+                        '106': {
+                            'Label': 'Amp of Input',
+                            'InPhs': '-',
+                            'Quad': '-',
+                            'Amp': 'RA-Ra$(sys)$(sidx)01:$(llrf):PLAmpInp-Mon',
+                            'Phs': '-'
+                        },
+                        '107': {
+                            'Label': 'Phase of Input',
+                            'InPhs': '-',
+                            'Quad': '-',
+                            'Amp': '-',
+                            'Phs': 'RA-Ra$(sys)$(sidx)01:$(llrf):PLPhsInp-Mon'
+                        },
+                        '112': {
+                            'Label': 'Error',
+                            'InPhs': '-',
+                            'Quad': '-',
+                            'Amp': '-',
+                            'Phs': 'RA-Ra$(sys)$(sidx)01:$(llrf):PLErr-Mon'
+                        },
+                        '113': {
+                            'Label': 'Error Accum',
+                            'InPhs': '-',
+                            'Quad': '-',
+                            'Amp': '-',
+                            'Phs': 'RA-Ra$(sys)$(sidx)01:$(llrf):PLErrAcc-Mon'
+                        },
+                        '114': {
+                            'Label': 'Polar Control Output',
+                            'InPhs': 'RA-Ra$(sys)$(sidx)01:$(llrf):POCtrlI-Mon',
+                            'Quad': 'RA-Ra$(sys)$(sidx)01:$(llrf):POCtrlQ-Mon',
+                            'Amp': 'RA-Ra$(sys)$(sidx)01:$(llrf):POCtrlAmp-Mon',
+                            'Phs': 'RA-Ra$(sys)$(sidx)01:$(llrf):POCtrlPhs-Mon'
                         },
                         '6': {
                             'Label': 'SSA 1 Control Signal',
