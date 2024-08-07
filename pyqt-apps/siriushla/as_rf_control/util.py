@@ -1365,12 +1365,56 @@ SEC_2_CHANNELS = {
                             'Phs': 'RA-Ra$(sys)$(sidx)01:$(llrf):SLErrAccPhs-Mon'
                         },
                         '71': {
-                            'Label': 'Control Output',
+                            'Label': 'Slow Control Output',
                             'InPhs': 'RA-Ra$(sys)$(sidx)01:$(llrf):SLCtrlI-Mon',
                             'Quad': 'RA-Ra$(sys)$(sidx)01:$(llrf):SLCtrlQ-Mon',
                             'Amp': 'RA-Ra$(sys)$(sidx)01:$(llrf):SLCtrlAmp-Mon',
                             'Phs': 'RA-Ra$(sys)$(sidx)01:$(llrf):SLCtrlPhs-Mon'
                         },
+                    },
+                    'Fast': {
+                        'Control': {
+                            '115': ['Enable', 'RA-Ra$(sys)$(sidx)01:$(llrf):FL'],
+                            '111': ['Input Selection', 'RA-Ra$(sys)$(sidx)01:$(llrf):FLInp'],
+                            '124': ['PI Limit', 'RA-Ra$(sys)$(sidx)01:$(llrf):FLPILim'],
+                            '119': ['Ki', 'RA-Ra$(sys)$(sidx)01:$(llrf):FLKI'],
+                            '118': ['Kp', 'RA-Ra$(sys)$(sidx)01:$(llrf):FLKP']
+                        },
+                        '124': {
+                            'Label': 'Reference',
+                            'InPhs': 'RA-Ra$(sys)$(sidx)01:$(llrf):FLRefI-Mon',
+                            'Quad': 'RA-Ra$(sys)$(sidx)01:$(llrf):FLRefQ-Mon',
+                            'Amp': 'RA-Ra$(sys)$(sidx)01:$(llrf):FLRefAmp-Mon',
+                            'Phs': 'RA-Ra$(sys)$(sidx)01:$(llrf):FLRefPhs-Mon'
+                        },
+                        '112': {
+                            'Label': 'Input',
+                            'InPhs': 'RA-Ra$(sys)$(sidx)01:$(llrf):FLInpI-Mon',
+                            'Quad': 'RA-Ra$(sys)$(sidx)01:$(llrf):FLInpQ-Mon',
+                            'Amp': 'RA-Ra$(sys)$(sidx)01:$(llrf):FLInpAmp-Mon',
+                            'Phs': 'RA-Ra$(sys)$(sidx)01:$(llrf):FLInpPhs-Mon'
+                        },
+                        '118': {
+                            'Label': 'Fast Control Output',
+                            'InPhs': 'RA-Ra$(sys)$(sidx)01:$(llrf):FLCtrlI-Mon',
+                            'Quad': 'RA-Ra$(sys)$(sidx)01:$(llrf):FLCtrlQ-Mon',
+                            'Amp': 'RA-Ra$(sys)$(sidx)01:$(llrf):FLCtrlAmp-Mon',
+                            'Phs': 'RA-Ra$(sys)$(sidx)01:$(llrf):FLCtrlPhs-Mon'
+                        },
+                        '6': {
+                            'Label': 'SSA 1 Control Signal',
+                            'InPhs': 'RA-Ra$(sys)$(sidx)01:$(llrf):SSA1CtrlI-Mon',
+                            'Quad': 'RA-Ra$(sys)$(sidx)01:$(llrf):SSA1CtrlQ-Mon',
+                            'Amp': 'RA-Ra$(sys)$(sidx)01:$(llrf):SSA1CtrlAmp-Mon',
+                            'Phs': 'RA-Ra$(sys)$(sidx)01:$(llrf):SSA1CtrlPhs-Mon'
+                        },
+                        '8': {
+                            'Label': 'SSA 2 Control Signal',
+                            'InPhs': 'RA-Ra$(sys)$(sidx)01:$(llrf):SSA2CtrlI-Mon',
+                            'Quad': 'RA-Ra$(sys)$(sidx)01:$(llrf):SSA2CtrlQ-Mon',
+                            'Amp': 'RA-Ra$(sys)$(sidx)01:$(llrf):SSA2CtrlAmp-Mon',
+                            'Phs': 'RA-Ra$(sys)$(sidx)01:$(llrf):SSA2CtrlPhs-Mon'
+                        }
                     }
                 }
             },

@@ -1394,32 +1394,37 @@ class LoopsDetails(SiriusDialog):
         rect_title_lay.addWidget(SiriusLedState(
             self, self.prefix+chs_dict['General']['RectMode']))
 
-        rect_lay = self._statisticsLayout(chs_dict['General'], True)
+        rect_lay = self._iqStatisticsLayout(chs_dict['General'], True)
 
         sl_lay = QVBoxLayout()
         sl_lay.setAlignment(Qt.AlignTop)
-        sl_lay.addLayout(self._slowControlLayout(chs_dict['Slow']['Control']))
+        sl_addrs = ['100', '110', '13', '1', '0']
+        sl_lay.addLayout(
+            self._iqControlLayout(chs_dict['Slow']['Control'], sl_addrs))
         sl_lay.addItem(QSpacerItem(0, 20, QSzPlcy.Ignored, QSzPlcy.Fixed))
-        sl_lay.addLayout(self._statisticsLayout(chs_dict['Slow'], False))
+        sl_lay.addLayout(self._iqStatisticsLayout(chs_dict['Slow'], False))
         gbox_sl = QGroupBox('Slow Loop', self)
         gbox_sl.setLayout(sl_lay)
 
-        # fl_lay = QVBoxLayout()
-        # fl_lay.setAlignment(Qt.AlignTop)
-        # fl_lay.addLayout(self._fastControlLayout(chs_dict['Fast']['Control']))
-        # fl_lay.addLayout(self._statisticsLayout(chs_dict['Fast'], False))
-        # gbox_fl = QGroupBox('Fast Loop', self)
-        # gbox_fl.setLayout(fl_lay)
+        fl_lay = QVBoxLayout()
+        fl_lay.setAlignment(Qt.AlignTop)
+        fl_addrs = ['115', '111', '124', '119', '118']
+        fl_lay.addLayout(
+            self._iqControlLayout(chs_dict['Fast']['Control'], fl_addrs))
+        fl_lay.addItem(QSpacerItem(0, 20, QSzPlcy.Ignored, QSzPlcy.Fixed))
+        fl_lay.addLayout(self._iqStatisticsLayout(chs_dict['Fast'], False))
+        gbox_fl = QGroupBox('Fast Loop', self)
+        gbox_fl.setLayout(fl_lay)
 
         lay.addLayout(rect_title_lay)
         lay.addItem(QSpacerItem(0, 20, QSzPlcy.Ignored, QSzPlcy.Fixed))
         lay.addLayout(rect_lay)
         lay.addWidget(gbox_sl)
-        lay.addWidget(fl_lay)
+        lay.addWidget(gbox_fl)
 
         return lay
 
-    def _statisticsLayout(self, chs_dict, isRect):
+    def _iqStatisticsLayout(self, chs_dict, isRect):
         lay = QGridLayout()
         lay.setHorizontalSpacing(18)
 
@@ -1460,31 +1465,31 @@ class LoopsDetails(SiriusDialog):
 
         return lay
 
-    def _slowControlLayout(self, chs_dict):
+    def _iqControlLayout(self, chs_dict, addrs):
         lay = QGridLayout()
         lay.setAlignment(Qt.AlignTop)
 
         # Enable
-        lay.addWidget(QLabel('100', alignment=Qt.AlignCenter), 1, 0)
-        lay.addWidget(QLabel(chs_dict['100'][0]), 1, 1)
+        lay.addWidget(QLabel(addrs[0], alignment=Qt.AlignCenter), 1, 0)
+        lay.addWidget(QLabel(chs_dict[addrs[0]][0]), 1, 1)
         lay.addWidget(PyDMStateButton(
-            self, self.prefix+chs_dict['100'][1]+'-Sel'), 1, 2)
+            self, self.prefix+chs_dict[addrs[0]][1]+'-Sel'), 1, 2)
         lay.addWidget(SiriusLedState(
-            self, self.prefix+chs_dict['100'][1]+'-Sts'),
+            self, self.prefix+chs_dict[addrs[0]][1]+'-Sts'),
             1, 3, alignment=Qt.AlignHCenter)
 
         # Input Selection
-        lb_inpsel = SiriusLabel(self, self.prefix+chs_dict['110'][1]+'-Sts')
+        lb_inpsel = SiriusLabel(self, self.prefix+chs_dict[addrs[1]][1]+'-Sts')
         lb_inpsel.showUnits = True
-        lay.addWidget(QLabel('110', alignment=Qt.AlignCenter), 2, 0)
-        lay.addWidget(QLabel(chs_dict['110'][0]), 2, 1)
+        lay.addWidget(QLabel(addrs[1], alignment=Qt.AlignCenter), 2, 0)
+        lay.addWidget(QLabel(chs_dict[addrs[1]][0]), 2, 1)
         lay.addWidget(SiriusEnumComboBox(
-            self, self.prefix+chs_dict['110'][1]+'-Sel'),
+            self, self.prefix+chs_dict[addrs[1]][1]+'-Sel'),
             2, 2, alignment=Qt.AlignRight)
         lay.addWidget(lb_inpsel, 2, 3)
 
         # PI Limit, Ki and Kp
-        keys = ['13', '1', '0']
+        keys = addrs[2:]
         row = 2
         column = 4
         max_column = 7
