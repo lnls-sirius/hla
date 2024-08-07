@@ -19,7 +19,8 @@ from ..widgets import PyDMLed, PyDMLedMultiChannel, PyDMStateButton, \
 from .custom_widgets import RFEnblDsblButton
 from .details import CavityStatusDetails, FDLMonitor, LLRFInterlockDetails, \
     TransmLineStatusDetails, SlowLoopErrorDetails, SlowLoopParametersDetails, \
-    TempMonitor, ADCDACDetails, HardwareDetails, LoopsDetails
+    TempMonitor
+from .advanced_details import ADCDACDetails, HardwareDetails, LoopsDetails
 from .util import SEC_2_CHANNELS
 
 
