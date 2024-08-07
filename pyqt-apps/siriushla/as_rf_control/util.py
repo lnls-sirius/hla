@@ -397,10 +397,8 @@ SEC_2_CHANNELS = {
                 '80': ['Phase Correct Error', 'RA-RaBO01:RF-LLRF:PhsCorrErr-Mon'],
                 '81': ['Phase Correct Control', 'RA-RaBO01:RF-LLRF:PhsCorrCtrl-Mon'],
                 '125': ['Fwd Min Amp & Phs', 'RA-RaBO01:RF-LLRF:LoopFwdMin'],
+                'Mode': 'RA-RaBO01:RF-LLRF:LoopMode-Sts'
             },
-            'Rect': {
-                'RectMode': 'RA-Ra$(sys)$(sidx)01:$(llrf):LoopMode-Sts'
-            }
         }
     },
     'SI': {
@@ -1560,6 +1558,7 @@ SEC_2_CHANNELS = {
                     '80': ['Phase Correct Error', 'RA-RaSIB01:RF-LLRF-B:PhsCorrErr-Mon'],
                     '81': ['Phase Correct Control', 'RA-RaSIB01:RF-LLRF-B:PhsCorrCtrl-Mon'],
                     '125': ['Fwd Min Amp & Phs', 'RA-RaSIB01:RF-LLRF-B:LoopFwdMin'],
+                    'Mode': 'RA-RaSIB01:RF-LLRF-B:LoopMode-Sts'
                 },
             },
         }

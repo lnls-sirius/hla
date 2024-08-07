@@ -54,9 +54,9 @@ class ADCDACDetails(SiriusDialog):
                 lb_value.showUnits = True
                 lay.addWidget(QLabel(key), row, 0)
                 lay.addWidget(QLabel(val[0]), row, 1)
-                lay.addWidget(lb_value, row, 2)
                 lay.addWidget(
-                    SiriusLineEdit(self, self.prefix+val[1]+'-SP'), row, 3)
+                    SiriusLineEdit(self, self.prefix+val[1]+'-SP'), row, 2)
+                lay.addWidget(lb_value, row, 3)
             row += 1
 
 
