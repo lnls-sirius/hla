@@ -38,7 +38,6 @@ class ADCDACDetails(SiriusDialog):
         lay.setAlignment(Qt.AlignTop)
         lay.setSpacing(9)
 
-
         row = 0
         for key, val in self.syst_dict.items():
             if key == 'ADC Enable' or key == 'DAC Enable':

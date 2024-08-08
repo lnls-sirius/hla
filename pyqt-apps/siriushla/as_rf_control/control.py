@@ -862,17 +862,18 @@ class RFMainControl(SiriusMainWindow):
         return lay
 
     def _advancedDetailsLayout(self):
-        lay = QGridLayout()
-        lay.setAlignment(Qt.AlignTop | Qt.AlignHCenter)
-        lay.setHorizontalSpacing(100)
-        lay.setVerticalSpacing(10)
-
         if self.section == 'SI':
+            lay = QVBoxLayout()
+            lay.setAlignment(Qt.AlignTop)
             systems = ['A', 'B']
         else:
+            lay = QGridLayout()
+            lay.setAlignment(Qt.AlignTop | Qt.AlignHCenter)
+            lay.addItem(QSpacerItem(0, 20, QSzPlcy.Ignored, QSzPlcy.Fixed))
             systems = ['']
 
-        offset = 0
+        lay.setSpacing(9)
+
         for i in range(len(systems)):
             # ADCs and DACs
             pb_adcdac = QPushButton(
@@ -895,12 +896,20 @@ class RFMainControl(SiriusMainWindow):
                 pb_loops, LoopsDetails, parent=self,
                 prefix=self.prefix, section=self.section, system=systems[i])
 
-            lay.addWidget(QLabel(
-                f'<h4>{systems[i]}</h4>'), 0, offset)
-            lay.addWidget(pb_adcdac, 1, offset)
-            lay.addWidget(pb_hrdwr, 2, offset)
-            lay.addWidget(pb_loops, 3, offset)
-            offset += 1
+            if self.section == 'SI':
+                gbox = QGroupBox(f'System {systems[i]}', self)
+                gbox_lay = QGridLayout()
+                gbox.setLayout(gbox_lay)
+                gbox_lay.addWidget(pb_adcdac, 0, 0)
+                gbox_lay.addWidget(pb_hrdwr, 0, 1)
+                gbox_lay.addWidget(pb_loops, 0, 2)
+
+                lay.addItem(QSpacerItem(0, 20, QSzPlcy.Ignored, QSzPlcy.Fixed))
+                lay.addWidget(gbox)
+            else:
+                lay.addWidget(pb_adcdac, 1, 0)
+                lay.addWidget(pb_hrdwr, 1, 1)
+                lay.addWidget(pb_loops, 1, 2)
 
         return lay
 
