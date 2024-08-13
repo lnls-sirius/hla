@@ -574,6 +574,11 @@ class RampsDetails(SiriusDialog):
             self._rampsControlLayout(self.syst_dict['Control']))
         dtls.addTab(wid_controls, 'Ramps Control')
 
+        wid_top = QWidget(self)
+        wid_top.setLayout(
+            self._topRampLayout(self.syst_dict['Top']))
+        dtls.addTab(wid_top, 'Top')
+
         lay.addWidget(dtls, 1, 0)
 
     def _rampsControlLayout(self, chs_dict):
@@ -593,11 +598,11 @@ class RampsDetails(SiriusDialog):
             0, 3, alignment=Qt.AlignHCenter)
 
         # Ramp Down Disable
-        lay_cntrls.addWidget(QLabel('Ramp Dwn Dsbl'), 1, 1)
+        lay_cntrls.addWidget(QLabel('Ramp Down Disable'), 1, 1)
         lay_cntrls.addWidget(PyDMStateButton(
-            self, self.prefix+chs_dict['Ramp Dwn Dsbl']+'-Sel'), 1, 2)
+            self, self.prefix+chs_dict['Ramp Down Disable']+'-Sel'), 1, 2)
         lay_cntrls.addWidget(SiriusLedState(
-            self, self.prefix+chs_dict['Ramp Dwn Dsbl']+'-Sts'),
+            self, self.prefix+chs_dict['Ramp Down Disable']+'-Sts'),
             1, 3, alignment=Qt.AlignHCenter)
 
         # T1 to T4
@@ -605,17 +610,21 @@ class RampsDetails(SiriusDialog):
         self.pvs = []
         for i in range(len(addrs)):
             self._setupTextInputLine(lay_cntrls, chs_dict, addrs[i], i+2)
-            self.pvs.append(PV(self.prefix+chs_dict[addrs[i]][1]+'-RB'))
-            self.pvs[i].add_callback(self._handle_total)
 
-        total = 0
-        # for p in self.pvs:
-        #     if p.value is not None:
-        #         total += p.value
+        lb_total = SiriusLabel(self)
+        rule = ('[{"name": "TextRule", "property": "Text", ' +
+                '"expression": "ch[0] + ch[1] + ch[2] + ch[4]", ' +
+                '"channels": [')
+        for i in range(len(addrs)):
+            rule += ('{"channel": ' +
+                self.prefix+chs_dict[addrs[i]][1]+'-RB"' +
+                ', "trigger": true}')
 
-        self.lb_total = QLabel(str(total), alignment=Qt.AlignCenter)
+        rule += ']}]'
+        lb_total.rules = rule
+
         lay_cntrls.addWidget(QLabel('Total'), 6, 1)
-        lay_cntrls.addWidget(self.lb_total, 6, 2)
+        lay_cntrls.addWidget(lb_total, 6, 2)
         lay_cntrls.addWidget(QLabel('/410', alignment=Qt.AlignCenter), 6, 3)
 
         # Ramp Increase Rate
@@ -670,8 +679,9 @@ class RampsDetails(SiriusDialog):
         lay.addWidget(label, row, 2, row, 3,
             alignment=Qt.AlignTop | Qt.AlignHCenter)
 
-    def _handle_total(self, pvname, value, **kwargs):
-        total = 0
-        for p in self.pvs:
-            total += p.get()
-        self.lb_total.setText(str(total))
+    def _topRampLayout(self, chs_dict):
+        lay = QVBoxLayout(self)
+        lay.setAlignment(Qt.AlignTop)
+        lay.setSpacing(9)
+
+        return lay
