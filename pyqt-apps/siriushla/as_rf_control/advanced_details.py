@@ -306,15 +306,19 @@ class LoopsDetails(SiriusDialog):
         lay.addWidget(QLabel('114'), 5, 0)
         lay.addWidget(QLabel(chs_dict['114'][0]), 5, 1)
         lay.addWidget(SiriusEnumComboBox(
-            self, self.prefix+chs_dict['114'][1]),
+            self, self.prefix+chs_dict['114'][1]+'-Sel'),
             5, 2, alignment=Qt.AlignRight)
+        lay.addWidget(SiriusLabel(self, self.prefix+chs_dict['114'][1]+'-Sts',
+            alignment=Qt.AlignRight), 5, 3)
 
         # Quadrant Selection
         lay.addWidget(QLabel('107'), 6, 0)
         lay.addWidget(QLabel(chs_dict['107'][0]), 6, 1)
         lay.addWidget(SiriusEnumComboBox(
-            self, self.prefix+chs_dict['107'][1]),
+            self, self.prefix+chs_dict['107'][1]+'-Sel'),
             6, 2, alignment=Qt.AlignRight)
+        lay.addWidget(SiriusLabel(self, self.prefix+chs_dict['107'][1]+'-Sts',
+            alignment=Qt.AlignRight), 6, 3)
 
         lay.addItem(QSpacerItem(40, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 0, 4)
 
