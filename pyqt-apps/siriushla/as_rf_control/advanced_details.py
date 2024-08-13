@@ -1,5 +1,6 @@
 """Advanced detail windows."""
 
+from epics import PV
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGridLayout, QGroupBox, QHBoxLayout, QLabel, \
     QSizePolicy as QSzPlcy, QSpacerItem, QTabWidget, QVBoxLayout, \
@@ -534,3 +535,143 @@ class LoopsDetails(SiriusDialog):
                 column = 0
 
         return lay
+
+
+class RampsDetails(SiriusDialog):
+    """Details about cavity ramps."""
+
+    def __init__(self, parent=None, prefix='', section='', system=''):
+        """Init."""
+        super().__init__(parent)
+        self.prefix = prefix
+        self.prefix += ('-' if prefix and not prefix.endswith('-') else '')
+        self.section = section
+        self.system = system
+        self.chs = SEC_2_CHANNELS[self.section]
+        self.setObjectName(self.section+'App')
+        title = 'Ramps Details'
+        title += (f' - {self.system}' if self.section == 'SI' else '')
+        self.setWindowTitle(title)
+        if self.section == 'SI':
+            self.syst_dict = self.chs['Ramps'][self.system]
+        else:
+            self.syst_dict = self.chs['Ramps']
+        self._setupUi()
+
+    def _setupUi(self):
+        lay = QGridLayout(self)
+        lay.setAlignment(Qt.AlignTop)
+        dtls = QTabWidget(self)
+        dtls.setObjectName(self.section+'Tab')
+        dtls.setStyleSheet(
+            "#"+self.section+'Tab'+"::pane {"
+            "    border-left: 2px solid gray;"
+            "    border-bottom: 2px solid gray;"
+            "    border-right: 2px solid gray;}")
+
+        wid_controls = QWidget(self)
+        wid_controls.setLayout(
+            self._rampsControlLayout(self.syst_dict['Control']))
+        dtls.addTab(wid_controls, 'Ramps Control')
+
+        lay.addWidget(dtls, 1, 0)
+
+    def _rampsControlLayout(self, chs_dict):
+        lay = QHBoxLayout()
+        lay.setSpacing(9)
+
+        lay_cntrls = QGridLayout(self)
+        lay_cntrls.setAlignment(Qt.AlignTop)
+        lay_cntrls.setSpacing(9)
+
+        # Ramp Enable
+        lay_cntrls.addWidget(QLabel('Ramp Enable'), 0, 1)
+        lay_cntrls.addWidget(PyDMStateButton(
+            self, self.prefix+chs_dict['Ramp Enable']+'-Sel'), 0, 2)
+        lay_cntrls.addWidget(SiriusLedState(
+            self, self.prefix+chs_dict['Ramp Enable']+'-Sts'),
+            0, 3, alignment=Qt.AlignHCenter)
+
+        # Ramp Down Disable
+        lay_cntrls.addWidget(QLabel('Ramp Dwn Dsbl'), 1, 1)
+        lay_cntrls.addWidget(PyDMStateButton(
+            self, self.prefix+chs_dict['Ramp Dwn Dsbl']+'-Sel'), 1, 2)
+        lay_cntrls.addWidget(SiriusLedState(
+            self, self.prefix+chs_dict['Ramp Dwn Dsbl']+'-Sts'),
+            1, 3, alignment=Qt.AlignHCenter)
+
+        # T1 to T4
+        addrs = ['356', '357', '358', '359']
+        self.pvs = []
+        for i in range(len(addrs)):
+            self._setupTextInputLine(lay_cntrls, chs_dict, addrs[i], i+2)
+            self.pvs.append(PV(self.prefix+chs_dict[addrs[i]][1]+'-RB'))
+            self.pvs[i].add_callback(self._handle_total)
+
+        total = 0
+        # for p in self.pvs:
+        #     if p.value is not None:
+        #         total += p.value
+
+        self.lb_total = QLabel(str(total), alignment=Qt.AlignCenter)
+        lay_cntrls.addWidget(QLabel('Total'), 6, 1)
+        lay_cntrls.addWidget(self.lb_total, 6, 2)
+        lay_cntrls.addWidget(QLabel('/410', alignment=Qt.AlignCenter), 6, 3)
+
+        # Ramp Increase Rate
+        self._setupTextInputLine(lay_cntrls, chs_dict, '360', 7)
+
+        # Top
+        self._setupCentralLabelLine(lay_cntrls, chs_dict, '164', 8)
+        self._setupTextInputLine(lay_cntrls, chs_dict, '362 mV', 9)
+        self._setupTextInputLine(lay_cntrls, chs_dict, '362 Vgap', 10)
+        self._setupTextInputLine(lay_cntrls, chs_dict, '364', 11)
+
+        # Bot
+        self._setupCentralLabelLine(lay_cntrls, chs_dict, '184', 12)
+        self._setupTextInputLine(lay_cntrls, chs_dict, '361 mV', 13)
+        self._setupTextInputLine(lay_cntrls, chs_dict, '361 Vgap', 14)
+        self._setupTextInputLine(lay_cntrls, chs_dict, '363', 15)
+
+        # Ramp Top and Ready
+        self._setupCentralLabelLine(lay_cntrls, chs_dict, '536', 16)
+        lay_cntrls.addWidget(QLabel('533'), 17, 0)
+        lay_cntrls.addWidget(QLabel(chs_dict['533'][0]), 17, 1)
+        lay_cntrls.addWidget(SiriusLedState(
+            self, self.prefix+chs_dict['533'][1]),
+            17, 2, 17, 3, alignment=Qt.AlignTop | Qt.AlignHCenter)
+
+        # Slopes
+        self._setupTextInputLine(lay_cntrls, chs_dict, '365', 18)
+        self._setupTextInputLine(lay_cntrls, chs_dict, '366', 19)
+        self._setupTextInputLine(lay_cntrls, chs_dict, '367', 20)
+        self._setupTextInputLine(lay_cntrls, chs_dict, '368', 21)
+
+        lay.addLayout(lay_cntrls)
+
+        return lay
+
+    def _setupTextInputLine(self, lay, chs_dict, key, row):
+        label = SiriusLabel(self, self.prefix+chs_dict[key][1]+'-RB')
+        label.showUnits = True
+
+        lay.addWidget(QLabel(key.split()[0]), row, 0)
+        lay.addWidget(QLabel(chs_dict[key][0]), row, 1)
+        lay.addWidget(SiriusLineEdit(
+            self, self.prefix+chs_dict[key][1]+'-SP'), row, 2)
+        lay.addWidget(label, row, 3, alignment=Qt.AlignRight)
+
+    def _setupCentralLabelLine(self, lay, chs_dict, key, row):
+        label = SiriusLabel(self, self.prefix+chs_dict[key][1])
+        label.showUnits = True
+
+        lay.addWidget(QLabel(key), row, 0)
+        lay.addWidget(QLabel(chs_dict[key][0]), row, 1)
+        lay.addWidget(label, row, 2, row, 3,
+            alignment=Qt.AlignTop | Qt.AlignHCenter)
+
+    def _handle_total(self, pvname, value, **kwargs):
+        total = 0
+        for p in self.pvs:
+            total += p.get()
+        self.lb_total.setText(str(total))

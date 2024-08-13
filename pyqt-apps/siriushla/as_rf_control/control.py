@@ -20,7 +20,8 @@ from .custom_widgets import RFEnblDsblButton
 from .details import CavityStatusDetails, FDLMonitor, LLRFInterlockDetails, \
     TransmLineStatusDetails, SlowLoopErrorDetails, SlowLoopParametersDetails, \
     TempMonitor
-from .advanced_details import ADCDACDetails, HardwareDetails, LoopsDetails
+from .advanced_details import ADCDACDetails, HardwareDetails, LoopsDetails, \
+    RampsDetails
 from .util import SEC_2_CHANNELS
 
 
@@ -865,14 +866,15 @@ class RFMainControl(SiriusMainWindow):
         if self.section == 'SI':
             lay = QVBoxLayout()
             lay.setAlignment(Qt.AlignTop)
+            lay.setSpacing(9)
             systems = ['A', 'B']
         else:
             lay = QGridLayout()
             lay.setAlignment(Qt.AlignTop | Qt.AlignHCenter)
+            lay.setHorizontalSpacing(9)
+            lay.setVerticalSpacing(18)
             lay.addItem(QSpacerItem(0, 20, QSzPlcy.Ignored, QSzPlcy.Fixed))
             systems = ['']
-
-        lay.setSpacing(9)
 
         for i in range(len(systems)):
             # ADCs and DACs
@@ -896,13 +898,23 @@ class RFMainControl(SiriusMainWindow):
                 pb_loops, LoopsDetails, parent=self,
                 prefix=self.prefix, section=self.section, system=systems[i])
 
+            # Cavity Ramps
+            pb_ramps = QPushButton(
+                qta.icon('fa5s.external-link-alt'), ' Cavity Ramps', self)
+            connect_window(
+                pb_ramps, RampsDetails, parent=self,
+                prefix=self.prefix, section=self.section, system=systems[i])
+
             if self.section == 'SI':
                 gbox = QGroupBox(f'System {systems[i]}', self)
                 gbox_lay = QGridLayout()
+                gbox_lay.setHorizontalSpacing(9)
+                gbox_lay.setVerticalSpacing(18)
                 gbox.setLayout(gbox_lay)
                 gbox_lay.addWidget(pb_adcdac, 0, 0)
                 gbox_lay.addWidget(pb_hrdwr, 0, 1)
                 gbox_lay.addWidget(pb_loops, 0, 2)
+                gbox_lay.addWidget(pb_ramps, 1, 0)
 
                 lay.addItem(QSpacerItem(0, 20, QSzPlcy.Ignored, QSzPlcy.Fixed))
                 lay.addWidget(gbox)
@@ -910,6 +922,7 @@ class RFMainControl(SiriusMainWindow):
                 lay.addWidget(pb_adcdac, 1, 0)
                 lay.addWidget(pb_hrdwr, 1, 1)
                 lay.addWidget(pb_loops, 1, 2)
+                lay.addWidget(pb_ramps, 2, 0)
 
         return lay
 

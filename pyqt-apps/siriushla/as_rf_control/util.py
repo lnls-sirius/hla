@@ -1564,6 +1564,35 @@ SEC_2_CHANNELS = {
                     'Mode': 'RA-RaSIB01:RF-LLRF-B:LoopMode-Sts'
                 },
             },
+        },
+        'Ramps': {
+            'A': {
+                'Control': {
+                    'Ramp Enable': 'RA-Ra$(sys)$(sidx)01:$(llrf):RmpEn',
+                    'Ramp Dwn Dsbl': 'RA-Ra$(sys)$(sidx)01:$(llrf):RampDownDsbl',
+                    '356': ['T1 Ramp Delay After Trig', 'RA-Ra$(sys)$(sidx)01:$(llrf):RmpTs1'],
+                    '357': ['T2 Ramp Up', 'RA-Ra$(sys)$(sidx)01:$(llrf):RmpTs2'],
+                    '358': ['T3 Ramp Top', 'RA-Ra$(sys)$(sidx)01:$(llrf):RmpTs3'],
+                    '359': ['T4 Ramp Down', 'RA-Ra$(sys)$(sidx)01:$(llrf):RmpTs4'],
+                    '360': ['Ramp Increase Rate', 'RA-Ra$(sys)$(sidx)01:$(llrf):RmpIncTime'],
+                    '164': ['Ref Top', 'RA-Ra$(sys)$(sidx)01:$(llrf):RefTopAmp-Mon'],
+                    '362 mV': ['Amp Ramp Top (mV)', 'RA-Ra$(sys)$(sidx)01:$(llrf):RampAmpTop'],
+                    '362 Vgap': ['Amp Ramp Top (Vgap)', 'RA-Ra$(sys)$(sidx)01:$(llrf):RampAmpTopVGap'],
+                    '364': ['Phase Ramp Top', 'RA-Ra$(sys)$(sidx)01:$(llrf):RampPhsTop'],
+                    '184': ['Ref Bot', 'RA-Ra$(sys)$(sidx)01:$(llrf):RefBotAmp-Mon'],
+                    '361 mV': ['Amp Ramp Bot (mV)', 'RA-Ra$(sys)$(sidx)01:$(llrf):RampAmpBot'],
+                    '361 Vgap': ['Amp Ramp Bot (Vgap)', 'RA-Ra$(sys)$(sidx)01:$(llrf):RampAmpBotVGap'],
+                    '363': ['Phase Ramp Bot', 'RA-Ra$(sys)$(sidx)01:$(llrf):RampPhsBot'],
+                    '536': ['Ramp Top', 'RA-Ra$(sys)$(sidx)01:$(llrf):RampTop-Mon'],
+                    '533': ['Ramp Ready', 'RA-Ra$(sys)$(sidx)01:$(llrf):RampRdy-Mon'],
+                    '365': ['Amp Ramp Up Slope', 'RA-Ra$(sys)$(sidx)01:$(llrf):RampAmpUpCnt'],
+                    '366': ['Amp Ramp Down Slope', 'RA-Ra$(sys)$(sidx)01:$(llrf):RampAmpDownCnt'],
+                    '367': ['Phase Ramp Up Slope', 'RA-Ra$(sys)$(sidx)01:$(llrf):RampPhsUpCnt'],
+                    '368': ['Phase Ramp Down Slope', 'RA-Ra$(sys)$(sidx)01:$(llrf):RampPhsDownCnt']
+                },
+            },
+            'B': {
+            }
         }
     },
 }
