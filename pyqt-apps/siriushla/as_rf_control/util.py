@@ -375,6 +375,7 @@ SEC_2_CHANNELS = {
             'Cav Type': 'RA-RaBO01:RF-LLRF:CavType-Mon',
             'Errors': 'RA-RaBO01:RF-LLRF:InitErrors-Mon',
             'Int. Errors': 'RA-RaBO01:RF-LLRF:InternalErr-Mon',
+            'Int. Err. Clear': 'RA-RaBO01:RF-LLRF:ResetIntError-Cmd',
             'Init': 'RA-RaBO01:RF-LLRF:InitStatus-Mon',
             'Versions': {
                 'Firmware': 'RA-RaBO01:RF-LLRF:FPGAVersion-Mon',
@@ -1211,6 +1212,7 @@ SEC_2_CHANNELS = {
                 'Cav Type': 'RA-RaSIA01:RF-LLRF-A:CavType-Mon',
                 'Errors': 'RA-RaSIA01:RF-LLRF-A:InitErrors-Mon',
                 'Int. Errors': 'RA-RaSIA01:RF-LLRF-A:InternalErr-Mon',
+                'Int. Err. Clear': 'RA-RaSIA01:RF-LLRF-A:ResetIntError-Cmd',
                 'Init': 'RA-RaSIA01:RF-LLRF-A:InitStatus-Mon',
                 'Versions': {
                     'Firmware': 'RA-RaSIA01:RF-LLRF-A:FPGAVersion-Mon',
@@ -1247,6 +1249,7 @@ SEC_2_CHANNELS = {
                 'Cav Type': 'RA-RaSIB01:RF-LLRF-B:CavType-Mon',
                 'Errors': 'RA-RaSIB01:RF-LLRF-B:InitErrors-Mon',
                 'Int. Errors': 'RA-RaSIB01:RF-LLRF-B:InternalErr-Mon',
+                'Int. Err. Clear': 'RA-RaSIB01:RF-LLRF-B:ResetIntError-Cmd',
                 'Init': 'RA-RaSIB01:RF-LLRF-B:InitStatus-Mon',
                 'Versions': {
                     'Firmware': 'RA-RaSIB01:RF-LLRF-B:FPGAVersion-Mon',

@@ -158,6 +158,10 @@ class HardwareDetails(SiriusDialog):
             'Phs Ref Inconsistency', 'Amd Ref Inconsistency', 'Diag Get']
         self._setupByteMonitor(lay_interr, True, labels,
             self.prefix+self.syst_dict['Int. Errors'])
+        pb_clear = SiriusPushButton(
+            self, self.prefix+self.syst_dict['Int. Err. Clear'])
+        pb_clear.setText('Clear')
+        lay_interr.addWidget(pb_clear, len(labels)+1, 0)
 
         # Init
         gbox_init = QGroupBox('Init', self)
