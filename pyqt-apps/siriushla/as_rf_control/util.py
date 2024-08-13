@@ -1733,58 +1733,58 @@ SEC_2_CHANNELS = {
                             'Phs': 'RA-To$(sys)$(sidx)02:RF-SSAmpTower:PwrRevBotPhs-Mon'
                         },
                         '192': {
-                            'Label': '',
-                            'InPhs': '',
-                            'Quad': '',
-                            'Amp1': '',
+                            'Label': 'Fwd Cavity',
+                            'InPhs': '$(cav):PwrFwdBotI-Mon',
+                            'Quad': '$(cav):PwrFwdBotQ-Mon',
+                            'Amp1': '$(cav):PwrFwdBotAmp-Mon',
                             'Amp2': '',
                             'Amp3': '',
-                            'Phs': ''
+                            'Phs': '$(cav):PwrFwdBotPhs-Mon'
                         },
-                        '0': {
-                            'Label': '',
-                            'InPhs': '',
-                            'Quad': '',
-                            'Amp1': '',
+                        '176': {
+                            'Label': 'Fwd Pwr SSA 1',
+                            'InPhs': 'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrFwdBotI-Mon',
+                            'Quad': 'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrFwdBotQ-Mon',
+                            'Amp1': 'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrFwdBotAmp-Mon',
                             'Amp2': '',
                             'Amp3': '',
-                            'Phs': ''
+                            'Phs': 'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrFwdBotPhs-Mon'
                         },
-                        '0': {
-                            'Label': '',
-                            'InPhs': '',
-                            'Quad': '',
-                            'Amp1': '',
+                        '178': {
+                            'Label': 'Rev Pwr SSA 1',
+                            'InPhs': 'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrRevBotI-Mon',
+                            'Quad': 'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrRevBotQ-Mon',
+                            'Amp1': 'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrRevBotAmp-Mon',
                             'Amp2': '',
                             'Amp3': '',
-                            'Phs': ''
+                            'Phs': 'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrRevBotPhs-Mon'
                         },
-                        '0': {
-                            'Label': '',
-                            'InPhs': '',
-                            'Quad': '',
-                            'Amp1': '',
+                        '180': {
+                            'Label': 'Rev Cavity',
+                            'InPhs': '$(cav):PwrRevBotI-Mon',
+                            'Quad': '$(cav):PwrRevBotQ-Mon',
+                            'Amp1': '$(cav):PwrRevBotAmp-Mon',
                             'Amp2': '',
                             'Amp3': '',
-                            'Phs': ''
+                            'Phs': '$(cav):PwrRevBotPhs-Mon'
                         },
-                        '0': {
-                            'Label': '',
-                            'InPhs': '',
-                            'Quad': '',
-                            'Amp1': '',
-                            'Amp2': '',
-                            'Amp3': '',
-                            'Phs': ''
+                        '188': {
+                            'Label': 'Loop Error',
+                            'InPhs': 'RA-Ra$(sys)$(sidx)01:$(llrf):ErrBotI-Mon',
+                            'Quad': 'RA-Ra$(sys)$(sidx)01:$(llrf):ErrBotQ-Mon',
+                            'Amp1': 'RA-Ra$(sys)$(sidx)01:$(llrf):ErrBotAmp-Mon',
+                            'Amp2': '-',
+                            'Amp3': '-',
+                            'Phs': 'RA-Ra$(sys)$(sidx)01:$(llrf):ErrBotPhs-Mon'
                         },
-                        '0': {
-                            'Label': '',
-                            'InPhs': '',
-                            'Quad': '',
-                            'Amp1': '',
-                            'Amp2': '',
-                            'Amp3': '',
-                            'Phs': ''
+                        '186': {
+                            'Label': 'Control',
+                            'InPhs': 'RA-Ra$(sys)$(sidx)01:$(llrf):CtrlBotI-Mon',
+                            'Quad': 'RA-Ra$(sys)$(sidx)01:$(llrf):CtrlBotQ-Mon',
+                            'Amp1': 'RA-Ra$(sys)$(sidx)01:$(llrf):CtrlBotAmp-Mon',
+                            'Amp2': '-',
+                            'Amp3': '-',
+                            'Phs': 'RA-Ra$(sys)$(sidx)01:$(llrf):CtrlBotPhs-Mon'
                         },
                         '183': {
                             'Label': 'FF Error',
