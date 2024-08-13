@@ -571,13 +571,13 @@ class RampsDetails(SiriusDialog):
 
         wid_controls = QWidget(self)
         wid_controls.setLayout(
-            self._rampsControlLayout(self.syst_dict['Control']))
+            self._rampsControlLayout(self.syst_dict['Controls']))
         dtls.addTab(wid_controls, 'Ramps Control')
 
         wid_top = QWidget(self)
         wid_top.setLayout(
-            self._topRampLayout(self.syst_dict['Top']))
-        dtls.addTab(wid_top, 'Top')
+            self._diagnosticsRampLayout(self.syst_dict['Diagnostics']))
+        dtls.addTab(wid_top, 'Ramp Diagnostics')
 
         lay.addWidget(dtls, 1, 0)
 
@@ -679,9 +679,76 @@ class RampsDetails(SiriusDialog):
         lay.addWidget(label, row, 2, row, 3,
             alignment=Qt.AlignTop | Qt.AlignHCenter)
 
-    def _topRampLayout(self, chs_dict):
-        lay = QVBoxLayout(self)
+    def _diagnosticsRampLayout(self, chs_dict):
+        lay = QVBoxLayout()
         lay.setAlignment(Qt.AlignTop)
-        lay.setSpacing(9)
+        lay.setSpacing(20)
+
+        gbox_top = QGroupBox('Top Ramp', self)
+        gbox_top.setLayout(self._topOrBotRampLayout(
+            chs_dict['Top'], ['162', '163'], ['531']))
+        gbox_bot = QGroupBox('Bottom Ramp', self)
+        gbox_bot.setLayout(self._topOrBotRampLayout(
+            chs_dict['Bot'], ['183'], ['531']))
+
+        lay.addWidget(gbox_top)
+        lay.addWidget(gbox_bot)
+
+        return lay
+
+    def _topOrBotRampLayout(self, chs_dict, lb_addrs, led_addrs):
+        lay = QGridLayout(self)
+        lay.setAlignment(Qt.AlignTop)
+        lay.setVerticalSpacing(9)
+        lay.setHorizontalSpacing(18)
+
+        row = 0
+        for addr in lb_addrs:
+                lb = SiriusLabel(self, self.prefix+chs_dict[addr]['PV'])
+                lb.showUnits = True
+                lay.addWidget(QLabel(addr, alignment=Qt.AlignCenter), row, 0)
+                lay.addWidget(QLabel(
+                    chs_dict[addr]['Label'], alignment=Qt.AlignLeft), row, 1)
+                lay.addWidget(lb, row, 2)
+                row += 1
+
+        for addr in led_addrs:
+            lay.addWidget(QLabel(addr, alignment=Qt.AlignCenter), row, 0)
+            lay.addWidget(QLabel(
+                chs_dict[addr]['Label'], alignment=Qt.AlignLeft), row, 1)
+            lay.addWidget(SiriusLedState(
+                self, self.prefix+chs_dict[addr]['PV']),
+                row, 2, alignment=Qt.AlignCenter)
+            row += 1
+
+        lay.addItem(QSpacerItem(0, 15, QSzPlcy.Ignored, QSzPlcy.Fixed), row, 0)
+        lay.addWidget(QLabel(
+            'In-Phase', alignment=Qt.AlignCenter), row+1, 2)
+        lay.addWidget(QLabel(
+            'Quadrature', alignment=Qt.AlignCenter), row+1, 3)
+        lay.addWidget(QLabel(
+            'Amp', alignment=Qt.AlignCenter), row+1, 5)
+        lay.addWidget(QLabel(
+            'Phase', alignment=Qt.AlignCenter), row+1, 7)
+        row += 2
+
+        for key, dic in chs_dict.items():
+            if key not in lb_addrs and key not in led_addrs:
+                lay.addWidget(QLabel(
+                    key, alignment=Qt.AlignCenter), row, 0)
+                lay.addWidget(QLabel(
+                    dic['Label'], alignment=Qt.AlignLeft), row, 1)
+                column = 2
+                for k, val in dic.items():
+                    if k != 'Label' and val != '-':
+                        lb = SiriusLabel(self, self.prefix+val)
+                        lb.showUnits = True
+                        lay.addWidget(lb, row, column)
+                        column += 1
+                    elif val == '-':
+                        lay.addWidget(QLabel(
+                            '-', alignment=Qt.AlignCenter), row, column)
+                        column += 1
+                row += 1
 
         return lay

@@ -1567,7 +1567,7 @@ SEC_2_CHANNELS = {
         },
         'Ramps': {
             'A': {
-                'Control': {
+                'Controls': {
                     'Ramp Enable': 'RA-Ra$(sys)$(sidx)01:$(llrf):RmpEn',
                     'Ramp Down Disable': 'RA-Ra$(sys)$(sidx)01:$(llrf):RampDownDsbl',
                     '356': ['T1 Ramp Delay After Trig', 'RA-Ra$(sys)$(sidx)01:$(llrf):RmpTs1'],
@@ -1590,97 +1590,211 @@ SEC_2_CHANNELS = {
                     '367': ['Phase Ramp Up Slope', 'RA-Ra$(sys)$(sidx)01:$(llrf):RampPhsUpCnt'],
                     '368': ['Phase Ramp Down Slope', 'RA-Ra$(sys)$(sidx)01:$(llrf):RampPhsDownCnt']
                 },
-                'Top': {
-                    '164': {
-                        'Label': 'Ref',
-                        'InPhs': 'RA-Ra$(sys)$(sidx)01:$(llrf):RefTopI-Mon',
-                        'Quad': 'RA-Ra$(sys)$(sidx)01:$(llrf):RefTopQ-Mon',
-                        'Amp1': 'RA-Ra$(sys)$(sidx)01:$(llrf):RefTopAmp-Mon',
-                        'Amp2': '',
-                        'Amp3': '',
-                        'Phs': 'RA-Ra$(sys)$(sidx)01:$(llrf):RefTopPhs-Mon'
+                'Diagnostics': {
+                    'Top': {
+                        '164': {
+                            'Label': 'Ref',
+                            'InPhs': 'RA-Ra$(sys)$(sidx)01:$(llrf):RefTopI-Mon',
+                            'Quad': 'RA-Ra$(sys)$(sidx)01:$(llrf):RefTopQ-Mon',
+                            'Amp1': 'RA-Ra$(sys)$(sidx)01:$(llrf):RefTopAmp-Mon',
+                            'Amp2': '',
+                            'Amp3': '',
+                            'Phs': 'RA-Ra$(sys)$(sidx)01:$(llrf):RefTopPhs-Mon'
+                        },
+                        '150': {
+                            'Label': 'Cell 3',
+                            'InPhs': '$(cav):PwrTopI-Mon',
+                            'Quad': '$(cav):PwrTopQ-Mon',
+                            'Amp1': '$(cav):PwrTopAmp-Mon',
+                            'Amp2': '',
+                            'Amp3': '',
+                            'Phs': '$(cav):PwrTopPhs-Mon'
+                        },
+                        '152': {
+                            'Label': 'Cell 2',
+                            'InPhs': 'RA-To$(sys)$(sidx)02:RF-SSAmpTower:PwrFwdTopI-Mon',
+                            'Quad': 'RA-To$(sys)$(sidx)02:RF-SSAmpTower:PwrFwdTopQ-Mon',
+                            'Amp1': 'RA-To$(sys)$(sidx)02:RF-SSAmpTower:PwrFwdTopAmp-Mon',
+                            'Amp2': '',
+                            'Amp3': '',
+                            'Phs': 'RA-To$(sys)$(sidx)02:RF-SSAmpTower:PwrFwdTopPhs-Mon'
+                        },
+                        '154': {
+                            'Label': 'Cell 4',
+                            'InPhs': 'RA-To$(sys)$(sidx)02:RF-SSAmpTower:PwrRevTopI-Mon',
+                            'Quad': 'RA-To$(sys)$(sidx)02:RF-SSAmpTower:PwrRevTopQ-Mon',
+                            'Amp1': 'RA-To$(sys)$(sidx)02:RF-SSAmpTower:PwrRevTopAmp-Mon',
+                            'Amp2': '',
+                            'Amp3': '',
+                            'Phs': 'RA-To$(sys)$(sidx)02:RF-SSAmpTower:PwrRevTopPhs-Mon'
+                        },
+                        '190': {
+                            'Label': 'Fwd Cavity',
+                            'InPhs': '$(cav):PwrFwdTopI-Mon',
+                            'Quad': '$(cav):PwrFwdTopQ-Mon',
+                            'Amp1': '$(cav):PwrFwdTopAmp-Mon',
+                            'Amp2': '',
+                            'Amp3': '',
+                            'Phs': '$(cav):PwrFwdTopPhs-Mon'
+                        },
+                        '156': {
+                            'Label': 'Fwd Pwr SSA 1',
+                            'InPhs': 'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrFwdTopI-Mon',
+                            'Quad': 'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrFwdTopQ-Mon',
+                            'Amp1': 'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrFwdTopAmp-Mon',
+                            'Amp2': '',
+                            'Amp3': '',
+                            'Phs': 'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrFwdTopPhs-Mon'
+                        },
+                        '158': {
+                            'Label': 'Rev Pwr SSA 1',
+                            'InPhs':  'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrRevTopI-Mon',
+                            'Quad':  'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrRevTopQ-Mon',
+                            'Amp1':  'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrRevTopAmp-Mon',
+                            'Amp2': '',
+                            'Amp3': '',
+                            'Phs':  'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrRevTopPhs-Mon'
+                        },
+                        '160': {
+                            'Label': 'Rev Cavity',
+                            'InPhs': '$(cav):PwrRevTopI-Mon',
+                            'Quad': '$(cav):PwrRevTopQ-Mon',
+                            'Amp1': '$(cav):PwrRevTopAmp-Mon',
+                            'Amp2': '',
+                            'Amp3': '',
+                            'Phs': '(cav):PwrRevTopPhs-Mon'
+                        },
+                        '168': {
+                            'Label': 'Loop Error',
+                            'InPhs': 'RA-Ra$(sys)$(sidx)01:$(llrf):ErrTopI-Mon',
+                            'Quad': 'RA-Ra$(sys)$(sidx)01:$(llrf):ErrTopQ-Mon',
+                            'Amp1': 'RA-Ra$(sys)$(sidx)01:$(llrf):ErrTopAmp-Mon',
+                            'Amp2': '-',
+                            'Amp3': '-',
+                            'Phs': 'RA-Ra$(sys)$(sidx)01:$(llrf):ErrTopPhs-Mon'
+                        },
+                        '166': {
+                            'Label': 'Control',
+                            'InPhs': 'RA-Ra$(sys)$(sidx)01:$(llrf):CtrlTopI-Mon',
+                            'Quad': 'RA-Ra$(sys)$(sidx)01:$(llrf):CtrlTopQ-Mon',
+                            'Amp1': 'RA-Ra$(sys)$(sidx)01:$(llrf):CtrlTopAmp-Mon',
+                            'Amp2': '-',
+                            'Amp3': '-',
+                            'Phs': 'RA-Ra$(sys)$(sidx)01:$(llrf):CtrlTopPhs-Mon'
+                        },
+                        '162': {
+                            'Label': 'Tuning Dephase',
+                            'PV': 'RA-Ra$(sys)$(sidx)01:$(llrf):TuneDephsTop-Mon'
+                        },
+                        '163': {
+                            'Label': 'FF Error',
+                            'PV': 'RA-Ra$(sys)$(sidx)01:$(llrf):FFErrTop-Mon'
+                        },
+                        '531': {
+                            'Label': '5 Hz Trigger',
+                            'PV': 'RA-Ra$(sys)$(sidx)01:$(llrf):RampTrigger-Mon'
+                        }
                     },
-                    '150': {
-                        'Label': 'Cell 3',
-                        'InPhs': '$(cav):PwrTopI-Mon',
-                        'Quad': '$(cav):PwrTopQ-Mon',
-                        'Amp1': '$(cav):PwrTopAmp-Mon',
-                        'Amp2': '',
-                        'Amp3': '',
-                        'Phs': '$(cav):PwrTopPhs-Mon'
-                    },
-                    '152': {
-                        'Label': 'Cell 2',
-                        'InPhs': 'RA-To$(sys)$(sidx)02:RF-SSAmpTower:PwrFwdTopI-Mon',
-                        'Quad': 'RA-To$(sys)$(sidx)02:RF-SSAmpTower:PwrFwdTopQ-Mon',
-                        'Amp1': 'RA-To$(sys)$(sidx)02:RF-SSAmpTower:PwrFwdTopAmp-Mon',
-                        'Amp2': '',
-                        'Amp3': '',
-                        'Phs': 'RA-To$(sys)$(sidx)02:RF-SSAmpTower:PwrFwdTopPhs-Mon'
-                    },
-                    '154': {
-                        'Label': 'Cell 4',
-                        'InPhs': 'RA-To$(sys)$(sidx)02:RF-SSAmpTower:PwrRevTopI-Mon',
-                        'Quad': 'RA-To$(sys)$(sidx)02:RF-SSAmpTower:PwrRevTopQ-Mon',
-                        'Amp1': 'RA-To$(sys)$(sidx)02:RF-SSAmpTower:PwrRevTopAmp-Mon',
-                        'Amp2': '',
-                        'Amp3': '',
-                        'Phs': 'RA-To$(sys)$(sidx)02:RF-SSAmpTower:PwrRevTopPhs-Mon'
-                    },
-                    '190': {
-                        'Label': 'Fwd Cavity',
-                        'InPhs': '$(cav):PwrFwdTopI-Mon',
-                        'Quad': '$(cav):PwrFwdTopQ-Mon',
-                        'Amp1': '$(cav):PwrFwdTopAmp-Mon',
-                        'Amp2': '',
-                        'Amp3': '',
-                        'Phs': '$(cav):PwrFwdTopPhs-Mon'
-                    },
-                    '156': {
-                        'Label': 'Fwd Pwr SSA 1',
-                        'InPhs': 'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrFwdTopI-Mon',
-                        'Quad': 'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrFwdTopQ-Mon',
-                        'Amp1': 'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrFwdTopAmp-Mon',
-                        'Amp2': '',
-                        'Amp3': '',
-                        'Phs': 'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrFwdTopPhs-Mon'
-                    },
-                    '158': {
-                        'Label': 'Rev Pwr SSA 1',
-                        'InPhs':  'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrRevTopI-Mon',
-                        'Quad':  'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrRevTopQ-Mon',
-                        'Amp1':  'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrRevTopAmp-Mon',
-                        'Amp2': '',
-                        'Amp3': '',
-                        'Phs':  'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrRevTopPhs-Mon'
-                    },
-                    '160': {
-                        'Label': 'Rev Cavity',
-                        'InPhs': '',
-                        'Quad': '',
-                        'Amp1': '',
-                        'Amp2': '',
-                        'Amp3': '',
-                        'Phs': ''
-                    },
-                    '168': {
-                        'Label': 'Loop Error',
-                        'InPhs': '',
-                        'Quad': '',
-                        'Amp1': '',
-                        'Amp2': '-',
-                        'Amp3': '-',
-                        'Phs': ''
-                    },
-                    '166': {
-                        'Label': 'Control',
-                        'InPhs': '',
-                        'Quad': '',
-                        'Amp1': '',
-                        'Amp2': '-',
-                        'Amp3': '-',
-                        'Phs': ''
-                    },
+                    'Bot': {
+                        '184': {
+                            'Label': 'Ref',
+                            'InPhs': 'RA-Ra$(sys)$(sidx)01:$(llrf):RefBotI-Mon',
+                            'Quad': 'RA-Ra$(sys)$(sidx)01:$(llrf):RefBotQ-Mon',
+                            'Amp1': 'RA-Ra$(sys)$(sidx)01:$(llrf):RefBotAmp-Mon',
+                            'Amp2': '',
+                            'Amp3': '',
+                            'Phs': 'RA-Ra$(sys)$(sidx)01:$(llrf):RefBotPhs-Mon'
+                        },
+                        '170': {
+                            'Label': 'Cell 3',
+                            'InPhs': '$(cav):PwrBotI-Mon',
+                            'Quad': '$(cav):PwrBotQ-Mon',
+                            'Amp1': '$(cav):PwrBotAmp-Mon',
+                            'Amp2': '',
+                            'Amp3': '',
+                            'Phs': '$(cav):PwrBotPhs-Mon'
+                        },
+                        '172': {
+                            'Label': 'Cell 2',
+                            'InPhs': 'RA-To$(sys)$(sidx)02:RF-SSAmpTower:PwrFwdBotI-Mon',
+                            'Quad': 'RA-To$(sys)$(sidx)02:RF-SSAmpTower:PwrFwdBotQ-Mon',
+                            'Amp1': 'RA-To$(sys)$(sidx)02:RF-SSAmpTower:PwrFwdBotAmp-Mon',
+                            'Amp2': '',
+                            'Amp3': '',
+                            'Phs': 'RA-To$(sys)$(sidx)02:RF-SSAmpTower:PwrFwdBotPhs-Mon'
+                        },
+                        '174': {
+                            'Label': 'Cell 4',
+                            'InPhs': 'RA-To$(sys)$(sidx)02:RF-SSAmpTower:PwrRevBotI-Mon',
+                            'Quad': 'RA-To$(sys)$(sidx)02:RF-SSAmpTower:PwrRevBotQ-Mon',
+                            'Amp1': 'RA-To$(sys)$(sidx)02:RF-SSAmpTower:PwrRevBotAmp-Mon',
+                            'Amp2': '',
+                            'Amp3': '',
+                            'Phs': 'RA-To$(sys)$(sidx)02:RF-SSAmpTower:PwrRevBotPhs-Mon'
+                        },
+                        '192': {
+                            'Label': '',
+                            'InPhs': '',
+                            'Quad': '',
+                            'Amp1': '',
+                            'Amp2': '',
+                            'Amp3': '',
+                            'Phs': ''
+                        },
+                        '0': {
+                            'Label': '',
+                            'InPhs': '',
+                            'Quad': '',
+                            'Amp1': '',
+                            'Amp2': '',
+                            'Amp3': '',
+                            'Phs': ''
+                        },
+                        '0': {
+                            'Label': '',
+                            'InPhs': '',
+                            'Quad': '',
+                            'Amp1': '',
+                            'Amp2': '',
+                            'Amp3': '',
+                            'Phs': ''
+                        },
+                        '0': {
+                            'Label': '',
+                            'InPhs': '',
+                            'Quad': '',
+                            'Amp1': '',
+                            'Amp2': '',
+                            'Amp3': '',
+                            'Phs': ''
+                        },
+                        '0': {
+                            'Label': '',
+                            'InPhs': '',
+                            'Quad': '',
+                            'Amp1': '',
+                            'Amp2': '',
+                            'Amp3': '',
+                            'Phs': ''
+                        },
+                        '0': {
+                            'Label': '',
+                            'InPhs': '',
+                            'Quad': '',
+                            'Amp1': '',
+                            'Amp2': '',
+                            'Amp3': '',
+                            'Phs': ''
+                        },
+                        '183': {
+                            'Label': 'FF Error',
+                            'PV': 'RA-Ra$(sys)$(sidx)01:RF-LLRF:FFErrBot-Mon'
+                        },
+                        '531': {
+                            'Label': '5 Hz Trigger',
+                            'PV': 'RA-Ra$(sys)$(sidx)01:$(llrf):RampTrigger-Mon'
+                        }
+                    }
                 }
             },
             'B': {
