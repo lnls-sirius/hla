@@ -287,10 +287,10 @@ class LoopsDetails(SiriusDialog):
         lay.addWidget(QLabel(chs_dict['29'][0]), 3, 1)
         lay.addWidget(SiriusEnumComboBox(
             self, self.prefix+chs_dict['29'][1]+'-SP'),
-            2, 2, alignment=Qt.AlignRight)
+            3, 2, alignment=Qt.AlignRight)
         lay.addWidget(lb_vinc, 3, 3)
 
-        # Phase Inc. Rate
+        # # Phase Inc. Rate
         lb_pinc = SiriusLabel(self, self.prefix+chs_dict['28'][1]+'-RB',
             alignment=Qt.AlignRight)
         lb_pinc.showUnits = True
@@ -298,7 +298,7 @@ class LoopsDetails(SiriusDialog):
         lay.addWidget(QLabel(chs_dict['28'][0]), 4, 1)
         lay.addWidget(SiriusEnumComboBox(
             self, self.prefix+chs_dict['28'][1]+'-SP'),
-            3, 2, alignment=Qt.AlignRight)
+            4, 2, alignment=Qt.AlignRight)
         lay.addWidget(lb_pinc, 4, 3)
 
         # Look Reference
@@ -309,12 +309,12 @@ class LoopsDetails(SiriusDialog):
         lay.addWidget(QLabel(chs_dict['106'][0]), 5, 1)
         lay.addWidget(pb_lookref, 5, 2, alignment=Qt.AlignRight)
 
-        # Rect/Polar Mode Select
+        # # Rect/Polar Mode Select
         lay.addWidget(QLabel('114'), 6, 0)
         lay.addWidget(QLabel(chs_dict['114'][0]), 6, 1)
         lay.addWidget(SiriusEnumComboBox(
             self, self.prefix+chs_dict['114'][1]+'-Sel'),
-            5, 2, alignment=Qt.AlignRight)
+            6, 2, alignment=Qt.AlignRight)
         lay.addWidget(SiriusLabel(self, self.prefix+chs_dict['114'][1]+'-Sts',
             alignment=Qt.AlignRight), 6, 3)
 
@@ -323,7 +323,7 @@ class LoopsDetails(SiriusDialog):
         lay.addWidget(QLabel(chs_dict['107'][0]), 7, 1)
         lay.addWidget(SiriusEnumComboBox(
             self, self.prefix+chs_dict['107'][1]+'-Sel'),
-            6, 2, alignment=Qt.AlignRight)
+            7, 2, alignment=Qt.AlignRight)
         lay.addWidget(SiriusLabel(self, self.prefix+chs_dict['107'][1]+'-Sts',
             alignment=Qt.AlignRight), 7, 3)
 
