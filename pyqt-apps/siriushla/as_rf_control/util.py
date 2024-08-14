@@ -402,6 +402,274 @@ SEC_2_CHANNELS = {
                 '125': ['Fwd Min Amp & Phs', 'RA-RaBO01:RF-LLRF:LoopFwdMin'],
                 'Mode': 'RA-RaBO01:RF-LLRF:LoopMode-Sts'
             },
+            'General': {
+                '0': {
+                    'Label': 'Cavity Voltage',
+                    'InPhs': 'BO-05D:RF-P5Cav:PwrI-Mon',
+                    'Quad': 'BO-05D:RF-P5Cav:PwrQ-Mon',
+                    'Amp1': 'BO-05D:RF-P5Cav:PwrAmp-Mon',
+                    'Amp2': 'BO-05D:RF-P5Cav:PwrAmpW-Mon',
+                    'Amp3': 'BO-05D:RF-P5Cav:PwrAmpdBm-Mon',
+                    'Amp4': 'BO-05D:RF-P5Cav:PwrAmpVGap-Mon',
+                    'Phs': 'BO-05D:RF-P5Cav:PwrPhs-Mon'
+                },
+                '2': {
+                    'Label': 'Forward Power',
+                    'InPhs': 'BO-05D:RF-P5Cav:PwrFwdI-Mon',
+                    'Quad': 'BO-05D:RF-P5Cav:PwrFwdQ-Mon',
+                    'Amp1': 'BO-05D:RF-P5Cav:PwrFwdAmp-Mon',
+                    'Amp2': 'BO-05D:RF-P5Cav:PwrFwdAmpW-Mon',
+                    'Amp3': 'BO-05D:RF-P5Cav:PwrFwdAmpdBm-Mon',
+                    'Amp4': '-',
+                    'Phs': 'BO-05D:RF-P5Cav:PwrFwdPhs-Mon'
+                },
+                '20': {
+                    'Label': 'Fwd Pwr SSA 1',
+                    'InPhs': 'RA-ToBO01:RF-SSAmpTower:PwrFwdOutI-Mon',
+                    'Quad': 'RA-ToBO01:RF-SSAmpTower:PwrFwdOutQ-Mon',
+                    'Amp1': 'RA-ToBO01:RF-SSAmpTower:PwrFwdOutAmp-Mon',
+                    'Amp2': 'RA-ToBO01:RF-SSAmpTower:PwrFwdOutAmpW-Mon',
+                    'Amp3': 'RA-ToBO01:RF-SSAmpTower:PwrFwdOutAmpdBm-Mon',
+                    'Amp4': '-',
+                    'Phs': 'RA-ToBO01:RF-SSAmpTower:PwrFwdOutPhs-Mon'
+                },
+                '32': {
+                    'Label': 'Ang Cav Fwd',
+                    'InPhs': '-',
+                    'Quad': '-',
+                    'Amp1': '-',
+                    'Amp2': '-',
+                    'Amp3': '-',
+                    'Amp4': '-',
+                    'Phs': 'RA-RaBO01:RF-LLRF:Dephase-Mon'
+                },
+            },
+            'Rect': {
+                '30': {
+                    'Label': 'Fwd Pwr SSA 2',
+                    'InPhs': 'BO-05D:RF-P5Cav:PwrFBTNTopI-Mon',
+                    'Quad': 'BO-05D:RF-P5Cav:PwrFBTNTopQ-Mon',
+                    'Amp1': 'BO-05D:RF-P5Cav:PwrFBTNTopAmp-Mon',
+                    'Amp2': 'BO-05D:RF-P5Cav:PwrFBTNTopAmpW-Mon',
+                    'Amp3': 'BO-05D:RF-P5Cav:PwrFBTNTopAmpdBm-Mon',
+                    'Amp4': '-',
+                    'Phs': 'BO-05D:RF-P5Cav:PwrFBTNTopPhs-Mon'
+                },
+                'Slow': {
+                    'Control': {
+                        '100': ['Enable', 'RA-RaBO01:RF-LLRF:SL'],
+                        '110': ['Input Selection', 'RA-RaBO01:RF-LLRF:SLInp'],
+                        '13': ['PI Limit', 'RA-RaBO01:RF-LLRF:SLPILim'],
+                        '1': ['Ki', 'RA-RaBO01:RF-LLRF:SLKI'],
+                        '0': ['Kp', 'RA-RaBO01:RF-LLRF:SLKP']
+                    },
+                    '512': {
+                        'Label': 'Reference',
+                        'InPhs': 'RA-RaBO01:RF-LLRF:SLRefI-Mon',
+                        'Quad': 'RA-RaBO01:RF-LLRF:SLRefQ-Mon',
+                        'Amp': 'RA-RaBO01:RF-LLRF:SLRefAmp-Mon',
+                        'Phs': 'RA-RaBO01:RF-LLRF:SLRefPhs-Mon'
+                    },
+                    '120': {
+                        'Label': 'Input',
+                        'InPhs': 'RA-RaBO01:RF-LLRF:SLInpI-Mon',
+                        'Quad': 'RA-RaBO01:RF-LLRF:SLInpQ-Mon',
+                        'Amp': 'RA-RaBO01:RF-LLRF:SLInpAmp-Mon',
+                        'Phs': 'RA-RaBO01:RF-LLRF:SLInpPhs-Mon'
+                    },
+                    '14': {
+                        'Label': 'Error',
+                        'InPhs': 'RA-RaBO01:RF-LLRF:SLErrorI-Mon',
+                        'Quad': 'RA-RaBO01:RF-LLRF:SLErrorQ-Mon',
+                        'Amp': 'RA-RaBO01:RF-LLRF:SLErrorAmp-Mon',
+                        'Phs': 'RA-RaBO01:RF-LLRF:SLErrorPhs-Mon'
+                    },
+                    '16': {
+                        'Label': 'Error Accum',
+                        'InPhs': 'RA-RaBO01:RF-LLRF:SLErrAccI-Mon',
+                        'Quad': 'RA-RaBO01:RF-LLRF:SLErrAccQ-Mon',
+                        'Amp': 'RA-RaBO01:RF-LLRF:SLErrAccAmp-Mon',
+                        'Phs': 'RA-RaBO01:RF-LLRF:SLErrAccPhs-Mon'
+                    },
+                    '71': {
+                        'Label': 'Slow Control Output',
+                        'InPhs': 'RA-RaBO01:RF-LLRF:SLCtrlI-Mon',
+                        'Quad': 'RA-RaBO01:RF-LLRF:SLCtrlQ-Mon',
+                        'Amp': 'RA-RaBO01:RF-LLRF:SLCtrlAmp-Mon',
+                        'Phs': 'RA-RaBO01:RF-LLRF:SLCtrlPhs-Mon'
+                    },
+                },
+                'Fast': {
+                    'Control': {
+                        '115': ['Enable', 'RA-RaBO01:RF-LLRF:FL'],
+                        '111': ['Input Selection', 'RA-RaBO01:RF-LLRF:FLInp'],
+                        '124': ['PI Limit', 'RA-RaBO01:RF-LLRF:FLPILim'],
+                        '119': ['Ki', 'RA-RaBO01:RF-LLRF:FLKI'],
+                        '118': ['Kp', 'RA-RaBO01:RF-LLRF:FLKP']
+                    },
+                    '124': {
+                        'Label': 'Reference',
+                        'InPhs': 'RA-RaBO01:RF-LLRF:FLRefI-Mon',
+                        'Quad': 'RA-RaBO01:RF-LLRF:FLRefQ-Mon',
+                        'Amp': 'RA-RaBO01:RF-LLRF:FLRefAmp-Mon',
+                        'Phs': 'RA-RaBO01:RF-LLRF:FLRefPhs-Mon'
+                    },
+                    '112': {
+                        'Label': 'Input',
+                        'InPhs': 'RA-RaBO01:RF-LLRF:FLInpI-Mon',
+                        'Quad': 'RA-RaBO01:RF-LLRF:FLInpQ-Mon',
+                        'Amp': 'RA-RaBO01:RF-LLRF:FLInpAmp-Mon',
+                        'Phs': 'RA-RaBO01:RF-LLRF:FLInpPhs-Mon'
+                    },
+                    '118': {
+                        'Label': 'Fast Control Output',
+                        'InPhs': 'RA-RaBO01:RF-LLRF:FLCtrlI-Mon',
+                        'Quad': 'RA-RaBO01:RF-LLRF:FLCtrlQ-Mon',
+                        'Amp': 'RA-RaBO01:RF-LLRF:FLCtrlAmp-Mon',
+                        'Phs': 'RA-RaBO01:RF-LLRF:FLCtrlPhs-Mon'
+                    },
+                    '6': {
+                        'Label': 'SSA 1 Control Signal',
+                        'InPhs': 'RA-RaBO01:RF-LLRF:SSA1CtrlI-Mon',
+                        'Quad': 'RA-RaBO01:RF-LLRF:SSA1CtrlQ-Mon',
+                        'Amp': 'RA-RaBO01:RF-LLRF:SSA1CtrlAmp-Mon',
+                        'Phs': 'RA-RaBO01:RF-LLRF:SSA1CtrlPhs-Mon'
+                    },
+                    '8': {
+                        'Label': 'SSA 2 Control Signal',
+                        'InPhs': 'RA-RaBO01:RF-LLRF:SSA2CtrlI-Mon',
+                        'Quad': 'RA-RaBO01:RF-LLRF:SSA2CtrlQ-Mon',
+                        'Amp': 'RA-RaBO01:RF-LLRF:SSA2CtrlAmp-Mon',
+                        'Phs': 'RA-RaBO01:RF-LLRF:SSA2CtrlPhs-Mon'
+                    }
+                }
+            },
+            'Polar': {
+                    '527': {
+                        'Label': 'Amp Ref',
+                        'InPhs': '-',
+                        'Quad': '-',
+                        'Amp1': 'RA-RaBO01:RF-LLRF:AmpRefOld-Mon',
+                        'Amp2': '-',
+                        'Amp3': '-',
+                        'Amp4': '-',
+                        'Phs': '-'
+                    },
+                    'Amp': {
+                        'Control': {
+                            '116': ['Enable', 'RA-RaBO01:RF-LLRF:AL'],
+                            '112': ['Input Selection', 'RA-RaBO01:RF-LLRF:ALInp'],
+                            '121': ['Ki', 'RA-RaBO01:RF-LLRF:ALKI'],
+                            '120': ['Kp', 'RA-RaBO01:RF-LLRF:ALKP']
+                        },
+                        '100': {
+                            'Label': 'Amp Loop Input',
+                            'InPhs': 'RA-RaBO01:RF-LLRF:ALInpI-Mon',
+                            'Quad': 'RA-RaBO01:RF-LLRF:ALInpQ-Mon',
+                            'Amp': 'RA-RaBO01:RF-LLRF:ALInpAmp-Mon',
+                            'Phs': 'RA-RaBO01:RF-LLRF:ALInpPhs-Mon'
+                        },
+                        '104': {
+                            'Label': 'Amp of Input',
+                            'InPhs': '-',
+                            'Quad': '-',
+                            'Amp': 'RA-RaBO01:RF-LLRF:ALAmpInp-Mon',
+                            'Phs': '-'
+                        },
+                        '105': {
+                            'Label': 'Phase of Input',
+                            'InPhs': '-',
+                            'Quad': '-',
+                            'Amp': '-',
+                            'Phs': 'RA-RaBO01:RF-LLRF:ALPhsInp-Mon'
+                        },
+                        '109': {
+                            'Label': 'Error',
+                            'InPhs': '-',
+                            'Quad': '-',
+                            'Amp': 'RA-RaBO01:RF-LLRF:ALErr-Mon',
+                            'Phs': '-'
+                        },
+                        '110': {
+                            'Label': 'Error Accum',
+                            'InPhs': '-',
+                            'Quad': '-',
+                            'Amp': 'RA-RaBO01:RF-LLRF:ALErrAcc-Mon',
+                            'Phs': '-'
+                        },
+                        '528': {
+                            'Label': 'Phase Ref',
+                            'InPhs': '-',
+                            'Quad': '-',
+                            'Amp': '-',
+                            'Phs': 'RA-RaBO01:RF-LLRF:PhsRefOld-Mon'
+                        }
+                    },
+                    'Phase': {
+                        'Control': {
+                            '117': ['Enable', 'RA-RaBO01:RF-LLRF:PL'],
+                            '113': ['Input Selection', 'RA-RaBO01:RF-LLRF:PLInp'],
+                            '123': ['Ki', 'RA-RaBO01:RF-LLRF:PLKI'],
+                            '122': ['Kp', 'RA-RaBO01:RF-LLRF:PLKP']
+                        },
+                        '102': {
+                            'Label': 'Phase Loop Input',
+                            'InPhs': 'RA-RaBO01:RF-LLRF:PLInpI-Mon',
+                            'Quad': 'RA-RaBO01:RF-LLRF:PLInpQ-Mon',
+                            'Amp': 'RA-RaBO01:RF-LLRF:PLInpAmp-Mon',
+                            'Phs': 'RA-RaBO01:RF-LLRF:PLInpPhs-Mon'
+                        },
+                        '106': {
+                            'Label': 'Amp of Input',
+                            'InPhs': '-',
+                            'Quad': '-',
+                            'Amp': 'RA-RaBO01:RF-LLRF:PLAmpInp-Mon',
+                            'Phs': '-'
+                        },
+                        '107': {
+                            'Label': 'Phase of Input',
+                            'InPhs': '-',
+                            'Quad': '-',
+                            'Amp': '-',
+                            'Phs': 'RA-RaBO01:RF-LLRF:PLPhsInp-Mon'
+                        },
+                        '112': {
+                            'Label': 'Error',
+                            'InPhs': '-',
+                            'Quad': '-',
+                            'Amp': '-',
+                            'Phs': 'RA-RaBO01:RF-LLRF:PLErr-Mon'
+                        },
+                        '113': {
+                            'Label': 'Error Accum',
+                            'InPhs': '-',
+                            'Quad': '-',
+                            'Amp': '-',
+                            'Phs': 'RA-RaBO01:RF-LLRF:PLErrAcc-Mon'
+                        },
+                        '114': {
+                            'Label': 'Polar Control Output',
+                            'InPhs': 'RA-RaBO01:RF-LLRF:POCtrlI-Mon',
+                            'Quad': 'RA-RaBO01:RF-LLRF:POCtrlQ-Mon',
+                            'Amp': 'RA-RaBO01:RF-LLRF:POCtrlAmp-Mon',
+                            'Phs': 'RA-RaBO01:RF-LLRF:POCtrlPhs-Mon'
+                        },
+                        '6': {
+                            'Label': 'SSA 1 Control Signal',
+                            'InPhs': 'RA-RaBO01:RF-LLRF:SSA1CtrlI-Mon',
+                            'Quad': 'RA-RaBO01:RF-LLRF:SSA1CtrlQ-Mon',
+                            'Amp': 'RA-RaBO01:RF-LLRF:SSA1CtrlAmp-Mon',
+                            'Phs': 'RA-RaBO01:RF-LLRF:SSA1CtrlPhs-Mon'
+                        },
+                        '8': {
+                            'Label': 'SSA 2 Control Signal',
+                            'InPhs': 'RA-RaBO01:RF-LLRF:SSA2CtrlI-Mon',
+                            'Quad': 'RA-RaBO01:RF-LLRF:SSA2CtrlQ-Mon',
+                            'Amp': 'RA-RaBO01:RF-LLRF:SSA2CtrlAmp-Mon',
+                            'Phs': 'RA-RaBO01:RF-LLRF:SSA2CtrlPhs-Mon'
+                        }
+                    }
+                }
         }
     },
     'SI': {
@@ -1283,33 +1551,33 @@ SEC_2_CHANNELS = {
                 'General': {
                     '0': {
                         'Label': 'Cavity Voltage',
-                        'InPhs': '$(cav):PwrI-Mon',
-                        'Quad': '$(cav):PwrQ-Mon',
-                        'Amp1': '$(cav):PwrAmp-Mon',
-                        'Amp2': '',
-                        'Amp3': '',
-                        'Amp4': '',
-                        'Phs': '$(cav):PwrPhs-Mon'
+                        'InPhs': 'SI-03SP:RF-SRFCav-A:PwrI-Mon',
+                        'Quad': 'SI-03SP:RF-SRFCav-A:PwrQ-Mon',
+                        'Amp1': 'SI-03SP:RF-SRFCav-A:PwrAmp-Mon',
+                        'Amp2': 'SI-03SP:RF-SRFCav-A:PwrAmpW-Mon',
+                        'Amp3': 'SI-03SP:RF-SRFCav-A:PwrAmpdBm-Mon',
+                        'Amp4': 'SI-03SP:RF-SRFCav-A:PwrAmpVGap-Mon',
+                        'Phs': 'SI-03SP:RF-SRFCav-A:PwrPhs-Mon'
                     },
                     '2': {
                         'Label': 'Forward Power',
-                        'InPhs': '$(cav):PwrFwdI-Mon',
-                        'Quad': '$(cav):PwrFwdQ-Mon',
-                        'Amp1': '$(cav):PwrFwdAmp-Mon',
-                        'Amp2': '',
-                        'Amp3': '',
+                        'InPhs': 'SI-03SP:RF-SRFCav-A:PwrFwdI-Mon',
+                        'Quad': 'SI-03SP:RF-SRFCav-A:PwrFwdQ-Mon',
+                        'Amp1': 'SI-03SP:RF-SRFCav-A:PwrFwdAmp-Mon',
+                        'Amp2': 'SI-03SP:RF-SRFCav-A:PwrFwdAmpW-Mon',
+                        'Amp3': 'SI-03SP:RF-SRFCav-A:PwrFwdAmpdBm-Mon',
                         'Amp4': '-',
-                        'Phs': '$(cav):PwrFwdPhs-Mon'
+                        'Phs': 'SI-03SP:RF-SRFCav-A:PwrFwdPhs-Mon'
                     },
                     '20': {
                         'Label': 'Fwd Pwr SSA 1',
-                        'InPhs': 'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrFwdOutI-Mon',
-                        'Quad': 'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrFwdOutQ-Mon',
-                        'Amp1': 'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrFwdOutAmp-Mon',
-                        'Amp2': '',
-                        'Amp3': '',
+                        'InPhs': 'RA-ToSIA01:RF-SSAmpTower:PwrFwdOutI-Mon',
+                        'Quad': 'RA-ToSIA01:RF-SSAmpTower:PwrFwdOutQ-Mon',
+                        'Amp1': 'RA-ToSIA01:RF-SSAmpTower:PwrFwdOutAmp-Mon',
+                        'Amp2': 'RA-ToSIA01:RF-SSAmpTower:PwrFwdOutAmpW-Mon',
+                        'Amp3': 'RA-ToSIA01:RF-SSAmpTower:PwrFwdOutAmpdBm-Mon',
                         'Amp4': '-',
-                        'Phs': 'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrFwdOutPhs-Mon'
+                        'Phs': 'RA-ToSIA01:RF-SSAmpTower:PwrFwdOutPhs-Mon'
                     },
                     '32': {
                         'Label': 'Ang Cav Fwd',
@@ -1319,106 +1587,106 @@ SEC_2_CHANNELS = {
                         'Amp2': '-',
                         'Amp3': '-',
                         'Amp4': '-',
-                        'Phs': 'RA-Ra$(sys)$(sidx)01:$(llrf):Dephase-Mon'
+                        'Phs': 'RA-RaSIA01:RF-LLRF-A:Dephase-Mon'
                     },
                 },
                 'Rect': {
                     '30': {
                         'Label': 'Fwd Pwr SSA 2',
-                        'InPhs': '$(cav):PwrFBTNTopI-Mon',
-                        'Quad': '$(cav):PwrFBTNTopQ-Mon',
-                        'Amp1': '$(cav):PwrFBTNTopAmp-Mon',
-                        'Amp2': '',
-                        'Amp3': '',
+                        'InPhs': 'SI-03SP:RF-SRFCav-A:PwrFBTNTopI-Mon',
+                        'Quad': 'SI-03SP:RF-SRFCav-A:PwrFBTNTopQ-Mon',
+                        'Amp1': 'SI-03SP:RF-SRFCav-A:PwrFBTNTopAmp-Mon',
+                        'Amp2': 'SI-03SP:RF-SRFCav-A:PwrFBTNTopAmpW-Mon',
+                        'Amp3': 'SI-03SP:RF-SRFCav-A:PwrFBTNTopAmpdBm-Mon',
                         'Amp4': '-',
-                        'Phs': '$(cav):PwrFBTNTopPhs-Mon'
+                        'Phs': 'SI-03SP:RF-SRFCav-A:PwrFBTNTopPhs-Mon'
                     },
                     'Slow': {
                         'Control': {
-                            '100': ['Enable', 'RA-Ra$(sys)$(sidx)01:$(llrf):SL'],
-                            '110': ['Input Selection', 'RA-Ra$(sys)$(sidx)01:$(llrf):SLInp'],
-                            '13': ['PI Limit', 'RA-Ra$(sys)$(sidx)01:$(llrf):SLPILim'],
-                            '1': ['Ki', 'RA-Ra$(sys)$(sidx)01:$(llrf):SLKI'],
-                            '0': ['Kp', 'RA-Ra$(sys)$(sidx)01:$(llrf):SLKP']
+                            '100': ['Enable', 'RA-RaSIA01:RF-LLRF-A:SL'],
+                            '110': ['Input Selection', 'RA-RaSIA01:RF-LLRF-A:SLInp'],
+                            '13': ['PI Limit', 'RA-RaSIA01:RF-LLRF-A:SLPILim'],
+                            '1': ['Ki', 'RA-RaSIA01:RF-LLRF-A:SLKI'],
+                            '0': ['Kp', 'RA-RaSIA01:RF-LLRF-A:SLKP']
                         },
                         '512': {
                             'Label': 'Reference',
-                            'InPhs': 'RA-Ra$(sys)$(sidx)01:$(llrf):SLRefI-Mon',
-                            'Quad': 'RA-Ra$(sys)$(sidx)01:$(llrf):SLRefQ-Mon',
-                            'Amp': 'RA-Ra$(sys)$(sidx)01:$(llrf):SLRefAmp-Mon',
-                            'Phs': 'RA-Ra$(sys)$(sidx)01:$(llrf):SLRefPhs-Mon'
+                            'InPhs': 'RA-RaSIA01:RF-LLRF-A:SLRefI-Mon',
+                            'Quad': 'RA-RaSIA01:RF-LLRF-A:SLRefQ-Mon',
+                            'Amp': 'RA-RaSIA01:RF-LLRF-A:SLRefAmp-Mon',
+                            'Phs': 'RA-RaSIA01:RF-LLRF-A:SLRefPhs-Mon'
                         },
                         '120': {
                             'Label': 'Input',
-                            'InPhs': 'RA-Ra$(sys)$(sidx)01:$(llrf):SLInpI-Mon',
-                            'Quad': 'RA-Ra$(sys)$(sidx)01:$(llrf):SLInpQ-Mon',
-                            'Amp': 'RA-Ra$(sys)$(sidx)01:$(llrf):SLInpAmp-Mon',
-                            'Phs': 'RA-Ra$(sys)$(sidx)01:$(llrf):SLInpPhs-Mon'
+                            'InPhs': 'RA-RaSIA01:RF-LLRF-A:SLInpI-Mon',
+                            'Quad': 'RA-RaSIA01:RF-LLRF-A:SLInpQ-Mon',
+                            'Amp': 'RA-RaSIA01:RF-LLRF-A:SLInpAmp-Mon',
+                            'Phs': 'RA-RaSIA01:RF-LLRF-A:SLInpPhs-Mon'
                         },
                         '14': {
                             'Label': 'Error',
-                            'InPhs': 'RA-Ra$(sys)$(sidx)01:$(llrf):SLErrorI-Mon',
-                            'Quad': 'RA-Ra$(sys)$(sidx)01:$(llrf):SLErrorQ-Mon',
-                            'Amp': 'RA-Ra$(sys)$(sidx)01:$(llrf):SLErrorAmp-Mon',
-                            'Phs': 'RA-Ra$(sys)$(sidx)01:$(llrf):SLErrorPhs-Mon'
+                            'InPhs': 'RA-RaSIA01:RF-LLRF-A:SLErrorI-Mon',
+                            'Quad': 'RA-RaSIA01:RF-LLRF-A:SLErrorQ-Mon',
+                            'Amp': 'RA-RaSIA01:RF-LLRF-A:SLErrorAmp-Mon',
+                            'Phs': 'RA-RaSIA01:RF-LLRF-A:SLErrorPhs-Mon'
                         },
                         '16': {
                             'Label': 'Error Accum',
-                            'InPhs': 'RA-Ra$(sys)$(sidx)01:$(llrf):SLErrAccI-Mon',
-                            'Quad': 'RA-Ra$(sys)$(sidx)01:$(llrf):SLErrAccQ-Mon',
-                            'Amp': 'RA-Ra$(sys)$(sidx)01:$(llrf):SLErrAccAmp-Mon',
-                            'Phs': 'RA-Ra$(sys)$(sidx)01:$(llrf):SLErrAccPhs-Mon'
+                            'InPhs': 'RA-RaSIA01:RF-LLRF-A:SLErrAccI-Mon',
+                            'Quad': 'RA-RaSIA01:RF-LLRF-A:SLErrAccQ-Mon',
+                            'Amp': 'RA-RaSIA01:RF-LLRF-A:SLErrAccAmp-Mon',
+                            'Phs': 'RA-RaSIA01:RF-LLRF-A:SLErrAccPhs-Mon'
                         },
                         '71': {
                             'Label': 'Slow Control Output',
-                            'InPhs': 'RA-Ra$(sys)$(sidx)01:$(llrf):SLCtrlI-Mon',
-                            'Quad': 'RA-Ra$(sys)$(sidx)01:$(llrf):SLCtrlQ-Mon',
-                            'Amp': 'RA-Ra$(sys)$(sidx)01:$(llrf):SLCtrlAmp-Mon',
-                            'Phs': 'RA-Ra$(sys)$(sidx)01:$(llrf):SLCtrlPhs-Mon'
+                            'InPhs': 'RA-RaSIA01:RF-LLRF-A:SLCtrlI-Mon',
+                            'Quad': 'RA-RaSIA01:RF-LLRF-A:SLCtrlQ-Mon',
+                            'Amp': 'RA-RaSIA01:RF-LLRF-A:SLCtrlAmp-Mon',
+                            'Phs': 'RA-RaSIA01:RF-LLRF-A:SLCtrlPhs-Mon'
                         },
                     },
                     'Fast': {
                         'Control': {
-                            '115': ['Enable', 'RA-Ra$(sys)$(sidx)01:$(llrf):FL'],
-                            '111': ['Input Selection', 'RA-Ra$(sys)$(sidx)01:$(llrf):FLInp'],
-                            '124': ['PI Limit', 'RA-Ra$(sys)$(sidx)01:$(llrf):FLPILim'],
-                            '119': ['Ki', 'RA-Ra$(sys)$(sidx)01:$(llrf):FLKI'],
-                            '118': ['Kp', 'RA-Ra$(sys)$(sidx)01:$(llrf):FLKP']
+                            '115': ['Enable', 'RA-RaSIA01:RF-LLRF-A:FL'],
+                            '111': ['Input Selection', 'RA-RaSIA01:RF-LLRF-A:FLInp'],
+                            '124': ['PI Limit', 'RA-RaSIA01:RF-LLRF-A:FLPILim'],
+                            '119': ['Ki', 'RA-RaSIA01:RF-LLRF-A:FLKI'],
+                            '118': ['Kp', 'RA-RaSIA01:RF-LLRF-A:FLKP']
                         },
                         '124': {
                             'Label': 'Reference',
-                            'InPhs': 'RA-Ra$(sys)$(sidx)01:$(llrf):FLRefI-Mon',
-                            'Quad': 'RA-Ra$(sys)$(sidx)01:$(llrf):FLRefQ-Mon',
-                            'Amp': 'RA-Ra$(sys)$(sidx)01:$(llrf):FLRefAmp-Mon',
-                            'Phs': 'RA-Ra$(sys)$(sidx)01:$(llrf):FLRefPhs-Mon'
+                            'InPhs': 'RA-RaSIA01:RF-LLRF-A:FLRefI-Mon',
+                            'Quad': 'RA-RaSIA01:RF-LLRF-A:FLRefQ-Mon',
+                            'Amp': 'RA-RaSIA01:RF-LLRF-A:FLRefAmp-Mon',
+                            'Phs': 'RA-RaSIA01:RF-LLRF-A:FLRefPhs-Mon'
                         },
                         '112': {
                             'Label': 'Input',
-                            'InPhs': 'RA-Ra$(sys)$(sidx)01:$(llrf):FLInpI-Mon',
-                            'Quad': 'RA-Ra$(sys)$(sidx)01:$(llrf):FLInpQ-Mon',
-                            'Amp': 'RA-Ra$(sys)$(sidx)01:$(llrf):FLInpAmp-Mon',
-                            'Phs': 'RA-Ra$(sys)$(sidx)01:$(llrf):FLInpPhs-Mon'
+                            'InPhs': 'RA-RaSIA01:RF-LLRF-A:FLInpI-Mon',
+                            'Quad': 'RA-RaSIA01:RF-LLRF-A:FLInpQ-Mon',
+                            'Amp': 'RA-RaSIA01:RF-LLRF-A:FLInpAmp-Mon',
+                            'Phs': 'RA-RaSIA01:RF-LLRF-A:FLInpPhs-Mon'
                         },
                         '118': {
                             'Label': 'Fast Control Output',
-                            'InPhs': 'RA-Ra$(sys)$(sidx)01:$(llrf):FLCtrlI-Mon',
-                            'Quad': 'RA-Ra$(sys)$(sidx)01:$(llrf):FLCtrlQ-Mon',
-                            'Amp': 'RA-Ra$(sys)$(sidx)01:$(llrf):FLCtrlAmp-Mon',
-                            'Phs': 'RA-Ra$(sys)$(sidx)01:$(llrf):FLCtrlPhs-Mon'
+                            'InPhs': 'RA-RaSIA01:RF-LLRF-A:FLCtrlI-Mon',
+                            'Quad': 'RA-RaSIA01:RF-LLRF-A:FLCtrlQ-Mon',
+                            'Amp': 'RA-RaSIA01:RF-LLRF-A:FLCtrlAmp-Mon',
+                            'Phs': 'RA-RaSIA01:RF-LLRF-A:FLCtrlPhs-Mon'
                         },
                         '6': {
                             'Label': 'SSA 1 Control Signal',
-                            'InPhs': 'RA-Ra$(sys)$(sidx)01:$(llrf):SSA1CtrlI-Mon',
-                            'Quad': 'RA-Ra$(sys)$(sidx)01:$(llrf):SSA1CtrlQ-Mon',
-                            'Amp': 'RA-Ra$(sys)$(sidx)01:$(llrf):SSA1CtrlAmp-Mon',
-                            'Phs': 'RA-Ra$(sys)$(sidx)01:$(llrf):SSA1CtrlPhs-Mon'
+                            'InPhs': 'RA-RaSIA01:RF-LLRF-A:SSA1CtrlI-Mon',
+                            'Quad': 'RA-RaSIA01:RF-LLRF-A:SSA1CtrlQ-Mon',
+                            'Amp': 'RA-RaSIA01:RF-LLRF-A:SSA1CtrlAmp-Mon',
+                            'Phs': 'RA-RaSIA01:RF-LLRF-A:SSA1CtrlPhs-Mon'
                         },
                         '8': {
                             'Label': 'SSA 2 Control Signal',
-                            'InPhs': 'RA-Ra$(sys)$(sidx)01:$(llrf):SSA2CtrlI-Mon',
-                            'Quad': 'RA-Ra$(sys)$(sidx)01:$(llrf):SSA2CtrlQ-Mon',
-                            'Amp': 'RA-Ra$(sys)$(sidx)01:$(llrf):SSA2CtrlAmp-Mon',
-                            'Phs': 'RA-Ra$(sys)$(sidx)01:$(llrf):SSA2CtrlPhs-Mon'
+                            'InPhs': 'RA-RaSIA01:RF-LLRF-A:SSA2CtrlI-Mon',
+                            'Quad': 'RA-RaSIA01:RF-LLRF-A:SSA2CtrlQ-Mon',
+                            'Amp': 'RA-RaSIA01:RF-LLRF-A:SSA2CtrlAmp-Mon',
+                            'Phs': 'RA-RaSIA01:RF-LLRF-A:SSA2CtrlPhs-Mon'
                         }
                     }
                 },
@@ -1427,31 +1695,31 @@ SEC_2_CHANNELS = {
                         'Label': 'Amp Ref',
                         'InPhs': '-',
                         'Quad': '-',
-                        'Amp1': 'RA-Ra$(sys)$(sidx)01:$(llrf):AmpRefOld-Mon',
-                        'Amp2': '',
-                        'Amp3': '',
+                        'Amp1': 'RA-RaSIA01:RF-LLRF-A:AmpRefOld-Mon',
+                        'Amp2': '-',
+                        'Amp3': '-',
                         'Amp4': '-',
                         'Phs': '-'
                     },
                     'Amp': {
                         'Control': {
-                            '116': ['Enable', 'RA-Ra$(sys)$(sidx)01:$(llrf):AL'],
-                            '112': ['Input Selection', 'RA-Ra$(sys)$(sidx)01:$(llrf):ALInp'],
-                            '121': ['Ki', 'RA-Ra$(sys)$(sidx)01:$(llrf):ALKI'],
-                            '120': ['Kp', 'RA-Ra$(sys)$(sidx)01:$(llrf):ALKP']
+                            '116': ['Enable', 'RA-RaSIA01:RF-LLRF-A:AL'],
+                            '112': ['Input Selection', 'RA-RaSIA01:RF-LLRF-A:ALInp'],
+                            '121': ['Ki', 'RA-RaSIA01:RF-LLRF-A:ALKI'],
+                            '120': ['Kp', 'RA-RaSIA01:RF-LLRF-A:ALKP']
                         },
                         '100': {
                             'Label': 'Amp Loop Input',
-                            'InPhs': 'RA-Ra$(sys)$(sidx)01:$(llrf):ALInpI-Mon',
-                            'Quad': 'RA-Ra$(sys)$(sidx)01:$(llrf):ALInpQ-Mon',
-                            'Amp': 'RA-Ra$(sys)$(sidx)01:$(llrf):ALInpAmp-Mon',
-                            'Phs': 'RA-Ra$(sys)$(sidx)01:$(llrf):ALInpPhs-Mon'
+                            'InPhs': 'RA-RaSIA01:RF-LLRF-A:ALInpI-Mon',
+                            'Quad': 'RA-RaSIA01:RF-LLRF-A:ALInpQ-Mon',
+                            'Amp': 'RA-RaSIA01:RF-LLRF-A:ALInpAmp-Mon',
+                            'Phs': 'RA-RaSIA01:RF-LLRF-A:ALInpPhs-Mon'
                         },
                         '104': {
                             'Label': 'Amp of Input',
                             'InPhs': '-',
                             'Quad': '-',
-                            'Amp': 'RA-Ra$(sys)$(sidx)01:$(llrf):ALAmpInp-Mon',
+                            'Amp': 'RA-RaSIA01:RF-LLRF-A:ALAmpInp-Mon',
                             'Phs': '-'
                         },
                         '105': {
@@ -1459,20 +1727,20 @@ SEC_2_CHANNELS = {
                             'InPhs': '-',
                             'Quad': '-',
                             'Amp': '-',
-                            'Phs': 'RA-Ra$(sys)$(sidx)01:$(llrf):ALPhsInp-Mon'
+                            'Phs': 'RA-RaSIA01:RF-LLRF-A:ALPhsInp-Mon'
                         },
                         '109': {
                             'Label': 'Error',
                             'InPhs': '-',
                             'Quad': '-',
-                            'Amp': 'RA-Ra$(sys)$(sidx)01:$(llrf):ALErr-Mon',
+                            'Amp': 'RA-RaSIA01:RF-LLRF-A:ALErr-Mon',
                             'Phs': '-'
                         },
                         '110': {
                             'Label': 'Error Accum',
                             'InPhs': '-',
                             'Quad': '-',
-                            'Amp': 'RA-Ra$(sys)$(sidx)01:$(llrf):ALErrAcc-Mon',
+                            'Amp': 'RA-RaSIA01:RF-LLRF-A:ALErrAcc-Mon',
                             'Phs': '-'
                         },
                         '528': {
@@ -1480,28 +1748,28 @@ SEC_2_CHANNELS = {
                             'InPhs': '-',
                             'Quad': '-',
                             'Amp': '-',
-                            'Phs': 'RA-Ra$(sys)$(sidx)01:$(llrf):PhsRefOld-Mon'
+                            'Phs': 'RA-RaSIA01:RF-LLRF-A:PhsRefOld-Mon'
                         }
                     },
                     'Phase': {
                         'Control': {
-                            '117': ['Enable', 'RA-Ra$(sys)$(sidx)01:$(llrf):PL'],
-                            '113': ['Input Selection', 'RA-Ra$(sys)$(sidx)01:$(llrf):PLInp'],
-                            '123': ['Ki', 'RA-Ra$(sys)$(sidx)01:$(llrf):PLKI'],
-                            '122': ['Kp', 'RA-Ra$(sys)$(sidx)01:$(llrf):PLKP']
+                            '117': ['Enable', 'RA-RaSIA01:RF-LLRF-A:PL'],
+                            '113': ['Input Selection', 'RA-RaSIA01:RF-LLRF-A:PLInp'],
+                            '123': ['Ki', 'RA-RaSIA01:RF-LLRF-A:PLKI'],
+                            '122': ['Kp', 'RA-RaSIA01:RF-LLRF-A:PLKP']
                         },
                         '102': {
                             'Label': 'Phase Loop Input',
-                            'InPhs': 'RA-Ra$(sys)$(sidx)01:$(llrf):PLInpI-Mon',
-                            'Quad': 'RA-Ra$(sys)$(sidx)01:$(llrf):PLInpQ-Mon',
-                            'Amp': 'RA-Ra$(sys)$(sidx)01:$(llrf):PLInpAmp-Mon',
-                            'Phs': 'RA-Ra$(sys)$(sidx)01:$(llrf):PLInpPhs-Mon'
+                            'InPhs': 'RA-RaSIA01:RF-LLRF-A:PLInpI-Mon',
+                            'Quad': 'RA-RaSIA01:RF-LLRF-A:PLInpQ-Mon',
+                            'Amp': 'RA-RaSIA01:RF-LLRF-A:PLInpAmp-Mon',
+                            'Phs': 'RA-RaSIA01:RF-LLRF-A:PLInpPhs-Mon'
                         },
                         '106': {
                             'Label': 'Amp of Input',
                             'InPhs': '-',
                             'Quad': '-',
-                            'Amp': 'RA-Ra$(sys)$(sidx)01:$(llrf):PLAmpInp-Mon',
+                            'Amp': 'RA-RaSIA01:RF-LLRF-A:PLAmpInp-Mon',
                             'Phs': '-'
                         },
                         '107': {
@@ -1509,42 +1777,42 @@ SEC_2_CHANNELS = {
                             'InPhs': '-',
                             'Quad': '-',
                             'Amp': '-',
-                            'Phs': 'RA-Ra$(sys)$(sidx)01:$(llrf):PLPhsInp-Mon'
+                            'Phs': 'RA-RaSIA01:RF-LLRF-A:PLPhsInp-Mon'
                         },
                         '112': {
                             'Label': 'Error',
                             'InPhs': '-',
                             'Quad': '-',
                             'Amp': '-',
-                            'Phs': 'RA-Ra$(sys)$(sidx)01:$(llrf):PLErr-Mon'
+                            'Phs': 'RA-RaSIA01:RF-LLRF-A:PLErr-Mon'
                         },
                         '113': {
                             'Label': 'Error Accum',
                             'InPhs': '-',
                             'Quad': '-',
                             'Amp': '-',
-                            'Phs': 'RA-Ra$(sys)$(sidx)01:$(llrf):PLErrAcc-Mon'
+                            'Phs': 'RA-RaSIA01:RF-LLRF-A:PLErrAcc-Mon'
                         },
                         '114': {
                             'Label': 'Polar Control Output',
-                            'InPhs': 'RA-Ra$(sys)$(sidx)01:$(llrf):POCtrlI-Mon',
-                            'Quad': 'RA-Ra$(sys)$(sidx)01:$(llrf):POCtrlQ-Mon',
-                            'Amp': 'RA-Ra$(sys)$(sidx)01:$(llrf):POCtrlAmp-Mon',
-                            'Phs': 'RA-Ra$(sys)$(sidx)01:$(llrf):POCtrlPhs-Mon'
+                            'InPhs': 'RA-RaSIA01:RF-LLRF-A:POCtrlI-Mon',
+                            'Quad': 'RA-RaSIA01:RF-LLRF-A:POCtrlQ-Mon',
+                            'Amp': 'RA-RaSIA01:RF-LLRF-A:POCtrlAmp-Mon',
+                            'Phs': 'RA-RaSIA01:RF-LLRF-A:POCtrlPhs-Mon'
                         },
                         '6': {
                             'Label': 'SSA 1 Control Signal',
-                            'InPhs': 'RA-Ra$(sys)$(sidx)01:$(llrf):SSA1CtrlI-Mon',
-                            'Quad': 'RA-Ra$(sys)$(sidx)01:$(llrf):SSA1CtrlQ-Mon',
-                            'Amp': 'RA-Ra$(sys)$(sidx)01:$(llrf):SSA1CtrlAmp-Mon',
-                            'Phs': 'RA-Ra$(sys)$(sidx)01:$(llrf):SSA1CtrlPhs-Mon'
+                            'InPhs': 'RA-RaSIA01:RF-LLRF-A:SSA1CtrlI-Mon',
+                            'Quad': 'RA-RaSIA01:RF-LLRF-A:SSA1CtrlQ-Mon',
+                            'Amp': 'RA-RaSIA01:RF-LLRF-A:SSA1CtrlAmp-Mon',
+                            'Phs': 'RA-RaSIA01:RF-LLRF-A:SSA1CtrlPhs-Mon'
                         },
                         '8': {
                             'Label': 'SSA 2 Control Signal',
-                            'InPhs': 'RA-Ra$(sys)$(sidx)01:$(llrf):SSA2CtrlI-Mon',
-                            'Quad': 'RA-Ra$(sys)$(sidx)01:$(llrf):SSA2CtrlQ-Mon',
-                            'Amp': 'RA-Ra$(sys)$(sidx)01:$(llrf):SSA2CtrlAmp-Mon',
-                            'Phs': 'RA-Ra$(sys)$(sidx)01:$(llrf):SSA2CtrlPhs-Mon'
+                            'InPhs': 'RA-RaSIA01:RF-LLRF-A:SSA2CtrlI-Mon',
+                            'Quad': 'RA-RaSIA01:RF-LLRF-A:SSA2CtrlQ-Mon',
+                            'Amp': 'RA-RaSIA01:RF-LLRF-A:SSA2CtrlAmp-Mon',
+                            'Phs': 'RA-RaSIA01:RF-LLRF-A:SSA2CtrlPhs-Mon'
                         }
                     }
                 }
@@ -1569,6 +1837,274 @@ SEC_2_CHANNELS = {
                     '125': ['Fwd Min Amp & Phs', 'RA-RaSIB01:RF-LLRF-B:LoopFwdMin'],
                     'Mode': 'RA-RaSIB01:RF-LLRF-B:LoopMode-Sts'
                 },
+                'General': {
+                    '0': {
+                        'Label': 'Cavity Voltage',
+                        'InPhs': 'SI-03SP:RF-SRFCav-B:PwrI-Mon',
+                        'Quad': 'SI-03SP:RF-SRFCav-B:PwrQ-Mon',
+                        'Amp1': 'SI-03SP:RF-SRFCav-B:PwrAmp-Mon',
+                        'Amp2': 'SI-03SP:RF-SRFCav-B:PwrAmpW-Mon',
+                        'Amp3': 'SI-03SP:RF-SRFCav-B:PwrAmpdBm-Mon',
+                        'Amp4': 'SI-03SP:RF-SRFCav-B:PwrAmpVGap-Mon',
+                        'Phs': 'SI-03SP:RF-SRFCav-B:PwrPhs-Mon'
+                    },
+                    '2': {
+                        'Label': 'Forward Power',
+                        'InPhs': 'SI-03SP:RF-SRFCav-B:PwrFwdI-Mon',
+                        'Quad': 'SI-03SP:RF-SRFCav-B:PwrFwdQ-Mon',
+                        'Amp1': 'SI-03SP:RF-SRFCav-B:PwrFwdAmp-Mon',
+                        'Amp2': 'SI-03SP:RF-SRFCav-B:PwrFwdAmpW-Mon',
+                        'Amp3': 'SI-03SP:RF-SRFCav-B:PwrFwdAmpdBm-Mon',
+                        'Amp4': '-',
+                        'Phs': 'SI-03SP:RF-SRFCav-B:PwrFwdPhs-Mon'
+                    },
+                    '20': {
+                        'Label': 'Fwd Pwr SSA 1',
+                        'InPhs': 'RA-ToSIB01:RF-SSAmpTower:PwrFwdOutI-Mon',
+                        'Quad': 'RA-ToSIB01:RF-SSAmpTower:PwrFwdOutQ-Mon',
+                        'Amp1': 'RA-ToSIB01:RF-SSAmpTower:PwrFwdOutAmp-Mon',
+                        'Amp2': 'RA-ToSIB01:RF-SSAmpTower:PwrFwdOutAmpW-Mon',
+                        'Amp3': 'RA-ToSIB01:RF-SSAmpTower:PwrFwdOutAmpdBm-Mon',
+                        'Amp4': '-',
+                        'Phs': 'RA-ToSIB01:RF-SSAmpTower:PwrFwdOutPhs-Mon'
+                    },
+                    '32': {
+                        'Label': 'Ang Cav Fwd',
+                        'InPhs': '-',
+                        'Quad': '-',
+                        'Amp1': '-',
+                        'Amp2': '-',
+                        'Amp3': '-',
+                        'Amp4': '-',
+                        'Phs': 'RA-RaSIB01:RF-LLRF-B:Dephase-Mon'
+                    },
+                },
+                'Rect': {
+                    '30': {
+                        'Label': 'Fwd Pwr SSA 2',
+                        'InPhs': 'SI-03SP:RF-SRFCav-B:PwrFBTNTopI-Mon',
+                        'Quad': 'SI-03SP:RF-SRFCav-B:PwrFBTNTopQ-Mon',
+                        'Amp1': 'SI-03SP:RF-SRFCav-B:PwrFBTNTopAmp-Mon',
+                        'Amp2': 'SI-03SP:RF-SRFCav-B:PwrFBTNTopAmpW-Mon',
+                        'Amp3': 'SI-03SP:RF-SRFCav-B:PwrFBTNTopAmpdBm-Mon',
+                        'Amp4': '-',
+                        'Phs': 'SI-03SP:RF-SRFCav-B:PwrFBTNTopPhs-Mon'
+                    },
+                    'Slow': {
+                        'Control': {
+                            '100': ['Enable', 'RA-RaSIB01:RF-LLRF-B:SL'],
+                            '110': ['Input Selection', 'RA-RaSIB01:RF-LLRF-B:SLInp'],
+                            '13': ['PI Limit', 'RA-RaSIB01:RF-LLRF-B:SLPILim'],
+                            '1': ['Ki', 'RA-RaSIB01:RF-LLRF-B:SLKI'],
+                            '0': ['Kp', 'RA-RaSIB01:RF-LLRF-B:SLKP']
+                        },
+                        '512': {
+                            'Label': 'Reference',
+                            'InPhs': 'RA-RaSIB01:RF-LLRF-B:SLRefI-Mon',
+                            'Quad': 'RA-RaSIB01:RF-LLRF-B:SLRefQ-Mon',
+                            'Amp': 'RA-RaSIB01:RF-LLRF-B:SLRefAmp-Mon',
+                            'Phs': 'RA-RaSIB01:RF-LLRF-B:SLRefPhs-Mon'
+                        },
+                        '120': {
+                            'Label': 'Input',
+                            'InPhs': 'RA-RaSIB01:RF-LLRF-B:SLInpI-Mon',
+                            'Quad': 'RA-RaSIB01:RF-LLRF-B:SLInpQ-Mon',
+                            'Amp': 'RA-RaSIB01:RF-LLRF-B:SLInpAmp-Mon',
+                            'Phs': 'RA-RaSIB01:RF-LLRF-B:SLInpPhs-Mon'
+                        },
+                        '14': {
+                            'Label': 'Error',
+                            'InPhs': 'RA-RaSIB01:RF-LLRF-B:SLErrorI-Mon',
+                            'Quad': 'RA-RaSIB01:RF-LLRF-B:SLErrorQ-Mon',
+                            'Amp': 'RA-RaSIB01:RF-LLRF-B:SLErrorAmp-Mon',
+                            'Phs': 'RA-RaSIB01:RF-LLRF-B:SLErrorPhs-Mon'
+                        },
+                        '16': {
+                            'Label': 'Error Accum',
+                            'InPhs': 'RA-RaSIB01:RF-LLRF-B:SLErrAccI-Mon',
+                            'Quad': 'RA-RaSIB01:RF-LLRF-B:SLErrAccQ-Mon',
+                            'Amp': 'RA-RaSIB01:RF-LLRF-B:SLErrAccAmp-Mon',
+                            'Phs': 'RA-RaSIB01:RF-LLRF-B:SLErrAccPhs-Mon'
+                        },
+                        '71': {
+                            'Label': 'Slow Control Output',
+                            'InPhs': 'RA-RaSIB01:RF-LLRF-B:SLCtrlI-Mon',
+                            'Quad': 'RA-RaSIB01:RF-LLRF-B:SLCtrlQ-Mon',
+                            'Amp': 'RA-RaSIB01:RF-LLRF-B:SLCtrlAmp-Mon',
+                            'Phs': 'RA-RaSIB01:RF-LLRF-B:SLCtrlPhs-Mon'
+                        },
+                    },
+                    'Fast': {
+                        'Control': {
+                            '115': ['Enable', 'RA-RaSIB01:RF-LLRF-B:FL'],
+                            '111': ['Input Selection', 'RA-RaSIB01:RF-LLRF-B:FLInp'],
+                            '124': ['PI Limit', 'RA-RaSIB01:RF-LLRF-B:FLPILim'],
+                            '119': ['Ki', 'RA-RaSIB01:RF-LLRF-B:FLKI'],
+                            '118': ['Kp', 'RA-RaSIB01:RF-LLRF-B:FLKP']
+                        },
+                        '124': {
+                            'Label': 'Reference',
+                            'InPhs': 'RA-RaSIB01:RF-LLRF-B:FLRefI-Mon',
+                            'Quad': 'RA-RaSIB01:RF-LLRF-B:FLRefQ-Mon',
+                            'Amp': 'RA-RaSIB01:RF-LLRF-B:FLRefAmp-Mon',
+                            'Phs': 'RA-RaSIB01:RF-LLRF-B:FLRefPhs-Mon'
+                        },
+                        '112': {
+                            'Label': 'Input',
+                            'InPhs': 'RA-RaSIB01:RF-LLRF-B:FLInpI-Mon',
+                            'Quad': 'RA-RaSIB01:RF-LLRF-B:FLInpQ-Mon',
+                            'Amp': 'RA-RaSIB01:RF-LLRF-B:FLInpAmp-Mon',
+                            'Phs': 'RA-RaSIB01:RF-LLRF-B:FLInpPhs-Mon'
+                        },
+                        '118': {
+                            'Label': 'Fast Control Output',
+                            'InPhs': 'RA-RaSIB01:RF-LLRF-B:FLCtrlI-Mon',
+                            'Quad': 'RA-RaSIB01:RF-LLRF-B:FLCtrlQ-Mon',
+                            'Amp': 'RA-RaSIB01:RF-LLRF-B:FLCtrlAmp-Mon',
+                            'Phs': 'RA-RaSIB01:RF-LLRF-B:FLCtrlPhs-Mon'
+                        },
+                        '6': {
+                            'Label': 'SSA 1 Control Signal',
+                            'InPhs': 'RA-RaSIB01:RF-LLRF-B:SSA1CtrlI-Mon',
+                            'Quad': 'RA-RaSIB01:RF-LLRF-B:SSA1CtrlQ-Mon',
+                            'Amp': 'RA-RaSIB01:RF-LLRF-B:SSA1CtrlAmp-Mon',
+                            'Phs': 'RA-RaSIB01:RF-LLRF-B:SSA1CtrlPhs-Mon'
+                        },
+                        '8': {
+                            'Label': 'SSA 2 Control Signal',
+                            'InPhs': 'RA-RaSIB01:RF-LLRF-B:SSA2CtrlI-Mon',
+                            'Quad': 'RA-RaSIB01:RF-LLRF-B:SSA2CtrlQ-Mon',
+                            'Amp': 'RA-RaSIB01:RF-LLRF-B:SSA2CtrlAmp-Mon',
+                            'Phs': 'RA-RaSIB01:RF-LLRF-B:SSA2CtrlPhs-Mon'
+                        }
+                    }
+                },
+                'Polar': {
+                    '527': {
+                        'Label': 'Amp Ref',
+                        'InPhs': '-',
+                        'Quad': '-',
+                        'Amp1': 'RA-RaSIB01:RF-LLRF-B:AmpRefOld-Mon',
+                        'Amp2': '-',
+                        'Amp3': '-',
+                        'Amp4': '-',
+                        'Phs': '-'
+                    },
+                    'Amp': {
+                        'Control': {
+                            '116': ['Enable', 'RA-RaSIB01:RF-LLRF-B:AL'],
+                            '112': ['Input Selection', 'RA-RaSIB01:RF-LLRF-B:ALInp'],
+                            '121': ['Ki', 'RA-RaSIB01:RF-LLRF-B:ALKI'],
+                            '120': ['Kp', 'RA-RaSIB01:RF-LLRF-B:ALKP']
+                        },
+                        '100': {
+                            'Label': 'Amp Loop Input',
+                            'InPhs': 'RA-RaSIB01:RF-LLRF-B:ALInpI-Mon',
+                            'Quad': 'RA-RaSIB01:RF-LLRF-B:ALInpQ-Mon',
+                            'Amp': 'RA-RaSIB01:RF-LLRF-B:ALInpAmp-Mon',
+                            'Phs': 'RA-RaSIB01:RF-LLRF-B:ALInpPhs-Mon'
+                        },
+                        '104': {
+                            'Label': 'Amp of Input',
+                            'InPhs': '-',
+                            'Quad': '-',
+                            'Amp': 'RA-RaSIB01:RF-LLRF-B:ALAmpInp-Mon',
+                            'Phs': '-'
+                        },
+                        '105': {
+                            'Label': 'Phase of Input',
+                            'InPhs': '-',
+                            'Quad': '-',
+                            'Amp': '-',
+                            'Phs': 'RA-RaSIB01:RF-LLRF-B:ALPhsInp-Mon'
+                        },
+                        '109': {
+                            'Label': 'Error',
+                            'InPhs': '-',
+                            'Quad': '-',
+                            'Amp': 'RA-RaSIB01:RF-LLRF-B:ALErr-Mon',
+                            'Phs': '-'
+                        },
+                        '110': {
+                            'Label': 'Error Accum',
+                            'InPhs': '-',
+                            'Quad': '-',
+                            'Amp': 'RA-RaSIB01:RF-LLRF-B:ALErrAcc-Mon',
+                            'Phs': '-'
+                        },
+                        '528': {
+                            'Label': 'Phase Ref',
+                            'InPhs': '-',
+                            'Quad': '-',
+                            'Amp': '-',
+                            'Phs': 'RA-RaSIB01:RF-LLRF-B:PhsRefOld-Mon'
+                        }
+                    },
+                    'Phase': {
+                        'Control': {
+                            '117': ['Enable', 'RA-RaSIB01:RF-LLRF-B:PL'],
+                            '113': ['Input Selection', 'RA-RaSIB01:RF-LLRF-B:PLInp'],
+                            '123': ['Ki', 'RA-RaSIB01:RF-LLRF-B:PLKI'],
+                            '122': ['Kp', 'RA-RaSIB01:RF-LLRF-B:PLKP']
+                        },
+                        '102': {
+                            'Label': 'Phase Loop Input',
+                            'InPhs': 'RA-RaSIB01:RF-LLRF-B:PLInpI-Mon',
+                            'Quad': 'RA-RaSIB01:RF-LLRF-B:PLInpQ-Mon',
+                            'Amp': 'RA-RaSIB01:RF-LLRF-B:PLInpAmp-Mon',
+                            'Phs': 'RA-RaSIB01:RF-LLRF-B:PLInpPhs-Mon'
+                        },
+                        '106': {
+                            'Label': 'Amp of Input',
+                            'InPhs': '-',
+                            'Quad': '-',
+                            'Amp': 'RA-RaSIB01:RF-LLRF-B:PLAmpInp-Mon',
+                            'Phs': '-'
+                        },
+                        '107': {
+                            'Label': 'Phase of Input',
+                            'InPhs': '-',
+                            'Quad': '-',
+                            'Amp': '-',
+                            'Phs': 'RA-RaSIB01:RF-LLRF-B:PLPhsInp-Mon'
+                        },
+                        '112': {
+                            'Label': 'Error',
+                            'InPhs': '-',
+                            'Quad': '-',
+                            'Amp': '-',
+                            'Phs': 'RA-RaSIB01:RF-LLRF-B:PLErr-Mon'
+                        },
+                        '113': {
+                            'Label': 'Error Accum',
+                            'InPhs': '-',
+                            'Quad': '-',
+                            'Amp': '-',
+                            'Phs': 'RA-RaSIB01:RF-LLRF-B:PLErrAcc-Mon'
+                        },
+                        '114': {
+                            'Label': 'Polar Control Output',
+                            'InPhs': 'RA-RaSIB01:RF-LLRF-B:POCtrlI-Mon',
+                            'Quad': 'RA-RaSIB01:RF-LLRF-B:POCtrlQ-Mon',
+                            'Amp': 'RA-RaSIB01:RF-LLRF-B:POCtrlAmp-Mon',
+                            'Phs': 'RA-RaSIB01:RF-LLRF-B:POCtrlPhs-Mon'
+                        },
+                        '6': {
+                            'Label': 'SSA 1 Control Signal',
+                            'InPhs': 'RA-RaSIB01:RF-LLRF-B:SSA1CtrlI-Mon',
+                            'Quad': 'RA-RaSIB01:RF-LLRF-B:SSA1CtrlQ-Mon',
+                            'Amp': 'RA-RaSIB01:RF-LLRF-B:SSA1CtrlAmp-Mon',
+                            'Phs': 'RA-RaSIB01:RF-LLRF-B:SSA1CtrlPhs-Mon'
+                        },
+                        '8': {
+                            'Label': 'SSA 2 Control Signal',
+                            'InPhs': 'RA-RaSIB01:RF-LLRF-B:SSA2CtrlI-Mon',
+                            'Quad': 'RA-RaSIB01:RF-LLRF-B:SSA2CtrlQ-Mon',
+                            'Amp': 'RA-RaSIB01:RF-LLRF-B:SSA2CtrlAmp-Mon',
+                            'Phs': 'RA-RaSIB01:RF-LLRF-B:SSA2CtrlPhs-Mon'
+                        }
+                    }
+                }
             },
         },
         'Ramps': {
