@@ -556,9 +556,9 @@ class RampsDetails(SiriusDialog):
         title += (f' - {self.system}' if self.section == 'SI' else '')
         self.setWindowTitle(title)
         if self.section == 'SI':
-            self.syst_dict = self.chs['Ramps'][self.system]
+            self.syst_dict = self.chs['RampDtls'][self.system]
         else:
-            self.syst_dict = self.chs['Ramps']
+            self.syst_dict = self.chs['RampDtls']
         self._setupUi()
 
     def _setupUi(self):

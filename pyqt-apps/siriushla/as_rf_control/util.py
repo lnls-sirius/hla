@@ -2107,7 +2107,7 @@ SEC_2_CHANNELS = {
                 }
             },
         },
-        'Ramps': {
+        'RampDtls': {
             'A': {
                 'Controls': {
                     'Ramp Enable': 'RA-Ra$(sys)$(sidx)01:$(llrf):RmpEn',
@@ -2139,8 +2139,8 @@ SEC_2_CHANNELS = {
                             'InPhs': 'RA-Ra$(sys)$(sidx)01:$(llrf):RefTopI-Mon',
                             'Quad': 'RA-Ra$(sys)$(sidx)01:$(llrf):RefTopQ-Mon',
                             'Amp1': 'RA-Ra$(sys)$(sidx)01:$(llrf):RefTopAmp-Mon',
-                            'Amp2': '',
-                            'Amp3': '',
+                            'Amp2': 'RA-Ra$(sys)$(sidx)01:$(llrf):RefTopAmpW-Mon',
+                            'Amp3': 'RA-Ra$(sys)$(sidx)01:$(llrf):RefTopAmpdBm-Mon',
                             'Phs': 'RA-Ra$(sys)$(sidx)01:$(llrf):RefTopPhs-Mon'
                         },
                         '150': {
@@ -2148,8 +2148,8 @@ SEC_2_CHANNELS = {
                             'InPhs': '$(cav):PwrTopI-Mon',
                             'Quad': '$(cav):PwrTopQ-Mon',
                             'Amp1': '$(cav):PwrTopAmp-Mon',
-                            'Amp2': '',
-                            'Amp3': '',
+                            'Amp2': '$(cav):PwrTopAmpW-Mon',
+                            'Amp3': '$(cav):PwrTopAmpdBm-Mon',
                             'Phs': '$(cav):PwrTopPhs-Mon'
                         },
                         '152': {
@@ -2157,8 +2157,8 @@ SEC_2_CHANNELS = {
                             'InPhs': 'RA-To$(sys)$(sidx)02:RF-SSAmpTower:PwrFwdTopI-Mon',
                             'Quad': 'RA-To$(sys)$(sidx)02:RF-SSAmpTower:PwrFwdTopQ-Mon',
                             'Amp1': 'RA-To$(sys)$(sidx)02:RF-SSAmpTower:PwrFwdTopAmp-Mon',
-                            'Amp2': '',
-                            'Amp3': '',
+                            'Amp2': 'RA-To$(sys)$(sidx)02:RF-SSAmpTower:PwrFwdTopAmpW-Mon',
+                            'Amp3': 'RA-To$(sys)$(sidx)02:RF-SSAmpTower:PwrFwdTopAmpdBm-Mon',
                             'Phs': 'RA-To$(sys)$(sidx)02:RF-SSAmpTower:PwrFwdTopPhs-Mon'
                         },
                         '154': {
@@ -2166,8 +2166,8 @@ SEC_2_CHANNELS = {
                             'InPhs': 'RA-To$(sys)$(sidx)02:RF-SSAmpTower:PwrRevTopI-Mon',
                             'Quad': 'RA-To$(sys)$(sidx)02:RF-SSAmpTower:PwrRevTopQ-Mon',
                             'Amp1': 'RA-To$(sys)$(sidx)02:RF-SSAmpTower:PwrRevTopAmp-Mon',
-                            'Amp2': '',
-                            'Amp3': '',
+                            'Amp2': 'RA-To$(sys)$(sidx)02:RF-SSAmpTower:PwrRevTopAmpW-Mon',
+                            'Amp3': 'RA-To$(sys)$(sidx)02:RF-SSAmpTower:PwrRevTopAmpdBm-Mon',
                             'Phs': 'RA-To$(sys)$(sidx)02:RF-SSAmpTower:PwrRevTopPhs-Mon'
                         },
                         '190': {
@@ -2175,8 +2175,8 @@ SEC_2_CHANNELS = {
                             'InPhs': '$(cav):PwrFwdTopI-Mon',
                             'Quad': '$(cav):PwrFwdTopQ-Mon',
                             'Amp1': '$(cav):PwrFwdTopAmp-Mon',
-                            'Amp2': '',
-                            'Amp3': '',
+                            'Amp2': '$(cav):PwrFwdTopAmpW-Mon',
+                            'Amp3': '$(cav):PwrFwdTopAmpdBm-Mon',
                             'Phs': '$(cav):PwrFwdTopPhs-Mon'
                         },
                         '156': {
@@ -2184,8 +2184,8 @@ SEC_2_CHANNELS = {
                             'InPhs': 'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrFwdTopI-Mon',
                             'Quad': 'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrFwdTopQ-Mon',
                             'Amp1': 'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrFwdTopAmp-Mon',
-                            'Amp2': '',
-                            'Amp3': '',
+                            'Amp2': 'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrFwdTopAmpW-Mon',
+                            'Amp3': 'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrFwdTopAmpdBm-Mon',
                             'Phs': 'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrFwdTopPhs-Mon'
                         },
                         '158': {
@@ -2193,8 +2193,8 @@ SEC_2_CHANNELS = {
                             'InPhs':  'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrRevTopI-Mon',
                             'Quad':  'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrRevTopQ-Mon',
                             'Amp1':  'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrRevTopAmp-Mon',
-                            'Amp2': '',
-                            'Amp3': '',
+                            'Amp2': 'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrRevTopAmpW-Mon',
+                            'Amp3': 'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrRevTopAmpdBm-Mon',
                             'Phs':  'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrRevTopPhs-Mon'
                         },
                         '160': {
@@ -2202,8 +2202,8 @@ SEC_2_CHANNELS = {
                             'InPhs': '$(cav):PwrRevTopI-Mon',
                             'Quad': '$(cav):PwrRevTopQ-Mon',
                             'Amp1': '$(cav):PwrRevTopAmp-Mon',
-                            'Amp2': '',
-                            'Amp3': '',
+                            'Amp2': '$(cav):PwrRevTopAmpW-Mon',
+                            'Amp3': '$(cav):PwrRevTopAmpdBm-Mon',
                             'Phs': '(cav):PwrRevTopPhs-Mon'
                         },
                         '168': {
@@ -2243,8 +2243,8 @@ SEC_2_CHANNELS = {
                             'InPhs': 'RA-Ra$(sys)$(sidx)01:$(llrf):RefBotI-Mon',
                             'Quad': 'RA-Ra$(sys)$(sidx)01:$(llrf):RefBotQ-Mon',
                             'Amp1': 'RA-Ra$(sys)$(sidx)01:$(llrf):RefBotAmp-Mon',
-                            'Amp2': '',
-                            'Amp3': '',
+                            'Amp2': 'RA-Ra$(sys)$(sidx)01:$(llrf):RefBotAmpW-Mon',
+                            'Amp3': 'RA-Ra$(sys)$(sidx)01:$(llrf):RefBotAmpdBm-Mon',
                             'Phs': 'RA-Ra$(sys)$(sidx)01:$(llrf):RefBotPhs-Mon'
                         },
                         '170': {
@@ -2252,8 +2252,8 @@ SEC_2_CHANNELS = {
                             'InPhs': '$(cav):PwrBotI-Mon',
                             'Quad': '$(cav):PwrBotQ-Mon',
                             'Amp1': '$(cav):PwrBotAmp-Mon',
-                            'Amp2': '',
-                            'Amp3': '',
+                            'Amp2': '$(cav):PwrBotAmpW-Mon',
+                            'Amp3': '$(cav):PwrBotAmpdBm-Mon',
                             'Phs': '$(cav):PwrBotPhs-Mon'
                         },
                         '172': {
@@ -2261,8 +2261,8 @@ SEC_2_CHANNELS = {
                             'InPhs': 'RA-To$(sys)$(sidx)02:RF-SSAmpTower:PwrFwdBotI-Mon',
                             'Quad': 'RA-To$(sys)$(sidx)02:RF-SSAmpTower:PwrFwdBotQ-Mon',
                             'Amp1': 'RA-To$(sys)$(sidx)02:RF-SSAmpTower:PwrFwdBotAmp-Mon',
-                            'Amp2': '',
-                            'Amp3': '',
+                            'Amp2': 'RA-To$(sys)$(sidx)02:RF-SSAmpTower:PwrFwdBotAmpW-Mon',
+                            'Amp3': 'RA-To$(sys)$(sidx)02:RF-SSAmpTower:PwrFwdBotAmpdBm-Mon',
                             'Phs': 'RA-To$(sys)$(sidx)02:RF-SSAmpTower:PwrFwdBotPhs-Mon'
                         },
                         '174': {
@@ -2270,8 +2270,8 @@ SEC_2_CHANNELS = {
                             'InPhs': 'RA-To$(sys)$(sidx)02:RF-SSAmpTower:PwrRevBotI-Mon',
                             'Quad': 'RA-To$(sys)$(sidx)02:RF-SSAmpTower:PwrRevBotQ-Mon',
                             'Amp1': 'RA-To$(sys)$(sidx)02:RF-SSAmpTower:PwrRevBotAmp-Mon',
-                            'Amp2': '',
-                            'Amp3': '',
+                            'Amp2': 'RA-To$(sys)$(sidx)02:RF-SSAmpTower:PwrRevBotAmpW-Mon',
+                            'Amp3': 'RA-To$(sys)$(sidx)02:RF-SSAmpTower:PwrRevBotAmpdBm-Mon',
                             'Phs': 'RA-To$(sys)$(sidx)02:RF-SSAmpTower:PwrRevBotPhs-Mon'
                         },
                         '192': {
@@ -2279,8 +2279,8 @@ SEC_2_CHANNELS = {
                             'InPhs': '$(cav):PwrFwdBotI-Mon',
                             'Quad': '$(cav):PwrFwdBotQ-Mon',
                             'Amp1': '$(cav):PwrFwdBotAmp-Mon',
-                            'Amp2': '',
-                            'Amp3': '',
+                            'Amp2': '$(cav):PwrFwdBotAmpW-Mon',
+                            'Amp3': '$(cav):PwrFwdBotAmpdBm-Mon',
                             'Phs': '$(cav):PwrFwdBotPhs-Mon'
                         },
                         '176': {
@@ -2288,8 +2288,8 @@ SEC_2_CHANNELS = {
                             'InPhs': 'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrFwdBotI-Mon',
                             'Quad': 'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrFwdBotQ-Mon',
                             'Amp1': 'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrFwdBotAmp-Mon',
-                            'Amp2': '',
-                            'Amp3': '',
+                            'Amp2': 'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrFwdBotAmpW-Mon',
+                            'Amp3': 'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrFwdBotAmpdBm-Mon',
                             'Phs': 'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrFwdBotPhs-Mon'
                         },
                         '178': {
@@ -2297,8 +2297,8 @@ SEC_2_CHANNELS = {
                             'InPhs': 'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrRevBotI-Mon',
                             'Quad': 'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrRevBotQ-Mon',
                             'Amp1': 'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrRevBotAmp-Mon',
-                            'Amp2': '',
-                            'Amp3': '',
+                            'Amp2': 'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrRevBotAmpW-Mon',
+                            'Amp3': 'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrRevBotAmpdBm-Mon',
                             'Phs': 'RA-To$(sys)$(sidx)01:RF-SSAmpTower:PwrRevBotPhs-Mon'
                         },
                         '180': {
@@ -2306,8 +2306,8 @@ SEC_2_CHANNELS = {
                             'InPhs': '$(cav):PwrRevBotI-Mon',
                             'Quad': '$(cav):PwrRevBotQ-Mon',
                             'Amp1': '$(cav):PwrRevBotAmp-Mon',
-                            'Amp2': '',
-                            'Amp3': '',
+                            'Amp2': '$(cav):PwrRevBotAmpW-Mon',
+                            'Amp3': '$(cav):PwrRevBotAmpdBm-Mon',
                             'Phs': '$(cav):PwrRevBotPhs-Mon'
                         },
                         '188': {
