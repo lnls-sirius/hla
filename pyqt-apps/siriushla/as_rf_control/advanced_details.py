@@ -216,7 +216,7 @@ class HardwareDetails(SiriusDialog):
                 led = SiriusLedAlert(self, pv, bit)
             else:
                 led = SiriusLedState(self, pv, bit)
-            lay.addWidget(led, bit, 0)
+            lay.addWidget(led, bit, 0, alignment=Qt.AlignHCenter)
             lay.addWidget(QLabel(labels[bit]), bit, 1)
 
 
