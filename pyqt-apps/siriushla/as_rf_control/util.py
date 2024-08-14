@@ -384,14 +384,16 @@ SEC_2_CHANNELS = {
         },
         'Loops': {
             'Control': {
-                '24': ['Amp Loop Ref (mV)', 'RA-RaBO01:RF-LLRF:ALRef'],
+                '24 mV': ['Amp Loop Ref (mV)', 'RA-RaBO01:RF-LLRF:ALRef'],
+                '24 VGap': ['Amp Loop Ref (VGap)', 'RA-RaBO01:RF-LLRF:ALRefVGap'],
                 '25': ['Phase Loop Ref', 'RA-RaBO01:RF-LLRF:PLRef'],
                 '29': ['Voltage Inc. Rate', 'RA-RaBO01:RF-LLRF:AmpIncRate'],
                 '28': ['Phase Inc. Rate', 'RA-RaBO01:RF-LLRF:PhsIncRate'],
                 '106': ['Look Reference', 'RA-RaBO01:RF-LLRF:LookRef-Cmd'],
                 '114': ['Rect/Polar Mode Select', 'RA-RaBO01:RF-LLRF:LoopMode'],
                 '107': ['Quadrant Selection', 'RA-RaBO01:RF-LLRF:Quad'],
-                '26': ['Amp Ref Min (mV)', 'RA-RaBO01:RF-LLRF:AmpRefMin'],
+                '26 mV': ['Amp Ref Min (mV)', 'RA-RaBO01:RF-LLRF:AmpRefMin'],
+                '26 VGap': ['Amp Ref Min (VGap)', 'RA-RaBO01:RF-LLRF:AmpRefMinVGap'],
                 '27': ['Phase Ref Min', 'RA-RaBO01:RF-LLRF:PhsRefMin'],
                 '30': ['Open Loop Gain', 'RA-RaBO01:RF-LLRF:OLGain'],
                 '31': ['Phase Correction Control', 'RA-RaBO01:RF-LLRF:PhsCorrection'],
@@ -1260,21 +1262,23 @@ SEC_2_CHANNELS = {
         'Loops': {
             'A': {
                 'Control': {
-                    '24': ['Amp Loop Ref (mV)', 'RA-RaSIA01:RF-LLRF-A:ALRef'],
+                    '24 mV': ['Amp Loop Ref (mV)', 'RA-RaSIA01:RF-LLRF-A:ALRef'],
+                    '24 VGap': ['Amp Loop Ref (VGap)', 'RA-RaSIA01:RF-LLRF-A:ALRefVGap'],
                     '25': ['Phase Loop Ref', 'RA-RaSIA01:RF-LLRF-A:PLRef'],
                     '29': ['Voltage Inc. Rate', 'RA-RaSIA01:RF-LLRF-A:AmpIncRate'],
                     '28': ['Phase Inc. Rate', 'RA-RaSIA01:RF-LLRF-A:PhsIncRate'],
                     '106': ['Look Reference', 'RA-RaSIA01:RF-LLRF-A:LookRef-Cmd'],
                     '114': ['Rect/Polar Mode Select', 'RA-RaSIA01:RF-LLRF-A:LoopMode'],
                     '107': ['Quadrant Selection', 'RA-RaSIA01:RF-LLRF-A:Quad'],
-                    '26': ['Amp Ref Min (mV)', 'RA-RaSIA01:RF-LLRF-A:AmpRefMin'],
+                    '26 mV': ['Amp Ref Min (mV)', 'RA-RaSIA01:RF-LLRF-A:AmpRefMin'],
+                    '26 VGap': ['Amp Ref Min (VGap)', 'RA-RaSIA01:RF-LLRF-A:AmpRefMinVGap'],
                     '27': ['Phase Ref Min', 'RA-RaSIA01:RF-LLRF-A:PhsRefMin'],
                     '30': ['Open Loop Gain', 'RA-RaSIA01:RF-LLRF-A:OLGain'],
                     '31': ['Phase Correction Control', 'RA-RaSIA01:RF-LLRF-A:PhsCorrection'],
                     '80': ['Phase Correct Error', 'RA-RaSIA01:RF-LLRF-A:PhsCorrErr-Mon'],
                     '81': ['Phase Correct Control', 'RA-RaSIA01:RF-LLRF-A:PhsCorrCtrl-Mon'],
                     '125': ['Fwd Min Amp & Phs', 'RA-RaSIA01:RF-LLRF-A:LoopFwdMin'],
-                    'Mode': 'RA-Ra$(sys)$(sidx)01:$(llrf):LoopMode-Sts'
+                    'Mode': 'RA-RaSIA01:RF-LLRF-A:LoopMode-Sts'
                 },
                 'General': {
                     '0': {
@@ -1547,14 +1551,16 @@ SEC_2_CHANNELS = {
             },
             'B': {
                 'Control': {
-                    '24': ['Amp Loop Ref (mV)', 'RA-RaSIB01:RF-LLRF-B:ALRef'],
+                    '24 mV': ['Amp Loop Ref (mV)', 'RA-RaSIB01:RF-LLRF-B:ALRef'],
+                    '24 VGap': ['Amp Loop Ref (VGap)', 'RA-RaSIB01:RF-LLRF-B:ALRefVGap'],
                     '25': ['Phase Loop Ref', 'RA-RaSIB01:RF-LLRF-B:PLRef'],
                     '29': ['Voltage Inc. Rate', 'RA-RaSIB01:RF-LLRF-B:AmpIncRate'],
                     '28': ['Phase Inc. Rate', 'RA-RaSIB01:RF-LLRF-B:PhsIncRate'],
                     '106': ['Look Reference', 'RA-RaSIB01:RF-LLRF-B:LookRef-Cmd'],
                     '114': ['Rect/Polar Mode Select', 'RA-RaSIB01:RF-LLRF-B:LoopMode'],
                     '107': ['Quadrant Selection', 'RA-RaSIB01:RF-LLRF-B:Quad'],
-                    '26': ['Amp Ref Min (mV)', 'RA-RaSIB01:RF-LLRF-B:AmpRefMin'],
+                    '26 mV': ['Amp Ref Min (mV)', 'RA-RaSIB01:RF-LLRF-B:AmpRefMin'],
+                    '26 VGap': ['Amp Ref Min (VGap)', 'RA-RaSIB01:RF-LLRF-B:AmpRefMinVGap'],
                     '27': ['Phase Ref Min', 'RA-RaSIB01:RF-LLRF-B:PhsRefMin'],
                     '30': ['Open Loop Gain', 'RA-RaSIB01:RF-LLRF-B:OLGain'],
                     '31': ['Phase Correction Control', 'RA-RaSIB01:RF-LLRF-B:PhsCorrection'],

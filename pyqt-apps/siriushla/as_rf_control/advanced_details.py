@@ -272,99 +272,101 @@ class LoopsDetails(SiriusDialog):
         lay.setSpacing(9)
 
         # Amp Loop Ref
-        self._setupLabelEdit(lay, chs_dict, '24', 0, 0)
+        self._setupLabelEdit(lay, chs_dict, '24 mV', 0, 0)
+        self._setupLabelEdit(lay, chs_dict, '24 VGap', 1, 0)
 
         # Phase Loop Ref
-        self._setupLabelEdit(lay, chs_dict, '25', 1, 0)
+        self._setupLabelEdit(lay, chs_dict, '25', 2, 0)
 
         # Voltage Inc. Rate
         lb_vinc = SiriusLabel(self, self.prefix+chs_dict['29'][1]+'-RB',
             alignment=Qt.AlignRight)
         lb_vinc.showUnits = True
-        lay.addWidget(QLabel('29'), 2, 0)
-        lay.addWidget(QLabel(chs_dict['29'][0]), 2, 1)
+        lay.addWidget(QLabel('29'), 3, 0)
+        lay.addWidget(QLabel(chs_dict['29'][0]), 3, 1)
         lay.addWidget(SiriusEnumComboBox(
             self, self.prefix+chs_dict['29'][1]+'-SP'),
             2, 2, alignment=Qt.AlignRight)
-        lay.addWidget(lb_vinc, 2, 3)
+        lay.addWidget(lb_vinc, 3, 3)
 
         # Phase Inc. Rate
         lb_pinc = SiriusLabel(self, self.prefix+chs_dict['28'][1]+'-RB',
             alignment=Qt.AlignRight)
         lb_pinc.showUnits = True
-        lay.addWidget(QLabel('28'), 3, 0)
-        lay.addWidget(QLabel(chs_dict['28'][0]), 3, 1)
+        lay.addWidget(QLabel('28'), 4, 0)
+        lay.addWidget(QLabel(chs_dict['28'][0]), 4, 1)
         lay.addWidget(SiriusEnumComboBox(
             self, self.prefix+chs_dict['28'][1]+'-SP'),
             3, 2, alignment=Qt.AlignRight)
-        lay.addWidget(lb_pinc, 3, 3)
+        lay.addWidget(lb_pinc, 4, 3)
 
         # Look Reference
         pb_lookref = SiriusPushButton(
             self, self.prefix+chs_dict['106'][1])
         pb_lookref.setText('OFF')
-        lay.addWidget(QLabel('106'), 4, 0)
-        lay.addWidget(QLabel(chs_dict['106'][0]), 4, 1)
-        lay.addWidget(pb_lookref, 4, 2, alignment=Qt.AlignRight)
+        lay.addWidget(QLabel('106'), 5, 0)
+        lay.addWidget(QLabel(chs_dict['106'][0]), 5, 1)
+        lay.addWidget(pb_lookref, 5, 2, alignment=Qt.AlignRight)
 
         # Rect/Polar Mode Select
-        lay.addWidget(QLabel('114'), 5, 0)
-        lay.addWidget(QLabel(chs_dict['114'][0]), 5, 1)
+        lay.addWidget(QLabel('114'), 6, 0)
+        lay.addWidget(QLabel(chs_dict['114'][0]), 6, 1)
         lay.addWidget(SiriusEnumComboBox(
             self, self.prefix+chs_dict['114'][1]+'-Sel'),
             5, 2, alignment=Qt.AlignRight)
         lay.addWidget(SiriusLabel(self, self.prefix+chs_dict['114'][1]+'-Sts',
-            alignment=Qt.AlignRight), 5, 3)
+            alignment=Qt.AlignRight), 6, 3)
 
         # Quadrant Selection
-        lay.addWidget(QLabel('107'), 6, 0)
-        lay.addWidget(QLabel(chs_dict['107'][0]), 6, 1)
+        lay.addWidget(QLabel('107'), 7, 0)
+        lay.addWidget(QLabel(chs_dict['107'][0]), 7, 1)
         lay.addWidget(SiriusEnumComboBox(
             self, self.prefix+chs_dict['107'][1]+'-Sel'),
             6, 2, alignment=Qt.AlignRight)
         lay.addWidget(SiriusLabel(self, self.prefix+chs_dict['107'][1]+'-Sts',
-            alignment=Qt.AlignRight), 6, 3)
+            alignment=Qt.AlignRight), 7, 3)
 
         lay.addItem(QSpacerItem(40, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 0, 4)
 
-        # Amp Ref Min (mV)
-        self._setupLabelEdit(lay, chs_dict, '26', 0, 5)
+        # Amp Ref Min
+        self._setupLabelEdit(lay, chs_dict, '26 mV', 0, 5)
+        self._setupLabelEdit(lay, chs_dict, '26 VGap', 1, 5)
 
         # Phase Ref Min
-        self._setupLabelEdit(lay, chs_dict, '27', 1, 5)
+        self._setupLabelEdit(lay, chs_dict, '27', 2, 5)
 
         # Open Loop Gain
-        self._setupLabelEdit(lay, chs_dict, '30', 2, 5)
+        self._setupLabelEdit(lay, chs_dict, '30', 3, 5)
 
         # Phase Correction Control
-        lay.addWidget(QLabel('31'), 3, 5)
-        lay.addWidget(QLabel(chs_dict['31'][0]), 3, 6)
+        lay.addWidget(QLabel('31'), 4, 5)
+        lay.addWidget(QLabel(chs_dict['31'][0]), 4, 6)
         lay.addWidget(PyDMStateButton(
-            self, self.prefix+chs_dict['31'][1]+'-Sel'), 3, 7)
+            self, self.prefix+chs_dict['31'][1]+'-Sel'), 4, 7)
         lay.addWidget(SiriusLedState(
             self, self.prefix+chs_dict['31'][1]+'-Sts'),
-            3, 8, alignment=Qt.AlignHCenter)
+            4, 8, alignment=Qt.AlignHCenter)
 
         # Phase Correct Error
         lb_80 = SiriusLabel(self, self.prefix+chs_dict['80'][1],
             alignment=Qt.AlignRight)
         lb_80.showUnits = True
-        lay.addWidget(QLabel('80'), 4, 5)
-        lay.addWidget(QLabel(chs_dict['80'][0]), 4, 6)
-        lay.addWidget(lb_80, 4, 8)
+        lay.addWidget(QLabel('80'), 5, 5)
+        lay.addWidget(QLabel(chs_dict['80'][0]), 5, 6)
+        lay.addWidget(lb_80, 5, 8)
 
         # Phase Correct Control
         lb_81 = SiriusLabel(self, self.prefix+chs_dict['81'][1],
             alignment=Qt.AlignRight)
         lb_81.showUnits = True
-        lay.addWidget(QLabel('81'), 5, 5)
-        lay.addWidget(QLabel(chs_dict['81'][0]), 5, 6)
-        lay.addWidget(lb_81, 5, 8)
+        lay.addWidget(QLabel('81'), 6, 5)
+        lay.addWidget(QLabel(chs_dict['81'][0]), 6, 6)
+        lay.addWidget(lb_81, 6, 8)
 
         # Fwd Min Amp & Phs
-        self._setupLabelEdit(lay, chs_dict, '125', 6, 5)
+        self._setupLabelEdit(lay, chs_dict, '125', 7, 5)
 
-        # Equations (row = 7, column = 8)
+        # Equations (row = 8, column = 8)
         # pb_eq = QPushButton(
         #     qta.icon('fa5s.external-link-alt'), ' Equations', self)
         # connect_window(
@@ -377,7 +379,7 @@ class LoopsDetails(SiriusDialog):
         label = SiriusLabel(self, self.prefix+chs_dict[key][1]+'-RB')
         label.showUnits = True
 
-        lay.addWidget(QLabel(key), row, column)
+        lay.addWidget(QLabel(key.split()[0]), row, column)
         lay.addWidget(QLabel(chs_dict[key][0]), row, column+1)
         lay.addWidget(SiriusLineEdit(
             self, self.prefix+chs_dict[key][1]+'-SP'), row, column+2)
@@ -704,13 +706,13 @@ class RampsDetails(SiriusDialog):
 
         row = 0
         for addr in lb_addrs:
-                lb = SiriusLabel(self, self.prefix+chs_dict[addr]['PV'])
-                lb.showUnits = True
-                lay.addWidget(QLabel(addr, alignment=Qt.AlignCenter), row, 0)
-                lay.addWidget(QLabel(
-                    chs_dict[addr]['Label'], alignment=Qt.AlignLeft), row, 1)
-                lay.addWidget(lb, row, 2)
-                row += 1
+            lb = SiriusLabel(self, self.prefix+chs_dict[addr]['PV'])
+            lb.showUnits = True
+            lay.addWidget(QLabel(addr, alignment=Qt.AlignCenter), row, 0)
+            lay.addWidget(QLabel(
+                chs_dict[addr]['Label'], alignment=Qt.AlignLeft), row, 1)
+            lay.addWidget(lb, row, 2)
+            row += 1
 
         for addr in led_addrs:
             lay.addWidget(QLabel(addr, alignment=Qt.AlignCenter), row, 0)
