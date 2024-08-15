@@ -911,17 +911,17 @@ SEC_2_CHANNELS = {
             'Cav': {
                 'Raw-U': 'RA-RaBO01:RF-LLRF:CavSysCal',
                 'U-Raw': 'RA-RaBO01:RF-LLRF:CavSysCalInv',
-                'OLG': 'RA-RaBO01:RF-LLRF:CavOLG'
+                'OLG': 'RA-RaBO01:RF-LLRF:CavSysCalOLG'
             },
             'Fwd Cav': {
                 'Raw-U': 'RA-RaBO01:RF-LLRF:FwdCavSysCal',
                 'U-Raw': 'RA-RaBO01:RF-LLRF:FwdCavSysCalInv',
-                'OLG': 'RA-RaBO01:RF-LLRF:FwdCavOLG'
+                'OLG': 'RA-RaBO01:RF-LLRF:FwdCavSysCalOLG'
             },
             'Fwd SSA 1': {
                 'Raw-U': 'RA-RaBO01:RF-LLRF:FwdSSA1SysCal',
                 'U-Raw': 'RA-RaBO01:RF-LLRF:FwdSSA1SysCalInv',
-                'OLG': 'RA-RaBO01:RF-LLRF:FwdSSA1OLG'
+                'OLG': 'RA-RaBO01:RF-LLRF:FwdSSA1SysCalOLG'
             },
             'Fwd SSA 2': {
                 'Raw-U': 'RA-RaBO01:RF-LLRF:FwdSSA2SysCal'
