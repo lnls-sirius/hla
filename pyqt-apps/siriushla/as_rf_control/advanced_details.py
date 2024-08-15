@@ -1,12 +1,13 @@
 """Advanced detail windows."""
 
-from epics import PV
+import qtawesome as qta
 from qtpy.QtCore import Qt
 from qtpy.QtGui import QColor
 from qtpy.QtWidgets import QGridLayout, QGroupBox, QHBoxLayout, QLabel, \
     QSizePolicy as QSzPlcy, QSpacerItem, QTabWidget, QVBoxLayout, \
-    QWidget, QFrame
+    QWidget, QFrame, QPushButton
 
+from ..util import connect_window
 from ..widgets import PyDMStateButton, SiriusDialog, SiriusLabel, \
     SiriusLedAlert, SiriusLedState, SiriusLineEdit, SiriusScaleIndicator, \
     SiriusEnumComboBox, SiriusPushButton, SiriusTimePlot
@@ -281,7 +282,7 @@ class LoopsDetails(SiriusDialog):
 
         # Voltage Inc. Rate
         lb_vinc = SiriusLabel(self, self.prefix+chs_dict['29'][1]+'-RB',
-            alignment=Qt.AlignRight)
+            alignment=Qt.AlignCenter)
         lb_vinc.showUnits = True
         lay.addWidget(QLabel('29'), 3, 0)
         lay.addWidget(QLabel(chs_dict['29'][0]), 3, 1)
@@ -292,7 +293,7 @@ class LoopsDetails(SiriusDialog):
 
         # # Phase Inc. Rate
         lb_pinc = SiriusLabel(self, self.prefix+chs_dict['28'][1]+'-RB',
-            alignment=Qt.AlignRight)
+            alignment=Qt.AlignCenter)
         lb_pinc.showUnits = True
         lay.addWidget(QLabel('28'), 4, 0)
         lay.addWidget(QLabel(chs_dict['28'][0]), 4, 1)
@@ -316,7 +317,7 @@ class LoopsDetails(SiriusDialog):
             self, self.prefix+chs_dict['114'][1]+'-Sel'),
             6, 2, alignment=Qt.AlignRight)
         lay.addWidget(SiriusLabel(self, self.prefix+chs_dict['114'][1]+'-Sts',
-            alignment=Qt.AlignRight), 6, 3)
+            alignment=Qt.AlignCenter), 6, 3)
 
         # Quadrant Selection
         lay.addWidget(QLabel('107'), 7, 0)
@@ -325,8 +326,18 @@ class LoopsDetails(SiriusDialog):
             self, self.prefix+chs_dict['107'][1]+'-Sel'),
             7, 2, alignment=Qt.AlignRight)
         lay.addWidget(SiriusLabel(self, self.prefix+chs_dict['107'][1]+'-Sts',
-            alignment=Qt.AlignRight), 7, 3)
+            alignment=Qt.AlignCenter), 7, 3)
 
+        # Equations
+        pb_eq = QPushButton(
+            qta.icon('fa5s.external-link-alt'), ' Equations', self)
+        connect_window(
+            pb_eq, EquationsDetails, parent=self,
+            prefix=self.prefix, section=self.section, system=self.system)
+        pb_eq.setStyleSheet('min-width:8em')
+        lay.addWidget(pb_eq, 9, 1)
+
+        lay.addItem(QSpacerItem(0, 9, QSzPlcy.Ignored, QSzPlcy.Fixed), 8, 0)
         lay.addItem(QSpacerItem(40, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 0, 4)
 
         # Amp Ref Min
@@ -350,7 +361,7 @@ class LoopsDetails(SiriusDialog):
 
         # Phase Correct Error
         lb_80 = SiriusLabel(self, self.prefix+chs_dict['80'][1],
-            alignment=Qt.AlignRight)
+            alignment=Qt.AlignCenter)
         lb_80.showUnits = True
         lay.addWidget(QLabel('80'), 5, 5)
         lay.addWidget(QLabel(chs_dict['80'][0]), 5, 6)
@@ -358,7 +369,7 @@ class LoopsDetails(SiriusDialog):
 
         # Phase Correct Control
         lb_81 = SiriusLabel(self, self.prefix+chs_dict['81'][1],
-            alignment=Qt.AlignRight)
+            alignment=Qt.AlignCenter)
         lb_81.showUnits = True
         lay.addWidget(QLabel('81'), 6, 5)
         lay.addWidget(QLabel(chs_dict['81'][0]), 6, 6)
@@ -366,13 +377,6 @@ class LoopsDetails(SiriusDialog):
 
         # Fwd Min Amp & Phs
         self._setupLabelEdit(lay, chs_dict, '125', 7, 5)
-
-        # Equations (row = 8, column = 8)
-        # pb_eq = QPushButton(
-        #     qta.icon('fa5s.external-link-alt'), ' Equations', self)
-        # connect_window(
-        #     pq_eq, EquationsDetails, parent=self,
-        #     prefix=self.prefix, section=self.section, system=self.system)
 
         return lay
 
@@ -384,7 +388,7 @@ class LoopsDetails(SiriusDialog):
         lay.addWidget(QLabel(chs_dict[key][0]), row, column+1)
         lay.addWidget(SiriusLineEdit(
             self, self.prefix+chs_dict[key][1]+'-SP'), row, column+2)
-        lay.addWidget(label, row, column+3, alignment=Qt.AlignRight)
+        lay.addWidget(label, row, column+3, alignment=Qt.AlignCenter)
 
     def _specificLoopsLayout(self, rect_or_polar):
         lay = QVBoxLayout(self)
@@ -813,3 +817,84 @@ class RampsDetails(SiriusDialog):
                 row += 1
 
         return lay
+
+
+class EquationsDetails(SiriusDialog):
+    """."""
+
+    def __init__(self, parent=None, prefix='', section='', system=''):
+        """Init."""
+        super().__init__(parent)
+        self.prefix = prefix
+        self.prefix += ('-' if prefix and not prefix.endswith('-') else '')
+        self.section = section
+        self.system = system
+        self.chs = SEC_2_CHANNELS[self.section]
+        self.setObjectName(self.section+'App')
+        title = 'Equations'
+        title += (f' - {self.system}' if self.section == 'SI' else '')
+        self.setWindowTitle(title)
+        # if self.section == 'SI':
+        #     self.syst_dict = self.chs['Equations'][self.system]
+        # else:
+        #     self.syst_dict = self.chs['Equations']
+        self._setupUi()
+
+    def _setupUi(self):
+        lay = QGridLayout(self)
+        lay.setAlignment(Qt.AlignTop)
+        lay.setSpacing(9)
+
+        gbox_al = QGroupBox('Amp Loop Ref')
+        gbox_ol = QGroupBox('Open Loop Gain Recommended')
+        gbox_cav = QGroupBox('Cav')
+        gbox_fwdcav = QGroupBox('Fwd Cav')
+        gbox_fwdssa1 = QGroupBox('Fwd SSA 1')
+        gbox_fwdssa2 = QGroupBox('Fwd SSA 2')
+        gbox_vgap = QGroupBox('VGap')
+
+        lay_extra = QGridLayout()
+        lay_extra.addWidget(QLabel(
+            'C4*F^4 + C3*F^3 + C2*F^2 + C1*F + C0',
+            alignment=Qt.AlignCenter), 0, 0, 1, 5)
+        lay_extra.addWidget(QLabel('Rsh (Ohm)'), 2, 0)
+        lay_extra.addWidget(QLabel('######'), 2, 1)
+
+        lay_extra.addWidget(QLabel('######'), 3, 0)
+        lay_extra.addWidget(QLabel('######'), 3, 2)
+        lb_arrowr1 = QLabel(alignment=Qt.AlignCenter)
+        lb_arrowr1.setPixmap(
+            qta.icon('fa5s.arrow-right', color='black').pixmap(20, 20))
+        lb_arrowr2 = QLabel(alignment=Qt.AlignCenter)
+        lb_arrowr2.setPixmap(
+            qta.icon('fa5s.arrow-right', color='black').pixmap(20, 20))
+        lay_extra.addWidget(lb_arrowr1, 3, 1)
+        lay_extra.addWidget(lb_arrowr2, 3, 3)
+
+        lay_extra.addWidget(QLabel('######'), 4, 0)
+        lay_extra.addWidget(QLabel('######'), 4, 2)
+        lb_arrowl1 = QLabel(alignment=Qt.AlignCenter)
+        lb_arrowl1.setPixmap(
+            qta.icon('fa5s.arrow-left', color='black').pixmap(20, 20))
+        lb_arrowl2 = QLabel(alignment=Qt.AlignCenter)
+        lb_arrowl2.setPixmap(
+            qta.icon('fa5s.arrow-left', color='black').pixmap(20, 20))
+        lay_extra.addWidget(lb_arrowl1, 4, 1)
+        lay_extra.addWidget(lb_arrowl2, 4, 3)
+
+        lb_hw = QLabel('HW', alignment=Qt.AlignCenter)
+        lb_hw.setStyleSheet('''
+            background-color:black;color:white;
+            min-width:3em;min-height:3em;
+            max-width:3em;max-height:3em;''')
+        lay_extra.addWidget(lb_hw, 3, 4, 4, 4,
+            alignment=Qt.AlignTop | Qt.AlignHCenter)
+
+        lay.addWidget(gbox_al, 0, 0)
+        lay.addWidget(gbox_ol, 0, 1)
+        lay.addWidget(gbox_cav, 1, 0)
+        lay.addWidget(gbox_fwdcav, 1, 1)
+        lay.addWidget(gbox_fwdssa1, 2, 0)
+        lay.addWidget(gbox_fwdssa2, 2, 1)
+        lay.addWidget(gbox_vgap, 3, 0)
+        lay.addLayout(lay_extra, 3, 1)
