@@ -904,60 +904,29 @@ SEC_2_CHANNELS = {
         },
         'Equations': {
             'AL Ref': {
-                'C4': ['', ''],
-                'C3': ['', ''],
-                'C2': ['', ''],
-                'C1': ['', ''],
-                'C0': ['', ''],
-                'OFS': ['', '']
+                'Raw-U': '',
+                'U-Raw': ''
             },
-            'OLG Rec': {
-                'C4': [''],
-                'C3': [''],
-                'C2': [''],
-                'C1': [''],
-                'C0': [''],
-                'F': ['']
-            },
+            'OLG Rec': '',
             'Cav': {
-                'C4': ['', '', ''],
-                'C3': ['', '', ''],
-                'C2': ['', '', ''],
-                'C1': ['', '', ''],
-                'C0': ['', '', ''],
-                'OFS': ['', '', '-']
+                'Raw-U': 'RA-RaBO01:RF-LLRF:CavSysCal',
+                'U-Raw': 'RA-RaBO01:RF-LLRF:CavSysCalInv',
+                'OLG': 'RA-RaBO01:RF-LLRF:CavOLG'
             },
             'Fwd Cav': {
-                'C4': ['', '', ''],
-                'C3': ['', '', ''],
-                'C2': ['', '', ''],
-                'C1': ['', '', ''],
-                'C0': ['', '', ''],
-                'OFS': ['', '', '-']
+                'Raw-U': 'RA-RaBO01:RF-LLRF:FwdCavSysCal',
+                'U-Raw': 'RA-RaBO01:RF-LLRF:FwdCavSysCalInv',
+                'OLG': 'RA-RaBO01:RF-LLRF:FwdCavOLG'
             },
             'Fwd SSA 1': {
-                'C4': ['', '', ''],
-                'C3': ['', '', ''],
-                'C2': ['', '', ''],
-                'C1': ['', '', ''],
-                'C0': ['', '', ''],
-                'OFS': ['', '', '-']
+                'Raw-U': 'RA-RaBO01:RF-LLRF:FwdSSA1SysCal',
+                'U-Raw': 'RA-RaBO01:RF-LLRF:FwdSSA1SysCalInv',
+                'OLG': 'RA-RaBO01:RF-LLRF:FwdSSA1OLG'
             },
             'Fwd SSA 2': {
-                'C4': [''],
-                'C3': [''],
-                'C2': [''],
-                'C1': [''],
-                'C0': [''],
-                'OFs': ['']
+                'Raw-U': 'RA-RaBO01:RF-LLRF:FwdSSA2SysCal'
             },
-            'VGap': {
-                'C4': ['', ''],
-                'C3': ['', ''],
-                'C2': ['', ''],
-                'C1': ['', ''],
-                'C0': ['', '']
-            },
+            'VGap': '',
             'Rsh': ''
         },
     },

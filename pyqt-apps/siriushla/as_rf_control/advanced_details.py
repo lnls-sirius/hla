@@ -1,6 +1,7 @@
 """Advanced detail windows."""
 
 import qtawesome as qta
+from epics import PV
 from qtpy.QtCore import Qt
 from qtpy.QtGui import QColor
 from qtpy.QtWidgets import QGridLayout, QGroupBox, QHBoxLayout, QLabel, \
@@ -834,10 +835,10 @@ class EquationsDetails(SiriusDialog):
         title = 'Equations'
         title += (f' - {self.system}' if self.section == 'SI' else '')
         self.setWindowTitle(title)
-        # if self.section == 'SI':
-        #     self.syst_dict = self.chs['Equations'][self.system]
-        # else:
-        #     self.syst_dict = self.chs['Equations']
+        if self.section == 'SI':
+            self.syst_dict = self.chs['Equations'][self.system]
+        else:
+            self.syst_dict = self.chs['Equations']
         self._setupUi()
 
     def _setupUi(self):
@@ -846,12 +847,30 @@ class EquationsDetails(SiriusDialog):
         lay.setSpacing(9)
 
         gbox_al = QGroupBox('Amp Loop Ref')
+        gbox_al.setLayout(
+            self._genericStatisticsLayout(self.syst_dict['AL Ref']))
+
         gbox_ol = QGroupBox('Open Loop Gain Recommended')
+        # gbox_ol.setLayout(self._olgRecLayout('OLG Rec'))
+
         gbox_cav = QGroupBox('Cav')
+        gbox_cav.setLayout(
+            self._genericStatisticsLayout(self.syst_dict['Cav']))
+
         gbox_fwdcav = QGroupBox('Fwd Cav')
+        gbox_fwdcav.setLayout(
+            self._genericStatisticsLayout(self.syst_dict['Fwd Cav']))
+
         gbox_fwdssa1 = QGroupBox('Fwd SSA 1')
+        gbox_fwdssa1.setLayout(
+            self._genericStatisticsLayout(self.syst_dict['Fwd SSA 1']))
+
         gbox_fwdssa2 = QGroupBox('Fwd SSA 2')
+        gbox_fwdssa2.setLayout(
+            self._genericStatisticsLayout(self.syst_dict['Fwd SSA 2']))
+
         gbox_vgap = QGroupBox('VGap')
+        # gbox_vgap.setLayout(self.vgapLayout('VGap'))
 
         lay_extra = QGridLayout()
         lay_extra.addWidget(QLabel(
@@ -898,3 +917,30 @@ class EquationsDetails(SiriusDialog):
         lay.addWidget(gbox_fwdssa2, 2, 1)
         lay.addWidget(gbox_vgap, 3, 0)
         lay.addLayout(lay_extra, 3, 1)
+
+    def _genericStatisticsLayout(self, chs_dict):
+        lay = QGridLayout()
+        lay.setAlignment(Qt.AlignTop)
+        lay.setSpacing(9)
+
+        labels = ['C0', 'C1', 'C2', 'C3', 'C4', 'OFS']
+        for i in range(len(labels)):
+            lay.addWidget(QLabel(
+                labels[i], alignment=Qt.AlignCenter), i+1, 0)
+
+        col = 1
+        for key, val in chs_dict.items():
+            lay.addWidget(QLabel(key, alignment=Qt.AlignCenter), 0, col)
+
+            for i in range(len(labels)):
+                if i == len(labels) - 1 and key == 'OLG':
+                    lay.addWidget(QLabel(
+                        '-', alignment=Qt.AlignCenter), i+1, col)
+                else:
+                    lay.addWidget(SiriusLabel(
+                        self, self.prefix+val+'-RB'), i+1, col,
+                        alignment=Qt.AlignCenter)
+
+            col += 1
+
+        return lay
