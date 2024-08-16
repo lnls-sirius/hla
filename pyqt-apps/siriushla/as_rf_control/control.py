@@ -7,7 +7,7 @@ from pydm.widgets import PyDMEnumComboBox, PyDMLineEdit
 from pyqtgraph import InfiniteLine, mkPen
 from qtpy.QtCore import Qt
 from qtpy.QtGui import QColor
-from qtpy.QtWidgets import QCheckBox, QComboBox, QFormLayout, QGridLayout, \
+from qtpy.QtWidgets import QCheckBox, QComboBox, QGridLayout, \
     QGroupBox, QHBoxLayout, QLabel, QPushButton, QRadioButton, \
     QSizePolicy as QSzPlcy, QSpacerItem, QTabWidget, QVBoxLayout, QWidget
 
@@ -21,7 +21,7 @@ from .details import CavityStatusDetails, FDLMonitor, LLRFInterlockDetails, \
     TransmLineStatusDetails, SlowLoopErrorDetails, SlowLoopParametersDetails, \
     TempMonitor
 from .advanced_details import ADCDACDetails, HardwareDetails, LoopsDetails, \
-    RampsDetails, AutoStartDetails
+    RampsDetails, AutoStartDetails, ConditioningDetails
 from .util import SEC_2_CHANNELS
 
 
@@ -874,63 +874,50 @@ class RFMainControl(SiriusMainWindow):
             systems = ['']
 
         for i in range(len(systems)):
-            # ADCs and DACs
-            pb_adcdac = QPushButton(
-                qta.icon('fa5s.external-link-alt'), ' ADCs and DACs', self)
-            connect_window(
-                pb_adcdac, ADCDACDetails, parent=self,
-                prefix=self.prefix, section=self.section, system=systems[i])
-
-            # Hardware
-            pb_hrdwr = QPushButton(
-                qta.icon('fa5s.external-link-alt'), ' Hardware', self)
-            connect_window(
-                pb_hrdwr, HardwareDetails, parent=self,
-                prefix=self.prefix, section=self.section, system=systems[i])
-
-            # Loops
-            pb_loops = QPushButton(
-                qta.icon('fa5s.external-link-alt'), ' Loops', self)
-            connect_window(
-                pb_loops, LoopsDetails, parent=self,
-                prefix=self.prefix, section=self.section, system=systems[i])
-
-            # Cavity Ramps
-            pb_ramps = QPushButton(
-                qta.icon('fa5s.external-link-alt'), ' Cavity Ramps', self)
-            connect_window(
-                pb_ramps, RampsDetails, parent=self,
-                prefix=self.prefix, section=self.section, system=systems[i])
-
-            # Auto Start
-            pb_auto = QPushButton(
-                qta.icon('fa5s.external-link-alt'), ' Auto Start', self)
-            connect_window(
-                pb_auto, AutoStartDetails, parent=self,
-                prefix=self.prefix, section=self.section, system=systems[i])
+            buttons = []
+            self._addDetailButton(
+                'ADCs and DACs', ADCDACDetails, systems[i], buttons)
+            self._addDetailButton(
+                'Hardware', HardwareDetails, systems[i], buttons)
+            self._addDetailButton(
+                'Loops', LoopsDetails, systems[i], buttons)
+            self._addDetailButton(
+                'Cavity Ramps', RampsDetails, systems[i], buttons)
+            self._addDetailButton(
+                'Auto Start', AutoStartDetails, systems[i], buttons)
+            self._addDetailButton(
+                'Conditioning', ConditioningDetails, systems[i], buttons)
 
             if self.section == 'SI':
                 gbox = QGroupBox(f'System {systems[i]}', self)
                 gbox_lay = QGridLayout()
                 gbox_lay.setHorizontalSpacing(9)
                 gbox_lay.setVerticalSpacing(18)
+                self._setupDetailButtons(gbox_lay, buttons, 0)
                 gbox.setLayout(gbox_lay)
-                gbox_lay.addWidget(pb_adcdac, 0, 0)
-                gbox_lay.addWidget(pb_hrdwr, 0, 1)
-                gbox_lay.addWidget(pb_loops, 0, 2)
-                gbox_lay.addWidget(pb_ramps, 1, 0)
-                gbox_lay.addWidget(pb_auto, 1, 1)
-
                 lay.addItem(QSpacerItem(0, 20, QSzPlcy.Ignored, QSzPlcy.Fixed))
                 lay.addWidget(gbox)
             else:
-                lay.addWidget(pb_adcdac, 1, 0)
-                lay.addWidget(pb_hrdwr, 1, 1)
-                lay.addWidget(pb_loops, 1, 2)
-                lay.addWidget(pb_ramps, 2, 0)
-                lay.addWidget(pb_auto, 2, 1)
+                self._setupDetailButtons(lay, buttons, 1)
 
         return lay
+
+    def _addDetailButton(self, title, detail_class, system, buttons):
+        pb = QPushButton(
+            qta.icon('fa5s.external-link-alt'), f' {title}', self)
+        connect_window(
+            pb, detail_class, parent=self,
+            prefix=self.prefix, section=self.section, system=system)
+        buttons.append(pb)
+
+    def _setupDetailButtons(self, lay, buttons, row):
+        column = 0
+        for pb in buttons:
+            lay.addWidget(pb, row, column)
+            column += 1
+            if column > 2:
+                column = 0
+                row += 1
 
     def _handle_rmptab_visibility(self, unit_type):
         for pos in ['Top', 'Bottom']:
