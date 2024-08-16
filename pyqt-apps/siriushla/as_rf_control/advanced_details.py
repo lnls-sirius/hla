@@ -851,7 +851,7 @@ class EquationsDetails(SiriusDialog):
             self._genericStatisticsLayout(self.syst_dict['AL Ref']))
 
         gbox_ol = QGroupBox('Open Loop Gain Recommended')
-        # gbox_ol.setLayout(self._olgRecLayout('OLG Rec'))
+        gbox_ol.setLayout(self._olgRecLayout())
 
         gbox_cav = QGroupBox('Cav')
         gbox_cav.setLayout(
@@ -870,12 +870,14 @@ class EquationsDetails(SiriusDialog):
             self._genericStatisticsLayout(self.syst_dict['Fwd SSA 2']))
 
         gbox_vgap = QGroupBox('VGap')
-        # gbox_vgap.setLayout(self.vgapLayout('VGap'))
+        gbox_vgap.setLayout(self._vgapLayout())
 
         lay_extra = QGridLayout()
+        lay_extra.addItem(
+            QSpacerItem(0, 27, QSzPlcy.Ignored, QSzPlcy.Fixed), 0, 0)
         lay_extra.addWidget(QLabel(
             'C4*F^4 + C3*F^3 + C2*F^2 + C1*F + C0',
-            alignment=Qt.AlignCenter), 0, 0, 1, 5)
+            alignment=Qt.AlignCenter), 1, 0, 1, 5)
         lay_extra.addWidget(QLabel('Rsh (Ohm)'), 2, 0)
         lay_extra.addWidget(QLabel('######'), 2, 1)
 
@@ -942,5 +944,35 @@ class EquationsDetails(SiriusDialog):
                         alignment=Qt.AlignCenter)
 
             col += 1
+
+        return lay
+
+    def _olgRecLayout(self):
+        lay = QGridLayout()
+        lay.setAlignment(Qt.AlignTop)
+        lay.setSpacing(9)
+
+        lay.addWidget(QLabel(
+            'C4*F^3 + C3*F^2 + C2*F + C1 + C0/F',
+            alignment=Qt.AlignCenter), 0, 0, 1, 2)
+        lay.addItem(QSpacerItem(0, 9, QSzPlcy.Ignored, QSzPlcy.Fixed), 1, 0)
+
+        labels = ['F', 'C0', 'C1', 'C2', 'C3', 'C4']
+        for i in range(len(labels)):
+            lay.addWidget(QLabel(labels[i], alignment=Qt.AlignCenter), i+2, 0)
+
+        return lay
+
+    def _vgapLayout(self):
+        lay = QGridLayout()
+        lay.setAlignment(Qt.AlignTop)
+        lay.setSpacing(9)
+
+        labels = ['C0', 'C1', 'C2', 'C3', 'C4']
+        for i in range(len(labels)):
+            lay.addWidget(QLabel(labels[i], alignment=Qt.AlignCenter), i, 0)
+            lay.addWidget(QLabel(labels[i], alignment=Qt.AlignCenter), i, 3)
+
+        lay.addItem(QSpacerItem(9, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 0, 2)
 
         return lay
