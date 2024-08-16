@@ -79,9 +79,6 @@ class RFMainControl(SiriusMainWindow):
             wid_rampctrl = QWidget(self)
             wid_rampctrl.setLayout(self._rampControlLayout())
             wid_startctrl.addTab(wid_rampctrl, 'Ramp Controls')
-            # wid_autostart = QWidget(self)
-            # wid_autostart.setLayout(self._autoStartLayout())
-            # wid_startctrl.addTab(wid_autostart, 'Auto Start')
         wid_advdtls = QWidget(self)
         wid_advdtls.setStyleSheet("QPushButton{min-width: 8em;}")
         wid_advdtls.setLayout(self._advancedDetailsLayout())
@@ -1059,56 +1056,6 @@ class RFMainControl(SiriusMainWindow):
         lay.addLayout(hbox_rb, 10, 0, 1, 3)
         lay.addItem(
             QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Expanding), 11, 0)
-        return lay
-
-    def _autoStartLayout(self):
-        self.bt_autostart = PyDMStateButton(
-            self, self.prefix+'RA-RaBO01:RF-LLRF:AutoStartupEn-SP')
-        self.led_autostart = SiriusLedState(
-            self, self.prefix+'RA-RaBO01:RF-LLRF:AutoStartupEn-RB')
-        hl_autostart = QHBoxLayout()
-        hl_autostart.setAlignment(Qt.AlignLeft)
-        hl_autostart.addWidget(self.bt_autostart)
-        hl_autostart.addWidget(self.led_autostart)
-
-        self.cb_comstart = PyDMEnumComboBox(
-            self, self.prefix+'RA-RaBO01:RF-LLRF:AutoStartupCmdStart-Sel')
-        self.cb_comstart.setStyleSheet('min-width: 15em; max-width: 15em;')
-
-        self.lb_statestart = SiriusLabel(
-            self, self.prefix+'RA-RaBO01:RF-LLRF:AutoStartupCmdStart-Sts')
-        self.lb_statestart.setStyleSheet(
-            'qproperty-alignment: AlignLeft; min-width:15em; max-width:15em;')
-
-        self.led_startok = PyDMLedMultiChannel(
-            self, {self.prefix+'RA-RaSIA01:RF-LLRF-A:EPSEn-Sts': 0,
-                   self.prefix+'RA-RaSIA01:RF-LLRF-A:FIMEn-Sts': 0,
-                   self.prefix+'RA-RaBO01:RF-LLRF:SSARdy-Mon': 1,
-                   self.prefix+'RA-RaBO01:RF-LLRF:IntlkAll-Mon': 0})
-
-        self.led_tuneok = PyDMLedMultiChannel(
-            self, {self.prefix+'RA-RaBO01:RF-LLRF:TuneFwdMin-Mon': 1})
-
-        self.led_closeloopok = PyDMLedMultiChannel(
-            self, {self.prefix+'RA-RaBO01:RF-LLRF:SLFwdMin-Mon': 1,
-                   self.prefix+'RA-RaBO01:RF-LLRF:FLFwdMin-Mon': 1,
-                   self.prefix+'RA-RaBO01:RF-LLRF:ALFwdMin-Mon': 1,
-                   self.prefix+'RA-RaBO01:RF-LLRF:PLFwdMin-Mon': 1})
-
-        lay = QFormLayout()
-        lay.setLabelAlignment(Qt.AlignRight)
-        lay.setFormAlignment(Qt.AlignLeft)
-        lay.addRow(QLabel('<h3> • Commands</h3>', self))
-        lay.addItem(QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed))
-        lay.addRow('Enable: ', hl_autostart)
-        lay.addRow('Command: ', self.cb_comstart)
-        lay.addRow('Current State:', self.lb_statestart)
-        lay.addItem(QSpacerItem(0, 20, QSzPlcy.Ignored, QSzPlcy.Fixed))
-        lay.addRow(QLabel('<h3> • Statuses</h3>', self))
-        lay.addItem(QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed))
-        lay.addRow('Auto Start Beginning Ok: ', self.led_startok)
-        lay.addRow('Auto Tuning Ok: ', self.led_tuneok)
-        lay.addRow('Auto Close Loops Ok: ', self.led_closeloopok)
         return lay
 
     def _powerMeterLayout(self):
