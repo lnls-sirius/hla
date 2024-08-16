@@ -21,7 +21,7 @@ from .details import CavityStatusDetails, FDLMonitor, LLRFInterlockDetails, \
     TransmLineStatusDetails, SlowLoopErrorDetails, SlowLoopParametersDetails, \
     TempMonitor
 from .advanced_details import ADCDACDetails, HardwareDetails, LoopsDetails, \
-    RampsDetails
+    RampsDetails, AutoStartDetails
 from .util import SEC_2_CHANNELS
 
 
@@ -905,6 +905,13 @@ class RFMainControl(SiriusMainWindow):
                 pb_ramps, RampsDetails, parent=self,
                 prefix=self.prefix, section=self.section, system=systems[i])
 
+            # Auto Start
+            pb_auto = QPushButton(
+                qta.icon('fa5s.external-link-alt'), ' Auto Start', self)
+            connect_window(
+                pb_auto, AutoStartDetails, parent=self,
+                prefix=self.prefix, section=self.section, system=systems[i])
+
             if self.section == 'SI':
                 gbox = QGroupBox(f'System {systems[i]}', self)
                 gbox_lay = QGridLayout()
@@ -915,6 +922,7 @@ class RFMainControl(SiriusMainWindow):
                 gbox_lay.addWidget(pb_hrdwr, 0, 1)
                 gbox_lay.addWidget(pb_loops, 0, 2)
                 gbox_lay.addWidget(pb_ramps, 1, 0)
+                gbox_lay.addWidget(pb_auto, 1, 1)
 
                 lay.addItem(QSpacerItem(0, 20, QSzPlcy.Ignored, QSzPlcy.Fixed))
                 lay.addWidget(gbox)
@@ -923,6 +931,7 @@ class RFMainControl(SiriusMainWindow):
                 lay.addWidget(pb_hrdwr, 1, 1)
                 lay.addWidget(pb_loops, 1, 2)
                 lay.addWidget(pb_ramps, 2, 0)
+                lay.addWidget(pb_auto, 2, 1)
 
         return lay
 

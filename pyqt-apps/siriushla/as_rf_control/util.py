@@ -929,6 +929,22 @@ SEC_2_CHANNELS = {
             'VGap': '',
             'Rsh': ''
         },
+        'AutoStart': {
+            '22': ['Automatic Startup Enable', 'RA-RaBO01:RF-LLRF:AutoStartupEn'],
+            '23': ['Command Start', 'RA-RaBO01:RF-LLRF:AutoStartupCmdStart'],
+            '400': ['EPS Interlock', 'RA-RaBO01:RF-LLRF:EPSEn'],
+            '401': ['Interlock Bypass', 'RA-RaBO01:RF-LLRF:FIMEn'],
+            'Diag': {
+                '500': ['State Start', 'RA-RaBO01:RF-LLRF:AutoStartState-Mon'],
+                '400': ['Tx Ready', 'RA-RaBO01:RF-LLRF:SSARdy-Mon'],
+                '401': ['Fast Interlock', 'RA-RaBO01:RF-LLRF:IntlkAll-Mon'],
+                '308': ['Slow Loop Fwd Min', 'RA-RaBO01:RF-LLRF:SLFwdMin-Mon'],
+                '309': ['Fast Loop Fwd Min', 'RA-RaBO01:RF-LLRF:FLFwdMin-Mon'],
+                '310': ['Amp Loop Fwd Min', 'RA-RaBO01:RF-LLRF:ALFwdMin-Mon'],
+                '311': ['Phase Loop Fwd Min', 'RA-RaBO01:RF-LLRF:PLFwdMin-Mon'],
+                '307': ['Tuning Fwd Min', 'RA-RaBO01:RF-LLRF:TuneFwdMin-Mon']
+            }
+        },
     },
     'SI': {
         'Emergency': 'RA-RaSIA02:RF-IntlkCtrl:EStop-Mon',
@@ -2828,6 +2844,40 @@ SEC_2_CHANNELS = {
                     }
                 }
             }
-        }
+        },
+        'AutoStart': {
+            'A': {
+                '22': ['Automatic Startup Enable', 'RA-RaSIA01:RF-LLRF-A:AutoStartupEn'],
+                '23': ['Command Start', 'RA-RaSIA01:RF-LLRF-A:AutoStartupCmdStart'],
+                '400': ['EPS Interlock', 'RA-RaSIA01:RF-LLRF-A:EPSEn'],
+                '401': ['Interlock Bypass', 'RA-RaSIA01:RF-LLRF-A:FIMEn'],
+                'Diag': {
+                    '500': ['State Start', 'RA-RaSIA01:RF-LLRF-A:AutoStartState-Mon'],
+                    '400': ['Tx Ready', 'RA-RaSIA01:RF-LLRF-A:SSARdy-Mon'],
+                    '401': ['Fast Interlock', 'RA-RaSIA01:RF-LLRF-A:IntlkAll-Mon'],
+                    '308': ['Slow Loop Fwd Min', 'RA-RaSIA01:RF-LLRF-A:SLFwdMin-Mon'],
+                    '309': ['Fast Loop Fwd Min', 'RA-RaSIA01:RF-LLRF-A:FLFwdMin-Mon'],
+                    '310': ['Amp Loop Fwd Min', 'RA-RaSIA01:RF-LLRF-A:ALFwdMin-Mon'],
+                    '311': ['Phase Loop Fwd Min', 'RA-RaSIA01:RF-LLRF-A:PLFwdMin-Mon'],
+                    '307': ['Tuning Fwd Min', 'RA-RaSIA01:RF-LLRF-A:TuneFwdMin-Mon']
+                }
+            },
+            'B': {
+                '22': ['Automatic Startup Enable', 'RA-RaSIB01:RF-LLRF-B:AutoStartupEn'],
+                '23': ['Command Start', 'RA-RaSIB01:RF-LLRF-B:AutoStartupCmdStart'],
+                '400': ['EPS Interlock', 'RA-RaSIB01:RF-LLRF-B:EPSEn'],
+                '401': ['Interlock Bypass', 'RA-RaSIB01:RF-LLRF-B:FIMEn'],
+                'Diag': {
+                    '500': ['State Start', 'RA-RaSIB01:RF-LLRF-B:AutoStartState-Mon'],
+                    '400': ['Tx Ready', 'RA-RaSIB01:RF-LLRF-B:SSARdy-Mon'],
+                    '401': ['Fast Interlock', 'RA-RaSIB01:RF-LLRF-B:IntlkAll-Mon'],
+                    '308': ['Slow Loop Fwd Min', 'RA-RaSIB01:RF-LLRF-B:SLFwdMin-Mon'],
+                    '309': ['Fast Loop Fwd Min', 'RA-RaSIB01:RF-LLRF-B:FLFwdMin-Mon'],
+                    '310': ['Amp Loop Fwd Min', 'RA-RaSIB01:RF-LLRF-B:ALFwdMin-Mon'],
+                    '311': ['Phase Loop Fwd Min', 'RA-RaSIB01:RF-LLRF-B:PLFwdMin-Mon'],
+                    '307': ['Tuning Fwd Min', 'RA-RaSIB01:RF-LLRF-B:TuneFwdMin-Mon']
+                }
+            }
+        },
     },
 }
