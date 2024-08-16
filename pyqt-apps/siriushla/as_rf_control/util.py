@@ -945,6 +945,20 @@ SEC_2_CHANNELS = {
                 '307': ['Tuning Fwd Min', 'RA-RaBO01:RF-LLRF:TuneFwdMin-Mon']
             }
         },
+        'Conditioning': {
+            '200': ['Pulse Mode Enable', 'RA-Ra$(sys)$(sidx)01:$(llrf):CondEn'],
+            '201': ['Auto Conditioning Enable', 'A-Ra$(sys)$(sidx)01:$(llrf):CondAuto'],
+            '204': ['Conditioning Freq', 'RA-Ra$(sys)$(sidx)01:$(llrf):CondFreq'],
+            '540': ['Cond Freq Diag', 'RA-Ra$(sys)$(sidx)01:$(llrf):CondFreq-Mon', '$(device):CondFreqDiagHz'],
+            '205': ['Duty Cycle', 'RA-Ra$(sys)$(sidx)01:$(llrf):CondDuty2'],
+            '530': ['Duty Cycle RB', 'RA-Ra$(sys)$(sidx)01:$(llrf):CondDutyCycle-Mon', '$(device):DutyCycle'],
+            '79': ['Vacuum', 'RA-Ra$(sys)$(sidx)01:$(llrf):VacuumFastRly-Mon'],
+            'Relay': {
+                'CGC Fast Relay': '$(cavityloc):VA-CCG-$(vac):FastRelay',
+                'Relay Setpoint RB': '$(vacloc):Setpoint',
+                'Relay Hysteria RB': '$(vacloc):Hyst'
+            }
+        }
     },
     'SI': {
         'Emergency': 'RA-RaSIA02:RF-IntlkCtrl:EStop-Mon',

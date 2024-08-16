@@ -1009,7 +1009,10 @@ class AutoStartDetails(SiriusDialog):
         gbox_gen = QGroupBox('General')
         gen_lay = QGridLayout()
 
+        # # Enable
         self._setupButtonLed(gen_lay, '22', 0)
+
+        # # Start
         gen_lay.addWidget(QLabel('23'), 1, 0)
         gen_lay.addWidget(QLabel(self.syst_dict['23'][0]), 1, 1)
         gen_lay.addWidget(SiriusEnumComboBox(
@@ -1018,19 +1021,25 @@ class AutoStartDetails(SiriusDialog):
         gen_lay.addWidget(SiriusLabel(
             self, self.prefix+self.syst_dict['23'][1]+'-Sts',
             alignment=Qt.AlignCenter), 1, 3)
+
+        # # EPS
         self._setupButtonLed(gen_lay, '400', 2)
+
+        # # Bypass
         self._setupButtonLed(gen_lay, '401', 3)
 
         # Diagnostics
         gbox_diag = QGroupBox('Diagnostics')
         diag_lay = QGridLayout()
 
+        # # State Start
         lb_state = SiriusLabel(self, self.syst_dict['Diag']['500'][1])
         lb_state.showUnits = True
-
         diag_lay.addWidget(QLabel('500'), 0, 0)
         diag_lay.addWidget(QLabel(self.syst_dict['Diag']['500'][0]), 0, 1)
         diag_lay.addWidget(lb_state, 0, 2)
+
+        # # LEDs
         row = 1
         for key in self.syst_dict['Diag'].keys():
             if key != '500':
@@ -1062,3 +1071,101 @@ class AutoStartDetails(SiriusDialog):
         lay.addWidget(QLabel(key), row, 0)
         lay.addWidget(QLabel(chs_dict[key][0]), row, 1)
         lay.addWidget(led, row, 2, alignment=Qt.AlignCenter)
+
+
+class ConditioningDetails(SiriusDialog):
+    """."""
+
+    def __init__(self, parent=None, prefix='', section='', system=''):
+        """Init."""
+        super().__init__(parent)
+        self.prefix = prefix
+        self.prefix += ('-' if prefix and not prefix.endswith('-') else '')
+        self.section = section
+        self.system = system
+        self.chs = SEC_2_CHANNELS[self.section]
+        self.setObjectName(self.section+'App')
+        title = 'Conditioning Details'
+        title += (f' - {self.system}' if self.section == 'SI' else '')
+        self.setWindowTitle(title)
+        if self.section == 'SI':
+            self.syst_dict = self.chs['Conditioning'][self.system]
+        else:
+            self.syst_dict = self.chs['Conditioning']
+        self._setupUi()
+
+    def _setupUi(self):
+        lay = QGridLayout(self)
+        lay.setAlignment(Qt.AlignTop)
+        lay.setSpacing(9)
+
+        # Pulse Enable
+        self._setupLedState(lay, '200', 0, True)
+
+        # Auto Cond Enable
+        self._setupLedState(lay, '201', 1, True)
+
+        # Cond Freq
+        self._setupLabelEdit(lay, '204', 2)
+
+        # Cond Freq Diag
+        self._setupTwoLabels(lay, '540', 3)
+
+        # Duty Cycle
+        self._setupLabelEdit(lay, '205', 4)
+
+        # Duty Cycle RB
+        self._setupTwoLabels(lay, '530', 5)
+        relay_keys = [
+            'CGC Fast Relay', 'Relay Setpoint RB', 'Relay Hysteria RB']
+        row = 6
+        for key in relay_keys:
+            lb_relay = SiriusLabel(
+                self, self.prefix+self.syst_dict['Relay'][key][1]+'-RB')
+            lb_relay.showUnits = True
+
+            lay.addWidget(QLabel(key), row, 1)
+            if key.split()[-1] != 'RB':
+                lay.addWidget(SiriusLineEdit(
+                    self, self.prefix+self.syst_dict['Relay'][key]+'-SP'), row, 2)
+            lay.addWidget(lb_relay, row, 3)
+            row += 1
+
+        # Vacuum
+        self._setupLedState(lay, '79', row, False)
+
+    def _setupLedState(self, lay, key, row, has_button):
+        lay.addWidget(QLabel(key), row, 0)
+        lay.addWidget(QLabel(self.syst_dict[key][0]), row, 1)
+
+        ending = ''
+        if has_button:
+            lay.addWidget(PyDMStateButton(
+                self, self.prefix+self.syst_dict[key][1]+'-Sel'),
+                row, 2, alignment=Qt.AlignCenter)
+            ending = '-Sts'
+
+        lay.addWidget(SiriusLedState(
+            self, self.prefix+self.syst_dict[key][1]+ending),
+            row, 3, alignment=Qt.AlignCenter)
+
+    def _setupLabelEdit(self, lay, key, row):
+        label = SiriusLabel(self, self.prefix+self.syst_dict[key][1]+'-RB')
+        label.showUnits = True
+
+        lay.addWidget(QLabel(key), row, 0)
+        lay.addWidget(QLabel(self.syst_dict[key][0]), row, 1)
+        lay.addWidget(SiriusLineEdit(
+            self, self.prefix+self.syst_dict[key][1]+'-SP'), row, 2)
+        lay.addWidget(label, row, 3, alignment=Qt.AlignCenter)
+
+    def _setupTwoLabels(self, lay, key, row):
+        lb_1 = SiriusLabel(self, self.prefix+self.syst_dict[key][1])
+        lb_1.showUnits = True
+        lb_2 = SiriusLabel(self, self.prefix+self.syst_dict[key][2])
+        lb_2.showUnits = True
+
+        lay.addWidget(QLabel(key), row, 0)
+        lay.addWidget(QLabel(self.syst_dict[key][0]), row, 1)
+        lay.addWidget(lb_1, row, 2, alignment=Qt.AlignCenter)
+        lay.addWidget(lb_2, row, 3, alignment=Qt.AlignCenter)
