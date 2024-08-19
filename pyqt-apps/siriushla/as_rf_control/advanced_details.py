@@ -10,7 +10,7 @@ from qtpy.QtWidgets import QGridLayout, QGroupBox, QHBoxLayout, QLabel, \
 
 from ..util import connect_window
 from ..widgets import PyDMStateButton, SiriusDialog, SiriusLabel, \
-    SiriusLedAlert, SiriusLedState, SiriusLineEdit, SiriusScaleIndicator, \
+    SiriusLedAlert, SiriusLedState, SiriusSpinbox, SiriusScaleIndicator, \
     SiriusEnumComboBox, SiriusPushButton, SiriusTimePlot
 
 from .util import SEC_2_CHANNELS
@@ -58,7 +58,7 @@ class ADCDACDetails(SiriusDialog):
                 lay.addWidget(QLabel(key), row, 0)
                 lay.addWidget(QLabel(val[0]), row, 1)
                 lay.addWidget(
-                    SiriusLineEdit(self, self.prefix+val[1]+'-SP'), row, 2)
+                    SiriusSpinbox(self, self.prefix+val[1]+'-SP'), row, 2)
                 lay.addWidget(lb_value, row, 3)
             row += 1
 
@@ -387,7 +387,7 @@ class LoopsDetails(SiriusDialog):
 
         lay.addWidget(QLabel(key.split()[0]), row, column)
         lay.addWidget(QLabel(chs_dict[key][0]), row, column+1)
-        lay.addWidget(SiriusLineEdit(
+        lay.addWidget(SiriusSpinbox(
             self, self.prefix+chs_dict[key][1]+'-SP'), row, column+2)
         lay.addWidget(label, row, column+3, alignment=Qt.AlignCenter)
 
@@ -534,7 +534,7 @@ class LoopsDetails(SiriusDialog):
             lay.addWidget(QLabel(
                 keys[i], alignment=Qt.AlignCenter), row, column)
             lay.addWidget(QLabel(chs_dict[keys[i]][0]), row, column+1)
-            lay.addWidget(SiriusLineEdit(
+            lay.addWidget(SiriusSpinbox(
                 self, self.prefix+chs_dict[keys[i]][1]+'-SP'), row, column+2)
             lay.addWidget(lb, row, column+3)
             column += 4
@@ -730,7 +730,7 @@ class RampsDetails(SiriusDialog):
 
         lay.addWidget(QLabel(key.split()[0], alignment=Qt.AlignCenter), row, 0)
         lay.addWidget(QLabel(chs_dict[key][0]), row, 1)
-        lay.addWidget(SiriusLineEdit(
+        lay.addWidget(SiriusSpinbox(
             self, self.prefix+chs_dict[key][1]+'-SP'), row, 2)
         lay.addWidget(label, row, 3, alignment=Qt.AlignCenter)
 
@@ -1140,7 +1140,7 @@ class ConditioningDetails(SiriusDialog):
 
             lay.addWidget(QLabel(key), row, 1)
             if key.split()[-1] != 'RB':
-                lay.addWidget(SiriusLineEdit(
+                lay.addWidget(SiriusSpinbox(
                     self, self.prefix+self.syst_dict['Relay'][key]+'-SP'),
                     row, 2)
             lay.addWidget(lb_relay, row, 3)
@@ -1170,7 +1170,7 @@ class ConditioningDetails(SiriusDialog):
 
         lay.addWidget(QLabel(key), row, 0)
         lay.addWidget(QLabel(self.syst_dict[key][0]), row, 1)
-        lay.addWidget(SiriusLineEdit(
+        lay.addWidget(SiriusSpinbox(
             self, self.prefix+self.syst_dict[key][1]+'-SP'), row, 2)
         lay.addWidget(label, row, 3, alignment=Qt.AlignCenter)
 
@@ -1254,7 +1254,7 @@ class TuningDetails(SiriusDialog):
         lb_num = SiriusLabel(self, self.prefix+chs_dict['302'][1]+'-RB')
         lb_num.showUnits = True
         self._setupAddrLabel(lay, chs_dict, '302', 0)
-        lay.addWidget(SiriusLineEdit(
+        lay.addWidget(SiriusSpinbox(
             self, self.prefix+chs_dict['302'][1]+'-SP'), 0, 2)
         lay.addWidget(lb_num, 0, 3, alignment=Qt.AlignCenter)
 
@@ -1309,7 +1309,7 @@ class TuningDetails(SiriusDialog):
             label = SiriusLabel(self, self.prefix+chs_dict[key][1]+'-RB')
             label.showUnits = True
             self._setupAddrLabel(lay, chs_dict, key, row)
-            lay.addWidget(SiriusLineEdit(
+            lay.addWidget(SiriusSpinbox(
                 self, self.prefix+chs_dict[key][1]+'-SP'), row, 2)
             lay.addWidget(label, row, 3)
             row += 1
