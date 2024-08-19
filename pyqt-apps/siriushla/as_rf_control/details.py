@@ -1,17 +1,20 @@
 """Detail windows."""
 
+import qtawesome as qta
 from pyqtgraph import BarGraphItem, PlotWidget
 from pydm.widgets import PyDMEnumComboBox
 from qtpy.QtCore import Qt, QTimer
 from qtpy.QtGui import QColor
 from qtpy.QtWidgets import QCheckBox, QComboBox, QFormLayout, QGridLayout, \
     QGroupBox, QHBoxLayout, QLabel, QSizePolicy as QSzPlcy, QSpacerItem, \
-    QTabWidget, QVBoxLayout, QWidget
+    QTabWidget, QVBoxLayout, QWidget, QPushButton
 
+from ..util import connect_window
 from ..widgets import DetachableTabWidget, PyDMLedMultiChannel, \
     PyDMStateButton, SiriusConnectionSignal as _ConnSignal, SiriusDialog, \
     SiriusLabel, SiriusLedAlert, SiriusSpinbox, SiriusTimePlot, \
     SiriusWaveformPlot
+from .advanced_details import AdvancedInterlockDetails
 
 from .util import SEC_2_CHANNELS
 
@@ -308,7 +311,7 @@ class LLRFInterlockDetails(SiriusDialog):
             offset = 1
             for key, chs_dict in self.chs['LLRF Intlk Details'].items():
                 self._setupDetails(lay, key, chs_dict, offset)
-                offset += 2
+                offset += 3
         else:
             self._setupDetails(lay, None, self.chs['LLRF Intlk Details'], 1)
 
@@ -366,6 +369,15 @@ class LLRFInterlockDetails(SiriusDialog):
             lay_time.addWidget(desc, irow, 0)
             lay_time.addWidget(lbl, irow, 1)
         lay.addWidget(gbox_time, offset+1, col)
+
+        # advanced details
+        pb_dtls = QPushButton(
+            qta.icon('fa5s.external-link-alt'), ' Advanced Details', self)
+        pb_dtls.setStyleSheet("min-width: 9em;")
+        connect_window(
+            pb_dtls, AdvancedInterlockDetails, parent=self,
+            prefix=self.prefix, section=self.section, system=key)
+        lay.addWidget(pb_dtls, offset+2, 0)
 
 
 class BarGraph(PlotWidget):
@@ -1022,4 +1034,3 @@ class SlowLoopParametersDetails(SiriusDialog):
         lay_input.setRowStretch(3, 2)
         lay_llrf.addLayout(lay_input, 1, 4, 3, 2)
         lay.addLayout(lay_llrf)
-

@@ -37,7 +37,7 @@ SEC_2_CHANNELS = {
                         'Plunger 2 End Sw Down',
                     ),
                 },
-                'Fast Input': {
+                'Input 2': {
                     'Status': {
                         '0': 'RA-RaBO01:RF-LLRF:Inp2Intlk0-Mon',
                         '1': 'RA-RaBO01:RF-LLRF:Inp2Intlk1-Mon',
@@ -991,6 +991,42 @@ SEC_2_CHANNELS = {
                 '316': ['Tuning/FF On Top Ramp', 'RA-RaBO01:RF-LLRF:RampTuneTop'],
             }
         },
+        'AdvIntlk': {
+            'Diagnostics': {
+                'General': {
+                    'Manual': ['Manual Interlock', 'RA-Ra$(sys)$(sidx)01:$(llrf):IntlkManual'],
+                    'EndSw': ['End Switches', 'RA-Ra$(sys)$(sidx)01:$(llrf):EndSwLogicInv'],
+                    'Delay': 'RA-Ra$(sys)$(sidx)01:$(llrf):IntlkDly',
+                    'HW': 'RA-Ra$(sys)$(sidx)01:$(llrf):FDLHwTrig-Mon',
+                    'Beam Inv': ['Logic Inv. LLRF Beam Trip', 'RA-Ra$(sys)$(sidx)01:$(llrf):OrbitIntlkLogicInv'],
+                    'Vacuum Inv': ['Vacuum Logic Inversion', 'RA-Ra$(sys)$(sidx)01:$(llrf):VacLogicInv']
+                },
+                'Levels': {
+                    'RevSSA1': 'RA-Ra$(sys)$(sidx)01:$(llrf):LimRevSSA1',
+                    'RevSSA2': 'RA-Ra$(sys)$(sidx)01:$(llrf):LimRevSSA2',
+                    'RevSSA3': 'RA-Ra$(sys)$(sidx)01:$(llrf):LimRevSSA3',
+                    'RevSSA4': 'RA-Ra$(sys)$(sidx)01:$(llrf):LimRevSSA4',
+                    'RevCav': 'RA-Ra$(sys)$(sidx)01:$(llrf):LimRevCav',
+                    'VCav': 'RA-Ra$(sys)$(sidx)01:$(llrf):LimCav',
+                    'FwCav': 'RA-Ra$(sys)$(sidx)01:$(llrf):LimFwdCav',
+                    'FwSSA1': 'RA-Ra$(sys)$(sidx)01:$(llrf):LimFwdSSA1',
+                    'RF In 7': 'RA-Ra$(sys)$(sidx)01:$(llrf):LimRefIn7',
+                    'RF In 8': 'RA-Ra$(sys)$(sidx)01:$(llrf):LimRefIn8',
+                    'RF In 9': 'RA-Ra$(sys)$(sidx)01:$(llrf):LimRefIn9',
+                    'RF In 10': 'RA-Ra$(sys)$(sidx)01:$(llrf):LimRefIn10',
+                    'RF In 11': 'RA-Ra$(sys)$(sidx)01:$(llrf):LimRefIn11',
+                    'RF In 12': 'RA-Ra$(sys)$(sidx)01:$(llrf):LimRefIn12',
+                    'RF In 13': 'RA-Ra$(sys)$(sidx)01:$(llrf):LimRefIn13',
+                    'RF In 14': 'RA-Ra$(sys)$(sidx)01:$(llrf):LimRefIn14',
+                    'RF In 15': 'RA-Ra$(sys)$(sidx)01:$(llrf):LimRefIn15'
+                },
+                'GPIO': {
+                    'Inp': 'RA-Ra$(sys)$(sidx)01:$(llrf):GPIOInp-Mon',
+                    'Intlk': 'RA-Ra$(sys)$(sidx)01:$(llrf):GPIOIntlk-Mon',
+                    'Out': 'RA-Ra$(sys)$(sidx)01:$(llrf):GPIOOut-Mon'
+                }
+            },
+        }
     },
     'SI': {
         'Emergency': 'RA-RaSIA02:RF-IntlkCtrl:EStop-Mon',
@@ -1002,7 +1038,7 @@ SEC_2_CHANNELS = {
         'LLRF Intlk Details': {
             'A': {
                 'Inputs': {
-                    'Input': {
+                    'Input 1': {
                         'Status': {
                             '0': 'RA-RaSIA01:RF-LLRF-A:Inp1Intlk0-Mon',
                             '1': 'RA-RaSIA01:RF-LLRF-A:Inp1Intlk1-Mon',
@@ -1031,7 +1067,7 @@ SEC_2_CHANNELS = {
                             'Plunger 2 End Sw Down',
                         ),
                     },
-                    'Fast Input': {
+                    'Input 2': {
                         'Status': {
                             '0': 'RA-RaSIA01:RF-LLRF-A:Inp2Intlk0-Mon',
                             '1': 'RA-RaSIA01:RF-LLRF-A:Inp2Intlk1-Mon',
@@ -1101,7 +1137,7 @@ SEC_2_CHANNELS = {
                             'Plunger 2 End Sw Down',
                         ),
                     },
-                    'Fast Input': {
+                    'Input 2': {
                         'Status': {
                             '0': 'RA-RaSIB01:RF-LLRF-B:Inp2Intlk0-Mon',
                             '1': 'RA-RaSIB01:RF-LLRF-B:Inp2Intlk1-Mon',
