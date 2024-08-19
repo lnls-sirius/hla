@@ -21,7 +21,7 @@ from .details import CavityStatusDetails, FDLMonitor, LLRFInterlockDetails, \
     TransmLineStatusDetails, SlowLoopErrorDetails, SlowLoopParametersDetails, \
     TempMonitor
 from .advanced_details import ADCDACDetails, HardwareDetails, LoopsDetails, \
-    RampsDetails, AutoStartDetails, ConditioningDetails
+    RampsDetails, AutoStartDetails, ConditioningDetails, TuningDetails
 from .util import SEC_2_CHANNELS
 
 
@@ -887,6 +887,8 @@ class RFMainControl(SiriusMainWindow):
                 'Auto Start', AutoStartDetails, systems[i], buttons)
             self._addDetailButton(
                 'Conditioning', ConditioningDetails, systems[i], buttons)
+            self._addDetailButton(
+                'Tuning', TuningDetails, systems[i], buttons)
 
             if self.section == 'SI':
                 gbox = QGroupBox(f'System {systems[i]}', self)

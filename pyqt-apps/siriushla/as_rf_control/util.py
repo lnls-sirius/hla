@@ -958,7 +958,39 @@ SEC_2_CHANNELS = {
                 'Relay Setpoint RB': '$(vacloc):Setpoint',
                 'Relay Hysteria RB': '$(vacloc):Hyst'
             }
-        }
+        },
+        'TunDtls': {
+            'General': {
+                '34': ['Fwd Pwr Amplitude', 'RA-Ra$(sys)$(sidx)01:$(llrf):CavFwdAmp-Mon'],
+                '19': ['Fwd Pwr Phase Angle', 'RA-Ra$(sys)$(sidx)01:$(llrf):CavFwdPhs-Mon'],
+                '33': ['Cavity Amplitude', 'RA-Ra$(sys)$(sidx)01:$(llrf):CavAmp-Mon'],
+                '18': ['Cavity Phase Angle', 'RA-Ra$(sys)$(sidx)01:$(llrf):CavPhs-Mon'],
+                '307': ['Tuning Fwd Min', 'RA-Ra$(sys)$(sidx)01:$(llrf):TuneFwdMin-Mon'],
+                '303': ['Pulses Frequency', 'RA-Ra$(sys)$(sidx)01:$(llrf):TuneFreq'],
+            },
+            'Manual': {
+                '302': ['Number of Pulses', 'RA-Ra$(sys)$(sidx)01:$(llrf):TuneStep'],
+                '306': ['Plunger 1 Move Dir', 'RA-Ra$(sys)$(sidx)01:$(llrf):TunnerDir'],
+                '305': ['Plunger 1 Move', 'RA-Ra$(sys)$(sidx)01:$(llrf):TunnerMove'],
+                '315': ['Plunger 2 Move Dir', 'RA-Ra$(sys)$(sidx)01:$(llrf):PLG2Dir'],
+                '314': ['Plunger 2 Move', 'RA-Ra$(sys)$(sidx)01:$(llrf):PLG2Move'],
+                '307': ['Tuning Reset', 'RA-Ra$(sys)$(sidx)01:$(llrf):TunnerMove-Cmd'],
+                '302 Man': ['Plunger 1 Manual Dn', '$(cav):TunnerManDown-Mon'],
+                '303 Man': ['Plunger 1 Manual Up', '$(cav):TunnerManUp-Mon'],
+                '315 Man': ['Plunger 2 Manual Dn', '$(cav):Plg2ManDown-Mon'],
+                '316 Man': ['Plunger 2 Manual Up', '$(cav):Plg2ManUp-Mon'],
+            },
+            'Auto': {
+                '301': ['Tuning Pos Enable', 'RA-Ra$(sys)$(sidx)01:$(llrf):TuneDir'],
+                '309': ['Tuning Margin High', 'RA-Ra$(sys)$(sidx)01:$(llrf):TuneMarginHI'],
+                '310': ['Tuning Margin Low', 'RA-Ra$(sys)$(sidx)01:$(llrf):TuneMarginLO'],
+                '308': ['Tuning Forward Min', 'RA-Ra$(sys)$(sidx)01:$(llrf):TuneFwdMin'],
+                '311': ['Tuning Delay', 'RA-Ra$(sys)$(sidx)01:$(llrf):TuneDly'],
+                '312': ['Tuning Filter Enable', 'RA-Ra$(sys)$(sidx)01:$(llrf):TuneFilt'],
+                '313': ['Tuning Trigger Enable', 'RA-Ra$(sys)$(sidx)01:$(llrf):TuneTrig'],
+                '316': ['Tuning/FF On Top Ramp', 'RA-Ra$(sys)$(sidx)01:$(llrf):RampTuneTop'],
+            }
+        },
     },
     'SI': {
         'Emergency': 'RA-RaSIA02:RF-IntlkCtrl:EStop-Mon',
