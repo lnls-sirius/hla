@@ -1109,25 +1109,35 @@ class ConditioningDetails(SiriusDialog):
         self._setupLabelEdit(lay, '204', 2)
 
         # Cond Freq Diag
-        self._setupTwoLabels(lay, '540', 3)
+        lb_condfreq = SiriusLabel(self, self.prefix+self.syst_dict['540'][1])
+        lb_condfreq.showUnits = True
+        lay.addWidget(QLabel('540'), 3, 0)
+        lay.addWidget(QLabel(self.syst_dict['540'][0]), 3, 1)
+        lay.addWidget(lb_condfreq, 3, 3, alignment=Qt.AlignCenter)
 
         # Duty Cycle
         self._setupLabelEdit(lay, '205', 4)
 
         # Duty Cycle RB
-        self._setupTwoLabels(lay, '530', 5)
+        lb_condfreq = SiriusLabel(self, self.prefix+self.syst_dict['530'][1])
+        lb_condfreq.showUnits = True
+        lay.addWidget(QLabel('530'), 5, 0)
+        lay.addWidget(QLabel(self.syst_dict['530'][0]), 5, 1)
+        lay.addWidget(lb_condfreq, 5, 3, alignment=Qt.AlignCenter)
+
         relay_keys = [
             'CGC Fast Relay', 'Relay Setpoint RB', 'Relay Hysteria RB']
         row = 6
         for key in relay_keys:
             lb_relay = SiriusLabel(
-                self, self.prefix+self.syst_dict['Relay'][key][1]+'-RB')
+                self, self.prefix+self.syst_dict['Relay'][key]+'-RB')
             lb_relay.showUnits = True
 
             lay.addWidget(QLabel(key), row, 1)
             if key.split()[-1] != 'RB':
                 lay.addWidget(SiriusLineEdit(
-                    self, self.prefix+self.syst_dict['Relay'][key]+'-SP'), row, 2)
+                    self, self.prefix+self.syst_dict['Relay'][key]+'-SP'),
+                    row, 2)
             lay.addWidget(lb_relay, row, 3)
             row += 1
 
@@ -1158,14 +1168,3 @@ class ConditioningDetails(SiriusDialog):
         lay.addWidget(SiriusLineEdit(
             self, self.prefix+self.syst_dict[key][1]+'-SP'), row, 2)
         lay.addWidget(label, row, 3, alignment=Qt.AlignCenter)
-
-    def _setupTwoLabels(self, lay, key, row):
-        lb_1 = SiriusLabel(self, self.prefix+self.syst_dict[key][1])
-        lb_1.showUnits = True
-        lb_2 = SiriusLabel(self, self.prefix+self.syst_dict[key][2])
-        lb_2.showUnits = True
-
-        lay.addWidget(QLabel(key), row, 0)
-        lay.addWidget(QLabel(self.syst_dict[key][0]), row, 1)
-        lay.addWidget(lb_1, row, 2, alignment=Qt.AlignCenter)
-        lay.addWidget(lb_2, row, 3, alignment=Qt.AlignCenter)
