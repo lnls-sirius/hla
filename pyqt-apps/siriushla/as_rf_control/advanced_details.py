@@ -874,33 +874,39 @@ class EquationsDetails(SiriusDialog):
 
         lay_extra = QGridLayout()
         lay_extra.setVerticalSpacing(12)
-        lay_extra.addItem(
-            QSpacerItem(0, 18, QSzPlcy.Ignored, QSzPlcy.Fixed), 0, 0)
-        lay_extra.addWidget(QLabel(
-            'C4*F^4 + C3*F^3 + C2*F^2 + C1*F + C0',
-            alignment=Qt.AlignCenter), 1, 0, 1, 5)
-        lay_extra.addWidget(QLabel('Rsh (Ohm)'), 2, 0)
-        lay_extra.addWidget(QLabel('######'), 2, 1)
 
-        lay_extra.addWidget(QLabel('######'), 3, 0)
-        lay_extra.addWidget(QLabel('######'), 3, 2)
+        lb_rsh = SiriusLabel(self, self.prefix+self.syst_dict['Rsh'])
+        lb_rsh.showUnits = True
+
         lb_arrowr1 = QLabel(alignment=Qt.AlignCenter)
         lb_arrowr1.setPixmap(
             qta.icon('fa5s.arrow-right', color='black').pixmap(20, 20))
         lb_arrowr2 = QLabel(alignment=Qt.AlignCenter)
         lb_arrowr2.setPixmap(
             qta.icon('fa5s.arrow-right', color='black').pixmap(20, 20))
-        lay_extra.addWidget(lb_arrowr1, 3, 1)
-        lay_extra.addWidget(lb_arrowr2, 3, 3)
 
-        lay_extra.addWidget(QLabel('######'), 4, 0)
-        lay_extra.addWidget(QLabel('######'), 4, 2)
         lb_arrowl1 = QLabel(alignment=Qt.AlignCenter)
         lb_arrowl1.setPixmap(
             qta.icon('fa5s.arrow-left', color='black').pixmap(20, 20))
         lb_arrowl2 = QLabel(alignment=Qt.AlignCenter)
         lb_arrowl2.setPixmap(
             qta.icon('fa5s.arrow-left', color='black').pixmap(20, 20))
+
+        lay_extra.addItem(
+            QSpacerItem(0, 18, QSzPlcy.Ignored, QSzPlcy.Fixed), 0, 0)
+        lay_extra.addWidget(QLabel(
+            'C4*F^4 + C3*F^3 + C2*F^2 + C1*F + C0',
+            alignment=Qt.AlignCenter), 1, 0, 1, 5)
+        lay_extra.addWidget(QLabel('Rsh (Ohm)'), 2, 0)
+        lay_extra.addWidget(lb_rsh, 2, 1)
+
+        lay_extra.addWidget(QLabel('######'), 3, 0)
+        lay_extra.addWidget(QLabel('######'), 3, 2)
+        lay_extra.addWidget(lb_arrowr1, 3, 1)
+        lay_extra.addWidget(lb_arrowr2, 3, 3)
+
+        lay_extra.addWidget(QLabel('######'), 4, 0)
+        lay_extra.addWidget(QLabel('######'), 4, 2)
         lay_extra.addWidget(lb_arrowl1, 4, 1)
         lay_extra.addWidget(lb_arrowl2, 4, 3)
 

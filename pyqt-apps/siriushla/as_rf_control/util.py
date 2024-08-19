@@ -927,7 +927,7 @@ SEC_2_CHANNELS = {
                 'Raw-U': 'RA-RaBO01:RF-LLRF:FwdSSA2SysCal'
             },
             'VGap': '',
-            'Rsh': ''
+            'Rsh': 'BO-05D:RF-P5Cav:Rsh-Cte'
         },
         'AutoStart': {
             '22': ['Automatic Startup Enable', 'RA-RaBO01:RF-LLRF:AutoStartupEn'],
