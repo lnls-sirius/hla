@@ -924,39 +924,36 @@ class EquationsDetails(SiriusDialog):
         lay.addWidget(gbox_fwdssa1, 2, 0)
         lay.addWidget(gbox_fwdssa2, 2, 1)
         lay.addWidget(gbox_vgap, 3, 0)
-        lay.addLayout(lay_extra, 3, 1)
+        lay.addLayout(lay_extra, 3, 1, alignment=Qt.AlignHCenter)
 
     def _genericStatisticsLayout(self, chs_dict):
         lay = QGridLayout()
         lay.setAlignment(Qt.AlignTop)
         lay.setSpacing(9)
 
-        labels = ['C0', 'C1', 'C2', 'C3', 'C4']
+        # Header
+        labels = ['C0', 'C1', 'C2', 'C3', 'C4', 'OFS']
         for i in range(len(labels)):
             lay.addWidget(QLabel(
-                labels[i], alignment=Qt.AlignCenter), i+1, 0)
-        lay.addWidget(QLabel(
-            'OFS', alignment=Qt.AlignCenter), len(labels)+1, 0)
+                labels[i], alignment=Qt.AlignCenter), 0, i+1)
 
-        col = 1
+        # Body
+        row = 1
         for key, val in chs_dict.items():
             if key != 'OFS':
-                lay.addWidget(QLabel(key, alignment=Qt.AlignCenter), 0, col)
-
-                for i in range(len(labels)):
-                    lay.addWidget(SiriusLabel(
-                        self, self.prefix+val+'-RB'), i+1, col,
-                        alignment=Qt.AlignCenter)
+                lay.addWidget(QLabel(key, alignment=Qt.AlignCenter), row, 0)
+                lay.addWidget(SiriusLabel(
+                    self, self.prefix+val+'-RB'), row, 1, 1, len(labels)-1)
 
                 if key != 'OLG':
                     lay.addWidget(SiriusLabel(
                         self, self.prefix+chs_dict['OFS']+'-RB'),
-                        len(labels)+1, col, alignment=Qt.AlignCenter)
+                        row, len(labels), alignment=Qt.AlignCenter)
                 else:
                     lay.addWidget(QLabel(
-                        '-', alignment=Qt.AlignCenter), len(labels)+1, col)
+                        '-', alignment=Qt.AlignCenter), row, len(labels))
 
-            col += 1
+                row += 1
 
         return lay
 
@@ -965,14 +962,15 @@ class EquationsDetails(SiriusDialog):
         lay.setAlignment(Qt.AlignTop)
         lay.setSpacing(9)
 
+        # Header
+        labels = ['C0', 'C1', 'C2', 'C3', 'C4', 'F']
         lay.addWidget(QLabel(
             'C4*F^3 + C3*F^2 + C2*F + C1 + C0/F',
-            alignment=Qt.AlignCenter), 0, 0, 1, 2)
+            alignment=Qt.AlignCenter), 0, 0, 1, len(labels))
         lay.addItem(QSpacerItem(0, 9, QSzPlcy.Ignored, QSzPlcy.Fixed), 1, 0)
 
-        labels = ['F', 'C0', 'C1', 'C2', 'C3', 'C4']
         for i in range(len(labels)):
-            lay.addWidget(QLabel(labels[i], alignment=Qt.AlignCenter), i+2, 0)
+            lay.addWidget(QLabel(labels[i], alignment=Qt.AlignCenter), 2, i)
 
         return lay
 
@@ -981,12 +979,13 @@ class EquationsDetails(SiriusDialog):
         lay.setAlignment(Qt.AlignTop)
         lay.setSpacing(9)
 
+        # Header
         labels = ['C0', 'C1', 'C2', 'C3', 'C4']
         for i in range(len(labels)):
-            lay.addWidget(QLabel(labels[i], alignment=Qt.AlignCenter), i, 0)
-            lay.addWidget(QLabel(labels[i], alignment=Qt.AlignCenter), i, 3)
+            lay.addWidget(QLabel(labels[i], alignment=Qt.AlignCenter), 0, i)
+            lay.addWidget(QLabel(labels[i], alignment=Qt.AlignCenter), 4, i)
 
-        lay.addItem(QSpacerItem(9, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 0, 2)
+        lay.addItem(QSpacerItem(0, 18, QSzPlcy.Ignored, QSzPlcy.Fixed), 3, 0)
 
         return lay
 
