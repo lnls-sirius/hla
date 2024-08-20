@@ -1235,13 +1235,23 @@ class TuningDetails(SiriusDialog):
         gbox_gen.setLayout(self._generalLayout(self.syst_dict['General']))
         lay.addWidget(gbox_gen, 1, 0)
 
-        gbox_man = QGroupBox('Manual')
-        gbox_man.setLayout(self._manualLayout(self.syst_dict['Manual']))
-        lay.addWidget(gbox_man)
+        auto_man = QTabWidget(self)
+        auto_man.setObjectName(self.section+'Tab')
+        auto_man.setStyleSheet(
+            "#"+self.section+'Tab'+"::pane {"
+            "    border-left: 2px solid gray;"
+            "    border-bottom: 2px solid gray;"
+            "    border-right: 2px solid gray;}")
 
-        gbox_auto = QGroupBox('Auto')
-        gbox_auto.setLayout(self._autoLayout(self.syst_dict['Auto']))
-        lay.addWidget(gbox_auto)
+        wid_man = QWidget(self)
+        wid_man.setLayout(self._manualLayout(self.syst_dict['Manual']))
+        auto_man.addTab(wid_man, 'Manual')
+
+        wid_auto = QWidget(self)
+        wid_auto.setLayout(self._autoLayout(self.syst_dict['Auto']))
+        auto_man.addTab(wid_auto, 'Auto')
+
+        lay.addWidget(auto_man, 1, 1)
 
     def _generalLayout(self, chs_dict):
         lay = QGridLayout()
