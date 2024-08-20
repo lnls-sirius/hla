@@ -1544,10 +1544,12 @@ class AdvancedInterlockDetails(SiriusDialog):
             column = 2
             for bit in range(len(labels)):
                 lay_state = QHBoxLayout()
-                lay_state.addWidget(PyDMStateButton(
-                    self, self.prefix+val[1]+'-Sel'), alignment=Qt.AlignRight)
+                pb = PyDMStateButton(self, self.prefix+val[1]+'-Sel')
+                pb.pvbit = bit
+                lay_state.addWidget(pb, alignment=Qt.AlignRight)
                 lay_state.addWidget(SiriusLedState(
-                    self, self.prefix+val[1]+'-Sts', bit), alignment=Qt.AlignLeft)
+                    self, self.prefix+val[1]+'-Sts', bit),
+                    alignment=Qt.AlignLeft)
                 lay.addLayout(lay_state, row, column)
                 lay.addItem(QSpacerItem(
                     9, 0, QSzPlcy.Ignored, QSzPlcy.Fixed), row, column+1)
