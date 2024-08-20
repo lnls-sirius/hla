@@ -1384,6 +1384,10 @@ class AdvancedInterlockDetails(SiriusDialog):
             self._diagnosticsLayout(self.syst_dict['Diagnostics']))
         dtls.addTab(wid_diag, 'Diagnostics')
 
+        wid_bypass = QWidget(self)
+        wid_bypass.setLayout(self._bypassLayout(self.syst_dict['Bypass']))
+        dtls.addTab(wid_bypass, 'Interlock Bypass')
+
         lay.addWidget(dtls, 1, 0)
 
     def _diagnosticsLayout(self, chs_dict):
@@ -1407,9 +1411,11 @@ class AdvancedInterlockDetails(SiriusDialog):
             lb = SiriusLabel(self, self.prefix+val+'-RB')
             lb.showUnits = True
             lay_lvls.addWidget(QLabel(f'Limit {key}'), row, 0)
+            lay_lvls.addItem(QSpacerItem(
+                9, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), row, 1)
             lay_lvls.addWidget(SiriusSpinbox(
-                self, self.prefix+val+'-SP'), row, 1)
-            lay_lvls.addWidget(lb, row, 2)
+                self, self.prefix+val+'-SP'), row, 2)
+            lay_lvls.addWidget(lb, row, 3)
             row += 1
 
         # GPIO Inputs
@@ -1504,3 +1510,47 @@ class AdvancedInterlockDetails(SiriusDialog):
             lay.addWidget(QLabel(labels[bit]), bit+1, 0)
             lay.addWidget(SiriusLedState(
                 self, channel, bit), bit+1, 1, alignment=Qt.AlignCenter)
+
+    def _bypassLayout(self, chs_dict):
+        lay = QGridLayout()
+        lay.setAlignment(Qt.AlignTop)
+        lay.setSpacing(9)
+
+        labels = ['Diagnostics', 'Ext LLRF', 'Tx PLC', 'FDL Trigger',
+            'Pin Diode', 'Loops Standby']
+
+        column = 2
+        for lb in labels:
+            lay.addWidget(QLabel(
+                lb, alignment=Qt.AlignCenter), 0, column)
+            column += 2
+
+        for i in range(1, column):
+            if i % 2 == 0 or i == 1:
+                lay.setColumnStretch(i, 1)
+        lay.setColumnMinimumWidth(1, 120)
+
+        row = 1
+        for key, val in chs_dict.items():
+            lay.addWidget(QLabel(key.split()[0]), row, 0)
+            lay.addWidget(QLabel(val[0]), row, 1)
+            column = 2
+            for bit in range(len(labels)):
+                lay_state = QHBoxLayout()
+                lay_state.addWidget(SiriusLedState(
+                    self, self.prefix+val[1]+'-Sts', bit))
+                # lay_state.addWidget(PyDMStateButton(
+                #     self, self.prefix+val[1]+'-Sel'))
+                lay.addLayout(lay_state, row, column)
+                lay.addItem(QSpacerItem(
+                    9, 0, QSzPlcy.Ignored, QSzPlcy.Fixed), row, column+1)
+                column += 2
+            lay.addWidget(SiriusPushButton(
+                self, self.prefix+val[1]+'-Sel', 'All Zero', releaseValue=0),
+                row, column)
+            lay.addWidget(SiriusPushButton(
+                self, self.prefix+val[1]+'-Sel', 'All One', releaseValue=63),
+                row, column+1)
+            row += 1
+
+        return lay
