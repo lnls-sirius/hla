@@ -905,27 +905,32 @@ SEC_2_CHANNELS = {
         'Equations': {
             'AL Ref': {
                 'Raw-U': '',
-                'U-Raw': ''
+                'U-Raw': '',
+                'OFS': ''
             },
-            'OLG Rec': '',
             'Cav': {
-                'Raw-U': 'RA-RaBO01:RF-LLRF:CavSysCal',
-                'U-Raw': 'RA-RaBO01:RF-LLRF:CavSysCalInv',
-                'OLG': 'RA-RaBO01:RF-LLRF:CavSysCalOLG'
+                'Raw-U': 'RA-Ra$(sys)$(sidx)01:$(llrf):CavSysCal',
+                'U-Raw': 'RA-Ra$(sys)$(sidx)01:$(llrf):CavSysCalInv',
+                'OLG': 'RA-Ra$(sys)$(sidx)01:$(llrf):CavSysCalOLG',
+                'OFS': 'RA-Ra$(sys)$(sidx)01:$(llrf):CavOffset'
             },
             'Fwd Cav': {
-                'Raw-U': 'RA-RaBO01:RF-LLRF:FwdCavSysCal',
-                'U-Raw': 'RA-RaBO01:RF-LLRF:FwdCavSysCalInv',
-                'OLG': 'RA-RaBO01:RF-LLRF:FwdCavSysCalOLG'
+                'Raw-U': 'RA-Ra$(sys)$(sidx)01:$(llrf):FwdCavSysCal',
+                'U-Raw': 'RA-Ra$(sys)$(sidx)01:$(llrf):FwdCavSysCalInv',
+                'OLG': 'RA-Ra$(sys)$(sidx)01:$(llrf):FwdCavSysCalOLG',
+                'OFS': 'RA-Ra$(sys)$(sidx)01:$(llrf):FwdCavOffset'
             },
             'Fwd SSA 1': {
-                'Raw-U': 'RA-RaBO01:RF-LLRF:FwdSSA1SysCal',
-                'U-Raw': 'RA-RaBO01:RF-LLRF:FwdSSA1SysCalInv',
-                'OLG': 'RA-RaBO01:RF-LLRF:FwdSSA1SysCalOLG'
+                'Raw-U': 'RA-Ra$(sys)$(sidx)01:$(llrf):FwdSSA1SysCal',
+                'U-Raw': 'RA-Ra$(sys)$(sidx)01:$(llrf):FwdSSA1SysCalInv',
+                'OLG': 'RA-Ra$(sys)$(sidx)01:$(llrf):FwdSSA1SysCalOLG',
+                'OFS': 'RA-Ra$(sys)$(sidx)01:$(llrf):FwdSSA1SysCalOffset'
             },
             'Fwd SSA 2': {
-                'Raw-U': 'RA-RaBO01:RF-LLRF:FwdSSA2SysCal'
+                'Raw-U': 'RA-Ra$(sys)$(sidx)01:$(llrf):FwdSSA2SysCal',
+                'OFS': 'RA-Ra$(sys)$(sidx)01:$(llrf):FwdSSA2SysCalOffset'
             },
+            'OLG Rec': '',
             'VGap': '',
             'Rsh': 'BO-05D:RF-P5Cav:Rsh-Cte'
         },
@@ -947,7 +952,7 @@ SEC_2_CHANNELS = {
         },
         'Conditioning': {
             '200': ['Pulse Mode Enable', 'RA-Ra$(sys)$(sidx)01:$(llrf):CondEn'],
-            '201': ['Auto Conditioning Enable', 'A-Ra$(sys)$(sidx)01:$(llrf):CondAuto'],
+            '201': ['Auto Conditioning Enable', 'RA-Ra$(sys)$(sidx)01:$(llrf):CondAuto'],
             '204': ['Conditioning Freq', 'RA-Ra$(sys)$(sidx)01:$(llrf):CondFreq'],
             '540': ['Cond Freq Diag', 'RA-Ra$(sys)$(sidx)01:$(llrf):CondFreq-Mon'],
             '205': ['Duty Cycle', 'RA-Ra$(sys)$(sidx)01:$(llrf):CondDuty2'],

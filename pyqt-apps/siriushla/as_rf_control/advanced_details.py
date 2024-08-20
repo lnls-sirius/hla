@@ -931,23 +931,30 @@ class EquationsDetails(SiriusDialog):
         lay.setAlignment(Qt.AlignTop)
         lay.setSpacing(9)
 
-        labels = ['C0', 'C1', 'C2', 'C3', 'C4', 'OFS']
+        labels = ['C0', 'C1', 'C2', 'C3', 'C4']
         for i in range(len(labels)):
             lay.addWidget(QLabel(
                 labels[i], alignment=Qt.AlignCenter), i+1, 0)
+        lay.addWidget(QLabel(
+            'OFS', alignment=Qt.AlignCenter), len(labels)+1, 0)
 
         col = 1
         for key, val in chs_dict.items():
-            lay.addWidget(QLabel(key, alignment=Qt.AlignCenter), 0, col)
+            if key != 'OFS':
+                lay.addWidget(QLabel(key, alignment=Qt.AlignCenter), 0, col)
 
-            for i in range(len(labels)):
-                if i == len(labels) - 1 and key == 'OLG':
-                    lay.addWidget(QLabel(
-                        '-', alignment=Qt.AlignCenter), i+1, col)
-                else:
+                for i in range(len(labels)):
                     lay.addWidget(SiriusLabel(
                         self, self.prefix+val+'-RB'), i+1, col,
                         alignment=Qt.AlignCenter)
+
+                if key != 'OLG':
+                    lay.addWidget(SiriusLabel(
+                        self, self.prefix+chs_dict['OFS']+'-RB'),
+                        len(labels)+1, col, alignment=Qt.AlignCenter)
+                else:
+                    lay.addWidget(QLabel(
+                        '-', alignment=Qt.AlignCenter), len(labels)+1, col)
 
             col += 1
 
@@ -1537,10 +1544,10 @@ class AdvancedInterlockDetails(SiriusDialog):
             column = 2
             for bit in range(len(labels)):
                 lay_state = QHBoxLayout()
+                lay_state.addWidget(PyDMStateButton(
+                    self, self.prefix+val[1]+'-Sel'), alignment=Qt.AlignRight)
                 lay_state.addWidget(SiriusLedState(
-                    self, self.prefix+val[1]+'-Sts', bit))
-                # lay_state.addWidget(PyDMStateButton(
-                #     self, self.prefix+val[1]+'-Sel'))
+                    self, self.prefix+val[1]+'-Sts', bit), alignment=Qt.AlignLeft)
                 lay.addLayout(lay_state, row, column)
                 lay.addItem(QSpacerItem(
                     9, 0, QSzPlcy.Ignored, QSzPlcy.Fixed), row, column+1)
