@@ -1354,11 +1354,6 @@ class TuningDetails(SiriusDialog):
             lay.addWidget(label, row, 3)
             row += 1
 
-        # Filter Enable
-        self._setupAddrLabel(lay, chs_dict, '312', row)
-        self._setupButtonLed(lay, chs_dict, '312', row)
-        row += 1
-
         # Trigger Enable
         lb_trig = SiriusLabel(self, self.prefix+chs_dict['313'][1]+'-Sts')
         lb_trig.showUnits = True
@@ -1367,6 +1362,11 @@ class TuningDetails(SiriusDialog):
             self, self.prefix+chs_dict['313'][1]+'-Sel'),
             row, 2, alignment=Qt.AlignCenter)
         lay.addWidget(lb_trig, row, 3, alignment=Qt.AlignCenter)
+        row += 1
+
+        # Filter Enable
+        self._setupAddrLabel(lay, chs_dict, '312', row)
+        self._setupButtonLed(lay, chs_dict, '312', row)
         row += 1
 
         # On Top Ramp
