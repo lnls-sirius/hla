@@ -42,7 +42,11 @@ class ADCDACDetails(SiriusDialog):
         lay.setAlignment(Qt.AlignTop)
         lay.setSpacing(9)
 
-        row = 0
+        lay.addWidget(QLabel(
+            '<h4>Advanced ADCs and DACs Details</h4>',
+            alignment=Qt.AlignCenter), 0, 0, 1, 4)
+
+        row = 1
         for key, val in self.syst_dict.items():
             if key == 'ADC Enable' or key == 'DAC Enable':
                 pb_enbl = PyDMStateButton(
@@ -89,6 +93,10 @@ class HardwareDetails(SiriusDialog):
         lay.setAlignment(Qt.AlignTop)
         lay.setHorizontalSpacing(18)
         lay.setVerticalSpacing(9)
+
+        lay.addWidget(QLabel(
+            '<h4>Advanced Hardware Details</h4>',
+            alignment=Qt.AlignCenter), 0, 0, 1, 5)
 
         # FPGA Temps
         gbox_fpga = QGroupBox('FPGA Temps', self)
@@ -189,12 +197,12 @@ class HardwareDetails(SiriusDialog):
         lay_vbox.addWidget(frame_pll)
         lay_vbox.addWidget(frame_type)
 
-        lay.addWidget(gbox_fpga, 0, 0)
-        lay.addWidget(gbox_vers, 1, 0, 1, 5)
-        lay.addLayout(lay_vbox, 0, 1)
-        lay.addWidget(gbox_err, 0, 2)
-        lay.addWidget(gbox_interr, 0, 3)
-        lay.addWidget(gbox_init, 0, 4)
+        lay.addWidget(gbox_fpga, 1, 0)
+        lay.addWidget(gbox_vers, 2, 0, 1, 5)
+        lay.addLayout(lay_vbox, 1, 1)
+        lay.addWidget(gbox_err, 1, 2)
+        lay.addWidget(gbox_interr, 1, 3)
+        lay.addWidget(gbox_init, 1, 4)
 
     def _setupLabelsLayout(self, gbox, isFPGA, chs_dict):
         lay = QGridLayout(gbox)
@@ -244,7 +252,7 @@ class LoopsDetails(SiriusDialog):
         self._setupUi()
 
     def _setupUi(self):
-        lay = QGridLayout(self)
+        lay = QVBoxLayout(self)
         lay.setAlignment(Qt.AlignTop)
         dtls = QTabWidget(self)
         dtls.setObjectName(self.section+'Tab')
@@ -267,7 +275,9 @@ class LoopsDetails(SiriusDialog):
         wid_polar.setLayout(self._specificLoopsLayout('Polar'))
         dtls.addTab(wid_polar, 'Polar Loops')
 
-        lay.addWidget(dtls, 1, 0)
+        lay.addWidget(QLabel(
+            '<h4>Advanced Loops Details</h4>', alignment=Qt.AlignCenter))
+        lay.addWidget(dtls)
 
     def _loopsControlLayout(self, chs_dict):
         lay = QGridLayout(self)
@@ -567,7 +577,7 @@ class RampsDetails(SiriusDialog):
         self._setupUi()
 
     def _setupUi(self):
-        lay = QGridLayout(self)
+        lay = QVBoxLayout(self)
         lay.setAlignment(Qt.AlignTop)
         dtls = QTabWidget(self)
         dtls.setObjectName(self.section+'Tab')
@@ -587,7 +597,10 @@ class RampsDetails(SiriusDialog):
             self._diagnosticsRampLayout(self.syst_dict['Diagnostics']))
         dtls.addTab(wid_top, 'Ramp Diagnostics')
 
-        lay.addWidget(dtls, 1, 0)
+        lay.addWidget(QLabel(
+            '<h4>Advanced Cavity Ramps Details</h4>',
+            alignment=Qt.AlignCenter))
+        lay.addWidget(dtls)
 
     def _rampsControlLayout(self, chs_dict):
         lay = QGridLayout()
@@ -917,14 +930,17 @@ class EquationsDetails(SiriusDialog):
         lay_extra.addWidget(lb_hw, 3, 4, 4, 4,
             alignment=Qt.AlignTop | Qt.AlignHCenter)
 
-        lay.addWidget(gbox_al, 0, 0)
-        lay.addWidget(gbox_ol, 0, 1)
-        lay.addWidget(gbox_cav, 1, 0)
-        lay.addWidget(gbox_fwdcav, 1, 1)
-        lay.addWidget(gbox_fwdssa1, 2, 0)
-        lay.addWidget(gbox_fwdssa2, 2, 1)
-        lay.addWidget(gbox_vgap, 3, 0)
-        lay.addLayout(lay_extra, 3, 1, alignment=Qt.AlignHCenter)
+        lay.addWidget(QLabel(
+            '<h4>Equations Details</h4>',
+            alignment=Qt.AlignCenter), 0, 0, 1, 2)
+        lay.addWidget(gbox_al, 1, 0)
+        lay.addWidget(gbox_ol, 1, 1)
+        lay.addWidget(gbox_cav, 2, 0)
+        lay.addWidget(gbox_fwdcav, 2, 1)
+        lay.addWidget(gbox_fwdssa1, 3, 0)
+        lay.addWidget(gbox_fwdssa2, 3, 1)
+        lay.addWidget(gbox_vgap, 4, 0)
+        lay.addLayout(lay_extra, 4, 1, alignment=Qt.AlignHCenter)
 
     def _genericStatisticsLayout(self, chs_dict):
         lay = QGridLayout()
@@ -1019,6 +1035,7 @@ class AutoStartDetails(SiriusDialog):
         # General
         gbox_gen = QGroupBox('General')
         gen_lay = QGridLayout()
+        gbox_gen.setLayout(gen_lay)
 
         # # Enable
         self._setupButtonLed(gen_lay, '22', 0)
@@ -1042,6 +1059,7 @@ class AutoStartDetails(SiriusDialog):
         # Diagnostics
         gbox_diag = QGroupBox('Diagnostics')
         diag_lay = QGridLayout()
+        gbox_diag.setLayout(diag_lay)
 
         # # State Start
         lb_state = SiriusLabel(self, self.syst_dict['Diag']['500'][1])
@@ -1058,8 +1076,8 @@ class AutoStartDetails(SiriusDialog):
                     diag_lay, key, self.syst_dict['Diag'], row, key == '401')
                 row += 1
 
-        gbox_gen.setLayout(gen_lay)
-        gbox_diag.setLayout(diag_lay)
+        lay.addWidget(QLabel(
+            '<h4>Advanced Auto Start Details</h4>', alignment=Qt.AlignCenter))
         lay.addWidget(gbox_gen)
         lay.addWidget(gbox_diag)
 
@@ -1109,36 +1127,39 @@ class ConditioningDetails(SiriusDialog):
         lay = QGridLayout(self)
         lay.setAlignment(Qt.AlignTop)
         lay.setSpacing(9)
+        lay.addWidget(QLabel(
+            '<h4>Advanced Conditioning Details</h4>',
+            alignment=Qt.AlignCenter), 0, 0, 1, 4)
 
         # Pulse Enable
-        self._setupLedState(lay, '200', 0, True)
+        self._setupLedState(lay, '200', 1, True)
 
         # Auto Cond Enable
-        self._setupLedState(lay, '201', 1, True)
+        self._setupLedState(lay, '201', 2, True)
 
         # Cond Freq
-        self._setupLabelEdit(lay, '204', 2)
+        self._setupLabelEdit(lay, '204', 3)
 
         # Cond Freq Diag
         lb_condfreq = SiriusLabel(self, self.prefix+self.syst_dict['540'][1])
         lb_condfreq.showUnits = True
-        lay.addWidget(QLabel('540'), 3, 0)
-        lay.addWidget(QLabel(self.syst_dict['540'][0]), 3, 1)
-        lay.addWidget(lb_condfreq, 3, 3, alignment=Qt.AlignCenter)
+        lay.addWidget(QLabel('540'), 4, 0)
+        lay.addWidget(QLabel(self.syst_dict['540'][0]), 4, 1)
+        lay.addWidget(lb_condfreq, 4, 3, alignment=Qt.AlignCenter)
 
         # Duty Cycle
-        self._setupLabelEdit(lay, '205', 4)
+        self._setupLabelEdit(lay, '205', 5)
 
         # Duty Cycle RB
         lb_condfreq = SiriusLabel(self, self.prefix+self.syst_dict['530'][1])
         lb_condfreq.showUnits = True
-        lay.addWidget(QLabel('530'), 5, 0)
-        lay.addWidget(QLabel(self.syst_dict['530'][0]), 5, 1)
-        lay.addWidget(lb_condfreq, 5, 3, alignment=Qt.AlignCenter)
+        lay.addWidget(QLabel('530'), 6, 0)
+        lay.addWidget(QLabel(self.syst_dict['530'][0]), 6, 1)
+        lay.addWidget(lb_condfreq, 6, 3, alignment=Qt.AlignCenter)
 
         relay_keys = [
             'CGC Fast Relay', 'Relay Setpoint RB', 'Relay Hysteria RB']
-        row = 6
+        row = 7
         for key in relay_keys:
             lb_relay = SiriusLabel(
                 self, self.prefix+self.syst_dict['Relay'][key]+'-RB')
@@ -1203,13 +1224,16 @@ class TuningDetails(SiriusDialog):
         self._setupUi()
 
     def _setupUi(self):
-        lay = QHBoxLayout(self)
+        lay = QGridLayout(self)
         lay.setAlignment(Qt.AlignTop)
         lay.setSpacing(9)
+        lay.addWidget(QLabel(
+            '<h4>Advanced Tuning Details</h4>',
+            alignment=Qt.AlignCenter), 0, 0, 1, 2)
 
         gbox_gen = QGroupBox('General')
         gbox_gen.setLayout(self._generalLayout(self.syst_dict['General']))
-        lay.addWidget(gbox_gen)
+        lay.addWidget(gbox_gen, 1, 0)
 
         gbox_man = QGroupBox('Manual')
         gbox_man.setLayout(self._manualLayout(self.syst_dict['Manual']))
@@ -1375,7 +1399,7 @@ class AdvancedInterlockDetails(SiriusDialog):
         self._setupUi()
 
     def _setupUi(self):
-        lay = QGridLayout(self)
+        lay = QVBoxLayout(self)
         lay.setAlignment(Qt.AlignTop)
         dtls = QTabWidget(self)
         dtls.setObjectName(self.section+'Tab')
@@ -1394,7 +1418,9 @@ class AdvancedInterlockDetails(SiriusDialog):
         wid_bypass.setLayout(self._bypassLayout(self.syst_dict['Bypass']))
         dtls.addTab(wid_bypass, 'Interlock Bypass')
 
-        lay.addWidget(dtls, 1, 0)
+        lay.addWidget(QLabel(
+            '<h4>Advanced Interlock Details</h4>', alignment=Qt.AlignCenter))
+        lay.addWidget(dtls)
 
     def _diagnosticsLayout(self, chs_dict):
         lay = QHBoxLayout()
