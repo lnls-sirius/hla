@@ -904,9 +904,9 @@ SEC_2_CHANNELS = {
         },
         'Equations': {
             'AL Ref': {
-                'Raw-U': '',
-                'U-Raw': '',
-                'OFS': ''
+                'Raw-U': 'RA-Ra$(sys)$(sidx)01:$(llrf):ALRefSysCal',
+                'U-Raw': 'RA-Ra$(sys)$(sidx)01:$(llrf):ALRefSysCalInv',
+                'OFS': 'RA-Ra$(sys)$(sidx)01:$(llrf):ALRefOffset'
             },
             'Cav': {
                 'Raw-U': 'RA-Ra$(sys)$(sidx)01:$(llrf):CavSysCal',
@@ -930,8 +930,10 @@ SEC_2_CHANNELS = {
                 'Raw-U': 'RA-Ra$(sys)$(sidx)01:$(llrf):FwdSSA2SysCal',
                 'OFS': 'RA-Ra$(sys)$(sidx)01:$(llrf):FwdSSA2SysCalOffset'
             },
-            'OLG Rec': '',
-            'VGap': '',
+            'VGap': {
+                'Hw to Amp': 'RA-Ra$(sys)$(sidx)01:$(llrf):Hw2AmpVCavCoeff',
+                'Amp to Hw': 'RA-Ra$(sys)$(sidx)01:$(llrf):AmpVCav2HwCoeff'
+            },
             'Rsh': 'BO-05D:RF-P5Cav:Rsh-Cte'
         },
         'AutoStart': {

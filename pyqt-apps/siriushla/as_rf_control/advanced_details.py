@@ -863,9 +863,6 @@ class EquationsDetails(SiriusDialog):
         gbox_al.setLayout(
             self._genericStatisticsLayout(self.syst_dict['AL Ref']))
 
-        gbox_ol = QGroupBox('Open Loop Gain Recommended')
-        gbox_ol.setLayout(self._olgRecLayout())
-
         gbox_cav = QGroupBox('Cav')
         gbox_cav.setLayout(
             self._genericStatisticsLayout(self.syst_dict['Cav']))
@@ -883,8 +880,9 @@ class EquationsDetails(SiriusDialog):
             self._genericStatisticsLayout(self.syst_dict['Fwd SSA 2']))
 
         gbox_vgap = QGroupBox('VGap')
-        gbox_vgap.setLayout(self._vgapLayout())
+        gbox_vgap.setLayout(self._vgapLayout(self.syst_dict['VGap']))
 
+        # Hardware
         lay_extra = QGridLayout()
         lay_extra.setVerticalSpacing(12)
 
@@ -916,8 +914,10 @@ class EquationsDetails(SiriusDialog):
         lay_extra.addWidget(QLabel(
             'C4*F^4 + C3*F^3 + C2*F^2 + C1*F + C0',
             alignment=Qt.AlignCenter), 1, 0, 1, 5)
-        lay_extra.addWidget(QLabel('Rsh (Ohm)'), 2, 0)
-        lay_extra.addWidget(lb_rsh, 2, 1)
+        lay_extra.addWidget(QLabel(
+            'Rsh (Ohm)', alignment=Qt.AlignRight | Qt.AlignVCenter),
+            2, 0, 1, 2)
+        lay_extra.addWidget(lb_rsh, 2, 2, 1, 3, alignment=Qt.AlignCenter)
 
         lay_extra.addWidget(QLabel('######'), 3, 0)
         lay_extra.addWidget(QLabel('######'), 3, 2)
@@ -934,13 +934,12 @@ class EquationsDetails(SiriusDialog):
             '<h4>Equations Details</h4>',
             alignment=Qt.AlignCenter), 0, 0, 1, 2)
         lay.addWidget(gbox_al, 1, 0)
-        lay.addWidget(gbox_ol, 1, 1)
-        lay.addWidget(gbox_cav, 2, 0)
-        lay.addWidget(gbox_fwdcav, 2, 1)
-        lay.addWidget(gbox_fwdssa1, 3, 0)
-        lay.addWidget(gbox_fwdssa2, 3, 1)
-        lay.addWidget(gbox_vgap, 4, 0)
-        lay.addLayout(lay_extra, 4, 1, alignment=Qt.AlignHCenter)
+        lay.addWidget(gbox_cav, 1, 1)
+        lay.addWidget(gbox_fwdcav, 2, 0)
+        lay.addWidget(gbox_fwdssa1, 2, 1)
+        lay.addWidget(gbox_fwdssa2, 3, 0)
+        lay.addWidget(gbox_vgap, 3, 1)
+        lay.addLayout(lay_extra, 4, 0, 1, 2, alignment=Qt.AlignHCenter)
 
     def _genericStatisticsLayout(self, chs_dict):
         lay = QGridLayout()
@@ -973,35 +972,23 @@ class EquationsDetails(SiriusDialog):
 
         return lay
 
-    def _olgRecLayout(self):
+    def _vgapLayout(self, chs_dict):
         lay = QGridLayout()
         lay.setAlignment(Qt.AlignTop)
         lay.setSpacing(9)
 
-        # Header
-        labels = ['C0', 'C1', 'C2', 'C3', 'C4', 'F']
-        lay.addWidget(QLabel(
-            'C4*F^3 + C3*F^2 + C2*F + C1 + C0/F',
-            alignment=Qt.AlignCenter), 0, 0, 1, len(labels))
-        lay.addItem(QSpacerItem(0, 9, QSzPlcy.Ignored, QSzPlcy.Fixed), 1, 0)
-
-        for i in range(len(labels)):
-            lay.addWidget(QLabel(labels[i], alignment=Qt.AlignCenter), 2, i)
-
-        return lay
-
-    def _vgapLayout(self):
-        lay = QGridLayout()
-        lay.setAlignment(Qt.AlignTop)
-        lay.setSpacing(9)
-
-        # Header
+        # Headers
         labels = ['C0', 'C1', 'C2', 'C3', 'C4']
         for i in range(len(labels)):
             lay.addWidget(QLabel(labels[i], alignment=Qt.AlignCenter), 0, i)
-            lay.addWidget(QLabel(labels[i], alignment=Qt.AlignCenter), 4, i)
+            lay.addWidget(QLabel(labels[i], alignment=Qt.AlignCenter), 2, i)
 
-        lay.addItem(QSpacerItem(0, 18, QSzPlcy.Ignored, QSzPlcy.Fixed), 3, 0)
+        # Bodies
+        for i in range(len(labels)):
+            lay.addWidget(SiriusLabel(
+                self, self.prefix+chs_dict['Hw to Amp']+f'{i}-RB'), 1, i)
+            lay.addWidget(SiriusLabel(
+                self, self.prefix+chs_dict['Hw to Amp']+f'{i}-RB'), 3, i)
 
         return lay
 
