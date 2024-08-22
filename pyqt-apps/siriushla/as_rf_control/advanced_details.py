@@ -1,7 +1,6 @@
 """Advanced detail windows."""
 
 import qtawesome as qta
-from epics import PV
 from qtpy.QtCore import Qt
 from qtpy.QtGui import QColor
 from qtpy.QtWidgets import QGridLayout, QGroupBox, QHBoxLayout, QLabel, \

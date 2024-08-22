@@ -928,6 +928,8 @@ SEC_2_CHANNELS = {
             },
             'Fwd SSA 2': {
                 'Raw-U': 'RA-Ra$(sys)$(sidx)01:$(llrf):FwdSSA2SysCal',
+                'U-Raw': 'RA-Ra$(sys)$(sidx)01:$(llrf):FwdSSA2SysCalInv',
+                'OLG': 'RA-Ra$(sys)$(sidx)01:$(llrf):FwdSSA2SysCalOLG',
                 'OFS': 'RA-Ra$(sys)$(sidx)01:$(llrf):FwdSSA2SysCalOffset'
             },
             'VGap': {
