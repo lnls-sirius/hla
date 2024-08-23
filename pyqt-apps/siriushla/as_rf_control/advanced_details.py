@@ -37,16 +37,69 @@ class ADCDACDetails(SiriusDialog):
         self._setupUi()
 
     def _setupUi(self):
+        lay = QVBoxLayout(self)
+        lay.setAlignment(Qt.AlignTop)
+        dtls = QTabWidget(self)
+        dtls.setObjectName(self.section+'Tab')
+        dtls.setStyleSheet(
+            "#"+self.section+'Tab'+"::pane {"
+            "    border-left: 2px solid gray;"
+            "    border-bottom: 2px solid gray;"
+            "    border-right: 2px solid gray;}")
+
+        wid_input = QWidget(self)
+        wid_input.setLayout(self._rfInputLayout(self.syst_dict['Input']))
+        dtls.addTab(wid_input, 'RF Inputs')
+
+        wid_controls = QWidget(self)
+        wid_controls.setLayout(
+            self._controlsLayout(self.syst_dict['Control']))
+        dtls.addTab(wid_controls, 'Controls')
+
+        lay.addWidget(QLabel(
+            '<h4>Advanced ADCs and DACs Details</h4>',
+            alignment=Qt.AlignCenter))
+        lay.addWidget(dtls)
+
+    def _rfInputLayout(self, chs_dict):
+        lay = QGridLayout(self)
+        lay.setAlignment(Qt.AlignTop)
+        lay.setVerticalSpacing(9)
+        lay.setHorizontalSpacing(18)
+
+        lay.addWidget(QLabel(
+            'In-Phase', alignment=Qt.AlignCenter), 0, 2)
+        lay.addWidget(QLabel(
+            'Quadrature', alignment=Qt.AlignCenter), 0, 3)
+        lay.addWidget(QLabel(
+            'Amp', alignment=Qt.AlignCenter), 0, 4, 1, 4)
+        lay.addWidget(QLabel(
+            'Phase', alignment=Qt.AlignCenter), 0, 8)
+
+        row = 1
+        for key, val in chs_dict.items():
+            lay.addWidget(QLabel(key, alignment=Qt.AlignCenter), row, 0)
+            lay.addWidget(QLabel(val[0], alignment=Qt.AlignLeft), row, 1)
+
+            endings = ['I', 'Q', 'Amp', 'AmpW', 'AmpdBm', 'AmpVGap', 'Phs']
+            for i in range(len(endings)):
+                lb = SiriusLabel(self, self.prefix+val[1]+f'{endings[i]}-Mon')
+                lb.showUnits = True
+                lay.addWidget(lb, row, i+2)
+
+            # Add checks to empty values
+
+            row += 1
+
+        return lay
+
+    def _controlsLayout(self, chs_dict):
         lay = QGridLayout(self)
         lay.setAlignment(Qt.AlignTop)
         lay.setSpacing(9)
 
-        lay.addWidget(QLabel(
-            '<h4>Advanced ADCs and DACs Details</h4>',
-            alignment=Qt.AlignCenter), 0, 0, 1, 4)
-
         row = 1
-        for key, val in self.syst_dict.items():
+        for key, val in chs_dict.items():
             if key == 'ADC Enable' or key == 'DAC Enable':
                 pb_enbl = PyDMStateButton(
                     self, self.prefix+val[1]+'-Sel')
@@ -64,6 +117,8 @@ class ADCDACDetails(SiriusDialog):
                     SiriusSpinbox(self, self.prefix+val[1]+'-SP'), row, 2)
                 lay.addWidget(lb_value, row, 3)
             row += 1
+
+        return lay
 
 
 class HardwareDetails(SiriusDialog):
