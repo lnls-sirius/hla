@@ -315,10 +315,10 @@ class LLRFInterlockDetails(SiriusDialog):
         else:
             self._setupDetails(lay, None, self.chs['LLRF Intlk Details'], 1)
 
-    def _setupDetails(self, lay, key, chs_dict, offset):
-        if key:
+    def _setupDetails(self, lay, system, chs_dict, offset):
+        if system:
             lay.addWidget(QLabel(
-                f'<h4>LLRF {key}</h4>', self,
+                f'<h4>LLRF {system}</h4>', self,
                 alignment=Qt.AlignLeft), offset, 0)
 
         # inputs
@@ -376,7 +376,7 @@ class LLRFInterlockDetails(SiriusDialog):
         pb_dtls.setStyleSheet("min-width: 9em;")
         connect_window(
             pb_dtls, AdvancedInterlockDetails, parent=self,
-            prefix=self.prefix, section=self.section, system=key)
+            prefix=self.prefix, section=self.section, system=system)
         lay.addWidget(pb_dtls, offset+2, 0)
 
 
