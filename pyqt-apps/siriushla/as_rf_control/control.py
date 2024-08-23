@@ -622,8 +622,6 @@ class RFMainControl(SiriusMainWindow):
             lb2 = '4'
             lb_fflat = QLabel(
                 '<h3> • Field Flatness</h3>', self, alignment=Qt.AlignLeft)
-            lb_ffsts = QLabel('Acting: ', self, alignment=Qt.AlignRight)
-            self.lb_ffsts = SiriusLedState(self, self.prefix+pvs['Sts'])
             lb_ffen = QLabel('Enable: ', self, alignment=Qt.AlignRight)
             self.bt_ffen = PyDMStateButton(self, self.prefix+pvs['Auto']+'-Sel')
             self.lb_ffen = SiriusLedState(self, self.prefix+pvs['Auto']+'-Sts')
@@ -631,7 +629,8 @@ class RFMainControl(SiriusMainWindow):
             self.bt_ffpos = PyDMStateButton(self, self.prefix+pvs['Pos']+'-Sel')
             self.lb_ffpos = SiriusLedState(self, self.prefix+pvs['Pos']+'-Sts')
             lb_ffg1 = QLabel('Gain Cell 2: ', self, alignment=Qt.AlignRight)
-            lb_ffg2 = QLabel(f'Gain Cell {lb2:s}: ', self, alignment=Qt.AlignRight)
+            lb_ffg2 = QLabel(
+                f'Gain Cell {lb2:s}: ', self, alignment=Qt.AlignRight)
             self.sb_ffg1 = SiriusSpinbox(self, self.prefix+pvs['Gain1']+'-SP')
             self.sb_ffg2 = SiriusSpinbox(self, self.prefix+pvs['Gain2']+'-SP')
             self.lb_ffg1 = SiriusLabel(self, self.prefix+pvs['Gain1']+'-RB')
@@ -639,18 +638,26 @@ class RFMainControl(SiriusMainWindow):
             self.lb_ffg1.showUnits = True
             self.lb_ffg2.showUnits = True
             lb_ffdb = QLabel('DeadBand: ', self, alignment=Qt.AlignRight)
-            self.sb_ffdb = SiriusSpinbox(self, self.prefix+pvs['Deadband']+':SP')
-            self.lb_ffdb = SiriusLabel(self, self.prefix+pvs['Deadband']+':RB')
+            self.sb_ffdb = SiriusSpinbox(
+                self, self.prefix+pvs['Deadband']+'-SP')
+            self.lb_ffdb = SiriusLabel(self, self.prefix+pvs['Deadband']+'-RB')
             self.lb_ffdb.showUnits = True
             lb_ffcell1 = QLabel('Cell 2: ', self, alignment=Qt.AlignRight)
             self.lb_ffcell1 = SiriusLabel(self, self.prefix+pvs['Cell1'])
             self.lb_ffcell1.showUnits = True
-            lb_ffcell2 = QLabel(f'Cell {lb2:s}: ', self, alignment=Qt.AlignRight)
+            lb_ffcell2 = QLabel(
+                f'Cell {lb2:s}: ', self, alignment=Qt.AlignRight)
             self.lb_ffcell2 = SiriusLabel(self, self.prefix+pvs['Cell2'])
             self.lb_ffcell2.showUnits = True
             lb_fferr = QLabel('Error: ', self, alignment=Qt.AlignRight)
             self.lb_fferr = SiriusLabel(self, self.prefix+pvs['Err'])
             self.lb_fferr.showUnits = True
+            lb_ffsts = QLabel('Acting: ', self, alignment=Qt.AlignRight)
+            self.lb_ffsts = SiriusLedState(self, self.prefix+pvs['Sts'])
+            lb_fwdmin = QLabel(
+                'Tuning Fwd Min: ', self, alignment=Qt.AlignRight)
+            self.lb_fwdmin = SiriusLedState(self, self.prefix+pvs['FwdMin'])
+
             lay_fflat = QGridLayout()
             lay_fflat.setAlignment(Qt.AlignTop | Qt.AlignHCenter)
             lay_fflat.setVerticalSpacing(12)
@@ -678,6 +685,9 @@ class RFMainControl(SiriusMainWindow):
             lay_fflat.addWidget(self.lb_fferr, 8, 1)
             lay_fflat.addWidget(lb_ffsts, 9, 0)
             lay_fflat.addWidget(self.lb_ffsts, 9, 1, alignment=Qt.AlignCenter)
+            lay_fflat.addWidget(lb_fwdmin, 10, 0)
+            lay_fflat.addWidget(
+                self.lb_fwdmin, 10, 1, alignment=Qt.AlignCenter)
             wid_fflat = QWidget()
             wid_fflat.setLayout(lay_fflat)
 

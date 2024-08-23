@@ -235,6 +235,7 @@ SEC_2_CHANNELS = {
             'Cell2': 'RA-RaBO01:RF-LLRF:FFCell4-Mon',
             'Deadband': 'RA-RaBO01:RF-LLRF:FFDeadBand',
             'Err': 'RA-RaBO01:RF-LLRF:FFErr-Mon',
+            'FwdMin': 'RA-RaBO01:RF-LLRF:TuneFwdMin-Mon'
         },
         'PwrMtr': {
             'Cavity Power': {
