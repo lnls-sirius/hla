@@ -370,6 +370,7 @@ SEC_2_CHANNELS = {
                 'ADC 3': 'RA-RaBO01:RF-LLRF:GPIOADC3-Mon'
             },
             'Clock Src': 'RA-RaBO01:RF-LLRF:MO1000ClkSrc-Sel',
+            'Loop Trigger': 'RA-RaBO01:RF-LLRF:LoopTrigProc-Mon',
             'PLL': 'RA-RaBO01:RF-LLRF:MO1000PLL-Mon',
             'FPGA Init': 'RA-RaBO01:RF-LLRF:FPGAInit-Cmd',
             'Cav Type': 'RA-RaBO01:RF-LLRF:CavType-Mon',
@@ -1871,6 +1872,7 @@ SEC_2_CHANNELS = {
                     'ADC 3': 'RA-RaSIA01:RF-LLRF-A:GPIOADC3-Mon'
                 },
                 'Clock Src': 'RA-RaSIA01:RF-LLRF-A:MO1000ClkSrc-Sel',
+                'Loop Trigger': 'RA-RaSIA01:RF-LLRF-A:LoopTrigProc-Mon',
                 'PLL': 'RA-RaSIA01:RF-LLRF-A:MO1000PLL-Mon',
                 'FPGA Init': 'RA-RaSIA01:RF-LLRF-A:FPGAInit-Cmd',
                 'Cav Type': 'RA-RaSIA01:RF-LLRF-A:CavType-Mon',
@@ -1908,6 +1910,7 @@ SEC_2_CHANNELS = {
                     'ADC 3': 'RA-RaSIB01:RF-LLRF-B:GPIOADC3-Mon'
                 },
                 'Clock Src': 'RA-RaSIB01:RF-LLRF-B:MO1000ClkSrc-Sel',
+                'Loop Trigger': 'RA-RaSIB01:RF-LLRF-B:LoopTrigProc-Mon',
                 'PLL': 'RA-RaSIB01:RF-LLRF-B:MO1000PLL-Mon',
                 'FPGA Init': 'RA-RaSIB01:RF-LLRF-B:FPGAInit-Cmd',
                 'Cav Type': 'RA-RaSIB01:RF-LLRF-B:CavType-Mon',

@@ -113,37 +113,34 @@ class HardwareDetails(SiriusDialog):
         gbox_gpio = QGroupBox('GPIO', self)
         self._setupLabelsLayout(gbox_gpio, False, self.syst_dict['GPIO'])
 
-        # Clock Src and PLL
-        frame_pll = QFrame(self)
-        frame_pll.setFrameStyle(QFrame.Box)
-        frame_pll.setObjectName('frame_pll')
-        frame_pll.setStyleSheet("""
-            #frame_pll{
-                border: 2px solid gray;}
-        """)
-        lay_pll = QGridLayout(frame_pll)
+        # Clock Src, Loop Trigger and PLL
+        gbox_pll = QGroupBox(self)
+        lay_pll = QGridLayout(gbox_pll)
         lay_pll.setSpacing(9)
-        lay_pll.setSpacing(Qt.AlignTop)
+        lay_pll.setAlignment(Qt.AlignTop)
+
         pb_clock = PyDMStateButton(
             self, self.prefix+self.syst_dict['Clock Src'])
+        pb_trig = SiriusPushButton(
+            self, self.prefix+self.syst_dict['Loop Trigger'], 'Loop Trigger')
+        pb_trig.setStyleSheet('min-width: 6em')
         led_pll = SiriusLedState(self, self.prefix+self.syst_dict['PLL'])
         pb_init = PyDMStateButton(
             self, self.prefix+self.syst_dict['FPGA Init'])
-        lay_pll.addWidget(QLabel('Clock Src'), 0, 0)
-        lay_pll.addWidget(pb_clock, 0, 2)
-        lay_pll.addWidget(QLabel('PLL'), 1, 0)
-        lay_pll.addWidget(led_pll, 1, 1)
-        lay_pll.addWidget(pb_init, 1, 2)
+        lay_pll.addWidget(QLabel(
+            'Clock Src', alignment=Qt.AlignRight | Qt.AlignVCenter), 0, 0)
+        lay_pll.addWidget(pb_clock, 0, 1)
+        lay_pll.addWidget(QLabel(
+            'Loop Trigger', alignment=Qt.AlignRight | Qt.AlignVCenter), 1, 0)
+        lay_pll.addWidget(pb_trig, 1, 1)
+        lay_pll.addWidget(QLabel(
+            'PLL', alignment=Qt.AlignRight | Qt.AlignVCenter), 2, 0)
+        lay_pll.addWidget(pb_init, 2, 1)
+        lay_pll.addWidget(led_pll, 2, 2)
 
         # Cavity Type
-        frame_type = QFrame(self)
-        frame_type.setFrameStyle(QFrame.Box)
-        frame_type.setObjectName('frame_type')
-        frame_type.setStyleSheet("""
-            #frame_type{
-                border: 2px solid gray;}
-        """)
-        lay_type = QGridLayout(frame_type)
+        gbox_type = QGroupBox(self)
+        lay_type = QGridLayout(gbox_type)
         lay_type.setSpacing(9)
         lay_type.setSpacing(Qt.AlignTop)
         lay_type.addWidget(QLabel('Cavity Type'), 0, 0)
@@ -193,8 +190,8 @@ class HardwareDetails(SiriusDialog):
         lay_vbox.addWidget(gbox_mo1000)
         lay_vbox.addWidget(gbox_mi125)
         lay_vbox.addWidget(gbox_gpio)
-        lay_vbox.addWidget(frame_pll)
-        lay_vbox.addWidget(frame_type)
+        lay_vbox.addWidget(gbox_pll)
+        lay_vbox.addWidget(gbox_type)
 
         lay.addWidget(gbox_fpga, 1, 0)
         lay.addWidget(gbox_vers, 2, 0, 1, 5)
