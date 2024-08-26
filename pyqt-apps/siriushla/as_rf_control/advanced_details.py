@@ -10,7 +10,7 @@ from qtpy.QtWidgets import QGridLayout, QGroupBox, QHBoxLayout, QLabel, \
 from ..util import connect_window
 from ..widgets import PyDMStateButton, SiriusDialog, SiriusLabel, \
     SiriusLedAlert, SiriusLedState, SiriusSpinbox, SiriusScaleIndicator, \
-    SiriusEnumComboBox, SiriusPushButton, SiriusTimePlot
+    SiriusEnumComboBox, SiriusPushButton, SiriusTimePlot, SiriusLineEdit
 
 from .util import SEC_2_CHANNELS
 
@@ -413,6 +413,15 @@ class LoopsDetails(SiriusDialog):
         pb_eq.setStyleSheet('min-width:8em')
         lay.addWidget(pb_eq, 9, 1)
 
+        # Limits
+        pb_limit = QPushButton(
+            qta.icon('fa5s.external-link-alt'), ' Limits', self)
+        connect_window(
+            pb_limit, LimitsDetails, parent=self, prefix=self.prefix,
+            section=self.section, system=self.system, which='Loop')
+        pb_limit.setStyleSheet('min-width:8em')
+        lay.addWidget(pb_limit, 9, 2)
+
         lay.addItem(QSpacerItem(0, 9, QSzPlcy.Ignored, QSzPlcy.Fixed), 8, 0)
         lay.addItem(QSpacerItem(40, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 0, 4)
 
@@ -654,7 +663,7 @@ class RampsDetails(SiriusDialog):
 
         wid_controls = QWidget(self)
         wid_controls.setLayout(
-            self._rampsControlLayout(self.syst_dict['Controls']))
+            self._rampsControlLayout(self.syst_dict['Control']))
         dtls.addTab(wid_controls, 'Ramps Control')
 
         wid_top = QWidget(self)
@@ -704,6 +713,15 @@ class RampsDetails(SiriusDialog):
         # # Ramp Increase Rate and Top
         self._setupTextInputLine(lay_gen, chs_dict, '360', 3)
         self._setupLabelLine(lay_gen, chs_dict, '536', 4)
+
+        # # Limits
+        pb_limit = QPushButton(
+            qta.icon('fa5s.external-link-alt'), ' Limits', self)
+        connect_window(
+            pb_limit, LimitsDetails, parent=self, prefix=self.prefix,
+            section=self.section, system=self.system, which='Ramp')
+        pb_limit.setStyleSheet('min-width:8em')
+        lay_gen.addWidget(pb_limit, 5, 1)
 
         # Graph
         graph_amp = SiriusTimePlot(self)
@@ -1650,3 +1668,69 @@ class AdvancedInterlockDetails(SiriusDialog):
             row += 1
 
         return lay
+
+
+class LimitsDetails(SiriusDialog):
+    """Loop and Ramp Limits details."""
+
+    def __init__(self, parent=None, prefix='', section='', system='', which=''):
+        """Init."""
+        super().__init__(parent)
+        self.prefix = prefix
+        self.prefix += ('-' if prefix and not prefix.endswith('-') else '')
+        self.section = section
+        self.system = system
+        self.which = which
+        self.chs = SEC_2_CHANNELS[self.section]
+        self.setObjectName(self.section+'App')
+        title = f'{self.which} Limits Details'
+        title += (f' - {self.system}' if self.section == 'SI' else '')
+        self.setWindowTitle(title)
+        if self.which == 'Loop':
+            key = 'Loops'
+        else:
+            key = 'RampDtls'
+        if self.section == 'SI':
+            self.syst_dict = self.chs[key][self.system]['Control']['Limits']
+        else:
+            self.syst_dict = self.chs[key]['Control']['Limits']
+        self._setupUi()
+
+    def _setupUi(self):
+        lay = QGridLayout(self)
+        lay.setAlignment(Qt.AlignTop)
+        lay.setSpacing(9)
+        lay.addWidget(QLabel(
+            f'<h4>{self.which} Limits Details</h4>', alignment=Qt.AlignCenter),
+            0, 0, 1, 4)
+
+        row = 1
+        for key, val in self.syst_dict.items():
+            lb_val = SiriusLabel(self, self.prefix+val[1]+'-RB')
+            lb_val.showUnits = True
+
+            lay.addWidget(QLabel(key), row, 0)
+            lay.addWidget(QLabel(val[0]), row, 1, alignment=Qt.AlignCenter)
+            lay.addWidget(SiriusSpinbox(
+                self, self.prefix+val[1]+'-SP'), row, 2)
+            lay.addWidget(lb_val, row, 3)
+
+            self._setupMaxMinEdit(lay, val[1], row+1, True)
+            self._setupMaxMinEdit(lay, val[1], row+2, False)
+
+            row += 3
+
+    def _setupMaxMinEdit(self, lay, pv, row, is_max):
+        if is_max:
+            label = 'MAX'
+            ending = '-SP.DRVH'
+        else:
+            label = 'MIN'
+            ending = '-SP.DRVL'
+
+        lb = SiriusLabel(self, self.prefix+pv+ending)
+        lb.showUnits = True
+
+        lay.addWidget(QLabel(label, alignment=Qt.AlignCenter), row, 1)
+        lay.addWidget(SiriusLineEdit(self, self.prefix+pv+ending), row, 2)
+        lay.addWidget(lb, row, 3)

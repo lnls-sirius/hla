@@ -570,7 +570,12 @@ SEC_2_CHANNELS = {
                 '80': ['Phase Correct Error', 'RA-RaBO01:RF-LLRF:PhsCorrErr-Mon'],
                 '81': ['Phase Correct Control', 'RA-RaBO01:RF-LLRF:PhsCorrCtrl-Mon'],
                 '125': ['Fwd Min Amp & Phs', 'RA-RaBO01:RF-LLRF:LoopFwdMin'],
-                'Mode': 'RA-RaBO01:RF-LLRF:LoopMode-Sts'
+                'Mode': 'RA-RaBO01:RF-LLRF:LoopMode-Sts',
+                'Limits': {
+                    '24': ['Amp Loop Ref', 'RA-RaBO01:RF-LLRF:ALRef'],
+                    '30': ['Open Loop Gain', 'RA-RaBO01:RF-LLRF:OLGain'],
+                    '0': ['Slow Loop Kp', 'RA-RaBO01:RF-LLRF:SLKP'],
+                }
             },
             'General': {
                 '0': {
@@ -842,7 +847,7 @@ SEC_2_CHANNELS = {
                 }
         },
         'RampDtls': {
-            'Controls': {
+            'Control': {
                 'Ramp Enable': 'RA-RaBO01:RF-LLRF:RmpEn',
                 'Ramp Down Disable': 'RA-RaBO01:RF-LLRF:RampDownDsbl',
                 '356': ['T1 Ramp Delay After Trig', 'RA-RaBO01:RF-LLRF:RmpTs1'],
@@ -863,7 +868,11 @@ SEC_2_CHANNELS = {
                 '365': ['Amp Ramp Up Slope', 'RA-RaBO01:RF-LLRF:RampAmpUpCnt'],
                 '366': ['Amp Ramp Down Slope', 'RA-RaBO01:RF-LLRF:RampAmpDownCnt'],
                 '367': ['Phase Ramp Up Slope', 'RA-RaBO01:RF-LLRF:RampPhsUpCnt'],
-                '368': ['Phase Ramp Down Slope', 'RA-RaBO01:RF-LLRF:RampPhsDownCnt']
+                '368': ['Phase Ramp Down Slope', 'RA-RaBO01:RF-LLRF:RampPhsDownCnt'],
+                'Limits': {
+                    '362': ['Top Reference', 'RA-RaBO01:RF-LLRF:RampAmpTop'],
+                    '361': ['Bot Reference', 'RA-RaBO01:RF-LLRF:RampAmpBot']
+                }
             },
             'Diagnostics': {
                 'Top': {
@@ -2468,7 +2477,12 @@ SEC_2_CHANNELS = {
                     '80': ['Phase Correct Error', 'RA-RaSIA01:RF-LLRF-A:PhsCorrErr-Mon'],
                     '81': ['Phase Correct Control', 'RA-RaSIA01:RF-LLRF-A:PhsCorrCtrl-Mon'],
                     '125': ['Fwd Min Amp & Phs', 'RA-RaSIA01:RF-LLRF-A:LoopFwdMin'],
-                    'Mode': 'RA-RaSIA01:RF-LLRF-A:LoopMode-Sts'
+                    'Mode': 'RA-RaSIA01:RF-LLRF-A:LoopMode-Sts',
+                    'Limits': {
+                        '24': ['Amp Loop Ref', 'RA-RaSIA01:RF-LLRF-A:ALRef'],
+                        '30': ['Open Loop Gain', 'RA-RaSIA01:RF-LLRF-A:OLGain'],
+                        '0': ['Slow Loop Kp', 'RA-RaSIA01:RF-LLRF-A:SLKP'],
+                    }
                 },
                 'General': {
                     '0': {
@@ -2757,7 +2771,12 @@ SEC_2_CHANNELS = {
                     '80': ['Phase Correct Error', 'RA-RaSIB01:RF-LLRF-B:PhsCorrErr-Mon'],
                     '81': ['Phase Correct Control', 'RA-RaSIB01:RF-LLRF-B:PhsCorrCtrl-Mon'],
                     '125': ['Fwd Min Amp & Phs', 'RA-RaSIB01:RF-LLRF-B:LoopFwdMin'],
-                    'Mode': 'RA-RaSIB01:RF-LLRF-B:LoopMode-Sts'
+                    'Mode': 'RA-RaSIB01:RF-LLRF-B:LoopMode-Sts',
+                    'Limits': {
+                        '24': ['Amp Loop Ref', 'RA-RaSIB01:RF-LLRF-B:ALRef'],
+                        '30': ['Open Loop Gain', 'RA-RaSIB01:RF-LLRF-B:OLGain'],
+                        '0': ['Slow Loop Kp', 'RA-RaSIB01:RF-LLRF-B:SLKP'],
+                    }
                 },
                 'General': {
                     '0': {
@@ -3031,7 +3050,7 @@ SEC_2_CHANNELS = {
         },
         'RampDtls': {
             'A': {
-                'Controls': {
+                'Control': {
                     'Ramp Enable': 'RA-RaSIA01:RF-LLRF-A:RmpEn',
                     'Ramp Down Disable': 'RA-RaSIA01:RF-LLRF-A:RampDownDsbl',
                     '356': ['T1 Ramp Delay After Trig', 'RA-RaSIA01:RF-LLRF-A:RmpTs1'],
@@ -3052,7 +3071,11 @@ SEC_2_CHANNELS = {
                     '365': ['Amp Ramp Up Slope', 'RA-RaSIA01:RF-LLRF-A:RampAmpUpCnt'],
                     '366': ['Amp Ramp Down Slope', 'RA-RaSIA01:RF-LLRF-A:RampAmpDownCnt'],
                     '367': ['Phase Ramp Up Slope', 'RA-RaSIA01:RF-LLRF-A:RampPhsUpCnt'],
-                    '368': ['Phase Ramp Down Slope', 'RA-RaSIA01:RF-LLRF-A:RampPhsDownCnt']
+                    '368': ['Phase Ramp Down Slope', 'RA-RaSIA01:RF-LLRF-A:RampPhsDownCnt'],
+                    'Limits': {
+                        '362': ['Top Reference', 'RA-RaSIA01:RF-LLRF-A:RampAmpTop'],
+                        '361': ['Bot Reference', 'RA-RaSIA01:RF-LLRF-A:RampAmpBot']
+                    }
                 },
                 'Diagnostics': {
                     'Top': {
@@ -3262,7 +3285,7 @@ SEC_2_CHANNELS = {
                 },
             },
             'B': {
-                'Controls': {
+                'Control': {
                     'Ramp Enable': 'RA-RaSIB01:RF-LLRF-B:RmpEn',
                     'Ramp Down Disable': 'RA-RaSIB01:RF-LLRF-B:RampDownDsbl',
                     '356': ['T1 Ramp Delay After Trig', 'RA-RaSIB01:RF-LLRF-B:RmpTs1'],
@@ -3283,7 +3306,11 @@ SEC_2_CHANNELS = {
                     '365': ['Amp Ramp Up Slope', 'RA-RaSIB01:RF-LLRF-B:RampAmpUpCnt'],
                     '366': ['Amp Ramp Down Slope', 'RA-RaSIB01:RF-LLRF-B:RampAmpDownCnt'],
                     '367': ['Phase Ramp Up Slope', 'RA-RaSIB01:RF-LLRF-B:RampPhsUpCnt'],
-                    '368': ['Phase Ramp Down Slope', 'RA-RaSIB01:RF-LLRF-B:RampPhsDownCnt']
+                    '368': ['Phase Ramp Down Slope', 'RA-RaSIB01:RF-LLRF-B:RampPhsDownCnt'],
+                    'Limits': {
+                        '362': ['Top Reference', 'RA-RaSIB01:RF-LLRF-B:RampAmpTop'],
+                        '361': ['Bot Reference', 'RA-RaSIB01:RF-LLRF-B:RampAmpBot']
+                    }
                 },
                 'Diagnostics': {
                     'Top': {
