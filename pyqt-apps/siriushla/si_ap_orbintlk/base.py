@@ -18,7 +18,6 @@ class BaseObject(BaseOrbitIntlk):
 
     CONV_NM2M = 1e-9  # [nm] --> [m]
     CONV_UM2NM = 1e+3  # [um] --> [nm]
-    MINSUM_RESO = 2**24
 
     _pvs = dict()
 

@@ -8,7 +8,7 @@ from siriuspy.diagbeam.bpm.csdev import Const as _csbpm
 
 from siriushla import util
 from siriushla.widgets import PyDMStateButton, SiriusLedState, \
-    SiriusLedAlert, SiriusLineEdit, SiriusLabel
+    SiriusLedAlert, SiriusWaveformLineEdit, SiriusLabel
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla.as_di_bpms.base import BaseWidget, CustomGroupBox
 from siriushla.common.afc_acq_core import PhysicalTriggers, LogicalTriggers
@@ -103,7 +103,7 @@ class ParamsSettings(BaseWidget):
         title = ('' if self.is_pbpm else 'RFFE and ') + 'Switching Settings'
         formlist = (('SwMode-Sel', 'Switching Mode'), )
         if not self.is_pbpm:
-            formlist += ('RFFEAtt-SP', 'RFFE Attenuation')
+            formlist += (('RFFEAtt-SP', 'RFFE Attenuation'), )
         grpbx = self._create_formlayout_groupbox(title, formlist)
         vbl.addWidget(grpbx)
         vbl.addSpacing(20)
@@ -115,6 +115,37 @@ class BPMAdvancedSettings(BaseWidget):
     def __init__(self, parent=None, prefix='', bpm=''):
         super().__init__(parent=parent, prefix=prefix, bpm=bpm)
         self.setupui()
+
+    @staticmethod
+    def get_acqrate_props(rate):
+        items = list()
+        if rate == 'Monit':
+            items.append(('MONITUpdtTime-SP', 'Update Time'))
+        if rate != 'FOFB':
+            items.append(
+                (f'{rate}PhaseSyncDly-SP', 'Delay', ['lineedit', 'label']))
+        items.extend([
+            (f'{rate}PhaseSyncEn-Sel', 'Sync Enable',
+                ['statebutton', 'ledstate']),
+            ((f'{rate}PhaseDesyncCnt-Mon', f'{rate}PhaseDesyncCntRst-Cmd'),
+                'Desync. Count',
+                ['label', ('pushbutton', 'Reset Count', None, 1, 0)]),
+            (f'{rate}DataMaskEn-Sel', 'Data Mask Enable',
+                ['statebutton', 'ledstate']),
+        ])
+        if rate == 'FOFB':
+            items.extend([
+                (f'{rate}DataMaskSamples-SP', 'Data Mask Samples',
+                    ['lineedit', 'label']),
+            ])
+        else:
+            items.extend([
+                (f'{rate}DataMaskSamplesBeg-SP', 'Data Mask Samples Begin',
+                    ['lineedit', 'label']),
+                (f'{rate}DataMaskSamplesEnd-SP', 'Data Mask Samples End',
+                    ['lineedit', 'label']),
+            ])
+        return items
 
     def setupui(self):
         gdl = QGridLayout(self)
@@ -142,14 +173,14 @@ class BPMAdvancedSettings(BaseWidget):
             conflist += (
                 ('', '', ()),
                 ('', '<h4>Antenna Offsets</h4>', ()),
-                ('SwDirOffsetA-SP', 'Direct Offset A', 12),
-                ('SwDirOffsetB-SP', 'Direct Offset B', 12),
-                ('SwDirOffsetC-SP', 'Direct Offset C', 12),
-                ('SwDirOffsetD-SP', 'Direct Offset D', 12),
-                ('SwInvOffsetA-SP', 'Inverse Offset A', 12),
-                ('SwInvOffsetB-SP', 'Inverse Offset B', 12),
-                ('SwInvOffsetC-SP', 'Inverse Offset C', 12),
-                ('SwInvOffsetD-SP', 'Inverse Offset D', 12),
+                ('SwDirOffsetA-SP', 'Direct Offset A'),
+                ('SwDirOffsetB-SP', 'Direct Offset B'),
+                ('SwDirOffsetC-SP', 'Direct Offset C'),
+                ('SwDirOffsetD-SP', 'Direct Offset D'),
+                ('SwInvOffsetA-SP', 'Inverse Offset A'),
+                ('SwInvOffsetB-SP', 'Inverse Offset B'),
+                ('SwInvOffsetC-SP', 'Inverse Offset C'),
+                ('SwInvOffsetD-SP', 'Inverse Offset D'),
             )
 
         grpbx = self._create_formlayout_groupbox('Switching', conflist)
@@ -172,47 +203,15 @@ class BPMAdvancedSettings(BaseWidget):
             }
 
         for rate, pos in rate2pos.items():
-            items = list()
-            if rate == 'Monit':
-                if not self.is_pbpm:
-                    items.append(
-                        ('MonitEnable-Sel', 'Enable',
-                         ['statebutton', 'ledstate'])
-                    )
-                items.append(('MONITUpdtTime-SP', 'Update Time'))
-            if rate != 'FOFB':
-                items.append(
-                    (f'{rate}PhaseSyncDly-SP', 'Delay', ['lineedit', 'label']))
-            items.extend([
-                (f'{rate}PhaseSyncEn-Sel', 'Sync Enable',
-                 ['statebutton', 'ledstate']),
-                ((f'{rate}PhaseDesyncCnt-Mon', f'{rate}PhaseDesyncCntRst-Cmd'),
-                 'Desync. Count',
-                 ['label', ('pushbutton', 'Reset Count', None, 1, 0)]),
-                (f'{rate}DataMaskEn-Sel', 'Data Mask Enable',
-                 ['statebutton', 'ledstate']),
-            ])
-            if rate == 'FOFB':
-                items.extend([
-                    (f'{rate}DataMaskSamples-SP', 'Data Mask Samples',
-                     ['lineedit', 'label']),
-                ])
-            else:
-                items.extend([
-                    (f'{rate}DataMaskSamplesBeg-SP', 'Data Mask Samples Begin',
-                     ['lineedit', 'label']),
-                    (f'{rate}DataMaskSamplesEnd-SP', 'Data Mask Samples End',
-                     ['lineedit', 'label']),
-                ])
+            items = self.get_acqrate_props(rate)
             grpbx = self._create_formlayout_groupbox(rate, items)
             gdl.addWidget(grpbx, *pos)
 
             hrow = QHBoxLayout()
             hrow.setContentsMargins(0, 0, 0, 0)
 
-            acqcores = ['GEN', 'PM'] if self.is_pbpm else ['ACQ', 'PM']
             grpbx = TriggersLauncherWidget(
-                self, prefix=self.prefix, bpm=self.bpm, acqcores=acqcores)
+                self, prefix=self.prefix, bpm=self.bpm, acqcores=['GEN', 'PM'])
             hrow.addWidget(grpbx)
 
             if not self.is_pbpm:
@@ -259,15 +258,6 @@ class TriggersLauncherWidget(BaseWidget):
             pbt, wind, parent=self, prefix=self.prefix, device=self.bpm)
         hbl.addWidget(pbt)
         hbl.addStretch()
-        if 'ACQ' in self.acqcores:
-            pbt = QPushButton('ACQ Logical Triggers')
-            wind = create_window_from_widget(
-                LogicalTriggers, title=self.bpm+': ACQ Logical Triggers')
-            util.connect_window(
-                pbt, wind, parent=self, prefix=self.prefix, device=self.bpm,
-                names=_csbpm.LogTrigIntern._fields, trig_tp='')
-            hbl.addWidget(pbt)
-            hbl.addStretch()
         if 'GEN' in self.acqcores:
             pbt = QPushButton('General Logical Triggers')
             wind = create_window_from_widget(
@@ -277,7 +267,7 @@ class TriggersLauncherWidget(BaseWidget):
                 names=_csbpm.LogTrigIntern._fields, trig_tp='_GEN')
             hbl.addWidget(pbt)
             hbl.addStretch()
-        if 'PM' in self.acqcores or 'ACQ_PM' in self.acqcores:
+        if 'PM' in self.acqcores:
             pbt = QPushButton('Post-Mortem Logical Triggers')
             wind = create_window_from_widget(
                 LogicalTriggers,
@@ -322,7 +312,7 @@ class PolySettings(BaseWidget):
         lay.addWidget(sc_area)
 
     def _create_coeff_group(self, coeff):
-        enblctl = 'XY' if coeff in ['X', 'Y'] else coeff
+        enblctl = 'XY' if coeff in ['X', 'Y'] else coeff.capitalize()
 
         ldc_enbl = QLabel('Enable: ', self)
         but_enbl = PyDMStateButton(
@@ -331,7 +321,7 @@ class PolySettings(BaseWidget):
             self, self.get_pvname(f'{enblctl}PosCal-Sts'))
 
         ldc_gen = QLabel('GEN: ', self)
-        but_gen = SiriusLineEdit(
+        but_gen = SiriusWaveformLineEdit(
             self, self.get_pvname(f'GEN_Poly{coeff}ArrayCoeff-SP'))
         lbl_gen = SiriusLabel(
             self, self.get_pvname(f'GEN_Poly{coeff}ArrayCoeff-RB'))
@@ -341,7 +331,7 @@ class PolySettings(BaseWidget):
             self, self.get_pvname(f'GEN_Poly{enblctl}ASubCalc.SEVR'))
 
         ldc_pm = QLabel('PM: ', self)
-        but_pm = SiriusLineEdit(
+        but_pm = SiriusWaveformLineEdit(
             self, self.get_pvname(f'PM_Poly{coeff}ArrayCoeff-SP'))
         lbl_pm = SiriusLabel(
             self, self.get_pvname(f'PM_Poly{coeff}ArrayCoeff-RB'))
@@ -409,42 +399,40 @@ class BPMHardwareSettings(BaseWidget):
         lay = QGridLayout(self)
 
         lab = QLabel(
-            '<h2>'+self.bpm+' Hardware Settings</h2>', self,
+            '<h2>'+self.bpm+' FMC250 Settings</h2>', self,
             alignment=Qt.AlignCenter)
         lay.addWidget(lab, 0, 0, 1, 2)
 
-        lay.addWidget(self._setupADCWidget(), 1, 0)
-        lay.addWidget(self._setupAD9510Widget(), 2, 0, 5, 1)
-        lay.addWidget(self._setupActiveClockWidget(), 1, 1)
-        lay.addWidget(self._setupFMC250MWidget(), 2, 1)
-        for chan in range(4):
-            lay.addWidget(self._setupADCChannelMWidget(chan), chan+3, 1)
+        vlay0 = QVBoxLayout()
+        vlay0.setContentsMargins(0, 0, 0, 0)
+        vlay0.addWidget(self._setupADCCommonWidget())
+        vlay0.addWidget(self._setupActiveClockWidget())
+        vlay0.addWidget(self._setupAD9510PLLWidget())
 
-    def _setupADCWidget(self):
-        return self._create_formlayout_groupbox('ADC', (
+        vlay1 = QVBoxLayout()
+        vlay1.setContentsMargins(0, 0, 0, 0)
+        vlay1.addWidget(self._setupADCsWidget())
+
+        lay.addLayout(vlay0, 1, 0)
+        lay.addLayout(vlay1, 1, 1)
+
+    def _setupADCCommonWidget(self):
+        return self._create_formlayout_groupbox('ADC Common', (
             ('ADCTrigDir-Sel', 'Trigger Direction'),
             ('ADCTrigTerm-Sel', 'Trigger Termination'),
-            ('ADCClkSel-Sel', 'Reference Clock'),
             ('ADCTestDataEn-Sel', 'Enable test data',
              ['statebutton', 'ledstate']),
         ))
 
-    def _setupAD9510Widget(self):
-        return self._create_formlayout_groupbox('ADC AD9510', (
+    def _setupAD9510PLLWidget(self):
+        return self._create_formlayout_groupbox('AD9510 PLL', (
             ('ADCAD9510PllStatus-Mon', 'PLL Status',
              [('ledstate', SiriusLedState.Red, SiriusLedState.LightGreen)]),
             ('ADCAD9510Defaults-Sel', 'Reset',
              [('pushbutton', 'Reset', None, 1, 0)]),
-            ('ADCAD9510PllFunc-SP', 'PLL Function', ['lineedit', 'label']),
-            ('ADCAD9510ClkSel-Sel', 'Reference Clock'),
-            ('ADCAD9510PllPDown-Sel', 'PLL Power Down'),
-            ('ADCAD9510CpCurrent-Sel', 'CP Current'),
             ('ADCAD9510ADiv-SP', 'A divider', ['lineedit', 'label']),
             ('ADCAD9510BDiv-SP', 'B divider', ['lineedit', 'label']),
-            ('ADCAD9510Prescaler-SP', 'Prescaler', ['lineedit', 'label']),
             ('ADCAD9510RDiv-SP', 'R divider', ['lineedit', 'label']),
-            ('ADCAD9510MuxStatus-SP', 'Mux status', ['lineedit', 'label']),
-            ('ADCAD9510Outputs-SP', 'Outputs', ['lineedit', 'label']),
         ))
 
     def _setupActiveClockWidget(self):
@@ -452,27 +440,25 @@ class BPMHardwareSettings(BaseWidget):
             ('INFOClkFreq-SP', 'Clock Frequency [Hz]', ['lineedit', 'label']),
             ('ADCSi57xOe-Sel', 'Osc. output enable',
              ['statebutton', 'ledstate']),
-            ('INFOClkProp-Sel', 'Link Frequency',
-             ['statebutton', 'ledstate']),
             ('ADCSi57xFreq-SP', 'Osc. Frequency [Hz]', ['lineedit', 'label']),
-            ('ADCSi57xFStartup-SP', 'Osc. Frequency [Hz]\nStartup ',
-             ['lineedit', 'label']),
+            ('ADCClkSel-Sel', 'Reference Clock'),
         ))
 
-    def _setupFMC250MWidget(self):
-        return self._create_formlayout_groupbox('FMC250', (
+    def _setupADCsWidget(self):
+        proplist = (
             ('ActiveClkRstAdcs-Sel', 'Reset',
              [('pushbutton', 'Reset', None, 1, 0)]),
-            (([f'ADC{i}CalStatus-Mon' for i in range(4)]), 'Calibration Done',
-             ['ledstate', 'ledstate', 'ledstate', 'ledstate']),
-        ))
-
-    def _setupADCChannelMWidget(self, chan):
-        return self._create_formlayout_groupbox(f'ADC Channel {chan}', (
-            (f'ADC{chan}Temp-Mon', 'Temp. code'),
-            (f'ADC{chan}TestMode-SP', 'Test mode', ['lineedit', ]),
-            (f'ADC{chan}RstModes-Sel', 'Reset Mode', ['combo']),
-        ))
+        )
+        for chan in range(4):
+            proplist += (
+                ('', '', ()),
+                ('', f'<h4>Channel {chan}</h4>', ()),
+                (f'ADC{chan}Temp-Mon', 'Temp. code'),
+                (f'ADC{chan}TestMode-SP', 'Test mode', ['lineedit', ]),
+                (f'ADC{chan}RstModes-Sel', 'Reset Mode', ['combo']),
+                (f'ADC{chan}CalStatus-Mon', 'Calibration Done', ['ledstate']),
+            )
+        return self._create_formlayout_groupbox('ADCs', proplist)
 
 
 class PBPMHardwareSettings(BaseWidget):
