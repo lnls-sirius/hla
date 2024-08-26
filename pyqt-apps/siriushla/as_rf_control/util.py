@@ -1177,6 +1177,13 @@ SEC_2_CHANNELS = {
                 '312': ['Tuning Filter Enable', 'RA-RaBO01:RF-LLRF:TuneFilt'],
                 '313': ['Tuning Trigger Enable', 'RA-RaBO01:RF-LLRF:TuneTrig'],
                 '316': ['Tuning/FF On Top Ramp', 'RA-RaBO01:RF-LLRF:RampTuneTop'],
+            },
+            'Drivers': {
+                '5V': ['RA-RaBO01:RF-CavPlDrivers:VoltPos5V-Mon', 'RA-RaBO01:RF-CavPlDrivers:Current5V-Mon'],
+                '48V': ['RA-RaBO01:RF-CavPlDrivers:VoltPos48V-Mon', 'RA-RaBO01:RF-CavPlDrivers:Current48V-Mon'],
+                'Enable': 'RA-RaBO01:RF-CavPlDrivers:DrEnbl',
+                '1': ['RA-RaBO01:RF-CavPlDrivers:Dr1Enbl-Sts', 'RA-RaBO01:RF-CavPlDrivers:Dr1Flt-Mon'],
+                '2': ['RA-RaBO01:RF-CavPlDrivers:Dr2Enbl-Sts', 'RA-RaBO01:RF-CavPlDrivers:Dr2Flt-Mon']
             }
         },
         'AdvIntlk': {
@@ -3581,6 +3588,13 @@ SEC_2_CHANNELS = {
                     '312': ['Tuning Filter Enable', 'RA-RaSIA01:RF-LLRF-A:TuneFilt'],
                     '313': ['Tuning Trigger Enable', 'RA-RaSIA01:RF-LLRF-A:TuneTrig'],
                     '316': ['Tuning/FF On Top Ramp', 'RA-RaSIA01:RF-LLRF-A:RampTuneTop'],
+                },
+                'Drivers': {
+                    '5V': ['RA-RaSIA01:RF-CavPlDrivers:VoltPos5V-Mon', 'RA-RaSIA01:RF-CavPlDrivers:Current5V-Mon'],
+                    '24V': ['RA-RaSIA01:RF-CavPlDrivers:VoltPos24V-Mon', 'RA-RaSIA01:RF-CavPlDrivers:Current24V-Mon'],
+                    'Enable': 'RA-RaSIA01:RF-CavPlDrivers:DrEnbl',
+                    '1': ['RA-RaSIA01:RF-CavPlDrivers:Dr1Enbl-Sts', 'RA-RaSIA01:RF-CavPlDrivers:Dr1Flt-Mon'],
+                    '2': ['RA-RaSIA01:RF-CavPlDrivers:Dr2Enbl-Sts', 'RA-RaSIA01:RF-CavPlDrivers:Dr2Flt-Mon']
                 }
             },
             'B': {
@@ -3609,6 +3623,13 @@ SEC_2_CHANNELS = {
                     '312': ['Tuning Filter Enable', 'RA-RaSIB01:RF-LLRF-B:TuneFilt'],
                     '313': ['Tuning Trigger Enable', 'RA-RaSIB01:RF-LLRF-B:TuneTrig'],
                     '316': ['Tuning/FF On Top Ramp', 'RA-RaSIB01:RF-LLRF-B:RampTuneTop'],
+                },
+                'Drivers': {
+                    '5V': ['RA-RaSIB01:RF-CavPlDrivers:VoltPos5V-Mon', 'RA-RaSIB01:RF-CavPlDrivers:Current5V-Mon'],
+                    '24V': ['RA-RaSIB01:RF-CavPlDrivers:VoltPos24V-Mon', 'RA-RaSIB01:RF-CavPlDrivers:Current24V-Mon'],
+                    'Enable': 'RA-RaSIB01:RF-CavPlDrivers:DrEnbl',
+                    '1': ['RA-RaSIB01:RF-CavPlDrivers:Dr1Enbl-Sts', 'RA-RaSIB01:RF-CavPlDrivers:Dr1Flt-Mon'],
+                    '2': ['RA-RaSIB01:RF-CavPlDrivers:Dr2Enbl-Sts', 'RA-RaSIB01:RF-CavPlDrivers:Dr2Flt-Mon']
                 }
             }
         },

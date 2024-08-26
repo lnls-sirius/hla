@@ -1299,11 +1299,15 @@ class TuningDetails(SiriusDialog):
         lay.setSpacing(9)
         lay.addWidget(QLabel(
             '<h4>Advanced Tuning Details</h4>',
-            alignment=Qt.AlignCenter), 0, 0, 1, 2)
+            alignment=Qt.AlignCenter), 0, 0, 1, 3)
 
         gbox_gen = QGroupBox('General')
         gbox_gen.setLayout(self._generalLayout(self.syst_dict['General']))
         lay.addWidget(gbox_gen, 1, 0)
+
+        gbox_drv = QGroupBox('Drivers')
+        gbox_drv.setLayout(self._driversLayout(self.syst_dict['Drivers']))
+        lay.addWidget(gbox_drv, 1, 1)
 
         auto_man = QTabWidget(self)
         auto_man.setObjectName(self.section+'Tab')
@@ -1321,7 +1325,7 @@ class TuningDetails(SiriusDialog):
         wid_auto.setLayout(self._autoLayout(self.syst_dict['Auto']))
         auto_man.addTab(wid_auto, 'Auto')
 
-        lay.addWidget(auto_man, 1, 1)
+        lay.addWidget(auto_man, 1, 2)
 
     def _generalLayout(self, chs_dict):
         lay = QGridLayout()
@@ -1352,6 +1356,56 @@ class TuningDetails(SiriusDialog):
             self, self.prefix+chs_dict['303'][1]+'-SP'),
             row, 2, alignment=Qt.AlignCenter)
         lay.addWidget(lb_freq, row, 3, alignment=Qt.AlignCenter)
+
+        return lay
+
+    def _driversLayout(self, chs_dict):
+        lay = QGridLayout(self)
+        lay.setAlignment(Qt.AlignTop)
+        lay.setSpacing(9)
+
+        if self.section == 'SI':
+            supplies = ['5V', '24V']
+        else:
+            supplies = ['5V', '48V']
+        row = 0
+        for sup in supplies:
+            lb_volt = SiriusLabel(self, self.prefix+chs_dict[sup][0])
+            lb_volt.showUnit = True
+            lb_curr = SiriusLabel(self, self.prefix+chs_dict[sup][1])
+            lb_curr.showUnit = True
+            lay.addWidget(QLabel(f'{sup} Supply'), row, 0)
+            lay.addWidget(lb_volt, row, 1)
+            lay.addWidget(lb_curr, row, 2)
+            row += 1
+
+        lay.addWidget(QLabel('Drivers'), row, 0)
+        lay.addWidget(PyDMStateButton(
+            self, self.prefix+chs_dict['Enable']+'-Sel'),
+            row, 1, alignment=Qt.AlignCenter)
+        lay.addWidget(SiriusLedState(
+            self, self.prefix+chs_dict['Enable']+'-Sts'),
+            row, 2, alignment=Qt.AlignCenter)
+        row += 1
+
+        drivers = ['1', '2']
+        for d in drivers:
+            gbox = QGroupBox(f'Driver {d}')
+            gbox_lay = QGridLayout()
+            gbox.setLayout(gbox_lay)
+
+            lb_status = SiriusLabel(self, self.prefix+chs_dict[d][0])
+            lb_status.showUnits = True
+
+            gbox_lay.addWidget(QLabel('Status'), 0, 0)
+            gbox_lay.addWidget(lb_status, 0, 1)
+            gbox_lay.addWidget(QLabel('Fault'), 1, 0)
+            gbox_lay.addWidget(SiriusLedAlert(
+                self, self.prefix+chs_dict[d][1]),
+                1, 1, alignment=Qt.AlignCenter)
+
+            lay.addWidget(gbox, row, 0, 1, 3)
+            row += 1
 
         return lay
 
@@ -1649,8 +1703,7 @@ class AdvancedInterlockDetails(SiriusDialog):
             column = 2
             for bit in range(len(labels)):
                 lay_state = QHBoxLayout()
-                pb = PyDMStateButton(self, self.prefix+val[1]+'-Sel')
-                pb.pvbit = bit
+                pb = PyDMStateButton(self, self.prefix+val[1]+'-Sel', bit=bit)
                 lay_state.addWidget(pb, alignment=Qt.AlignRight)
                 lay_state.addWidget(SiriusLedState(
                     self, self.prefix+val[1]+'-Sts', bit),
