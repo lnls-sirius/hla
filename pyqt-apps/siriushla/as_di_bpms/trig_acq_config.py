@@ -2,6 +2,7 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QVBoxLayout, QWidget, \
     QLabel, QGridLayout, QSizePolicy as QSzPlcy, QTabWidget
 from siriushla.as_di_bpms.base import BaseWidget
+from siriushla.as_di_bpms.settings import BPMAdvancedSettings
 from siriushla.common.afc_acq_core.trig_acq_config import AcqBaseWindow
 
 
@@ -25,21 +26,17 @@ class BPMBaseTriggeredAcquisition(AcqBaseWindow, BaseWidget):
         self.wid_basic = self._basicSettingsWidget()
         self.wid_trig = self._triggersWidget()
         self.wid_graph = self._graphsWidget()
-        self.wid_tbtconf = self._tbtConfigWidget()
-        self.wid_datatrig = self._dataTrigWidget()
+        self.wid_advcd = self._advancedSettingsWidget()
 
         wid = QWidget()
         lay = QGridLayout(wid)
         lay.addWidget(self.title, 0, 0, 1, 2)
-        lay.addWidget(self.wid_graph, 1, 0, 2, 1)
+        lay.addWidget(self.wid_graph, 1, 0, 3, 1)
         lay.addWidget(self.wid_basic, 1, 1)
-        lay.addWidget(self.wid_tbtconf, 2, 1)
-        lay.addWidget(self.wid_datatrig, 3, 1)
-        lay.addWidget(self.wid_trig, 4, 1)
-        lay.setColumnStretch(0, 3)
+        lay.addWidget(self.wid_advcd, 2, 1)
+        lay.addWidget(self.wid_trig, 3, 1)
+        lay.setColumnStretch(0, 4)
         lay.setColumnStretch(1, 1)
-        lay.setRowStretch(0, 3)
-        lay.setRowStretch(1, 1)
         self.setCentralWidget(wid)
 
     def _graphsWidget(self):
@@ -64,34 +61,54 @@ class BPMBaseTriggeredAcquisition(AcqBaseWindow, BaseWidget):
 
         wid = QTabWidget(self)
         wid.setObjectName(self.sec+'Tab')
+        wid.setStyleSheet("""
+            #{}Tab::pane {{
+                border-left: 2px solid gray;
+                border-bottom: 2px solid gray;
+                border-right: 2px solid gray;
+            }}""".format(self.sec))
         wid.addTab(gp_ant, 'Antennas')
         wid.addTab(gp_pos, 'Positions')
         return wid
 
-    def _tbtConfigWidget(self):
-        grpbx = self._create_formlayout_groupbox(
-            'TbT Configurations', (
-                ('TbTPhaseSyncEn-Sel', 'Sync Timing', False),
-                ('TbTPhaseSyncDly-SP', 'TbT Delay [adc counts]',
-                 dict(isdata=False, widgets=['lineedit', 'label'])),
-                ('TbTDataMaskEn-Sel', 'Mask Data', False),
-                ('TbTDataMaskSamplesBeg-SP', 'Mask Begin',
-                 dict(isdata=False, widgets=['lineedit', 'label'])),
-                ('TbTDataMaskSamplesEnd-SP', 'Mask End',
-                 dict(isdata=False, widgets=['lineedit', 'label'])),
-                ))
-        return grpbx
+    def _advancedSettingsWidget(self):
+        tabwid = QTabWidget(self)
+        tabwid.setObjectName(self.sec+'Tab')
+        tabwid.setStyleSheet("""
+            #{}Tab::pane {{
+                border-left: 2px solid gray;
+                border-bottom: 2px solid gray;
+                border-right: 2px solid gray;
+            }}""".format(self.sec))
 
-    def _dataTrigWidget(self):
-        grpbx = self._create_formlayout_groupbox(
-            'Auto Trigger Configurations', (
+        # rates settings
+        wid_ratesconf = QTabWidget(self)
+        for rate in ['FOFB', 'TbT', 'FAcq']:
+            items = BPMAdvancedSettings.get_acqrate_props(rate)
+            grpbx = self._create_formlayout_groupbox('', items)
+            wid_ratesconf.addTab(grpbx, rate)
+        tabwid.addTab(wid_ratesconf, 'Acq.Rate Config.')
+
+        # data triggered settings
+        wid_datatrig = self._create_formlayout_groupbox(
+            '', (
                 ('DataTrigChan-Sel', 'Type of Rate as Trigger'),
                 ('TriggerDataSel-SP', 'Channel'),
                 ('TriggerDataPol-Sel', 'Slope'),
                 ('TriggerDataThres-SP', 'Threshold'),
-                ('TriggerDataHyst-SP', 'Hysteresis')))
-        grpbx.rules = self.basic_rule('Trigger-Sts', True, val=2)
-        return grpbx
+                ('TriggerDataHyst-SP', 'Hysteresis')
+            ))
+        tabwid.addTab(wid_datatrig, 'Auto Trig. Config.')
+
+        return tabwid
+
+    def _ratesConfigWidget(self):
+        tabwid = QTabWidget(self)
+        for rate in ['FOFB', 'TbT', 'FAcq']:
+            items = BPMAdvancedSettings.get_acqrate_props(rate)
+            grpbx = self._create_formlayout_groupbox('', items)
+            tabwid.addTab(grpbx, rate)
+        return tabwid
 
 
 class BPMGENAcquisition(BPMBaseTriggeredAcquisition):

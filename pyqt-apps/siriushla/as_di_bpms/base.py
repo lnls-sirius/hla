@@ -37,7 +37,10 @@ class BaseWidget(QWidget):
         return addr
 
     def _create_formlayout_groupbox(self, title, props):
-        grpbx = CustomGroupBox(title, self)
+        if title:
+            grpbx = CustomGroupBox(title, self)
+        else:
+            grpbx = QWidget(self)
         fbl = QFormLayout(grpbx)
         grpbx.layoutf = fbl
         fbl.setLabelAlignment(Qt.AlignVCenter)

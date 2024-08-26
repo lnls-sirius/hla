@@ -116,6 +116,37 @@ class BPMAdvancedSettings(BaseWidget):
         super().__init__(parent=parent, prefix=prefix, bpm=bpm)
         self.setupui()
 
+    @staticmethod
+    def get_acqrate_props(rate):
+        items = list()
+        if rate == 'Monit':
+            items.append(('MONITUpdtTime-SP', 'Update Time'))
+        if rate != 'FOFB':
+            items.append(
+                (f'{rate}PhaseSyncDly-SP', 'Delay', ['lineedit', 'label']))
+        items.extend([
+            (f'{rate}PhaseSyncEn-Sel', 'Sync Enable',
+                ['statebutton', 'ledstate']),
+            ((f'{rate}PhaseDesyncCnt-Mon', f'{rate}PhaseDesyncCntRst-Cmd'),
+                'Desync. Count',
+                ['label', ('pushbutton', 'Reset Count', None, 1, 0)]),
+            (f'{rate}DataMaskEn-Sel', 'Data Mask Enable',
+                ['statebutton', 'ledstate']),
+        ])
+        if rate == 'FOFB':
+            items.extend([
+                (f'{rate}DataMaskSamples-SP', 'Data Mask Samples',
+                    ['lineedit', 'label']),
+            ])
+        else:
+            items.extend([
+                (f'{rate}DataMaskSamplesBeg-SP', 'Data Mask Samples Begin',
+                    ['lineedit', 'label']),
+                (f'{rate}DataMaskSamplesEnd-SP', 'Data Mask Samples End',
+                    ['lineedit', 'label']),
+            ])
+        return items
+
     def setupui(self):
         gdl = QGridLayout(self)
         lab = QLabel('<h2>' + self.bpm + ' Advanced Settings</h2>')
@@ -172,33 +203,7 @@ class BPMAdvancedSettings(BaseWidget):
             }
 
         for rate, pos in rate2pos.items():
-            items = list()
-            if rate == 'Monit':
-                items.append(('MONITUpdtTime-SP', 'Update Time'))
-            if rate != 'FOFB':
-                items.append(
-                    (f'{rate}PhaseSyncDly-SP', 'Delay', ['lineedit', 'label']))
-            items.extend([
-                (f'{rate}PhaseSyncEn-Sel', 'Sync Enable',
-                 ['statebutton', 'ledstate']),
-                ((f'{rate}PhaseDesyncCnt-Mon', f'{rate}PhaseDesyncCntRst-Cmd'),
-                 'Desync. Count',
-                 ['label', ('pushbutton', 'Reset Count', None, 1, 0)]),
-                (f'{rate}DataMaskEn-Sel', 'Data Mask Enable',
-                 ['statebutton', 'ledstate']),
-            ])
-            if rate == 'FOFB':
-                items.extend([
-                    (f'{rate}DataMaskSamples-SP', 'Data Mask Samples',
-                     ['lineedit', 'label']),
-                ])
-            else:
-                items.extend([
-                    (f'{rate}DataMaskSamplesBeg-SP', 'Data Mask Samples Begin',
-                     ['lineedit', 'label']),
-                    (f'{rate}DataMaskSamplesEnd-SP', 'Data Mask Samples End',
-                     ['lineedit', 'label']),
-                ])
+            items = self.get_acqrate_props(rate)
             grpbx = self._create_formlayout_groupbox(rate, items)
             gdl.addWidget(grpbx, *pos)
 
