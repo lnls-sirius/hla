@@ -5,7 +5,7 @@ from qtpy.QtCore import Qt
 from qtpy.QtGui import QColor
 from qtpy.QtWidgets import QGridLayout, QGroupBox, QHBoxLayout, QLabel, \
     QSizePolicy as QSzPlcy, QSpacerItem, QTabWidget, QVBoxLayout, \
-    QWidget, QFrame, QPushButton
+    QWidget, QPushButton
 
 from ..util import connect_window
 from ..widgets import PyDMStateButton, SiriusDialog, SiriusLabel, \
@@ -77,18 +77,22 @@ class ADCDACDetails(SiriusDialog):
             'Phase', alignment=Qt.AlignCenter), 0, 8)
 
         row = 1
-        for key, val in chs_dict.items():
-            lay.addWidget(QLabel(key, alignment=Qt.AlignCenter), row, 0)
-            lay.addWidget(QLabel(val[0], alignment=Qt.AlignLeft), row, 1)
-
-            endings = ['I', 'Q', 'Amp', 'AmpW', 'AmpdBm', 'AmpVGap', 'Phs']
-            for i in range(len(endings)):
-                lb = SiriusLabel(self, self.prefix+val[1]+f'{endings[i]}-Mon')
-                lb.showUnits = True
-                lay.addWidget(lb, row, i+2)
-
-            # Add checks to empty values
-
+        for key, dic in chs_dict.items():
+            lay.addWidget(QLabel(
+                key, alignment=Qt.AlignCenter), row, 0)
+            lay.addWidget(QLabel(
+                dic['Label'], alignment=Qt.AlignLeft), row, 1)
+            column = 2
+            for k, val in dic.items():
+                if k != 'Label' and val != '-':
+                    lb = SiriusLabel(self, self.prefix+val)
+                    lb.showUnits = True
+                    lay.addWidget(lb, row, column)
+                    column += 1
+                elif val == '-':
+                    lay.addWidget(QLabel(
+                        '-', alignment=Qt.AlignCenter), row, column)
+                    column += 1
             row += 1
 
         return lay
@@ -98,25 +102,35 @@ class ADCDACDetails(SiriusDialog):
         lay.setAlignment(Qt.AlignTop)
         lay.setSpacing(9)
 
-        row = 1
-        for key, val in chs_dict.items():
-            if key == 'ADC Enable' or key == 'DAC Enable':
-                pb_enbl = PyDMStateButton(
-                    self, self.prefix+val[1]+'-Sel')
-                led_enbl = SiriusLedState(
-                    self, self.prefix+val[1])
-                lay.addWidget(QLabel(val[0]), row, 0, 1, 2)
-                lay.addWidget(pb_enbl, row, 2)
-                lay.addWidget(led_enbl, row, 3)
+        for k, sub_dict in chs_dict.items():
+            row = 1
+            if k == 'ADC':
+                offset = 0
             else:
-                lb_value = SiriusLabel(self, self.prefix+val[1]+'-RB')
-                lb_value.showUnits = True
-                lay.addWidget(QLabel(key), row, 0)
-                lay.addWidget(QLabel(val[0]), row, 1)
-                lay.addWidget(
-                    SiriusSpinbox(self, self.prefix+val[1]+'-SP'), row, 2)
-                lay.addWidget(lb_value, row, 3)
-            row += 1
+                offset = 5
+
+            for key, val in sub_dict.items():
+                if key == 'Enable':
+                    pb_enbl = PyDMStateButton(
+                        self, self.prefix+val[1]+'-Sel')
+                    led_enbl = SiriusLedState(
+                        self, self.prefix+val[1])
+                    lay.addWidget(QLabel(val[0]), row, offset, 1, 2)
+                    lay.addWidget(pb_enbl, row, offset+2)
+                    lay.addWidget(led_enbl, row, offset+3,
+                        alignment=Qt.AlignCenter)
+                else:
+                    lb_value = SiriusLabel(self, self.prefix+val[1]+'-RB')
+                    lb_value.showUnits = True
+                    lay.addWidget(QLabel(key), row, offset)
+                    lay.addWidget(QLabel(val[0]), row, offset+1)
+                    lay.addWidget(
+                        SiriusSpinbox(self, self.prefix+val[1]+'-SP'),
+                        row, offset+2)
+                    lay.addWidget(lb_value, row, offset+3)
+                row += 1
+
+        lay.addItem(QSpacerItem(20, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 1, 4)
 
         return lay
 
