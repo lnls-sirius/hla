@@ -846,38 +846,86 @@ SEC_2_CHANNELS = {
                 }
             },
             'Equations': {
-                'AL Ref': {
-                    'Raw-U': 'RA-Ra$(sys)$(sidx)01:$(llrf):ALRefSysCal',
-                    'U-Raw': 'RA-Ra$(sys)$(sidx)01:$(llrf):ALRefSysCalInv',
-                    'OFS': 'RA-Ra$(sys)$(sidx)01:$(llrf):ALRefOffset'
-                },
+                # 'Amp Loop Ref': {
+                #     'Raw-U': 'RA-RaBO01:RF-LLRF:ALRefSysCal',
+                #     'U-Raw': 'RA-RaBO01:RF-LLRF:ALRefSysCalInv',
+                #     'OFS': 'RA-RaBO01:RF-LLRF:ALRefOffset'
+                # },
                 'Cav': {
-                    'Raw-U': 'RA-Ra$(sys)$(sidx)01:$(llrf):CavSysCal',
-                    'U-Raw': 'RA-Ra$(sys)$(sidx)01:$(llrf):CavSysCalInv',
-                    'OLG': 'RA-Ra$(sys)$(sidx)01:$(llrf):CavSysCalOLG',
-                    'OFS': 'RA-Ra$(sys)$(sidx)01:$(llrf):CavOffset'
+                    'Raw-U': 'RA-RaBO01:RF-LLRF:CavSysCal',
+                    'U-Raw': 'RA-RaBO01:RF-LLRF:CavSysCalInv',
+                    'OLG': 'RA-RaBO01:RF-LLRF:CavSysCalOLG',
+                    'OFS': 'RA-RaBO01:RF-LLRF:CavOffset'
                 },
                 'Fwd Cav': {
-                    'Raw-U': 'RA-Ra$(sys)$(sidx)01:$(llrf):FwdCavSysCal',
-                    'U-Raw': 'RA-Ra$(sys)$(sidx)01:$(llrf):FwdCavSysCalInv',
-                    'OLG': 'RA-Ra$(sys)$(sidx)01:$(llrf):FwdCavSysCalOLG',
-                    'OFS': 'RA-Ra$(sys)$(sidx)01:$(llrf):FwdCavOffset'
+                    'Raw-U': 'RA-RaBO01:RF-LLRF:FwdCavSysCal',
+                    'U-Raw': 'RA-RaBO01:RF-LLRF:FwdCavSysCalInv',
+                    'OLG': 'RA-RaBO01:RF-LLRF:FwdCavSysCalOLG',
+                    'OFS': 'RA-RaBO01:RF-LLRF:FwdCavOffset'
+                },
+                'Rev Cav': {
+                    'Raw-U': 'RA-RaBO01:RF-LLRF:RevCavSysCal',
+                    'OFS': 'RA-RaBO01:RF-LLRF:RevCavOffset'
                 },
                 'Fwd SSA 1': {
-                    'Raw-U': 'RA-Ra$(sys)$(sidx)01:$(llrf):FwdSSA1SysCal',
-                    'U-Raw': 'RA-Ra$(sys)$(sidx)01:$(llrf):FwdSSA1SysCalInv',
-                    'OLG': 'RA-Ra$(sys)$(sidx)01:$(llrf):FwdSSA1SysCalOLG',
-                    'OFS': 'RA-Ra$(sys)$(sidx)01:$(llrf):FwdSSA1SysCalOffset'
+                    'Raw-U': 'RA-RaBO01:RF-LLRF:FwdSSA1SysCal',
+                    'U-Raw': 'RA-RaBO01:RF-LLRF:FwdSSA1SysCalInv',
+                    'OLG': 'RA-RaBO01:RF-LLRF:FwdSSA1SysCalOLG',
+                    'OFS': 'RA-RaBO01:RF-LLRF:FwdSSA1SysCalOffset'
+                },
+                'Rev SSA 1': {
+                    'Raw-U': 'RA-RaBO01:RF-LLRF:RevSSA1SysCal',
+                    'OFS': 'RA-RaBO01:RF-LLRF:RevSSA1Offset' 
                 },
                 'Fwd SSA 2': {
-                    'Raw-U': 'RA-Ra$(sys)$(sidx)01:$(llrf):FwdSSA2SysCal',
-                    'U-Raw': 'RA-Ra$(sys)$(sidx)01:$(llrf):FwdSSA2SysCalInv',
-                    'OLG': 'RA-Ra$(sys)$(sidx)01:$(llrf):FwdSSA2SysCalOLG',
-                    'OFS': 'RA-Ra$(sys)$(sidx)01:$(llrf):FwdSSA2SysCalOffset'
+                    'Raw-U': 'RA-RaBO01:RF-LLRF:FwdSSA2SysCal',
+                    'U-Raw': 'RA-RaBO01:RF-LLRF:FwdSSA2SysCalInv',
+                    'OLG': 'RA-RaBO01:RF-LLRF:FwdSSA2SysCalOLG',
+                    'OFS': 'RA-RaBO01:RF-LLRF:FwdSSA2SysCalOffset'
+                },
+                'In Pre': {
+                    'Raw-U': 'RA-RaBO01:RF-LLRF:InPre1AmpSysCal',
+                    'OFS': 'RA-RaBO01:RF-LLRF:InPre1AmpOffset'
+                },
+                'Fwd Pre': {
+                    'Raw-U': 'RA-RaBO01:RF-LLRF:FwdPre1SysCal',
+                    'OFS': 'RA-RaBO01:RF-LLRF:FwdPre1Offset'
+                },
+                'Rev Pre': {
+                    'Raw-U': 'RA-RaBO01:RF-LLRF:RevPreAmpSysCal',
+                    'OFS': 'RA-RaBO01:RF-LLRF:RevPreAmpOffset'
+                },
+                'Fwd Circ': {
+                    'Raw-U': 'RA-RaBO01:RF-LLRF:FwdCircSysCal',
+                    'OFS': 'RA-RaBO01:RF-LLRF:FwdCircOffset'
+                },
+                'Rev Circ': {
+                    'Raw-U': 'RA-RaBO01:RF-LLRF:RevCircSysCal',
+                    'OFS': 'RA-RaBO01:RF-LLRF:RevCircOffset'
+                },
+                'MO': {
+                    'Raw-U': 'RA-RaBO01:RF-LLRF:MOSysCal',
+                    'OFS': 'RA-RaBO01:RF-LLRF:MOOffset'
+                },
+                'Cell 1': {
+                    'Raw-U': 'RA-RaBO01:RF-LLRF:Cell1SysCal',
+                    'OFS': 'RA-RaBO01:RF-LLRF:Cell1Offset'
+                },
+                'Cell 2': {
+                    'Raw-U': 'RA-RaBO01:RF-LLRF:Cell2SysCal',
+                    'OFS': 'RA-RaBO01:RF-LLRF:Cell2Offset'
+                },
+                'Cell 4': {
+                    'Raw-U': 'RA-RaBO01:RF-LLRF:Cell3SysCal',
+                    'OFS': 'RA-RaBO01:RF-LLRF:Cell3Offset'
+                },
+                'Cell 5': {
+                    'Raw-U': 'RA-RaBO01:RF-LLRF:Cell5SysCal',
+                    'OFS': 'RA-RaBO01:RF-LLRF:Cell5Offset'
                 },
                 'VGap': {
-                    'Hw to Amp': 'RA-Ra$(sys)$(sidx)01:$(llrf):Hw2AmpVCavCoeff',
-                    'Amp to Hw': 'RA-Ra$(sys)$(sidx)01:$(llrf):AmpVCav2HwCoeff'
+                    'Hw to Amp': 'RA-RaBO01:RF-LLRF:Hw2AmpVCavCoeff',
+                    'Amp to Hw': 'RA-RaBO01:RF-LLRF:AmpVCav2HwCoeff'
                 },
                 'Rsh': 'BO-05D:RF-P5Cav:Rsh-Cte'
             },

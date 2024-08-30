@@ -942,28 +942,31 @@ class EquationsDetails(SiriusDialog):
         lay.setAlignment(Qt.AlignTop)
         lay.setSpacing(9)
 
-        gbox_al = QGroupBox('Amp Loop Ref')
-        gbox_al.setLayout(
-            self._genericStatisticsLayout(self.syst_dict['AL Ref']))
+        lay.addWidget(QLabel(
+            '<h4>Equations Details</h4>',
+            alignment=Qt.AlignCenter), 0, 0, 1, 3)
 
-        gbox_cav = QGroupBox('Cav')
-        gbox_cav.setLayout(
-            self._genericStatisticsLayout(self.syst_dict['Cav']))
+        row = 1
+        column = 0
+        for key, dic in self.syst_dict.items():
+            if key != 'VGap' and key != 'Rsh':
+                gbox = QGroupBox(key)
+                gbox.setLayout(self._genericStatisticsLayout(dic))
 
-        gbox_fwdcav = QGroupBox('Fwd Cav')
-        gbox_fwdcav.setLayout(
-            self._genericStatisticsLayout(self.syst_dict['Fwd Cav']))
+                lay.addWidget(gbox, row, column)
 
-        gbox_fwdssa1 = QGroupBox('Fwd SSA 1')
-        gbox_fwdssa1.setLayout(
-            self._genericStatisticsLayout(self.syst_dict['Fwd SSA 1']))
-
-        gbox_fwdssa2 = QGroupBox('Fwd SSA 2')
-        gbox_fwdssa2.setLayout(
-            self._genericStatisticsLayout(self.syst_dict['Fwd SSA 2']))
-
+                column += 1
+                if column == 3:
+                    column = 0
+                    row += 1
+        
         gbox_vgap = QGroupBox('VGap')
         gbox_vgap.setLayout(self._vgapLayout(self.syst_dict['VGap']))
+        lay.addWidget(gbox_vgap, row, column)
+        column += 1
+        if column == 3:
+            column = 0
+            row += 1
 
         # Rsh
         lay_extra = QGridLayout()
@@ -982,16 +985,7 @@ class EquationsDetails(SiriusDialog):
             2, 0)
         lay_extra.addWidget(lb_rsh, 2, 1, alignment=Qt.AlignCenter)
 
-        lay.addWidget(QLabel(
-            '<h4>Equations Details</h4>',
-            alignment=Qt.AlignCenter), 0, 0, 1, 2)
-        lay.addWidget(gbox_al, 1, 0)
-        lay.addWidget(gbox_cav, 1, 1)
-        lay.addWidget(gbox_fwdcav, 2, 0)
-        lay.addWidget(gbox_fwdssa1, 2, 1)
-        lay.addWidget(gbox_fwdssa2, 3, 0)
-        lay.addWidget(gbox_vgap, 3, 1)
-        lay.addLayout(lay_extra, 4, 0, 1, 2, alignment=Qt.AlignHCenter)
+        lay.addLayout(lay_extra, row, column, alignment=Qt.AlignHCenter)
 
     def _genericStatisticsLayout(self, chs_dict):
         lay = QGridLayout()
