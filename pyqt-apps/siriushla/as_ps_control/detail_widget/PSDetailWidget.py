@@ -339,8 +339,8 @@ class PSDetailWidget(_BaseDetailWidget):
         self.ctrlloop_box = QGroupBox('Control Loop')
         self.ctrlloop_box.setObjectName('ctrlloop_box')
         if self._psmodel == 'FBP':
-            self.sofbmode_box = QGroupBox('SOFB Mode')
-            self.sofbmode_box.setObjectName('sofbmode_box')
+            self.iocmode_box = QGroupBox('IOC Mode')
+            self.iocmode_box.setObjectName('iocmode_box')
         self.genparams_box = QGroupBox('General Params')
         self.genparams_box.setObjectName('genparams_box')
         self.current_box = QGroupBox("Current")
@@ -374,7 +374,7 @@ class PSDetailWidget(_BaseDetailWidget):
         self.opmode_box.setLayout(self._opModeLayout())
         self.ctrlloop_box.setLayout(self._ctrlLoopLayout())
         if self._psmodel == 'FBP':
-            self.sofbmode_box.setLayout(self._sofbModeLayout())
+            self.iocmode_box.setLayout(self._iocModeLayout())
         self.genparams_box.setLayout(self._genParamsLayout())
         self.current_box.setLayout(self._currentLayout())
         self.siggen_tab.setLayout(self._siggenLayout())
@@ -398,7 +398,7 @@ class PSDetailWidget(_BaseDetailWidget):
         controls.addWidget(self.interlock_box, 3, 1)
         if self._psmodel == 'FBP':
             controls.addWidget(self.genparams_box, 4, 0)
-            controls.addWidget(self.sofbmode_box, 4, 1)
+            controls.addWidget(self.iocmode_box, 4, 1)
         else:
             controls.addWidget(self.genparams_box, 4, 0, 1, 2)
 
@@ -758,13 +758,20 @@ class PSDetailWidget(_BaseDetailWidget):
         layout.addWidget(self.tab_siggen, 0, 0)
         return layout
 
-    def _sofbModeLayout(self):
+    def _iocModeLayout(self):
         sofb_mode_sel = self._prefixed_psname + ':SOFBMode-Sel'
         sofb_mode_sts = self._prefixed_psname + ':SOFBMode-Sts'
 
-        sofb_mode_label = QLabel('Enable', self)
+        sofb_mode_label = QLabel('SOFB', self)
         sofb_mode_btn = PyDMStateButton(self, sofb_mode_sel)
         sofb_mode_led = SiriusLedState(self, sofb_mode_sts)
+
+        idff_mode_sel = self._prefixed_psname + ':IDFFMode-Sel'
+        idff_mode_sts = self._prefixed_psname + ':IDFFMode-Sts'
+
+        idff_mode_label = QLabel('IDFF', self)
+        idff_mode_btn = PyDMStateButton(self, sofb_mode_sel)
+        idff_mode_led = SiriusLedState(self, sofb_mode_sts)
 
         layout = QGridLayout()
         layout.setAlignment(Qt.AlignTop)
@@ -772,6 +779,9 @@ class PSDetailWidget(_BaseDetailWidget):
         layout.addWidget(sofb_mode_label, 0, 0, Qt.AlignRight)
         layout.addWidget(sofb_mode_btn, 0, 1, Qt.AlignHCenter)
         layout.addWidget(sofb_mode_led, 0, 2)
+        layout.addWidget(idff_mode_label, 1, 0, Qt.AlignRight)
+        layout.addWidget(idff_mode_btn, 1, 1, Qt.AlignHCenter)
+        layout.addWidget(idff_mode_led, 1, 2)
         return layout
 
     def _genParamsLayout(self):
