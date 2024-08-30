@@ -27,9 +27,9 @@ class ADCDACDetails(SiriusDialog):
         self.system = system
         self.chs = SEC_2_CHANNELS[self.section]
         self.setObjectName(self.section+'App')
-        title = 'ADCs and DACs Details'
-        title += (f' - {self.system}' if self.section == 'SI' else '')
-        self.setWindowTitle(title)
+        self.title = 'ADCs and DACs Details'
+        self.title += (f' - {self.system}' if self.section == 'SI' else '')
+        self.setWindowTitle(self.title)
         if self.section == 'SI':
             self.syst_dict = self.chs['ADCs and DACs'][self.system]
         else:
@@ -57,8 +57,7 @@ class ADCDACDetails(SiriusDialog):
         dtls.addTab(wid_controls, 'Controls')
 
         lay.addWidget(QLabel(
-            '<h4>Advanced ADCs and DACs Details</h4>',
-            alignment=Qt.AlignCenter))
+            f'<h4>{self.title}</h4>', alignment=Qt.AlignCenter))
         lay.addWidget(dtls)
 
     def _rfInputLayout(self, chs_dict):
@@ -147,9 +146,9 @@ class HardwareDetails(SiriusDialog):
         self.system = system
         self.chs = SEC_2_CHANNELS[self.section]
         self.setObjectName(self.section+'App')
-        title = 'Hardware Details'
-        title += (f' - {self.system}' if self.section == 'SI' else '')
-        self.setWindowTitle(title)
+        self.title = 'Hardware Details'
+        self.title += (f' - {self.system}' if self.section == 'SI' else '')
+        self.setWindowTitle(self.title)
         if self.section == 'SI':
             self.syst_dict = self.chs['Hardware'][self.system]
         else:
@@ -163,8 +162,7 @@ class HardwareDetails(SiriusDialog):
         lay.setVerticalSpacing(9)
 
         lay.addWidget(QLabel(
-            '<h4>Advanced Hardware Details</h4>',
-            alignment=Qt.AlignCenter), 0, 0, 1, 5)
+            f'<h4>{self.title}</h4>', alignment=Qt.AlignCenter), 0, 0, 1, 5)
 
         # FPGA Temps
         gbox_fpga = QGroupBox('FPGA Temps', self)
@@ -307,9 +305,9 @@ class LoopsDetails(SiriusDialog):
         self.system = system
         self.chs = SEC_2_CHANNELS[self.section]
         self.setObjectName(self.section+'App')
-        title = 'Loops Details'
-        title += (f' - {self.system}' if self.section == 'SI' else '')
-        self.setWindowTitle(title)
+        self.title = 'Loops Details'
+        self.title += (f' - {self.system}' if self.section == 'SI' else '')
+        self.setWindowTitle(self.title)
         if self.section == 'SI':
             self.syst_dict = self.chs['Loops'][self.system]
         else:
@@ -341,7 +339,7 @@ class LoopsDetails(SiriusDialog):
         dtls.addTab(wid_polar, 'Polar Loops')
 
         lay.addWidget(QLabel(
-            '<h4>Advanced Loops Details</h4>', alignment=Qt.AlignCenter))
+            f'<h4>{self.title}</h4>', alignment=Qt.AlignCenter))
         lay.addWidget(dtls)
 
     def _loopsControlLayout(self, chs_dict):
@@ -641,9 +639,9 @@ class RampsDetails(SiriusDialog):
         self.system = system
         self.chs = SEC_2_CHANNELS[self.section]
         self.setObjectName(self.section+'App')
-        title = 'Ramps Details'
-        title += (f' - {self.system}' if self.section == 'SI' else '')
-        self.setWindowTitle(title)
+        self.title = 'Cavity Ramps Details'
+        self.title += (f' - {self.system}' if self.section == 'SI' else '')
+        self.setWindowTitle(self.title)
         if self.section == 'SI':
             self.syst_dict = self.chs['RampDtls'][self.system]
         else:
@@ -672,8 +670,7 @@ class RampsDetails(SiriusDialog):
         dtls.addTab(wid_top, 'Ramp Diagnostics')
 
         lay.addWidget(QLabel(
-            '<h4>Advanced Cavity Ramps Details</h4>',
-            alignment=Qt.AlignCenter))
+            f'<h4>{self.title}</h4>', alignment=Qt.AlignCenter))
         lay.addWidget(dtls)
 
     def _rampsControlLayout(self, chs_dict):
@@ -928,9 +925,9 @@ class EquationsDetails(SiriusDialog):
         self.system = system
         self.chs = SEC_2_CHANNELS[self.section]
         self.setObjectName(self.section+'App')
-        title = 'Equations'
-        title += (f' - {self.system}' if self.section == 'SI' else '')
-        self.setWindowTitle(title)
+        self.title = 'Equations Details'
+        self.title += (f' - {self.system}' if self.section == 'SI' else '')
+        self.setWindowTitle(self.title)
         if self.section == 'SI':
             self.syst_dict = self.chs['Loops'][self.system]['Equations']
         else:
@@ -943,8 +940,7 @@ class EquationsDetails(SiriusDialog):
         lay.setSpacing(9)
 
         lay.addWidget(QLabel(
-            '<h4>Equations Details</h4>',
-            alignment=Qt.AlignCenter), 0, 0, 1, 3)
+            f'<h4>{self.title}</h4>', alignment=Qt.AlignCenter), 0, 0, 1, 3)
 
         row = 1
         column = 0
@@ -952,14 +948,12 @@ class EquationsDetails(SiriusDialog):
             if key != 'VGap' and key != 'Rsh':
                 gbox = QGroupBox(key)
                 gbox.setLayout(self._genericStatisticsLayout(dic))
-
                 lay.addWidget(gbox, row, column)
-
                 column += 1
                 if column == 3:
                     column = 0
                     row += 1
-        
+
         gbox_vgap = QGroupBox('VGap')
         gbox_vgap.setLayout(self._vgapLayout(self.syst_dict['VGap']))
         lay.addWidget(gbox_vgap, row, column)
@@ -1051,9 +1045,9 @@ class AutoStartDetails(SiriusDialog):
         self.system = system
         self.chs = SEC_2_CHANNELS[self.section]
         self.setObjectName(self.section+'App')
-        title = 'Auto Start Details'
-        title += (f' - {self.system}' if self.section == 'SI' else '')
-        self.setWindowTitle(title)
+        self.title = 'Auto Start Details'
+        self.title += (f' - {self.system}' if self.section == 'SI' else '')
+        self.setWindowTitle(self.title)
         if self.section == 'SI':
             self.syst_dict = self.chs['AutoStart'][self.system]
         else:
@@ -1110,7 +1104,7 @@ class AutoStartDetails(SiriusDialog):
                 row += 1
 
         lay.addWidget(QLabel(
-            '<h4>Advanced Auto Start Details</h4>', alignment=Qt.AlignCenter))
+            f'<h4>{self.title}</h4>', alignment=Qt.AlignCenter))
         lay.addWidget(gbox_gen)
         lay.addWidget(gbox_diag)
 
@@ -1147,9 +1141,9 @@ class ConditioningDetails(SiriusDialog):
         self.system = system
         self.chs = SEC_2_CHANNELS[self.section]
         self.setObjectName(self.section+'App')
-        title = 'Conditioning Details'
-        title += (f' - {self.system}' if self.section == 'SI' else '')
-        self.setWindowTitle(title)
+        self.title = 'Conditioning Details'
+        self.title += (f' - {self.system}' if self.section == 'SI' else '')
+        self.setWindowTitle(self.title)
         if self.section == 'SI':
             self.syst_dict = self.chs['Conditioning'][self.system]
         else:
@@ -1161,8 +1155,7 @@ class ConditioningDetails(SiriusDialog):
         lay.setAlignment(Qt.AlignTop)
         lay.setSpacing(9)
         lay.addWidget(QLabel(
-            '<h4>Advanced Conditioning Details</h4>',
-            alignment=Qt.AlignCenter), 0, 0, 1, 4)
+            f'<h4>{self.title}</h4>', alignment=Qt.AlignCenter), 0, 0, 1, 4)
 
         # Pulse Enable
         self._setupLedState(lay, '200', 1, True)
@@ -1247,9 +1240,9 @@ class TuningDetails(SiriusDialog):
         self.system = system
         self.chs = SEC_2_CHANNELS[self.section]
         self.setObjectName(self.section+'App')
-        title = 'Tuning Details'
-        title += (f' - {self.system}' if self.section == 'SI' else '')
-        self.setWindowTitle(title)
+        self.title = 'Tuning Details'
+        self.title += (f' - {self.system}' if self.section == 'SI' else '')
+        self.setWindowTitle(self.title)
         if self.section == 'SI':
             self.syst_dict = self.chs['TunDtls'][self.system]
         else:
@@ -1261,8 +1254,7 @@ class TuningDetails(SiriusDialog):
         lay.setAlignment(Qt.AlignTop)
         lay.setSpacing(9)
         lay.addWidget(QLabel(
-            '<h4>Advanced Tuning Details</h4>',
-            alignment=Qt.AlignCenter), 0, 0, 1, 3)
+            f'<h4>{self.title}</h4>', alignment=Qt.AlignCenter), 0, 0, 1, 3)
 
         gbox_gen = QGroupBox('General')
         gbox_gen.setLayout(self._generalLayout(self.syst_dict['General']))
@@ -1486,9 +1478,9 @@ class AdvancedInterlockDetails(SiriusDialog):
         self.system = system
         self.chs = SEC_2_CHANNELS[self.section]
         self.setObjectName(self.section+'App')
-        title = 'Advanced Interlock Details'
-        title += (f' - {self.system}' if self.section == 'SI' else '')
-        self.setWindowTitle(title)
+        self.title = 'Advanced Interlock Details'
+        self.title += (f' - {self.system}' if self.section == 'SI' else '')
+        self.setWindowTitle(self.title)
         if self.section == 'SI':
             self.syst_dict = self.chs['AdvIntlk'][self.system]
         else:
@@ -1516,7 +1508,7 @@ class AdvancedInterlockDetails(SiriusDialog):
         dtls.addTab(wid_bypass, 'Interlock Bypass')
 
         lay.addWidget(QLabel(
-            '<h4>Advanced Interlock Details</h4>', alignment=Qt.AlignCenter))
+            f'<h4>{self.title}</h4>', alignment=Qt.AlignCenter))
         lay.addWidget(dtls)
 
     def _diagnosticsLayout(self, chs_dict):
@@ -1699,9 +1691,9 @@ class LimitsDetails(SiriusDialog):
         self.which = which
         self.chs = SEC_2_CHANNELS[self.section]
         self.setObjectName(self.section+'App')
-        title = f'{self.which} Limits Details'
-        title += (f' - {self.system}' if self.section == 'SI' else '')
-        self.setWindowTitle(title)
+        self.title = f'{self.which} Limits Details'
+        self.title += (f' - {self.system}' if self.section == 'SI' else '')
+        self.setWindowTitle(self.title)
         if self.which == 'Loop':
             key = 'Loops'
         else:
@@ -1717,8 +1709,7 @@ class LimitsDetails(SiriusDialog):
         lay.setAlignment(Qt.AlignTop)
         lay.setSpacing(9)
         lay.addWidget(QLabel(
-            f'<h4>{self.which} Limits Details</h4>', alignment=Qt.AlignCenter),
-            0, 0, 1, 4)
+            f'<h4>{self.title}</h4>', alignment=Qt.AlignCenter), 0, 0, 1, 4)
 
         row = 1
         for key, val in self.syst_dict.items():
