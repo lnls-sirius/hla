@@ -61,7 +61,7 @@ class ADCDACDetails(SiriusDialog):
         lay.addWidget(dtls)
 
     def _rfInputLayout(self, chs_dict):
-        lay = QGridLayout(self)
+        lay = QGridLayout()
         lay.setAlignment(Qt.AlignTop)
         lay.setVerticalSpacing(9)
         lay.setHorizontalSpacing(18)
@@ -97,7 +97,7 @@ class ADCDACDetails(SiriusDialog):
         return lay
 
     def _controlsLayout(self, chs_dict):
-        lay = QGridLayout(self)
+        lay = QGridLayout()
         lay.setAlignment(Qt.AlignTop)
         lay.setSpacing(9)
 
@@ -343,7 +343,7 @@ class LoopsDetails(SiriusDialog):
         lay.addWidget(dtls)
 
     def _loopsControlLayout(self, chs_dict):
-        lay = QGridLayout(self)
+        lay = QGridLayout()
         lay.setAlignment(Qt.AlignTop)
         lay.setSpacing(9)
 
@@ -474,7 +474,7 @@ class LoopsDetails(SiriusDialog):
         lay.addWidget(label, row, column+3, alignment=Qt.AlignCenter)
 
     def _specificLoopsLayout(self, rect_or_polar):
-        lay = QVBoxLayout(self)
+        lay = QVBoxLayout()
         lay.setAlignment(Qt.AlignTop)
         lay.setSpacing(9)
         chs_dict = self.syst_dict[rect_or_polar]
@@ -678,7 +678,7 @@ class RampsDetails(SiriusDialog):
         lay.setSpacing(9)
 
         # General
-        lay_gen = QGridLayout(self)
+        lay_gen = QGridLayout()
         lay_gen.setAlignment(Qt.AlignTop)
         lay_gen.setSpacing(9)
         gbox_gen = QGroupBox('General')
@@ -742,7 +742,7 @@ class RampsDetails(SiriusDialog):
                 lineStyle=Qt.SolidLine, lineWidth=1)
 
         # Times
-        lay_times = QGridLayout(self)
+        lay_times = QGridLayout()
         lay_times.setAlignment(Qt.AlignTop)
         lay_times.setSpacing(9)
         gbox_times = QGroupBox('Times')
@@ -773,7 +773,7 @@ class RampsDetails(SiriusDialog):
             '/410', alignment=Qt.AlignCenter), len(addrs)+1, 3)
 
         # Top
-        lay_top = QGridLayout(self)
+        lay_top = QGridLayout()
         lay_top.setAlignment(Qt.AlignTop)
         lay_top.setSpacing(9)
         gbox_top = QGroupBox('Top Ramp')
@@ -785,7 +785,7 @@ class RampsDetails(SiriusDialog):
         self._setupTextInputLine(lay_top, chs_dict, '364', 12)
 
         # Bot
-        lay_bot = QGridLayout(self)
+        lay_bot = QGridLayout()
         lay_bot.setAlignment(Qt.AlignTop)
         lay_bot.setSpacing(9)
         gbox_bot = QGroupBox('Bottom Ramp')
@@ -797,7 +797,7 @@ class RampsDetails(SiriusDialog):
         self._setupTextInputLine(lay_bot, chs_dict, '363', 16)
 
         # Slopes
-        lay_slopes = QGridLayout(self)
+        lay_slopes = QGridLayout()
         lay_slopes.setAlignment(Qt.AlignTop)
         lay_slopes.setSpacing(9)
         gbox_slopes = QGroupBox('Slopes')
@@ -853,7 +853,7 @@ class RampsDetails(SiriusDialog):
         return lay
 
     def _topOrBotRampLayout(self, chs_dict, lb_addrs, led_addrs):
-        lay = QGridLayout(self)
+        lay = QGridLayout()
         lay.setAlignment(Qt.AlignTop)
         lay.setVerticalSpacing(9)
         lay.setHorizontalSpacing(18)
@@ -1315,7 +1315,7 @@ class TuningDetails(SiriusDialog):
         return lay
 
     def _driversLayout(self, chs_dict):
-        lay = QGridLayout(self)
+        lay = QGridLayout()
         lay.setAlignment(Qt.AlignTop)
         lay.setSpacing(9)
 
