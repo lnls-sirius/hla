@@ -770,8 +770,8 @@ class PSDetailWidget(_BaseDetailWidget):
         idff_mode_sts = self._prefixed_psname + ':IDFFMode-Sts'
 
         idff_mode_label = QLabel('IDFF', self)
-        idff_mode_btn = PyDMStateButton(self, sofb_mode_sel)
-        idff_mode_led = SiriusLedState(self, sofb_mode_sts)
+        idff_mode_btn = PyDMStateButton(self, idff_mode_sel)
+        idff_mode_led = SiriusLedState(self, idff_mode_sts)
 
         layout = QGridLayout()
         layout.setAlignment(Qt.AlignTop)
