@@ -1741,3 +1741,28 @@ class LimitsDetails(SiriusDialog):
         lay.addWidget(QLabel(label, alignment=Qt.AlignCenter), row, 1)
         lay.addWidget(SiriusLineEdit(self, self.prefix+pv+ending), row, 2)
         lay.addWidget(lb, row, 3)
+
+
+class CalibrationDetails(SiriusDialog):
+    """LLRF Calibration Systems details."""
+
+    def __init__(self, parent=None, prefix='', section='', system=''):
+        """Init."""
+        super().__init__(parent)
+        self.prefix = prefix
+        self.prefix += ('-' if prefix and not prefix.endswith('-') else '')
+        self.section = section
+        self.system = system
+        self.chs = SEC_2_CHANNELS[self.section]
+        self.setObjectName(self.section+'App')
+        self.title = 'Calibration Systems Details'
+        self.title += (f' - {self.system}' if self.section == 'SI' else '')
+        self.setWindowTitle(self.title)
+        if self.section == 'SI':
+            self.syst_dict = self.chs['CalSys'][self.system]
+        else:
+            self.syst_dict = self.chs['CalSys']
+        self._setupUi()
+
+    def _setupUi(self):
+        pass

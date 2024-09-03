@@ -1293,6 +1293,8 @@ SEC_2_CHANNELS = {
                 '846': ['ILK RF In 15', 'RA-RaBO01:RF-LLRF:FIMRFIn15'],
                 '847': ['ILK LLRF Beam Trip', 'RA-RaBO01:RF-LLRF:FIMOrbitIntlk']
             }
+        },
+        'CalSys': {
         }
     },
     'SI': {
