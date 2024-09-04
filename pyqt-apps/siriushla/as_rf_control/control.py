@@ -16,14 +16,9 @@ from ..widgets import PyDMLed, PyDMLedMultiChannel, PyDMStateButton, \
     SiriusConnectionSignal, SiriusLabel, SiriusLedAlert, SiriusLedState, \
     SiriusMainWindow, SiriusPushButton, SiriusSpinbox, SiriusTimePlot, \
     SiriusWaveformPlot
-from .advanced_details.adcs_dacs import ADCDACDetails
-from .advanced_details.auto_start import AutoStartDetails
-from .advanced_details.calibration import CalibrationDetails
-from .advanced_details.conditioning import ConditioningDetails
-from .advanced_details.hardware import HardwareDetails
-from .advanced_details.loops import LoopsDetails
-from .advanced_details.ramps import RampsDetails
-from .advanced_details.tuning import TuningDetails
+from .advanced_details import ADCDACDetails, AutoStartDetails, \
+    CalibrationDetails, ConditioningDetails, HardwareDetails, LoopsDetails, \
+    RampsDetails, TuningDetails
 from .custom_widgets import RFEnblDsblButton
 from .details import CavityStatusDetails, FDLDetails, LLRFInterlockDetails, \
     SlowLoopErrorDetails, SlowLoopParametersDetails, TempMonitor, \
