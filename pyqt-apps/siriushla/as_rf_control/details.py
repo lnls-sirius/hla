@@ -1,21 +1,20 @@
 """Detail windows."""
 
 import qtawesome as qta
-from pyqtgraph import BarGraphItem, PlotWidget
 from pydm.widgets import PyDMEnumComboBox
+from pyqtgraph import BarGraphItem, PlotWidget
 from qtpy.QtCore import Qt, QTimer
 from qtpy.QtGui import QColor
 from qtpy.QtWidgets import QCheckBox, QComboBox, QFormLayout, QGridLayout, \
-    QGroupBox, QHBoxLayout, QLabel, QSizePolicy as QSzPlcy, QSpacerItem, \
-    QTabWidget, QVBoxLayout, QWidget, QPushButton
+    QGroupBox, QHBoxLayout, QLabel, QPushButton, QSizePolicy as QSzPlcy, \
+    QSpacerItem, QTabWidget, QVBoxLayout, QWidget
 
 from ..util import connect_window
 from ..widgets import DetachableTabWidget, PyDMLedMultiChannel, \
     PyDMStateButton, SiriusConnectionSignal as _ConnSignal, SiriusDialog, \
     SiriusLabel, SiriusLedAlert, SiriusSpinbox, SiriusTimePlot, \
     SiriusWaveformPlot
-from .advanced_details import AdvancedInterlockDetails
-
+from .advanced_details.adv_interlock import AdvancedInterlockDetails
 from .util import SEC_2_CHANNELS
 
 

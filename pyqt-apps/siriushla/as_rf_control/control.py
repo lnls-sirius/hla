@@ -7,22 +7,27 @@ from pydm.widgets import PyDMEnumComboBox, PyDMLineEdit
 from pyqtgraph import InfiniteLine, mkPen
 from qtpy.QtCore import Qt
 from qtpy.QtGui import QColor
-from qtpy.QtWidgets import QCheckBox, QComboBox, QGridLayout, \
-    QGroupBox, QHBoxLayout, QLabel, QPushButton, QRadioButton, \
-    QSizePolicy as QSzPlcy, QSpacerItem, QTabWidget, QVBoxLayout, QWidget
+from qtpy.QtWidgets import QCheckBox, QComboBox, QGridLayout, QGroupBox, \
+    QHBoxLayout, QLabel, QPushButton, QRadioButton, QSizePolicy as QSzPlcy, \
+    QSpacerItem, QTabWidget, QVBoxLayout, QWidget
 
 from ..util import connect_window, get_appropriate_color
 from ..widgets import PyDMLed, PyDMLedMultiChannel, PyDMStateButton, \
     SiriusConnectionSignal, SiriusLabel, SiriusLedAlert, SiriusLedState, \
     SiriusMainWindow, SiriusPushButton, SiriusSpinbox, SiriusTimePlot, \
     SiriusWaveformPlot
+from .advanced_details.adcs_dacs import ADCDACDetails
+from .advanced_details.auto_start import AutoStartDetails
+from .advanced_details.calibration import CalibrationDetails
+from .advanced_details.conditioning import ConditioningDetails
+from .advanced_details.hardware import HardwareDetails
+from .advanced_details.loops import LoopsDetails
+from .advanced_details.ramps import RampsDetails
+from .advanced_details.tuning import TuningDetails
 from .custom_widgets import RFEnblDsblButton
 from .details import CavityStatusDetails, FDLDetails, LLRFInterlockDetails, \
-    TransmLineStatusDetails, SlowLoopErrorDetails, SlowLoopParametersDetails, \
-    TempMonitor
-from .advanced_details import ADCDACDetails, HardwareDetails, LoopsDetails, \
-    RampsDetails, AutoStartDetails, ConditioningDetails, TuningDetails, \
-    CalibrationDetails
+    SlowLoopErrorDetails, SlowLoopParametersDetails, TempMonitor, \
+    TransmLineStatusDetails
 from .util import SEC_2_CHANNELS
 
 
