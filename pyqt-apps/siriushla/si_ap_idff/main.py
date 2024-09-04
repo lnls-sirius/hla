@@ -127,6 +127,18 @@ class IDFFWindow(SiriusMainWindow):
             lay.addWidget(self.sb_controlqs, 5, 1)
             lay.addWidget(self.lb_controlqs, 5, 2)
 
+        if IDSearch.conv_idname_2_idff_lcnames(self.idname):
+            ld_controllc = QLabel(
+                'Control LC: ', self, alignment=Qt.AlignRight)
+            self.sb_controllc = PyDMStateButton(
+                self, self.dev_pref.substitute(propty='ControlLC-Sel'))
+            self.lb_controllc = SiriusLedState(
+                self, self.dev_pref.substitute(propty='ControlLC-Sts'))
+
+            lay.addWidget(ld_controllc, 6, 0)
+            lay.addWidget(self.sb_controllc, 6, 1)
+            lay.addWidget(self.lb_controllc, 6, 2)
+
         lay.addLayout(glay_calccorr, 7, 0, 1, 3)
 
         return gbox
