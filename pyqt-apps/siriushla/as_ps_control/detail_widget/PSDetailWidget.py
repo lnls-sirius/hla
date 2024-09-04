@@ -1744,14 +1744,14 @@ class FastCorrPSDetailWidget(_BaseDetailWidget):
             self, self._prefixed_psname + ':CurrLoopKp-RB')
 
         ctlti_lb = QLabel(
-            'CurrLoopTi', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            'CurrLoopKi', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
         self.ctlti_sp = SiriusSpinbox(
-            self, self._prefixed_psname + ':CurrLoopTi-SP')
+            self, self._prefixed_psname + ':CurrLoopKi-SP')
         self.ctlti_sp.limitsFromChannel = False
         self.ctlti_sp.setMinimum(0.0)
         self.ctlti_sp.setMaximum(2**31 - 1)
         self.ctlti_rb = SiriusLabel(
-            self, self._prefixed_psname + ':CurrLoopTi-RB')
+            self, self._prefixed_psname + ':CurrLoopKi-RB')
 
         cgain_lb = QLabel(
             'CurrGain', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
