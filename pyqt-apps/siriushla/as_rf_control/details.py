@@ -475,8 +475,8 @@ class TempMonitor(SiriusDialog):
         lay.addWidget(dettab, 1, 0)
 
 
-class FDLMonitor(SiriusDialog):
-    """Fast Data Logger Monitor."""
+class FDLDetails(SiriusDialog):
+    """Fast Data Logger Monitor and additional details."""
 
     def __init__(self, parent=None, prefix='', section='', chs=''):
         """Init."""
