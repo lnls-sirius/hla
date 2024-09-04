@@ -1,6 +1,7 @@
 """Detail windows."""
 
 from pyqtgraph import BarGraphItem, PlotWidget
+from pydm.widgets import PyDMEnumComboBox
 from qtpy.QtCore import Qt, QTimer
 from qtpy.QtGui import QColor
 from qtpy.QtWidgets import QCheckBox, QComboBox, QFormLayout, QGridLayout, \
@@ -9,7 +10,9 @@ from qtpy.QtWidgets import QCheckBox, QComboBox, QFormLayout, QGridLayout, \
 
 from ..widgets import DetachableTabWidget, PyDMLedMultiChannel, \
     PyDMStateButton, SiriusConnectionSignal as _ConnSignal, SiriusDialog, \
-    SiriusLabel, SiriusLedAlert, SiriusSpinbox, SiriusWaveformPlot
+    SiriusLabel, SiriusLedAlert, SiriusSpinbox, SiriusTimePlot, \
+    SiriusWaveformPlot
+
 from .util import SEC_2_CHANNELS
 
 
@@ -174,12 +177,33 @@ class TransmLineStatusDetails(SiriusDialog):
         self._setupUi()
 
     def _setupUi(self):
-        lay = QFormLayout(self)
-        lay.setLabelAlignment(Qt.AlignRight)
-        lay.addRow(QLabel('<h4>Transm. Line - Detailed Status</h4>'))
-        lay.addItem(QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed))
+        lay = QGridLayout(self)
+        lay.setAlignment(Qt.AlignTop)
+        lay.setSpacing(15)
 
-        for widget_id, pvname in self.chs['TL Sts']['label_led'].items():
+        self.title = QLabel(
+            '<h4>Transm. Line - Detailed Status</h4>',
+            self, alignment=Qt.AlignHCenter)
+        lay.addWidget(self.title, 0, 0, 1, 4)
+        lay.addItem(QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), 1, 0)
+
+        offset = 0
+        if self.section == 'SI':
+            for key, chs_dict in self.chs['TL Sts'].items():
+                self._setupDetails(lay, key, chs_dict, offset)
+                offset += 2
+        else:
+            self._setupDetails(lay, None, self.chs['TL Sts'], offset)
+
+    def _setupDetails(self, lay, key, chs_dict, offset):
+        row = 2
+        if key:
+            lay.addWidget(QLabel(
+                f'<h4>{key}<h4>', self,
+                alignment=Qt.AlignRight), row, offset)
+            row += 1
+
+        for widget_id, pvname in chs_dict['label_led'].items():
             wid = QWidget()
             hlay = QHBoxLayout()
             wid.setLayout(hlay)
@@ -196,7 +220,10 @@ class TransmLineStatusDetails(SiriusDialog):
                 self, self.prefix+pvname['led'])
             hlay.addWidget(si_led_wid)
 
-            lay.addRow(widget_id, wid)
+            lay.addWidget(QLabel(
+                widget_id, self, alignment=Qt.AlignRight), row, offset)
+            lay.addWidget(wid, row, offset+1)
+            row += 1
 
         wid = QWidget()
         hlay = QHBoxLayout()
@@ -204,32 +231,44 @@ class TransmLineStatusDetails(SiriusDialog):
         hlay.setContentsMargins(0, 0, 0, 0)
 
         lb_circtin = SiriusLabel(
-            self, self.prefix+self.chs['TL Sts']['Circulator Temp. In']['label'])
+            self, self.prefix+chs_dict['Circulator Temp. In']['label'])
         lb_circtin.showUnits = True
         lb_circtin.setStyleSheet('qproperty-alignment: AlignLeft;')
         hlay.addWidget(lb_circtin)
 
         si_led_wid = PyDMLedMultiChannel(
-            self, self.chs['TL Sts']['Circulator Temp. In']['led'])
+            self, chs_dict['Circulator Temp. In']['led'])
         hlay.addWidget(si_led_wid)
 
-        lay.addRow('Circulator T In: ', wid)
+        lay.addWidget(QLabel(
+            'Circulator T In: ', self, alignment=Qt.AlignRight), row, offset)
+        lay.addWidget(wid, row, offset + 1)
+        row += 1
 
-        for widget_id, pvname in self.chs['TL Sts']['label'].items():
+        for widget_id, pvname in chs_dict['label'].items():
             if not ((self.section == 'BO') and ('Combiner' == widget_id)):
                 si_lbl_wid = SiriusLabel(
                     self, self.prefix+pvname)
                 si_lbl_wid.showUnits = True
                 si_lbl_wid.setStyleSheet('qproperty-alignment: AlignLeft;')
-                lay.addRow(widget_id, si_lbl_wid)
+                lay.addWidget(QLabel(
+                    widget_id, self, alignment=Qt.AlignRight), row, offset)
+                lay.addWidget(si_lbl_wid, row, offset+1)
+                row += 1
 
-        lay.addItem(QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed))
+        lay.addItem(QSpacerItem(
+            0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), row, offset)
+        row += 1
 
-        for widget_id, pvname in self.chs['TL Sts']['led'].items():
+        for widget_id, pvname in chs_dict['led'].items():
             if not ((self.section == 'BO') and ('Detector Load' in widget_id)):
                 si_led_wid = SiriusLedAlert(
                     self, self.prefix+pvname)
-                lay.addRow(widget_id + ": ", si_led_wid)
+                lay.addWidget(QLabel(
+                    f'{widget_id}: ', self, alignment=Qt.AlignRight),
+                    row, offset)
+                lay.addWidget(si_led_wid, row, offset+1)
+                row += 1
 
         self.setStyleSheet("""
             SiriusLabel{
@@ -237,10 +276,6 @@ class TransmLineStatusDetails(SiriusDialog):
             }
             QLed{
                 max-width: 1.29em;
-            }
-            .QLabel{
-                max-height:2em;
-                qproperty-alignment: AlignRight;
             }""")
 
 
@@ -269,9 +304,23 @@ class LLRFInterlockDetails(SiriusDialog):
             alignment=Qt.AlignCenter)
         lay.addWidget(self.title, 0, 0, 1, 3)
 
+        if self.section == 'SI':
+            offset = 1
+            for key, chs_dict in self.chs['LLRF Intlk Details'].items():
+                self._setupDetails(lay, key, chs_dict, offset)
+                offset += 2
+        else:
+            self._setupDetails(lay, None, self.chs['LLRF Intlk Details'], 1)
+
+    def _setupDetails(self, lay, key, chs_dict, offset):
+        if key:
+            lay.addWidget(QLabel(
+                f'<h4>LLRF {key}</h4>', self,
+                alignment=Qt.AlignLeft), offset, 0)
+
         # inputs
         col = 0
-        for name, dic in self.chs['LLRF Intlk Details']['Inputs'].items():
+        for name, dic in chs_dict['Inputs'].items():
             gbox = QGroupBox(name, self)
             lay_intlk = QGridLayout(gbox)
             lay_intlk.setAlignment(Qt.AlignTop)
@@ -299,7 +348,7 @@ class LLRFInterlockDetails(SiriusDialog):
                 lbl.setStyleSheet('QLabel{min-width:12em;}')
                 lay_intlk.addWidget(lbl, irow, icol)
 
-            lay.addWidget(gbox, 1, col)
+            lay.addWidget(gbox, offset+1, col)
             col += 1
 
         # timestamps
@@ -308,7 +357,7 @@ class LLRFInterlockDetails(SiriusDialog):
         lay_time.setAlignment(Qt.AlignTop)
         lay_time.setHorizontalSpacing(9)
         lay_time.setVerticalSpacing(9)
-        for idx, pvn in self.chs['LLRF Intlk Details']['Timestamps'].items():
+        for idx, pvn in chs_dict['Timestamps'].items():
             irow = int(idx)-1
             desc = QLabel('Interlock '+idx, self, alignment=Qt.AlignCenter)
             desc.setStyleSheet('QLabel{min-width:6em;}')
@@ -316,7 +365,7 @@ class LLRFInterlockDetails(SiriusDialog):
             lbl.showUnits = True
             lay_time.addWidget(desc, irow, 0)
             lay_time.addWidget(lbl, irow, 1)
-        lay.addWidget(gbox_time, 1, col)
+        lay.addWidget(gbox_time, offset+1, col)
 
 
 class BarGraph(PlotWidget):
@@ -417,13 +466,13 @@ class TempMonitor(SiriusDialog):
 class FDLMonitor(SiriusDialog):
     """Fast Data Logger Monitor."""
 
-    def __init__(self, parent=None, prefix='', section=''):
+    def __init__(self, parent=None, prefix='', section='', chs=''):
         """Init."""
         super().__init__(parent)
         self.prefix = prefix
         self.prefix += ('-' if prefix and not prefix.endswith('-') else '')
         self.section = section
-        self.chs = SEC_2_CHANNELS[self.section]
+        self.chs = chs
         self.setObjectName(self.section+'App')
         self.setWindowTitle('FDL Monitor')
         self.curves_amp = dict()
@@ -435,6 +484,14 @@ class FDLMonitor(SiriusDialog):
         wid.setMinimumSize(820, 800)
         lay = QVBoxLayout(wid)
         lay.setAlignment(Qt.AlignTop)
+
+        if self.section == 'SI':
+            title = QLabel(
+                f"<h4>LLRF {self.chs['Name']} FDL</h4>", self,
+                alignment=Qt.AlignCenter)
+        else:
+            title = QLabel("<h4>LLRF FDL</h4>", self, alignment=Qt.AlignCenter)
+        lay.addWidget(title)
 
         controls = QGroupBox('Controls', self)
         controls.setLayout(self._controlsLayout())
@@ -451,11 +508,11 @@ class FDLMonitor(SiriusDialog):
         lay.setHorizontalSpacing(15)
 
         # First line
-        self.lb_mode = SiriusLabel(self, self.prefix + self.chs['FDL']['Mode'])
+        self.lb_mode = SiriusLabel(self, self.prefix + self.chs['Mode'])
         self.led_swtrig = SiriusLedAlert(
-            self, self.prefix + self.chs['FDL']['SW Trig'])
+            self, self.prefix + self.chs['SW Trig'])
         self.bt_swtrig = PyDMStateButton(
-            self, self.prefix + self.chs['FDL']['Trig'])
+            self, self.prefix + self.chs['Trig'])
 
         lay.addWidget(QLabel(
             '<h4>Perseus FDL Mode:</h4>', self,
@@ -471,9 +528,9 @@ class FDLMonitor(SiriusDialog):
 
         # Second line
         self.lb_processing = SiriusLabel(
-            self, self.prefix + self.chs['FDL']['Processing'])
+            self, self.prefix + self.chs['Processing'])
         self.led_hwtrig = SiriusLedAlert(
-            self, self.prefix + self.chs['FDL']['HW Trig'])
+            self, self.prefix + self.chs['HW Trig'])
 
         lay.addWidget(QLabel(
             '<h4>IOC FDL Status:</h4>', self,
@@ -488,13 +545,13 @@ class FDLMonitor(SiriusDialog):
 
         # Third line
         self.bt_rearm = PyDMStateButton(
-            self, self.prefix + self.chs['FDL']['Rearm'])
+            self, self.prefix + self.chs['Rearm'])
         self.led_rearm = SiriusLedAlert(
-            self, self.prefix + self.chs['FDL']['Rearm'])
+            self, self.prefix + self.chs['Rearm'])
         self.led_raw = SiriusLedAlert(
-            self, self.prefix + self.chs['FDL']['Raw'])
+            self, self.prefix + self.chs['Raw']+'-Sts')
         self.bt_raw = PyDMStateButton(
-            self, self.prefix + self.chs['FDL']['Raw'] + ':S')
+            self, self.prefix + self.chs['Raw']+'-Sel')
 
         rearm_lay = QHBoxLayout()
         rearm_lay.addWidget(self.bt_rearm)
@@ -514,18 +571,18 @@ class FDLMonitor(SiriusDialog):
 
         # Fourth line
         self.sb_qty = SiriusSpinbox(
-            self, self.prefix + self.chs['FDL']['Qty'] + 'SP')
+            self, self.prefix + self.chs['Qty'] + '-SP')
         self.lb_qty = SiriusLabel(
-            self, self.prefix + self.chs['FDL']['Qty'] + 'RB')
+            self, self.prefix + self.chs['Qty'] + '-RB')
         qty_lay = QHBoxLayout()
         qty_lay.addWidget(self.sb_qty)
         qty_lay.addWidget(self.lb_qty)
 
         self.lb_size = SiriusLabel(
-            self, self.prefix + self.chs['FDL']['Size'])
+            self, self.prefix + self.chs['Size'])
         self.lb_size._show_units = True
         self.lb_duration = SiriusLabel(
-            self, self.prefix + self.chs['FDL']['Duration'])
+            self, self.prefix + self.chs['Duration'])
         self.lb_duration._show_units = True
         size_dur_lay = QHBoxLayout()
         size_dur_lay.addWidget(QLabel(
@@ -546,13 +603,13 @@ class FDLMonitor(SiriusDialog):
 
         # Fifth line
         self.sb_delay_sample = SiriusSpinbox(
-            self, self.prefix + self.chs['FDL']['Delay'] + '-SP')
+            self, self.prefix + self.chs['Delay'] + '-SP')
         self.lb_delay_sample = SiriusLabel(
-            self, self.prefix + self.chs['FDL']['Delay'] + '-RB')
+            self, self.prefix + self.chs['Delay'] + '-RB')
         self.sb_delay_us = SiriusSpinbox(
-            self, self.prefix + self.chs['FDL']['Delay'] + 'Time-SP')
+            self, self.prefix + self.chs['Delay'] + 'Time-SP')
         self.lb_delay_us = SiriusLabel(
-            self, self.prefix + self.chs['FDL']['Delay'] + 'Time-RB')
+            self, self.prefix + self.chs['Delay'] + 'Time-RB')
         sb_unit = QComboBox()
         sb_unit.addItems(['Choose a unit', 'Sample units', 'us'])
         sb_unit.setMaximumWidth(120)
@@ -594,10 +651,10 @@ class FDLMonitor(SiriusDialog):
 
         checks_wid = QWidget()
         self.hbox_checks = QHBoxLayout(checks_wid)
-        for idx in range(len(self.chs['FDL']['Signals'])):
+        for idx in range(len(self.chs['Signals'])):
             self.setupCurve(
-                self.chs['FDL']['Signals'][idx],
-                self.prefix + self.chs['FDL']['Time'],
+                self.chs['Signals'][idx],
+                self.prefix + self.chs['Time'],
                 idx)
 
         lay.addWidget(checks_wid)
@@ -667,3 +724,301 @@ class FDLMonitor(SiriusDialog):
         self.lb_delay_sample.setVisible(text == 'Sample units')
         self.sb_delay_us.setVisible(text == 'us')
         self.lb_delay_us.setVisible(text == 'us')
+
+
+class SlowLoopErrorDetails(SiriusDialog):
+    """Slow Loop Control Error Details."""
+    def __init__(self, parent=None, prefix='', section=''):
+        """Init."""
+        super().__init__(parent)
+        self.prefix = prefix
+        self.prefix += ('-' if prefix and not prefix.endswith('-') else '')
+        self.section = section
+        self.chs = SEC_2_CHANNELS[self.section]
+        self.setObjectName(self.section+'App')
+        self.setWindowTitle('Slow Loop Control Error Details')
+        self._setupUi()
+
+    def _setupUi(self):
+        lay = QVBoxLayout(self)
+        lay.setAlignment(Qt.AlignTop)
+        lay.setSpacing(20)
+
+        self.title = QLabel(
+            '<h3>Slow Loop Control Error Details</h3>', self,
+            alignment=Qt.AlignCenter)
+        lay.addWidget(self.title)
+
+        if self.section == 'SI':
+            for key, chs_dict in self.chs['SL']['ErrDtls'].items():
+                self._setupDetails(lay, key, chs_dict)
+        else:
+            self._setupDetails(lay, None, self.chs['SL']['ErrDtls'])
+
+    def _setupDetails(self, lay, key, chs_dict):
+        if key:
+            lay.addItem(QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed))
+            lay.addWidget(QLabel(
+                f'<h4>LLRF {key}</h4>', self, alignment=Qt.AlignCenter))
+
+        lay_llrf = QHBoxLayout()
+        lay_llrf.setAlignment(Qt.AlignTop)
+        lay_llrf.setSpacing(0)
+
+        lay_table = QGridLayout()
+        lay_table.setAlignment(Qt.AlignVCenter)
+        lay_table.setSpacing(9)
+        lay_table.addWidget(QLabel(
+            '<h4>Reference<h4>', self, alignment=Qt.AlignCenter), 1, 0)
+        lay_table.addWidget(QLabel(
+            '<h4>Input</h4>', self, alignment=Qt.AlignCenter), 2, 0)
+        lay_table.addWidget(QLabel(
+            '<h4>Error</h4>', self, alignment=Qt.AlignCenter), 3, 0)
+
+        # I
+        lb_iref = SiriusLabel(self, self.prefix+chs_dict['IRef'])
+        lb_iref.showUnits = True
+        lb_iinp = SiriusLabel(self, self.prefix+chs_dict['IInp'])
+        lb_iinp.showUnits = True
+        lb_ierr = SiriusLabel(self, self.prefix+chs_dict['IErr'])
+        lb_ierr.showUnits = True
+        lay_table.addWidget(QLabel(
+            '<h4>I</h4>', self, alignment=Qt.AlignCenter), 0, 1)
+        lay_table.addWidget(lb_iref, 1, 1)
+        lay_table.addWidget(lb_iinp, 2, 1)
+        lay_table.addWidget(lb_ierr, 3, 1)
+
+        # Q
+        lb_qref = SiriusLabel(self, self.prefix+chs_dict['QRef'])
+        lb_qref.showUnits = True
+        lb_qinp = SiriusLabel(self, self.prefix+chs_dict['QInp'])
+        lb_qinp.showUnits = True
+        lb_qerr = SiriusLabel(self, self.prefix+chs_dict['QErr'])
+        lb_qerr.showUnits = True
+        lay_table.addWidget(QLabel(
+            '<h4>Q</h4>', self, alignment=Qt.AlignCenter), 0, 2)
+        lay_table.addWidget(lb_qref, 1, 2)
+        lay_table.addWidget(lb_qinp, 2, 2)
+        lay_table.addWidget(lb_qerr, 3, 2)
+
+        lay_llrf.addLayout(lay_table)
+        lay_llrf.addItem(QSpacerItem(15, 0, QSzPlcy.Fixed, QSzPlcy.Ignored))
+
+        # Graphs
+        self.setupGraphFasor(lay_llrf, chs_dict)
+        self.setupGraphTime(lay_llrf, key, "Amp")
+        self.setupGraphTime(lay_llrf, key, "Phs")
+
+        lay.addLayout(lay_llrf)
+
+    def setupGraphFasor(self, lay_llrf, chs_dict):
+        graph_iq = SiriusWaveformPlot(
+            parent=self, background=QColor(255, 255, 255))
+        graph_iq.setStyleSheet('min-height: 15em; min-width: 20em;')
+        graph_iq.maxRedrawRate = 2
+        graph_iq.mouseEnabledX = True
+        graph_iq.setShowXGrid(True)
+        graph_iq.setShowYGrid(True)
+        graph_iq.setShowLegend(True)
+        graph_iq.setAutoRangeX(False)
+        graph_iq.setAutoRangeY(False)
+        graph_iq.setAxisColor(QColor(0, 0, 0))
+        axx = graph_iq.plotItem.getAxis('right')
+        axx.setVisible(True)
+        axx.setTicks([])
+        axx.setWidth(0)
+        axx = graph_iq.plotItem.getAxis('top')
+        axx.setVisible(True)
+        axx.setTicks([])
+        axx.setHeight(0)
+
+        lbl_axis = ["Q", "I"]
+        channels = {
+            'Input': {
+                'X': self.prefix+chs_dict['IInp'],
+                'Y': self.prefix+chs_dict['QInp']
+            },
+            'Reference': {
+                'X': self.prefix+chs_dict['IRef'],
+                'Y': self.prefix+chs_dict['QRef']
+            }
+        }
+        graph_iq.setMinXRange(-1.0)
+        graph_iq.setMaxXRange(1.0)
+        graph_iq.setMinYRange(-1.0)
+        graph_iq.setMaxYRange(1.0)
+
+        graph_iq.setYLabels([lbl_axis[0]])
+        graph_iq.setXLabels([lbl_axis[1]])
+        graph_iq.setPlotTitle("I & Q Fasor")
+
+        opts = dict(
+            y_channel=channels['Input']['Y'],
+            x_channel=channels['Input']['X'],
+            name='Input',
+            color='red',
+            redraw_mode=2,
+            lineStyle=1,
+            lineWidth=3,
+            symbol='o',
+            symbolSize=10)
+        graph_iq.addChannel(**opts)
+
+        opts = dict(
+            y_channel=channels['Reference']['Y'],
+            x_channel=channels['Reference']['X'],
+            name='Reference',
+            color='blue',
+            redraw_mode=2,
+            lineStyle=1,
+            lineWidth=3,
+            symbol='o',
+            symbolSize=10)
+        graph_iq.addChannel(**opts)
+
+        lay_llrf.addWidget(graph_iq)
+
+    def setupGraphTime(self, lay_llrf, key, mode):
+        graph = SiriusTimePlot(self)
+        graph.setStyleSheet('min-height:15em;min-width:20em;max-height:15em;')
+        graph.timeSpan = 120
+        graph.maxRedrawRate = 2
+        graph.setShowXGrid(True)
+        graph.setShowYGrid(True)
+        graph.backgroundColor = QColor(255, 255, 255)
+        graph.setShowLegend(True)
+        graph.setAxisColor(QColor(0, 0, 0))
+        graph.setXLabels(["Time"])
+        axx = graph.plotItem.getAxis('right')
+        axx.setVisible(True)
+        axx.setTicks([])
+        axx.setWidth(0)
+        axx = graph.plotItem.getAxis('top')
+        axx.setVisible(True)
+        axx.setTicks([])
+        axx.setHeight(0)
+
+        chs_dict = self.chs['SL']['Over']
+        if self.section == 'SI':
+            chs_dict = chs_dict[key]
+
+        if mode == 'Amp':
+            title = 'Amplitude'
+            channels = {
+                'Input': self.prefix+chs_dict['AInp'],
+                'Reference': self.prefix+chs_dict['ARef']
+            }
+        else:
+            title = 'Phase'
+            channels = {
+                'Input': self.prefix+chs_dict['PInp'],
+                'Reference': self.prefix+chs_dict['PRef']
+            }
+
+        graph.setPlotTitle(title)
+        graph.setYLabels([title])
+
+        opts = dict(
+            y_channel=channels['Input'],
+            name='Input',
+            color='red',
+            lineStyle=1,
+            lineWidth=3)
+        graph.addYChannel(**opts)
+
+        opts = dict(
+            y_channel=channels['Reference'],
+            name='Reference',
+            color='blue',
+            lineStyle=1,
+            lineWidth=3)
+        graph.addYChannel(**opts)
+
+        lay_llrf.addWidget(graph)
+
+
+class SlowLoopParametersDetails(SiriusDialog):
+    """Slow Loop Control Parameters Details."""
+    def __init__(self, parent=None, prefix='', section=''):
+        """Init."""
+        super().__init__(parent)
+        self.prefix = prefix
+        self.prefix += ('-' if prefix and not prefix.endswith('-') else '')
+        self.section = section
+        self.chs = SEC_2_CHANNELS[self.section]
+        self.setObjectName(self.section+'App')
+        self.setWindowTitle('Slow Loop Control Parameters Details')
+        self._setupUi()
+
+    def _setupUi(self):
+        lay = QVBoxLayout(self)
+        lay.setAlignment(Qt.AlignTop)
+        lay.setSpacing(20)
+
+        self.title = QLabel(
+            '<h3>Slow Loop Control Parameters Details</h3>', self,
+            alignment=Qt.AlignCenter
+        )
+        lay.addWidget(self.title)
+
+        if self.section == 'SI':
+            for key, chs_dict in self.chs['SL']['Params'].items():
+                self._setupDetails(lay, key, chs_dict)
+        else:
+            self._setupDetails(lay, None, self.chs['SL']['Params'])
+
+    def _setupDetails(self, lay, key, chs_dict):
+        if key:
+            lay.addItem(QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed))
+            lay.addWidget(QLabel(
+                f'<h4>LLRF {key}</h4>', self, alignment=Qt.AlignLeft))
+
+        lay_llrf = QGridLayout()
+        lay_llrf.setAlignment(Qt.AlignTop)
+        lay_llrf.setHorizontalSpacing(9)
+        lay_llrf.setVerticalSpacing(9)
+
+        cb_inpsel = PyDMEnumComboBox(
+            self, self.prefix+chs_dict['Inp']+'-Sel')
+        lb_inpsel = SiriusLabel(
+            self, self.prefix+chs_dict['Inp']+'-Sts')
+        sb_pilimit = SiriusSpinbox(
+            self, self.prefix+chs_dict['PIL']+'-SP')
+        lb_pilimit = SiriusLabel(
+            self, self.prefix+chs_dict['PIL']+'-RB')
+        sb_ki = SiriusSpinbox(
+            self, self.prefix+chs_dict['KI']+'-SP')
+        lb_ki = SiriusLabel(
+            self, self.prefix+chs_dict['KI']+'-RB')
+        sb_kp = SiriusSpinbox(
+            self, self.prefix+chs_dict['KP']+'-SP')
+        lb_kp = SiriusLabel(
+            self, self.prefix+chs_dict['KP']+'-RB')
+
+        lay_llrf.addWidget(
+            QLabel('<h4>SP/RB</h4>', self, alignment=Qt.AlignCenter),
+            0, 2, 1, 2)
+        lay_llrf.addWidget(
+            QLabel('<h4>PI Limit</h4>', self, alignment=Qt.AlignCenter),
+            1, 0, 1, 2)
+        lay_llrf.addWidget(
+            QLabel('<h4>Ki</h4>', self, alignment=Qt.AlignCenter), 2, 0, 1, 2)
+        lay_llrf.addWidget(
+            QLabel('<h4>Kp</h4>', self, alignment=Qt.AlignCenter), 3, 0, 1, 2)
+        lay_llrf.addWidget(sb_pilimit, 1, 2, alignment=Qt.AlignRight)
+        lay_llrf.addWidget(lb_pilimit, 1, 3, alignment=Qt.AlignLeft)
+        lay_llrf.addWidget(sb_ki, 2, 2, alignment=Qt.AlignRight)
+        lay_llrf.addWidget(lb_ki, 2, 3, alignment=Qt.AlignLeft)
+        lay_llrf.addWidget(sb_kp, 3, 2, alignment=Qt.AlignRight)
+        lay_llrf.addWidget(lb_kp, 3, 3, alignment=Qt.AlignLeft)
+
+        lay_input = QGridLayout()
+        lay_input.addWidget(
+            QLabel('<h4>Loop Input</h4>', self, alignment=Qt.AlignCenter),
+            1, 0, 1, 2)
+        lay_input.addWidget(cb_inpsel, 2, 0, alignment=Qt.AlignRight)
+        lay_input.addWidget(lb_inpsel, 2, 1, alignment=Qt.AlignLeft)
+        lay_input.setRowStretch(0, 2)
+        lay_input.setRowStretch(3, 2)
+        lay_llrf.addLayout(lay_input, 1, 4, 3, 2)
+        lay.addLayout(lay_llrf)
