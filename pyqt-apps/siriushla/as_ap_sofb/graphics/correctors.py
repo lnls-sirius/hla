@@ -15,13 +15,17 @@ class CorrectorsWidget(BaseWidget):
         if not ctrls:
             self._chans, ctrls = self.get_default_ctrls(device, prefix)
 
-        names = ('DeltaKicks', 'Kicks')
+        names = ('DeltaKicks', 'Kicks', 'FOFB Download', 'Ref Kicks')
         super().__init__(parent, device, ctrls, names, False, prefix, acc)
 
         self.updater[0].some_changed('val', 'Delta Kicks')
         self.updater[0].some_changed('ref', 'Zero')
         self.updater[1].some_changed('val', 'Kicks')
         self.updater[1].some_changed('ref', 'Zero')
+        self.updater[2].some_changed('val', 'FOFB Download')
+        self.updater[2].some_changed('ref', 'Zero')
+        self.updater[3].some_changed('val', 'Ref Kicks')
+        self.updater[3].some_changed('ref', 'Zero')
 
         if acc in {'SI', 'BO'}:
             self.add_RF_kicks()
@@ -37,7 +41,10 @@ class CorrectorsWidget(BaseWidget):
         lbl = QLabel('Frequency', grpbx)
         hbl.addWidget(lbl)
         lbl = SiriusLabel(
-            grpbx, self.devpref.substitute(propty='KickRF-Mon'))
+            grpbx,
+            self.devpref.substitute(propty='KickRF-Mon'),
+            keep_unit=True,
+        )
         lbl.showUnits = True
         lbl.setSizePolicy(QSzPol.Fixed, QSzPol.Preferred)
         lbl.setStyleSheet('min-width: 8em;')
@@ -48,7 +55,8 @@ class CorrectorsWidget(BaseWidget):
         lbl = QLabel('Delta Freq.', grpbx)
         hbl.addWidget(lbl)
         lbl = SiriusLabel(
-            grpbx, self.devpref.substitute(propty='DeltaKickRF-Mon'))
+            grpbx, self.devpref.substitute(propty='DeltaKickRF-Mon')
+        )
         lbl.showUnits = True
         lbl.setSizePolicy(QSzPol.Fixed, QSzPol.Preferred)
         lbl.setStyleSheet('min-width: 6em;')
@@ -104,21 +112,52 @@ class CorrectorsWidget(BaseWidget):
             _ConnSig(basename.substitute(propty='DeltaKickCH-Mon')),
             _ConnSig(basename.substitute(propty='DeltaKickCV-Mon')),
             _ConnSig(basename.substitute(propty='KickCH-Mon')),
-            _ConnSig(basename.substitute(propty='KickCV-Mon'))]
+            _ConnSig(basename.substitute(propty='KickCV-Mon')),
+            _ConnSig(basename.substitute(propty='FOFBDownloadKicksCH-Mon')),
+            _ConnSig(basename.substitute(propty='FOFBDownloadKicksCV-Mon')),
+            _ConnSig(basename.substitute(propty='RefKickCH-Mon')),
+            _ConnSig(basename.substitute(propty='RefKickCV-Mon')),
+        ]
         ctrls = {
             'Delta Kicks': {
                 'x': {
                     'signal': chans[0].new_value_signal,
-                    'getvalue': chans[0].getvalue},
+                    'getvalue': chans[0].getvalue,
+                },
                 'y': {
                     'signal': chans[1].new_value_signal,
-                    'getvalue': chans[1].getvalue}},
+                    'getvalue': chans[1].getvalue,
+                }
+            },
             'Kicks': {
                 'x': {
                     'signal': chans[2].new_value_signal,
-                    'getvalue': chans[2].getvalue},
+                    'getvalue': chans[2].getvalue,
+                },
                 'y': {
                     'signal': chans[3].new_value_signal,
-                    'getvalue': chans[3].getvalue}},
-            }
+                    'getvalue': chans[3].getvalue,
+                }
+            },
+            'FOFB Download': {
+                'x': {
+                    'signal': chans[4].new_value_signal,
+                    'getvalue': chans[4].getvalue,
+                },
+                'y': {
+                    'signal': chans[5].new_value_signal,
+                    'getvalue': chans[5].getvalue,
+                }
+            },
+            'Ref Kicks': {
+                'x': {
+                    'signal': chans[6].new_value_signal,
+                    'getvalue': chans[6].getvalue,
+                },
+                'y': {
+                    'signal': chans[7].new_value_signal,
+                    'getvalue': chans[7].getvalue,
+                }
+            },
+        }
         return chans, ctrls

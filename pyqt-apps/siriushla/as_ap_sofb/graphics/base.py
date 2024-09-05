@@ -44,7 +44,7 @@ class BaseWidget(QWidget):
         self.thread = QThread()
         self.updater = []
         self.graph = {'x': None, 'y': None}
-        for _ in range(2):
+        for _ in self.line_names:
             upd = UpdateGraph(ctrls, is_orb, acc)
             upd.moveToThread(self.thread)
             self.timer.timeout.connect(upd.update_graphic)

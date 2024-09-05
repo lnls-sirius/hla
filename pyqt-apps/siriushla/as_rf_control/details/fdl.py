@@ -117,9 +117,9 @@ class FDLDetails(SiriusDialog):
 
         # Fourth line
         self.sb_qty = SiriusSpinbox(
-            self, self.prefix + self.chs['Qty'] + 'SP')
+            self, self.prefix + self.chs['Qty'] + '-SP')
         self.lb_qty = SiriusLabel(
-            self, self.prefix + self.chs['Qty'] + 'RB')
+            self, self.prefix + self.chs['Qty'] + '-RB')
         qty_lay = QHBoxLayout()
         qty_lay.addWidget(self.sb_qty)
         qty_lay.addWidget(self.lb_qty)

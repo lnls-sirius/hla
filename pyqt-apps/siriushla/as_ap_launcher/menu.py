@@ -675,30 +675,19 @@ def get_object(ismenubar=True, parent=None):
             action = menu.addAction('Monitor')
             action.setIcon(util.get_monitor_icon('mdi.currency-sign'))
             self.connect_newprocess(action, cmd + ['-w', 'Monitor', ])
-            typs = ('Single Pass', 'Multi Turn')
-            acts = ('SPass', 'MTurn')
-            for typ, act in zip(typs, acts):
-                if sec in {'bo', 'si'}:
-                    menu2 = menu.addMenu(typ)
-                    menu2.setObjectName(sec.upper()+'App')
-                    if act == 'SPass':
-                        self._create_bpm_actions(sec, menu2, act, cmd)
-                    else:
-                        for mode in ('Antennas', 'Positions'):
-                            menu3 = menu2.addMenu(mode)
-                            menu3.setObjectName(sec.upper()+'App')
-                            cmd2 = cmd + ['-m', mode]
-                            self._create_bpm_actions(sec, menu3, act, cmd2)
-                else:
-                    if act == 'SPass':
-                        self._create_bpm_actions(sec, menu, act, cmd, typ)
-                    else:
-                        menu2 = menu.addMenu(typ)
-                        menu2.setObjectName(sec.upper()+'App')
-                        for mode in ('Antennas', 'Positions'):
-                            cmd2 = cmd + ['-m', mode]
-                            self._create_bpm_actions(
-                                sec, menu2, act, cmd2, mode)
+            menu2 = menu.addMenu('Acquisition Data')
+            menu2.setObjectName(sec.upper()+'App')
+            if sec in {'bo', 'si'}:
+                for mode in ('Antennas', 'Positions'):
+                    menu3 = menu2.addMenu(mode)
+                    menu3.setObjectName(sec.upper()+'App')
+                    cmd2 = cmd + ['-m', mode]
+                    self._create_bpm_actions(sec, menu3, 'AcqData', cmd2)
+            else:
+                for mode in ('Antennas', 'Positions'):
+                    cmd2 = cmd + ['-m', mode]
+                    self._create_bpm_actions(
+                        sec, menu2, 'AcqData', cmd2, mode)
             return menu
 
         def _create_bpm_actions(self, sec, menu, act, cmd, name=None):

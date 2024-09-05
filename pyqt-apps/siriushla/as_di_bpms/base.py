@@ -37,7 +37,10 @@ class BaseWidget(QWidget):
         return addr
 
     def _create_formlayout_groupbox(self, title, props):
-        grpbx = CustomGroupBox(title, self)
+        if title:
+            grpbx = CustomGroupBox(title, self)
+        else:
+            grpbx = QWidget(self)
         fbl = QFormLayout(grpbx)
         grpbx.layoutf = fbl
         fbl.setLabelAlignment(Qt.AlignVCenter)
@@ -143,6 +146,16 @@ class BaseWidget(QWidget):
             raise NotImplementedError(f'widget not defined for type {widtype}')
         wid.setObjectName(str(pvname).replace('-', ''))
         return wid
+
+    def basic_rule(self, channel, flag, val=0):
+        chan = self.get_pvname(channel)
+        opr = '==' if flag else '!='
+        val = str(val)
+        rules = (
+            '[{"name": "VisRule", "property": "Visible", ' +
+            '"expression": "ch[0] '+opr+' '+val+'", "channels": ' +
+            '[{"channel": "'+chan+'", "trigger": true}]}]')
+        return rules
 
 
 CustomGroupBox = pydmwidget_factory(QGroupBox, pydm_class='primi')

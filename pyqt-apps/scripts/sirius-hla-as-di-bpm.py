@@ -12,8 +12,7 @@ from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.search import BPMSearch
 from siriushla.util import get_appropriate_color, get_monitor_icon
 from siriushla.widgets.windows import create_window_from_widget
-from siriushla.as_di_bpms import SelectBPMs, BPMMain, SinglePassSummary, \
-    MultiTurnSummary
+from siriushla.as_di_bpms import SelectBPMs, BPMMain, AcqDataSummary
 
 
 parser = _argparse.ArgumentParser(
@@ -27,7 +26,7 @@ parser.add_argument(
 parser.add_argument(
     '-w', '--window', type=str, default='Monitor',
     help="type of window to open (default= 'Monitor').",
-    choices=('SPass', 'MTurn', 'Monitor'))
+    choices=('AcqData', 'Monitor'))
 parser.add_argument(
     '-m', '--mode', type=str, default='Positions',
     help="Show Antennas or Positions  (default= 'Positions').",
@@ -53,10 +52,8 @@ else:
         clas = SelectBPMs
         icon = get_monitor_icon(
             'mdi.currency-sign', color=get_appropriate_color(sec))
-    elif args.window == 'SPass':
-        clas = SinglePassSummary
     else:
-        clas = MultiTurnSummary
+        clas = AcqDataSummary
         kwargs['mode'] = args.mode
     slc = slice(None, None)
     maxn = 5 if sec == 'BO' else 20
