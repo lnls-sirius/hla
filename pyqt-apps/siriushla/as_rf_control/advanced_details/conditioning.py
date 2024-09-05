@@ -62,21 +62,22 @@ class ConditioningDetails(SiriusDialog):
         lay.addWidget(QLabel(self.syst_dict['530'][0]), 6, 1)
         lay.addWidget(lb_condfreq, 6, 3, alignment=Qt.AlignCenter)
 
-        relay_keys = [
-            'CGC Fast Relay', 'Relay Setpoint RB', 'Relay Hysteria RB']
         row = 7
-        for key in relay_keys:
-            lb_relay = SiriusLabel(
-                self, self.prefix+self.syst_dict['Relay'][key]+'-RB')
-            lb_relay.showUnits = True
+        if self.section == 'BO':
+            relay_keys = [
+                'CGC Fast Relay', 'Relay Setpoint RB', 'Relay Hysteria RB']
+            for key in relay_keys:
+                lb_relay = SiriusLabel(
+                    self, self.prefix+self.syst_dict['Relay'][key]+'-RB')
+                lb_relay.showUnits = True
 
-            lay.addWidget(QLabel(key), row, 1)
-            if key.split()[-1] != 'RB':
-                lay.addWidget(SiriusSpinbox(
-                    self, self.prefix+self.syst_dict['Relay'][key]+'-SP'),
-                    row, 2)
-            lay.addWidget(lb_relay, row, 3)
-            row += 1
+                lay.addWidget(QLabel(key), row, 1)
+                if key.split()[-1] != 'RB':
+                    lay.addWidget(SiriusSpinbox(
+                        self, self.prefix+self.syst_dict['Relay'][key]+'-SP'),
+                        row, 2)
+                lay.addWidget(lb_relay, row, 3)
+                row += 1
 
         # Vacuum
         self._setupLedState(lay, '79', row, False)
