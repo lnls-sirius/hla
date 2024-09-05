@@ -3926,6 +3926,36 @@ SEC_2_CHANNELS = {
                 }
             }
         },
+        'Conditioning': {
+            'A': {
+                '200': ['Pulse Mode Enable', 'RA-Ra$(sys)$(sidx)01:$(llrf):CondEn'],
+                '201': ['Auto Conditioning Enable', 'RA-Ra$(sys)$(sidx)01:$(llrf):CondAuto'],
+                '204': ['Conditioning Freq', 'RA-Ra$(sys)$(sidx)01:$(llrf):CondFreq'],
+                '540': ['Cond Freq Diag', 'RA-Ra$(sys)$(sidx)01:$(llrf):CondFreq-Mon'],
+                '205': ['Duty Cycle', 'RA-Ra$(sys)$(sidx)01:$(llrf):CondDuty2'],
+                '530': ['Duty Cycle RB', 'RA-Ra$(sys)$(sidx)01:$(llrf):CondDutyCycle-Mon'],
+                '79': ['Vacuum', 'RA-Ra$(sys)$(sidx)01:$(llrf):VacuumFastRly-Mon'],
+                'Relay': {
+                    'CGC Fast Relay': '$(cavityloc):VA-CCG-$(vac):FastRelay',
+                    'Relay Setpoint RB': '$(vacloc):Setpoint',
+                    'Relay Hysteria RB': '$(vacloc):Hyst'
+                }
+            },
+            'B': {
+                '200': ['Pulse Mode Enable', 'RA-Ra$(sys)$(sidx)01:$(llrf):CondEn'],
+                '201': ['Auto Conditioning Enable', 'RA-Ra$(sys)$(sidx)01:$(llrf):CondAuto'],
+                '204': ['Conditioning Freq', 'RA-Ra$(sys)$(sidx)01:$(llrf):CondFreq'],
+                '540': ['Cond Freq Diag', 'RA-Ra$(sys)$(sidx)01:$(llrf):CondFreq-Mon'],
+                '205': ['Duty Cycle', 'RA-Ra$(sys)$(sidx)01:$(llrf):CondDuty2'],
+                '530': ['Duty Cycle RB', 'RA-Ra$(sys)$(sidx)01:$(llrf):CondDutyCycle-Mon'],
+                '79': ['Vacuum', 'RA-Ra$(sys)$(sidx)01:$(llrf):VacuumFastRly-Mon'],
+                'Relay': {
+                    'CGC Fast Relay': '$(cavityloc):VA-CCG-$(vac):FastRelay',
+                    'Relay Setpoint RB': '$(vacloc):Setpoint',
+                    'Relay Hysteria RB': '$(vacloc):Hyst'
+                }
+            }
+        },
         'TunDtls': {
             'A': {
                 'General': {
