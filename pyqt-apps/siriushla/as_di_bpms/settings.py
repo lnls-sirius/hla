@@ -120,30 +120,35 @@ class BPMAdvancedSettings(BaseWidget):
     def get_acqrate_props(rate):
         items = list()
         if rate == 'Monit':
-            items.append(('MONITUpdtTime-SP', 'Update Time'))
+            items.append(('MONITUpdtTime-SP', 'Update Time', False))
         if rate != 'FOFB':
-            items.append(
-                (f'{rate}PhaseSyncDly-SP', 'Delay', ['lineedit', 'label']))
+            items.append((
+                f'{rate}PhaseSyncDly-SP', 'Delay',
+                {'isdata': False, 'widgets': ['lineedit', 'label']}
+            ))
         items.extend([
             (f'{rate}PhaseSyncEn-Sel', 'Sync Enable',
-                ['statebutton', 'ledstate']),
+             {'isdata': False, 'widgets': ['statebutton', 'ledstate']}),
             ((f'{rate}PhaseDesyncCnt-Mon', f'{rate}PhaseDesyncCntRst-Cmd'),
-                'Desync. Count',
-                ['label', ('pushbutton', 'Reset Count', None, 1, 0)]),
+             'Desync. Count',
+             {
+              'isdata': False,
+              'widgets': ['label', ('pushbutton', 'Reset Count', None, 1, 0)]
+             }),
             (f'{rate}DataMaskEn-Sel', 'Data Mask Enable',
-                ['statebutton', 'ledstate']),
+             {'isdata': False, 'widgets': ['statebutton', 'ledstate']}),
         ])
         if rate == 'FOFB':
             items.extend([
                 (f'{rate}DataMaskSamples-SP', 'Data Mask Samples',
-                    ['lineedit', 'label']),
+                 {'isdata': False, 'widgets': ['lineedit', 'label']}),
             ])
         else:
             items.extend([
                 (f'{rate}DataMaskSamplesBeg-SP', 'Data Mask Samples Begin',
-                    ['lineedit', 'label']),
+                 {'isdata': False, 'widgets': ['lineedit', 'label']}),
                 (f'{rate}DataMaskSamplesEnd-SP', 'Data Mask Samples End',
-                    ['lineedit', 'label']),
+                 {'isdata': False, 'widgets': ['lineedit', 'label']}),
             ])
         return items
 
