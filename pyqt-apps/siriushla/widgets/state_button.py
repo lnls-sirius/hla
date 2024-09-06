@@ -31,6 +31,8 @@ class PyDMStateButton(QFrame, PyDMWritableWidget):
         The parent widget for the Label
     init_channel : str, optional
         The channel to be used by the widget.
+    bit : int
+        Bit of the PV value to be handled.
     """
 
     class buttonShapeMap:
@@ -75,7 +77,7 @@ class PyDMStateButton(QFrame, PyDMWritableWidget):
     clicked = Signal()
     DEFAULT_CONFIRM_MESSAGE = "Are you sure you want to proceed?"
 
-    def __init__(self, parent=None, init_channel=None, invert=False):
+    def __init__(self, parent=None, init_channel=None, invert=False, bit=-1):
         """Initialize all internal states and properties."""
         QFrame.__init__(self, parent)
         PyDMWritableWidget.__init__(self, init_channel=init_channel)
@@ -86,6 +88,7 @@ class PyDMStateButton(QFrame, PyDMWritableWidget):
 
         self._bit = -1
         self._bit_val = 0
+        self.pvbit = bit
         self.value = 0
         self.clicked.connect(self.send_value)
         self.shape = 0

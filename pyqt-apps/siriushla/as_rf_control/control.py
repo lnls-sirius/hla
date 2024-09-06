@@ -7,19 +7,22 @@ from pydm.widgets import PyDMEnumComboBox, PyDMLineEdit
 from pyqtgraph import InfiniteLine, mkPen
 from qtpy.QtCore import Qt
 from qtpy.QtGui import QColor
-from qtpy.QtWidgets import QCheckBox, QComboBox, QFormLayout, QGridLayout, \
-    QGroupBox, QHBoxLayout, QLabel, QPushButton, QRadioButton, \
-    QSizePolicy as QSzPlcy, QSpacerItem, QTabWidget, QVBoxLayout, QWidget
+from qtpy.QtWidgets import QCheckBox, QComboBox, QGridLayout, QGroupBox, \
+    QHBoxLayout, QLabel, QPushButton, QRadioButton, QSizePolicy as QSzPlcy, \
+    QSpacerItem, QTabWidget, QVBoxLayout, QWidget
 
 from ..util import connect_window, get_appropriate_color
 from ..widgets import PyDMLed, PyDMLedMultiChannel, PyDMStateButton, \
     SiriusConnectionSignal, SiriusLabel, SiriusLedAlert, SiriusLedState, \
     SiriusMainWindow, SiriusPushButton, SiriusSpinbox, SiriusTimePlot, \
     SiriusWaveformPlot
+from .advanced_details import ADCDACDetails, AutoStartDetails, \
+    CalibrationDetails, ConditioningDetails, HardwareDetails, LoopsDetails, \
+    RampsDetails, TuningDetails
 from .custom_widgets import RFEnblDsblButton
-from .details import CavityStatusDetails, FDLMonitor, LLRFInterlockDetails, \
-    TransmLineStatusDetails, SlowLoopErrorDetails, SlowLoopParametersDetails, \
-    TempMonitor
+from .details import CavityStatusDetails, FDLDetails, LLRFInterlockDetails, \
+    SlowLoopErrorDetails, SlowLoopParametersDetails, TempMonitor, \
+    TransmLineStatusDetails
 from .util import SEC_2_CHANNELS
 
 
@@ -63,26 +66,24 @@ class RFMainControl(SiriusMainWindow):
         gbox_rfgen.setStyleSheet('#RFGen{background-color: #d7ccc8;}')
         gbox_rfgen.setLayout(self._rfGenLayout())
 
-        if self.section == 'SI':
-            wid_startctrl = QGroupBox('Start Controls', self)
-            wid_startctrl.setLayout(self._startControlLayout())
-        else:
-            wid_startctrl = QTabWidget(self)
-            wid_startctrl.setObjectName(self.section+'Tab')
-            wid_startctrl.setStyleSheet(
-                "#"+self.section+'Tab'+"::pane {"
-                "    border-left: 2px solid gray;"
-                "    border-bottom: 2px solid gray;"
-                "    border-right: 2px solid gray;}")
-            wid_control = QWidget(self)
-            wid_control.setLayout(self._startControlLayout())
-            wid_startctrl.addTab(wid_control, 'Start Controls')
+        wid_startctrl = QTabWidget(self)
+        wid_startctrl.setObjectName(self.section+'Tab')
+        wid_startctrl.setStyleSheet(
+            "#"+self.section+'Tab'+"::pane {"
+            "    border-left: 2px solid gray;"
+            "    border-bottom: 2px solid gray;"
+            "    border-right: 2px solid gray;}")
+        wid_control = QWidget(self)
+        wid_control.setLayout(self._startControlLayout())
+        wid_startctrl.addTab(wid_control, 'Start Controls')
+        if self.section == 'BO':
             wid_rampctrl = QWidget(self)
             wid_rampctrl.setLayout(self._rampControlLayout())
             wid_startctrl.addTab(wid_rampctrl, 'Ramp Controls')
-            # wid_autostart = QWidget(self)
-            # wid_autostart.setLayout(self._autoStartLayout())
-            # wid_startctrl.addTab(wid_autostart, 'Auto Start')
+        wid_advdtls = QWidget(self)
+        wid_advdtls.setStyleSheet("QPushButton{min-width: 8em;}")
+        wid_advdtls.setLayout(self._advancedDetailsLayout())
+        wid_startctrl.addTab(wid_advdtls, 'Advanced Details')
 
         if self.section == 'SI':
             wid_pwrmon = QGroupBox('Power Meter', self)
@@ -266,41 +267,6 @@ class RFMainControl(SiriusMainWindow):
             self.pb_llrf.setStyleSheet(
                 'min-width:25px; max-width:25px; icon-size:20px;')
 
-        # Auxiliary Windows
-        self._ld_aux = QLabel(
-            '<h4>Auxiliary Windows</h4>', self, alignment=Qt.AlignLeft)
-
-        # # Open FDL
-        self.ld_fdl = QLabel(
-            'LLRF FDL', self, alignment=Qt.AlignRight | Qt.AlignVCenter)
-        if self.section == 'SI':
-            lay_fdl = QGridLayout()
-            lay_fdl.addWidget(self.ld_fdl, 0, 0)
-            offset = 1
-            for key, val in self.chs['FDL'].items():
-                ld_llrf = QLabel(
-                    f'• {key}', self,
-                    alignment=Qt.AlignRight | Qt.AlignVCenter)
-                pb_llrf = QPushButton(
-                    qta.icon('fa5s.external-link-alt'), '', self)
-                pb_llrf.setStyleSheet(
-                    'min-width:25px; max-width:25px; icon-size:20px;')
-                connect_window(
-                pb_llrf, FDLMonitor, parent=self, prefix=self.prefix,
-                section=self.section, chs=val)
-
-                lay_fdl.addWidget(ld_llrf, offset, 0)
-                lay_fdl.addWidget(pb_llrf, offset, 1)
-                offset += 1
-        else:
-            self.pb_openfdl = QPushButton(
-                qta.icon('fa5s.external-link-alt'), '', self)
-            self.pb_openfdl.setStyleSheet(
-                'min-width:25px; max-width:25px; icon-size:20px;')
-            connect_window(
-                self.pb_openfdl, FDLMonitor, parent=self,
-                prefix=self.prefix, section=self.section, chs=self.chs['FDL'])
-
         lay = QGridLayout()
         lay.setHorizontalSpacing(6)
         lay.setAlignment(Qt.AlignTop)
@@ -333,12 +299,6 @@ class RFMainControl(SiriusMainWindow):
         else:
             lay.addWidget(self.ld_llrf, 9, 0, alignment=Qt.AlignVCenter)
             lay.addWidget(self.pb_llrf, 9, 1)
-        lay.addWidget(self._ld_aux, 10, 0, 1, 3)
-        if self.section == 'SI':
-            lay.addLayout(lay_fdl, 11, 0, 1, 2)
-        else:
-            lay.addWidget(self.ld_fdl, 11, 0)
-            lay.addWidget(self.pb_openfdl, 11, 1)
 
         return lay
 
@@ -622,8 +582,6 @@ class RFMainControl(SiriusMainWindow):
             lb2 = '4'
             lb_fflat = QLabel(
                 '<h3> • Field Flatness</h3>', self, alignment=Qt.AlignLeft)
-            lb_ffsts = QLabel('Acting: ', self, alignment=Qt.AlignRight)
-            self.lb_ffsts = SiriusLedState(self, self.prefix+pvs['Sts'])
             lb_ffen = QLabel('Enable: ', self, alignment=Qt.AlignRight)
             self.bt_ffen = PyDMStateButton(self, self.prefix+pvs['Auto']+'-Sel')
             self.lb_ffen = SiriusLedState(self, self.prefix+pvs['Auto']+'-Sts')
@@ -631,7 +589,8 @@ class RFMainControl(SiriusMainWindow):
             self.bt_ffpos = PyDMStateButton(self, self.prefix+pvs['Pos']+'-Sel')
             self.lb_ffpos = SiriusLedState(self, self.prefix+pvs['Pos']+'-Sts')
             lb_ffg1 = QLabel('Gain Cell 2: ', self, alignment=Qt.AlignRight)
-            lb_ffg2 = QLabel(f'Gain Cell {lb2:s}: ', self, alignment=Qt.AlignRight)
+            lb_ffg2 = QLabel(
+                f'Gain Cell {lb2:s}: ', self, alignment=Qt.AlignRight)
             self.sb_ffg1 = SiriusSpinbox(self, self.prefix+pvs['Gain1']+'-SP')
             self.sb_ffg2 = SiriusSpinbox(self, self.prefix+pvs['Gain2']+'-SP')
             self.lb_ffg1 = SiriusLabel(self, self.prefix+pvs['Gain1']+'-RB')
@@ -639,18 +598,26 @@ class RFMainControl(SiriusMainWindow):
             self.lb_ffg1.showUnits = True
             self.lb_ffg2.showUnits = True
             lb_ffdb = QLabel('DeadBand: ', self, alignment=Qt.AlignRight)
-            self.sb_ffdb = SiriusSpinbox(self, self.prefix+pvs['Deadband']+':SP')
-            self.lb_ffdb = SiriusLabel(self, self.prefix+pvs['Deadband']+':RB')
+            self.sb_ffdb = SiriusSpinbox(
+                self, self.prefix+pvs['Deadband']+'-SP')
+            self.lb_ffdb = SiriusLabel(self, self.prefix+pvs['Deadband']+'-RB')
             self.lb_ffdb.showUnits = True
             lb_ffcell1 = QLabel('Cell 2: ', self, alignment=Qt.AlignRight)
             self.lb_ffcell1 = SiriusLabel(self, self.prefix+pvs['Cell1'])
             self.lb_ffcell1.showUnits = True
-            lb_ffcell2 = QLabel(f'Cell {lb2:s}: ', self, alignment=Qt.AlignRight)
+            lb_ffcell2 = QLabel(
+                f'Cell {lb2:s}: ', self, alignment=Qt.AlignRight)
             self.lb_ffcell2 = SiriusLabel(self, self.prefix+pvs['Cell2'])
             self.lb_ffcell2.showUnits = True
             lb_fferr = QLabel('Error: ', self, alignment=Qt.AlignRight)
             self.lb_fferr = SiriusLabel(self, self.prefix+pvs['Err'])
             self.lb_fferr.showUnits = True
+            lb_ffsts = QLabel('Acting: ', self, alignment=Qt.AlignRight)
+            self.lb_ffsts = SiriusLedState(self, self.prefix+pvs['Sts'])
+            lb_fwdmin = QLabel(
+                'Tuning Fwd Min: ', self, alignment=Qt.AlignRight)
+            self.lb_fwdmin = SiriusLedState(self, self.prefix+pvs['FwdMin'])
+
             lay_fflat = QGridLayout()
             lay_fflat.setAlignment(Qt.AlignTop | Qt.AlignHCenter)
             lay_fflat.setVerticalSpacing(12)
@@ -678,8 +645,24 @@ class RFMainControl(SiriusMainWindow):
             lay_fflat.addWidget(self.lb_fferr, 8, 1)
             lay_fflat.addWidget(lb_ffsts, 9, 0)
             lay_fflat.addWidget(self.lb_ffsts, 9, 1, alignment=Qt.AlignCenter)
+            lay_fflat.addWidget(lb_fwdmin, 10, 0)
+            lay_fflat.addWidget(
+                self.lb_fwdmin, 10, 1, alignment=Qt.AlignCenter)
             wid_fflat = QWidget()
             wid_fflat.setLayout(lay_fflat)
+
+        # # FDL
+        wid_fdl = QWidget()
+        lay_fdl = QVBoxLayout(wid_fdl)
+        lay_fdl.setAlignment(Qt.AlignTop)
+        lay_fdl.setSpacing(9)
+        self.curves_amp = dict()
+
+        if self.section == 'SI':
+            for k, chs in self.chs['FDL'].items():
+                self._create_fdl_lay(lay_fdl, k, chs)
+        else:
+            self._create_fdl_lay(lay_fdl, None, self.chs['FDL'])
 
         wid_llrf = QTabWidget(self)
         color = 'green' if self.section == 'BO' else 'blue'
@@ -693,6 +676,7 @@ class RFMainControl(SiriusMainWindow):
         wid_llrf.addTab(wid_tun, 'Tuning')
         if self.section == 'BO':
             wid_llrf.addTab(wid_fflat, 'Field Flatness')
+        wid_llrf.addTab(wid_fdl, 'FDL')
 
         # Layout
         vlay = QVBoxLayout()
@@ -859,6 +843,70 @@ class RFMainControl(SiriusMainWindow):
             200, 10, QSzPlcy.Fixed, QSzPlcy.MinimumExpanding), 21, 3)
         return lay
 
+    def _advancedDetailsLayout(self):
+        if self.section == 'SI':
+            lay = QVBoxLayout()
+            lay.setAlignment(Qt.AlignTop)
+            lay.setSpacing(9)
+            systems = ['A', 'B']
+        else:
+            lay = QGridLayout()
+            lay.setAlignment(Qt.AlignTop | Qt.AlignHCenter)
+            lay.setHorizontalSpacing(9)
+            lay.setVerticalSpacing(18)
+            lay.addItem(QSpacerItem(0, 20, QSzPlcy.Ignored, QSzPlcy.Fixed))
+            systems = ['']
+
+        for i in range(len(systems)):
+            buttons = []
+            self._addDetailButton(
+                'ADCs and DACs', ADCDACDetails, systems[i], buttons)
+            self._addDetailButton(
+                'Hardware', HardwareDetails, systems[i], buttons)
+            self._addDetailButton(
+                'Loops', LoopsDetails, systems[i], buttons)
+            self._addDetailButton(
+                'Cavity Ramps', RampsDetails, systems[i], buttons)
+            self._addDetailButton(
+                'Auto Start', AutoStartDetails, systems[i], buttons)
+            self._addDetailButton(
+                'Conditioning', ConditioningDetails, systems[i], buttons)
+            self._addDetailButton(
+                'Tuning', TuningDetails, systems[i], buttons)
+            self._addDetailButton(
+                'Calibration', CalibrationDetails, systems[i], buttons)
+
+            if self.section == 'SI':
+                gbox = QGroupBox(f'System {systems[i]}', self)
+                gbox_lay = QGridLayout()
+                gbox_lay.setHorizontalSpacing(9)
+                gbox_lay.setVerticalSpacing(18)
+                self._setupDetailButtons(gbox_lay, buttons, 0)
+                gbox.setLayout(gbox_lay)
+                lay.addItem(QSpacerItem(0, 20, QSzPlcy.Ignored, QSzPlcy.Fixed))
+                lay.addWidget(gbox)
+            else:
+                self._setupDetailButtons(lay, buttons, 1)
+
+        return lay
+
+    def _addDetailButton(self, title, detail_class, system, buttons):
+        pb = QPushButton(
+            qta.icon('fa5s.external-link-alt'), f' {title}', self)
+        connect_window(
+            pb, detail_class, parent=self,
+            prefix=self.prefix, section=self.section, system=system)
+        buttons.append(pb)
+
+    def _setupDetailButtons(self, lay, buttons, row):
+        column = 0
+        for pb in buttons:
+            lay.addWidget(pb, row, column)
+            column += 1
+            if column > 2:
+                column = 0
+                row += 1
+
     def _handle_rmptab_visibility(self, unit_type):
         for pos in ['Top', 'Bottom']:
             for pv_id in ['CavPwr', 'PowFwd', 'PowRev']:
@@ -983,56 +1031,6 @@ class RFMainControl(SiriusMainWindow):
         lay.addLayout(hbox_rb, 10, 0, 1, 3)
         lay.addItem(
             QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Expanding), 11, 0)
-        return lay
-
-    def _autoStartLayout(self):
-        self.bt_autostart = PyDMStateButton(
-            self, self.prefix+'RA-RaBO01:RF-LLRF:AutoStartupEn-SP')
-        self.led_autostart = SiriusLedState(
-            self, self.prefix+'RA-RaBO01:RF-LLRF:AutoStartupEn-RB')
-        hl_autostart = QHBoxLayout()
-        hl_autostart.setAlignment(Qt.AlignLeft)
-        hl_autostart.addWidget(self.bt_autostart)
-        hl_autostart.addWidget(self.led_autostart)
-
-        self.cb_comstart = PyDMEnumComboBox(
-            self, self.prefix+'RA-RaBO01:RF-LLRF:AutoStartupCmdStart-Sel')
-        self.cb_comstart.setStyleSheet('min-width: 15em; max-width: 15em;')
-
-        self.lb_statestart = SiriusLabel(
-            self, self.prefix+'RA-RaBO01:RF-LLRF:AutoStartupCmdStart-Sts')
-        self.lb_statestart.setStyleSheet(
-            'qproperty-alignment: AlignLeft; min-width:15em; max-width:15em;')
-
-        self.led_startok = PyDMLedMultiChannel(
-            self, {self.prefix+'RA-RaSIA01:RF-LLRF-A:EPSEn-Sts': 0,
-                   self.prefix+'RA-RaSIA01:RF-LLRF-A:FIMEn-Sts': 0,
-                   self.prefix+'RA-RaBO01:RF-LLRF:SSARdy-Mon': 1,
-                   self.prefix+'RA-RaBO01:RF-LLRF:IntlkAll-Mon': 0})
-
-        self.led_tuneok = PyDMLedMultiChannel(
-            self, {self.prefix+'RA-RaBO01:RF-LLRF:TuneFwdMin-Mon': 1})
-
-        self.led_closeloopok = PyDMLedMultiChannel(
-            self, {self.prefix+'RA-RaBO01:RF-LLRF:SLFwdMin-Mon': 1,
-                   self.prefix+'RA-RaBO01:RF-LLRF:FLFwdMin-Mon': 1,
-                   self.prefix+'RA-RaBO01:RF-LLRF:ALFwdMin-Mon': 1,
-                   self.prefix+'RA-RaBO01:RF-LLRF:PLFwdMin-Mon': 1})
-
-        lay = QFormLayout()
-        lay.setLabelAlignment(Qt.AlignRight)
-        lay.setFormAlignment(Qt.AlignLeft)
-        lay.addRow(QLabel('<h3> • Commands</h3>', self))
-        lay.addItem(QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed))
-        lay.addRow('Enable: ', hl_autostart)
-        lay.addRow('Command: ', self.cb_comstart)
-        lay.addRow('Current State:', self.lb_statestart)
-        lay.addItem(QSpacerItem(0, 20, QSzPlcy.Ignored, QSzPlcy.Fixed))
-        lay.addRow(QLabel('<h3> • Statuses</h3>', self))
-        lay.addItem(QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed))
-        lay.addRow('Auto Start Beginning Ok: ', self.led_startok)
-        lay.addRow('Auto Tuning Ok: ', self.led_tuneok)
-        lay.addRow('Auto Close Loops Ok: ', self.led_closeloopok)
         return lay
 
     def _powerMeterLayout(self):
@@ -1550,6 +1548,50 @@ class RFMainControl(SiriusMainWindow):
         lay_tunset.addWidget(lb_dphase, 5, offset)
         lay_tunset.addWidget(led_tunact, 6, offset, alignment=Qt.AlignCenter)
 
+    def _create_fdl_lay(self, lay_fdl, key, chs):
+        # Graph
+        self.amp_graph = SiriusWaveformPlot(
+            parent=self, background=QColor(255, 255, 255))
+        self.amp_graph.maxRedrawRate = 2
+        self.amp_graph.setShowXGrid(True)
+        self.amp_graph.setShowYGrid(True)
+        self.amp_graph.setShowLegend(False)
+        self.amp_graph.setAutoRangeX(True)
+        self.amp_graph.setAutoRangeY(True)
+        self.amp_graph.setAxisColor(QColor(0, 0, 0))
+
+        lay_checks = QGridLayout()
+        row = 0
+        column = 0
+        for idx in range(len(chs['Signals'])):
+            self._setupAmpCurve(chs['Signals'][idx],
+            self.prefix+chs['Time'], idx, lay_checks, row, column)
+            column += 1
+            if column == len(chs['Signals']) / 2:
+                row += 1
+                column = 0
+
+        # Section Title
+        lay_section = QHBoxLayout()
+        pb_fdldtls = QPushButton(qta.icon('fa5s.ellipsis-v'), '', self)
+        pb_fdldtls.setObjectName('dtls')
+        pb_fdldtls.setStyleSheet(
+            '#dtls{min-width:18px;max-width:18px;icon-size:20px;}')
+        connect_window(pb_fdldtls, FDLDetails, parent=self,
+                    section=self.section, prefix=self.prefix, chs=chs)
+        if key:
+            title = key
+        else:
+            title = 'FDL Data'
+        lay_section.addWidget(QLabel(
+            f'<h3> • {title}</h3>', self, alignment=Qt.AlignLeft))
+        lay_section.addWidget(pb_fdldtls, alignment=Qt.AlignRight)
+
+        lay_fdl.addLayout(lay_section)
+        lay_fdl.addWidget(QLabel('<h4>Amplitude</h4>'))
+        lay_fdl.addLayout(lay_checks)
+        lay_fdl.addWidget(self.amp_graph)
+
     def _create_slc_lay(self, lay_slc, key, chs_dict, offset):
         if key:
             lay_slc.addWidget(QLabel(
@@ -1628,6 +1670,27 @@ class RFMainControl(SiriusMainWindow):
         lay_slc.addItem(QSpacerItem(
             15, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 12, offset+2)
 
+    def _setupAmpCurve(self, signal, timebase, idx, lay_checks, row, column):
+        cid = signal[0]
+        color = self.prefix + signal[3]
+
+        if signal[1]:
+            chn_amp = self.prefix + signal[1]
+            self.amp_graph.addChannel(
+                y_channel=chn_amp,
+                x_channel=timebase,
+                redraw_mode=2, name=cid, color=color,
+                lineStyle=Qt.SolidLine, lineWidth=1
+            )
+            self.curves_amp[cid] = self.amp_graph.curveAtIndex(idx)
+
+        cbx = QCheckBox(cid, self)
+        cbx.setChecked(True)
+        cbx.setObjectName(cid)
+        cbx.setStyleSheet('color:' + color + ';')
+        cbx.stateChanged.connect(self._handle_amp_curves_visibility)
+        lay_checks.addWidget(cbx, row, column)
+
     def _handle_pwrdata_visibility(self, text):
         for group, labels in self._pm_labels.items():
             for lbl in labels:
@@ -1649,6 +1712,13 @@ class RFMainControl(SiriusMainWindow):
             name += ' ' + self.cb_units.currentText()
         curve = self.curves[name]
         curve.setVisible(state)
+
+    def _handle_amp_curves_visibility(self, state):
+        name = self.sender().objectName()
+
+        amp_curve = self.curves_amp.get(name)
+        if amp_curve:
+            amp_curve.setVisible(state)
 
     def _handle_predrive_led_channels(self, led_drive, chs_dict, value):
         val = 100 if value == 1 else chs_dict['PreDriveThrs']

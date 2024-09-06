@@ -5,12 +5,11 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QLabel, QWidget, QGridLayout, \
     QHBoxLayout, QVBoxLayout, QPushButton, QSizePolicy, QGroupBox
 from pydm.widgets.display_format import DisplayFormat as _DisplayFormat
-from ..si_di_bbb.custom_widgets import MyScaleIndicator
 from ..li_rf_llrf.chart import ChartWindow
 from .. import util as _util
 from ..widgets import SiriusLabel, PyDMLed, PyDMLedMultiChannel, \
     SiriusLineEdit, SiriusEnumComboBox, PyDMStateButton, SiriusLedAlert,\
-    SiriusPushButton
+    SiriusPushButton, SiriusScaleIndicator
 from .util import COLORS, IPS_DETAILS, LEGEND
 from .widgets import LedLegend, QGroupBoxButton, \
     PyDMLedMultiIncosistencyDetector
@@ -201,7 +200,7 @@ class BaseFunctionsInterface():
 
     def getProgressBar(self, pv_name, limit, color=COLORS['purple']):
         """ Create and configure Progress Bar """
-        prog_bar = MyScaleIndicator(
+        prog_bar = SiriusScaleIndicator(
             init_channel=pv_name)
         prog_bar.limitsFromChannel = False
         prog_bar.showLimits = False

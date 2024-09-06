@@ -8,9 +8,9 @@ from pydm.widgets import PyDMEnumComboBox
 from siriuspy.envars import VACA_PREFIX as _vaca_prefix
 from siriuspy.namesys import SiriusPVName as _PVName
 
-from ..widgets import SiriusFrame, SiriusLabel, SiriusPushButton, SiriusSpinbox
+from ..widgets import SiriusFrame, SiriusLabel, SiriusPushButton, \
+    SiriusSpinbox, SiriusScaleIndicator
 
-from .custom_widgets import MyScaleIndicator
 from .util import set_bbb_color
 
 
@@ -331,56 +331,56 @@ class BbBADCWidget(QWidget):
 
         ld_adcch0 = QLabel(
             '<h4>Channel 0</h4>', self, alignment=Qt.AlignCenter)
-        si_adcch0 = MyScaleIndicator(self, self.dev_pref+':MAX1202_CH0')
+        si_adcch0 = SiriusScaleIndicator(self, self.dev_pref+':MAX1202_CH0')
         si_adcch0.showUnits = True
         si_adcch0.setObjectName('ch0')
         si_adcch0.setStyleSheet('#ch0{min-height:6em; min-width:8em;}')
 
         ld_adcch1 = QLabel(
             '<h4>Channel 1</h4>', self, alignment=Qt.AlignCenter)
-        si_adcch1 = MyScaleIndicator(self, self.dev_pref+':MAX1202_CH1')
+        si_adcch1 = SiriusScaleIndicator(self, self.dev_pref+':MAX1202_CH1')
         si_adcch1.showUnits = True
         si_adcch1.setObjectName('ch1')
         si_adcch1.setStyleSheet('#ch1{min-height:6em; min-width:8em;}')
 
         ld_adcch2 = QLabel(
             '<h4>Channel 2</h4>', self, alignment=Qt.AlignCenter)
-        si_adcch2 = MyScaleIndicator(self, self.dev_pref+':MAX1202_CH2')
+        si_adcch2 = SiriusScaleIndicator(self, self.dev_pref+':MAX1202_CH2')
         si_adcch2.showUnits = True
         si_adcch2.setObjectName('ch2')
         si_adcch2.setStyleSheet('#ch2{min-height:6em; min-width:8em;}')
 
         ld_adcch3 = QLabel(
             '<h4>Channel 3</h4>', self, alignment=Qt.AlignCenter)
-        si_adcch3 = MyScaleIndicator(self, self.dev_pref+':MAX1202_CH3')
+        si_adcch3 = SiriusScaleIndicator(self, self.dev_pref+':MAX1202_CH3')
         si_adcch3.showUnits = True
         si_adcch3.setObjectName('ch3')
         si_adcch3.setStyleSheet('#ch3{min-height:6em; min-width:8em;}')
 
         ld_adcch4 = QLabel(
             '<h4>Channel 4</h4>', self, alignment=Qt.AlignCenter)
-        si_adcch4 = MyScaleIndicator(self, self.dev_pref+':MAX1202_CH4')
+        si_adcch4 = SiriusScaleIndicator(self, self.dev_pref+':MAX1202_CH4')
         si_adcch4.showUnits = True
         si_adcch4.setObjectName('ch4')
         si_adcch4.setStyleSheet('#ch4{min-height:6em; min-width:8em;}')
 
         ld_adcch5 = QLabel(
             '<h4>Channel 5</h4>', self, alignment=Qt.AlignCenter)
-        si_adcch5 = MyScaleIndicator(self, self.dev_pref+':MAX1202_CH5')
+        si_adcch5 = SiriusScaleIndicator(self, self.dev_pref+':MAX1202_CH5')
         si_adcch5.showUnits = True
         si_adcch5.setObjectName('ch5')
         si_adcch5.setStyleSheet('#ch5{min-height:6em; min-width:8em;}')
 
         ld_adcch6 = QLabel(
             '<h4>Channel 6</h4>', self, alignment=Qt.AlignCenter)
-        si_adcch6 = MyScaleIndicator(self, self.dev_pref+':MAX1202_CH6')
+        si_adcch6 = SiriusScaleIndicator(self, self.dev_pref+':MAX1202_CH6')
         si_adcch6.showUnits = True
         si_adcch6.setObjectName('ch6')
         si_adcch6.setStyleSheet('#ch6{min-height:6em; min-width:8em;}')
 
         ld_adcch7 = QLabel(
             '<h4>Channel 7</h4>', self, alignment=Qt.AlignCenter)
-        si_adcch7 = MyScaleIndicator(self, self.dev_pref+':MAX1202_CH7')
+        si_adcch7 = SiriusScaleIndicator(self, self.dev_pref+':MAX1202_CH7')
         si_adcch7.showUnits = True
         si_adcch7.setObjectName('ch7')
         si_adcch7.setStyleSheet('#ch7{min-height:6em; min-width:8em;}')
