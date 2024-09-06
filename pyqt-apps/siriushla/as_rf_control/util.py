@@ -1839,6 +1839,64 @@ SEC_2_CHANNELS = {
                 'LLRF': 'B'
             }
         },
+        'SSADtls': {
+            'A': {
+                'Rack': {
+                    'Temp': 'RA-To$(sys)0$(NB):RF-HeatSink-H0$(suffix):T-Mon',
+                    'Tms': 'RA-To$(sys)0$(NB):RF-HeatSink-H0$(suffix):Tms-Mon',
+                    'PT-100': [
+                        'RA-To$(sys)0$(NB):RF-HeatSink-H0$(suffix):TUp-Mon',
+                        'RA-To$(sys)0$(NB):RF-HeatSink-H0$(suffix):TDown-Mon'
+                    ],
+                    'Status': 'RA-To$(sys)0$(NB):RF-TDKSource-R$(suffix):StsAC-Mon',
+                    'Temp A': 'RA-To$(sys)0$(NB):RF-SSAMux-$(suffix):TempA-Mon',
+                    'Temp B': 'RA-To$(sys)0$(NB):RF-SSAMux-$(suffix):TempB-Mon',
+                    'Voltage': 'RA-To$(sys)0$(NB):RF-SSAMux-$(suffix):VoltPos5V-Mon',
+                    'Current': 'RA-To$(sys)0$(NB):RF-SSAMux-$(suffix):CurrentPos5V-Mon'
+                },
+                'Runtime': 'RA-To$(sys)0$(NB):RF-SSAmpTower:RunHour-Mon',
+                'Pre Amp 1': [
+                    'RA-Ra$(sys)01:RF-LLRFPreAmp-1:T1-Mon',
+                    'RA-Ra$(sys)01:RF-LLRFPreAmp-1:T1Up-Mon',
+                ],
+                'Pre Amp 2': [
+                    'RA-Ra$(sys)01:RF-LLRFPreAmp-1:T2-Mon',
+                    'RA-Ra$(sys)01:RF-LLRFPreAmp-1:T2Up-Mon',
+                ],
+                'In Pwr Fwd': [
+                    'RA-To$(sys)0$(NB):RF-SSAmpTower:PwrFwdIn-Mon',
+                    'RA-To$(sys)0$(NB):RF-SSAmpTower:HwPwrFwdIn-Mon',
+                    'RA-To$(sys)0$(NB):RF-SSAmpTower:PwrFwdInSts-Mon'
+                ],
+                'In Pwr Rev': [
+                    'RA-To$(sys)0$(NB):RF-SSAmpTower:PwrRevIn-Mon',
+                    'RA-To$(sys)0$(NB):RF-SSAmpTower:HwPwrRevIn-Mon',
+                    'RA-To$(sys)0$(NB):RF-SSAmpTower:PwrRevInSts-Mon'
+                ],
+                'Out Pwr Fwd': [
+                    'RA-To$(sys)0$(NB):RF-SSAmpTower:PwrFwdOut-Mon',
+                    'RA-To$(sys)0$(NB):RF-SSAmpTower:HwPwrFwdOut-Mon',
+                    'RA-To$(sys)0$(NB):RF-SSAmpTower:PwrFwdOutSts-Mon'
+                ],
+                'Out Pwr Rev': [
+                    'RA-To$(sys)0$(NB):RF-SSAmpTower:PwrRevOut-Mon',
+                    'RA-To$(sys)0$(NB):RF-SSAmpTower:HwPwrRevOut-Mon',
+                    'RA-To$(sys)0$(NB):RF-SSAmpTower:PwrRevOutSts-Mon'
+                ],
+            },
+            'B': {
+                'Diag': {
+                    'Pre Amp 3': [
+                        'RA-Ra$(sys)01:RF-LLRFPreAmp-1:T1-Mon',
+                        'RA-Ra$(sys)01:RF-LLRFPreAmp-1:T1Up-Mon',
+                    ],
+                    'Pre Amp 4': [
+                        'RA-Ra$(sys)01:RF-LLRFPreAmp-1:T2-Mon',
+                        'RA-Ra$(sys)01:RF-LLRFPreAmp-1:T2Up-Mon',
+                    ],
+                },
+            }
+        },
         'SL': {
             'ErrDtls': {
                 'A': {

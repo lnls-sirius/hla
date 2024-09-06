@@ -21,7 +21,7 @@ from .advanced_details import ADCDACDetails, AutoStartDetails, \
     RampsDetails, TuningDetails
 from .custom_widgets import RFEnblDsblButton
 from .details import CavityStatusDetails, FDLDetails, LLRFInterlockDetails, \
-    SlowLoopErrorDetails, SlowLoopParametersDetails, TempMonitor, \
+    SlowLoopErrorDetails, SlowLoopParametersDetails, SSADetails, TempMonitor, \
     TransmLineStatusDetails
 from .util import SEC_2_CHANNELS
 
@@ -358,19 +358,19 @@ class RFMainControl(SiriusMainWindow):
         lay_amp.addItem(QSpacerItem(
             10, 0, QSzPlcy.Expanding, QSzPlcy.Ignored), 0, 0)
         lay_amp.addWidget(
-            QLabel('<h4>Power</h4>', self, alignment=Qt.AlignCenter), 1, 3)
+            QLabel('<h4>Power</h4>', self, alignment=Qt.AlignCenter), 1, 4)
         lay_amp.addWidget(QLabel(
             '<h4>'+dic['SRC 1']['Label']+'</h4>', self,
-            alignment=Qt.AlignCenter), 1, 4)
-        lay_amp.addWidget(QLabel(
-            '<h4>'+dic['SRC 2']['Label']+'</h4>', self,
             alignment=Qt.AlignCenter), 1, 5)
         lay_amp.addWidget(QLabel(
-            '<h4>Pin Sw</h4>', self, alignment=Qt.AlignCenter), 1, 6)
+            '<h4>'+dic['SRC 2']['Label']+'</h4>', self,
+            alignment=Qt.AlignCenter), 1, 6)
         lay_amp.addWidget(QLabel(
-            '<h4>Pre Drive</h4>', self, alignment=Qt.AlignCenter), 1, 7)
+            '<h4>Pin Sw</h4>', self, alignment=Qt.AlignCenter), 1, 7)
+        lay_amp.addWidget(QLabel(
+            '<h4>Pre Drive</h4>', self, alignment=Qt.AlignCenter), 1, 8)
         lay_amp.addItem(QSpacerItem(
-            10, 0, QSzPlcy.Expanding, QSzPlcy.Ignored), 0, 8)
+            10, 0, QSzPlcy.Expanding, QSzPlcy.Ignored), 0, 9)
 
         if self.section == 'BO':
             self._create_ssa_wid(lay_amp, 2, self.chs['SSA'])
@@ -1432,14 +1432,30 @@ class RFMainControl(SiriusMainWindow):
         lay_amp.addWidget(led_sts, row, 1)
 
         lb_name = QLabel('<h4>'+chs_dict['Name']+'</h4>', self,
-                         alignment=Qt.AlignLeft | Qt.AlignVCenter)
+                         alignment=Qt.AlignCenter)
         lb_name.setStyleSheet('max-height: 1.29em;')
         lay_amp.addWidget(lb_name, row, 2)
+
+        pb_ssadtls = QPushButton(qta.icon('fa5s.ellipsis-v'), '', self)
+        pb_ssadtls.setObjectName('dtls')
+        pb_ssadtls.setStyleSheet(
+            '#dtls{min-width:18px;max-width:18px;icon-size:20px;}')
+        ssa_num = int(chs_dict['Name'].split()[-1])
+        system = ''
+        if self.section == 'SI':
+            if ssa_num == 1 or ssa_num == 2:
+                system = 'A'
+            else:
+                system = 'B'
+        connect_window(pb_ssadtls, SSADetails, parent=self,
+                       section=self.section, prefix=self.prefix,
+                       num=ssa_num, system=system)
+        lay_amp.addWidget(pb_ssadtls, row, 3)
 
         lb_pwr = SiriusLabel(self, self.prefix+chs_dict['Power'])
         lb_pwr.showUnits = True
         lb_pwr.setStyleSheet('min-width: 6em; max-width: 6em;')
-        lay_amp.addWidget(lb_pwr, row, 3)
+        lay_amp.addWidget(lb_pwr, row, 4)
 
         bt_src1 = RFEnblDsblButton(
             parent=self,
@@ -1455,7 +1471,7 @@ class RFMainControl(SiriusMainWindow):
         else:
             led_src1 = SiriusLedState(
                 self, self.prefix+chs_dict['SRC 1']['Mon'])
-        lay_amp.addLayout(self._create_vlay(bt_src1, led_src1), row, 4)
+        lay_amp.addLayout(self._create_vlay(bt_src1, led_src1), row, 5)
 
         bt_src2 = RFEnblDsblButton(
             parent=self,
@@ -1463,7 +1479,7 @@ class RFMainControl(SiriusMainWindow):
                 'on': self.prefix+chs_dict['SRC 2']['Enable'],
                 'off': self.prefix+chs_dict['SRC 2']['Disable']})
         led_src2 = SiriusLedState(self, self.prefix+chs_dict['SRC 2']['Mon'])
-        lay_amp.addLayout(self._create_vlay(bt_src2, led_src2), row, 5)
+        lay_amp.addLayout(self._create_vlay(bt_src2, led_src2), row, 6)
 
         bt_pinsw = RFEnblDsblButton(
             parent=self,
@@ -1477,7 +1493,7 @@ class RFMainControl(SiriusMainWindow):
             '", "trigger": true}]}]')
         bt_pinsw.pb_on.rules = rules
         led_pinsw = SiriusLedState(self, self.prefix+chs_dict['PinSw']['Mon'])
-        lay_amp.addLayout(self._create_vlay(bt_pinsw, led_pinsw), row, 6)
+        lay_amp.addLayout(self._create_vlay(bt_pinsw, led_pinsw), row, 7)
 
         lb_drive = SiriusLabel(self, self.prefix+chs_dict['PreDrive'])
         lb_drive.showUnits = True
@@ -1485,7 +1501,7 @@ class RFMainControl(SiriusMainWindow):
             parent=self, channels2values={
                 self.prefix+chs_dict['PreDrive']: {
                     'comp': 'lt', 'value': chs_dict['PreDriveThrs']}})
-        lay_amp.addLayout(self._create_vlay(lb_drive, led_drive), row, 7)
+        lay_amp.addLayout(self._create_vlay(lb_drive, led_drive), row, 8)
 
         ch_pinsw = SiriusConnectionSignal(self.prefix+chs_dict['PinSw']['Mon'])
         ch_pinsw.new_value_signal[int].connect(
