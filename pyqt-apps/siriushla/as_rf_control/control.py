@@ -1440,17 +1440,17 @@ class RFMainControl(SiriusMainWindow):
         pb_ssadtls.setObjectName('dtls')
         pb_ssadtls.setStyleSheet(
             '#dtls{min-width:18px;max-width:18px;icon-size:20px;}')
-        ssa_num = int(chs_dict['Name'].split()[-1])
-        system = ''
-        if self.section == 'SI':
-            if ssa_num == 1 or ssa_num == 2:
-                system = 'A'
-            else:
-                system = 'B'
-        connect_window(pb_ssadtls, SSADetails, parent=self,
-                       section=self.section, prefix=self.prefix,
-                       num=ssa_num, system=system)
         lay_amp.addWidget(pb_ssadtls, row, 3)
+        if self.section == 'SI':
+            ssa_num = int(chs_dict['Name'].split()[-1])
+            system = ('A' if ssa_num == 1 or ssa_num == 2 else 'B')
+            connect_window(pb_ssadtls, SSADetails, parent=self,
+                        section=self.section, prefix=self.prefix,
+                        num=ssa_num, system=system)
+        else:
+            connect_window(pb_ssadtls, SSADetails, parent=self,
+                        section=self.section, prefix=self.prefix,
+                        num='', system='')
 
         lb_pwr = SiriusLabel(self, self.prefix+chs_dict['Power'])
         lb_pwr.showUnits = True

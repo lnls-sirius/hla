@@ -23,11 +23,12 @@ class SSADetails(SiriusDialog):
         self.num = num
         self.system = system
         self.setObjectName(self.section+'App')
-        self.setWindowTitle(f'{self.section} SSA 0{self.num} Details')
         if self.section == 'SI':
             self.syst_dict = self.chs['SSADtls'][self.system]
+            self.setWindowTitle(f'{self.section} SSA 0{self.num} Details')
         else:
             self.syst_dict = self.chs['SSADtls']
+            self.setWindowTitle(f'{self.section} SSA Details')
         self._setupUi()
 
     def _setupUi(self):
@@ -50,8 +51,11 @@ class SSADetails(SiriusDialog):
         wid_graphs.setLayout(self._setupGraphsLay())
         dtls.addTab(wid_graphs, 'Graphs')
 
-        lay.addWidget(QLabel(
-            f'<h4>SSA 0{self.num} Details</h4>', alignment=Qt.AlignCenter))
+        if self.section == 'SI':
+            title = f'<h4>SSA 0{self.num} Details</h4>'
+        else:
+            title = '<h4>SSA Details</h4>'
+        lay.addWidget(QLabel(title, alignment=Qt.AlignCenter))
         lay.addWidget(dtls)
 
     def _setupDiagLay(self):
@@ -89,13 +93,13 @@ class SSADetails(SiriusDialog):
 
         # Pre Amp
         lb_preamp = SiriusLabel(
-            self, self.prefix+self.syst_dict[f'Pre Amp {self.num}'][0])
+            self, self.prefix+self.syst_dict[f'Pre Amp{self.num}'][0])
         lb_preamp.showUnits = True
         lay.addWidget(QLabel('Pre Amp', alignment=Qt.AlignRight), 4, 0)
         lay.addWidget(lb_preamp, 4, 1)
         lay.addWidget(QLabel('-', alignment=Qt.AlignCenter), 4, 2)
         lay.addWidget(SiriusLedAlert(
-            self, self.prefix+self.syst_dict[f'Pre Amp {self.num}'][1]),
+            self, self.prefix+self.syst_dict[f'Pre Amp{self.num}'][1]),
             4, 3, alignment=Qt.AlignCenter)
 
         # In and Out Pwr
@@ -120,7 +124,7 @@ class SSADetails(SiriusDialog):
         lay_alerts = QGridLayout()
         row_alerts = 0
         column = 0
-        for key, ls in self.syst_dict['Alerts'].items():
+        for _, ls in self.syst_dict['Alerts'].items():
             lay_alerts.addWidget(QLabel(ls[0]), row_alerts, column)
             lay_alerts.addWidget(SiriusLedAlert(
                 self, self.prefix+ls[1]), row_alerts, column+1)

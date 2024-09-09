@@ -1855,11 +1855,11 @@ SEC_2_CHANNELS = {
                     'Current': 'RA-To$(sys)0$(NB):RF-SSAMux-$(suffix):CurrentPos5V-Mon'
                 },
                 'Runtime': 'RA-To$(sys)0$(NB):RF-SSAmpTower:RunHour-Mon',
-                'Pre Amp 1': [
+                'Pre Amp1': [
                     'RA-Ra$(sys)01:RF-LLRFPreAmp-1:T1-Mon',
                     'RA-Ra$(sys)01:RF-LLRFPreAmp-1:T1Up-Mon',
                 ],
-                'Pre Amp 2': [
+                'Pre Amp2': [
                     'RA-Ra$(sys)01:RF-LLRFPreAmp-1:T2-Mon',
                     'RA-Ra$(sys)01:RF-LLRFPreAmp-1:T2Up-Mon',
                 ],
@@ -1896,16 +1896,59 @@ SEC_2_CHANNELS = {
                 }
             },
             'B': {
-                'Diag': {
-                    'Pre Amp 3': [
-                        'RA-Ra$(sys)01:RF-LLRFPreAmp-1:T1-Mon',
-                        'RA-Ra$(sys)01:RF-LLRFPreAmp-1:T1Up-Mon',
+                'Rack': {
+                    'Temp': 'RA-ToSIB0$(NB):RF-HeatSink-H0$(suffix):T-Mon',
+                    'Tms': 'RA-ToSIB0$(NB):RF-HeatSink-H0$(suffix):Tms-Mon',
+                    'PT-100': [
+                        'RA-ToSIB0$(NB):RF-HeatSink-H0$(suffix):TUp-Mon',
+                        'RA-ToSIB0$(NB):RF-HeatSink-H0$(suffix):TDown-Mon'
                     ],
-                    'Pre Amp 4': [
-                        'RA-Ra$(sys)01:RF-LLRFPreAmp-1:T2-Mon',
-                        'RA-Ra$(sys)01:RF-LLRFPreAmp-1:T2Up-Mon',
-                    ],
+                    'Status': 'RA-ToSIB0$(NB):RF-TDKSource-R$(suffix):StsAC-Mon',
+                    'Temp A': 'RA-ToSIB0$(NB):RF-SSAMux-$(suffix):TempA-Mon',
+                    'Temp B': 'RA-ToSIB0$(NB):RF-SSAMux-$(suffix):TempB-Mon',
+                    'Voltage': 'RA-ToSIB0$(NB):RF-SSAMux-$(suffix):VoltPos5V-Mon',
+                    'Current': 'RA-ToSIB0$(NB):RF-SSAMux-$(suffix):CurrentPos5V-Mon'
                 },
+                'Runtime': 'RA-ToSIB0$(NB):RF-SSAmpTower:RunHour-Mon',
+                'Pre Amp3': [
+                    'RA-RaSIB01:RF-LLRFPreAmp-1:T1-Mon',
+                    'RA-RaSIB01:RF-LLRFPreAmp-1:T1Up-Mon',
+                ],
+                'Pre Amp4': [
+                    'RA-RaSIB01:RF-LLRFPreAmp-1:T2-Mon',
+                    'RA-RaSIB01:RF-LLRFPreAmp-1:T2Up-Mon',
+                ],
+                'In Pwr Fwd': [
+                    'RA-ToSIB0$(NB):RF-SSAmpTower:PwrFwdIn-Mon',
+                    'RA-ToSIB0$(NB):RF-SSAmpTower:HwPwrFwdIn-Mon',
+                    'RA-ToSIB0$(NB):RF-SSAmpTower:PwrFwdInSts-Mon'
+                ],
+                'In Pwr Rev': [
+                    'RA-ToSIB0$(NB):RF-SSAmpTower:PwrRevIn-Mon',
+                    'RA-ToSIB0$(NB):RF-SSAmpTower:HwPwrRevIn-Mon',
+                    'RA-ToSIB0$(NB):RF-SSAmpTower:PwrRevInSts-Mon'
+                ],
+                'Out Pwr Fwd': [
+                    'RA-ToSIB0$(NB):RF-SSAmpTower:PwrFwdOut-Mon',
+                    'RA-ToSIB0$(NB):RF-SSAmpTower:HwPwrFwdOut-Mon',
+                    'RA-ToSIB0$(NB):RF-SSAmpTower:PwrFwdOutSts-Mon'
+                ],
+                'Out Pwr Rev': [
+                    'RA-ToSIB0$(NB):RF-SSAmpTower:PwrRevOut-Mon',
+                    'RA-ToSIB0$(NB):RF-SSAmpTower:HwPwrRevOut-Mon',
+                    'RA-ToSIB0$(NB):RF-SSAmpTower:PwrRevOutSts-Mon'
+                ],
+                'Alerts': {
+                    'PhsFlt': ['Phase Fault', 'RA-ToSIB0$(NB):RF-ACPanel:PhsFlt-Mon'],
+                    'SSAFlwRt': ['SSA Rotameter Flow', 'RA-ToSIB0$(NB):RF-SSAmpTower:HdFlwRt-Mon'],
+                    'LoadFlwRt': ['Load Rotameter Flow', 'RA-ToSIB0$(NB):RF-WaterLoad:HdFlwRt-Mon'],
+                    'PnlFeed': ['AC Panel Feedback', 'RA-ToSIB0$(NB):RF-ACPanel:Intlk-Mon'],
+                    'PnlIntlk': ['AC Panel Interlock', 'RA-ToSIB0$(NB):RF-Intlk:IntlkACPanel-Mon'],
+                    'PnlSts': ['AC Panel Status', 'RA-ToSIB0$(NB):RF-ACPanel:PwrACOp-Mon'],
+                    'ElecFuse': ['Electronic Fuse', 'RA-ToSIB0$(NB):RF-CtrlPanel:PwrSts-Mon'],
+                    'PwrSup': ['24V Power Supply', 'RA-ToSIB0$(NB):RF-ACPanel:StsPos24V-Mon'],
+                    'PwrIntlk': ['RF Power Interlock', 'RA-ToSIB0$(NB):RF-SSAmpTower:RFPwrSts-Mon'],
+                }
             }
         },
         'SL': {
