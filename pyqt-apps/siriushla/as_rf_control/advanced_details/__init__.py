@@ -6,4 +6,5 @@ from .conditioning import ConditioningDetails
 from .hardware import HardwareDetails
 from .loops import LoopsDetails
 from .ramps import RampsDetails
+from .ssa_currents import SSACurrentsDetails
 from .tuning import TuningDetails

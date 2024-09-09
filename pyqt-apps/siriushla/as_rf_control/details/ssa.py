@@ -1,12 +1,15 @@
 """SSA Details."""
 
+import qtawesome as qta
 from qtpy.QtCore import Qt
 from qtpy.QtGui import QColor
-from qtpy.QtWidgets import QCheckBox, QGridLayout, QLabel, \
+from qtpy.QtWidgets import QCheckBox, QGridLayout, QLabel, QPushButton, \
     QSizePolicy as QSzPlcy, QSpacerItem, QTabWidget, QVBoxLayout, QWidget
 
+from ...util import connect_window
 from ...widgets import PyDMLed, PyDMLedMultiChannel, SiriusDialog, \
     SiriusLabel, SiriusLedAlert, SiriusLedState, SiriusTimePlot
+from ..advanced_details import SSACurrentsDetails
 from ..util import SEC_2_CHANNELS
 
 
@@ -120,12 +123,23 @@ class SSADetails(SiriusDialog):
                 row_general, 3, alignment=Qt.AlignCenter)
             row_general += 1
 
+        # Currents
+        pb_curr = QPushButton(
+            qta.icon('fa5s.external-link-alt'), ' Currents', self)
+        connect_window(pb_curr, SSACurrentsDetails, parent=self,
+            prefix=self.prefix, section=self.section, num=self.num,
+            system=self.system)
+        pb_curr.setStyleSheet('min-width: 6em;')
+        lay.addWidget(pb_curr, row_general, 1)
+
+
         # Alerts
         lay_alerts = QGridLayout()
         row_alerts = 0
         column = 0
         for _, ls in self.syst_dict['Alerts'].items():
-            lay_alerts.addWidget(QLabel(ls[0]), row_alerts, column)
+            lay_alerts.addWidget(QLabel(ls[0], alignment=Qt.AlignCenter),
+                row_alerts, column)
             lay_alerts.addWidget(SiriusLedAlert(
                 self, self.prefix+ls[1]), row_alerts, column+1)
             column += 2

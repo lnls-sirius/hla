@@ -1951,6 +1951,26 @@ SEC_2_CHANNELS = {
                 }
             }
         },
+        'SSACurr': {
+            'A': {
+                'HeatSink': {
+                    'Curr': 'RA-To$(sys)0$(NB):RF-SSAmp-H0$(hs_num)$(letter)M0$(m_num):Current$(curr_num)-Mon',
+                    'Fwd Top': 'RA-To$(sys)0$(NB):RF-HeatSink-H0$(hs_num):PwrFwdTop-Mon',
+                    'Rev Top': 'RA-To$(sys)0$(NB):RF-HeatSink-H0$(hs_num):PwrRevTop-Mon',
+                    'Fwd Bot': 'RA-To$(sys)0$(NB):RF-HeatSink-H0$(hs_num):PwrFwdBot-Mon',
+                    'Rev Bot': 'RA-To$(sys)0$(NB):RF-HeatSink-H0$(hs_num):PwrRevBot-Mon'
+                },
+                'PreAmp': {
+
+                },
+                'Total': {
+                    
+                }
+            },
+            'B': {
+
+            }
+        },
         'SL': {
             'ErrDtls': {
                 'A': {
