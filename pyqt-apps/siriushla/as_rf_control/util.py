@@ -1883,6 +1883,17 @@ SEC_2_CHANNELS = {
                     'RA-To$(sys)0$(NB):RF-SSAmpTower:HwPwrRevOut-Mon',
                     'RA-To$(sys)0$(NB):RF-SSAmpTower:PwrRevOutSts-Mon'
                 ],
+                'Alerts': {
+                    'PhsFlt': ['Phase Fault', 'RA-To$(sys)0$(NB):RF-ACPanel:PhsFlt-Mon'],
+                    'SSAFlwRt': ['SSA Rotameter Flow', 'RA-To$(sys)0$(NB):RF-SSAmpTower:HdFlwRt-Mon'],
+                    'LoadFlwRt': ['Load Rotameter Flow', 'RA-To$(sys)0$(NB):RF-WaterLoad:HdFlwRt-Mon'],
+                    'PnlFeed': ['AC Panel Feedback', 'RA-To$(sys)0$(NB):RF-ACPanel:Intlk-Mon'],
+                    'PnlIntlk': ['AC Panel Interlock', 'RA-To$(sys)0$(NB):RF-Intlk:IntlkACPanel-Mon'],
+                    'PnlSts': ['AC Panel Status', 'RA-To$(sys)0$(NB):RF-ACPanel:PwrACOp-Mon'],
+                    'ElecFuse': ['Electronic Fuse', 'RA-To$(sys)0$(NB):RF-CtrlPanel:PwrSts-Mon'],
+                    'PwrSup': ['24V Power Supply', 'RA-To$(sys)0$(NB):RF-ACPanel:StsPos24V-Mon'],
+                    'PwrIntlk': ['RF Power Interlock', 'RA-To$(sys)0$(NB):RF-SSAmpTower:RFPwrSts-Mon'],
+                }
             },
             'B': {
                 'Diag': {
