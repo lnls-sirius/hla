@@ -129,9 +129,6 @@ class SSADetails(SiriusDialog):
                 lb, alignment=Qt.AlignCenter), i, 0)
             lay_other.addWidget(lb_val, i, 1, alignment=Qt.AlignCenter)
 
-        tab_wid.addTab(wid_other, 'Other')
-        lay.addWidget(tab_wid, 0, 0, 1, 2)
-
         # Status
         led_status = SiriusLedState(
             self, self._substitute_pv_macros(
@@ -139,9 +136,12 @@ class SSADetails(SiriusDialog):
         led_status.setOffColor(PyDMLed.LightGreen)
         led_status.setOnColor(PyDMLed.DarkGreen)
 
-        lay.addWidget(QLabel(
-            'Status AC', alignment=Qt.AlignCenter), 1, 0)
-        lay.addWidget(led_status, 1, 1, alignment=Qt.AlignCenter)
+        lay_other.addWidget(QLabel(
+            'Status AC', alignment=Qt.AlignCenter), i+1, 0)
+        lay_other.addWidget(led_status, i+1, 1, alignment=Qt.AlignCenter)
+
+        tab_wid.addTab(wid_other, 'Other')
+        lay.addWidget(tab_wid, 0, 0, 1, 2)
 
         return lay
 
