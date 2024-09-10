@@ -4,7 +4,7 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGridLayout, QLabel, QSizePolicy as QSzPlcy, \
     QSpacerItem, QTabWidget, QVBoxLayout, QWidget, QGroupBox
 
-from ...widgets import SiriusDialog, SiriusLabel
+from ...widgets import SiriusDialog, SiriusLabel, SiriusLedState
 from ..util import SEC_2_CHANNELS
 
 
@@ -21,6 +21,7 @@ class SSACurrentsDetails(SiriusDialog):
         self.num = num
         self.system = system
         self.setObjectName(self.section+'App')
+        self.curr_pvs = {}
         if self.section == 'SI':
             self.syst_dict = self.chs['SSACurr'][self.system]
             self.title = f'SSA 0{self.num} Currents Details'
@@ -77,16 +78,16 @@ class SSACurrentsDetails(SiriusDialog):
                     gbox_preamp = QGroupBox('Pre Amplifiers')
                     gbox_preamp.setLayout(self._setupPreAmpLay(self.syst_dict['PreAmp']))
                     lay.addWidget(gbox_preamp, row, column)
-                else:
-                    gbox_total = QGroupBox('Total Current')
-                    gbox_total.setLayout(self._setupTotalLay(self.syst_dict['Total']))
-                    lay.addWidget(gbox_total, row, column)
                 column += 1
             elif column == 5:
                 lay.addItem(QSpacerItem(
                     0, 9, QSzPlcy.Ignored, QSzPlcy.Fixed), row+1, 0)
                 column = 0
                 row += 2
+
+        gbox_total = QGroupBox('Total Current')
+        gbox_total.setLayout(self._setupTotalLay(self.syst_dict['Total']))
+        lay.addWidget(gbox_total, 2, 2)
 
         return lay
 
@@ -104,18 +105,29 @@ class SSACurrentsDetails(SiriusDialog):
             '<h4>B</h4>', alignment=Qt.AlignCenter), 1, 3, 1, 2)
 
         for i in range(1, 9):
-            base_pv = self.prefix+chs_dict['Curr']
-            lb_a_1 = SiriusLabel(self, self._substitute_macros(
-                base_pv, hs_num, 'A', i, 1))
+            pv_a_1 = self._substitute_macros(
+                self.prefix+chs_dict['Curr'], hs_num, 'A', i, 1)
+            pv_a_2 = self._substitute_macros(
+                self.prefix+chs_dict['Curr'], hs_num, 'A', i, 2)
+            pv_b_1 = self._substitute_macros(
+                self.prefix+chs_dict['Curr'], hs_num, 'B', i, 1)
+            pv_b_2 = self._substitute_macros(
+                self.prefix+chs_dict['Curr'], hs_num, 'A', i, 2)
+            if i == 1:
+                self.curr_pvs[hs_num] = [pv_a_1, pv_a_2, pv_b_1, pv_b_2]
+            else:
+                self.curr_pvs[hs_num].append(pv_a_1)
+                self.curr_pvs[hs_num].append(pv_a_2)
+                self.curr_pvs[hs_num].append(pv_b_1)
+                self.curr_pvs[hs_num].append(pv_b_2)
+
+            lb_a_1 = SiriusLabel(self, pv_a_1)
             lb_a_1.showUnits = True
-            lb_a_2 = SiriusLabel(self, self._substitute_macros(
-                base_pv, hs_num, 'A', i, 2))
+            lb_a_2 = SiriusLabel(self, pv_a_2)
             lb_a_2.showUnits = True
-            lb_b_1 = SiriusLabel(self, self._substitute_macros(
-                base_pv, hs_num, 'B', i, 1))
+            lb_b_1 = SiriusLabel(self, pv_b_1)
             lb_b_1.showUnits = True
-            lb_b_2 = SiriusLabel(self, self._substitute_macros(
-                base_pv, hs_num, 'B', i, 2))
+            lb_b_2 = SiriusLabel(self, pv_b_2)
             lb_b_2.showUnits = True
 
             if row_label == 'left':
@@ -133,15 +145,124 @@ class SSACurrentsDetails(SiriusDialog):
 
     def _setupPreAmpLay(self, chs_dict):
         lay = QGridLayout()
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignVCenter)
         lay.setSpacing(9)
+
+        row = 0
+        column = 0
+        for i in range(2, 9, 2):
+            # Heat Sinks
+            lb_1 = SiriusLabel(self, self._substitute_macros(
+                self.prefix+chs_dict['HS'], i, curr_num='1'))
+            lb_1.showUnits = True
+            lb_2 = SiriusLabel(self, self._substitute_macros(
+                self.prefix+chs_dict['HS'], i, curr_num='2'))
+            lb_2.showUnits = True
+
+            lay.addWidget(QLabel(
+                f'<h4>Heat Sink {i}</h4>', alignment=Qt.AlignCenter),
+                row, column)
+            lay.addWidget(lb_1, row+1, column)
+            lay.addWidget(lb_2, row+2, column)
+
+            column += 1
+            if column == 1:
+                if row == 0:
+                    # Pre Amp
+                    lb_1 = SiriusLabel(self, self._substitute_macros(
+                        self.prefix+chs_dict['PreAmp'], curr_num='1'))
+                    lb_1.showUnits = True
+                    lb_2 = SiriusLabel(self, self._substitute_macros(
+                        self.prefix+chs_dict['HS'], curr_num='2'))
+                    lb_2.showUnits = True
+
+                    lay.addWidget(QLabel(
+                        '<h4>PreAmp</h4>', alignment=Qt.AlignCenter),
+                        row, column)
+                    lay.addWidget(lb_1, row+1, column)
+                    lay.addWidget(lb_2, row+2, column)
+                    column += 1
+                else:
+                    # TDK Source
+                    lay.addWidget(QLabel(
+                        '<h4>TDK Source</h4>', alignment=Qt.AlignCenter),
+                        row, column)
+                    lay.addWidget(SiriusLedState(
+                        self, self._substitute_macros(
+                            self.prefix+chs_dict['TDK'])), row+1, column,
+                            alignment=Qt.AlignCenter)
+                    column += 1
+
+            if column > 2:
+                row += 3
+                column = 0
 
         return lay
 
     def _setupTotalLay(self, chs_dict):
         lay = QGridLayout()
-        lay.setAlignment(Qt.AlignTop)
+        lay.setAlignment(Qt.AlignVCenter)
         lay.setSpacing(9)
+
+        row = 0
+        column = 0
+        hs_nums = {
+            1: [1, 2],
+            2: [3, 4],
+            3: [5, 6],
+            4: [7, 8]
+        }
+
+        # Racks 1 to 4
+        for i in range(1, 5):
+            sum_expr = '"ch[0] + '
+            for j in range(1, 63):
+                sum_expr += f'ch[{j}] + '
+            sum_expr += 'ch[63]"'
+
+            lb_total = SiriusLabel(self)
+            lb_total.showUnits = True
+            rule = ('[{"name": "TextRule", "property": "Text", ' +
+                    '"expression": ' + sum_expr + ', ' +
+                    '"channels": [')
+
+            for num in hs_nums[i]:
+                for j in range(len(self.curr_pvs[num])):
+                    rule += ('{"channel":} ' +
+                        self.curr_pvs[num][j] + ', "trigger": true}')
+            rule += ']}]'
+            lb_total.rules = rule
+
+            lay.addWidget(QLabel(
+                f'<h4>Rack {i}</h4>', alignment=Qt.AlignCenter), row, column)
+            lay.addWidget(lb_total, row+1, column)
+            column += 2
+            if column > 2:
+                row += 2
+                column = 0
+
+        # Total
+        sum_expr = '"ch[0] + '
+        for i in range(1, 255):
+            sum_expr += f'ch[{i}] + '
+        sum_expr += 'ch[255]"'
+
+        lb_total = SiriusLabel(self)
+        lb_total.showUnits = True
+        rule = ('[{"name": "TextRule", "property": "Text", ' +
+                '"expression": ' + sum_expr + ', ' +
+                '"channels": [')
+        for i in range(1, 5):
+            for num in hs_nums[i]:
+                for j in range(len(self.curr_pvs[num])):
+                    rule += ('{"channel":} ' +
+                        self.curr_pvs[num][j] + ', "trigger": true}')
+        rule += ']}]'
+        lb_total.rules = rule
+
+        lay.addWidget(QLabel(
+            '<h4>Total</h4>', alignment=Qt.AlignCenter), row, 1)
+        lay.addWidget(lb_total, row+1, 1, alignment=Qt.AlignCenter)
 
         return lay
 

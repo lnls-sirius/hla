@@ -1961,10 +1961,12 @@ SEC_2_CHANNELS = {
                     'Rev Bot': 'RA-To$(sys)0$(NB):RF-HeatSink-H0$(hs_num):PwrRevBot-Mon'
                 },
                 'PreAmp': {
-
+                    'HS': 'RA-To$(sys)0$(NB):RF-SSAmp-H0$(hs_num)PreAmp:Current$(curr_num)-Mon',
+                    'PreAmp': 'RA-To$(sys)0$(NB):RF-SSAmp-H0$(PREP)PreAmp:Current$(curr_num)-Mon',
+                    'TDK': 'RA-To$(sys)0$(NB):RF-SSAmpTower:PwrDCR1-Mon'
                 },
                 'Total': {
-                    
+
                 }
             },
             'B': {
