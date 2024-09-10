@@ -1842,57 +1842,57 @@ SEC_2_CHANNELS = {
         'SSADtls': {
             'A': {
                 'Rack': {
-                    'Temp': 'RA-To$(sys)0$(NB):RF-HeatSink-H0$(suffix):T-Mon',
-                    'Tms': 'RA-To$(sys)0$(NB):RF-HeatSink-H0$(suffix):Tms-Mon',
+                    'Temp': 'RA-ToSIA0$(NB):RF-HeatSink-H0$(suffix):T-Mon',
+                    'Tms': 'RA-ToSIA0$(NB):RF-HeatSink-H0$(suffix):Tms-Mon',
                     'PT-100': [
-                        'RA-To$(sys)0$(NB):RF-HeatSink-H0$(suffix):TUp-Mon',
-                        'RA-To$(sys)0$(NB):RF-HeatSink-H0$(suffix):TDown-Mon'
+                        'RA-ToSIA0$(NB):RF-HeatSink-H0$(suffix):TUp-Mon',
+                        'RA-ToSIA0$(NB):RF-HeatSink-H0$(suffix):TDown-Mon'
                     ],
-                    'Status': 'RA-To$(sys)0$(NB):RF-TDKSource-R$(suffix):StsAC-Mon',
-                    'Temp A': 'RA-To$(sys)0$(NB):RF-SSAMux-$(suffix):TempA-Mon',
-                    'Temp B': 'RA-To$(sys)0$(NB):RF-SSAMux-$(suffix):TempB-Mon',
-                    'Voltage': 'RA-To$(sys)0$(NB):RF-SSAMux-$(suffix):VoltPos5V-Mon',
-                    'Current': 'RA-To$(sys)0$(NB):RF-SSAMux-$(suffix):CurrentPos5V-Mon'
+                    'Status': 'RA-ToSIA0$(NB):RF-TDKSource-R$(suffix):StsAC-Mon',
+                    'Temp A': 'RA-ToSIA0$(NB):RF-SSAMux-$(suffix):TempA-Mon',
+                    'Temp B': 'RA-ToSIA0$(NB):RF-SSAMux-$(suffix):TempB-Mon',
+                    'Voltage': 'RA-ToSIA0$(NB):RF-SSAMux-$(suffix):VoltPos5V-Mon',
+                    'Current': 'RA-ToSIA0$(NB):RF-SSAMux-$(suffix):CurrentPos5V-Mon'
                 },
-                'Runtime': 'RA-To$(sys)0$(NB):RF-SSAmpTower:RunHour-Mon',
+                'Runtime': 'RA-ToSIA0$(NB):RF-SSAmpTower:RunHour-Mon',
                 'Pre Amp1': [
-                    'RA-Ra$(sys)01:RF-LLRFPreAmp-1:T1-Mon',
-                    'RA-Ra$(sys)01:RF-LLRFPreAmp-1:T1Up-Mon',
+                    'RA-RoSIA01:RF-LLRFPreAmp-1:T1-Mon',
+                    'RA-RoSIA01:RF-LLRFPreAmp-1:T1Up-Mon',
                 ],
                 'Pre Amp2': [
-                    'RA-Ra$(sys)01:RF-LLRFPreAmp-1:T2-Mon',
-                    'RA-Ra$(sys)01:RF-LLRFPreAmp-1:T2Up-Mon',
+                    'RA-RoSIA01:RF-LLRFPreAmp-1:T2-Mon',
+                    'RA-RoSIA01:RF-LLRFPreAmp-1:T2Up-Mon',
                 ],
                 'In Pwr Fwd': [
-                    'RA-To$(sys)0$(NB):RF-SSAmpTower:PwrFwdIn-Mon',
-                    'RA-To$(sys)0$(NB):RF-SSAmpTower:HwPwrFwdIn-Mon',
-                    'RA-To$(sys)0$(NB):RF-SSAmpTower:PwrFwdInSts-Mon'
+                    'RA-ToSIA0$(NB):RF-SSAmpTower:PwrFwdIn-Mon',
+                    'RA-ToSIA0$(NB):RF-SSAmpTower:HwPwrFwdIn-Mon',
+                    'RA-ToSIA0$(NB):RF-SSAmpTower:PwrFwdInSts-Mon'
                 ],
                 'In Pwr Rev': [
-                    'RA-To$(sys)0$(NB):RF-SSAmpTower:PwrRevIn-Mon',
-                    'RA-To$(sys)0$(NB):RF-SSAmpTower:HwPwrRevIn-Mon',
-                    'RA-To$(sys)0$(NB):RF-SSAmpTower:PwrRevInSts-Mon'
+                    'RA-ToSIA0$(NB):RF-SSAmpTower:PwrRevIn-Mon',
+                    'RA-ToSIA0$(NB):RF-SSAmpTower:HwPwrRevIn-Mon',
+                    'RA-ToSIA0$(NB):RF-SSAmpTower:PwrRevInSts-Mon'
                 ],
                 'Out Pwr Fwd': [
-                    'RA-To$(sys)0$(NB):RF-SSAmpTower:PwrFwdOut-Mon',
-                    'RA-To$(sys)0$(NB):RF-SSAmpTower:HwPwrFwdOut-Mon',
-                    'RA-To$(sys)0$(NB):RF-SSAmpTower:PwrFwdOutSts-Mon'
+                    'RA-ToSIA0$(NB):RF-SSAmpTower:PwrFwdOut-Mon',
+                    'RA-ToSIA0$(NB):RF-SSAmpTower:HwPwrFwdOut-Mon',
+                    'RA-ToSIA0$(NB):RF-SSAmpTower:PwrFwdOutSts-Mon'
                 ],
                 'Out Pwr Rev': [
-                    'RA-To$(sys)0$(NB):RF-SSAmpTower:PwrRevOut-Mon',
-                    'RA-To$(sys)0$(NB):RF-SSAmpTower:HwPwrRevOut-Mon',
-                    'RA-To$(sys)0$(NB):RF-SSAmpTower:PwrRevOutSts-Mon'
+                    'RA-ToSIA0$(NB):RF-SSAmpTower:PwrRevOut-Mon',
+                    'RA-ToSIA0$(NB):RF-SSAmpTower:HwPwrRevOut-Mon',
+                    'RA-ToSIA0$(NB):RF-SSAmpTower:PwrRevOutSts-Mon'
                 ],
                 'Alerts': {
-                    'PhsFlt': ['Phase Fault', 'RA-To$(sys)0$(NB):RF-ACPanel:PhsFlt-Mon'],
-                    'SSAFlwRt': ['SSA Rotameter Flow', 'RA-To$(sys)0$(NB):RF-SSAmpTower:HdFlwRt-Mon'],
-                    'LoadFlwRt': ['Load Rotameter Flow', 'RA-To$(sys)0$(NB):RF-WaterLoad:HdFlwRt-Mon'],
-                    'PnlFeed': ['AC Panel Feedback', 'RA-To$(sys)0$(NB):RF-ACPanel:Intlk-Mon'],
-                    'PnlIntlk': ['AC Panel Interlock', 'RA-To$(sys)0$(NB):RF-Intlk:IntlkACPanel-Mon'],
-                    'PnlSts': ['AC Panel Status', 'RA-To$(sys)0$(NB):RF-ACPanel:PwrACOp-Mon'],
-                    'ElecFuse': ['Electronic Fuse', 'RA-To$(sys)0$(NB):RF-CtrlPanel:PwrSts-Mon'],
-                    'PwrSup': ['24V Power Supply', 'RA-To$(sys)0$(NB):RF-ACPanel:StsPos24V-Mon'],
-                    'PwrIntlk': ['RF Power Interlock', 'RA-To$(sys)0$(NB):RF-SSAmpTower:RFPwrSts-Mon'],
+                    'PhsFlt': ['Phase Fault', 'RA-ToSIA0$(NB):RF-ACPanel:PhsFlt-Mon'],
+                    'SSAFlwRt': ['SSA Rotameter Flow', 'RA-ToSIA0$(NB):RF-SSAmpTower:HdFlwRt-Mon'],
+                    'LoadFlwRt': ['Load Rotameter Flow', 'RA-ToSIA0$(NB):RF-WaterLoad:HdFlwRt-Mon'],
+                    'PnlFeed': ['AC Panel Feedback', 'RA-ToSIA0$(NB):RF-ACPanel:Intlk-Mon'],
+                    'PnlIntlk': ['AC Panel Interlock', 'RA-ToSIA0$(NB):RF-Intlk:IntlkACPanel-Mon'],
+                    'PnlSts': ['AC Panel Status', 'RA-ToSIA0$(NB):RF-ACPanel:PwrACOp-Mon'],
+                    'ElecFuse': ['Electronic Fuse', 'RA-ToSIA0$(NB):RF-CtrlPanel:PwrSts-Mon'],
+                    'PwrSup': ['24V Power Supply', 'RA-ToSIA0$(NB):RF-ACPanel:StsPos24V-Mon'],
+                    'PwrIntlk': ['RF Power Interlock', 'RA-ToSIA0$(NB):RF-SSAmpTower:RFPwrSts-Mon'],
                 }
             },
             'B': {
@@ -1954,50 +1954,91 @@ SEC_2_CHANNELS = {
         'SSACurr': {
             'A': {
                 'HeatSink': {
-                    'Curr': 'RA-To$(sys)0$(NB):RF-SSAmp-H0$(hs_num)$(letter)M0$(m_num):Current$(curr_num)-Mon',
-                    'Fwd Top': 'RA-To$(sys)0$(NB):RF-HeatSink-H0$(hs_num):PwrFwdTop-Mon',
-                    'Rev Top': 'RA-To$(sys)0$(NB):RF-HeatSink-H0$(hs_num):PwrRevTop-Mon',
-                    'Fwd Bot': 'RA-To$(sys)0$(NB):RF-HeatSink-H0$(hs_num):PwrFwdBot-Mon',
-                    'Rev Bot': 'RA-To$(sys)0$(NB):RF-HeatSink-H0$(hs_num):PwrRevBot-Mon'
+                    'Curr': 'RA-ToSIA0$(NB):RF-SSAmp-H0$(hs_num)$(letter)M0$(m_num):Current$(curr_num)-Mon',
+                    'Fwd Top': 'RA-ToSIA0$(NB):RF-HeatSink-H0$(hs_num):PwrFwdTop-Mon',
+                    'Rev Top': 'RA-ToSIA0$(NB):RF-HeatSink-H0$(hs_num):PwrRevTop-Mon',
+                    'Fwd Bot': 'RA-ToSIA0$(NB):RF-HeatSink-H0$(hs_num):PwrFwdBot-Mon',
+                    'Rev Bot': 'RA-ToSIA0$(NB):RF-HeatSink-H0$(hs_num):PwrRevBot-Mon'
                 },
                 'PreAmp': {
-                    'HS': 'RA-To$(sys)0$(NB):RF-SSAmp-H0$(hs_num)PreAmp:Current$(curr_num)-Mon',
-                    'PreAmp': 'RA-To$(sys)0$(NB):RF-SSAmp-H05PreAmp:Current$(curr_num)-Mon',
-                    'TDK': 'RA-To$(sys)0$(NB):RF-SSAmpTower:PwrDCR1-Mon'
+                    'HS': 'RA-ToSIA0$(NB):RF-SSAmp-H0$(hs_num)PreAmp:Current$(curr_num)-Mon',
+                    'PreAmp': 'RA-ToSIA0$(NB):RF-SSAmp-H05PreAmp:Current$(curr_num)-Mon',
+                    'TDK': 'RA-ToSIA0$(NB):RF-SSAmpTower:PwrDCR1-Mon'
                 },
                 'Offsets': {
-                    'FwdPwrTop': ['Forward Power - Top', 'RA-To$(sys)0$(NB):OffsetConfig:UpperIncidentPower'],
-                    'RevPwrTop': ['Reverse Power - Top', 'RA-To$(sys)0$(NB):OffsetConfig:UpperReflectedPower'],
-                    'FwdPwrBot': ['Forward Power - Bottom', 'RA-To$(sys)0$(NB):OffsetConfig:LowerIncidentPower'],
-                    'RevPwrBot': ['Reverse Power - Bottom', 'RA-To$(sys)0$(NB):OffsetConfig:LowerReflectedPower'],
+                    'FwdPwrTop': ['Forward Power - Top', 'RA-ToSIA0$(NB):OffsetConfig:UpperIncidentPower'],
+                    'RevPwrTop': ['Reverse Power - Top', 'RA-ToSIA0$(NB):OffsetConfig:UpperReflectedPower'],
+                    'FwdPwrBot': ['Forward Power - Bottom', 'RA-ToSIA0$(NB):OffsetConfig:LowerIncidentPower'],
+                    'RevPwrBot': ['Reverse Power - Bottom', 'RA-ToSIA0$(NB):OffsetConfig:LowerReflectedPower'],
                 },
-                'RacksTotal': 'RA-To$(sys)0$(NB):RF-SSAMux-$(rack_num):DCCurrent-Mon',
+                'RacksTotal': 'RA-ToSIA0$(NB):RF-SSAMux-$(rack_num):DCCurrent-Mon',
                 'Alarms': {
                     'General': {
                         'Label': 'General Power',
-                        'HIHI': 'RA-To$(sys)0$(NB):AlarmConfig:GeneralPowerLimHiHi',
-                        'HIGH': 'RA-To$(sys)0$(NB):AlarmConfig:GeneralPowerLimHigh',
-                        'LOW': 'RA-To$(sys)0$(NB):AlarmConfig:GeneralPowerLimLow',
-                        'LOLO': 'RA-To$(sys)0$(NB):AlarmConfig:GeneralPowerLimLoLo',
+                        'HIHI': 'RA-ToSIA0$(NB):AlarmConfig:GeneralPowerLimHiHi',
+                        'HIGH': 'RA-ToSIA0$(NB):AlarmConfig:GeneralPowerLimHigh',
+                        'LOW': 'RA-ToSIA0$(NB):AlarmConfig:GeneralPowerLimLow',
+                        'LOLO': 'RA-ToSIA0$(NB):AlarmConfig:GeneralPowerLimLoLo',
                     },
                     'Inter': {
                         'Label': 'Intermediary Power',
-                        'HIHI': 'RA-To$(sys)0$(NB):AlarmConfig:InnerPowerLimHiHi',
-                        'HIGH': 'RA-To$(sys)0$(NB):AlarmConfig:InnerPowerLimHigh',
-                        'LOW': 'RA-To$(sys)0$(NB):AlarmConfig:InnerPowerLimLow',
-                        'LOLO': 'RA-To$(sys)0$(NB):AlarmConfig:InnerPowerLimLoLo',
+                        'HIHI': 'RA-ToSIA0$(NB):AlarmConfig:InnerPowerLimHiHi',
+                        'HIGH': 'RA-ToSIA0$(NB):AlarmConfig:InnerPowerLimHigh',
+                        'LOW': 'RA-ToSIA0$(NB):AlarmConfig:InnerPowerLimLow',
+                        'LOLO': 'RA-ToSIA0$(NB):AlarmConfig:InnerPowerLimLoLo',
                     },
                     'High': {
                         'Label': 'Current - High Limit',
-                        'HIHI': 'RA-To$(sys)0$(NB):AlarmConfig:CurrentLimHiHi',
-                        'HIGH': 'RA-To$(sys)0$(NB):AlarmConfig:CurrentLimHigh',
-                        'LOW': 'RA-To$(sys)0$(NB):AlarmConfig:CurrentLimLow',
-                        'LOLO': 'RA-To$(sys)0$(NB):AlarmConfig:CurrentLimLoLo',
+                        'HIHI': 'RA-ToSIA0$(NB):AlarmConfig:CurrentLimHiHi',
+                        'HIGH': 'RA-ToSIA0$(NB):AlarmConfig:CurrentLimHigh',
+                        'LOW': 'RA-ToSIA0$(NB):AlarmConfig:CurrentLimLow',
+                        'LOLO': 'RA-ToSIA0$(NB):AlarmConfig:CurrentLimLoLo',
                     },
                 }
             },
             'B': {
-
+                'HeatSink': {
+                    'Curr': 'RA-ToSIB0$(NB):RF-SSAmp-H0$(hs_num)$(letter)M0$(m_num):Current$(curr_num)-Mon',
+                    'Fwd Top': 'RA-ToSIB0$(NB):RF-HeatSink-H0$(hs_num):PwrFwdTop-Mon',
+                    'Rev Top': 'RA-ToSIB0$(NB):RF-HeatSink-H0$(hs_num):PwrRevTop-Mon',
+                    'Fwd Bot': 'RA-ToSIB0$(NB):RF-HeatSink-H0$(hs_num):PwrFwdBot-Mon',
+                    'Rev Bot': 'RA-ToSIB0$(NB):RF-HeatSink-H0$(hs_num):PwrRevBot-Mon'
+                },
+                'PreAmp': {
+                    'HS': 'RA-ToSIB0$(NB):RF-SSAmp-H0$(hs_num)PreAmp:Current$(curr_num)-Mon',
+                    'PreAmp': 'RA-ToSIB0$(NB):RF-SSAmp-H05PreAmp:Current$(curr_num)-Mon',
+                    'TDK': 'RA-ToSIB0$(NB):RF-SSAmpTower:PwrDCR1-Mon'
+                },
+                'Offsets': {
+                    'FwdPwrTop': ['Forward Power - Top', 'RA-ToSIB0$(NB):OffsetConfig:UpperIncidentPower'],
+                    'RevPwrTop': ['Reverse Power - Top', 'RA-ToSIB0$(NB):OffsetConfig:UpperReflectedPower'],
+                    'FwdPwrBot': ['Forward Power - Bottom', 'RA-ToSIB0$(NB):OffsetConfig:LowerIncidentPower'],
+                    'RevPwrBot': ['Reverse Power - Bottom', 'RA-ToSIB0$(NB):OffsetConfig:LowerReflectedPower'],
+                },
+                'RacksTotal': 'RA-ToSIB0$(NB):RF-SSAMux-$(rack_num):DCCurrent-Mon',
+                'Alarms': {
+                    'General': {
+                        'Label': 'General Power',
+                        'HIHI': 'RA-ToSIB0$(NB):AlarmConfig:GeneralPowerLimHiHi',
+                        'HIGH': 'RA-ToSIB0$(NB):AlarmConfig:GeneralPowerLimHigh',
+                        'LOW': 'RA-ToSIB0$(NB):AlarmConfig:GeneralPowerLimLow',
+                        'LOLO': 'RA-ToSIB0$(NB):AlarmConfig:GeneralPowerLimLoLo',
+                    },
+                    'Inter': {
+                        'Label': 'Intermediary Power',
+                        'HIHI': 'RA-ToSIB0$(NB):AlarmConfig:InnerPowerLimHiHi',
+                        'HIGH': 'RA-ToSIB0$(NB):AlarmConfig:InnerPowerLimHigh',
+                        'LOW': 'RA-ToSIB0$(NB):AlarmConfig:InnerPowerLimLow',
+                        'LOLO': 'RA-ToSIB0$(NB):AlarmConfig:InnerPowerLimLoLo',
+                    },
+                    'High': {
+                        'Label': 'Current - High Limit',
+                        'HIHI': 'RA-ToSIB0$(NB):AlarmConfig:CurrentLimHiHi',
+                        'HIGH': 'RA-ToSIB0$(NB):AlarmConfig:CurrentLimHigh',
+                        'LOW': 'RA-ToSIB0$(NB):AlarmConfig:CurrentLimLow',
+                        'LOLO': 'RA-ToSIB0$(NB):AlarmConfig:CurrentLimLoLo',
+                    },
+                }
             }
         },
         'SL': {

@@ -206,12 +206,6 @@ class SSACurrentsDetails(SiriusDialog):
 
         row = 0
         column = 0
-        hs_nums = {
-            1: [1, 2],
-            2: [3, 4],
-            3: [5, 6],
-            4: [7, 8]
-        }
 
         # Racks 1 to 4
         total_pvs = []
