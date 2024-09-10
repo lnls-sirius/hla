@@ -152,6 +152,8 @@ class SSACurrentsDetails(SiriusDialog):
         column = 0
         for i in range(2, 9, 2):
             # Heat Sinks
+            label = QLabel(f'<h4>Heat Sink {i}</h4>', alignment=Qt.AlignCenter)
+            label.setStyleSheet("min-width:6em;")
             lb_1 = SiriusLabel(self, self._substitute_macros(
                 self.prefix+chs_dict['HS'], i, curr_num='1'))
             lb_1.showUnits = True
@@ -159,9 +161,7 @@ class SSACurrentsDetails(SiriusDialog):
                 self.prefix+chs_dict['HS'], i, curr_num='2'))
             lb_2.showUnits = True
 
-            lay.addWidget(QLabel(
-                f'<h4>Heat Sink {i}</h4>', alignment=Qt.AlignCenter),
-                row, column)
+            lay.addWidget(label, row, column)
             lay.addWidget(lb_1, row+1, column)
             lay.addWidget(lb_2, row+2, column)
 
@@ -169,6 +169,8 @@ class SSACurrentsDetails(SiriusDialog):
             if column == 1:
                 if row == 0:
                     # Pre Amp
+                    label = QLabel('<h4>PreAmp</h4>', alignment=Qt.AlignCenter)
+                    label.setStyleSheet("min-width:6em;")
                     lb_1 = SiriusLabel(self, self._substitute_macros(
                         self.prefix+chs_dict['PreAmp'], curr_num='1'))
                     lb_1.showUnits = True
@@ -176,17 +178,17 @@ class SSACurrentsDetails(SiriusDialog):
                         self.prefix+chs_dict['HS'], curr_num='2'))
                     lb_2.showUnits = True
 
-                    lay.addWidget(QLabel(
-                        '<h4>PreAmp</h4>', alignment=Qt.AlignCenter),
-                        row, column)
+                    lay.addWidget(label, row, column)
                     lay.addWidget(lb_1, row+1, column)
                     lay.addWidget(lb_2, row+2, column)
                     column += 1
                 else:
                     # TDK Source
-                    lay.addWidget(QLabel(
-                        '<h4>TDK Source</h4>', alignment=Qt.AlignCenter),
-                        row, column)
+                    label = QLabel(
+                        '<h4>TDK Source</h4>', alignment=Qt.AlignCenter)
+                    label.setStyleSheet("min-width:6em;")
+
+                    lay.addWidget(label, row, column)
                     lay.addWidget(SiriusLedState(
                         self, self._substitute_macros(
                             self.prefix+chs_dict['TDK'])), row+1, column,
