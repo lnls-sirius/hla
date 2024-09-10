@@ -1971,6 +1971,7 @@ SEC_2_CHANNELS = {
                     'FwdPwrBot': ['Forward Power - Bottom', 'RA-To$(sys)0$(NB):OffsetConfig:LowerIncidentPower'],
                     'RevPwrBot': ['Reverse Power - Bottom', 'RA-To$(sys)0$(NB):OffsetConfig:LowerReflectedPower'],
                 },
+                'RacksTotal': 'RA-To$(sys)0$(NB):RF-SSAMux-$(rack_num):DCCurrent-Mon',
                 'Alarms': {
                     'General': {
                         'Label': 'General Power',

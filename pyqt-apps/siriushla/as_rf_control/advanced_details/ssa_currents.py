@@ -214,24 +214,12 @@ class SSACurrentsDetails(SiriusDialog):
         }
 
         # Racks 1 to 4
+        total_pvs = []
         for i in range(1, 5):
-            sum_expr = '"ch[0] + '
-            for j in range(1, 63):
-                sum_expr += f'ch[{j}] + '
-            sum_expr += 'ch[63]"'
-
-            lb_total = SiriusLabel(self)
+            total_pvs.append(self._substitute_macros(
+                self.prefix+self.syst_dict['RacksTotal'], rack_num=i))
+            lb_total = SiriusLabel(self, total_pvs[-1])
             lb_total.showUnits = True
-            rule = ('[{"name": "TextRule", "property": "Text", ' +
-                    '"expression": ' + sum_expr + ', ' +
-                    '"channels": [')
-
-            for num in hs_nums[i]:
-                for j in range(len(self.curr_pvs[num])):
-                    rule += ('{"channel":} ' +
-                        self.curr_pvs[num][j] + ', "trigger": true}')
-            rule += ']}]'
-            lb_total.rules = rule
 
             lay.addWidget(QLabel(
                 f'<h4>Rack {i}</h4>', alignment=Qt.AlignCenter), row, column)
@@ -243,20 +231,17 @@ class SSACurrentsDetails(SiriusDialog):
 
         # Total
         sum_expr = '"ch[0] + '
-        for i in range(1, 255):
+        for i in range(1, 4):
             sum_expr += f'ch[{i}] + '
-        sum_expr += 'ch[255]"'
+        sum_expr += 'ch[4]"'
 
         lb_total = SiriusLabel(self)
         lb_total.showUnits = True
         rule = ('[{"name": "TextRule", "property": "Text", ' +
-                '"expression": ' + sum_expr + ', ' +
+                '"expression": ' + '"ch[0] + ch[1] + ch[2] + ch[3]", ' +
                 '"channels": [')
-        for i in range(1, 5):
-            for num in hs_nums[i]:
-                for j in range(len(self.curr_pvs[num])):
-                    rule += ('{"channel":} ' +
-                        self.curr_pvs[num][j] + ', "trigger": true}')
+        for pv in total_pvs:
+            rule += ('{"channel": ' + pv + ', "trigger": true}, ')
         rule += ']}]'
         lb_total.rules = rule
 
@@ -316,7 +301,8 @@ class SSACurrentsDetails(SiriusDialog):
 
         return lay
 
-    def _substitute_macros(self, pv_name, hs_num='', letter='', m_num='', curr_num=''):
+    def _substitute_macros(self, pv_name, hs_num='', letter='', m_num='',
+    curr_num='', rack_num=''):
         pv_name = pv_name.replace('$(NB)', str(self.num))
         if hs_num:
             pv_name = pv_name.replace('$(hs_num)', str(hs_num))
@@ -326,4 +312,6 @@ class SSACurrentsDetails(SiriusDialog):
             pv_name = pv_name.replace('$(m_num)', str(m_num))
         if curr_num:
             pv_name = pv_name.replace('$(curr_num)', str(curr_num))
+        if rack_num:
+            pv_name = pv_name.replace('$(rack_num)', str(rack_num))
         return pv_name
