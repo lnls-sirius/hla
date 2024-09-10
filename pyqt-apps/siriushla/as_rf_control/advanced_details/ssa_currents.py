@@ -2,9 +2,9 @@
 
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGridLayout, QLabel, QSizePolicy as QSzPlcy, \
-    QSpacerItem, QTabWidget, QVBoxLayout, QWidget, QGroupBox
+    QSpacerItem, QTabWidget, QVBoxLayout, QWidget, QGroupBox, QHBoxLayout
 
-from ...widgets import SiriusDialog, SiriusLabel, SiriusLedState
+from ...widgets import SiriusDialog, SiriusLabel, SiriusLedState, SiriusSpinbox
 from ..util import SEC_2_CHANNELS
 
 
@@ -47,9 +47,9 @@ class SSACurrentsDetails(SiriusDialog):
         wid_diag.setLayout(self._setupDiagLay())
         dtls.addTab(wid_diag, 'Diagnostics')
 
-        # wid_graphs = QWidget(self)
-        # wid_graphs.setLayout(self._setupGraphsLay())
-        # dtls.addTab(wid_graphs, 'Graphs')
+        wid_graphs = QWidget(self)
+        wid_graphs.setLayout(self._setupAlarmLay())
+        dtls.addTab(wid_graphs, 'Alarm Limits')
 
         lay.addWidget(QLabel(
             f'<h4>{self.title}</h4>', alignment=Qt.AlignCenter))
@@ -86,7 +86,7 @@ class SSACurrentsDetails(SiriusDialog):
                 row += 2
 
         gbox_total = QGroupBox('Total Current')
-        gbox_total.setLayout(self._setupTotalLay(self.syst_dict['Total']))
+        gbox_total.setLayout(self._setupTotalLay())
         lay.addWidget(gbox_total, 2, 2)
 
         return lay
@@ -199,7 +199,7 @@ class SSACurrentsDetails(SiriusDialog):
 
         return lay
 
-    def _setupTotalLay(self, chs_dict):
+    def _setupTotalLay(self):
         lay = QGridLayout()
         lay.setAlignment(Qt.AlignVCenter)
         lay.setSpacing(9)
@@ -263,6 +263,56 @@ class SSACurrentsDetails(SiriusDialog):
         lay.addWidget(QLabel(
             '<h4>Total</h4>', alignment=Qt.AlignCenter), row, 1)
         lay.addWidget(lb_total, row+1, 1, alignment=Qt.AlignCenter)
+
+        return lay
+
+    def _setupAlarmLay(self):
+        lay = QHBoxLayout()
+        lay.setAlignment(Qt.AlignTop)
+        lay.setSpacing(18)
+
+        # Offsets
+        lay_off = QGridLayout()
+        lay_off.setAlignment(Qt.AlignCenter)
+        lay_off.setSpacing(9)
+        gbox_off = QGroupBox('Offsets (dB)')
+        gbox_off.setLayout(lay_off)
+
+        row = 0
+        for _, lst in self.syst_dict['Offsets'].items():
+            lay_off.addWidget(QLabel(
+                f'<h4>{lst[0]}</h4>', alignment=Qt.AlignCenter), row, 0)
+            lay_off.addWidget(SiriusSpinbox(
+                self, self._substitute_macros(self.prefix+lst[1])), row, 2)
+            row += 1
+        lay_off.addItem(QSpacerItem(
+            27, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 0, 1)
+        lay.addWidget(gbox_off)
+
+        # Alarms
+        lay_alarms = QGridLayout()
+        lay_alarms.setAlignment(Qt.AlignTop)
+        lay_alarms.setSpacing(9)
+        gbox_alarms = QGroupBox('Alarms')
+        gbox_alarms.setLayout(lay_alarms)
+
+        column = 0
+        for _, dic in self.syst_dict['Alarms'].items():
+            lay_alarms.addWidget(QLabel(
+                f'<h4>{dic["Label"]}</h4>', alignment=Qt.AlignCenter),
+                0, column, 1, 2)
+            row = 1
+            for key, val in dic.items():
+                if key != 'Label':
+                    lay_alarms.addWidget(QLabel(
+                        f'<h4>{key}</h4>', alignment=Qt.AlignCenter),
+                        row, column)
+                    lay_alarms.addWidget(SiriusSpinbox(
+                        self, self._substitute_macros(self.prefix+val)),
+                        row, column+1)
+                    row += 1
+            column += 2
+        lay.addWidget(gbox_alarms)
 
         return lay
 

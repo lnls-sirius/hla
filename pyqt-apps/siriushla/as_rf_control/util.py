@@ -1962,11 +1962,37 @@ SEC_2_CHANNELS = {
                 },
                 'PreAmp': {
                     'HS': 'RA-To$(sys)0$(NB):RF-SSAmp-H0$(hs_num)PreAmp:Current$(curr_num)-Mon',
-                    'PreAmp': 'RA-To$(sys)0$(NB):RF-SSAmp-H0$(PREP)PreAmp:Current$(curr_num)-Mon',
+                    'PreAmp': 'RA-To$(sys)0$(NB):RF-SSAmp-H05PreAmp:Current$(curr_num)-Mon',
                     'TDK': 'RA-To$(sys)0$(NB):RF-SSAmpTower:PwrDCR1-Mon'
                 },
-                'Total': {
-
+                'Offsets': {
+                    'FwdPwrTop': ['Forward Power - Top', 'RA-To$(sys)0$(NB):OffsetConfig:UpperIncidentPower'],
+                    'RevPwrTop': ['Reverse Power - Top', 'RA-To$(sys)0$(NB):OffsetConfig:UpperReflectedPower'],
+                    'FwdPwrBot': ['Forward Power - Bottom', 'RA-To$(sys)0$(NB):OffsetConfig:LowerIncidentPower'],
+                    'RevPwrBot': ['Reverse Power - Bottom', 'RA-To$(sys)0$(NB):OffsetConfig:LowerReflectedPower'],
+                },
+                'Alarms': {
+                    'General': {
+                        'Label': 'General Power',
+                        'HIHI': 'RA-To$(sys)0$(NB):AlarmConfig:GeneralPowerLimHiHi',
+                        'HIGH': 'RA-To$(sys)0$(NB):AlarmConfig:GeneralPowerLimHigh',
+                        'LOW': 'RA-To$(sys)0$(NB):AlarmConfig:GeneralPowerLimLow',
+                        'LOLO': 'RA-To$(sys)0$(NB):AlarmConfig:GeneralPowerLimLoLo',
+                    },
+                    'Inter': {
+                        'Label': 'Intermediary Power',
+                        'HIHI': 'RA-To$(sys)0$(NB):AlarmConfig:InnerPowerLimHiHi',
+                        'HIGH': 'RA-To$(sys)0$(NB):AlarmConfig:InnerPowerLimHigh',
+                        'LOW': 'RA-To$(sys)0$(NB):AlarmConfig:InnerPowerLimLow',
+                        'LOLO': 'RA-To$(sys)0$(NB):AlarmConfig:InnerPowerLimLoLo',
+                    },
+                    'High': {
+                        'Label': 'Current - High Limit',
+                        'HIHI': 'RA-To$(sys)0$(NB):AlarmConfig:CurrentLimHiHi',
+                        'HIGH': 'RA-To$(sys)0$(NB):AlarmConfig:CurrentLimHigh',
+                        'LOW': 'RA-To$(sys)0$(NB):AlarmConfig:CurrentLimLow',
+                        'LOLO': 'RA-To$(sys)0$(NB):AlarmConfig:CurrentLimLoLo',
+                    },
                 }
             },
             'B': {
