@@ -132,7 +132,6 @@ class SSADetails(SiriusDialog):
         pb_curr.setStyleSheet('min-width: 6em;')
         lay.addWidget(pb_curr, row_general, 1)
 
-
         # Alerts
         lay_alerts = QGridLayout()
         row_alerts = 0
@@ -291,6 +290,7 @@ class SSADetails(SiriusDialog):
             # Table
             cbx = QCheckBox(self)
             cbx.setChecked(True)
+            cbx.setObjectName(suffix)
             cbx.setStyleSheet('color:'+colors[i]+'; max-width: 1.2em;')
             cbx.stateChanged.connect(self._handle_hs_curves_visibility)
             lb_desc = QLabel(suffix)
@@ -341,6 +341,7 @@ class SSADetails(SiriusDialog):
                 # Table
                 cbx = QCheckBox(self)
                 cbx.setChecked(True)
+                cbx.setObjectName(f'{graph_idx+1}{k}')
                 cbx.setStyleSheet('color:'+colors[k][i-1]+'; max-width: 1.2em;')
                 cbx.stateChanged.connect(self._handle_temp_curves_visibility)
                 lb_desc = QLabel(f'Rack {i} - Temp {k}')
@@ -360,7 +361,8 @@ class SSADetails(SiriusDialog):
                     self.prefix+self.syst_dict['Rack'][f'Temp {k}'], str(i))
                 graph_temp.addYChannel(y_channel=channel, color=colors[k][i-1],
                     name=i, lineStyle=Qt.SolidLine, lineWidth=1)
-                self.curves_temp[graph_idx] = graph_temp.curveAtIndex(graph_idx)
+                self.curves_temp[f'{graph_idx+1}{k}'] = graph_temp.curveAtIndex(
+                    graph_idx)
                 graph_idx += 1
 
         return graph_temp, lay_cboxes

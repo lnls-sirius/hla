@@ -1724,6 +1724,7 @@ class RFMainControl(SiriusMainWindow):
 
     def _handle_curves_visibility(self, state):
         name = self.sender().objectName()
+        print(name)
         if name in self.chs['PwrMtr']:
             name += ' ' + self.cb_units.currentText()
         curve = self.curves[name]
