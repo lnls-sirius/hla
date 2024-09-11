@@ -1,8 +1,8 @@
 """SSA Currents Details."""
 
 from qtpy.QtCore import Qt
-from qtpy.QtWidgets import QGridLayout, QLabel, QSizePolicy as QSzPlcy, \
-    QSpacerItem, QTabWidget, QVBoxLayout, QWidget, QGroupBox, QHBoxLayout
+from qtpy.QtWidgets import QGridLayout, QGroupBox, QHBoxLayout, QLabel, \
+    QSizePolicy as QSzPlcy, QSpacerItem, QTabWidget, QVBoxLayout, QWidget
 
 from ...widgets import SiriusDialog, SiriusLabel, SiriusLedState, SiriusSpinbox
 from ..util import SEC_2_CHANNELS
@@ -237,7 +237,7 @@ class SSACurrentsDetails(SiriusDialog):
                 '"expression": ' + '"ch[0] + ch[1] + ch[2] + ch[3]", ' +
                 '"channels": [')
         for pv in total_pvs:
-            rule += ('{"channel": ' + pv + ', "trigger": true}, ')
+            rule += ('{"channel": "' + pv + '", "trigger": true}, ')
         rule += ']}]'
         lb_total.rules = rule
 
