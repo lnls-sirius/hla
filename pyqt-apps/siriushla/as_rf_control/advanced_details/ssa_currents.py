@@ -47,9 +47,9 @@ class SSACurrentsDetails(SiriusDialog):
         wid_diag.setLayout(self._setupDiagLay())
         dtls.addTab(wid_diag, 'Diagnostics')
 
-        wid_graphs = QWidget(self)
-        wid_graphs.setLayout(self._setupAlarmLay())
-        dtls.addTab(wid_graphs, 'Alarm Limits')
+        # wid_graphs = QWidget(self)
+        # wid_graphs.setLayout(self._setupAlarmLay())
+        # dtls.addTab(wid_graphs, 'Alarm Limits')
 
         lay.addWidget(QLabel(
             f'<h4>{self.title}</h4>', alignment=Qt.AlignCenter))
@@ -62,32 +62,54 @@ class SSACurrentsDetails(SiriusDialog):
 
         row = 0
         column = 0
-        for i in range(1, 9):
-            row_label = ''
-            if column == 0:
-                row_label = 'left'
-            elif column == 4:
-                row_label = 'right'
+        if self.section == 'SI':
+            for i in range(1, 9):
+                row_label = ''
+                if column == 0:
+                    row_label = 'left'
+                elif column == 4:
+                    row_label = 'right'
 
-            lay.addLayout(self._setupHeatSinkLay(
-                i, self.syst_dict['HeatSink'], row_label), row, column)
+                lay.addLayout(self._setupHeatSinkLay(
+                    i, self.syst_dict['HeatSink'], row_label), row, column)
 
-            column += 1
-            if column == 2:
-                if row == 0:
-                    gbox_preamp = QGroupBox('Pre Amplifiers')
-                    gbox_preamp.setLayout(self._setupPreAmpLay(self.syst_dict['PreAmp']))
-                    lay.addWidget(gbox_preamp, row, column)
                 column += 1
-            elif column == 5:
-                lay.addItem(QSpacerItem(
-                    0, 9, QSzPlcy.Ignored, QSzPlcy.Fixed), row+1, 0)
-                column = 0
-                row += 2
+                if column == 2:
+                    if row == 0:
+                        gbox_preamp = QGroupBox('Pre Amplifiers')
+                        gbox_preamp.setLayout(self._setupPreAmpLay(self.syst_dict['PreAmp']))
+                        lay.addWidget(gbox_preamp, row, column)
+                    column += 1
+                elif column == 5:
+                    lay.addItem(QSpacerItem(
+                        0, 9, QSzPlcy.Ignored, QSzPlcy.Fixed), row+1, 0)
+                    column = 0
+                    row += 2
 
-        gbox_total = QGroupBox('Total Current')
-        gbox_total.setLayout(self._setupTotalLay())
-        lay.addWidget(gbox_total, 2, 2)
+            gbox_total = QGroupBox('Total Current')
+            gbox_total.setLayout(self._setupTotalLay())
+            lay.addWidget(gbox_total, 2, 2)
+        else:
+            for i in range(1, 7):
+                row_label = ''
+                if column == 0:
+                    row_label = 'left'
+                elif column == 6:
+                    row_label = 'right'
+
+                lay.addLayout(self._setupHeatSinkLay(
+                    i, self.syst_dict['HeatSink'], row_label), row, column)
+
+                column += 1
+                if column == 3:
+                    # gbox_preamp = QGroupBox('Pre Amplifiers')
+                    # gbox_preamp.setLayout(self._setupPreAmpLay(self.syst_dict['PreAmp']))
+                    # lay.addWidget(gbox_preamp, row, column)
+                    column += 1
+
+            # gbox_total = QGroupBox('Total Current')
+            # gbox_total.setLayout(self._setupTotalLay())
+            # lay.addWidget(gbox_total, 2, 2)
 
         return lay
 
@@ -96,67 +118,117 @@ class SSACurrentsDetails(SiriusDialog):
         lay.setAlignment(Qt.AlignTop)
         lay.setSpacing(9)
 
-        lay.addWidget(QLabel(
-            f'<h4>Heat Sink {hs_num}</h4>', alignment=Qt.AlignCenter),
-            0, 1, 1, 4)
-        lay.addWidget(QLabel(
-            '<h4>A</h4>', alignment=Qt.AlignCenter), 1, 1, 1, 2)
-        lay.addWidget(QLabel(
-            '<h4>B</h4>', alignment=Qt.AlignCenter), 1, 3, 1, 2)
+        if self.section == 'SI':
+            lay.addWidget(QLabel(
+                f'<h4>Heat Sink {hs_num}</h4>', alignment=Qt.AlignCenter),
+                0, 1, 1, 4)
+            lay.addWidget(QLabel(
+                '<h4>A</h4>', alignment=Qt.AlignCenter), 1, 1, 1, 2)
+            lay.addWidget(QLabel(
+                '<h4>B</h4>', alignment=Qt.AlignCenter), 1, 3, 1, 2)
 
-        # Currents
-        for i in range(1, 9):
-            pv_a_1 = self._substitute_macros(
-                self.prefix+chs_dict['Curr'], hs_num, 'A', i, 1)
-            pv_a_2 = self._substitute_macros(
-                self.prefix+chs_dict['Curr'], hs_num, 'A', i, 2)
-            pv_b_1 = self._substitute_macros(
-                self.prefix+chs_dict['Curr'], hs_num, 'B', i, 1)
-            pv_b_2 = self._substitute_macros(
-                self.prefix+chs_dict['Curr'], hs_num, 'A', i, 2)
-            if i == 1:
-                self.curr_pvs[hs_num] = [pv_a_1, pv_a_2, pv_b_1, pv_b_2]
-            else:
-                self.curr_pvs[hs_num].append(pv_a_1)
-                self.curr_pvs[hs_num].append(pv_a_2)
-                self.curr_pvs[hs_num].append(pv_b_1)
-                self.curr_pvs[hs_num].append(pv_b_2)
+            # Currents
+            for i in range(1, 9):
+                pv_a_1 = self._substitute_macros(
+                    self.prefix+chs_dict['Curr'], hs_num, 'A', i, 1)
+                pv_a_2 = self._substitute_macros(
+                    self.prefix+chs_dict['Curr'], hs_num, 'A', i, 2)
+                pv_b_1 = self._substitute_macros(
+                    self.prefix+chs_dict['Curr'], hs_num, 'B', i, 1)
+                pv_b_2 = self._substitute_macros(
+                    self.prefix+chs_dict['Curr'], hs_num, 'A', i, 2)
+                if i == 1:
+                    self.curr_pvs[hs_num] = [pv_a_1, pv_a_2, pv_b_1, pv_b_2]
+                else:
+                    self.curr_pvs[hs_num].append(pv_a_1)
+                    self.curr_pvs[hs_num].append(pv_a_2)
+                    self.curr_pvs[hs_num].append(pv_b_1)
+                    self.curr_pvs[hs_num].append(pv_b_2)
 
-            lb_a_1 = SiriusLabel(self, pv_a_1)
-            lb_a_1.showUnits = True
-            lb_a_2 = SiriusLabel(self, pv_a_2)
-            lb_a_2.showUnits = True
-            lb_b_1 = SiriusLabel(self, pv_b_1)
-            lb_b_1.showUnits = True
-            lb_b_2 = SiriusLabel(self, pv_b_2)
-            lb_b_2.showUnits = True
+                lb_a_1 = SiriusLabel(self, pv_a_1)
+                lb_a_1.showUnits = True
+                lb_a_2 = SiriusLabel(self, pv_a_2)
+                lb_a_2.showUnits = True
+                lb_b_1 = SiriusLabel(self, pv_b_1)
+                lb_b_1.showUnits = True
+                lb_b_2 = SiriusLabel(self, pv_b_2)
+                lb_b_2.showUnits = True
 
-            if row_label == 'left':
-                lay.addWidget(QLabel(
-                    f'M0{i}', alignment=Qt.AlignCenter), i+1, 0)
-            elif row_label == 'right':
-                lay.addWidget(QLabel(
-                    f'M0{i}', alignment=Qt.AlignCenter), i+1, 5)
-            lay.addWidget(lb_a_1, i+1, 1)
-            lay.addWidget(lb_a_2, i+1, 2)
-            lay.addWidget(lb_b_1, i+1, 3)
-            lay.addWidget(lb_b_2, i+1, 4)
-            row = i+2
+                if row_label == 'left':
+                    lay.addWidget(QLabel(
+                        f'M0{i}', alignment=Qt.AlignCenter), i+1, 0)
+                elif row_label == 'right':
+                    lay.addWidget(QLabel(
+                        f'M0{i}', alignment=Qt.AlignCenter), i+1, 5)
+                lay.addWidget(lb_a_1, i+1, 1)
+                lay.addWidget(lb_a_2, i+1, 2)
+                lay.addWidget(lb_b_1, i+1, 3)
+                lay.addWidget(lb_b_2, i+1, 4)
+                row = i+2
 
-        # Power
-        lay.addWidget(QLabel(
-            '<h4>Power</h4>', alignment=Qt.AlignCenter), row, 1, 1, 4)
-        column = 1
-        for key, val in chs_dict.items():
-            if key != 'Curr':
-                lb_pwr = SiriusLabel(
-                    self, self._substitute_macros(self.prefix+val, hs_num))
-                lb_pwr.showUnits = True
-                lay.addWidget(QLabel(
-                    f'<h4>{key}</h4>', alignment=Qt.AlignCenter),
-                    row+1, column)
-                lay.addWidget(lb_pwr, row+2, column)
-                column += 1
+            # Power
+            lay.addWidget(QLabel(
+                '<h4>Power</h4>', alignment=Qt.AlignCenter), row, 1, 1, 4)
+            column = 1
+            for key, val in chs_dict.items():
+                if key != 'Curr':
+                    lb_pwr = SiriusLabel(
+                        self, self._substitute_macros(self.prefix+val, hs_num))
+                    lb_pwr.showUnits = True
+                    lay.addWidget(QLabel(
+                        f'<h4>{key}</h4>', alignment=Qt.AlignCenter),
+                        row+1, column)
+                    lay.addWidget(lb_pwr, row+2, column)
+                    column += 1
+        else:
+            lay.addWidget(QLabel(
+                f'<h4>Heat Sink {hs_num}</h4>', alignment=Qt.AlignCenter),
+                0, 1, 1, 2)
+
+            # Currents
+            for i in range(1, 9):
+                pv_curr_1 = self._substitute_macros(
+                    self.prefix+chs_dict['Curr'], hs_num, m_num=i, curr_num=1)
+                pv_curr_2 = self._substitute_macros(
+                    self.prefix+chs_dict['Curr'], hs_num, m_num=i, curr_num=2)
+                if i == 1:
+                    self.curr_pvs[hs_num] = [pv_curr_1, pv_curr_2]
+                else:
+                    self.curr_pvs[hs_num].append(pv_curr_1)
+                    self.curr_pvs[hs_num].append(pv_curr_2)
+
+                lb_curr_1 = SiriusLabel(self, pv_curr_1)
+                lb_curr_1.showUnits = True
+                lb_curr_2 = SiriusLabel(self, pv_curr_2)
+                lb_curr_2.showUnits = True
+
+                if row_label == 'left':
+                    lay.addWidget(QLabel(
+                        f'M0{i}', alignment=Qt.AlignCenter), i+1, 0)
+                elif row_label == 'right':
+                    lay.addWidget(QLabel(
+                        f'M0{i}', alignment=Qt.AlignCenter), i+1, 5)
+                lay.addWidget(lb_curr_1, i+1, 1)
+                lay.addWidget(lb_curr_2, i+1, 2)
+                row = i+2
+
+            # Power
+            lay.addWidget(QLabel(
+                '<h4>Power</h4>', alignment=Qt.AlignCenter), row, 1, 1, 2)
+            column = 1
+            for key, val in chs_dict.items():
+                if key != 'Curr':
+                    lb_pwr = SiriusLabel(
+                        self, self._substitute_macros(self.prefix+val, hs_num))
+                    lb_pwr.showUnits = True
+                    lay.addWidget(QLabel(
+                        f'<h4>{key}</h4>', alignment=Qt.AlignCenter),
+                        row+1, column)
+                    lay.addWidget(lb_pwr, row+2, column)
+                    column += 1
+                if column > 2:
+                    row += 3
+                    column = 1
 
         return lay
 
