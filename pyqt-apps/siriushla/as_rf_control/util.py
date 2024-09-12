@@ -185,7 +185,12 @@ SEC_2_CHANNELS = {
                 'Temp': 'RA-ToBO:RF-HeatSink-H0$(hs_num):T-Mon',
                 'TMS': 'RA-ToBO:RF-HeatSink-H0$(hs_num):Tms-Mon'
             },
-            'PreAmp': 'RA-RaBO01:RF-LLRFPreAmp:T1-Mon'
+            'PreAmp': 'RA-RaBO01:RF-LLRFPreAmp:T1-Mon',
+            'AC': {
+                'Intlk': 'BO-ToBO:RF-ACDCPanel:Intlk-Mon',
+                'Ctrl': 'BO-ToBO:RF-ACDCPanel:CtrlMode-Mon',
+                '300Vdc': 'RA-ToBO:RF-ACDCPanel:300VdcEnbl-Mon'
+            }
         },
         'SL': {
             'ErrDtls': {

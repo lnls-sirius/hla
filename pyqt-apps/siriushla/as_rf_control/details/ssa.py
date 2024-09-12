@@ -4,7 +4,7 @@ import qtawesome as qta
 from qtpy.QtCore import Qt
 from qtpy.QtGui import QColor
 from qtpy.QtWidgets import QCheckBox, QGridLayout, QLabel, QPushButton, \
-    QSizePolicy as QSzPlcy, QSpacerItem, QTabWidget, QVBoxLayout, QWidget
+    QSizePolicy as QSzPlcy, QSpacerItem, QTabWidget, QVBoxLayout, QWidget, QGroupBox
 
 from ...util import connect_window
 from ...widgets import PyDMLed, PyDMLedMultiChannel, SiriusDialog, \
@@ -418,10 +418,14 @@ class SSADetailsBO(SiriusDialog):
         lay.addWidget(dtls)
 
     def _setupDiagLay(self):
+        lay = QGridLayout()
+        lay.setSpacing(9)
+        lay.setAlignment(Qt.AlignTop)
+
         # Temperatures
+        gbox_temp = QGroupBox('Temperatures')
         lay_temp = QGridLayout()
-        lay_temp.setSpacing(9)
-        lay_temp.setAlignment(Qt.AlignTop)
+        gbox_temp.setLayout(lay_temp)
         lay_temp.addWidget(QLabel(
             '<h4>TMS</h4>', alignment=Qt.AlignCenter), 1, 2)
         lay_temp.addWidget(QLabel(
@@ -440,7 +444,7 @@ class SSADetailsBO(SiriusDialog):
                 self, self._substitute_pv_macros(
                     self.prefix+self.syst_dict['HeatSink']['TMS'], i)),
                 i+1, 2, alignment=Qt.AlignCenter)
-            # PT-100
+            # # PT-100
             row = i+2
 
         lb_temp = SiriusLabel(self, self.prefix+self.syst_dict['PreAmp'])
@@ -450,9 +454,35 @@ class SSADetailsBO(SiriusDialog):
             '<h4>PreAmp 01</h4>', alignment=Qt.AlignCenter), row, 0)
         lay_temp.addWidget(lb_temp, row, 1)
         lay_temp.addWidget(QLabel('-', alignment=Qt.AlignCenter), row, 2)
-        # PT-100
+        # # PT-100
+        lay.addWidget(gbox_temp, 0, 0, 1, 2)
 
-        return lay_temp
+        # AC Panel
+        gbox_ac = QGroupBox('AC Panel')
+        lay_ac = QGridLayout()
+        gbox_ac.setLayout(lay_ac)
+
+        lay_ac.addWidget(QLabel(
+            '<h4>AC/DC Panel Interlock</h4>',
+            alignment=Qt.AlignRight | Qt.AlignVCenter), 0, 0)
+        lay_ac.addWidget(SiriusLedAlert(
+            self, self.prefix+self.syst_dict['AC']['Intlk']),
+            0, 1, alignment=Qt.AlignCenter)
+        lay_ac.addWidget(QLabel(
+            '<h4>Control Mode</h4>',
+            alignment=Qt.AlignRight | Qt.AlignVCenter), 1, 0)
+        lay_ac.addWidget(SiriusLabel(
+            self, self.prefix+self.syst_dict['AC']['Ctrl']),
+            1, 1, alignment=Qt.AlignCenter)
+        lay_ac.addWidget(QLabel(
+            '<h4>300 Vdc Enable</h4>',
+            alignment=Qt.AlignRight | Qt.AlignVCenter), 2, 0)
+        lay_ac.addWidget(SiriusLedState(
+            self, self.prefix+self.syst_dict['AC']['300Vdc']),
+            2, 1, alignment=Qt.AlignCenter)
+        lay.addWidget(gbox_ac, 1, 0)
+
+        return lay
 
     def _setupGraphsLay(self):
         lay = QVBoxLayout()
