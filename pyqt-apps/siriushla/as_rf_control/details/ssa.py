@@ -3,8 +3,9 @@
 import qtawesome as qta
 from qtpy.QtCore import Qt
 from qtpy.QtGui import QColor
-from qtpy.QtWidgets import QCheckBox, QGridLayout, QLabel, QPushButton, \
-    QSizePolicy as QSzPlcy, QSpacerItem, QTabWidget, QVBoxLayout, QWidget, QGroupBox
+from qtpy.QtWidgets import QCheckBox, QGridLayout, QGroupBox, QLabel, \
+    QPushButton, QSizePolicy as QSzPlcy, QSpacerItem, QTabWidget, \
+    QVBoxLayout, QWidget
 
 from ...util import connect_window
 from ...widgets import PyDMLed, PyDMLedMultiChannel, SiriusDialog, \
@@ -455,12 +456,17 @@ class SSADetailsBO(SiriusDialog):
         lay_temp.addWidget(lb_temp, row, 1)
         lay_temp.addWidget(QLabel('-', alignment=Qt.AlignCenter), row, 2)
         # # PT-100
-        lay.addWidget(gbox_temp, 0, 0, 1, 2)
+        lay.addWidget(gbox_temp, 0, 0, 1, 3)
 
         # AC Panel
         gbox_ac = QGroupBox('AC Panel')
         lay_ac = QGridLayout()
         gbox_ac.setLayout(lay_ac)
+
+        lb_volt = SiriusLabel(self, self.prefix+self.syst_dict['AC']['Volt'])
+        lb_volt.showUnits = True
+        lb_curr = SiriusLabel(self, self.prefix+self.syst_dict['AC']['Curr'])
+        lb_curr.showUnits = True
 
         lay_ac.addWidget(QLabel(
             '<h4>AC/DC Panel Interlock</h4>',
@@ -480,7 +486,34 @@ class SSADetailsBO(SiriusDialog):
         lay_ac.addWidget(SiriusLedState(
             self, self.prefix+self.syst_dict['AC']['300Vdc']),
             2, 1, alignment=Qt.AlignCenter)
-        lay.addWidget(gbox_ac, 1, 0)
+        lay_ac.addWidget(QLabel(
+            '<h4>AC/DC Voltage</h4>',
+            alignment=Qt.AlignRight | Qt.AlignVCenter), 3, 0)
+        lay_ac.addWidget(lb_volt, 3, 1)
+        lay_ac.addWidget(QLabel(
+            '<h4>AC/DC Current</h4>',
+            alignment=Qt.AlignRight | Qt.AlignVCenter), 4, 0)
+        lay_ac.addWidget(lb_curr, 4, 1)
+        lay.addWidget(gbox_ac, 1, 0, 3, 1)
+
+        # Others
+        lb_pwr = SiriusLabel(self, self.prefix+self.syst_dict['Pwr'])
+        lb_pwr.showUnits = True
+        pb_curr = QPushButton(
+            qta.icon('fa5s.external-link-alt'), ' Currents', self)
+        connect_window(pb_curr, SSACurrentsDetails, parent=self,
+            prefix=self.prefix, section=self.section, num='',
+            system='')
+
+        lay.addWidget(QLabel(
+            '<h4>Rotameter Flow</h4>', alignment=Qt.AlignCenter), 1, 1)
+        lay.addWidget(SiriusLedAlert(
+            self, self.prefix+self.syst_dict['Rot']),
+            1, 2, alignment=Qt.AlignCenter)
+        lay.addWidget(QLabel(
+            '<h4>Power</h4>', alignment=Qt.AlignCenter), 2, 1)
+        lay.addWidget(lb_pwr, 2, 2)
+        lay.addWidget(pb_curr, 3, 1, alignment=Qt.AlignHCenter)
 
         return lay
 
@@ -490,8 +523,6 @@ class SSADetailsBO(SiriusDialog):
         lay.setSpacing(9)
 
         graph_hs = SiriusTimePlot(self)
-        graph_hs.setStyleSheet(
-            'min-height:15em;min-width:20em;max-height:40em')
         graph_hs.maxRedrawRate = 2
         graph_hs.setShowXGrid(True)
         graph_hs.setShowYGrid(True)

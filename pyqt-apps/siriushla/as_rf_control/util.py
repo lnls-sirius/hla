@@ -189,8 +189,12 @@ SEC_2_CHANNELS = {
             'AC': {
                 'Intlk': 'BO-ToBO:RF-ACDCPanel:Intlk-Mon',
                 'Ctrl': 'BO-ToBO:RF-ACDCPanel:CtrlMode-Mon',
-                '300Vdc': 'RA-ToBO:RF-ACDCPanel:300VdcEnbl-Mon'
-            }
+                '300Vdc': 'RA-ToBO:RF-ACDCPanel:300VdcEnbl-Mon',
+                'Volt': 'BO-ToBO:RF-ACDCPanel:300Vdc-Mon',
+                'Curr': 'BO-ToBO:RF-ACDCPanel:CurrentVdc-Mon'
+            },
+            'Rot': 'RA-ToBo:RF-SSAmpTower:HdFlwRt-Mon',
+            'Pwr': 'RA-ToBo:RF-SSAmpTower:PwrFwdOut-Mon'
         },
         'SL': {
             'ErrDtls': {
