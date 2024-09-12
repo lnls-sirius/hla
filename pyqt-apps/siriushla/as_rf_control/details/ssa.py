@@ -13,25 +13,21 @@ from ..advanced_details import SSACurrentsDetails
 from ..util import SEC_2_CHANNELS
 
 
-class SSADetails(SiriusDialog):
-    """SSA Details."""
+class SSADetailsSI(SiriusDialog):
+    """SSA Details for storage ring."""
 
-    def __init__(self, parent, prefix='', section='', num='', system=''):
+    def __init__(self, parent, prefix='', num='', system=''):
         """Init."""
         super().__init__(parent)
         self.prefix = prefix
         self.prefix += ('-' if prefix and not prefix.endswith('-') else '')
-        self.section = section
+        self.section = 'SI'
         self.chs = SEC_2_CHANNELS[self.section]
         self.num = num
         self.system = system
         self.setObjectName(self.section+'App')
-        if self.section == 'SI':
-            self.syst_dict = self.chs['SSADtls'][self.system]
-            self.setWindowTitle(f'{self.section} SSA 0{self.num} Details')
-        else:
-            self.syst_dict = self.chs['SSADtls']
-            self.setWindowTitle(f'{self.section} SSA Details')
+        self.syst_dict = self.chs['SSADtls'][self.system]
+        self.setWindowTitle(f'{self.section} SSA 0{self.num} Details')
         self._setupUi()
 
     def _setupUi(self):
@@ -54,10 +50,7 @@ class SSADetails(SiriusDialog):
         wid_graphs.setLayout(self._setupGraphsLay())
         dtls.addTab(wid_graphs, 'Graphs')
 
-        if self.section == 'SI':
-            title = f'<h4>SSA 0{self.num} Details</h4>'
-        else:
-            title = '<h4>SSA Details</h4>'
+        title = f'<h4>SSA 0{self.num} Details</h4>'
         lay.addWidget(QLabel(title, alignment=Qt.AlignCenter))
         lay.addWidget(dtls)
 
@@ -381,4 +374,143 @@ class SSADetails(SiriusDialog):
     def _handle_temp_curves_visibility(self, state):
         name = self.sender().objectName()
         curve = self.curves_temp[name]
+        curve.setVisible(state)
+
+
+class SSADetailsBO(SiriusDialog):
+    """SSA Details for booster ring."""
+
+    def __init__(self, parent, prefix=''):
+        """Init."""
+        super().__init__(parent)
+        self.prefix = prefix
+        self.prefix += ('-' if prefix and not prefix.endswith('-') else '')
+        self.section = 'BO'
+        self.chs = SEC_2_CHANNELS[self.section]
+        self.setObjectName(self.section+'App')
+        self.syst_dict = self.chs['SSADtls']
+        self.setWindowTitle(f'{self.section} SSA Details')
+        self._setupUi()
+
+    def _setupUi(self):
+        lay = QVBoxLayout(self)
+        lay.setSpacing(9)
+        lay.setAlignment(Qt.AlignTop)
+
+        dtls = QTabWidget(self)
+        dtls.setObjectName(self.section+'Tab')
+        dtls.setStyleSheet(
+            "#"+self.section+'Tab'+"::pane {"
+            "    border-left: 2px solid gray;"
+            "    border-bottom: 2px solid gray;"
+            "    border-right: 2px solid gray;}")
+
+        wid_diag = QWidget(self)
+        wid_diag.setLayout(self._setupDiagLay())
+        dtls.addTab(wid_diag, 'Diagnostics')
+
+        wid_graphs = QWidget(self)
+        wid_graphs.setLayout(self._setupGraphsLay())
+        dtls.addTab(wid_graphs, 'Graphs')
+
+        title = '<h4>SSA Details</h4>'
+        lay.addWidget(QLabel(title, alignment=Qt.AlignCenter))
+        lay.addWidget(dtls)
+
+    def _setupDiagLay(self):
+        # Temperatures
+        lay_temp = QGridLayout()
+        lay_temp.setSpacing(9)
+        lay_temp.setAlignment(Qt.AlignTop)
+        lay_temp.addWidget(QLabel(
+            '<h4>TMS</h4>', alignment=Qt.AlignCenter), 1, 2)
+        lay_temp.addWidget(QLabel(
+            '<h4>PT-100</h4>', alignment=Qt.AlignCenter), 1, 3)
+
+        for i in range(1, 7):
+            lb_temp = SiriusLabel(
+                self, self._substitute_pv_macros(
+                    self.prefix+self.syst_dict['HeatSink']['Temp'], i))
+            lb_temp.showUnits = True
+
+            lay_temp.addWidget(QLabel(
+                f'<h4>HeatSink {i}</h4>', alignment=Qt.AlignCenter), i+1, 0)
+            lay_temp.addWidget(lb_temp, i+1, 1, alignment=Qt.AlignCenter)
+            lay_temp.addWidget(SiriusLedAlert(
+                self, self._substitute_pv_macros(
+                    self.prefix+self.syst_dict['HeatSink']['TMS'], i)),
+                i+1, 2, alignment=Qt.AlignCenter)
+            # PT-100
+            row = i+2
+
+        lb_temp = SiriusLabel(self, self.prefix+self.syst_dict['PreAmp'])
+        lb_temp.showUnits = True
+
+        lay_temp.addWidget(QLabel(
+            '<h4>PreAmp 01</h4>', alignment=Qt.AlignCenter), row, 0)
+        lay_temp.addWidget(lb_temp, row, 1)
+        lay_temp.addWidget(QLabel('-', alignment=Qt.AlignCenter), row, 2)
+        # PT-100
+
+        return lay_temp
+
+    def _setupGraphsLay(self):
+        lay = QVBoxLayout()
+        lay.setAlignment(Qt.AlignTop)
+        lay.setSpacing(9)
+
+        graph_hs = SiriusTimePlot(self)
+        graph_hs.setStyleSheet(
+            'min-height:15em;min-width:20em;max-height:40em')
+        graph_hs.maxRedrawRate = 2
+        graph_hs.setShowXGrid(True)
+        graph_hs.setShowYGrid(True)
+        graph_hs.setAutoRangeX(True)
+        graph_hs.setAutoRangeY(True)
+        graph_hs.setBackgroundColor(QColor(255, 255, 255))
+        graph_hs.setTimeSpan(1800)
+        graph_hs.maxRedrawRate = 2
+
+        lay_cboxes = QGridLayout()
+        colors = ['blue', 'red', 'magenta', 'darkGreen', 'darkRed', 'darkBlue']
+        column = 0
+        self.curves_hs = {}
+        for i in range(len(colors)):
+            # Table
+            name = f'H{i+1}'
+            cbx = QCheckBox(self)
+            cbx.setChecked(True)
+            cbx.setObjectName(name)
+            cbx.setStyleSheet('color:'+colors[i]+'; max-width: 1.2em;')
+            cbx.stateChanged.connect(self._handle_hs_curves_visibility)
+            lb_desc = QLabel(name)
+            lb_desc.setStyleSheet(
+                'min-height: 1.5em; color:'+colors[i]+'; max-width: 8em;'
+                'qproperty-alignment: AlignCenter;')
+            lay_cboxes.addWidget(cbx, 0, column)
+            lay_cboxes.addWidget(lb_desc, 0, column+1)
+            column += 2
+
+            # Graph
+            channel = self._substitute_pv_macros(
+                self.prefix+self.syst_dict['HeatSink']['Temp'], i+1)
+            graph_hs.addYChannel(y_channel=channel, color=colors[i], name=name,
+                lineStyle=Qt.SolidLine, lineWidth=1)
+            self.curves_hs[name] = graph_hs.curveAtIndex(i)
+
+        lay.addWidget(QLabel(
+            '<h4>Heat Sinks Temperatures</h4>', alignment=Qt.AlignCenter))
+        lay.addLayout(lay_cboxes)
+        lay.addWidget(graph_hs)
+
+        return lay
+
+    def _substitute_pv_macros(self, pv_name, hs_num=''):
+        if hs_num:
+            pv_name = pv_name.replace('$(hs_num)', str(hs_num))
+        return pv_name
+
+    def _handle_hs_curves_visibility(self, state):
+        name = self.sender().objectName()
+        curve = self.curves_hs[name]
         curve.setVisible(state)

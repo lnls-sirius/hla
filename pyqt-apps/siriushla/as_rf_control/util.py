@@ -180,6 +180,13 @@ SEC_2_CHANNELS = {
             'PreDrive': 'RA-RaBO01:RF-LLRFPreAmp:PwrFwdInAmp-Mon',
             'PreDriveThrs': 4,  # mV
         },
+        'SSADtls': {
+            'HeatSink': {
+                'Temp': 'RA-ToBO:RF-HeatSink-H0$(hs_num):T-Mon',
+                'TMS': 'RA-ToBO:RF-HeatSink-H0$(hs_num):Tms-Mon'
+            },
+            'PreAmp': 'RA-RaBO01:RF-LLRFPreAmp:T1-Mon'
+        },
         'SL': {
             'ErrDtls': {
                 'IRef': 'RA-RaBO01:RF-LLRF:SLRefI-Mon',

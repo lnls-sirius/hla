@@ -21,8 +21,8 @@ from .advanced_details import ADCDACDetails, AutoStartDetails, \
     RampsDetails, TuningDetails
 from .custom_widgets import RFEnblDsblButton
 from .details import CavityStatusDetails, FDLDetails, LLRFInterlockDetails, \
-    SlowLoopErrorDetails, SlowLoopParametersDetails, SSADetails, TempMonitor, \
-    TransmLineStatusDetails
+    SlowLoopErrorDetails, SlowLoopParametersDetails, SSADetailsBO, \
+    SSADetailsSI, TempMonitor, TransmLineStatusDetails
 from .util import SEC_2_CHANNELS
 
 
@@ -1444,13 +1444,11 @@ class RFMainControl(SiriusMainWindow):
         if self.section == 'SI':
             ssa_num = int(chs_dict['Name'].split()[-1])
             system = ('A' if ssa_num == 1 or ssa_num == 2 else 'B')
-            connect_window(pb_ssadtls, SSADetails, parent=self,
-                        section=self.section, prefix=self.prefix,
-                        num=ssa_num, system=system)
+            connect_window(pb_ssadtls, SSADetailsSI, parent=self,
+                        prefix=self.prefix, num=ssa_num, system=system)
         else:
-            connect_window(pb_ssadtls, SSADetails, parent=self,
-                        section=self.section, prefix=self.prefix,
-                        num='', system='')
+            connect_window(pb_ssadtls, SSADetailsBO, parent=self,
+                        prefix=self.prefix)
 
         lb_pwr = SiriusLabel(self, self.prefix+chs_dict['Power'])
         lb_pwr.showUnits = True
