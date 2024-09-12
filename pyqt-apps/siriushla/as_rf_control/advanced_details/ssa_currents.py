@@ -104,6 +104,7 @@ class SSACurrentsDetails(SiriusDialog):
         lay.addWidget(QLabel(
             '<h4>B</h4>', alignment=Qt.AlignCenter), 1, 3, 1, 2)
 
+        # Currents
         for i in range(1, 9):
             pv_a_1 = self._substitute_macros(
                 self.prefix+chs_dict['Curr'], hs_num, 'A', i, 1)
@@ -140,6 +141,22 @@ class SSACurrentsDetails(SiriusDialog):
             lay.addWidget(lb_a_2, i+1, 2)
             lay.addWidget(lb_b_1, i+1, 3)
             lay.addWidget(lb_b_2, i+1, 4)
+            row = i+2
+
+        # Power
+        lay.addWidget(QLabel(
+            '<h4>Power</h4>', alignment=Qt.AlignCenter), row, 1, 1, 4)
+        column = 1
+        for key, val in chs_dict.items():
+            if key != 'Curr':
+                lb_pwr = SiriusLabel(
+                    self, self._substitute_macros(self.prefix+val, hs_num))
+                lb_pwr.showUnits = True
+                lay.addWidget(QLabel(
+                    f'<h4>{key}</h4>', alignment=Qt.AlignCenter),
+                    row+1, column)
+                lay.addWidget(lb_pwr, row+2, column)
+                column += 1
 
         return lay
 
@@ -175,7 +192,7 @@ class SSACurrentsDetails(SiriusDialog):
                         self.prefix+chs_dict['PreAmp'], curr_num='1'))
                     lb_1.showUnits = True
                     lb_2 = SiriusLabel(self, self._substitute_macros(
-                        self.prefix+chs_dict['HS'], curr_num='2'))
+                        self.prefix+chs_dict['PreAmp'], curr_num='2'))
                     lb_2.showUnits = True
 
                     lay.addWidget(label, row, column)
