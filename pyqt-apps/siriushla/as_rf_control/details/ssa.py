@@ -237,8 +237,13 @@ class SSADetailsSI(SiriusDialog):
                     self, self._substitute_pv_macros(
                         self.prefix+chs_dict['Temp'], suffix))
                 lb_temp.showUnits = True
-                # pt_100_channels = {}
-                # led_pt100 = PyDMLedMultiChannel(self, )
+                pt_100_channels = {
+                    self._substitute_pv_macros(
+                        self.prefix+chs_dict['PT-100'][0], suffix): 0,
+                    self._substitute_pv_macros(
+                        self.prefix+chs_dict['PT-100'][1], suffix): 0
+                }
+                led_pt100 = PyDMLedMultiChannel(self, pt_100_channels)
 
                 lay.addWidget(QLabel(
                     f'HeatSink {self.sink_count}{s}',
@@ -248,7 +253,7 @@ class SSADetailsSI(SiriusDialog):
                     self, self._substitute_pv_macros(
                         self.prefix+chs_dict['Tms'], suffix)),
                     row, 2, alignment=Qt.AlignCenter)
-                # lay.addWidget(led_pt100, row, 3, alignment=Qt.AlignCenter)
+                lay.addWidget(led_pt100, row, 3, alignment=Qt.AlignCenter)
 
                 row += 1
             self.sink_count += 1
@@ -438,6 +443,13 @@ class SSADetailsBO(SiriusDialog):
                 self, self._substitute_pv_macros(
                     self.prefix+self.syst_dict['HeatSink']['Temp'], i))
             lb_temp.showUnits = True
+            pt_100_channels = {
+                self._substitute_pv_macros(
+                    self.prefix+self.syst_dict['HeatSink']['PT-100'][0], i): 0,
+                self._substitute_pv_macros(
+                    self.prefix+self.syst_dict['HeatSink']['PT-100'][1], i): 0
+            }
+            led_pt100 = PyDMLedMultiChannel(self, pt_100_channels)
 
             lay_temp.addWidget(QLabel(
                 f'<h4>HeatSink {i}</h4>', alignment=Qt.AlignCenter), i+1, 0)
@@ -446,17 +458,20 @@ class SSADetailsBO(SiriusDialog):
                 self, self._substitute_pv_macros(
                     self.prefix+self.syst_dict['HeatSink']['TMS'], i)),
                 i+1, 2, alignment=Qt.AlignCenter)
-            # # PT-100
+            lay_temp.addWidget(led_pt100, i+1, 3, alignment=Qt.AlignCenter)
             row = i+2
 
-        lb_temp = SiriusLabel(self, self.prefix+self.syst_dict['PreAmp'])
+        lb_temp = SiriusLabel(
+            self, self.prefix+self.syst_dict['PreAmp']['Temp'])
         lb_temp.showUnits = True
 
         lay_temp.addWidget(QLabel(
             '<h4>PreAmp 01</h4>', alignment=Qt.AlignCenter), row, 0)
         lay_temp.addWidget(lb_temp, row, 1)
         lay_temp.addWidget(QLabel('-', alignment=Qt.AlignCenter), row, 2)
-        # # PT-100
+        lay_temp.addWidget(SiriusLedState(
+            self, self.prefix+self.syst_dict['PreAmp']['PT-100']),
+            row, 3, alignment=Qt.AlignCenter)
         lay.addWidget(gbox_temp, 0, 0, 1, 3)
 
         # AC Panel

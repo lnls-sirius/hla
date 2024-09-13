@@ -183,9 +183,16 @@ SEC_2_CHANNELS = {
         'SSADtls': {
             'HeatSink': {
                 'Temp': 'RA-ToBO:RF-HeatSink-H0$(hs_num):T-Mon',
-                'TMS': 'RA-ToBO:RF-HeatSink-H0$(hs_num):Tms-Mon'
+                'TMS': 'RA-ToBO:RF-HeatSink-H0$(hs_num):Tms-Mon',
+                'PT-100': [
+                        'RA-ToSIA0$(NB):RF-HeatSink-H0$(hs_num):TUp-Mon',
+                        'RA-ToSIA0$(NB):RF-HeatSink-H0$(hs_num):TDown-Mon'
+                ]
             },
-            'PreAmp': 'RA-RaBO01:RF-LLRFPreAmp:T1-Mon',
+            'PreAmp': {
+                'Temp': 'RA-RaBO01:RF-LLRFPreAmp:T1-Mon',
+                'PT-100': 'RA-RaBO01:RF-LLRFPreAmp:T1Up-Mon'
+            },
             'AC': {
                 'Intlk': 'BO-ToBO:RF-ACDCPanel:Intlk-Mon',
                 'Ctrl': 'BO-ToBO:RF-ACDCPanel:CtrlMode-Mon',
@@ -194,14 +201,7 @@ SEC_2_CHANNELS = {
                 'Curr': 'BO-ToBO:RF-ACDCPanel:CurrentVdc-Mon'
             },
             'Rot': 'RA-ToBo:RF-SSAmpTower:HdFlwRt-Mon',
-            'PwrFwdOut': 'RA-ToBo:RF-SSAmpTower:PwrFwdOut-Mon',
-            'Pwr': {
-                'Fwd In': '$(SI):RF-SSAmpTower:PwrFwdIn$(MR)-Mon',
-                'Rev In': '$(SI):RF-SSAmpTower:PwrRevIn$(MR)-Mon',
-                'Fwd Out': '$(SI):RF-SSAmpTower:PwrFwdOut$(MR)-Mon',
-                'Rev Out': '$(SI):RF-SSAmpTower:PwrRevOut$(MR)-Mon',
-                'Gain': '$(SI):RF-SSAmpTower:PwrFwdIn$(MR)-Mon',
-            }
+            'Pwr': 'RA-ToBo:RF-SSAmpTower:PwrFwdOut-Mon',
         },
         'SSACurr': {
             'HeatSink': {
