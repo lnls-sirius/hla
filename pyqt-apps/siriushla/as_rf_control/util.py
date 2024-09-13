@@ -280,16 +280,16 @@ SEC_2_CHANNELS = {
                 'Mode': 'RA-RaBO01:RF-LLRF:LoopMode',
                 'ASet': 'RA-RaBO01:RF-LLRF:ALRef',
                 'PSet': 'RA-RaBO01:RF-LLRF:PLRef',
-                'AInc': 'RA-RaBO01:RF-LLRF:AmpIncRate-Sp',
+                'AInc': 'RA-RaBO01:RF-LLRF:AmpIncRate',
                 'PInc': 'RA-RaBO01:RF-LLRF:PhsIncRate',
                 'ARef': 'RA-RaBO01:RF-LLRF:SLRefAmp-Mon',
                 'PRef': 'RA-RaBO01:RF-LLRF:SLRefPhs-Mon',
                 'AInp': 'RA-RaBO01:RF-LLRF:SLInpAmp-Mon',
                 'PInp': 'RA-RaBO01:RF-LLRF:SLInpPhs-Mon',
-                'AErr': 'RA-RaBO01:RF-LLRF:SLErrAmp-Mon',
-                'PErr': 'RA-RaBO01:RF-LLRF:SLErrPhs-Mon',
+                'AErr': 'RA-RaBO01:RF-LLRF:SLErrorAmp-Mon',
+                'PErr': 'RA-RaBO01:RF-LLRF:SLErrorPhs-Mon',
             },
-            'ASet': 'RA-RaBO01:RF-LLRF:AmpVCav',
+            'ASet': 'RA-RaBO01:RF-LLRF:ALRefAmpVGap',
         },
         'Tun': {
             'Auto': 'RA-RaBO01:RF-LLRF:Tune',
@@ -337,7 +337,7 @@ SEC_2_CHANNELS = {
                 'color': 'red',
             },
         },
-        'CavVGap': 'BO-05D:RF-P5Cav:PwrCell3VCav-Mon',
+        'CavVGap': 'BO-05D:RF-P5Cav:PwrCell3AmpVGap-Mon',
         'TempMon': {
             'Temp.': {
                 'Cells': {
@@ -1008,29 +1008,29 @@ SEC_2_CHANNELS = {
         'RampDtls': {
             'Control': {
                 'Ramp Enable': 'RA-RaBO01:RF-LLRF:RmpEn',
-                'Ramp Down Disable': 'RA-RaBO01:RF-LLRF:RampDownDsbl',
+                'Ramp Down Disable': 'RA-RaBO01:RF-LLRF:RmpDownDsbl',
                 '356': ['T1 Ramp Delay After Trig', 'RA-RaBO01:RF-LLRF:RmpTs1'],
                 '357': ['T2 Ramp Up', 'RA-RaBO01:RF-LLRF:RmpTs2'],
                 '358': ['T3 Ramp Top', 'RA-RaBO01:RF-LLRF:RmpTs3'],
                 '359': ['T4 Ramp Down', 'RA-RaBO01:RF-LLRF:RmpTs4'],
                 '360': ['Ramp Increase Rate', 'RA-RaBO01:RF-LLRF:RmpIncTime'],
                 '164': ['Ref Top', 'RA-RaBO01:RF-LLRF:RefTopAmp-Mon', 'red'],
-                '362 mV': ['Amp Ramp Top (mV)', 'RA-RaBO01:RF-LLRF:RampAmpTop'],
-                '362 Vgap': ['Amp Ramp Top (Vgap)', 'RA-RaBO01:RF-LLRF:RampAmpTopVGap'],
-                '364': ['Phase Ramp Top', 'RA-RaBO01:RF-LLRF:RampPhsTop'],
+                '362 mV': ['Amp Ramp Top (mV)', 'RA-RaBO01:RF-LLRF:RmpAmpTop'],
+                '362 Vgap': ['Amp Ramp Top (Vgap)', 'RA-RaBO01:RF-LLRF:RmpAmpTopVGap'],
+                '364': ['Phase Ramp Top', 'RA-RaBO01:RF-LLRF:RmpPhsTop'],
                 '184': ['Ref Bot', 'RA-RaBO01:RF-LLRF:RefBotAmp-Mon', 'blue'],
-                '361 mV': ['Amp Ramp Bot (mV)', 'RA-RaBO01:RF-LLRF:RampAmpBot'],
-                '361 Vgap': ['Amp Ramp Bot (Vgap)', 'RA-RaBO01:RF-LLRF:RampAmpBotVGap'],
-                '363': ['Phase Ramp Bot', 'RA-RaBO01:RF-LLRF:RampPhsBot'],
-                '536': ['Ramp Top', 'RA-RaBO01:RF-LLRF:RampTop-Mon', 'green'],
-                '533': ['Ramp Ready', 'RA-RaBO01:RF-LLRF:RampRdy-Mon'],
-                '365': ['Amp Ramp Up Slope', 'RA-RaBO01:RF-LLRF:RampAmpUpCnt'],
-                '366': ['Amp Ramp Down Slope', 'RA-RaBO01:RF-LLRF:RampAmpDownCnt'],
-                '367': ['Phase Ramp Up Slope', 'RA-RaBO01:RF-LLRF:RampPhsUpCnt'],
-                '368': ['Phase Ramp Down Slope', 'RA-RaBO01:RF-LLRF:RampPhsDownCnt'],
+                '361 mV': ['Amp Ramp Bot (mV)', 'RA-RaBO01:RF-LLRF:RmpAmpBot'],
+                '361 Vgap': ['Amp Ramp Bot (Vgap)', 'RA-RaBO01:RF-LLRF:RmpAmpBotVGap'],
+                '363': ['Phase Ramp Bot', 'RA-RaBO01:RF-LLRF:RmpPhsBot'],
+                '536': ['Ramp Top', 'RA-RaBO01:RF-LLRF:RmpTop-Mon', 'green'],
+                '533': ['Ramp Ready', 'RA-RaBO01:RF-LLRF:RmpRdy-Mon'],
+                '365': ['Amp Ramp Up Slope', 'RA-RaBO01:RF-LLRF:RmpAmpUpCnt'],
+                '366': ['Amp Ramp Down Slope', 'RA-RaBO01:RF-LLRF:RmpAmpDownCnt'],
+                '367': ['Phase Ramp Up Slope', 'RA-RaBO01:RF-LLRF:RmpPhsUpCnt'],
+                '368': ['Phase Ramp Down Slope', 'RA-RaBO01:RF-LLRF:RmpPhsDownCnt'],
                 'Limits': {
-                    '362': ['Top Reference', 'RA-RaBO01:RF-LLRF:RampAmpTop'],
-                    '361': ['Bot Reference', 'RA-RaBO01:RF-LLRF:RampAmpBot']
+                    '362': ['Top Reference', 'RA-RaBO01:RF-LLRF:RmpAmpTop'],
+                    '361': ['Bot Reference', 'RA-RaBO01:RF-LLRF:RmpAmpBot']
                 }
             },
             'Diagnostics': {
@@ -1135,7 +1135,7 @@ SEC_2_CHANNELS = {
                     },
                     '531': {
                         'Label': '5 Hz Trigger',
-                        'PV': 'RA-RaBO01:RF-LLRF:RampTrigger-Mon'
+                        'PV': 'RA-RaBO01:RF-LLRF:RmpTrigger-Mon'
                     }
                 },
                 'Bot': {
@@ -1235,7 +1235,7 @@ SEC_2_CHANNELS = {
                     },
                     '531': {
                         'Label': '5 Hz Trigger',
-                        'PV': 'RA-RaBO01:RF-LLRF:RampTrigger-Mon'
+                        'PV': 'RA-RaBO01:RF-LLRF:RmpTrigger-Mon'
                     }
                 }
             }
@@ -1299,7 +1299,7 @@ SEC_2_CHANNELS = {
                 '311': ['Tuning Delay', 'RA-RaBO01:RF-LLRF:TuneDly'],
                 '312': ['Tuning Filter Enable', 'RA-RaBO01:RF-LLRF:TuneFilt'],
                 '313': ['Tuning Trigger Enable', 'RA-RaBO01:RF-LLRF:TuneTrig'],
-                '316': ['Tuning/FF On Top Ramp', 'RA-RaBO01:RF-LLRF:RampTuneTop'],
+                '316': ['Tuning/FF On Top Ramp', 'RA-RaBO01:RF-LLRF:RmpTuneTop'],
             },
             'Drivers': {
                 '5V': ['RA-RaBO01:RF-CavPlDrivers:VoltPos5V-Mon', 'RA-RaBO01:RF-CavPlDrivers:Current5V-Mon'],
@@ -2150,8 +2150,8 @@ SEC_2_CHANNELS = {
                     'PRef': 'RA-RaSIA01:RF-LLRF-A:SLRefPhs-Mon',
                     'AInp': 'RA-RaSIA01:RF-LLRF-A:SLInpAmp-Mon',
                     'PInp': 'RA-RaSIA01:RF-LLRF-A:SLInpPhs-Mon',
-                    'AErr': 'RA-RaSIA01:RF-LLRF-A:SLErrAmp-Mon',
-                    'PErr': 'RA-RaSIA01:RF-LLRF-A:SLErrPhs-Mon',
+                    'AErr': 'RA-RaSIA01:RF-LLRF-A:SLErrorAmp-Mon',
+                    'PErr': 'RA-RaSIA01:RF-LLRF-A:SLErrorPhs-Mon',
                 },
                 'B': {
                     'Enbl': 'RA-RaSIB01:RF-LLRF-B:SL',
@@ -2164,13 +2164,13 @@ SEC_2_CHANNELS = {
                     'PRef': 'RA-RaSIB01:RF-LLRF-B:SLRefPhs-Mon',
                     'AInp': 'RA-RaSIB01:RF-LLRF-B:SLInpAmp-Mon',
                     'PInp': 'RA-RaSIB01:RF-LLRF-B:SLInpPhs-Mon',
-                    'AErr': 'RA-RaSIB01:RF-LLRF-B:SLErrAmp-Mon',
-                    'PErr': 'RA-RaSIB01:RF-LLRF-B:SLErrPhs-Mon',
+                    'AErr': 'RA-RaSIB01:RF-LLRF-B:SLErrorAmp-Mon',
+                    'PErr': 'RA-RaSIB01:RF-LLRF-B:SLErrorPhs-Mon',
                 },
             },
             'ASet': {
-                'A': 'RA-RaSIA01:RF-LLRF-A:AmpVCav',
-                'B': 'RA-RaSIB01:RF-LLRF-B:AmpVCav',
+                'A': 'RA-RaSIA01:RF-LLRF-A:ALRefAmpVGap',
+                'B': 'RA-RaSIB01:RF-LLRF-B:ALRefAmpVGap',
             },
         },
         'Tun': {
@@ -3690,29 +3690,29 @@ SEC_2_CHANNELS = {
             'A': {
                 'Control': {
                     'Ramp Enable': 'RA-RaSIA01:RF-LLRF-A:RmpEn',
-                    'Ramp Down Disable': 'RA-RaSIA01:RF-LLRF-A:RampDownDsbl',
+                    'Ramp Down Disable': 'RA-RaSIA01:RF-LLRF-A:RmpDownDsbl',
                     '356': ['T1 Ramp Delay After Trig', 'RA-RaSIA01:RF-LLRF-A:RmpTs1'],
                     '357': ['T2 Ramp Up', 'RA-RaSIA01:RF-LLRF-A:RmpTs2'],
                     '358': ['T3 Ramp Top', 'RA-RaSIA01:RF-LLRF-A:RmpTs3'],
                     '359': ['T4 Ramp Down', 'RA-RaSIA01:RF-LLRF-A:RmpTs4'],
                     '360': ['Ramp Increase Rate', 'RA-RaSIA01:RF-LLRF-A:RmpIncTime'],
                     '164': ['Ref Top', 'RA-RaSIA01:RF-LLRF-A:RefTopAmp-Mon', 'red'],
-                    '362 mV': ['Amp Ramp Top (mV)', 'RA-RaSIA01:RF-LLRF-A:RampAmpTop'],
-                    '362 Vgap': ['Amp Ramp Top (Vgap)', 'RA-RaSIA01:RF-LLRF-A:RampAmpTopVGap'],
-                    '364': ['Phase Ramp Top', 'RA-RaSIA01:RF-LLRF-A:RampPhsTop'],
+                    '362 mV': ['Amp Ramp Top (mV)', 'RA-RaSIA01:RF-LLRF-A:RmpAmpTop'],
+                    '362 Vgap': ['Amp Ramp Top (Vgap)', 'RA-RaSIA01:RF-LLRF-A:RmpAmpTopVGap'],
+                    '364': ['Phase Ramp Top', 'RA-RaSIA01:RF-LLRF-A:RmpPhsTop'],
                     '184': ['Ref Bot', 'RA-RaSIA01:RF-LLRF-A:RefBotAmp-Mon', 'blue'],
-                    '361 mV': ['Amp Ramp Bot (mV)', 'RA-RaSIA01:RF-LLRF-A:RampAmpBot'],
-                    '361 Vgap': ['Amp Ramp Bot (Vgap)', 'RA-RaSIA01:RF-LLRF-A:RampAmpBotVGap'],
-                    '363': ['Phase Ramp Bot', 'RA-RaSIA01:RF-LLRF-A:RampPhsBot'],
-                    '536': ['Ramp Top', 'RA-RaSIA01:RF-LLRF-A:RampTop-Mon', 'green'],
-                    '533': ['Ramp Ready', 'RA-RaSIA01:RF-LLRF-A:RampRdy-Mon'],
-                    '365': ['Amp Ramp Up Slope', 'RA-RaSIA01:RF-LLRF-A:RampAmpUpCnt'],
-                    '366': ['Amp Ramp Down Slope', 'RA-RaSIA01:RF-LLRF-A:RampAmpDownCnt'],
-                    '367': ['Phase Ramp Up Slope', 'RA-RaSIA01:RF-LLRF-A:RampPhsUpCnt'],
-                    '368': ['Phase Ramp Down Slope', 'RA-RaSIA01:RF-LLRF-A:RampPhsDownCnt'],
+                    '361 mV': ['Amp Ramp Bot (mV)', 'RA-RaSIA01:RF-LLRF-A:RmpAmpBot'],
+                    '361 Vgap': ['Amp Ramp Bot (Vgap)', 'RA-RaSIA01:RF-LLRF-A:RmpAmpBotVGap'],
+                    '363': ['Phase Ramp Bot', 'RA-RaSIA01:RF-LLRF-A:RmpPhsBot'],
+                    '536': ['Ramp Top', 'RA-RaSIA01:RF-LLRF-A:RmpTop-Mon', 'green'],
+                    '533': ['Ramp Ready', 'RA-RaSIA01:RF-LLRF-A:RmpRdy-Mon'],
+                    '365': ['Amp Ramp Up Slope', 'RA-RaSIA01:RF-LLRF-A:RmpAmpUpCnt'],
+                    '366': ['Amp Ramp Down Slope', 'RA-RaSIA01:RF-LLRF-A:RmpAmpDownCnt'],
+                    '367': ['Phase Ramp Up Slope', 'RA-RaSIA01:RF-LLRF-A:RmpPhsUpCnt'],
+                    '368': ['Phase Ramp Down Slope', 'RA-RaSIA01:RF-LLRF-A:RmpPhsDownCnt'],
                     'Limits': {
-                        '362': ['Top Reference', 'RA-RaSIA01:RF-LLRF-A:RampAmpTop'],
-                        '361': ['Bot Reference', 'RA-RaSIA01:RF-LLRF-A:RampAmpBot']
+                        '362': ['Top Reference', 'RA-RaSIA01:RF-LLRF-A:RmpAmpTop'],
+                        '361': ['Bot Reference', 'RA-RaSIA01:RF-LLRF-A:RmpAmpBot']
                     }
                 },
                 'Diagnostics': {
@@ -3817,7 +3817,7 @@ SEC_2_CHANNELS = {
                         },
                         '531': {
                             'Label': '5 Hz Trigger',
-                            'PV': 'RA-RaSIA01:RF-LLRF-A:RampTrigger-Mon'
+                            'PV': 'RA-RaSIA01:RF-LLRF-A:RmpTrigger-Mon'
                         }
                     },
                     'Bot': {
@@ -3917,7 +3917,7 @@ SEC_2_CHANNELS = {
                         },
                         '531': {
                             'Label': '5 Hz Trigger',
-                            'PV': 'RA-RaSIA01:RF-LLRF-A:RampTrigger-Mon'
+                            'PV': 'RA-RaSIA01:RF-LLRF-A:RmpTrigger-Mon'
                         }
                     }
                 },
@@ -3925,29 +3925,29 @@ SEC_2_CHANNELS = {
             'B': {
                 'Control': {
                     'Ramp Enable': 'RA-RaSIB01:RF-LLRF-B:RmpEn',
-                    'Ramp Down Disable': 'RA-RaSIB01:RF-LLRF-B:RampDownDsbl',
+                    'Ramp Down Disable': 'RA-RaSIB01:RF-LLRF-B:RmpDownDsbl',
                     '356': ['T1 Ramp Delay After Trig', 'RA-RaSIB01:RF-LLRF-B:RmpTs1'],
                     '357': ['T2 Ramp Up', 'RA-RaSIB01:RF-LLRF-B:RmpTs2'],
                     '358': ['T3 Ramp Top', 'RA-RaSIB01:RF-LLRF-B:RmpTs3'],
                     '359': ['T4 Ramp Down', 'RA-RaSIB01:RF-LLRF-B:RmpTs4'],
                     '360': ['Ramp Increase Rate', 'RA-RaSIB01:RF-LLRF-B:RmpIncTime'],
                     '164': ['Ref Top', 'RA-RaSIB01:RF-LLRF-B:RefTopAmp-Mon', 'red'],
-                    '362 mV': ['Amp Ramp Top (mV)', 'RA-RaSIB01:RF-LLRF-B:RampAmpTop'],
-                    '362 Vgap': ['Amp Ramp Top (Vgap)', 'RA-RaSIB01:RF-LLRF-B:RampAmpTopVGap'],
-                    '364': ['Phase Ramp Top', 'RA-RaSIB01:RF-LLRF-B:RampPhsTop'],
+                    '362 mV': ['Amp Ramp Top (mV)', 'RA-RaSIB01:RF-LLRF-B:RmpAmpTop'],
+                    '362 Vgap': ['Amp Ramp Top (Vgap)', 'RA-RaSIB01:RF-LLRF-B:RmpAmpTopVGap'],
+                    '364': ['Phase Ramp Top', 'RA-RaSIB01:RF-LLRF-B:RmpPhsTop'],
                     '184': ['Ref Bot', 'RA-RaSIB01:RF-LLRF-B:RefBotAmp-Mon', 'blue'],
-                    '361 mV': ['Amp Ramp Bot (mV)', 'RA-RaSIB01:RF-LLRF-B:RampAmpBot'],
-                    '361 Vgap': ['Amp Ramp Bot (Vgap)', 'RA-RaSIB01:RF-LLRF-B:RampAmpBotVGap'],
-                    '363': ['Phase Ramp Bot', 'RA-RaSIB01:RF-LLRF-B:RampPhsBot'],
-                    '536': ['Ramp Top', 'RA-RaSIB01:RF-LLRF-B:RampTop-Mon', 'green'],
-                    '533': ['Ramp Ready', 'RA-RaSIB01:RF-LLRF-B:RampRdy-Mon'],
-                    '365': ['Amp Ramp Up Slope', 'RA-RaSIB01:RF-LLRF-B:RampAmpUpCnt'],
-                    '366': ['Amp Ramp Down Slope', 'RA-RaSIB01:RF-LLRF-B:RampAmpDownCnt'],
-                    '367': ['Phase Ramp Up Slope', 'RA-RaSIB01:RF-LLRF-B:RampPhsUpCnt'],
-                    '368': ['Phase Ramp Down Slope', 'RA-RaSIB01:RF-LLRF-B:RampPhsDownCnt'],
+                    '361 mV': ['Amp Ramp Bot (mV)', 'RA-RaSIB01:RF-LLRF-B:RmpAmpBot'],
+                    '361 Vgap': ['Amp Ramp Bot (Vgap)', 'RA-RaSIB01:RF-LLRF-B:RmpAmpBotVGap'],
+                    '363': ['Phase Ramp Bot', 'RA-RaSIB01:RF-LLRF-B:RmpPhsBot'],
+                    '536': ['Ramp Top', 'RA-RaSIB01:RF-LLRF-B:RmpTop-Mon', 'green'],
+                    '533': ['Ramp Ready', 'RA-RaSIB01:RF-LLRF-B:RmpRdy-Mon'],
+                    '365': ['Amp Ramp Up Slope', 'RA-RaSIB01:RF-LLRF-B:RmpAmpUpCnt'],
+                    '366': ['Amp Ramp Down Slope', 'RA-RaSIB01:RF-LLRF-B:RmpAmpDownCnt'],
+                    '367': ['Phase Ramp Up Slope', 'RA-RaSIB01:RF-LLRF-B:RmpPhsUpCnt'],
+                    '368': ['Phase Ramp Down Slope', 'RA-RaSIB01:RF-LLRF-B:RmpPhsDownCnt'],
                     'Limits': {
-                        '362': ['Top Reference', 'RA-RaSIB01:RF-LLRF-B:RampAmpTop'],
-                        '361': ['Bot Reference', 'RA-RaSIB01:RF-LLRF-B:RampAmpBot']
+                        '362': ['Top Reference', 'RA-RaSIB01:RF-LLRF-B:RmpAmpTop'],
+                        '361': ['Bot Reference', 'RA-RaSIB01:RF-LLRF-B:RmpAmpBot']
                     }
                 },
                 'Diagnostics': {
@@ -4052,7 +4052,7 @@ SEC_2_CHANNELS = {
                         },
                         '531': {
                             'Label': '5 Hz Trigger',
-                            'PV': 'RA-RaSIB01:RF-LLRF-B:RampTrigger-Mon'
+                            'PV': 'RA-RaSIB01:RF-LLRF-B:RmpTrigger-Mon'
                         }
                     },
                     'Bot': {
@@ -4152,7 +4152,7 @@ SEC_2_CHANNELS = {
                         },
                         '531': {
                             'Label': '5 Hz Trigger',
-                            'PV': 'RA-RaSIB01:RF-LLRF-B:RampTrigger-Mon'
+                            'PV': 'RA-RaSIB01:RF-LLRF-B:RmpTrigger-Mon'
                         }
                     }
                 }
@@ -4238,7 +4238,7 @@ SEC_2_CHANNELS = {
                     '311': ['Tuning Delay', 'RA-RaSIA01:RF-LLRF-A:TuneDly'],
                     '312': ['Tuning Filter Enable', 'RA-RaSIA01:RF-LLRF-A:TuneFilt'],
                     '313': ['Tuning Trigger Enable', 'RA-RaSIA01:RF-LLRF-A:TuneTrig'],
-                    '316': ['Tuning/FF On Top Ramp', 'RA-RaSIA01:RF-LLRF-A:RampTuneTop'],
+                    '316': ['Tuning/FF On Top Ramp', 'RA-RaSIA01:RF-LLRF-A:RmpTuneTop'],
                 },
                 'Drivers': {
                     '5V': ['RA-RaSIA01:RF-CavPlDrivers:VoltPos5V-Mon', 'RA-RaSIA01:RF-CavPlDrivers:Current5V-Mon'],
@@ -4273,7 +4273,7 @@ SEC_2_CHANNELS = {
                     '311': ['Tuning Delay', 'RA-RaSIB01:RF-LLRF-B:TuneDly'],
                     '312': ['Tuning Filter Enable', 'RA-RaSIB01:RF-LLRF-B:TuneFilt'],
                     '313': ['Tuning Trigger Enable', 'RA-RaSIB01:RF-LLRF-B:TuneTrig'],
-                    '316': ['Tuning/FF On Top Ramp', 'RA-RaSIB01:RF-LLRF-B:RampTuneTop'],
+                    '316': ['Tuning/FF On Top Ramp', 'RA-RaSIB01:RF-LLRF-B:RmpTuneTop'],
                 },
                 'Drivers': {
                     '5V': ['RA-RaSIB01:RF-CavPlDrivers:VoltPos5V-Mon', 'RA-RaSIB01:RF-CavPlDrivers:Current5V-Mon'],
