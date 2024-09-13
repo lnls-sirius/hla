@@ -199,11 +199,17 @@ class SSACurrentsDetails(SiriusDialog):
                 0, 1, 1, 2)
 
             # Currents
-            for i in range(1, 9):
+            for i in range(1, 17):
+                if i < 10:
+                    m_num = f'0{i}'
+                else:
+                    m_num = i
                 pv_curr_1 = self._substitute_macros(
-                    self.prefix+chs_dict['Curr'], hs_num, m_num=i, curr_num=1)
+                    self.prefix+chs_dict['Curr'],
+                    hs_num, m_num=m_num, curr_num=1)
                 pv_curr_2 = self._substitute_macros(
-                    self.prefix+chs_dict['Curr'], hs_num, m_num=i, curr_num=2)
+                    self.prefix+chs_dict['Curr'],
+                    hs_num, m_num=m_num, curr_num=2)
                 if i == 1:
                     self.curr_pvs[hs_num] = [pv_curr_1, pv_curr_2]
                 else:
@@ -217,10 +223,10 @@ class SSACurrentsDetails(SiriusDialog):
 
                 if row_label == 'left':
                     lay.addWidget(QLabel(
-                        f'M0{i}', alignment=Qt.AlignCenter), i+1, 0)
+                        f'M{m_num}', alignment=Qt.AlignCenter), i+1, 0)
                 elif row_label == 'right':
                     lay.addWidget(QLabel(
-                        f'M0{i}', alignment=Qt.AlignCenter), i+1, 5)
+                        f'M{m_num}', alignment=Qt.AlignCenter), i+1, 5)
                 lay.addWidget(lb_curr_1, i+1, 1)
                 lay.addWidget(lb_curr_2, i+1, 2)
                 row = i+2
@@ -306,16 +312,16 @@ class SSACurrentsDetails(SiriusDialog):
         else:
             # Heat Sinks
             hs_nums = [1, 4, 3, 6]
-            m_nums = [1, 1, 17, 17]
+            m_nums = ['01', '01', '17', '17']
             row = 0
             column = 0
             for i, hs_num in enumerate(hs_nums):
                 lb_1 = SiriusLabel(self, self._substitute_macros(
-                    self.prefix+chs_dict['HS'], i, m_num=m_nums[i],
+                    self.prefix+chs_dict['HS'], hs_num=hs_num, m_num=m_nums[i],
                     curr_num='1'))
                 lb_1.showUnits = True
                 lb_2 = SiriusLabel(self, self._substitute_macros(
-                    self.prefix+chs_dict['HS'], i, m_num=m_nums[i],
+                    self.prefix+chs_dict['HS'], hs_num=hs_num, m_num=m_nums[i],
                     curr_num='2'))
                 lb_2.showUnits = True
 
