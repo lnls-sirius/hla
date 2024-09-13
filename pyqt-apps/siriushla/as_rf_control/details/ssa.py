@@ -134,7 +134,8 @@ class SSADetailsSI(SiriusDialog):
             lay_alerts.addWidget(QLabel(ls[0], alignment=Qt.AlignCenter),
                 row_alerts, column)
             lay_alerts.addWidget(SiriusLedAlert(
-                self, self.prefix+ls[1]), row_alerts, column+1)
+                self, self.prefix+self._substitute_pv_macros(ls[1])),
+                row_alerts, column+1)
             column += 2
             if column == 6:
                 row_alerts += 1
