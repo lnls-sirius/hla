@@ -447,23 +447,23 @@ SEC_2_CHANNELS = {
                 },
                 '20': {
                     'Label': 'Fwd Pwr SSA 1 (RFin5)',
-                    'I': 'RA-ToBO01:RF-SSAmpTower:FwdOutI-Mon',
-                    'Q': 'RA-ToBO01:RF-SSAmpTower:FwdOutQ-Mon',
-                    'Amp1': 'RA-ToBO01:RF-SSAmpTower:FwdOutAmp-Mon',
-                    'Amp2': 'RA-ToBO01:RF-SSAmpTower:FwdOutAmpW-Mon',
-                    'Amp3': 'RA-ToBO01:RF-SSAmpTower:FwdOutAmpdBm-Mon',
-                    'Amp4': 'RA-ToBO01:RF-SSAmpTower:FwdOutAmpVGap-Mon',
-                    'Phs': 'RA-ToBO01:RF-SSAmpTower:FwdOutPhs-Mon'
+                    'I': 'RA-ToBO:RF-SSAmpTower:FwdOutI-Mon',
+                    'Q': 'RA-ToBO:RF-SSAmpTower:FwdOutQ-Mon',
+                    'Amp1': 'RA-ToBO:RF-SSAmpTower:FwdOutAmp-Mon',
+                    'Amp2': 'RA-ToBO:RF-SSAmpTower:FwdOutAmpW-Mon',
+                    'Amp3': 'RA-ToBO:RF-SSAmpTower:FwdOutAmpdBm-Mon',
+                    'Amp4': 'RA-ToBO:RF-SSAmpTower:FwdOutAmpVGap-Mon',
+                    'Phs': 'RA-ToBO:RF-SSAmpTower:FwdOutPhs-Mon'
                 },
                 '22': {
                     'Label': 'Rev Pwr SSA 1 (RFin6)',
-                    'I': 'RA-ToBO01:RF-SSAmpTower:RevOutI-Mon',
-                    'Q': 'RA-ToBO01:RF-SSAmpTower:RevOutQ-Mon',
-                    'Amp1': 'RA-ToBO01:RF-SSAmpTower:RevOutAmp-Mon',
-                    'Amp2': 'RA-ToBO01:RF-SSAmpTower:RevOutAmpW-Mon',
-                    'Amp3': 'RA-ToBO01:RF-SSAmpTower:RevOutAmpdBm-Mon',
-                    'Amp4': 'RA-ToBO01:RF-SSAmpTower:RevOutAmpVGap-Mon',
-                    'Phs': 'RA-ToBO01:RF-SSAmpTower:RevOutPhs-Mon'
+                    'I': 'RA-ToBO:RF-SSAmpTower:RevOutI-Mon',
+                    'Q': 'RA-ToBO:RF-SSAmpTower:RevOutQ-Mon',
+                    'Amp1': 'RA-ToBO:RF-SSAmpTower:RevOutAmp-Mon',
+                    'Amp2': 'RA-ToBO:RF-SSAmpTower:RevOutAmpW-Mon',
+                    'Amp3': 'RA-ToBO:RF-SSAmpTower:RevOutAmpdBm-Mon',
+                    'Amp4': 'RA-ToBO:RF-SSAmpTower:RevOutAmpVGap-Mon',
+                    'Phs': 'RA-ToBO:RF-SSAmpTower:RevOutPhs-Mon'
                 },
                 '37': {
                     'Label': 'Cell 2 Voltage (RFin7)',
@@ -680,13 +680,13 @@ SEC_2_CHANNELS = {
                 },
                 '20': {
                     'Label': 'Fwd Pwr SSA 1',
-                    'InPhs': 'RA-ToBO01:RF-SSAmpTower:FwdOutI-Mon',
-                    'Quad': 'RA-ToBO01:RF-SSAmpTower:FwdOutQ-Mon',
-                    'Amp1': 'RA-ToBO01:RF-SSAmpTower:FwdOutAmp-Mon',
-                    'Amp2': 'RA-ToBO01:RF-SSAmpTower:FwdOutAmpW-Mon',
-                    'Amp3': 'RA-ToBO01:RF-SSAmpTower:FwdOutAmpdBm-Mon',
+                    'InPhs': 'RA-ToBO:RF-SSAmpTower:FwdOutI-Mon',
+                    'Quad': 'RA-ToBO:RF-SSAmpTower:FwdOutQ-Mon',
+                    'Amp1': 'RA-ToBO:RF-SSAmpTower:FwdOutAmp-Mon',
+                    'Amp2': 'RA-ToBO:RF-SSAmpTower:FwdOutAmpW-Mon',
+                    'Amp3': 'RA-ToBO:RF-SSAmpTower:FwdOutAmpdBm-Mon',
                     'Amp4': '-',
-                    'Phs': 'RA-ToBO01:RF-SSAmpTower:FwdOutPhs-Mon'
+                    'Phs': 'RA-ToBO:RF-SSAmpTower:FwdOutPhs-Mon'
                 },
                 '32': {
                     'Label': 'Ang Cav Fwd',
@@ -1055,21 +1055,21 @@ SEC_2_CHANNELS = {
                     },
                     '152': {
                         'Label': 'Cell 2',
-                        'InPhs': 'RA-ToBO02:RF-SSAmpTower:FwdTopI-Mon',
-                        'Quad': 'RA-ToBO02:RF-SSAmpTower:FwdTopQ-Mon',
-                        'Amp1': 'RA-ToBO02:RF-SSAmpTower:FwdTopAmp-Mon',
-                        'Amp2': 'RA-ToBO02:RF-SSAmpTower:FwdTopAmpW-Mon',
-                        'Amp3': 'RA-ToBO02:RF-SSAmpTower:FwdTopAmpdBm-Mon',
-                        'Phs': 'RA-ToBO02:RF-SSAmpTower:FwdTopPhs-Mon'
+                        'InPhs': 'RA-ToBO:RF-SSAmpTower:FwdTopI-Mon',
+                        'Quad': 'RA-ToBO:RF-SSAmpTower:FwdTopQ-Mon',
+                        'Amp1': 'RA-ToBO:RF-SSAmpTower:FwdTopAmp-Mon',
+                        'Amp2': 'RA-ToBO:RF-SSAmpTower:FwdTopAmpW-Mon',
+                        'Amp3': 'RA-ToBO:RF-SSAmpTower:FwdTopAmpdBm-Mon',
+                        'Phs': 'RA-ToBO:RF-SSAmpTower:FwdTopPhs-Mon'
                     },
                     '154': {
                         'Label': 'Cell 4',
-                        'InPhs': 'RA-ToBO02:RF-SSAmpTower:RevTopI-Mon',
-                        'Quad': 'RA-ToBO02:RF-SSAmpTower:RevTopQ-Mon',
-                        'Amp1': 'RA-ToBO02:RF-SSAmpTower:RevTopAmp-Mon',
-                        'Amp2': 'RA-ToBO02:RF-SSAmpTower:RevTopAmpW-Mon',
-                        'Amp3': 'RA-ToBO02:RF-SSAmpTower:RevTopAmpdBm-Mon',
-                        'Phs': 'RA-ToBO02:RF-SSAmpTower:RevTopPhs-Mon'
+                        'InPhs': 'RA-ToBO:RF-SSAmpTower:RevTopI-Mon',
+                        'Quad': 'RA-ToBO:RF-SSAmpTower:RevTopQ-Mon',
+                        'Amp1': 'RA-ToBO:RF-SSAmpTower:RevTopAmp-Mon',
+                        'Amp2': 'RA-ToBO:RF-SSAmpTower:RevTopAmpW-Mon',
+                        'Amp3': 'RA-ToBO:RF-SSAmpTower:RevTopAmpdBm-Mon',
+                        'Phs': 'RA-ToBO:RF-SSAmpTower:RevTopPhs-Mon'
                     },
                     '190': {
                         'Label': 'Fwd Cavity',
@@ -1082,21 +1082,21 @@ SEC_2_CHANNELS = {
                     },
                     '156': {
                         'Label': 'Fwd Pwr SSA 1',
-                        'InPhs': 'RA-ToBO01:RF-SSAmpTower:FwdTopI-Mon',
-                        'Quad': 'RA-ToBO01:RF-SSAmpTower:FwdTopQ-Mon',
-                        'Amp1': 'RA-ToBO01:RF-SSAmpTower:FwdTopAmp-Mon',
-                        'Amp2': 'RA-ToBO01:RF-SSAmpTower:FwdTopAmpW-Mon',
-                        'Amp3': 'RA-ToBO01:RF-SSAmpTower:FwdTopAmpdBm-Mon',
-                        'Phs': 'RA-ToBO01:RF-SSAmpTower:FwdTopPhs-Mon'
+                        'InPhs': 'RA-ToBO:RF-SSAmpTower:FwdTopI-Mon',
+                        'Quad': 'RA-ToBO:RF-SSAmpTower:FwdTopQ-Mon',
+                        'Amp1': 'RA-ToBO:RF-SSAmpTower:FwdTopAmp-Mon',
+                        'Amp2': 'RA-ToBO:RF-SSAmpTower:FwdTopAmpW-Mon',
+                        'Amp3': 'RA-ToBO:RF-SSAmpTower:FwdTopAmpdBm-Mon',
+                        'Phs': 'RA-ToBO:RF-SSAmpTower:FwdTopPhs-Mon'
                     },
                     '158': {
                         'Label': 'Rev Pwr SSA 1',
-                        'InPhs':  'RA-ToBO01:RF-SSAmpTower:RevTopI-Mon',
-                        'Quad':  'RA-ToBO01:RF-SSAmpTower:RevTopQ-Mon',
-                        'Amp1':  'RA-ToBO01:RF-SSAmpTower:RevTopAmp-Mon',
-                        'Amp2': 'RA-ToBO01:RF-SSAmpTower:RevTopAmpW-Mon',
-                        'Amp3': 'RA-ToBO01:RF-SSAmpTower:RevTopAmpdBm-Mon',
-                        'Phs':  'RA-ToBO01:RF-SSAmpTower:RevTopPhs-Mon'
+                        'InPhs':  'RA-ToBO:RF-SSAmpTower:RevTopI-Mon',
+                        'Quad':  'RA-ToBO:RF-SSAmpTower:RevTopQ-Mon',
+                        'Amp1':  'RA-ToBO:RF-SSAmpTower:RevTopAmp-Mon',
+                        'Amp2': 'RA-ToBO:RF-SSAmpTower:RevTopAmpW-Mon',
+                        'Amp3': 'RA-ToBO:RF-SSAmpTower:RevTopAmpdBm-Mon',
+                        'Phs':  'RA-ToBO:RF-SSAmpTower:RevTopPhs-Mon'
                     },
                     '160': {
                         'Label': 'Rev Cavity',
@@ -1159,21 +1159,21 @@ SEC_2_CHANNELS = {
                     },
                     '172': {
                         'Label': 'Cell 2',
-                        'InPhs': 'RA-ToBO02:RF-SSAmpTower:FwdBotI-Mon',
-                        'Quad': 'RA-ToBO02:RF-SSAmpTower:FwdBotQ-Mon',
-                        'Amp1': 'RA-ToBO02:RF-SSAmpTower:FwdBotAmp-Mon',
-                        'Amp2': 'RA-ToBO02:RF-SSAmpTower:FwdBotAmpW-Mon',
-                        'Amp3': 'RA-ToBO02:RF-SSAmpTower:FwdBotAmpdBm-Mon',
-                        'Phs': 'RA-ToBO02:RF-SSAmpTower:FwdBotPhs-Mon'
+                        'InPhs': 'RA-ToBO:RF-SSAmpTower:FwdBotI-Mon',
+                        'Quad': 'RA-ToBO:RF-SSAmpTower:FwdBotQ-Mon',
+                        'Amp1': 'RA-ToBO:RF-SSAmpTower:FwdBotAmp-Mon',
+                        'Amp2': 'RA-ToBO:RF-SSAmpTower:FwdBotAmpW-Mon',
+                        'Amp3': 'RA-ToBO:RF-SSAmpTower:FwdBotAmpdBm-Mon',
+                        'Phs': 'RA-ToBO:RF-SSAmpTower:FwdBotPhs-Mon'
                     },
                     '174': {
                         'Label': 'Cell 4',
-                        'InPhs': 'RA-ToBO02:RF-SSAmpTower:RevBotI-Mon',
-                        'Quad': 'RA-ToBO02:RF-SSAmpTower:RevBotQ-Mon',
-                        'Amp1': 'RA-ToBO02:RF-SSAmpTower:RevBotAmp-Mon',
-                        'Amp2': 'RA-ToBO02:RF-SSAmpTower:RevBotAmpW-Mon',
-                        'Amp3': 'RA-ToBO02:RF-SSAmpTower:RevBotAmpdBm-Mon',
-                        'Phs': 'RA-ToBO02:RF-SSAmpTower:RevBotPhs-Mon'
+                        'InPhs': 'RA-ToBO:RF-SSAmpTower:RevBotI-Mon',
+                        'Quad': 'RA-ToBO:RF-SSAmpTower:RevBotQ-Mon',
+                        'Amp1': 'RA-ToBO:RF-SSAmpTower:RevBotAmp-Mon',
+                        'Amp2': 'RA-ToBO:RF-SSAmpTower:RevBotAmpW-Mon',
+                        'Amp3': 'RA-ToBO:RF-SSAmpTower:RevBotAmpdBm-Mon',
+                        'Phs': 'RA-ToBO:RF-SSAmpTower:RevBotPhs-Mon'
                     },
                     '192': {
                         'Label': 'Fwd Cavity',
@@ -1186,21 +1186,21 @@ SEC_2_CHANNELS = {
                     },
                     '176': {
                         'Label': 'Fwd Pwr SSA 1',
-                        'InPhs': 'RA-ToBO01:RF-SSAmpTower:FwdBotI-Mon',
-                        'Quad': 'RA-ToBO01:RF-SSAmpTower:FwdBotQ-Mon',
-                        'Amp1': 'RA-ToBO01:RF-SSAmpTower:FwdBotAmp-Mon',
-                        'Amp2': 'RA-ToBO01:RF-SSAmpTower:FwdBotAmpW-Mon',
-                        'Amp3': 'RA-ToBO01:RF-SSAmpTower:FwdBotAmpdBm-Mon',
-                        'Phs': 'RA-ToBO01:RF-SSAmpTower:FwdBotPhs-Mon'
+                        'InPhs': 'RA-ToBO:RF-SSAmpTower:PwrFwdBotI-Mon',
+                        'Quad': 'RA-ToBO:RF-SSAmpTower:PwrFwdBotQ-Mon',
+                        'Amp1': 'RA-ToBO:RF-SSAmpTower:PwrFwdBotAmp-Mon',
+                        'Amp2': 'RA-ToBO:RF-SSAmpTower:PwrFwdBotAmpW-Mon',
+                        'Amp3': 'RA-ToBO:RF-SSAmpTower:PwrFwdBotAmpdBm-Mon',
+                        'Phs': 'RA-ToBO:RF-SSAmpTower:PwrFwdBotPhs-Mon'
                     },
                     '178': {
                         'Label': 'Rev Pwr SSA 1',
-                        'InPhs': 'RA-ToBO01:RF-SSAmpTower:RevBotI-Mon',
-                        'Quad': 'RA-ToBO01:RF-SSAmpTower:RevBotQ-Mon',
-                        'Amp1': 'RA-ToBO01:RF-SSAmpTower:RevBotAmp-Mon',
-                        'Amp2': 'RA-ToBO01:RF-SSAmpTower:RevBotAmpW-Mon',
-                        'Amp3': 'RA-ToBO01:RF-SSAmpTower:RevBotAmpdBm-Mon',
-                        'Phs': 'RA-ToBO01:RF-SSAmpTower:RevBotPhs-Mon'
+                        'InPhs': 'RA-ToBO:RF-SSAmpTower:RevBotI-Mon',
+                        'Quad': 'RA-ToBO:RF-SSAmpTower:RevBotQ-Mon',
+                        'Amp1': 'RA-ToBO:RF-SSAmpTower:RevBotAmp-Mon',
+                        'Amp2': 'RA-ToBO:RF-SSAmpTower:RevBotAmpW-Mon',
+                        'Amp3': 'RA-ToBO:RF-SSAmpTower:RevBotAmpdBm-Mon',
+                        'Phs': 'RA-ToBO:RF-SSAmpTower:RevBotPhs-Mon'
                     },
                     '180': {
                         'Label': 'Rev Cavity',
