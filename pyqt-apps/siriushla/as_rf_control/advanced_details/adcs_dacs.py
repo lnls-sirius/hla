@@ -107,7 +107,7 @@ class ADCDACDetails(SiriusDialog):
                     pb_enbl = PyDMStateButton(
                         self, self.prefix+val[1]+'-Sel')
                     led_enbl = SiriusLedState(
-                        self, self.prefix+val[1])
+                        self, self.prefix+val[1]+'-Sts')
                     lay.addWidget(QLabel(val[0]), row, offset, 1, 2)
                     lay.addWidget(pb_enbl, row, offset+2)
                     lay.addWidget(led_enbl, row, offset+3,
