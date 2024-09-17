@@ -123,6 +123,6 @@ class EquationsDetails(SiriusDialog):
             lay.addWidget(SiriusLabel(
                 self, self.prefix+chs_dict['Hw to Amp']+f'{i}-RB'), 1, i)
             lay.addWidget(SiriusLabel(
-                self, self.prefix+chs_dict['Hw to Amp']+f'{i}-RB'), 3, i)
+                self, self.prefix+chs_dict['Amp to Hw']+f'{i}-RB'), 3, i)
 
         return lay

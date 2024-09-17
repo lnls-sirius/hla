@@ -978,7 +978,6 @@ class RFMainControl(SiriusMainWindow):
             self, self.prefix+'BO-05D:RF-P5Cav:RmpAmpVCavBot-Mon')
         self.lb_cavvgapbot.showUnits = True
 
-
         lay = QGridLayout()
         self.ramp_chn_wid = {}
 
@@ -1039,14 +1038,14 @@ class RFMainControl(SiriusMainWindow):
         lay_vals.setHorizontalSpacing(15)
         lay_vals.setVerticalSpacing(6)
         lay_vals.addWidget(
-            QLabel('<h4>Channel</h4>', self, alignment=Qt.AlignCenter), 0, 1)
+            QLabel('<h4>Channel</h4>', self, alignment=Qt.AlignCenter), 0, 2)
         self.cb_units = QComboBox(self)
         self.cb_units.addItems(['W', 'dBm', 'mV'])
         self.cb_units.setStyleSheet(
             'QComboBox{max-width: 3.5em; font-weight: bold;}')
         self.cb_units.currentTextChanged.connect(
             self._handle_pwrdata_visibility)
-        lay_vals.addWidget(self.cb_units, 0, 2)
+        lay_vals.addWidget(self.cb_units, 0, 3)
 
         self.pwr_mon_graph = SiriusTimePlot(self)
         self.pwr_mon_graph.autoRangeX = True
@@ -1099,11 +1098,11 @@ class RFMainControl(SiriusMainWindow):
             lb_mvpwr.setVisible(False)
             self._pm_labels['mV'].append(lb_mvpwr)
 
-            lay_vals.addWidget(cbx, row, 0)
-            lay_vals.addWidget(lb_desc, row, 1)
-            lay_vals.addWidget(lb_dbmpwr, row, 2)
-            lay_vals.addWidget(lb_wpwr, row, 2)
-            lay_vals.addWidget(lb_mvpwr, row, 2)
+            lay_vals.addWidget(cbx, row, 1)
+            lay_vals.addWidget(lb_desc, row, 2)
+            lay_vals.addWidget(lb_dbmpwr, row, 3)
+            lay_vals.addWidget(lb_wpwr, row, 3)
+            lay_vals.addWidget(lb_mvpwr, row, 3)
 
             # Graph
             self.pwr_mon_graph.addYChannel(
@@ -1121,6 +1120,27 @@ class RFMainControl(SiriusMainWindow):
 
             idx += 1
         self.pwr_mon_graph.setLabel('left', '')
+
+        # ADCs and DACs
+        if self.section == 'SI':
+            systems = ['A', 'B']
+            rows = [1, 9]
+            for i in range(len(systems)):
+                lay_sys = QHBoxLayout()
+                lay_sys.setSpacing(9)
+                lb_sys = QLabel(
+                    f'<h4>{systems[i]}</h4>', alignment=Qt.AlignCenter)
+                lb_sys.setStyleSheet('min-width:15px;max-width:15px;')
+
+                pb_adcdac = QPushButton(qta.icon('fa5s.ellipsis-v'), '', self)
+                pb_adcdac.setStyleSheet(
+                    'min-width:18px;max-width:18px;icon-size:20px;')
+                connect_window(pb_adcdac, ADCDACDetails, parent=self,
+                            section=self.section, prefix=self.prefix,
+                            system=systems[i])
+                lay_sys.addWidget(pb_adcdac)
+                lay_sys.addWidget(lb_sys)
+                lay_vals.addLayout(lay_sys, rows[i], 0)
 
         if self.section == 'BO':
             for name in data:
