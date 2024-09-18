@@ -119,10 +119,11 @@ class EquationsDetails(SiriusDialog):
             lay.addWidget(QLabel(labels[i], alignment=Qt.AlignCenter), 2, i)
 
         # Bodies
-        for i in range(len(labels)):
-            lay.addWidget(SiriusLabel(
-                self, self.prefix+chs_dict['Hw to Amp']+f'{i}-RB'), 1, i)
-            lay.addWidget(SiriusLabel(
-                self, self.prefix+chs_dict['Amp to Hw']+f'{i}-RB'), 3, i)
+        lay.addWidget(SiriusLabel(
+            self, self.prefix+chs_dict['Hw to Amp']+'-RB'),
+            1, 0, 1, len(labels))
+        lay.addWidget(SiriusLabel(
+            self, self.prefix+chs_dict['Amp to Hw']+'-RB'),
+            3, 0, 1, len(labels))
 
         return lay
