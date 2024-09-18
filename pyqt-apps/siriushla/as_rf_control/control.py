@@ -569,7 +569,7 @@ class RFMainControl(SiriusMainWindow):
             QSpacerItem(0, 25, QSzPlcy.Ignored, QSzPlcy.Fixed), 2, 0)
         if self.section == 'SI':
             lay_plun.addWidget(QLabel(
-                '<h3> • Tunners</h3>', self, alignment=Qt.AlignLeft), 3, 0)
+                '<h3> • Tuners</h3>', self, alignment=Qt.AlignLeft), 3, 0)
         else:
             lay_plun.addWidget(QLabel(
                 '<h3> • Plungers</h3>', self, alignment=Qt.AlignLeft), 3, 0)
