@@ -698,12 +698,12 @@ class RFMainControl(SiriusMainWindow):
             self, self.prefix+'RA-RaBO01:RF-LLRF:RmpEn-Sts')
 
         self.led_rmpready = PyDMLed(
-            self, self.prefix+'RA-RaBO01:RF-LLRF:RampRdy-Mon')
+            self, self.prefix+'RA-RaBO01:RF-LLRF:RmpRdy-Mon')
         self.led_rmpready.onColor = PyDMLed.LightGreen
         self.led_rmpready.offColor = PyDMLed.Red
 
         self.led_rmptrig = PyDMLed(
-            self, self.prefix+'RA-RaBO01:RF-LLRF:RampTrigger-Mon')
+            self, self.prefix+'RA-RaBO01:RF-LLRF:RmpTrigger-Mon')
         self.led_rmptrig.onColor = PyDMLed.LightGreen
         self.led_rmptrig.offColor = PyDMLed.Red
 
@@ -735,36 +735,36 @@ class RFMainControl(SiriusMainWindow):
         self.lb_rmpts4.showUnits = True
 
         self.sb_rmpphstop = SiriusSpinbox(
-            self, self.prefix+'RA-RaBO01:RF-LLRF:RampPhsTop-SP')
+            self, self.prefix+'RA-RaBO01:RF-LLRF:RmpPhsTop-SP')
         self.lb_rmpphstop = SiriusLabel(
-            self, self.prefix+'RA-RaBO01:RF-LLRF:RampPhsTop-RB')
+            self, self.prefix+'RA-RaBO01:RF-LLRF:RmpPhsTop-RB')
         self.lb_rmpphstop.showUnits = True
         self.ld_rmpphstop = QLabel('Amplitude', self, alignment=Qt.AlignRight)
         lay_rmpphstopdesc = QHBoxLayout()
         lay_rmpphstopdesc.addWidget(self.ld_rmpphstop)
         lay_rmpphstopdesc.setAlignment(Qt.AlignRight)
         self.le_rmpvolttop1 = PyDMLineEdit(
-            self, self.prefix+'RA-RaBO01:RF-LLRF:RampAmpTop-SP')
+            self, self.prefix+'RA-RaBO01:RF-LLRF:RmpAmpTop-SP')
         self.lb_rmpvolttop1 = SiriusLabel(
-            self, self.prefix+'RA-RaBO01:RF-LLRF:RampAmpTop-RB')
+            self, self.prefix+'RA-RaBO01:RF-LLRF:RmpAmpTop-RB')
         self.lb_rmpvolttop1.showUnits = True
         self.lb_rmpvolttop2 = SiriusLabel(
             self, self.prefix+'RA-RaBO01:RF-LLRF:RmpAmpVCavTop-RB')
         self.lb_rmpvolttop2.showUnits = True
 
         self.sb_rmpphsbot = SiriusSpinbox(
-            self, self.prefix+'RA-RaBO01:RF-LLRF:RampPhsBot-SP')
+            self, self.prefix+'RA-RaBO01:RF-LLRF:RmpPhsBot-SP')
         self.lb_rmpphsbot = SiriusLabel(
-            self, self.prefix+'RA-RaBO01:RF-LLRF:RampPhsBot-RB')
+            self, self.prefix+'RA-RaBO01:RF-LLRF:RmpPhsBot-RB')
         self.lb_rmpphsbot.showUnits = True
         self.ld_rmpphsbot = QLabel('Amplitude', self, alignment=Qt.AlignRight)
         lay_rmpphsbotdesc = QHBoxLayout()
         lay_rmpphsbotdesc.addWidget(self.ld_rmpphsbot)
         lay_rmpphsbotdesc.setAlignment(Qt.AlignRight)
         self.le_rmpvoltbot1 = PyDMLineEdit(
-            self, self.prefix+'RA-RaBO01:RF-LLRF:RampAmpBot-SP')
+            self, self.prefix+'RA-RaBO01:RF-LLRF:RmpAmpBot-SP')
         self.lb_rmpvoltbot1 = SiriusLabel(
-            self, self.prefix+'RA-RaBO01:RF-LLRF:RampAmpBot-RB')
+            self, self.prefix+'RA-RaBO01:RF-LLRF:RmpAmpBot-RB')
         self.lb_rmpvoltbot1.showUnits = True
         self.lb_rmpvoltbot2 = SiriusLabel(
             self, self.prefix+'RA-RaBO01:RF-LLRF:RmpAmpVCavBot-RB')
@@ -944,14 +944,14 @@ class RFMainControl(SiriusMainWindow):
         self.rb_pwrmtr.toggled.connect(
             _part(self._handle_rmpwfm_visibility, 0))
         self.ramp_graph.addChannel(
-            y_channel=self.prefix+'BR-RF-DLLRF-01:VCavRampWf.AVAL',
+            y_channel=self.prefix+'BR-RF-DLLRF-01:VCavRmpWf.AVAL',
             x_channel=self.prefix+'BR-RF-DLLRF-01:DiagWf32Scale.AVAL',
             redraw_mode=2, name='VGav kV', color=QColor('blue'))
         self.curve_vgav = self.ramp_graph.curveAtIndex(1)
         self.rb_vgav = QRadioButton('VGav [kV]', self)
         self.rb_vgav.toggled.connect(_part(self._handle_rmpwfm_visibility, 1))
         self.ramp_graph.addChannel(
-            y_channel=self.prefix+'BR-RF-DLLRF-01:VCavRampWf:W.AVAL',
+            y_channel=self.prefix+'BR-RF-DLLRF-01:VCavRmpWf:W.AVAL',
             x_channel=self.prefix+'BR-RF-DLLRF-01:DiagWf32Scale.AVAL',
             redraw_mode=2, name='Power [W]', color=QColor('blue'))
         self.curve_pwr = self.ramp_graph.curveAtIndex(2)
@@ -1150,7 +1150,7 @@ class RFMainControl(SiriusMainWindow):
 
             lb_cavphs = QLabel('Phase', self, alignment=Qt.AlignCenter)
             self.lb_cavphs = SiriusLabel(
-                self, self.prefix+'BO-05D:RF-P5Cav:PwrCell3Phs-Mon')
+                self, self.prefix+'BO-05D:RF-P5Cav:Cell3Phs-Mon')
             self.lb_cavphs.showUnits = True
             lay_vals.addWidget(lb_cavphs, 5, 1, alignment=Qt.AlignCenter)
             lay_vals.addWidget(self.lb_cavphs, 5, 2)
