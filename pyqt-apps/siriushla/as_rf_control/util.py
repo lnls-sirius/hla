@@ -1549,15 +1549,15 @@ SEC_2_CHANNELS = {
                 'Inputs': {
                     'Input 1': {
                         'Status': {
-                            '0': 'RA-RaSIA01:RF-LLRF-A:Inp1Intlk0-Mon',
-                            '1': 'RA-RaSIA01:RF-LLRF-A:Inp1Intlk1-Mon',
-                            '2': 'RA-RaSIA01:RF-LLRF-A:Inp1Intlk2-Mon',
-                            '3': 'RA-RaSIA01:RF-LLRF-A:Inp1Intlk3-Mon',
-                            '4': 'RA-RaSIA01:RF-LLRF-A:Inp1Intlk4-Mon',
-                            '5': 'RA-RaSIA01:RF-LLRF-A:Inp1Intlk5-Mon',
-                            '6': 'RA-RaSIA01:RF-LLRF-A:Inp1Intlk6-Mon',
-                            '7': 'RA-RaSIA01:RF-LLRF-A:Inp1Intlk7-Mon',
-                            'Mon': 'RA-RaSIA01:RF-LLRF-A:Inp1Intlk-Mon',
+                            '0': 'RA-RaSIA01:RF-LLRF:Inp1Intlk0-Mon',
+                            '1': 'RA-RaSIA01:RF-LLRF:Inp1Intlk1-Mon',
+                            '2': 'RA-RaSIA01:RF-LLRF:Inp1Intlk2-Mon',
+                            '3': 'RA-RaSIA01:RF-LLRF:Inp1Intlk3-Mon',
+                            '4': 'RA-RaSIA01:RF-LLRF:Inp1Intlk4-Mon',
+                            '5': 'RA-RaSIA01:RF-LLRF:Inp1Intlk5-Mon',
+                            '6': 'RA-RaSIA01:RF-LLRF:Inp1Intlk6-Mon',
+                            '7': 'RA-RaSIA01:RF-LLRF:Inp1Intlk7-Mon',
+                            'Mon': 'RA-RaSIA01:RF-LLRF:Inp1Intlk-Mon',
                         },
                         'Labels': (
                             'Rev Out SSA 1',
@@ -1578,15 +1578,15 @@ SEC_2_CHANNELS = {
                     },
                     'Input 2': {
                         'Status': {
-                            '0': 'RA-RaSIA01:RF-LLRF-A:Inp2Intlk0-Mon',
-                            '1': 'RA-RaSIA01:RF-LLRF-A:Inp2Intlk1-Mon',
-                            '2': 'RA-RaSIA01:RF-LLRF-A:Inp2Intlk2-Mon',
-                            '3': 'RA-RaSIA01:RF-LLRF-A:Inp2Intlk3-Mon',
-                            '4': 'RA-RaSIA01:RF-LLRF-A:Inp2Intlk4-Mon',
-                            '5': 'RA-RaSIA01:RF-LLRF-A:Inp2Intlk5-Mon',
-                            '6': 'RA-RaSIA01:RF-LLRF-A:Inp2Intlk6-Mon',
-                            '7': 'RA-RaSIA01:RF-LLRF-A:Inp2Intlk7-Mon',
-                            'Mon': 'RA-RaSIA01:RF-LLRF-A:Inp2Intlk-Mon',
+                            '0': 'RA-RaSIA01:RF-LLRF:Inp2Intlk0-Mon',
+                            '1': 'RA-RaSIA01:RF-LLRF:Inp2Intlk1-Mon',
+                            '2': 'RA-RaSIA01:RF-LLRF:Inp2Intlk2-Mon',
+                            '3': 'RA-RaSIA01:RF-LLRF:Inp2Intlk3-Mon',
+                            '4': 'RA-RaSIA01:RF-LLRF:Inp2Intlk4-Mon',
+                            '5': 'RA-RaSIA01:RF-LLRF:Inp2Intlk5-Mon',
+                            '6': 'RA-RaSIA01:RF-LLRF:Inp2Intlk6-Mon',
+                            '7': 'RA-RaSIA01:RF-LLRF:Inp2Intlk7-Mon',
+                            'Mon': 'RA-RaSIA01:RF-LLRF:Inp2Intlk-Mon',
                         },
                         'Labels': (
                             'Cavity Voltage',
@@ -1606,28 +1606,28 @@ SEC_2_CHANNELS = {
                     },
                 },
                 'Timestamps': {
-                    '1': 'RA-RaSIA01:RF-LLRF-A:IntlkTs1-Mon',
-                    '2': 'RA-RaSIA01:RF-LLRF-A:IntlkTs2-Mon',
-                    '3': 'RA-RaSIA01:RF-LLRF-A:IntlkTs3-Mon',
-                    '4': 'RA-RaSIA01:RF-LLRF-A:IntlkTs4-Mon',
-                    '5': 'RA-RaSIA01:RF-LLRF-A:IntlkTs5-Mon',
-                    '6': 'RA-RaSIA01:RF-LLRF-A:IntlkTs6-Mon',
-                    '7': 'RA-RaSIA01:RF-LLRF-A:IntlkTs7-Mon',
+                    '1': 'RA-RaSIA01:RF-LLRF:IntlkTs1-Mon',
+                    '2': 'RA-RaSIA01:RF-LLRF:IntlkTs2-Mon',
+                    '3': 'RA-RaSIA01:RF-LLRF:IntlkTs3-Mon',
+                    '4': 'RA-RaSIA01:RF-LLRF:IntlkTs4-Mon',
+                    '5': 'RA-RaSIA01:RF-LLRF:IntlkTs5-Mon',
+                    '6': 'RA-RaSIA01:RF-LLRF:IntlkTs6-Mon',
+                    '7': 'RA-RaSIA01:RF-LLRF:IntlkTs7-Mon',
                 }
             },
             'B': {
                 'Inputs': {
                     'Input': {
                         'Status': {
-                            '0': 'RA-RaSIB01:RF-LLRF-B:Inp1Intlk0-Mon',
-                            '1': 'RA-RaSIB01:RF-LLRF-B:Inp1Intlk1-Mon',
-                            '2': 'RA-RaSIB01:RF-LLRF-B:Inp1Intlk2-Mon',
-                            '3': 'RA-RaSIB01:RF-LLRF-B:Inp1Intlk3-Mon',
-                            '4': 'RA-RaSIB01:RF-LLRF-B:Inp1Intlk4-Mon',
-                            '5': 'RA-RaSIB01:RF-LLRF-B:Inp1Intlk5-Mon',
-                            '6': 'RA-RaSIB01:RF-LLRF-B:Inp1Intlk6-Mon',
-                            '7': 'RA-RaSIB01:RF-LLRF-B:Inp1Intlk7-Mon',
-                            'Mon': 'RA-RaSIB01:RF-LLRF-B:Inp1Intlk-Mon',
+                            '0': 'RA-RaSIB01:RF-LLRF:Inp1Intlk0-Mon',
+                            '1': 'RA-RaSIB01:RF-LLRF:Inp1Intlk1-Mon',
+                            '2': 'RA-RaSIB01:RF-LLRF:Inp1Intlk2-Mon',
+                            '3': 'RA-RaSIB01:RF-LLRF:Inp1Intlk3-Mon',
+                            '4': 'RA-RaSIB01:RF-LLRF:Inp1Intlk4-Mon',
+                            '5': 'RA-RaSIB01:RF-LLRF:Inp1Intlk5-Mon',
+                            '6': 'RA-RaSIB01:RF-LLRF:Inp1Intlk6-Mon',
+                            '7': 'RA-RaSIB01:RF-LLRF:Inp1Intlk7-Mon',
+                            'Mon': 'RA-RaSIB01:RF-LLRF:Inp1Intlk-Mon',
                         },
                         'Labels': (
                             'Rev Out SSA 1',
@@ -1648,15 +1648,15 @@ SEC_2_CHANNELS = {
                     },
                     'Input 2': {
                         'Status': {
-                            '0': 'RA-RaSIB01:RF-LLRF-B:Inp2Intlk0-Mon',
-                            '1': 'RA-RaSIB01:RF-LLRF-B:Inp2Intlk1-Mon',
-                            '2': 'RA-RaSIB01:RF-LLRF-B:Inp2Intlk2-Mon',
-                            '3': 'RA-RaSIB01:RF-LLRF-B:Inp2Intlk3-Mon',
-                            '4': 'RA-RaSIB01:RF-LLRF-B:Inp2Intlk4-Mon',
-                            '5': 'RA-RaSIB01:RF-LLRF-B:Inp2Intlk5-Mon',
-                            '6': 'RA-RaSIB01:RF-LLRF-B:Inp2Intlk6-Mon',
-                            '7': 'RA-RaSIB01:RF-LLRF-B:Inp2Intlk7-Mon',
-                            'Mon': 'RA-RaSIB01:RF-LLRF-B:Inp2Intlk-Mon',
+                            '0': 'RA-RaSIB01:RF-LLRF:Inp2Intlk0-Mon',
+                            '1': 'RA-RaSIB01:RF-LLRF:Inp2Intlk1-Mon',
+                            '2': 'RA-RaSIB01:RF-LLRF:Inp2Intlk2-Mon',
+                            '3': 'RA-RaSIB01:RF-LLRF:Inp2Intlk3-Mon',
+                            '4': 'RA-RaSIB01:RF-LLRF:Inp2Intlk4-Mon',
+                            '5': 'RA-RaSIB01:RF-LLRF:Inp2Intlk5-Mon',
+                            '6': 'RA-RaSIB01:RF-LLRF:Inp2Intlk6-Mon',
+                            '7': 'RA-RaSIB01:RF-LLRF:Inp2Intlk7-Mon',
+                            'Mon': 'RA-RaSIB01:RF-LLRF:Inp2Intlk-Mon',
                         },
                         'Labels': (
                             'Cavity Voltage',
@@ -1676,20 +1676,20 @@ SEC_2_CHANNELS = {
                     },
                 },
                 'Timestamps': {
-                    '1': 'RA-RaSIB01:RF-LLRF-B:IntlkTs1-Mon',
-                    '2': 'RA-RaSIB01:RF-LLRF-B:IntlkTs2-Mon',
-                    '3': 'RA-RaSIB01:RF-LLRF-B:IntlkTs3-Mon',
-                    '4': 'RA-RaSIB01:RF-LLRF-B:IntlkTs4-Mon',
-                    '5': 'RA-RaSIB01:RF-LLRF-B:IntlkTs5-Mon',
-                    '6': 'RA-RaSIB01:RF-LLRF-B:IntlkTs6-Mon',
-                    '7': 'RA-RaSIB01:RF-LLRF-B:IntlkTs7-Mon',
+                    '1': 'RA-RaSIB01:RF-LLRF:IntlkTs1-Mon',
+                    '2': 'RA-RaSIB01:RF-LLRF:IntlkTs2-Mon',
+                    '3': 'RA-RaSIB01:RF-LLRF:IntlkTs3-Mon',
+                    '4': 'RA-RaSIB01:RF-LLRF:IntlkTs4-Mon',
+                    '5': 'RA-RaSIB01:RF-LLRF:IntlkTs5-Mon',
+                    '6': 'RA-RaSIB01:RF-LLRF:IntlkTs6-Mon',
+                    '7': 'RA-RaSIB01:RF-LLRF:IntlkTs7-Mon',
                 }
             }
         },
         'Reset': {
             'Global': 'RA-RaSIA02:RF-Intlk:Reset-Cmd',
-            'A': 'RA-RaSIA01:RF-LLRF-A:IntlkReset-Cmd',
-            'B': 'RA-RaSIB01:RF-LLRF-B:IntlkReset-Cmd',
+            'A': 'RA-RaSIA01:RF-LLRF:IntlkReset-Cmd',
+            'B': 'RA-RaSIB01:RF-LLRF:IntlkReset-Cmd',
         },
         'Cav Sts': {
             'Geral': 'SI-03SP:RF-P7Cav:Sts-Mon',
@@ -1728,7 +1728,7 @@ SEC_2_CHANNELS = {
             },
             'Vac': {
                 'Cells': 'SI-03SP:VA-CCG-CAV:Pressure-Mon',
-                'Cond': 'RA-RaSIA01:RF-LLRF-A:VacuumFastRly-Mon',
+                'Cond': 'RA-RaSIA01:RF-LLRF:VacuumFastRly-Mon',
                 'Cells ok': 'SI-03SP:RF-P7Cav:Pressure-Mon',
                 'Coupler ok': 'SI-03SP:RF-P7Cav:CoupPressure-Mon',
             }
@@ -2108,91 +2108,91 @@ SEC_2_CHANNELS = {
         'SL': {
             'ErrDtls': {
                 'A': {
-                    'IRef': 'RA-RaSIA01:RF-LLRF-A:SLRefI-Mon',
-                    'QRef': 'RA-RaSIA01:RF-LLRF-A:SLRefQ-Mon',
-                    'IInp': 'RA-RaSIA01:RF-LLRF-A:SLInpI-Mon',
-                    'QInp': 'RA-RaSIA01:RF-LLRF-A:SLInpQ-Mon',
-                    'IErr': 'RA-RaSIA01:RF-LLRF-A:SLErrorI-Mon',
-                    'QErr': 'RA-RaSIA01:RF-LLRF-A:SLErrorQ-Mon',
+                    'IRef': 'RA-RaSIA01:RF-LLRF:SLRefI-Mon',
+                    'QRef': 'RA-RaSIA01:RF-LLRF:SLRefQ-Mon',
+                    'IInp': 'RA-RaSIA01:RF-LLRF:SLInpI-Mon',
+                    'QInp': 'RA-RaSIA01:RF-LLRF:SLInpQ-Mon',
+                    'IErr': 'RA-RaSIA01:RF-LLRF:SLErrorI-Mon',
+                    'QErr': 'RA-RaSIA01:RF-LLRF:SLErrorQ-Mon',
                 },
                 'B': {
-                    'IRef': 'RA-RaSIB01:RF-LLRF-B:SLRefI-Mon',
-                    'QRef': 'RA-RaSIB01:RF-LLRF-B:SLRefQ-Mon',
-                    'IInp': 'RA-RaSIB01:RF-LLRF-B:SLInpI-Mon',
-                    'QInp': 'RA-RaSIB01:RF-LLRF-B:SLInpQ-Mon',
-                    'IErr': 'RA-RaSIB01:RF-LLRF-B:SLErrorI-Mon',
-                    'QErr': 'RA-RaSIB01:RF-LLRF-B:SLErrorQ-Mon',
+                    'IRef': 'RA-RaSIB01:RF-LLRF:SLRefI-Mon',
+                    'QRef': 'RA-RaSIB01:RF-LLRF:SLRefQ-Mon',
+                    'IInp': 'RA-RaSIB01:RF-LLRF:SLInpI-Mon',
+                    'QInp': 'RA-RaSIB01:RF-LLRF:SLInpQ-Mon',
+                    'IErr': 'RA-RaSIB01:RF-LLRF:SLErrorI-Mon',
+                    'QErr': 'RA-RaSIB01:RF-LLRF:SLErrorQ-Mon',
                 },
             },
             'Params': {
                 'A': {
-                    'Inp': 'RA-RaSIA01:RF-LLRF-A:SLInp',
-                    'PIL': 'RA-RaSIA01:RF-LLRF-A:SLPILim',
-                    'KI': 'RA-RaSIA01:RF-LLRF-A:SLKI',
-                    'KP': 'RA-RaSIA01:RF-LLRF-A:SLKP',
+                    'Inp': 'RA-RaSIA01:RF-LLRF:SLInp',
+                    'PIL': 'RA-RaSIA01:RF-LLRF:SLPILim',
+                    'KI': 'RA-RaSIA01:RF-LLRF:SLKI',
+                    'KP': 'RA-RaSIA01:RF-LLRF:SLKP',
                 },
                 'B': {
-                    'Inp': 'RA-RaSIB01:RF-LLRF-B:SLInp',
-                    'PIL': 'RA-RaSIB01:RF-LLRF-B:SLPILim',
-                    'KI': 'RA-RaSIB01:RF-LLRF-B:SLKI',
-                    'KP': 'RA-RaSIB01:RF-LLRF-B:SLKP',
+                    'Inp': 'RA-RaSIB01:RF-LLRF:SLInp',
+                    'PIL': 'RA-RaSIB01:RF-LLRF:SLPILim',
+                    'KI': 'RA-RaSIB01:RF-LLRF:SLKI',
+                    'KP': 'RA-RaSIB01:RF-LLRF:SLKP',
                 },
             },
             'Over': {
                 'A': {
-                    'Enbl': 'RA-RaSIA01:RF-LLRF-A:SL',
-                    'Mode': 'RA-RaSIA01:RF-LLRF-A:LoopMode',
-                    'ASet': 'RA-RaSIA01:RF-LLRF-A:ALRef',
-                    'AInc': 'RA-RaSIA01:RF-LLRF-A:AmpIncRate',
-                    'PSet': 'RA-RaSIA01:RF-LLRF-A:PLRef',
-                    'PInc': 'RA-RaSIA01:RF-LLRF-A:PhsIncRate',
-                    'ARef': 'RA-RaSIA01:RF-LLRF-A:SLRefAmp-Mon',
-                    'PRef': 'RA-RaSIA01:RF-LLRF-A:SLRefPhs-Mon',
-                    'AInp': 'RA-RaSIA01:RF-LLRF-A:SLInpAmp-Mon',
-                    'PInp': 'RA-RaSIA01:RF-LLRF-A:SLInpPhs-Mon',
-                    'AErr': 'RA-RaSIA01:RF-LLRF-A:SLErrorAmp-Mon',
-                    'PErr': 'RA-RaSIA01:RF-LLRF-A:SLErrorPhs-Mon',
+                    'Enbl': 'RA-RaSIA01:RF-LLRF:SL',
+                    'Mode': 'RA-RaSIA01:RF-LLRF:LoopMode',
+                    'ASet': 'RA-RaSIA01:RF-LLRF:ALRef',
+                    'AInc': 'RA-RaSIA01:RF-LLRF:AmpIncRate',
+                    'PSet': 'RA-RaSIA01:RF-LLRF:PLRef',
+                    'PInc': 'RA-RaSIA01:RF-LLRF:PhsIncRate',
+                    'ARef': 'RA-RaSIA01:RF-LLRF:SLRefAmp-Mon',
+                    'PRef': 'RA-RaSIA01:RF-LLRF:SLRefPhs-Mon',
+                    'AInp': 'RA-RaSIA01:RF-LLRF:SLInpAmp-Mon',
+                    'PInp': 'RA-RaSIA01:RF-LLRF:SLInpPhs-Mon',
+                    'AErr': 'RA-RaSIA01:RF-LLRF:SLErrorAmp-Mon',
+                    'PErr': 'RA-RaSIA01:RF-LLRF:SLErrorPhs-Mon',
                 },
                 'B': {
-                    'Enbl': 'RA-RaSIB01:RF-LLRF-B:SL',
-                    'Mode': 'RA-RaSIB01:RF-LLRF-B:LoopMode',
-                    'ASet': 'RA-RaSIB01:RF-LLRF-B:ALRef',
-                    'AInc': 'RA-RaSIB01:RF-LLRF-B:AmpIncRate',
-                    'PSet': 'RA-RaSIB01:RF-LLRF-B:PLRef',
-                    'PInc': 'RA-RaSIB01:RF-LLRF-B:PhsIncRate',
-                    'ARef': 'RA-RaSIB01:RF-LLRF-B:SLRefAmp-Mon',
-                    'PRef': 'RA-RaSIB01:RF-LLRF-B:SLRefPhs-Mon',
-                    'AInp': 'RA-RaSIB01:RF-LLRF-B:SLInpAmp-Mon',
-                    'PInp': 'RA-RaSIB01:RF-LLRF-B:SLInpPhs-Mon',
-                    'AErr': 'RA-RaSIB01:RF-LLRF-B:SLErrorAmp-Mon',
-                    'PErr': 'RA-RaSIB01:RF-LLRF-B:SLErrorPhs-Mon',
+                    'Enbl': 'RA-RaSIB01:RF-LLRF:SL',
+                    'Mode': 'RA-RaSIB01:RF-LLRF:LoopMode',
+                    'ASet': 'RA-RaSIB01:RF-LLRF:ALRef',
+                    'AInc': 'RA-RaSIB01:RF-LLRF:AmpIncRate',
+                    'PSet': 'RA-RaSIB01:RF-LLRF:PLRef',
+                    'PInc': 'RA-RaSIB01:RF-LLRF:PhsIncRate',
+                    'ARef': 'RA-RaSIB01:RF-LLRF:SLRefAmp-Mon',
+                    'PRef': 'RA-RaSIB01:RF-LLRF:SLRefPhs-Mon',
+                    'AInp': 'RA-RaSIB01:RF-LLRF:SLInpAmp-Mon',
+                    'PInp': 'RA-RaSIB01:RF-LLRF:SLInpPhs-Mon',
+                    'AErr': 'RA-RaSIB01:RF-LLRF:SLErrorAmp-Mon',
+                    'PErr': 'RA-RaSIB01:RF-LLRF:SLErrorPhs-Mon',
                 },
             },
             'ASet': {
-                'A': 'RA-RaSIA01:RF-LLRF-A:ALRefAmpVGap',
-                'B': 'RA-RaSIB01:RF-LLRF-B:ALRefAmpVGap',
+                'A': 'RA-RaSIA01:RF-LLRF:ALRefAmpVGap',
+                'B': 'RA-RaSIB01:RF-LLRF:ALRefAmpVGap',
             },
         },
         'Tun': {
             'A': {
-                'Auto': 'RA-RaSIA01:RF-LLRF-A:Tune',
-                'DTune': 'RA-RaSIA01:RF-LLRF-A:Detune',
-                'DPhase': 'RA-RaSIA01:RF-LLRF-A:TuneDephs-Mon',
-                'Acting': 'RA-RaSIA01:RF-LLRF-A:TuneOut-Mon',
-                'Deadbnd': 'RA-RaSIA01:RF-LLRF-A:TuneMarginHI',
-                'Oversht': 'RA-RaSIA01:RF-LLRF-A:TuneMarginLO',
+                'Auto': 'RA-RaSIA01:RF-LLRF:Tune',
+                'DTune': 'RA-RaSIA01:RF-LLRF:Detune',
+                'DPhase': 'RA-RaSIA01:RF-LLRF:TuneDephs-Mon',
+                'Acting': 'RA-RaSIA01:RF-LLRF:TuneOut-Mon',
+                'Deadbnd': 'RA-RaSIA01:RF-LLRF:TuneMarginHI',
+                'Oversht': 'RA-RaSIA01:RF-LLRF:TuneMarginLO',
                 'Pl1Down': 'SI-03SP:RF-SRFCav-A:TunnerMoveDown-Mon',
                 'Pl1Up': 'SI-03SP:RF-SRFCav-A:TunnerMoveUp-Mon',
                 'PlM1Curr': 'RA-RaSIA01:RF-CavPlDrivers:Dr1Current-Mon',
                 'color': 'blue'
             },
             'B': {
-                'Auto': 'RA-RaSIB01:RF-LLRF-B:Tune',
-                'DTune': 'RA-RaSIB01:RF-LLRF-B:Detune',
-                'DPhase': 'RA-RaSIB01:RF-LLRF-B:TuneDephs-Mon',
-                'Acting': 'RA-RaSIB01:RF-LLRF-B:TuneOut-Mon',
-                'Deadbnd': 'RA-RaSIB01:RF-LLRF-B:TuneMarginHI',
-                'Oversht': 'RA-RaSIB01:RF-LLRF-B:TuneMarginLO',
+                'Auto': 'RA-RaSIB01:RF-LLRF:Tune',
+                'DTune': 'RA-RaSIB01:RF-LLRF:Detune',
+                'DPhase': 'RA-RaSIB01:RF-LLRF:TuneDephs-Mon',
+                'Acting': 'RA-RaSIB01:RF-LLRF:TuneOut-Mon',
+                'Deadbnd': 'RA-RaSIB01:RF-LLRF:TuneMarginHI',
+                'Oversht': 'RA-RaSIB01:RF-LLRF:TuneMarginLO',
                 'Pl1Down': 'SI-03SP:RF-SRFCav-B:TunnerMoveDown-Mon',
                 'Pl1Up': 'SI-03SP:RF-SRFCav-B:TunnerMoveUp-Mon',
                 'PlM1Curr': 'RA-RaSIB01:RF-CavPlDrivers:Dr1Current-Mon',
@@ -2397,60 +2397,60 @@ SEC_2_CHANNELS = {
         'FDL': {
             'A': {
                 'Signals': (
-                    ('Cav', 'RA-RaSIA01:RF-LLRF-A:FDLCavAmp-Mon', 'RA-RaSIA01:RF-LLRF-A:FDLCavPhs-Mon', 'blue'),
-                    ('Fwd Cav', 'RA-RaSIA01:RF-LLRF-A:FDLCavFwdAmp-Mon', 'RA-RaSIA01:RF-LLRF-A:FDLCavFwdPhs-Mon', 'red'),
-                    ('Rev Cav', 'RA-RaSIA01:RF-LLRF-A:FDLCavRevAmp-Mon', 'RA-RaSIA01:RF-LLRF-A:FDLCavRevPhs-Mon', 'darkSlateBlue'),
-                    ('Fwd Ssa', 'RA-RaSIA01:RF-LLRF-A:FDLFwdSSAAmp-Mon', 'RA-RaSIA01:RF-LLRF-A:FDLFwdSSAPhs-Mon', 'darkGreen'),
-                    ('Rev Ssa', 'RA-RaSIA01:RF-LLRF-A:FDLRevSSAAmp-Mon', 'RA-RaSIA01:RF-LLRF-A:FDLRevSSAPhs-Mon', 'magenta'),
-                    ('Ctrl', 'RA-RaSIA01:RF-LLRF-A:FDLCtrlAmp-Mon', 'RA-RaSIA01:RF-LLRF-A:FDLCtrlPhs-Mon', 'darkCyan'),
-                    ('Ref', 'RA-RaSIA01:RF-LLRF-A:FDLSLRefAmp-Mon', 'RA-RaSIA01:RF-LLRF-A:FDLSLRefPhs-Mon', 'darkRed'),
-                    ('Err', 'RA-RaSIA01:RF-LLRF-A:FDLSLErrAmp-Mon', 'RA-RaSIA01:RF-LLRF-A:FDLSLErrPhs-Mon', 'purple'),
-                    ('Err Acc', 'RA-RaSIA01:RF-LLRF-A:FDLSLErrAccAmp-Mon', 'RA-RaSIA01:RF-LLRF-A:FDLSLErrAccPhs-Mon', 'saddlebrown'),
-                    ('MO', 'RA-RaSIA01:RF-LLRF-A:FDLMOAmp-Mon', 'RA-RaSIA01:RF-LLRF-A:FDLMOPhs-Mon', 'darkBlue'),
-                    ('Tune', None, 'RA-RaSIA01:RF-LLRF-A:FDLTuneDephs-Mon', 'orangered'),
-                    ('Tune Filt', None, 'RA-RaSIA01:RF-LLRF-A:FDLTuneDephsFilt-Mon', 'darkOliveGreen')
+                    ('Cav', 'RA-RaSIA01:RF-LLRF:FDLCavAmp-Mon', 'RA-RaSIA01:RF-LLRF:FDLCavPhs-Mon', 'blue'),
+                    ('Fwd Cav', 'RA-RaSIA01:RF-LLRF:FDLCavFwdAmp-Mon', 'RA-RaSIA01:RF-LLRF:FDLCavFwdPhs-Mon', 'red'),
+                    ('Rev Cav', 'RA-RaSIA01:RF-LLRF:FDLCavRevAmp-Mon', 'RA-RaSIA01:RF-LLRF:FDLCavRevPhs-Mon', 'darkSlateBlue'),
+                    ('Fwd Ssa', 'RA-RaSIA01:RF-LLRF:FDLFwdSSAAmp-Mon', 'RA-RaSIA01:RF-LLRF:FDLFwdSSAPhs-Mon', 'darkGreen'),
+                    ('Rev Ssa', 'RA-RaSIA01:RF-LLRF:FDLRevSSAAmp-Mon', 'RA-RaSIA01:RF-LLRF:FDLRevSSAPhs-Mon', 'magenta'),
+                    ('Ctrl', 'RA-RaSIA01:RF-LLRF:FDLCtrlAmp-Mon', 'RA-RaSIA01:RF-LLRF:FDLCtrlPhs-Mon', 'darkCyan'),
+                    ('Ref', 'RA-RaSIA01:RF-LLRF:FDLSLRefAmp-Mon', 'RA-RaSIA01:RF-LLRF:FDLSLRefPhs-Mon', 'darkRed'),
+                    ('Err', 'RA-RaSIA01:RF-LLRF:FDLSLErrAmp-Mon', 'RA-RaSIA01:RF-LLRF:FDLSLErrPhs-Mon', 'purple'),
+                    ('Err Acc', 'RA-RaSIA01:RF-LLRF:FDLSLErrAccAmp-Mon', 'RA-RaSIA01:RF-LLRF:FDLSLErrAccPhs-Mon', 'saddlebrown'),
+                    ('MO', 'RA-RaSIA01:RF-LLRF:FDLMOAmp-Mon', 'RA-RaSIA01:RF-LLRF:FDLMOPhs-Mon', 'darkBlue'),
+                    ('Tune', None, 'RA-RaSIA01:RF-LLRF:FDLTuneDephs-Mon', 'orangered'),
+                    ('Tune Filt', None, 'RA-RaSIA01:RF-LLRF:FDLTuneDephsFilt-Mon', 'darkOliveGreen')
                 ),
-                'Time': 'RA-RaSIA01:RF-LLRF-A:FDLScale32-Mon',
-                'Mode': 'RA-RaSIA01:RF-LLRF-A:FDLMode-Mon',
-                'SW Trig': 'RA-RaSIA01:RF-LLRF-A:FDLSwTrig-Mon',
-                'HW Trig': 'RA-RaSIA01:RF-LLRF-A:FDLHwTrig-Mon',
-                'Trig': 'RA-RaSIA01:RF-LLRF-A:FDLTrig-Cmd',
-                'Processing': 'RA-RaSIA01:RF-LLRF-A:FDLProcessing-Mon',
-                'Rearm': 'RA-RaSIA01:RF-LLRF-A:FDLRearm-Sel',
-                'Raw': 'RA-RaSIA01:RF-LLRF-A:FDLRaw',
-                'Qty': 'RA-RaSIA01:RF-LLRF-A:FDLFrame',
-                'Size': 'RA-RaSIA01:RF-LLRF-A:FDLSize-Mon',
-                'Duration': 'RA-RaSIA01:RF-LLRF-A:FDLDuration-Mon',
-                'Delay': 'RA-RaSIA01:RF-LLRF-A:FDLTrigDly',
+                'Time': 'RA-RaSIA01:RF-LLRF:FDLScale32-Mon',
+                'Mode': 'RA-RaSIA01:RF-LLRF:FDLMode-Mon',
+                'SW Trig': 'RA-RaSIA01:RF-LLRF:FDLSwTrig-Mon',
+                'HW Trig': 'RA-RaSIA01:RF-LLRF:FDLHwTrig-Mon',
+                'Trig': 'RA-RaSIA01:RF-LLRF:FDLTrig-Cmd',
+                'Processing': 'RA-RaSIA01:RF-LLRF:FDLProcessing-Mon',
+                'Rearm': 'RA-RaSIA01:RF-LLRF:FDLRearm-Sel',
+                'Raw': 'RA-RaSIA01:RF-LLRF:FDLRaw',
+                'Qty': 'RA-RaSIA01:RF-LLRF:FDLFrame',
+                'Size': 'RA-RaSIA01:RF-LLRF:FDLSize-Mon',
+                'Duration': 'RA-RaSIA01:RF-LLRF:FDLDuration-Mon',
+                'Delay': 'RA-RaSIA01:RF-LLRF:FDLTrigDly',
                 'Name': 'A',
             },
             'B': {
                 'Signals': (
-                    ('Cav', 'RA-RaSIB01:RF-LLRF-B:FDLCavAmp-Mon', 'RA-RaSIB01:RF-LLRF-B:FDLCavPhs-Mon', 'blue'),
-                    ('Fwd Cav', 'RA-RaSIB01:RF-LLRF-B:FDLCavFwdAmp-Mon', 'RA-RaSIB01:RF-LLRF-B:FDLCavFwdPhs-Mon', 'red'),
-                    ('Rev Cav', 'RA-RaSIB01:RF-LLRF-B:FDLCavRevAmp-Mon', 'RA-RaSIB01:RF-LLRF-B:FDLCavRevPhs-Mon', 'darkSlateBlue'),
-                    ('Fwd Ssa', 'RA-RaSIB01:RF-LLRF-B:FDLFwdSSAAmp-Mon', 'RA-RaSIB01:RF-LLRF-B:FDLFwdSSAPhs-Mon', 'darkGreen'),
-                    ('Rev Ssa', 'RA-RaSIB01:RF-LLRF-B:FDLRevSSAAmp-Mon', 'RA-RaSIB01:RF-LLRF-B:FDLRevSSAPhs-Mon', 'magenta'),
-                    ('Ctrl', 'RA-RaSIB01:RF-LLRF-B:FDLCtrlAmp-Mon', 'RA-RaSIB01:RF-LLRF-B:FDLCtrlPhs-Mon', 'darkCyan'),
-                    ('Ref', 'RA-RaSIB01:RF-LLRF-B:FDLSLRefAmp-Mon', 'RA-RaSIB01:RF-LLRF-B:FDLSLRefPhs-Mon', 'darkRed'),
-                    ('Err', 'RA-RaSIB01:RF-LLRF-B:FDLSLErrAmp-Mon', 'RA-RaSIB01:RF-LLRF-B:FDLSLErrPhs-Mon', 'purple'),
-                    ('Err Acc', 'RA-RaSIB01:RF-LLRF-B:FDLSLErrAccAmp-Mon', 'RA-RaSIB01:RF-LLRF-B:FDLSLErrAccPhs-Mon', 'saddlebrown'),
-                    ('MO', 'RA-RaSIB01:RF-LLRF-B:FDLMOAmp-Mon', 'RA-RaSIB01:RF-LLRF-B:FDLMOPhs-Mon', 'darkBlue'),
-                    ('Tune', None, 'RA-RaSIB01:RF-LLRF-B:FDLTuneDephs-Mon', 'orangered'),
-                    ('Tune Filt', None, 'RA-RaSIB01:RF-LLRF-B:FDLTuneDephsFilt-Mon', 'darkOliveGreen')
+                    ('Cav', 'RA-RaSIB01:RF-LLRF:FDLCavAmp-Mon', 'RA-RaSIB01:RF-LLRF:FDLCavPhs-Mon', 'blue'),
+                    ('Fwd Cav', 'RA-RaSIB01:RF-LLRF:FDLCavFwdAmp-Mon', 'RA-RaSIB01:RF-LLRF:FDLCavFwdPhs-Mon', 'red'),
+                    ('Rev Cav', 'RA-RaSIB01:RF-LLRF:FDLCavRevAmp-Mon', 'RA-RaSIB01:RF-LLRF:FDLCavRevPhs-Mon', 'darkSlateBlue'),
+                    ('Fwd Ssa', 'RA-RaSIB01:RF-LLRF:FDLFwdSSAAmp-Mon', 'RA-RaSIB01:RF-LLRF:FDLFwdSSAPhs-Mon', 'darkGreen'),
+                    ('Rev Ssa', 'RA-RaSIB01:RF-LLRF:FDLRevSSAAmp-Mon', 'RA-RaSIB01:RF-LLRF:FDLRevSSAPhs-Mon', 'magenta'),
+                    ('Ctrl', 'RA-RaSIB01:RF-LLRF:FDLCtrlAmp-Mon', 'RA-RaSIB01:RF-LLRF:FDLCtrlPhs-Mon', 'darkCyan'),
+                    ('Ref', 'RA-RaSIB01:RF-LLRF:FDLSLRefAmp-Mon', 'RA-RaSIB01:RF-LLRF:FDLSLRefPhs-Mon', 'darkRed'),
+                    ('Err', 'RA-RaSIB01:RF-LLRF:FDLSLErrAmp-Mon', 'RA-RaSIB01:RF-LLRF:FDLSLErrPhs-Mon', 'purple'),
+                    ('Err Acc', 'RA-RaSIB01:RF-LLRF:FDLSLErrAccAmp-Mon', 'RA-RaSIB01:RF-LLRF:FDLSLErrAccPhs-Mon', 'saddlebrown'),
+                    ('MO', 'RA-RaSIB01:RF-LLRF:FDLMOAmp-Mon', 'RA-RaSIB01:RF-LLRF:FDLMOPhs-Mon', 'darkBlue'),
+                    ('Tune', None, 'RA-RaSIB01:RF-LLRF:FDLTuneDephs-Mon', 'orangered'),
+                    ('Tune Filt', None, 'RA-RaSIB01:RF-LLRF:FDLTuneDephsFilt-Mon', 'darkOliveGreen')
                 ),
-                'Time': 'RA-RaSIB01:RF-LLRF-B:FDLScale32-Mon',
-                'Mode': 'RA-RaSIB01:RF-LLRF-B:FDLMode-Mon',
-                'SW Trig': 'RA-RaSIB01:RF-LLRF-B:FDLSwTrig-Mon',
-                'HW Trig': 'RA-RaSIB01:RF-LLRF-B:FDLHwTrig-Mon',
-                'Trig': 'RA-RaSIB01:RF-LLRF-B:FDLTrig-Cmd',
-                'Processing': 'RA-RaSIB01:RF-LLRF-B:FDLProcessing-Mon',
-                'Rearm': 'RA-RaSIB01:RF-LLRF-B:FDLRearm-Sel',
-                'Raw': 'RA-RaSIB01:RF-LLRF-B:FDLRaw',
-                'Qty': 'RA-RaSIB01:RF-LLRF-B:FDLFrame',
-                'Size': 'RA-RaSIB01:RF-LLRF-B:FDLSize-Mon',
-                'Duration': 'RA-RaSIB01:RF-LLRF-B:FDLDuration-Mon',
-                'Delay': 'RA-RaSIB01:RF-LLRF-B:FDLTrigDly',
+                'Time': 'RA-RaSIB01:RF-LLRF:FDLScale32-Mon',
+                'Mode': 'RA-RaSIB01:RF-LLRF:FDLMode-Mon',
+                'SW Trig': 'RA-RaSIB01:RF-LLRF:FDLSwTrig-Mon',
+                'HW Trig': 'RA-RaSIB01:RF-LLRF:FDLHwTrig-Mon',
+                'Trig': 'RA-RaSIB01:RF-LLRF:FDLTrig-Cmd',
+                'Processing': 'RA-RaSIB01:RF-LLRF:FDLProcessing-Mon',
+                'Rearm': 'RA-RaSIB01:RF-LLRF:FDLRearm-Sel',
+                'Raw': 'RA-RaSIB01:RF-LLRF:FDLRaw',
+                'Qty': 'RA-RaSIB01:RF-LLRF:FDLFrame',
+                'Size': 'RA-RaSIB01:RF-LLRF:FDLSize-Mon',
+                'Duration': 'RA-RaSIB01:RF-LLRF:FDLDuration-Mon',
+                'Delay': 'RA-RaSIB01:RF-LLRF:FDLTrigDly',
                 'Name': 'B'
             }
         },
@@ -2518,7 +2518,7 @@ SEC_2_CHANNELS = {
                         'Phs': 'RA-ToSIA01:RF-SSAmpTower:RevOutPhs-Mon'
                     },
                     '37': {
-                        'Label': 'Cell 2 Voltage (RFin7)',
+                        'Label': 'Fwd Pwr SSA 2 (RFin7)',
                         'I': 'RA-ToSIA02:RF-SSAmpTower:FwdOutI-Mon',
                         'Q': 'RA-ToSIA02:RF-SSAmpTower:FwdOutQ-Mon',
                         'Amp1': 'RA-ToSIA02:RF-SSAmpTower:FwdOutAmp-Mon',
@@ -2528,7 +2528,7 @@ SEC_2_CHANNELS = {
                         'Phs': 'RA-ToSIA02:RF-SSAmpTower:FwdOutPhs-Mon'
                     },
                     '39': {
-                        'Label': 'Cell 6 Voltage (RFin8)',
+                        'Label': 'Rev Pwr SSA 2 (RFin8)',
                         'I': 'RA-ToSIA02:RF-SSAmpTower:RevOutI-Mon',
                         'Q': 'RA-ToSIA02:RF-SSAmpTower:RevOutQ-Mon',
                         'Amp1': 'RA-ToSIA02:RF-SSAmpTower:RevOutAmp-Mon',
@@ -2538,7 +2538,7 @@ SEC_2_CHANNELS = {
                         'Phs': 'RA-ToSIA02:RF-SSAmpTower:RevOutPhs-Mon'
                     },
                     '41': {
-                        'Label': 'Fwd Pwr SSA 2 (RFin9)',
+                        'Label': 'FBT Near Top (RFin9)',
                         'I': 'SI-03SP:RF-SRFCav-A:FBTNTopI-Mon',
                         'Q': 'SI-03SP:RF-SRFCav-A:FBTNTopQ-Mon',
                         'Amp1': 'SI-03SP:RF-SRFCav-A:FBTNTopAmp-Mon',
@@ -2548,7 +2548,7 @@ SEC_2_CHANNELS = {
                         'Phs': 'SI-03SP:RF-SRFCav-A:FBTNTopPhs-Mon'
                     },
                     '43': {
-                        'Label': 'Rev Pwr SSA 2 (RFin10)',
+                        'Label': 'Wg Pickup (RFin10)',
                         'I': 'SI-03SP:RF-SRFCav-A:WgPkupI-Mon',
                         'Q': 'SI-03SP:RF-SRFCav-A:WgPkupQ-Mon',
                         'Amp1': 'SI-03SP:RF-SRFCav-A:WgPkupAmp-Mon',
@@ -2558,7 +2558,7 @@ SEC_2_CHANNELS = {
                         'Phs': 'SI-03SP:RF-SRFCav-A:WgPkupPhs-Mon'
                     },
                     '45': {
-                        'Label': 'Pre-Drive Input 1 (RFin11)',
+                        'Label': 'FBT Near Bot (RFin11)',
                         'I': 'SI-03SP:RF-SRFCav-A:FBTNBotI-Mon',
                         'Q': 'SI-03SP:RF-SRFCav-A:FBTNBotQ-Mon',
                         'Amp1': 'SI-03SP:RF-SRFCav-A:FBTNBotAmp-Mon',
@@ -2568,7 +2568,7 @@ SEC_2_CHANNELS = {
                         'Phs': 'SI-03SP:RF-SRFCav-A:FBTNBotPhs-Mon'
                     },
                     '47': {
-                        'Label': 'Pre-Drive Out Fwd 1 (RFin12)',
+                        'Label': 'Inp SSA 1 (RFin12)',
                         'I': 'RA-ToSIA01:RF-SSAmpTower:FwdInI-Mon',
                         'Q': 'RA-ToSIA01:RF-SSAmpTower:FwdInQ-Mon',
                         'Amp1': 'RA-ToSIA01:RF-SSAmpTower:FwdInAmp-Mon',
@@ -2578,7 +2578,7 @@ SEC_2_CHANNELS = {
                         'Phs': 'RA-ToSIA01:RF-SSAmpTower:FwdInPhs-Mon'
                     },
                     '49': {
-                        'Label': 'Pre-Drive Input 2 (RFin13)',
+                        'Label': 'Inp SSA 2 (RFin13)',
                         'I': 'RA-ToSIA02:RF-SSAmpTower:FwdInI-Mon',
                         'Q': 'RA-ToSIA02:RF-SSAmpTower:FwdInQ-Mon',
                         'Amp1': 'RA-ToSIA02:RF-SSAmpTower:FwdInAmp-Mon',
@@ -2588,7 +2588,7 @@ SEC_2_CHANNELS = {
                         'Phs': 'RA-ToSIA02:RF-SSAmpTower:FwdInPhs-Mon'
                     },
                     '51': {
-                        'Label': 'Pre-Drive Out Fwd 2 (RFin14)',
+                        'Label': 'Circulator Fwd Out (RFin14)',
                         'I': 'SI-03SP:RF-SRFCav-A:WgPkupI-Mon',
                         'Q': 'SI-03SP:RF-SRFCav-A:WgPkupQ-Mon',
                         'Amp1': 'SI-03SP:RF-SRFCav-A:WgPkupAmp-Mon',
@@ -2598,7 +2598,7 @@ SEC_2_CHANNELS = {
                         'Phs': 'SI-03SP:RF-SRFCav-A:WgPkupPhs-Mon'
                     },
                     '53': {
-                        'Label': 'Circulator Out Rev (RFin15)',
+                        'Label': 'Circulator Rev Out (RFin15)',
                         'I': 'RA-TL:RF-Circulator-SIA:RevOutI-Mon',
                         'Q': 'RA-TL:RF-Circulator-SIA:RevOutQ-Mon',
                         'Amp1': 'RA-TL:RF-Circulator-SIA:RevOutAmp-Mon',
@@ -2609,13 +2609,13 @@ SEC_2_CHANNELS = {
                     },
                     '91': {
                         'Label': 'Mux DACsIF (RFin16)',
-                        'I': 'RA-RaSIA01:RF-LLRF-A:DACIFI-Mon',
-                        'Q': 'RA-RaSIA01:RF-LLRF-A:DACIFQ-Mon',
-                        'Amp1': 'RA-RaSIA01:RF-LLRF-A:DACIFAmp-Mon',
+                        'I': 'RA-RaSIA01:RF-LLRF:DACIFI-Mon',
+                        'Q': 'RA-RaSIA01:RF-LLRF:DACIFQ-Mon',
+                        'Amp1': 'RA-RaSIA01:RF-LLRF:DACIFAmp-Mon',
                         'Amp2': '-',
                         'Amp3': '-',
                         'Amp4': '-',
-                        'Phs': 'RA-RaSIA01:RF-LLRF-A:DACIFPhs-Mon'
+                        'Phs': 'RA-RaSIA01:RF-LLRF:DACIFPhs-Mon'
                     },
                     '32': {
                         'Label': 'Ang Cav Fwd',
@@ -2625,34 +2625,34 @@ SEC_2_CHANNELS = {
                         'Amp2': '-',
                         'Amp3': '-',
                         'Amp4': '-',
-                        'Phs': 'RA-RaSIA01:RF-LLRF-A:Dephase-Mon'
+                        'Phs': 'RA-RaSIA01:RF-LLRF:Dephase-Mon'
                     }
                 },
                 'Control': {
                     'ADC': {
-                        'Enable': ['101 - ADCs Phase Shift Enable', 'RA-RaSIA01:RF-LLRF-A:PhShADC'],
-                        '2': ['Phase Shift Cavity', 'RA-RaSIA01:RF-LLRF-A:PHSHCav'],
-                        '3': ['Phase Shift Fwd Cav', 'RA-RaSIA01:RF-LLRF-A:PHSHFwdCav'],
-                        '8': ['Gain Fwd Cavity', 'RA-RaSIA01:RF-LLRF-A:GainFwdCav'],
-                        '4': ['Phase Shift Fwd SSA 1', 'RA-RaSIA01:RF-LLRF-A:PHSHFwdSSA1'],
-                        '9': ['Gain Fwd SSA 1', 'RA-RaSIA01:RF-LLRF-A:GainFwdSSA1'],
-                        '5': ['Phase Shift Fwd SSA 2', 'RA-RaSIA01:RF-LLRF-A:PHSHFwdSSA2'],
-                        '10': ['Gain Fwd SSA 2', 'RA-RaSIA01:RF-LLRF-A:GainFwdSSA2'],
-                        '6': ['Phase Shift Fwd SSA 3', 'RA-RaSIA01:RF-LLRF-A:PHSHFwdSSA3'],
-                        '11': ['Gain Fwd SSA 3', 'RA-RaSIA01:RF-LLRF-A:GainFwdSSA3'],
-                        '7': ['Phase Shift Fwd SSA 4', 'RA-RaSIA01:RF-LLRF-A:PHSHFwdSSA4'],
-                        '12': ['Gain Fwd SSA 4', 'RA-RaSIA01:RF-LLRF-A:GainFwdSSA4'],
+                        'Enable': ['101 - ADCs Phase Shift Enable', 'RA-RaSIA01:RF-LLRF:PhShADC'],
+                        '2': ['Phase Shift Cavity', 'RA-RaSIA01:RF-LLRF:PHSHCav'],
+                        '3': ['Phase Shift Fwd Cav', 'RA-RaSIA01:RF-LLRF:PHSHFwdCav'],
+                        '8': ['Gain Fwd Cavity', 'RA-RaSIA01:RF-LLRF:GainFwdCav'],
+                        '4': ['Phase Shift Fwd SSA 1', 'RA-RaSIA01:RF-LLRF:PHSHFwdSSA1'],
+                        '9': ['Gain Fwd SSA 1', 'RA-RaSIA01:RF-LLRF:GainFwdSSA1'],
+                        '5': ['Phase Shift Fwd SSA 2', 'RA-RaSIA01:RF-LLRF:PHSHFwdSSA2'],
+                        '10': ['Gain Fwd SSA 2', 'RA-RaSIA01:RF-LLRF:GainFwdSSA2'],
+                        '6': ['Phase Shift Fwd SSA 3', 'RA-RaSIA01:RF-LLRF:PHSHFwdSSA3'],
+                        '11': ['Gain Fwd SSA 3', 'RA-RaSIA01:RF-LLRF:GainFwdSSA3'],
+                        '7': ['Phase Shift Fwd SSA 4', 'RA-RaSIA01:RF-LLRF:PHSHFwdSSA4'],
+                        '12': ['Gain Fwd SSA 4', 'RA-RaSIA01:RF-LLRF:GainFwdSSA4'],
                     },
                     'DAC': {
-                        'Enable': ['102 - DACs Phase Shift Enable', 'RA-RaSIA01:RF-LLRF-A:PhShDAC'],
-                        '14': ['Phase Shift Drive SSA 1', 'RA-RaSIA01:RF-LLRF-A:PHSHSSA1'],
-                        '18': ['Gain Drive SSA 1', 'RA-RaSIA01:RF-LLRF-A:GainSSA1'],
-                        '15': ['Phase Shift Drive SSA 2', 'RA-RaSIA01:RF-LLRF-A:PHSHSSA2'],
-                        '19': ['Gain Drive SSA 2', 'RA-RaSIA01:RF-LLRF-A:GainSSA2'],
-                        '16': ['Phase Shift Drive SSA 3', 'RA-RaSIA01:RF-LLRF-A:PHSHSSA3'],
-                        '20': ['Gain Drive SSA 3', 'RA-RaSIA01:RF-LLRF-A:GainSSA3'],
-                        '17': ['Phase Shift Drive SSA 4', 'RA-RaSIA01:RF-LLRF-A:PHSHSSA4'],
-                        '21': ['Gain Drive SSA 4', 'RA-RaSIA01:RF-LLRF-A:GainSSA4']
+                        'Enable': ['102 - DACs Phase Shift Enable', 'RA-RaSIA01:RF-LLRF:PhShDAC'],
+                        '14': ['Phase Shift Drive SSA 1', 'RA-RaSIA01:RF-LLRF:PHSHSSA1'],
+                        '18': ['Gain Drive SSA 1', 'RA-RaSIA01:RF-LLRF:GainSSA1'],
+                        '15': ['Phase Shift Drive SSA 2', 'RA-RaSIA01:RF-LLRF:PHSHSSA2'],
+                        '19': ['Gain Drive SSA 2', 'RA-RaSIA01:RF-LLRF:GainSSA2'],
+                        '16': ['Phase Shift Drive SSA 3', 'RA-RaSIA01:RF-LLRF:PHSHSSA3'],
+                        '20': ['Gain Drive SSA 3', 'RA-RaSIA01:RF-LLRF:GainSSA3'],
+                        '17': ['Phase Shift Drive SSA 4', 'RA-RaSIA01:RF-LLRF:PHSHSSA4'],
+                        '21': ['Gain Drive SSA 4', 'RA-RaSIA01:RF-LLRF:GainSSA4']
                     }
                 },
             },
@@ -2719,7 +2719,7 @@ SEC_2_CHANNELS = {
                         'Phs': 'RA-ToSIB01:RF-SSAmpTower:RevOutPhs-Mon'
                     },
                     '37': {
-                        'Label': 'Cell 2 Voltage (RFin7)',
+                        'Label': 'Fwd Pwr SSA 2 (RFin7)',
                         'I': 'RA-ToSIB02:RF-SSAmpTower:FwdOutI-Mon',
                         'Q': 'RA-ToSIB02:RF-SSAmpTower:FwdOutQ-Mon',
                         'Amp1': 'RA-ToSIB02:RF-SSAmpTower:FwdOutAmp-Mon',
@@ -2729,7 +2729,7 @@ SEC_2_CHANNELS = {
                         'Phs': 'RA-ToSIB02:RF-SSAmpTower:FwdOutPhs-Mon'
                     },
                     '39': {
-                        'Label': 'Cell 6 Voltage (RFin8)',
+                        'Label': 'Rev Pwr SSA 2 (RFin8)',
                         'I': 'RA-ToSIB02:RF-SSAmpTower:RevOutI-Mon',
                         'Q': 'RA-ToSIB02:RF-SSAmpTower:RevOutQ-Mon',
                         'Amp1': 'RA-ToSIB02:RF-SSAmpTower:RevOutAmp-Mon',
@@ -2739,7 +2739,7 @@ SEC_2_CHANNELS = {
                         'Phs': 'RA-ToSIB02:RF-SSAmpTower:RevOutPhs-Mon'
                     },
                     '41': {
-                        'Label': 'Fwd Pwr SSA 2 (RFin9)',
+                        'Label': 'FBT Near Top (RFin9)',
                         'I': 'SI-03SP:RF-SRFCav-B:FBTNTopI-Mon',
                         'Q': 'SI-03SP:RF-SRFCav-B:FBTNTopQ-Mon',
                         'Amp1': 'SI-03SP:RF-SRFCav-B:FBTNTopAmp-Mon',
@@ -2749,7 +2749,7 @@ SEC_2_CHANNELS = {
                         'Phs': 'SI-03SP:RF-SRFCav-B:FBTNTopPhs-Mon'
                     },
                     '43': {
-                        'Label': 'Rev Pwr SSA 2 (RFin10)',
+                        'Label': 'Wg Pickup (RFin10)',
                         'I': 'SI-03SP:RF-SRFCav-B:WgPkupI-Mon',
                         'Q': 'SI-03SP:RF-SRFCav-B:WgPkupQ-Mon',
                         'Amp1': 'SI-03SP:RF-SRFCav-B:WgPkupAmp-Mon',
@@ -2759,7 +2759,7 @@ SEC_2_CHANNELS = {
                         'Phs': 'SI-03SP:RF-SRFCav-B:WgPkupPhs-Mon'
                     },
                     '45': {
-                        'Label': 'Pre-Drive Input 1 (RFin11)',
+                        'Label': 'FBT Near Bot (RFin11)',
                         'I': 'SI-03SP:RF-SRFCav-B:FBTNBotI-Mon',
                         'Q': 'SI-03SP:RF-SRFCav-B:FBTNBotQ-Mon',
                         'Amp1': 'SI-03SP:RF-SRFCav-B:FBTNBotAmp-Mon',
@@ -2769,7 +2769,7 @@ SEC_2_CHANNELS = {
                         'Phs': 'SI-03SP:RF-SRFCav-B:FBTNBotPhs-Mon'
                     },
                     '47': {
-                        'Label': 'Pre-Drive Out Fwd 1 (RFin12)',
+                        'Label': 'Inp SSA 1 (RFin12)',
                         'I': 'RA-ToSIB01:RF-SSAmpTower:FwdInI-Mon',
                         'Q': 'RA-ToSIB01:RF-SSAmpTower:FwdInQ-Mon',
                         'Amp1': 'RA-ToSIB01:RF-SSAmpTower:FwdInAmp-Mon',
@@ -2779,7 +2779,7 @@ SEC_2_CHANNELS = {
                         'Phs': 'RA-ToSIB01:RF-SSAmpTower:FwdInPhs-Mon'
                     },
                     '49': {
-                        'Label': 'Pre-Drive Input 2 (RFin13)',
+                        'Label': 'Inp SSA 2 (RFin13)',
                         'I': 'RA-ToSIB02:RF-SSAmpTower:FwdInI-Mon',
                         'Q': 'RA-ToSIB02:RF-SSAmpTower:FwdInQ-Mon',
                         'Amp1': 'RA-ToSIB02:RF-SSAmpTower:FwdInAmp-Mon',
@@ -2789,7 +2789,7 @@ SEC_2_CHANNELS = {
                         'Phs': 'RA-ToSIB02:RF-SSAmpTower:FwdInPhs-Mon'
                     },
                     '51': {
-                        'Label': 'Pre-Drive Out Fwd 2 (RFin14)',
+                        'Label': 'Circulator Fwd Out (RFin14)',
                         'I': 'SI-03SP:RF-SRFCav-B:WgPkupI-Mon',
                         'Q': 'SI-03SP:RF-SRFCav-B:WgPkupQ-Mon',
                         'Amp1': 'SI-03SP:RF-SRFCav-B:WgPkupAmp-Mon',
@@ -2799,7 +2799,7 @@ SEC_2_CHANNELS = {
                         'Phs': 'SI-03SP:RF-SRFCav-B:WgPkupPhs-Mon'
                     },
                     '53': {
-                        'Label': 'Circulator Out Rev (RFin15)',
+                        'Label': 'Circulator Rev Out (RFin15)',
                         'I': 'RA-TL:RF-Circulator-SIB:RevOutI-Mon',
                         'Q': 'RA-TL:RF-Circulator-SIB:RevOutQ-Mon',
                         'Amp1': 'RA-TL:RF-Circulator-SIB:RevOutAmp-Mon',
@@ -2810,13 +2810,13 @@ SEC_2_CHANNELS = {
                     },
                     '91': {
                         'Label': 'Mux DACsIF (RFin16)',
-                        'I': 'RA-RaSIB01:RF-LLRF-B:DACIFI-Mon',
-                        'Q': 'RA-RaSIB01:RF-LLRF-B:DACIFQ-Mon',
-                        'Amp1': 'RA-RaSIB01:RF-LLRF-B:DACIFAmp-Mon',
+                        'I': 'RA-RaSIB01:RF-LLRF:DACIFI-Mon',
+                        'Q': 'RA-RaSIB01:RF-LLRF:DACIFQ-Mon',
+                        'Amp1': 'RA-RaSIB01:RF-LLRF:DACIFAmp-Mon',
                         'Amp2': '-',
                         'Amp3': '-',
                         'Amp4': '-',
-                        'Phs': 'RA-RaSIB01:RF-LLRF-B:DACIFPhs-Mon'
+                        'Phs': 'RA-RaSIB01:RF-LLRF:DACIFPhs-Mon'
                     },
                     '32': {
                         'Label': 'Ang Cav Fwd',
@@ -2826,34 +2826,34 @@ SEC_2_CHANNELS = {
                         'Amp2': '-',
                         'Amp3': '-',
                         'Amp4': '-',
-                        'Phs': 'RA-RaSIB01:RF-LLRF-B:Dephase-Mon'
+                        'Phs': 'RA-RaSIB01:RF-LLRF:Dephase-Mon'
                     }
                 },
                 'Control': {
                     'ADC': {
-                        'Enable': ['101 - ADCs Phase Shift Enable', 'RA-RaSIB01:RF-LLRF-B:PhShADC'],
-                        '2': ['Phase Shift Cavity', 'RA-RaSIB01:RF-LLRF-B:PHSHCav'],
-                        '3': ['Phase Shift Fwd Cav', 'RA-RaSIB01:RF-LLRF-B:PHSHFwdCav'],
-                        '8': ['Gain Fwd Cavity', 'RA-RaSIB01:RF-LLRF-B:GainFwdCav'],
-                        '4': ['Phase Shift Fwd SSA 1', 'RA-RaSIB01:RF-LLRF-B:PHSHFwdSSA1'],
-                        '9': ['Gain Fwd SSA 1', 'RA-RaSIB01:RF-LLRF-B:GainFwdSSA1'],
-                        '5': ['Phase Shift Fwd SSA 2', 'RA-RaSIB01:RF-LLRF-B:PHSHFwdSSA2'],
-                        '10': ['Gain Fwd SSA 2', 'RA-RaSIB01:RF-LLRF-B:GainFwdSSA2'],
-                        '6': ['Phase Shift Fwd SSA 3', 'RA-RaSIB01:RF-LLRF-B:PHSHFwdSSA3'],
-                        '11': ['Gain Fwd SSA 3', 'RA-RaSIB01:RF-LLRF-B:GainFwdSSA3'],
-                        '7': ['Phase Shift Fwd SSA 4', 'RA-RaSIB01:RF-LLRF-B:PHSHFwdSSA4'],
-                        '12': ['Gain Fwd SSA 4', 'RA-RaSIB01:RF-LLRF-B:GainFwdSSA4'],
+                        'Enable': ['101 - ADCs Phase Shift Enable', 'RA-RaSIB01:RF-LLRF:PhShADC'],
+                        '2': ['Phase Shift Cavity', 'RA-RaSIB01:RF-LLRF:PHSHCav'],
+                        '3': ['Phase Shift Fwd Cav', 'RA-RaSIB01:RF-LLRF:PHSHFwdCav'],
+                        '8': ['Gain Fwd Cavity', 'RA-RaSIB01:RF-LLRF:GainFwdCav'],
+                        '4': ['Phase Shift Fwd SSA 1', 'RA-RaSIB01:RF-LLRF:PHSHFwdSSA1'],
+                        '9': ['Gain Fwd SSA 1', 'RA-RaSIB01:RF-LLRF:GainFwdSSA1'],
+                        '5': ['Phase Shift Fwd SSA 2', 'RA-RaSIB01:RF-LLRF:PHSHFwdSSA2'],
+                        '10': ['Gain Fwd SSA 2', 'RA-RaSIB01:RF-LLRF:GainFwdSSA2'],
+                        '6': ['Phase Shift Fwd SSA 3', 'RA-RaSIB01:RF-LLRF:PHSHFwdSSA3'],
+                        '11': ['Gain Fwd SSA 3', 'RA-RaSIB01:RF-LLRF:GainFwdSSA3'],
+                        '7': ['Phase Shift Fwd SSA 4', 'RA-RaSIB01:RF-LLRF:PHSHFwdSSA4'],
+                        '12': ['Gain Fwd SSA 4', 'RA-RaSIB01:RF-LLRF:GainFwdSSA4'],
                     },
                     'DAC': {
-                        'Enable': ['102 - DACs Phase Shift Enable', 'RA-RaSIB01:RF-LLRF-B:PhShDAC'],
-                        '14': ['Phase Shift Drive SSA 1', 'RA-RaSIB01:RF-LLRF-B:PHSHSSA1'],
-                        '18': ['Gain Drive SSA 1', 'RA-RaSIB01:RF-LLRF-B:GainSSA1'],
-                        '15': ['Phase Shift Drive SSA 2', 'RA-RaSIB01:RF-LLRF-B:PHSHSSA2'],
-                        '19': ['Gain Drive SSA 2', 'RA-RaSIB01:RF-LLRF-B:GainSSA2'],
-                        '16': ['Phase Shift Drive SSA 3', 'RA-RaSIB01:RF-LLRF-B:PHSHSSA3'],
-                        '20': ['Gain Drive SSA 3', 'RA-RaSIB01:RF-LLRF-B:GainSSA3'],
-                        '17': ['Phase Shift Drive SSA 4', 'RA-RaSIB01:RF-LLRF-B:PHSHSSA4'],
-                        '21': ['Gain Drive SSA 4', 'RA-RaSIB01:RF-LLRF-B:GainSSA4']
+                        'Enable': ['102 - DACs Phase Shift Enable', 'RA-RaSIB01:RF-LLRF:PhShDAC'],
+                        '14': ['Phase Shift Drive SSA 1', 'RA-RaSIB01:RF-LLRF:PHSHSSA1'],
+                        '18': ['Gain Drive SSA 1', 'RA-RaSIB01:RF-LLRF:GainSSA1'],
+                        '15': ['Phase Shift Drive SSA 2', 'RA-RaSIB01:RF-LLRF:PHSHSSA2'],
+                        '19': ['Gain Drive SSA 2', 'RA-RaSIB01:RF-LLRF:GainSSA2'],
+                        '16': ['Phase Shift Drive SSA 3', 'RA-RaSIB01:RF-LLRF:PHSHSSA3'],
+                        '20': ['Gain Drive SSA 3', 'RA-RaSIB01:RF-LLRF:GainSSA3'],
+                        '17': ['Phase Shift Drive SSA 4', 'RA-RaSIB01:RF-LLRF:PHSHSSA4'],
+                        '21': ['Gain Drive SSA 4', 'RA-RaSIB01:RF-LLRF:GainSSA4']
                     }
                 }
             }
@@ -2861,105 +2861,105 @@ SEC_2_CHANNELS = {
         'Hardware': {
             'A': {
                 'FPGA': {
-                    'Temp': 'RA-RaSIA01:RF-LLRF-A:FPGATemp-Mon',
-                    'Temp Max': 'RA-RaSIA01:RF-LLRF-A:FPGATempMax-Mon',
-                    'Temp Min': 'RA-RaSIA01:RF-LLRF-A:FPGATempMin-Mon',
-                    'Vint': 'RA-RaSIA01:RF-LLRF-A:FPGAVint-Mon',
-                    'Vint Max': 'RA-RaSIA01:RF-LLRF-A:FPGAVintMax-Mon',
-                    'Vint Min': 'RA-RaSIA01:RF-LLRF-A:FPGAVintMin-Mon',
-                    'Vaux': 'RA-RaSIA01:RF-LLRF-A:FPGAVaux-Mon',
-                    'Vaux Max': 'RA-RaSIA01:RF-LLRF-A:FPGAVauxMax-Mon',
-                    'Vaux Min': 'RA-RaSIA01:RF-LLRF-A:FPGAVauxMin-Mon'
+                    'Temp': 'RA-RaSIA01:RF-LLRF:FPGATemp-Mon',
+                    'Temp Max': 'RA-RaSIA01:RF-LLRF:FPGATempMax-Mon',
+                    'Temp Min': 'RA-RaSIA01:RF-LLRF:FPGATempMin-Mon',
+                    'Vint': 'RA-RaSIA01:RF-LLRF:FPGAVint-Mon',
+                    'Vint Max': 'RA-RaSIA01:RF-LLRF:FPGAVintMax-Mon',
+                    'Vint Min': 'RA-RaSIA01:RF-LLRF:FPGAVintMin-Mon',
+                    'Vaux': 'RA-RaSIA01:RF-LLRF:FPGAVaux-Mon',
+                    'Vaux Max': 'RA-RaSIA01:RF-LLRF:FPGAVauxMax-Mon',
+                    'Vaux Min': 'RA-RaSIA01:RF-LLRF:FPGAVauxMin-Mon'
                 },
                 'Mo1000': {
-                    'Temp': 'RA-RaSIA01:RF-LLRF-A:MO1000Temp-Mon',
-                    'Temp DAC 1': 'RA-RaSIA01:RF-LLRF-A:MO1000DAC1Temp-Mon',
-                    'Temp DAC 2': 'RA-RaSIA01:RF-LLRF-A:MO1000DAC2Temp-Mon'
+                    'Temp': 'RA-RaSIA01:RF-LLRF:MO1000Temp-Mon',
+                    'Temp DAC 1': 'RA-RaSIA01:RF-LLRF:MO1000DAC1Temp-Mon',
+                    'Temp DAC 2': 'RA-RaSIA01:RF-LLRF:MO1000DAC2Temp-Mon'
                 },
                 'Mi125': {
-                    'Temp': 'RA-RaSIA01:RF-LLRF-A:M125Temp-Mon',
+                    'Temp': 'RA-RaSIA01:RF-LLRF:M125Temp-Mon',
                 },
                 'GPIO': {
-                    'ADC 0': 'RA-RaSIA01:RF-LLRF-A:GPIOADC0-Mon',
-                    'ADC 3': 'RA-RaSIA01:RF-LLRF-A:GPIOADC3-Mon'
+                    'ADC 0': 'RA-RaSIA01:RF-LLRF:GPIOADC0-Mon',
+                    'ADC 3': 'RA-RaSIA01:RF-LLRF:GPIOADC3-Mon'
                 },
-                'Clock Src': 'RA-RaSIA01:RF-LLRF-A:MO1000ClkSrc-Sel',
-                'Loop Trigger': 'RA-RaSIA01:RF-LLRF-A:LoopTrigProc-Mon',
-                'PLL': 'RA-RaSIA01:RF-LLRF-A:MO1000PLL-Mon',
-                'FPGA Init': 'RA-RaSIA01:RF-LLRF-A:FPGAInit-Cmd',
-                'Cav Type': 'RA-RaSIA01:RF-LLRF-A:CavType-Mon',
-                'Errors': 'RA-RaSIA01:RF-LLRF-A:InitErrors-Mon',
-                'Int. Errors': 'RA-RaSIA01:RF-LLRF-A:InternalErr-Mon',
-                'Int. Err. Clear': 'RA-RaSIA01:RF-LLRF-A:ResetIntError-Cmd',
-                'Init': 'RA-RaSIA01:RF-LLRF-A:InitStatus-Mon',
+                'Clock Src': 'RA-RaSIA01:RF-LLRF:MO1000ClkSrc-Sel',
+                'Loop Trigger': 'RA-RaSIA01:RF-LLRF:LoopTrigProc-Mon',
+                'PLL': 'RA-RaSIA01:RF-LLRF:MO1000PLL-Mon',
+                'FPGA Init': 'RA-RaSIA01:RF-LLRF:FPGAInit-Cmd',
+                'Cav Type': 'RA-RaSIA01:RF-LLRF:CavType-Mon',
+                'Errors': 'RA-RaSIA01:RF-LLRF:InitErrors-Mon',
+                'Int. Errors': 'RA-RaSIA01:RF-LLRF:InternalErr-Mon',
+                'Int. Err. Clear': 'RA-RaSIA01:RF-LLRF:ResetIntError-Cmd',
+                'Init': 'RA-RaSIA01:RF-LLRF:InitStatus-Mon',
                 'Versions': {
-                    'Firmware': 'RA-RaSIA01:RF-LLRF-A:FPGAVersion-Mon',
-                    'IOC': 'RA-RaSIA01:RF-LLRF-A:Version-Mon'
+                    'Firmware': 'RA-RaSIA01:RF-LLRF:FPGAVersion-Mon',
+                    'IOC': 'RA-RaSIA01:RF-LLRF:Version-Mon'
                 },
             },
             'B': {
                 'FPGA': {
-                    'Temp': 'RA-RaSIB01:RF-LLRF-B:FPGATemp-Mon',
-                    'Temp Max': 'RA-RaSIB01:RF-LLRF-B:FPGATempMax-Mon',
-                    'Temp Min': 'RA-RaSIB01:RF-LLRF-B:FPGATempMin-Mon',
-                    'Vint': 'RA-RaSIB01:RF-LLRF-B:FPGAVint-Mon',
-                    'Vint Max': 'RA-RaSIB01:RF-LLRF-B:FPGAVintMax-Mon',
-                    'Vint Min': 'RA-RaSIB01:RF-LLRF-B:FPGAVintMin-Mon',
-                    'Vaux': 'RA-RaSIB01:RF-LLRF-B:FPGAVaux-Mon',
-                    'Vaux Max': 'RA-RaSIB01:RF-LLRF-B:FPGAVauxMax-Mon',
-                    'Vaux Min': 'RA-RaSIB01:RF-LLRF-B:FPGAVauxMin-Mon'
+                    'Temp': 'RA-RaSIB01:RF-LLRF:FPGATemp-Mon',
+                    'Temp Max': 'RA-RaSIB01:RF-LLRF:FPGATempMax-Mon',
+                    'Temp Min': 'RA-RaSIB01:RF-LLRF:FPGATempMin-Mon',
+                    'Vint': 'RA-RaSIB01:RF-LLRF:FPGAVint-Mon',
+                    'Vint Max': 'RA-RaSIB01:RF-LLRF:FPGAVintMax-Mon',
+                    'Vint Min': 'RA-RaSIB01:RF-LLRF:FPGAVintMin-Mon',
+                    'Vaux': 'RA-RaSIB01:RF-LLRF:FPGAVaux-Mon',
+                    'Vaux Max': 'RA-RaSIB01:RF-LLRF:FPGAVauxMax-Mon',
+                    'Vaux Min': 'RA-RaSIB01:RF-LLRF:FPGAVauxMin-Mon'
                 },
                 'Mo1000': {
-                    'Temp': 'RA-RaSIB01:RF-LLRF-B:MO1000Temp-Mon',
-                    'Temp DAC 1': 'RA-RaSIB01:RF-LLRF-B:MO1000DAC1Temp-Mon',
-                    'Temp DAC 2': 'RA-RaSIB01:RF-LLRF-B:MO1000DAC2Temp-Mon'
+                    'Temp': 'RA-RaSIB01:RF-LLRF:MO1000Temp-Mon',
+                    'Temp DAC 1': 'RA-RaSIB01:RF-LLRF:MO1000DAC1Temp-Mon',
+                    'Temp DAC 2': 'RA-RaSIB01:RF-LLRF:MO1000DAC2Temp-Mon'
                 },
                 'Mi125': {
-                    'Temp': 'RA-RaSIB01:RF-LLRF-B:M125Temp-Mon',
+                    'Temp': 'RA-RaSIB01:RF-LLRF:M125Temp-Mon',
                 },
                 'GPIO': {
-                    'ADC 0': 'RA-RaSIB01:RF-LLRF-B:GPIOADC0-Mon',
-                    'ADC 3': 'RA-RaSIB01:RF-LLRF-B:GPIOADC3-Mon'
+                    'ADC 0': 'RA-RaSIB01:RF-LLRF:GPIOADC0-Mon',
+                    'ADC 3': 'RA-RaSIB01:RF-LLRF:GPIOADC3-Mon'
                 },
-                'Clock Src': 'RA-RaSIB01:RF-LLRF-B:MO1000ClkSrc-Sel',
-                'Loop Trigger': 'RA-RaSIB01:RF-LLRF-B:LoopTrigProc-Mon',
-                'PLL': 'RA-RaSIB01:RF-LLRF-B:MO1000PLL-Mon',
-                'FPGA Init': 'RA-RaSIB01:RF-LLRF-B:FPGAInit-Cmd',
-                'Cav Type': 'RA-RaSIB01:RF-LLRF-B:CavType-Mon',
-                'Errors': 'RA-RaSIB01:RF-LLRF-B:InitErrors-Mon',
-                'Int. Errors': 'RA-RaSIB01:RF-LLRF-B:InternalErr-Mon',
-                'Int. Err. Clear': 'RA-RaSIB01:RF-LLRF-B:ResetIntError-Cmd',
-                'Init': 'RA-RaSIB01:RF-LLRF-B:InitStatus-Mon',
+                'Clock Src': 'RA-RaSIB01:RF-LLRF:MO1000ClkSrc-Sel',
+                'Loop Trigger': 'RA-RaSIB01:RF-LLRF:LoopTrigProc-Mon',
+                'PLL': 'RA-RaSIB01:RF-LLRF:MO1000PLL-Mon',
+                'FPGA Init': 'RA-RaSIB01:RF-LLRF:FPGAInit-Cmd',
+                'Cav Type': 'RA-RaSIB01:RF-LLRF:CavType-Mon',
+                'Errors': 'RA-RaSIB01:RF-LLRF:InitErrors-Mon',
+                'Int. Errors': 'RA-RaSIB01:RF-LLRF:InternalErr-Mon',
+                'Int. Err. Clear': 'RA-RaSIB01:RF-LLRF:ResetIntError-Cmd',
+                'Init': 'RA-RaSIB01:RF-LLRF:InitStatus-Mon',
                 'Versions': {
-                    'Firmware': 'RA-RaSIB01:RF-LLRF-B:FPGAVersion-Mon',
-                    'IOC': 'RA-RaSIB01:RF-LLRF-B:Version-Mon'
+                    'Firmware': 'RA-RaSIB01:RF-LLRF:FPGAVersion-Mon',
+                    'IOC': 'RA-RaSIB01:RF-LLRF:Version-Mon'
                 },
             }
         },
         'Loops': {
             'A': {
                 'Control': {
-                    '24 mV': ['Amp Loop Ref (mV)', 'RA-RaSIA01:RF-LLRF-A:ALRef'],
-                    '24 VGap': ['Amp Loop Ref (VGap)', 'RA-RaSIA01:RF-LLRF-A:ALRefAmpVGap'],
-                    '25': ['Phase Loop Ref', 'RA-RaSIA01:RF-LLRF-A:PLRef'],
-                    '29': ['Voltage Inc. Rate', 'RA-RaSIA01:RF-LLRF-A:AmpIncRate'],
-                    '28': ['Phase Inc. Rate', 'RA-RaSIA01:RF-LLRF-A:PhsIncRate'],
-                    '106': ['Look Reference', 'RA-RaSIA01:RF-LLRF-A:LookRef-Cmd'],
-                    '114': ['Rect/Polar Mode Select', 'RA-RaSIA01:RF-LLRF-A:LoopMode'],
-                    '107': ['Quadrant Selection', 'RA-RaSIA01:RF-LLRF-A:Quad'],
-                    '26 mV': ['Amp Ref Min (mV)', 'RA-RaSIA01:RF-LLRF-A:AmpRefMin'],
-                    '26 VGap': ['Amp Ref Min (VGap)', 'RA-RaSIA01:RF-LLRF-A:AmpRefMinVGap'],
-                    '27': ['Phase Ref Min', 'RA-RaSIA01:RF-LLRF-A:PhsRefMin'],
-                    '30': ['Open Loop Gain', 'RA-RaSIA01:RF-LLRF-A:OLGain'],
-                    '31': ['Phase Correction Control', 'RA-RaSIA01:RF-LLRF-A:PhsCorrection'],
-                    '80': ['Phase Correct Error', 'RA-RaSIA01:RF-LLRF-A:PhsCorrErr-Mon'],
-                    '81': ['Phase Correct Control', 'RA-RaSIA01:RF-LLRF-A:PhsCorrCtrl-Mon'],
-                    '125': ['Fwd Min Amp & Phs', 'RA-RaSIA01:RF-LLRF-A:LoopFwdMin'],
-                    'Mode': 'RA-RaSIA01:RF-LLRF-A:LoopMode-Sts',
+                    '24 mV': ['Amp Loop Ref (mV)', 'RA-RaSIA01:RF-LLRF:ALRef'],
+                    '24 VGap': ['Amp Loop Ref (VGap)', 'RA-RaSIA01:RF-LLRF:ALRefAmpVGap'],
+                    '25': ['Phase Loop Ref', 'RA-RaSIA01:RF-LLRF:PLRef'],
+                    '29': ['Voltage Inc. Rate', 'RA-RaSIA01:RF-LLRF:AmpIncRate'],
+                    '28': ['Phase Inc. Rate', 'RA-RaSIA01:RF-LLRF:PhsIncRate'],
+                    '106': ['Look Reference', 'RA-RaSIA01:RF-LLRF:LookRef-Cmd'],
+                    '114': ['Rect/Polar Mode Select', 'RA-RaSIA01:RF-LLRF:LoopMode'],
+                    '107': ['Quadrant Selection', 'RA-RaSIA01:RF-LLRF:Quad'],
+                    '26 mV': ['Amp Ref Min (mV)', 'RA-RaSIA01:RF-LLRF:AmpRefMin'],
+                    '26 VGap': ['Amp Ref Min (VGap)', 'RA-RaSIA01:RF-LLRF:AmpRefMinVGap'],
+                    '27': ['Phase Ref Min', 'RA-RaSIA01:RF-LLRF:PhsRefMin'],
+                    '30': ['Open Loop Gain', 'RA-RaSIA01:RF-LLRF:OLGain'],
+                    '31': ['Phase Correction Control', 'RA-RaSIA01:RF-LLRF:PhsCorrection'],
+                    '80': ['Phase Correct Error', 'RA-RaSIA01:RF-LLRF:PhsCorrErr-Mon'],
+                    '81': ['Phase Correct Control', 'RA-RaSIA01:RF-LLRF:PhsCorrCtrl-Mon'],
+                    '125': ['Fwd Min Amp & Phs', 'RA-RaSIA01:RF-LLRF:LoopFwdMin'],
+                    'Mode': 'RA-RaSIA01:RF-LLRF:LoopMode-Sts',
                     'Limits': {
-                        '24': ['Amp Loop Ref', 'RA-RaSIA01:RF-LLRF-A:ALRef'],
-                        '30': ['Open Loop Gain', 'RA-RaSIA01:RF-LLRF-A:OLGain'],
-                        '0': ['Slow Loop Kp', 'RA-RaSIA01:RF-LLRF-A:SLKP'],
+                        '24': ['Amp Loop Ref', 'RA-RaSIA01:RF-LLRF:ALRef'],
+                        '30': ['Open Loop Gain', 'RA-RaSIA01:RF-LLRF:OLGain'],
+                        '0': ['Slow Loop Kp', 'RA-RaSIA01:RF-LLRF:SLKP'],
                     }
                 },
                 'General': {
@@ -3001,7 +3001,7 @@ SEC_2_CHANNELS = {
                         'Amp2': '-',
                         'Amp3': '-',
                         'Amp4': '-',
-                        'Phs': 'RA-RaSIA01:RF-LLRF-A:Dephase-Mon'
+                        'Phs': 'RA-RaSIA01:RF-LLRF:Dephase-Mon'
                     },
                 },
                 'Rect': {
@@ -3017,90 +3017,90 @@ SEC_2_CHANNELS = {
                     },
                     'Slow': {
                         'Control': {
-                            '100': ['Enable', 'RA-RaSIA01:RF-LLRF-A:SL'],
-                            '110': ['Input Selection', 'RA-RaSIA01:RF-LLRF-A:SLInp'],
-                            '13': ['PI Limit', 'RA-RaSIA01:RF-LLRF-A:SLPILim'],
-                            '1': ['Ki', 'RA-RaSIA01:RF-LLRF-A:SLKI'],
-                            '0': ['Kp', 'RA-RaSIA01:RF-LLRF-A:SLKP']
+                            '100': ['Enable', 'RA-RaSIA01:RF-LLRF:SL'],
+                            '110': ['Input Selection', 'RA-RaSIA01:RF-LLRF:SLInp'],
+                            '13': ['PI Limit', 'RA-RaSIA01:RF-LLRF:SLPILim'],
+                            '1': ['Ki', 'RA-RaSIA01:RF-LLRF:SLKI'],
+                            '0': ['Kp', 'RA-RaSIA01:RF-LLRF:SLKP']
                         },
                         '512': {
                             'Label': 'Reference',
-                            'InPhs': 'RA-RaSIA01:RF-LLRF-A:SLRefI-Mon',
-                            'Quad': 'RA-RaSIA01:RF-LLRF-A:SLRefQ-Mon',
-                            'Amp': 'RA-RaSIA01:RF-LLRF-A:SLRefAmp-Mon',
-                            'Phs': 'RA-RaSIA01:RF-LLRF-A:SLRefPhs-Mon'
+                            'InPhs': 'RA-RaSIA01:RF-LLRF:SLRefI-Mon',
+                            'Quad': 'RA-RaSIA01:RF-LLRF:SLRefQ-Mon',
+                            'Amp': 'RA-RaSIA01:RF-LLRF:SLRefAmp-Mon',
+                            'Phs': 'RA-RaSIA01:RF-LLRF:SLRefPhs-Mon'
                         },
                         '120': {
                             'Label': 'Input',
-                            'InPhs': 'RA-RaSIA01:RF-LLRF-A:SLInpI-Mon',
-                            'Quad': 'RA-RaSIA01:RF-LLRF-A:SLInpQ-Mon',
-                            'Amp': 'RA-RaSIA01:RF-LLRF-A:SLInpAmp-Mon',
-                            'Phs': 'RA-RaSIA01:RF-LLRF-A:SLInpPhs-Mon'
+                            'InPhs': 'RA-RaSIA01:RF-LLRF:SLInpI-Mon',
+                            'Quad': 'RA-RaSIA01:RF-LLRF:SLInpQ-Mon',
+                            'Amp': 'RA-RaSIA01:RF-LLRF:SLInpAmp-Mon',
+                            'Phs': 'RA-RaSIA01:RF-LLRF:SLInpPhs-Mon'
                         },
                         '14': {
                             'Label': 'Error',
-                            'InPhs': 'RA-RaSIA01:RF-LLRF-A:SLErrorI-Mon',
-                            'Quad': 'RA-RaSIA01:RF-LLRF-A:SLErrorQ-Mon',
-                            'Amp': 'RA-RaSIA01:RF-LLRF-A:SLErrorAmp-Mon',
-                            'Phs': 'RA-RaSIA01:RF-LLRF-A:SLErrorPhs-Mon'
+                            'InPhs': 'RA-RaSIA01:RF-LLRF:SLErrorI-Mon',
+                            'Quad': 'RA-RaSIA01:RF-LLRF:SLErrorQ-Mon',
+                            'Amp': 'RA-RaSIA01:RF-LLRF:SLErrorAmp-Mon',
+                            'Phs': 'RA-RaSIA01:RF-LLRF:SLErrorPhs-Mon'
                         },
                         '16': {
                             'Label': 'Error Accum',
-                            'InPhs': 'RA-RaSIA01:RF-LLRF-A:SLErrAccI-Mon',
-                            'Quad': 'RA-RaSIA01:RF-LLRF-A:SLErrAccQ-Mon',
-                            'Amp': 'RA-RaSIA01:RF-LLRF-A:SLErrAccAmp-Mon',
-                            'Phs': 'RA-RaSIA01:RF-LLRF-A:SLErrAccPhs-Mon'
+                            'InPhs': 'RA-RaSIA01:RF-LLRF:SLErrAccI-Mon',
+                            'Quad': 'RA-RaSIA01:RF-LLRF:SLErrAccQ-Mon',
+                            'Amp': 'RA-RaSIA01:RF-LLRF:SLErrAccAmp-Mon',
+                            'Phs': 'RA-RaSIA01:RF-LLRF:SLErrAccPhs-Mon'
                         },
                         '71': {
                             'Label': 'Slow Control Output',
-                            'InPhs': 'RA-RaSIA01:RF-LLRF-A:SLCtrlI-Mon',
-                            'Quad': 'RA-RaSIA01:RF-LLRF-A:SLCtrlQ-Mon',
-                            'Amp': 'RA-RaSIA01:RF-LLRF-A:SLCtrlAmp-Mon',
-                            'Phs': 'RA-RaSIA01:RF-LLRF-A:SLCtrlPhs-Mon'
+                            'InPhs': 'RA-RaSIA01:RF-LLRF:SLCtrlI-Mon',
+                            'Quad': 'RA-RaSIA01:RF-LLRF:SLCtrlQ-Mon',
+                            'Amp': 'RA-RaSIA01:RF-LLRF:SLCtrlAmp-Mon',
+                            'Phs': 'RA-RaSIA01:RF-LLRF:SLCtrlPhs-Mon'
                         },
                     },
                     'Fast': {
                         'Control': {
-                            '115': ['Enable', 'RA-RaSIA01:RF-LLRF-A:FL'],
-                            '111': ['Input Selection', 'RA-RaSIA01:RF-LLRF-A:FLInp'],
-                            '124': ['PI Limit', 'RA-RaSIA01:RF-LLRF-A:FLPILim'],
-                            '119': ['Ki', 'RA-RaSIA01:RF-LLRF-A:FLKI'],
-                            '118': ['Kp', 'RA-RaSIA01:RF-LLRF-A:FLKP']
+                            '115': ['Enable', 'RA-RaSIA01:RF-LLRF:FL'],
+                            '111': ['Input Selection', 'RA-RaSIA01:RF-LLRF:FLInp'],
+                            '124': ['PI Limit', 'RA-RaSIA01:RF-LLRF:FLPILim'],
+                            '119': ['Ki', 'RA-RaSIA01:RF-LLRF:FLKI'],
+                            '118': ['Kp', 'RA-RaSIA01:RF-LLRF:FLKP']
                         },
                         '124': {
                             'Label': 'Reference',
-                            'InPhs': 'RA-RaSIA01:RF-LLRF-A:FLRefI-Mon',
-                            'Quad': 'RA-RaSIA01:RF-LLRF-A:FLRefQ-Mon',
-                            'Amp': 'RA-RaSIA01:RF-LLRF-A:FLRefAmp-Mon',
-                            'Phs': 'RA-RaSIA01:RF-LLRF-A:FLRefPhs-Mon'
+                            'InPhs': 'RA-RaSIA01:RF-LLRF:FLRefI-Mon',
+                            'Quad': 'RA-RaSIA01:RF-LLRF:FLRefQ-Mon',
+                            'Amp': 'RA-RaSIA01:RF-LLRF:FLRefAmp-Mon',
+                            'Phs': 'RA-RaSIA01:RF-LLRF:FLRefPhs-Mon'
                         },
                         '112': {
                             'Label': 'Input',
-                            'InPhs': 'RA-RaSIA01:RF-LLRF-A:FLInpI-Mon',
-                            'Quad': 'RA-RaSIA01:RF-LLRF-A:FLInpQ-Mon',
-                            'Amp': 'RA-RaSIA01:RF-LLRF-A:FLInpAmp-Mon',
-                            'Phs': 'RA-RaSIA01:RF-LLRF-A:FLInpPhs-Mon'
+                            'InPhs': 'RA-RaSIA01:RF-LLRF:FLInpI-Mon',
+                            'Quad': 'RA-RaSIA01:RF-LLRF:FLInpQ-Mon',
+                            'Amp': 'RA-RaSIA01:RF-LLRF:FLInpAmp-Mon',
+                            'Phs': 'RA-RaSIA01:RF-LLRF:FLInpPhs-Mon'
                         },
                         '118': {
                             'Label': 'Fast Control Output',
-                            'InPhs': 'RA-RaSIA01:RF-LLRF-A:FLCtrlI-Mon',
-                            'Quad': 'RA-RaSIA01:RF-LLRF-A:FLCtrlQ-Mon',
-                            'Amp': 'RA-RaSIA01:RF-LLRF-A:FLCtrlAmp-Mon',
-                            'Phs': 'RA-RaSIA01:RF-LLRF-A:FLCtrlPhs-Mon'
+                            'InPhs': 'RA-RaSIA01:RF-LLRF:FLCtrlI-Mon',
+                            'Quad': 'RA-RaSIA01:RF-LLRF:FLCtrlQ-Mon',
+                            'Amp': 'RA-RaSIA01:RF-LLRF:FLCtrlAmp-Mon',
+                            'Phs': 'RA-RaSIA01:RF-LLRF:FLCtrlPhs-Mon'
                         },
                         '6': {
                             'Label': 'SSA 1 Control Signal',
-                            'InPhs': 'RA-RaSIA01:RF-LLRF-A:SSA1CtrlI-Mon',
-                            'Quad': 'RA-RaSIA01:RF-LLRF-A:SSA1CtrlQ-Mon',
-                            'Amp': 'RA-RaSIA01:RF-LLRF-A:SSA1CtrlAmp-Mon',
-                            'Phs': 'RA-RaSIA01:RF-LLRF-A:SSA1CtrlPhs-Mon'
+                            'InPhs': 'RA-RaSIA01:RF-LLRF:SSA1CtrlI-Mon',
+                            'Quad': 'RA-RaSIA01:RF-LLRF:SSA1CtrlQ-Mon',
+                            'Amp': 'RA-RaSIA01:RF-LLRF:SSA1CtrlAmp-Mon',
+                            'Phs': 'RA-RaSIA01:RF-LLRF:SSA1CtrlPhs-Mon'
                         },
                         '8': {
                             'Label': 'SSA 2 Control Signal',
-                            'InPhs': 'RA-RaSIA01:RF-LLRF-A:SSA2CtrlI-Mon',
-                            'Quad': 'RA-RaSIA01:RF-LLRF-A:SSA2CtrlQ-Mon',
-                            'Amp': 'RA-RaSIA01:RF-LLRF-A:SSA2CtrlAmp-Mon',
-                            'Phs': 'RA-RaSIA01:RF-LLRF-A:SSA2CtrlPhs-Mon'
+                            'InPhs': 'RA-RaSIA01:RF-LLRF:SSA2CtrlI-Mon',
+                            'Quad': 'RA-RaSIA01:RF-LLRF:SSA2CtrlQ-Mon',
+                            'Amp': 'RA-RaSIA01:RF-LLRF:SSA2CtrlAmp-Mon',
+                            'Phs': 'RA-RaSIA01:RF-LLRF:SSA2CtrlPhs-Mon'
                         }
                     }
                 },
@@ -3109,7 +3109,7 @@ SEC_2_CHANNELS = {
                         'Label': 'Amp Ref',
                         'InPhs': '-',
                         'Quad': '-',
-                        'Amp1': 'RA-RaSIA01:RF-LLRF-A:AmpRefOld-Mon',
+                        'Amp1': 'RA-RaSIA01:RF-LLRF:AmpRefOld-Mon',
                         'Amp2': '-',
                         'Amp3': '-',
                         'Amp4': '-',
@@ -3117,23 +3117,23 @@ SEC_2_CHANNELS = {
                     },
                     'Amp': {
                         'Control': {
-                            '116': ['Enable', 'RA-RaSIA01:RF-LLRF-A:AL'],
-                            '112': ['Input Selection', 'RA-RaSIA01:RF-LLRF-A:ALInp'],
-                            '121': ['Ki', 'RA-RaSIA01:RF-LLRF-A:ALKI'],
-                            '120': ['Kp', 'RA-RaSIA01:RF-LLRF-A:ALKP']
+                            '116': ['Enable', 'RA-RaSIA01:RF-LLRF:AL'],
+                            '112': ['Input Selection', 'RA-RaSIA01:RF-LLRF:ALInp'],
+                            '121': ['Ki', 'RA-RaSIA01:RF-LLRF:ALKI'],
+                            '120': ['Kp', 'RA-RaSIA01:RF-LLRF:ALKP']
                         },
                         '100': {
                             'Label': 'Amp Loop Input',
-                            'InPhs': 'RA-RaSIA01:RF-LLRF-A:ALInpI-Mon',
-                            'Quad': 'RA-RaSIA01:RF-LLRF-A:ALInpQ-Mon',
-                            'Amp': 'RA-RaSIA01:RF-LLRF-A:ALInpAmp-Mon',
-                            'Phs': 'RA-RaSIA01:RF-LLRF-A:ALInpPhs-Mon'
+                            'InPhs': 'RA-RaSIA01:RF-LLRF:ALInpI-Mon',
+                            'Quad': 'RA-RaSIA01:RF-LLRF:ALInpQ-Mon',
+                            'Amp': 'RA-RaSIA01:RF-LLRF:ALInpAmp-Mon',
+                            'Phs': 'RA-RaSIA01:RF-LLRF:ALInpPhs-Mon'
                         },
                         '104': {
                             'Label': 'Amp of Input',
                             'InPhs': '-',
                             'Quad': '-',
-                            'Amp': 'RA-RaSIA01:RF-LLRF-A:ALAmpInp-Mon',
+                            'Amp': 'RA-RaSIA01:RF-LLRF:ALAmpInp-Mon',
                             'Phs': '-'
                         },
                         '105': {
@@ -3141,20 +3141,20 @@ SEC_2_CHANNELS = {
                             'InPhs': '-',
                             'Quad': '-',
                             'Amp': '-',
-                            'Phs': 'RA-RaSIA01:RF-LLRF-A:ALPhsInp-Mon'
+                            'Phs': 'RA-RaSIA01:RF-LLRF:ALPhsInp-Mon'
                         },
                         '109': {
                             'Label': 'Error',
                             'InPhs': '-',
                             'Quad': '-',
-                            'Amp': 'RA-RaSIA01:RF-LLRF-A:ALErr-Mon',
+                            'Amp': 'RA-RaSIA01:RF-LLRF:ALErr-Mon',
                             'Phs': '-'
                         },
                         '110': {
                             'Label': 'Error Accum',
                             'InPhs': '-',
                             'Quad': '-',
-                            'Amp': 'RA-RaSIA01:RF-LLRF-A:ALErrAcc-Mon',
+                            'Amp': 'RA-RaSIA01:RF-LLRF:ALErrAcc-Mon',
                             'Phs': '-'
                         },
                         '528': {
@@ -3162,28 +3162,28 @@ SEC_2_CHANNELS = {
                             'InPhs': '-',
                             'Quad': '-',
                             'Amp': '-',
-                            'Phs': 'RA-RaSIA01:RF-LLRF-A:PhsRefOld-Mon'
+                            'Phs': 'RA-RaSIA01:RF-LLRF:PhsRefOld-Mon'
                         }
                     },
                     'Phase': {
                         'Control': {
-                            '117': ['Enable', 'RA-RaSIA01:RF-LLRF-A:PL'],
-                            '113': ['Input Selection', 'RA-RaSIA01:RF-LLRF-A:PLInp'],
-                            '123': ['Ki', 'RA-RaSIA01:RF-LLRF-A:PLKI'],
-                            '122': ['Kp', 'RA-RaSIA01:RF-LLRF-A:PLKP']
+                            '117': ['Enable', 'RA-RaSIA01:RF-LLRF:PL'],
+                            '113': ['Input Selection', 'RA-RaSIA01:RF-LLRF:PLInp'],
+                            '123': ['Ki', 'RA-RaSIA01:RF-LLRF:PLKI'],
+                            '122': ['Kp', 'RA-RaSIA01:RF-LLRF:PLKP']
                         },
                         '102': {
                             'Label': 'Phase Loop Input',
-                            'InPhs': 'RA-RaSIA01:RF-LLRF-A:PLInpI-Mon',
-                            'Quad': 'RA-RaSIA01:RF-LLRF-A:PLInpQ-Mon',
-                            'Amp': 'RA-RaSIA01:RF-LLRF-A:PLInpAmp-Mon',
-                            'Phs': 'RA-RaSIA01:RF-LLRF-A:PLInpPhs-Mon'
+                            'InPhs': 'RA-RaSIA01:RF-LLRF:PLInpI-Mon',
+                            'Quad': 'RA-RaSIA01:RF-LLRF:PLInpQ-Mon',
+                            'Amp': 'RA-RaSIA01:RF-LLRF:PLInpAmp-Mon',
+                            'Phs': 'RA-RaSIA01:RF-LLRF:PLInpPhs-Mon'
                         },
                         '106': {
                             'Label': 'Amp of Input',
                             'InPhs': '-',
                             'Quad': '-',
-                            'Amp': 'RA-RaSIA01:RF-LLRF-A:PLAmpInp-Mon',
+                            'Amp': 'RA-RaSIA01:RF-LLRF:PLAmpInp-Mon',
                             'Phs': '-'
                         },
                         '107': {
@@ -3191,149 +3191,149 @@ SEC_2_CHANNELS = {
                             'InPhs': '-',
                             'Quad': '-',
                             'Amp': '-',
-                            'Phs': 'RA-RaSIA01:RF-LLRF-A:PLPhsInp-Mon'
+                            'Phs': 'RA-RaSIA01:RF-LLRF:PLPhsInp-Mon'
                         },
                         '112': {
                             'Label': 'Error',
                             'InPhs': '-',
                             'Quad': '-',
                             'Amp': '-',
-                            'Phs': 'RA-RaSIA01:RF-LLRF-A:PLErr-Mon'
+                            'Phs': 'RA-RaSIA01:RF-LLRF:PLErr-Mon'
                         },
                         '113': {
                             'Label': 'Error Accum',
                             'InPhs': '-',
                             'Quad': '-',
                             'Amp': '-',
-                            'Phs': 'RA-RaSIA01:RF-LLRF-A:PLErrAcc-Mon'
+                            'Phs': 'RA-RaSIA01:RF-LLRF:PLErrAcc-Mon'
                         },
                         '114': {
                             'Label': 'Polar Control Output',
-                            'InPhs': 'RA-RaSIA01:RF-LLRF-A:POCtrlI-Mon',
-                            'Quad': 'RA-RaSIA01:RF-LLRF-A:POCtrlQ-Mon',
-                            'Amp': 'RA-RaSIA01:RF-LLRF-A:POCtrlAmp-Mon',
-                            'Phs': 'RA-RaSIA01:RF-LLRF-A:POCtrlPhs-Mon'
+                            'InPhs': 'RA-RaSIA01:RF-LLRF:POCtrlI-Mon',
+                            'Quad': 'RA-RaSIA01:RF-LLRF:POCtrlQ-Mon',
+                            'Amp': 'RA-RaSIA01:RF-LLRF:POCtrlAmp-Mon',
+                            'Phs': 'RA-RaSIA01:RF-LLRF:POCtrlPhs-Mon'
                         },
                         '6': {
                             'Label': 'SSA 1 Control Signal',
-                            'InPhs': 'RA-RaSIA01:RF-LLRF-A:SSA1CtrlI-Mon',
-                            'Quad': 'RA-RaSIA01:RF-LLRF-A:SSA1CtrlQ-Mon',
-                            'Amp': 'RA-RaSIA01:RF-LLRF-A:SSA1CtrlAmp-Mon',
-                            'Phs': 'RA-RaSIA01:RF-LLRF-A:SSA1CtrlPhs-Mon'
+                            'InPhs': 'RA-RaSIA01:RF-LLRF:SSA1CtrlI-Mon',
+                            'Quad': 'RA-RaSIA01:RF-LLRF:SSA1CtrlQ-Mon',
+                            'Amp': 'RA-RaSIA01:RF-LLRF:SSA1CtrlAmp-Mon',
+                            'Phs': 'RA-RaSIA01:RF-LLRF:SSA1CtrlPhs-Mon'
                         },
                         '8': {
                             'Label': 'SSA 2 Control Signal',
-                            'InPhs': 'RA-RaSIA01:RF-LLRF-A:SSA2CtrlI-Mon',
-                            'Quad': 'RA-RaSIA01:RF-LLRF-A:SSA2CtrlQ-Mon',
-                            'Amp': 'RA-RaSIA01:RF-LLRF-A:SSA2CtrlAmp-Mon',
-                            'Phs': 'RA-RaSIA01:RF-LLRF-A:SSA2CtrlPhs-Mon'
+                            'InPhs': 'RA-RaSIA01:RF-LLRF:SSA2CtrlI-Mon',
+                            'Quad': 'RA-RaSIA01:RF-LLRF:SSA2CtrlQ-Mon',
+                            'Amp': 'RA-RaSIA01:RF-LLRF:SSA2CtrlAmp-Mon',
+                            'Phs': 'RA-RaSIA01:RF-LLRF:SSA2CtrlPhs-Mon'
                         }
                     }
                 },
                 'Equations': {
                     'Cav': {
-                        'Raw-U': 'RA-RaSIA01:RF-LLRF-A:CavSysCal',
-                        'U-Raw': 'RA-RaSIA01:RF-LLRF-A:CavSysCalInv',
-                        'OLG': 'RA-RaSIA01:RF-LLRF-A:CavSysCalOLG',
-                        'OFS': 'RA-RaSIA01:RF-LLRF-A:CavOffset'
+                        'Raw-U': 'RA-RaSIA01:RF-LLRF:CavSysCal',
+                        'U-Raw': 'RA-RaSIA01:RF-LLRF:CavSysCalInv',
+                        'OLG': 'RA-RaSIA01:RF-LLRF:CavSysCalOLG',
+                        'OFS': 'RA-RaSIA01:RF-LLRF:CavOffset'
                     },
                     'Fwd Cav': {
-                        'Raw-U': 'RA-RaSIA01:RF-LLRF-A:FwdCavSysCal',
-                        'U-Raw': 'RA-RaSIA01:RF-LLRF-A:FwdCavSysCalInv',
-                        'OLG': 'RA-RaSIA01:RF-LLRF-A:FwdCavSysCalOLG',
-                        'OFS': 'RA-RaSIA01:RF-LLRF-A:FwdCavOffset'
+                        'Raw-U': 'RA-RaSIA01:RF-LLRF:FwdCavSysCal',
+                        'U-Raw': 'RA-RaSIA01:RF-LLRF:FwdCavSysCalInv',
+                        'OLG': 'RA-RaSIA01:RF-LLRF:FwdCavSysCalOLG',
+                        'OFS': 'RA-RaSIA01:RF-LLRF:FwdCavOffset'
                     },
                     'Rev Cav': {
-                        'Raw-U': 'RA-RaSIA01:RF-LLRF-A:RevCavSysCal',
-                        'OFS': 'RA-RaSIA01:RF-LLRF-A:RevCavOffset'
+                        'Raw-U': 'RA-RaSIA01:RF-LLRF:RevCavSysCal',
+                        'OFS': 'RA-RaSIA01:RF-LLRF:RevCavOffset'
                     },
                     'Fwd SSA 1': {
-                        'Raw-U': 'RA-RaSIA01:RF-LLRF-A:FwdSSA1SysCal',
-                        'U-Raw': 'RA-RaSIA01:RF-LLRF-A:FwdSSA1SysCalInv',
-                        'OLG': 'RA-RaSIA01:RF-LLRF-A:FwdSSA1SysCalOLG',
-                        'OFS': 'RA-RaSIA01:RF-LLRF-A:FwdSSA1SysCalOffset'
+                        'Raw-U': 'RA-RaSIA01:RF-LLRF:FwdSSA1SysCal',
+                        'U-Raw': 'RA-RaSIA01:RF-LLRF:FwdSSA1SysCalInv',
+                        'OLG': 'RA-RaSIA01:RF-LLRF:FwdSSA1SysCalOLG',
+                        'OFS': 'RA-RaSIA01:RF-LLRF:FwdSSA1SysCalOffset'
                     },
                     'Rev SSA 1': {
-                        'Raw-U': 'RA-RaSIA01:RF-LLRF-A:RevSSA1SysCal',
-                        'OFS': 'RA-RaSIA01:RF-LLRF-A:RevSSA1Offset' 
+                        'Raw-U': 'RA-RaSIA01:RF-LLRF:RevSSA1SysCal',
+                        'OFS': 'RA-RaSIA01:RF-LLRF:RevSSA1Offset' 
                     },
                     'Fwd SSA 2': {
-                        'Raw-U': 'RA-RaSIA01:RF-LLRF-A:FwdSSA2SysCal',
-                        'U-Raw': 'RA-RaSIA01:RF-LLRF-A:FwdSSA2SysCalInv',
-                        'OLG': 'RA-RaSIA01:RF-LLRF-A:FwdSSA2SysCalOLG',
-                        'OFS': 'RA-RaSIA01:RF-LLRF-A:FwdSSA2SysCalOffset'
+                        'Raw-U': 'RA-RaSIA01:RF-LLRF:FwdSSA2SysCal',
+                        'U-Raw': 'RA-RaSIA01:RF-LLRF:FwdSSA2SysCalInv',
+                        'OLG': 'RA-RaSIA01:RF-LLRF:FwdSSA2SysCalOLG',
+                        'OFS': 'RA-RaSIA01:RF-LLRF:FwdSSA2SysCalOffset'
                     },
                     'Rev SSA 2': {
-                        'Raw-U': 'RA-RaSIA01:RF-LLRF-A:RevSSA2SysCal',
-                        'OFS': 'RA-RaSIA01:RF-LLRF-A:RevSSA2Offset' 
+                        'Raw-U': 'RA-RaSIA01:RF-LLRF:RevSSA2SysCal',
+                        'OFS': 'RA-RaSIA01:RF-LLRF:RevSSA2Offset' 
                     },
                     'Fwd Pre': {
-                        'Raw-U': 'RA-RaSIA01:RF-LLRF-A:FwdPreSysCal',
-                        'OFS': 'RA-RaSIA01:RF-LLRF-A:FwdPreOffset'
+                        'Raw-U': 'RA-RaSIA01:RF-LLRF:FwdPreSysCal',
+                        'OFS': 'RA-RaSIA01:RF-LLRF:FwdPreOffset'
                     },
                     'Fwd Pre 1': {
-                        'Raw-U': 'RA-RaSIA01:RF-LLRF-A:FwdPre1SysCal',
-                        'OFS': 'RA-RaSIA01:RF-LLRF-A:FwdPre1Offset'
+                        'Raw-U': 'RA-RaSIA01:RF-LLRF:FwdPre1SysCal',
+                        'OFS': 'RA-RaSIA01:RF-LLRF:FwdPre1Offset'
                     },
                     'Fwd Pre 2': {
-                        'Raw-U': 'RA-RaSIA01:RF-LLRF-A:FwdPre2SysCal',
-                        'OFS': 'RA-RaSIA01:RF-LLRF-A:FwdPre2Offset'
+                        'Raw-U': 'RA-RaSIA01:RF-LLRF:FwdPre2SysCal',
+                        'OFS': 'RA-RaSIA01:RF-LLRF:FwdPre2Offset'
                     },
                     'In Pre 1': {
-                        'Raw-U': 'RA-RaSIA01:RF-LLRF-A:In1PreAmpSysCal',
-                        'OFS': 'RA-RaSIA01:RF-LLRF-A:In1PreAmpOffset'
+                        'Raw-U': 'RA-RaSIA01:RF-LLRF:In1PreAmpSysCal',
+                        'OFS': 'RA-RaSIA01:RF-LLRF:In1PreAmpOffset'
                     },
                     'In Pre 2': {
-                        'Raw-U': 'RA-RaSIA01:RF-LLRF-A:In2PreAmpSysCal',
-                        'OFS': 'RA-RaSIA01:RF-LLRF-A:In2PreAmpOffset'
+                        'Raw-U': 'RA-RaSIA01:RF-LLRF:In2PreAmpSysCal',
+                        'OFS': 'RA-RaSIA01:RF-LLRF:In2PreAmpOffset'
                     },
                     'Fwd Circ': {
-                        'Raw-U': 'RA-RaSIA01:RF-LLRF-A:FwdCircSysCal',
-                        'OFS': 'RA-RaSIA01:RF-LLRF-A:FwdCircOffset'
+                        'Raw-U': 'RA-RaSIA01:RF-LLRF:FwdCircSysCal',
+                        'OFS': 'RA-RaSIA01:RF-LLRF:FwdCircOffset'
                     },
                     'Rev Circ': {
-                        'Raw-U': 'RA-RaSIA01:RF-LLRF-A:RevCircSysCal',
-                        'OFS': 'RA-RaSIA01:RF-LLRF-A:RevCircOffset'
+                        'Raw-U': 'RA-RaSIA01:RF-LLRF:RevCircSysCal',
+                        'OFS': 'RA-RaSIA01:RF-LLRF:RevCircOffset'
                     },
                     'MO': {
-                        'Raw-U': 'RA-RaSIA01:RF-LLRF-A:MOSysCal',
-                        'OFS': 'RA-RaSIA01:RF-LLRF-A:MOOffset'
+                        'Raw-U': 'RA-RaSIA01:RF-LLRF:MOSysCal',
+                        'OFS': 'RA-RaSIA01:RF-LLRF:MOOffset'
                     },
                     'Amp Loop Ref': {
-                        'Raw-U': 'RA-RaSIA01:RF-LLRF-A:ALRefSysCal',
-                        'U-Raw': 'RA-RaSIA01:RF-LLRF-A:ALRefSysCalInv',
-                        'OFS': 'RA-RaSIA01:RF-LLRF-A:ALRefOffset'
+                        'Raw-U': 'RA-RaSIA01:RF-LLRF:ALRefSysCal',
+                        'U-Raw': 'RA-RaSIA01:RF-LLRF:ALRefSysCalInv',
+                        'OFS': 'RA-RaSIA01:RF-LLRF:ALRefOffset'
                     },
                     'VGap': {
-                        'Hw to Amp': 'RA-RaSIA01:RF-LLRF-A:Hw2AmpVCavCoeff',
-                        'Amp to Hw': 'RA-RaSIA01:RF-LLRF-A:AmpVCav2HwCoeff'
+                        'Hw to Amp': 'RA-RaSIA01:RF-LLRF:Hw2AmpVCavCoeff',
+                        'Amp to Hw': 'RA-RaSIA01:RF-LLRF:AmpVCav2HwCoeff'
                     },
                     'Rsh': 'SI-03SP:RF-SRFCav-A:Rsh-Cte'
                 }
             },
             'B': {
                 'Control': {
-                    '24 mV': ['Amp Loop Ref (mV)', 'RA-RaSIB01:RF-LLRF-B:ALRef'],
-                    '24 VGap': ['Amp Loop Ref (VGap)', 'RA-RaSIB01:RF-LLRF-B:ALRefAmpVGap'],
-                    '25': ['Phase Loop Ref', 'RA-RaSIB01:RF-LLRF-B:PLRef'],
-                    '29': ['Voltage Inc. Rate', 'RA-RaSIB01:RF-LLRF-B:AmpIncRate'],
-                    '28': ['Phase Inc. Rate', 'RA-RaSIB01:RF-LLRF-B:PhsIncRate'],
-                    '106': ['Look Reference', 'RA-RaSIB01:RF-LLRF-B:LookRef-Cmd'],
-                    '114': ['Rect/Polar Mode Select', 'RA-RaSIB01:RF-LLRF-B:LoopMode'],
-                    '107': ['Quadrant Selection', 'RA-RaSIB01:RF-LLRF-B:Quad'],
-                    '26 mV': ['Amp Ref Min (mV)', 'RA-RaSIB01:RF-LLRF-B:AmpRefMin'],
-                    '26 VGap': ['Amp Ref Min (VGap)', 'RA-RaSIB01:RF-LLRF-B:AmpRefMinVGap'],
-                    '27': ['Phase Ref Min', 'RA-RaSIB01:RF-LLRF-B:PhsRefMin'],
-                    '30': ['Open Loop Gain', 'RA-RaSIB01:RF-LLRF-B:OLGain'],
-                    '31': ['Phase Correction Control', 'RA-RaSIB01:RF-LLRF-B:PhsCorrection'],
-                    '80': ['Phase Correct Error', 'RA-RaSIB01:RF-LLRF-B:PhsCorrErr-Mon'],
-                    '81': ['Phase Correct Control', 'RA-RaSIB01:RF-LLRF-B:PhsCorrCtrl-Mon'],
-                    '125': ['Fwd Min Amp & Phs', 'RA-RaSIB01:RF-LLRF-B:LoopFwdMin'],
-                    'Mode': 'RA-RaSIB01:RF-LLRF-B:LoopMode-Sts',
+                    '24 mV': ['Amp Loop Ref (mV)', 'RA-RaSIB01:RF-LLRF:ALRef'],
+                    '24 VGap': ['Amp Loop Ref (VGap)', 'RA-RaSIB01:RF-LLRF:ALRefAmpVGap'],
+                    '25': ['Phase Loop Ref', 'RA-RaSIB01:RF-LLRF:PLRef'],
+                    '29': ['Voltage Inc. Rate', 'RA-RaSIB01:RF-LLRF:AmpIncRate'],
+                    '28': ['Phase Inc. Rate', 'RA-RaSIB01:RF-LLRF:PhsIncRate'],
+                    '106': ['Look Reference', 'RA-RaSIB01:RF-LLRF:LookRef-Cmd'],
+                    '114': ['Rect/Polar Mode Select', 'RA-RaSIB01:RF-LLRF:LoopMode'],
+                    '107': ['Quadrant Selection', 'RA-RaSIB01:RF-LLRF:Quad'],
+                    '26 mV': ['Amp Ref Min (mV)', 'RA-RaSIB01:RF-LLRF:AmpRefMin'],
+                    '26 VGap': ['Amp Ref Min (VGap)', 'RA-RaSIB01:RF-LLRF:AmpRefMinVGap'],
+                    '27': ['Phase Ref Min', 'RA-RaSIB01:RF-LLRF:PhsRefMin'],
+                    '30': ['Open Loop Gain', 'RA-RaSIB01:RF-LLRF:OLGain'],
+                    '31': ['Phase Correction Control', 'RA-RaSIB01:RF-LLRF:PhsCorrection'],
+                    '80': ['Phase Correct Error', 'RA-RaSIB01:RF-LLRF:PhsCorrErr-Mon'],
+                    '81': ['Phase Correct Control', 'RA-RaSIB01:RF-LLRF:PhsCorrCtrl-Mon'],
+                    '125': ['Fwd Min Amp & Phs', 'RA-RaSIB01:RF-LLRF:LoopFwdMin'],
+                    'Mode': 'RA-RaSIB01:RF-LLRF:LoopMode-Sts',
                     'Limits': {
-                        '24': ['Amp Loop Ref', 'RA-RaSIB01:RF-LLRF-B:ALRef'],
-                        '30': ['Open Loop Gain', 'RA-RaSIB01:RF-LLRF-B:OLGain'],
-                        '0': ['Slow Loop Kp', 'RA-RaSIB01:RF-LLRF-B:SLKP'],
+                        '24': ['Amp Loop Ref', 'RA-RaSIB01:RF-LLRF:ALRef'],
+                        '30': ['Open Loop Gain', 'RA-RaSIB01:RF-LLRF:OLGain'],
+                        '0': ['Slow Loop Kp', 'RA-RaSIB01:RF-LLRF:SLKP'],
                     }
                 },
                 'General': {
@@ -3375,7 +3375,7 @@ SEC_2_CHANNELS = {
                         'Amp2': '-',
                         'Amp3': '-',
                         'Amp4': '-',
-                        'Phs': 'RA-RaSIB01:RF-LLRF-B:Dephase-Mon'
+                        'Phs': 'RA-RaSIB01:RF-LLRF:Dephase-Mon'
                     },
                 },
                 'Rect': {
@@ -3391,90 +3391,90 @@ SEC_2_CHANNELS = {
                     },
                     'Slow': {
                         'Control': {
-                            '100': ['Enable', 'RA-RaSIB01:RF-LLRF-B:SL'],
-                            '110': ['Input Selection', 'RA-RaSIB01:RF-LLRF-B:SLInp'],
-                            '13': ['PI Limit', 'RA-RaSIB01:RF-LLRF-B:SLPILim'],
-                            '1': ['Ki', 'RA-RaSIB01:RF-LLRF-B:SLKI'],
-                            '0': ['Kp', 'RA-RaSIB01:RF-LLRF-B:SLKP']
+                            '100': ['Enable', 'RA-RaSIB01:RF-LLRF:SL'],
+                            '110': ['Input Selection', 'RA-RaSIB01:RF-LLRF:SLInp'],
+                            '13': ['PI Limit', 'RA-RaSIB01:RF-LLRF:SLPILim'],
+                            '1': ['Ki', 'RA-RaSIB01:RF-LLRF:SLKI'],
+                            '0': ['Kp', 'RA-RaSIB01:RF-LLRF:SLKP']
                         },
                         '512': {
                             'Label': 'Reference',
-                            'InPhs': 'RA-RaSIB01:RF-LLRF-B:SLRefI-Mon',
-                            'Quad': 'RA-RaSIB01:RF-LLRF-B:SLRefQ-Mon',
-                            'Amp': 'RA-RaSIB01:RF-LLRF-B:SLRefAmp-Mon',
-                            'Phs': 'RA-RaSIB01:RF-LLRF-B:SLRefPhs-Mon'
+                            'InPhs': 'RA-RaSIB01:RF-LLRF:SLRefI-Mon',
+                            'Quad': 'RA-RaSIB01:RF-LLRF:SLRefQ-Mon',
+                            'Amp': 'RA-RaSIB01:RF-LLRF:SLRefAmp-Mon',
+                            'Phs': 'RA-RaSIB01:RF-LLRF:SLRefPhs-Mon'
                         },
                         '120': {
                             'Label': 'Input',
-                            'InPhs': 'RA-RaSIB01:RF-LLRF-B:SLInpI-Mon',
-                            'Quad': 'RA-RaSIB01:RF-LLRF-B:SLInpQ-Mon',
-                            'Amp': 'RA-RaSIB01:RF-LLRF-B:SLInpAmp-Mon',
-                            'Phs': 'RA-RaSIB01:RF-LLRF-B:SLInpPhs-Mon'
+                            'InPhs': 'RA-RaSIB01:RF-LLRF:SLInpI-Mon',
+                            'Quad': 'RA-RaSIB01:RF-LLRF:SLInpQ-Mon',
+                            'Amp': 'RA-RaSIB01:RF-LLRF:SLInpAmp-Mon',
+                            'Phs': 'RA-RaSIB01:RF-LLRF:SLInpPhs-Mon'
                         },
                         '14': {
                             'Label': 'Error',
-                            'InPhs': 'RA-RaSIB01:RF-LLRF-B:SLErrorI-Mon',
-                            'Quad': 'RA-RaSIB01:RF-LLRF-B:SLErrorQ-Mon',
-                            'Amp': 'RA-RaSIB01:RF-LLRF-B:SLErrorAmp-Mon',
-                            'Phs': 'RA-RaSIB01:RF-LLRF-B:SLErrorPhs-Mon'
+                            'InPhs': 'RA-RaSIB01:RF-LLRF:SLErrorI-Mon',
+                            'Quad': 'RA-RaSIB01:RF-LLRF:SLErrorQ-Mon',
+                            'Amp': 'RA-RaSIB01:RF-LLRF:SLErrorAmp-Mon',
+                            'Phs': 'RA-RaSIB01:RF-LLRF:SLErrorPhs-Mon'
                         },
                         '16': {
                             'Label': 'Error Accum',
-                            'InPhs': 'RA-RaSIB01:RF-LLRF-B:SLErrAccI-Mon',
-                            'Quad': 'RA-RaSIB01:RF-LLRF-B:SLErrAccQ-Mon',
-                            'Amp': 'RA-RaSIB01:RF-LLRF-B:SLErrAccAmp-Mon',
-                            'Phs': 'RA-RaSIB01:RF-LLRF-B:SLErrAccPhs-Mon'
+                            'InPhs': 'RA-RaSIB01:RF-LLRF:SLErrAccI-Mon',
+                            'Quad': 'RA-RaSIB01:RF-LLRF:SLErrAccQ-Mon',
+                            'Amp': 'RA-RaSIB01:RF-LLRF:SLErrAccAmp-Mon',
+                            'Phs': 'RA-RaSIB01:RF-LLRF:SLErrAccPhs-Mon'
                         },
                         '71': {
                             'Label': 'Slow Control Output',
-                            'InPhs': 'RA-RaSIB01:RF-LLRF-B:SLCtrlI-Mon',
-                            'Quad': 'RA-RaSIB01:RF-LLRF-B:SLCtrlQ-Mon',
-                            'Amp': 'RA-RaSIB01:RF-LLRF-B:SLCtrlAmp-Mon',
-                            'Phs': 'RA-RaSIB01:RF-LLRF-B:SLCtrlPhs-Mon'
+                            'InPhs': 'RA-RaSIB01:RF-LLRF:SLCtrlI-Mon',
+                            'Quad': 'RA-RaSIB01:RF-LLRF:SLCtrlQ-Mon',
+                            'Amp': 'RA-RaSIB01:RF-LLRF:SLCtrlAmp-Mon',
+                            'Phs': 'RA-RaSIB01:RF-LLRF:SLCtrlPhs-Mon'
                         },
                     },
                     'Fast': {
                         'Control': {
-                            '115': ['Enable', 'RA-RaSIB01:RF-LLRF-B:FL'],
-                            '111': ['Input Selection', 'RA-RaSIB01:RF-LLRF-B:FLInp'],
-                            '124': ['PI Limit', 'RA-RaSIB01:RF-LLRF-B:FLPILim'],
-                            '119': ['Ki', 'RA-RaSIB01:RF-LLRF-B:FLKI'],
-                            '118': ['Kp', 'RA-RaSIB01:RF-LLRF-B:FLKP']
+                            '115': ['Enable', 'RA-RaSIB01:RF-LLRF:FL'],
+                            '111': ['Input Selection', 'RA-RaSIB01:RF-LLRF:FLInp'],
+                            '124': ['PI Limit', 'RA-RaSIB01:RF-LLRF:FLPILim'],
+                            '119': ['Ki', 'RA-RaSIB01:RF-LLRF:FLKI'],
+                            '118': ['Kp', 'RA-RaSIB01:RF-LLRF:FLKP']
                         },
                         '124': {
                             'Label': 'Reference',
-                            'InPhs': 'RA-RaSIB01:RF-LLRF-B:FLRefI-Mon',
-                            'Quad': 'RA-RaSIB01:RF-LLRF-B:FLRefQ-Mon',
-                            'Amp': 'RA-RaSIB01:RF-LLRF-B:FLRefAmp-Mon',
-                            'Phs': 'RA-RaSIB01:RF-LLRF-B:FLRefPhs-Mon'
+                            'InPhs': 'RA-RaSIB01:RF-LLRF:FLRefI-Mon',
+                            'Quad': 'RA-RaSIB01:RF-LLRF:FLRefQ-Mon',
+                            'Amp': 'RA-RaSIB01:RF-LLRF:FLRefAmp-Mon',
+                            'Phs': 'RA-RaSIB01:RF-LLRF:FLRefPhs-Mon'
                         },
                         '112': {
                             'Label': 'Input',
-                            'InPhs': 'RA-RaSIB01:RF-LLRF-B:FLInpI-Mon',
-                            'Quad': 'RA-RaSIB01:RF-LLRF-B:FLInpQ-Mon',
-                            'Amp': 'RA-RaSIB01:RF-LLRF-B:FLInpAmp-Mon',
-                            'Phs': 'RA-RaSIB01:RF-LLRF-B:FLInpPhs-Mon'
+                            'InPhs': 'RA-RaSIB01:RF-LLRF:FLInpI-Mon',
+                            'Quad': 'RA-RaSIB01:RF-LLRF:FLInpQ-Mon',
+                            'Amp': 'RA-RaSIB01:RF-LLRF:FLInpAmp-Mon',
+                            'Phs': 'RA-RaSIB01:RF-LLRF:FLInpPhs-Mon'
                         },
                         '118': {
                             'Label': 'Fast Control Output',
-                            'InPhs': 'RA-RaSIB01:RF-LLRF-B:FLCtrlI-Mon',
-                            'Quad': 'RA-RaSIB01:RF-LLRF-B:FLCtrlQ-Mon',
-                            'Amp': 'RA-RaSIB01:RF-LLRF-B:FLCtrlAmp-Mon',
-                            'Phs': 'RA-RaSIB01:RF-LLRF-B:FLCtrlPhs-Mon'
+                            'InPhs': 'RA-RaSIB01:RF-LLRF:FLCtrlI-Mon',
+                            'Quad': 'RA-RaSIB01:RF-LLRF:FLCtrlQ-Mon',
+                            'Amp': 'RA-RaSIB01:RF-LLRF:FLCtrlAmp-Mon',
+                            'Phs': 'RA-RaSIB01:RF-LLRF:FLCtrlPhs-Mon'
                         },
                         '6': {
                             'Label': 'SSA 1 Control Signal',
-                            'InPhs': 'RA-RaSIB01:RF-LLRF-B:SSA1CtrlI-Mon',
-                            'Quad': 'RA-RaSIB01:RF-LLRF-B:SSA1CtrlQ-Mon',
-                            'Amp': 'RA-RaSIB01:RF-LLRF-B:SSA1CtrlAmp-Mon',
-                            'Phs': 'RA-RaSIB01:RF-LLRF-B:SSA1CtrlPhs-Mon'
+                            'InPhs': 'RA-RaSIB01:RF-LLRF:SSA1CtrlI-Mon',
+                            'Quad': 'RA-RaSIB01:RF-LLRF:SSA1CtrlQ-Mon',
+                            'Amp': 'RA-RaSIB01:RF-LLRF:SSA1CtrlAmp-Mon',
+                            'Phs': 'RA-RaSIB01:RF-LLRF:SSA1CtrlPhs-Mon'
                         },
                         '8': {
                             'Label': 'SSA 2 Control Signal',
-                            'InPhs': 'RA-RaSIB01:RF-LLRF-B:SSA2CtrlI-Mon',
-                            'Quad': 'RA-RaSIB01:RF-LLRF-B:SSA2CtrlQ-Mon',
-                            'Amp': 'RA-RaSIB01:RF-LLRF-B:SSA2CtrlAmp-Mon',
-                            'Phs': 'RA-RaSIB01:RF-LLRF-B:SSA2CtrlPhs-Mon'
+                            'InPhs': 'RA-RaSIB01:RF-LLRF:SSA2CtrlI-Mon',
+                            'Quad': 'RA-RaSIB01:RF-LLRF:SSA2CtrlQ-Mon',
+                            'Amp': 'RA-RaSIB01:RF-LLRF:SSA2CtrlAmp-Mon',
+                            'Phs': 'RA-RaSIB01:RF-LLRF:SSA2CtrlPhs-Mon'
                         }
                     }
                 },
@@ -3483,7 +3483,7 @@ SEC_2_CHANNELS = {
                         'Label': 'Amp Ref',
                         'InPhs': '-',
                         'Quad': '-',
-                        'Amp1': 'RA-RaSIB01:RF-LLRF-B:AmpRefOld-Mon',
+                        'Amp1': 'RA-RaSIB01:RF-LLRF:AmpRefOld-Mon',
                         'Amp2': '-',
                         'Amp3': '-',
                         'Amp4': '-',
@@ -3491,23 +3491,23 @@ SEC_2_CHANNELS = {
                     },
                     'Amp': {
                         'Control': {
-                            '116': ['Enable', 'RA-RaSIB01:RF-LLRF-B:AL'],
-                            '112': ['Input Selection', 'RA-RaSIB01:RF-LLRF-B:ALInp'],
-                            '121': ['Ki', 'RA-RaSIB01:RF-LLRF-B:ALKI'],
-                            '120': ['Kp', 'RA-RaSIB01:RF-LLRF-B:ALKP']
+                            '116': ['Enable', 'RA-RaSIB01:RF-LLRF:AL'],
+                            '112': ['Input Selection', 'RA-RaSIB01:RF-LLRF:ALInp'],
+                            '121': ['Ki', 'RA-RaSIB01:RF-LLRF:ALKI'],
+                            '120': ['Kp', 'RA-RaSIB01:RF-LLRF:ALKP']
                         },
                         '100': {
                             'Label': 'Amp Loop Input',
-                            'InPhs': 'RA-RaSIB01:RF-LLRF-B:ALInpI-Mon',
-                            'Quad': 'RA-RaSIB01:RF-LLRF-B:ALInpQ-Mon',
-                            'Amp': 'RA-RaSIB01:RF-LLRF-B:ALInpAmp-Mon',
-                            'Phs': 'RA-RaSIB01:RF-LLRF-B:ALInpPhs-Mon'
+                            'InPhs': 'RA-RaSIB01:RF-LLRF:ALInpI-Mon',
+                            'Quad': 'RA-RaSIB01:RF-LLRF:ALInpQ-Mon',
+                            'Amp': 'RA-RaSIB01:RF-LLRF:ALInpAmp-Mon',
+                            'Phs': 'RA-RaSIB01:RF-LLRF:ALInpPhs-Mon'
                         },
                         '104': {
                             'Label': 'Amp of Input',
                             'InPhs': '-',
                             'Quad': '-',
-                            'Amp': 'RA-RaSIB01:RF-LLRF-B:ALAmpInp-Mon',
+                            'Amp': 'RA-RaSIB01:RF-LLRF:ALAmpInp-Mon',
                             'Phs': '-'
                         },
                         '105': {
@@ -3515,20 +3515,20 @@ SEC_2_CHANNELS = {
                             'InPhs': '-',
                             'Quad': '-',
                             'Amp': '-',
-                            'Phs': 'RA-RaSIB01:RF-LLRF-B:ALPhsInp-Mon'
+                            'Phs': 'RA-RaSIB01:RF-LLRF:ALPhsInp-Mon'
                         },
                         '109': {
                             'Label': 'Error',
                             'InPhs': '-',
                             'Quad': '-',
-                            'Amp': 'RA-RaSIB01:RF-LLRF-B:ALErr-Mon',
+                            'Amp': 'RA-RaSIB01:RF-LLRF:ALErr-Mon',
                             'Phs': '-'
                         },
                         '110': {
                             'Label': 'Error Accum',
                             'InPhs': '-',
                             'Quad': '-',
-                            'Amp': 'RA-RaSIB01:RF-LLRF-B:ALErrAcc-Mon',
+                            'Amp': 'RA-RaSIB01:RF-LLRF:ALErrAcc-Mon',
                             'Phs': '-'
                         },
                         '528': {
@@ -3536,28 +3536,28 @@ SEC_2_CHANNELS = {
                             'InPhs': '-',
                             'Quad': '-',
                             'Amp': '-',
-                            'Phs': 'RA-RaSIB01:RF-LLRF-B:PhsRefOld-Mon'
+                            'Phs': 'RA-RaSIB01:RF-LLRF:PhsRefOld-Mon'
                         }
                     },
                     'Phase': {
                         'Control': {
-                            '117': ['Enable', 'RA-RaSIB01:RF-LLRF-B:PL'],
-                            '113': ['Input Selection', 'RA-RaSIB01:RF-LLRF-B:PLInp'],
-                            '123': ['Ki', 'RA-RaSIB01:RF-LLRF-B:PLKI'],
-                            '122': ['Kp', 'RA-RaSIB01:RF-LLRF-B:PLKP']
+                            '117': ['Enable', 'RA-RaSIB01:RF-LLRF:PL'],
+                            '113': ['Input Selection', 'RA-RaSIB01:RF-LLRF:PLInp'],
+                            '123': ['Ki', 'RA-RaSIB01:RF-LLRF:PLKI'],
+                            '122': ['Kp', 'RA-RaSIB01:RF-LLRF:PLKP']
                         },
                         '102': {
                             'Label': 'Phase Loop Input',
-                            'InPhs': 'RA-RaSIB01:RF-LLRF-B:PLInpI-Mon',
-                            'Quad': 'RA-RaSIB01:RF-LLRF-B:PLInpQ-Mon',
-                            'Amp': 'RA-RaSIB01:RF-LLRF-B:PLInpAmp-Mon',
-                            'Phs': 'RA-RaSIB01:RF-LLRF-B:PLInpPhs-Mon'
+                            'InPhs': 'RA-RaSIB01:RF-LLRF:PLInpI-Mon',
+                            'Quad': 'RA-RaSIB01:RF-LLRF:PLInpQ-Mon',
+                            'Amp': 'RA-RaSIB01:RF-LLRF:PLInpAmp-Mon',
+                            'Phs': 'RA-RaSIB01:RF-LLRF:PLInpPhs-Mon'
                         },
                         '106': {
                             'Label': 'Amp of Input',
                             'InPhs': '-',
                             'Quad': '-',
-                            'Amp': 'RA-RaSIB01:RF-LLRF-B:PLAmpInp-Mon',
+                            'Amp': 'RA-RaSIB01:RF-LLRF:PLAmpInp-Mon',
                             'Phs': '-'
                         },
                         '107': {
@@ -3565,122 +3565,122 @@ SEC_2_CHANNELS = {
                             'InPhs': '-',
                             'Quad': '-',
                             'Amp': '-',
-                            'Phs': 'RA-RaSIB01:RF-LLRF-B:PLPhsInp-Mon'
+                            'Phs': 'RA-RaSIB01:RF-LLRF:PLPhsInp-Mon'
                         },
                         '112': {
                             'Label': 'Error',
                             'InPhs': '-',
                             'Quad': '-',
                             'Amp': '-',
-                            'Phs': 'RA-RaSIB01:RF-LLRF-B:PLErr-Mon'
+                            'Phs': 'RA-RaSIB01:RF-LLRF:PLErr-Mon'
                         },
                         '113': {
                             'Label': 'Error Accum',
                             'InPhs': '-',
                             'Quad': '-',
                             'Amp': '-',
-                            'Phs': 'RA-RaSIB01:RF-LLRF-B:PLErrAcc-Mon'
+                            'Phs': 'RA-RaSIB01:RF-LLRF:PLErrAcc-Mon'
                         },
                         '114': {
                             'Label': 'Polar Control Output',
-                            'InPhs': 'RA-RaSIB01:RF-LLRF-B:POCtrlI-Mon',
-                            'Quad': 'RA-RaSIB01:RF-LLRF-B:POCtrlQ-Mon',
-                            'Amp': 'RA-RaSIB01:RF-LLRF-B:POCtrlAmp-Mon',
-                            'Phs': 'RA-RaSIB01:RF-LLRF-B:POCtrlPhs-Mon'
+                            'InPhs': 'RA-RaSIB01:RF-LLRF:POCtrlI-Mon',
+                            'Quad': 'RA-RaSIB01:RF-LLRF:POCtrlQ-Mon',
+                            'Amp': 'RA-RaSIB01:RF-LLRF:POCtrlAmp-Mon',
+                            'Phs': 'RA-RaSIB01:RF-LLRF:POCtrlPhs-Mon'
                         },
                         '6': {
                             'Label': 'SSA 1 Control Signal',
-                            'InPhs': 'RA-RaSIB01:RF-LLRF-B:SSA1CtrlI-Mon',
-                            'Quad': 'RA-RaSIB01:RF-LLRF-B:SSA1CtrlQ-Mon',
-                            'Amp': 'RA-RaSIB01:RF-LLRF-B:SSA1CtrlAmp-Mon',
-                            'Phs': 'RA-RaSIB01:RF-LLRF-B:SSA1CtrlPhs-Mon'
+                            'InPhs': 'RA-RaSIB01:RF-LLRF:SSA1CtrlI-Mon',
+                            'Quad': 'RA-RaSIB01:RF-LLRF:SSA1CtrlQ-Mon',
+                            'Amp': 'RA-RaSIB01:RF-LLRF:SSA1CtrlAmp-Mon',
+                            'Phs': 'RA-RaSIB01:RF-LLRF:SSA1CtrlPhs-Mon'
                         },
                         '8': {
                             'Label': 'SSA 2 Control Signal',
-                            'InPhs': 'RA-RaSIB01:RF-LLRF-B:SSA2CtrlI-Mon',
-                            'Quad': 'RA-RaSIB01:RF-LLRF-B:SSA2CtrlQ-Mon',
-                            'Amp': 'RA-RaSIB01:RF-LLRF-B:SSA2CtrlAmp-Mon',
-                            'Phs': 'RA-RaSIB01:RF-LLRF-B:SSA2CtrlPhs-Mon'
+                            'InPhs': 'RA-RaSIB01:RF-LLRF:SSA2CtrlI-Mon',
+                            'Quad': 'RA-RaSIB01:RF-LLRF:SSA2CtrlQ-Mon',
+                            'Amp': 'RA-RaSIB01:RF-LLRF:SSA2CtrlAmp-Mon',
+                            'Phs': 'RA-RaSIB01:RF-LLRF:SSA2CtrlPhs-Mon'
                         }
                     }
                 },
                 'Equations': {
                     'Cav': {
-                        'Raw-U': 'RA-RaSIB01:RF-LLRF-B:CavSysCal',
-                        'U-Raw': 'RA-RaSIB01:RF-LLRF-B:CavSysCalInv',
-                        'OLG': 'RA-RaSIB01:RF-LLRF-B:CavSysCalOLG',
-                        'OFS': 'RA-RaSIB01:RF-LLRF-B:CavOffset'
+                        'Raw-U': 'RA-RaSIB01:RF-LLRF:CavSysCal',
+                        'U-Raw': 'RA-RaSIB01:RF-LLRF:CavSysCalInv',
+                        'OLG': 'RA-RaSIB01:RF-LLRF:CavSysCalOLG',
+                        'OFS': 'RA-RaSIB01:RF-LLRF:CavOffset'
                     },
                     'Fwd Cav': {
-                        'Raw-U': 'RA-RaSIB01:RF-LLRF-B:FwdCavSysCal',
-                        'U-Raw': 'RA-RaSIB01:RF-LLRF-B:FwdCavSysCalInv',
-                        'OLG': 'RA-RaSIB01:RF-LLRF-B:FwdCavSysCalOLG',
-                        'OFS': 'RA-RaSIB01:RF-LLRF-B:FwdCavOffset'
+                        'Raw-U': 'RA-RaSIB01:RF-LLRF:FwdCavSysCal',
+                        'U-Raw': 'RA-RaSIB01:RF-LLRF:FwdCavSysCalInv',
+                        'OLG': 'RA-RaSIB01:RF-LLRF:FwdCavSysCalOLG',
+                        'OFS': 'RA-RaSIB01:RF-LLRF:FwdCavOffset'
                     },
                     'Rev Cav': {
-                        'Raw-U': 'RA-RaSIB01:RF-LLRF-B:RevCavSysCal',
-                        'OFS': 'RA-RaSIB01:RF-LLRF-B:RevCavOffset'
+                        'Raw-U': 'RA-RaSIB01:RF-LLRF:RevCavSysCal',
+                        'OFS': 'RA-RaSIB01:RF-LLRF:RevCavOffset'
                     },
                     'Fwd SSA 1': {
-                        'Raw-U': 'RA-RaSIB01:RF-LLRF-B:FwdSSA1SysCal',
-                        'U-Raw': 'RA-RaSIB01:RF-LLRF-B:FwdSSA1SysCalInv',
-                        'OLG': 'RA-RaSIB01:RF-LLRF-B:FwdSSA1SysCalOLG',
-                        'OFS': 'RA-RaSIB01:RF-LLRF-B:FwdSSA1SysCalOffset'
+                        'Raw-U': 'RA-RaSIB01:RF-LLRF:FwdSSA1SysCal',
+                        'U-Raw': 'RA-RaSIB01:RF-LLRF:FwdSSA1SysCalInv',
+                        'OLG': 'RA-RaSIB01:RF-LLRF:FwdSSA1SysCalOLG',
+                        'OFS': 'RA-RaSIB01:RF-LLRF:FwdSSA1SysCalOffset'
                     },
                     'Rev SSA 1': {
-                        'Raw-U': 'RA-RaSIB01:RF-LLRF-B:RevSSA1SysCal',
-                        'OFS': 'RA-RaSIB01:RF-LLRF-B:RevSSA1Offset' 
+                        'Raw-U': 'RA-RaSIB01:RF-LLRF:RevSSA1SysCal',
+                        'OFS': 'RA-RaSIB01:RF-LLRF:RevSSA1Offset' 
                     },
                     'Fwd SSA 2': {
-                        'Raw-U': 'RA-RaSIB01:RF-LLRF-B:FwdSSA2SysCal',
-                        'U-Raw': 'RA-RaSIB01:RF-LLRF-B:FwdSSA2SysCalInv',
-                        'OLG': 'RA-RaSIB01:RF-LLRF-B:FwdSSA2SysCalOLG',
-                        'OFS': 'RA-RaSIB01:RF-LLRF-B:FwdSSA2SysCalOffset'
+                        'Raw-U': 'RA-RaSIB01:RF-LLRF:FwdSSA2SysCal',
+                        'U-Raw': 'RA-RaSIB01:RF-LLRF:FwdSSA2SysCalInv',
+                        'OLG': 'RA-RaSIB01:RF-LLRF:FwdSSA2SysCalOLG',
+                        'OFS': 'RA-RaSIB01:RF-LLRF:FwdSSA2SysCalOffset'
                     },
                     'Rev SSA 2': {
-                        'Raw-U': 'RA-RaSIB01:RF-LLRF-B:RevSSA2SysCal',
-                        'OFS': 'RA-RaSIB01:RF-LLRF-B:RevSSA2Offset' 
+                        'Raw-U': 'RA-RaSIB01:RF-LLRF:RevSSA2SysCal',
+                        'OFS': 'RA-RaSIB01:RF-LLRF:RevSSA2Offset' 
                     },
                     'Fwd Pre': {
-                        'Raw-U': 'RA-RaSIB01:RF-LLRF-B:FwdPreSysCal',
-                        'OFS': 'RA-RaSIB01:RF-LLRF-B:FwdPreOffset'
+                        'Raw-U': 'RA-RaSIB01:RF-LLRF:FwdPreSysCal',
+                        'OFS': 'RA-RaSIB01:RF-LLRF:FwdPreOffset'
                     },
                     'Fwd Pre 1': {
-                        'Raw-U': 'RA-RaSIB01:RF-LLRF-B:FwdPre1SysCal',
-                        'OFS': 'RA-RaSIB01:RF-LLRF-B:FwdPre1Offset'
+                        'Raw-U': 'RA-RaSIB01:RF-LLRF:FwdPre1SysCal',
+                        'OFS': 'RA-RaSIB01:RF-LLRF:FwdPre1Offset'
                     },
                     'Fwd Pre 2': {
-                        'Raw-U': 'RA-RaSIB01:RF-LLRF-B:FwdPre2SysCal',
-                        'OFS': 'RA-RaSIB01:RF-LLRF-B:FwdPre2Offset'
+                        'Raw-U': 'RA-RaSIB01:RF-LLRF:FwdPre2SysCal',
+                        'OFS': 'RA-RaSIB01:RF-LLRF:FwdPre2Offset'
                     },
                     'In Pre 1': {
-                        'Raw-U': 'RA-RaSIB01:RF-LLRF-B:In1PreAmpSysCal',
-                        'OFS': 'RA-RaSIB01:RF-LLRF-B:In1PreAmpOffset'
+                        'Raw-U': 'RA-RaSIB01:RF-LLRF:In1PreAmpSysCal',
+                        'OFS': 'RA-RaSIB01:RF-LLRF:In1PreAmpOffset'
                     },
                     'In Pre 2': {
-                        'Raw-U': 'RA-RaSIB01:RF-LLRF-B:In2PreAmpSysCal',
-                        'OFS': 'RA-RaSIB01:RF-LLRF-B:In2PreAmpOffset'
+                        'Raw-U': 'RA-RaSIB01:RF-LLRF:In2PreAmpSysCal',
+                        'OFS': 'RA-RaSIB01:RF-LLRF:In2PreAmpOffset'
                     },
                     'Fwd Circ': {
-                        'Raw-U': 'RA-RaSIB01:RF-LLRF-B:FwdCircSysCal',
-                        'OFS': 'RA-RaSIB01:RF-LLRF-B:FwdCircOffset'
+                        'Raw-U': 'RA-RaSIB01:RF-LLRF:FwdCircSysCal',
+                        'OFS': 'RA-RaSIB01:RF-LLRF:FwdCircOffset'
                     },
                     'Rev Circ': {
-                        'Raw-U': 'RA-RaSIB01:RF-LLRF-B:RevCircSysCal',
-                        'OFS': 'RA-RaSIB01:RF-LLRF-B:RevCircOffset'
+                        'Raw-U': 'RA-RaSIB01:RF-LLRF:RevCircSysCal',
+                        'OFS': 'RA-RaSIB01:RF-LLRF:RevCircOffset'
                     },
                     'MO': {
-                        'Raw-U': 'RA-RaSIB01:RF-LLRF-B:MOSysCal',
-                        'OFS': 'RA-RaSIB01:RF-LLRF-B:MOOffset'
+                        'Raw-U': 'RA-RaSIB01:RF-LLRF:MOSysCal',
+                        'OFS': 'RA-RaSIB01:RF-LLRF:MOOffset'
                     },
                     'Amp Loop Ref': {
-                        'Raw-U': 'RA-RaSIB01:RF-LLRF-B:ALRefSysCal',
-                        'U-Raw': 'RA-RaSIB01:RF-LLRF-B:ALRefSysCalInv',
-                        'OFS': 'RA-RaSIB01:RF-LLRF-B:ALRefOffset'
+                        'Raw-U': 'RA-RaSIB01:RF-LLRF:ALRefSysCal',
+                        'U-Raw': 'RA-RaSIB01:RF-LLRF:ALRefSysCalInv',
+                        'OFS': 'RA-RaSIB01:RF-LLRF:ALRefOffset'
                     },
                     'VGap': {
-                        'Hw to Amp': 'RA-RaSIB01:RF-LLRF-B:Hw2AmpVCavCoeff',
-                        'Amp to Hw': 'RA-RaSIB01:RF-LLRF-B:AmpVCav2HwCoeff'
+                        'Hw to Amp': 'RA-RaSIB01:RF-LLRF:Hw2AmpVCavCoeff',
+                        'Amp to Hw': 'RA-RaSIB01:RF-LLRF:AmpVCav2HwCoeff'
                     },
                     'Rsh': 'SI-03SP:RF-SRFCav-B:Rsh-Cte'
                 }
@@ -3689,42 +3689,42 @@ SEC_2_CHANNELS = {
         'RampDtls': {
             'A': {
                 'Control': {
-                    'Ramp Enable': 'RA-RaSIA01:RF-LLRF-A:RmpEn',
-                    'Ramp Down Disable': 'RA-RaSIA01:RF-LLRF-A:RmpDownDsbl',
-                    '356': ['T1 Ramp Delay After Trig', 'RA-RaSIA01:RF-LLRF-A:RmpTs1'],
-                    '357': ['T2 Ramp Up', 'RA-RaSIA01:RF-LLRF-A:RmpTs2'],
-                    '358': ['T3 Ramp Top', 'RA-RaSIA01:RF-LLRF-A:RmpTs3'],
-                    '359': ['T4 Ramp Down', 'RA-RaSIA01:RF-LLRF-A:RmpTs4'],
-                    '360': ['Ramp Increase Rate', 'RA-RaSIA01:RF-LLRF-A:RmpIncTime'],
-                    '164': ['Ref Top', 'RA-RaSIA01:RF-LLRF-A:RefTopAmp-Mon', 'red'],
-                    '362 mV': ['Amp Ramp Top (mV)', 'RA-RaSIA01:RF-LLRF-A:RmpAmpTop'],
-                    '362 Vgap': ['Amp Ramp Top (Vgap)', 'RA-RaSIA01:RF-LLRF-A:RmpAmpTopVGap'],
-                    '364': ['Phase Ramp Top', 'RA-RaSIA01:RF-LLRF-A:RmpPhsTop'],
-                    '184': ['Ref Bot', 'RA-RaSIA01:RF-LLRF-A:RefBotAmp-Mon', 'blue'],
-                    '361 mV': ['Amp Ramp Bot (mV)', 'RA-RaSIA01:RF-LLRF-A:RmpAmpBot'],
-                    '361 Vgap': ['Amp Ramp Bot (Vgap)', 'RA-RaSIA01:RF-LLRF-A:RmpAmpBotVGap'],
-                    '363': ['Phase Ramp Bot', 'RA-RaSIA01:RF-LLRF-A:RmpPhsBot'],
-                    '536': ['Ramp Top', 'RA-RaSIA01:RF-LLRF-A:RmpTop-Mon', 'green'],
-                    '533': ['Ramp Ready', 'RA-RaSIA01:RF-LLRF-A:RmpRdy-Mon'],
-                    '365': ['Amp Ramp Up Slope', 'RA-RaSIA01:RF-LLRF-A:RmpAmpUpCnt'],
-                    '366': ['Amp Ramp Down Slope', 'RA-RaSIA01:RF-LLRF-A:RmpAmpDownCnt'],
-                    '367': ['Phase Ramp Up Slope', 'RA-RaSIA01:RF-LLRF-A:RmpPhsUpCnt'],
-                    '368': ['Phase Ramp Down Slope', 'RA-RaSIA01:RF-LLRF-A:RmpPhsDownCnt'],
+                    'Ramp Enable': 'RA-RaSIA01:RF-LLRF:RmpEn',
+                    'Ramp Down Disable': 'RA-RaSIA01:RF-LLRF:RmpDownDsbl',
+                    '356': ['T1 Ramp Delay After Trig', 'RA-RaSIA01:RF-LLRF:RmpTs1'],
+                    '357': ['T2 Ramp Up', 'RA-RaSIA01:RF-LLRF:RmpTs2'],
+                    '358': ['T3 Ramp Top', 'RA-RaSIA01:RF-LLRF:RmpTs3'],
+                    '359': ['T4 Ramp Down', 'RA-RaSIA01:RF-LLRF:RmpTs4'],
+                    '360': ['Ramp Increase Rate', 'RA-RaSIA01:RF-LLRF:RmpIncTime'],
+                    '164': ['Ref Top', 'RA-RaSIA01:RF-LLRF:RefTopAmp-Mon', 'red'],
+                    '362 mV': ['Amp Ramp Top (mV)', 'RA-RaSIA01:RF-LLRF:RmpAmpTop'],
+                    '362 Vgap': ['Amp Ramp Top (Vgap)', 'RA-RaSIA01:RF-LLRF:RmpAmpTopVGap'],
+                    '364': ['Phase Ramp Top', 'RA-RaSIA01:RF-LLRF:RmpPhsTop'],
+                    '184': ['Ref Bot', 'RA-RaSIA01:RF-LLRF:RefBotAmp-Mon', 'blue'],
+                    '361 mV': ['Amp Ramp Bot (mV)', 'RA-RaSIA01:RF-LLRF:RmpAmpBot'],
+                    '361 Vgap': ['Amp Ramp Bot (Vgap)', 'RA-RaSIA01:RF-LLRF:RmpAmpBotVGap'],
+                    '363': ['Phase Ramp Bot', 'RA-RaSIA01:RF-LLRF:RmpPhsBot'],
+                    '536': ['Ramp Top', 'RA-RaSIA01:RF-LLRF:RmpTop-Mon', 'green'],
+                    '533': ['Ramp Ready', 'RA-RaSIA01:RF-LLRF:RmpRdy-Mon'],
+                    '365': ['Amp Ramp Up Slope', 'RA-RaSIA01:RF-LLRF:RmpAmpUpCnt'],
+                    '366': ['Amp Ramp Down Slope', 'RA-RaSIA01:RF-LLRF:RmpAmpDownCnt'],
+                    '367': ['Phase Ramp Up Slope', 'RA-RaSIA01:RF-LLRF:RmpPhsUpCnt'],
+                    '368': ['Phase Ramp Down Slope', 'RA-RaSIA01:RF-LLRF:RmpPhsDownCnt'],
                     'Limits': {
-                        '362': ['Top Reference', 'RA-RaSIA01:RF-LLRF-A:RmpAmpTop'],
-                        '361': ['Bot Reference', 'RA-RaSIA01:RF-LLRF-A:RmpAmpBot']
+                        '362': ['Top Reference', 'RA-RaSIA01:RF-LLRF:RmpAmpTop'],
+                        '361': ['Bot Reference', 'RA-RaSIA01:RF-LLRF:RmpAmpBot']
                     }
                 },
                 'Diagnostics': {
                     'Top': {
                         '164': {
                             'Label': 'Ref',
-                            'InPhs': 'RA-RaSIA01:RF-LLRF-A:RefTopI-Mon',
-                            'Quad': 'RA-RaSIA01:RF-LLRF-A:RefTopQ-Mon',
-                            'Amp1': 'RA-RaSIA01:RF-LLRF-A:RefTopAmp-Mon',
-                            'Amp2': 'RA-RaSIA01:RF-LLRF-A:RefTopAmpW-Mon',
-                            'Amp3': 'RA-RaSIA01:RF-LLRF-A:RefTopAmpdBm-Mon',
-                            'Phs': 'RA-RaSIA01:RF-LLRF-A:RefTopPhs-Mon'
+                            'InPhs': 'RA-RaSIA01:RF-LLRF:RefTopI-Mon',
+                            'Quad': 'RA-RaSIA01:RF-LLRF:RefTopQ-Mon',
+                            'Amp1': 'RA-RaSIA01:RF-LLRF:RefTopAmp-Mon',
+                            'Amp2': 'RA-RaSIA01:RF-LLRF:RefTopAmpW-Mon',
+                            'Amp3': 'RA-RaSIA01:RF-LLRF:RefTopAmpdBm-Mon',
+                            'Phs': 'RA-RaSIA01:RF-LLRF:RefTopPhs-Mon'
                         },
                         '150': {
                             'Label': 'Cell 3',
@@ -3791,44 +3791,44 @@ SEC_2_CHANNELS = {
                         },
                         '168': {
                             'Label': 'Loop Error',
-                            'InPhs': 'RA-RaSIA01:RF-LLRF-A:ErrTopI-Mon',
-                            'Quad': 'RA-RaSIA01:RF-LLRF-A:ErrTopQ-Mon',
-                            'Amp1': 'RA-RaSIA01:RF-LLRF-A:ErrTopAmp-Mon',
+                            'InPhs': 'RA-RaSIA01:RF-LLRF:ErrTopI-Mon',
+                            'Quad': 'RA-RaSIA01:RF-LLRF:ErrTopQ-Mon',
+                            'Amp1': 'RA-RaSIA01:RF-LLRF:ErrTopAmp-Mon',
                             'Amp2': '-',
                             'Amp3': '-',
-                            'Phs': 'RA-RaSIA01:RF-LLRF-A:ErrTopPhs-Mon'
+                            'Phs': 'RA-RaSIA01:RF-LLRF:ErrTopPhs-Mon'
                         },
                         '166': {
                             'Label': 'Control',
-                            'InPhs': 'RA-RaSIA01:RF-LLRF-A:CtrlTopI-Mon',
-                            'Quad': 'RA-RaSIA01:RF-LLRF-A:CtrlTopQ-Mon',
-                            'Amp1': 'RA-RaSIA01:RF-LLRF-A:CtrlTopAmp-Mon',
+                            'InPhs': 'RA-RaSIA01:RF-LLRF:CtrlTopI-Mon',
+                            'Quad': 'RA-RaSIA01:RF-LLRF:CtrlTopQ-Mon',
+                            'Amp1': 'RA-RaSIA01:RF-LLRF:CtrlTopAmp-Mon',
                             'Amp2': '-',
                             'Amp3': '-',
-                            'Phs': 'RA-RaSIA01:RF-LLRF-A:CtrlTopPhs-Mon'
+                            'Phs': 'RA-RaSIA01:RF-LLRF:CtrlTopPhs-Mon'
                         },
                         '162': {
                             'Label': 'Tuning Dephase',
-                            'PV': 'RA-RaSIA01:RF-LLRF-A:TuneDephsTop-Mon'
+                            'PV': 'RA-RaSIA01:RF-LLRF:TuneDephsTop-Mon'
                         },
                         '163': {
                             'Label': 'FF Error',
-                            'PV': 'RA-RaSIA01:RF-LLRF-A:FFErrTop-Mon'
+                            'PV': 'RA-RaSIA01:RF-LLRF:FFErrTop-Mon'
                         },
                         '531': {
                             'Label': '5 Hz Trigger',
-                            'PV': 'RA-RaSIA01:RF-LLRF-A:RmpTrigger-Mon'
+                            'PV': 'RA-RaSIA01:RF-LLRF:RmpTrigger-Mon'
                         }
                     },
                     'Bot': {
                         '184': {
                             'Label': 'Ref',
-                            'InPhs': 'RA-RaSIA01:RF-LLRF-A:RefBotI-Mon',
-                            'Quad': 'RA-RaSIA01:RF-LLRF-A:RefBotQ-Mon',
-                            'Amp1': 'RA-RaSIA01:RF-LLRF-A:RefBotAmp-Mon',
-                            'Amp2': 'RA-RaSIA01:RF-LLRF-A:RefBotAmpW-Mon',
-                            'Amp3': 'RA-RaSIA01:RF-LLRF-A:RefBotAmpdBm-Mon',
-                            'Phs': 'RA-RaSIA01:RF-LLRF-A:RefBotPhs-Mon'
+                            'InPhs': 'RA-RaSIA01:RF-LLRF:RefBotI-Mon',
+                            'Quad': 'RA-RaSIA01:RF-LLRF:RefBotQ-Mon',
+                            'Amp1': 'RA-RaSIA01:RF-LLRF:RefBotAmp-Mon',
+                            'Amp2': 'RA-RaSIA01:RF-LLRF:RefBotAmpW-Mon',
+                            'Amp3': 'RA-RaSIA01:RF-LLRF:RefBotAmpdBm-Mon',
+                            'Phs': 'RA-RaSIA01:RF-LLRF:RefBotPhs-Mon'
                         },
                         '170': {
                             'Label': 'Cell 3',
@@ -3895,21 +3895,21 @@ SEC_2_CHANNELS = {
                         },
                         '188': {
                             'Label': 'Loop Error',
-                            'InPhs': 'RA-RaSIA01:RF-LLRF-A:ErrBotI-Mon',
-                            'Quad': 'RA-RaSIA01:RF-LLRF-A:ErrBotQ-Mon',
-                            'Amp1': 'RA-RaSIA01:RF-LLRF-A:ErrBotAmp-Mon',
+                            'InPhs': 'RA-RaSIA01:RF-LLRF:ErrBotI-Mon',
+                            'Quad': 'RA-RaSIA01:RF-LLRF:ErrBotQ-Mon',
+                            'Amp1': 'RA-RaSIA01:RF-LLRF:ErrBotAmp-Mon',
                             'Amp2': '-',
                             'Amp3': '-',
-                            'Phs': 'RA-RaSIA01:RF-LLRF-A:ErrBotPhs-Mon'
+                            'Phs': 'RA-RaSIA01:RF-LLRF:ErrBotPhs-Mon'
                         },
                         '186': {
                             'Label': 'Control',
-                            'InPhs': 'RA-RaSIA01:RF-LLRF-A:CtrlBotI-Mon',
-                            'Quad': 'RA-RaSIA01:RF-LLRF-A:CtrlBotQ-Mon',
-                            'Amp1': 'RA-RaSIA01:RF-LLRF-A:CtrlBotAmp-Mon',
+                            'InPhs': 'RA-RaSIA01:RF-LLRF:CtrlBotI-Mon',
+                            'Quad': 'RA-RaSIA01:RF-LLRF:CtrlBotQ-Mon',
+                            'Amp1': 'RA-RaSIA01:RF-LLRF:CtrlBotAmp-Mon',
                             'Amp2': '-',
                             'Amp3': '-',
-                            'Phs': 'RA-RaSIA01:RF-LLRF-A:CtrlBotPhs-Mon'
+                            'Phs': 'RA-RaSIA01:RF-LLRF:CtrlBotPhs-Mon'
                         },
                         '183': {
                             'Label': 'FF Error',
@@ -3917,49 +3917,49 @@ SEC_2_CHANNELS = {
                         },
                         '531': {
                             'Label': '5 Hz Trigger',
-                            'PV': 'RA-RaSIA01:RF-LLRF-A:RmpTrigger-Mon'
+                            'PV': 'RA-RaSIA01:RF-LLRF:RmpTrigger-Mon'
                         }
                     }
                 },
             },
             'B': {
                 'Control': {
-                    'Ramp Enable': 'RA-RaSIB01:RF-LLRF-B:RmpEn',
-                    'Ramp Down Disable': 'RA-RaSIB01:RF-LLRF-B:RmpDownDsbl',
-                    '356': ['T1 Ramp Delay After Trig', 'RA-RaSIB01:RF-LLRF-B:RmpTs1'],
-                    '357': ['T2 Ramp Up', 'RA-RaSIB01:RF-LLRF-B:RmpTs2'],
-                    '358': ['T3 Ramp Top', 'RA-RaSIB01:RF-LLRF-B:RmpTs3'],
-                    '359': ['T4 Ramp Down', 'RA-RaSIB01:RF-LLRF-B:RmpTs4'],
-                    '360': ['Ramp Increase Rate', 'RA-RaSIB01:RF-LLRF-B:RmpIncTime'],
-                    '164': ['Ref Top', 'RA-RaSIB01:RF-LLRF-B:RefTopAmp-Mon', 'red'],
-                    '362 mV': ['Amp Ramp Top (mV)', 'RA-RaSIB01:RF-LLRF-B:RmpAmpTop'],
-                    '362 Vgap': ['Amp Ramp Top (Vgap)', 'RA-RaSIB01:RF-LLRF-B:RmpAmpTopVGap'],
-                    '364': ['Phase Ramp Top', 'RA-RaSIB01:RF-LLRF-B:RmpPhsTop'],
-                    '184': ['Ref Bot', 'RA-RaSIB01:RF-LLRF-B:RefBotAmp-Mon', 'blue'],
-                    '361 mV': ['Amp Ramp Bot (mV)', 'RA-RaSIB01:RF-LLRF-B:RmpAmpBot'],
-                    '361 Vgap': ['Amp Ramp Bot (Vgap)', 'RA-RaSIB01:RF-LLRF-B:RmpAmpBotVGap'],
-                    '363': ['Phase Ramp Bot', 'RA-RaSIB01:RF-LLRF-B:RmpPhsBot'],
-                    '536': ['Ramp Top', 'RA-RaSIB01:RF-LLRF-B:RmpTop-Mon', 'green'],
-                    '533': ['Ramp Ready', 'RA-RaSIB01:RF-LLRF-B:RmpRdy-Mon'],
-                    '365': ['Amp Ramp Up Slope', 'RA-RaSIB01:RF-LLRF-B:RmpAmpUpCnt'],
-                    '366': ['Amp Ramp Down Slope', 'RA-RaSIB01:RF-LLRF-B:RmpAmpDownCnt'],
-                    '367': ['Phase Ramp Up Slope', 'RA-RaSIB01:RF-LLRF-B:RmpPhsUpCnt'],
-                    '368': ['Phase Ramp Down Slope', 'RA-RaSIB01:RF-LLRF-B:RmpPhsDownCnt'],
+                    'Ramp Enable': 'RA-RaSIB01:RF-LLRF:RmpEn',
+                    'Ramp Down Disable': 'RA-RaSIB01:RF-LLRF:RmpDownDsbl',
+                    '356': ['T1 Ramp Delay After Trig', 'RA-RaSIB01:RF-LLRF:RmpTs1'],
+                    '357': ['T2 Ramp Up', 'RA-RaSIB01:RF-LLRF:RmpTs2'],
+                    '358': ['T3 Ramp Top', 'RA-RaSIB01:RF-LLRF:RmpTs3'],
+                    '359': ['T4 Ramp Down', 'RA-RaSIB01:RF-LLRF:RmpTs4'],
+                    '360': ['Ramp Increase Rate', 'RA-RaSIB01:RF-LLRF:RmpIncTime'],
+                    '164': ['Ref Top', 'RA-RaSIB01:RF-LLRF:RefTopAmp-Mon', 'red'],
+                    '362 mV': ['Amp Ramp Top (mV)', 'RA-RaSIB01:RF-LLRF:RmpAmpTop'],
+                    '362 Vgap': ['Amp Ramp Top (Vgap)', 'RA-RaSIB01:RF-LLRF:RmpAmpTopVGap'],
+                    '364': ['Phase Ramp Top', 'RA-RaSIB01:RF-LLRF:RmpPhsTop'],
+                    '184': ['Ref Bot', 'RA-RaSIB01:RF-LLRF:RefBotAmp-Mon', 'blue'],
+                    '361 mV': ['Amp Ramp Bot (mV)', 'RA-RaSIB01:RF-LLRF:RmpAmpBot'],
+                    '361 Vgap': ['Amp Ramp Bot (Vgap)', 'RA-RaSIB01:RF-LLRF:RmpAmpBotVGap'],
+                    '363': ['Phase Ramp Bot', 'RA-RaSIB01:RF-LLRF:RmpPhsBot'],
+                    '536': ['Ramp Top', 'RA-RaSIB01:RF-LLRF:RmpTop-Mon', 'green'],
+                    '533': ['Ramp Ready', 'RA-RaSIB01:RF-LLRF:RmpRdy-Mon'],
+                    '365': ['Amp Ramp Up Slope', 'RA-RaSIB01:RF-LLRF:RmpAmpUpCnt'],
+                    '366': ['Amp Ramp Down Slope', 'RA-RaSIB01:RF-LLRF:RmpAmpDownCnt'],
+                    '367': ['Phase Ramp Up Slope', 'RA-RaSIB01:RF-LLRF:RmpPhsUpCnt'],
+                    '368': ['Phase Ramp Down Slope', 'RA-RaSIB01:RF-LLRF:RmpPhsDownCnt'],
                     'Limits': {
-                        '362': ['Top Reference', 'RA-RaSIB01:RF-LLRF-B:RmpAmpTop'],
-                        '361': ['Bot Reference', 'RA-RaSIB01:RF-LLRF-B:RmpAmpBot']
+                        '362': ['Top Reference', 'RA-RaSIB01:RF-LLRF:RmpAmpTop'],
+                        '361': ['Bot Reference', 'RA-RaSIB01:RF-LLRF:RmpAmpBot']
                     }
                 },
                 'Diagnostics': {
                     'Top': {
                         '164': {
                             'Label': 'Ref',
-                            'InPhs': 'RA-RaSIB01:RF-LLRF-B:RefTopI-Mon',
-                            'Quad': 'RA-RaSIB01:RF-LLRF-B:RefTopQ-Mon',
-                            'Amp1': 'RA-RaSIB01:RF-LLRF-B:RefTopAmp-Mon',
-                            'Amp2': 'RA-RaSIB01:RF-LLRF-B:RefTopAmpW-Mon',
-                            'Amp3': 'RA-RaSIB01:RF-LLRF-B:RefTopAmpdBm-Mon',
-                            'Phs': 'RA-RaSIB01:RF-LLRF-B:RefTopPhs-Mon'
+                            'InPhs': 'RA-RaSIB01:RF-LLRF:RefTopI-Mon',
+                            'Quad': 'RA-RaSIB01:RF-LLRF:RefTopQ-Mon',
+                            'Amp1': 'RA-RaSIB01:RF-LLRF:RefTopAmp-Mon',
+                            'Amp2': 'RA-RaSIB01:RF-LLRF:RefTopAmpW-Mon',
+                            'Amp3': 'RA-RaSIB01:RF-LLRF:RefTopAmpdBm-Mon',
+                            'Phs': 'RA-RaSIB01:RF-LLRF:RefTopPhs-Mon'
                         },
                         '150': {
                             'Label': 'Cell 3',
@@ -4026,44 +4026,44 @@ SEC_2_CHANNELS = {
                         },
                         '168': {
                             'Label': 'Loop Error',
-                            'InPhs': 'RA-RaSIB01:RF-LLRF-B:ErrTopI-Mon',
-                            'Quad': 'RA-RaSIB01:RF-LLRF-B:ErrTopQ-Mon',
-                            'Amp1': 'RA-RaSIB01:RF-LLRF-B:ErrTopAmp-Mon',
+                            'InPhs': 'RA-RaSIB01:RF-LLRF:ErrTopI-Mon',
+                            'Quad': 'RA-RaSIB01:RF-LLRF:ErrTopQ-Mon',
+                            'Amp1': 'RA-RaSIB01:RF-LLRF:ErrTopAmp-Mon',
                             'Amp2': '-',
                             'Amp3': '-',
-                            'Phs': 'RA-RaSIB01:RF-LLRF-B:ErrTopPhs-Mon'
+                            'Phs': 'RA-RaSIB01:RF-LLRF:ErrTopPhs-Mon'
                         },
                         '166': {
                             'Label': 'Control',
-                            'InPhs': 'RA-RaSIB01:RF-LLRF-B:CtrlTopI-Mon',
-                            'Quad': 'RA-RaSIB01:RF-LLRF-B:CtrlTopQ-Mon',
-                            'Amp1': 'RA-RaSIB01:RF-LLRF-B:CtrlTopAmp-Mon',
+                            'InPhs': 'RA-RaSIB01:RF-LLRF:CtrlTopI-Mon',
+                            'Quad': 'RA-RaSIB01:RF-LLRF:CtrlTopQ-Mon',
+                            'Amp1': 'RA-RaSIB01:RF-LLRF:CtrlTopAmp-Mon',
                             'Amp2': '-',
                             'Amp3': '-',
-                            'Phs': 'RA-RaSIB01:RF-LLRF-B:CtrlTopPhs-Mon'
+                            'Phs': 'RA-RaSIB01:RF-LLRF:CtrlTopPhs-Mon'
                         },
                         '162': {
                             'Label': 'Tuning Dephase',
-                            'PV': 'RA-RaSIB01:RF-LLRF-B:TuneDephsTop-Mon'
+                            'PV': 'RA-RaSIB01:RF-LLRF:TuneDephsTop-Mon'
                         },
                         '163': {
                             'Label': 'FF Error',
-                            'PV': 'RA-RaSIB01:RF-LLRF-B:FFErrTop-Mon'
+                            'PV': 'RA-RaSIB01:RF-LLRF:FFErrTop-Mon'
                         },
                         '531': {
                             'Label': '5 Hz Trigger',
-                            'PV': 'RA-RaSIB01:RF-LLRF-B:RmpTrigger-Mon'
+                            'PV': 'RA-RaSIB01:RF-LLRF:RmpTrigger-Mon'
                         }
                     },
                     'Bot': {
                         '184': {
                             'Label': 'Ref',
-                            'InPhs': 'RA-RaSIB01:RF-LLRF-B:RefBotI-Mon',
-                            'Quad': 'RA-RaSIB01:RF-LLRF-B:RefBotQ-Mon',
-                            'Amp1': 'RA-RaSIB01:RF-LLRF-B:RefBotAmp-Mon',
-                            'Amp2': 'RA-RaSIB01:RF-LLRF-B:RefBotAmpW-Mon',
-                            'Amp3': 'RA-RaSIB01:RF-LLRF-B:RefBotAmpdBm-Mon',
-                            'Phs': 'RA-RaSIB01:RF-LLRF-B:RefBotPhs-Mon'
+                            'InPhs': 'RA-RaSIB01:RF-LLRF:RefBotI-Mon',
+                            'Quad': 'RA-RaSIB01:RF-LLRF:RefBotQ-Mon',
+                            'Amp1': 'RA-RaSIB01:RF-LLRF:RefBotAmp-Mon',
+                            'Amp2': 'RA-RaSIB01:RF-LLRF:RefBotAmpW-Mon',
+                            'Amp3': 'RA-RaSIB01:RF-LLRF:RefBotAmpdBm-Mon',
+                            'Phs': 'RA-RaSIB01:RF-LLRF:RefBotPhs-Mon'
                         },
                         '170': {
                             'Label': 'Cell 3',
@@ -4130,29 +4130,29 @@ SEC_2_CHANNELS = {
                         },
                         '188': {
                             'Label': 'Loop Error',
-                            'InPhs': 'RA-RaSIB01:RF-LLRF-B:ErrBotI-Mon',
-                            'Quad': 'RA-RaSIB01:RF-LLRF-B:ErrBotQ-Mon',
-                            'Amp1': 'RA-RaSIB01:RF-LLRF-B:ErrBotAmp-Mon',
+                            'InPhs': 'RA-RaSIB01:RF-LLRF:ErrBotI-Mon',
+                            'Quad': 'RA-RaSIB01:RF-LLRF:ErrBotQ-Mon',
+                            'Amp1': 'RA-RaSIB01:RF-LLRF:ErrBotAmp-Mon',
                             'Amp2': '-',
                             'Amp3': '-',
-                            'Phs': 'RA-RaSIB01:RF-LLRF-B:ErrBotPhs-Mon'
+                            'Phs': 'RA-RaSIB01:RF-LLRF:ErrBotPhs-Mon'
                         },
                         '186': {
                             'Label': 'Control',
-                            'InPhs': 'RA-RaSIB01:RF-LLRF-B:CtrlBotI-Mon',
-                            'Quad': 'RA-RaSIB01:RF-LLRF-B:CtrlBotQ-Mon',
-                            'Amp1': 'RA-RaSIB01:RF-LLRF-B:CtrlBotAmp-Mon',
+                            'InPhs': 'RA-RaSIB01:RF-LLRF:CtrlBotI-Mon',
+                            'Quad': 'RA-RaSIB01:RF-LLRF:CtrlBotQ-Mon',
+                            'Amp1': 'RA-RaSIB01:RF-LLRF:CtrlBotAmp-Mon',
                             'Amp2': '-',
                             'Amp3': '-',
-                            'Phs': 'RA-RaSIB01:RF-LLRF-B:CtrlBotPhs-Mon'
+                            'Phs': 'RA-RaSIB01:RF-LLRF:CtrlBotPhs-Mon'
                         },
                         '183': {
                             'Label': 'FF Error',
-                            'PV': 'RA-RaSIB01:RF-LLRF-B:FFErrBot-Mon'
+                            'PV': 'RA-RaSIB01:RF-LLRF:FFErrBot-Mon'
                         },
                         '531': {
                             'Label': '5 Hz Trigger',
-                            'PV': 'RA-RaSIB01:RF-LLRF-B:RmpTrigger-Mon'
+                            'PV': 'RA-RaSIB01:RF-LLRF:RmpTrigger-Mon'
                         }
                     }
                 }
@@ -4160,85 +4160,85 @@ SEC_2_CHANNELS = {
         },
         'AutoStart': {
             'A': {
-                '22': ['Automatic Startup Enable', 'RA-RaSIA01:RF-LLRF-A:AutoStartupEn'],
-                '23': ['Command Start', 'RA-RaSIA01:RF-LLRF-A:AutoStartupCmdStart'],
-                '400': ['EPS Interlock', 'RA-RaSIA01:RF-LLRF-A:EPSEn'],
-                '401': ['Interlock Bypass', 'RA-RaSIA01:RF-LLRF-A:FIMEn'],
+                '22': ['Automatic Startup Enable', 'RA-RaSIA01:RF-LLRF:AutoStartupEn'],
+                '23': ['Command Start', 'RA-RaSIA01:RF-LLRF:AutoStartupCmdStart'],
+                '400': ['EPS Interlock', 'RA-RaSIA01:RF-LLRF:EPSEn'],
+                '401': ['Interlock Bypass', 'RA-RaSIA01:RF-LLRF:FIMEn'],
                 'Diag': {
-                    '500': ['State Start', 'RA-RaSIA01:RF-LLRF-A:AutoStartState-Mon'],
-                    '400': ['Tx Ready', 'RA-RaSIA01:RF-LLRF-A:SSARdy-Mon'],
-                    '401': ['Fast Interlock', 'RA-RaSIA01:RF-LLRF-A:IntlkAll-Mon'],
-                    '308': ['Slow Loop Fwd Min', 'RA-RaSIA01:RF-LLRF-A:SLFwdMin-Mon'],
-                    '309': ['Fast Loop Fwd Min', 'RA-RaSIA01:RF-LLRF-A:FLFwdMin-Mon'],
-                    '310': ['Amp Loop Fwd Min', 'RA-RaSIA01:RF-LLRF-A:ALFwdMin-Mon'],
-                    '311': ['Phase Loop Fwd Min', 'RA-RaSIA01:RF-LLRF-A:PLFwdMin-Mon'],
-                    '307': ['Tuning Fwd Min', 'RA-RaSIA01:RF-LLRF-A:TuneFwdMin-Mon']
+                    '500': ['State Start', 'RA-RaSIA01:RF-LLRF:AutoStartState-Mon'],
+                    '400': ['Tx Ready', 'RA-RaSIA01:RF-LLRF:SSARdy-Mon'],
+                    '401': ['Fast Interlock', 'RA-RaSIA01:RF-LLRF:IntlkAll-Mon'],
+                    '308': ['Slow Loop Fwd Min', 'RA-RaSIA01:RF-LLRF:SLFwdMin-Mon'],
+                    '309': ['Fast Loop Fwd Min', 'RA-RaSIA01:RF-LLRF:FLFwdMin-Mon'],
+                    '310': ['Amp Loop Fwd Min', 'RA-RaSIA01:RF-LLRF:ALFwdMin-Mon'],
+                    '311': ['Phase Loop Fwd Min', 'RA-RaSIA01:RF-LLRF:PLFwdMin-Mon'],
+                    '307': ['Tuning Fwd Min', 'RA-RaSIA01:RF-LLRF:TuneFwdMin-Mon']
                 }
             },
             'B': {
-                '22': ['Automatic Startup Enable', 'RA-RaSIB01:RF-LLRF-B:AutoStartupEn'],
-                '23': ['Command Start', 'RA-RaSIB01:RF-LLRF-B:AutoStartupCmdStart'],
-                '400': ['EPS Interlock', 'RA-RaSIB01:RF-LLRF-B:EPSEn'],
-                '401': ['Interlock Bypass', 'RA-RaSIB01:RF-LLRF-B:FIMEn'],
+                '22': ['Automatic Startup Enable', 'RA-RaSIB01:RF-LLRF:AutoStartupEn'],
+                '23': ['Command Start', 'RA-RaSIB01:RF-LLRF:AutoStartupCmdStart'],
+                '400': ['EPS Interlock', 'RA-RaSIB01:RF-LLRF:EPSEn'],
+                '401': ['Interlock Bypass', 'RA-RaSIB01:RF-LLRF:FIMEn'],
                 'Diag': {
-                    '500': ['State Start', 'RA-RaSIB01:RF-LLRF-B:AutoStartState-Mon'],
-                    '400': ['Tx Ready', 'RA-RaSIB01:RF-LLRF-B:SSARdy-Mon'],
-                    '401': ['Fast Interlock', 'RA-RaSIB01:RF-LLRF-B:IntlkAll-Mon'],
-                    '308': ['Slow Loop Fwd Min', 'RA-RaSIB01:RF-LLRF-B:SLFwdMin-Mon'],
-                    '309': ['Fast Loop Fwd Min', 'RA-RaSIB01:RF-LLRF-B:FLFwdMin-Mon'],
-                    '310': ['Amp Loop Fwd Min', 'RA-RaSIB01:RF-LLRF-B:ALFwdMin-Mon'],
-                    '311': ['Phase Loop Fwd Min', 'RA-RaSIB01:RF-LLRF-B:PLFwdMin-Mon'],
-                    '307': ['Tuning Fwd Min', 'RA-RaSIB01:RF-LLRF-B:TuneFwdMin-Mon']
+                    '500': ['State Start', 'RA-RaSIB01:RF-LLRF:AutoStartState-Mon'],
+                    '400': ['Tx Ready', 'RA-RaSIB01:RF-LLRF:SSARdy-Mon'],
+                    '401': ['Fast Interlock', 'RA-RaSIB01:RF-LLRF:IntlkAll-Mon'],
+                    '308': ['Slow Loop Fwd Min', 'RA-RaSIB01:RF-LLRF:SLFwdMin-Mon'],
+                    '309': ['Fast Loop Fwd Min', 'RA-RaSIB01:RF-LLRF:FLFwdMin-Mon'],
+                    '310': ['Amp Loop Fwd Min', 'RA-RaSIB01:RF-LLRF:ALFwdMin-Mon'],
+                    '311': ['Phase Loop Fwd Min', 'RA-RaSIB01:RF-LLRF:PLFwdMin-Mon'],
+                    '307': ['Tuning Fwd Min', 'RA-RaSIB01:RF-LLRF:TuneFwdMin-Mon']
                 }
             }
         },
         'Conditioning': {
             'A': {
-                '200': ['Pulse Mode Enable', 'RA-RaSIA01:RF-LLRF-A:CondEn'],
-                '201': ['Auto Conditioning Enable', 'RA-RaSIA01:RF-LLRF-A:CondAuto'],
-                '204': ['Conditioning Freq', 'RA-RaSIA01:RF-LLRF-A:CondFreq'],
-                '540': ['Cond Freq Diag', 'RA-RaSIA01:RF-LLRF-A:CondFreq-Mon'],
-                '205': ['Duty Cycle', 'RA-RaSIA01:RF-LLRF-A:CondDuty2'],
-                '530': ['Duty Cycle RB', 'RA-RaSIA01:RF-LLRF-A:CondDutyCycle-Mon'],
-                '79': ['Vacuum', 'RA-RaSIA01:RF-LLRF-A:VacuumFastRly-Mon'],
+                '200': ['Pulse Mode Enable', 'RA-RaSIA01:RF-LLRF:CondEn'],
+                '201': ['Auto Conditioning Enable', 'RA-RaSIA01:RF-LLRF:CondAuto'],
+                '204': ['Conditioning Freq', 'RA-RaSIA01:RF-LLRF:CondFreq'],
+                '540': ['Cond Freq Diag', 'RA-RaSIA01:RF-LLRF:CondFreq-Mon'],
+                '205': ['Duty Cycle', 'RA-RaSIA01:RF-LLRF:CondDuty2'],
+                '530': ['Duty Cycle RB', 'RA-RaSIA01:RF-LLRF:CondDutyCycle-Mon'],
+                '79': ['Vacuum', 'RA-RaSIA01:RF-LLRF:VacuumFastRly-Mon'],
             },
             'B': {
-                '200': ['Pulse Mode Enable', 'RA-RaSIB01:RF-LLRF-B:CondEn'],
-                '201': ['Auto Conditioning Enable', 'RA-RaSIB01:RF-LLRF-B:CondAuto'],
-                '204': ['Conditioning Freq', 'RA-RaSIB01:RF-LLRF-B:CondFreq'],
-                '540': ['Cond Freq Diag', 'RA-RaSIB01:RF-LLRF-B:CondFreq-Mon'],
-                '205': ['Duty Cycle', 'RA-RaSIB01:RF-LLRF-B:CondDuty2'],
-                '530': ['Duty Cycle RB', 'RA-RaSIB01:RF-LLRF-B:CondDutyCycle-Mon'],
-                '79': ['Vacuum', 'RA-RaSIB01:RF-LLRF-B:VacuumFastRly-Mon'],
+                '200': ['Pulse Mode Enable', 'RA-RaSIB01:RF-LLRF:CondEn'],
+                '201': ['Auto Conditioning Enable', 'RA-RaSIB01:RF-LLRF:CondAuto'],
+                '204': ['Conditioning Freq', 'RA-RaSIB01:RF-LLRF:CondFreq'],
+                '540': ['Cond Freq Diag', 'RA-RaSIB01:RF-LLRF:CondFreq-Mon'],
+                '205': ['Duty Cycle', 'RA-RaSIB01:RF-LLRF:CondDuty2'],
+                '530': ['Duty Cycle RB', 'RA-RaSIB01:RF-LLRF:CondDutyCycle-Mon'],
+                '79': ['Vacuum', 'RA-RaSIB01:RF-LLRF:VacuumFastRly-Mon'],
             }
         },
         'TunDtls': {
             'A': {
                 'General': {
-                    '34': ['Fwd Pwr Amplitude', 'RA-RaSIA01:RF-LLRF-A:CavFwdAmp-Mon'],
-                    '19': ['Fwd Pwr Phase Angle', 'RA-RaSIA01:RF-LLRF-A:CavFwdPhs-Mon'],
-                    '33': ['Cavity Amplitude', 'RA-RaSIA01:RF-LLRF-A:CavAmp-Mon'],
-                    '18': ['Cavity Phase Angle', 'RA-RaSIA01:RF-LLRF-A:CavPhs-Mon'],
-                    '307': ['Tuning Fwd Min', 'RA-RaSIA01:RF-LLRF-A:TuneFwdMin-Mon'],
-                    '303': ['Pulses Frequency', 'RA-RaSIA01:RF-LLRF-A:TuneFreq'],
+                    '34': ['Fwd Pwr Amplitude', 'RA-RaSIA01:RF-LLRF:CavFwdAmp-Mon'],
+                    '19': ['Fwd Pwr Phase Angle', 'RA-RaSIA01:RF-LLRF:CavFwdPhs-Mon'],
+                    '33': ['Cavity Amplitude', 'RA-RaSIA01:RF-LLRF:CavAmp-Mon'],
+                    '18': ['Cavity Phase Angle', 'RA-RaSIA01:RF-LLRF:CavPhs-Mon'],
+                    '307': ['Tuning Fwd Min', 'RA-RaSIA01:RF-LLRF:TuneFwdMin-Mon'],
+                    '303': ['Pulses Frequency', 'RA-RaSIA01:RF-LLRF:TuneFreq'],
                 },
                 'Manual': {
-                    '302': ['Number of Pulses', 'RA-RaSIA01:RF-LLRF-A:TuneStep'],
-                    '306': ['Tunner Move Dir', 'RA-RaSIA01:RF-LLRF-A:TunnerDir'],
-                    '305': ['Tunner Move', 'RA-RaSIA01:RF-LLRF-A:TunnerMove'],
-                    '307': ['Tuning Reset', 'RA-RaSIA01:RF-LLRF-A:TunnerMove-Cmd'],
+                    '302': ['Number of Pulses', 'RA-RaSIA01:RF-LLRF:TuneStep'],
+                    '306': ['Tunner Move Dir', 'RA-RaSIA01:RF-LLRF:TunnerDir'],
+                    '305': ['Tunner Move', 'RA-RaSIA01:RF-LLRF:TunnerMove'],
+                    '307': ['Tuning Reset', 'RA-RaSIA01:RF-LLRF:TunnerMove-Cmd'],
                     '302 Man': ['Tunner Manual Dn', 'SI-03SP:RF-SRFCav-A:TunnerManDown-Mon'],
                     '303 Man': ['Tunner Manual Up', 'SI-03SP:RF-SRFCav-A:TunnerManUp-Mon'],
                 },
                 'Auto': {
-                    '301': ['Tuning Pos Enable', 'RA-RaSIA01:RF-LLRF-A:TuneDir'],
-                    '309': ['Tuning Margin High', 'RA-RaSIA01:RF-LLRF-A:TuneMarginHI'],
-                    '310': ['Tuning Margin Low', 'RA-RaSIA01:RF-LLRF-A:TuneMarginLO'],
-                    '308': ['Tuning Forward Min', 'RA-RaSIA01:RF-LLRF-A:TuneFwdMin'],
-                    '311': ['Tuning Delay', 'RA-RaSIA01:RF-LLRF-A:TuneDly'],
-                    '312': ['Tuning Filter Enable', 'RA-RaSIA01:RF-LLRF-A:TuneFilt'],
-                    '313': ['Tuning Trigger Enable', 'RA-RaSIA01:RF-LLRF-A:TuneTrig'],
-                    '316': ['Tuning/FF On Top Ramp', 'RA-RaSIA01:RF-LLRF-A:RmpTuneTop'],
+                    '301': ['Tuning Pos Enable', 'RA-RaSIA01:RF-LLRF:TuneDir'],
+                    '309': ['Tuning Margin High', 'RA-RaSIA01:RF-LLRF:TuneMarginHI'],
+                    '310': ['Tuning Margin Low', 'RA-RaSIA01:RF-LLRF:TuneMarginLO'],
+                    '308': ['Tuning Forward Min', 'RA-RaSIA01:RF-LLRF:TuneFwdMin'],
+                    '311': ['Tuning Delay', 'RA-RaSIA01:RF-LLRF:TuneDly'],
+                    '312': ['Tuning Filter Enable', 'RA-RaSIA01:RF-LLRF:TuneFilt'],
+                    '313': ['Tuning Trigger Enable', 'RA-RaSIA01:RF-LLRF:TuneTrig'],
+                    '316': ['Tuning/FF On Top Ramp', 'RA-RaSIA01:RF-LLRF:RmpTuneTop'],
                 },
                 'Drivers': {
                     '5V': ['RA-RaSIA01:RF-CavPlDrivers:VoltPos5V-Mon', 'RA-RaSIA01:RF-CavPlDrivers:Current5V-Mon'],
@@ -4250,30 +4250,30 @@ SEC_2_CHANNELS = {
             },
             'B': {
                 'General': {
-                    '34': ['Fwd Pwr Amplitude', 'RA-RaSIB01:RF-LLRF-B:CavFwdAmp-Mon'],
-                    '19': ['Fwd Pwr Phase Angle', 'RA-RaSIB01:RF-LLRF-B:CavFwdPhs-Mon'],
-                    '33': ['Cavity Amplitude', 'RA-RaSIB01:RF-LLRF-B:CavAmp-Mon'],
-                    '18': ['Cavity Phase Angle', 'RA-RaSIB01:RF-LLRF-B:CavPhs-Mon'],
-                    '307': ['Tuning Fwd Min', 'RA-RaSIB01:RF-LLRF-B:TuneFwdMin-Mon'],
-                    '303': ['Pulses Frequency', 'RA-RaSIB01:RF-LLRF-B:TuneFreq'],
+                    '34': ['Fwd Pwr Amplitude', 'RA-RaSIB01:RF-LLRF:CavFwdAmp-Mon'],
+                    '19': ['Fwd Pwr Phase Angle', 'RA-RaSIB01:RF-LLRF:CavFwdPhs-Mon'],
+                    '33': ['Cavity Amplitude', 'RA-RaSIB01:RF-LLRF:CavAmp-Mon'],
+                    '18': ['Cavity Phase Angle', 'RA-RaSIB01:RF-LLRF:CavPhs-Mon'],
+                    '307': ['Tuning Fwd Min', 'RA-RaSIB01:RF-LLRF:TuneFwdMin-Mon'],
+                    '303': ['Pulses Frequency', 'RA-RaSIB01:RF-LLRF:TuneFreq'],
                 },
                 'Manual': {
-                    '302': ['Number of Pulses', 'RA-RaSIB01:RF-LLRF-B:TuneStep'],
-                    '306': ['Tunner Move Dir', 'RA-RaSIB01:RF-LLRF-B:TunnerDir'],
-                    '305': ['Tunner Move', 'RA-RaSIB01:RF-LLRF-B:TunnerMove'],
-                    '307': ['Tuning Reset', 'RA-RaSIB01:RF-LLRF-B:TunnerMove-Cmd'],
+                    '302': ['Number of Pulses', 'RA-RaSIB01:RF-LLRF:TuneStep'],
+                    '306': ['Tunner Move Dir', 'RA-RaSIB01:RF-LLRF:TunnerDir'],
+                    '305': ['Tunner Move', 'RA-RaSIB01:RF-LLRF:TunnerMove'],
+                    '307': ['Tuning Reset', 'RA-RaSIB01:RF-LLRF:TunnerMove-Cmd'],
                     '302 Man': ['Tunner Manual Dn', 'SI-03SP:RF-SRFCav-B:TunnerManDown-Mon'],
                     '303 Man': ['Tunner Manual Up', 'SI-03SP:RF-SRFCav-B:TunnerManUp-Mon'],
                 },
                 'Auto': {
-                    '301': ['Tuning Pos Enable', 'RA-RaSIB01:RF-LLRF-B:TuneDir'],
-                    '309': ['Tuning Margin High', 'RA-RaSIB01:RF-LLRF-B:TuneMarginHI'],
-                    '310': ['Tuning Margin Low', 'RA-RaSIB01:RF-LLRF-B:TuneMarginLO'],
-                    '308': ['Tuning Forward Min', 'RA-RaSIB01:RF-LLRF-B:TuneFwdMin'],
-                    '311': ['Tuning Delay', 'RA-RaSIB01:RF-LLRF-B:TuneDly'],
-                    '312': ['Tuning Filter Enable', 'RA-RaSIB01:RF-LLRF-B:TuneFilt'],
-                    '313': ['Tuning Trigger Enable', 'RA-RaSIB01:RF-LLRF-B:TuneTrig'],
-                    '316': ['Tuning/FF On Top Ramp', 'RA-RaSIB01:RF-LLRF-B:RmpTuneTop'],
+                    '301': ['Tuning Pos Enable', 'RA-RaSIB01:RF-LLRF:TuneDir'],
+                    '309': ['Tuning Margin High', 'RA-RaSIB01:RF-LLRF:TuneMarginHI'],
+                    '310': ['Tuning Margin Low', 'RA-RaSIB01:RF-LLRF:TuneMarginLO'],
+                    '308': ['Tuning Forward Min', 'RA-RaSIB01:RF-LLRF:TuneFwdMin'],
+                    '311': ['Tuning Delay', 'RA-RaSIB01:RF-LLRF:TuneDly'],
+                    '312': ['Tuning Filter Enable', 'RA-RaSIB01:RF-LLRF:TuneFilt'],
+                    '313': ['Tuning Trigger Enable', 'RA-RaSIB01:RF-LLRF:TuneTrig'],
+                    '316': ['Tuning/FF On Top Ramp', 'RA-RaSIB01:RF-LLRF:RmpTuneTop'],
                 },
                 'Drivers': {
                     '5V': ['RA-RaSIB01:RF-CavPlDrivers:VoltPos5V-Mon', 'RA-RaSIB01:RF-CavPlDrivers:Current5V-Mon'],
@@ -4288,131 +4288,131 @@ SEC_2_CHANNELS = {
             'A': {
                 'Diagnostics': {
                     'General': {
-                        'Manual': ['Manual Interlock', 'RA-RaSIA01:RF-LLRF-A:IntlkManual'],
-                        'EndSw': ['End Switches', 'RA-RaSIA01:RF-LLRF-A:EndSwLogicInv'],
-                        'Delay': 'RA-RaSIA01:RF-LLRF-A:IntlkDly',
-                        'HW': 'RA-RaSIA01:RF-LLRF-A:FDLHwTrig-Mon',
-                        'Beam Inv': ['Logic Inv. LLRF Beam Trip', 'RA-RaSIA01:RF-LLRF-A:OrbitIntlkLogicInv'],
-                        'Vacuum Inv': ['Vacuum Logic Inversion', 'RA-RaSIA01:RF-LLRF-A:VacLogicInv']
+                        'Manual': ['Manual Interlock', 'RA-RaSIA01:RF-LLRF:IntlkManual'],
+                        'EndSw': ['End Switches', 'RA-RaSIA01:RF-LLRF:EndSwLogicInv'],
+                        'Delay': 'RA-RaSIA01:RF-LLRF:IntlkDly',
+                        'HW': 'RA-RaSIA01:RF-LLRF:FDLHwTrig-Mon',
+                        'Beam Inv': ['Logic Inv. LLRF Beam Trip', 'RA-RaSIA01:RF-LLRF:OrbitIntlkLogicInv'],
+                        'Vacuum Inv': ['Vacuum Logic Inversion', 'RA-RaSIA01:RF-LLRF:VacLogicInv']
                     },
                     'Levels': {
-                        'RevSSA1': 'RA-RaSIA01:RF-LLRF-A:LimRevSSA1',
-                        'RevSSA2': 'RA-RaSIA01:RF-LLRF-A:LimRevSSA2',
-                        'RevSSA3': 'RA-RaSIA01:RF-LLRF-A:LimRevSSA3',
-                        'RevSSA4': 'RA-RaSIA01:RF-LLRF-A:LimRevSSA4',
-                        'RevCav': 'RA-RaSIA01:RF-LLRF-A:LimRevCav',
-                        'VCav': 'RA-RaSIA01:RF-LLRF-A:LimCav',
-                        'FwCav': 'RA-RaSIA01:RF-LLRF-A:LimFwdCav',
-                        'FwSSA1': 'RA-RaSIA01:RF-LLRF-A:LimFwdSSA1',
-                        'RF In 7': 'RA-RaSIA01:RF-LLRF-A:LimRFIn7',
-                        'RF In 8': 'RA-RaSIA01:RF-LLRF-A:LimRFIn8',
-                        'RF In 9': 'RA-RaSIA01:RF-LLRF-A:LimRFIn9',
-                        'RF In 10': 'RA-RaSIA01:RF-LLRF-A:LimRFIn10',
-                        'RF In 11': 'RA-RaSIA01:RF-LLRF-A:LimRFIn11',
-                        'RF In 12': 'RA-RaSIA01:RF-LLRF-A:LimRFIn12',
-                        'RF In 13': 'RA-RaSIA01:RF-LLRF-A:LimRFIn13',
-                        'RF In 14': 'RA-RaSIA01:RF-LLRF-A:LimRFIn14',
-                        'RF In 15': 'RA-RaSIA01:RF-LLRF-A:LimRFIn15'
+                        'RevSSA1': 'RA-RaSIA01:RF-LLRF:LimRevSSA1',
+                        'RevSSA2': 'RA-RaSIA01:RF-LLRF:LimRevSSA2',
+                        'RevSSA3': 'RA-RaSIA01:RF-LLRF:LimRevSSA3',
+                        'RevSSA4': 'RA-RaSIA01:RF-LLRF:LimRevSSA4',
+                        'RevCav': 'RA-RaSIA01:RF-LLRF:LimRevCav',
+                        'VCav': 'RA-RaSIA01:RF-LLRF:LimCav',
+                        'FwCav': 'RA-RaSIA01:RF-LLRF:LimFwdCav',
+                        'FwSSA1': 'RA-RaSIA01:RF-LLRF:LimFwdSSA1',
+                        'RF In 7': 'RA-RaSIA01:RF-LLRF:LimRFIn7',
+                        'RF In 8': 'RA-RaSIA01:RF-LLRF:LimRFIn8',
+                        'RF In 9': 'RA-RaSIA01:RF-LLRF:LimRFIn9',
+                        'RF In 10': 'RA-RaSIA01:RF-LLRF:LimRFIn10',
+                        'RF In 11': 'RA-RaSIA01:RF-LLRF:LimRFIn11',
+                        'RF In 12': 'RA-RaSIA01:RF-LLRF:LimRFIn12',
+                        'RF In 13': 'RA-RaSIA01:RF-LLRF:LimRFIn13',
+                        'RF In 14': 'RA-RaSIA01:RF-LLRF:LimRFIn14',
+                        'RF In 15': 'RA-RaSIA01:RF-LLRF:LimRFIn15'
                     },
                     'GPIO': {
-                        'Inp': 'RA-RaSIA01:RF-LLRF-A:GPIOInp-Mon',
-                        'Intlk': 'RA-RaSIA01:RF-LLRF-A:GPIOIntlk-Mon',
-                        'Out': 'RA-RaSIA01:RF-LLRF-A:GPIOOut-Mon'
+                        'Inp': 'RA-RaSIA01:RF-LLRF:GPIOInp-Mon',
+                        'Intlk': 'RA-RaSIA01:RF-LLRF:GPIOIntlk-Mon',
+                        'Out': 'RA-RaSIA01:RF-LLRF:GPIOOut-Mon'
                     }
                 },
                 'Bypass': {
-                    '806': ['Rev SSA 1', 'RA-RaSIA01:RF-LLRF-A:FIMRevSSA1'],
-                    '807': ['Rev SSA 2', 'RA-RaSIA01:RF-LLRF-A:FIMRevSSA2'],
-                    '808': ['Rev SSA 3', 'RA-RaSIA01:RF-LLRF-A:FIMRevSSA3'],
-                    '809': ['Rev SSA 4', 'RA-RaSIA01:RF-LLRF-A:FIMRevSSA4'],
-                    '810': ['Rev Cavity', 'RA-RaSIA01:RF-LLRF-A:FIMRevCav'],
-                    '811': ['Manual Interlock', 'RA-RaSIA01:RF-LLRF-A:FIMManual'],
-                    '812': ['PLC', 'RA-RaSIA01:RF-LLRF-A:FIMPLC'],
-                    '813': ['Ext LLRF 1', 'RA-RaSIA01:RF-LLRF-A:FIMLLRF1'],
-                    '814': ['Ext LLRF 2', 'RA-RaSIA01:RF-LLRF-A:FIMLLRF2'],
-                    '815': ['Ext LLRF 3', 'RA-RaSIA01:RF-LLRF-A:FIMLLRF3'],
-                    '816 1': ['End Switch Up 1', 'RA-RaSIA01:RF-LLRF-A:FIMTunnerHigh'],
-                    '817 1': ['End Switch Down 1', 'RA-RaSIA01:RF-LLRF-A:FIMTunnerLow'],
-                    '816 2': ['End Switch Up 2', 'RA-RaSIA01:RF-LLRF-A:FIMPLG2Up'],
-                    '817 2': ['End Switch Down 2', 'RA-RaSIA01:RF-LLRF-A:FIMPLG2Down'],
-                    '835': ['ILK VCav', 'RA-RaSIA01:RF-LLRF-A:FIMCav'],
-                    '836': ['ILK Fwd Cav', 'RA-RaSIA01:RF-LLRF-A:FIMFwdCav'],
-                    '837': ['ILK Fw SSA 1', 'RA-RaSIA01:RF-LLRF-A:FIMFwdSSA1'],
-                    '838': ['ILK RF In 7', 'RA-RaSIA01:RF-LLRF-A:FIMRFIn7'],
-                    '839': ['ILK RF In 8', 'RA-RaSIA01:RF-LLRF-A:FIMRFIn8'],
-                    '840': ['ILK RF In 9', 'RA-RaSIA01:RF-LLRF-A:FIMRFIn9'],
-                    '841': ['ILK RF In 10', 'RA-RaSIA01:RF-LLRF-A:FIMRFIn10'],
-                    '842': ['ILK RF In 11', 'RA-RaSIA01:RF-LLRF-A:FIMRFIn11'],
-                    '843': ['ILK RF In 12', 'RA-RaSIA01:RF-LLRF-A:FIMRFIn12'],
-                    '844': ['ILK RF In 13', 'RA-RaSIA01:RF-LLRF-A:FIMRFIn13'],
-                    '845': ['ILK RF In 14', 'RA-RaSIA01:RF-LLRF-A:FIMRFIn14'],
-                    '846': ['ILK RF In 15', 'RA-RaSIA01:RF-LLRF-A:FIMRFIn15'],
-                    '847': ['ILK LLRF Beam Trip', 'RA-RaSIA01:RF-LLRF-A:FIMOrbitIntlk']
+                    '806': ['Rev SSA 1', 'RA-RaSIA01:RF-LLRF:FIMRevSSA1'],
+                    '807': ['Rev SSA 2', 'RA-RaSIA01:RF-LLRF:FIMRevSSA2'],
+                    '808': ['Rev SSA 3', 'RA-RaSIA01:RF-LLRF:FIMRevSSA3'],
+                    '809': ['Rev SSA 4', 'RA-RaSIA01:RF-LLRF:FIMRevSSA4'],
+                    '810': ['Rev Cavity', 'RA-RaSIA01:RF-LLRF:FIMRevCav'],
+                    '811': ['Manual Interlock', 'RA-RaSIA01:RF-LLRF:FIMManual'],
+                    '812': ['PLC', 'RA-RaSIA01:RF-LLRF:FIMPLC'],
+                    '813': ['Ext LLRF 1', 'RA-RaSIA01:RF-LLRF:FIMLLRF1'],
+                    '814': ['Ext LLRF 2', 'RA-RaSIA01:RF-LLRF:FIMLLRF2'],
+                    '815': ['Ext LLRF 3', 'RA-RaSIA01:RF-LLRF:FIMLLRF3'],
+                    '816 1': ['End Switch Up 1', 'RA-RaSIA01:RF-LLRF:FIMTunnerHigh'],
+                    '817 1': ['End Switch Down 1', 'RA-RaSIA01:RF-LLRF:FIMTunnerLow'],
+                    '816 2': ['End Switch Up 2', 'RA-RaSIA01:RF-LLRF:FIMPLG2Up'],
+                    '817 2': ['End Switch Down 2', 'RA-RaSIA01:RF-LLRF:FIMPLG2Down'],
+                    '835': ['ILK VCav', 'RA-RaSIA01:RF-LLRF:FIMCav'],
+                    '836': ['ILK Fwd Cav', 'RA-RaSIA01:RF-LLRF:FIMFwdCav'],
+                    '837': ['ILK Fw SSA 1', 'RA-RaSIA01:RF-LLRF:FIMFwdSSA1'],
+                    '838': ['ILK RF In 7', 'RA-RaSIA01:RF-LLRF:FIMRFIn7'],
+                    '839': ['ILK RF In 8', 'RA-RaSIA01:RF-LLRF:FIMRFIn8'],
+                    '840': ['ILK RF In 9', 'RA-RaSIA01:RF-LLRF:FIMRFIn9'],
+                    '841': ['ILK RF In 10', 'RA-RaSIA01:RF-LLRF:FIMRFIn10'],
+                    '842': ['ILK RF In 11', 'RA-RaSIA01:RF-LLRF:FIMRFIn11'],
+                    '843': ['ILK RF In 12', 'RA-RaSIA01:RF-LLRF:FIMRFIn12'],
+                    '844': ['ILK RF In 13', 'RA-RaSIA01:RF-LLRF:FIMRFIn13'],
+                    '845': ['ILK RF In 14', 'RA-RaSIA01:RF-LLRF:FIMRFIn14'],
+                    '846': ['ILK RF In 15', 'RA-RaSIA01:RF-LLRF:FIMRFIn15'],
+                    '847': ['ILK LLRF Beam Trip', 'RA-RaSIA01:RF-LLRF:FIMOrbitIntlk']
                 }
             },
             'B': {
                 'Diagnostics': {
                     'General': {
-                        'Manual': ['Manual Interlock', 'RA-RaSIB01:RF-LLRF-B:IntlkManual'],
-                        'EndSw': ['End Switches', 'RA-RaSIB01:RF-LLRF-B:EndSwLogicInv'],
-                        'Delay': 'RA-RaSIB01:RF-LLRF-B:IntlkDly',
-                        'HW': 'RA-RaSIB01:RF-LLRF-B:FDLHwTrig-Mon',
-                        'Beam Inv': ['Logic Inv. LLRF Beam Trip', 'RA-RaSIB01:RF-LLRF-B:OrbitIntlkLogicInv'],
-                        'Vacuum Inv': ['Vacuum Logic Inversion', 'RA-RaSIB01:RF-LLRF-B:VacLogicInv']
+                        'Manual': ['Manual Interlock', 'RA-RaSIB01:RF-LLRF:IntlkManual'],
+                        'EndSw': ['End Switches', 'RA-RaSIB01:RF-LLRF:EndSwLogicInv'],
+                        'Delay': 'RA-RaSIB01:RF-LLRF:IntlkDly',
+                        'HW': 'RA-RaSIB01:RF-LLRF:FDLHwTrig-Mon',
+                        'Beam Inv': ['Logic Inv. LLRF Beam Trip', 'RA-RaSIB01:RF-LLRF:OrbitIntlkLogicInv'],
+                        'Vacuum Inv': ['Vacuum Logic Inversion', 'RA-RaSIB01:RF-LLRF:VacLogicInv']
                     },
                     'Levels': {
-                        'RevSSA1': 'RA-RaSIB01:RF-LLRF-B:LimRevSSA1',
-                        'RevSSA2': 'RA-RaSIB01:RF-LLRF-B:LimRevSSA2',
-                        'RevSSA3': 'RA-RaSIB01:RF-LLRF-B:LimRevSSA3',
-                        'RevSSA4': 'RA-RaSIB01:RF-LLRF-B:LimRevSSA4',
-                        'RevCav': 'RA-RaSIB01:RF-LLRF-B:LimRevCav',
-                        'VCav': 'RA-RaSIB01:RF-LLRF-B:LimCav',
-                        'FwCav': 'RA-RaSIB01:RF-LLRF-B:LimFwdCav',
-                        'FwSSA1': 'RA-RaSIB01:RF-LLRF-B:LimFwdSSA1',
-                        'RF In 7': 'RA-RaSIB01:RF-LLRF-B:LimRefIn7',
-                        'RF In 8': 'RA-RaSIB01:RF-LLRF-B:LimRefIn8',
-                        'RF In 9': 'RA-RaSIB01:RF-LLRF-B:LimRefIn9',
-                        'RF In 10': 'RA-RaSIB01:RF-LLRF-B:LimRefIn10',
-                        'RF In 11': 'RA-RaSIB01:RF-LLRF-B:LimRefIn11',
-                        'RF In 12': 'RA-RaSIB01:RF-LLRF-B:LimRefIn12',
-                        'RF In 13': 'RA-RaSIB01:RF-LLRF-B:LimRefIn13',
-                        'RF In 14': 'RA-RaSIB01:RF-LLRF-B:LimRefIn14',
-                        'RF In 15': 'RA-RaSIB01:RF-LLRF-B:LimRefIn15'
+                        'RevSSA1': 'RA-RaSIB01:RF-LLRF:LimRevSSA1',
+                        'RevSSA2': 'RA-RaSIB01:RF-LLRF:LimRevSSA2',
+                        'RevSSA3': 'RA-RaSIB01:RF-LLRF:LimRevSSA3',
+                        'RevSSA4': 'RA-RaSIB01:RF-LLRF:LimRevSSA4',
+                        'RevCav': 'RA-RaSIB01:RF-LLRF:LimRevCav',
+                        'VCav': 'RA-RaSIB01:RF-LLRF:LimCav',
+                        'FwCav': 'RA-RaSIB01:RF-LLRF:LimFwdCav',
+                        'FwSSA1': 'RA-RaSIB01:RF-LLRF:LimFwdSSA1',
+                        'RF In 7': 'RA-RaSIB01:RF-LLRF:LimRefIn7',
+                        'RF In 8': 'RA-RaSIB01:RF-LLRF:LimRefIn8',
+                        'RF In 9': 'RA-RaSIB01:RF-LLRF:LimRefIn9',
+                        'RF In 10': 'RA-RaSIB01:RF-LLRF:LimRefIn10',
+                        'RF In 11': 'RA-RaSIB01:RF-LLRF:LimRefIn11',
+                        'RF In 12': 'RA-RaSIB01:RF-LLRF:LimRefIn12',
+                        'RF In 13': 'RA-RaSIB01:RF-LLRF:LimRefIn13',
+                        'RF In 14': 'RA-RaSIB01:RF-LLRF:LimRefIn14',
+                        'RF In 15': 'RA-RaSIB01:RF-LLRF:LimRefIn15'
                     },
                     'GPIO': {
-                        'Inp': 'RA-RaSIB01:RF-LLRF-B:GPIOInp-Mon',
-                        'Intlk': 'RA-RaSIB01:RF-LLRF-B:GPIOIntlk-Mon',
-                        'Out': 'RA-RaSIB01:RF-LLRF-B:GPIOOut-Mon'
+                        'Inp': 'RA-RaSIB01:RF-LLRF:GPIOInp-Mon',
+                        'Intlk': 'RA-RaSIB01:RF-LLRF:GPIOIntlk-Mon',
+                        'Out': 'RA-RaSIB01:RF-LLRF:GPIOOut-Mon'
                     }
                 },
                 'Bypass': {
-                    '806': ['Rev SSA 1', 'RA-RaSIB01:RF-LLRF-B:FIMRevSSA1'],
-                    '807': ['Rev SSA 2', 'RA-RaSIB01:RF-LLRF-B:FIMRevSSA2'],
-                    '808': ['Rev SSA 3', 'RA-RaSIB01:RF-LLRF-B:FIMRevSSA3'],
-                    '809': ['Rev SSA 4', 'RA-RaSIB01:RF-LLRF-B:FIMRevSSA4'],
-                    '810': ['Rev Cavity', 'RA-RaSIB01:RF-LLRF-B:FIMRevCav'],
-                    '811': ['Manual Interlock', 'RA-RaSIB01:RF-LLRF-B:FIMManual'],
-                    '812': ['PLC', 'RA-RaSIB01:RF-LLRF-B:FIMPLC'],
-                    '813': ['Ext LLRF 1', 'RA-RaSIB01:RF-LLRF-B:FIMLLRF1'],
-                    '814': ['Ext LLRF 2', 'RA-RaSIB01:RF-LLRF-B:FIMLLRF2'],
-                    '815': ['Ext LLRF 3', 'RA-RaSIB01:RF-LLRF-B:FIMLLRF3'],
-                    '816 1': ['End Switch Up 1', 'RA-RaSIB01:RF-LLRF-B:FIMTunnerHigh'],
-                    '817 1': ['End Switch Down 1', 'RA-RaSIB01:RF-LLRF-B:FIMTunnerLow'],
-                    '816 2': ['End Switch Up 2', 'RA-RaSIB01:RF-LLRF-B:FIMPLG2Up'],
-                    '817 2': ['End Switch Down 2', 'RA-RaSIB01:RF-LLRF-B:FIMPLG2Down'],
-                    '835': ['ILK VCav', 'RA-RaSIB01:RF-LLRF-B:FIMCav'],
-                    '836': ['ILK Fwd Cav', 'RA-RaSIB01:RF-LLRF-B:FIMFwdCav'],
-                    '837': ['ILK Fw SSA 1', 'RA-RaSIB01:RF-LLRF-B:FIMFwdSSA1'],
-                    '838': ['ILK RF In 7', 'RA-RaSIB01:RF-LLRF-B:FIMRFIn7'],
-                    '839': ['ILK RF In 8', 'RA-RaSIB01:RF-LLRF-B:FIMRFIn8'],
-                    '840': ['ILK RF In 9', 'RA-RaSIB01:RF-LLRF-B:FIMRFIn9'],
-                    '841': ['ILK RF In 10', 'RA-RaSIB01:RF-LLRF-B:FIMRFIn10'],
-                    '842': ['ILK RF In 11', 'RA-RaSIB01:RF-LLRF-B:FIMRFIn11'],
-                    '843': ['ILK RF In 12', 'RA-RaSIB01:RF-LLRF-B:FIMRFIn12'],
-                    '844': ['ILK RF In 13', 'RA-RaSIB01:RF-LLRF-B:FIMRFIn13'],
-                    '845': ['ILK RF In 14', 'RA-RaSIB01:RF-LLRF-B:FIMRFIn14'],
-                    '846': ['ILK RF In 15', 'RA-RaSIB01:RF-LLRF-B:FIMRFIn15'],
-                    '847': ['ILK LLRF Beam Trip', 'RA-RaSIB01:RF-LLRF-B:FIMOrbitIntlk']
+                    '806': ['Rev SSA 1', 'RA-RaSIB01:RF-LLRF:FIMRevSSA1'],
+                    '807': ['Rev SSA 2', 'RA-RaSIB01:RF-LLRF:FIMRevSSA2'],
+                    '808': ['Rev SSA 3', 'RA-RaSIB01:RF-LLRF:FIMRevSSA3'],
+                    '809': ['Rev SSA 4', 'RA-RaSIB01:RF-LLRF:FIMRevSSA4'],
+                    '810': ['Rev Cavity', 'RA-RaSIB01:RF-LLRF:FIMRevCav'],
+                    '811': ['Manual Interlock', 'RA-RaSIB01:RF-LLRF:FIMManual'],
+                    '812': ['PLC', 'RA-RaSIB01:RF-LLRF:FIMPLC'],
+                    '813': ['Ext LLRF 1', 'RA-RaSIB01:RF-LLRF:FIMLLRF1'],
+                    '814': ['Ext LLRF 2', 'RA-RaSIB01:RF-LLRF:FIMLLRF2'],
+                    '815': ['Ext LLRF 3', 'RA-RaSIB01:RF-LLRF:FIMLLRF3'],
+                    '816 1': ['End Switch Up 1', 'RA-RaSIB01:RF-LLRF:FIMTunnerHigh'],
+                    '817 1': ['End Switch Down 1', 'RA-RaSIB01:RF-LLRF:FIMTunnerLow'],
+                    '816 2': ['End Switch Up 2', 'RA-RaSIB01:RF-LLRF:FIMPLG2Up'],
+                    '817 2': ['End Switch Down 2', 'RA-RaSIB01:RF-LLRF:FIMPLG2Down'],
+                    '835': ['ILK VCav', 'RA-RaSIB01:RF-LLRF:FIMCav'],
+                    '836': ['ILK Fwd Cav', 'RA-RaSIB01:RF-LLRF:FIMFwdCav'],
+                    '837': ['ILK Fw SSA 1', 'RA-RaSIB01:RF-LLRF:FIMFwdSSA1'],
+                    '838': ['ILK RF In 7', 'RA-RaSIB01:RF-LLRF:FIMRFIn7'],
+                    '839': ['ILK RF In 8', 'RA-RaSIB01:RF-LLRF:FIMRFIn8'],
+                    '840': ['ILK RF In 9', 'RA-RaSIB01:RF-LLRF:FIMRFIn9'],
+                    '841': ['ILK RF In 10', 'RA-RaSIB01:RF-LLRF:FIMRFIn10'],
+                    '842': ['ILK RF In 11', 'RA-RaSIB01:RF-LLRF:FIMRFIn11'],
+                    '843': ['ILK RF In 12', 'RA-RaSIB01:RF-LLRF:FIMRFIn12'],
+                    '844': ['ILK RF In 13', 'RA-RaSIB01:RF-LLRF:FIMRFIn13'],
+                    '845': ['ILK RF In 14', 'RA-RaSIB01:RF-LLRF:FIMRFIn14'],
+                    '846': ['ILK RF In 15', 'RA-RaSIB01:RF-LLRF:FIMRFIn15'],
+                    '847': ['ILK LLRF Beam Trip', 'RA-RaSIB01:RF-LLRF:FIMOrbitIntlk']
                 }
             }
         },
