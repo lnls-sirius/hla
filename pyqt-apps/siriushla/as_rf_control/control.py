@@ -1059,66 +1059,71 @@ class RFMainControl(SiriusMainWindow):
         self.pwr_mon_graph.setStyleSheet(
             '#pwrmon_graph{min-width: 21em; min-height: 18em;}')
 
-        data = self.chs['PwrMtr']
+        data = [self.chs['PwrMtr']['A'], self.chs['PwrMtr']['B']]
 
         self._pm_labels = dict()
         self._pm_labels['dBm'] = list()
         self._pm_labels['W'] = list()
         self._pm_labels['mV'] = list()
         idx = 0
-        for name, dic in data.items():
-            wch, dbch, mvch = dic['W'], dic['dBm'], dic['mV']
-            color = dic['color']
-            row = idx+1
 
-            # Table
-            cbx = QCheckBox(self)
-            cond = True if self.section == 'BO' else 'Coup' in name
-            cbx.setChecked(cond)
-            cbx.setObjectName(name)
-            cbx.setStyleSheet('color:'+color+'; max-width: 1.2em;')
-            cbx.stateChanged.connect(self._handle_curves_visibility)
+        for d in data:
+            for name, dic in d.items():
+                wch, dbch, mvch = dic['W'], dic['dBm'], dic['mV']
+                color = dic['color']
+                row = idx+1
 
-            lb_desc = QLabel(name, self)
-            lb_desc.setStyleSheet(
-                'min-height: 1.5em; color:'+color+'; max-width: 8em;'
-                'qproperty-alignment: AlignCenter;')
+                # Table
+                cbx = QCheckBox(self)
+                cond = True if self.section == 'BO' else 'Coup' in name
+                cbx.setChecked(cond)
+                cbx.setObjectName(name)
+                cbx.setStyleSheet('color:'+color+'; max-width: 1.2em;')
+                cbx.stateChanged.connect(self._handle_curves_visibility)
 
-            lb_dbmpwr = SiriusLabel(self, self.prefix+dbch)
-            lb_dbmpwr.showUnits = True
-            lb_dbmpwr.setVisible(False)
-            self._pm_labels['dBm'].append(lb_dbmpwr)
+                lb_desc = QLabel(name, self)
+                lb_desc.setStyleSheet(
+                    'min-height: 1.5em; color:'+color+'; max-width: 8em;'
+                    'qproperty-alignment: AlignCenter;')
 
-            lb_wpwr = SiriusLabel(self, self.prefix+wch)
-            lb_wpwr.showUnits = True
-            self._pm_labels['W'].append(lb_wpwr)
+                lb_dbmpwr = SiriusLabel(self, self.prefix+dbch)
+                lb_dbmpwr.showUnits = True
+                lb_dbmpwr.setVisible(False)
+                self._pm_labels['dBm'].append(lb_dbmpwr)
 
-            lb_mvpwr = SiriusLabel(self, self.prefix+mvch)
-            lb_mvpwr.showUnits = True
-            lb_mvpwr.setVisible(False)
-            self._pm_labels['mV'].append(lb_mvpwr)
+                lb_wpwr = SiriusLabel(self, self.prefix+wch)
+                lb_wpwr.showUnits = True
+                self._pm_labels['W'].append(lb_wpwr)
 
-            lay_vals.addWidget(cbx, row, 1)
-            lay_vals.addWidget(lb_desc, row, 2)
-            lay_vals.addWidget(lb_dbmpwr, row, 3)
-            lay_vals.addWidget(lb_wpwr, row, 3)
-            lay_vals.addWidget(lb_mvpwr, row, 3)
+                lb_mvpwr = SiriusLabel(self, self.prefix+mvch)
+                lb_mvpwr.showUnits = True
+                lb_mvpwr.setVisible(False)
+                self._pm_labels['mV'].append(lb_mvpwr)
 
-            # Graph
-            self.pwr_mon_graph.addYChannel(
-                y_channel=self.prefix+dbch, name=name+' dBm', color=color,
-                lineStyle=Qt.SolidLine, lineWidth=1)
-            self.curves[name+' dBm'] = self.pwr_mon_graph.curveAtIndex(3*idx)
-            self.pwr_mon_graph.addYChannel(
-                y_channel=self.prefix+wch, name=name+' W', color=color,
-                lineStyle=Qt.SolidLine, lineWidth=1)
-            self.curves[name+' W'] = self.pwr_mon_graph.curveAtIndex(3*idx+1)
-            self.pwr_mon_graph.addYChannel(
-                y_channel=self.prefix+mvch, name=name+' mV', color=color,
-                lineStyle=Qt.SolidLine, lineWidth=1)
-            self.curves[name+' mV'] = self.pwr_mon_graph.curveAtIndex(3*idx+2)
+                lay_vals.addWidget(cbx, row, 1)
+                lay_vals.addWidget(lb_desc, row, 2)
+                lay_vals.addWidget(lb_dbmpwr, row, 3)
+                lay_vals.addWidget(lb_wpwr, row, 3)
+                lay_vals.addWidget(lb_mvpwr, row, 3)
 
-            idx += 1
+                # Graph
+                self.pwr_mon_graph.addYChannel(
+                    y_channel=self.prefix+dbch, name=name+' dBm', color=color,
+                    lineStyle=Qt.SolidLine, lineWidth=1)
+                self.curves[name+' dBm'] = self.pwr_mon_graph.curveAtIndex(
+                    3*idx)
+                self.pwr_mon_graph.addYChannel(
+                    y_channel=self.prefix+wch, name=name+' W', color=color,
+                    lineStyle=Qt.SolidLine, lineWidth=1)
+                self.curves[name+' W'] = self.pwr_mon_graph.curveAtIndex(
+                    3*idx+1)
+                self.pwr_mon_graph.addYChannel(
+                    y_channel=self.prefix+mvch, name=name+' mV', color=color,
+                    lineStyle=Qt.SolidLine, lineWidth=1)
+                self.curves[name+' mV'] = self.pwr_mon_graph.curveAtIndex(
+                    3*idx+2)
+
+                idx += 1
         self.pwr_mon_graph.setLabel('left', '')
 
         # ADCs and DACs
@@ -1154,10 +1159,11 @@ class RFMainControl(SiriusMainWindow):
             lay_vals.addWidget(lb_cavphs, 5, 1, alignment=Qt.AlignCenter)
             lay_vals.addWidget(self.lb_cavphs, 5, 2)
         else:
-            for name in data:
-                self.curves[name+' W'].setVisible('Coup' in name)
-                self.curves[name+' dBm'].setVisible(False)
-                self.curves[name+' mV'].setVisible(False)
+            for d in data:
+                for name in d:
+                    self.curves[name+' W'].setVisible('Coup' in name)
+                    self.curves[name+' dBm'].setVisible(False)
+                    self.curves[name+' mV'].setVisible(False)
 
         lay_cavvgap = QGridLayout()
         offset = 0
