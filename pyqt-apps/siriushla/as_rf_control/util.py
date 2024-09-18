@@ -406,7 +406,7 @@ SEC_2_CHANNELS = {
         'ADCs and DACs': {
             'Input': {
                 '0': {
-                    'Label': 'Cavity Voltage (RFin1)',
+                    'Label': 'V Cav (RF In 1)',
                     'I': 'BO-05D:RF-P5Cav:Cell3I-Mon',
                     'Q': 'BO-05D:RF-P5Cav:Cell3Q-Mon',
                     'Amp1': 'BO-05D:RF-P5Cav:Cell3Amp-Mon',
@@ -416,7 +416,7 @@ SEC_2_CHANNELS = {
                     'Phs': 'BO-05D:RF-P5Cav:Cell3Phs-Mon'
                 },
                 '2': {
-                    'Label': 'Forward Power (RFin2)',
+                    'Label': 'Fwd Cav (RF In 2)',
                     'I': 'BO-05D:RF-P5Cav:FwdI-Mon',
                     'Q': 'BO-05D:RF-P5Cav:FwdQ-Mon',
                     'Amp1': 'BO-05D:RF-P5Cav:FwdAmp-Mon',
@@ -426,7 +426,7 @@ SEC_2_CHANNELS = {
                     'Phs': 'BO-05D:RF-P5Cav:FwdPhs-Mon'
                 },
                 '24': {
-                    'Label': 'Rev Pwr Cavity (RFin3)',
+                    'Label': 'Rev Cav (RF In 3)',
                     'I': 'BO-05D:RF-P5Cav:RevI-Mon',
                     'Q': 'BO-05D:RF-P5Cav:RevQ-Mon',
                     'Amp1': 'BO-05D:RF-P5Cav:RevAmp-Mon',
@@ -436,7 +436,7 @@ SEC_2_CHANNELS = {
                     'Phs': 'BO-05D:RF-P5Cav:RevPhs-Mon'
                 },
                 '35': {
-                    'Label': 'Master Osc (RFin4)',
+                    'Label': 'Master Osc (RF In 4)',
                     'I': 'RA-RaMO:RF-Gen:BOLLRFI-Mon',
                     'Q': 'RA-RaMO:RF-Gen:BOLLRFQ-Mon',
                     'Amp1': 'RA-RaMO:RF-Gen:BOLLRFAmp-Mon',
@@ -446,7 +446,7 @@ SEC_2_CHANNELS = {
                     'Phs': 'RA-RaMO:RF-Gen:BOLLRFPhs-Mon'
                 },
                 '20': {
-                    'Label': 'Fwd Pwr SSA 1 (RFin5)',
+                    'Label': 'Fwd SSA 1 (RF In 5)',
                     'I': 'RA-ToBO:RF-SSAmpTower:FwdOutI-Mon',
                     'Q': 'RA-ToBO:RF-SSAmpTower:FwdOutQ-Mon',
                     'Amp1': 'RA-ToBO:RF-SSAmpTower:FwdOutAmp-Mon',
@@ -456,7 +456,7 @@ SEC_2_CHANNELS = {
                     'Phs': 'RA-ToBO:RF-SSAmpTower:FwdOutPhs-Mon'
                 },
                 '22': {
-                    'Label': 'Rev Pwr SSA 1 (RFin6)',
+                    'Label': 'Rev SSA 1 (RF In 6)',
                     'I': 'RA-ToBO:RF-SSAmpTower:RevOutI-Mon',
                     'Q': 'RA-ToBO:RF-SSAmpTower:RevOutQ-Mon',
                     'Amp1': 'RA-ToBO:RF-SSAmpTower:RevOutAmp-Mon',
@@ -466,7 +466,7 @@ SEC_2_CHANNELS = {
                     'Phs': 'RA-ToBO:RF-SSAmpTower:RevOutPhs-Mon'
                 },
                 '37': {
-                    'Label': 'Cell 2 Voltage (RFin7)',
+                    'Label': 'V Cell 2 (RF In 7)',
                     'I': 'BO-05D:RF-P5Cav:Cell2I-Mon',
                     'Q': 'BO-05D:RF-P5Cav:Cell2Q-Mon',
                     'Amp1': 'BO-05D:RF-P5Cav:Cell2Amp-Mon',
@@ -476,7 +476,7 @@ SEC_2_CHANNELS = {
                     'Phs': 'BO-05D:RF-P5Cav:Cell2Phs-Mon'
                 },
                 '39': {
-                    'Label': 'Cell 4 Voltage (RFin8)',
+                    'Label': 'V Cell 4 (RF In 8)',
                     'I': 'BO-05D:RF-P5Cav:Cell4I-Mon',
                     'Q': 'BO-05D:RF-P5Cav:Cell4Q-Mon',
                     'Amp1': 'BO-05D:RF-P5Cav:Cell4Amp-Mon',
@@ -486,7 +486,7 @@ SEC_2_CHANNELS = {
                     'Phs': 'BO-05D:RF-P5Cav:Cell4Phs-Mon'
                 },
                 '41': {
-                    'Label': 'Cell 1 Voltage (RFin9)',
+                    'Label': 'V Cell 1 (RF In 9)',
                     'I': 'BO-05D:RF-P5Cav:Cell1I-Mon',
                     'Q': 'BO-05D:RF-P5Cav:Cell1Q-Mon',
                     'Amp1': 'BO-05D:RF-P5Cav:Cell1Amp-Mon',
@@ -496,7 +496,7 @@ SEC_2_CHANNELS = {
                     'Phs': 'BO-05D:RF-P5Cav:Cell1Phs-Mon'
                 },
                 '43': {
-                    'Label': 'Cell 5 Voltage (RFin10)',
+                    'Label': 'V Cell 5 (RF In 10)',
                     'I': 'BO-05D:RF-P5Cav:Cell5I-Mon',
                     'Q': 'BO-05D:RF-P5Cav:Cell5Q-Mon',
                     'Amp1': 'BO-05D:RF-P5Cav:Cell5Amp-Mon',
@@ -506,7 +506,7 @@ SEC_2_CHANNELS = {
                     'Phs': 'BO-05D:RF-P5Cav:Cell5Phs-Mon'
                 },
                 '45': {
-                    'Label': 'Pre-Drive Input (RFin11)',
+                    'Label': 'Pre-Drive In (RF In 11)',
                     'I': 'RA-RaBO01:RF-LLRFPreAmp:FwdIn1I-Mon',
                     'Q': 'RA-RaBO01:RF-LLRFPreAmp:FwdIn1Q-Mon',
                     'Amp1': 'RA-RaBO01:RF-LLRFPreAmp:FwdIn1Amp-Mon',
@@ -516,7 +516,7 @@ SEC_2_CHANNELS = {
                     'Phs': 'RA-RaBO01:RF-LLRFPreAmp:FwdIn1Phs-Mon'
                 },
                 '47': {
-                    'Label': 'Pre-Drive Output Fwd (RFin12)',
+                    'Label': 'Fwd Pre-Drive (RF In 12)',
                     'I': 'RA-RaBO01:RF-LLRFPreAmp:FwdOut1I-Mon',
                     'Q': 'RA-RaBO01:RF-LLRFPreAmp:FwdOut1Q-Mon',
                     'Amp1': 'RA-RaBO01:RF-LLRFPreAmp:FwdOut1Amp-Mon',
@@ -526,7 +526,7 @@ SEC_2_CHANNELS = {
                     'Phs': 'RA-RaBO01:RF-LLRFPreAmp:FwdOut1Phs-Mon'
                 },
                 '49': {
-                    'Label': 'Pre-Drive Output Rev (RFin13)',
+                    'Label': 'Rev Pre-Drive (RF In 13)',
                     'I': 'RA-RaBO01:RF-LLRFPreAmp:RevOut1I-Mon',
                     'Q': 'RA-RaBO01:RF-LLRFPreAmp:RevOut1Q-Mon',
                     'Amp1': 'RA-RaBO01:RF-LLRFPreAmp:RevOut1Amp-Mon',
@@ -536,7 +536,7 @@ SEC_2_CHANNELS = {
                     'Phs': 'RA-RaBO01:RF-LLRFPreAmp:RevOut1Phs-Mon'
                 },
                 '51': {
-                    'Label': 'Circulator Out Fwd (RFin14)',
+                    'Label': 'Fwd Circ (RF In 14)',
                     'I': 'RA-TL:RF-Circulator-BO:FwdOutI-Mon',
                     'Q': 'RA-TL:RF-Circulator-BO:FwdOutQ-Mon',
                     'Amp1': 'RA-TL:RF-Circulator-BO:FwdOutAmp-Mon',
@@ -546,7 +546,7 @@ SEC_2_CHANNELS = {
                     'Phs': 'RA-TL:RF-Circulator-BO:FwdOutPhs-Mon'
                 },
                 '53': {
-                    'Label': 'Circulator Out Rev (RFin15)',
+                    'Label': 'Rev Circ (RF In 15)',
                     'I': 'RA-TL:RF-Circulator-BO:RevOutI-Mon',
                     'Q': 'RA-TL:RF-Circulator-BO:RevOutQ-Mon',
                     'Amp1': 'RA-TL:RF-Circulator-BO:RevOutAmp-Mon',
@@ -556,7 +556,7 @@ SEC_2_CHANNELS = {
                     'Phs': 'RA-TL:RF-Circulator-BO:RevOutPhs-Mon'
                 },
                 '91': {
-                    'Label': 'Mux DACsIF (RFin16)',
+                    'Label': 'Mux DACsIF (RF In 16)',
                     'I': 'RA-RaBO01:RF-LLRF:DACIFI-Mon',
                     'Q': 'RA-RaBO01:RF-LLRF:DACIFQ-Mon',
                     'Amp1': 'RA-RaBO01:RF-LLRF:DACIFAmp-Mon',
@@ -1320,23 +1320,23 @@ SEC_2_CHANNELS = {
                     'Vacuum Inv': ['Vacuum Logic Inversion', 'RA-RaBO01:RF-LLRF:VacLogicInv']
                 },
                 'Levels': {
+                    'VCav': 'RA-RaBO01:RF-LLRF:LimCav',
+                    'FwdCav': 'RA-RaBO01:RF-LLRF:LimFwdCav',
+                    'RevCav': 'RA-RaBO01:RF-LLRF:LimRevCav',
+                    'FwdSSA1': 'RA-RaBO01:RF-LLRF:LimFwdSSA1',
                     'RevSSA1': 'RA-RaBO01:RF-LLRF:LimRevSSA1',
                     'RevSSA2': 'RA-RaBO01:RF-LLRF:LimRevSSA2',
                     'RevSSA3': 'RA-RaBO01:RF-LLRF:LimRevSSA3',
                     'RevSSA4': 'RA-RaBO01:RF-LLRF:LimRevSSA4',
-                    'RevCav': 'RA-RaBO01:RF-LLRF:LimRevCav',
-                    'VCav': 'RA-RaBO01:RF-LLRF:LimCav',
-                    'FwCav': 'RA-RaBO01:RF-LLRF:LimFwdCav',
-                    'FwSSA1': 'RA-RaBO01:RF-LLRF:LimFwdSSA1',
-                    'RF In 7': 'RA-RaBO01:RF-LLRF:LimRefIn7',
-                    'RF In 8': 'RA-RaBO01:RF-LLRF:LimRefIn8',
-                    'RF In 9': 'RA-RaBO01:RF-LLRF:LimRefIn9',
-                    'RF In 10': 'RA-RaBO01:RF-LLRF:LimRefIn10',
-                    'RF In 11': 'RA-RaBO01:RF-LLRF:LimRefIn11',
-                    'RF In 12': 'RA-RaBO01:RF-LLRF:LimRefIn12',
-                    'RF In 13': 'RA-RaBO01:RF-LLRF:LimRefIn13',
-                    'RF In 14': 'RA-RaBO01:RF-LLRF:LimRefIn14',
-                    'RF In 15': 'RA-RaBO01:RF-LLRF:LimRefIn15'
+                    'VCell2 (RF In 7)': 'RA-RaBO01:RF-LLRF:LimRefIn7',
+                    'VCell4 (RF In 8)': 'RA-RaBO01:RF-LLRF:LimRefIn8',
+                    'VCell1 (RF In 9)': 'RA-RaBO01:RF-LLRF:LimRefIn9',
+                    'VCell5 (RF In 10)': 'RA-RaBO01:RF-LLRF:LimRefIn10',
+                    'PreDriveIn (RF In 11)': 'RA-RaBO01:RF-LLRF:LimRefIn11',
+                    'FwdPreDrive (RF In 12)': 'RA-RaBO01:RF-LLRF:LimRefIn12',
+                    'RevPreDrive(RF In 13)': 'RA-RaBO01:RF-LLRF:LimRefIn13',
+                    'FwdCirc (RF In 14)': 'RA-RaBO01:RF-LLRF:LimRefIn14',
+                    'RevCirc (RF In 15)': 'RA-RaBO01:RF-LLRF:LimRefIn15'
                 },
                 'GPIO': {
                     'Inp': 'RA-RaBO01:RF-LLRF:GPIOInp-Mon',
@@ -2458,7 +2458,7 @@ SEC_2_CHANNELS = {
             'A': {
                 'Input': {
                     '0': {
-                        'Label': 'Cavity Voltage (RFin1)',
+                        'Label': 'V Cav (RF In 1)',
                         'I': 'SI-03SP:RF-SRFCav-A:I-Mon',
                         'Q': 'SI-03SP:RF-SRFCav-A:Q-Mon',
                         'Amp1': 'SI-03SP:RF-SRFCav-A:Amp-Mon',
@@ -2468,7 +2468,7 @@ SEC_2_CHANNELS = {
                         'Phs': 'SI-03SP:RF-SRFCav-A:Phs-Mon'
                     },
                     '2': {
-                        'Label': 'Forward Power (RFin2)',
+                        'Label': 'Fwd Cav (RF In 2)',
                         'I': 'SI-03SP:RF-SRFCav-A:FwdI-Mon',
                         'Q': 'SI-03SP:RF-SRFCav-A:FwdQ-Mon',
                         'Amp1': 'SI-03SP:RF-SRFCav-A:FwdAmp-Mon',
@@ -2478,7 +2478,7 @@ SEC_2_CHANNELS = {
                         'Phs': 'SI-03SP:RF-SRFCav-A:FwdPhs-Mon'
                     },
                     '24': {
-                        'Label': 'Rev Pwr Cavity (RFin3)',
+                        'Label': 'Rev Cav (RF In 3)',
                         'I': 'SI-03SP:RF-SRFCav-A:RevI-Mon',
                         'Q': 'SI-03SP:RF-SRFCav-A:RevQ-Mon',
                         'Amp1': 'SI-03SP:RF-SRFCav-A:RevAmp-Mon',
@@ -2488,7 +2488,7 @@ SEC_2_CHANNELS = {
                         'Phs': 'SI-03SP:RF-SRFCav-A:RevPhs-Mon'
                     },
                     '35': {
-                        'Label': 'Master Osc (RFin4)',
+                        'Label': 'Master Osc (RF In 4)',
                         'I': 'RA-RaMO:RF-Gen:SIALLRFI-Mon',
                         'Q': 'RA-RaMO:RF-Gen:SIALLRFQ-Mon',
                         'Amp1': 'RA-RaMO:RF-Gen:SIALLRFAmp-Mon',
@@ -2498,7 +2498,7 @@ SEC_2_CHANNELS = {
                         'Phs': 'RA-RaMO:RF-Gen:SIALLRFPhs-Mon'
                     },
                     '20': {
-                        'Label': 'Fwd Pwr SSA 1 (RFin5)',
+                        'Label': 'Fwd SSA 1 (RF In 5)',
                         'I': 'RA-ToSIA01:RF-SSAmpTower:FwdOutI-Mon',
                         'Q': 'RA-ToSIA01:RF-SSAmpTower:FwdOutQ-Mon',
                         'Amp1': 'RA-ToSIA01:RF-SSAmpTower:FwdOutAmp-Mon',
@@ -2508,7 +2508,7 @@ SEC_2_CHANNELS = {
                         'Phs': 'RA-ToSIA01:RF-SSAmpTower:FwdOutPhs-Mon'
                     },
                     '22': {
-                        'Label': 'Rev Pwr SSA 1 (RFin6)',
+                        'Label': 'Rev SSA 1 (RF In 6)',
                         'I': 'RA-ToSIA01:RF-SSAmpTower:RevOutI-Mon',
                         'Q': 'RA-ToSIA01:RF-SSAmpTower:RevOutQ-Mon',
                         'Amp1': 'RA-ToSIA01:RF-SSAmpTower:RevOutAmp-Mon',
@@ -2518,7 +2518,7 @@ SEC_2_CHANNELS = {
                         'Phs': 'RA-ToSIA01:RF-SSAmpTower:RevOutPhs-Mon'
                     },
                     '37': {
-                        'Label': 'Fwd Pwr SSA 2 (RFin7)',
+                        'Label': 'Fwd SSA 2 (RF In 7)',
                         'I': 'RA-ToSIA02:RF-SSAmpTower:FwdOutI-Mon',
                         'Q': 'RA-ToSIA02:RF-SSAmpTower:FwdOutQ-Mon',
                         'Amp1': 'RA-ToSIA02:RF-SSAmpTower:FwdOutAmp-Mon',
@@ -2528,7 +2528,7 @@ SEC_2_CHANNELS = {
                         'Phs': 'RA-ToSIA02:RF-SSAmpTower:FwdOutPhs-Mon'
                     },
                     '39': {
-                        'Label': 'Rev Pwr SSA 2 (RFin8)',
+                        'Label': 'Rev SSA 2 (RF In 8)',
                         'I': 'RA-ToSIA02:RF-SSAmpTower:RevOutI-Mon',
                         'Q': 'RA-ToSIA02:RF-SSAmpTower:RevOutQ-Mon',
                         'Amp1': 'RA-ToSIA02:RF-SSAmpTower:RevOutAmp-Mon',
@@ -2538,7 +2538,7 @@ SEC_2_CHANNELS = {
                         'Phs': 'RA-ToSIA02:RF-SSAmpTower:RevOutPhs-Mon'
                     },
                     '41': {
-                        'Label': 'FBT Near Top (RFin9)',
+                        'Label': 'FBTN Top (RF In 9)',
                         'I': 'SI-03SP:RF-SRFCav-A:FBTNTopI-Mon',
                         'Q': 'SI-03SP:RF-SRFCav-A:FBTNTopQ-Mon',
                         'Amp1': 'SI-03SP:RF-SRFCav-A:FBTNTopAmp-Mon',
@@ -2548,7 +2548,7 @@ SEC_2_CHANNELS = {
                         'Phs': 'SI-03SP:RF-SRFCav-A:FBTNTopPhs-Mon'
                     },
                     '43': {
-                        'Label': 'Wg Pickup (RFin10)',
+                        'Label': 'Wg Pickup (RF In 10)',
                         'I': 'SI-03SP:RF-SRFCav-A:WgPkupI-Mon',
                         'Q': 'SI-03SP:RF-SRFCav-A:WgPkupQ-Mon',
                         'Amp1': 'SI-03SP:RF-SRFCav-A:WgPkupAmp-Mon',
@@ -2558,7 +2558,7 @@ SEC_2_CHANNELS = {
                         'Phs': 'SI-03SP:RF-SRFCav-A:WgPkupPhs-Mon'
                     },
                     '45': {
-                        'Label': 'FBT Near Bot (RFin11)',
+                        'Label': 'FBTN Bot (RF In 11)',
                         'I': 'SI-03SP:RF-SRFCav-A:FBTNBotI-Mon',
                         'Q': 'SI-03SP:RF-SRFCav-A:FBTNBotQ-Mon',
                         'Amp1': 'SI-03SP:RF-SRFCav-A:FBTNBotAmp-Mon',
@@ -2568,7 +2568,7 @@ SEC_2_CHANNELS = {
                         'Phs': 'SI-03SP:RF-SRFCav-A:FBTNBotPhs-Mon'
                     },
                     '47': {
-                        'Label': 'Inp SSA 1 (RFin12)',
+                        'Label': 'Inp SSA 1 (RF In 12)',
                         'I': 'RA-ToSIA01:RF-SSAmpTower:FwdInI-Mon',
                         'Q': 'RA-ToSIA01:RF-SSAmpTower:FwdInQ-Mon',
                         'Amp1': 'RA-ToSIA01:RF-SSAmpTower:FwdInAmp-Mon',
@@ -2578,7 +2578,7 @@ SEC_2_CHANNELS = {
                         'Phs': 'RA-ToSIA01:RF-SSAmpTower:FwdInPhs-Mon'
                     },
                     '49': {
-                        'Label': 'Inp SSA 2 (RFin13)',
+                        'Label': 'Inp SSA 2 (RF In 13)',
                         'I': 'RA-ToSIA02:RF-SSAmpTower:FwdInI-Mon',
                         'Q': 'RA-ToSIA02:RF-SSAmpTower:FwdInQ-Mon',
                         'Amp1': 'RA-ToSIA02:RF-SSAmpTower:FwdInAmp-Mon',
@@ -2588,7 +2588,7 @@ SEC_2_CHANNELS = {
                         'Phs': 'RA-ToSIA02:RF-SSAmpTower:FwdInPhs-Mon'
                     },
                     '51': {
-                        'Label': 'Circulator Fwd Out (RFin14)',
+                        'Label': 'Fwd Circ (RF In 14)',
                         'I': 'SI-03SP:RF-SRFCav-A:WgPkupI-Mon',
                         'Q': 'SI-03SP:RF-SRFCav-A:WgPkupQ-Mon',
                         'Amp1': 'SI-03SP:RF-SRFCav-A:WgPkupAmp-Mon',
@@ -2598,7 +2598,7 @@ SEC_2_CHANNELS = {
                         'Phs': 'SI-03SP:RF-SRFCav-A:WgPkupPhs-Mon'
                     },
                     '53': {
-                        'Label': 'Circulator Rev Out (RFin15)',
+                        'Label': 'Rev Circ (RF In 15)',
                         'I': 'RA-TL:RF-Circulator-SIA:RevOutI-Mon',
                         'Q': 'RA-TL:RF-Circulator-SIA:RevOutQ-Mon',
                         'Amp1': 'RA-TL:RF-Circulator-SIA:RevOutAmp-Mon',
@@ -2608,7 +2608,7 @@ SEC_2_CHANNELS = {
                         'Phs': 'RA-TL:RF-Circulator-SIA:RevOutPhs-Mon'
                     },
                     '91': {
-                        'Label': 'Mux DACsIF (RFin16)',
+                        'Label': 'Mux DACsIF (RF In 16)',
                         'I': 'RA-RaSIA01:RF-LLRF:DACIFI-Mon',
                         'Q': 'RA-RaSIA01:RF-LLRF:DACIFQ-Mon',
                         'Amp1': 'RA-RaSIA01:RF-LLRF:DACIFAmp-Mon',
@@ -2659,7 +2659,7 @@ SEC_2_CHANNELS = {
             'B': {
                 'Input': {
                     '0': {
-                        'Label': 'Cavity Voltage (RFin1)',
+                        'Label': 'V Cav (RF In 1)',
                         'I': 'SI-03SP:RF-SRFCav-B:I-Mon',
                         'Q': 'SI-03SP:RF-SRFCav-B:Q-Mon',
                         'Amp1': 'SI-03SP:RF-SRFCav-B:Amp-Mon',
@@ -2669,7 +2669,7 @@ SEC_2_CHANNELS = {
                         'Phs': 'SI-03SP:RF-SRFCav-B:Phs-Mon'
                     },
                     '2': {
-                        'Label': 'Forward Power (RFin2)',
+                        'Label': 'Fwd Cav (RF In 2)',
                         'I': 'SI-03SP:RF-SRFCav-B:FwdI-Mon',
                         'Q': 'SI-03SP:RF-SRFCav-B:FwdQ-Mon',
                         'Amp1': 'SI-03SP:RF-SRFCav-B:FwdAmp-Mon',
@@ -2679,7 +2679,7 @@ SEC_2_CHANNELS = {
                         'Phs': 'SI-03SP:RF-SRFCav-B:FwdPhs-Mon'
                     },
                     '24': {
-                        'Label': 'Rev Pwr Cavity (RFin3)',
+                        'Label': 'Rev Cav (RF In 3)',
                         'I': 'SI-03SP:RF-SRFCav-B:RevI-Mon',
                         'Q': 'SI-03SP:RF-SRFCav-B:RevQ-Mon',
                         'Amp1': 'SI-03SP:RF-SRFCav-B:RevAmp-Mon',
@@ -2689,7 +2689,7 @@ SEC_2_CHANNELS = {
                         'Phs': 'SI-03SP:RF-SRFCav-B:RevPhs-Mon'
                     },
                     '35': {
-                        'Label': 'Master Osc (RFin4)',
+                        'Label': 'Master Osc (RF In 4)',
                         'I': 'RA-RaMO:RF-Gen:SIBLLRFI-Mon',
                         'Q': 'RA-RaMO:RF-Gen:SIBLLRFQ-Mon',
                         'Amp1': 'RA-RaMO:RF-Gen:SIBLLRFAmp-Mon',
@@ -2699,7 +2699,7 @@ SEC_2_CHANNELS = {
                         'Phs': 'RA-RaMO:RF-Gen:SIBLLRFPhs-Mon'
                     },
                     '20': {
-                        'Label': 'Fwd Pwr SSA 1 (RFin5)',
+                        'Label': 'Fwd SSA 1 (RF In 5)',
                         'I': 'RA-ToSIB01:RF-SSAmpTower:FwdOutI-Mon',
                         'Q': 'RA-ToSIB01:RF-SSAmpTower:FwdOutQ-Mon',
                         'Amp1': 'RA-ToSIB01:RF-SSAmpTower:FwdOutAmp-Mon',
@@ -2709,7 +2709,7 @@ SEC_2_CHANNELS = {
                         'Phs': 'RA-ToSIB01:RF-SSAmpTower:FwdOutPhs-Mon'
                     },
                     '22': {
-                        'Label': 'Rev Pwr SSA 1 (RFin6)',
+                        'Label': 'Rev SSA 1 (RF In 6)',
                         'I': 'RA-ToSIB01:RF-SSAmpTower:RevOutI-Mon',
                         'Q': 'RA-ToSIB01:RF-SSAmpTower:RevOutQ-Mon',
                         'Amp1': 'RA-ToSIB01:RF-SSAmpTower:RevOutAmp-Mon',
@@ -2719,7 +2719,7 @@ SEC_2_CHANNELS = {
                         'Phs': 'RA-ToSIB01:RF-SSAmpTower:RevOutPhs-Mon'
                     },
                     '37': {
-                        'Label': 'Fwd Pwr SSA 2 (RFin7)',
+                        'Label': 'Fwd SSA 2 (RF In 7)',
                         'I': 'RA-ToSIB02:RF-SSAmpTower:FwdOutI-Mon',
                         'Q': 'RA-ToSIB02:RF-SSAmpTower:FwdOutQ-Mon',
                         'Amp1': 'RA-ToSIB02:RF-SSAmpTower:FwdOutAmp-Mon',
@@ -2729,7 +2729,7 @@ SEC_2_CHANNELS = {
                         'Phs': 'RA-ToSIB02:RF-SSAmpTower:FwdOutPhs-Mon'
                     },
                     '39': {
-                        'Label': 'Rev Pwr SSA 2 (RFin8)',
+                        'Label': 'Rev SSA 2 (RF In 8)',
                         'I': 'RA-ToSIB02:RF-SSAmpTower:RevOutI-Mon',
                         'Q': 'RA-ToSIB02:RF-SSAmpTower:RevOutQ-Mon',
                         'Amp1': 'RA-ToSIB02:RF-SSAmpTower:RevOutAmp-Mon',
@@ -2739,7 +2739,7 @@ SEC_2_CHANNELS = {
                         'Phs': 'RA-ToSIB02:RF-SSAmpTower:RevOutPhs-Mon'
                     },
                     '41': {
-                        'Label': 'FBT Near Top (RFin9)',
+                        'Label': 'FBTN Top (RF In 9)',
                         'I': 'SI-03SP:RF-SRFCav-B:FBTNTopI-Mon',
                         'Q': 'SI-03SP:RF-SRFCav-B:FBTNTopQ-Mon',
                         'Amp1': 'SI-03SP:RF-SRFCav-B:FBTNTopAmp-Mon',
@@ -2749,7 +2749,7 @@ SEC_2_CHANNELS = {
                         'Phs': 'SI-03SP:RF-SRFCav-B:FBTNTopPhs-Mon'
                     },
                     '43': {
-                        'Label': 'Wg Pickup (RFin10)',
+                        'Label': 'Wg Pickup (RF In 10)',
                         'I': 'SI-03SP:RF-SRFCav-B:WgPkupI-Mon',
                         'Q': 'SI-03SP:RF-SRFCav-B:WgPkupQ-Mon',
                         'Amp1': 'SI-03SP:RF-SRFCav-B:WgPkupAmp-Mon',
@@ -2759,7 +2759,7 @@ SEC_2_CHANNELS = {
                         'Phs': 'SI-03SP:RF-SRFCav-B:WgPkupPhs-Mon'
                     },
                     '45': {
-                        'Label': 'FBT Near Bot (RFin11)',
+                        'Label': 'FBTN Bot (RF In 11)',
                         'I': 'SI-03SP:RF-SRFCav-B:FBTNBotI-Mon',
                         'Q': 'SI-03SP:RF-SRFCav-B:FBTNBotQ-Mon',
                         'Amp1': 'SI-03SP:RF-SRFCav-B:FBTNBotAmp-Mon',
@@ -2769,7 +2769,7 @@ SEC_2_CHANNELS = {
                         'Phs': 'SI-03SP:RF-SRFCav-B:FBTNBotPhs-Mon'
                     },
                     '47': {
-                        'Label': 'Inp SSA 1 (RFin12)',
+                        'Label': 'Inp SSA 1 (RF In 12)',
                         'I': 'RA-ToSIB01:RF-SSAmpTower:FwdInI-Mon',
                         'Q': 'RA-ToSIB01:RF-SSAmpTower:FwdInQ-Mon',
                         'Amp1': 'RA-ToSIB01:RF-SSAmpTower:FwdInAmp-Mon',
@@ -2779,7 +2779,7 @@ SEC_2_CHANNELS = {
                         'Phs': 'RA-ToSIB01:RF-SSAmpTower:FwdInPhs-Mon'
                     },
                     '49': {
-                        'Label': 'Inp SSA 2 (RFin13)',
+                        'Label': 'Inp SSA 2 (RF In 13)',
                         'I': 'RA-ToSIB02:RF-SSAmpTower:FwdInI-Mon',
                         'Q': 'RA-ToSIB02:RF-SSAmpTower:FwdInQ-Mon',
                         'Amp1': 'RA-ToSIB02:RF-SSAmpTower:FwdInAmp-Mon',
@@ -2789,7 +2789,7 @@ SEC_2_CHANNELS = {
                         'Phs': 'RA-ToSIB02:RF-SSAmpTower:FwdInPhs-Mon'
                     },
                     '51': {
-                        'Label': 'Circulator Fwd Out (RFin14)',
+                        'Label': 'Fwd Circ (RF In 14)',
                         'I': 'SI-03SP:RF-SRFCav-B:WgPkupI-Mon',
                         'Q': 'SI-03SP:RF-SRFCav-B:WgPkupQ-Mon',
                         'Amp1': 'SI-03SP:RF-SRFCav-B:WgPkupAmp-Mon',
@@ -2799,7 +2799,7 @@ SEC_2_CHANNELS = {
                         'Phs': 'SI-03SP:RF-SRFCav-B:WgPkupPhs-Mon'
                     },
                     '53': {
-                        'Label': 'Circulator Rev Out (RFin15)',
+                        'Label': 'Rev Circ (RF In 15)',
                         'I': 'RA-TL:RF-Circulator-SIB:RevOutI-Mon',
                         'Q': 'RA-TL:RF-Circulator-SIB:RevOutQ-Mon',
                         'Amp1': 'RA-TL:RF-Circulator-SIB:RevOutAmp-Mon',
@@ -2809,7 +2809,7 @@ SEC_2_CHANNELS = {
                         'Phs': 'RA-TL:RF-Circulator-SIB:RevOutPhs-Mon'
                     },
                     '91': {
-                        'Label': 'Mux DACsIF (RFin16)',
+                        'Label': 'Mux DACsIF (RF In 16)',
                         'I': 'RA-RaSIB01:RF-LLRF:DACIFI-Mon',
                         'Q': 'RA-RaSIB01:RF-LLRF:DACIFQ-Mon',
                         'Amp1': 'RA-RaSIB01:RF-LLRF:DACIFAmp-Mon',
@@ -4296,23 +4296,23 @@ SEC_2_CHANNELS = {
                         'Vacuum Inv': ['Vacuum Logic Inversion', 'RA-RaSIA01:RF-LLRF:VacLogicInv']
                     },
                     'Levels': {
+                        'VCav': 'RA-RaSIA01:RF-LLRF:LimCav',
+                        'FwdCav': 'RA-RaSIA01:RF-LLRF:LimFwdCav',
+                        'RevCav': 'RA-RaSIA01:RF-LLRF:LimRevCav',
+                        'FwdSSA1': 'RA-RaSIA01:RF-LLRF:LimFwdSSA1',
                         'RevSSA1': 'RA-RaSIA01:RF-LLRF:LimRevSSA1',
                         'RevSSA2': 'RA-RaSIA01:RF-LLRF:LimRevSSA2',
                         'RevSSA3': 'RA-RaSIA01:RF-LLRF:LimRevSSA3',
                         'RevSSA4': 'RA-RaSIA01:RF-LLRF:LimRevSSA4',
-                        'RevCav': 'RA-RaSIA01:RF-LLRF:LimRevCav',
-                        'VCav': 'RA-RaSIA01:RF-LLRF:LimCav',
-                        'FwCav': 'RA-RaSIA01:RF-LLRF:LimFwdCav',
-                        'FwSSA1': 'RA-RaSIA01:RF-LLRF:LimFwdSSA1',
-                        'RF In 7': 'RA-RaSIA01:RF-LLRF:LimRFIn7',
-                        'RF In 8': 'RA-RaSIA01:RF-LLRF:LimRFIn8',
-                        'RF In 9': 'RA-RaSIA01:RF-LLRF:LimRFIn9',
-                        'RF In 10': 'RA-RaSIA01:RF-LLRF:LimRFIn10',
-                        'RF In 11': 'RA-RaSIA01:RF-LLRF:LimRFIn11',
-                        'RF In 12': 'RA-RaSIA01:RF-LLRF:LimRFIn12',
-                        'RF In 13': 'RA-RaSIA01:RF-LLRF:LimRFIn13',
-                        'RF In 14': 'RA-RaSIA01:RF-LLRF:LimRFIn14',
-                        'RF In 15': 'RA-RaSIA01:RF-LLRF:LimRFIn15'
+                        'FwdSSA2 (RF In 7)': 'RA-RaSIA01:RF-LLRF:LimRFIn7',
+                        'RevSSA2 (RF In 8)': 'RA-RaSIA01:RF-LLRF:LimRFIn8',
+                        'FBTNTop (RF In 9)': 'RA-RaSIA01:RF-LLRF:LimRFIn9',
+                        'WgPickup (RF In 10)': 'RA-RaSIA01:RF-LLRF:LimRFIn10',
+                        'FBTNBot (RF In 11)': 'RA-RaSIA01:RF-LLRF:LimRFIn11',
+                        'InpSSA1 (RF In 12)': 'RA-RaSIA01:RF-LLRF:LimRFIn12',
+                        'InpSSA2 (RF In 13)': 'RA-RaSIA01:RF-LLRF:LimRFIn13',
+                        'FwdCirc (RF In 14)': 'RA-RaSIA01:RF-LLRF:LimRFIn14',
+                        'RevCirc (RF In 15)': 'RA-RaSIA01:RF-LLRF:LimRFIn15'
                     },
                     'GPIO': {
                         'Inp': 'RA-RaSIA01:RF-LLRF:GPIOInp-Mon',
@@ -4361,23 +4361,23 @@ SEC_2_CHANNELS = {
                         'Vacuum Inv': ['Vacuum Logic Inversion', 'RA-RaSIB01:RF-LLRF:VacLogicInv']
                     },
                     'Levels': {
+                        'VCav': 'RA-RaSIB01:RF-LLRF:LimCav',
+                        'FwdCav': 'RA-RaSIB01:RF-LLRF:LimFwdCav',
+                        'RevCav': 'RA-RaSIB01:RF-LLRF:LimRevCav',
+                        'FwdSSA1': 'RA-RaSIB01:RF-LLRF:LimFwdSSA1',
                         'RevSSA1': 'RA-RaSIB01:RF-LLRF:LimRevSSA1',
                         'RevSSA2': 'RA-RaSIB01:RF-LLRF:LimRevSSA2',
                         'RevSSA3': 'RA-RaSIB01:RF-LLRF:LimRevSSA3',
                         'RevSSA4': 'RA-RaSIB01:RF-LLRF:LimRevSSA4',
-                        'RevCav': 'RA-RaSIB01:RF-LLRF:LimRevCav',
-                        'VCav': 'RA-RaSIB01:RF-LLRF:LimCav',
-                        'FwCav': 'RA-RaSIB01:RF-LLRF:LimFwdCav',
-                        'FwSSA1': 'RA-RaSIB01:RF-LLRF:LimFwdSSA1',
-                        'RF In 7': 'RA-RaSIB01:RF-LLRF:LimRefIn7',
-                        'RF In 8': 'RA-RaSIB01:RF-LLRF:LimRefIn8',
-                        'RF In 9': 'RA-RaSIB01:RF-LLRF:LimRefIn9',
-                        'RF In 10': 'RA-RaSIB01:RF-LLRF:LimRefIn10',
-                        'RF In 11': 'RA-RaSIB01:RF-LLRF:LimRefIn11',
-                        'RF In 12': 'RA-RaSIB01:RF-LLRF:LimRefIn12',
-                        'RF In 13': 'RA-RaSIB01:RF-LLRF:LimRefIn13',
-                        'RF In 14': 'RA-RaSIB01:RF-LLRF:LimRefIn14',
-                        'RF In 15': 'RA-RaSIB01:RF-LLRF:LimRefIn15'
+                        'FwdSSA2 (RF In 7)': 'RA-RaSIB01:RF-LLRF:LimRFIn7',
+                        'RevSSA2 (RF In 8)': 'RA-RaSIB01:RF-LLRF:LimRFIn8',
+                        'FBTNTop (RF In 9)': 'RA-RaSIB01:RF-LLRF:LimRFIn9',
+                        'WgPickup (RF In 10)': 'RA-RaSIB01:RF-LLRF:LimRFIn10',
+                        'FBTNBot (RF In 11)': 'RA-RaSIB01:RF-LLRF:LimRFIn11',
+                        'InpSSA1 (RF In 12)': 'RA-RaSIB01:RF-LLRF:LimRFIn12',
+                        'InpSSA2 (RF In 13)': 'RA-RaSIB01:RF-LLRF:LimRFIn13',
+                        'FwdCirc (RF In 14)': 'RA-RaSIB01:RF-LLRF:LimRFIn14',
+                        'RevCirc (RF In 15)': 'RA-RaSIB01:RF-LLRF:LimRFIn15'
                     },
                     'GPIO': {
                         'Inp': 'RA-RaSIB01:RF-LLRF:GPIOInp-Mon',
