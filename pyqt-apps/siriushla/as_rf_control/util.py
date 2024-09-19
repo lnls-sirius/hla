@@ -2298,8 +2298,8 @@ SEC_2_CHANNELS = {
             },
         },
         'CavVGap': {
-            'A': 'SI-03SP:RF-SRFCav-A:VCav-Mon',
-            'B': 'SI-03SP:RF-SRFCav-B:VCav-Mon'
+            'A': 'SI-03SP:RF-SRFCav-A:AmpVGap-Mon',
+            'B': 'SI-03SP:RF-SRFCav-B:AmpVGap-Mon'
         },
         'TempMon': {
             'Temp.': {
