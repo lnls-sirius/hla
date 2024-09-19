@@ -1152,8 +1152,8 @@ class RFMainControl(SiriusMainWindow):
             self.lb_cavphs = SiriusLabel(
                 self, self.prefix+'BO-05D:RF-P5Cav:Cell3Phs-Mon')
             self.lb_cavphs.showUnits = True
-            lay_vals.addWidget(lb_cavphs, 5, 1, alignment=Qt.AlignCenter)
-            lay_vals.addWidget(self.lb_cavphs, 5, 2)
+            lay_vals.addWidget(lb_cavphs, 5, 2, alignment=Qt.AlignCenter)
+            lay_vals.addWidget(self.lb_cavphs, 5, 3)
         else:
             for name in data:
                 self.curves[name+' W'].setVisible('Coup' in name)
