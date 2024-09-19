@@ -1134,7 +1134,7 @@ SEC_2_CHANNELS = {
                         'PV': 'RA-RaBO01:RF-LLRF:FFErrTop-Mon'
                     },
                     '531': {
-                        'Label': '5 Hz Trigger',
+                        'Label': 'Ramp Trigger',
                         'PV': 'RA-RaBO01:RF-LLRF:RmpTrigger-Mon'
                     }
                 },
@@ -1234,7 +1234,7 @@ SEC_2_CHANNELS = {
                         'PV': 'RA-RaBO01:RF-LLRF:FFErrBot-Mon'
                     },
                     '531': {
-                        'Label': '5 Hz Trigger',
+                        'Label': 'Ramp Trigger',
                         'PV': 'RA-RaBO01:RF-LLRF:RmpTrigger-Mon'
                     }
                 }
@@ -3816,7 +3816,7 @@ SEC_2_CHANNELS = {
                             'PV': 'RA-RaSIA01:RF-LLRF:FFErrTop-Mon'
                         },
                         '531': {
-                            'Label': '5 Hz Trigger',
+                            'Label': 'Ramp Trigger',
                             'PV': 'RA-RaSIA01:RF-LLRF:RmpTrigger-Mon'
                         }
                     },
@@ -3916,7 +3916,7 @@ SEC_2_CHANNELS = {
                             'PV': 'RA-RaSIA01:RF-LLRF:FFErrBot-Mon'
                         },
                         '531': {
-                            'Label': '5 Hz Trigger',
+                            'Label': 'Ramp Trigger',
                             'PV': 'RA-RaSIA01:RF-LLRF:RmpTrigger-Mon'
                         }
                     }
@@ -4051,7 +4051,7 @@ SEC_2_CHANNELS = {
                             'PV': 'RA-RaSIB01:RF-LLRF:FFErrTop-Mon'
                         },
                         '531': {
-                            'Label': '5 Hz Trigger',
+                            'Label': 'Ramp Trigger',
                             'PV': 'RA-RaSIB01:RF-LLRF:RmpTrigger-Mon'
                         }
                     },
@@ -4151,7 +4151,7 @@ SEC_2_CHANNELS = {
                             'PV': 'RA-RaSIB01:RF-LLRF:FFErrBot-Mon'
                         },
                         '531': {
-                            'Label': '5 Hz Trigger',
+                            'Label': 'Ramp Trigger',
                             'PV': 'RA-RaSIB01:RF-LLRF:RmpTrigger-Mon'
                         }
                     }
