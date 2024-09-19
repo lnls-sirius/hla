@@ -972,7 +972,7 @@ class RFMainControl(SiriusMainWindow):
         self.cb_ramp.currentTextChanged.connect(self._handle_rmptab_visibility)
 
         self.lb_c3phsbot = SiriusLabel(
-            self, self.prefix+'BR-RF-DLLRF-01:BOT:CELL3:PHS')
+            self, self.prefix+'BO-05D:RF-P5Cav:Cell3BotPhs-Mon')
         self.lb_c3phsbot.showUnits = True
         self.lb_cavvgapbot = SiriusLabel(
             self, self.prefix+'BO-05D:RF-P5Cav:RmpAmpVCavBot-Mon')
@@ -996,7 +996,7 @@ class RFMainControl(SiriusMainWindow):
                         wid_dict[pv_id].setVisible(False)
 
         self.lb_c3phstop = SiriusLabel(
-            self, self.prefix+'BR-RF-DLLRF-01:TOP:CELL3:PHS')
+            self, self.prefix+'BO-05D:RF-P5Cav:Cell3TopPhs-Mon')
         self.lb_c3phstop.showUnits = True
         self.lb_cavvgaptop = SiriusLabel(
             self, self.prefix+'BO-05D:RF-P5Cav:RmpAmpVCavTop-Mon')

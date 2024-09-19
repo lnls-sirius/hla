@@ -364,14 +364,14 @@ SEC_2_CHANNELS = {
             },
             'mV': {
                 'Bottom': {
-                    'CavPwr': 'BR-RF-DLLRF-01:BOT:CELL3:AMP',
-                    'PowFwd': 'BR-RF-DLLRF-01:BOT:FWDCAV:AMP',
-                    'PowRev': 'BR-RF-DLLRF-01:BOT:REVCAV:AMP'
+                    'CavPwr': 'BO-05D:RF-P5Cav:Cell3BotAmp-Mon',
+                    'PowFwd': 'BO-05D:RF-P5Cav:FwdBotAmp-Mon',
+                    'PowRev': 'BO-05D:RF-P5Cav:RevBotAmp-Mon'
                 },
                 'Top': {
-                    'CavPwr': 'BR-RF-DLLRF-01:TOP:CELL3:AMP',
-                    'PowFwd': 'BR-RF-DLLRF-01:TOP:FWDCAV:AMP',
-                    'PowRev': 'BR-RF-DLLRF-01:TOP:REVCAV:AMP'
+                    'CavPwr': 'BO-05D:RF-P5Cav:Cell3TopAmp-Mon',
+                    'PowFwd': 'BO-05D:RF-P5Cav:FwdTopAmp-Mon',
+                    'PowRev': 'BO-05D:RF-P5Cav:RevTopAmp-Mon'
                 }
             }
         },
@@ -2884,7 +2884,7 @@ SEC_2_CHANNELS = {
                     'ADC 3': 'RA-RaSIA01:RF-LLRF:GPIOADC3-Mon'
                 },
                 'Clock Src': 'RA-RaSIA01:RF-LLRF:MO1000ClkSrc-Sel',
-                'Loop Trigger': 'RA-RaSIA01:RF-LLRF:LoopTrigProc-Mon',
+                'Loop Trigger': 'RA-RaSIA01:RF-LLRF:LoopTrigProc-Cmd',
                 'PLL': 'RA-RaSIA01:RF-LLRF:MO1000PLL-Mon',
                 'FPGA Init': 'RA-RaSIA01:RF-LLRF:FPGAInit-Cmd',
                 'Cav Type': 'RA-RaSIA01:RF-LLRF:CavType-Mon',
@@ -2922,7 +2922,7 @@ SEC_2_CHANNELS = {
                     'ADC 3': 'RA-RaSIB01:RF-LLRF:GPIOADC3-Mon'
                 },
                 'Clock Src': 'RA-RaSIB01:RF-LLRF:MO1000ClkSrc-Sel',
-                'Loop Trigger': 'RA-RaSIB01:RF-LLRF:LoopTrigProc-Mon',
+                'Loop Trigger': 'RA-RaSIB01:RF-LLRF:LoopTrigProc-Cmd',
                 'PLL': 'RA-RaSIB01:RF-LLRF:MO1000PLL-Mon',
                 'FPGA Init': 'RA-RaSIB01:RF-LLRF:FPGAInit-Cmd',
                 'Cav Type': 'RA-RaSIB01:RF-LLRF:CavType-Mon',
