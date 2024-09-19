@@ -8,7 +8,7 @@ from qtpy.QtWidgets import QGridLayout, QGroupBox, QLabel, QPushButton, \
 
 from ...util import connect_window
 from ...widgets import PyDMStateButton, SiriusDialog, SiriusLabel, \
-    SiriusLedState, SiriusSpinbox, SiriusTimePlot
+    SiriusLedState, SiriusSpinbox, SiriusTimePlot, SiriusSumLabel
 from ..util import SEC_2_CHANNELS
 from .limits import LimitsDetails
 
@@ -141,20 +141,13 @@ class RampsDetails(SiriusDialog):
             self._setupTextInputLine(lay_times, chs_dict, addrs[i], i)
 
         # # Total
-        lb_total = SiriusLabel(self)
-        rule = ('[{"name": "TextRule", "property": "Text", ' +
-                '"expression": "ch[0] + ch[1] + ch[2] + ch[4]", ' +
-                '"channels": [')
-        for i in range(len(addrs)):
-            rule += ('{"channel": "' +
-                self.prefix+chs_dict[addrs[i]][1]+'-RB"' +
-                '", "trigger": true}, ')
-
-        rule += ']}]'
-        lb_total.rules = rule
+        total_channels = []
+        for addr in addrs:
+            total_channels.append(self.prefix+chs_dict[addr][1]+'-RB')
+        lb_total = SiriusSumLabel(self, total_channels)
 
         lay_times.addWidget(QLabel('Total'), len(addrs)+1, 1)
-        lay_times.addWidget(lb_total, len(addrs)+1, 2)
+        lay_times.addWidget(lb_total, len(addrs)+1, 2, alignment=Qt.AlignCenter)
         lay_times.addWidget(QLabel(
             '/410', alignment=Qt.AlignCenter), len(addrs)+1, 3)
 
