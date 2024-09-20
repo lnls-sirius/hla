@@ -8,7 +8,7 @@ from qtpy.QtWidgets import QGridLayout, QGroupBox, QLabel, QPushButton, \
 
 from ...util import connect_window
 from ...widgets import PyDMStateButton, SiriusDialog, SiriusLabel, \
-    SiriusLedState, SiriusSpinbox, SiriusTimePlot, SiriusSumLabel
+    SiriusLedState, SiriusSpinbox, SiriusSumLabel, SiriusTimePlot
 from ..util import SEC_2_CHANNELS
 from .limits import LimitsDetails
 
@@ -260,14 +260,14 @@ class RampsDetails(SiriusDialog):
             alt_row += 1
 
         lay.addItem(QSpacerItem(0, 15, QSzPlcy.Ignored, QSzPlcy.Fixed), row, 0)
+        lay.addWidget(QLabel('In-Phase', alignment=Qt.AlignCenter), row+1, 2)
+        lay.addWidget(QLabel('Quadrature', alignment=Qt.AlignCenter), row+1, 3)
+        lay.addWidget(QLabel('Amp', alignment=Qt.AlignCenter), row+1, 4)
+        lay.addWidget(QLabel('Phase', alignment=Qt.AlignCenter), row+1, 5)
+        lay.addItem(QSpacerItem(
+            12, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), row+1, 6)
         lay.addWidget(QLabel(
-            'In-Phase', alignment=Qt.AlignCenter), row+1, 2)
-        lay.addWidget(QLabel(
-            'Quadrature', alignment=Qt.AlignCenter), row+1, 3)
-        lay.addWidget(QLabel(
-            'Amp', alignment=Qt.AlignCenter), row+1, 5)
-        lay.addWidget(QLabel(
-            'Phase', alignment=Qt.AlignCenter), row+1, 7)
+            'Power', alignment=Qt.AlignCenter), row+1, 7, 1, 2)
         row += 2
 
         for key, dic in chs_dict.items():
@@ -286,6 +286,8 @@ class RampsDetails(SiriusDialog):
                     elif val == '-':
                         lay.addWidget(QLabel(
                             '-', alignment=Qt.AlignHCenter), row, column)
+                        column += 1
+                    if column == 6:
                         column += 1
                 row += 1
 

@@ -256,16 +256,15 @@ class LoopsDetails(SiriusDialog):
             'In-Phase', alignment=Qt.AlignCenter), 0, 2)
         lay.addWidget(QLabel(
             'Quadrature', alignment=Qt.AlignCenter), 0, 3)
+        lay.addWidget(QLabel(
+            'Amp', alignment=Qt.AlignCenter), 0, 4)
+        lay.addWidget(QLabel(
+            'Phase', alignment=Qt.AlignCenter), 0, 5)
         if is_top_section:
+            lay.addItem(QSpacerItem(
+                24, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 0, 6)
             lay.addWidget(QLabel(
-                'Amp', alignment=Qt.AlignCenter), 0, 4, 1, 4)
-            lay.addWidget(QLabel(
-                'Phase', alignment=Qt.AlignCenter), 0, 8)
-        else:
-            lay.addWidget(QLabel(
-                'Amp', alignment=Qt.AlignCenter), 0, 4)
-            lay.addWidget(QLabel(
-                'Phase', alignment=Qt.AlignCenter), 0, 5)
+                'Power', alignment=Qt.AlignCenter), 0, 7, 1, 2)
 
         rows_dict = chs_dict
         if rect_or_polar != '' and extra_addr != '':
@@ -288,6 +287,8 @@ class LoopsDetails(SiriusDialog):
                     elif val == '-':
                         lay.addWidget(QLabel(
                             '-', alignment=Qt.AlignCenter), row, column)
+                        column += 1
+                    if column == 6:
                         column += 1
                 row += 1
 
