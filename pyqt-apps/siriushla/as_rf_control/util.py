@@ -2043,7 +2043,6 @@ SEC_2_CHANNELS = {
                 'PreAmp': {
                     'HS': 'RA-ToSIA0$(NB):RF-SSAmp-H0$(hs_num)PreAmp:Current$(curr_num)-Mon',
                     'PreAmp': 'RA-ToSIA0$(NB):RF-SSAmp-H05PreAmp:Current$(curr_num)-Mon',
-                    'TDK': 'RA-ToSIA0$(NB):RF-SSAmpTower:DCR1-Mon'
                 },
                 'Offsets': {
                     'FwdPwrTop': ['Forward Power - Top', 'RA-ToSIA0$(NB):OffsetConfig:UpperIncidentPower'],
@@ -2087,7 +2086,6 @@ SEC_2_CHANNELS = {
                 'PreAmp': {
                     'HS': 'RA-ToSIB0$(NB):RF-SSAmp-H0$(hs_num)PreAmp:Current$(curr_num)-Mon',
                     'PreAmp': 'RA-ToSIB0$(NB):RF-SSAmp-H05PreAmp:Current$(curr_num)-Mon',
-                    'TDK': 'RA-ToSIB0$(NB):RF-SSAmpTower:DCR1-Mon'
                 },
                 'Offsets': {
                     'FwdPwrTop': ['Forward Power - Top', 'RA-ToSIB0$(NB):OffsetConfig:UpperIncidentPower'],

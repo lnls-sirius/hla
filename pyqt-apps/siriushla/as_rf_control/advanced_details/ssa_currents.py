@@ -292,19 +292,7 @@ class SSACurrentsDetails(SiriusDialog):
                         lay.addWidget(label, row, column)
                         lay.addWidget(lb_1, row+1, column)
                         lay.addWidget(lb_2, row+2, column)
-                        column += 1
-                    else:
-                        # TDK Source
-                        label = QLabel(
-                            '<h4>TDK Source</h4>', alignment=Qt.AlignCenter)
-                        label.setStyleSheet("min-width:6em;")
-
-                        lay.addWidget(label, row, column)
-                        lay.addWidget(SiriusLedState(
-                            self, self._substitute_macros(
-                                self.prefix+chs_dict['TDK'])), row+1, column,
-                                alignment=Qt.AlignCenter)
-                        column += 1
+                    column += 1
 
                 if column > 2:
                     row += 3
