@@ -1376,162 +1376,162 @@ SEC_2_CHANNELS = {
         },
         'CalSys': {
             'Ch1': {
-                'Label': 'RA-RaBO01:RF-RFCalSys:dBm1-Mon.DESC',
+                'Label': 'RA-RaBO01:RF-RFCalSys:PwrdBm1-Mon.DESC',
                 'Ofs': 'RA-RaBO01:RF-RFCalSys:OFSdB1-Mon',
-                'UnCal': 'RA-RaBO01:RF-RFCalSys:dBm1-Calc',
+                'UnCal': 'RA-RaBO01:RF-RFCalSys:PwrdBm1-Calc',
                 'Cal': {
-                    'dBm': 'RA-RaBO01:RF-RFCalSys:dBm1-Mon',
-                    'W': 'RA-RaBO01:RF-RFCalSys:W1-Mon'
+                    'dBm': 'RA-RaBO01:RF-RFCalSys:PwrdBm1-Mon',
+                    'W': 'RA-RaBO01:RF-RFCalSys:PwrW1-Mon'
                 },
                 'Color': 'blue'
             },
             'Ch2': {
-                'Label': 'RA-RaBO01:RF-RFCalSys:dBm2-Mon.DESC',
+                'Label': 'RA-RaBO01:RF-RFCalSys:PwrdBm2-Mon.DESC',
                 'Ofs': 'RA-RaBO01:RF-RFCalSys:OFSdB2-Mon',
-                'UnCal': 'RA-RaBO01:RF-RFCalSys:dBm2-Calc',
+                'UnCal': 'RA-RaBO01:RF-RFCalSys:PwrdBm2-Calc',
                 'Cal': {
-                    'dBm': 'RA-RaBO01:RF-RFCalSys:dBm2-Mon',
-                    'W': 'RA-RaBO01:RF-RFCalSys:W2-Mon'
+                    'dBm': 'RA-RaBO01:RF-RFCalSys:PwrdBm2-Mon',
+                    'W': 'RA-RaBO01:RF-RFCalSys:PwrW2-Mon'
                 },
                 'Color': 'red'
             },
             'Ch3': {
-                'Label': 'RA-RaBO01:RF-RFCalSys:dBm3-Mon.DESC',
+                'Label': 'RA-RaBO01:RF-RFCalSys:PwrdBm3-Mon.DESC',
                 'Ofs': 'RA-RaBO01:RF-RFCalSys:OFSdB3-Mon',
-                'UnCal': 'RA-RaBO01:RF-RFCalSys:dBm3-Calc',
+                'UnCal': 'RA-RaBO01:RF-RFCalSys:PwrdBm3-Calc',
                 'Cal': {
-                    'dBm': 'RA-RaBO01:RF-RFCalSys:dBm3-Mon',
-                    'W': 'RA-RaBO01:RF-RFCalSys:W3-Mon'
+                    'dBm': 'RA-RaBO01:RF-RFCalSys:PwrdBm3-Mon',
+                    'W': 'RA-RaBO01:RF-RFCalSys:PwrW3-Mon'
                 },
                 'Color': 'magenta'
             },
             'Ch4': {
-                'Label': 'RA-RaBO01:RF-RFCalSys:dBm4-Mon.DESC',
+                'Label': 'RA-RaBO01:RF-RFCalSys:PwrdBm4-Mon.DESC',
                 'Ofs': 'RA-RaBO01:RF-RFCalSys:OFSdB4-Mon',
-                'UnCal': 'RA-RaBO01:RF-RFCalSys:dBm4-Calc',
+                'UnCal': 'RA-RaBO01:RF-RFCalSys:PwrdBm4-Calc',
                 'Cal': {
-                    'dBm': 'RA-RaBO01:RF-RFCalSys:dBm4-Mon',
-                    'W': 'RA-RaBO01:RF-RFCalSys:W4-Mon'
+                    'dBm': 'RA-RaBO01:RF-RFCalSys:PwrdBm4-Mon',
+                    'W': 'RA-RaBO01:RF-RFCalSys:PwrW4-Mon'
                 },
                 'Color': 'darkGreen'
             },
             'Ch5': {
-                'Label': 'RA-RaBO01:RF-RFCalSys:dBm5-Mon.DESC',
+                'Label': 'RA-RaBO01:RF-RFCalSys:PwrdBm5-Mon.DESC',
                 'Ofs': 'RA-RaBO01:RF-RFCalSys:OFSdB5-Mon',
-                'UnCal': 'RA-RaBO01:RF-RFCalSys:dBm5-Calc',
+                'UnCal': 'RA-RaBO01:RF-RFCalSys:PwrdBm5-Calc',
                 'Cal': {
-                    'dBm': 'RA-RaBO01:RF-RFCalSys:dBm5-Mon',
-                    'W': 'RA-RaBO01:RF-RFCalSys:W5-Mon'
+                    'dBm': 'RA-RaBO01:RF-RFCalSys:PwrdBm5-Mon',
+                    'W': 'RA-RaBO01:RF-RFCalSys:PwrW5-Mon'
                 },
                 'Color': 'darkRed'
             },
             'Ch6': {
-                'Label': 'RA-RaBO01:RF-RFCalSys:dBm6-Mon.DESC',
+                'Label': 'RA-RaBO01:RF-RFCalSys:PwrdBm6-Mon.DESC',
                 'Ofs': 'RA-RaBO01:RF-RFCalSys:OFSdB6-Mon',
-                'UnCal': 'RA-RaBO01:RF-RFCalSys:dBm6-Calc',
+                'UnCal': 'RA-RaBO01:RF-RFCalSys:PwrdBm6-Calc',
                 'Cal': {
-                    'dBm': 'RA-RaBO01:RF-RFCalSys:dBm6-Mon',
-                    'W': 'RA-RaBO01:RF-RFCalSys:W6-Mon'
+                    'dBm': 'RA-RaBO01:RF-RFCalSys:PwrdBm6-Mon',
+                    'W': 'RA-RaBO01:RF-RFCalSys:PwrW6-Mon'
                 },
                 'Color': 'black'
             },
             'Ch7': {
-                'Label': 'RA-RaBO01:RF-RFCalSys:dBm7-Mon.DESC',
+                'Label': 'RA-RaBO01:RF-RFCalSys:PwrdBm7-Mon.DESC',
                 'Ofs': 'RA-RaBO01:RF-RFCalSys:OFSdB7-Mon',
-                'UnCal': 'RA-RaBO01:RF-RFCalSys:dBm7-Calc',
+                'UnCal': 'RA-RaBO01:RF-RFCalSys:PwrdBm7-Calc',
                 'Cal': {
-                    'dBm': 'RA-RaBO01:RF-RFCalSys:dBm7-Mon',
-                    'W': 'RA-RaBO01:RF-RFCalSys:W7-Mon'
+                    'dBm': 'RA-RaBO01:RF-RFCalSys:PwrdBm7-Mon',
+                    'W': 'RA-RaBO01:RF-RFCalSys:PwrW7-Mon'
                 },
                 'Color': 'darkBlue'
             },
             'Ch8': {
-                'Label': 'RA-RaBO01:RF-RFCalSys:dBm8-Mon.DESC',
+                'Label': 'RA-RaBO01:RF-RFCalSys:PwrdBm8-Mon.DESC',
                 'Ofs': 'RA-RaBO01:RF-RFCalSys:OFSdB8-Mon',
-                'UnCal': 'RA-RaBO01:RF-RFCalSys:dBm8-Calc',
+                'UnCal': 'RA-RaBO01:RF-RFCalSys:PwrdBm8-Calc',
                 'Cal': {
-                    'dBm': 'RA-RaBO01:RF-RFCalSys:dBm8-Mon',
-                    'W': 'RA-RaBO01:RF-RFCalSys:W8-Mon'
+                    'dBm': 'RA-RaBO01:RF-RFCalSys:PwrdBm8-Mon',
+                    'W': 'RA-RaBO01:RF-RFCalSys:PwrW8-Mon'
                 },
                 'Color': 'darkOrange'
             },
             'Ch9': {
-                'Label': 'RA-RaBO01:RF-RFCalSys:dBm9-Mon.DESC',
+                'Label': 'RA-RaBO01:RF-RFCalSys:PwrdBm9-Mon.DESC',
                 'Ofs': 'RA-RaBO01:RF-RFCalSys:OFSdB9-Mon',
-                'UnCal': 'RA-RaBO01:RF-RFCalSys:dBm9-Calc',
+                'UnCal': 'RA-RaBO01:RF-RFCalSys:PwrdBm9-Calc',
                 'Cal': {
-                    'dBm': 'RA-RaBO01:RF-RFCalSys:dBm9-Mon',
-                    'W': 'RA-RaBO01:RF-RFCalSys:W9-Mon'
+                    'dBm': 'RA-RaBO01:RF-RFCalSys:PwrdBm9-Mon',
+                    'W': 'RA-RaBO01:RF-RFCalSys:PwrW9-Mon'
                 },
                 'Color': 'orangered'
             },
             'Ch10': {
-                'Label': 'RA-RaBO01:RF-RFCalSys:dBm10-Mon.DESC',
+                'Label': 'RA-RaBO01:RF-RFCalSys:PwrdBm10-Mon.DESC',
                 'Ofs': 'RA-RaBO01:RF-RFCalSys:OFSdB10-Mon',
-                'UnCal': 'RA-RaBO01:RF-RFCalSys:dBm10-Calc',
+                'UnCal': 'RA-RaBO01:RF-RFCalSys:PwrdBm10-Calc',
                 'Cal': {
-                    'dBm': 'RA-RaBO01:RF-RFCalSys:dBm10-Mon',
-                    'W': 'RA-RaBO01:RF-RFCalSys:W10-Mon'
+                    'dBm': 'RA-RaBO01:RF-RFCalSys:PwrdBm10-Mon',
+                    'W': 'RA-RaBO01:RF-RFCalSys:PwrW10-Mon'
                 },
                 'Color': 'darkOliveGreen'
             },
             'Ch11': {
-                'Label': 'RA-RaBO01:RF-RFCalSys:dBm11-Mon.DESC',
+                'Label': 'RA-RaBO01:RF-RFCalSys:PwrdBm11-Mon.DESC',
                 'Ofs': 'RA-RaBO01:RF-RFCalSys:OFSdB11-Mon',
-                'UnCal': 'RA-RaBO01:RF-RFCalSys:dBm11-Calc',
+                'UnCal': 'RA-RaBO01:RF-RFCalSys:PwrdBm11-Calc',
                 'Cal': {
-                    'dBm': 'RA-RaBO01:RF-RFCalSys:dBm11-Mon',
-                    'W': 'RA-RaBO01:RF-RFCalSys:W11-Mon'
+                    'dBm': 'RA-RaBO01:RF-RFCalSys:PwrdBm11-Mon',
+                    'W': 'RA-RaBO01:RF-RFCalSys:PwrW11-Mon'
                 },
                 'Color': 'darkMagenta'
             },
             'Ch12': {
-                'Label': 'RA-RaBO01:RF-RFCalSys:dBm12-Mon.DESC',
+                'Label': 'RA-RaBO01:RF-RFCalSys:PwrdBm12-Mon.DESC',
                 'Ofs': 'RA-RaBO01:RF-RFCalSys:OFSdB12-Mon',
-                'UnCal': 'RA-RaBO01:RF-RFCalSys:dBm12-Calc',
+                'UnCal': 'RA-RaBO01:RF-RFCalSys:PwrdBm12-Calc',
                 'Cal': {
-                    'dBm': 'RA-RaBO01:RF-RFCalSys:dBm12-Mon',
-                    'W': 'RA-RaBO01:RF-RFCalSys:W12-Mon'
+                    'dBm': 'RA-RaBO01:RF-RFCalSys:PwrdBm12-Mon',
+                    'W': 'RA-RaBO01:RF-RFCalSys:PwrW12-Mon'
                 },
                 'Color': 'chocolate'
             },
             'Ch13': {
-                'Label': 'RA-RaBO01:RF-RFCalSys:dBm13-Mon.DESC',
+                'Label': 'RA-RaBO01:RF-RFCalSys:PwrdBm13-Mon.DESC',
                 'Ofs': 'RA-RaBO01:RF-RFCalSys:OFSdB13-Mon',
-                'UnCal': 'RA-RaBO01:RF-RFCalSys:dBm13-Calc',
+                'UnCal': 'RA-RaBO01:RF-RFCalSys:PwrdBm13-Calc',
                 'Cal': {
-                    'dBm': 'RA-RaBO01:RF-RFCalSys:dBm13-Mon',
-                    'W': 'RA-RaBO01:RF-RFCalSys:W13-Mon'
+                    'dBm': 'RA-RaBO01:RF-RFCalSys:PwrdBm13-Mon',
+                    'W': 'RA-RaBO01:RF-RFCalSys:PwrW13-Mon'
                 },
                 'Color': 'fireBrick'
             },
             'Ch14': {
-                'Label': 'RA-RaBO01:RF-RFCalSys:dBm14-Mon.DESC',
+                'Label': 'RA-RaBO01:RF-RFCalSys:PwrdBm14-Mon.DESC',
                 'Ofs': 'RA-RaBO01:RF-RFCalSys:OFSdB14-Mon',
-                'UnCal': 'RA-RaBO01:RF-RFCalSys:dBm14-Calc',
+                'UnCal': 'RA-RaBO01:RF-RFCalSys:PwrdBm14-Calc',
                 'Cal': {
-                    'dBm': 'RA-RaBO01:RF-RFCalSys:dBm14-Mon',
-                    'W': 'RA-RaBO01:RF-RFCalSys:W14-Mon'
+                    'dBm': 'RA-RaBO01:RF-RFCalSys:PwrdBm14-Mon',
+                    'W': 'RA-RaBO01:RF-RFCalSys:PwrW14-Mon'
                 },
                 'Color': 'darkCyan'
             },
             'Ch15': {
-                'Label': 'RA-RaBO01:RF-RFCalSys:dBm15-Mon.DESC',
+                'Label': 'RA-RaBO01:RF-RFCalSys:PwrdBm15-Mon.DESC',
                 'Ofs': 'RA-RaBO01:RF-RFCalSys:OFSdB15-Mon',
-                'UnCal': 'RA-RaBO01:RF-RFCalSys:dBm15-Calc',
+                'UnCal': 'RA-RaBO01:RF-RFCalSys:PwrdBm15-Calc',
                 'Cal': {
-                    'dBm': 'RA-RaBO01:RF-RFCalSys:dBm15-Mon',
-                    'W': 'RA-RaBO01:RF-RFCalSys:W15-Mon'
+                    'dBm': 'RA-RaBO01:RF-RFCalSys:PwrdBm15-Mon',
+                    'W': 'RA-RaBO01:RF-RFCalSys:PwrW15-Mon'
                 },
                 'Color': 'saddlebrown'
             },
             'Ch16': {
-                'Label': 'RA-RaBO01:RF-RFCalSys:dBm16-Mon.DESC',
+                'Label': 'RA-RaBO01:RF-RFCalSys:PwrdBm16-Mon.DESC',
                 'Ofs': 'RA-RaBO01:RF-RFCalSys:OFSdB16-Mon',
-                'UnCal': 'RA-RaBO01:RF-RFCalSys:dBm16-Calc',
+                'UnCal': 'RA-RaBO01:RF-RFCalSys:PwrdBm16-Calc',
                 'Cal': {
-                    'dBm': 'RA-RaBO01:RF-RFCalSys:dBm16-Mon',
-                    'W': 'RA-RaBO01:RF-RFCalSys:W16-Mon'
+                    'dBm': 'RA-RaBO01:RF-RFCalSys:PwrdBm16-Mon',
+                    'W': 'RA-RaBO01:RF-RFCalSys:PwrW16-Mon'
                 },
                 'Color': 'darkSlateGrey'
             }
@@ -4419,324 +4419,324 @@ SEC_2_CHANNELS = {
         'CalSys': {
             'A': {
                 'Ch1': {
-                    'Label': 'RA-RaSIA01:RF-RFCalSys:dBm1-Mon.DESC',
+                    'Label': 'RA-RaSIA01:RF-RFCalSys:PwrdBm1-Mon.DESC',
                     'Ofs': 'RA-RaSIA01:RF-RFCalSys:OFSdB1-Mon',
-                    'UnCal': 'RA-RaSIA01:RF-RFCalSys:dBm1-Calc',
+                    'UnCal': 'RA-RaSIA01:RF-RFCalSys:PwrdBm1-Calc',
                     'Cal': {
-                        'dBm': 'RA-RaSIA01:RF-RFCalSys:dBm1-Mon',
-                        'W': 'RA-RaSIA01:RF-RFCalSys:W1-Mon'
+                        'dBm': 'RA-RaSIA01:RF-RFCalSys:PwrdBm1-Mon',
+                        'W': 'RA-RaSIA01:RF-RFCalSys:PwrW1-Mon'
                     },
                     'Color': 'blue'
                 },
                 'Ch2': {
-                    'Label': 'RA-RaSIA01:RF-RFCalSys:dBm2-Mon.DESC',
+                    'Label': 'RA-RaSIA01:RF-RFCalSys:PwrdBm2-Mon.DESC',
                     'Ofs': 'RA-RaSIA01:RF-RFCalSys:OFSdB2-Mon',
-                    'UnCal': 'RA-RaSIA01:RF-RFCalSys:dBm2-Calc',
+                    'UnCal': 'RA-RaSIA01:RF-RFCalSys:PwrdBm2-Calc',
                     'Cal': {
-                        'dBm': 'RA-RaSIA01:RF-RFCalSys:dBm2-Mon',
-                        'W': 'RA-RaSIA01:RF-RFCalSys:W2-Mon'
+                        'dBm': 'RA-RaSIA01:RF-RFCalSys:PwrdBm2-Mon',
+                        'W': 'RA-RaSIA01:RF-RFCalSys:PwrW2-Mon'
                     },
                     'Color': 'red'
                 },
                 'Ch3': {
-                    'Label': 'RA-RaSIA01:RF-RFCalSys:dBm3-Mon.DESC',
+                    'Label': 'RA-RaSIA01:RF-RFCalSys:PwrdBm3-Mon.DESC',
                     'Ofs': 'RA-RaSIA01:RF-RFCalSys:OFSdB3-Mon',
-                    'UnCal': 'RA-RaSIA01:RF-RFCalSys:dBm3-Calc',
+                    'UnCal': 'RA-RaSIA01:RF-RFCalSys:PwrdBm3-Calc',
                     'Cal': {
-                        'dBm': 'RA-RaSIA01:RF-RFCalSys:dBm3-Mon',
-                        'W': 'RA-RaSIA01:RF-RFCalSys:W3-Mon'
+                        'dBm': 'RA-RaSIA01:RF-RFCalSys:PwrdBm3-Mon',
+                        'W': 'RA-RaSIA01:RF-RFCalSys:PwrW3-Mon'
                     },
                     'Color': 'magenta'
                 },
                 'Ch4': {
-                    'Label': 'RA-RaSIA01:RF-RFCalSys:dBm4-Mon.DESC',
+                    'Label': 'RA-RaSIA01:RF-RFCalSys:PwrdBm4-Mon.DESC',
                     'Ofs': 'RA-RaSIA01:RF-RFCalSys:OFSdB4-Mon',
-                    'UnCal': 'RA-RaSIA01:RF-RFCalSys:dBm4-Calc',
+                    'UnCal': 'RA-RaSIA01:RF-RFCalSys:PwrdBm4-Calc',
                     'Cal': {
-                        'dBm': 'RA-RaSIA01:RF-RFCalSys:dBm4-Mon',
-                        'W': 'RA-RaSIA01:RF-RFCalSys:W4-Mon'
+                        'dBm': 'RA-RaSIA01:RF-RFCalSys:PwrdBm4-Mon',
+                        'W': 'RA-RaSIA01:RF-RFCalSys:PwrW4-Mon'
                     },
                     'Color': 'darkGreen'
                 },
                 'Ch5': {
-                    'Label': 'RA-RaSIA01:RF-RFCalSys:dBm5-Mon.DESC',
+                    'Label': 'RA-RaSIA01:RF-RFCalSys:PwrdBm5-Mon.DESC',
                     'Ofs': 'RA-RaSIA01:RF-RFCalSys:OFSdB5-Mon',
-                    'UnCal': 'RA-RaSIA01:RF-RFCalSys:dBm5-Calc',
+                    'UnCal': 'RA-RaSIA01:RF-RFCalSys:PwrdBm5-Calc',
                     'Cal': {
-                        'dBm': 'RA-RaSIA01:RF-RFCalSys:dBm5-Mon',
-                        'W': 'RA-RaSIA01:RF-RFCalSys:W5-Mon'
+                        'dBm': 'RA-RaSIA01:RF-RFCalSys:PwrdBm5-Mon',
+                        'W': 'RA-RaSIA01:RF-RFCalSys:PwrW5-Mon'
                     },
                     'Color': 'darkRed'
                 },
                 'Ch6': {
-                    'Label': 'RA-RaSIA01:RF-RFCalSys:dBm6-Mon.DESC',
+                    'Label': 'RA-RaSIA01:RF-RFCalSys:PwrdBm6-Mon.DESC',
                     'Ofs': 'RA-RaSIA01:RF-RFCalSys:OFSdB6-Mon',
-                    'UnCal': 'RA-RaSIA01:RF-RFCalSys:dBm6-Calc',
+                    'UnCal': 'RA-RaSIA01:RF-RFCalSys:PwrdBm6-Calc',
                     'Cal': {
-                        'dBm': 'RA-RaSIA01:RF-RFCalSys:dBm6-Mon',
-                        'W': 'RA-RaSIA01:RF-RFCalSys:W6-Mon'
+                        'dBm': 'RA-RaSIA01:RF-RFCalSys:PwrdBm6-Mon',
+                        'W': 'RA-RaSIA01:RF-RFCalSys:PwrW6-Mon'
                     },
                     'Color': 'black'
                 },
                 'Ch7': {
-                    'Label': 'RA-RaSIA01:RF-RFCalSys:dBm7-Mon.DESC',
+                    'Label': 'RA-RaSIA01:RF-RFCalSys:PwrdBm7-Mon.DESC',
                     'Ofs': 'RA-RaSIA01:RF-RFCalSys:OFSdB7-Mon',
-                    'UnCal': 'RA-RaSIA01:RF-RFCalSys:dBm7-Calc',
+                    'UnCal': 'RA-RaSIA01:RF-RFCalSys:PwrdBm7-Calc',
                     'Cal': {
-                        'dBm': 'RA-RaSIA01:RF-RFCalSys:dBm7-Mon',
-                        'W': 'RA-RaSIA01:RF-RFCalSys:W7-Mon'
+                        'dBm': 'RA-RaSIA01:RF-RFCalSys:PwrdBm7-Mon',
+                        'W': 'RA-RaSIA01:RF-RFCalSys:PwrW7-Mon'
                     },
                     'Color': 'darkBlue'
                 },
                 'Ch8': {
-                    'Label': 'RA-RaSIA01:RF-RFCalSys:dBm8-Mon.DESC',
+                    'Label': 'RA-RaSIA01:RF-RFCalSys:PwrdBm8-Mon.DESC',
                     'Ofs': 'RA-RaSIA01:RF-RFCalSys:OFSdB8-Mon',
-                    'UnCal': 'RA-RaSIA01:RF-RFCalSys:dBm8-Calc',
+                    'UnCal': 'RA-RaSIA01:RF-RFCalSys:PwrdBm8-Calc',
                     'Cal': {
-                        'dBm': 'RA-RaSIA01:RF-RFCalSys:dBm8-Mon',
-                        'W': 'RA-RaSIA01:RF-RFCalSys:W8-Mon'
+                        'dBm': 'RA-RaSIA01:RF-RFCalSys:PwrdBm8-Mon',
+                        'W': 'RA-RaSIA01:RF-RFCalSys:PwrW8-Mon'
                     },
                     'Color': 'yellow'
                 },
                 'Ch9': {
-                    'Label': 'RA-RaSIA01:RF-RFCalSys:dBm9-Mon.DESC',
+                    'Label': 'RA-RaSIA01:RF-RFCalSys:PwrdBm9-Mon.DESC',
                     'Ofs': 'RA-RaSIA01:RF-RFCalSys:OFSdB9-Mon',
-                    'UnCal': 'RA-RaSIA01:RF-RFCalSys:dBm9-Calc',
+                    'UnCal': 'RA-RaSIA01:RF-RFCalSys:PwrdBm9-Calc',
                     'Cal': {
-                        'dBm': 'RA-RaSIA01:RF-RFCalSys:dBm9-Mon',
-                        'W': 'RA-RaSIA01:RF-RFCalSys:W9-Mon'
+                        'dBm': 'RA-RaSIA01:RF-RFCalSys:PwrdBm9-Mon',
+                        'W': 'RA-RaSIA01:RF-RFCalSys:PwrW9-Mon'
                     },
                     'Color': 'orangered'
                 },
                 'Ch10': {
-                    'Label': 'RA-RaSIA01:RF-RFCalSys:dBm10-Mon.DESC',
+                    'Label': 'RA-RaSIA01:RF-RFCalSys:PwrdBm10-Mon.DESC',
                     'Ofs': 'RA-RaSIA01:RF-RFCalSys:OFSdB10-Mon',
-                    'UnCal': 'RA-RaSIA01:RF-RFCalSys:dBm10-Calc',
+                    'UnCal': 'RA-RaSIA01:RF-RFCalSys:PwrdBm10-Calc',
                     'Cal': {
-                        'dBm': 'RA-RaSIA01:RF-RFCalSys:dBm10-Mon',
-                        'W': 'RA-RaSIA01:RF-RFCalSys:W10-Mon'
+                        'dBm': 'RA-RaSIA01:RF-RFCalSys:PwrdBm10-Mon',
+                        'W': 'RA-RaSIA01:RF-RFCalSys:PwrW10-Mon'
                     },
                     'Color': 'darkOliveGreen'
                 },
                 'Ch11': {
-                    'Label': 'RA-RaSIA01:RF-RFCalSys:dBm11-Mon.DESC',
+                    'Label': 'RA-RaSIA01:RF-RFCalSys:PwrdBm11-Mon.DESC',
                     'Ofs': 'RA-RaSIA01:RF-RFCalSys:OFSdB11-Mon',
-                    'UnCal': 'RA-RaSIA01:RF-RFCalSys:dBm11-Calc',
+                    'UnCal': 'RA-RaSIA01:RF-RFCalSys:PwrdBm11-Calc',
                     'Cal': {
-                        'dBm': 'RA-RaSIA01:RF-RFCalSys:dBm11-Mon',
-                        'W': 'RA-RaSIA01:RF-RFCalSys:W11-Mon'
+                        'dBm': 'RA-RaSIA01:RF-RFCalSys:PwrdBm11-Mon',
+                        'W': 'RA-RaSIA01:RF-RFCalSys:PwrW11-Mon'
                     },
                     'Color': 'darkMagenta'
                 },
                 'Ch12': {
-                    'Label': 'RA-RaSIA01:RF-RFCalSys:dBm12-Mon.DESC',
+                    'Label': 'RA-RaSIA01:RF-RFCalSys:PwrdBm12-Mon.DESC',
                     'Ofs': 'RA-RaSIA01:RF-RFCalSys:OFSdB12-Mon',
-                    'UnCal': 'RA-RaSIA01:RF-RFCalSys:dBm12-Calc',
+                    'UnCal': 'RA-RaSIA01:RF-RFCalSys:PwrdBm12-Calc',
                     'Cal': {
-                        'dBm': 'RA-RaSIA01:RF-RFCalSys:dBm12-Mon',
-                        'W': 'RA-RaSIA01:RF-RFCalSys:W12-Mon'
+                        'dBm': 'RA-RaSIA01:RF-RFCalSys:PwrdBm12-Mon',
+                        'W': 'RA-RaSIA01:RF-RFCalSys:PwrW12-Mon'
                     },
                     'Color': 'chocolate'
                 },
                 'Ch13': {
-                    'Label': 'RA-RaSIA01:RF-RFCalSys:dBm13-Mon.DESC',
+                    'Label': 'RA-RaSIA01:RF-RFCalSys:PwrdBm13-Mon.DESC',
                     'Ofs': 'RA-RaSIA01:RF-RFCalSys:OFSdB13-Mon',
-                    'UnCal': 'RA-RaSIA01:RF-RFCalSys:dBm13-Calc',
+                    'UnCal': 'RA-RaSIA01:RF-RFCalSys:PwrdBm13-Calc',
                     'Cal': {
-                        'dBm': 'RA-RaSIA01:RF-RFCalSys:dBm13-Mon',
-                        'W': 'RA-RaSIA01:RF-RFCalSys:W13-Mon'
+                        'dBm': 'RA-RaSIA01:RF-RFCalSys:PwrdBm13-Mon',
+                        'W': 'RA-RaSIA01:RF-RFCalSys:PwrW13-Mon'
                     },
                     'Color': 'cyan'
                 },
                 'Ch14': {
-                    'Label': 'RA-RaSIA01:RF-RFCalSys:dBm14-Mon.DESC',
+                    'Label': 'RA-RaSIA01:RF-RFCalSys:PwrdBm14-Mon.DESC',
                     'Ofs': 'RA-RaSIA01:RF-RFCalSys:OFSdB14-Mon',
-                    'UnCal': 'RA-RaSIA01:RF-RFCalSys:dBm14-Calc',
+                    'UnCal': 'RA-RaSIA01:RF-RFCalSys:PwrdBm14-Calc',
                     'Cal': {
-                        'dBm': 'RA-RaSIA01:RF-RFCalSys:dBm14-Mon',
-                        'W': 'RA-RaSIA01:RF-RFCalSys:W14-Mon'
+                        'dBm': 'RA-RaSIA01:RF-RFCalSys:PwrdBm14-Mon',
+                        'W': 'RA-RaSIA01:RF-RFCalSys:PwrW14-Mon'
                     },
                     'Color': 'darkCyan'
                 },
                 'Ch15': {
-                    'Label': 'RA-RaSIA01:RF-RFCalSys:dBm15-Mon.DESC',
+                    'Label': 'RA-RaSIA01:RF-RFCalSys:PwrdBm15-Mon.DESC',
                     'Ofs': 'RA-RaSIA01:RF-RFCalSys:OFSdB15-Mon',
-                    'UnCal': 'RA-RaSIA01:RF-RFCalSys:dBm15-Calc',
+                    'UnCal': 'RA-RaSIA01:RF-RFCalSys:PwrdBm15-Calc',
                     'Cal': {
-                        'dBm': 'RA-RaSIA01:RF-RFCalSys:dBm15-Mon',
-                        'W': 'RA-RaSIA01:RF-RFCalSys:W15-Mon'
+                        'dBm': 'RA-RaSIA01:RF-RFCalSys:PwrdBm15-Mon',
+                        'W': 'RA-RaSIA01:RF-RFCalSys:PwrW15-Mon'
                     },
                     'Color': 'saddlebrown'
                 },
                 'Ch16': {
-                    'Label': 'RA-RaSIA01:RF-RFCalSys:dBm16-Mon.DESC',
+                    'Label': 'RA-RaSIA01:RF-RFCalSys:PwrdBm16-Mon.DESC',
                     'Ofs': 'RA-RaSIA01:RF-RFCalSys:OFSdB16-Mon',
-                    'UnCal': 'RA-RaSIA01:RF-RFCalSys:dBm16-Calc',
+                    'UnCal': 'RA-RaSIA01:RF-RFCalSys:PwrdBm16-Calc',
                     'Cal': {
-                        'dBm': 'RA-RaSIA01:RF-RFCalSys:dBm16-Mon',
-                        'W': 'RA-RaSIA01:RF-RFCalSys:W16-Mon'
+                        'dBm': 'RA-RaSIA01:RF-RFCalSys:PwrdBm16-Mon',
+                        'W': 'RA-RaSIA01:RF-RFCalSys:PwrW16-Mon'
                     },
                     'Color': 'darkSlateGrey'
                 }
             },
             'B': {
                 'Ch1': {
-                    'Label': 'RA-RaSIB01:RF-RFCalSys:dBm1-Mon.DESC',
+                    'Label': 'RA-RaSIB01:RF-RFCalSys:PwrdBm1-Mon.DESC',
                     'Ofs': 'RA-RaSIB01:RF-RFCalSys:OFSdB1-Mon',
-                    'UnCal': 'RA-RaSIB01:RF-RFCalSys:dBm1-Calc',
+                    'UnCal': 'RA-RaSIB01:RF-RFCalSys:PwrdBm1-Calc',
                     'Cal': {
-                        'dBm': 'RA-RaSIB01:RF-RFCalSys:dBm1-Mon',
-                        'W': 'RA-RaSIB01:RF-RFCalSys:W1-Mon'
+                        'dBm': 'RA-RaSIB01:RF-RFCalSys:PwrdBm1-Mon',
+                        'W': 'RA-RaSIB01:RF-RFCalSys:PwrW1-Mon'
                     },
                     'Color': 'blue'
                 },
                 'Ch2': {
-                    'Label': 'RA-RaSIB01:RF-RFCalSys:dBm2-Mon.DESC',
+                    'Label': 'RA-RaSIB01:RF-RFCalSys:PwrdBm2-Mon.DESC',
                     'Ofs': 'RA-RaSIB01:RF-RFCalSys:OFSdB2-Mon',
-                    'UnCal': 'RA-RaSIB01:RF-RFCalSys:dBm2-Calc',
+                    'UnCal': 'RA-RaSIB01:RF-RFCalSys:PwrdBm2-Calc',
                     'Cal': {
-                        'dBm': 'RA-RaSIB01:RF-RFCalSys:dBm2-Mon',
-                        'W': 'RA-RaSIB01:RF-RFCalSys:W2-Mon'
+                        'dBm': 'RA-RaSIB01:RF-RFCalSys:PwrdBm2-Mon',
+                        'W': 'RA-RaSIB01:RF-RFCalSys:PwrW2-Mon'
                     },
                     'Color': 'red'
                 },
                 'Ch3': {
-                    'Label': 'RA-RaSIB01:RF-RFCalSys:dBm3-Mon.DESC',
+                    'Label': 'RA-RaSIB01:RF-RFCalSys:PwrdBm3-Mon.DESC',
                     'Ofs': 'RA-RaSIB01:RF-RFCalSys:OFSdB3-Mon',
-                    'UnCal': 'RA-RaSIB01:RF-RFCalSys:dBm3-Calc',
+                    'UnCal': 'RA-RaSIB01:RF-RFCalSys:PwrdBm3-Calc',
                     'Cal': {
-                        'dBm': 'RA-RaSIB01:RF-RFCalSys:dBm3-Mon',
-                        'W': 'RA-RaSIB01:RF-RFCalSys:W3-Mon'
+                        'dBm': 'RA-RaSIB01:RF-RFCalSys:PwrdBm3-Mon',
+                        'W': 'RA-RaSIB01:RF-RFCalSys:PwrW3-Mon'
                     },
                     'Color': 'magenta'
                 },
                 'Ch4': {
-                    'Label': 'RA-RaSIB01:RF-RFCalSys:dBm4-Mon.DESC',
+                    'Label': 'RA-RaSIB01:RF-RFCalSys:PwrdBm4-Mon.DESC',
                     'Ofs': 'RA-RaSIB01:RF-RFCalSys:OFSdB4-Mon',
-                    'UnCal': 'RA-RaSIB01:RF-RFCalSys:dBm4-Calc',
+                    'UnCal': 'RA-RaSIB01:RF-RFCalSys:PwrdBm4-Calc',
                     'Cal': {
-                        'dBm': 'RA-RaSIB01:RF-RFCalSys:dBm4-Mon',
-                        'W': 'RA-RaSIB01:RF-RFCalSys:W4-Mon'
+                        'dBm': 'RA-RaSIB01:RF-RFCalSys:PwrdBm4-Mon',
+                        'W': 'RA-RaSIB01:RF-RFCalSys:PwrW4-Mon'
                     },
                     'Color': 'darkGreen'
                 },
                 'Ch5': {
-                    'Label': 'RA-RaSIB01:RF-RFCalSys:dBm5-Mon.DESC',
+                    'Label': 'RA-RaSIB01:RF-RFCalSys:PwrdBm5-Mon.DESC',
                     'Ofs': 'RA-RaSIB01:RF-RFCalSys:OFSdB5-Mon',
-                    'UnCal': 'RA-RaSIB01:RF-RFCalSys:dBm5-Calc',
+                    'UnCal': 'RA-RaSIB01:RF-RFCalSys:PwrdBm5-Calc',
                     'Cal': {
-                        'dBm': 'RA-RaSIB01:RF-RFCalSys:dBm5-Mon',
-                        'W': 'RA-RaSIB01:RF-RFCalSys:W5-Mon'
+                        'dBm': 'RA-RaSIB01:RF-RFCalSys:PwrdBm5-Mon',
+                        'W': 'RA-RaSIB01:RF-RFCalSys:PwrW5-Mon'
                     },
                     'Color': 'darkRed'
                 },
                 'Ch6': {
-                    'Label': 'RA-RaSIB01:RF-RFCalSys:dBm6-Mon.DESC',
+                    'Label': 'RA-RaSIB01:RF-RFCalSys:PwrdBm6-Mon.DESC',
                     'Ofs': 'RA-RaSIB01:RF-RFCalSys:OFSdB6-Mon',
-                    'UnCal': 'RA-RaSIB01:RF-RFCalSys:dBm6-Calc',
+                    'UnCal': 'RA-RaSIB01:RF-RFCalSys:PwrdBm6-Calc',
                     'Cal': {
-                        'dBm': 'RA-RaSIB01:RF-RFCalSys:dBm6-Mon',
-                        'W': 'RA-RaSIB01:RF-RFCalSys:W6-Mon'
+                        'dBm': 'RA-RaSIB01:RF-RFCalSys:PwrdBm6-Mon',
+                        'W': 'RA-RaSIB01:RF-RFCalSys:PwrW6-Mon'
                     },
                     'Color': 'black'
                 },
                 'Ch7': {
-                    'Label': 'RA-RaSIB01:RF-RFCalSys:dBm7-Mon.DESC',
+                    'Label': 'RA-RaSIB01:RF-RFCalSys:PwrdBm7-Mon.DESC',
                     'Ofs': 'RA-RaSIB01:RF-RFCalSys:OFSdB7-Mon',
-                    'UnCal': 'RA-RaSIB01:RF-RFCalSys:dBm7-Calc',
+                    'UnCal': 'RA-RaSIB01:RF-RFCalSys:PwrdBm7-Calc',
                     'Cal': {
-                        'dBm': 'RA-RaSIB01:RF-RFCalSys:dBm7-Mon',
-                        'W': 'RA-RaSIB01:RF-RFCalSys:W7-Mon'
+                        'dBm': 'RA-RaSIB01:RF-RFCalSys:PwrdBm7-Mon',
+                        'W': 'RA-RaSIB01:RF-RFCalSys:PwrW7-Mon'
                     },
                     'Color': 'darkBlue'
                 },
                 'Ch8': {
-                    'Label': 'RA-RaSIB01:RF-RFCalSys:dBm8-Mon.DESC',
+                    'Label': 'RA-RaSIB01:RF-RFCalSys:PwrdBm8-Mon.DESC',
                     'Ofs': 'RA-RaSIB01:RF-RFCalSys:OFSdB8-Mon',
-                    'UnCal': 'RA-RaSIB01:RF-RFCalSys:dBm8-Calc',
+                    'UnCal': 'RA-RaSIB01:RF-RFCalSys:PwrdBm8-Calc',
                     'Cal': {
-                        'dBm': 'RA-RaSIB01:RF-RFCalSys:dBm8-Mon',
-                        'W': 'RA-RaSIB01:RF-RFCalSys:W8-Mon'
+                        'dBm': 'RA-RaSIB01:RF-RFCalSys:PwrdBm8-Mon',
+                        'W': 'RA-RaSIB01:RF-RFCalSys:PwrW8-Mon'
                     },
                     'Color': 'yellow'
                 },
                 'Ch9': {
-                    'Label': 'RA-RaSIB01:RF-RFCalSys:dBm9-Mon.DESC',
+                    'Label': 'RA-RaSIB01:RF-RFCalSys:PwrdBm9-Mon.DESC',
                     'Ofs': 'RA-RaSIB01:RF-RFCalSys:OFSdB9-Mon',
-                    'UnCal': 'RA-RaSIB01:RF-RFCalSys:dBm9-Calc',
+                    'UnCal': 'RA-RaSIB01:RF-RFCalSys:PwrdBm9-Calc',
                     'Cal': {
-                        'dBm': 'RA-RaSIB01:RF-RFCalSys:dBm9-Mon',
-                        'W': 'RA-RaSIB01:RF-RFCalSys:W9-Mon'
+                        'dBm': 'RA-RaSIB01:RF-RFCalSys:PwrdBm9-Mon',
+                        'W': 'RA-RaSIB01:RF-RFCalSys:PwrW9-Mon'
                     },
                     'Color': 'orangered'
                 },
                 'Ch10': {
-                    'Label': 'RA-RaSIB01:RF-RFCalSys:dBm10-Mon.DESC',
+                    'Label': 'RA-RaSIB01:RF-RFCalSys:PwrdBm10-Mon.DESC',
                     'Ofs': 'RA-RaSIB01:RF-RFCalSys:OFSdB10-Mon',
-                    'UnCal': 'RA-RaSIB01:RF-RFCalSys:dBm10-Calc',
+                    'UnCal': 'RA-RaSIB01:RF-RFCalSys:PwrdBm10-Calc',
                     'Cal': {
-                        'dBm': 'RA-RaSIB01:RF-RFCalSys:dBm10-Mon',
-                        'W': 'RA-RaSIB01:RF-RFCalSys:W10-Mon'
+                        'dBm': 'RA-RaSIB01:RF-RFCalSys:PwrdBm10-Mon',
+                        'W': 'RA-RaSIB01:RF-RFCalSys:PwrW10-Mon'
                     },
                     'Color': 'darkOliveGreen'
                 },
                 'Ch11': {
-                    'Label': 'RA-RaSIB01:RF-RFCalSys:dBm11-Mon.DESC',
+                    'Label': 'RA-RaSIB01:RF-RFCalSys:PwrdBm11-Mon.DESC',
                     'Ofs': 'RA-RaSIB01:RF-RFCalSys:OFSdB11-Mon',
-                    'UnCal': 'RA-RaSIB01:RF-RFCalSys:dBm11-Calc',
+                    'UnCal': 'RA-RaSIB01:RF-RFCalSys:PwrdBm11-Calc',
                     'Cal': {
-                        'dBm': 'RA-RaSIB01:RF-RFCalSys:dBm11-Mon',
-                        'W': 'RA-RaSIB01:RF-RFCalSys:W11-Mon'
+                        'dBm': 'RA-RaSIB01:RF-RFCalSys:PwrdBm11-Mon',
+                        'W': 'RA-RaSIB01:RF-RFCalSys:PwrW11-Mon'
                     },
                     'Color': 'darkMagenta'
                 },
                 'Ch12': {
-                    'Label': 'RA-RaSIB01:RF-RFCalSys:dBm12-Mon.DESC',
+                    'Label': 'RA-RaSIB01:RF-RFCalSys:PwrdBm12-Mon.DESC',
                     'Ofs': 'RA-RaSIB01:RF-RFCalSys:OFSdB12-Mon',
-                    'UnCal': 'RA-RaSIB01:RF-RFCalSys:dBm12-Calc',
+                    'UnCal': 'RA-RaSIB01:RF-RFCalSys:PwrdBm12-Calc',
                     'Cal': {
-                        'dBm': 'RA-RaSIB01:RF-RFCalSys:dBm12-Mon',
-                        'W': 'RA-RaSIB01:RF-RFCalSys:W12-Mon'
+                        'dBm': 'RA-RaSIB01:RF-RFCalSys:PwrdBm12-Mon',
+                        'W': 'RA-RaSIB01:RF-RFCalSys:PwrW12-Mon'
                     },
                     'Color': 'chocolate'
                 },
                 'Ch13': {
-                    'Label': 'RA-RaSIB01:RF-RFCalSys:dBm13-Mon.DESC',
+                    'Label': 'RA-RaSIB01:RF-RFCalSys:PwrdBm13-Mon.DESC',
                     'Ofs': 'RA-RaSIB01:RF-RFCalSys:OFSdB13-Mon',
-                    'UnCal': 'RA-RaSIB01:RF-RFCalSys:dBm13-Calc',
+                    'UnCal': 'RA-RaSIB01:RF-RFCalSys:PwrdBm13-Calc',
                     'Cal': {
-                        'dBm': 'RA-RaSIB01:RF-RFCalSys:dBm13-Mon',
-                        'W': 'RA-RaSIB01:RF-RFCalSys:W13-Mon'
+                        'dBm': 'RA-RaSIB01:RF-RFCalSys:PwrdBm13-Mon',
+                        'W': 'RA-RaSIB01:RF-RFCalSys:PwrW13-Mon'
                     },
                     'Color': 'cyan'
                 },
                 'Ch14': {
-                    'Label': 'RA-RaSIB01:RF-RFCalSys:dBm14-Mon.DESC',
+                    'Label': 'RA-RaSIB01:RF-RFCalSys:PwrdBm14-Mon.DESC',
                     'Ofs': 'RA-RaSIB01:RF-RFCalSys:OFSdB14-Mon',
-                    'UnCal': 'RA-RaSIB01:RF-RFCalSys:dBm14-Calc',
+                    'UnCal': 'RA-RaSIB01:RF-RFCalSys:PwrdBm14-Calc',
                     'Cal': {
-                        'dBm': 'RA-RaSIB01:RF-RFCalSys:dBm14-Mon',
-                        'W': 'RA-RaSIB01:RF-RFCalSys:W14-Mon'
+                        'dBm': 'RA-RaSIB01:RF-RFCalSys:PwrdBm14-Mon',
+                        'W': 'RA-RaSIB01:RF-RFCalSys:PwrW14-Mon'
                     },
                     'Color': 'darkCyan'
                 },
                 'Ch15': {
-                    'Label': 'RA-RaSIB01:RF-RFCalSys:dBm15-Mon.DESC',
+                    'Label': 'RA-RaSIB01:RF-RFCalSys:PwrdBm15-Mon.DESC',
                     'Ofs': 'RA-RaSIB01:RF-RFCalSys:OFSdB15-Mon',
-                    'UnCal': 'RA-RaSIB01:RF-RFCalSys:dBm15-Calc',
+                    'UnCal': 'RA-RaSIB01:RF-RFCalSys:PwrdBm15-Calc',
                     'Cal': {
-                        'dBm': 'RA-RaSIB01:RF-RFCalSys:dBm15-Mon',
-                        'W': 'RA-RaSIB01:RF-RFCalSys:W15-Mon'
+                        'dBm': 'RA-RaSIB01:RF-RFCalSys:PwrdBm15-Mon',
+                        'W': 'RA-RaSIB01:RF-RFCalSys:PwrW15-Mon'
                     },
                     'Color': 'saddlebrown'
                 },
                 'Ch16': {
-                    'Label': 'RA-RaSIB01:RF-RFCalSys:dBm16-Mon.DESC',
+                    'Label': 'RA-RaSIB01:RF-RFCalSys:PwrdBm16-Mon.DESC',
                     'Ofs': 'RA-RaSIB01:RF-RFCalSys:OFSdB16-Mon',
-                    'UnCal': 'RA-RaSIB01:RF-RFCalSys:dBm16-Calc',
+                    'UnCal': 'RA-RaSIB01:RF-RFCalSys:PwrdBm16-Calc',
                     'Cal': {
-                        'dBm': 'RA-RaSIB01:RF-RFCalSys:dBm16-Mon',
-                        'W': 'RA-RaSIB01:RF-RFCalSys:W16-Mon'
+                        'dBm': 'RA-RaSIB01:RF-RFCalSys:PwrdBm16-Mon',
+                        'W': 'RA-RaSIB01:RF-RFCalSys:PwrW16-Mon'
                     },
                     'Color': 'darkSlateGrey'
                 }
