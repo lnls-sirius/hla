@@ -7,7 +7,7 @@ from qtpy.QtWidgets import QCheckBox, QComboBox, QGridLayout, QHBoxLayout, \
     QWidget
 
 from ...widgets import SiriusDialog, SiriusLabel, SiriusLineEdit, \
-    SiriusSpinbox, SiriusTimePlot
+    SiriusTimePlot
 from ..util import SEC_2_CHANNELS
 
 
@@ -109,7 +109,7 @@ class CalibrationDetails(SiriusDialog):
                 self, self.prefix+self.syst_dict[f'Ch{i}']['Label']), i, 1)
             lay.addWidget(lb_label, i, 2)
             lay.addWidget(lb_uncal, i, 4)
-            lay.addWidget(SiriusSpinbox(
+            lay.addWidget(SiriusLineEdit(
                 self, self.prefix+self.syst_dict[f'Ch{i}']['Ofs']), i, 6)
             lay.addWidget(lb_ofs, i, 7)
             lay.addWidget(lb_cal_dbm, i, 9, 1, 2)
