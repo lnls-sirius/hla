@@ -158,7 +158,7 @@ SEC_2_CHANNELS = {
         'SSA': {
             'Name': 'SSA',
             'Status': 'RA-ToBO:RF-SSAmpTower:Sts-Mon',
-            'Power': 'RA-ToBO:RF-SSAmpTower:PwrFwdOutLLRF-Mon',
+            'Power': 'RA-ToBO:RF-SSAmpTower:FwdOutLLRF-Mon',
             'SRC 1': {
                 'Label': '300VDC',
                 'Enable': 'RA-ToBO:RF-ACDCPanel:300VdcEnbl-Sel',
