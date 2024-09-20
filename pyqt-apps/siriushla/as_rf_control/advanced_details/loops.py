@@ -10,7 +10,6 @@ from ...util import connect_window
 from ...widgets import PyDMStateButton, SiriusDialog, SiriusEnumComboBox, \
     SiriusLabel, SiriusLedState, SiriusPushButton, SiriusSpinbox
 from ..util import SEC_2_CHANNELS
-from .equations import EquationsDetails
 from .limits import LimitsDetails
 
 
@@ -123,15 +122,6 @@ class LoopsDetails(SiriusDialog):
         lay.addWidget(SiriusLabel(self, self.prefix+chs_dict['107'][1]+'-Sts',
             alignment=Qt.AlignCenter), 7, 3)
 
-        # Equations
-        pb_eq = QPushButton(
-            qta.icon('fa5s.external-link-alt'), ' Equations', self)
-        connect_window(
-            pb_eq, EquationsDetails, parent=self,
-            prefix=self.prefix, section=self.section, system=self.system)
-        pb_eq.setStyleSheet('min-width:8em')
-        lay.addWidget(pb_eq, 9, 1)
-
         # Limits
         pb_limit = QPushButton(
             qta.icon('fa5s.external-link-alt'), ' Limits', self)
@@ -139,7 +129,7 @@ class LoopsDetails(SiriusDialog):
             pb_limit, LimitsDetails, parent=self, prefix=self.prefix,
             section=self.section, system=self.system, which='Loop')
         pb_limit.setStyleSheet('min-width:8em')
-        lay.addWidget(pb_limit, 9, 2)
+        lay.addWidget(pb_limit, 9, 1)
 
         lay.addItem(QSpacerItem(0, 9, QSzPlcy.Ignored, QSzPlcy.Fixed), 8, 0)
         lay.addItem(QSpacerItem(40, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 0, 4)

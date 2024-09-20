@@ -24,9 +24,9 @@ class EquationsDetails(SiriusDialog):
         self.title += (f' - {self.system}' if self.section == 'SI' else '')
         self.setWindowTitle(self.title)
         if self.section == 'SI':
-            self.syst_dict = self.chs['Loops'][self.system]['Equations']
+            self.syst_dict = self.chs['Equations'][self.system]
         else:
-            self.syst_dict = self.chs['Loops']['Equations']
+            self.syst_dict = self.chs['Equations']
         self._setupUi()
 
     def _setupUi(self):

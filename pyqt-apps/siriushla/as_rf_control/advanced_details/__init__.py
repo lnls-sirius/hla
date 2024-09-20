@@ -3,6 +3,7 @@ from .adv_interlock import AdvancedInterlockDetails
 from .auto_start import AutoStartDetails
 from .calibration import CalibrationDetails
 from .conditioning import ConditioningDetails
+from .equations import EquationsDetails
 from .hardware import HardwareDetails
 from .loops import LoopsDetails
 from .ramps import RampsDetails
