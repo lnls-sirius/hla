@@ -60,14 +60,12 @@ class ADCDACDetails(SiriusDialog):
         lay.setVerticalSpacing(9)
         lay.setHorizontalSpacing(18)
 
-        lay.addWidget(QLabel(
-            'In-Phase', alignment=Qt.AlignCenter), 0, 2)
-        lay.addWidget(QLabel(
-            'Quadrature', alignment=Qt.AlignCenter), 0, 3)
-        lay.addWidget(QLabel(
-            'Amp', alignment=Qt.AlignCenter), 0, 4, 1, 4)
-        lay.addWidget(QLabel(
-            'Phase', alignment=Qt.AlignCenter), 0, 8)
+        lay.addWidget(QLabel('In-Phase', alignment=Qt.AlignCenter), 0, 2)
+        lay.addWidget(QLabel('Quadrature', alignment=Qt.AlignCenter), 0, 3)
+        lay.addWidget(QLabel('Amp', alignment=Qt.AlignCenter), 0, 4)
+        lay.addWidget(QLabel('Phase', alignment=Qt.AlignCenter), 0, 5)
+        lay.addItem(QSpacerItem(24, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 0, 6)
+        lay.addWidget(QLabel('Power', alignment=Qt.AlignCenter), 0, 7, 1, 2)
 
         row = 1
         for key, dic in chs_dict.items():
@@ -85,6 +83,8 @@ class ADCDACDetails(SiriusDialog):
                 elif val == '-':
                     lay.addWidget(QLabel(
                         '-', alignment=Qt.AlignCenter), row, column)
+                    column += 1
+                if column == 6:
                     column += 1
             row += 1
 

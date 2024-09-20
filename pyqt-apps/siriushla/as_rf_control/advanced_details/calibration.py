@@ -190,7 +190,7 @@ class CalibrationDetails(SiriusDialog):
 
             # Table
             cbx = QCheckBox(self)
-            cbx.setChecked(True)
+            cbx.setChecked(False)
             cbx.setObjectName(name)
             cbx.setStyleSheet('color:'+color+'; max-width: 1.2em;')
             cbx.stateChanged.connect(self._handle_curves_visibility)
