@@ -2052,13 +2052,6 @@ SEC_2_CHANNELS = {
                 },
                 'RacksTotal': 'RA-ToSIA0$(NB):RF-SSAMux-$(rack_num):DCCurrent-Mon',
                 'Alarms': {
-                    'General': {
-                        'Label': 'General Power',
-                        'HIHI': 'RA-ToSIA0$(NB):AlarmConfig:GeneralPowerLimHiHi',
-                        'HIGH': 'RA-ToSIA0$(NB):AlarmConfig:GeneralPowerLimHigh',
-                        'LOW': 'RA-ToSIA0$(NB):AlarmConfig:GeneralPowerLimLow',
-                        'LOLO': 'RA-ToSIA0$(NB):AlarmConfig:GeneralPowerLimLoLo',
-                    },
                     'Inter': {
                         'Label': 'Intermediary Power',
                         'HIHI': 'RA-ToSIA0$(NB):AlarmConfig:InnerPowerLimHiHi',
@@ -2095,13 +2088,6 @@ SEC_2_CHANNELS = {
                 },
                 'RacksTotal': 'RA-ToSIB0$(NB):RF-SSAMux-$(rack_num):DCCurrent-Mon',
                 'Alarms': {
-                    'General': {
-                        'Label': 'General Power',
-                        'HIHI': 'RA-ToSIB0$(NB):AlarmConfig:GeneralPowerLimHiHi',
-                        'HIGH': 'RA-ToSIB0$(NB):AlarmConfig:GeneralPowerLimHigh',
-                        'LOW': 'RA-ToSIB0$(NB):AlarmConfig:GeneralPowerLimLow',
-                        'LOLO': 'RA-ToSIB0$(NB):AlarmConfig:GeneralPowerLimLoLo',
-                    },
                     'Inter': {
                         'Label': 'Intermediary Power',
                         'HIHI': 'RA-ToSIB0$(NB):AlarmConfig:InnerPowerLimHiHi',

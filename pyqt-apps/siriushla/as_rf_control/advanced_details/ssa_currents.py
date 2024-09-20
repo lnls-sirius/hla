@@ -333,40 +333,6 @@ class SSACurrentsDetails(SiriusDialog):
                 0, 9, QSzPlcy.Ignored, QSzPlcy.Fixed), row, 0)
             lay.addLayout(lay_dc, row+1, 1, 1, 2)
 
-            #     column += 1
-            #     if column == 1:
-            #         if row == 0:
-            #             # Pre Amp
-            #             label = QLabel(
-            #                 '<h4>PreAmp</h4>', alignment=Qt.AlignCenter)
-            #             label.setStyleSheet("min-width:6em;")
-            #             lb_1 = SiriusLabel(self, self._substitute_macros(
-            #                 self.prefix+chs_dict['PreAmp'], curr_num='1'))
-            #             lb_1.showUnits = True
-            #             lb_2 = SiriusLabel(self, self._substitute_macros(
-            #                 self.prefix+chs_dict['PreAmp'], curr_num='2'))
-            #             lb_2.showUnits = True
-
-            #             lay.addWidget(label, row, column)
-            #             lay.addWidget(lb_1, row+1, column)
-            #             lay.addWidget(lb_2, row+2, column)
-            #             column += 1
-            #         else:
-            #             # TDK Source
-            #             label = QLabel(
-            #                 '<h4>TDK Source</h4>', alignment=Qt.AlignCenter)
-            #             label.setStyleSheet("min-width:6em;")
-
-            #             lay.addWidget(label, row, column)
-            #             lay.addWidget(SiriusLedState(
-            #                 self, self._substitute_macros(
-            #                     self.prefix+chs_dict['TDK'])), row+1, column,
-            #                     alignment=Qt.AlignCenter)
-            #             column += 1
-
-            #     if column > 2:
-            #         row += 3
-
         return lay
 
     def _setupPowerLay(self, chs_dict):
