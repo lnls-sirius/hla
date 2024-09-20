@@ -24,11 +24,13 @@ class SSACurrentsDetails(SiriusDialog):
         self.curr_pvs = {}
         if self.section == 'SI':
             self.syst_dict = self.chs['SSACurr'][self.system]
-            self.title = f'SSA 0{self.num} Currents Details'
+            self.title = f"""
+                {self.section}{self.system} SSA 0{self.num} Currents Details
+                """
         else:
             self.syst_dict = self.chs['SSACurr']
-            self.title = 'SSA Currents Details'
-        self.setWindowTitle(f'{self.section} {self.title}')
+            self.title = f'{self.section} SSA Currents Details'
+        self.setWindowTitle(self.title)
         self._setupUi()
 
     def _setupUi(self):

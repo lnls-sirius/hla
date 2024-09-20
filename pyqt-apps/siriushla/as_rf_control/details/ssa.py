@@ -28,7 +28,8 @@ class SSADetailsSI(SiriusDialog):
         self.system = system
         self.setObjectName(self.section+'App')
         self.syst_dict = self.chs['SSADtls'][self.system]
-        self.setWindowTitle(f'{self.section} SSA 0{self.num} Details')
+        title = f'{self.section}{self.system} SSA 0{self.num} Details'
+        self.setWindowTitle(title)
         self._setupUi()
 
     def _setupUi(self):
