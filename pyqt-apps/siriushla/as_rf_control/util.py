@@ -644,12 +644,12 @@ SEC_2_CHANNELS = {
             'General': {
                 '0': {
                     'Label': 'Cavity Voltage',
-                    'InPhs': 'BO-05D:RF-P5Cav:I-Mon',
-                    'Quad': 'BO-05D:RF-P5Cav:Q-Mon',
-                    'Amp': 'BO-05D:RF-P5Cav:Amp-Mon',
-                    'Phs': 'BO-05D:RF-P5Cav:Phs-Mon',
-                    'PwrW': 'BO-05D:RF-P5Cav:PwrW-Mon',
-                    'PwrdBm': 'BO-05D:RF-P5Cav:PwrdBm-Mon',
+                    'InPhs': 'BO-05D:RF-P5Cav:Cell3I-Mon',
+                    'Quad': 'BO-05D:RF-P5Cav:Cell3Q-Mon',
+                    'Amp': 'BO-05D:RF-P5Cav:Cell3Amp-Mon',
+                    'Phs': 'BO-05D:RF-P5Cav:Cell3Phs-Mon',
+                    'PwrW': 'BO-05D:RF-P5Cav:Cell3PwrW-Mon',
+                    'PwrdBm': 'BO-05D:RF-P5Cav:Cell3PwrdBm-Mon',
                 },
                 '2': {
                     'Label': 'Forward Power',
@@ -680,15 +680,6 @@ SEC_2_CHANNELS = {
                 },
             },
             'Rect': {
-                '30': {
-                    'Label': 'Fwd Pwr SSA 2',
-                    'InPhs': 'BO-05D:RF-P5Cav:FBTNTopI-Mon',
-                    'Quad': 'BO-05D:RF-P5Cav:FBTNTopQ-Mon',
-                    'Amp': 'BO-05D:RF-P5Cav:FBTNTopAmp-Mon',
-                    'Phs': 'BO-05D:RF-P5Cav:FBTNTopPhs-Mon',
-                    'PwrW': 'BO-05D:RF-P5Cav:FBTNTopPwrW-Mon',
-                    'PwrdBm': 'BO-05D:RF-P5Cav:FBTNTopPwrdBm-Mon',
-                },
                 'Slow': {
                     'Control': {
                         '100': ['Enable', 'RA-RaBO01:RF-LLRF:SL'],
@@ -764,18 +755,11 @@ SEC_2_CHANNELS = {
                     },
                     '6': {
                         'Label': 'SSA 1 Control Signal',
-                        'InPhs': 'RA-RaBO01:RF-LLRF:SSA1CtrlI-Mon',
-                        'Quad': 'RA-RaBO01:RF-LLRF:SSA1CtrlQ-Mon',
-                        'Amp': 'RA-RaBO01:RF-LLRF:SSA1CtrlAmp-Mon',
-                        'Phs': 'RA-RaBO01:RF-LLRF:SSA1CtrlPhs-Mon'
+                        'InPhs': 'RA-RaBO01:RF-LLRF:SSACtrlI-Mon',
+                        'Quad': 'RA-RaBO01:RF-LLRF:SSACtrlQ-Mon',
+                        'Amp': 'RA-RaBO01:RF-LLRF:SSACtrlAmp-Mon',
+                        'Phs': 'RA-RaBO01:RF-LLRF:SSACtrlPhs-Mon'
                     },
-                    '8': {
-                        'Label': 'SSA 2 Control Signal',
-                        'InPhs': 'RA-RaBO01:RF-LLRF:SSA2CtrlI-Mon',
-                        'Quad': 'RA-RaBO01:RF-LLRF:SSA2CtrlQ-Mon',
-                        'Amp': 'RA-RaBO01:RF-LLRF:SSA2CtrlAmp-Mon',
-                        'Phs': 'RA-RaBO01:RF-LLRF:SSA2CtrlPhs-Mon'
-                    }
                 }
             },
             'Polar': {
@@ -889,18 +873,11 @@ SEC_2_CHANNELS = {
                     },
                     '6': {
                         'Label': 'SSA 1 Control Signal',
-                        'InPhs': 'RA-RaBO01:RF-LLRF:SSA1CtrlI-Mon',
-                        'Quad': 'RA-RaBO01:RF-LLRF:SSA1CtrlQ-Mon',
-                        'Amp': 'RA-RaBO01:RF-LLRF:SSA1CtrlAmp-Mon',
-                        'Phs': 'RA-RaBO01:RF-LLRF:SSA1CtrlPhs-Mon'
+                        'InPhs': 'RA-RaBO01:RF-LLRF:SSACtrlI-Mon',
+                        'Quad': 'RA-RaBO01:RF-LLRF:SSACtrlQ-Mon',
+                        'Amp': 'RA-RaBO01:RF-LLRF:SSACtrlAmp-Mon',
+                        'Phs': 'RA-RaBO01:RF-LLRF:SSACtrlPhs-Mon'
                     },
-                    '8': {
-                        'Label': 'SSA 2 Control Signal',
-                        'InPhs': 'RA-RaBO01:RF-LLRF:SSA2CtrlI-Mon',
-                        'Quad': 'RA-RaBO01:RF-LLRF:SSA2CtrlQ-Mon',
-                        'Amp': 'RA-RaBO01:RF-LLRF:SSA2CtrlAmp-Mon',
-                        'Phs': 'RA-RaBO01:RF-LLRF:SSA2CtrlPhs-Mon'
-                    }
                 }
             }
         },

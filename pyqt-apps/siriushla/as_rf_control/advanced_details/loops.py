@@ -191,7 +191,7 @@ class LoopsDetails(SiriusDialog):
         chs_dict = self.syst_dict[rect_or_polar]
 
         if rect_or_polar == 'Rect':
-            extra_addr = '30'
+            extra_addr = '30' if self.section == 'SI' else ''
             grp_1 = 'Slow'
             grp_1_addrs = ['100', '110', '13', '1', '0']
             grp_2 = 'Fast'
@@ -257,9 +257,10 @@ class LoopsDetails(SiriusDialog):
                 'Power', alignment=Qt.AlignCenter), 0, 7, 1, 2)
 
         rows_dict = chs_dict
-        if rect_or_polar != '' and extra_addr != '':
+        if rect_or_polar != '':
             rows_dict = chs_dict['General'].copy()
-            rows_dict[extra_addr] = self.syst_dict[rect_or_polar][extra_addr]
+            if extra_addr != '':
+                rows_dict[extra_addr] = self.syst_dict[rect_or_polar][extra_addr]
         row = 1
         for key, dic in rows_dict.items():
             if key != 'Control':
