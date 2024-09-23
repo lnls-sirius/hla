@@ -140,17 +140,17 @@ class CalSysDetails(SiriusDialog):
                 self, self.prefix+self.syst_dict[f'Ch{i}']['Label'])
             lb_label.setStyleSheet("min-width:8em;")
 
-            lb_uncal = SiriusLabel(
-                self, self.prefix+self.syst_dict[f'Ch{i}']['UnCal'])
-            lb_uncal.showUnits = True
+            lb_ofs = SiriusLabel(
+                self, self.prefix+self.syst_dict[f'Ch{i}']['Ofs'])
+            lb_ofs.showUnits = True
 
             lay.addWidget(lb_ch, i, 0)
             lay.addWidget(SiriusLineEdit(
                 self, self.prefix+self.syst_dict[f'Ch{i}']['Label']), i, 1)
             lay.addWidget(lb_label, i, 2)
-            lay.addWidget(lb_uncal, i, 4)
             lay.addWidget(SiriusLineEdit(
-                self, self.prefix+self.syst_dict[f'Ch{i}']['Ofs']), i, 5)
+                self, self.prefix+self.syst_dict[f'Ch{i}']['Ofs']), i, 4)
+            lay.addWidget(lb_ofs, i, 5)
 
         return lay
 
