@@ -11,7 +11,7 @@ from ...widgets import SiriusDialog, SiriusLabel, SiriusLineEdit, \
 from ..util import SEC_2_CHANNELS
 
 
-class CalibrationDetails(SiriusDialog):
+class CalSysDetails(SiriusDialog):
     """LLRF Calibration Systems advanced details."""
 
     def __init__(self, parent=None, prefix='', section='', system=''):

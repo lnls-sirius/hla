@@ -1,4 +1,4 @@
-"""Advanced details related to multiple constants."""
+"""Advanced details related to calibration equations and constants."""
 
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGridLayout, QGroupBox, QLabel, \
@@ -8,8 +8,8 @@ from ...widgets import SiriusDialog, SiriusLabel
 from ..util import SEC_2_CHANNELS
 
 
-class EquationsDetails(SiriusDialog):
-    """Advanced details related to multiple constants."""
+class CalEqDetails(SiriusDialog):
+    """Advanced details related to calibration equations and constants."""
 
     def __init__(self, parent=None, prefix='', section='', system=''):
         """Init."""
@@ -20,7 +20,7 @@ class EquationsDetails(SiriusDialog):
         self.system = system
         self.chs = SEC_2_CHANNELS[self.section]
         self.setObjectName(self.section+'App')
-        self.title = 'Equations Details'
+        self.title = 'Calibration Equations Details'
         self.title += (f' - {self.system}' if self.section == 'SI' else '')
         self.setWindowTitle(self.title)
         if self.section == 'SI':

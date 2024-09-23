@@ -16,9 +16,9 @@ from ..widgets import PyDMLed, PyDMLedMultiChannel, PyDMStateButton, \
     SiriusConnectionSignal, SiriusLabel, SiriusLedAlert, SiriusLedState, \
     SiriusMainWindow, SiriusPushButton, SiriusSpinbox, SiriusTimePlot, \
     SiriusWaveformPlot
-from .advanced_details import ADCDACDetails, AutoStartDetails, \
-    CalibrationDetails, ConditioningDetails, EquationsDetails, \
-    HardwareDetails, LoopsDetails, RampsDetails, TuningDetails
+from .advanced_details import ADCDACDetails, AutoStartDetails, CalEqDetails, \
+    CalSysDetails, ConditioningDetails, HardwareDetails, LoopsDetails, \
+    RampsDetails, TuningDetails
 from .custom_widgets import RFEnblDsblButton
 from .details import CavityStatusDetails, FDLDetails, LLRFInterlockDetails, \
     SlowLoopErrorDetails, SlowLoopParametersDetails, SSADetailsBO, \
@@ -874,9 +874,9 @@ class RFMainControl(SiriusMainWindow):
             self._addDetailButton(
                 'Tuning', TuningDetails, systems[i], buttons)
             self._addDetailButton(
-                'Calibration', CalibrationDetails, systems[i], buttons)
+                'Cal Sys', CalSysDetails, systems[i], buttons)
             self._addDetailButton(
-                'Equations', EquationsDetails, systems[i], buttons)
+                'Cal Eq', CalEqDetails, systems[i], buttons)
 
             if self.section == 'SI':
                 gbox = QGroupBox(f'System {systems[i]}', self)
