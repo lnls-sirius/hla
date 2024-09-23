@@ -3584,10 +3584,6 @@ SEC_2_CHANNELS = {
                             'Label': 'Tuning Dephase',
                             'PV': 'RA-RaSIA01:RF-LLRF:TuneDephsTop-Mon'
                         },
-                        '163': {
-                            'Label': 'FF Error',
-                            'PV': 'RA-RaSIA01:RF-LLRF:FFErrTop-Mon'
-                        },
                         '531': {
                             'Label': 'Ramp Trigger',
                             'PV': 'RA-RaSIA01:RF-LLRF:RmpTrigger-Mon'
@@ -3683,10 +3679,6 @@ SEC_2_CHANNELS = {
                             'Phs': 'RA-RaSIA01:RF-LLRF:CtrlBotPhs-Mon',
                             'PwrW': '-',
                             'PwrdBm': '-',
-                        },
-                        '183': {
-                            'Label': 'FF Error',
-                            'PV': 'RA-RaSIA01:RF-LLRF:FFErrBot-Mon'
                         },
                         '531': {
                             'Label': 'Ramp Trigger',
@@ -3819,10 +3811,6 @@ SEC_2_CHANNELS = {
                             'Label': 'Tuning Dephase',
                             'PV': 'RA-RaSIB01:RF-LLRF:TuneDephsTop-Mon'
                         },
-                        '163': {
-                            'Label': 'FF Error',
-                            'PV': 'RA-RaSIB01:RF-LLRF:FFErrTop-Mon'
-                        },
                         '531': {
                             'Label': 'Ramp Trigger',
                             'PV': 'RA-RaSIB01:RF-LLRF:RmpTrigger-Mon'
@@ -3918,10 +3906,6 @@ SEC_2_CHANNELS = {
                             'Phs': 'RA-RaSIB01:RF-LLRF:CtrlBotPhs-Mon',
                             'PwrW': '-',
                             'PwrdBm': '-',
-                        },
-                        '183': {
-                            'Label': 'FF Error',
-                            'PV': 'RA-RaSIB01:RF-LLRF:FFErrBot-Mon'
                         },
                         '531': {
                             'Label': 'Ramp Trigger',

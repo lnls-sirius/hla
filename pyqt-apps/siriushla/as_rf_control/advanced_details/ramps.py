@@ -219,12 +219,16 @@ class RampsDetails(SiriusDialog):
         lay.setAlignment(Qt.AlignTop)
         lay.setSpacing(20)
 
+        lb_addrs_top = ['163', '162'] if self.section == 'BO' else ['162']
+        lb_addrs_bot = ['183'] if self.section == 'BO' else []
+        led_addrs = ['531']
+
         gbox_top = QGroupBox('Top Ramp', self)
         gbox_top.setLayout(self._topOrBotRampLayout(
-            chs_dict['Top'], ['163', '162'], ['531']))
+            chs_dict['Top'], lb_addrs_top, led_addrs))
         gbox_bot = QGroupBox('Bottom Ramp', self)
         gbox_bot.setLayout(self._topOrBotRampLayout(
-            chs_dict['Bot'], ['183'], ['531']))
+            chs_dict['Bot'], lb_addrs_bot, led_addrs))
 
         lay.addWidget(gbox_top)
         lay.addWidget(gbox_bot)
@@ -249,14 +253,16 @@ class RampsDetails(SiriusDialog):
             row += 1
 
         alt_row = 0
+        column = 4 if lb_addrs != [] else 0
         for addr in led_addrs:
-            lay.addWidget(QLabel(addr, alignment=Qt.AlignCenter), alt_row, 4)
+            lay.addWidget(QLabel(
+                addr, alignment=Qt.AlignCenter), alt_row, column)
             lay.addWidget(QLabel(
                 chs_dict[addr]['Label'],
-                alignment=Qt.AlignLeft | Qt.AlignVCenter), alt_row, 5)
+                alignment=Qt.AlignLeft | Qt.AlignVCenter), alt_row, column+1)
             lay.addWidget(SiriusLedState(
                 self, self.prefix+chs_dict[addr]['PV']),
-                alt_row, 6, alignment=Qt.AlignCenter)
+                alt_row, column+2, alignment=Qt.AlignCenter)
             alt_row += 1
 
         lay.addItem(QSpacerItem(0, 15, QSzPlcy.Ignored, QSzPlcy.Fixed), row, 0)
