@@ -5,7 +5,7 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGridLayout, QGroupBox, QLabel, QPushButton
 
 from ...util import connect_window
-from ...widgets import SiriusDialog, SiriusLabel, SiriusLedAlert
+from ...widgets import SiriusDialog, SiriusLabel, SiriusLedAlert, SiriusSpinbox
 from ..advanced_details import AdvancedInterlockDetails
 from ..util import SEC_2_CHANNELS
 
@@ -39,7 +39,7 @@ class LLRFInterlockDetails(SiriusDialog):
             offset = 1
             for key, chs_dict in self.chs['LLRF Intlk Details'].items():
                 self._setupDetails(lay, key, chs_dict, offset)
-                offset += 3
+                offset += 4
         else:
             self._setupDetails(lay, None, self.chs['LLRF Intlk Details'], 1)
 
@@ -79,7 +79,7 @@ class LLRFInterlockDetails(SiriusDialog):
                 lbl.setStyleSheet('QLabel{min-width:12em;}')
                 lay_intlk.addWidget(lbl, irow, icol)
 
-            lay.addWidget(gbox, offset+1, col)
+            lay.addWidget(gbox, offset+1, col, 3, 1)
             col += 1
 
         # timestamps
@@ -98,6 +98,31 @@ class LLRFInterlockDetails(SiriusDialog):
             lay_time.addWidget(lbl, irow, 1)
         lay.addWidget(gbox_time, offset+1, col)
 
+        # quench
+        if self.section == 'SI':
+            gbox_quench = QGroupBox('Quench Cond. 1', self)
+            lay_quench = QGridLayout(gbox_quench)
+            lay_quench.setAlignment(Qt.AlignTop)
+            lay_quench.setSpacing(9)
+
+            rv_ch = self.prefix+chs_dict['Quench1']['Rv']
+            dly_ch = self.prefix+chs_dict['Quench1']['Dly']
+            lb_dly = SiriusLabel(self, dly_ch+'-RB')
+            lb_dly.showUnits = True
+
+            lay_quench.addWidget(QLabel(
+                'Rv Ratio'), 0, 0, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            lay_quench.addWidget(SiriusSpinbox(
+                self, rv_ch+'-SP'), 0, 1, alignment=Qt.AlignCenter)
+            lay_quench.addWidget(SiriusLabel(
+                self, self.prefix+rv_ch+'-RB'), 0, 2, alignment=Qt.AlignCenter)
+            lay_quench.addWidget(QLabel(
+                'Delay'), 1, 0, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            lay_quench.addWidget(SiriusSpinbox(
+                self, dly_ch+'-SP'), 1, 1, alignment=Qt.AlignCenter)
+            lay_quench.addWidget(lb_dly, 1, 2, alignment=Qt.AlignCenter)
+            lay.addWidget(gbox_quench, offset+2, col)
+
         # advanced details
         pb_dtls = QPushButton(
             qta.icon('fa5s.external-link-alt'), ' Advanced Details', self)
@@ -105,4 +130,4 @@ class LLRFInterlockDetails(SiriusDialog):
         connect_window(
             pb_dtls, AdvancedInterlockDetails, parent=self,
             prefix=self.prefix, section=self.section, system=system)
-        lay.addWidget(pb_dtls, offset+2, 0)
+        lay.addWidget(pb_dtls, offset+3, col, alignment=Qt.AlignCenter)

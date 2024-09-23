@@ -1580,6 +1580,7 @@ SEC_2_CHANNELS = {
                             'Pre-Drive 2 Out (RFIN14)',
                             'Circulator Out Fwd (RFIN15)',
                             'LLRF Beam Trip',
+                            'Quench Condition 1'
                         ),
                     },
                 },
@@ -1591,6 +1592,10 @@ SEC_2_CHANNELS = {
                     '5': 'RA-RaSIA01:RF-LLRF:IntlkTs5-Mon',
                     '6': 'RA-RaSIA01:RF-LLRF:IntlkTs6-Mon',
                     '7': 'RA-RaSIA01:RF-LLRF:IntlkTs7-Mon',
+                },
+                'Quench1': {
+                    'Rv': 'RA-RaSIA01:RF-LLRF:QuenchCond1RvRatio',
+                    'Dly': 'RA-RaSIA01:RF-LLRF:QuenchCond1Dly'
                 }
             },
             'B': {
@@ -1650,6 +1655,7 @@ SEC_2_CHANNELS = {
                             'Pre-Drive 2 Out (RFIN14)',
                             'Circulator Out Fwd (RFIN15)',
                             'LLRF Beam Trip',
+                            'Quench Condition 1'
                         ),
                     },
                 },
@@ -1661,6 +1667,10 @@ SEC_2_CHANNELS = {
                     '5': 'RA-RaSIB01:RF-LLRF:IntlkTs5-Mon',
                     '6': 'RA-RaSIB01:RF-LLRF:IntlkTs6-Mon',
                     '7': 'RA-RaSIB01:RF-LLRF:IntlkTs7-Mon',
+                },
+                'Quench1': {
+                    'Rv': 'RA-RaSIB01:RF-LLRF:QuenchCond1RvRatio',
+                    'Dly': 'RA-RaSIB01:RF-LLRF:QuenchCond1Dly'
                 }
             }
         },
@@ -4107,6 +4117,7 @@ SEC_2_CHANNELS = {
                     '817 1': ['End Switch Down 1', 'RA-RaSIA01:RF-LLRF:FIMTunerLow'],
                     '816 2': ['End Switch Up 2', 'RA-RaSIA01:RF-LLRF:FIMPLG2Up'],
                     '817 2': ['End Switch Down 2', 'RA-RaSIA01:RF-LLRF:FIMPLG2Down'],
+                    '853': ['Quench Condition 1', 'RA-RaSIA01:RF-LLRF:FIMQuenchCond1'],
                     '835': ['ILK VCav', 'RA-RaSIA01:RF-LLRF:FIMCav'],
                     '836': ['ILK Fwd Cav', 'RA-RaSIA01:RF-LLRF:FIMFwdCav'],
                     '837': ['ILK Fw SSA 1', 'RA-RaSIA01:RF-LLRF:FIMFwdSSA1'],
@@ -4172,6 +4183,7 @@ SEC_2_CHANNELS = {
                     '817 1': ['End Switch Down 1', 'RA-RaSIB01:RF-LLRF:FIMTunerLow'],
                     '816 2': ['End Switch Up 2', 'RA-RaSIB01:RF-LLRF:FIMPLG2Up'],
                     '817 2': ['End Switch Down 2', 'RA-RaSIB01:RF-LLRF:FIMPLG2Down'],
+                    '853': ['Quench Condition 1', 'RA-RaSIB01:RF-LLRF:FIMQuenchCond1'],
                     '835': ['ILK VCav', 'RA-RaSIB01:RF-LLRF:FIMCav'],
                     '836': ['ILK Fwd Cav', 'RA-RaSIB01:RF-LLRF:FIMFwdCav'],
                     '837': ['ILK Fw SSA 1', 'RA-RaSIB01:RF-LLRF:FIMFwdSSA1'],
