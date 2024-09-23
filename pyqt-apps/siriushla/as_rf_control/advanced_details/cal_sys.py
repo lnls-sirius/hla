@@ -207,10 +207,12 @@ class CalSysDetails(SiriusDialog):
                 y_channel=self.prefix+dbch, name=name+' dBm', color=color,
                 lineStyle=Qt.SolidLine, lineWidth=1)
             self.curves[name+' dBm'] = self.graph.curveAtIndex(2*idx)
+            self.curves[name+' dBm'].setVisible(False)
             self.graph.addYChannel(
                 y_channel=self.prefix+wch, name=name+' W', color=color,
                 lineStyle=Qt.SolidLine, lineWidth=1)
             self.curves[name+' W'] = self.graph.curveAtIndex(2*idx+1)
+            self.curves[name+' W'].setVisible(False)
 
             idx += 1
         self.graph.setLabel('left', '')
