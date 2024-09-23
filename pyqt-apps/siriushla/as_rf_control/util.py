@@ -307,7 +307,7 @@ SEC_2_CHANNELS = {
         },
         'FFlat': {
             'Sts': 'RA-RaBO01:RF-LLRF:FFOn-Mon',
-            'Auto': 'RA-RaBO01:RF-LLRF:FFEn',
+            'Auto': 'RA-RaBO01:RF-LLRF:FFEnbl',
             'Pos': 'RA-RaBO01:RF-LLRF:FFDir',
             'Gain1': 'RA-RaBO01:RF-LLRF:FFGainCell2',
             'Gain2': 'RA-RaBO01:RF-LLRF:FFGainCell4',
@@ -906,7 +906,7 @@ SEC_2_CHANNELS = {
         },
         'RampDtls': {
             'Control': {
-                'Ramp Enable': 'RA-RaBO01:RF-LLRF:RmpEn',
+                'Ramp Enable': 'RA-RaBO01:RF-LLRF:RmpEnbl',
                 'Ramp Down Disable': 'RA-RaBO01:RF-LLRF:RmpDownDsbl',
                 '356': ['T1 Ramp Delay After Trig', 'RA-RaBO01:RF-LLRF:RmpTs1'],
                 '357': ['T2 Ramp Up', 'RA-RaBO01:RF-LLRF:RmpTs2'],
@@ -1140,10 +1140,10 @@ SEC_2_CHANNELS = {
             }
         },
         'AutoStart': {
-            '22': ['Automatic Startup Enable', 'RA-RaBO01:RF-LLRF:AutoStartupEn'],
+            '22': ['Automatic Startup Enable', 'RA-RaBO01:RF-LLRF:AutoStartupEnbl'],
             '23': ['Command Start', 'RA-RaBO01:RF-LLRF:AutoStartupCmdStart'],
-            '400': ['EPS Interlock', 'RA-RaBO01:RF-LLRF:EPSEn'],
-            '401': ['Interlock Bypass', 'RA-RaBO01:RF-LLRF:FIMEn'],
+            '400': ['EPS Interlock', 'RA-RaBO01:RF-LLRF:EPSEnbl'],
+            '401': ['Interlock Bypass', 'RA-RaBO01:RF-LLRF:FIMEnbl'],
             'Diag': {
                 '500': ['State Start', 'RA-RaBO01:RF-LLRF:AutoStartState-Mon'],
                 '400': ['Tx Ready', 'RA-RaBO01:RF-LLRF:SSARdy-Mon'],
@@ -1156,7 +1156,7 @@ SEC_2_CHANNELS = {
             }
         },
         'Conditioning': {
-            '200': ['Pulse Mode Enable', 'RA-RaBO01:RF-LLRF:CondEn'],
+            '200': ['Pulse Mode Enable', 'RA-RaBO01:RF-LLRF:CondEnbl'],
             '201': ['Auto Conditioning Enable', 'RA-RaBO01:RF-LLRF:CondAuto'],
             '204': ['Conditioning Freq', 'RA-RaBO01:RF-LLRF:CondFreq'],
             '540': ['Cond Freq Diag', 'RA-RaBO01:RF-LLRF:CondFreq-Mon'],
@@ -3471,7 +3471,7 @@ SEC_2_CHANNELS = {
         'RampDtls': {
             'A': {
                 'Control': {
-                    'Ramp Enable': 'RA-RaSIA01:RF-LLRF:RmpEn',
+                    'Ramp Enable': 'RA-RaSIA01:RF-LLRF:RmpEnbl',
                     'Ramp Down Disable': 'RA-RaSIA01:RF-LLRF:RmpDownDsbl',
                     '356': ['T1 Ramp Delay After Trig', 'RA-RaSIA01:RF-LLRF:RmpTs1'],
                     '357': ['T2 Ramp Up', 'RA-RaSIA01:RF-LLRF:RmpTs2'],
@@ -3706,7 +3706,7 @@ SEC_2_CHANNELS = {
             },
             'B': {
                 'Control': {
-                    'Ramp Enable': 'RA-RaSIB01:RF-LLRF:RmpEn',
+                    'Ramp Enable': 'RA-RaSIB01:RF-LLRF:RmpEnbl',
                     'Ramp Down Disable': 'RA-RaSIB01:RF-LLRF:RmpDownDsbl',
                     '356': ['T1 Ramp Delay After Trig', 'RA-RaSIB01:RF-LLRF:RmpTs1'],
                     '357': ['T2 Ramp Up', 'RA-RaSIB01:RF-LLRF:RmpTs2'],
@@ -3942,10 +3942,10 @@ SEC_2_CHANNELS = {
         },
         'AutoStart': {
             'A': {
-                '22': ['Automatic Startup Enable', 'RA-RaSIA01:RF-LLRF:AutoStartupEn'],
+                '22': ['Automatic Startup Enable', 'RA-RaSIA01:RF-LLRF:AutoStartupEnbl'],
                 '23': ['Command Start', 'RA-RaSIA01:RF-LLRF:AutoStartupCmdStart'],
-                '400': ['EPS Interlock', 'RA-RaSIA01:RF-LLRF:EPSEn'],
-                '401': ['Interlock Bypass', 'RA-RaSIA01:RF-LLRF:FIMEn'],
+                '400': ['EPS Interlock', 'RA-RaSIA01:RF-LLRF:EPSEnbl'],
+                '401': ['Interlock Bypass', 'RA-RaSIA01:RF-LLRF:FIMEnbl'],
                 'Diag': {
                     '500': ['State Start', 'RA-RaSIA01:RF-LLRF:AutoStartState-Mon'],
                     '400': ['Tx Ready', 'RA-RaSIA01:RF-LLRF:SSARdy-Mon'],
@@ -3958,10 +3958,10 @@ SEC_2_CHANNELS = {
                 }
             },
             'B': {
-                '22': ['Automatic Startup Enable', 'RA-RaSIB01:RF-LLRF:AutoStartupEn'],
+                '22': ['Automatic Startup Enable', 'RA-RaSIB01:RF-LLRF:AutoStartupEnbl'],
                 '23': ['Command Start', 'RA-RaSIB01:RF-LLRF:AutoStartupCmdStart'],
-                '400': ['EPS Interlock', 'RA-RaSIB01:RF-LLRF:EPSEn'],
-                '401': ['Interlock Bypass', 'RA-RaSIB01:RF-LLRF:FIMEn'],
+                '400': ['EPS Interlock', 'RA-RaSIB01:RF-LLRF:EPSEnbl'],
+                '401': ['Interlock Bypass', 'RA-RaSIB01:RF-LLRF:FIMEnbl'],
                 'Diag': {
                     '500': ['State Start', 'RA-RaSIB01:RF-LLRF:AutoStartState-Mon'],
                     '400': ['Tx Ready', 'RA-RaSIB01:RF-LLRF:SSARdy-Mon'],
@@ -3976,7 +3976,7 @@ SEC_2_CHANNELS = {
         },
         'Conditioning': {
             'A': {
-                '200': ['Pulse Mode Enable', 'RA-RaSIA01:RF-LLRF:CondEn'],
+                '200': ['Pulse Mode Enable', 'RA-RaSIA01:RF-LLRF:CondEnbl'],
                 '201': ['Auto Conditioning Enable', 'RA-RaSIA01:RF-LLRF:CondAuto'],
                 '204': ['Conditioning Freq', 'RA-RaSIA01:RF-LLRF:CondFreq'],
                 '540': ['Cond Freq Diag', 'RA-RaSIA01:RF-LLRF:CondFreq-Mon'],
@@ -3985,7 +3985,7 @@ SEC_2_CHANNELS = {
                 '79': ['Vacuum', 'RA-RaSIA01:RF-LLRF:VacuumFastRly-Mon'],
             },
             'B': {
-                '200': ['Pulse Mode Enable', 'RA-RaSIB01:RF-LLRF:CondEn'],
+                '200': ['Pulse Mode Enable', 'RA-RaSIB01:RF-LLRF:CondEnbl'],
                 '201': ['Auto Conditioning Enable', 'RA-RaSIB01:RF-LLRF:CondAuto'],
                 '204': ['Conditioning Freq', 'RA-RaSIB01:RF-LLRF:CondFreq'],
                 '540': ['Cond Freq Diag', 'RA-RaSIB01:RF-LLRF:CondFreq-Mon'],

@@ -693,9 +693,9 @@ class RFMainControl(SiriusMainWindow):
         ctrls_label = QLabel('<h3> • Controls</h3>', self,
                              alignment=Qt.AlignLeft)
         self.bt_rmpenbl = PyDMStateButton(
-            self, self.prefix+'RA-RaBO01:RF-LLRF:RmpEn-Sel')
+            self, self.prefix+'RA-RaBO01:RF-LLRF:RmpEnbl-Sel')
         self.lb_rmpenbl = SiriusLedState(
-            self, self.prefix+'RA-RaBO01:RF-LLRF:RmpEn-Sts')
+            self, self.prefix+'RA-RaBO01:RF-LLRF:RmpEnbl-Sts')
 
         self.led_rmpready = PyDMLed(
             self, self.prefix+'RA-RaBO01:RF-LLRF:RmpRdy-Mon')
