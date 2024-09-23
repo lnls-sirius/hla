@@ -289,7 +289,7 @@ SEC_2_CHANNELS = {
                 'AErr': 'RA-RaBO01:RF-LLRF:SLErrorAmp-Mon',
                 'PErr': 'RA-RaBO01:RF-LLRF:SLErrorPhs-Mon',
             },
-            'ASet': 'RA-RaBO01:RF-LLRF:ALRefAmpVGap',
+            'ASet': 'RA-RaBO01:RF-LLRF:ALRefVGap',
         },
         'Tun': {
             'Auto': 'RA-RaBO01:RF-LLRF:Tune',
@@ -337,7 +337,7 @@ SEC_2_CHANNELS = {
                 'color': 'red',
             },
         },
-        'CavVGap': 'BO-05D:RF-P5Cav:Cell3AmpVGap-Mon',
+        'CavVGap': 'BO-05D:RF-P5Cav:Cell3VGap-Mon',
         'TempMon': {
             'Temp.': {
                 'Cells': {
@@ -619,7 +619,7 @@ SEC_2_CHANNELS = {
         'Loops': {
             'Control': {
                 '24 mV': ['Amp Loop Ref (mV)', 'RA-RaBO01:RF-LLRF:ALRef'],
-                '24 VGap': ['Amp Loop Ref (VGap)', 'RA-RaBO01:RF-LLRF:ALRefAmpVGap'],
+                '24 VGap': ['Amp Loop Ref (VGap)', 'RA-RaBO01:RF-LLRF:ALRefVGap'],
                 '25': ['Phase Loop Ref', 'RA-RaBO01:RF-LLRF:PLRef'],
                 '29': ['Voltage Inc. Rate', 'RA-RaBO01:RF-LLRF:AmpIncRate'],
                 '28': ['Phase Inc. Rate', 'RA-RaBO01:RF-LLRF:PhsIncRate'],
@@ -2147,8 +2147,8 @@ SEC_2_CHANNELS = {
                 },
             },
             'ASet': {
-                'A': 'RA-RaSIA01:RF-LLRF:ALRefAmpVGap',
-                'B': 'RA-RaSIB01:RF-LLRF:ALRefAmpVGap',
+                'A': 'RA-RaSIA01:RF-LLRF:ALRefVGap',
+                'B': 'RA-RaSIB01:RF-LLRF:ALRefVGap',
             },
         },
         'Tun': {
@@ -2276,8 +2276,8 @@ SEC_2_CHANNELS = {
             },
         },
         'CavVGap': {
-            'A': 'SI-03SP:RF-SRFCav-A:AmpVGap-Mon',
-            'B': 'SI-03SP:RF-SRFCav-B:AmpVGap-Mon'
+            'A': 'SI-03SP:RF-SRFCav-A:VGap-Mon',
+            'B': 'SI-03SP:RF-SRFCav-B:VGap-Mon'
         },
         'TempMon': {
             'Temp.': {
@@ -2884,7 +2884,7 @@ SEC_2_CHANNELS = {
             'A': {
                 'Control': {
                     '24 mV': ['Amp Loop Ref (mV)', 'RA-RaSIA01:RF-LLRF:ALRef'],
-                    '24 VGap': ['Amp Loop Ref (VGap)', 'RA-RaSIA01:RF-LLRF:ALRefAmpVGap'],
+                    '24 VGap': ['Amp Loop Ref (VGap)', 'RA-RaSIA01:RF-LLRF:ALRefVGap'],
                     '25': ['Phase Loop Ref', 'RA-RaSIA01:RF-LLRF:PLRef'],
                     '29': ['Voltage Inc. Rate', 'RA-RaSIA01:RF-LLRF:AmpIncRate'],
                     '28': ['Phase Inc. Rate', 'RA-RaSIA01:RF-LLRF:PhsIncRate'],
@@ -3172,7 +3172,7 @@ SEC_2_CHANNELS = {
             'B': {
                 'Control': {
                     '24 mV': ['Amp Loop Ref (mV)', 'RA-RaSIB01:RF-LLRF:ALRef'],
-                    '24 VGap': ['Amp Loop Ref (VGap)', 'RA-RaSIB01:RF-LLRF:ALRefAmpVGap'],
+                    '24 VGap': ['Amp Loop Ref (VGap)', 'RA-RaSIB01:RF-LLRF:ALRefVGap'],
                     '25': ['Phase Loop Ref', 'RA-RaSIB01:RF-LLRF:PLRef'],
                     '29': ['Voltage Inc. Rate', 'RA-RaSIB01:RF-LLRF:AmpIncRate'],
                     '28': ['Phase Inc. Rate', 'RA-RaSIB01:RF-LLRF:PhsIncRate'],
