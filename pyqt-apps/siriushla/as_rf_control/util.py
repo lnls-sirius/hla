@@ -1439,13 +1439,11 @@ SEC_2_CHANNELS = {
             'Cav': {
                 'Raw-U': 'RA-RaBO01:RF-LLRF:CavSysCal',
                 'U-Raw': 'RA-RaBO01:RF-LLRF:CavSysCalInv',
-                'OLG': 'RA-RaBO01:RF-LLRF:CavOLG',
                 'OFS': 'RA-RaBO01:RF-LLRF:CavOffset'
             },
             'Fwd Cav': {
                 'Raw-U': 'RA-RaBO01:RF-LLRF:FwdCavSysCal',
                 'U-Raw': 'RA-RaBO01:RF-LLRF:FwdCavSysCalInv',
-                'OLG': 'RA-RaBO01:RF-LLRF:FwdCavOLG',
                 'OFS': 'RA-RaBO01:RF-LLRF:FwdCavOffset'
             },
             'Rev Cav': {
@@ -1455,18 +1453,11 @@ SEC_2_CHANNELS = {
             'Fwd SSA 1': {
                 'Raw-U': 'RA-RaBO01:RF-LLRF:FwdSSA1SysCal',
                 'U-Raw': 'RA-RaBO01:RF-LLRF:FwdSSA1SysCalInv',
-                'OLG': 'RA-RaBO01:RF-LLRF:FwdSSA1OLG',
                 'OFS': 'RA-RaBO01:RF-LLRF:FwdSSA1Offset'
             },
             'Rev SSA 1': {
                 'Raw-U': 'RA-RaBO01:RF-LLRF:RevSSA1SysCal',
-                'OFS': 'RA-RaBO01:RF-LLRF:RevSSA1Offset' 
-            },
-            'Fwd SSA 2': {
-                'Raw-U': 'RA-RaBO01:RF-LLRF:FwdSSA2SysCal',
-                'U-Raw': 'RA-RaBO01:RF-LLRF:FwdSSA2SysCalInv',
-                'OLG': 'RA-RaBO01:RF-LLRF:FwdSSA2OLG',
-                'OFS': 'RA-RaBO01:RF-LLRF:FwdSSA2Offset'
+                'OFS': 'RA-RaBO01:RF-LLRF:RevSSA1Offset'
             },
             'In Pre': {
                 'Raw-U': 'RA-RaBO01:RF-LLRF:InPre1AmpSysCal',
@@ -4531,13 +4522,11 @@ SEC_2_CHANNELS = {
                 'Cav': {
                     'Raw-U': 'RA-RaSIA01:RF-LLRF:CavSysCal',
                     'U-Raw': 'RA-RaSIA01:RF-LLRF:CavSysCalInv',
-                    'OLG': 'RA-RaSIA01:RF-LLRF:CavOLG',
                     'OFS': 'RA-RaSIA01:RF-LLRF:CavOffset'
                 },
                 'Fwd Cav': {
                     'Raw-U': 'RA-RaSIA01:RF-LLRF:FwdCavSysCal',
                     'U-Raw': 'RA-RaSIA01:RF-LLRF:FwdCavSysCalInv',
-                    'OLG': 'RA-RaSIA01:RF-LLRF:FwdCavOLG',
                     'OFS': 'RA-RaSIA01:RF-LLRF:FwdCavOffset'
                 },
                 'Rev Cav': {
@@ -4547,7 +4536,6 @@ SEC_2_CHANNELS = {
                 'Fwd SSA 1': {
                     'Raw-U': 'RA-RaSIA01:RF-LLRF:FwdSSA1SysCal',
                     'U-Raw': 'RA-RaSIA01:RF-LLRF:FwdSSA1SysCalInv',
-                    'OLG': 'RA-RaSIA01:RF-LLRF:FwdSSA1OLG',
                     'OFS': 'RA-RaSIA01:RF-LLRF:FwdSSA1Offset'
                 },
                 'Rev SSA 1': {
@@ -4557,24 +4545,11 @@ SEC_2_CHANNELS = {
                 'Fwd SSA 2': {
                     'Raw-U': 'RA-RaSIA01:RF-LLRF:FwdSSA2SysCal',
                     'U-Raw': 'RA-RaSIA01:RF-LLRF:FwdSSA2SysCalInv',
-                    'OLG': 'RA-RaSIA01:RF-LLRF:FwdSSA2OLG',
                     'OFS': 'RA-RaSIA01:RF-LLRF:FwdSSA2Offset'
                 },
                 'Rev SSA 2': {
                     'Raw-U': 'RA-RaSIA01:RF-LLRF:RevSSA2SysCal',
                     'OFS': 'RA-RaSIA01:RF-LLRF:RevSSA2Offset' 
-                },
-                'Fwd Pre': {
-                    'Raw-U': 'RA-RaSIA01:RF-LLRF:FwdPreSysCal',
-                    'OFS': 'RA-RaSIA01:RF-LLRF:FwdPreOffset'
-                },
-                'Fwd Pre 1': {
-                    'Raw-U': 'RA-RaSIA01:RF-LLRF:FwdPre1SysCal',
-                    'OFS': 'RA-RaSIA01:RF-LLRF:FwdPre1Offset'
-                },
-                'Fwd Pre 2': {
-                    'Raw-U': 'RA-RaSIA01:RF-LLRF:FwdPre2SysCal',
-                    'OFS': 'RA-RaSIA01:RF-LLRF:FwdPre2Offset'
                 },
                 'In Pre 1': {
                     'Raw-U': 'RA-RaSIA01:RF-LLRF:In1PreAmpSysCal',
@@ -4611,13 +4586,11 @@ SEC_2_CHANNELS = {
                 'Cav': {
                     'Raw-U': 'RA-RaSIB01:RF-LLRF:CavSysCal',
                     'U-Raw': 'RA-RaSIB01:RF-LLRF:CavSysCalInv',
-                    'OLG': 'RA-RaSIB01:RF-LLRF:CavOLG',
                     'OFS': 'RA-RaSIB01:RF-LLRF:CavOffset'
                 },
                 'Fwd Cav': {
                     'Raw-U': 'RA-RaSIB01:RF-LLRF:FwdCavSysCal',
                     'U-Raw': 'RA-RaSIB01:RF-LLRF:FwdCavSysCalInv',
-                    'OLG': 'RA-RaSIB01:RF-LLRF:FwdCavOLG',
                     'OFS': 'RA-RaSIB01:RF-LLRF:FwdCavOffset'
                 },
                 'Rev Cav': {
@@ -4627,7 +4600,6 @@ SEC_2_CHANNELS = {
                 'Fwd SSA 1': {
                     'Raw-U': 'RA-RaSIB01:RF-LLRF:FwdSSA1SysCal',
                     'U-Raw': 'RA-RaSIB01:RF-LLRF:FwdSSA1SysCalInv',
-                    'OLG': 'RA-RaSIB01:RF-LLRF:FwdSSA1OLG',
                     'OFS': 'RA-RaSIB01:RF-LLRF:FwdSSA1Offset'
                 },
                 'Rev SSA 1': {
@@ -4637,24 +4609,11 @@ SEC_2_CHANNELS = {
                 'Fwd SSA 2': {
                     'Raw-U': 'RA-RaSIB01:RF-LLRF:FwdSSA2SysCal',
                     'U-Raw': 'RA-RaSIB01:RF-LLRF:FwdSSA2SysCalInv',
-                    'OLG': 'RA-RaSIB01:RF-LLRF:FwdSSA2OLG',
                     'OFS': 'RA-RaSIB01:RF-LLRF:FwdSSA2Offset'
                 },
                 'Rev SSA 2': {
                     'Raw-U': 'RA-RaSIB01:RF-LLRF:RevSSA2SysCal',
                     'OFS': 'RA-RaSIB01:RF-LLRF:RevSSA2Offset' 
-                },
-                'Fwd Pre': {
-                    'Raw-U': 'RA-RaSIB01:RF-LLRF:FwdPreSysCal',
-                    'OFS': 'RA-RaSIB01:RF-LLRF:FwdPreOffset'
-                },
-                'Fwd Pre 1': {
-                    'Raw-U': 'RA-RaSIB01:RF-LLRF:FwdPre1SysCal',
-                    'OFS': 'RA-RaSIB01:RF-LLRF:FwdPre1Offset'
-                },
-                'Fwd Pre 2': {
-                    'Raw-U': 'RA-RaSIB01:RF-LLRF:FwdPre2SysCal',
-                    'OFS': 'RA-RaSIB01:RF-LLRF:FwdPre2Offset'
                 },
                 'In Pre 1': {
                     'Raw-U': 'RA-RaSIB01:RF-LLRF:In1PreAmpSysCal',
