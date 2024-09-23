@@ -391,17 +391,17 @@ SEC_2_CHANNELS = {
                 ('Tune Filt', None, 'RA-RaBO01:RF-LLRF:FDLTuneDephsFilt-Mon', 'darkOliveGreen')
             ),
             'Time': 'RA-RaBO01:RF-LLRF:FDLScale32-Mon',
-            'Mode': 'RA-RaBO1:RF-LLRF:FDLMode-Mon',
+            'Mode': 'RA-RaBO01:RF-LLRF:FDLMode-Mon',
             'SW Trig': 'RA-RaBO01:RF-LLRF:FDLSwTrig-Mon',
             'HW Trig': 'RA-RaBO01:RF-LLRF:FDLHwTrig-Mon',
             'Trig': 'RA-RaBO01:RF-LLRF:FDLTrig-Cmd',
-            'Processing': 'RA-RaBO1:RF-LLRF:FDLProcessing-Mon',
-            'Rearm': 'RA-RaBO1:RF-LLRF:FDLRearm-Sel',
+            'Processing': 'RA-RaBO01:RF-LLRF:FDLProcessing-Mon',
+            'Rearm': 'RA-RaBO01:RF-LLRF:FDLRearm-Sel',
             'Raw': 'RA-RaBO01:RF-LLRF:FDLRaw',
-            'Qty': 'RA-RaBO1:RF-LLRF:FDLFrame',
-            'Size': 'RA-RaBO1:RF-LLRF:FDLSize-Mon',
-            'Duration': 'RA-RaBO1:RF-LLRF:FDLDuration-Mon',
-            'Delay': 'RA-RaBO1:RF-LLRF:FDLTrigDly'
+            'Qty': 'RA-RaBO01:RF-LLRF:FDLFrame',
+            'Size': 'RA-RaBO01:RF-LLRF:FDLSize-Mon',
+            'Duration': 'RA-RaBO01:RF-LLRF:FDLDuration-Mon',
+            'Delay': 'RA-RaBO01:RF-LLRF:FDLTrigDly'
         },
         'ADCs and DACs': {
             'Input': {
