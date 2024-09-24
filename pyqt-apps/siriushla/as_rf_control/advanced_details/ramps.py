@@ -8,7 +8,7 @@ from qtpy.QtWidgets import QGridLayout, QGroupBox, QLabel, QPushButton, \
 
 from ...util import connect_window
 from ...widgets import PyDMStateButton, SiriusDialog, SiriusLabel, \
-    SiriusLedState, SiriusSpinbox, SiriusSumLabel, SiriusTimePlot
+    SiriusLedState, SiriusSpinbox, SiriusTimePlot
 from ..util import SEC_2_CHANNELS
 from .limits import LimitsDetails
 
@@ -144,7 +144,20 @@ class RampsDetails(SiriusDialog):
         total_channels = []
         for addr in addrs:
             total_channels.append(self.prefix+chs_dict[addr][1]+'-RB')
-        lb_total = SiriusSumLabel(self, total_channels)
+
+        lb_total = SiriusLabel(self)
+        lb_total.precisionFromPV = False
+        lb_total.precision = 2
+        lb_total.showUnits = True
+        rule = ('[{"name": "TextRule", "property": "Text", ' +
+                '"expression":"ch[0] + ch[1] + ch[2] + ch[3]", ' +
+                '"channels":[')
+        for i, pv in enumerate(total_channels):
+            rule += ('{"channel": "' + pv + '", "trigger": true}')
+            if i != 3:
+                rule += ', '
+        rule += ']}]'
+        lb_total.rules = rule
 
         lay_times.addWidget(QLabel('Total'), len(addrs)+1, 1)
         lay_times.addWidget(lb_total, len(addrs)+1, 2, alignment=Qt.AlignCenter)

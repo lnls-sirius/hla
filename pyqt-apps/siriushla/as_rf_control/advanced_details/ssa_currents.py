@@ -376,6 +376,8 @@ class SSACurrentsDetails(SiriusDialog):
             total_pvs.append(self._substitute_macros(
                 self.prefix+self.syst_dict['RacksTotal'], rack_num=i))
             lb_total = SiriusLabel(self, total_pvs[-1])
+            lb_total.precisionFromPV = False
+            lb_total.precision = 2
             lb_total.showUnits = True
 
             lay.addWidget(QLabel(
@@ -387,18 +389,17 @@ class SSACurrentsDetails(SiriusDialog):
                 column = 0
 
         # Total
-        sum_expr = '"ch[0] + '
-        for i in range(1, 4):
-            sum_expr += f'ch[{i}] + '
-        sum_expr += 'ch[4]"'
-
         lb_total = SiriusLabel(self)
+        lb_total.precisionFromPV = False
+        lb_total.precision = 2
         lb_total.showUnits = True
         rule = ('[{"name": "TextRule", "property": "Text", ' +
-                '"expression": ' + '"ch[0] + ch[1] + ch[2] + ch[3]", ' +
-                '"channels": [')
-        for pv in total_pvs:
-            rule += ('{"channel": "' + pv + '", "trigger": true}, ')
+                '"expression":"ch[0] + ch[1] + ch[2] + ch[3]", ' +
+                '"channels":[')
+        for i, pv in enumerate(total_pvs):
+            rule += ('{"channel": "' + pv + '", "trigger": true}')
+            if i != 3:
+                rule += ', '
         rule += ']}]'
         lb_total.rules = rule
 

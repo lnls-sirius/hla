@@ -31,4 +31,3 @@ from .waveformtable import SiriusWaveformTable
 from .selection_matrix import SelectionMatrixWidget
 from .relative_widget import RelativeWidget
 from .scale import BaseScale, SiriusScaleIndicator
-from .sum import SiriusSumLabel
