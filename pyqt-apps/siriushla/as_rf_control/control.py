@@ -977,7 +977,7 @@ class RFMainControl(SiriusMainWindow):
             self, self.prefix+'BO-05D:RF-P5Cav:Cell3BotPhs-Mon')
         self.lb_c3phsbot.showUnits = True
         self.lb_cavvgapbot = SiriusLabel(
-            self, self.prefix+'BO-05D:RF-P5Cav:RmpAmpVCavBot-Mon')
+            self, self.prefix+'BO-05D:RF-P5Cav:Cell3BotVGap-Mon')
         self.lb_cavvgapbot.showUnits = True
 
         lay = QGridLayout()
@@ -1001,7 +1001,7 @@ class RFMainControl(SiriusMainWindow):
             self, self.prefix+'BO-05D:RF-P5Cav:Cell3TopPhs-Mon')
         self.lb_c3phstop.showUnits = True
         self.lb_cavvgaptop = SiriusLabel(
-            self, self.prefix+'BO-05D:RF-P5Cav:RmpAmpVCavTop-Mon')
+            self, self.prefix+'BO-05D:RF-P5Cav:Cell3TopVGap-Mon')
         self.lb_cavvgaptop.showUnits = True
 
         lay.setVerticalSpacing(15)

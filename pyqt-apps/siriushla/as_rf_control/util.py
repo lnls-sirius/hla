@@ -352,14 +352,14 @@ SEC_2_CHANNELS = {
         'Ramp': {
             'W': {
                 'Bottom': {
-                    'CavPwr': 'BO-05D:RF-P5Cav:Cell3Bot-Mon',
-                    'PowFwd': 'BO-05D:RF-P5Cav:FwdBot-Mon',
-                    'PowRev': 'BO-05D:RF-P5Cav:RevBot-Mon'
+                    'CavPwr': 'BO-05D:RF-P5Cav:Cell3BotPwrW-Mon',
+                    'PowFwd': 'BO-05D:RF-P5Cav:FwdBotPwrW-Mon',
+                    'PowRev': 'BO-05D:RF-P5Cav:RevBotPwrW-Mon'
                 },
                 'Top': {
-                    'CavPwr': 'BO-05D:RF-P5Cav:Cell3Top-Mon',
-                    'PowFwd': 'BO-05D:RF-P5Cav:FwdTop-Mon',
-                    'PowRev': 'BO-05D:RF-P5Cav:RevTop-Mon'
+                    'CavPwr': 'BO-05D:RF-P5Cav:Cell3TopPwrW-Mon',
+                    'PowFwd': 'BO-05D:RF-P5Cav:FwdTopPwrW-Mon',
+                    'PowRev': 'BO-05D:RF-P5Cav:RevTopPwrW-Mon'
                 }
             },
             'mV': {
