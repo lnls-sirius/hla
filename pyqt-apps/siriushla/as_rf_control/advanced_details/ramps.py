@@ -146,9 +146,9 @@ class RampsDetails(SiriusDialog):
                 '"expression": "ch[0] + ch[1] + ch[2] + ch[4]", ' +
                 '"channels": [')
         for i in range(len(addrs)):
-            rule += ('{"channel": ' +
+            rule += ('{"channel": "' +
                 self.prefix+chs_dict[addrs[i]][1]+'-RB"' +
-                ', "trigger": true}')
+                '", "trigger": true}, ')
 
         rule += ']}]'
         lb_total.rules = rule
