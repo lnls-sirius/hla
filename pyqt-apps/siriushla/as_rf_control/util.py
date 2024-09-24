@@ -206,10 +206,10 @@ SEC_2_CHANNELS = {
         'SSACurr': {
             'HeatSink': {
                 'Curr': 'RA-ToBO:RF-SSAmp-H0$(hs_num)M$(m_num):Current$(curr_num)-Mon',
-                'Fwd Top': 'RA-ToBO:RF-HeatSink-H0$(hs_num):FwdTop-Mon',
-                'Rev Top': 'RA-ToBO:RF-HeatSink-H0$(hs_num):RevTop-Mon',
-                'Fwd Bot': 'RA-ToBO:RF-HeatSink-H0$(hs_num):FwdBot-Mon',
-                'Rev Bot': 'RA-ToBO:RF-HeatSink-H0$(hs_num):RevBot-Mon'
+                'Fwd Top': 'RA-ToBO:RF-HeatSink-H0$(hs_num):PwrFwdTop-Mon',
+                'Rev Top': 'RA-ToBO:RF-HeatSink-H0$(hs_num):PwrRevTop-Mon',
+                'Fwd Bot': 'RA-ToBO:RF-HeatSink-H0$(hs_num):PwrFwdBot-Mon',
+                'Rev Bot': 'RA-ToBO:RF-HeatSink-H0$(hs_num):PwrRevBot-Mon'
             },
             'PreAmp': {
                 'HS': 'RA-ToBO:RF-SSAmp-H0$(hs_num)M$(m_num):Current$(curr_num)-Mon',
@@ -217,12 +217,12 @@ SEC_2_CHANNELS = {
             },
             'Pwr': {
                 'Input': {
-                    'Fwd': 'RA-ToBO:RF-SSAmpTower:FwdIn-Mon',
-                    'Rev': 'RA-ToBO:RF-SSAmpTower:RevIn-Mon'
+                    'Fwd': 'RA-ToBO:RF-SSAmpTower:PwrFwdIn-Mon',
+                    'Rev': 'RA-ToBO:RF-SSAmpTower:PwrRevIn-Mon'
                 },
                 'Output': {
-                    'Fwd': 'RA-ToBO:RF-SSAmpTower:FwdOut-Mon',
-                    'Rev': 'RA-ToBO:RF-SSAmpTower:RevOut-Mon'
+                    'Fwd': 'RA-ToBO:RF-SSAmpTower:PwrFwdOut-Mon',
+                    'Rev': 'RA-ToBO:RF-SSAmpTower:PwrRevOut-Mon'
                 }
             },
             'Offsets': {
@@ -1991,10 +1991,10 @@ SEC_2_CHANNELS = {
             'A': {
                 'HeatSink': {
                     'Curr': 'RA-ToSIA0$(NB):RF-SSAmp-H0$(hs_num)$(letter)M0$(m_num):Current$(curr_num)-Mon',
-                    'Fwd Top': 'RA-ToSIA0$(NB):RF-HeatSink-H0$(hs_num):FwdTop-Mon',
-                    'Rev Top': 'RA-ToSIA0$(NB):RF-HeatSink-H0$(hs_num):RevTop-Mon',
-                    'Fwd Bot': 'RA-ToSIA0$(NB):RF-HeatSink-H0$(hs_num):FwdBot-Mon',
-                    'Rev Bot': 'RA-ToSIA0$(NB):RF-HeatSink-H0$(hs_num):RevBot-Mon'
+                    'Fwd Top': 'RA-ToSIA0$(NB):RF-HeatSink-H0$(hs_num):PwrFwdTop-Mon',
+                    'Rev Top': 'RA-ToSIA0$(NB):RF-HeatSink-H0$(hs_num):PwrRevTop-Mon',
+                    'Fwd Bot': 'RA-ToSIA0$(NB):RF-HeatSink-H0$(hs_num):PwrFwdBot-Mon',
+                    'Rev Bot': 'RA-ToSIA0$(NB):RF-HeatSink-H0$(hs_num):PwrRevBot-Mon'
                 },
                 'PreAmp': {
                     'HS': 'RA-ToSIA0$(NB):RF-SSAmp-H0$(hs_num)PreAmp:Current$(curr_num)-Mon',
@@ -2027,10 +2027,10 @@ SEC_2_CHANNELS = {
             'B': {
                 'HeatSink': {
                     'Curr': 'RA-ToSIB0$(NB):RF-SSAmp-H0$(hs_num)$(letter)M0$(m_num):Current$(curr_num)-Mon',
-                    'Fwd Top': 'RA-ToSIB0$(NB):RF-HeatSink-H0$(hs_num):FwdTop-Mon',
-                    'Rev Top': 'RA-ToSIB0$(NB):RF-HeatSink-H0$(hs_num):RevTop-Mon',
-                    'Fwd Bot': 'RA-ToSIB0$(NB):RF-HeatSink-H0$(hs_num):FwdBot-Mon',
-                    'Rev Bot': 'RA-ToSIB0$(NB):RF-HeatSink-H0$(hs_num):RevBot-Mon'
+                    'Fwd Top': 'RA-ToSIB0$(NB):RF-HeatSink-H0$(hs_num):PwrFwdTop-Mon',
+                    'Rev Top': 'RA-ToSIB0$(NB):RF-HeatSink-H0$(hs_num):PwrRevTop-Mon',
+                    'Fwd Bot': 'RA-ToSIB0$(NB):RF-HeatSink-H0$(hs_num):PwrFwdBot-Mon',
+                    'Rev Bot': 'RA-ToSIB0$(NB):RF-HeatSink-H0$(hs_num):PwrRevBot-Mon'
                 },
                 'PreAmp': {
                     'HS': 'RA-ToSIB0$(NB):RF-SSAmp-H0$(hs_num)PreAmp:Current$(curr_num)-Mon',
