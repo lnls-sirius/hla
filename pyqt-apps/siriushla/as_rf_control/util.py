@@ -185,8 +185,8 @@ SEC_2_CHANNELS = {
                 'Temp': 'RA-ToBO:RF-HeatSink-H0$(hs_num):T-Mon',
                 'TMS': 'RA-ToBO:RF-HeatSink-H0$(hs_num):Tms-Mon',
                 'PT-100': [
-                        'RA-ToSIA0$(NB):RF-HeatSink-H0$(hs_num):TUp-Mon',
-                        'RA-ToSIA0$(NB):RF-HeatSink-H0$(hs_num):TDown-Mon'
+                        'RA-ToBO:RF-HeatSink-H0$(hs_num):TUp-Mon',
+                        'RA-ToBO:RF-HeatSink-H0$(hs_num):TDown-Mon'
                 ]
             },
             'PreAmp': {
@@ -200,8 +200,8 @@ SEC_2_CHANNELS = {
                 'Volt': 'BO-ToBO:RF-ACDCPanel:300Vdc-Mon',
                 'Curr': 'BO-ToBO:RF-ACDCPanel:CurrentVdc-Mon'
             },
-            'Rot': 'RA-ToBo:RF-SSAmpTower:HdFlwRt-Mon',
-            'Pwr': 'RA-ToBo:RF-SSAmpTower:FwdOut-Mon',
+            'Rot': 'RA-ToBO:RF-SSAmpTower:HdFlwRt-Mon',
+            'Pwr': 'RA-ToBO:RF-SSAmpTower:PwrFwdOut-Mon',
         },
         'SSACurr': {
             'HeatSink': {
@@ -213,7 +213,7 @@ SEC_2_CHANNELS = {
             },
             'PreAmp': {
                 'HS': 'RA-ToBO:RF-SSAmp-H0$(hs_num)M$(m_num):Current$(curr_num)-Mon',
-                'DC': 'RA-ToBO:RF-SSAmpTower:DC-Cmd'
+                'DC': 'RA-ToBO:RF-SSAmpTower:PwrDC-Cmd'
             },
             'Pwr': {
                 'Input': {
