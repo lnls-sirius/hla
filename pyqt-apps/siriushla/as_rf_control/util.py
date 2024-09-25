@@ -4017,7 +4017,17 @@ SEC_2_CHANNELS = {
                     '307': ['Tuning Fwd Min', 'RA-RaSIB01:RF-LLRF:TuneFwdMin-Mon'],
                     '303': ['Pulses Frequency', 'RA-RaSIB01:RF-LLRF:TuneFreq'],
                     '301': ['Tuning Direction', 'RA-RaSIB01:RF-LLRF:TuneDir'],
-                    '300': ['Auto Tuning Enable', 'RA-RaSIB01:RF-LLRF:Tune']
+                    '300': ['Auto Tuning Enable', 'RA-RaSIB01:RF-LLRF:Tune'],
+                    'Moving': {
+                        'Manual': {
+                            'Up': 'SI-03SP:RF-SRFCav-B:TunerManUp-Mon',
+                            'Down': 'SI-03SP:RF-SRFCav-B:TunerManDown-Mon'
+                        },
+                        'Auto': {
+                            'Up': 'SI-03SP:RF-SRFCav-B:TunerMoveUp-Mon',
+                            'Down': 'SI-03SP:RF-SRFCav-B:TunerMoveDown-Mon'
+                        }
+                    }
                 },
                 'Manual': {
                     '302': ['Number of Pulses', 'RA-RaSIB01:RF-LLRF:TuneStep'],
