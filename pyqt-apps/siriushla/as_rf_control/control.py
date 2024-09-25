@@ -699,7 +699,7 @@ class RFMainControl(SiriusMainWindow):
             self, self.prefix+'RA-RaBO01:RF-LLRF:RmpEnbl-Sts')
 
         self.led_rmpready = PyDMLed(
-            self, self.prefix+'RA-RaBO01:RF-LLRF:RmpRdy-Mon')
+            self, self.prefix+'RA-RaBO01:RF-LLRF:RmpReady-Mon')
         self.led_rmpready.onColor = PyDMLed.LightGreen
         self.led_rmpready.offColor = PyDMLed.Red
 
@@ -750,7 +750,7 @@ class RFMainControl(SiriusMainWindow):
             self, self.prefix+'RA-RaBO01:RF-LLRF:RmpAmpTop-RB')
         self.lb_rmpvolttop1.showUnits = True
         self.lb_rmpvolttop2 = SiriusLabel(
-            self, self.prefix+'RA-RaBO01:RF-LLRF:RmpAmpVCavTop-RB')
+            self, self.prefix+'BO-05D:RF-P5Cav:Cell3TopVGap-Mon')
         self.lb_rmpvolttop2.showUnits = True
 
         self.sb_rmpphsbot = SiriusSpinbox(
@@ -768,7 +768,7 @@ class RFMainControl(SiriusMainWindow):
             self, self.prefix+'RA-RaBO01:RF-LLRF:RmpAmpBot-RB')
         self.lb_rmpvoltbot1.showUnits = True
         self.lb_rmpvoltbot2 = SiriusLabel(
-            self, self.prefix+'RA-RaBO01:RF-LLRF:RmpAmpVCavBot-RB')
+            self, self.prefix+'BO-05D:RF-P5Cav:Cell3BotVGap-Mon')
         self.lb_rmpvoltbot2.showUnits = True
 
         lay = QGridLayout()
