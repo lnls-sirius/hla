@@ -1190,7 +1190,7 @@ SEC_2_CHANNELS = {
             },
             'Drivers': {
                 '5V': ['RA-RaBO01:RF-CavPlDrivers:VoltPos5V-Mon', 'RA-RaBO01:RF-CavPlDrivers:Current5V-Mon'],
-                '48V': ['RA-RaBO01:RF-CavPlDrivers:VoltPos48V-Mon', 'RA-RaBO01:RF-CavPlDrivers:Current48V-Mon'],
+                '48V': ['RA-RaBO01:RF-CavPlDrivers:VoltPos48V-Mon'],
                 'Enable': 'RA-RaBO01:RF-CavPlDrivers:DrEnbl',
                 '1': ['RA-RaBO01:RF-CavPlDrivers:Dr1Enbl-Mon', 'RA-RaBO01:RF-CavPlDrivers:Dr1Flt-Mon'],
                 '2': ['RA-RaBO01:RF-CavPlDrivers:Dr2Enbl-Mon', 'RA-RaBO01:RF-CavPlDrivers:Dr2Flt-Mon']

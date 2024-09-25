@@ -158,17 +158,19 @@ class TuningDetails(SiriusDialog):
             supplies = ['5V', '48V']
         row = 0
         for sup in supplies:
+            lb_supply = QLabel(f'{sup} Supply', alignment=Qt.AlignCenter)
+            lb_supply.setStyleSheet('min-width:5em;')
             lb_volt = SiriusLabel(self, self.prefix+chs_dict[sup][0])
             lb_volt.showUnits = True
             lb_volt.setStyleSheet('min-width:7em;')
-            lb_curr = SiriusLabel(self, self.prefix+chs_dict[sup][1])
-            lb_curr.showUnits = True
-            lb_curr.setStyleSheet('min-width:7em;')
-            lb_supply = QLabel(f'{sup} Supply', alignment=Qt.AlignCenter)
-            lb_supply.setStyleSheet('min-width:5em;')
             lay.addWidget(lb_supply, row, 0)
             lay.addWidget(lb_volt, row, 1)
-            lay.addWidget(lb_curr, row, 2)
+
+            if len(chs_dict[sup]) > 1:
+                lb_curr = SiriusLabel(self, self.prefix+chs_dict[sup][1])
+                lb_curr.showUnits = True
+                lb_curr.setStyleSheet('min-width:7em;')
+                lay.addWidget(lb_curr, row, 2)
             row += 1
 
         lay.addItem(QSpacerItem(0, 18, QSzPlcy.Ignored, QSzPlcy.Fixed), row, 0)
