@@ -1643,9 +1643,14 @@ SEC_2_CHANNELS = {
             }
         },
         'Reset': {
-            'Global': 'RA-RaSIA02:RF-Intlk:Reset-Cmd',
-            'A': 'RA-RaSIA01:RF-LLRF:IntlkReset-Cmd',
-            'B': 'RA-RaSIB01:RF-LLRF:IntlkReset-Cmd',
+            'PLC': {
+                'A': 'RA-RaSIA02:RF-Intlk:Reset-Cmd',
+                'B': 'RA-RaSIB02:RF-Intlk:Reset-Cmd',
+            },
+            'LLRF': {
+                'A': 'RA-RaSIA01:RF-LLRF:IntlkReset-Cmd',
+                'B': 'RA-RaSIB01:RF-LLRF:IntlkReset-Cmd',
+            }
         },
         'Cav Sts': {
             'Geral': 'SI-03SP:RF-P7Cav:Sts-Mon',

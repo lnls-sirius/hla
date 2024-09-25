@@ -140,21 +140,30 @@ class RFMainControl(SiriusMainWindow):
             }""")
 
     def _statusLayout(self):
+        lay = QGridLayout()
+        lay.setHorizontalSpacing(6)
+        lay.setAlignment(Qt.AlignTop)
+
         # Interlocks
         self._ld_intlks = QLabel(
             '<h4>Interlocks</h4>', self, alignment=Qt.AlignLeft)
+        lay.addWidget(self._ld_intlks, 0, 0, 1, 3)
 
         # # Emergency
         self.ld_emerg = QLabel('Emergency Stop', self, alignment=Qt.AlignRight)
         self.ld_emerg.setStyleSheet('min-width: 6.8em;')
         self.led_emerg = SiriusLedAlert(
             self, self.prefix+self.chs['Emergency'])
+        lay.addWidget(self.ld_emerg, 1, 0, alignment=Qt.AlignVCenter)
+        lay.addWidget(self.led_emerg, 1, 1, alignment=Qt.AlignCenter)
 
         # # Sirius Interlock
         self.ld_siriusintlk = QLabel(
             'Sirius Interlock', self, alignment=Qt.AlignRight)
         self.led_siriusintlk = SiriusLedAlert(
             self, self.prefix+self.chs['Sirius Intlk'])
+        lay.addWidget(self.ld_siriusintlk, 2, 0, alignment=Qt.AlignVCenter)
+        lay.addWidget(self.led_siriusintlk, 2, 1, alignment=Qt.AlignCenter)
 
         # # LLRF Interlock
         self.ld_intlk = QLabel('LLRF Interlock', self, alignment=Qt.AlignRight)
@@ -165,28 +174,29 @@ class RFMainControl(SiriusMainWindow):
         connect_window(self.pb_intlkdtls, LLRFInterlockDetails, parent=self,
                        section=self.section, prefix=self.prefix)
 
+        row = 3
+        lay.addWidget(self.ld_intlk, row, 0, alignment=Qt.AlignVCenter)
+        lay.addWidget(self.pb_intlkdtls, row, 2, alignment=Qt.AlignCenter)
         if self.section == 'SI':
-            lay_llrf_intlk = QGridLayout()
-            lay_llrf_intlk.addWidget(self.ld_intlk, 0, 0,
-                alignment=Qt.AlignVCenter)
-            lay_llrf_intlk.addWidget(self.pb_intlkdtls,
-                0, 1, alignment=Qt.AlignCenter)
-
-            offset = 1
+            row += 1
             for key, val in self.chs['LLRF Intlk'].items():
                 ld_llrf = QLabel(
                     f'• {key}', alignment=Qt.AlignRight | Qt.AlignVCenter)
                 led_llrf = SiriusLedAlert(self, self.prefix+val)
-                lay_llrf_intlk.addWidget(ld_llrf, offset, 0)
-                lay_llrf_intlk.addWidget(led_llrf, offset, 1)
-                offset += 1
+                lay.addWidget(ld_llrf, row, 0)
+                lay.addWidget(led_llrf, row, 1, alignment=Qt.AlignCenter)
+                row += 1
         else:
             self.led_llrf = SiriusLedAlert(
                 self, self.prefix+self.chs['LLRF Intlk'])
+            lay.addWidget(self.led_llrf, row, 1, alignment=Qt.AlignCenter)
+            row += 1
 
         # Status
         self._ld_stats = QLabel(
             '<h4>Status</h4>', self, alignment=Qt.AlignLeft)
+        lay.addWidget(self._ld_stats, row, 0, 1, 3)
+        row += 1
 
         # # Status Cavity
         self.ld_cavsts = QLabel('Cavity', self, alignment=Qt.AlignRight)
@@ -198,6 +208,10 @@ class RFMainControl(SiriusMainWindow):
             '#dtls{min-width:18px;max-width:18px;icon-size:20px;}')
         connect_window(self.pb_cavdtls, CavityStatusDetails, parent=self,
                        section=self.section, prefix=self.prefix)
+        lay.addWidget(self.ld_cavsts, row, 0, alignment=Qt.AlignVCenter)
+        lay.addWidget(self.led_cavsts, row, 1, alignment=Qt.AlignCenter)
+        lay.addWidget(self.pb_cavdtls, row, 2)
+        row += 1
 
         # # Status Transmission Line
         self.ld_tlsts = QLabel('Transm. Line', self, alignment=Qt.AlignRight)
@@ -208,57 +222,75 @@ class RFMainControl(SiriusMainWindow):
         connect_window(self.pb_tldtls, TransmLineStatusDetails, parent=self,
                        section=self.section, prefix=self.prefix)
 
+        lay.addWidget(self.ld_tlsts, row, 0, alignment=Qt.AlignVCenter)
+        lay.addWidget(self.pb_tldtls, row, 2, alignment=Qt.AlignCenter)
         if self.section == 'SI':
-            lay_tl = QGridLayout()
-            lay_tl.addWidget(self.ld_tlsts, 0, 0,
-                alignment=Qt.AlignVCenter)
-            lay_tl.addWidget(self.pb_tldtls, 0, 1,
-                alignment=Qt.AlignCenter)
-
-            offset = 1
+            row += 1
             for key, chs_dict in self.chs['TL Sts'].items():
                 ld_tlsts = QLabel(
                     f'• {key}', alignment=Qt.AlignRight | Qt.AlignVCenter)
                 led_tlsts = PyDMLedMultiChannel(
                     self, {self.prefix+chs_dict['Geral']: 1})
-                lay_tl.addWidget(ld_tlsts, offset, 0)
-                lay_tl.addWidget(led_tlsts, offset, 1)
-                offset += 1
+                lay.addWidget(ld_tlsts, row, 0)
+                lay.addWidget(led_tlsts, row, 1, alignment=Qt.AlignCenter)
+                row += 1
         else:
             self.led_tlsts = PyDMLedMultiChannel(
                 self, {self.prefix+self.chs['TL Sts']['Geral']: 1})
+            lay.addWidget(self.led_tlsts, row, 1, alignment=Qt.AlignCenter)
+            row += 1
 
         # Reset
         self._ld_reset = QLabel('<h4>Reset</h4>', self, alignment=Qt.AlignLeft)
+        lay.addWidget(self._ld_reset, row, 0, 1, 3)
+        row += 1
 
-        # # Reset Global
-        self.ld_glbl = QLabel('Reset Global', self, alignment=Qt.AlignRight)
-        self.pb_glbl = SiriusPushButton(
-            label='', icon=qta.icon('fa5s.sync'), releaseValue=0,
-            parent=self, init_channel=self.prefix+self.chs['Reset']['Global'])
-        self.pb_glbl.setStyleSheet(
-            'min-width:25px; max-width:25px; icon-size:20px;')
+        # # Reset PLC/Global
+        if self.section == 'SI':
+            self.ld_glbl = QLabel('Reset PLC', self, alignment=Qt.AlignRight)
+            lay.addWidget(self.ld_glbl, row, 0, alignment=Qt.AlignVCenter)
+            row += 1
+            for key, val in self.chs['Reset']['PLC'].items():
+                ld_plc = QLabel(
+                    f'• {key}', self,
+                    alignment=Qt.AlignRight | Qt.AlignVCenter)
+                pb_plc = SiriusPushButton(
+                    label='', icon=qta.icon('fa5s.sync'), releaseValue=0,
+                    parent=self, init_channel=self.prefix+val)
+                pb_plc.setStyleSheet(
+                    'min-width:25px; max-width:25px; icon-size:20px;')
+                lay.addWidget(ld_plc, row, 0)
+                lay.addWidget(pb_plc, row, 1)
+                row += 1
+        else:
+            self.ld_glbl = QLabel(
+                'Reset Global', self, alignment=Qt.AlignRight)
+            self.pb_glbl = SiriusPushButton(
+                icon=qta.icon('fa5s.sync'), releaseValue=0, parent=self,
+                init_channel=self.prefix+self.chs['Reset']['Global'])
+            self.pb_glbl.setStyleSheet(
+                'min-width:25px; max-width:25px; icon-size:20px;')
+            lay.addWidget(self.ld_glbl, row, 0, alignment=Qt.AlignVCenter)
+            lay.addWidget(self.pb_glbl, row, 1)
+            row += 1
 
         # # Reset LLRF
         self.ld_llrf = QLabel('Reset LLRF', self, alignment=Qt.AlignRight)
+        lay.addWidget(self.ld_llrf, row, 0)
         if self.section == 'SI':
-            lay_llrf_reset = QGridLayout()
-            lay_llrf_reset.addWidget(self.ld_llrf, 0, 0)
-
-            offset = 1
-            for key, val in self.chs['Reset'].items():
-                if key != 'Global':
-                    ld_llrf = QLabel(
-                        f'• {key}', self,
-                        alignment=Qt.AlignRight | Qt.AlignVCenter)
-                    pb_llrf = SiriusPushButton(
-                        label='', icon=qta.icon('fa5s.sync'), releaseValue=0,
-                        parent=self, init_channel=self.prefix+val)
-                    pb_llrf.setStyleSheet(
-                        'min-width:25px; max-width:25px; icon-size:20px;')
-                    lay_llrf_reset.addWidget(ld_llrf, offset, 0)
-                    lay_llrf_reset.addWidget(pb_llrf, offset, 1)
-                    offset += 1
+            row += 1
+            for key, val in self.chs['Reset']['LLRF'].items():
+                ld_llrf = QLabel(
+                    f'• {key}', self,
+                    alignment=Qt.AlignRight | Qt.AlignVCenter)
+                pb_llrf = SiriusPushButton(
+                    label='', icon=qta.icon('fa5s.sync'), releaseValue=0,
+                    parent=self, init_channel=self.prefix+val)
+                pb_llrf.setStyleSheet(
+                    'min-width:25px; max-width:25px; icon-size:20px;')
+                lay.addWidget(ld_llrf, row, 0)
+                lay.addWidget(pb_llrf, row, 1)
+                row += 1
         else:
             self.pb_llrf = SiriusPushButton(
                 init_channel=self.prefix+self.chs['Reset']['LLRF'],
@@ -266,39 +298,8 @@ class RFMainControl(SiriusMainWindow):
                 parent=self, releaseValue=0)
             self.pb_llrf.setStyleSheet(
                 'min-width:25px; max-width:25px; icon-size:20px;')
-
-        lay = QGridLayout()
-        lay.setHorizontalSpacing(6)
-        lay.setAlignment(Qt.AlignTop)
-        lay.addWidget(self._ld_intlks, 0, 0, 1, 3)
-        lay.addWidget(self.ld_emerg, 1, 0, alignment=Qt.AlignVCenter)
-        lay.addWidget(self.led_emerg, 1, 1)
-        lay.addWidget(self.ld_siriusintlk, 2, 0, alignment=Qt.AlignVCenter)
-        lay.addWidget(self.led_siriusintlk, 2, 1)
-        if self.section == 'SI':
-            lay.addLayout(lay_llrf_intlk, 3, 0, 1, 2)
-        else:
-            lay.addWidget(self.ld_intlk, 3, 0, alignment=Qt.AlignVCenter)
-            lay.addWidget(self.led_llrf, 3, 1)
-            lay.addWidget(self.pb_intlkdtls, 3, 2)
-        lay.addWidget(self._ld_stats, 4, 0, 1, 3)
-        lay.addWidget(self.ld_cavsts, 5, 0, alignment=Qt.AlignVCenter)
-        lay.addWidget(self.led_cavsts, 5, 1)
-        lay.addWidget(self.pb_cavdtls, 5, 2)
-        if self.section == 'SI':
-            lay.addLayout(lay_tl, 6, 0, 1, 2)
-        else:
-            lay.addWidget(self.ld_tlsts, 6, 0, alignment=Qt.AlignVCenter)
-            lay.addWidget(self.led_tlsts, 6, 1)
-            lay.addWidget(self.pb_tldtls, 6, 2)
-        lay.addWidget(self._ld_reset, 7, 0, 1, 3)
-        lay.addWidget(self.ld_glbl, 8, 0, alignment=Qt.AlignVCenter)
-        lay.addWidget(self.pb_glbl, 8, 1)
-        if self.section == 'SI':
-            lay.addLayout(lay_llrf_reset, 9, 0, 1, 2)
-        else:
-            lay.addWidget(self.ld_llrf, 9, 0, alignment=Qt.AlignVCenter)
-            lay.addWidget(self.pb_llrf, 9, 1)
+            lay.addWidget(self.pb_llrf, row, 1)
+            row += 1
 
         return lay
 
