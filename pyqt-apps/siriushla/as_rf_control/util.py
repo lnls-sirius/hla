@@ -1181,8 +1181,8 @@ SEC_2_CHANNELS = {
                 '5V': ['RA-RaBO01:RF-CavPlDrivers:VoltPos5V-Mon', 'RA-RaBO01:RF-CavPlDrivers:Current5V-Mon'],
                 '48V': ['RA-RaBO01:RF-CavPlDrivers:VoltPos48V-Mon', 'RA-RaBO01:RF-CavPlDrivers:Current48V-Mon'],
                 'Enable': 'RA-RaBO01:RF-CavPlDrivers:DrEnbl',
-                '1': ['RA-RaBO01:RF-CavPlDrivers:Dr1Enbl-Sts', 'RA-RaBO01:RF-CavPlDrivers:Dr1Flt-Mon'],
-                '2': ['RA-RaBO01:RF-CavPlDrivers:Dr2Enbl-Sts', 'RA-RaBO01:RF-CavPlDrivers:Dr2Flt-Mon']
+                '1': ['RA-RaBO01:RF-CavPlDrivers:Dr1Enbl-Mon', 'RA-RaBO01:RF-CavPlDrivers:Dr1Flt-Mon'],
+                '2': ['RA-RaBO01:RF-CavPlDrivers:Dr2Enbl-Mon', 'RA-RaBO01:RF-CavPlDrivers:Dr2Flt-Mon']
             }
         },
         'AdvIntlk': {
@@ -3983,8 +3983,8 @@ SEC_2_CHANNELS = {
                     '5V': ['RA-RaSIA01:RF-CavPlDrivers:VoltPos5V-Mon', 'RA-RaSIA01:RF-CavPlDrivers:Current5V-Mon'],
                     '24V': ['RA-RaSIA01:RF-CavPlDrivers:VoltPos24V-Mon', 'RA-RaSIA01:RF-CavPlDrivers:Current24V-Mon'],
                     'Enable': 'RA-RaSIA01:RF-CavPlDrivers:DrEnbl',
-                    '1': ['RA-RaSIA01:RF-CavPlDrivers:Dr1Enbl-Sts', 'RA-RaSIA01:RF-CavPlDrivers:Dr1Flt-Mon'],
-                    '2': ['RA-RaSIA01:RF-CavPlDrivers:Dr2Enbl-Sts', 'RA-RaSIA01:RF-CavPlDrivers:Dr2Flt-Mon']
+                    '1': ['RA-RaSIA01:RF-CavPlDrivers:Dr1Enbl-Sts', 'RA-RaSIA01:RF-CavPlDrivers:Dr1Current-Mon'],
+                    '2': ['RA-RaSIA01:RF-CavPlDrivers:Dr2Enbl-Sts', 'RA-RaSIA01:RF-CavPlDrivers:Dr1Current-Mon']
                 }
             },
             'B': {
@@ -4018,8 +4018,8 @@ SEC_2_CHANNELS = {
                     '5V': ['RA-RaSIB01:RF-CavPlDrivers:VoltPos5V-Mon', 'RA-RaSIB01:RF-CavPlDrivers:Current5V-Mon'],
                     '24V': ['RA-RaSIB01:RF-CavPlDrivers:VoltPos24V-Mon', 'RA-RaSIB01:RF-CavPlDrivers:Current24V-Mon'],
                     'Enable': 'RA-RaSIB01:RF-CavPlDrivers:DrEnbl',
-                    '1': ['RA-RaSIB01:RF-CavPlDrivers:Dr1Enbl-Sts', 'RA-RaSIB01:RF-CavPlDrivers:Dr1Flt-Mon'],
-                    '2': ['RA-RaSIB01:RF-CavPlDrivers:Dr2Enbl-Sts', 'RA-RaSIB01:RF-CavPlDrivers:Dr2Flt-Mon']
+                    '1': ['RA-RaSIB01:RF-CavPlDrivers:Dr1Enbl-Sts', 'RA-RaSIB01:RF-CavPlDrivers:Dr1Current-Mon'],
+                    '2': ['RA-RaSIB01:RF-CavPlDrivers:Dr2Enbl-Sts', 'RA-RaSIB01:RF-CavPlDrivers:Dr1Current-Mon']
                 }
             }
         },
