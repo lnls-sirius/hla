@@ -1154,6 +1154,22 @@ SEC_2_CHANNELS = {
                 '18': ['Cavity Phase Angle', 'RA-RaBO01:RF-LLRF:CavPhs-Mon'],
                 '307': ['Tuning Fwd Min', 'RA-RaBO01:RF-LLRF:TuneFwdMin-Mon'],
                 '303': ['Pulses Frequency', 'RA-RaBO01:RF-LLRF:TuneFreq'],
+                '301': ['Tuning Direction', 'RA-RaBO01:RF-LLRF:TuneDir'],
+                '300': ['Auto Tuning Enable', 'RA-RaBO01:RF-LLRF:Tune'],
+                'Moving': {
+                    'Manual': {
+                        'Up 1': 'BO-05D:RF-P5Cav:Plg1ManUp-Mon',
+                        'Down 1': 'BO-05D:RF-P5Cav:Plg1ManDown-Mon',
+                        'Up 2': 'BO-05D:RF-P5Cav:Plg2ManUp-Mon',
+                        'Down 2': 'BO-05D:RF-P5Cav:Plg2ManDown-Mon'
+                    },
+                    'Auto': {
+                        'Up 1': 'BO-05D:RF-P5Cav:Plg1MoveUp-Mon',
+                        'Down 1': 'BO-05D:RF-P5Cav:Plg1MoveDown-Mon',
+                        'Up 2': 'BO-05D:RF-P5Cav:Plg2MoveUp-Mon',
+                        'Down 2': 'BO-05D:RF-P5Cav:Plg2MoveDown-Mon'
+                    }
+                }
             },
             'Manual': {
                 '302': ['Number of Pulses', 'RA-RaBO01:RF-LLRF:TuneStep'],
@@ -1161,14 +1177,9 @@ SEC_2_CHANNELS = {
                 '305': ['Plunger 1 Move', 'RA-RaBO01:RF-LLRF:PLG1Move'],
                 '315': ['Plunger 2 Move Dir', 'RA-RaBO01:RF-LLRF:PLG2Dir'],
                 '314': ['Plunger 2 Move', 'RA-RaBO01:RF-LLRF:PLG2Move'],
-                '307': ['Tuning Reset', 'RA-RaBO01:RF-LLRF:PLGMove-Cmd'],
-                '302 Man': ['Plunger 1 Manual Dn', 'BO-05D:RF-P5Cav:Plg1ManDown-Mon'],
-                '303 Man': ['Plunger 1 Manual Up', 'BO-05D:RF-P5Cav:Plg1ManUp-Mon'],
-                '315 Man': ['Plunger 2 Manual Dn', 'BO-05D:RF-P5Cav:Plg2ManDown-Mon'],
-                '316 Man': ['Plunger 2 Manual Up', 'BO-05D:RF-P5Cav:Plg2ManUp-Mon'],
+                '307': ['Tuning Reset', 'RA-RaBO01:RF-LLRF:PLGMove-Cmd']
             },
             'Auto': {
-                '301': ['Tuning Pos Enable', 'RA-RaBO01:RF-LLRF:TuneDir'],
                 '309': ['Tuning Margin High', 'RA-RaBO01:RF-LLRF:TuneMarginHI'],
                 '310': ['Tuning Margin Low', 'RA-RaBO01:RF-LLRF:TuneMarginLO'],
                 '308': ['Tuning Forward Min', 'RA-RaBO01:RF-LLRF:TuneFwdMin'],
@@ -3960,17 +3971,27 @@ SEC_2_CHANNELS = {
                     '18': ['Cavity Phase Angle', 'RA-RaSIA01:RF-LLRF:CavPhs-Mon'],
                     '307': ['Tuning Fwd Min', 'RA-RaSIA01:RF-LLRF:TuneFwdMin-Mon'],
                     '303': ['Pulses Frequency', 'RA-RaSIA01:RF-LLRF:TuneFreq'],
+                    '301': ['Tuning Direction', 'RA-RaSIA01:RF-LLRF:TuneDir'],
+                    '300': ['Auto Tuning Enable', 'RA-RaSIA01:RF-LLRF:Tune'],
+                    'Moving': {
+                        'Manual': {
+                            'Up': 'SI-03SP:RF-SRFCav-A:TunerManUp-Mon',
+                            'Down': 'SI-03SP:RF-SRFCav-A:TunerManDown-Mon'
+                        },
+                        'Auto': {
+                            'Up': 'SI-03SP:RF-SRFCav-A:TunerMoveUp-Mon',
+                            'Down': 'SI-03SP:RF-SRFCav-A:TunerMoveDown-Mon'
+                        }
+                    }
                 },
                 'Manual': {
                     '302': ['Number of Pulses', 'RA-RaSIA01:RF-LLRF:TuneStep'],
                     '306': ['Tuner Move Dir', 'RA-RaSIA01:RF-LLRF:TunerDir'],
                     '305': ['Tuner Move', 'RA-RaSIA01:RF-LLRF:TunerMove'],
                     '307': ['Tuning Reset', 'RA-RaSIA01:RF-LLRF:TunerMove-Cmd'],
-                    '302 Man': ['Tuner Manual Dn', 'SI-03SP:RF-SRFCav-A:TunerManDown-Mon'],
-                    '303 Man': ['Tuner Manual Up', 'SI-03SP:RF-SRFCav-A:TunerManUp-Mon'],
+
                 },
                 'Auto': {
-                    '301': ['Tuning Pos Enable', 'RA-RaSIA01:RF-LLRF:TuneDir'],
                     '309': ['Tuning Margin High', 'RA-RaSIA01:RF-LLRF:TuneMarginHI'],
                     '310': ['Tuning Margin Low', 'RA-RaSIA01:RF-LLRF:TuneMarginLO'],
                     '308': ['Tuning Forward Min', 'RA-RaSIA01:RF-LLRF:TuneFwdMin'],
@@ -3985,7 +4006,7 @@ SEC_2_CHANNELS = {
                     'Enable': 'RA-RaSIA01:RF-CavPlDrivers:DrEnbl',
                     '1': ['RA-RaSIA01:RF-CavPlDrivers:Dr1Enbl-Sts', 'RA-RaSIA01:RF-CavPlDrivers:Dr1Current-Mon'],
                     '2': ['RA-RaSIA01:RF-CavPlDrivers:Dr2Enbl-Sts', 'RA-RaSIA01:RF-CavPlDrivers:Dr1Current-Mon']
-                }
+                },
             },
             'B': {
                 'General': {
@@ -3995,17 +4016,16 @@ SEC_2_CHANNELS = {
                     '18': ['Cavity Phase Angle', 'RA-RaSIB01:RF-LLRF:CavPhs-Mon'],
                     '307': ['Tuning Fwd Min', 'RA-RaSIB01:RF-LLRF:TuneFwdMin-Mon'],
                     '303': ['Pulses Frequency', 'RA-RaSIB01:RF-LLRF:TuneFreq'],
+                    '301': ['Tuning Direction', 'RA-RaSIB01:RF-LLRF:TuneDir'],
+                    '300': ['Auto Tuning Enable', 'RA-RaSIB01:RF-LLRF:Tune']
                 },
                 'Manual': {
                     '302': ['Number of Pulses', 'RA-RaSIB01:RF-LLRF:TuneStep'],
                     '306': ['Tuner Move Dir', 'RA-RaSIB01:RF-LLRF:TunerDir'],
                     '305': ['Tuner Move', 'RA-RaSIB01:RF-LLRF:TunerMove'],
                     '307': ['Tuning Reset', 'RA-RaSIB01:RF-LLRF:TunerMove-Cmd'],
-                    '302 Man': ['Tuner Manual Dn', 'SI-03SP:RF-SRFCav-B:TunerManDown-Mon'],
-                    '303 Man': ['Tuner Manual Up', 'SI-03SP:RF-SRFCav-B:TunerManUp-Mon'],
                 },
                 'Auto': {
-                    '301': ['Tuning Pos Enable', 'RA-RaSIB01:RF-LLRF:TuneDir'],
                     '309': ['Tuning Margin High', 'RA-RaSIB01:RF-LLRF:TuneMarginHI'],
                     '310': ['Tuning Margin Low', 'RA-RaSIB01:RF-LLRF:TuneMarginLO'],
                     '308': ['Tuning Forward Min', 'RA-RaSIB01:RF-LLRF:TuneFwdMin'],
