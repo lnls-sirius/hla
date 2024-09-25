@@ -108,9 +108,9 @@ class TuningDetails(SiriusDialog):
         row = 0
         for sup in supplies:
             lb_volt = SiriusLabel(self, self.prefix+chs_dict[sup][0])
-            lb_volt.showUnit = True
+            lb_volt.showUnits = True
             lb_curr = SiriusLabel(self, self.prefix+chs_dict[sup][1])
-            lb_curr.showUnit = True
+            lb_curr.showUnits = True
             lay.addWidget(QLabel(f'{sup} Supply'), row, 0)
             lay.addWidget(lb_volt, row, 1)
             lay.addWidget(lb_curr, row, 2)
