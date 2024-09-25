@@ -252,18 +252,6 @@ class TuningDetails(SiriusDialog):
         lay.addWidget(pb_reset, row, 2, alignment=Qt.AlignCenter)
         row += 1
 
-        # Manual Up/Down
-        # keys = ['302 Man', '303 Man']
-        # if self.section == 'BO':
-        #     keys.extend(['315 Man', '316 Man'])
-
-        # for key in keys:
-        #     self._setupAddrLabel(lay, chs_dict, key, row)
-        #     lay.addWidget(SiriusLedState(
-        #         self, self.prefix+chs_dict[key][1]),
-        #         row, 3, alignment=Qt.AlignCenter)
-        #     row += 1
-
         return lay
 
     def _autoLayout(self, chs_dict):
