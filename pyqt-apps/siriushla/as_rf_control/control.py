@@ -1508,26 +1508,34 @@ class RFMainControl(SiriusMainWindow):
             channels={
                 'on': self.prefix+chs_dict['PinSw']['Enable'],
                 'off': self.prefix+chs_dict['PinSw']['Disable']})
+        pre_drive_ch = chs_dict['PreDrive']
+        if self.section == 'SI':
+            pre_drive_ch = pre_drive_ch['Value']
+        pre_drive_ch = self.prefix + pre_drive_ch
         rules = (
             '[{"name": "EnblRule", "property": "Enable", "expression":' +
             '"ch[0] < ' + str(chs_dict['PreDriveThrs']) + '", "channels":' +
-            '[{"channel": "'+self.prefix+chs_dict['PreDrive'] +
-            '", "trigger": true}]}]')
+            '[{"channel": "'+ pre_drive_ch + '", "trigger": true}]}]')
         bt_pinsw.pb_on.rules = rules
         led_pinsw = SiriusLedState(self, self.prefix+chs_dict['PinSw']['Mon'])
         lay_amp.addLayout(self._create_vlay(bt_pinsw, led_pinsw), row, 7)
 
-        lb_drive = SiriusLabel(self, self.prefix+chs_dict['PreDrive'])
+        lb_drive = SiriusLabel(self, pre_drive_ch)
         lb_drive.showUnits = True
-        led_drive = PyDMLedMultiChannel(
-            parent=self, channels2values={
-                self.prefix+chs_dict['PreDrive']: {
-                    'comp': 'lt', 'value': chs_dict['PreDriveThrs']}})
+        if self.section == 'SI':
+            led_drive = SiriusLedState(
+                self, self.prefix+chs_dict['PreDrive']['LED'])
+        else:
+            led_drive = PyDMLedMultiChannel(
+                parent=self, channels2values={
+                    self.prefix+chs_dict['PreDrive']: {
+                        'comp': 'lt', 'value': chs_dict['PreDriveThrs']}})
+            ch_pinsw = SiriusConnectionSignal(
+                self.prefix+chs_dict['PinSw']['Mon'])
+            ch_pinsw.new_value_signal[int].connect(
+                _part(self._handle_predrive_led_channels, led_drive, chs_dict))
         lay_amp.addLayout(self._create_vlay(lb_drive, led_drive), row, 8)
 
-        ch_pinsw = SiriusConnectionSignal(self.prefix+chs_dict['PinSw']['Mon'])
-        ch_pinsw.new_value_signal[int].connect(
-            _part(self._handle_predrive_led_channels, led_drive, chs_dict))
 
     def _create_tun_set_wid(self, lay_tunset, column, chs_dict, offset):
         if column:

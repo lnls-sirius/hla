@@ -158,7 +158,7 @@ SEC_2_CHANNELS = {
         'SSA': {
             'Name': 'SSA',
             'Status': 'RA-ToBO:RF-SSAmpTower:Sts-Mon',
-            'Power': 'RA-ToBO:RF-SSAmpTower:FwdOutLLRF-Mon',
+            'Power': 'RA-ToBO:RF-SSAmpTower:FwdOutPwrdBm-Mon',
             'SRC 1': {
                 'Label': '300VDC',
                 'Enable': 'RA-ToBO:RF-ACDCPanel:300VdcEnbl-Sel',
@@ -167,9 +167,9 @@ SEC_2_CHANNELS = {
             },
             'SRC 2': {
                 'Label': 'DC/DC',
-                'Enable': 'RA-ToBO:RF-SSAmpTower:CnvEnbl-Sel',
-                'Disable': 'RA-ToBO:RF-SSAmpTower:CnvDsbl-Sel',
-                'Mon': 'RA-ToBO:RF-SSAmpTower:Cnv-Sts'
+                'Enable': 'RA-ToBO:RF-SSAmpTower:PwrCnvEnbl-Sel',
+                'Disable': 'RA-ToBO:RF-SSAmpTower:PwrCnvDsbl-Sel',
+                'Mon': 'RA-ToBO:RF-SSAmpTower:PwrCnv-Sts'
             },
             'PinSw': {
                 'Label': 'PinSw',
@@ -177,7 +177,7 @@ SEC_2_CHANNELS = {
                 'Disable': 'RA-RaBO01:RF-LLRFPreAmp:PinSwDsbl-Cmd',
                 'Mon': 'RA-RaBO01:RF-LLRFPreAmp:PinSw-Mon'
             },
-            'PreDrive': 'RA-RaBO01:RF-LLRFPreAmp:FwdInAmp-Mon',
+            'PreDrive': 'RA-RaBO01:RF-LLRFPreAmp:FwdIn1PwrdBm-Mon',
             'PreDriveThrs': 4,  # mV
         },
         'SSADtls': {
