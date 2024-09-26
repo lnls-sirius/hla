@@ -1867,8 +1867,8 @@ SEC_2_CHANNELS = {
                     'Mon': 'RA-ToSIB03:RF-CtrlPanel:PINSwSts-Mon'
                 },
                 'PreDrive': {
-                    'Value': 'RA-ToSIA03:RF-SSAmpTower:PwrFwdIn-Mon',
-                    'LED': 'RA-ToSIA03:RF-SSAmpTower:CoaxSwLvlSts-Mon'
+                    'Value': 'RA-ToSIB03:RF-SSAmpTower:PwrFwdIn-Mon',
+                    'LED': 'RA-ToSIB03:RF-SSAmpTower:CoaxSwLvlSts-Mon'
                 },
                 'PreDriveThrs': 5,  # mV
                 'LLRF': 'B'
@@ -1896,8 +1896,8 @@ SEC_2_CHANNELS = {
                     'Mon': 'RA-ToSIB04:RF-CtrlPanel:PINSwSts-Mon'
                 },
                 'PreDrive': {
-                    'Value': 'RA-ToSIA04:RF-SSAmpTower:PwrFwdIn-Mon',
-                    'LED': 'RA-ToSIA04:RF-SSAmpTower:CoaxSwLvlSts-Mon'
+                    'Value': 'RA-ToSIB04:RF-SSAmpTower:PwrFwdIn-Mon',
+                    'LED': 'RA-ToSIB04:RF-SSAmpTower:CoaxSwLvlSts-Mon'
                 },
                 'PreDriveThrs': 5,  # mV
                 'LLRF': 'B'
