@@ -1789,18 +1789,18 @@ SEC_2_CHANNELS = {
             '1': {
                 'Name': 'SSA 01',
                 'Status': 'RA-ToSIA01:RF-SSAmpTower:Sts-Mon',
-                'Power': 'RA-ToSIA01:RF-SSAmpTower:FwdOut-Mon',
+                'Power': 'RA-ToSIA01:RF-SSAmpTower:PwrFwdOut-Mon',
                 'SRC 1': {
                     'Label': 'AC TDK',
-                    'Enable': 'RA-ToSIA01:RF-ACPanel:ACEnbl-Cmd',
-                    'Disable': 'RA-ToSIA01:RF-ACPanel:ACDsbl-Cmd',
-                    'Mon': 'RA-ToSIA01:RF-ACPanel:AC-Mon'
+                    'Enable': 'RA-ToSIA01:RF-ACPanel:PwrACEnbl-Cmd',
+                    'Disable': 'RA-ToSIA01:RF-ACPanel:PwrACDsbl-Cmd',
+                    'Mon': 'RA-ToSIA01:RF-ACPanel:PwrAC-Mon'
                 },
                 'SRC 2': {
                     'Label': 'DC TDK',
-                    'Enable': 'RA-ToSIA01:RF-TDKSource:DCEnbl-Cmd',
-                    'Disable': 'RA-ToSIA01:RF-TDKSource:DCDsbl-Cmd',
-                    'Mon': 'RA-ToSIA01:RF-TDKSource:DC-Mon'
+                    'Enable': 'RA-ToSIA01:RF-TDKSource:PwrDCEnbl-Cmd',
+                    'Disable': 'RA-ToSIA01:RF-TDKSource:PwrDCDsbl-Cmd',
+                    'Mon': 'RA-ToSIA01:RF-TDKSource:PwrDC-Mon'
                 },
                 'PinSw': {
                     'Label': 'PinSw',
@@ -1808,25 +1808,28 @@ SEC_2_CHANNELS = {
                     'Disable': 'RA-ToSIA01:RF-CtrlPanel:PINSwDsbl-Cmd',
                     'Mon': 'RA-ToSIA01:RF-CtrlPanel:PINSwSts-Mon'
                 },
-                'PreDrive': 'RA-RaSIA01:RF-LLRFPreAmp:FwdIn1Amp-Mon',
+                'PreDrive': {
+                    'Value': 'RA-ToSIA01:RF-SSAmpTower:PwrFwdIn-Mon',
+                    'LED': 'RA-ToSIA01:RF-SSAmpTower:CoaxSwLvlSts-Mon'
+                },
                 'PreDriveThrs': 5,  # mV
                 'LLRF': 'A'
             },
             '2': {
                 'Name': 'SSA 02',
                 'Status': 'RA-ToSIA02:RF-SSAmpTower:Sts-Mon',
-                'Power': 'RA-ToSIA02:RF-SSAmpTower:FwdOut-Mon',
+                'Power': 'RA-ToSIA02:RF-SSAmpTower:PwrFwdOut-Mon',
                 'SRC 1': {
                     'Label': 'AC TDK',
-                    'Enable': 'RA-ToSIA02:RF-ACPanel:ACEnbl-Cmd',
-                    'Disable': 'RA-ToSIA02:RF-ACPanel:ACDsbl-Cmd',
-                    'Mon': 'RA-ToSIA02:RF-ACPanel:AC-Mon'
+                    'Enable': 'RA-ToSIA02:RF-ACPanel:PwrACEnbl-Cmd',
+                    'Disable': 'RA-ToSIA02:RF-ACPanel:PwrACDsbl-Cmd',
+                    'Mon': 'RA-ToSIA02:RF-ACPanel:PwrAC-Mon'
                 },
                 'SRC 2': {
                     'Label': 'DC TDK',
-                    'Enable': 'RA-ToSIA02:RF-TDKSource:DCEnbl-Cmd',
-                    'Disable': 'RA-ToSIA02:RF-TDKSource:DCDsbl-Cmd',
-                    'Mon': 'RA-ToSIA02:RF-TDKSource:DC-Mon'
+                    'Enable': 'RA-ToSIA02:RF-TDKSource:PwrDCEnbl-Cmd',
+                    'Disable': 'RA-ToSIA02:RF-TDKSource:PwrDCDsbl-Cmd',
+                    'Mon': 'RA-ToSIA02:RF-TDKSource:PwrDC-Mon'
                 },
                 'PinSw': {
                     'Label': 'PinSw',
@@ -1834,25 +1837,28 @@ SEC_2_CHANNELS = {
                     'Disable': 'RA-ToSIA02:RF-CtrlPanel:PINSwDsbl-Cmd',
                     'Mon': 'RA-ToSIA02:RF-CtrlPanel:PINSwSts-Mon'
                 },
-                'PreDrive': 'RA-RaSIA01:RF-LLRFPreAmp:FwdIn2Amp-Mon',
+                'PreDrive': {
+                    'Value': 'RA-ToSIA02:RF-SSAmpTower:PwrFwdIn-Mon',
+                    'LED': 'RA-ToSIA02:RF-SSAmpTower:CoaxSwLvlSts-Mon'
+                },
                 'PreDriveThrs': 5,  # mV
                 'LLRF': 'A'
             },
             '3': {
                 'Name': 'SSA 03',
                 'Status': 'RA-ToSIB03:RF-SSAmpTower:Sts-Mon',
-                'Power': 'RA-ToSIB03:RF-SSAmpTower:FwdOut-Mon',
+                'Power': 'RA-ToSIB03:RF-SSAmpTower:PwrFwdOut-Mon',
                 'SRC 1': {
                     'Label': 'AC TDK',
-                    'Enable': 'RA-ToSIB03:RF-ACPanel:ACEnbl-Cmd',
-                    'Disable': 'RA-ToSIB03:RF-ACPanel:ACDsbl-Cmd',
-                    'Mon': 'RA-ToSIB03:RF-ACPanel:AC-Mon'
+                    'Enable': 'RA-ToSIB03:RF-ACPanel:PwrACEnbl-Cmd',
+                    'Disable': 'RA-ToSIB03:RF-ACPanel:PwrACDsbl-Cmd',
+                    'Mon': 'RA-ToSIB03:RF-ACPanel:PwrAC-Mon'
                 },
                 'SRC 2': {
                     'Label': 'DC TDK',
-                    'Enable': 'RA-ToSIB03:RF-TDKSource:DCEnbl-Cmd',
-                    'Disable': 'RA-ToSIB03:RF-TDKSource:DCDsbl-Cmd',
-                    'Mon': 'RA-ToSIB03:RF-TDKSource:DC-Mon'
+                    'Enable': 'RA-ToSIB03:RF-TDKSource:PwrDCEnbl-Cmd',
+                    'Disable': 'RA-ToSIB03:RF-TDKSource:PwrDCDsbl-Cmd',
+                    'Mon': 'RA-ToSIB03:RF-TDKSource:PwrDC-Mon'
                 },
                 'PinSw': {
                     'Label': 'PinSw',
@@ -1860,25 +1866,28 @@ SEC_2_CHANNELS = {
                     'Disable': 'RA-ToSIB03:RF-CtrlPanel:PINSwDsbl-Cmd',
                     'Mon': 'RA-ToSIB03:RF-CtrlPanel:PINSwSts-Mon'
                 },
-                'PreDrive': 'RA-RaSIA01:RF-LLRFPreAmp:FwdIn3Amp-Mon',
+                'PreDrive': {
+                    'Value': 'RA-ToSIA03:RF-SSAmpTower:PwrFwdIn-Mon',
+                    'LED': 'RA-ToSIA03:RF-SSAmpTower:CoaxSwLvlSts-Mon'
+                },
                 'PreDriveThrs': 5,  # mV
                 'LLRF': 'B'
             },
             '4': {
                 'Name': 'SSA 04',
                 'Status': 'RA-ToSIB04:RF-SSAmpTower:Sts-Mon',
-                'Power': 'RA-ToSIB04:RF-SSAmpTower:FwdOut-Mon',
+                'Power': 'RA-ToSIB04:RF-SSAmpTower:PwrFwdOut-Mon',
                 'SRC 1': {
                     'Label': 'AC TDK',
-                    'Enable': 'RA-ToSIB04:RF-ACPanel:ACEnbl-Cmd',
-                    'Disable': 'RA-ToSIB04:RF-ACPanel:ACDsbl-Cmd',
-                    'Mon': 'RA-ToSIB04:RF-ACPanel:AC-Mon'
+                    'Enable': 'RA-ToSIB04:RF-ACPanel:PwrACEnbl-Cmd',
+                    'Disable': 'RA-ToSIB04:RF-ACPanel:PwrACDsbl-Cmd',
+                    'Mon': 'RA-ToSIB04:RF-ACPanel:PwrAC-Mon'
                 },
                 'SRC 2': {
                     'Label': 'DC TDK',
-                    'Enable': 'RA-ToSIB04:RF-TDKSource:DCEnbl-Cmd',
-                    'Disable': 'RA-ToSIB04:RF-TDKSource:DCDsbl-Cmd',
-                    'Mon': 'RA-ToSIB04:RF-TDKSource:DC-Mon'
+                    'Enable': 'RA-ToSIB04:RF-TDKSource:PwrDCEnbl-Cmd',
+                    'Disable': 'RA-ToSIB04:RF-TDKSource:PwrDCDsbl-Cmd',
+                    'Mon': 'RA-ToSIB04:RF-TDKSource:PwrDC-Mon'
                 },
                 'PinSw': {
                     'Label': 'PinSw',
@@ -1886,7 +1895,10 @@ SEC_2_CHANNELS = {
                     'Disable': 'RA-ToSIB04:RF-CtrlPanel:PINSwDsbl-Cmd',
                     'Mon': 'RA-ToSIB04:RF-CtrlPanel:PINSwSts-Mon'
                 },
-                'PreDrive': 'RA-RaSIA01:RF-LLRFPreAmp:FwdIn4Amp-Mon',
+                'PreDrive': {
+                    'Value': 'RA-ToSIA04:RF-SSAmpTower:PwrFwdIn-Mon',
+                    'LED': 'RA-ToSIA04:RF-SSAmpTower:CoaxSwLvlSts-Mon'
+                },
                 'PreDriveThrs': 5,  # mV
                 'LLRF': 'B'
             }
@@ -1908,32 +1920,32 @@ SEC_2_CHANNELS = {
                 },
                 'Runtime': 'RA-ToSIA0$(NB):RF-SSAmpTower:RunHour-Mon',
                 'Pre Amp1': [
-                    'RA-RoSIA01:RF-LLRFPreAmp-1:T1-Mon',
-                    'RA-RoSIA01:RF-LLRFPreAmp-1:T1Up-Mon',
+                    'RA-RaSIA01:RF-LLRFPreAmp-1:T1-Mon',
+                    'RA-RaSIA01:RF-LLRFPreAmp-1:T1Up-Mon',
                 ],
                 'Pre Amp2': [
-                    'RA-RoSIA01:RF-LLRFPreAmp-1:T2-Mon',
-                    'RA-RoSIA01:RF-LLRFPreAmp-1:T2Up-Mon',
+                    'RA-RaSIA01:RF-LLRFPreAmp-1:T2-Mon',
+                    'RA-RaSIA01:RF-LLRFPreAmp-1:T2Up-Mon',
                 ],
                 'In Pwr Fwd': [
-                    'RA-ToSIA0$(NB):RF-SSAmpTower:FwdIn-Mon',
-                    'RA-ToSIA0$(NB):RF-SSAmpTower:HwFwdIn-Mon',
-                    'RA-ToSIA0$(NB):RF-SSAmpTower:FwdInSts-Mon'
+                    'RA-ToSIA0$(NB):RF-SSAmpTower:PwrFwdIn-Mon',
+                    'RA-ToSIA0$(NB):RF-SSAmpTower:HwPwrFwdIn-Mon',
+                    'RA-ToSIA0$(NB):RF-SSAmpTower:PwrFwdInSts-Mon'
                 ],
                 'In Pwr Rev': [
-                    'RA-ToSIA0$(NB):RF-SSAmpTower:RevIn-Mon',
-                    'RA-ToSIA0$(NB):RF-SSAmpTower:HwRevIn-Mon',
-                    'RA-ToSIA0$(NB):RF-SSAmpTower:RevInSts-Mon'
+                    'RA-ToSIA0$(NB):RF-SSAmpTower:PwrRevIn-Mon',
+                    'RA-ToSIA0$(NB):RF-SSAmpTower:HwPwrRevIn-Mon',
+                    'RA-ToSIA0$(NB):RF-SSAmpTower:PwrRevInSts-Mon'
                 ],
                 'Out Pwr Fwd': [
-                    'RA-ToSIA0$(NB):RF-SSAmpTower:FwdOut-Mon',
-                    'RA-ToSIA0$(NB):RF-SSAmpTower:HwFwdOut-Mon',
-                    'RA-ToSIA0$(NB):RF-SSAmpTower:FwdOutSts-Mon'
+                    'RA-ToSIA0$(NB):RF-SSAmpTower:PwrFwdOut-Mon',
+                    'RA-ToSIA0$(NB):RF-SSAmpTower:HwPwrFwdOut-Mon',
+                    'RA-ToSIA0$(NB):RF-SSAmpTower:PwrFwdOutSts-Mon'
                 ],
                 'Out Pwr Rev': [
-                    'RA-ToSIA0$(NB):RF-SSAmpTower:RevOut-Mon',
-                    'RA-ToSIA0$(NB):RF-SSAmpTower:HwRevOut-Mon',
-                    'RA-ToSIA0$(NB):RF-SSAmpTower:RevOutSts-Mon'
+                    'RA-ToSIA0$(NB):RF-SSAmpTower:PwrRevOut-Mon',
+                    'RA-ToSIA0$(NB):RF-SSAmpTower:HwPwrRevOut-Mon',
+                    'RA-ToSIA0$(NB):RF-SSAmpTower:PwrRevOutSts-Mon'
                 ],
                 'Alerts': {
                     'PhsFlt': ['Phase Fault', 'RA-ToSIA0$(NB):RF-ACPanel:PhsFlt-Mon'],
@@ -1971,24 +1983,24 @@ SEC_2_CHANNELS = {
                     'RA-RaSIB01:RF-LLRFPreAmp-1:T2Up-Mon',
                 ],
                 'In Pwr Fwd': [
-                    'RA-ToSIB0$(NB):RF-SSAmpTower:FwdIn-Mon',
-                    'RA-ToSIB0$(NB):RF-SSAmpTower:HwFwdIn-Mon',
-                    'RA-ToSIB0$(NB):RF-SSAmpTower:FwdInSts-Mon'
+                    'RA-ToSIB0$(NB):RF-SSAmpTower:PwrFwdIn-Mon',
+                    'RA-ToSIB0$(NB):RF-SSAmpTower:HwPwrFwdIn-Mon',
+                    'RA-ToSIB0$(NB):RF-SSAmpTower:PwrFwdInSts-Mon'
                 ],
                 'In Pwr Rev': [
-                    'RA-ToSIB0$(NB):RF-SSAmpTower:RevIn-Mon',
-                    'RA-ToSIB0$(NB):RF-SSAmpTower:HwRevIn-Mon',
-                    'RA-ToSIB0$(NB):RF-SSAmpTower:RevInSts-Mon'
+                    'RA-ToSIB0$(NB):RF-SSAmpTower:PwrRevIn-Mon',
+                    'RA-ToSIB0$(NB):RF-SSAmpTower:HwPwrRevIn-Mon',
+                    'RA-ToSIB0$(NB):RF-SSAmpTower:PwrRevInSts-Mon'
                 ],
                 'Out Pwr Fwd': [
-                    'RA-ToSIB0$(NB):RF-SSAmpTower:FwdOut-Mon',
-                    'RA-ToSIB0$(NB):RF-SSAmpTower:HwFwdOut-Mon',
-                    'RA-ToSIB0$(NB):RF-SSAmpTower:FwdOutSts-Mon'
+                    'RA-ToSIB0$(NB):RF-SSAmpTower:PwrFwdOut-Mon',
+                    'RA-ToSIB0$(NB):RF-SSAmpTower:HwPwrFwdOut-Mon',
+                    'RA-ToSIB0$(NB):RF-SSAmpTower:PwrFwdOutSts-Mon'
                 ],
                 'Out Pwr Rev': [
-                    'RA-ToSIB0$(NB):RF-SSAmpTower:RevOut-Mon',
-                    'RA-ToSIB0$(NB):RF-SSAmpTower:HwRevOut-Mon',
-                    'RA-ToSIB0$(NB):RF-SSAmpTower:RevOutSts-Mon'
+                    'RA-ToSIB0$(NB):RF-SSAmpTower:PwrRevOut-Mon',
+                    'RA-ToSIB0$(NB):RF-SSAmpTower:HwPwrRevOut-Mon',
+                    'RA-ToSIB0$(NB):RF-SSAmpTower:PwrRevOutSts-Mon'
                 ],
                 'Alerts': {
                     'PhsFlt': ['Phase Fault', 'RA-ToSIB0$(NB):RF-ACPanel:PhsFlt-Mon'],
