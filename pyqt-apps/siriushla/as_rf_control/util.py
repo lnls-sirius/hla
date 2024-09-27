@@ -144,11 +144,11 @@ SEC_2_CHANNELS = {
             },
             'label': {
                 'Circulator Temp. Out': 'RA-TLBO:RF-Circulator:Tout-Mon',
-                'Circulator In Reflected Power': 'RA-TLBO:RF-Circulator:RevIndBm-Mon'
+                'Circulator In Reflected Power': 'RA-TLBO:RF-Circulator:PwrRevIndBm-Mon'
             },
             'led': {
                 'Circulator Arc Detector': 'RA-TLBO:RF-Circulator:Arc-Mon',
-                'Circulator Arc Detector Supply Fail': 'RA-RaBO02:RF-ArcDetec-Circ:Fail-Mon',
+                'Circulator Arc Detector Supply Fail': 'RA-RaBO02:RF-ArcDetec-Circ:PwrFail-Mon',
                 'Circulator Flow': 'RA-TLBO:RF-Circulator:FlwRt-Mon',
                 'Load Flow': 'RA-TLBO:RF-Load:FlwRt-Mon',
                 'TCU Status': 'RA-TLBO:RF-Circulator:IntlkOp-Mon',
@@ -1731,14 +1731,14 @@ SEC_2_CHANNELS = {
                 },
                 'label': {
                     'Circulator Temp. Out': 'RA-TLSIA:RF-Circulator:Tout-Mon',
-                    'Circulator In Reflected Power': 'RA-TLSIA:RF-Circulator:RevIndBm-Mon',
+                    'Circulator In Reflected Power': 'RA-TLSIA:RF-Circulator:PwrRevIndBm-Mon',
                     'Combiner': 'RA-TLSIA:RF-Combiner:T-Mon'
                 },
                 'led': {
                     'Circulator Arc Detector': 'RA-TLSIA:RF-Circulator:Arc-Mon',
-                    'Circulator Arc Detector Supply Fail': 'RA-RaSIA02:RF-ArcDetec-Circ:Fail-Mon',
+                    'Circulator Arc Detector Supply Fail': 'RA-RaSIA02:RF-ArcDetec-Circ:PwrFail-Mon',
                     'Arc Detector Load': 'RA-TLSIA:RF-Load:Arc-Mon',
-                    'Arc Detector Load Supply Fail': 'RA-RaSIA02:RF-ArcDetec-Load:Fail-Mon',
+                    'Arc Detector Load Supply Fail': 'RA-RaSIA02:RF-ArcDetec-Load:PwrFail-Mon',
                     'Circulator Flow': 'RA-TLSIA:RF-Circulator:FlwRt-Mon',
                     'Load Flow': 'RA-TLSIA:RF-Load:FlwRt-Mon',
                     'TCU Status': 'RA-TLSIA:RF-Circulator:IntlkOp-Mon',
@@ -1770,14 +1770,14 @@ SEC_2_CHANNELS = {
                 },
                 'label': {
                     'Circulator Temp. Out': 'RA-TLSIB:RF-Circulator:Tout-Mon',
-                    'Circulator In Reflected Power': 'RA-TLSIB:RF-Circulator:RevIndBm-Mon',
+                    'Circulator In Reflected Power': 'RA-TLSIB:RF-Circulator:PwrRevIndBm-Mon',
                     'Combiner': 'RA-TLSIB:RF-Combiner:T-Mon'
                 },
                 'led': {
                     'Circulator Arc Detector': 'RA-TLSIB:RF-Circulator:Arc-Mon',
-                    'Circulator Arc Detector Supply Fail': 'RA-RaSIB02:RF-ArcDetec-Circ:Fail-Mon',
+                    'Circulator Arc Detector Supply Fail': 'RA-RaSIB02:RF-ArcDetec-Circ:PwrFail-Mon',
                     'Arc Detector Load': 'RA-TLSIB:RF-Load:Arc-Mon',
-                    'Arc Detector Load Supply Fail': 'RA-RaSIB02:RF-ArcDetec-Load:Fail-Mon',
+                    'Arc Detector Load Supply Fail': 'RA-RaSIB02:RF-ArcDetec-Load:PwrFail-Mon',
                     'Circulator Flow': 'RA-TLSIB:RF-Circulator:FlwRt-Mon',
                     'Load Flow': 'RA-TLSIB:RF-Load:FlwRt-Mon',
                     'TCU Status': 'RA-TLSIB:RF-Circulator:IntlkOp-Mon',
