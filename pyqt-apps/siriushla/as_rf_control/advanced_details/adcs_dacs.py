@@ -5,7 +5,7 @@ from qtpy.QtWidgets import QGridLayout, QLabel, QSizePolicy as QSzPlcy, \
     QSpacerItem, QTabWidget, QVBoxLayout, QWidget
 
 from ...widgets import PyDMStateButton, SiriusDialog, SiriusLabel, \
-    SiriusLedState, SiriusSpinbox
+    SiriusLedState, SiriusSpinbox, SiriusEnumComboBox
 from ..util import SEC_2_CHANNELS
 
 
@@ -112,6 +112,19 @@ class ADCDACDetails(SiriusDialog):
                     lay.addWidget(pb_enbl, row, offset+2)
                     lay.addWidget(led_enbl, row, offset+3,
                         alignment=Qt.AlignCenter)
+                elif key == 'Cryogenic Load Leveler':
+                    lay.addWidget(QLabel(key), row, offset, 1, 2)
+                    row += 1
+                    for k, v in val.items():
+                        lb_gain = SiriusLabel(self, self.prefix+v[1]+'-Sts')
+                        lb_gain.showUnits = True
+                        lay.addWidget(QLabel(k), row, offset)
+                        lay.addWidget(QLabel(v[0]), row, offset+1)
+                        lay.addWidget(SiriusEnumComboBox(
+                            self, self.prefix+v[1]+'-Sel'),
+                            row, offset+2, alignment=Qt.AlignCenter)
+                        lay.addWidget(lb_gain, row, offset+3)
+                        row += 1
                 else:
                     lb_value = SiriusLabel(self, self.prefix+val[1]+'-RB')
                     lb_value.showUnits = True

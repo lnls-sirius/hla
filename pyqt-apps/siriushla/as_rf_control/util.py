@@ -2619,7 +2619,11 @@ SEC_2_CHANNELS = {
                         '16': ['Phase Shift Drive SSA 3', 'RA-RaSIA01:RF-LLRF:PhShSSA3'],
                         '20': ['Gain Drive SSA 3', 'RA-RaSIA01:RF-LLRF:GainSSA3'],
                         '17': ['Phase Shift Drive SSA 4', 'RA-RaSIA01:RF-LLRF:PhShSSA4'],
-                        '21': ['Gain Drive SSA 4', 'RA-RaSIA01:RF-LLRF:GainSSA4']
+                        '21': ['Gain Drive SSA 4', 'RA-RaSIA01:RF-LLRF:GainSSA4'],
+                        'Cryogenic Load Leveler': {
+                            '34': ['Channel', 'RA-RaSIA01:RF-LLRF:CavMonCh'],
+                            '35': ['Gain', 'RA-RaSIA01:RF-LLRF:CavMonGain'],
+                        }
                     }
                 },
             },
@@ -2803,7 +2807,11 @@ SEC_2_CHANNELS = {
                         '16': ['Phase Shift Drive SSA 3', 'RA-RaSIB01:RF-LLRF:PhShSSA3'],
                         '20': ['Gain Drive SSA 3', 'RA-RaSIB01:RF-LLRF:GainSSA3'],
                         '17': ['Phase Shift Drive SSA 4', 'RA-RaSIB01:RF-LLRF:PhShSSA4'],
-                        '21': ['Gain Drive SSA 4', 'RA-RaSIB01:RF-LLRF:GainSSA4']
+                        '21': ['Gain Drive SSA 4', 'RA-RaSIB01:RF-LLRF:GainSSA4'],
+                        'Cryogenic Load Leveler': {
+                            '34': ['Channel', 'RA-RaSIB01:RF-LLRF:CavMonCh'],
+                            '35': ['Gain', 'RA-RaSIB01:RF-LLRF:CavMonGain'],
+                        }
                     }
                 }
             }
