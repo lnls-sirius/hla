@@ -1452,7 +1452,9 @@ class RFMainControl(SiriusMainWindow):
         return lay
 
     def _create_ssa_wid(self, lay_amp, row, chs_dict):
-        led_sts = SiriusLedState(self, self.prefix+chs_dict['Status'])
+        led_sts = SiriusLedAlert(self, self.prefix+chs_dict['Status'])
+        led_sts.offColor = PyDMLed.LightGreen
+        led_sts.onColor = PyDMLed.Red
         lay_amp.addWidget(led_sts, row, 1)
 
         lb_name = QLabel('<h4>'+chs_dict['Name']+'</h4>', self,
