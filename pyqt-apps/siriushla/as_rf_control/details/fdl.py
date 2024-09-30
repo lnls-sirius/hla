@@ -57,7 +57,8 @@ class FDLDetails(SiriusDialog):
         self.led_swtrig = SiriusLedAlert(
             self, self.prefix + self.chs['SW Trig'])
         self.bt_swtrig = SiriusPushButton(
-            self, self.prefix + self.chs['Trig'], 'Force')
+            self, self.prefix + self.chs['Trig'], 'Force',
+            pressValue=1, releaseValue=0)
 
         lay.addWidget(QLabel(
             '<h4>Perseus FDL Mode:</h4>', self,
