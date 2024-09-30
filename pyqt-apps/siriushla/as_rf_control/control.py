@@ -18,7 +18,7 @@ from ..widgets import PyDMLed, PyDMLedMultiChannel, PyDMStateButton, \
     SiriusWaveformPlot
 from .advanced_details import ADCDACDetails, AutoStartDetails, CalEqDetails, \
     CalSysDetails, ConditioningDetails, HardwareDetails, LoopsDetails, \
-    RampsDetails, TuningDetails
+    RampsDetails, RFInputsDetails, TuningDetails
 from .custom_widgets import RFEnblDsblButton
 from .details import CavityStatusDetails, FDLDetails, LLRFInterlockDetails, \
     SlowLoopErrorDetails, SlowLoopParametersDetails, SSADetailsBO, \
@@ -863,6 +863,8 @@ class RFMainControl(SiriusMainWindow):
             self._addDetailButton(
                 'ADCs and DACs', ADCDACDetails, systems[i], buttons)
             self._addDetailButton(
+                'RF Inputs', RFInputsDetails, systems[i], buttons)
+            self._addDetailButton(
                 'Hardware', HardwareDetails, systems[i], buttons)
             self._addDetailButton(
                 'Loops', LoopsDetails, systems[i], buttons)
@@ -1125,7 +1127,7 @@ class RFMainControl(SiriusMainWindow):
             idx += 1
         self.pwr_mon_graph.setLabel('left', '')
 
-        # ADCs and DACs
+        # RF Inputs
         if self.section == 'SI':
             systems = ['A', 'B']
             rows = [1, 9]
@@ -1136,13 +1138,13 @@ class RFMainControl(SiriusMainWindow):
                     f'<h4>{systems[i]}</h4>', alignment=Qt.AlignCenter)
                 lb_sys.setStyleSheet('min-width:15px;max-width:15px;')
 
-                pb_adcdac = QPushButton(qta.icon('fa5s.ellipsis-v'), '', self)
-                pb_adcdac.setStyleSheet(
+                pb_rfinp = QPushButton(qta.icon('fa5s.ellipsis-v'), '', self)
+                pb_rfinp.setStyleSheet(
                     'min-width:18px;max-width:18px;icon-size:20px;')
-                connect_window(pb_adcdac, ADCDACDetails, parent=self,
+                connect_window(pb_rfinp, RFInputsDetails, parent=self,
                             section=self.section, prefix=self.prefix,
                             system=systems[i])
-                lay_sys.addWidget(pb_adcdac)
+                lay_sys.addWidget(pb_rfinp)
                 lay_sys.addWidget(lb_sys)
                 lay_vals.addLayout(lay_sys, rows[i], 0)
 
