@@ -1,5 +1,6 @@
 """Advanced details related to calibration equations and constants."""
 
+from pydm.widgets.display_format import DisplayFormat
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGridLayout, QGroupBox, QLabel, \
     QSizePolicy as QSzPlcy, QSpacerItem
@@ -91,17 +92,23 @@ class CalEqDetails(SiriusDialog):
         row = 1
         for key, val in chs_dict.items():
             if key != 'OFS':
-                lay.addWidget(QLabel(key, alignment=Qt.AlignCenter), row, 0)
-                lay.addWidget(SiriusLabel(
-                    self, self.prefix+val+'-RB'), row, 1, 1, len(labels)-1)
-
-                if key != 'OLG':
-                    lay.addWidget(SiriusLabel(
-                        self, self.prefix+chs_dict['OFS']+'-RB'),
-                        row, len(labels), alignment=Qt.AlignCenter)
-                else:
+                column = 1
+                for i in range(len(labels)-1):
+                    lb = SiriusLabel(
+                        self, self.prefix+val+f'-RB.[{i}]')
+                    lb.precisionFromPV = False
+                    lb.precision = 3
+                    lb.displayFormat = DisplayFormat.Exponential
                     lay.addWidget(QLabel(
-                        '-', alignment=Qt.AlignCenter), row, len(labels))
+                        key, alignment=Qt.AlignCenter), row, 0)
+                    lay.addWidget(lb, row, column)
+                    column += 1
+
+                lb_ofs = SiriusLabel(self, self.prefix+chs_dict['OFS']+'-RB')
+                lb_ofs.precisionFromPV = 0
+                lb_ofs.precision = 3
+                lb_ofs.displayFormat = DisplayFormat.Exponential
+                lay.addWidget(lb_ofs, row, len(labels))
 
                 row += 1
 
@@ -119,11 +126,17 @@ class CalEqDetails(SiriusDialog):
             lay.addWidget(QLabel(labels[i], alignment=Qt.AlignCenter), 2, i)
 
         # Bodies
-        lay.addWidget(SiriusLabel(
-            self, self.prefix+chs_dict['Hw to Amp']+'-RB'),
-            1, 0, 1, len(labels))
-        lay.addWidget(SiriusLabel(
-            self, self.prefix+chs_dict['Amp to Hw']+'-RB'),
-            3, 0, 1, len(labels))
+        column = 0
+        for i in range(len(labels)):
+            for i, key in enumerate(['Hw to Amp', 'Amp to Hw']):
+                lb = SiriusLabel(
+                    self, self.prefix+chs_dict[key]+f'-RB.[{i}]')
+                lb.precisionFromPV = False
+                lb.precision = 3
+                lb.displayFormat = DisplayFormat.Exponential
+
+                row = 1 if i == 0 else 3
+                lay.addWidget(lb, row, column)
+            column += 1
 
         return lay
