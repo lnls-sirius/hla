@@ -1,3 +1,4 @@
+from .ac_panel import ACPanelDetails
 from .adcs_dacs import ADCDACDetails
 from .adv_interlock import AdvancedInterlockDetails
 from .auto_start import AutoStartDetails

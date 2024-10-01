@@ -4661,6 +4661,48 @@ SEC_2_CHANNELS = {
                 },
                 'Rsh': 'SI-03SP:RF-SRFCav-B:Rsh-Cte'
             }
+        },
+        'ACPanel': {
+            'A': {
+                'Phs': {
+                    'Curr': 'RA-ToSIA0$(NB):RF-ACPanel:PhsCurrent$(phs_num)-Mon',
+                    'Volt': 'RA-ToSIA0$(NB):RF-ACPanel:PhsVoltage$(phs_num)-Mon',
+                    'THD': 'RA-ToSIA0$(NB):RF-ACPanel:THD$(phs_num)-Mon'
+                },
+                'LineVolt': {
+                    '12': 'RA-ToSIA0$(NB):RF-ACPanel:LineVoltage12-Mon',
+                    '13': 'RA-ToSIA0$(NB):RF-ACPanel:LineVoltage13-Mon',
+                    '23': 'RA-ToSIA0$(NB):RF-ACPanel:LineVoltage23-Mon'
+                },
+                'CurrN': 'RA-ToSIA0$(NB):RF-ACPanel:CurrentN-Mon',
+                'Freq': 'RA-ToSIA0$(NB):RF-ACPanel:Freq-Mon',
+                'Pwr Factor': 'RA-ToSIA0$(NB):RF-ACPanel:PwrFactor-Mon',
+                'Pwr': {
+                    'S': 'RA-ToSIA0$(NB):RF-ACPanel:PwrS-Mon',
+                    'P': 'RA-ToSIA0$(NB):RF-ACPanel:PwrP-Mon',
+                    'Q': 'RA-ToSIA0$(NB):RF-ACPanel:PwrQ-Mon'
+                }
+            },
+            'B': {
+                'Phs': {
+                    'Curr': 'RA-ToSIB0$(NB):RF-ACPanel:PhsCurrent$(phs_num)-Mon',
+                    'Volt': 'RA-ToSIB0$(NB):RF-ACPanel:PhsVoltage$(phs_num)-Mon',
+                    'THD': 'RA-ToSIB0$(NB):RF-ACPanel:THD$(phs_num)-Mon'
+                },
+                'LineVolt': {
+                    '12': 'RA-ToSIB0$(NB):RF-ACPanel:LineVoltage12-Mon',
+                    '13': 'RA-ToSIB0$(NB):RF-ACPanel:LineVoltage13-Mon',
+                    '23': 'RA-ToSIB0$(NB):RF-ACPanel:LineVoltage23-Mon'
+                },
+                'CurrN': 'RA-ToSIB0$(NB):RF-ACPanel:CurrentN-Mon',
+                'Freq': 'RA-ToSIB0$(NB):RF-ACPanel:Freq-Mon',
+                'Pwr Factor': 'RA-ToSIB0$(NB):RF-ACPanel:PwrFactor-Mon',
+                'Pwr': {
+                    'S': 'RA-ToSIB0$(NB):RF-ACPanel:PwrS-Mon',
+                    'P': 'RA-ToSIB0$(NB):RF-ACPanel:PwrP-Mon',
+                    'Q': 'RA-ToSIB0$(NB):RF-ACPanel:PwrQ-Mon'
+                }
+            },
         }
     },
 }
