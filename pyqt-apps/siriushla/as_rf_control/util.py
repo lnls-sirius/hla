@@ -1154,6 +1154,7 @@ SEC_2_CHANNELS = {
                 '303': ['Pulses Frequency', 'RA-RaBO01:RF-LLRF:TuneFreq'],
                 '301': ['Tuning Direction', 'RA-RaBO01:RF-LLRF:TuneDir'],
                 '300': ['Auto Tuning Enable', 'RA-RaBO01:RF-LLRF:Tune'],
+                '299': ['Tuning Out', 'RA-RaBO01:RF-LLRF:TuneOut-Mon'],
                 'Moving': {
                     'Manual': {
                         'Up 1': 'BO-05D:RF-P5Cav:Plg1ManUp-Mon',
@@ -3989,6 +3990,7 @@ SEC_2_CHANNELS = {
                     '303': ['Pulses Frequency', 'RA-RaSIA01:RF-LLRF:TuneFreq'],
                     '301': ['Tuning Direction', 'RA-RaSIA01:RF-LLRF:TuneDir'],
                     '300': ['Auto Tuning Enable', 'RA-RaSIA01:RF-LLRF:Tune'],
+                    '299': ['Tuning Out', 'RA-RaSIA01:RF-LLRF:TuneOut-Mon'],
                     'Moving': {
                         'Manual': {
                             'Up': 'SI-03SP:RF-SRFCav-A:TunerManUp-Mon',
@@ -4034,6 +4036,7 @@ SEC_2_CHANNELS = {
                     '303': ['Pulses Frequency', 'RA-RaSIB01:RF-LLRF:TuneFreq'],
                     '301': ['Tuning Direction', 'RA-RaSIB01:RF-LLRF:TuneDir'],
                     '300': ['Auto Tuning Enable', 'RA-RaSIB01:RF-LLRF:Tune'],
+                    '299': ['Tuning Out', 'RA-RaSIB01:RF-LLRF:TuneOut-Mon'],
                     'Moving': {
                         'Manual': {
                             'Up': 'SI-03SP:RF-SRFCav-B:TunerManUp-Mon',

@@ -96,6 +96,13 @@ class TuningDetails(SiriusDialog):
             row, 3, alignment=Qt.AlignCenter)
         row += 1
 
+        # Tuning Out
+        self._setupAddrLabel(lay, chs_dict, '299', row)
+        lay.addWidget(SiriusLedState(
+            self, self.prefix+chs_dict['299'][1]),
+            row, 3, alignment=Qt.AlignCenter)
+        row += 1
+
         # Pulses Freq
         lb_freq = SiriusLabel(self, self.prefix+chs_dict['303'][1]+'-RB')
         lb_freq.showUnits = True
