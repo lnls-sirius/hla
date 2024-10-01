@@ -290,6 +290,15 @@ class SiriusScrnView(QWidget):
         self.pb_autogain.setStyleSheet(
             "#autog{min-width:25px; max-width:25px; icon-size:20px;}")
 
+        label_CycleEnergy = QLabel('Cycle Energy: ', self)
+        self.pb_cycle_energy = PyDMPushButton(
+            label='', icon=qta.icon('fa5s.sync'),
+            parent=self, pressValue=1,
+            init_channel=self.scrn_prefix.substitute(propty='PoEReset-Cmd'))
+        self.pb_cycle_energy.setObjectName('cycle_energy')
+        self.pb_cycle_energy.setStyleSheet(
+            "#cycle_energy{min-width:25px; max-width:25px; icon-size:20px;}")
+        
         cam_prefix = SiriusPVName(self.scrn_prefix).substitute(dev='ScrnCam')
         label_Reset = QLabel('Reset: ', self)
         self.pb_dtl = PyDMPushButton(
@@ -320,6 +329,7 @@ class SiriusScrnView(QWidget):
         lay.addRow(label_CamAcqPeriod, hbox_CamAcqPeriod)
         lay.addRow(label_CamExposureTime, hbox_CamExposureTime)
         lay.addRow(label_CamGain, hbox_CamGain)
+        lay.addRow(label_CycleEnergy, self.pb_cycle_energy)
         lay.addRow(label_AutoGain, self.pb_autogain)
         lay.addRow(label_Reset, hbox_aux)
         return lay
