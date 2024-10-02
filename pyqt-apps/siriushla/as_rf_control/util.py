@@ -1704,6 +1704,14 @@ SEC_2_CHANNELS = {
                 'Coupler ok': 'SI-03SP:RF-P7Cav:CoupPressure-Mon',
             }
         },
+        'Cryo Sts': {
+            'A': {
+                'Geral': 'SI-03SP:RF-CryoMod-A:Intlk-Mon'
+            },
+            'B': {
+                'Geral': 'SI-03SP:RF-CryoMod-B:Intlk-Mon'
+            }
+        },
         'TL Sts': {
             'A': {
                 'Geral': 'RA-TLSIA:RF-TrLine:Sts-Mon',

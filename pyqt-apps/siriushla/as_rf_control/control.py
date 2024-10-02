@@ -198,20 +198,42 @@ class RFMainControl(SiriusMainWindow):
         lay.addWidget(self._ld_stats, row, 0, 1, 3)
         row += 1
 
+        # # Status Cryo Module
+        if self.section == 'SI':
+            self.ld_cryosts = QLabel('Cryo Module', self, alignment=Qt.AlignRight)
+            self.pb_cryodtls = QPushButton(qta.icon('fa5s.ellipsis-v'), '', self)
+            self.pb_cryodtls.setObjectName('dtls')
+            self.pb_cryodtls.setStyleSheet(
+                '#dtls{min-width:18px;max-width:18px;icon-size:20px;}')
+            connect_window(self.pb_cryodtls, CavityStatusDetails, parent=self,
+                        section=self.section, prefix=self.prefix)
+            lay.addWidget(self.ld_cryosts, row, 0, alignment=Qt.AlignVCenter)
+            lay.addWidget(self.pb_cryodtls, row, 2)
+            row += 1
+
+            for key, chs_dict in self.chs['Cryo Sts'].items():
+                ld_cryosts = QLabel(
+                    f'• {key}', alignment=Qt.AlignRight | Qt.AlignVCenter)
+                led_cryosts = PyDMLedMultiChannel(
+                    self, {self.prefix+chs_dict['Geral']: 1})
+                lay.addWidget(ld_cryosts, row, 0)
+                lay.addWidget(led_cryosts, row, 1, alignment=Qt.AlignCenter)
+                row += 1
         # # Status Cavity
-        self.ld_cavsts = QLabel('Cavity', self, alignment=Qt.AlignRight)
-        self.led_cavsts = PyDMLedMultiChannel(
-            self, {self.prefix+self.chs['Cav Sts']['Geral']: 1})
-        self.pb_cavdtls = QPushButton(qta.icon('fa5s.ellipsis-v'), '', self)
-        self.pb_cavdtls.setObjectName('dtls')
-        self.pb_cavdtls.setStyleSheet(
-            '#dtls{min-width:18px;max-width:18px;icon-size:20px;}')
-        connect_window(self.pb_cavdtls, CavityStatusDetails, parent=self,
-                       section=self.section, prefix=self.prefix)
-        lay.addWidget(self.ld_cavsts, row, 0, alignment=Qt.AlignVCenter)
-        lay.addWidget(self.led_cavsts, row, 1, alignment=Qt.AlignCenter)
-        lay.addWidget(self.pb_cavdtls, row, 2)
-        row += 1
+        else:
+            self.ld_cavsts = QLabel('Cavity', self, alignment=Qt.AlignRight)
+            self.led_cavsts = PyDMLedMultiChannel(
+                self, {self.prefix+self.chs['Cav Sts']['Geral']: 1})
+            self.pb_cavdtls = QPushButton(qta.icon('fa5s.ellipsis-v'), '', self)
+            self.pb_cavdtls.setObjectName('dtls')
+            self.pb_cavdtls.setStyleSheet(
+                '#dtls{min-width:18px;max-width:18px;icon-size:20px;}')
+            connect_window(self.pb_cavdtls, CavityStatusDetails, parent=self,
+                        section=self.section, prefix=self.prefix)
+            lay.addWidget(self.ld_cavsts, row, 0, alignment=Qt.AlignVCenter)
+            lay.addWidget(self.led_cavsts, row, 1, alignment=Qt.AlignCenter)
+            lay.addWidget(self.pb_cavdtls, row, 2)
+            row += 1
 
         # # Status Transmission Line
         self.ld_tlsts = QLabel('Transm. Line', self, alignment=Qt.AlignRight)
