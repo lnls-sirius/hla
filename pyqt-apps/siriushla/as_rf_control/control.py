@@ -356,8 +356,8 @@ class RFMainControl(SiriusMainWindow):
         lay_amp = QGridLayout()
         lay_amp.setHorizontalSpacing(8)
         lay_amp.setVerticalSpacing(15)
-        lay_amp.addItem(QSpacerItem(
-            10, 0, QSzPlcy.Expanding, QSzPlcy.Ignored), 0, 0)
+        lay_amp.addWidget(
+            QLabel('<h4>Status</h4>', self, alignment=Qt.AlignCenter), 1, 3)
         lay_amp.addWidget(
             QLabel('<h4>Power</h4>', self, alignment=Qt.AlignCenter), 1, 4)
         lay_amp.addWidget(QLabel(
@@ -1454,21 +1454,16 @@ class RFMainControl(SiriusMainWindow):
         return lay
 
     def _create_ssa_wid(self, lay_amp, row, chs_dict):
-        led_sts = SiriusLedAlert(self, self.prefix+chs_dict['Status'])
-        led_sts.offColor = PyDMLed.LightGreen
-        led_sts.onColor = PyDMLed.Red
-        lay_amp.addWidget(led_sts, row, 1)
-
         lb_name = QLabel('<h4>'+chs_dict['Name']+'</h4>', self,
                          alignment=Qt.AlignCenter)
         lb_name.setStyleSheet('max-height: 1.29em;')
-        lay_amp.addWidget(lb_name, row, 2)
+        lay_amp.addWidget(lb_name, row, 1)
 
         pb_ssadtls = QPushButton(qta.icon('fa5s.ellipsis-v'), '', self)
         pb_ssadtls.setObjectName('dtls')
         pb_ssadtls.setStyleSheet(
             '#dtls{min-width:18px;max-width:18px;icon-size:20px;}')
-        lay_amp.addWidget(pb_ssadtls, row, 3)
+        lay_amp.addWidget(pb_ssadtls, row, 2)
         if self.section == 'SI':
             ssa_num = int(chs_dict['Name'].split()[-1])
             system = ('A' if ssa_num == 1 or ssa_num == 2 else 'B')
@@ -1477,6 +1472,11 @@ class RFMainControl(SiriusMainWindow):
         else:
             connect_window(pb_ssadtls, SSADetailsBO, parent=self,
                         prefix=self.prefix)
+
+        led_sts = SiriusLedAlert(self, self.prefix+chs_dict['Status'])
+        led_sts.onColor = PyDMLed.LightGreen
+        led_sts.offColor = PyDMLed.Red
+        lay_amp.addWidget(led_sts, row, 3, alignment=Qt.AlignCenter)
 
         lb_pwr = SiriusLabel(self, self.prefix+chs_dict['Power'])
         lb_pwr.showUnits = True
