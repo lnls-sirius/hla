@@ -1133,10 +1133,8 @@ SEC_2_CHANNELS = {
         'Conditioning': {
             '200': ['Pulse Mode Enable', 'RA-RaBO01:RF-LLRF:CondEnbl'],
             '201': ['Auto Conditioning Enable', 'RA-RaBO01:RF-LLRF:CondAuto'],
-            '204': ['Conditioning Freq', 'RA-RaBO01:RF-LLRF:CondFreq'],
-            '540': ['Cond Freq Diag', 'RA-RaBO01:RF-LLRF:CondFreq-Mon'],
-            '205': ['Duty Cycle', 'RA-RaBO01:RF-LLRF:CondDuty2'],
-            '530': ['Duty Cycle RB', 'RA-RaBO01:RF-LLRF:CondDutyCycle-Mon'],
+            '202': ['Duty Cycle', 'RA-RaBO01:RF-LLRF:CondDuty'],
+            '530': ['Duty Cycle Ref', 'RA-RaBO01:RF-LLRF:CondDutyCycle-Mon'],
             '79': ['Vacuum', 'RA-RaBO01:RF-LLRF:VacuumFastRly-Mon'],
             'Relay': {
                 'CGC Fast Relay': 'BO-05D:VA-CCG-RFC:FastRelay',
@@ -3971,19 +3969,15 @@ SEC_2_CHANNELS = {
             'A': {
                 '200': ['Pulse Mode Enable', 'RA-RaSIA01:RF-LLRF:CondEnbl'],
                 '201': ['Auto Conditioning Enable', 'RA-RaSIA01:RF-LLRF:CondAuto'],
-                '204': ['Conditioning Freq', 'RA-RaSIA01:RF-LLRF:CondFreq'],
-                '540': ['Cond Freq Diag', 'RA-RaSIA01:RF-LLRF:CondFreq-Mon'],
-                '205': ['Duty Cycle', 'RA-RaSIA01:RF-LLRF:CondDuty2'],
-                '530': ['Duty Cycle RB', 'RA-RaSIA01:RF-LLRF:CondDutyCycle-Mon'],
+                '202': ['Duty Cycle', 'RA-RaSIA01:RF-LLRF:CondDuty'],
+                '530': ['Duty Cycle Ref', 'RA-RaSIA01:RF-LLRF:CondDutyCycle-Mon'],
                 '79': ['Vacuum', 'RA-RaSIA01:RF-LLRF:VacuumFastRly-Mon'],
             },
             'B': {
                 '200': ['Pulse Mode Enable', 'RA-RaSIB01:RF-LLRF:CondEnbl'],
                 '201': ['Auto Conditioning Enable', 'RA-RaSIB01:RF-LLRF:CondAuto'],
-                '204': ['Conditioning Freq', 'RA-RaSIB01:RF-LLRF:CondFreq'],
-                '540': ['Cond Freq Diag', 'RA-RaSIB01:RF-LLRF:CondFreq-Mon'],
-                '205': ['Duty Cycle', 'RA-RaSIB01:RF-LLRF:CondDuty2'],
-                '530': ['Duty Cycle RB', 'RA-RaSIB01:RF-LLRF:CondDutyCycle-Mon'],
+                '202': ['Duty Cycle', 'RA-RaSIB01:RF-LLRF:CondDuty'],
+                '530': ['Duty Cycle Ref', 'RA-RaSIB01:RF-LLRF:CondDutyCycle-Mon'],
                 '79': ['Vacuum', 'RA-RaSIB01:RF-LLRF:VacuumFastRly-Mon'],
             }
         },
