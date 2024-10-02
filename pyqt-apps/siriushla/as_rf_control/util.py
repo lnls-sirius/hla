@@ -1957,13 +1957,12 @@ SEC_2_CHANNELS = {
                 'Alerts': {
                     'PhsFlt': ['Phase Fault', 'RA-ToSIA0$(NB):RF-ACPanel:PhsFlt-Mon'],
                     'SSAFlwRt': ['SSA Rotameter Flow', 'RA-ToSIA0$(NB):RF-SSAmpTower:HdFlwRt-Mon'],
-                    'LoadFlwRt': ['Load Rotameter Flow', 'RA-ToSIA0$(NB):RF-WaterLoad:HdFlwRt-Mon'],
                     'PnlFeed': ['AC Panel Feedback', 'RA-ToSIA0$(NB):RF-ACPanel:Intlk-Mon'],
                     'PnlIntlk': ['AC Panel Interlock', 'RA-ToSIA0$(NB):RF-Intlk:IntlkACPanel-Mon'],
-                    'PnlSts': ['AC Panel Status', 'RA-ToSIA0$(NB):RF-ACPanel:ACOp-Mon'],
-                    'ElecFuse': ['Electronic Fuse', 'RA-ToSIA0$(NB):RF-CtrlPanel:Sts-Mon'],
+                    'PnlSts': ['AC Panel Status', 'RA-ToSIA0$(NB):RF-ACPanel:PwrACOp-Mon'],
+                    'ElecFuse': ['Electronic Fuse', 'RA-ToSIA0$(NB):RF-CtrlPanel:PwrSts-Mon'],
                     'PwrSup': ['24V Power Supply', 'RA-ToSIA0$(NB):RF-ACPanel:StsPos24V-Mon'],
-                    'PwrIntlk': ['RF Power Interlock', 'RA-ToSIA0$(NB):RF-SSAmpTower:RFSts-Mon'],
+                    'PwrIntlk': ['RF Power Interlock', 'RA-ToSIA0$(NB):RF-SSAmpTower:RFPwrSts-Mon'],
                 }
             },
             'B': {
@@ -2012,13 +2011,12 @@ SEC_2_CHANNELS = {
                 'Alerts': {
                     'PhsFlt': ['Phase Fault', 'RA-ToSIB0$(NB):RF-ACPanel:PhsFlt-Mon'],
                     'SSAFlwRt': ['SSA Rotameter Flow', 'RA-ToSIB0$(NB):RF-SSAmpTower:HdFlwRt-Mon'],
-                    'LoadFlwRt': ['Load Rotameter Flow', 'RA-ToSIB0$(NB):RF-WaterLoad:HdFlwRt-Mon'],
                     'PnlFeed': ['AC Panel Feedback', 'RA-ToSIB0$(NB):RF-ACPanel:Intlk-Mon'],
                     'PnlIntlk': ['AC Panel Interlock', 'RA-ToSIB0$(NB):RF-Intlk:IntlkACPanel-Mon'],
-                    'PnlSts': ['AC Panel Status', 'RA-ToSIB0$(NB):RF-ACPanel:ACOp-Mon'],
-                    'ElecFuse': ['Electronic Fuse', 'RA-ToSIB0$(NB):RF-CtrlPanel:Sts-Mon'],
+                    'PnlSts': ['AC Panel Status', 'RA-ToSIB0$(NB):RF-ACPanel:PwrACOp-Mon'],
+                    'ElecFuse': ['Electronic Fuse', 'RA-ToSIB0$(NB):RF-CtrlPanel:PwrSts-Mon'],
                     'PwrSup': ['24V Power Supply', 'RA-ToSIB0$(NB):RF-ACPanel:StsPos24V-Mon'],
-                    'PwrIntlk': ['RF Power Interlock', 'RA-ToSIB0$(NB):RF-SSAmpTower:RFSts-Mon'],
+                    'PwrIntlk': ['RF Power Interlock', 'RA-ToSIB0$(NB):RF-SSAmpTower:RFPwrSts-Mon'],
                 }
             }
         },
