@@ -83,7 +83,7 @@ class CalEqDetails(SiriusDialog):
         lay.setSpacing(9)
 
         # Header
-        labels = ['C0', 'C1', 'C2', 'C3', 'C4', 'OFS']
+        labels = ['C0', 'C1', 'C2', 'C3', 'C4']
         for i in range(len(labels)):
             lay.addWidget(QLabel(
                 labels[i], alignment=Qt.AlignCenter), 0, i+1)
@@ -93,24 +93,24 @@ class CalEqDetails(SiriusDialog):
         for key, val in chs_dict.items():
             if key != 'OFS':
                 column = 1
-                for i in range(len(labels)-1):
+                for i in range(len(labels)):
                     lb = SiriusLabel(
                         self, self.prefix+val+f'-RB.[{i}]')
                     lb.precisionFromPV = False
-                    lb.precision = 3
+                    lb.precision = 2
                     lb.displayFormat = DisplayFormat.Exponential
                     lay.addWidget(QLabel(
                         key, alignment=Qt.AlignCenter), row, 0)
                     lay.addWidget(lb, row, column)
                     column += 1
-
-                lb_ofs = SiriusLabel(self, self.prefix+chs_dict['OFS']+'-RB')
-                lb_ofs.precisionFromPV = 0
-                lb_ofs.precision = 3
-                lb_ofs.displayFormat = DisplayFormat.Exponential
-                lay.addWidget(lb_ofs, row, len(labels))
-
                 row += 1
+
+        lb_ofs = SiriusLabel(self, self.prefix+chs_dict['OFS']+'-RB')
+        lb_ofs.precisionFromPV = 0
+        lb_ofs.precision = 2
+        lb_ofs.displayFormat = DisplayFormat.Exponential
+        lay.addWidget(QLabel('<h4>OFS</h4>', alignment=Qt.AlignCenter), row, 0)
+        lay.addWidget(lb_ofs, row, 1, 1, 5, alignment=Qt.AlignLeft)
 
         return lay
 
@@ -132,7 +132,7 @@ class CalEqDetails(SiriusDialog):
                 lb = SiriusLabel(
                     self, self.prefix+chs_dict[key]+f'-RB.[{i}]')
                 lb.precisionFromPV = False
-                lb.precision = 3
+                lb.precision = 2
                 lb.displayFormat = DisplayFormat.Exponential
 
                 row = 1 if i == 0 else 3
