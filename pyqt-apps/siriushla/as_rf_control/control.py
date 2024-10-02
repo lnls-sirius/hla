@@ -150,20 +150,35 @@ class RFMainControl(SiriusMainWindow):
         lay.addWidget(self._ld_intlks, 0, 0, 1, 3)
 
         # # Emergency
-        self.ld_emerg = QLabel('Emergency Stop', self, alignment=Qt.AlignRight)
-        self.ld_emerg.setStyleSheet('min-width: 6.8em;')
-        self.led_emerg = SiriusLedAlert(
-            self, self.prefix+self.chs['Emergency'])
-        lay.addWidget(self.ld_emerg, 1, 0, alignment=Qt.AlignVCenter)
-        lay.addWidget(self.led_emerg, 1, 1, alignment=Qt.AlignCenter)
+        if self.section == 'BO':
+            self.ld_emerg = QLabel('Emergency Stop', self, alignment=Qt.AlignRight)
+            self.ld_emerg.setStyleSheet('min-width: 6.8em;')
+            self.led_emerg = SiriusLedAlert(
+                self, self.prefix+self.chs['Emergency'])
+            lay.addWidget(self.ld_emerg, 1, 0, alignment=Qt.AlignVCenter)
+            lay.addWidget(self.led_emerg, 1, 1, alignment=Qt.AlignCenter)
 
         # # Sirius Interlock
         self.ld_siriusintlk = QLabel(
             'Sirius Interlock', self, alignment=Qt.AlignRight)
-        self.led_siriusintlk = SiriusLedAlert(
-            self, self.prefix+self.chs['Sirius Intlk'])
-        lay.addWidget(self.ld_siriusintlk, 2, 0, alignment=Qt.AlignVCenter)
-        lay.addWidget(self.led_siriusintlk, 2, 1, alignment=Qt.AlignCenter)
+        row = 2
+        lay.addWidget(self.ld_siriusintlk, row, 0, alignment=Qt.AlignVCenter)
+        if self.section == 'SI':
+            row += 1
+            for key, val in self.chs['Sirius Intlk'].items():
+                ld_llrf = QLabel(
+                    f'• {key}', alignment=Qt.AlignRight | Qt.AlignVCenter)
+                led_siriusintlk = SiriusLedAlert(self, self.prefix+val)
+                lay.addWidget(ld_llrf, row, 0)
+                lay.addWidget(led_siriusintlk, row, 1,
+                    alignment=Qt.AlignCenter)
+                row += 1
+        else:
+            self.led_siriusintlk = SiriusLedAlert(
+                self, self.prefix+self.chs['Sirius Intlk'])
+            lay.addWidget(self.led_siriusintlk, row, 1,
+                alignment=Qt.AlignCenter)
+            row += 1
 
         # # LLRF Interlock
         self.ld_intlk = QLabel('LLRF Interlock', self, alignment=Qt.AlignRight)
@@ -174,7 +189,6 @@ class RFMainControl(SiriusMainWindow):
         connect_window(self.pb_intlkdtls, LLRFInterlockDetails, parent=self,
                        section=self.section, prefix=self.prefix)
 
-        row = 3
         lay.addWidget(self.ld_intlk, row, 0, alignment=Qt.AlignVCenter)
         lay.addWidget(self.pb_intlkdtls, row, 2, alignment=Qt.AlignCenter)
         if self.section == 'SI':
