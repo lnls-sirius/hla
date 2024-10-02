@@ -4591,6 +4591,14 @@ SEC_2_CHANNELS = {
                     'U-Raw': 'RA-RaSIA01:RF-LLRF:ALRefSysCalInv',
                     'OFS': 'RA-RaSIA01:RF-LLRF:ALRefOffset'
                 },
+                'FBTN Top': {
+                    'Raw-U': 'RA-RaSIA01:RF-LLRF:FBTNTopSysCal',
+                    'OFS': 'RA-RaSIA01:RF-LLRF:FBTNTopOffset'
+                },
+                'FBTN Bot': {
+                    'Raw-U': 'RA-RaSIA01:RF-LLRF:FBTNBotSysCal',
+                    'OFS': 'RA-RaSIA01:RF-LLRF:FBTNBotOffset'
+                },
                 'VGap': {
                     'Hw to Amp': 'RA-RaSIA01:RF-LLRF:Hw2AmpVCavCoeff',
                     'Amp to Hw': 'RA-RaSIA01:RF-LLRF:AmpVCav2HwCoeff'
@@ -4654,6 +4662,14 @@ SEC_2_CHANNELS = {
                     'Raw-U': 'RA-RaSIB01:RF-LLRF:ALRefSysCal',
                     'U-Raw': 'RA-RaSIB01:RF-LLRF:ALRefSysCalInv',
                     'OFS': 'RA-RaSIB01:RF-LLRF:ALRefOffset'
+                },
+                'FBTN Top': {
+                    'Raw-U': 'RA-RaSIB01:RF-LLRF:FBTNTopSysCal',
+                    'OFS': 'RA-RaSIB01:RF-LLRF:FBTNTopOffset'
+                },
+                'FBTN Bot': {
+                    'Raw-U': 'RA-RaSIB01:RF-LLRF:FBTNBotSysCal',
+                    'OFS': 'RA-RaSIB01:RF-LLRF:FBTNBotOffset'
                 },
                 'VGap': {
                     'Hw to Amp': 'RA-RaSIB01:RF-LLRF:Hw2AmpVCavCoeff',
