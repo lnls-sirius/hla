@@ -215,7 +215,7 @@ class RFMainControl(SiriusMainWindow):
                 ld_cryosts = QLabel(
                     f'• {key}', alignment=Qt.AlignRight | Qt.AlignVCenter)
                 led_cryosts = PyDMLedMultiChannel(
-                    self, {self.prefix+chs_dict['Geral']: 1})
+                    self, {self.prefix+chs_dict['Geral']: 0})
                 lay.addWidget(ld_cryosts, row, 0)
                 lay.addWidget(led_cryosts, row, 1, alignment=Qt.AlignCenter)
                 row += 1
