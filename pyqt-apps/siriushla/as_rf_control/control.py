@@ -206,16 +206,12 @@ class RFMainControl(SiriusMainWindow):
             lay.addWidget(self.led_llrf, row, 1, alignment=Qt.AlignCenter)
             row += 1
 
-        # Status
-        self._ld_stats = QLabel(
-            '<h4>Status</h4>', self, alignment=Qt.AlignLeft)
-        lay.addWidget(self._ld_stats, row, 0, 1, 3)
-        row += 1
-
-        # # Status Cryo Module
+        # # Cryo Module
         if self.section == 'SI':
-            self.ld_cryosts = QLabel('Cryo Module', self, alignment=Qt.AlignRight)
-            self.pb_cryodtls = QPushButton(qta.icon('fa5s.ellipsis-v'), '', self)
+            self.ld_cryosts = QLabel(
+                'Cryo Module', self, alignment=Qt.AlignRight)
+            self.pb_cryodtls = QPushButton(
+                qta.icon('fa5s.ellipsis-v'), '', self)
             self.pb_cryodtls.setObjectName('dtls')
             self.pb_cryodtls.setStyleSheet(
                 '#dtls{min-width:18px;max-width:18px;icon-size:20px;}')
@@ -233,7 +229,7 @@ class RFMainControl(SiriusMainWindow):
                 lay.addWidget(ld_cryosts, row, 0)
                 lay.addWidget(led_cryosts, row, 1, alignment=Qt.AlignCenter)
                 row += 1
-        # # Status Cavity
+        # # Cavity
         else:
             self.ld_cavsts = QLabel('Cavity', self, alignment=Qt.AlignRight)
             self.led_cavsts = PyDMLedMultiChannel(
@@ -249,7 +245,7 @@ class RFMainControl(SiriusMainWindow):
             lay.addWidget(self.pb_cavdtls, row, 2)
             row += 1
 
-        # # Status Transmission Line
+        # # Transmission Line
         self.ld_tlsts = QLabel('Transm. Line', self, alignment=Qt.AlignRight)
         self.pb_tldtls = QPushButton(qta.icon('fa5s.ellipsis-v'), '', self)
         self.pb_tldtls.setObjectName('dtls')
