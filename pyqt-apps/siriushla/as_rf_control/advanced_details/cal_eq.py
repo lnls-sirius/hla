@@ -93,14 +93,14 @@ class CalEqDetails(SiriusDialog):
         for key, val in chs_dict.items():
             if key != 'OFS':
                 column = 1
+                lay.addWidget(QLabel(
+                    f'<h4>{key}</h4>', alignment=Qt.AlignCenter), row, 0)
                 for i in range(len(labels)):
                     lb = SiriusLabel(
                         self, self.prefix+val+f'-RB.[{i}]')
                     lb.precisionFromPV = False
                     lb.precision = 2
                     lb.displayFormat = DisplayFormat.Exponential
-                    lay.addWidget(QLabel(
-                        key, alignment=Qt.AlignCenter), row, 0)
                     lay.addWidget(lb, row, column)
                     column += 1
                 row += 1
