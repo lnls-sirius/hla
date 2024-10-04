@@ -228,8 +228,6 @@ PVS_DVF = {
                 'cam1:DataType', 'cam1:DataType_RBV'],
             'Pixel Format': [
                 'cam1:PixelFormat', 'cam1:PixelFormat_RBV'],
-            'Pixel Size': [
-                'cam1:PixelSize', 'cam1:PixelSize_RBV'],
             'ArrayCallbacks': [
                 'cam1:ArrayCallbacks', 'cam1:ArrayCallbacks_RBV'],
         }
@@ -247,8 +245,6 @@ PVS_DVF = {
     'Other Pluggins Settings': [
         (3, 1, 1, 2),
         {
-            'ffmstream1 - EnableCallbacks': [
-                'ffmstream1:EnableCallbacks', 'ffmstream1:EnableCallbacks_RBV'],
             'Trans1 - EnableCallbacks': [
                 'Trans1:EnableCallbacks', 'Trans1:EnableCallbacks_RBV'],
             'HDF1 - EnableCallbacks': [
