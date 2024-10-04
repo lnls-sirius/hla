@@ -92,7 +92,7 @@ class TransmLineStatusDetails(SiriusDialog):
         row += 1
 
         for widget_id, pvname in chs_dict['label'].items():
-            if not ((self.section == 'BO') and ('Combiner' == widget_id)):
+            if not (self.section == 'BO'):
                 si_lbl_wid = SiriusLabel(
                     self, self.prefix+pvname)
                 si_lbl_wid.showUnits = True
