@@ -7,7 +7,7 @@ from qtpy.QtWidgets import QCheckBox, QComboBox, QGridLayout, QGroupBox, \
 
 from ...widgets import PyDMStateButton, SiriusDialog, SiriusLabel, \
     SiriusLedAlert, SiriusLedState, SiriusPushButton, SiriusSpinbox, \
-    SiriusWaveformPlot
+    SiriusWaveformPlot, SiriusLineEdit
 
 
 class FDLDetails(SiriusDialog):
@@ -154,11 +154,11 @@ class FDLDetails(SiriusDialog):
         lay.addLayout(size_dur_lay, 3, 3)
 
         # Fifth line
-        self.sb_delay_sample = SiriusSpinbox(
+        self.sb_delay_sample = SiriusLineEdit(
             self, self.prefix + self.chs['Delay'] + '-SP')
         self.lb_delay_sample = SiriusLabel(
             self, self.prefix + self.chs['Delay'] + '-RB')
-        self.sb_delay_us = SiriusSpinbox(
+        self.sb_delay_us = SiriusLineEdit(
             self, self.prefix + self.chs['Delay'] + 'Time-SP')
         self.lb_delay_us = SiriusLabel(
             self, self.prefix + self.chs['Delay'] + 'Time-RB')
