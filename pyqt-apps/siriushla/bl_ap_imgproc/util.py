@@ -57,7 +57,7 @@ PVS_IMGPROCOVERVIEW = {
     'Image': [
         (2, 0, 1, 3),
         {
-            'Projection': ['image1:ArrayData', 'ImgSizeX-Mon'],
+            'Projection': ['image1:ArrayData', 'image1:ArraySize0_RBV'],
         }
     ],
 }
@@ -190,13 +190,13 @@ PVS_DVF = {
         {
             'Max Size X': 'cam1:MaxSizeX_RBV',
             'Max Size Y': 'cam1:MaxSizeY_RBV',
-            'Offset X': 'cam1:OffsetX_RBV',
-            'Offset Y': 'cam1:OffsetY_RBV',
+            'Offset X': 'cam1:MinX_RBV',
+            'Offset Y': 'cam1:MinY_RBV',
             'Size X': 'cam1:SizeX_RBV',
             'Size Y': 'cam1:SizeY_RBV',
-            'Temperature': 'cam1:Temperature',
-            'Failures': 'cam1:FAILURES_RBV',
-            'Completed': 'cam1:COMPLETED_RBV',
+            'Temperature': 'cam1:GC_TemperatureAbs_RBV',
+            'Failures': 'cam1:ARFrameFailures',
+            'Completed': 'cam1:ARFramesCompleted',
         }
     ],
     'Camera Acquisition': [
