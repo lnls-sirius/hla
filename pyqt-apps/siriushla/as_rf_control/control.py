@@ -1652,7 +1652,7 @@ class RFMainControl(SiriusMainWindow):
         column = 0
         for idx in range(len(chs['Signals'])):
             self._setupAmpCurve(chs['Signals'][idx],
-            self.prefix+chs['Time'], idx, lay_checks, row, column)
+            self.prefix+chs['Time'], key, idx, lay_checks, row, column)
             column += 1
             if column == len(chs['Signals']) / 2:
                 row += 1
@@ -1757,8 +1757,8 @@ class RFMainControl(SiriusMainWindow):
         lay_slc.addItem(QSpacerItem(
             15, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 12, offset+2)
 
-    def _setupAmpCurve(self, signal, timebase, idx, lay_checks, row, column):
-        cid = signal[0]
+    def _setupAmpCurve(self, signal, timebase, key, idx, lay_checks, row, column):
+        cid = f'{key} - {signal[0]}'
         color = self.prefix + signal[3]
 
         if signal[1]:
@@ -1771,7 +1771,7 @@ class RFMainControl(SiriusMainWindow):
             )
             self.curves_amp[cid] = self.amp_graph.curveAtIndex(idx)
 
-        cbx = QCheckBox(cid, self)
+        cbx = QCheckBox(signal[0], self)
         cbx.setChecked(True)
         cbx.setObjectName(cid)
         cbx.setStyleSheet('color:' + color + ';')
