@@ -43,7 +43,9 @@ class CycleWindow(SiriusMainWindow):
         self.setWindowIcon(qta.icon('mdi.recycle', color=cor))
         self._is_adv_mode = adv_mode
         # Data structs
-        self._psnames = get_psnames(isadv=self._is_adv_mode)
+        self._psnames = Filter.process_filters(
+            get_psnames(isadv=self._is_adv_mode),
+            filters={'sub': '((?!SB).)*'})
         self._timing = Timing()
         self._ps2cycle = list()
         self._ps_ready = list()
