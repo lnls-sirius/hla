@@ -78,7 +78,8 @@ class IDControl(SiriusMainWindow):
         lay.addWidget(self._apu_header)
 
         idlist = ['SI-06SB:ID-APU22', 'SI-07SP:ID-APU22',
-                  'SI-09SA:ID-APU22', 'SI-11SP:ID-APU58']
+                  'SI-09SA:ID-APU22', 'SI-11SP:ID-APU58',
+                  'SI-17SA:ID-APU22']
         for idname in idlist:
             apu_wid = APUSummaryWidget(self, self._prefix, idname)
             lay.addWidget(apu_wid)
