@@ -378,8 +378,8 @@ SEC_2_CHANNELS = {
         'FDL': {
             'Signals': (
                 ('Cav', 'RA-RaBO01:RF-LLRF:FDLCavAmp-Mon', 'RA-RaBO01:RF-LLRF:FDLCavPhs-Mon', 'blue'),
-                ('Fwd Cav', 'RA-RaBO01:RF-LLRF:FDLCavFwdAmp-Mon', 'RA-RaBO01:RF-LLRF:FDLCavFwdPhs-Mon', 'red'),
-                ('Rev Cav', 'RA-RaBO01:RF-LLRF:FDLCavRevAmp-Mon', 'RA-RaBO01:RF-LLRF:FDLCavRevPhs-Mon', 'darkSlateBlue'),
+                ('Fwd Cav', 'RA-RaBO01:RF-LLRF:FDLFwdCavAmp-Mon', 'RA-RaBO01:RF-LLRF:FDLFwdCavPhs-Mon', 'red'),
+                ('Rev Cav', 'RA-RaBO01:RF-LLRF:FDLRevCavAmp-Mon', 'RA-RaBO01:RF-LLRF:FDLRevCavPhs-Mon', 'darkSlateBlue'),
                 ('Fwd Ssa', 'RA-RaBO01:RF-LLRF:FDLFwdSSAAmp-Mon', 'RA-RaBO01:RF-LLRF:FDLFwdSSAPhs-Mon', 'darkGreen'),
                 ('Rev Ssa', 'RA-RaBO01:RF-LLRF:FDLRevSSAAmp-Mon', 'RA-RaBO01:RF-LLRF:FDLRevSSAPhs-Mon', 'magenta'),
                 ('Ctrl', 'RA-RaBO01:RF-LLRF:FDLCtrlAmp-Mon', 'RA-RaBO01:RF-LLRF:FDLCtrlPhs-Mon', 'darkCyan'),
@@ -2385,8 +2385,8 @@ SEC_2_CHANNELS = {
             'A': {
                 'Signals': (
                     ('Cav', 'RA-RaSIA01:RF-LLRF:FDLCavAmp-Mon', 'RA-RaSIA01:RF-LLRF:FDLCavPhs-Mon', 'blue'),
-                    ('Fwd Cav', 'RA-RaSIA01:RF-LLRF:FDLCavFwdAmp-Mon', 'RA-RaSIA01:RF-LLRF:FDLCavFwdPhs-Mon', 'red'),
-                    ('Rev Cav', 'RA-RaSIA01:RF-LLRF:FDLCavRevAmp-Mon', 'RA-RaSIA01:RF-LLRF:FDLCavRevPhs-Mon', 'darkSlateBlue'),
+                    ('Fwd Cav', 'RA-RaSIA01:RF-LLRF:FDLFwdCavAmp-Mon', 'RA-RaSIA01:RF-LLRF:FDLFwdCavPhs-Mon', 'red'),
+                    ('Rev Cav', 'RA-RaSIA01:RF-LLRF:FDLRevCavAmp-Mon', 'RA-RaSIA01:RF-LLRF:FDLRevCavPhs-Mon', 'darkSlateBlue'),
                     ('Fwd Ssa', 'RA-RaSIA01:RF-LLRF:FDLFwdSSAAmp-Mon', 'RA-RaSIA01:RF-LLRF:FDLFwdSSAPhs-Mon', 'darkGreen'),
                     ('Rev Ssa', 'RA-RaSIA01:RF-LLRF:FDLRevSSAAmp-Mon', 'RA-RaSIA01:RF-LLRF:FDLRevSSAPhs-Mon', 'magenta'),
                     ('Ctrl', 'RA-RaSIA01:RF-LLRF:FDLCtrlAmp-Mon', 'RA-RaSIA01:RF-LLRF:FDLCtrlPhs-Mon', 'darkCyan'),
@@ -2414,8 +2414,8 @@ SEC_2_CHANNELS = {
             'B': {
                 'Signals': (
                     ('Cav', 'RA-RaSIB01:RF-LLRF:FDLCavAmp-Mon', 'RA-RaSIB01:RF-LLRF:FDLCavPhs-Mon', 'blue'),
-                    ('Fwd Cav', 'RA-RaSIB01:RF-LLRF:FDLCavFwdAmp-Mon', 'RA-RaSIB01:RF-LLRF:FDLCavFwdPhs-Mon', 'red'),
-                    ('Rev Cav', 'RA-RaSIB01:RF-LLRF:FDLCavRevAmp-Mon', 'RA-RaSIB01:RF-LLRF:FDLCavRevPhs-Mon', 'darkSlateBlue'),
+                    ('Fwd Cav', 'RA-RaSIB01:RF-LLRF:FDLFwdCavAmp-Mon', 'RA-RaSIB01:RF-LLRF:FDLFwdCavPhs-Mon', 'red'),
+                    ('Rev Cav', 'RA-RaSIB01:RF-LLRF:FDLRevCavAmp-Mon', 'RA-RaSIB01:RF-LLRF:FDLRevCavPhs-Mon', 'darkSlateBlue'),
                     ('Fwd Ssa', 'RA-RaSIB01:RF-LLRF:FDLFwdSSAAmp-Mon', 'RA-RaSIB01:RF-LLRF:FDLFwdSSAPhs-Mon', 'darkGreen'),
                     ('Rev Ssa', 'RA-RaSIB01:RF-LLRF:FDLRevSSAAmp-Mon', 'RA-RaSIB01:RF-LLRF:FDLRevSSAPhs-Mon', 'magenta'),
                     ('Ctrl', 'RA-RaSIB01:RF-LLRF:FDLCtrlAmp-Mon', 'RA-RaSIB01:RF-LLRF:FDLCtrlPhs-Mon', 'darkCyan'),

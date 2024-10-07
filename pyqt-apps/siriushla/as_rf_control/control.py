@@ -718,11 +718,12 @@ class RFMainControl(SiriusMainWindow):
 
         # Layout
         vlay = QVBoxLayout()
-        vlay.addWidget(QLabel('<h3> • Solid State Amplifiers</h3>', self,
-                              alignment=Qt.AlignLeft))
+        vlay.addWidget(QLabel(
+            '<h3> • Solid State Amplifiers</h3>',
+            self, alignment=Qt.AlignLeft))
         vlay.addLayout(lay_amp)
-        vlay.addWidget(QLabel('<h3> • LLRF</h3>', self,
-                              alignment=Qt.AlignLeft))
+        vlay.addWidget(QLabel(
+            '<h3> • LLRF</h3>', self, alignment=Qt.AlignLeft))
         vlay.addWidget(wid_llrf)
         vlay.addStretch()
         return vlay
@@ -1576,7 +1577,6 @@ class RFMainControl(SiriusMainWindow):
             ch_pinsw.new_value_signal[int].connect(
                 _part(self._handle_predrive_led_channels, led_drive, chs_dict))
         lay_amp.addLayout(self._create_vlay(lb_drive, led_drive), row, 8)
-
 
     def _create_tun_set_wid(self, lay_tunset, column, chs_dict, offset):
         if column:
