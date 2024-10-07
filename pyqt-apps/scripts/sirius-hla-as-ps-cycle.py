@@ -4,6 +4,7 @@
 
 import sys
 import argparse as _argparse
+from siriuspy.logging import configure_logging
 from siriushla.sirius_application import SiriusApplication
 from siriushla.as_ps_cycle.cycle_window import CycleWindow
 
@@ -13,6 +14,8 @@ parser = _argparse.ArgumentParser(
 parser.add_argument('-isadv', action='store_true')
 args = parser.parse_args()
 isadv = args.isadv
+
+configure_logging()
 
 app = SiriusApplication(None, sys.argv)
 app.open_window(CycleWindow, adv_mode=isadv)
