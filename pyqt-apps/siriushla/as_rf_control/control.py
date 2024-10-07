@@ -508,14 +508,12 @@ class RFMainControl(SiriusMainWindow):
 
         # # # Plungers motors
         lay_plunmon = QGridLayout()
-        lb_down = QLabel('Down')
-        lb_up = QLabel('Up')
-        lay_plunmon.addItem(
-            QSpacerItem(10, 10, QSzPlcy.Expanding, QSzPlcy.Expanding), 0, 0)
-        lay_plunmon.addWidget(lb_down, 1, 2)
-        lay_plunmon.addWidget(lb_up, 1, 3)
-        lay_plunmon.addItem(
-            QSpacerItem(10, 10, QSzPlcy.Expanding, QSzPlcy.Expanding), 4, 4)
+        lay_plunmon.addItem(QSpacerItem(
+            10, 10, QSzPlcy.Expanding, QSzPlcy.Expanding), 0, 0)
+        lay_plunmon.addWidget(QLabel('Up', alignment=Qt.AlignCenter), 2, 1)
+        lay_plunmon.addWidget(QLabel('Down', alignment=Qt.AlignCenter), 3, 1)
+        lay_plunmon.addItem(QSpacerItem(
+            10, 10, QSzPlcy.Expanding, QSzPlcy.Expanding), 4, 4)
 
         self.graph_plunmotors = SiriusTimePlot(self)
         self.graph_plunmotors.setObjectName('graph')
@@ -534,7 +532,7 @@ class RFMainControl(SiriusMainWindow):
         if self.section == 'SI':
             offset = 2
             for key, chs_dict in self.chs['Tun'].items():
-                lb_plg = QLabel(key)
+                lb_plg = QLabel(key, alignment=Qt.AlignCenter)
                 led_plg_dn = PyDMLed(
                     self, self.prefix+chs_dict['Pl1Down'])
                 led_plg_dn.offColor = QColor(64, 64, 64)
@@ -551,12 +549,14 @@ class RFMainControl(SiriusMainWindow):
                     lineStyle=Qt.SolidLine, lineWidth=1,
                 )
 
-                lay_plunmon.addWidget(lb_plg, offset, 1)
-                lay_plunmon.addWidget(led_plg_dn, offset, 2)
-                lay_plunmon.addWidget(led_plg_up, offset, 3)
+                lay_plunmon.addWidget(lb_plg, 1, offset)
+                lay_plunmon.addWidget(
+                    led_plg_up, 2, offset, alignment=Qt.AlignCenter)
+                lay_plunmon.addWidget(
+                    led_plg_dn, 3, offset, alignment=Qt.AlignCenter)
                 offset += 1
         else:
-            self.lb_plg1 = QLabel('Plunger 1')
+            self.lb_plg1 = QLabel('Plg 1', alignment=Qt.AlignCenter)
             self.led_plg1_dn = PyDMLed(
                 self, self.prefix+self.chs['Tun']['Pl1Down'])
             self.led_plg1_dn.offColor = QColor(64, 64, 64)
@@ -568,10 +568,11 @@ class RFMainControl(SiriusMainWindow):
             self.led_plg1_up.onColor = QColor('blue')
             self.led_plg1_up.shape = PyDMLed.ShapeMap.Square
             self.graph_plunmotors.addYChannel(
-                y_channel=self.prefix+self.chs['Tun']['PlM1Curr'], color='blue',
-                name='Motor 1', lineStyle=Qt.SolidLine, lineWidth=1)
+                y_channel=self.prefix+self.chs['Tun']['PlM1Curr'],
+                color='blue', name='Motor 1',
+                lineStyle=Qt.SolidLine, lineWidth=1)
 
-            self.lb_plg2 = QLabel('Plunger 2')
+            self.lb_plg2 = QLabel('Plg 2', alignment=Qt.AlignCenter)
             self.led_plg2_dn = PyDMLed(
                 self, self.prefix+self.chs['Tun']['Pl2Down'])
             self.led_plg2_dn.offColor = QColor(64, 64, 64)
@@ -586,12 +587,16 @@ class RFMainControl(SiriusMainWindow):
                 y_channel=self.prefix+self.chs['Tun']['PlM2Curr'], color='red',
                 name='Motor 2', lineStyle=Qt.SolidLine, lineWidth=1)
 
-            lay_plunmon.addWidget(self.lb_plg1, 2, 1)
-            lay_plunmon.addWidget(self.led_plg1_dn, 2, 2)
-            lay_plunmon.addWidget(self.led_plg1_up, 2, 3)
-            lay_plunmon.addWidget(self.lb_plg2, 3, 1)
-            lay_plunmon.addWidget(self.led_plg2_dn, 3, 2)
-            lay_plunmon.addWidget(self.led_plg2_up, 3, 3)
+            lay_plunmon.addWidget(self.lb_plg1, 1, 2)
+            lay_plunmon.addWidget(
+                self.led_plg1_up, 2, 2, alignment=Qt.AlignCenter)
+            lay_plunmon.addWidget(
+                self.led_plg1_dn, 3, 2, alignment=Qt.AlignCenter)
+            lay_plunmon.addWidget(self.lb_plg2, 1, 3)
+            lay_plunmon.addWidget(
+                self.led_plg2_up, 2, 3, alignment=Qt.AlignCenter)
+            lay_plunmon.addWidget(
+                self.led_plg2_dn, 3, 3, alignment=Qt.AlignCenter)
 
         wid_tun = QWidget()
         lay_plun = QGridLayout(wid_tun)
@@ -1647,7 +1652,7 @@ class RFMainControl(SiriusMainWindow):
         column = 0
         for idx in range(len(chs['Signals'])):
             self._setupAmpCurve(chs['Signals'][idx],
-            self.prefix+chs['Time'], idx, lay_checks, row, column)
+            self.prefix+chs['Time'], key, idx, lay_checks, row, column)
             column += 1
             if column == len(chs['Signals']) / 2:
                 row += 1
@@ -1752,8 +1757,8 @@ class RFMainControl(SiriusMainWindow):
         lay_slc.addItem(QSpacerItem(
             15, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 12, offset+2)
 
-    def _setupAmpCurve(self, signal, timebase, idx, lay_checks, row, column):
-        cid = signal[0]
+    def _setupAmpCurve(self, signal, timebase, key, idx, lay_checks, row, column):
+        cid = f'{key} - {signal[0]}'
         color = self.prefix + signal[3]
 
         if signal[1]:
@@ -1766,7 +1771,7 @@ class RFMainControl(SiriusMainWindow):
             )
             self.curves_amp[cid] = self.amp_graph.curveAtIndex(idx)
 
-        cbx = QCheckBox(cid, self)
+        cbx = QCheckBox(signal[0], self)
         cbx.setChecked(True)
         cbx.setObjectName(cid)
         cbx.setStyleSheet('color:' + color + ';')

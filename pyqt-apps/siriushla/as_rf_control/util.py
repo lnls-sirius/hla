@@ -1739,7 +1739,6 @@ SEC_2_CHANNELS = {
                 'label': {
                     'Circulator Temp. Out': 'RA-TLSIA:RF-Circulator:Tout-Mon',
                     'Circulator In Reflected Power': 'RA-TLSIA:RF-Circulator:PwrRevIndBm-Mon',
-                    'Combiner': 'RA-TLSIA:RF-Combiner:T-Mon'
                 },
                 'led': {
                     'Circulator Arc Detector': 'RA-TLSIA:RF-Circulator:Arc-Mon',
@@ -1778,7 +1777,6 @@ SEC_2_CHANNELS = {
                 'label': {
                     'Circulator Temp. Out': 'RA-TLSIB:RF-Circulator:Tout-Mon',
                     'Circulator In Reflected Power': 'RA-TLSIB:RF-Circulator:PwrRevIndBm-Mon',
-                    'Combiner': 'RA-TLSIB:RF-Combiner:T-Mon'
                 },
                 'led': {
                     'Circulator Arc Detector': 'RA-TLSIB:RF-Circulator:Arc-Mon',
