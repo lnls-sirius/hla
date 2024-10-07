@@ -125,6 +125,15 @@ class BaslerCamSettings(QTabWidget):
         self.pb_dtl.setStyleSheet(
             "#reset{min-width:25px; max-width:25px; icon-size:20px;}")
 
+        label_PowerReset = QLabel('Power Reset: ', self)
+        self.pb_power_reset = PyDMPushButton(
+            label='', icon=qta.icon('fa5s.sync'),
+            parent=self, pressValue=1,
+            init_channel=self.cam_prefix.substitute(propty='PoEReset-Cmd'))
+        self.pb_power_reset.setObjectName('power_reset')
+        self.pb_power_reset.setStyleSheet(
+            "#power_reset{min-width:25px; max-width:25px; icon-size:20px;}")
+        
         wid = QWidget()
         flay = QFormLayout(wid)
         flay.setLabelAlignment(Qt.AlignRight)
@@ -133,6 +142,7 @@ class BaslerCamSettings(QTabWidget):
         flay.addRow(label_Temp, hbox_Temp)
         flay.addRow(label_LastErr, hbox_LastErr)
         flay.addRow(label_Reset, self.pb_dtl)
+        flay.addRow(label_PowerReset, self.pb_power_reset)
         return wid
 
     def _acquisitionWidget(self):
