@@ -14,7 +14,7 @@ from ..widgets import SiriusMainWindow, SiriusConnectionSignal
 
 from .apu import APUSummaryHeader, APUSummaryWidget
 from .delta import DELTASummaryHeader, DELTASummaryWidget
-from .papu import PAPUSummaryHeader, PAPUSummaryWidget
+from .ivu import IVUSummaryHeader, IVUSummaryWidget
 from .util import get_id_icon
 
 
@@ -60,12 +60,16 @@ class IDControl(SiriusMainWindow):
         self._gbox_epu = QGroupBox('DELTA', self)
         self._gbox_epu.setLayout(self._setupDELTALayout())
 
+        self._gbox_ivu = QGroupBox('IVU', self)
+        self._gbox_ivu.setLayout(self._setupIVULayout())
+
         lay = QGridLayout(cwid)
         lay.addWidget(self.label_mov1, 0, 0)
         lay.addWidget(label, 0, 1)
         lay.addWidget(self.label_mov2, 0, 2)
         lay.addWidget(self._gbox_apu, 1, 0, 1, 3)
         lay.addWidget(self._gbox_epu, 2, 0, 1, 3)
+        lay.addWidget(self._gbox_ivu, 3, 0, 1, 3)
         lay.setColumnStretch(0, 1)
         lay.setColumnStretch(1, 15)
         lay.setColumnStretch(2, 1)
@@ -120,6 +124,25 @@ class IDControl(SiriusMainWindow):
         idlist = ['SI-10SB:ID-DELTA52', ]
         for idname in idlist:
             delta_wid = DELTASummaryWidget(self, self._prefix, idname)
+            lay.addWidget(delta_wid)
+            self._id_widgets.append(delta_wid)
+            ch_mov = SiriusConnectionSignal(_PVName(idname).substitute(
+                prefix=self._prefix, propty='Moving-Mon'))
+            ch_mov.new_value_signal[int].connect(self._handle_moving_vis)
+            self._channels_mov.append(ch_mov)
+
+        return lay
+    
+    def _setupIVULayout(self):
+        lay = QVBoxLayout()
+        lay.setAlignment(Qt.AlignTop)
+
+        self._delta_header = IVUSummaryHeader(self)
+        lay.addWidget(self._delta_header)
+
+        idlist = ['SI-08SB:ID-IVU18', 'SI-14SB:ID-IVU18']
+        for idname in idlist:
+            delta_wid = IVUSummaryWidget(self, self._prefix, idname)
             lay.addWidget(delta_wid)
             self._id_widgets.append(delta_wid)
             ch_mov = SiriusConnectionSignal(_PVName(idname).substitute(
