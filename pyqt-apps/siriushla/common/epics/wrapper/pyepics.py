@@ -46,9 +46,10 @@ class PyEpicsWrapper:
             try:
                 if len(pvv) != len(value):
                     return False
+                return _np.allclose(pvv, value, rtol=1e-06, atol=0.0)
             except TypeError:
-                return False  # one of them is not an array
-            return _np.allclose(pvv, value, rtol=1e-06, atol=0.0)
+                # one of them is not an array or the array type is not numeric
+                return False
         elif isinstance(pvv, float) or isinstance(value, float):
             return isclose(pvv, value, rel_tol=1e-06, abs_tol=0.0)
         elif pvv == value:
