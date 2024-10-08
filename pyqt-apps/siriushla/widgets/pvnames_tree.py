@@ -410,7 +410,6 @@ class PVNameTree(QWidget):
                 key = dic_.get(p, 'LLRF')
                 if key:
                     item_key = parent_key + key
-                    # item = self._item_map.symbol(item_key)
                     item = self._item_map[item_key] \
                         if item_key in self._item_map else None
                     if item is not None:
@@ -418,9 +417,7 @@ class PVNameTree(QWidget):
                     else:
                         new_item = QTreeItem([key], parent)
                         new_item.setCheckState(0, Qt.Unchecked)
-                        # self._item_map.add_symbol(item_key, new_item)
                         self._item_map[item_key] = new_item
-                        # parent.addChild(new_item)
                         parent = new_item
                     parent_key = item_key
         elif isinstance(pvname, SiriusPVName):
