@@ -403,6 +403,23 @@ class PVNameTree(QWidget):
                         # parent.addChild(new_item)
                         parent = new_item
                     parent_key = item_key
+        elif pvname.startswith('RA'):
+            sec = 'BO' if pvname.startswith('RA-RaBO') else 'SI'
+            dic_ = {'sec': sec, 'dis': 'RF', 'dev': 'LLRF'}
+            for p in self._pnames:
+                key = dic_.get(p, 'LLRF')
+                if key:
+                    item_key = parent_key + key
+                    item = self._item_map[item_key] \
+                        if item_key in self._item_map else None
+                    if item is not None:
+                        parent = item
+                    else:
+                        new_item = QTreeItem([key], parent)
+                        new_item.setCheckState(0, Qt.Unchecked)
+                        self._item_map[item_key] = new_item
+                        parent = new_item
+                    parent_key = item_key
         elif isinstance(pvname, SiriusPVName):
             # Parse it with SiriusPVName
             pvname = SiriusPVName(pvname)
