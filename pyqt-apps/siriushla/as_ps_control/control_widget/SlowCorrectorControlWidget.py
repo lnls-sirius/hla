@@ -6,7 +6,7 @@ class SISlowCorrectorControlWidget(BasePSControlWidget):
     """Storage ring slow correctors."""
 
     def _getFilter(self, subsection=None):
-        filt = {"sec": "SI", "sub": "\w{4}", "dev": "(CH|CV).*"}
+        filt = {"sec": "SI", "sub": "\w{4}", "dev": "(CH|CV|LCH).*"}
         if subsection:
             filt.update({'sub': subsection})
         return filt
@@ -18,7 +18,7 @@ class SISlowCorrectorControlWidget(BasePSControlWidget):
         return True
 
     def _getGroups(self):
-        return [('Horizontal Slow Correctors', '-CH'),
+        return [('Horizontal Slow Correctors', 'CH'),
                 ('Vertical Slow Corretors', '-CV')]
 
 
