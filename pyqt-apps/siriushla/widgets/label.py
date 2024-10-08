@@ -46,6 +46,11 @@ class SiriusLabel(QLabel, TextFormatter, PyDMWidget, DisplayFormat):
         if is_pydm_app():
             self._string_encoding = self.app.get_string_encoding()
 
+        if 'Text' not in SiriusLabel.RULE_PROPERTIES:
+            SiriusLabel.RULE_PROPERTIES = PyDMWidget.RULE_PROPERTIES.copy()
+            SiriusLabel.RULE_PROPERTIES.update(
+                {'Text': ['value_changed', str]})
+
     @Property(DisplayFormat)
     def displayFormat(self):
         """Display Format."""

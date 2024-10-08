@@ -1,5 +1,6 @@
 """Advanced details related to the hardware."""
 
+from pydm.widgets import PyDMEnumComboBox
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGridLayout, QGroupBox, QLabel, QVBoxLayout
 
@@ -60,24 +61,26 @@ class HardwareDetails(SiriusDialog):
         lay_pll.setSpacing(9)
         lay_pll.setAlignment(Qt.AlignTop)
 
-        pb_clock = PyDMStateButton(
+        cb_clock = PyDMEnumComboBox(
             self, self.prefix+self.syst_dict['Clock Src'])
         pb_trig = SiriusPushButton(
             self, self.prefix+self.syst_dict['Loop Trigger'], 'Loop Trigger')
         pb_trig.setStyleSheet('min-width: 6em')
         led_pll = SiriusLedState(self, self.prefix+self.syst_dict['PLL'])
-        pb_init = PyDMStateButton(
-            self, self.prefix+self.syst_dict['FPGA Init'])
+        pb_init = SiriusPushButton(
+            self, self.prefix+self.syst_dict['FPGA Init'], 'Init')
         lay_pll.addWidget(QLabel(
             'Clock Src', alignment=Qt.AlignRight | Qt.AlignVCenter), 0, 0)
-        lay_pll.addWidget(pb_clock, 0, 1)
+        lay_pll.addWidget(cb_clock, 0, 1, alignment=Qt.AlignCenter)
         lay_pll.addWidget(QLabel(
             'Loop Trigger', alignment=Qt.AlignRight | Qt.AlignVCenter), 1, 0)
         lay_pll.addWidget(pb_trig, 1, 1)
         lay_pll.addWidget(QLabel(
             'PLL', alignment=Qt.AlignRight | Qt.AlignVCenter), 2, 0)
-        lay_pll.addWidget(pb_init, 2, 1)
-        lay_pll.addWidget(led_pll, 2, 2)
+        lay_pll.addWidget(led_pll, 2, 1, alignment=Qt.AlignCenter)
+        lay_pll.addWidget(QLabel(
+            'Init', alignment=Qt.AlignRight | Qt.AlignVCenter), 3, 0)
+        lay_pll.addWidget(pb_init, 3, 1, alignment=Qt.AlignCenter)
 
         # Cavity Type
         gbox_type = QGroupBox(self)

@@ -42,27 +42,17 @@ class ConditioningDetails(SiriusDialog):
         # Auto Cond Enable
         self._setupLedState(lay, '201', 2, True)
 
-        # Cond Freq
-        self._setupLabelEdit(lay, '204', 3)
-
-        # Cond Freq Diag
-        lb_condfreq = SiriusLabel(self, self.prefix+self.syst_dict['540'][1])
-        lb_condfreq.showUnits = True
-        lay.addWidget(QLabel('540'), 4, 0)
-        lay.addWidget(QLabel(self.syst_dict['540'][0]), 4, 1)
-        lay.addWidget(lb_condfreq, 4, 3, alignment=Qt.AlignCenter)
-
         # Duty Cycle
-        self._setupLabelEdit(lay, '205', 5)
+        self._setupLabelEdit(lay, '202', 3)
 
         # Duty Cycle RB
         lb_condfreq = SiriusLabel(self, self.prefix+self.syst_dict['530'][1])
         lb_condfreq.showUnits = True
-        lay.addWidget(QLabel('530'), 6, 0)
-        lay.addWidget(QLabel(self.syst_dict['530'][0]), 6, 1)
-        lay.addWidget(lb_condfreq, 6, 3, alignment=Qt.AlignCenter)
+        lay.addWidget(QLabel('530'), 4, 0)
+        lay.addWidget(QLabel(self.syst_dict['530'][0]), 4, 1)
+        lay.addWidget(lb_condfreq, 4, 3, alignment=Qt.AlignCenter)
 
-        row = 7
+        row = 5
         if self.section == 'BO':
             relay_keys = [
                 'CGC Fast Relay', 'Relay Setpoint RB', 'Relay Hysteria RB']

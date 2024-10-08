@@ -1,5 +1,6 @@
-"""Advanced details related to multiple constants."""
+"""Advanced details related to calibration equations and constants."""
 
+from pydm.widgets.display_format import DisplayFormat
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGridLayout, QGroupBox, QLabel, \
     QSizePolicy as QSzPlcy, QSpacerItem
@@ -8,8 +9,8 @@ from ...widgets import SiriusDialog, SiriusLabel
 from ..util import SEC_2_CHANNELS
 
 
-class EquationsDetails(SiriusDialog):
-    """Advanced details related to multiple constants."""
+class CalEqDetails(SiriusDialog):
+    """Advanced details related to calibration equations and constants."""
 
     def __init__(self, parent=None, prefix='', section='', system=''):
         """Init."""
@@ -20,13 +21,13 @@ class EquationsDetails(SiriusDialog):
         self.system = system
         self.chs = SEC_2_CHANNELS[self.section]
         self.setObjectName(self.section+'App')
-        self.title = 'Equations Details'
+        self.title = 'Calibration Equations Details'
         self.title += (f' - {self.system}' if self.section == 'SI' else '')
         self.setWindowTitle(self.title)
         if self.section == 'SI':
-            self.syst_dict = self.chs['Loops'][self.system]['Equations']
+            self.syst_dict = self.chs['Equations'][self.system]
         else:
-            self.syst_dict = self.chs['Loops']['Equations']
+            self.syst_dict = self.chs['Equations']
         self._setupUi()
 
     def _setupUi(self):
@@ -82,7 +83,7 @@ class EquationsDetails(SiriusDialog):
         lay.setSpacing(9)
 
         # Header
-        labels = ['C0', 'C1', 'C2', 'C3', 'C4', 'OFS']
+        labels = ['C0', 'C1', 'C2', 'C3', 'C4']
         for i in range(len(labels)):
             lay.addWidget(QLabel(
                 labels[i], alignment=Qt.AlignCenter), 0, i+1)
@@ -91,19 +92,25 @@ class EquationsDetails(SiriusDialog):
         row = 1
         for key, val in chs_dict.items():
             if key != 'OFS':
-                lay.addWidget(QLabel(key, alignment=Qt.AlignCenter), row, 0)
-                lay.addWidget(SiriusLabel(
-                    self, self.prefix+val+'-RB'), row, 1, 1, len(labels)-1)
-
-                if key != 'OLG':
-                    lay.addWidget(SiriusLabel(
-                        self, self.prefix+chs_dict['OFS']+'-RB'),
-                        row, len(labels), alignment=Qt.AlignCenter)
-                else:
-                    lay.addWidget(QLabel(
-                        '-', alignment=Qt.AlignCenter), row, len(labels))
-
+                column = 1
+                lay.addWidget(QLabel(
+                    f'<h4>{key}</h4>', alignment=Qt.AlignCenter), row, 0)
+                for i in range(len(labels)):
+                    lb = SiriusLabel(
+                        self, self.prefix+val+f'-RB.[{i}]')
+                    lb.precisionFromPV = False
+                    lb.precision = 2
+                    lb.displayFormat = DisplayFormat.Exponential
+                    lay.addWidget(lb, row, column)
+                    column += 1
                 row += 1
+
+        lb_ofs = SiriusLabel(self, self.prefix+chs_dict['OFS']+'-RB')
+        lb_ofs.precisionFromPV = 0
+        lb_ofs.precision = 2
+        lb_ofs.displayFormat = DisplayFormat.Exponential
+        lay.addWidget(QLabel('<h4>OFS</h4>', alignment=Qt.AlignCenter), row, 0)
+        lay.addWidget(lb_ofs, row, 1, 1, 5, alignment=Qt.AlignLeft)
 
         return lay
 
@@ -119,10 +126,17 @@ class EquationsDetails(SiriusDialog):
             lay.addWidget(QLabel(labels[i], alignment=Qt.AlignCenter), 2, i)
 
         # Bodies
+        column = 0
         for i in range(len(labels)):
-            lay.addWidget(SiriusLabel(
-                self, self.prefix+chs_dict['Hw to Amp']+f'{i}-RB'), 1, i)
-            lay.addWidget(SiriusLabel(
-                self, self.prefix+chs_dict['Hw to Amp']+f'{i}-RB'), 3, i)
+            for i, key in enumerate(['Hw to Amp', 'Amp to Hw']):
+                lb = SiriusLabel(
+                    self, self.prefix+chs_dict[key]+f'-RB.[{i}]')
+                lb.precisionFromPV = False
+                lb.precision = 2
+                lb.displayFormat = DisplayFormat.Exponential
+
+                row = 1 if i == 0 else 3
+                lay.addWidget(lb, row, column)
+            column += 1
 
         return lay

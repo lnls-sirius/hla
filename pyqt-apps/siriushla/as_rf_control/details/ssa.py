@@ -3,14 +3,14 @@
 import qtawesome as qta
 from qtpy.QtCore import Qt
 from qtpy.QtGui import QColor
-from qtpy.QtWidgets import QCheckBox, QGridLayout, QGroupBox, QLabel, \
-    QPushButton, QSizePolicy as QSzPlcy, QSpacerItem, QTabWidget, \
+from qtpy.QtWidgets import QCheckBox, QGridLayout, QGroupBox, QHBoxLayout, \
+    QLabel, QPushButton, QSizePolicy as QSzPlcy, QSpacerItem, QTabWidget, \
     QVBoxLayout, QWidget
 
 from ...util import connect_window
 from ...widgets import PyDMLed, PyDMLedMultiChannel, SiriusDialog, \
     SiriusLabel, SiriusLedAlert, SiriusLedState, SiriusTimePlot
-from ..advanced_details import SSACurrentsDetails
+from ..advanced_details import SSACurrentsDetails, ACPanelDetails
 from ..util import SEC_2_CHANNELS
 
 
@@ -119,13 +119,25 @@ class SSADetailsSI(SiriusDialog):
             row_general += 1
 
         # Currents
+        buttons_lay = QHBoxLayout()
         pb_curr = QPushButton(
             qta.icon('fa5s.external-link-alt'), ' Currents', self)
         connect_window(pb_curr, SSACurrentsDetails, parent=self,
             prefix=self.prefix, section=self.section, num=self.num,
             system=self.system)
         pb_curr.setStyleSheet('min-width: 6em;')
-        lay.addWidget(pb_curr, row_general, 1)
+        buttons_lay.addWidget(pb_curr)
+
+        # AC Panel
+        pb_acpnl = QPushButton(
+            qta.icon('fa5s.external-link-alt'), ' AC Panel', self)
+        connect_window(pb_acpnl, ACPanelDetails, parent=self,
+            prefix=self.prefix, section=self.section, num=self.num,
+            system=self.system)
+        pb_acpnl.setStyleSheet('min-width: 6em;')
+        buttons_lay.addWidget(pb_acpnl)
+
+        lay.addLayout(buttons_lay, row_general, 0, 1, 4)
 
         # Alerts
         lay_alerts = QGridLayout()

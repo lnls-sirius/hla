@@ -199,7 +199,7 @@ class AdvancedInterlockDetails(SiriusDialog):
             lay.addWidget(QLabel(key.split()[0]), row, 0)
             lay.addWidget(QLabel(val[0]), row, 1)
             column = 2
-            for bit in range(len(labels)):
+            for bit in reversed(range(len(labels))):
                 lay_state = QHBoxLayout()
                 pb = PyDMStateButton(self, self.prefix+val[1]+'-Sel', bit=bit)
                 lay_state.addWidget(pb, alignment=Qt.AlignRight)

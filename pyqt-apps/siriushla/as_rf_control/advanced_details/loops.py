@@ -10,7 +10,6 @@ from ...util import connect_window
 from ...widgets import PyDMStateButton, SiriusDialog, SiriusEnumComboBox, \
     SiriusLabel, SiriusLedState, SiriusPushButton, SiriusSpinbox
 from ..util import SEC_2_CHANNELS
-from .equations import EquationsDetails
 from .limits import LimitsDetails
 
 
@@ -123,15 +122,6 @@ class LoopsDetails(SiriusDialog):
         lay.addWidget(SiriusLabel(self, self.prefix+chs_dict['107'][1]+'-Sts',
             alignment=Qt.AlignCenter), 7, 3)
 
-        # Equations
-        pb_eq = QPushButton(
-            qta.icon('fa5s.external-link-alt'), ' Equations', self)
-        connect_window(
-            pb_eq, EquationsDetails, parent=self,
-            prefix=self.prefix, section=self.section, system=self.system)
-        pb_eq.setStyleSheet('min-width:8em')
-        lay.addWidget(pb_eq, 9, 1)
-
         # Limits
         pb_limit = QPushButton(
             qta.icon('fa5s.external-link-alt'), ' Limits', self)
@@ -139,7 +129,7 @@ class LoopsDetails(SiriusDialog):
             pb_limit, LimitsDetails, parent=self, prefix=self.prefix,
             section=self.section, system=self.system, which='Loop')
         pb_limit.setStyleSheet('min-width:8em')
-        lay.addWidget(pb_limit, 9, 2)
+        lay.addWidget(pb_limit, 9, 1)
 
         lay.addItem(QSpacerItem(0, 9, QSzPlcy.Ignored, QSzPlcy.Fixed), 8, 0)
         lay.addItem(QSpacerItem(40, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 0, 4)
@@ -201,7 +191,7 @@ class LoopsDetails(SiriusDialog):
         chs_dict = self.syst_dict[rect_or_polar]
 
         if rect_or_polar == 'Rect':
-            extra_addr = '30'
+            extra_addr = '30' if self.section == 'SI' else ''
             grp_1 = 'Slow'
             grp_1_addrs = ['100', '110', '13', '1', '0']
             grp_2 = 'Fast'
@@ -256,21 +246,21 @@ class LoopsDetails(SiriusDialog):
             'In-Phase', alignment=Qt.AlignCenter), 0, 2)
         lay.addWidget(QLabel(
             'Quadrature', alignment=Qt.AlignCenter), 0, 3)
+        lay.addWidget(QLabel(
+            'Amp', alignment=Qt.AlignCenter), 0, 4)
+        lay.addWidget(QLabel(
+            'Phase', alignment=Qt.AlignCenter), 0, 5)
         if is_top_section:
+            lay.addItem(QSpacerItem(
+                24, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 0, 6)
             lay.addWidget(QLabel(
-                'Amp', alignment=Qt.AlignCenter), 0, 4, 1, 4)
-            lay.addWidget(QLabel(
-                'Phase', alignment=Qt.AlignCenter), 0, 8)
-        else:
-            lay.addWidget(QLabel(
-                'Amp', alignment=Qt.AlignCenter), 0, 4)
-            lay.addWidget(QLabel(
-                'Phase', alignment=Qt.AlignCenter), 0, 5)
+                'Power', alignment=Qt.AlignCenter), 0, 7, 1, 2)
 
         rows_dict = chs_dict
-        if rect_or_polar != '' and extra_addr != '':
+        if rect_or_polar != '':
             rows_dict = chs_dict['General'].copy()
-            rows_dict[extra_addr] = self.syst_dict[rect_or_polar][extra_addr]
+            if extra_addr != '':
+                rows_dict[extra_addr] = self.syst_dict[rect_or_polar][extra_addr]
         row = 1
         for key, dic in rows_dict.items():
             if key != 'Control':
@@ -288,6 +278,8 @@ class LoopsDetails(SiriusDialog):
                     elif val == '-':
                         lay.addWidget(QLabel(
                             '-', alignment=Qt.AlignCenter), row, column)
+                        column += 1
+                    if column == 6:
                         column += 1
                 row += 1
 

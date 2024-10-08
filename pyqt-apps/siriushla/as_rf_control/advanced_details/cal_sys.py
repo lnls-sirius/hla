@@ -7,11 +7,11 @@ from qtpy.QtWidgets import QCheckBox, QComboBox, QGridLayout, QHBoxLayout, \
     QWidget
 
 from ...widgets import SiriusDialog, SiriusLabel, SiriusLineEdit, \
-    SiriusSpinbox, SiriusTimePlot
+    SiriusTimePlot
 from ..util import SEC_2_CHANNELS
 
 
-class CalibrationDetails(SiriusDialog):
+class CalSysDetails(SiriusDialog):
     """LLRF Calibration Systems advanced details."""
 
     def __init__(self, parent=None, prefix='', section='', system=''):
@@ -48,6 +48,11 @@ class CalibrationDetails(SiriusDialog):
             self._signalsLayout())
         dtls.addTab(wid_signals, 'Signals')
 
+        wid_control = QWidget(self)
+        wid_control.setLayout(
+            self._controlLayout())
+        dtls.addTab(wid_control, 'Control')
+
         wid_iq = QWidget(self)
         wid_iq.setLayout(self._graphLayout())
         dtls.addTab(wid_iq, 'Graph')
@@ -68,15 +73,15 @@ class CalibrationDetails(SiriusDialog):
         cb_units.currentTextChanged.connect(self._handle_labels_units)
 
         lay.addWidget(QLabel('<h4>Label</h4>', alignment=Qt.AlignCenter),
-            0, 1, 1, 2)
-        lay.addItem(QSpacerItem(12, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 0, 3)
-        lay.addWidget(QLabel('<h4>UnCal</h4>', alignment=Qt.AlignCenter), 0, 4)
-        lay.addItem(QSpacerItem(12, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 0, 5)
+            0, 1)
+        lay.addItem(QSpacerItem(12, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 0, 2)
+        lay.addWidget(QLabel('<h4>UnCal</h4>', alignment=Qt.AlignCenter), 0, 3)
+        lay.addItem(QSpacerItem(12, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 0, 4)
         lay.addWidget(QLabel('<h4>Offset</h4>', alignment=Qt.AlignCenter),
-            0, 6, 1, 2)
-        lay.addItem(QSpacerItem(12, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 0, 8)
-        lay.addWidget(QLabel('<h4>Cal</h4>', alignment=Qt.AlignCenter), 0, 9)
-        lay.addWidget(cb_units, 0, 10)
+            0, 5)
+        lay.addItem(QSpacerItem(12, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 0, 6)
+        lay.addWidget(QLabel('<h4>Cal</h4>', alignment=Qt.AlignCenter), 0, 7)
+        lay.addWidget(cb_units, 0, 8)
 
         self.cals_dbm = []
         self.cals_w = []
@@ -105,18 +110,47 @@ class CalibrationDetails(SiriusDialog):
             lb_cal_w.setVisible(True)
 
             lay.addWidget(lb_ch, i, 0)
-            lay.addWidget(SiriusLineEdit(
-                self, self.prefix+self.syst_dict[f'Ch{i}']['Label']), i, 1)
-            lay.addWidget(lb_label, i, 2)
-            lay.addWidget(lb_uncal, i, 4)
-            lay.addWidget(SiriusSpinbox(
-                self, self.prefix+self.syst_dict[f'Ch{i}']['Ofs']), i, 6)
-            lay.addWidget(lb_ofs, i, 7)
-            lay.addWidget(lb_cal_dbm, i, 9, 1, 2)
-            lay.addWidget(lb_cal_w, i, 9, 1, 2)
+            lay.addWidget(lb_label, i, 1)
+            lay.addWidget(lb_uncal, i, 3)
+            lay.addWidget(lb_ofs, i, 5)
+            lay.addWidget(lb_cal_dbm, i, 7, 1, 2)
+            lay.addWidget(lb_cal_w, i, 7, 1, 2)
 
             self.cals_dbm.append(lb_cal_dbm)
             self.cals_w.append(lb_cal_w)
+
+        return lay
+
+    def _controlLayout(self):
+        lay = QGridLayout()
+        lay.setAlignment(Qt.AlignTop)
+        lay.setSpacing(9)
+
+        lay.addWidget(QLabel('<h4>Label</h4>', alignment=Qt.AlignCenter),
+            0, 1, 1, 2)
+        lay.addItem(QSpacerItem(12, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 0, 3)
+        lay.addWidget(QLabel('<h4>Offset</h4>', alignment=Qt.AlignCenter),
+            0, 4, 1, 2)
+
+        for i in range(1, 17):
+            lb_ch = QLabel(f'Ch{i}', alignment=Qt.AlignCenter)
+            lb_ch.setStyleSheet(f'color:{self.syst_dict[f"Ch{i}"]["Color"]};')
+
+            lb_label = SiriusLabel(
+                self, self.prefix+self.syst_dict[f'Ch{i}']['Label'])
+            lb_label.setStyleSheet("min-width:8em;")
+
+            lb_ofs = SiriusLabel(
+                self, self.prefix+self.syst_dict[f'Ch{i}']['Ofs'])
+            lb_ofs.showUnits = True
+
+            lay.addWidget(lb_ch, i, 0)
+            lay.addWidget(SiriusLineEdit(
+                self, self.prefix+self.syst_dict[f'Ch{i}']['Label']), i, 1)
+            lay.addWidget(lb_label, i, 2)
+            lay.addWidget(SiriusLineEdit(
+                self, self.prefix+self.syst_dict[f'Ch{i}']['Ofs']), i, 4)
+            lay.addWidget(lb_ofs, i, 5)
 
         return lay
 
@@ -156,7 +190,7 @@ class CalibrationDetails(SiriusDialog):
 
             # Table
             cbx = QCheckBox(self)
-            cbx.setChecked(True)
+            cbx.setChecked(False)
             cbx.setObjectName(name)
             cbx.setStyleSheet('color:'+color+'; max-width: 1.2em;')
             cbx.stateChanged.connect(self._handle_curves_visibility)
@@ -173,10 +207,12 @@ class CalibrationDetails(SiriusDialog):
                 y_channel=self.prefix+dbch, name=name+' dBm', color=color,
                 lineStyle=Qt.SolidLine, lineWidth=1)
             self.curves[name+' dBm'] = self.graph.curveAtIndex(2*idx)
+            self.curves[name+' dBm'].setVisible(False)
             self.graph.addYChannel(
                 y_channel=self.prefix+wch, name=name+' W', color=color,
                 lineStyle=Qt.SolidLine, lineWidth=1)
             self.curves[name+' W'] = self.graph.curveAtIndex(2*idx+1)
+            self.curves[name+' W'].setVisible(False)
 
             idx += 1
         self.graph.setLabel('left', '')

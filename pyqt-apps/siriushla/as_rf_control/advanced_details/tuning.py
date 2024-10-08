@@ -2,7 +2,8 @@
 
 import qtawesome as qta
 from qtpy.QtCore import Qt
-from qtpy.QtWidgets import QGridLayout, QGroupBox, QLabel, QTabWidget, QWidget
+from qtpy.QtWidgets import QGridLayout, QGroupBox, QLabel, \
+    QSizePolicy as QSzPlcy, QSpacerItem, QTabWidget, QWidget
 
 from ...widgets import PyDMStateButton, SiriusDialog, SiriusEnumComboBox, \
     SiriusLabel, SiriusLedAlert, SiriusLedState, SiriusPushButton, \
@@ -68,9 +69,19 @@ class TuningDetails(SiriusDialog):
         lay = QGridLayout()
         lay.setAlignment(Qt.AlignTop)
         lay.setSpacing(9)
+        row = 0
+
+        # Tuning Direction
+        self._setupAddrLabel(lay, chs_dict, '301', row)
+        self._setupButtonLed(lay, chs_dict, '301', row)
+        row += 1
+
+        # Auto Tuning Enable
+        self._setupAddrLabel(lay, chs_dict, '300', row)
+        self._setupButtonLed(lay, chs_dict, '300', row)
+        row += 1
 
         # Amplitudes and Phase Angles
-        row = 0
         keys = ['34', '19', '33', '18']
         for key in keys:
             lb = SiriusLabel(self, self.prefix+chs_dict[key][1])
@@ -85,6 +96,13 @@ class TuningDetails(SiriusDialog):
             row, 3, alignment=Qt.AlignCenter)
         row += 1
 
+        # Tuning Out
+        self._setupAddrLabel(lay, chs_dict, '299', row)
+        lay.addWidget(SiriusLedState(
+            self, self.prefix+chs_dict['299'][1]),
+            row, 3, alignment=Qt.AlignCenter)
+        row += 1
+
         # Pulses Freq
         lb_freq = SiriusLabel(self, self.prefix+chs_dict['303'][1]+'-RB')
         lb_freq.showUnits = True
@@ -93,6 +111,46 @@ class TuningDetails(SiriusDialog):
             self, self.prefix+chs_dict['303'][1]+'-SP'),
             row, 2, alignment=Qt.AlignCenter)
         lay.addWidget(lb_freq, row, 3, alignment=Qt.AlignCenter)
+        row += 1
+
+        # Moving
+        gbox_mv = QGroupBox('Moving')
+        lay_mv = QGridLayout()
+        lay_mv.setAlignment(Qt.AlignTop)
+        lay_mv.setSpacing(9)
+        gbox_mv.setLayout(lay_mv)
+        mv_dict = chs_dict['Moving']
+
+        lay_mv.addWidget(QLabel(
+            'Manual', alignment=Qt.AlignCenter), 0, 1)
+        lay_mv.addWidget(QLabel(
+            'Auto', alignment=Qt.AlignCenter), 0, 2)
+        if self.section == 'SI':
+            lay_mv.addWidget(QLabel(
+                'Tuner Up', alignment=Qt.AlignCenter), 1, 0)
+            lay_mv.addWidget(QLabel(
+                'Tuner Down', alignment=Qt.AlignCenter), 2, 0)
+        else:
+            lay_mv.addWidget(QLabel(
+                'Plg 1 Up', alignment=Qt.AlignCenter), 1, 0)
+            lay_mv.addWidget(QLabel(
+                'Plg 1 Down', alignment=Qt.AlignCenter), 2, 0)
+            lay_mv.addWidget(QLabel(
+                'Plg 2 Up', alignment=Qt.AlignCenter), 3, 0)
+            lay_mv.addWidget(QLabel(
+                'Plg 2 Down', alignment=Qt.AlignCenter), 4, 0)
+
+        keys = ['Manual', 'Auto']
+        column = 1
+        for key in keys:
+            row_ = 1
+            for _, val in mv_dict[key].items():
+                lay_mv.addWidget(SiriusLedState(
+                    self, val), row_, column, alignment=Qt.AlignCenter)
+                row_ += 1
+            column += 1
+
+        lay.addWidget(gbox_mv, row, 0, 1, 4)
 
         return lay
 
@@ -107,23 +165,30 @@ class TuningDetails(SiriusDialog):
             supplies = ['5V', '48V']
         row = 0
         for sup in supplies:
+            lb_supply = QLabel(f'{sup} Supply', alignment=Qt.AlignCenter)
+            lb_supply.setStyleSheet('min-width:5em;')
             lb_volt = SiriusLabel(self, self.prefix+chs_dict[sup][0])
-            lb_volt.showUnit = True
-            lb_curr = SiriusLabel(self, self.prefix+chs_dict[sup][1])
-            lb_curr.showUnit = True
-            lay.addWidget(QLabel(f'{sup} Supply'), row, 0)
+            lb_volt.showUnits = True
+            lb_volt.setStyleSheet('min-width:7em;')
+            lay.addWidget(lb_supply, row, 0)
             lay.addWidget(lb_volt, row, 1)
-            lay.addWidget(lb_curr, row, 2)
+
+            if len(chs_dict[sup]) > 1:
+                lb_curr = SiriusLabel(self, self.prefix+chs_dict[sup][1])
+                lb_curr.showUnits = True
+                lb_curr.setStyleSheet('min-width:7em;')
+                lay.addWidget(lb_curr, row, 2)
             row += 1
 
-        lay.addWidget(QLabel('Drivers'), row, 0)
+        lay.addItem(QSpacerItem(0, 18, QSzPlcy.Ignored, QSzPlcy.Fixed), row, 0)
+        lay.addWidget(QLabel('Drivers'), row+1, 0)
         lay.addWidget(PyDMStateButton(
             self, self.prefix+chs_dict['Enable']+'-Sel'),
-            row, 1, alignment=Qt.AlignCenter)
+            row+1, 1, alignment=Qt.AlignCenter)
         lay.addWidget(SiriusLedState(
             self, self.prefix+chs_dict['Enable']+'-Sts'),
-            row, 2, alignment=Qt.AlignCenter)
-        row += 1
+            row+1, 2, alignment=Qt.AlignCenter)
+        row += 2
 
         drivers = ['1', '2']
         for d in drivers:
@@ -134,12 +199,20 @@ class TuningDetails(SiriusDialog):
             lb_status = SiriusLabel(self, self.prefix+chs_dict[d][0])
             lb_status.showUnits = True
 
-            gbox_lay.addWidget(QLabel('Status'), 0, 0)
+            gbox_lay.addWidget(QLabel(
+                'Status'), 0, 0, alignment=Qt.AlignCenter)
             gbox_lay.addWidget(lb_status, 0, 1)
-            gbox_lay.addWidget(QLabel('Fault'), 1, 0)
-            gbox_lay.addWidget(SiriusLedAlert(
-                self, self.prefix+chs_dict[d][1]),
-                1, 1, alignment=Qt.AlignCenter)
+            if self.section == 'SI':
+                lb_curr = SiriusLabel(self, self.prefix+chs_dict[d][1])
+                lb_curr.showUnits = True
+                gbox_lay.addWidget(QLabel(
+                    'Current'), 1, 0, alignment=Qt.AlignCenter)
+                gbox_lay.addWidget(lb_curr, 1, 1, alignment=Qt.AlignCenter)
+            else:
+                gbox_lay.addWidget(QLabel('Fault'), 1, 0)
+                gbox_lay.addWidget(SiriusLedAlert(
+                    self, self.prefix+chs_dict[d][1]),
+                    1, 1, alignment=Qt.AlignCenter)
 
             lay.addWidget(gbox, row, 0, 1, 3)
             row += 1
@@ -165,9 +238,17 @@ class TuningDetails(SiriusDialog):
             keys.extend(['315', '314'])
 
         row = 1
-        for key in keys:
+        for i, key in enumerate(keys):
             self._setupAddrLabel(lay, chs_dict, key, row)
-            self._setupButtonLed(lay, chs_dict, key, row)
+            if i % 2 == 0:
+                lay.addWidget(SiriusEnumComboBox(
+                    self, self.prefix+chs_dict[key][1]+'-Sel'),
+                    row, 2, alignment=Qt.AlignCenter)
+                lay.addWidget(SiriusLedState(
+                    self, self.prefix+chs_dict[key][1]+'-Sts'),
+                    row, 3, alignment=Qt.AlignCenter)
+            else:
+                self._setupButtonLed(lay, chs_dict, key, row)
             row += 1
 
         # Tuning Reset
@@ -180,18 +261,6 @@ class TuningDetails(SiriusDialog):
         lay.addWidget(pb_reset, row, 2, alignment=Qt.AlignCenter)
         row += 1
 
-        # Manual Up/Down
-        keys = ['302 Man', '303 Man']
-        if self.section == 'BO':
-            keys.extend(['315 Man', '316 Man'])
-
-        for key in keys:
-            self._setupAddrLabel(lay, chs_dict, key, row)
-            lay.addWidget(SiriusLedState(
-                self, self.prefix+chs_dict[key][1]),
-                row, 3, alignment=Qt.AlignCenter)
-            row += 1
-
         return lay
 
     def _autoLayout(self, chs_dict):
@@ -199,13 +268,9 @@ class TuningDetails(SiriusDialog):
         lay.setAlignment(Qt.AlignTop)
         lay.setSpacing(9)
 
-        # Pos Enable
-        self._setupAddrLabel(lay, chs_dict, '301', 0)
-        self._setupButtonLed(lay, chs_dict, '301', 0)
-
         # Tuning Margins, Forward Min and Delay
         keys = ['309', '310', '308', '311']
-        row = 1
+        row = 0
         for key in keys:
             label = SiriusLabel(self, self.prefix+chs_dict[key][1]+'-RB')
             label.showUnits = True
