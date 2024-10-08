@@ -1665,7 +1665,7 @@ class RFMainControl(SiriusMainWindow):
         pb_fdldtls.setStyleSheet(
             '#dtls{min-width:18px;max-width:18px;icon-size:20px;}')
         connect_window(pb_fdldtls, FDLDetails, parent=self,
-                    section=self.section, prefix=self.prefix, chs=chs)
+                    section=self.section, prefix=self.prefix, system=key)
         if key:
             title = key
         else:
