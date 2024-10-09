@@ -1117,8 +1117,6 @@ SEC_2_CHANNELS = {
         'AutoStart': {
             '22': ['Automatic Startup Enable', 'RA-RaBO01:RF-LLRF:AutoStartupEnbl'],
             '23': ['Command Start', 'RA-RaBO01:RF-LLRF:AutoStartupCmdStart'],
-            '400': ['EPS Interlock', 'RA-RaBO01:RF-LLRF:EPSEnbl'],
-            '401': ['Interlock Bypass', 'RA-RaBO01:RF-LLRF:FIMEnbl'],
             'Diag': {
                 '500': ['State Start', 'RA-RaBO01:RF-LLRF:AutoStartState-Mon'],
                 '400': ['Tx Ready', 'RA-RaBO01:RF-LLRF:SSARdy-Mon'],
@@ -1201,7 +1199,9 @@ SEC_2_CHANNELS = {
                     'Delay': 'RA-RaBO01:RF-LLRF:IntlkDly',
                     'HW': 'RA-RaBO01:RF-LLRF:FDLHwTrig-Mon',
                     'Beam Inv': ['Logic Inv. LLRF Beam Trip', 'RA-RaBO01:RF-LLRF:OrbitIntlkLogicInv'],
-                    'Vacuum Inv': ['Vacuum Logic Inversion', 'RA-RaBO01:RF-LLRF:VacLogicInv']
+                    'Vacuum Inv': ['Vacuum Logic Inversion', 'RA-RaBO01:RF-LLRF:VacLogicInv'],
+                    'SSA Bypass': ['SSA Interlock Bypass', 'RA-RaBO01:RF-LLRF:EPSEnbl'],
+                    'Bypass': ['Interlock Bypass', 'RA-RaBO01:RF-LLRF:FIMEnbl']
                 },
                 'Levels': {
                     'VCav': 'RA-RaBO01:RF-LLRF:LimCav',
@@ -3933,8 +3933,6 @@ SEC_2_CHANNELS = {
             'A': {
                 '22': ['Automatic Startup Enable', 'RA-RaSIA01:RF-LLRF:AutoStartupEnbl'],
                 '23': ['Command Start', 'RA-RaSIA01:RF-LLRF:AutoStartupCmdStart'],
-                '400': ['EPS Interlock', 'RA-RaSIA01:RF-LLRF:EPSEnbl'],
-                '401': ['Interlock Bypass', 'RA-RaSIA01:RF-LLRF:FIMEnbl'],
                 'Diag': {
                     '500': ['State Start', 'RA-RaSIA01:RF-LLRF:AutoStartState-Mon'],
                     '400': ['Tx Ready', 'RA-RaSIA01:RF-LLRF:SSARdy-Mon'],
@@ -3949,8 +3947,6 @@ SEC_2_CHANNELS = {
             'B': {
                 '22': ['Automatic Startup Enable', 'RA-RaSIB01:RF-LLRF:AutoStartupEnbl'],
                 '23': ['Command Start', 'RA-RaSIB01:RF-LLRF:AutoStartupCmdStart'],
-                '400': ['EPS Interlock', 'RA-RaSIB01:RF-LLRF:EPSEnbl'],
-                '401': ['Interlock Bypass', 'RA-RaSIB01:RF-LLRF:FIMEnbl'],
                 'Diag': {
                     '500': ['State Start', 'RA-RaSIB01:RF-LLRF:AutoStartState-Mon'],
                     '400': ['Tx Ready', 'RA-RaSIB01:RF-LLRF:SSARdy-Mon'],
@@ -4081,7 +4077,9 @@ SEC_2_CHANNELS = {
                         'Delay': 'RA-RaSIA01:RF-LLRF:IntlkDly',
                         'HW': 'RA-RaSIA01:RF-LLRF:FDLHwTrig-Mon',
                         'Beam Inv': ['Logic Inv. LLRF Beam Trip', 'RA-RaSIA01:RF-LLRF:OrbitIntlkLogicInv'],
-                        'Vacuum Inv': ['Vacuum Logic Inversion', 'RA-RaSIA01:RF-LLRF:VacLogicInv']
+                        'Vacuum Inv': ['Vacuum Logic Inversion', 'RA-RaSIA01:RF-LLRF:VacLogicInv'],
+                        'SSA Bypass': ['SSA Interlock Bypass', 'RA-RaSIA01:RF-LLRF:EPSEnbl'],
+                        'Bypass': ['Interlock Bypass', 'RA-RaSIA01:RF-LLRF:FIMEnbl']
                     },
                     'Levels': {
                         'VCav': 'RA-RaSIA01:RF-LLRF:LimCav',
@@ -4147,7 +4145,9 @@ SEC_2_CHANNELS = {
                         'Delay': 'RA-RaSIB01:RF-LLRF:IntlkDly',
                         'HW': 'RA-RaSIB01:RF-LLRF:FDLHwTrig-Mon',
                         'Beam Inv': ['Logic Inv. LLRF Beam Trip', 'RA-RaSIB01:RF-LLRF:OrbitIntlkLogicInv'],
-                        'Vacuum Inv': ['Vacuum Logic Inversion', 'RA-RaSIB01:RF-LLRF:VacLogicInv']
+                        'Vacuum Inv': ['Vacuum Logic Inversion', 'RA-RaSIB01:RF-LLRF:VacLogicInv'],
+                        'SSA Bypass': ['SSA Interlock Bypass', 'RA-RaSIB01:RF-LLRF:EPSEnbl'],
+                        'Bypass': ['Interlock Bypass', 'RA-RaSIB01:RF-LLRF:FIMEnbl']
                     },
                     'Levels': {
                         'VCav': 'RA-RaSIB01:RF-LLRF:LimCav',
