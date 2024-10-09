@@ -52,12 +52,6 @@ class AutoStartDetails(SiriusDialog):
             self, self.prefix+self.syst_dict['23'][1]+'-Sts',
             alignment=Qt.AlignCenter), 1, 3)
 
-        # # EPS
-        self._setupButtonLed(gen_lay, '400', 2)
-
-        # # Bypass
-        self._setupButtonLed(gen_lay, '401', 3)
-
         # Diagnostics
         gbox_diag = QGroupBox('Diagnostics')
         diag_lay = QGridLayout()

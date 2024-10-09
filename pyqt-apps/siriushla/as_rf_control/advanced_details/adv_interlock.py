@@ -156,7 +156,8 @@ class AdvancedInterlockDetails(SiriusDialog):
             self, self.prefix+chs_dict['HW']), 1, 2, alignment=Qt.AlignCenter)
 
         # Manual Interlock, End Switches and Logic Inversions
-        keys = ['Manual', 'EndSw', 'Beam Inv', 'Vacuum Inv']
+        keys = ['Manual', 'EndSw', 'Beam Inv',
+            'Vacuum Inv', 'SSA Bypass', 'Bypass']
         row = 3
         for key in keys:
             lay.addWidget(QLabel(chs_dict[key][0]), row, 0)
