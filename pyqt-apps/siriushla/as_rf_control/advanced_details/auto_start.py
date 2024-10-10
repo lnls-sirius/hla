@@ -58,19 +58,21 @@ class AutoStartDetails(SiriusDialog):
         gbox_diag.setLayout(diag_lay)
 
         # # State Start
-        lb_state = SiriusLabel(self, self.syst_dict['Diag']['500'][1])
+        lb_state = SiriusLabel(self, self.syst_dict['500'][1])
         lb_state.showUnits = True
         diag_lay.addWidget(QLabel('500'), 0, 0)
-        diag_lay.addWidget(QLabel(self.syst_dict['Diag']['500'][0]), 0, 1)
+        diag_lay.addWidget(QLabel(self.syst_dict['500'][0]), 0, 1)
         diag_lay.addWidget(lb_state, 0, 2)
 
         # # LEDs
         row = 1
-        for key in self.syst_dict['Diag'].keys():
-            if key != '500':
-                self._setupLabelLed(
-                    diag_lay, key, self.syst_dict['Diag'], row, key == '401')
-                row += 1
+        if self.section == 'SI':
+            chs_dict = self.chs['Diagnostics'][self.system]
+        else:
+            chs_dict = self.chs['Diagnostics']
+        for key, val in chs_dict.items():
+            self._setupLabelLed(diag_lay, key, val, row, key == '401')
+            row += 1
 
         lay.addWidget(QLabel(
             f'<h4>{self.title}</h4>', alignment=Qt.AlignCenter))
@@ -87,12 +89,12 @@ class AutoStartDetails(SiriusDialog):
             self, self.prefix+self.syst_dict[key][1]+'-Sts'),
             row, 3, alignment=Qt.AlignCenter)
 
-    def _setupLabelLed(self, lay, key, chs_dict, row, is_alert):
+    def _setupLabelLed(self, lay, key, val, row, is_alert):
         if is_alert:
-            led = SiriusLedAlert(self, self.prefix+chs_dict[key][1])
+            led = SiriusLedAlert(self, self.prefix+val[1])
         else:
-            led = SiriusLedState(self, self.prefix+chs_dict[key][1])
+            led = SiriusLedState(self, self.prefix+val[1])
 
         lay.addWidget(QLabel(key), row, 0)
-        lay.addWidget(QLabel(chs_dict[key][0]), row, 1)
+        lay.addWidget(QLabel(val[0]), row, 1)
         lay.addWidget(led, row, 2, alignment=Qt.AlignCenter)
