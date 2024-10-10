@@ -404,7 +404,7 @@ SEC_2_CHANNELS = {
             'Delay': 'RA-RaBO01:RF-LLRF:FDLTrigDly'
         },
         'Diagnostics': {
-            '400': ['Tx Ready', 'RA-RaBO01:RF-LLRF:SSARdy-Mon'],
+            '400': ['SSA Ready', 'RA-RaBO01:RF-LLRF:SSARdy-Mon'],
             '401': ['Fast Interlock', 'RA-RaBO01:RF-LLRF:IntlkAll-Mon'],
             '308': ['Slow Loop Fwd Min', 'RA-RaBO01:RF-LLRF:SLFwdMin-Mon'],
             '309': ['Fast Loop Fwd Min', 'RA-RaBO01:RF-LLRF:FLFwdMin-Mon'],
@@ -2443,7 +2443,7 @@ SEC_2_CHANNELS = {
         },
         'Diagnostics': {
             'A': {
-                '400': ['Tx Ready', 'RA-RaSIA01:RF-LLRF:SSARdy-Mon'],
+                '400': ['SSA Ready', 'RA-RaSIA01:RF-LLRF:SSARdy-Mon'],
                 '401': ['Fast Interlock', 'RA-RaSIA01:RF-LLRF:IntlkAll-Mon'],
                 '308': ['Slow Loop Fwd Min', 'RA-RaSIA01:RF-LLRF:SLFwdMin-Mon'],
                 '309': ['Fast Loop Fwd Min', 'RA-RaSIA01:RF-LLRF:FLFwdMin-Mon'],
@@ -2452,7 +2452,7 @@ SEC_2_CHANNELS = {
                 '307': ['Tuning Fwd Min', 'RA-RaSIA01:RF-LLRF:TuneFwdMin-Mon']
             },
             'B': {
-                '400': ['Tx Ready', 'RA-RaSIB01:RF-LLRF:SSARdy-Mon'],
+                '400': ['SSA Ready', 'RA-RaSIB01:RF-LLRF:SSARdy-Mon'],
                 '401': ['Fast Interlock', 'RA-RaSIB01:RF-LLRF:IntlkAll-Mon'],
                 '308': ['Slow Loop Fwd Min', 'RA-RaSIB01:RF-LLRF:SLFwdMin-Mon'],
                 '309': ['Fast Loop Fwd Min', 'RA-RaSIB01:RF-LLRF:FLFwdMin-Mon'],
