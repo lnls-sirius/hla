@@ -689,6 +689,21 @@ class RFMainControl(SiriusMainWindow):
             wid_fflat = QWidget()
             wid_fflat.setLayout(lay_fflat)
 
+        # # Diagnostics
+        wid_diag = QWidget()
+        lay_diag = QGridLayout(wid_diag)
+        lay_diag.setAlignment(Qt.AlignTop)
+        lay_diag.setSpacing(9)
+        if self.section == 'SI':
+            lay_diag.addItem(QSpacerItem(
+                27, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 0, 0)
+            column = 1
+            for k, chs in self.chs['Diagnostics'].items():
+                self._create_diag_lay(lay_diag, k, chs, column)
+                column += 2
+        else:
+            self._create_diag_lay(lay_diag, None, self.chs['Diagnostics'], 0)
+
         # # FDL
         wid_fdl = QWidget()
         lay_fdl = QVBoxLayout(wid_fdl)
@@ -714,6 +729,7 @@ class RFMainControl(SiriusMainWindow):
         wid_llrf.addTab(wid_tun, 'Tuning')
         if self.section == 'BO':
             wid_llrf.addTab(wid_fflat, 'Field Flatness')
+        wid_llrf.addTab(wid_diag, 'Diagnostics')
         wid_llrf.addTab(wid_fdl, 'FDL')
 
         # Layout
@@ -1678,6 +1694,26 @@ class RFMainControl(SiriusMainWindow):
         lay_fdl.addWidget(QLabel('<h4>Amplitude</h4>'))
         lay_fdl.addLayout(lay_checks)
         lay_fdl.addWidget(self.amp_graph)
+
+    def _create_diag_lay(self, lay_diag, key, chs, column):
+        if key is not None:
+            lay_diag.addWidget(QLabel(
+                f'<h4>{key}</h4>', alignment=Qt.AlignCenter),
+                0, column, 1, 2)
+            lay_diag.addItem(QSpacerItem(
+                0, 9, QSzPlcy.Ignored, QSzPlcy.Fixed), 1, column)
+        else:
+            lay_diag.addItem(QSpacerItem(
+                0, 18, QSzPlcy.Ignored, QSzPlcy.Fixed), 0, column)
+
+        row = 2
+        for _, val in chs.items():
+            lay_diag.addWidget(QLabel(
+                val[0], alignment=Qt.AlignRight), row, column)
+            lay_diag.addWidget(SiriusLedState(
+                self, self.prefix+val[1]), row, column+1,
+                alignment=Qt.AlignCenter)
+            row += 1
 
     def _create_slc_lay(self, lay_slc, key, chs_dict, offset):
         if key:
