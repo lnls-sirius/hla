@@ -1707,11 +1707,14 @@ class RFMainControl(SiriusMainWindow):
                 0, 18, QSzPlcy.Ignored, QSzPlcy.Fixed), 0, column)
 
         row = 2
-        for _, val in chs.items():
+        for k, val in chs.items():
+            if k == '401':
+                led = SiriusLedAlert(self, self.prefix+val[1])
+            else:
+                led = SiriusLedState(self, self.prefix+val[1])
             lay_diag.addWidget(QLabel(
                 val[0], alignment=Qt.AlignRight), row, column)
-            lay_diag.addWidget(SiriusLedState(
-                self, self.prefix+val[1]), row, column+1,
+            lay_diag.addWidget(led, row, column+1,
                 alignment=Qt.AlignCenter)
             row += 1
 
