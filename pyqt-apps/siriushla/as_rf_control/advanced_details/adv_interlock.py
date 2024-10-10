@@ -1,8 +1,9 @@
 """Advanced details related to interlocks."""
 
 from qtpy.QtCore import Qt
-from qtpy.QtWidgets import QGridLayout, QGroupBox, QHBoxLayout, QLabel, \
-    QSizePolicy as QSzPlcy, QSpacerItem, QTabWidget, QVBoxLayout, QWidget
+from qtpy.QtWidgets import QFrame, QGridLayout, QGroupBox, QHBoxLayout, \
+    QLabel, QSizePolicy as QSzPlcy, QSpacerItem, QTabWidget, QVBoxLayout, \
+    QWidget
 
 from ...widgets import PyDMStateButton, SiriusDialog, SiriusLabel, \
     SiriusLedAlert, SiriusLedState, SiriusPushButton, SiriusSpinbox
@@ -55,13 +56,14 @@ class AdvancedInterlockDetails(SiriusDialog):
         lay.addWidget(dtls)
 
     def _diagnosticsLayout(self, chs_dict):
-        lay = QHBoxLayout()
+        lay = QGridLayout()
         lay.setAlignment(Qt.AlignTop)
         lay.setSpacing(9)
 
         # General
-        gbox_gen = QGroupBox()
-        gbox_gen.setLayout(self._genDiagLayout(chs_dict['General']))
+        frame_gen = QFrame(self)
+        frame_gen.setFrameShape(QFrame.NoFrame)
+        frame_gen.setLayout(self._genDiagLayout(chs_dict['General']))
 
         # Levels
         gbox_lvls = QGroupBox('Levels')
@@ -72,15 +74,26 @@ class AdvancedInterlockDetails(SiriusDialog):
 
         row = 0
         for key, val in chs_dict['Levels'].items():
+            if key.split()[-1] == 'Extra':
+                label = QLabel(f'Limit {key[:-len("Extra")]}')
+            else:
+                label = QLabel(f'Limit {key}')
             lb = SiriusLabel(self, self.prefix+val+'-RB')
             lb.showUnits = True
-            lay_lvls.addWidget(QLabel(f'Limit {key}'), row, 0)
+            lb_w = SiriusLabel(self, self.prefix+val+'W-Mon')
+            lb_w.showUnits = True
+            lay_lvls.addWidget(label, row, 0)
             lay_lvls.addItem(QSpacerItem(
                 9, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), row, 1)
             lay_lvls.addWidget(SiriusSpinbox(
                 self, self.prefix+val+'-SP'), row, 2)
             lay_lvls.addWidget(lb, row, 3)
+            lay_lvls.addWidget(lb_w, row, 4)
             row += 1
+            if key == 'RevSSA4 (RF In 12)':
+                lay_lvls.addItem(QSpacerItem(
+                    0, 18, QSzPlcy.Ignored, QSzPlcy.Fixed), row, 0)
+                row += 1
 
         # GPIO Inputs
         gbox_inp = QGroupBox('GPIO Inputs')
@@ -128,11 +141,11 @@ class AdvancedInterlockDetails(SiriusDialog):
             self, self.prefix+chs_dict['GPIO']['Out']),
             0, 0, 1, 2, alignment=Qt.AlignCenter)
 
-        lay.addWidget(gbox_gen)
-        lay.addWidget(gbox_lvls)
-        lay.addWidget(gbox_inp)
-        lay.addWidget(gbox_intlk)
-        lay.addWidget(gbox_out)
+        lay.addWidget(gbox_lvls, 0, 0)
+        lay.addWidget(gbox_inp, 0, 1)
+        lay.addWidget(gbox_intlk, 0, 2)
+        lay.addWidget(gbox_out, 0, 3)
+        lay.addWidget(frame_gen, 1, 0)
 
         return lay
 
