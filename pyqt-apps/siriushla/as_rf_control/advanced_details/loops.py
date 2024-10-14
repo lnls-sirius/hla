@@ -103,6 +103,9 @@ class LoopsDetails(SiriusDialog):
         lay.addWidget(QLabel('106'), 5, 0)
         lay.addWidget(QLabel(chs_dict['106'][0]), 5, 1)
         lay.addWidget(pb_lookref, 5, 2, alignment=Qt.AlignRight)
+        lay.addWidget(SiriusLedState(
+            self, self.prefix+chs_dict['106'][1]),
+            5, 3, alignment=Qt.AlignCenter)
 
         # # Rect/Polar Mode Select
         lay.addWidget(QLabel('114'), 6, 0)
