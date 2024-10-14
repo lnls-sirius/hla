@@ -40,8 +40,9 @@ class CalEqDetails(SiriusDialog):
 
         row = 1
         column = 0
+        invalid_keys = ['VGap', 'r/Q', 'Q0', 'Rsh']
         for key, dic in self.syst_dict.items():
-            if key != 'VGap' and key != 'Rsh':
+            if key not in invalid_keys:
                 gbox = QGroupBox(key)
                 gbox.setLayout(self._genericStatisticsLayout(dic))
                 lay.addWidget(gbox, row, column)
@@ -58,22 +59,34 @@ class CalEqDetails(SiriusDialog):
             column = 0
             row += 1
 
-        # Rsh
         lay_extra = QGridLayout()
         lay_extra.setVerticalSpacing(12)
-
-        lb_rsh = SiriusLabel(self, self.prefix+self.syst_dict['Rsh'])
-        lb_rsh.showUnits = True
 
         lay_extra.addItem(
             QSpacerItem(0, 18, QSzPlcy.Ignored, QSzPlcy.Fixed), 0, 0)
         lay_extra.addWidget(QLabel(
-            'C4*F^4 + C3*F^3 + C2*F^2 + C1*F + C0',
+            'C0 + C1*F + C2*F^2 + C3*F^3 + C4*F^4',
             alignment=Qt.AlignCenter), 1, 0, 1, 2)
-        lay_extra.addWidget(QLabel(
-            'Rsh (Ohm)', alignment=Qt.AlignRight | Qt.AlignVCenter),
-            2, 0)
-        lay_extra.addWidget(lb_rsh, 2, 1, alignment=Qt.AlignCenter)
+        if self.section == 'SI':
+            lb_rq = SiriusLabel(self, self.prefix+self.syst_dict['r/Q'])
+            lb_rq.showUnits = True
+            lb_q0 = SiriusLabel(self, self.prefix+self.syst_dict['Q0'])
+            lb_q0.showUnits = True
+            lay_extra.addWidget(QLabel(
+                'r/Q', alignment=Qt.AlignRight | Qt.AlignVCenter),
+                2, 0)
+            lay_extra.addWidget(lb_rq, 2, 1, alignment=Qt.AlignCenter)
+            lay_extra.addWidget(QLabel(
+                'Q0', alignment=Qt.AlignRight | Qt.AlignVCenter),
+                3, 0)
+            lay_extra.addWidget(lb_q0, 3, 1, alignment=Qt.AlignCenter)
+        else:
+            lb_rsh = SiriusLabel(self, self.prefix+self.syst_dict['Rsh'])
+            lb_rsh.showUnits = True
+            lay_extra.addWidget(QLabel(
+                'Rsh (Ohm)', alignment=Qt.AlignRight | Qt.AlignVCenter),
+                2, 0)
+            lay_extra.addWidget(lb_rsh, 2, 1, alignment=Qt.AlignCenter)
 
         lay.addLayout(lay_extra, row, column, alignment=Qt.AlignHCenter)
 
