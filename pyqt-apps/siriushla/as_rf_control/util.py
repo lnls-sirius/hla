@@ -4605,7 +4605,8 @@ SEC_2_CHANNELS = {
                     'Hw to Amp': 'RA-RaSIA01:RF-LLRF:Hw2AmpVCavCoeff',
                     'Amp to Hw': 'RA-RaSIA01:RF-LLRF:AmpVCav2HwCoeff'
                 },
-                'Rsh': 'SI-03SP:RF-SRFCav-A:Rsh-Cte'
+                'r/Q': 'SI-03SP:RF-SRFCav-A:RoverQ-Cte',
+                'Q0': 'SI-03SP:RF-SRFCav-A:Q0-Cte'
             },
             'B': {
                 'Cav': {
@@ -4677,7 +4678,8 @@ SEC_2_CHANNELS = {
                     'Hw to Amp': 'RA-RaSIB01:RF-LLRF:Hw2AmpVCavCoeff',
                     'Amp to Hw': 'RA-RaSIB01:RF-LLRF:AmpVCav2HwCoeff'
                 },
-                'Rsh': 'SI-03SP:RF-SRFCav-B:Rsh-Cte'
+                'r/Q': 'SI-03SP:RF-SRFCav-B:RoverQ-Cte',
+                'Q0': 'SI-03SP:RF-SRFCav-B:Q0-Cte'
             }
         },
         'ACPanel': {
