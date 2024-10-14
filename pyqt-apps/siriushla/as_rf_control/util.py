@@ -4538,12 +4538,10 @@ SEC_2_CHANNELS = {
             'A': {
                 'Cav': {
                     'Raw-U': 'RA-RaSIA01:RF-LLRF:CavSysCal',
-                    'U-Raw': 'RA-RaSIA01:RF-LLRF:CavSysCalInv',
                     'OFS': 'RA-RaSIA01:RF-LLRF:CavOffset'
                 },
                 'Fwd Cav': {
                     'Raw-U': 'RA-RaSIA01:RF-LLRF:FwdCavSysCal',
-                    'U-Raw': 'RA-RaSIA01:RF-LLRF:FwdCavSysCalInv',
                     'OFS': 'RA-RaSIA01:RF-LLRF:FwdCavOffset'
                 },
                 'Rev Cav': {
@@ -4552,7 +4550,6 @@ SEC_2_CHANNELS = {
                 },
                 'Fwd SSA 1': {
                     'Raw-U': 'RA-RaSIA01:RF-LLRF:FwdSSA1SysCal',
-                    'U-Raw': 'RA-RaSIA01:RF-LLRF:FwdSSA1SysCalInv',
                     'OFS': 'RA-RaSIA01:RF-LLRF:FwdSSA1Offset'
                 },
                 'Rev SSA 1': {
@@ -4561,7 +4558,6 @@ SEC_2_CHANNELS = {
                 },
                 'Fwd SSA 2': {
                     'Raw-U': 'RA-RaSIA01:RF-LLRF:FwdSSA2SysCal',
-                    'U-Raw': 'RA-RaSIA01:RF-LLRF:FwdSSA2SysCalInv',
                     'OFS': 'RA-RaSIA01:RF-LLRF:FwdSSA2Offset'
                 },
                 'Rev SSA 2': {
@@ -4588,11 +4584,6 @@ SEC_2_CHANNELS = {
                     'Raw-U': 'RA-RaSIA01:RF-LLRF:MOSysCal',
                     'OFS': 'RA-RaSIA01:RF-LLRF:MOOffset'
                 },
-                'Amp Loop Ref': {
-                    'Raw-U': 'RA-RaSIA01:RF-LLRF:ALRefSysCal',
-                    'U-Raw': 'RA-RaSIA01:RF-LLRF:ALRefSysCalInv',
-                    'OFS': 'RA-RaSIA01:RF-LLRF:ALRefOffset'
-                },
                 'FBTN Top': {
                     'Raw-U': 'RA-RaSIA01:RF-LLRF:FBTNTopSysCal',
                     'OFS': 'RA-RaSIA01:RF-LLRF:FBTNTopOffset'
@@ -4601,22 +4592,16 @@ SEC_2_CHANNELS = {
                     'Raw-U': 'RA-RaSIA01:RF-LLRF:FBTNBotSysCal',
                     'OFS': 'RA-RaSIA01:RF-LLRF:FBTNBotOffset'
                 },
-                'VGap': {
-                    'Hw to Amp': 'RA-RaSIA01:RF-LLRF:Hw2AmpVCavCoeff',
-                    'Amp to Hw': 'RA-RaSIA01:RF-LLRF:AmpVCav2HwCoeff'
-                },
                 'r/Q': 'SI-03SP:RF-SRFCav-A:RoverQ-Cte',
                 'Q0': 'SI-03SP:RF-SRFCav-A:Q0-Cte'
             },
             'B': {
                 'Cav': {
                     'Raw-U': 'RA-RaSIB01:RF-LLRF:CavSysCal',
-                    'U-Raw': 'RA-RaSIB01:RF-LLRF:CavSysCalInv',
                     'OFS': 'RA-RaSIB01:RF-LLRF:CavOffset'
                 },
                 'Fwd Cav': {
                     'Raw-U': 'RA-RaSIB01:RF-LLRF:FwdCavSysCal',
-                    'U-Raw': 'RA-RaSIB01:RF-LLRF:FwdCavSysCalInv',
                     'OFS': 'RA-RaSIB01:RF-LLRF:FwdCavOffset'
                 },
                 'Rev Cav': {
@@ -4625,7 +4610,6 @@ SEC_2_CHANNELS = {
                 },
                 'Fwd SSA 1': {
                     'Raw-U': 'RA-RaSIB01:RF-LLRF:FwdSSA1SysCal',
-                    'U-Raw': 'RA-RaSIB01:RF-LLRF:FwdSSA1SysCalInv',
                     'OFS': 'RA-RaSIB01:RF-LLRF:FwdSSA1Offset'
                 },
                 'Rev SSA 1': {
@@ -4634,7 +4618,6 @@ SEC_2_CHANNELS = {
                 },
                 'Fwd SSA 2': {
                     'Raw-U': 'RA-RaSIB01:RF-LLRF:FwdSSA2SysCal',
-                    'U-Raw': 'RA-RaSIB01:RF-LLRF:FwdSSA2SysCalInv',
                     'OFS': 'RA-RaSIB01:RF-LLRF:FwdSSA2Offset'
                 },
                 'Rev SSA 2': {
@@ -4661,11 +4644,6 @@ SEC_2_CHANNELS = {
                     'Raw-U': 'RA-RaSIB01:RF-LLRF:MOSysCal',
                     'OFS': 'RA-RaSIB01:RF-LLRF:MOOffset'
                 },
-                'Amp Loop Ref': {
-                    'Raw-U': 'RA-RaSIB01:RF-LLRF:ALRefSysCal',
-                    'U-Raw': 'RA-RaSIB01:RF-LLRF:ALRefSysCalInv',
-                    'OFS': 'RA-RaSIB01:RF-LLRF:ALRefOffset'
-                },
                 'FBTN Top': {
                     'Raw-U': 'RA-RaSIB01:RF-LLRF:FBTNTopSysCal',
                     'OFS': 'RA-RaSIB01:RF-LLRF:FBTNTopOffset'
@@ -4673,10 +4651,6 @@ SEC_2_CHANNELS = {
                 'FBTN Bot': {
                     'Raw-U': 'RA-RaSIB01:RF-LLRF:FBTNBotSysCal',
                     'OFS': 'RA-RaSIB01:RF-LLRF:FBTNBotOffset'
-                },
-                'VGap': {
-                    'Hw to Amp': 'RA-RaSIB01:RF-LLRF:Hw2AmpVCavCoeff',
-                    'Amp to Hw': 'RA-RaSIB01:RF-LLRF:AmpVCav2HwCoeff'
                 },
                 'r/Q': 'SI-03SP:RF-SRFCav-B:RoverQ-Cte',
                 'Q0': 'SI-03SP:RF-SRFCav-B:Q0-Cte'

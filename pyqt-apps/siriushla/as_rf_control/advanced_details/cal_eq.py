@@ -51,13 +51,14 @@ class CalEqDetails(SiriusDialog):
                     column = 0
                     row += 1
 
-        gbox_vgap = QGroupBox('VGap')
-        gbox_vgap.setLayout(self._vgapLayout(self.syst_dict['VGap']))
-        lay.addWidget(gbox_vgap, row, column)
-        column += 1
-        if column == 3:
-            column = 0
-            row += 1
+        if self.section == 'BO':
+            gbox_vgap = QGroupBox('VGap')
+            gbox_vgap.setLayout(self._vgapLayout(self.syst_dict['VGap']))
+            lay.addWidget(gbox_vgap, row, column)
+            column += 1
+            if column == 3:
+                column = 0
+                row += 1
 
         lay_extra = QGridLayout()
         lay_extra.setVerticalSpacing(12)
