@@ -97,12 +97,12 @@ class LoopsDetails(SiriusDialog):
         lay.addWidget(lb_pinc, 4, 3)
 
         # Look Reference
-        pb_lookref = SiriusPushButton(
-            self, self.prefix+chs_dict['106'][1])
-        pb_lookref.setText('OFF')
         lay.addWidget(QLabel('106'), 5, 0)
         lay.addWidget(QLabel(chs_dict['106'][0]), 5, 1)
-        lay.addWidget(pb_lookref, 5, 2, alignment=Qt.AlignRight)
+        lay.addWidget(SiriusPushButton(
+            self, self.prefix+chs_dict['106'][1],
+            'OFF', pressValue=1, releaseValue=0),
+            5, 2, alignment=Qt.AlignRight)
         lay.addWidget(SiriusLedState(
             self, self.prefix+chs_dict['106'][1]),
             5, 3, alignment=Qt.AlignCenter)
