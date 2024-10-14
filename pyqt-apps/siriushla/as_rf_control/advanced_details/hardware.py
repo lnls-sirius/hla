@@ -4,8 +4,8 @@ from pydm.widgets import PyDMEnumComboBox
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGridLayout, QGroupBox, QLabel, QVBoxLayout
 
-from ...widgets import PyDMStateButton, SiriusDialog, SiriusLabel, \
-    SiriusLedAlert, SiriusLedState, SiriusPushButton, SiriusScaleIndicator
+from ...widgets import SiriusDialog, SiriusLabel, SiriusLedAlert, \
+    SiriusLedState, SiriusPushButton, SiriusScaleIndicator
 from ..util import SEC_2_CHANNELS
 
 
