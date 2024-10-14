@@ -2,7 +2,7 @@
 
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGridLayout, QLabel, QSizePolicy as QSzPlcy, \
-    QSpacerItem, QTabWidget, QVBoxLayout, QWidget
+    QSpacerItem
 
 from ...widgets import PyDMStateButton, SiriusDialog, SiriusEnumComboBox, \
     SiriusLabel, SiriusLedState, SiriusSpinbox
