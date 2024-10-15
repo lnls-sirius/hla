@@ -4592,6 +4592,10 @@ SEC_2_CHANNELS = {
                     'Raw-U': 'RA-RaSIA01:RF-LLRF:FBTNBotSysCal',
                     'OFS': 'RA-RaSIA01:RF-LLRF:FBTNBotOffset'
                 },
+                'Wg Pickup': {
+                    'Raw-U': 'RA-RaSIA01:RF-LLRF:WgPkupSysCal',
+                    'OFS': 'RA-RaSIA01:RF-LLRF:WgPkupOffset'
+                },
                 'r/Q': 'SI-03SP:RF-SRFCav-A:RoverQ-Cte',
                 'Q0': 'SI-03SP:RF-SRFCav-A:Q0-Cte'
             },
@@ -4651,6 +4655,10 @@ SEC_2_CHANNELS = {
                 'FBTN Bot': {
                     'Raw-U': 'RA-RaSIB01:RF-LLRF:FBTNBotSysCal',
                     'OFS': 'RA-RaSIB01:RF-LLRF:FBTNBotOffset'
+                },
+                'Wg Pickup': {
+                    'Raw-U': 'RA-RaSIB01:RF-LLRF:WgPkupSysCal',
+                    'OFS': 'RA-RaSIB01:RF-LLRF:WgPkupOffset'
                 },
                 'r/Q': 'SI-03SP:RF-SRFCav-B:RoverQ-Cte',
                 'Q0': 'SI-03SP:RF-SRFCav-B:Q0-Cte'
