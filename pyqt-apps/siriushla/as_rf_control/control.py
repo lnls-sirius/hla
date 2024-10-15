@@ -753,14 +753,14 @@ class RFMainControl(SiriusMainWindow):
         self.lb_rmpincts.showUnits = True
 
         self.sb_rmpts1 = SiriusSpinbox(
-            self, self.prefix+'RA-RaBO01:RF-LLRF:RmpIncTime-SP')
+            self, self.prefix+'RA-RaBO01:RF-LLRF:RmpTs1-SP')
         self.lb_rmpts1 = SiriusLabel(
-            self, self.prefix+'RA-RaBO01:RF-LLRF:RmpIncTime-RB')
+            self, self.prefix+'RA-RaBO01:RF-LLRF:RmpTs1-RB')
         self.lb_rmpts1.showUnits = True
         self.sb_rmpts2 = SiriusSpinbox(
             self, self.prefix+'RA-RaBO01:RF-LLRF:RmpTs2-SP')
         self.lb_rmpts2 = SiriusLabel(
-            self, self.prefix+'RA-RaBO01:RF-LLRF:RmpTs2-SP')
+            self, self.prefix+'RA-RaBO01:RF-LLRF:RmpTs2-RB')
         self.lb_rmpts2.showUnits = True
         self.sb_rmpts3 = SiriusSpinbox(
             self, self.prefix+'RA-RaBO01:RF-LLRF:RmpTs3-SP')
