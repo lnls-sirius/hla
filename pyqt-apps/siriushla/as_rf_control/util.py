@@ -2601,12 +2601,12 @@ SEC_2_CHANNELS = {
                 },
                 '41': {
                     'Label': 'FBTN Top (RF In 9)',
-                    'I': 'SI-03SP:RF-SRFCav-A:FBTNTopI-Mon',
-                    'Q': 'SI-03SP:RF-SRFCav-A:FBTNTopQ-Mon',
-                    'Amp': 'SI-03SP:RF-SRFCav-A:FBTNTopAmp-Mon',
-                    'Phs': 'SI-03SP:RF-SRFCav-A:FBTNTopPhs-Mon',
-                    'PwrW': 'SI-03SP:RF-SRFCav-A:FBTNTopPwrW-Mon',
-                    'PwrdBm': 'SI-03SP:RF-SRFCav-A:FBTNTopPwrdBm-Mon',
+                    'I': 'SI-03SP:RF-SRFCav-A:FBTntI-Mon',
+                    'Q': 'SI-03SP:RF-SRFCav-A:FBTntQ-Mon',
+                    'Amp': 'SI-03SP:RF-SRFCav-A:FBTntAmp-Mon',
+                    'Phs': 'SI-03SP:RF-SRFCav-A:FBTntPhs-Mon',
+                    'PwrW': 'SI-03SP:RF-SRFCav-A:FBTntPwrW-Mon',
+                    'PwrdBm': 'SI-03SP:RF-SRFCav-A:FBTntPwrdBm-Mon',
                 },
                 '43': {
                     'Label': 'Wg Pickup (RF In 10)',
@@ -2756,12 +2756,12 @@ SEC_2_CHANNELS = {
                 },
                 '41': {
                     'Label': 'FBTN Top (RF In 9)',
-                    'I': 'SI-03SP:RF-SRFCav-B:FBTNTopI-Mon',
-                    'Q': 'SI-03SP:RF-SRFCav-B:FBTNTopQ-Mon',
-                    'Amp': 'SI-03SP:RF-SRFCav-B:FBTNTopAmp-Mon',
-                    'Phs': 'SI-03SP:RF-SRFCav-B:FBTNTopPhs-Mon',
-                    'PwrW': 'SI-03SP:RF-SRFCav-B:FBTNTopPwrW-Mon',
-                    'PwrdBm': 'SI-03SP:RF-SRFCav-B:FBTNTopPwrdBm-Mon',
+                    'I': 'SI-03SP:RF-SRFCav-B:FBTntI-Mon',
+                    'Q': 'SI-03SP:RF-SRFCav-B:FBTntQ-Mon',
+                    'Amp': 'SI-03SP:RF-SRFCav-B:FBTntAmp-Mon',
+                    'Phs': 'SI-03SP:RF-SRFCav-B:FBTntPhs-Mon',
+                    'PwrW': 'SI-03SP:RF-SRFCav-B:FBTntPwrW-Mon',
+                    'PwrdBm': 'SI-03SP:RF-SRFCav-B:FBTntPwrdBm-Mon',
                 },
                 '43': {
                     'Label': 'Wg Pickup (RF In 10)',
@@ -4094,7 +4094,7 @@ SEC_2_CHANNELS = {
                         'RevSSA4 (RF In 12)': 'RA-RaSIA01:RF-LLRF:LimRevSSA4',
                         'FwdSSA2 (RF In 7)': 'RA-RaSIA01:RF-LLRF:LimRFIn7',
                         'RevSSA2 (RF In 8) Extra': 'RA-RaSIA01:RF-LLRF:LimRFIn8',
-                        'FBTNTop (RF In 9)': 'RA-RaSIA01:RF-LLRF:LimRFIn9',
+                        'FBTnt (RF In 9)': 'RA-RaSIA01:RF-LLRF:LimRFIn9',
                         'WgPickup (RF In 10)': 'RA-RaSIA01:RF-LLRF:LimRFIn10',
                         'FBTNBot (RF In 11)': 'RA-RaSIA01:RF-LLRF:LimRFIn11',
                         'InpSSA1 (RF In 12)': 'RA-RaSIA01:RF-LLRF:LimRFIn12',
@@ -4162,7 +4162,7 @@ SEC_2_CHANNELS = {
                         'RevSSA4 (RF In 12)': 'RA-RaSIB01:RF-LLRF:LimRevSSA4',
                         'FwdSSA2 (RF In 7)': 'RA-RaSIB01:RF-LLRF:LimRFIn7',
                         'RevSSA2 (RF In 8) Extra': 'RA-RaSIB01:RF-LLRF:LimRFIn8',
-                        'FBTNTop (RF In 9)': 'RA-RaSIB01:RF-LLRF:LimRFIn9',
+                        'FBTnt (RF In 9)': 'RA-RaSIB01:RF-LLRF:LimRFIn9',
                         'WgPickup (RF In 10)': 'RA-RaSIB01:RF-LLRF:LimRFIn10',
                         'FBTNBot (RF In 11)': 'RA-RaSIB01:RF-LLRF:LimRFIn11',
                         'InpSSA1 (RF In 12)': 'RA-RaSIB01:RF-LLRF:LimRFIn12',
@@ -4585,8 +4585,8 @@ SEC_2_CHANNELS = {
                     'OFS': 'RA-RaSIA01:RF-LLRF:MOOffset'
                 },
                 'FBTN Top': {
-                    'Raw-U': 'RA-RaSIA01:RF-LLRF:FBTNTopSysCal',
-                    'OFS': 'RA-RaSIA01:RF-LLRF:FBTNTopOffset'
+                    'Raw-U': 'RA-RaSIA01:RF-LLRF:FBTntSysCal',
+                    'OFS': 'RA-RaSIA01:RF-LLRF:FBTntOffset'
                 },
                 'FBTN Bot': {
                     'Raw-U': 'RA-RaSIA01:RF-LLRF:FBTNBotSysCal',
@@ -4645,8 +4645,8 @@ SEC_2_CHANNELS = {
                     'OFS': 'RA-RaSIB01:RF-LLRF:MOOffset'
                 },
                 'FBTN Top': {
-                    'Raw-U': 'RA-RaSIB01:RF-LLRF:FBTNTopSysCal',
-                    'OFS': 'RA-RaSIB01:RF-LLRF:FBTNTopOffset'
+                    'Raw-U': 'RA-RaSIB01:RF-LLRF:FBTntSysCal',
+                    'OFS': 'RA-RaSIB01:RF-LLRF:FBTntOffset'
                 },
                 'FBTN Bot': {
                     'Raw-U': 'RA-RaSIB01:RF-LLRF:FBTNBotSysCal',
