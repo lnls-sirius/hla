@@ -3075,6 +3075,20 @@ SEC_2_CHANNELS = {
                             'Quad': 'RA-RaSIA01:RF-LLRF:SSA2CtrlQ-Mon',
                             'Amp': 'RA-RaSIA01:RF-LLRF:SSA2CtrlAmp-Mon',
                             'Phs': 'RA-RaSIA01:RF-LLRF:SSA2CtrlPhs-Mon'
+                        },
+                        '10': {
+                            'Label': 'FBTN Top Control Signal',
+                            'InPhs': 'RA-RaSIA01:RF-LLRF:FBTntCtrlI-Mon',
+                            'Quad': 'RA-RaSIA01:RF-LLRF:FBTntCtrlQ-Mon',
+                            'Amp': 'RA-RaSIA01:RF-LLRF:FBTntCtrlAmp-Mon',
+                            'Phs': 'RA-RaSIA01:RF-LLRF:FBTntCtrlPhs-Mon'
+                        },
+                        '12': {
+                            'Label': 'Rev In Circ Control Signal',
+                            'InPhs': 'RA-RaSIA01:RF-LLRF:RevCircCtrlI-Mon',
+                            'Quad': 'RA-RaSIA01:RF-LLRF:RevCircCtrlQ-Mon',
+                            'Amp': 'RA-RaSIA01:RF-LLRF:RevCircCtrlAmp-Mon',
+                            'Phs': 'RA-RaSIA01:RF-LLRF:RevCircCtrlPhs-Mon'
                         }
                     }
                 },
@@ -3363,6 +3377,20 @@ SEC_2_CHANNELS = {
                             'Quad': 'RA-RaSIB01:RF-LLRF:SSA2CtrlQ-Mon',
                             'Amp': 'RA-RaSIB01:RF-LLRF:SSA2CtrlAmp-Mon',
                             'Phs': 'RA-RaSIB01:RF-LLRF:SSA2CtrlPhs-Mon'
+                        },
+                        '10': {
+                            'Label': 'FBTN Top Control Signal',
+                            'InPhs': 'RA-RaSIB01:RF-LLRF:FBTntCtrlI-Mon',
+                            'Quad': 'RA-RaSIB01:RF-LLRF:FBTntCtrlQ-Mon',
+                            'Amp': 'RA-RaSIB01:RF-LLRF:FBTntCtrlAmp-Mon',
+                            'Phs': 'RA-RaSIB01:RF-LLRF:FBTntCtrlPhs-Mon'
+                        },
+                        '12': {
+                            'Label': 'Rev In Circ Control Signal',
+                            'InPhs': 'RA-RaSIB01:RF-LLRF:RevCircCtrlI-Mon',
+                            'Quad': 'RA-RaSIB01:RF-LLRF:RevCircCtrlQ-Mon',
+                            'Amp': 'RA-RaSIB01:RF-LLRF:RevCircCtrlAmp-Mon',
+                            'Phs': 'RA-RaSIB01:RF-LLRF:RevCircCtrlPhs-Mon'
                         }
                     }
                 },
