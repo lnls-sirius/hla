@@ -122,7 +122,6 @@ class CalEqDetails(SiriusDialog):
         lb_ofs = SiriusLabel(self, self.prefix+chs_dict['OFS']+'-RB')
         lb_ofs.precisionFromPV = 0
         lb_ofs.precision = 2
-        lb_ofs.displayFormat = DisplayFormat.Exponential
         lay.addWidget(QLabel('<h4>OFS</h4>', alignment=Qt.AlignCenter), row, 0)
         lay.addWidget(lb_ofs, row, 1, 1, 5, alignment=Qt.AlignLeft)
 
