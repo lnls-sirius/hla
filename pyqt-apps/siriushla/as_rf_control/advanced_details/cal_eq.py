@@ -142,14 +142,14 @@ class CalEqDetails(SiriusDialog):
         # Bodies
         column = 0
         for i in range(len(labels)):
-            for i, key in enumerate(['Hw to Amp', 'Amp to Hw']):
+            for j, key in enumerate(['Hw to Amp', 'Amp to Hw']):
                 lb = SiriusLabel(
                     self, self.prefix+chs_dict[key]+f'-RB.[{i}]')
                 lb.precisionFromPV = False
                 lb.precision = 2
                 lb.displayFormat = DisplayFormat.Exponential
 
-                row = 1 if i == 0 else 3
+                row = 1 if j == 0 else 3
                 lay.addWidget(lb, row, column)
             column += 1
 
