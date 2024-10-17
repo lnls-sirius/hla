@@ -103,7 +103,7 @@ class IDFFWindow(SiriusMainWindow):
             self, self.dev_pref.substitute(propty='LoopState-Sts'))
         
         lbl_table_pointer = QLabel(
-            'Loop State: ', self)
+            'Table Pointer: ', self)
         self.table_pointer = SiriusLabel(
             self, self.dev_pref.substitute(propty='TablePointer-Mon'))
 
