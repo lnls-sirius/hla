@@ -29,18 +29,11 @@ class IVUControlWindowUtils():
             "Intlk-Mon", "IntlkBits-Mon", "IntlkLabels-Cte"
         ),
         "Is Operational": "IsOperational-Mon",
-        "PLC State": "PLCState-Mon",
-        "Sw": {
-            "Killed": "KillSw-Mon",
-            "Limit": "LimSw-Mon"
-        },
-        "Logs": {
-            "IOC Log": "Log-Mon",
-            "Sequencer State Machine Log": "StateMachineLog-Mon"
-        }
+        "PLC State": "PLCState-Mon"
     }
 
     MAIN_CONTROL_PVS = {
+        "Moving": "Moving-Mon",
         "KParam": {
             "SP": "KParam-SP",
             "RB": "KParam-RB",
@@ -54,59 +47,9 @@ class IVUControlWindowUtils():
             "pvname": "KParamChange-Cmd",
             "icon": "fa5s.play"
         },
-        "PParam": {
-            "SP": "PParam-SP",
-            "RB": "PParam-RB",
-            "Mon": "PParam-Mon"
-        },
-        "PParam Speed": {
-            "SP": "PParamVelo-SP",
-            "RB": "PParamVelo-RB",
-        },
-        "Change PParam": {
-            "pvname": "PParamChange-Cmd",
-            "icon": "fa5s.play"
-        },
-        "Polarization": {
-            "SP": "Pol-Sel",
-            "RB": "Pol-Sts",
-            "Mon": "Pol-Mon"
-        },
-        "Change Polarization": {
-            "pvname": "PolChange-Cmd",
-            "icon": "fa5s.play"
-        },
-        "Moving": "Moving-Mon",
-        "Motors Enabled": "MotorsEnbld-Mon",
         "Abort": {
             "pvname": "Abort-Cmd",
             "icon": "fa5s.stop"
-        }
-    }
-
-    AUX_CONTROL_PVS = {
-        "Max. Speed": {
-            "SP": "MaxVelo-SP",
-            "RB": "MaxVelo-RB",
-        },
-        "Max. Acc.": {
-            "SP": "MaxAcc-SP",
-            "RB": "MaxAcc-RB",
-        },
-        "Header": (
-            "KParam", "PParam"
-        ),
-        "Acceleration": (
-            "KParamAcc-SP", "KParamAcc-RB",
-            "PParamAcc-SP", "PParamAcc-RB"
-        ),
-        "Tolerance": (
-            "PosTol-SP", "PosTol-RB",
-            "PolTol-SP", "PolTol-RB"
-        ),
-        "Start Parking": {
-            "pvname": "StartParking-Cmd",
-            "icon": "fa5s.parking"
         }
     }
 
@@ -126,12 +69,10 @@ class IVUControlWindow(IDCommonControlWindow, IVUControlWindowUtils):
             label.setFixedWidth(150)
             lay.addWidget(label, row, 0)
 
-            if title in ("Moving", "Motors Enabled"):
+            if title in ("Moving"):
                 self._createMotion(pv_info, lay, row)
-            elif title in ["KParam", "PParam", "KParam Speed", "PParam Speed"]:
+            elif title in ["KParam", "KParam Speed"]:
                 self._createParam(pv_info, lay, row)
-            elif title == "Polarization":
-                self._createPolarization(pv_info, lay, row)
             elif isinstance(pv_info, str):
                 pvname = self.dev_pref.substitute(propty=pv_info)
                 lbl = SiriusLabel(self, init_channel=pvname)
@@ -148,30 +89,6 @@ class IVUControlWindow(IDCommonControlWindow, IVUControlWindowUtils):
 
     def _statusWidget(self):
         return self._createStatusGroup("Status", self.STATUS_PVS)
-
-    def _auxCommandsWidget(self):
-        group = QGroupBox('Auxiliary Controls')
-        lay = QGridLayout()
-        group.setLayout(lay)
-
-        row = 0
-        for title, pv_info in self.AUX_CONTROL_PVS.items():
-            if "Header" not in title:
-                label = QLabel(
-                    title, self, alignment=Qt.AlignRight | Qt.AlignVCenter)
-                lay.addWidget(label, row, 0)
-
-            if title in ["Max. Speed", "Max. Acc."]:
-                self._createParam(pv_info, lay, row)
-            elif title in ["Abort", "Start Parking"]:
-                self._createIconBtns(pv_info, lay, row)
-            elif "Header" in title:
-                self._createHeaders(pv_info, lay, row)
-            else:
-                self._createAccTol(pv_info, lay, row)
-            row += 1
-
-        return group
 
     def _ctrlModeWidget(self):
         gbox_ctrlmode = QGroupBox('Control Mode')
@@ -220,24 +137,6 @@ class IVUControlWindow(IDCommonControlWindow, IVUControlWindowUtils):
         led = PyDMLed(self, init_channel=pvname)
         led.setMaximumWidth(50)
         lay.addWidget(led, row, 1, 1, 1)
-
-    def _createPolarization(self, pv_info, lay, row):
-
-        pvname = self.dev_pref.substitute(propty=pv_info["SP"])
-        cb = SiriusEnumComboBox(self, init_channel=pvname)
-        cb.setMinimumWidth(50)
-        lay.addWidget(cb, row, 1, 1, 1)
-        lay.setContentsMargins(0, 0, 0, 0)
-
-        col = 2
-        for key in ["RB", "Mon"]:
-            pvname = self.dev_pref.substitute(propty=pv_info[key])
-            lbl = SiriusLabel(self, init_channel=pvname)
-            lbl.setMinimumWidth(125)
-            lbl.showUnits = True
-            lbl.setAlignment(Qt.AlignCenter)
-            lay.addWidget(lbl, row, col, 1, 1)
-            col += 1
 
     def _createDetailedLedBtn(self, pv_tuple):
 
@@ -359,8 +258,6 @@ class IVUSummaryBase(IDCommonSummaryBase):
     """IVU Summary Base Widget."""
 
     MODEL_WIDTHS = (
-        ('Alarms', 4),
-        ('Interlock', 4),
         ('KParam', 6),
         ('KParam Speed', 6),
         ('Start', 4),
