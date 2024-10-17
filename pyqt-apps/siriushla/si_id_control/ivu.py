@@ -33,7 +33,6 @@ class IVUControlWindowUtils():
     }
 
     MAIN_CONTROL_PVS = {
-        "Moving": "Moving-Mon",
         "KParam": {
             "SP": "KParam-SP",
             "RB": "KParam-RB",
@@ -41,8 +40,24 @@ class IVUControlWindowUtils():
         },
         "KParam Speed": {
             "SP": "KParamVelo-SP",
-            "RB": "KParamVelo-RB",
+            "RB": "KParamVelo-RB"
         },
+        "KParam Taper": {
+            "SP": "KParamTaper-SP",
+            "RB": "KParamTaper-RB",
+            "Mon": "KParamTaper-Mon"
+        },
+        "Center Offset": {
+            "SP": "CenterOffset-SP",
+            "RB": "CenterOffset-RB",
+            "Mon": "CenterOffset-Mon"
+        },
+        "Pitch Offset": {
+            "SP": "PitchOffset-SP",
+            "RB": "PitchOffset-RB",
+            "Mon": "PitchOffset-Mon"
+        },
+        "Moving": "Moving-Mon",
         "Change KParam": {
             "pvname": "KParamChange-Cmd",
             "icon": "fa5s.play"
@@ -71,7 +86,8 @@ class IVUControlWindow(IDCommonControlWindow, IVUControlWindowUtils):
 
             if title in ("Moving"):
                 self._createMotion(pv_info, lay, row)
-            elif title in ["KParam", "KParam Speed"]:
+            elif title in ["KParam", "KParam Speed", 
+                    "KParam Taper", "Center Offset", "Pitch Offset"]:
                 self._createParam(pv_info, lay, row)
             elif isinstance(pv_info, str):
                 pvname = self.dev_pref.substitute(propty=pv_info)
