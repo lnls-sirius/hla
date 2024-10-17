@@ -428,21 +428,19 @@ class RFMainControl(SiriusMainWindow):
         lay_slc.addWidget(QLabel(
             '<h4>Enable</h4>', self, alignment=Qt.AlignCenter), 3, 0)
         lay_slc.addItem(QSpacerItem(
-            0, 15, QSzPlcy.Ignored, QSzPlcy.Fixed), 4, 0)
+            0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), 4, 0)
         lay_slc.addWidget(QLabel(
-            '<h4>Amp.</h4>', self, alignment=Qt.AlignCenter), 5, 0)
+            '<h4>Amp.</h4>', self, alignment=Qt.AlignCenter), 6, 0)
         lay_slc.addWidget(QLabel(
-            '<h4>Phase</h4>', self, alignment=Qt.AlignCenter), 7, 0)
+            '<h4>Phase</h4>', self, alignment=Qt.AlignCenter), 8, 0)
         lay_slc.addItem(QSpacerItem(
-            0, 15, QSzPlcy.Ignored, QSzPlcy.Fixed), 9, 0)
+            0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), 10, 0)
         lay_slc.addWidget(QLabel(
-            '<h4>Reference</h4>', self, alignment=Qt.AlignCenter), 12, 0)
+            '<h4>Reference</h4>', self, alignment=Qt.AlignCenter), 13, 0)
         lay_slc.addWidget(QLabel(
-            '<h4>Input</h4>', self, alignment=Qt.AlignCenter), 13, 0)
+            '<h4>Input</h4>', self, alignment=Qt.AlignCenter), 14, 0)
         lay_slc.addWidget(QLabel(
-            '<h4>Error</h4>', self, alignment=Qt.AlignCenter), 14, 0)
-        lay_slc.addItem(QSpacerItem(
-            0, 15, QSzPlcy.Ignored, QSzPlcy.Fixed), 16, 0)
+            '<h4>Error</h4>', self, alignment=Qt.AlignCenter), 15, 0)
 
         offset = 1
         if self.section == 'SI':
@@ -1768,18 +1766,18 @@ class RFMainControl(SiriusMainWindow):
             self, self.prefix+chs_dict['PInc']+'-RB')
 
         lay_slc.addWidget(QLabel(
-            '<h4>SP/RB</h4>', self, alignment=Qt.AlignCenter), 4, offset)
+            '<h4>SP/RB</h4>', self, alignment=Qt.AlignCenter), 5, offset)
         lay_slc.addWidget(
             QLabel('<h4>Inc. Rate</h4>', self, alignment=Qt.AlignCenter),
-            4, offset+1)
-        lay_slc.addWidget(sb_amp1, 5, offset, alignment=Qt.AlignCenter)
-        lay_slc.addWidget(lb_amp1, 6, offset, alignment=Qt.AlignCenter)
-        lay_slc.addWidget(cb_ampincrate, 5, offset+1, alignment=Qt.AlignCenter)
-        lay_slc.addWidget(lb_ampincrate, 6, offset+1, alignment=Qt.AlignCenter)
-        lay_slc.addWidget(sb_phs, 7, offset, alignment=Qt.AlignCenter)
-        lay_slc.addWidget(lb_phs, 8, offset, alignment=Qt.AlignCenter)
-        lay_slc.addWidget(cb_phsincrate, 7, offset+1, alignment=Qt.AlignCenter)
-        lay_slc.addWidget(lb_phsincrate, 8, offset+1, alignment=Qt.AlignCenter)
+            5, offset+1)
+        lay_slc.addWidget(sb_amp1, 6, offset, alignment=Qt.AlignCenter)
+        lay_slc.addWidget(lb_amp1, 7, offset, alignment=Qt.AlignCenter)
+        lay_slc.addWidget(cb_ampincrate, 6, offset+1, alignment=Qt.AlignCenter)
+        lay_slc.addWidget(lb_ampincrate, 7, offset+1, alignment=Qt.AlignCenter)
+        lay_slc.addWidget(sb_phs, 8, offset, alignment=Qt.AlignCenter)
+        lay_slc.addWidget(lb_phs, 9, offset, alignment=Qt.AlignCenter)
+        lay_slc.addWidget(cb_phsincrate, 8, offset+1, alignment=Qt.AlignCenter)
+        lay_slc.addWidget(lb_phsincrate, 9, offset+1, alignment=Qt.AlignCenter)
 
         lb_ampref = SiriusLabel(self, self.prefix+chs_dict['ARef'])
         lb_ampref.showUnits = True
@@ -1795,16 +1793,16 @@ class RFMainControl(SiriusMainWindow):
         lb_phserr.showUnits = True
 
         lay_slc.addWidget(QLabel(
-            '<h4>Amp.</h4>', self, alignment=Qt.AlignCenter), 11, offset)
+            '<h4>Amp.</h4>', self, alignment=Qt.AlignCenter), 12, offset)
         lay_slc.addWidget(QLabel(
-            '<h4>Phase</h4>', self, alignment=Qt.AlignCenter), 11, offset+1)
+            '<h4>Phase</h4>', self, alignment=Qt.AlignCenter), 12, offset+1)
 
-        lay_slc.addWidget(lb_ampref, 12, offset)
-        lay_slc.addWidget(lb_ampinp, 13, offset)
-        lay_slc.addWidget(lb_amperr, 14, offset)
-        lay_slc.addWidget(lb_phsref, 12, offset+1)
-        lay_slc.addWidget(lb_phsinp, 13, offset+1)
-        lay_slc.addWidget(lb_phserr, 14, offset+1)
+        lay_slc.addWidget(lb_ampref, 13, offset)
+        lay_slc.addWidget(lb_ampinp, 14, offset)
+        lay_slc.addWidget(lb_amperr, 15, offset)
+        lay_slc.addWidget(lb_phsref, 13, offset+1)
+        lay_slc.addWidget(lb_phsinp, 14, offset+1)
+        lay_slc.addWidget(lb_phserr, 15, offset+1)
 
     def _setupAmpCurve(self, signal, timebase, key, idx, lay_checks, row, column):
         cid = f'{key} - {signal[0]}'
