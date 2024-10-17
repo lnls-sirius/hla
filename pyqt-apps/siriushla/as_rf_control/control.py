@@ -1125,11 +1125,20 @@ class RFMainControl(SiriusMainWindow):
         self._pm_labels['W'] = list()
         self._pm_labels['mV'] = list()
         idx = 0
+        column = 1
 
         for name, dic in data.items():
             wch, dbch, mvch = dic['W'], dic['dBm'], dic['mV']
             color = dic['color']
             row = idx+1
+            if idx > 3 and idx < 8:
+                column = 4
+                row = idx-3
+            elif idx > 7 and idx < 12:
+                column = 1
+            elif idx > 11:
+                column = 4
+                row = idx-3
 
             # Table
             cbx = QCheckBox(self)
@@ -1139,7 +1148,7 @@ class RFMainControl(SiriusMainWindow):
             cbx.setStyleSheet('color:'+color+'; max-width: 1.2em;')
             cbx.stateChanged.connect(self._handle_curves_visibility)
 
-            lb_desc = QLabel(name, self)
+            lb_desc = QLabel(' '.join(name.split()[2::]), self)
             lb_desc.setStyleSheet(
                 'min-height: 1.5em; color:'+color+'; max-width: 8em;'
                 'qproperty-alignment: AlignCenter;')
@@ -1158,11 +1167,11 @@ class RFMainControl(SiriusMainWindow):
             lb_mvpwr.setVisible(False)
             self._pm_labels['mV'].append(lb_mvpwr)
 
-            lay_vals.addWidget(cbx, row, 1)
-            lay_vals.addWidget(lb_desc, row, 2)
-            lay_vals.addWidget(lb_dbmpwr, row, 3)
-            lay_vals.addWidget(lb_wpwr, row, 3)
-            lay_vals.addWidget(lb_mvpwr, row, 3)
+            lay_vals.addWidget(cbx, row, column)
+            lay_vals.addWidget(lb_desc, row, column+1)
+            lay_vals.addWidget(lb_dbmpwr, row, column+2)
+            lay_vals.addWidget(lb_wpwr, row, column+2)
+            lay_vals.addWidget(lb_mvpwr, row, column+2)
 
             # Graph
             self.pwr_mon_graph.addYChannel(

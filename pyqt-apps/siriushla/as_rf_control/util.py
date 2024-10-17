@@ -2229,7 +2229,7 @@ SEC_2_CHANNELS = {
                 'W': 'SI-03SP:RF-SRFCav-A:RevPwrW-Mon',
                 'color': 'darkBlue'
             },
-            'A - Fwd In Load': {
+            'A - Fwd Load': {
                 'mV': 'RA-TL:RF-Load-SIA:FwdInAmp-Mon',
                 'dBm': 'RA-TL:RF-Load-SIA:FwdInPwrdBm-Mon',
                 'W': 'RA-TL:RF-Load-SIA:FwdInPwrW-Mon',
@@ -2277,7 +2277,7 @@ SEC_2_CHANNELS = {
                 'W': 'SI-03SP:RF-SRFCav-B:RevPwrW-Mon',
                 'color': 'saddlebrown'
             },
-            'B - Fwd In Load': {
+            'B - Fwd Load': {
                 'mV': 'RA-TL:RF-Load-SIB:FwdInAmp-Mon',
                 'dBm': 'RA-TL:RF-Load-SIB:FwdInPwrdBm-Mon',
                 'W': 'RA-TL:RF-Load-SIB:FwdInPwrW-Mon',
@@ -2645,7 +2645,7 @@ SEC_2_CHANNELS = {
                     'PwrdBm': 'RA-ToSIA02:RF-SSAmpTower:FwdInPwrdBm-Mon',
                 },
                 '51': {
-                    'Label': 'Fwd In Load (RF In 14)',
+                    'Label': 'Fwd Load (RF In 14)',
                     'I': 'RA-TL:RF-Load-SIA:FwdInI-Mon',
                     'Q': 'RA-TL:RF-Load-SIA:FwdInQ-Mon',
                     'Amp': 'RA-TL:RF-Load-SIA:FwdInAmp-Mon',
@@ -2800,7 +2800,7 @@ SEC_2_CHANNELS = {
                     'PwrdBm': 'RA-ToSIB04:RF-SSAmpTower:FwdInPwrdBm-Mon',
                 },
                 '51': {
-                    'Label': 'Fwd In Load (RF In 14)',
+                    'Label': 'Fwd Load (RF In 14)',
                     'I': 'RA-TL:RF-Load-SIB:FwdInI-Mon',
                     'Q': 'RA-TL:RF-Load-SIB:FwdInQ-Mon',
                     'Amp': 'RA-TL:RF-Load-SIB:FwdInAmp-Mon',
@@ -4600,7 +4600,7 @@ SEC_2_CHANNELS = {
                     'Raw-U': 'RA-RaSIA01:RF-LLRF:In2PreAmpSysCal',
                     'OFS': 'RA-RaSIA01:RF-LLRF:In2PreAmpOffset'
                 },
-                'Fwd In Load': {
+                'Fwd Load': {
                     'Raw-U': 'RA-RaSIA01:RF-LLRF:FwdLoadSysCal',
                     'OFS': 'RA-RaSIA01:RF-LLRF:FwdLoadOffset'
                 },
@@ -4664,7 +4664,7 @@ SEC_2_CHANNELS = {
                     'Raw-U': 'RA-RaSIB01:RF-LLRF:In2PreAmpSysCal',
                     'OFS': 'RA-RaSIB01:RF-LLRF:In2PreAmpOffset'
                 },
-                'Fwd In Load': {
+                'Fwd Load': {
                     'Raw-U': 'RA-RaSIB01:RF-LLRF:FwdLoadSysCal',
                     'OFS': 'RA-RaSIB01:RF-LLRF:FwdLoadOffset'
                 },
