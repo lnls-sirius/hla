@@ -2,8 +2,8 @@
 
 from qtpy.QtCore import Qt, QSize
 from qtpy.QtWidgets import QGroupBox, QLabel, \
-    QHBoxLayout, QVBoxLayout, QWidget, QPushButton, \
-    QGridLayout, QSizePolicy as QSzPlcy
+    QHBoxLayout, QPushButton, \
+    QGridLayout
 import qtawesome as qta
 from pydm.widgets import PyDMPushButton
 
@@ -11,7 +11,7 @@ from siriuspy.epics import PV
 
 from ..util import connect_newprocess, connect_window
 from ..widgets import SiriusLedAlert, SiriusLabel, SiriusSpinbox, \
-    PyDMLogLabel, PyDMLed, SiriusEnumComboBox, SiriusLineEdit
+    PyDMLed, PyDMStateButton, SiriusLineEdit
 from ..widgets.dialog import StatusDetailDialog
 
 from .base import IDCommonControlWindow, \
@@ -20,17 +20,6 @@ from .base import IDCommonControlWindow, \
 
 class IVUControlWindowUtils():
     """."""
-
-    STATUS_PVS = {
-        "Alarms": (
-            "Alarm-Mon", "AlarmBits-Mon", "AlarmLabels-Cte"
-        ),
-        "Interlock": (
-            "Intlk-Mon", "IntlkBits-Mon", "IntlkLabels-Cte"
-        ),
-        "Is Operational": "IsOperational-Mon",
-        "PLC State": "PLCState-Mon"
-    }
 
     MAIN_CONTROL_PVS = {
         "KParam": {
@@ -175,68 +164,6 @@ class IVUControlWindow(IDCommonControlWindow, IVUControlWindowUtils):
             btn.setEnabled(False)
         return btn
 
-    def _createStatusWidget(self, title, pv_suffix):
-        pv_tuple = tuple()
-        wid = QWidget()
-        lay = QHBoxLayout()
-        lay.setContentsMargins(0, 0, 0, 0)
-        wid.setLayout(lay)
-
-        label = QLabel(title, self, alignment=Qt.AlignRight | Qt.AlignVCenter)
-        lay.addWidget(label)
-
-        if isinstance(pv_suffix, tuple):
-            pv_tuple = (pv_suffix[1], pv_suffix[2])
-            pv_suffix = pv_suffix[0]
-
-        pvname = self.dev_pref.substitute(propty=pv_suffix)
-        if 'PLC State' in title:
-            led = SiriusLabel(self, pvname)
-        else:
-            led = SiriusLedAlert(init_channel=pvname)
-        lay.addWidget(led, alignment=Qt.AlignLeft)
-
-        if pv_tuple:
-            detailed_btn = self._createDetailedLedBtn(pv_tuple)
-            lay.addWidget(detailed_btn, alignment=Qt.AlignLeft)
-
-        return wid
-
-    def _createLogWidget(self, title, pv_suffix):
-        wid = QWidget()
-        lay = QVBoxLayout()
-        lay.setContentsMargins(0, 0, 0, 0)
-        wid.setLayout(lay)
-
-        label = QLabel(title, self)
-        lay.addWidget(label)
-
-        pvname = self.dev_pref.substitute(propty=pv_suffix)
-        log = PyDMLogLabel(init_channel=pvname)
-        lay.addWidget(log)
-
-        return wid
-
-    def _createStatusGroup(self, title, pvs):
-        group = QGroupBox()
-        lay = QVBoxLayout()
-        group.setLayout(lay)
-        group.setTitle(title)
-
-        pos = [0, 0]
-        for title, pv_info in pvs.items():
-            if isinstance(pv_info, dict):
-                widget = self._createStatusGroup(title, pv_info)
-            else:
-                if "Log" in title:
-                    widget = self._createLogWidget(title, pv_info)
-                else:
-                    widget = self._createStatusWidget(title, pv_info)
-            lay.addWidget(widget)
-            pos[1] += 1
-
-        return group
-
     def _createIconBtns(self, pv_info, lay, row):
         btn = PyDMPushButton(self, label='', icon=qta.icon(pv_info["icon"]))
         btn.channel = self.dev_pref.substitute(propty=pv_info["pvname"])
@@ -246,28 +173,6 @@ class IVUControlWindow(IDCommonControlWindow, IVUControlWindowUtils):
         btn.setStyleSheet(
             '#Start{min-width:30px; max-width:30px; icon-size:25px;}')
         lay.addWidget(btn, row, 1, 1, 4)
-
-    def _createHeaders(self, pv_info, lay, row):
-        col = 1
-        for header_lbl in pv_info:
-            lbl = QLabel(header_lbl, self, alignment=Qt.AlignCenter)
-            lbl.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
-            lay.addWidget(lbl, row, col, 1, 2)
-            col += 2
-
-    def _createAccTol(self, pv_info, lay, row):
-        col = 1
-        for enum in range(0, 2):
-            pvname = self.dev_pref.substitute(propty=pv_info[enum*2])
-            edit = SiriusLineEdit(self, init_channel=pvname)
-            lay.addWidget(edit, row, col, 1, 1)
-
-            pvname = self.dev_pref.substitute(propty=pv_info[(enum*2)+1])
-            lbl = SiriusLabel(self, init_channel=pvname, keep_unit=True)
-            lbl.showUnits = True
-            lbl.setAlignment(Qt.AlignCenter)
-            lay.addWidget(lbl, row, col+1, 1, 1)
-            col += 2
 
 
 class IVUSummaryBase(IDCommonSummaryBase):
