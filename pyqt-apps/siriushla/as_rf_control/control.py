@@ -190,7 +190,7 @@ class RFMainControl(SiriusMainWindow):
                        section=self.section, prefix=self.prefix)
 
         lay.addWidget(self.ld_intlk, row, 0, alignment=Qt.AlignVCenter)
-        lay.addWidget(self.pb_intlkdtls, row, 2, alignment=Qt.AlignCenter)
+        lay.addWidget(self.pb_intlkdtls, row, 1, alignment=Qt.AlignCenter)
         if self.section == 'SI':
             row += 1
             for key, val in self.chs['LLRF Intlk'].items():
@@ -218,7 +218,7 @@ class RFMainControl(SiriusMainWindow):
             connect_window(self.pb_cryodtls, CavityStatusDetails, parent=self,
                         section=self.section, prefix=self.prefix)
             lay.addWidget(self.ld_cryosts, row, 0, alignment=Qt.AlignVCenter)
-            lay.addWidget(self.pb_cryodtls, row, 2)
+            lay.addWidget(self.pb_cryodtls, row, 1)
             row += 1
 
             for key, chs_dict in self.chs['Cryo Sts'].items():
@@ -242,7 +242,7 @@ class RFMainControl(SiriusMainWindow):
                         section=self.section, prefix=self.prefix)
             lay.addWidget(self.ld_cavsts, row, 0, alignment=Qt.AlignVCenter)
             lay.addWidget(self.led_cavsts, row, 1, alignment=Qt.AlignCenter)
-            lay.addWidget(self.pb_cavdtls, row, 2)
+            lay.addWidget(self.pb_cavdtls, row, 1)
             row += 1
 
         # # Transmission Line
@@ -255,7 +255,7 @@ class RFMainControl(SiriusMainWindow):
                        section=self.section, prefix=self.prefix)
 
         lay.addWidget(self.ld_tlsts, row, 0, alignment=Qt.AlignVCenter)
-        lay.addWidget(self.pb_tldtls, row, 2, alignment=Qt.AlignCenter)
+        lay.addWidget(self.pb_tldtls, row, 1, alignment=Qt.AlignCenter)
         if self.section == 'SI':
             row += 1
             for key, chs_dict in self.chs['TL Sts'].items():
@@ -402,8 +402,6 @@ class RFMainControl(SiriusMainWindow):
             '<h4>Pin Sw</h4>', self, alignment=Qt.AlignCenter), 1, 7)
         lay_amp.addWidget(QLabel(
             '<h4>Pre Drive</h4>', self, alignment=Qt.AlignCenter), 1, 8)
-        lay_amp.addItem(QSpacerItem(
-            10, 0, QSzPlcy.Expanding, QSzPlcy.Ignored), 0, 9)
 
         if self.section == 'BO':
             self._create_ssa_wid(lay_amp, 2, self.chs['SSA'])
@@ -421,22 +419,22 @@ class RFMainControl(SiriusMainWindow):
         # # Slow Loop Control
         wid_sl = QWidget()
         lay_slc = QGridLayout(wid_sl)
-        lay_slc.setAlignment(Qt.AlignCenter)
+        lay_slc.setAlignment(Qt.AlignTop | Qt.AlignHCenter)
         lay_slc.setVerticalSpacing(6)
         lay_slc.setHorizontalSpacing(20)
 
         lay_slc.addWidget(QLabel(
-            '<h4>Mode</h4>', self, alignment=Qt.AlignCenter), 1, 0)
+            '<h4>Mode</h4>', self, alignment=Qt.AlignCenter), 2, 0)
         lay_slc.addWidget(QLabel(
-            '<h4>Enable</h4>', self, alignment=Qt.AlignCenter), 2, 0)
+            '<h4>Enable</h4>', self, alignment=Qt.AlignCenter), 3, 0)
         lay_slc.addItem(QSpacerItem(
-            0, 30, QSzPlcy.Ignored, QSzPlcy.Fixed), 3, 0)
+            0, 15, QSzPlcy.Ignored, QSzPlcy.Fixed), 4, 0)
         lay_slc.addWidget(QLabel(
-            '<h4>Amp. [mV]</h4>', self, alignment=Qt.AlignCenter), 5, 0)
+            '<h4>Amp.</h4>', self, alignment=Qt.AlignCenter), 5, 0)
         lay_slc.addWidget(QLabel(
-            '<h4>Phase [DEG]</h4>', self, alignment=Qt.AlignCenter), 7, 0)
+            '<h4>Phase</h4>', self, alignment=Qt.AlignCenter), 7, 0)
         lay_slc.addItem(QSpacerItem(
-            0, 30, QSzPlcy.Ignored, QSzPlcy.Fixed), 10, 0)
+            0, 15, QSzPlcy.Ignored, QSzPlcy.Fixed), 9, 0)
         lay_slc.addWidget(QLabel(
             '<h4>Reference</h4>', self, alignment=Qt.AlignCenter), 12, 0)
         lay_slc.addWidget(QLabel(
@@ -444,7 +442,7 @@ class RFMainControl(SiriusMainWindow):
         lay_slc.addWidget(QLabel(
             '<h4>Error</h4>', self, alignment=Qt.AlignCenter), 14, 0)
         lay_slc.addItem(QSpacerItem(
-            0, 50, QSzPlcy.Ignored, QSzPlcy.Fixed), 15, 0)
+            0, 15, QSzPlcy.Ignored, QSzPlcy.Fixed), 16, 0)
 
         offset = 1
         if self.section == 'SI':
@@ -497,28 +495,26 @@ class RFMainControl(SiriusMainWindow):
         lay_tunset.addWidget(ld_oversht, 4, 1)
         lay_tunset.addWidget(ld_dphase, 5, 1)
         lay_tunset.addWidget(ld_tunact, 6, 1)
-        lay_tunset.setColumnStretch(4, 3)
+        lay_tunset.addItem(QSpacerItem(
+            15, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 0, 3)
+        lay_tunset.setColumnStretch(5, 3)
         if self.section == 'SI':
             offset = 2
             for k, val in self.chs['Tun'].items():
                 self._create_tun_set_wid(lay_tunset, k, val, offset)
-                offset += 1
+                offset += 2
         else:
             self._create_tun_set_wid(lay_tunset, None, self.chs['Tun'], 2)
 
         # # # Plungers motors
         lay_plunmon = QGridLayout()
-        lay_plunmon.addItem(QSpacerItem(
-            10, 10, QSzPlcy.Expanding, QSzPlcy.Expanding), 0, 0)
         lay_plunmon.addWidget(QLabel('Up', alignment=Qt.AlignCenter), 2, 1)
         lay_plunmon.addWidget(QLabel('Down', alignment=Qt.AlignCenter), 3, 1)
-        lay_plunmon.addItem(QSpacerItem(
-            10, 10, QSzPlcy.Expanding, QSzPlcy.Expanding), 4, 4)
 
         self.graph_plunmotors = SiriusTimePlot(self)
         self.graph_plunmotors.setObjectName('graph')
-        self.graph_plunmotors.setStyleSheet(
-            '#graph{min-height:15em;min-width:20em;max-height:15em;}')
+        # self.graph_plunmotors.setStyleSheet(
+        #     '#graph{min-height:15em;min-width:20em;max-height:15em;}')
         self.graph_plunmotors.autoRangeX = True
         self.graph_plunmotors.autoRangeY = True
         self.graph_plunmotors.backgroundColor = QColor(255, 255, 255)
@@ -600,11 +596,11 @@ class RFMainControl(SiriusMainWindow):
 
         wid_tun = QWidget()
         lay_plun = QGridLayout(wid_tun)
+        lay_plun.setColumnStretch(0, 0)
+        lay_plun.setColumnStretch(1, 1)
         lay_plun.addWidget(QLabel(
             '<h3> • Settings</h3>', self, alignment=Qt.AlignLeft), 0, 0, 1, 3)
         lay_plun.addLayout(lay_tunset, 1, 0, 1, 2)
-        lay_plun.addItem(
-            QSpacerItem(0, 25, QSzPlcy.Ignored, QSzPlcy.Fixed), 2, 0)
         if self.section == 'SI':
             lay_plun.addWidget(QLabel(
                 '<h3> • Tuners</h3>', self, alignment=Qt.AlignLeft), 3, 0)
@@ -695,8 +691,6 @@ class RFMainControl(SiriusMainWindow):
         lay_diag.setAlignment(Qt.AlignTop)
         lay_diag.setSpacing(9)
         if self.section == 'SI':
-            lay_diag.addItem(QSpacerItem(
-                27, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 0, 0)
             column = 1
             for k, chs in self.chs['Diagnostics'].items():
                 self._create_diag_lay(lay_diag, k, chs, column)
@@ -1097,14 +1091,14 @@ class RFMainControl(SiriusMainWindow):
         lay_vals.setHorizontalSpacing(15)
         lay_vals.setVerticalSpacing(6)
         lay_vals.addWidget(
-            QLabel('<h4>Channel</h4>', self, alignment=Qt.AlignCenter), 0, 2)
+            QLabel('<h4>Units</h4>', self, alignment=Qt.AlignCenter), 0, 5)
         self.cb_units = QComboBox(self)
         self.cb_units.addItems(['W', 'dBm', 'mV'])
         self.cb_units.setStyleSheet(
             'QComboBox{max-width: 3.5em; font-weight: bold;}')
         self.cb_units.currentTextChanged.connect(
             self._handle_pwrdata_visibility)
-        lay_vals.addWidget(self.cb_units, 0, 3)
+        lay_vals.addWidget(self.cb_units, 0, 6)
 
         self.pwr_mon_graph = SiriusTimePlot(self)
         self.pwr_mon_graph.autoRangeX = True
@@ -1134,11 +1128,15 @@ class RFMainControl(SiriusMainWindow):
             if idx > 3 and idx < 8:
                 column = 4
                 row = idx-3
-            elif idx > 7 and idx < 12:
+            elif idx >= 8:
                 column = 1
-            elif idx > 11:
-                column = 4
-                row = idx-3
+                if idx == 8:
+                    lay_vals.addItem(QSpacerItem(
+                        0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), row, 0)
+                elif idx > 11:
+                    column = 4
+                    row = idx-3
+                row += 1
 
             # Table
             cbx = QCheckBox(self)
@@ -1193,7 +1191,7 @@ class RFMainControl(SiriusMainWindow):
         # RF Inputs
         if self.section == 'SI':
             systems = ['A', 'B']
-            rows = [1, 9]
+            rows = [1, 10]
             for i in range(len(systems)):
                 lay_sys = QHBoxLayout()
                 lay_sys.setSpacing(9)
@@ -1609,16 +1607,17 @@ class RFMainControl(SiriusMainWindow):
     def _create_tun_set_wid(self, lay_tunset, column, chs_dict, offset):
         if column:
             lay_tunset.addWidget(QLabel(
-                column, self, alignment=Qt.AlignCenter), 0, offset)
+                f'<h4>{column}</h4>', self, alignment=Qt.AlignCenter),
+                0, offset)
 
         bt_autotun = PyDMStateButton(
             self, self.prefix+chs_dict['Auto']+'-Sel')
-        lb_autotun = SiriusLedState(
+        led_autotun = SiriusLedState(
             self, self.prefix+chs_dict['Auto']+'-Sts')
         lay_autotun = QHBoxLayout()
         lay_autotun.setSpacing(6)
         lay_autotun.addWidget(bt_autotun)
-        lay_autotun.addWidget(lb_autotun)
+        lay_autotun.addWidget(led_autotun, alignment=Qt.AlignCenter)
 
         sb_dtune = SiriusSpinbox(
             self, self.prefix+chs_dict['DTune']+'-SP')
@@ -1699,11 +1698,10 @@ class RFMainControl(SiriusMainWindow):
         else:
             title = 'FDL Data'
         lay_section.addWidget(QLabel(
-            f'<h3> • {title}</h3>', self, alignment=Qt.AlignLeft))
+            f'<h4> • {title} - Amplitude</h4>', self, alignment=Qt.AlignLeft))
         lay_section.addWidget(pb_fdldtls, alignment=Qt.AlignRight)
 
         lay_fdl.addLayout(lay_section)
-        lay_fdl.addWidget(QLabel('<h4>Amplitude</h4>'))
         lay_fdl.addLayout(lay_checks)
         lay_fdl.addWidget(self.amp_graph)
 
@@ -1734,7 +1732,7 @@ class RFMainControl(SiriusMainWindow):
         if key:
             lay_slc.addWidget(QLabel(
                 f'<h4>{key}<h4>', self, alignment=Qt.AlignRight),
-                0, offset)
+                1, offset)
 
         lb_slmode = SiriusLabel(
             self, self.prefix+chs_dict['Mode']+'-Sts')
@@ -1745,15 +1743,16 @@ class RFMainControl(SiriusMainWindow):
         led_slenbl = SiriusLedState(
             self, self.prefix+chs_dict['Enbl']+'-Sts')
 
-        lay_slc.addWidget(lb_slmode, 1, offset, alignment=Qt.AlignCenter)
-        lay_slc.addWidget(led_slmode, 1, offset+1, alignment=Qt.AlignCenter)
-        lay_slc.addWidget(bt_slenbl, 2, offset, alignment=Qt.AlignCenter)
-        lay_slc.addWidget(led_slenbl, 2, offset+1, alignment=Qt.AlignCenter)
+        lay_slc.addWidget(lb_slmode, 2, offset, alignment=Qt.AlignCenter)
+        lay_slc.addWidget(led_slmode, 2, offset+1, alignment=Qt.AlignCenter)
+        lay_slc.addWidget(bt_slenbl, 3, offset, alignment=Qt.AlignCenter)
+        lay_slc.addWidget(led_slenbl, 3, offset+1, alignment=Qt.AlignCenter)
 
         sb_amp1 = SiriusSpinbox(
             self, self.prefix+chs_dict['ASet']+'-SP')
         lb_amp1 = SiriusLabel(
             self, self.prefix+chs_dict['ASet']+'-RB')
+        lb_amp1.showUnits = True
         cb_ampincrate = PyDMEnumComboBox(
             self, self.prefix+chs_dict['AInc']+'-SP')
         lb_ampincrate = SiriusLabel(
@@ -1762,6 +1761,7 @@ class RFMainControl(SiriusMainWindow):
             self, self.prefix+chs_dict['PSet']+'-SP')
         lb_phs = SiriusLabel(
             self, self.prefix+chs_dict['PSet']+'-RB')
+        lb_phs.showUnits = True
         cb_phsincrate = PyDMEnumComboBox(
             self, self.prefix+chs_dict['PInc']+'-SP')
         lb_phsincrate = SiriusLabel(
@@ -1770,7 +1770,7 @@ class RFMainControl(SiriusMainWindow):
         lay_slc.addWidget(QLabel(
             '<h4>SP/RB</h4>', self, alignment=Qt.AlignCenter), 4, offset)
         lay_slc.addWidget(
-            QLabel('<h4>Inc. Rate SP/RB</h4>', self, alignment=Qt.AlignCenter),
+            QLabel('<h4>Inc. Rate</h4>', self, alignment=Qt.AlignCenter),
             4, offset+1)
         lay_slc.addWidget(sb_amp1, 5, offset, alignment=Qt.AlignCenter)
         lay_slc.addWidget(lb_amp1, 6, offset, alignment=Qt.AlignCenter)
@@ -1805,8 +1805,6 @@ class RFMainControl(SiriusMainWindow):
         lay_slc.addWidget(lb_phsref, 12, offset+1)
         lay_slc.addWidget(lb_phsinp, 13, offset+1)
         lay_slc.addWidget(lb_phserr, 14, offset+1)
-        lay_slc.addItem(QSpacerItem(
-            15, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), 12, offset+2)
 
     def _setupAmpCurve(self, signal, timebase, key, idx, lay_checks, row, column):
         cid = f'{key} - {signal[0]}'
