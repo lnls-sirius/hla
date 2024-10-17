@@ -36,10 +36,18 @@ class IVUControlWindowUtils():
             "RB": "KParamTaper-RB",
             "Mon": "KParamTaper-Mon"
         },
+        "Center Mode": {
+            "Sel": "CenterMode-Sel",
+            "Sts": "CenterMode-Sts"
+        },
         "Center Offset": {
             "SP": "CenterOffset-SP",
             "RB": "CenterOffset-RB",
             "Mon": "CenterOffset-Mon"
+        },
+        "Pitch Mode": {
+            "Sel": "PitchMode-Sel",
+            "Sts": "PitchMode-Sts"
         },
         "Pitch Offset": {
             "SP": "PitchOffset-SP",
@@ -78,6 +86,8 @@ class IVUControlWindow(IDCommonControlWindow, IVUControlWindowUtils):
             elif title in ["KParam", "KParam Speed", 
                     "KParam Taper", "Center Offset", "Pitch Offset"]:
                 self._createParam(pv_info, lay, row)
+            elif title in ["Pitch Mode", "Center Mode"]:
+                self._createModeSwitch(pv_info, lay, row)
             elif isinstance(pv_info, str):
                 pvname = self.dev_pref.substitute(propty=pv_info)
                 lbl = SiriusLabel(self, init_channel=pvname)
@@ -92,8 +102,14 @@ class IVUControlWindow(IDCommonControlWindow, IVUControlWindowUtils):
 
         return group
 
-    def _statusWidget(self):
-        return self._createStatusGroup("Status", self.STATUS_PVS)
+    def _createModeSwitch(self, pv_info, lay, row):
+        pvname = self.dev_pref.substitute(propty=pv_info["Sel"])
+        self.mode_sp = PyDMStateButton(init_channel=pvname)
+        lay.addWidget(self.mode_sp, row, 1)
+    
+        pvname = self.dev_pref.substitute(propty=pv_info["Sts"])
+        self.mode_rb = PyDMLed(init_channel=pvname)
+        lay.addWidget(self.mode_rb, row, 2)
 
     def _ctrlModeWidget(self):
         gbox_ctrlmode = QGroupBox('Control Mode')
