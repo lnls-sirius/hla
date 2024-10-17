@@ -1300,95 +1300,98 @@ class RFMainControl(SiriusMainWindow):
         lay_temp.setRowStretch(0, 1)
         lay_temp.setRowStretch(1, 10)
 
-        # Cavity
-        # # Cells
-        lb_tempcell = QLabel('<h3> • Cell</h3>', self)
-        self.led_tempcellok = PyDMLedMultiChannel(self)
-        hbox_tempcell_state = QHBoxLayout()
-        hbox_tempcell_state.addWidget(lb_tempcell, alignment=Qt.AlignLeft)
-        hbox_tempcell_state.addWidget(
-            self.led_tempcellok, alignment=Qt.AlignRight)
+        if self.section == 'BO':
+            # Cavity
+            # # Cells
+            lb_tempcell = QLabel('<h3> • Cell</h3>', self)
+            self.led_tempcellok = PyDMLedMultiChannel(self)
+            hbox_tempcell_state = QHBoxLayout()
+            hbox_tempcell_state.addWidget(lb_tempcell, alignment=Qt.AlignLeft)
+            hbox_tempcell_state.addWidget(
+                self.led_tempcellok, alignment=Qt.AlignRight)
 
-        self.tempcell_graph = SiriusTimePlot(self)
-        self.tempcell_graph.setObjectName('tempcell_graph')
-        self.tempcell_graph.autoRangeX = True
-        self.tempcell_graph.autoRangeY = True
-        self.tempcell_graph.backgroundColor = QColor(255, 255, 255)
-        self.tempcell_graph.showXGrid = True
-        self.tempcell_graph.showYGrid = True
-        self.tempcell_graph.timeSpan = 1800
-        self.tempcell_graph.maxRedrawRate = 2
+            self.tempcell_graph = SiriusTimePlot(self)
+            self.tempcell_graph.setObjectName('tempcell_graph')
+            self.tempcell_graph.autoRangeX = True
+            self.tempcell_graph.autoRangeY = True
+            self.tempcell_graph.backgroundColor = QColor(255, 255, 255)
+            self.tempcell_graph.showXGrid = True
+            self.tempcell_graph.showYGrid = True
+            self.tempcell_graph.timeSpan = 1800
+            self.tempcell_graph.maxRedrawRate = 2
 
-        hbox_cbs = QHBoxLayout()
+            hbox_cbs = QHBoxLayout()
 
-        for idx in range(len(self.chs['Cav Sts']['Temp']['Cells'])):
-            cid = 'Cell ' + str(idx + 1)
-            chn = self.prefix+self.chs['Cav Sts']['Temp']['Cells'][idx][0]
-            color = self.chs['Cav Sts']['Temp']['Cells'][idx][1]
+            for idx in range(len(self.chs['Cav Sts']['Temp']['Cells'])):
+                cid = 'Cell ' + str(idx + 1)
+                chn = self.prefix+self.chs['Cav Sts']['Temp']['Cells'][idx][0]
+                color = self.chs['Cav Sts']['Temp']['Cells'][idx][1]
 
-            self.tempcell_graph.addYChannel(
-                y_channel=chn, name=cid, color=color,
-                lineStyle=Qt.SolidLine, lineWidth=1)
-            self.curves[cid] = self.tempcell_graph.curveAtIndex(idx)
+                self.tempcell_graph.addYChannel(
+                    y_channel=chn, name=cid, color=color,
+                    lineStyle=Qt.SolidLine, lineWidth=1)
+                self.curves[cid] = self.tempcell_graph.curveAtIndex(idx)
 
-            cbx = QCheckBox(cid, self)
-            cbx.setChecked(True)
-            cbx.setObjectName(cid)
-            cbx.setStyleSheet('color:'+color+';')
-            cbx.stateChanged.connect(self._handle_curves_visibility)
-            hbox_cbs.addWidget(cbx)
+                cbx = QCheckBox(cid, self)
+                cbx.setChecked(True)
+                cbx.setObjectName(cid)
+                cbx.setStyleSheet('color:'+color+';')
+                cbx.stateChanged.connect(self._handle_curves_visibility)
+                hbox_cbs.addWidget(cbx)
 
-        self.tempcell_graph.setLabel('left', '')
+            self.tempcell_graph.setLabel('left', '')
 
-        pen = mkPen(color='k', width=2, style=Qt.DashLine)
-        self.line_cell_maxlim = InfiniteLine(angle=0, pen=pen)
-        self.line_cell_minlim = InfiniteLine(angle=0, pen=pen)
-        self.tempcell_graph.addItem(self.line_cell_maxlim)
-        self.tempcell_graph.addItem(self.line_cell_minlim)
+            pen = mkPen(color='k', width=2, style=Qt.DashLine)
+            self.line_cell_maxlim = InfiniteLine(angle=0, pen=pen)
+            self.line_cell_minlim = InfiniteLine(angle=0, pen=pen)
+            self.tempcell_graph.addItem(self.line_cell_maxlim)
+            self.tempcell_graph.addItem(self.line_cell_minlim)
 
-        # # Coupler
-        lb_tempcoup = QLabel('<h3> • Coupler</h3>', self)
-        self.led_tempcoupok = PyDMLedMultiChannel(self)
-        hbox_tempcoup_state = QHBoxLayout()
-        hbox_tempcoup_state.addWidget(lb_tempcoup, alignment=Qt.AlignLeft)
-        hbox_tempcoup_state.addWidget(
-            self.led_tempcoupok, alignment=Qt.AlignRight)
+            # # Coupler
+            lb_tempcoup = QLabel('<h3> • Coupler</h3>', self)
+            self.led_tempcoupok = PyDMLedMultiChannel(self)
+            hbox_tempcoup_state = QHBoxLayout()
+            hbox_tempcoup_state.addWidget(lb_tempcoup, alignment=Qt.AlignLeft)
+            hbox_tempcoup_state.addWidget(
+                self.led_tempcoupok, alignment=Qt.AlignRight)
 
-        self.tempcoup_graph = SiriusTimePlot(self)
-        self.tempcoup_graph.setObjectName('tempcoup_graph')
-        self.tempcoup_graph.autoRangeX = True
-        self.tempcoup_graph.autoRangeY = True
-        self.tempcoup_graph.backgroundColor = QColor(255, 255, 255)
-        self.tempcoup_graph.showXGrid = True
-        self.tempcoup_graph.showYGrid = True
-        self.tempcoup_graph.timeSpan = 1800
-        self.tempcoup_graph.maxRedrawRate = 2
-        self.tempcoup_graph.addYChannel(
-            y_channel=self.prefix+self.chs['Cav Sts']['Temp']['Coupler'][0],
-            color=self.chs['Cav Sts']['Temp']['Coupler'][1],
-            name='Coupler', lineStyle=Qt.SolidLine, lineWidth=1)
-        self.curves['Coupler'] = self.tempcoup_graph.curveAtIndex(0)
-        self.tempcoup_graph.setLabel('left', '')
-        self.line_coup_maxlim = InfiniteLine(angle=0, pen=pen)
-        self.line_coup_minlim = InfiniteLine(angle=0, pen=pen)
-        self.tempcoup_graph.addItem(self.line_coup_maxlim)
-        self.tempcoup_graph.addItem(self.line_coup_minlim)
+            self.tempcoup_graph = SiriusTimePlot(self)
+            self.tempcoup_graph.setObjectName('tempcoup_graph')
+            self.tempcoup_graph.autoRangeX = True
+            self.tempcoup_graph.autoRangeY = True
+            self.tempcoup_graph.backgroundColor = QColor(255, 255, 255)
+            self.tempcoup_graph.showXGrid = True
+            self.tempcoup_graph.showYGrid = True
+            self.tempcoup_graph.timeSpan = 1800
+            self.tempcoup_graph.maxRedrawRate = 2
+            self.tempcoup_graph.addYChannel(
+                y_channel=self.prefix+self.chs['Cav Sts']['Temp']['Coupler'][0],
+                color=self.chs['Cav Sts']['Temp']['Coupler'][1],
+                name='Coupler', lineStyle=Qt.SolidLine, lineWidth=1)
+            self.curves['Coupler'] = self.tempcoup_graph.curveAtIndex(0)
+            self.tempcoup_graph.setLabel('left', '')
+            self.line_coup_maxlim = InfiniteLine(angle=0, pen=pen)
+            self.line_coup_minlim = InfiniteLine(angle=0, pen=pen)
+            self.tempcoup_graph.addItem(self.line_coup_maxlim)
+            self.tempcoup_graph.addItem(self.line_coup_minlim)
 
-        self.cavtemp_wid = QWidget()
-        lay_cavtemp = QVBoxLayout(self.cavtemp_wid)
-        lay_cavtemp.setAlignment(Qt.AlignTop)
-        lay_cavtemp.setContentsMargins(0, 0, 0, 9)
-        lay_cavtemp.addLayout(hbox_tempcell_state)
-        lay_cavtemp.addWidget(self.tempcell_graph)
-        lay_cavtemp.addLayout(hbox_cbs)
-        lay_cavtemp.addItem(QSpacerItem(0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed))
-        lay_cavtemp.addLayout(hbox_tempcoup_state)
-        lay_cavtemp.addWidget(self.tempcoup_graph)
+            self.cavtemp_wid = QWidget()
+            lay_cavtemp = QVBoxLayout(self.cavtemp_wid)
+            lay_cavtemp.setAlignment(Qt.AlignTop)
+            lay_cavtemp.setContentsMargins(0, 0, 0, 9)
+            lay_cavtemp.addLayout(hbox_tempcell_state)
+            lay_cavtemp.addWidget(self.tempcell_graph)
+            lay_cavtemp.addLayout(hbox_cbs)
+            lay_cavtemp.addItem(QSpacerItem(
+                0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed))
+            lay_cavtemp.addLayout(hbox_tempcoup_state)
+            lay_cavtemp.addWidget(self.tempcoup_graph)
 
-        self.temp_tab.addTab(self.cavtemp_wid, 'Cavity')
+            self.temp_tab.addTab(self.cavtemp_wid, 'Cavity')
 
         # Transm.Line Temperatures
         lb_tempcirc = QLabel('<h3> • Circulator</h3>', self)
+        pen = mkPen(color='k', width=2, style=Qt.DashLine)
         # temporary fix
         if self.section == 'SI':
             lims_circ = self.chs['TL Sts']['A']['Circ Limits']
