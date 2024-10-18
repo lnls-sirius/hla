@@ -143,6 +143,7 @@ class RFMainControl(SiriusMainWindow):
         lay = QGridLayout()
         lay.setHorizontalSpacing(6)
         lay.setAlignment(Qt.AlignTop)
+        button_column = 1 if self.section == 'SI' else 2
 
         # Interlocks
         self._ld_intlks = QLabel(
@@ -190,7 +191,8 @@ class RFMainControl(SiriusMainWindow):
                        section=self.section, prefix=self.prefix)
 
         lay.addWidget(self.ld_intlk, row, 0, alignment=Qt.AlignVCenter)
-        lay.addWidget(self.pb_intlkdtls, row, 1, alignment=Qt.AlignCenter)
+        lay.addWidget(self.pb_intlkdtls, row,
+            button_column, alignment=Qt.AlignCenter)
         if self.section == 'SI':
             row += 1
             for key, val in self.chs['LLRF Intlk'].items():
@@ -218,7 +220,7 @@ class RFMainControl(SiriusMainWindow):
             connect_window(self.pb_cryodtls, CavityStatusDetails, parent=self,
                         section=self.section, prefix=self.prefix)
             lay.addWidget(self.ld_cryosts, row, 0, alignment=Qt.AlignVCenter)
-            lay.addWidget(self.pb_cryodtls, row, 1)
+            lay.addWidget(self.pb_cryodtls, row, button_column)
             row += 1
 
             for key, chs_dict in self.chs['Cryo Sts'].items():
@@ -242,7 +244,7 @@ class RFMainControl(SiriusMainWindow):
                         section=self.section, prefix=self.prefix)
             lay.addWidget(self.ld_cavsts, row, 0, alignment=Qt.AlignVCenter)
             lay.addWidget(self.led_cavsts, row, 1, alignment=Qt.AlignCenter)
-            lay.addWidget(self.pb_cavdtls, row, 1)
+            lay.addWidget(self.pb_cavdtls, row, button_column)
             row += 1
 
         # # Transmission Line
@@ -255,7 +257,8 @@ class RFMainControl(SiriusMainWindow):
                        section=self.section, prefix=self.prefix)
 
         lay.addWidget(self.ld_tlsts, row, 0, alignment=Qt.AlignVCenter)
-        lay.addWidget(self.pb_tldtls, row, 1, alignment=Qt.AlignCenter)
+        lay.addWidget(self.pb_tldtls, row,
+            button_column, alignment=Qt.AlignCenter)
         if self.section == 'SI':
             row += 1
             for key, chs_dict in self.chs['TL Sts'].items():
