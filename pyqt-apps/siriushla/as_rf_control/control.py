@@ -1147,7 +1147,7 @@ class RFMainControl(SiriusMainWindow):
             cbx.setStyleSheet('color:'+color+'; max-width: 1.2em;')
             cbx.stateChanged.connect(self._handle_curves_visibility)
 
-            lb_desc = QLabel(' '.join(name.split()[2::]), self)
+            lb_desc = QLabel(''.join(name.split()[2::]), self)
             lb_desc.setStyleSheet(
                 'min-height: 1.5em; color:'+color+'; max-width: 8em;'
                 'qproperty-alignment: AlignCenter;')
