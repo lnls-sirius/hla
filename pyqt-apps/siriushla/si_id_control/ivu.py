@@ -38,7 +38,8 @@ class IVUControlWindowUtils():
         },
         "Center Mode": {
             "Sel": "CenterMode-Sel",
-            "Sts": "CenterMode-Sts"
+            "Sts": "CenterMode-Sts",
+            "Mon": "CenterOffset-SP"
         },
         "Center Offset": {
             "SP": "CenterOffset-SP",
@@ -47,7 +48,8 @@ class IVUControlWindowUtils():
         },
         "Pitch Mode": {
             "Sel": "PitchMode-Sel",
-            "Sts": "PitchMode-Sts"
+            "Sts": "PitchMode-Sts",
+            "Mon": "PitchOffset-SP"
         },
         "Pitch Offset": {
             "SP": "PitchOffset-SP",
@@ -108,12 +110,25 @@ class IVUControlWindow(IDCommonControlWindow, IVUControlWindowUtils):
 
     def _createModeSwitch(self, pv_info, lay, row):
         pvname = self.dev_pref.substitute(propty=pv_info["Sel"])
+        pvname_mon = self.dev_pref.substitute(propty=pv_info["Mon"])
         self.mode_sp = PyDMStateButton(init_channel=pvname)
+        self.mode_sp.rules = (
+            '[{"name": "VisibleWarning", "property": "Enable", "expression": "ch[0] == 0",' +
+            '"channels": [{"channel": "'+pvname_mon+'", "trigger": true}]}]')
+        
         lay.addWidget(self.mode_sp, row, 1)
     
         pvname = self.dev_pref.substitute(propty=pv_info["Sts"])
         self.mode_rb = PyDMLed(init_channel=pvname)
         lay.addWidget(self.mode_rb, row, 2)
+
+        warning = PyDMPushButton(label="The Offset value must be 0!")
+        warning.setStyleSheet("color: #ff0000")
+        warning.setFlat(True)
+        warning.rules = (
+            '[{"name": "VisibleWarning", "property": "Visible", "expression": "ch[0] != 0",' +
+            '"channels": [{"channel": "'+pvname_mon+'", "trigger": true}]}]')
+        lay.addWidget(warning, row, 3)
 
     def _ctrlModeWidget(self):
         gbox_ctrlmode = QGroupBox('Control Mode')
