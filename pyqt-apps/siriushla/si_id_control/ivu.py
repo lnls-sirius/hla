@@ -62,6 +62,10 @@ class IVUControlWindowUtils():
         "Abort": {
             "pvname": "Abort-Cmd",
             "icon": "fa5s.stop"
+        },
+        "Reset": {
+            "pvname": "Reset-Cmd",
+            "icon": "fa5s.sync"
         }
     }
 
