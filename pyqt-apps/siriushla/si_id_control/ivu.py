@@ -57,7 +57,7 @@ class IVUControlWindowUtils():
             "Mon": "PitchOffset-Mon"
         },
         "Moving": "Moving-Mon",
-        "Change KParam": {
+        "Start Movement": {
             "pvname": "KParamChange-Cmd",
             "icon": "fa5s.play"
         },
