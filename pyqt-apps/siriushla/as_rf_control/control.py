@@ -1078,15 +1078,21 @@ class RFMainControl(SiriusMainWindow):
         lay_vals.setAlignment(Qt.AlignTop)
         lay_vals.setHorizontalSpacing(15)
         lay_vals.setVerticalSpacing(6)
-        lay_vals.addWidget(
-            QLabel('<h4>Units</h4>', self, alignment=Qt.AlignCenter), 0, 5)
         self.cb_units = QComboBox(self)
         self.cb_units.addItems(['W', 'dBm', 'mV'])
         self.cb_units.setStyleSheet(
             'QComboBox{max-width: 3.5em; font-weight: bold;}')
         self.cb_units.currentTextChanged.connect(
             self._handle_pwrdata_visibility)
-        lay_vals.addWidget(self.cb_units, 0, 6)
+        if self.section == 'SI':
+            lay_vals.addWidget(
+                QLabel('<h4>Units</h4>', self, alignment=Qt.AlignCenter), 0, 5)
+            lay_vals.addWidget(self.cb_units, 0, 6)
+        else:
+            lay_vals.addWidget(
+                QLabel('<h4>Channel</h4>', self,
+                alignment=Qt.AlignCenter), 0, 2)
+            lay_vals.addWidget(self.cb_units, 0, 3)
 
         self.pwr_mon_graph = SiriusTimePlot(self)
         self.pwr_mon_graph.autoRangeX = True
@@ -1134,7 +1140,8 @@ class RFMainControl(SiriusMainWindow):
             cbx.setStyleSheet('color:'+color+'; max-width: 1.2em;')
             cbx.stateChanged.connect(self._handle_curves_visibility)
 
-            lb_desc = QLabel(''.join(name.split()[2::]), self)
+            lbl = ''.join(name.split()[2::]) if self.section == 'SI' else name
+            lb_desc = QLabel(lbl, self)
             lb_desc.setStyleSheet(
                 'min-height: 1.5em; color:'+color+'; max-width: 8em;'
                 'qproperty-alignment: AlignCenter;')
