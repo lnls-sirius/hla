@@ -242,7 +242,7 @@ class InjSysStbyControlWidget(QWidget):
         self._pb_on.setStyleSheet(
             '#bt{min-width:25px; max-width:25px; icon-size:20px;}')
 
-        self._led_sts = InjSysStbyLed(self)
+        self._led_sts = InjSysStbyLed(self, handler=self._handler)
         self._led_sts.setStyleSheet(
             'QLed{min-width:1.29em; max-width:1.29em;}')
 
@@ -314,7 +314,7 @@ class InjSysStbyControlWidget(QWidget):
         self._pb_on.setStyleSheet(
             '#bt{min-width:25px; max-width:25px; icon-size:20px;}')
 
-        self._led_sts = InjSysStbyLed(self)
+        self._led_sts = InjSysStbyLed(self, handler=self._handler)
 
         lay.addWidget(self._pb_off, 6, 1)
         lay.addWidget(self._pb_on, 6, 2)
