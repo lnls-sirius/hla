@@ -8,12 +8,13 @@ import qtawesome as qta
 
 from siriuspy.namesys import SiriusPVName
 from siriuspy.search import LLTimeSearch
+from siriuspy.devices.afc_acq_core import AMCCtrlAcqBase
 
 from ..util import get_appropriate_color
 from ..widgets import SiriusMainWindow, QLed
 from .util import SEC_2_SLOT
 from .custom_widgets import BPMMonLed, RFFEMonLed, PBPMMonLed, \
-    EVRMonLed, FOFBCtrlMonLed
+    EVRMonLed, FOFBCtrlMonLed, FRUMonLed
 
 
 class RaBPMMonitor(SiriusMainWindow):
@@ -21,7 +22,6 @@ class RaBPMMonitor(SiriusMainWindow):
 
     PBPM_MAXCOUNT_PERSEC = 4
     PBPM_ID_MAXCOUNT_PERSEC = 2
-
 
     def __init__(self, parent, prefix=''):
         super().__init__(parent)
@@ -32,6 +32,7 @@ class RaBPMMonitor(SiriusMainWindow):
         self.setWindowTitle('RaBPM Monitor')
         self.setObjectName('ASApp')
 
+        self.amc_devices = AMCCtrlAcqBase.DEVICES
         self.crates_mapping = LLTimeSearch.get_crates_mapping()
         self.sec2slot = SEC_2_SLOT
         self.sec2group = dict()
@@ -127,10 +128,15 @@ class RaBPMMonitor(SiriusMainWindow):
         # # led grid
         bobpm_n = 1
         for afc, devs in self.crates_mapping.items():
+            amc = self.amc_devices
+            sub = int(afc.sub[:2]) - 1
+            amc_sub = amc[sub]
+            
             # get devices
             afc = SiriusPVName(afc)
             devices = [afc] + [SiriusPVName(d) for d in devs]
-
+            amcdevs = [SiriusPVName(a) for a in amc_sub]
+        
             # determine sector, rabpm name and grid column
             sec = 'IA' if afc.sub[-2:] != 'TL' else 'TL'
             rabpm = afc.sub[:2] if sec == 'IA' else 'TL'
@@ -202,7 +208,6 @@ class RaBPMMonitor(SiriusMainWindow):
                 label.setStyleSheet('#boheader{border: 1px solid gray;}')
                 grid.addWidget(label, 21, col)
                 bobpm_n += bobpm_cnt
-
         return monitor
 
     def _setupLegendWidget(self):
@@ -291,7 +296,20 @@ class RaBPMMonitor(SiriusMainWindow):
                     min-height: 0.96em; max-height: 0.96em;
                     min-width: 0.48em; max-width: 0.48em;
                 }""")
-            wids.extend([anfe, dibe])
+            conn = FRUMonLed(self, dev+'CO-AMC-1', prefix=self.prefix)
+            conn.shape = conn.ShapeMap.Circle
+            conn.setStyleSheet("""
+                QLed{
+                    min-height: 0.72em; max-height: 0.72em;
+                    min-width: 0.72em; max-width: 0.72em;
+                }""")
+            duplicate = (
+                'M1:DI-BPM', 'C1:DI-BPM-1', 'C2:DI-BPM', 'C3:DI-BPM-2'
+                )
+            if dev.endswith(duplicate):
+                wids.extend([conn, anfe, dibe])
+            else:
+                wids.extend([anfe, dibe])
         else:
             wid = QLabel()
             wid.setStyleSheet("""

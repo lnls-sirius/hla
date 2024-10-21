@@ -58,9 +58,19 @@ def get_base_class(led_class):
 
     return _BaseMonLed
 
+
 _BaseMonLedMultiChan = get_base_class(PyDMLedMultiChannel)
 _BaseMonLedMultiConn = get_base_class(PyDMLedMultiConnection)
 
+
+class FRUMonLed(_BaseMonLedMultiChan):
+    """FRU monitor led."""
+
+    def __init__(self, parent=None, device='', prefix=''):
+        p2v = {'Status-Cte': 1}
+        super().__init__(
+            parent, device=device, propties2values=p2v, prefix=prefix,
+            command='sirius-hla-as-di-bpm.py')
 
 
 class BPMMonLed(_BaseMonLedMultiChan):

@@ -28,13 +28,33 @@ class BPMMain(BaseWidget):
         hbl.addSpacing(10)
         hbl.addStretch()
         if not self.is_pbpm:
-            chan2vals = {'RFFEasyn.CNCT': 1, 'ADCAD9510PllStatus-Mon': 1}
+            chan2vals = {
+                'RFFEasyn.CNCT': 1,
+                'ADCAD9510PllStatus-Mon': 1,
+                'Status-Cte': 1
+                }
             chan2vals = {self.get_pvname(k): v for k, v in chan2vals.items()}
             led = PyDMLedMultiChannel(self, channels2values=chan2vals)
             hbl.addWidget(led)
             hbl.addSpacing(10)
             hbl.addStretch()
         pbt = QPushButton('Open Settings')
+        Window = create_window_from_widget(
+            ParamsSettings, title=self.bpm+': Settings')
+        util.connect_window(
+            pbt, Window, parent=grpbx, prefix=self.prefix, bpm=self.bpm)
+        hbl.addWidget(pbt)
+        hbl.addSpacing(10)
+        hbl.addStretch()
+        self.layoutv.addWidget(grpbx)
+        self.layoutv.addSpacing(20)
+        self.layoutv.addStretch()
+
+        grpbx = CustomGroupBox('FRU Status', self)
+        hbl = QHBoxLayout(grpbx)
+        hbl.addSpacing(10)
+        hbl.addStretch()
+        pbt = QPushButton('Reset')
         Window = create_window_from_widget(
             ParamsSettings, title=self.bpm+': Settings')
         util.connect_window(

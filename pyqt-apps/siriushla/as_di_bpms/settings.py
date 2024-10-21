@@ -35,9 +35,13 @@ class ParamsSettings(BaseWidget):
             gdl = QGridLayout(grpbx)
             props = (
                 ('RFFEasyn.CNCT', 'RFFE Connected'),
-                ('ADCAD9510PllStatus-Mon', 'ADC Clock Synched'))
+                ('ADCAD9510PllStatus-Mon', 'ADC Clock Synched'),
+                ('Status-Cte', 'FRU Connected')
+                )
             for i, prop in enumerate(props):
-                led = SiriusLedState(grpbx, init_channel=self.get_pvname(prop[0]))
+                led = SiriusLedState(
+                    grpbx, init_channel=self.get_pvname(prop[0])
+                    )
                 led.setOffColor(led.Red)
                 lab = QLabel(prop[1], grpbx)
                 gdl.addWidget(led, i, 0)
