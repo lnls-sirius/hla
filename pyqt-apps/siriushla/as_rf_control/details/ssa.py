@@ -11,7 +11,7 @@ from ...util import connect_window
 from ...widgets import PyDMLed, PyDMLedMultiChannel, SiriusDialog, \
     SiriusLabel, SiriusLedAlert, SiriusLedState, SiriusTimePlot
 from ..advanced_details import SSACurrentsDetails, ACPanelDetails
-from ..util import SEC_2_CHANNELS
+from ..util import DEFAULT_STYLESHEET, SEC_2_CHANNELS
 
 
 class SSADetailsSI(SiriusDialog):
@@ -33,6 +33,7 @@ class SSADetailsSI(SiriusDialog):
         self._setupUi()
 
     def _setupUi(self):
+        self.setStyleSheet(DEFAULT_STYLESHEET)
         lay = QVBoxLayout(self)
         lay.setAlignment(Qt.AlignTop)
 

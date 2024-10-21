@@ -7,7 +7,7 @@ from qtpy.QtWidgets import QGridLayout, QGroupBox, QLabel, QPushButton
 from ...util import connect_window
 from ...widgets import SiriusDialog, SiriusLabel, SiriusLedAlert, SiriusSpinbox
 from ..advanced_details import AdvancedInterlockDetails
-from ..util import SEC_2_CHANNELS
+from ..util import DEFAULT_STYLESHEET, SEC_2_CHANNELS
 
 
 class LLRFInterlockDetails(SiriusDialog):
@@ -25,6 +25,7 @@ class LLRFInterlockDetails(SiriusDialog):
         self._setupUi()
 
     def _setupUi(self):
+        self.setStyleSheet(DEFAULT_STYLESHEET)
         lay = QGridLayout(self)
         lay.setAlignment(Qt.AlignTop)
         lay.setHorizontalSpacing(25)

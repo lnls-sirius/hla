@@ -6,7 +6,7 @@ from qtpy.QtWidgets import QGridLayout, QLabel, QSizePolicy as QSzPlcy, \
     QSpacerItem, QVBoxLayout
 
 from ...widgets import SiriusDialog, SiriusLabel, SiriusSpinbox
-from ..util import SEC_2_CHANNELS
+from ..util import DEFAULT_STYLESHEET, SEC_2_CHANNELS
 
 
 class SlowLoopParametersDetails(SiriusDialog):
@@ -24,6 +24,7 @@ class SlowLoopParametersDetails(SiriusDialog):
         self._setupUi()
 
     def _setupUi(self):
+        self.setStyleSheet(DEFAULT_STYLESHEET)
         lay = QVBoxLayout(self)
         lay.setAlignment(Qt.AlignTop)
         lay.setSpacing(20)

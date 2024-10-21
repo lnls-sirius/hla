@@ -8,7 +8,7 @@ from qtpy.QtWidgets import QGridLayout, QGroupBox, QLabel, \
 from ...widgets import PyDMStateButton, SiriusDialog, SiriusEnumComboBox, \
     SiriusLabel, SiriusLedAlert, SiriusLedState, SiriusPushButton, \
     SiriusSpinbox
-from ..util import SEC_2_CHANNELS
+from ..util import DEFAULT_STYLESHEET, SEC_2_CHANNELS
 
 
 class TuningDetails(SiriusDialog):
@@ -33,6 +33,7 @@ class TuningDetails(SiriusDialog):
         self._setupUi()
 
     def _setupUi(self):
+        self.setStyleSheet(DEFAULT_STYLESHEET)
         lay = QGridLayout(self)
         lay.setAlignment(Qt.AlignTop)
         lay.setSpacing(9)

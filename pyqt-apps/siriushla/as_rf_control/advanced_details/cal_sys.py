@@ -8,7 +8,7 @@ from qtpy.QtWidgets import QCheckBox, QComboBox, QGridLayout, QHBoxLayout, \
 
 from ...widgets import SiriusDialog, SiriusLabel, SiriusLineEdit, \
     SiriusTimePlot
-from ..util import SEC_2_CHANNELS
+from ..util import DEFAULT_STYLESHEET, SEC_2_CHANNELS
 
 
 class CalSysDetails(SiriusDialog):
@@ -33,6 +33,7 @@ class CalSysDetails(SiriusDialog):
         self._setupUi()
 
     def _setupUi(self):
+        self.setStyleSheet(DEFAULT_STYLESHEET)
         lay = QVBoxLayout(self)
         lay.setAlignment(Qt.AlignTop)
         dtls = QTabWidget(self)

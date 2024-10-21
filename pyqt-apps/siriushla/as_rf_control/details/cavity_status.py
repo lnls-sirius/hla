@@ -5,7 +5,7 @@ from qtpy.QtWidgets import QFormLayout, QGridLayout, QHBoxLayout, QLabel
 
 from ...widgets import PyDMLedMultiChannel, SiriusDialog, SiriusLabel, \
     SiriusLedAlert
-from ..util import SEC_2_CHANNELS
+from ..util import DEFAULT_STYLESHEET, SEC_2_CHANNELS
 
 
 class CavityStatusDetails(SiriusDialog):
@@ -22,6 +22,7 @@ class CavityStatusDetails(SiriusDialog):
         self._setupUi()
 
     def _setupUi(self):
+        self.setStyleSheet(DEFAULT_STYLESHEET)
         lay_temp1 = QFormLayout()
         lay_temp1.setHorizontalSpacing(9)
         lay_temp1.setVerticalSpacing(9)

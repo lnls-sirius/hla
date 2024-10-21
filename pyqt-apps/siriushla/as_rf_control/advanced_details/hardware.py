@@ -6,7 +6,7 @@ from qtpy.QtWidgets import QGridLayout, QGroupBox, QLabel, QVBoxLayout
 
 from ...widgets import SiriusDialog, SiriusLabel, SiriusLedAlert, \
     SiriusLedState, SiriusPushButton, SiriusScaleIndicator
-from ..util import SEC_2_CHANNELS
+from ..util import DEFAULT_STYLESHEET, SEC_2_CHANNELS
 
 
 class HardwareDetails(SiriusDialog):
@@ -31,6 +31,7 @@ class HardwareDetails(SiriusDialog):
         self._setupUi()
 
     def _setupUi(self):
+        self.setStyleSheet(DEFAULT_STYLESHEET)
         lay = QGridLayout(self)
         lay.setAlignment(Qt.AlignTop)
         lay.setHorizontalSpacing(18)

@@ -7,7 +7,7 @@ from qtpy.QtWidgets import QFrame, QGridLayout, QGroupBox, QHBoxLayout, \
 
 from ...widgets import PyDMStateButton, SiriusDialog, SiriusLabel, \
     SiriusLedAlert, SiriusLedState, SiriusPushButton, SiriusSpinbox
-from ..util import SEC_2_CHANNELS
+from ..util import DEFAULT_STYLESHEET, SEC_2_CHANNELS
 
 
 class AdvancedInterlockDetails(SiriusDialog):
@@ -32,6 +32,7 @@ class AdvancedInterlockDetails(SiriusDialog):
         self._setupUi()
 
     def _setupUi(self):
+        self.setStyleSheet(DEFAULT_STYLESHEET)
         lay = QVBoxLayout(self)
         lay.setAlignment(Qt.AlignTop)
         dtls = QTabWidget(self)

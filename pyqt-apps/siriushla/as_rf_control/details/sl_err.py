@@ -7,7 +7,7 @@ from qtpy.QtWidgets import QGridLayout, QHBoxLayout, QLabel, \
 
 from ...widgets import SiriusDialog, SiriusLabel, SiriusTimePlot, \
     SiriusWaveformPlot
-from ..util import SEC_2_CHANNELS
+from ..util import DEFAULT_STYLESHEET, SEC_2_CHANNELS
 
 
 class SlowLoopErrorDetails(SiriusDialog):
@@ -25,6 +25,7 @@ class SlowLoopErrorDetails(SiriusDialog):
         self._setupUi()
 
     def _setupUi(self):
+        self.setStyleSheet(DEFAULT_STYLESHEET)
         lay = QVBoxLayout(self)
         lay.setAlignment(Qt.AlignTop)
         lay.setSpacing(20)
@@ -99,7 +100,8 @@ class SlowLoopErrorDetails(SiriusDialog):
     def setupGraphFasor(self, lay_llrf, chs_dict):
         graph_iq = SiriusWaveformPlot(
             parent=self, background=QColor(255, 255, 255))
-        graph_iq.setStyleSheet('min-height: 15em; min-width: 20em;')
+        graph_iq.setStyleSheet(
+            'min-height: 15em; min-width: 20em; max-height:15em;')
         graph_iq.maxRedrawRate = 2
         graph_iq.mouseEnabledX = True
         graph_iq.setShowXGrid(True)

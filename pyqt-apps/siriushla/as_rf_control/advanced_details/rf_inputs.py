@@ -5,7 +5,7 @@ from qtpy.QtWidgets import QGridLayout, QLabel, QSizePolicy as QSzPlcy, \
     QSpacerItem
 
 from ...widgets import SiriusDialog, SiriusLabel
-from ..util import SEC_2_CHANNELS
+from ..util import DEFAULT_STYLESHEET, SEC_2_CHANNELS
 
 
 class RFInputsDetails(SiriusDialog):
@@ -31,6 +31,7 @@ class RFInputsDetails(SiriusDialog):
 
     def _setupUi(self):
         lay = QGridLayout(self)
+        self.setStyleSheet(DEFAULT_STYLESHEET)
         lay.setAlignment(Qt.AlignTop)
         lay.setVerticalSpacing(9)
         lay.setHorizontalSpacing(18)
