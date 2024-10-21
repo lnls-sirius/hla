@@ -9,7 +9,7 @@ from qtpy.QtWidgets import QGridLayout, QGroupBox, QLabel, QPushButton, \
 from ...util import connect_window
 from ...widgets import PyDMStateButton, SiriusDialog, SiriusLabel, \
     SiriusLedState, SiriusSpinbox, SiriusTimePlot
-from ..util import SEC_2_CHANNELS
+from ..util import DEFAULT_STYLESHEET, SEC_2_CHANNELS
 from .limits import LimitsDetails
 
 
@@ -35,6 +35,7 @@ class RampsDetails(SiriusDialog):
         self._setupUi()
 
     def _setupUi(self):
+        self.setStyleSheet(DEFAULT_STYLESHEET)
         lay = QVBoxLayout(self)
         lay.setAlignment(Qt.AlignTop)
         dtls = QTabWidget(self)

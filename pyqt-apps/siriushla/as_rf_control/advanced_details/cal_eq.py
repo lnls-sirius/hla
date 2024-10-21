@@ -6,7 +6,7 @@ from qtpy.QtWidgets import QGridLayout, QGroupBox, QLabel, \
     QSizePolicy as QSzPlcy, QSpacerItem
 
 from ...widgets import SiriusDialog, SiriusLabel
-from ..util import SEC_2_CHANNELS
+from ..util import DEFAULT_STYLESHEET, SEC_2_CHANNELS
 
 
 class CalEqDetails(SiriusDialog):
@@ -31,6 +31,7 @@ class CalEqDetails(SiriusDialog):
         self._setupUi()
 
     def _setupUi(self):
+        self.setStyleSheet(DEFAULT_STYLESHEET)
         lay = QGridLayout(self)
         lay.setAlignment(Qt.AlignTop)
         lay.setSpacing(9)

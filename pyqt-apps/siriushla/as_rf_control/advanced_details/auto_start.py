@@ -5,7 +5,7 @@ from qtpy.QtWidgets import QGridLayout, QGroupBox, QLabel, QVBoxLayout
 
 from ...widgets import PyDMStateButton, SiriusDialog, SiriusEnumComboBox, \
     SiriusLabel, SiriusLedAlert, SiriusLedState
-from ..util import SEC_2_CHANNELS
+from ..util import DEFAULT_STYLESHEET, SEC_2_CHANNELS
 
 
 class AutoStartDetails(SiriusDialog):
@@ -30,6 +30,7 @@ class AutoStartDetails(SiriusDialog):
         self._setupUi()
 
     def _setupUi(self):
+        self.setStyleSheet(DEFAULT_STYLESHEET)
         lay = QVBoxLayout(self)
         lay.setAlignment(Qt.AlignTop)
         lay.setSpacing(9)

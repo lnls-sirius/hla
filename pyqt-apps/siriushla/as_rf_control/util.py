@@ -1,5 +1,24 @@
 """Utilities."""
 
+DEFAULT_STYLESHEET = """
+            QSpinBox, QPushButton, PyDMEnumComboBox{
+                min-width:5em; max-width:5em;
+            }
+            PyDMLineEdit, SiriusSpinbox{
+                min-width:7em; max-width:7em;
+            }
+            PyDMStateButton{
+                min-width: 2.58em;
+            }
+            SiriusLabel{
+                qproperty-alignment: AlignCenter;
+            }
+            QLed{
+                max-width: 1.29em;
+            }
+            QLabel{
+                max-height:1.5em; min-width:4em;
+            }"""
 
 SEC_2_CHANNELS = {
     'BO': {

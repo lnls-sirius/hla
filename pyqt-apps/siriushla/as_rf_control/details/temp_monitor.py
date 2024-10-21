@@ -4,7 +4,7 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGridLayout, QLabel, QTabWidget
 
 from ...widgets import DetachableTabWidget, SiriusDialog
-from ..util import SEC_2_CHANNELS
+from ..util import DEFAULT_STYLESHEET, SEC_2_CHANNELS
 from .bar_graph import BarGraph
 
 
@@ -23,6 +23,7 @@ class TempMonitor(SiriusDialog):
         self._setupUi()
 
     def _setupUi(self):
+        self.setStyleSheet(DEFAULT_STYLESHEET)
         lay = QGridLayout(self)
         lay.setAlignment(Qt.AlignTop)
         lay.setHorizontalSpacing(25)
