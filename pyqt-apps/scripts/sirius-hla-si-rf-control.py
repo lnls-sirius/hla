@@ -16,7 +16,6 @@ from siriushla.as_rf_control.details import CavityStatusDetails, FDLDetails, \
     LLRFInterlockDetails, SlowLoopErrorDetails, SlowLoopParametersDetails, \
     SSADetailsSI, TempMonitor, TransmLineStatusDetails
 from siriushla.sirius_application import SiriusApplication
-from qtpy.QtWidgets import QMessageBox
 
 parser = _argparse.ArgumentParser(
     description="Run RF Control Interface.")
@@ -77,6 +76,6 @@ elif args.detail == 'ssa':
     app.open_window(SSADetailsSI, prefix=args.prefix, num=args.num_ssa,
         system=args.system)
 else:
-    raise ValueError("Invalid or missing detail argument")
+    raise ValueError("Invalid detail argument.")
 
 sys.exit(app.exec_())

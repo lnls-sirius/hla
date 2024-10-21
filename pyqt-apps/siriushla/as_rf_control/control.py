@@ -933,8 +933,10 @@ class RFMainControl(SiriusMainWindow):
         pb = QPushButton(
             qta.icon('fa5s.external-link-alt'), f' {title}', self)
         cmd = f'sirius-hla-{self.section.lower()}-rf-control.py'
-        cmd = f"{cmd} -d {detail} -s {system}".split(" ")
-        connect_newprocess(pb, cmd, is_window=True, parent=self)
+        cmd += f' -d {detail}'
+        if self.section == 'SI':
+            cmd += f' -s {system}'
+        connect_newprocess(pb, cmd.split(" "), is_window=True, parent=self)
         buttons.append(pb)
 
     def _setupDetailButtons(self, lay, buttons, row):
@@ -1515,16 +1517,14 @@ class RFMainControl(SiriusMainWindow):
         pb_ssadtls.setStyleSheet(
             '#dtls{min-width:18px;max-width:18px;icon-size:20px;}')
         lay_amp.addWidget(pb_ssadtls, row, 2)
+        cmd = f'sirius-hla-{self.section.lower()}-rf-control.py'
+        cmd += ' -d ssa'
         if self.section == 'SI':
             ssa_num = int(chs_dict['Name'].split()[-1])
             system = ('A' if ssa_num == 1 or ssa_num == 2 else 'B')
-            cmd = f'sirius-hla-{self.section.lower()}-rf-control.py'
-            cmd = f'{cmd} -d ssa -s {system} -n {ssa_num}'.split(" ")
-            connect_newprocess(
-                pb_ssadtls, cmd, is_window=True, parent=self)
-        else:
-            connect_window(pb_ssadtls, SSADetailsBO, parent=self,
-                        prefix=self.prefix)
+            cmd += f' -s {system} -n {ssa_num}'
+        connect_newprocess(
+            pb_ssadtls, cmd.split(" "), is_window=True, parent=self)
 
         led_sts = SiriusLedAlert(self, self.prefix+chs_dict['Status'])
         led_sts.onColor = PyDMLed.LightGreen
@@ -1681,8 +1681,11 @@ class RFMainControl(SiriusMainWindow):
         pb_fdldtls.setStyleSheet(
             '#dtls{min-width:18px;max-width:18px;icon-size:20px;}')
         cmd = f'sirius-hla-{self.section.lower()}-rf-control.py'
-        cmd = f'{cmd} -d fdl -s {key}'.split(" ")
-        connect_newprocess(pb_fdldtls, cmd, is_window=True, parent=self)
+        cmd += ' -d fdl'
+        if self.section == 'SI':
+            cmd += f' -s {key}'
+        connect_newprocess(
+            pb_fdldtls, cmd.split(" "), is_window=True, parent=self)
 
         if key:
             title = key
