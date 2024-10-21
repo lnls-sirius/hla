@@ -22,6 +22,7 @@ from ..widgets.windows import create_window_from_widget, SiriusDialog
 from ..util import connect_window, get_appropriate_color
 
 from .base import BaseList, BaseWidget
+from .allowed_buckets import AllowedBucketsMatrix
 
 
 # ###################### Event Generator ######################
@@ -1029,6 +1030,27 @@ class BucketList(BaseWidget):
         wid.setFocusPolicy(Qt.StrongFocus)
         wid.setObjectName('ASApp')
 
+        window = create_window_from_widget(
+            AllowedBucketsMatrix,
+            title='Allowed Buckets to Inject',
+            withscroll=True,
+            min_width=2200,
+            min_height=1200,
+        )
+        self._pb_allowed_buckets = QPushButton('', wid)
+        self._pb_allowed_buckets.setObjectName('btn')
+        self._pb_allowed_buckets.setIcon(qta.icon('fa5s.tasks'))
+        self._pb_allowed_buckets.setToolTip(
+            'Open window to select BPMs and correctors'
+        )
+        self._pb_allowed_buckets.setStyleSheet(
+            '#btn{min-width:3.3em; max-width:3.3em;\
+            min-height:1.8em; max-height:1.8em; icon-size:25px;}'
+        )
+        connect_window(
+            self._pb_allowed_buckets, window, None, device=inj_prefix
+        )
+
         self._sb_start = SiriusSpinbox(
             wid, inj_prefix.substitute(propty='BucketListStart-SP'))
         self._sb_start.setAlignment(Qt.AlignCenter)
@@ -1064,16 +1086,20 @@ class BucketList(BaseWidget):
         lay_pbrow.addWidget(self._pb_ok)
 
         lay = QGridLayout(wid)
-        lay.addWidget(QLabel('Start:', wid), 0, 0)
-        lay.addWidget(self._sb_start, 0, 1)
-        lay.addWidget(self._lb_start, 0, 2)
-        lay.addWidget(QLabel('Stop:', wid), 1, 0)
-        lay.addWidget(self._sb_stop, 1, 1)
-        lay.addWidget(self._lb_stop, 1, 2)
-        lay.addWidget(QLabel('Step:', wid), 2, 0)
-        lay.addWidget(self._sb_step, 2, 1)
-        lay.addWidget(self._lb_step, 2, 2)
-        lay.addLayout(lay_pbrow, 3, 0, 1, 3)
+        lay.addWidget(QLabel('Allowed Buckets:', wid), 0, 0)
+        lay.addWidget(
+            self._pb_allowed_buckets, 0, 1, 1, 2, alignment=Qt.AlignCenter
+        )
+        lay.addWidget(QLabel('Start:', wid), 1, 0)
+        lay.addWidget(self._sb_start, 1, 1)
+        lay.addWidget(self._lb_start, 1, 2)
+        lay.addWidget(QLabel('Stop:', wid), 2, 0)
+        lay.addWidget(self._sb_stop, 2, 1)
+        lay.addWidget(self._lb_stop, 2, 2)
+        lay.addWidget(QLabel('Step:', wid), 3, 0)
+        lay.addWidget(self._sb_step, 3, 1)
+        lay.addWidget(self._lb_step, 3, 2)
+        lay.addLayout(lay_pbrow, 4, 0, 1, 3)
 
         return wid
 
