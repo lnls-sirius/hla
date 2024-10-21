@@ -1034,8 +1034,6 @@ class BucketList(BaseWidget):
             AllowedBucketsMatrix,
             title='Allowed Buckets to Inject',
             withscroll=True,
-            min_width=2200,
-            min_height=1200,
         )
         self._pb_allowed_buckets = QPushButton('', wid)
         self._pb_allowed_buckets.setObjectName('btn')

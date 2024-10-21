@@ -36,7 +36,7 @@ class AllowedBucketsMatrix(SelectionWidget, PyDMWidget):
 
     def sizeHint(self):
         """Return the base size of the widget."""
-        return QSize(2600, 1200)
+        return QSize(1800, 1200)
 
     # --- SelectionWidget specific methods ---
 
