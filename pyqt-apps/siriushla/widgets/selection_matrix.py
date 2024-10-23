@@ -81,7 +81,7 @@ class SelectionMatrixWidget(QWidget):
         self._top_header_wids, self._side_header_wids = list(), list()
         self._setupUi()
 
-    def _setupUi(self):
+    def _setupUi(self, side_header_size_em=2, top_header_size_em=2):
         lay = QGridLayout(self)
 
         if self.title:
@@ -108,14 +108,14 @@ class SelectionMatrixWidget(QWidget):
         glay.setContentsMargins(0, 0, 0, 0)
         for i, head in enumerate(self._top_headers):
             head_wid = QPushButton(head, self)
-            head_wid.setStyleSheet('min-width:2em;')
+            head_wid.setStyleSheet(f'min-width:{top_header_size_em:f}em;')
             head_wid.clicked.connect(
                 _part(self.selectWidgetsAt, i, isrow=False))
             self._top_header_wids.append(head_wid)
             glay.addWidget(head_wid, 0, i+1)
         for i, head in enumerate(self._side_headers):
             head_wid = QPushButton(head, self)
-            head_wid.setStyleSheet('min-width:2em;')
+            head_wid.setStyleSheet(f'min-width:{side_header_size_em:f}em;')
             head_wid.clicked.connect(
                 _part(self.selectWidgetsAt, i, isrow=True))
             self._side_header_wids.append(head_wid)
