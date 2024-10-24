@@ -2,8 +2,8 @@
 
 from qtpy.QtCore import Qt, QSize
 from qtpy.QtWidgets import QGroupBox, QLabel, \
-    QHBoxLayout, QVBoxLayout, QWidget, QPushButton, \
-    QGridLayout, QSizePolicy as QSzPlcy
+    QHBoxLayout, QPushButton, \
+    QGridLayout
 import qtawesome as qta
 from pydm.widgets import PyDMPushButton
 
@@ -11,7 +11,7 @@ from siriuspy.epics import PV
 
 from ..util import connect_newprocess, connect_window
 from ..widgets import SiriusLedAlert, SiriusLabel, SiriusSpinbox, \
-    PyDMLogLabel, PyDMLed, SiriusEnumComboBox, SiriusLineEdit
+    PyDMLed, PyDMStateButton, SiriusLineEdit
 from ..widgets.dialog import StatusDetailDialog
 
 from .base import IDCommonControlWindow, \
@@ -21,25 +21,6 @@ from .base import IDCommonControlWindow, \
 class IVUControlWindowUtils():
     """."""
 
-    STATUS_PVS = {
-        "Alarms": (
-            "Alarm-Mon", "AlarmBits-Mon", "AlarmLabels-Cte"
-        ),
-        "Interlock": (
-            "Intlk-Mon", "IntlkBits-Mon", "IntlkLabels-Cte"
-        ),
-        "Is Operational": "IsOperational-Mon",
-        "PLC State": "PLCState-Mon",
-        "Sw": {
-            "Killed": "KillSw-Mon",
-            "Limit": "LimSw-Mon"
-        },
-        "Logs": {
-            "IOC Log": "Log-Mon",
-            "Sequencer State Machine Log": "StateMachineLog-Mon"
-        }
-    }
-
     MAIN_CONTROL_PVS = {
         "KParam": {
             "SP": "KParam-SP",
@@ -48,65 +29,45 @@ class IVUControlWindowUtils():
         },
         "KParam Speed": {
             "SP": "KParamVelo-SP",
-            "RB": "KParamVelo-RB",
+            "RB": "KParamVelo-RB"
         },
-        "Change KParam": {
+        "KParam Taper": {
+            "SP": "KParamTaper-SP",
+            "RB": "KParamTaper-RB",
+            "Mon": "KParamTaper-Mon"
+        },
+        "Center Mode": {
+            "Sel": "CenterMode-Sel",
+            "Sts": "CenterMode-Sts",
+            "Mon": "CenterOffset-SP"
+        },
+        "Center Offset": {
+            "SP": "CenterOffset-SP",
+            "RB": "CenterOffset-RB",
+            "Mon": "CenterOffset-Mon"
+        },
+        "Pitch Mode": {
+            "Sel": "PitchMode-Sel",
+            "Sts": "PitchMode-Sts",
+            "Mon": "PitchOffset-SP"
+        },
+        "Pitch Offset": {
+            "SP": "PitchOffset-SP",
+            "RB": "PitchOffset-RB",
+            "Mon": "PitchOffset-Mon"
+        },
+        "Moving": "Moving-Mon",
+        "Start Movement": {
             "pvname": "KParamChange-Cmd",
             "icon": "fa5s.play"
         },
-        "PParam": {
-            "SP": "PParam-SP",
-            "RB": "PParam-RB",
-            "Mon": "PParam-Mon"
-        },
-        "PParam Speed": {
-            "SP": "PParamVelo-SP",
-            "RB": "PParamVelo-RB",
-        },
-        "Change PParam": {
-            "pvname": "PParamChange-Cmd",
-            "icon": "fa5s.play"
-        },
-        "Polarization": {
-            "SP": "Pol-Sel",
-            "RB": "Pol-Sts",
-            "Mon": "Pol-Mon"
-        },
-        "Change Polarization": {
-            "pvname": "PolChange-Cmd",
-            "icon": "fa5s.play"
-        },
-        "Moving": "Moving-Mon",
-        "Motors Enabled": "MotorsEnbld-Mon",
         "Abort": {
             "pvname": "Abort-Cmd",
             "icon": "fa5s.stop"
-        }
-    }
-
-    AUX_CONTROL_PVS = {
-        "Max. Speed": {
-            "SP": "MaxVelo-SP",
-            "RB": "MaxVelo-RB",
         },
-        "Max. Acc.": {
-            "SP": "MaxAcc-SP",
-            "RB": "MaxAcc-RB",
-        },
-        "Header": (
-            "KParam", "PParam"
-        ),
-        "Acceleration": (
-            "KParamAcc-SP", "KParamAcc-RB",
-            "PParamAcc-SP", "PParamAcc-RB"
-        ),
-        "Tolerance": (
-            "PosTol-SP", "PosTol-RB",
-            "PolTol-SP", "PolTol-RB"
-        ),
-        "Start Parking": {
-            "pvname": "StartParking-Cmd",
-            "icon": "fa5s.parking"
+        "Reset": {
+            "pvname": "Reset-Cmd",
+            "icon": "fa5s.sync"
         }
     }
 
@@ -126,12 +87,13 @@ class IVUControlWindow(IDCommonControlWindow, IVUControlWindowUtils):
             label.setFixedWidth(150)
             lay.addWidget(label, row, 0)
 
-            if title in ("Moving", "Motors Enabled"):
+            if title in ("Moving"):
                 self._createMotion(pv_info, lay, row)
-            elif title in ["KParam", "PParam", "KParam Speed", "PParam Speed"]:
+            elif title in ["KParam", "KParam Speed", 
+                    "KParam Taper", "Center Offset", "Pitch Offset"]:
                 self._createParam(pv_info, lay, row)
-            elif title == "Polarization":
-                self._createPolarization(pv_info, lay, row)
+            elif title in ["Pitch Mode", "Center Mode"]:
+                self._createModeSwitch(pv_info, lay, row)
             elif isinstance(pv_info, str):
                 pvname = self.dev_pref.substitute(propty=pv_info)
                 lbl = SiriusLabel(self, init_channel=pvname)
@@ -146,32 +108,27 @@ class IVUControlWindow(IDCommonControlWindow, IVUControlWindowUtils):
 
         return group
 
-    def _statusWidget(self):
-        return self._createStatusGroup("Status", self.STATUS_PVS)
+    def _createModeSwitch(self, pv_info, lay, row):
+        pvname = self.dev_pref.substitute(propty=pv_info["Sel"])
+        pvname_mon = self.dev_pref.substitute(propty=pv_info["Mon"])
+        self.mode_sp = PyDMStateButton(init_channel=pvname)
+        self.mode_sp.rules = (
+            '[{"name": "VisibleWarning", "property": "Enable", "expression": "ch[0] == 0",' +
+            '"channels": [{"channel": "'+pvname_mon+'", "trigger": true}]}]')
+        
+        lay.addWidget(self.mode_sp, row, 1)
+    
+        pvname = self.dev_pref.substitute(propty=pv_info["Sts"])
+        self.mode_rb = PyDMLed(init_channel=pvname)
+        lay.addWidget(self.mode_rb, row, 2)
 
-    def _auxCommandsWidget(self):
-        group = QGroupBox('Auxiliary Controls')
-        lay = QGridLayout()
-        group.setLayout(lay)
-
-        row = 0
-        for title, pv_info in self.AUX_CONTROL_PVS.items():
-            if "Header" not in title:
-                label = QLabel(
-                    title, self, alignment=Qt.AlignRight | Qt.AlignVCenter)
-                lay.addWidget(label, row, 0)
-
-            if title in ["Max. Speed", "Max. Acc."]:
-                self._createParam(pv_info, lay, row)
-            elif title in ["Abort", "Start Parking"]:
-                self._createIconBtns(pv_info, lay, row)
-            elif "Header" in title:
-                self._createHeaders(pv_info, lay, row)
-            else:
-                self._createAccTol(pv_info, lay, row)
-            row += 1
-
-        return group
+        warning = PyDMPushButton(label="The Offset value must be 0!")
+        warning.setStyleSheet("color: #ff0000")
+        warning.setFlat(True)
+        warning.rules = (
+            '[{"name": "VisibleWarning", "property": "Visible", "expression": "ch[0] != 0",' +
+            '"channels": [{"channel": "'+pvname_mon+'", "trigger": true}]}]')
+        lay.addWidget(warning, row, 3)
 
     def _ctrlModeWidget(self):
         gbox_ctrlmode = QGroupBox('Control Mode')
@@ -221,24 +178,6 @@ class IVUControlWindow(IDCommonControlWindow, IVUControlWindowUtils):
         led.setMaximumWidth(50)
         lay.addWidget(led, row, 1, 1, 1)
 
-    def _createPolarization(self, pv_info, lay, row):
-
-        pvname = self.dev_pref.substitute(propty=pv_info["SP"])
-        cb = SiriusEnumComboBox(self, init_channel=pvname)
-        cb.setMinimumWidth(50)
-        lay.addWidget(cb, row, 1, 1, 1)
-        lay.setContentsMargins(0, 0, 0, 0)
-
-        col = 2
-        for key in ["RB", "Mon"]:
-            pvname = self.dev_pref.substitute(propty=pv_info[key])
-            lbl = SiriusLabel(self, init_channel=pvname)
-            lbl.setMinimumWidth(125)
-            lbl.showUnits = True
-            lbl.setAlignment(Qt.AlignCenter)
-            lay.addWidget(lbl, row, col, 1, 1)
-            col += 1
-
     def _createDetailedLedBtn(self, pv_tuple):
 
         btn = QPushButton('', self)
@@ -260,68 +199,6 @@ class IVUControlWindow(IDCommonControlWindow, IVUControlWindowUtils):
             btn.setEnabled(False)
         return btn
 
-    def _createStatusWidget(self, title, pv_suffix):
-        pv_tuple = tuple()
-        wid = QWidget()
-        lay = QHBoxLayout()
-        lay.setContentsMargins(0, 0, 0, 0)
-        wid.setLayout(lay)
-
-        label = QLabel(title, self, alignment=Qt.AlignRight | Qt.AlignVCenter)
-        lay.addWidget(label)
-
-        if isinstance(pv_suffix, tuple):
-            pv_tuple = (pv_suffix[1], pv_suffix[2])
-            pv_suffix = pv_suffix[0]
-
-        pvname = self.dev_pref.substitute(propty=pv_suffix)
-        if 'PLC State' in title:
-            led = SiriusLabel(self, pvname)
-        else:
-            led = SiriusLedAlert(init_channel=pvname)
-        lay.addWidget(led, alignment=Qt.AlignLeft)
-
-        if pv_tuple:
-            detailed_btn = self._createDetailedLedBtn(pv_tuple)
-            lay.addWidget(detailed_btn, alignment=Qt.AlignLeft)
-
-        return wid
-
-    def _createLogWidget(self, title, pv_suffix):
-        wid = QWidget()
-        lay = QVBoxLayout()
-        lay.setContentsMargins(0, 0, 0, 0)
-        wid.setLayout(lay)
-
-        label = QLabel(title, self)
-        lay.addWidget(label)
-
-        pvname = self.dev_pref.substitute(propty=pv_suffix)
-        log = PyDMLogLabel(init_channel=pvname)
-        lay.addWidget(log)
-
-        return wid
-
-    def _createStatusGroup(self, title, pvs):
-        group = QGroupBox()
-        lay = QVBoxLayout()
-        group.setLayout(lay)
-        group.setTitle(title)
-
-        pos = [0, 0]
-        for title, pv_info in pvs.items():
-            if isinstance(pv_info, dict):
-                widget = self._createStatusGroup(title, pv_info)
-            else:
-                if "Log" in title:
-                    widget = self._createLogWidget(title, pv_info)
-                else:
-                    widget = self._createStatusWidget(title, pv_info)
-            lay.addWidget(widget)
-            pos[1] += 1
-
-        return group
-
     def _createIconBtns(self, pv_info, lay, row):
         btn = PyDMPushButton(self, label='', icon=qta.icon(pv_info["icon"]))
         btn.channel = self.dev_pref.substitute(propty=pv_info["pvname"])
@@ -332,35 +209,11 @@ class IVUControlWindow(IDCommonControlWindow, IVUControlWindowUtils):
             '#Start{min-width:30px; max-width:30px; icon-size:25px;}')
         lay.addWidget(btn, row, 1, 1, 4)
 
-    def _createHeaders(self, pv_info, lay, row):
-        col = 1
-        for header_lbl in pv_info:
-            lbl = QLabel(header_lbl, self, alignment=Qt.AlignCenter)
-            lbl.setSizePolicy(QSzPlcy.Preferred, QSzPlcy.Maximum)
-            lay.addWidget(lbl, row, col, 1, 2)
-            col += 2
-
-    def _createAccTol(self, pv_info, lay, row):
-        col = 1
-        for enum in range(0, 2):
-            pvname = self.dev_pref.substitute(propty=pv_info[enum*2])
-            edit = SiriusLineEdit(self, init_channel=pvname)
-            lay.addWidget(edit, row, col, 1, 1)
-
-            pvname = self.dev_pref.substitute(propty=pv_info[(enum*2)+1])
-            lbl = SiriusLabel(self, init_channel=pvname, keep_unit=True)
-            lbl.showUnits = True
-            lbl.setAlignment(Qt.AlignCenter)
-            lay.addWidget(lbl, row, col+1, 1, 1)
-            col += 2
-
 
 class IVUSummaryBase(IDCommonSummaryBase):
     """IVU Summary Base Widget."""
 
     MODEL_WIDTHS = (
-        ('Alarms', 4),
-        ('Interlock', 4),
         ('KParam', 6),
         ('KParam Speed', 6),
         ('Start', 4),
