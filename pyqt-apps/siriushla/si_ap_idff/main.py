@@ -138,8 +138,11 @@ class IDFFWindow(SiriusMainWindow):
         lbl_table = QLabel(
             'Correctors Current: ', self)
         self.plot = SiriusWaveformPlot()
-        self.plot.addChannel(y_channel=self.dev_pref.substitute(propty='Table-SP'))
-        self.plot.addChannel(y_channel=self.dev_pref.substitute(propty='Table-RB'))
+        self.plot.addChannel(
+            y_channel=self.dev_pref.substitute(propty='Table-SP'), name="SP")
+        self.plot.addChannel(
+            y_channel=self.dev_pref.substitute(propty='Table-RB'), name="RB")
+        self.plot.setShowLegend(True)
         
         lay.addWidget(ld_loopstate, 0, 0)
         lay.addWidget(self.sb_loopstate, 0, 1)
