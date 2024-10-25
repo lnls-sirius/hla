@@ -159,9 +159,12 @@ class IDFFWindow(SiriusMainWindow):
         self.plot = QStackedWidget()
         self.plt = {}
         for id, name in enumerate(["CH1", "CH2", "CV1", "CV2"]):
-            ch1 = QRadioButton(name)
-            vlay.addWidget(ch1)
-            self.grp.addButton(ch1, id)
+            ch = QRadioButton(name)
+            vlay.addWidget(ch)
+            self.grp.addButton(ch, id)
+
+            if name == "CH1":
+                ch.setChecked(True)
 
             self.plt[name] = SiriusWaveformPlot()
             self.plt[name].setShowLegend(True)
