@@ -8,7 +8,7 @@ from qtpy.QtWidgets import QLabel, QGridLayout, QSizePolicy as QSzPlcy, \
 from time import strftime, localtime
 import qtawesome as qta
 import numpy as np
-from pydm.widgets import PyDMPushButton, PyDMWaveformTable
+from pydm.widgets import PyDMPushButton
 
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriuspy.namesys import SiriusPVName as _PVName
@@ -18,20 +18,13 @@ from siriuspy.idff.csdev import IDFFConst, ETypes as IDFFEnums
 from ..util import connect_window
 from ..widgets import SiriusMainWindow, SiriusLabel, SiriusSpinbox, \
     PyDMStateButton, SiriusLedState, PyDMLogLabel, SiriusLedAlert, \
-    SiriusConnectionSignal
+    SiriusConnectionSignal, SiriusWaveformPlot
 from ..widgets.dialog import StatusDetailDialog
 from ..as_ps_control.control_widget.ControlWidgetFactory import \
     ControlWidgetFactory
 from ..as_ps_control import PSDetailWindow
 from .custom_widgets import ConfigLineEdit
 from .util import get_idff_icon
-
-
-class SiriusWaveformTable(PyDMWaveformTable):
-    def value_changed(self, new_waveform):
-        if isinstance(new_waveform, np.ndarray):
-            super().value_changed(new_waveform)
-
 
 class IDFFWindow(SiriusMainWindow):
     """ID FF main window."""
@@ -143,17 +136,10 @@ class IDFFWindow(SiriusMainWindow):
             self._format_timestamp_label)
         
         lbl_table = QLabel(
-            'Current Table: ', self)
-        self.table_sp = SiriusWaveformTable(
-            self, self.dev_pref.substitute(propty='Table-SP'))
-        self.table_sp.setColumnCount(4)
-        self.table_sp.columnHeaderLabels = ["CH1", "CH2", "CV1", "CV2"]
-        self.table_sp.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-        self.table_rb = SiriusWaveformTable(
-            self, self.dev_pref.substitute(propty='Table-RB'))
-        self.table_rb.setColumnCount(4)
-        self.table_rb.columnHeaderLabels = ["CH1", "CH2", "CV1", "CV2"]
-        self.table_rb.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+            'Correctors Current: ', self)
+        self.plot = SiriusWaveformPlot()
+        self.plot.addChannel(y_channel=self.dev_pref.substitute(propty='Table-SP'))
+        self.plot.addChannel(y_channel=self.dev_pref.substitute(propty='Table-RB'))
         
         lay.addWidget(ld_loopstate, 0, 0)
         lay.addWidget(self.sb_loopstate, 0, 1)
@@ -169,8 +155,7 @@ class IDFFWindow(SiriusMainWindow):
         lay.addWidget(lbl_timestamp, 5, 0)
         lay.addWidget(self.timestamp, 5, 1, 1, 2)
         lay.addWidget(lbl_table, 6, 0)
-        lay.addWidget(self.table_sp, 6, 1)
-        lay.addWidget(self.table_rb, 6, 2)
+        lay.addWidget(self.plot, 6, 1, 1, 2)
         
         return gbox
 
