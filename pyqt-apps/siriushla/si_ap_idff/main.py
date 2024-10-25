@@ -151,25 +151,25 @@ class IDFFWindow(SiriusMainWindow):
         self.timestamp_mon.new_value_signal[float].connect(
             self._format_timestamp_label)
         
-        buttonWid = QWidget()
-        vlay = QVBoxLayout(buttonWid)
-        self.grp = QButtonGroup(buttonWid)
-        self.grp.buttonClicked.connect(lambda btn: self.plot.setCurrentIndex(self.grp.id(btn)))
+        buttonGroupWid = QWidget()
+        vlay = QVBoxLayout(buttonGroupWid)
+        self.button_group = QButtonGroup(buttonGroupWid)
+        self.button_group.buttonClicked.connect(lambda btn: self.stack.setCurrentIndex(self.button_group.id(btn)))
 
-        self.plot = QStackedWidget()
-        self.plt = {}
+        self.stack = QStackedWidget()
+        self.plot_dict = {}
         for id, name in enumerate(["CH1", "CH2", "CV1", "CV2"]):
-            ch = QRadioButton(name)
-            vlay.addWidget(ch)
-            self.grp.addButton(ch, id)
+            channel_btn = QRadioButton(name)
+            vlay.addWidget(channel_btn)
+            self.button_group.addButton(channel_btn, id)
 
             if name == "CH1":
-                ch.setChecked(True)
+                channel_btn.setChecked(True)
 
-            self.plt[name] = SiriusWaveformPlot()
-            self.plt[name].setShowLegend(True)
-            self.addNewTableCurve(self.plt[name], id)
-            self.plot.addWidget(self.plt[name])
+            self.plot_dict[name] = SiriusWaveformPlot()
+            self.plot_dict[name].setShowLegend(True)
+            self.addNewTableCurve(self.plot_dict[name], id)
+            self.stack.addWidget(self.plot_dict[name])
         
         lay.addWidget(ld_loopstate, 0, 0)
         lay.addWidget(self.sb_loopstate, 0, 1)
@@ -184,8 +184,8 @@ class IDFFWindow(SiriusMainWindow):
         lay.addWidget(self.plc_counter, 4, 1, 1, 2)
         lay.addWidget(lbl_timestamp, 5, 0)
         lay.addWidget(self.timestamp, 5, 1, 1, 2)
-        lay.addWidget(buttonWid, 6, 0)
-        lay.addWidget(self.plot, 6, 1, 1, 2)
+        lay.addWidget(buttonGroupWid, 6, 0)
+        lay.addWidget(self.stack, 6, 1, 1, 2)
         
         return gbox
 
