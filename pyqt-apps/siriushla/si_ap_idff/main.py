@@ -1,14 +1,15 @@
 """Main window."""
 
-from qtpy.QtCore import Qt
+from qtpy.QtCore import Qt, Slot
 from qtpy.QtWidgets import QLabel, QGridLayout, QSizePolicy as QSzPlcy, \
     QWidget, QGroupBox, QHBoxLayout, QVBoxLayout, QPushButton, QSpacerItem, \
-    QHeaderView
+    QHeaderView, QRadioButton, QButtonGroup, QStackedWidget
 
 from time import strftime, localtime
 import qtawesome as qta
 import numpy as np
 from pydm.widgets import PyDMPushButton
+from pydm.widgets.waveformplot import WaveformCurveItem
 
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriuspy.namesys import SiriusPVName as _PVName
@@ -25,6 +26,21 @@ from ..as_ps_control.control_widget.ControlWidgetFactory import \
 from ..as_ps_control import PSDetailWindow
 from .custom_widgets import ConfigLineEdit
 from .util import get_idff_icon
+
+
+class SectionedWaveformCurveItem(WaveformCurveItem):
+
+    def __init__(self, section, **kwargs):
+        super().__init__(**kwargs)
+        self.section = section
+
+    @Slot(np.ndarray)
+    def receiveYWaveform(self, new_waveform):
+        size = len(new_waveform)/4
+        min = int(size*self.section)
+        max = int(size*(self.section+1))
+        super().receiveYWaveform(new_waveform[min:max])
+
 
 class IDFFWindow(SiriusMainWindow):
     """ID FF main window."""
@@ -135,14 +151,22 @@ class IDFFWindow(SiriusMainWindow):
         self.timestamp_mon.new_value_signal[float].connect(
             self._format_timestamp_label)
         
-        lbl_table = QLabel(
-            'Correctors Current: ', self)
-        self.plot = SiriusWaveformPlot()
-        self.plot.addChannel(
-            y_channel=self.dev_pref.substitute(propty='Table-SP'), name="SP")
-        self.plot.addChannel(
-            y_channel=self.dev_pref.substitute(propty='Table-RB'), name="RB")
-        self.plot.setShowLegend(True)
+        buttonWid = QWidget()
+        vlay = QVBoxLayout(buttonWid)
+        self.grp = QButtonGroup(buttonWid)
+        self.grp.buttonClicked.connect(lambda btn: self.plot.setCurrentIndex(self.grp.id(btn)))
+
+        self.plot = QStackedWidget()
+        self.plt = {}
+        for id, name in enumerate(["CH1", "CH2", "CV1", "CV2"]):
+            ch1 = QRadioButton(name)
+            vlay.addWidget(ch1)
+            self.grp.addButton(ch1, id)
+
+            self.plt[name] = SiriusWaveformPlot()
+            self.plt[name].setShowLegend(True)
+            self.addNewTableCurve(self.plt[name], id)
+            self.plot.addWidget(self.plt[name])
         
         lay.addWidget(ld_loopstate, 0, 0)
         lay.addWidget(self.sb_loopstate, 0, 1)
@@ -157,10 +181,29 @@ class IDFFWindow(SiriusMainWindow):
         lay.addWidget(self.plc_counter, 4, 1, 1, 2)
         lay.addWidget(lbl_timestamp, 5, 0)
         lay.addWidget(self.timestamp, 5, 1, 1, 2)
-        lay.addWidget(lbl_table, 6, 0)
+        lay.addWidget(buttonWid, 6, 0)
         lay.addWidget(self.plot, 6, 1, 1, 2)
         
         return gbox
+
+    def addNewTableCurve(self, plt, section):
+        curve1 = SectionedWaveformCurveItem(
+            section=section,
+            y_addr=self.dev_pref.substitute(propty='Table-SP'), name="SP"
+        )
+        plt._needs_redraw = False
+        plt.addCurve(curve1)
+        curve1.data_changed.connect(plt.set_needs_redraw)
+
+        curve2 = SectionedWaveformCurveItem(
+            section=section,
+            y_addr=self.dev_pref.substitute(propty='Table-RB'), name="RB"
+        )
+        plt._needs_redraw = False
+        plt.addCurve(curve2)
+        curve2.data_changed.connect(plt.set_needs_redraw)
+
+        return plt
 
     def _basicSettingsWidget(self):
         ld_configname = QLabel(
