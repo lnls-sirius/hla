@@ -1085,8 +1085,8 @@ class RFMainControl(SiriusMainWindow):
             self._handle_pwrdata_visibility)
         if self.section == 'SI':
             lay_vals.addWidget(
-                QLabel('<h4>Units</h4>', self, alignment=Qt.AlignCenter), 0, 5)
-            lay_vals.addWidget(self.cb_units, 0, 6)
+                QLabel('<h4>Units</h4>', self, alignment=Qt.AlignCenter), 0, 4)
+            lay_vals.addWidget(self.cb_units, 0, 5)
         else:
             lay_vals.addWidget(
                 QLabel('<h4>Channel</h4>', self,
@@ -1112,22 +1112,22 @@ class RFMainControl(SiriusMainWindow):
         self._pm_labels['W'] = list()
         self._pm_labels['mV'] = list()
         idx = 0
-        column = 1
+        column = 0
 
         for name, dic in data.items():
             wch, dbch, mvch = dic['W'], dic['dBm'], dic['mV']
             color = dic['color']
             row = idx+1
             if idx > 3 and idx < 8:
-                column = 4
+                column = 3
                 row = idx-3
             elif idx >= 8:
-                column = 1
+                column = 0
                 if idx == 8:
                     lay_vals.addItem(QSpacerItem(
                         0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), row, 0)
                 elif idx > 11:
-                    column = 4
+                    column = 3
                     row = idx-3
                 row += 1
 
@@ -1185,7 +1185,7 @@ class RFMainControl(SiriusMainWindow):
         # RF Inputs
         if self.section == 'SI':
             systems = ['A', 'B']
-            rows = [1, 10]
+            rows = [0, 9]
             for i in range(len(systems)):
                 lay_sys = QHBoxLayout()
                 lay_sys.setSpacing(9)
@@ -1199,9 +1199,8 @@ class RFMainControl(SiriusMainWindow):
                 cmd = f'sirius-hla-{self.section.lower()}-rf-control.py'
                 cmd = f'{cmd} -d rf-inputs -s {systems[i]}'.split(" ")
                 connect_newprocess(pb_rfinp, cmd, is_window=True, parent=self)
-                lay_sys.addWidget(pb_rfinp)
-                lay_sys.addWidget(lb_sys)
-                lay_vals.addLayout(lay_sys, rows[i], 0)
+                lay_vals.addWidget(pb_rfinp, rows[i], 0)
+                lay_vals.addWidget(lb_sys, rows[i], 1)
 
         if self.section == 'BO':
             for name in data:
