@@ -71,8 +71,10 @@ class BaseWidget(QWidget):
             lay.setContentsMargins(0, 0, 0, 0)
         return group
 
-    def _create_logbuffer_table(self, prop):
-        table = SiriusWaveformTable(self, self.get_pvname(prop))
+    def _create_logbuffer_table(self, prop, transform=None):
+        table = SiriusWaveformTable(
+            self, self.get_pvname(prop), transform=transform
+        )
         table.setObjectName('tb')
         table.setEnabled(False)
         table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
