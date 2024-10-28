@@ -1,6 +1,7 @@
 """."""
 import logging as _log
 import numpy as _np
+from datetime import datetime as _datetime
 
 from qtpy.QtCore import Qt, Slot
 from qtpy.QtGui import QColor, QBrush
@@ -744,7 +745,15 @@ class EVG(BaseWidget):
             '', gbox_buf, (ld_bufrst, self.bt_bufrst))
 
         ld_bufutc = QLabel('<b>UTC buffer</b>', self)
-        self.tb_bufutc = self._create_logbuffer_table('UTCbuffer')
+        fmt = "%d/%m/%y %H:%M:%S"
+        func = _np.vectorize(
+            lambda tstp: _datetime.fromtimestamp(tstp).strftime(fmt)
+            if tstp != 0
+            else 0
+        )  # from timestamp to datetime format
+        self.tb_bufutc = self._create_logbuffer_table(
+            prop='UTCbuffer', transform=func
+        )
         gb_bufutc = self._create_small_group(
             '', gbox_buf, (ld_bufutc, self.tb_bufutc))
 
