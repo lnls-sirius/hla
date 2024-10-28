@@ -15,7 +15,9 @@ from siriuspy.idff.csdev import IDFFConst, ETypes as IDFFEnums
 
 from ..util import connect_window
 from ..widgets import SiriusMainWindow, SiriusLabel, SiriusSpinbox, \
-    PyDMStateButton, SiriusLedState, PyDMLogLabel, SiriusLedAlert
+    PyDMStateButton, SiriusLedState, PyDMLogLabel, SiriusLedAlert, \
+    PyDMLedTwoChannel
+
 from ..widgets.dialog import StatusDetailDialog
 from ..as_ps_control.control_widget.ControlWidgetFactory import \
     ControlWidgetFactory
@@ -186,13 +188,17 @@ class IDFFWindow(SiriusMainWindow):
             lay.addWidget(ld_kparam, 1, 0)
             lay.addWidget(self._lb_kparam, 1, 1)
 
+        channel1 = self.dev_pref.substitute(propty='Polarization-Mon')
+        channel2 = _PVName(self.idname).substitute(propty='Pol-Mon')
+        led = PyDMLedTwoChannel(channel1=channel1, channel2=channel2)
         ld_polar = QLabel(
             'Polarization: ', self, alignment=Qt.AlignRight)
         self.lb_polar = SiriusLabel(
             self, self.dev_pref.substitute(propty='Polarization-Mon'))
         lay.addItem(QSpacerItem(0, 15, QSzPlcy.Ignored, QSzPlcy.Fixed), 2, 0)
         lay.addWidget(ld_polar, 3, 0)
-        lay.addWidget(self.lb_polar, 3, 1, 1, 3)
+        lay.addWidget(self.lb_polar, 3, 1)
+        lay.addWidget(led, 3, 2)
         return gbox
 
     def _logWidget(self):
