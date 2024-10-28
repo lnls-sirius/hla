@@ -1819,7 +1819,7 @@ class RFMainControl(SiriusMainWindow):
         lay_slc.addWidget(lb_phserr, 16, offset+1)
 
     def _setupAmpCurve(self, signal, timebase, key, idx, lay_checks, row, column):
-        cid = f'{key} - {signal[0]}'
+        cid = f'{key} FDL - {signal[0]}'
         color = self.prefix + signal[3]
 
         if signal[1]:
