@@ -758,7 +758,9 @@ class EVG(BaseWidget):
             '', gbox_buf, (ld_bufutc, self.tb_bufutc))
 
         ld_bufsub = QLabel('<b>Subsec buffer</b>', self)
-        self.tb_bufsub = self._create_logbuffer_table('SUBSECbuffer')
+        func = lambda vec: vec * 8e-9  # from EVG clock to seconds
+        self.tb_bufsub = self._create_logbuffer_table(
+            prop='SUBSECbuffer', transform=func)
         gb_bufsub = self._create_small_group(
             '', gbox_buf, (ld_bufsub, self.tb_bufsub))
 
