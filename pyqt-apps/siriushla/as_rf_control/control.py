@@ -11,13 +11,12 @@ from qtpy.QtWidgets import QCheckBox, QComboBox, QGridLayout, QGroupBox, \
     QHBoxLayout, QLabel, QPushButton, QRadioButton, QSizePolicy as QSzPlcy, \
     QSpacerItem, QTabWidget, QVBoxLayout, QWidget
 
-from ..util import connect_newprocess, connect_window, get_appropriate_color
+from ..util import connect_newprocess, get_appropriate_color
 from ..widgets import PyDMLed, PyDMLedMultiChannel, PyDMStateButton, \
     SiriusConnectionSignal, SiriusLabel, SiriusLedAlert, SiriusLedState, \
     SiriusMainWindow, SiriusPushButton, SiriusSpinbox, SiriusTimePlot, \
     SiriusWaveformPlot
 from .custom_widgets import RFEnblDsblButton
-from .details import SSADetailsBO
 from .util import DEFAULT_STYLESHEET, SEC_2_CHANNELS
 
 
