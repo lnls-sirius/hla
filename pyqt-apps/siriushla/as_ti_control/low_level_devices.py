@@ -14,7 +14,7 @@ from pydm.widgets import PyDMLineEdit, PyDMPushButton
 from siriuspy.search import LLTimeSearch, HLTimeSearch
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.timesys import csdev as _cstime
-from siriuspy.devices import PV as _PV
+from siriuspy.epics import PV as _PV
 
 from ..widgets import PyDMLed, PyDMStateButton, SiriusLedState, \
     SiriusEnumComboBox, SiriusLedAlert, SiriusLabel, \
