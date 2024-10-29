@@ -14,6 +14,7 @@ from pydm.widgets import PyDMLineEdit, PyDMPushButton
 from siriuspy.search import LLTimeSearch, HLTimeSearch
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.timesys import csdev as _cstime
+from siriuspy.devices import PV as _PV
 
 from ..widgets import PyDMLed, PyDMStateButton, SiriusLedState, \
     SiriusEnumComboBox, SiriusLedAlert, SiriusLabel, \
@@ -758,7 +759,9 @@ class EVG(BaseWidget):
             '', gbox_buf, (ld_bufutc, self.tb_bufutc))
 
         ld_bufsub = QLabel('<b>Subsec buffer</b>', self)
-        func = lambda vec: vec * 8e-9  # from EVG clock to seconds
+        rffreq = _PV("RF-Gen:GeneralFreq-RB").value
+        func = lambda vec: _np.round(vec * 4 / rffreq, decimals=10)  
+        # from EVG clock to seconds
         self.tb_bufsub = self._create_logbuffer_table(
             prop='SUBSECbuffer', transform=func)
         gb_bufsub = self._create_small_group(
