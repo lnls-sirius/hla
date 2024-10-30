@@ -4,7 +4,7 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGridLayout, QLabel
 
 from ...widgets import SiriusDialog, SiriusLabel, SiriusLineEdit, SiriusSpinbox
-from ..util import SEC_2_CHANNELS
+from ..util import DEFAULT_STYLESHEET, SEC_2_CHANNELS
 
 
 class LimitsDetails(SiriusDialog):
@@ -34,6 +34,7 @@ class LimitsDetails(SiriusDialog):
         self._setupUi()
 
     def _setupUi(self):
+        self.setStyleSheet(DEFAULT_STYLESHEET)
         lay = QGridLayout(self)
         lay.setAlignment(Qt.AlignTop)
         lay.setSpacing(9)

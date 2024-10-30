@@ -9,7 +9,7 @@ from qtpy.QtWidgets import QGridLayout, QGroupBox, QHBoxLayout, QLabel, \
 from ...util import connect_window
 from ...widgets import PyDMStateButton, SiriusDialog, SiriusEnumComboBox, \
     SiriusLabel, SiriusLedState, SiriusPushButton, SiriusSpinbox
-from ..util import SEC_2_CHANNELS
+from ..util import DEFAULT_STYLESHEET, SEC_2_CHANNELS
 from .limits import LimitsDetails
 
 
@@ -35,6 +35,7 @@ class LoopsDetails(SiriusDialog):
         self._setupUi()
 
     def _setupUi(self):
+        self.setStyleSheet(DEFAULT_STYLESHEET)
         lay = QVBoxLayout(self)
         lay.setAlignment(Qt.AlignTop)
         dtls = QTabWidget(self)
@@ -97,12 +98,15 @@ class LoopsDetails(SiriusDialog):
         lay.addWidget(lb_pinc, 4, 3)
 
         # Look Reference
-        pb_lookref = SiriusPushButton(
-            self, self.prefix+chs_dict['106'][1])
-        pb_lookref.setText('OFF')
         lay.addWidget(QLabel('106'), 5, 0)
         lay.addWidget(QLabel(chs_dict['106'][0]), 5, 1)
-        lay.addWidget(pb_lookref, 5, 2, alignment=Qt.AlignRight)
+        lay.addWidget(SiriusPushButton(
+            self, self.prefix+chs_dict['106'][1],
+            'OFF', pressValue=1, releaseValue=0),
+            5, 2, alignment=Qt.AlignRight)
+        lay.addWidget(SiriusLedState(
+            self, self.prefix+chs_dict['106'][1]),
+            5, 3, alignment=Qt.AlignCenter)
 
         # # Rect/Polar Mode Select
         lay.addWidget(QLabel('114'), 6, 0)
