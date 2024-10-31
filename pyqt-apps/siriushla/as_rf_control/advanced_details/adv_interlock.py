@@ -2,8 +2,8 @@
 
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QFrame, QGridLayout, QGroupBox, QHBoxLayout, \
-    QLabel, QSizePolicy as QSzPlcy, QSpacerItem, QTabWidget, QVBoxLayout, \
-    QWidget
+    QLabel, QScrollArea, QSizePolicy as QSzPlcy, QSpacerItem, QTabWidget, \
+    QVBoxLayout, QWidget
 
 from ...widgets import PyDMStateButton, SiriusDialog, SiriusLabel, \
     SiriusLedAlert, SiriusLedState, SiriusPushButton, SiriusSpinbox
@@ -185,7 +185,7 @@ class AdvancedInterlockDetails(SiriusDialog):
             if row == 4:
                 row = 0
                 column += 3
-                
+
         return lay
 
     def _setupByteMonitor(self, lay, labels, channel):
@@ -198,41 +198,54 @@ class AdvancedInterlockDetails(SiriusDialog):
         lay = QGridLayout()
         lay.setAlignment(Qt.AlignTop)
         lay.setSpacing(9)
+        scarea = QScrollArea(self)
+        scarea.setSizeAdjustPolicy(scarea.AdjustToContents)
+        scarea.setWidgetResizable(True)
+        scr_ar_wid = QWidget()
+        scarea.setWidget(scr_ar_wid)
+        scr_ar_wid.setObjectName('scrollarea')
+        scr_ar_wid.setStyleSheet(
+            '#scrollarea {background-color: transparent;}')
+        lay.addWidget(scarea)
 
-        labels = ['Diagnostics', 'Ext LLRF', 'Tx PLC', 'FDL Trigger',
+        lay_scr = QGridLayout(scr_ar_wid)
+        lay_scr.setSpacing(9)
+
+        lbs_header = ['Diagnostics', 'Ext LLRF', 'Tx PLC', 'FDL Trigger',
             'Pin Diode', 'Loops Standby']
 
         column = 2
-        for lb in labels:
-            lay.addWidget(QLabel(
-                lb, alignment=Qt.AlignCenter), 0, column)
+        for lb in lbs_header:
+            label = QLabel(lb, alignment=Qt.AlignCenter)
+            label.setStyleSheet('min-width: 8em')
+            lay_scr.addWidget(label, 0, column)
             column += 2
 
         for i in range(1, column):
             if i % 2 == 0 or i == 1:
-                lay.setColumnStretch(i, 1)
-        lay.setColumnMinimumWidth(1, 120)
+                lay_scr.setColumnStretch(i, 1)
+        lay_scr.setColumnMinimumWidth(1, 120)
 
         row = 1
         for key, val in chs_dict.items():
-            lay.addWidget(QLabel(key.split()[0]), row, 0)
-            lay.addWidget(QLabel(val[0]), row, 1)
+            lay_scr.addWidget(QLabel(key.split()[0]), row, 0)
+            lay_scr.addWidget(QLabel(val[0]), row, 1)
             column = 2
-            for bit in reversed(range(len(labels))):
+            for bit in reversed(range(len(lbs_header))):
                 lay_state = QHBoxLayout()
                 pb = PyDMStateButton(self, self.prefix+val[1]+'-Sel', bit=bit)
                 lay_state.addWidget(pb, alignment=Qt.AlignRight)
                 lay_state.addWidget(SiriusLedState(
                     self, self.prefix+val[1]+'-Sts', bit),
                     alignment=Qt.AlignLeft)
-                lay.addLayout(lay_state, row, column)
-                lay.addItem(QSpacerItem(
+                lay_scr.addLayout(lay_state, row, column)
+                lay_scr.addItem(QSpacerItem(
                     9, 0, QSzPlcy.Ignored, QSzPlcy.Fixed), row, column+1)
                 column += 2
-            lay.addWidget(SiriusPushButton(
+            lay_scr.addWidget(SiriusPushButton(
                 self, self.prefix+val[1]+'-Sel', 'All Zero', releaseValue=0),
                 row, column)
-            lay.addWidget(SiriusPushButton(
+            lay_scr.addWidget(SiriusPushButton(
                 self, self.prefix+val[1]+'-Sel', 'All One', releaseValue=63),
                 row, column+1)
             row += 1
