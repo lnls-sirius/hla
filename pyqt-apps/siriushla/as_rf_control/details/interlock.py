@@ -2,7 +2,8 @@
 
 import qtawesome as qta
 from qtpy.QtCore import Qt
-from qtpy.QtWidgets import QGridLayout, QGroupBox, QLabel, QPushButton
+from qtpy.QtWidgets import QGridLayout, QGroupBox, QLabel, QPushButton, \
+    QScrollArea, QVBoxLayout, QWidget
 
 from ...util import connect_window
 from ...widgets import SiriusDialog, SiriusLabel, SiriusLedAlert, SiriusSpinbox
@@ -26,23 +27,35 @@ class LLRFInterlockDetails(SiriusDialog):
 
     def _setupUi(self):
         self.setStyleSheet(DEFAULT_STYLESHEET)
-        lay = QGridLayout(self)
+        lay = QVBoxLayout(self)
         lay.setAlignment(Qt.AlignTop)
-        lay.setHorizontalSpacing(25)
-        lay.setVerticalSpacing(15)
 
         self.title = QLabel(
             '<h4>LLRF Interlock Details</h4>', self,
             alignment=Qt.AlignCenter)
-        lay.addWidget(self.title, 0, 0, 1, 3)
+        lay.addWidget(self.title)
+
+        scarea = QScrollArea(self)
+        scarea.setSizeAdjustPolicy(scarea.AdjustToContents)
+        scarea.setWidgetResizable(True)
+        scr_ar_wid = QWidget()
+        scarea.setWidget(scr_ar_wid)
+        scr_ar_wid.setObjectName('scrollarea')
+        scr_ar_wid.setStyleSheet(
+            '#scrollarea {background-color: transparent;}')
+        lay.addWidget(scarea)
+
+        lay_scr = QGridLayout(scr_ar_wid)
+        lay_scr.setHorizontalSpacing(25)
+        lay_scr.setVerticalSpacing(9)
 
         if self.section == 'SI':
             offset = 1
             for key, chs_dict in self.chs['LLRF Intlk Details'].items():
-                self._setupDetails(lay, key, chs_dict, offset)
+                self._setupDetails(lay_scr, key, chs_dict, offset)
                 offset += 4
         else:
-            self._setupDetails(lay, None, self.chs['LLRF Intlk Details'], 1)
+            self._setupDetails(lay_scr, None, self.chs['LLRF Intlk Details'], 1)
 
     def _setupDetails(self, lay, system, chs_dict, offset):
         if system:
@@ -56,14 +69,14 @@ class LLRFInterlockDetails(SiriusDialog):
             gbox = QGroupBox(name, self)
             lay_intlk = QGridLayout(gbox)
             lay_intlk.setAlignment(Qt.AlignTop)
-            lay_intlk.setHorizontalSpacing(9)
+            lay_intlk.setHorizontalSpacing(0)
             lay_intlk.setVerticalSpacing(0)
 
             icol = 0
             for key in dic['Status']:
                 desc = QLabel(key, self, alignment=Qt.AlignCenter)
-                desc.setStyleSheet('QLabel{min-width:1em; max-width:2.5em;}')
-                lay_intlk.addWidget(desc, 0, icol)
+                desc.setStyleSheet('QLabel{min-width:2.5em; max-width:2.5em;}')
+                lay_intlk.addWidget(desc, 0, icol, alignment=Qt.AlignCenter)
                 icol += 1
 
             labels = dic['Labels']
@@ -74,7 +87,8 @@ class LLRFInterlockDetails(SiriusDialog):
                     led.shape = led.Square
                     if key != 'Mon':
                         led.offColor = led.DarkRed
-                    lay_intlk.addWidget(led, irow, icol)
+                    lay_intlk.addWidget(led, irow, icol,
+                        alignment=Qt.AlignHCenter)
                     icol += 1
                 lbl = QLabel(label, self)
                 lbl.setStyleSheet('QLabel{min-width:12em;}')
