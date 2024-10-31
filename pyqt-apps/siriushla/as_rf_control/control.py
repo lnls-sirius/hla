@@ -8,8 +8,8 @@ from pyqtgraph import InfiniteLine, mkPen
 from qtpy.QtCore import Qt
 from qtpy.QtGui import QColor
 from qtpy.QtWidgets import QCheckBox, QComboBox, QGridLayout, QGroupBox, \
-    QHBoxLayout, QLabel, QPushButton, QRadioButton, QSizePolicy as QSzPlcy, \
-    QSpacerItem, QTabWidget, QVBoxLayout, QWidget
+    QHBoxLayout, QLabel, QPushButton, QRadioButton, QScrollArea, \
+    QSizePolicy as QSzPlcy, QSpacerItem, QTabWidget, QVBoxLayout, QWidget
 
 from ..util import connect_newprocess, get_appropriate_color
 from ..widgets import PyDMLed, PyDMLedMultiChannel, PyDMStateButton, \
@@ -49,9 +49,21 @@ class RFMainControl(SiriusMainWindow):
         self.setStyleSheet(DEFAULT_STYLESHEET)
         cwid = QWidget(self)
         self.setCentralWidget(cwid)
+        lay = QVBoxLayout(cwid)
 
         label = QLabel('<h2>'+self.section+' RF Controls - Overview</h2>',
                        self, alignment=Qt.AlignCenter)
+        scarea = QScrollArea(self)
+        scarea.setSizeAdjustPolicy(scarea.AdjustToContents)
+        scarea.setWidgetResizable(True)
+        scr_ar_wid = QWidget()
+        scarea.setWidget(scr_ar_wid)
+        scr_ar_wid.setObjectName('scrollarea')
+        scr_ar_wid.setStyleSheet(
+            '#scrollarea {background-color: transparent;}')
+
+        lay.addWidget(label)
+        lay.addWidget(scarea)
 
         gbox_intlks = QGroupBox('Status', self)
         gbox_intlks.setLayout(self._statusLayout())
@@ -101,18 +113,17 @@ class RFMainControl(SiriusMainWindow):
         gbox_graphs = QGroupBox('Graphs', self)
         gbox_graphs.setLayout(self._graphsLayout())
 
-        lay = QGridLayout(cwid)
-        lay.addWidget(label, 0, 0, 1, 4)
-        lay.addWidget(gbox_intlks, 1, 0)
-        lay.addWidget(gbox_rfgen, 2, 0)
-        lay.addWidget(wid_startctrl, 1, 1, 2, 1)
-        lay.addWidget(wid_pwrmon, 1, 2, 2, 1)
-        lay.addWidget(gbox_graphs, 1, 3, 2, 1)
-        lay.setRowStretch(1, 1)
-        lay.setColumnStretch(0, 0)
-        lay.setColumnStretch(1, 5)
-        lay.setColumnStretch(2, 3)
-        lay.setColumnStretch(3, 4)
+        lay_scr = QGridLayout(scr_ar_wid)
+        lay_scr.addWidget(gbox_intlks, 0, 0)
+        lay_scr.addWidget(gbox_rfgen, 1, 0)
+        lay_scr.addWidget(wid_startctrl, 0, 1, 2, 1)
+        lay_scr.addWidget(wid_pwrmon, 0, 2, 2, 1)
+        lay_scr.addWidget(gbox_graphs, 0, 3, 2, 1)
+        lay_scr.setRowStretch(0, 1)
+        lay_scr.setColumnStretch(0, 0)
+        lay_scr.setColumnStretch(1, 5)
+        lay_scr.setColumnStretch(2, 3)
+        lay_scr.setColumnStretch(3, 4)
 
     def _statusLayout(self):
         lay = QGridLayout()
@@ -127,7 +138,8 @@ class RFMainControl(SiriusMainWindow):
 
         # # Emergency
         if self.section == 'BO':
-            self.ld_emerg = QLabel('Emergency Stop', self, alignment=Qt.AlignRight)
+            self.ld_emerg = QLabel(
+                'Emergency Stop', self, alignment=Qt.AlignRight)
             self.ld_emerg.setStyleSheet('min-width: 6.8em;')
             self.led_emerg = SiriusLedAlert(
                 self, self.prefix+self.chs['Emergency'])
@@ -144,6 +156,7 @@ class RFMainControl(SiriusMainWindow):
             for key, val in self.chs['Sirius Intlk'].items():
                 ld_llrf = QLabel(
                     f'• {key}', alignment=Qt.AlignRight | Qt.AlignVCenter)
+                ld_llrf.setStyleSheet('min-width: 6em')
                 led_siriusintlk = SiriusLedAlert(self, self.prefix+val)
                 lay.addWidget(ld_llrf, row, 0)
                 lay.addWidget(led_siriusintlk, row, 1,
@@ -158,6 +171,7 @@ class RFMainControl(SiriusMainWindow):
 
         # # LLRF Interlock
         self.ld_intlk = QLabel('LLRF Interlock', self, alignment=Qt.AlignRight)
+        self.ld_intlk.setStyleSheet('min-width: 6em')
         self.pb_intlkdtls = QPushButton(qta.icon('fa5s.ellipsis-v'), '', self)
         self.pb_intlkdtls.setObjectName('dtls')
         self.pb_intlkdtls.setStyleSheet(
@@ -188,6 +202,7 @@ class RFMainControl(SiriusMainWindow):
         if self.section == 'SI':
             self.ld_cryosts = QLabel(
                 'Cryo Module', self, alignment=Qt.AlignRight)
+            self.ld_cryosts.setStyleSheet('min-width: 6em')
             self.pb_cryodtls = QPushButton(
                 qta.icon('fa5s.ellipsis-v'), '', self)
             self.pb_cryodtls.setObjectName('dtls')
@@ -229,6 +244,7 @@ class RFMainControl(SiriusMainWindow):
 
         # # Transmission Line
         self.ld_tlsts = QLabel('Transm. Line', self, alignment=Qt.AlignRight)
+        self.ld_tlsts.setStyleSheet('min-width: 6em')
         self.pb_tldtls = QPushButton(qta.icon('fa5s.ellipsis-v'), '', self)
         self.pb_tldtls.setObjectName('dtls')
         self.pb_tldtls.setStyleSheet(
