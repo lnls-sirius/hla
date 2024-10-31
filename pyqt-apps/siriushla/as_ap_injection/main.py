@@ -114,7 +114,9 @@ class InjCtrlWindow(SiriusMainWindow):
         lay_injsys = QGridLayout(self.wid_injsys)
         lay_injsys.setContentsMargins(0, 0, 0, 0)
         lay_injsys.addWidget(self.wid_is_summ, 0, 0)
-        self.wid_is_full = InjSysStbyControlWidget(self, is_summary=False)
+        self.wid_is_full = InjSysStbyControlWidget(
+            self, is_summary=False, handler=self.wid_is_summ._handler
+        )
         self.wid_is_full.setVisible(False)
         lay_injsys.addWidget(self.wid_is_full, 0, 0)
         self._icon_expd = qta.icon('fa5s.plus')

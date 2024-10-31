@@ -8,7 +8,7 @@ from qtpy.QtWidgets import QCheckBox, QComboBox, QGridLayout, QGroupBox, \
 from ...widgets import PyDMStateButton, SiriusDialog, SiriusLabel, \
     SiriusLedAlert, SiriusLedState, SiriusLineEdit, SiriusPushButton, \
     SiriusSpinbox, SiriusWaveformPlot
-from ..util import SEC_2_CHANNELS
+from ..util import DEFAULT_STYLESHEET, SEC_2_CHANNELS
 
 
 class FDLDetails(SiriusDialog):
@@ -35,6 +35,7 @@ class FDLDetails(SiriusDialog):
         self._setupUi()
 
     def _setupUi(self):
+        self.setStyleSheet(DEFAULT_STYLESHEET)
         lay = QVBoxLayout(self)
         lay.setAlignment(Qt.AlignTop)
 
