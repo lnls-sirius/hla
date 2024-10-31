@@ -1,8 +1,8 @@
 """Advanced details related to interlocks."""
 
 from qtpy.QtCore import Qt
-from qtpy.QtWidgets import QFrame, QGridLayout, QGroupBox, QHBoxLayout, \
-    QLabel, QScrollArea, QSizePolicy as QSzPlcy, QSpacerItem, QTabWidget, \
+from qtpy.QtWidgets import QGridLayout, QGroupBox, QHBoxLayout, QLabel, \
+    QScrollArea, QSizePolicy as QSzPlcy, QSpacerItem, QTabWidget, \
     QVBoxLayout, QWidget
 
 from ...widgets import PyDMStateButton, SiriusDialog, SiriusLabel, \
@@ -62,9 +62,8 @@ class AdvancedInterlockDetails(SiriusDialog):
         lay.setSpacing(9)
 
         # General
-        frame_gen = QFrame(self)
-        frame_gen.setFrameShape(QFrame.NoFrame)
-        frame_gen.setLayout(self._genDiagLayout(chs_dict['General']))
+        gbox_gen = QGroupBox('General Controls')
+        gbox_gen.setLayout(self._genDiagLayout(chs_dict['General']))
 
         # Levels
         gbox_lvls = QGroupBox('Levels')
@@ -146,7 +145,7 @@ class AdvancedInterlockDetails(SiriusDialog):
         lay.addWidget(gbox_inp, 0, 1)
         lay.addWidget(gbox_intlk, 0, 2)
         lay.addWidget(gbox_out, 0, 3)
-        lay.addWidget(frame_gen, 1, 0, 1, 2)
+        lay.addWidget(gbox_gen, 1, 0, 1, 2)
 
         return lay
 
