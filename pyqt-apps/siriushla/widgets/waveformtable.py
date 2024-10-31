@@ -8,6 +8,11 @@ from pydm.widgets import PyDMWaveformTable
 class SiriusWaveformTable(PyDMWaveformTable):
     """Handle bugs for None, float and int values."""
 
+    def __init__(self, parent=None, init_channel=None, transform=None):
+        """."""
+        super().__init__(parent, init_channel)
+        self.transform = transform
+
     def value_changed(self, new_waveform):
         """
         Callback invoked when the Channel value is changed.
@@ -21,4 +26,6 @@ class SiriusWaveformTable(PyDMWaveformTable):
             return
         elif isinstance(new_waveform, (float, int)):
             new_waveform = _np.array([new_waveform])
+        if self.transform is not None:
+            new_waveform = self.transform(new_waveform)
         super().value_changed(new_waveform)
