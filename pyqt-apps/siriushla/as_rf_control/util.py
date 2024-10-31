@@ -667,6 +667,18 @@ SEC_2_CHANNELS = {
                     '0': ['Slow Loop Kp', 'RA-RaBO01:RF-LLRF:SLKP'],
                 }
             },
+            'Conditioning': {
+                '200': ['Pulse Mode Enable', 'RA-RaBO01:RF-LLRF:CondEnbl'],
+                '201': ['Auto Conditioning Enable', 'RA-RaBO01:RF-LLRF:CondAuto'],
+                '202': ['Duty Cycle', 'RA-RaBO01:RF-LLRF:CondDuty'],
+                '530': ['Duty Cycle Ref', 'RA-RaBO01:RF-LLRF:CondDutyCycle-Mon'],
+                '79': ['Vacuum', 'RA-RaBO01:RF-LLRF:VacuumFastRly-Mon'],
+                'Relay': {
+                    'CGC Fast Relay': 'BO-05D:VA-CCG-RFC:FastRelay',
+                    'Relay Setpoint RB': 'BO-RA02:VA-VGC-01:Relay1:Setpoint',
+                    'Relay Hysteria RB': 'BO-RA02:VA-VGC-01:Relay1:Hyst'
+                }
+            },
             'General': {
                 '0': {
                     'Label': 'Cavity Voltage',
@@ -1146,18 +1158,6 @@ SEC_2_CHANNELS = {
             '22': ['Automatic Startup Enable', 'RA-RaBO01:RF-LLRF:AutoStartupEnbl'],
             '23': ['Command Start', 'RA-RaBO01:RF-LLRF:AutoStartupCmdStart'],
             '500': ['State Start', 'RA-RaBO01:RF-LLRF:AutoStartState-Mon']
-        },
-        'Conditioning': {
-            '200': ['Pulse Mode Enable', 'RA-RaBO01:RF-LLRF:CondEnbl'],
-            '201': ['Auto Conditioning Enable', 'RA-RaBO01:RF-LLRF:CondAuto'],
-            '202': ['Duty Cycle', 'RA-RaBO01:RF-LLRF:CondDuty'],
-            '530': ['Duty Cycle Ref', 'RA-RaBO01:RF-LLRF:CondDutyCycle-Mon'],
-            '79': ['Vacuum', 'RA-RaBO01:RF-LLRF:VacuumFastRly-Mon'],
-            'Relay': {
-                'CGC Fast Relay': 'BO-05D:VA-CCG-RFC:FastRelay',
-                'Relay Setpoint RB': 'BO-RA02:VA-VGC-01:Relay1:Setpoint',
-                'Relay Hysteria RB': 'BO-RA02:VA-VGC-01:Relay1:Hyst'
-            }
         },
         'TunDtls': {
             'General': {
@@ -2960,6 +2960,13 @@ SEC_2_CHANNELS = {
                         '0': ['Slow Loop Kp', 'RA-RaSIA01:RF-LLRF:SLKP'],
                     }
                 },
+                'Conditioning': {
+                    '200': ['Pulse Mode Enable', 'RA-RaSIA01:RF-LLRF:CondEnbl'],
+                    '201': ['Auto Conditioning Enable', 'RA-RaSIA01:RF-LLRF:CondAuto'],
+                    '202': ['Duty Cycle', 'RA-RaSIA01:RF-LLRF:CondDuty'],
+                    '530': ['Duty Cycle Ref', 'RA-RaSIA01:RF-LLRF:CondDutyCycle-Mon'],
+                    '79': ['Vacuum', 'RA-RaSIA01:RF-LLRF:VacuumFastRly-Mon'],
+                },
                 'General': {
                     '0': {
                         'Label': 'Cavity Voltage',
@@ -3261,6 +3268,13 @@ SEC_2_CHANNELS = {
                         '30': ['Open Loop Gain', 'RA-RaSIB01:RF-LLRF:OLGain'],
                         '0': ['Slow Loop Kp', 'RA-RaSIB01:RF-LLRF:SLKP'],
                     }
+                },
+                'Conditioning': {
+                    '200': ['Pulse Mode Enable', 'RA-RaSIB01:RF-LLRF:CondEnbl'],
+                    '201': ['Auto Conditioning Enable', 'RA-RaSIB01:RF-LLRF:CondAuto'],
+                    '202': ['Duty Cycle', 'RA-RaSIB01:RF-LLRF:CondDuty'],
+                    '530': ['Duty Cycle Ref', 'RA-RaSIB01:RF-LLRF:CondDutyCycle-Mon'],
+                    '79': ['Vacuum', 'RA-RaSIB01:RF-LLRF:VacuumFastRly-Mon'],
                 },
                 'General': {
                     '0': {
@@ -4006,22 +4020,6 @@ SEC_2_CHANNELS = {
                 '22': ['Automatic Startup Enable', 'RA-RaSIB01:RF-LLRF:AutoStartupEnbl'],
                 '23': ['Command Start', 'RA-RaSIB01:RF-LLRF:AutoStartupCmdStart'],
                 '500': ['State Start', 'RA-RaSIB01:RF-LLRF:AutoStartState-Mon']
-            }
-        },
-        'Conditioning': {
-            'A': {
-                '200': ['Pulse Mode Enable', 'RA-RaSIA01:RF-LLRF:CondEnbl'],
-                '201': ['Auto Conditioning Enable', 'RA-RaSIA01:RF-LLRF:CondAuto'],
-                '202': ['Duty Cycle', 'RA-RaSIA01:RF-LLRF:CondDuty'],
-                '530': ['Duty Cycle Ref', 'RA-RaSIA01:RF-LLRF:CondDutyCycle-Mon'],
-                '79': ['Vacuum', 'RA-RaSIA01:RF-LLRF:VacuumFastRly-Mon'],
-            },
-            'B': {
-                '200': ['Pulse Mode Enable', 'RA-RaSIB01:RF-LLRF:CondEnbl'],
-                '201': ['Auto Conditioning Enable', 'RA-RaSIB01:RF-LLRF:CondAuto'],
-                '202': ['Duty Cycle', 'RA-RaSIB01:RF-LLRF:CondDuty'],
-                '530': ['Duty Cycle Ref', 'RA-RaSIB01:RF-LLRF:CondDutyCycle-Mon'],
-                '79': ['Vacuum', 'RA-RaSIB01:RF-LLRF:VacuumFastRly-Mon'],
             }
         },
         'TunDtls': {

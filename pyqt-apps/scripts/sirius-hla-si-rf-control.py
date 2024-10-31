@@ -5,17 +5,15 @@
 import argparse as _argparse
 import sys
 
-from siriuspy.envars import VACA_PREFIX
-
 from siriushla.as_rf_control.advanced_details import ADCDACDetails, \
-    AutoStartDetails, CalEqDetails, CalSysDetails, ConditioningDetails, \
-    HardwareDetails, LoopsDetails, RampsDetails, RFInputsDetails, \
-    TuningDetails
+    AutoStartDetails, CalEqDetails, CalSysDetails, HardwareDetails, \
+    LoopsDetails, RampsDetails, RFInputsDetails, TuningDetails
 from siriushla.as_rf_control.control import RFMainControl
 from siriushla.as_rf_control.details import CavityStatusDetails, FDLDetails, \
     LLRFInterlockDetails, SlowLoopErrorDetails, SlowLoopParametersDetails, \
     SSADetailsSI, TempMonitor, TransmLineStatusDetails
 from siriushla.sirius_application import SiriusApplication
+from siriuspy.envars import VACA_PREFIX
 
 parser = _argparse.ArgumentParser(
     description="Run RF Control Interface.")
@@ -35,7 +33,6 @@ specific_system_windows = {
     'auto-start': AutoStartDetails,
     'cal-eq': CalEqDetails,
     'cal-sys': CalSysDetails,
-    'conditioning': ConditioningDetails,
     'hardware': HardwareDetails,
     'loops': LoopsDetails,
     'ramps': RampsDetails,

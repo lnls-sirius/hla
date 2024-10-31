@@ -922,8 +922,6 @@ class RFMainControl(SiriusMainWindow):
             self._addDetailButton(
                 'Auto Start', 'auto-start', systems[i], buttons)
             self._addDetailButton(
-                'Conditioning', 'conditioning', systems[i], buttons)
-            self._addDetailButton(
                 'Tuning', 'tuning', systems[i], buttons)
             self._addDetailButton(
                 'Cal Sys', 'cal-sys', systems[i], buttons)

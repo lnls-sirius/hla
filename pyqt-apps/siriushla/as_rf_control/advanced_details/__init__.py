@@ -4,7 +4,6 @@ from .adv_interlock import AdvancedInterlockDetails
 from .auto_start import AutoStartDetails
 from .cal_eq import CalEqDetails
 from .cal_sys import CalSysDetails
-from .conditioning import ConditioningDetails
 from .hardware import HardwareDetails
 from .loops import LoopsDetails
 from .ramps import RampsDetails
