@@ -196,16 +196,16 @@ class LoopsDetails(SiriusDialog):
 
         if rect_or_polar == 'Rect':
             extra_addr = '30' if self.section == 'SI' else ''
-            grp_1 = 'Slow'
-            grp_1_addrs = ['100', '110', '13', '1', '0']
-            grp_2 = 'Fast'
-            grp_2_addrs = ['115', '111', '124', '119', '118']
+            grp_dict = {
+                'Slow': ['100', '110', '13', '1', '0'],
+                'Fast': ['115', '111', '124', '119', '118']
+            }
         else:
             extra_addr = '527'
-            grp_1 = 'Amp'
-            grp_1_addrs = ['116', '112', '121', '120']
-            grp_2 = 'Phase'
-            grp_2_addrs = ['117', '113', '123', '122']
+            grp_dict = {
+                'Amp': ['116', '112', '121', '120'],
+                'Phase': ['117', '113', '123', '122']
+            }
 
         title_lay = QHBoxLayout()
         title_lay.addWidget(QLabel(
@@ -216,29 +216,30 @@ class LoopsDetails(SiriusDialog):
         rect_lay = self._statisticsLayout(
             self.syst_dict, True, rect_or_polar, extra_addr)
 
-        grp_1_lay = QVBoxLayout()
-        grp_1_lay.setAlignment(Qt.AlignTop)
-        grp_1_lay.addLayout(
-            self._controlLayout(chs_dict[grp_1]['Control'], grp_1_addrs))
-        grp_1_lay.addItem(QSpacerItem(0, 20, QSzPlcy.Ignored, QSzPlcy.Fixed))
-        grp_1_lay.addLayout(self._statisticsLayout(chs_dict[grp_1], False))
-        gbox_grp_1 = QGroupBox(f'{grp_1} Loop', self)
-        gbox_grp_1.setLayout(grp_1_lay)
+        grps = QTabWidget(self)
+        grps.setObjectName(self.section+'Tab')
+        grps.setStyleSheet(
+            "#"+self.section+'Tab'+"::pane {"
+            "    border-left: 2px solid gray;"
+            "    border-bottom: 2px solid gray;"
+            "    border-right: 2px solid gray;}")
 
-        grp_2_lay = QVBoxLayout()
-        grp_2_lay.setAlignment(Qt.AlignTop)
-        grp_2_lay.addLayout(
-            self._controlLayout(chs_dict[grp_2]['Control'], grp_2_addrs))
-        grp_2_lay.addItem(QSpacerItem(0, 20, QSzPlcy.Ignored, QSzPlcy.Fixed))
-        grp_2_lay.addLayout(self._statisticsLayout(chs_dict[grp_2], False))
-        gbox_grp_2 = QGroupBox(f'{grp_2} Loop', self)
-        gbox_grp_2.setLayout(grp_2_lay)
+        for grp_name, addrs in grp_dict.items():
+            grp_lay = QVBoxLayout()
+            grp_lay.setAlignment(Qt.AlignTop)
+            grp_lay.addLayout(
+                self._controlLayout(chs_dict[grp_name]['Control'], addrs))
+            grp_lay.addItem(QSpacerItem(0, 20, QSzPlcy.Ignored, QSzPlcy.Fixed))
+            grp_lay.addLayout(
+                self._statisticsLayout(chs_dict[grp_name], False))
+            wid_grp = QWidget()
+            wid_grp.setLayout(grp_lay)
+            grps.addTab(wid_grp, f'{grp_name} Loop')
 
         lay.addLayout(title_lay)
         lay.addItem(QSpacerItem(0, 20, QSzPlcy.Ignored, QSzPlcy.Fixed))
         lay.addLayout(rect_lay)
-        lay.addWidget(gbox_grp_1)
-        lay.addWidget(gbox_grp_2)
+        lay.addWidget(grps)
 
         return lay
 
