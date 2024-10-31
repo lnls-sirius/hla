@@ -262,8 +262,8 @@ class SSACurrentsDetails(SiriusDialog):
         row = 0
         column = 0
         if self.section == 'SI':
+            # Heat Sinks
             for i in range(2, 9, 2):
-                # Heat Sinks
                 label = QLabel(
                     f'<h4>Heat Sink {i}</h4>', alignment=Qt.AlignCenter)
                 label.setStyleSheet("min-width:6em;")
@@ -279,27 +279,23 @@ class SSACurrentsDetails(SiriusDialog):
                 lay.addWidget(lb_2, row+2, column)
 
                 column += 1
-                if column == 1:
-                    if row == 0:
-                        # Pre Amp
-                        label = QLabel(
-                            '<h4>PreAmp</h4>', alignment=Qt.AlignCenter)
-                        label.setStyleSheet("min-width:6em;")
-                        lb_1 = SiriusLabel(self, self._substitute_macros(
-                            self.prefix+chs_dict['PreAmp'], curr_num='1'))
-                        lb_1.showUnits = True
-                        lb_2 = SiriusLabel(self, self._substitute_macros(
-                            self.prefix+chs_dict['PreAmp'], curr_num='2'))
-                        lb_2.showUnits = True
-
-                        lay.addWidget(label, row, column)
-                        lay.addWidget(lb_1, row+1, column)
-                        lay.addWidget(lb_2, row+2, column)
-                    column += 1
-
-                if column > 2:
+                if column > 1:
                     row += 3
                     column = 0
+
+            # Pre Amp
+            label = QLabel('<h4>PreAmp</h4>', alignment=Qt.AlignCenter)
+            lb_1 = SiriusLabel(self, self._substitute_macros(
+                self.prefix+chs_dict['PreAmp'], curr_num='1'))
+            lb_1.showUnits = True
+            lb_2 = SiriusLabel(self, self._substitute_macros(
+                self.prefix+chs_dict['PreAmp'], curr_num='2'))
+            lb_2.showUnits = True
+
+            lay.addWidget(label, row, 0, 1, 2)
+            lay.addWidget(lb_1, row+1, 0, 1, 2)
+            lay.addWidget(lb_2, row+2, 0, 1, 2)
+
         else:
             # Heat Sinks
             hs_nums = [1, 4, 3, 6]
@@ -384,8 +380,8 @@ class SSACurrentsDetails(SiriusDialog):
             lay.addWidget(QLabel(
                 f'<h4>Rack {i}</h4>', alignment=Qt.AlignCenter), row, column)
             lay.addWidget(lb_total, row+1, column)
-            column += 2
-            if column > 2:
+            column += 1
+            if column > 1:
                 row += 2
                 column = 0
 
@@ -405,8 +401,8 @@ class SSACurrentsDetails(SiriusDialog):
         lb_total.rules = rule
 
         lay.addWidget(QLabel(
-            '<h4>Total</h4>', alignment=Qt.AlignCenter), row, 1)
-        lay.addWidget(lb_total, row+1, 1, alignment=Qt.AlignCenter)
+            '<h4>Total</h4>', alignment=Qt.AlignCenter), row, 0, 1, 2)
+        lay.addWidget(lb_total, row+1, 0, 1, 2, alignment=Qt.AlignCenter)
 
         return lay
 
