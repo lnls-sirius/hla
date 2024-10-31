@@ -146,7 +146,7 @@ class AdvancedInterlockDetails(SiriusDialog):
         lay.addWidget(gbox_inp, 0, 1)
         lay.addWidget(gbox_intlk, 0, 2)
         lay.addWidget(gbox_out, 0, 3)
-        lay.addWidget(frame_gen, 1, 0)
+        lay.addWidget(frame_gen, 1, 0, 1, 2)
 
         return lay
 
@@ -172,16 +172,20 @@ class AdvancedInterlockDetails(SiriusDialog):
         # Manual Interlock, End Switches and Logic Inversions
         keys = ['Manual', 'EndSw', 'Beam Inv',
             'Vacuum Inv', 'SSA Bypass', 'Bypass']
-        row = 3
+        row = 2
+        column = 0
         for key in keys:
-            lay.addWidget(QLabel(chs_dict[key][0]), row, 0)
+            lay.addWidget(QLabel(chs_dict[key][0]), row, column)
             lay.addWidget(PyDMStateButton(
-                self, self.prefix+chs_dict[key][1]+'-Sel'), row, 1)
+                self, self.prefix+chs_dict[key][1]+'-Sel'), row, column+1)
             lay.addWidget(SiriusLedState(
                 self, self.prefix+chs_dict[key][1]+'-Sts'),
-                row, 2, alignment=Qt.AlignCenter)
+                row, column+2, alignment=Qt.AlignCenter)
             row += 1
-
+            if row == 4:
+                row = 0
+                column += 3
+                
         return lay
 
     def _setupByteMonitor(self, lay, labels, channel):
