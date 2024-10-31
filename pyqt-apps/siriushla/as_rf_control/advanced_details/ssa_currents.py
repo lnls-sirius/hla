@@ -2,7 +2,8 @@
 
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGridLayout, QGroupBox, QHBoxLayout, QLabel, \
-    QSizePolicy as QSzPlcy, QSpacerItem, QTabWidget, QVBoxLayout, QWidget
+    QScrollArea, QSizePolicy as QSzPlcy, QSpacerItem, QTabWidget, \
+    QVBoxLayout, QWidget
 
 from ...widgets import SiriusDialog, SiriusLabel, SiriusLedState, SiriusSpinbox
 from ..util import DEFAULT_STYLESHEET, SEC_2_CHANNELS
@@ -61,7 +62,19 @@ class SSACurrentsDetails(SiriusDialog):
     def _setupDiagLay(self):
         lay = QGridLayout()
         lay.setAlignment(Qt.AlignTop)
-        lay.setSpacing(18)
+
+        scarea = QScrollArea(self)
+        scarea.setSizeAdjustPolicy(scarea.AdjustToContents)
+        scarea.setWidgetResizable(True)
+        scr_ar_wid = QWidget()
+        scarea.setWidget(scr_ar_wid)
+        scr_ar_wid.setObjectName('scrollarea')
+        scr_ar_wid.setStyleSheet(
+            '#scrollarea {background-color: transparent;}')
+        lay.addWidget(scarea)
+
+        lay_scr = QGridLayout(scr_ar_wid)
+        lay_scr.setSpacing(18)
 
         row = 0
         column = 0
@@ -73,7 +86,7 @@ class SSACurrentsDetails(SiriusDialog):
                 elif column == 4:
                     row_label = 'right'
 
-                lay.addLayout(self._setupHeatSinkLay(
+                lay_scr.addLayout(self._setupHeatSinkLay(
                     i, self.syst_dict['HeatSink'], row_label), row, column)
 
                 column += 1
@@ -81,17 +94,17 @@ class SSACurrentsDetails(SiriusDialog):
                     if row == 0:
                         gbox_preamp = QGroupBox('Pre Amplifiers')
                         gbox_preamp.setLayout(self._setupPreAmpLay(self.syst_dict['PreAmp']))
-                        lay.addWidget(gbox_preamp, row, column)
+                        lay_scr.addWidget(gbox_preamp, row, column)
                     column += 1
                 elif column == 5:
-                    lay.addItem(QSpacerItem(
+                    lay_scr.addItem(QSpacerItem(
                         0, 9, QSzPlcy.Ignored, QSzPlcy.Fixed), row+1, 0)
                     column = 0
                     row += 2
 
             gbox_total = QGroupBox('Total Current')
             gbox_total.setLayout(self._setupTotalLay())
-            lay.addWidget(gbox_total, 2, 2)
+            lay_scr.addWidget(gbox_total, 2, 2)
         else:
             for i in range(1, 7):
                 row_label = ''
@@ -100,7 +113,7 @@ class SSACurrentsDetails(SiriusDialog):
                 elif column == 6:
                     row_label = 'right'
 
-                lay.addLayout(self._setupHeatSinkLay(
+                lay_scr.addLayout(self._setupHeatSinkLay(
                     i, self.syst_dict['HeatSink'], row_label),
                     row, column, 2, 1)
 
@@ -109,10 +122,10 @@ class SSACurrentsDetails(SiriusDialog):
                     # PreAmp
                     gbox_preamp = QGroupBox('Pre Amplifiers')
                     gbox_preamp.setLayout(self._setupPreAmpLay(self.syst_dict['PreAmp']))
-                    lay.addWidget(gbox_preamp, row, column)
+                    lay_scr.addWidget(gbox_preamp, row, column)
 
                     # Power
-                    lay.addLayout(self._setupPowerLay(
+                    lay_scr.addLayout(self._setupPowerLay(
                         self.syst_dict['Pwr']), row+1, column)
 
                     # Total Current
@@ -123,7 +136,7 @@ class SSACurrentsDetails(SiriusDialog):
                     lay_total.addWidget(QLabel(
                         '<h4>Total Current</h4>', alignment=Qt.AlignCenter))
                     lay_total.addWidget(lb_total, alignment=Qt.AlignCenter)
-                    lay.addLayout(lay_total, row+2, column)
+                    lay_scr.addLayout(lay_total, row+2, column)
 
                     column += 1
 
@@ -221,8 +234,10 @@ class SSACurrentsDetails(SiriusDialog):
 
                 lb_curr_1 = SiriusLabel(self, pv_curr_1)
                 lb_curr_1.showUnits = True
+                lb_curr_1.setStyleSheet('SiriusLabel{min-width:4.5em;}')
                 lb_curr_2 = SiriusLabel(self, pv_curr_2)
                 lb_curr_2.showUnits = True
+                lb_curr_2.setStyleSheet('SiriusLabel{min-width:4.5em;}')
 
                 if row_label == 'left':
                     lay.addWidget(QLabel(
@@ -307,10 +322,12 @@ class SSACurrentsDetails(SiriusDialog):
                     self.prefix+chs_dict['HS'], hs_num=hs_num, m_num=m_nums[i],
                     curr_num='1'))
                 lb_1.showUnits = True
+                lb_1.setStyleSheet('SiriusLabel{min-width:4.5em;}')
                 lb_2 = SiriusLabel(self, self._substitute_macros(
                     self.prefix+chs_dict['HS'], hs_num=hs_num, m_num=m_nums[i],
                     curr_num='2'))
                 lb_2.showUnits = True
+                lb_2.setStyleSheet('SiriusLabel{min-width:4.5em;}')
 
                 lay.addWidget(QLabel(
                     f'<h4>Heat Sink {hs_num}</h4>',
@@ -420,8 +437,9 @@ class SSACurrentsDetails(SiriusDialog):
 
         row = 0
         for _, lst in self.syst_dict['Offsets'].items():
-            lay_off.addWidget(QLabel(
-                f'<h4>{lst[0]}</h4>', alignment=Qt.AlignCenter), row, 0)
+            lb_off = QLabel(f'<h4>{lst[0]}</h4>', alignment=Qt.AlignCenter)
+            lb_off.setStyleSheet('QLabel{min-width:12em;}')
+            lay_off.addWidget(lb_off, row, 0)
             lay_off.addWidget(SiriusSpinbox(
                 self, self._substitute_macros(self.prefix+lst[1])), row, 2)
             row += 1

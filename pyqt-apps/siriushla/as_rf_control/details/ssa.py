@@ -481,7 +481,7 @@ class SSADetailsBO(SiriusDialog):
 
         lay_temp.addWidget(QLabel(
             '<h4>PreAmp 01</h4>', alignment=Qt.AlignCenter), row, 0)
-        lay_temp.addWidget(lb_temp, row, 1)
+        lay_temp.addWidget(lb_temp, row, 1, alignment=Qt.AlignCenter)
         lay_temp.addWidget(QLabel('-', alignment=Qt.AlignCenter), row, 2)
         lay_temp.addWidget(SiriusLedState(
             self, self.prefix+self.syst_dict['PreAmp']['PT-100']),
