@@ -6,7 +6,8 @@ from qtpy.QtWidgets import QGridLayout, QGroupBox, QHBoxLayout, QLabel, \
     QVBoxLayout, QWidget
 
 from ...widgets import PyDMStateButton, SiriusDialog, SiriusLabel, \
-    SiriusLedAlert, SiriusLedState, SiriusPushButton, SiriusSpinbox
+    SiriusLedAlert, SiriusLedState, SiriusLineEdit, SiriusPushButton, \
+    SiriusSpinbox
 from ..util import DEFAULT_STYLESHEET, SEC_2_CHANNELS
 
 
@@ -218,7 +219,7 @@ class AdvancedInterlockDetails(SiriusDialog):
             '<h4>Current</h4>',
             alignment=Qt.AlignRight | Qt.AlignVCenter), 1, 0)
         lay.addWidget(lb_curr, 1, 1, alignment=Qt.AlignCenter)
-        lay.addWidget(SiriusSpinbox(
+        lay.addWidget(SiriusLineEdit(
             self, self.prefix+chs_dict['Curr Delta']+'-SP'),
             1, 2, alignment=Qt.AlignCenter)
         lay.addWidget(lb_delta, 1, 3, alignment=Qt.AlignCenter)
@@ -260,11 +261,11 @@ class AdvancedInterlockDetails(SiriusDialog):
                 alignment=Qt.AlignRight | Qt.AlignVCenter), row, 0)
             lay.addWidget(lb_value, row, 1)
             lay.addLayout(lay_enable, row, 2)
-            lay.addWidget(SiriusSpinbox(
+            lay.addWidget(SiriusLineEdit(
                 self, self.prefix+chs['Coeff']+'-SP'),
                 row, 3, alignment=Qt.AlignCenter)
             lay.addWidget(lb_coeff, row, 4, alignment=Qt.AlignCenter)
-            lay.addWidget(SiriusSpinbox(
+            lay.addWidget(SiriusLineEdit(
                 self, self.prefix+chs['Offset']+'-SP'),
                 row, 5, alignment=Qt.AlignCenter)
             lay.addWidget(lb_ofs, row, 6, alignment=Qt.AlignCenter)
