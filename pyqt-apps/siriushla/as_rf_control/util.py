@@ -4153,6 +4153,31 @@ SEC_2_CHANNELS = {
                         'Out': 'RA-RaSIA01:RF-LLRF:GPIOOut-Mon'
                     }
                 },
+                'Dynamic': {
+                    'Curr': 'RA-RaSIA01:RF-LLRF:Current-Mon',
+                    'Curr Delta': 'RA-RaSIA01:RF-LLRF:CurrentDelta',
+                    'Rev Cav': {
+                        'Label': 'Rev Cav',
+                        'Value': 'RA-RaSIA01:RF-LLRF:LimRevCav-RB',
+                        'Enable': 'RA-RaSIA01:RF-LLRF:LimRevCavEn',
+                        'Coeff': 'RA-RaSIA01:RF-LLRF:LimRevCavCoeff',
+                        'Offset': 'RA-RaSIA01:RF-LLRF:LimRevCavOffset'
+                    },
+                    'Fwd Cav': {
+                        'Label': 'Fwd Cav',
+                        'Value': 'RA-RaSIA01:RF-LLRF:LimFwdCav-RB',
+                        'Enable': 'RA-RaSIA01:RF-LLRF:LimFwdCavEn',
+                        'Coeff': 'RA-RaSIA01:RF-LLRF:LimFwdCavCoeff',
+                        'Offset': 'RA-RaSIA01:RF-LLRF:LimFwdCavOffset'
+                    },
+                    'Quench': {
+                        'Label': 'Quench Cond 1 Ratio',
+                        'Value': 'RA-RaSIA01:RF-LLRF:QuenchCond1RvRatio-RB',
+                        'Enable': 'RA-RaSIA01:RF-LLRF:QuenchCond1RvRatioEn',
+                        'Coeff': 'RA-RaSIA01:RF-LLRF:QuenchCond1RvRatioCoeff',
+                        'Offset': 'RA-RaSIA01:RF-LLRF:QuenchCond1RvRatioOffset'
+                    },
+                },
                 'Bypass': {
                     '806': ['Rev SSA 1', 'RA-RaSIA01:RF-LLRF:FIMRevSSA1'],
                     '807': ['Rev SSA 2', 'RA-RaSIA01:RF-LLRF:FIMRevSSA2'],
@@ -4220,6 +4245,31 @@ SEC_2_CHANNELS = {
                         'Intlk': 'RA-RaSIB01:RF-LLRF:GPIOIntlk-Mon',
                         'Out': 'RA-RaSIB01:RF-LLRF:GPIOOut-Mon'
                     }
+                },
+                'Dynamic': {
+                    'Curr': 'RA-RaSIB01:RF-LLRF:Current-Mon',
+                    'Curr Delta': 'RA-RaSIB01:RF-LLRF:CurrentDelta',
+                    'Rev Cav': {
+                        'Label': 'Rev Cav',
+                        'Value': 'RA-RaSIB01:RF-LLRF:LimRevCav-RB',
+                        'Enable': 'RA-RaSIB01:RF-LLRF:LimRevCavEn',
+                        'Coeff': 'RA-RaSIB01:RF-LLRF:LimRevCavCoeff',
+                        'Offset': 'RA-RaSIB01:RF-LLRF:LimRevCavOffset'
+                    },
+                    'Fwd Cav': {
+                        'Label': 'Fwd Cav',
+                        'Value': 'RA-RaSIB01:RF-LLRF:LimFwdCav-RB',
+                        'Enable': 'RA-RaSIB01:RF-LLRF:LimFwdCavEn',
+                        'Coeff': 'RA-RaSIB01:RF-LLRF:LimFwdCavCoeff',
+                        'Offset': 'RA-RaSIB01:RF-LLRF:LimFwdCavOffset'
+                    },
+                    'Quench': {
+                        'Label': 'Quench Cond 1 Ratio',
+                        'Value': 'RA-RaSIB01:RF-LLRF:QuenchCond1RvRatio-RB',
+                        'Enable': 'RA-RaSIB01:RF-LLRF:QuenchCond1RvRatioEn',
+                        'Coeff': 'RA-RaSIB01:RF-LLRF:QuenchCond1RvRatioCoeff',
+                        'Offset': 'RA-RaSIB01:RF-LLRF:QuenchCond1RvRatioOffset'
+                    },
                 },
                 'Bypass': {
                     '806': ['Rev SSA 1', 'RA-RaSIB01:RF-LLRF:FIMRevSSA1'],
