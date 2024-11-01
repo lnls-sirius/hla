@@ -758,9 +758,9 @@ class RFMainControl(SiriusMainWindow):
         self.led_rmptrig.offColor = PyDMLed.Red
 
         self.cb_rmpincts = SiriusSpinbox(
-            self, self.prefix+'RA-RaBO01:RF-LLRF:RmpIncTime-SP')
+            self, self.prefix+'RA-RaBO01:RF-LLRF:RmpIncTimeTs-SP')
         self.lb_rmpincts = SiriusLabel(
-            self, self.prefix+'RA-RaBO01:RF-LLRF:RmpIncTime-RB')
+            self, self.prefix+'RA-RaBO01:RF-LLRF:RmpIncTimeTs-RB')
         self.lb_rmpincts.showUnits = True
 
         self.sb_rmpts1 = SiriusSpinbox(
