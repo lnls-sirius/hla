@@ -47,8 +47,7 @@ class LoopsDetails(SiriusDialog):
             "    border-right: 2px solid gray;}")
 
         wid_controls = QWidget(self)
-        wid_controls.setLayout(
-            self._loopsControlLayout(self.syst_dict['Control']))
+        wid_controls.setLayout(self._loopsControlLayout())
         dtls.addTab(wid_controls, 'Loops Control')
 
         wid_iq = QWidget(self)
@@ -63,9 +62,24 @@ class LoopsDetails(SiriusDialog):
             f'<h4>{self.title}</h4>', alignment=Qt.AlignCenter))
         lay.addWidget(dtls)
 
-    def _loopsControlLayout(self, chs_dict):
-        lay = QGridLayout()
+    def _loopsControlLayout(self):
+        lay = QVBoxLayout()
         lay.setAlignment(Qt.AlignTop)
+        lay.setSpacing(9)
+
+        gbox_gen = QGroupBox('General Controls')
+        gbox_gen.setLayout(self._setupGeneralControlsLayout(self.syst_dict['Control']))
+
+        gbox_cond = QGroupBox('Conditioning')
+        gbox_cond.setLayout(self._setupConditioningLayout(self.syst_dict['Conditioning']))
+
+        lay.addWidget(gbox_gen)
+        lay.addWidget(gbox_cond)
+
+        return lay
+
+    def _setupGeneralControlsLayout(self, chs_dict):
+        lay = QGridLayout()
         lay.setSpacing(9)
 
         # Amp Loop Ref
@@ -79,7 +93,7 @@ class LoopsDetails(SiriusDialog):
         lb_vinc = SiriusLabel(self, self.prefix+chs_dict['29'][1]+'-RB',
             alignment=Qt.AlignCenter)
         lb_vinc.showUnits = True
-        lay.addWidget(QLabel('29'), 3, 0)
+        lay.addWidget(QLabel('29', alignment=Qt.AlignCenter), 3, 0)
         lay.addWidget(QLabel(chs_dict['29'][0]), 3, 1)
         lay.addWidget(SiriusEnumComboBox(
             self, self.prefix+chs_dict['29'][1]+'-SP'),
@@ -90,7 +104,7 @@ class LoopsDetails(SiriusDialog):
         lb_pinc = SiriusLabel(self, self.prefix+chs_dict['28'][1]+'-RB',
             alignment=Qt.AlignCenter)
         lb_pinc.showUnits = True
-        lay.addWidget(QLabel('28'), 4, 0)
+        lay.addWidget(QLabel('28', alignment=Qt.AlignCenter), 4, 0)
         lay.addWidget(QLabel(chs_dict['28'][0]), 4, 1)
         lay.addWidget(SiriusEnumComboBox(
             self, self.prefix+chs_dict['28'][1]+'-SP'),
@@ -98,7 +112,7 @@ class LoopsDetails(SiriusDialog):
         lay.addWidget(lb_pinc, 4, 3)
 
         # Look Reference
-        lay.addWidget(QLabel('106'), 5, 0)
+        lay.addWidget(QLabel('106', alignment=Qt.AlignCenter), 5, 0)
         lay.addWidget(QLabel(chs_dict['106'][0]), 5, 1)
         lay.addWidget(SiriusPushButton(
             self, self.prefix+chs_dict['106'][1],
@@ -109,7 +123,7 @@ class LoopsDetails(SiriusDialog):
             5, 3, alignment=Qt.AlignCenter)
 
         # # Rect/Polar Mode Select
-        lay.addWidget(QLabel('114'), 6, 0)
+        lay.addWidget(QLabel('114', alignment=Qt.AlignCenter), 6, 0)
         lay.addWidget(QLabel(chs_dict['114'][0]), 6, 1)
         lay.addWidget(SiriusEnumComboBox(
             self, self.prefix+chs_dict['114'][1]+'-Sel'),
@@ -118,7 +132,7 @@ class LoopsDetails(SiriusDialog):
             alignment=Qt.AlignCenter), 6, 3)
 
         # Quadrant Selection
-        lay.addWidget(QLabel('107'), 7, 0)
+        lay.addWidget(QLabel('107', alignment=Qt.AlignCenter), 7, 0)
         lay.addWidget(QLabel(chs_dict['107'][0]), 7, 1)
         lay.addWidget(SiriusEnumComboBox(
             self, self.prefix+chs_dict['107'][1]+'-Sel'),
@@ -149,7 +163,7 @@ class LoopsDetails(SiriusDialog):
         self._setupLabelEdit(lay, chs_dict, '30', 3, 5)
 
         # Phase Correction Control
-        lay.addWidget(QLabel('31'), 4, 5)
+        lay.addWidget(QLabel('31', alignment=Qt.AlignCenter), 4, 5)
         lay.addWidget(QLabel(chs_dict['31'][0]), 4, 6)
         lay.addWidget(PyDMStateButton(
             self, self.prefix+chs_dict['31'][1]+'-Sel'), 4, 7)
@@ -161,7 +175,7 @@ class LoopsDetails(SiriusDialog):
         lb_80 = SiriusLabel(self, self.prefix+chs_dict['80'][1],
             alignment=Qt.AlignCenter)
         lb_80.showUnits = True
-        lay.addWidget(QLabel('80'), 5, 5)
+        lay.addWidget(QLabel('80', alignment=Qt.AlignCenter), 5, 5)
         lay.addWidget(QLabel(chs_dict['80'][0]), 5, 6)
         lay.addWidget(lb_80, 5, 8)
 
@@ -169,7 +183,7 @@ class LoopsDetails(SiriusDialog):
         lb_81 = SiriusLabel(self, self.prefix+chs_dict['81'][1],
             alignment=Qt.AlignCenter)
         lb_81.showUnits = True
-        lay.addWidget(QLabel('81'), 6, 5)
+        lay.addWidget(QLabel('81', alignment=Qt.AlignCenter), 6, 5)
         lay.addWidget(QLabel(chs_dict['81'][0]), 6, 6)
         lay.addWidget(lb_81, 6, 8)
 
@@ -178,15 +192,74 @@ class LoopsDetails(SiriusDialog):
 
         return lay
 
+    def _setupConditioningLayout(self, chs_dict):
+        lay = QGridLayout(self)
+        lay.setAlignment(Qt.AlignTop)
+        lay.setSpacing(9)
+
+        # Pulse Enable
+        self._setupLedState(lay, chs_dict, '200', 0, True)
+
+        # Auto Cond Enable
+        self._setupLedState(lay, chs_dict, '201', 1, True)
+
+        # Vacuum
+        self._setupLedState(lay, chs_dict, '79', 2, False)
+
+        # Duty Cycle
+        self._setupLabelEdit(lay, chs_dict, '202', 0, 4)
+
+        # Duty Cycle RB
+        lb_condfreq = SiriusLabel(self, self.prefix+chs_dict['530'][1])
+        lb_condfreq.showUnits = True
+        lay.addWidget(QLabel('530', alignment=Qt.AlignCenter), 1, 4)
+        lay.addWidget(QLabel(chs_dict['530'][0]), 1, 5)
+        lay.addWidget(lb_condfreq, 1, 7, alignment=Qt.AlignCenter)
+
+        row = 2
+        if self.section == 'BO':
+            relay_keys = [
+                'CGC Fast Relay', 'Relay Setpoint RB', 'Relay Hysteria RB']
+            for key in relay_keys:
+                lb_relay = SiriusLabel(
+                    self, self.prefix+chs_dict['Relay'][key]+'-RB')
+                lb_relay.showUnits = True
+
+                lay.addWidget(QLabel(key), row, 5)
+                if key.split()[-1] != 'RB':
+                    lay.addWidget(SiriusSpinbox(
+                        self, self.prefix+chs_dict['Relay'][key]+'-SP'),
+                        row, 6)
+                lay.addWidget(lb_relay, row, 7)
+                row += 1
+
+        return lay
+
     def _setupLabelEdit(self, lay, chs_dict, key, row, column):
         label = SiriusLabel(self, self.prefix+chs_dict[key][1]+'-RB')
         label.showUnits = True
 
-        lay.addWidget(QLabel(key.split()[0]), row, column)
+        lay.addWidget(QLabel(
+            key.split()[0], alignment=Qt.AlignCenter), row, column)
         lay.addWidget(QLabel(chs_dict[key][0]), row, column+1)
         lay.addWidget(SiriusSpinbox(
             self, self.prefix+chs_dict[key][1]+'-SP'), row, column+2)
         lay.addWidget(label, row, column+3, alignment=Qt.AlignCenter)
+
+    def _setupLedState(self, lay, chs_dict, key, row, has_button):
+        lay.addWidget(QLabel(key, alignment=Qt.AlignCenter), row, 0)
+        lay.addWidget(QLabel(chs_dict[key][0]), row, 1)
+
+        ending = ''
+        if has_button:
+            lay.addWidget(PyDMStateButton(
+                self, self.prefix+chs_dict[key][1]+'-Sel'),
+                row, 2, alignment=Qt.AlignCenter)
+            ending = '-Sts'
+
+        lay.addWidget(SiriusLedState(
+            self, self.prefix+chs_dict[key][1]+ending),
+            row, 3, alignment=Qt.AlignCenter)
 
     def _specificLoopsLayout(self, rect_or_polar):
         lay = QVBoxLayout()
@@ -196,16 +269,16 @@ class LoopsDetails(SiriusDialog):
 
         if rect_or_polar == 'Rect':
             extra_addr = '30' if self.section == 'SI' else ''
-            grp_1 = 'Slow'
-            grp_1_addrs = ['100', '110', '13', '1', '0']
-            grp_2 = 'Fast'
-            grp_2_addrs = ['115', '111', '124', '119', '118']
+            grp_dict = {
+                'Slow': ['100', '110', '13', '1', '0'],
+                'Fast': ['115', '111', '124', '119', '118']
+            }
         else:
             extra_addr = '527'
-            grp_1 = 'Amp'
-            grp_1_addrs = ['116', '112', '121', '120']
-            grp_2 = 'Phase'
-            grp_2_addrs = ['117', '113', '123', '122']
+            grp_dict = {
+                'Amp': ['116', '112', '121', '120'],
+                'Phase': ['117', '113', '123', '122']
+            }
 
         title_lay = QHBoxLayout()
         title_lay.addWidget(QLabel(
@@ -216,29 +289,30 @@ class LoopsDetails(SiriusDialog):
         rect_lay = self._statisticsLayout(
             self.syst_dict, True, rect_or_polar, extra_addr)
 
-        grp_1_lay = QVBoxLayout()
-        grp_1_lay.setAlignment(Qt.AlignTop)
-        grp_1_lay.addLayout(
-            self._controlLayout(chs_dict[grp_1]['Control'], grp_1_addrs))
-        grp_1_lay.addItem(QSpacerItem(0, 20, QSzPlcy.Ignored, QSzPlcy.Fixed))
-        grp_1_lay.addLayout(self._statisticsLayout(chs_dict[grp_1], False))
-        gbox_grp_1 = QGroupBox(f'{grp_1} Loop', self)
-        gbox_grp_1.setLayout(grp_1_lay)
+        grps = QTabWidget(self)
+        grps.setObjectName(self.section+'Tab')
+        grps.setStyleSheet(
+            "#"+self.section+'Tab'+"::pane {"
+            "    border-left: 2px solid gray;"
+            "    border-bottom: 2px solid gray;"
+            "    border-right: 2px solid gray;}")
 
-        grp_2_lay = QVBoxLayout()
-        grp_2_lay.setAlignment(Qt.AlignTop)
-        grp_2_lay.addLayout(
-            self._controlLayout(chs_dict[grp_2]['Control'], grp_2_addrs))
-        grp_2_lay.addItem(QSpacerItem(0, 20, QSzPlcy.Ignored, QSzPlcy.Fixed))
-        grp_2_lay.addLayout(self._statisticsLayout(chs_dict[grp_2], False))
-        gbox_grp_2 = QGroupBox(f'{grp_2} Loop', self)
-        gbox_grp_2.setLayout(grp_2_lay)
+        for grp_name, addrs in grp_dict.items():
+            grp_lay = QVBoxLayout()
+            grp_lay.setAlignment(Qt.AlignTop)
+            grp_lay.addLayout(
+                self._controlLayout(chs_dict[grp_name]['Control'], addrs))
+            grp_lay.addItem(QSpacerItem(0, 20, QSzPlcy.Ignored, QSzPlcy.Fixed))
+            grp_lay.addLayout(
+                self._statisticsLayout(chs_dict[grp_name], False))
+            wid_grp = QWidget()
+            wid_grp.setLayout(grp_lay)
+            grps.addTab(wid_grp, f'{grp_name} Loop')
 
         lay.addLayout(title_lay)
         lay.addItem(QSpacerItem(0, 20, QSzPlcy.Ignored, QSzPlcy.Fixed))
         lay.addLayout(rect_lay)
-        lay.addWidget(gbox_grp_1)
-        lay.addWidget(gbox_grp_2)
+        lay.addWidget(grps)
 
         return lay
 
