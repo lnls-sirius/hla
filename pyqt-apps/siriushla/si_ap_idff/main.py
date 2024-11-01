@@ -1,15 +1,16 @@
 """Main window."""
 
-from qtpy.QtCore import Qt, Slot
+from time import strftime, localtime
+
+from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QLabel, QGridLayout, QSizePolicy as QSzPlcy, \
     QWidget, QGroupBox, QHBoxLayout, QVBoxLayout, QPushButton, QSpacerItem, \
-    QHeaderView, QRadioButton, QButtonGroup, QStackedWidget
+    QRadioButton, QButtonGroup, QStackedWidget
+from qtpy.QtGui import QColor
 
-from time import strftime, localtime
 import qtawesome as qta
-import numpy as np
+
 from pydm.widgets import PyDMPushButton
-from pydm.widgets.waveformplot import WaveformCurveItem
 
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriuspy.namesys import SiriusPVName as _PVName
@@ -24,22 +25,8 @@ from ..widgets.dialog import StatusDetailDialog
 from ..as_ps_control.control_widget.ControlWidgetFactory import \
     ControlWidgetFactory
 from ..as_ps_control import PSDetailWindow
-from .custom_widgets import ConfigLineEdit
+from .custom_widgets import ConfigLineEdit, SectionedWaveformCurveItem
 from .util import get_idff_icon
-
-
-class SectionedWaveformCurveItem(WaveformCurveItem):
-
-    def __init__(self, section, **kwargs):
-        super().__init__(**kwargs)
-        self.section = section
-
-    @Slot(np.ndarray)
-    def receiveYWaveform(self, new_waveform):
-        size = len(new_waveform)/4
-        min = int(size*self.section)
-        max = int(size*(self.section+1))
-        super().receiveYWaveform(new_waveform[min:max])
 
 
 class IDFFWindow(SiriusMainWindow):
@@ -90,10 +77,10 @@ class IDFFWindow(SiriusMainWindow):
         gap_val = SiriusLabel(
             self, self.dev_pref.substitute(propty='IDPos-Mon'))
         gap_val.showUnits = True
-        
+
         hlay.addWidget(lbl_gap)
         hlay.addWidget(gap_val)
-        
+
         return gbox
 
     def _format_timestamp_label(self, value):
@@ -104,23 +91,20 @@ class IDFFWindow(SiriusMainWindow):
         gbox = QGroupBox('Settings', self)
         lay = QGridLayout(gbox)
 
-        ld_loopstate = QLabel(
-            'Loop State: ', self)
+        ld_loopstate = QLabel('Loop State: ', self)
         self.sb_loopstate = PyDMStateButton(
             self, self.dev_pref.substitute(propty='LoopState-Sel'))
         self.lb_loopstate = SiriusLedState(
             self, self.dev_pref.substitute(propty='LoopState-Sts'))
-        
-        lbl_table_pointer = QLabel(
-            'Table Pointer: ', self)
+
+        lbl_table_pointer = QLabel('Table Pointer: ', self)
         self.table_pointer = SiriusLabel(
             self, self.dev_pref.substitute(propty='TablePointer-Mon'))
 
-        lbl_alarm = QLabel(
-            'Alarm: ', self) 
+        lbl_alarm = QLabel('Alarm: ', self)
         self.alarm_led = SiriusLedState(
             self, self.dev_pref.substitute(propty='Alarms-Mon'))
-        
+
         alarm_details = QPushButton('', self)
         alarm_details.setIcon(qta.icon('fa5s.list-ul'))
         alarm_details.setToolTip('Open Detailed Alarms View')
@@ -135,22 +119,20 @@ class IDFFWindow(SiriusMainWindow):
             section='ID', title='FeedForward Status')
 
         self.clear_alarms = PyDMPushButton(
-            self, "Clear Alarms", 
+            self, "Clear Alarms",
             init_channel=self.dev_pref.substitute(propty='ClearFlags-Cmd'))
 
-        lbl_plc_counter = QLabel(
-            'PLC Counter: ', self)
+        lbl_plc_counter = QLabel('PLC Counter: ', self)
         self.plc_counter = SiriusLabel(
             self, self.dev_pref.substitute(propty='PLCCounter-Mon'))
-        
-        lbl_timestamp = QLabel(
-            'PLC Timestamp: ', self)
+
+        lbl_timestamp = QLabel('PLC Timestamp: ', self)
         self.timestamp = QLabel('0:00:00', self)
         self.timestamp_mon = SiriusConnectionSignal(
             self.dev_pref.substitute(propty='PLCTimestamp-Mon'))
         self.timestamp_mon.new_value_signal[float].connect(
             self._format_timestamp_label)
-        
+
         buttonGroupWid = QWidget()
         vlay = QVBoxLayout(buttonGroupWid)
         self.button_group = QButtonGroup(buttonGroupWid)
@@ -158,19 +140,28 @@ class IDFFWindow(SiriusMainWindow):
 
         self.stack = QStackedWidget()
         self.plot_dict = {}
-        for id, name in enumerate(["CH1", "CH2", "CV1", "CV2"]):
+        for idx, name in enumerate(["CH1", "CH2", "CV1", "CV2"]):
             channel_btn = QRadioButton(name)
             vlay.addWidget(channel_btn)
-            self.button_group.addButton(channel_btn, id)
+            self.button_group.addButton(channel_btn, idx)
 
             if name == "CH1":
                 channel_btn.setChecked(True)
 
-            self.plot_dict[name] = SiriusWaveformPlot()
-            self.plot_dict[name].setShowLegend(True)
-            self.addNewTableCurve(self.plot_dict[name], id)
-            self.stack.addWidget(self.plot_dict[name])
-        
+            graph = SiriusWaveformPlot()
+            graph.setShowLegend(True)
+            graph.autoRangeX = True
+            graph.autoRangeY = True
+            graph.showXGrid = True
+            graph.showYGrid = True
+            graph.showLegend = True
+            graph.setLabel('bottom', text='Index')
+            graph.setLabel('left', text='Current [A]')
+            graph.setBackgroundColor(QColor(255, 255, 255))
+            self.addNewTableCurve(graph, name, idx)
+            self.stack.addWidget(graph)
+            self.plot_dict[name] = graph
+
         lay.addWidget(ld_loopstate, 0, 0)
         lay.addWidget(self.sb_loopstate, 0, 1)
         lay.addWidget(self.lb_loopstate, 0, 2)
@@ -186,25 +177,34 @@ class IDFFWindow(SiriusMainWindow):
         lay.addWidget(self.timestamp, 5, 1, 1, 2)
         lay.addWidget(buttonGroupWid, 6, 0)
         lay.addWidget(self.stack, 6, 1, 1, 2)
-        
+
         return gbox
 
-    def addNewTableCurve(self, plt, section):
-        curve1 = SectionedWaveformCurveItem(
-            section=section,
-            y_addr=self.dev_pref.substitute(propty='Table-SP'), name="SP"
-        )
-        plt._needs_redraw = False
-        plt.addCurve(curve1)
-        curve1.data_changed.connect(plt.set_needs_redraw)
+    def addNewTableCurve(self, plt, name, section):
+        if 'CH' in name:
+            color_sp, color_rb = 'blue', 'darkBlue'
+        else:
+            color_sp, color_rb = 'red', 'darkRed'
 
-        curve2 = SectionedWaveformCurveItem(
+        curve_sp = SectionedWaveformCurveItem(
             section=section,
-            y_addr=self.dev_pref.substitute(propty='Table-RB'), name="RB"
+            y_addr=self.dev_pref.substitute(propty='Table-SP'),
+            name="SP",
+            color=QColor(color_sp),
         )
         plt._needs_redraw = False
-        plt.addCurve(curve2)
-        curve2.data_changed.connect(plt.set_needs_redraw)
+        plt.addCurve(curve_sp, curve_color=QColor(color_sp))
+        curve_sp.data_changed.connect(plt.set_needs_redraw)
+
+        curve_rb = SectionedWaveformCurveItem(
+            section=section,
+            y_addr=self.dev_pref.substitute(propty='Table-RB'),
+            name="RB",
+            color=QColor(color_rb),
+        )
+        plt._needs_redraw = False
+        plt.addCurve(curve_rb, curve_color=QColor(color_rb))
+        curve_rb.data_changed.connect(plt.set_needs_redraw)
 
         return plt
 
