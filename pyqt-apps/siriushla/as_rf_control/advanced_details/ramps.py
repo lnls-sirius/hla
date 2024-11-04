@@ -9,6 +9,7 @@ from qtpy.QtWidgets import QGridLayout, QGroupBox, QLabel, QPushButton, \
 from ...util import connect_window
 from ...widgets import PyDMStateButton, SiriusDialog, SiriusLabel, \
     SiriusLedState, SiriusSpinbox, SiriusTimePlot
+from ..custom_widgets import RFTitleFrame
 from ..util import DEFAULT_STYLESHEET, SEC_2_CHANNELS
 from .limits import LimitsDetails
 
@@ -46,6 +47,11 @@ class RampsDetails(SiriusDialog):
             "    border-bottom: 2px solid gray;"
             "    border-right: 2px solid gray;}")
 
+        title_frame = RFTitleFrame(self, self.system)
+        lay_title = QVBoxLayout(title_frame)
+        lay_title.addWidget(QLabel(
+            f'<h4>{self.title}</h4>', alignment=Qt.AlignCenter))
+
         wid_controls = QWidget(self)
         wid_controls.setLayout(
             self._rampsControlLayout(self.syst_dict['Control']))
@@ -56,8 +62,7 @@ class RampsDetails(SiriusDialog):
             self._diagnosticsRampLayout(self.syst_dict['Diagnostics']))
         dtls.addTab(wid_top, 'Ramp Diagnostics')
 
-        lay.addWidget(QLabel(
-            f'<h4>{self.title}</h4>', alignment=Qt.AlignCenter))
+        lay.addWidget(title_frame)
         lay.addWidget(dtls)
 
     def _rampsControlLayout(self, chs_dict):

@@ -9,6 +9,7 @@ from qtpy.QtWidgets import QGridLayout, QGroupBox, QHBoxLayout, QLabel, \
 from ...util import connect_window
 from ...widgets import PyDMStateButton, SiriusDialog, SiriusEnumComboBox, \
     SiriusLabel, SiriusLedState, SiriusPushButton, SiriusSpinbox
+from ..custom_widgets import RFTitleFrame
 from ..util import DEFAULT_STYLESHEET, SEC_2_CHANNELS
 from .limits import LimitsDetails
 
@@ -38,6 +39,12 @@ class LoopsDetails(SiriusDialog):
         self.setStyleSheet(DEFAULT_STYLESHEET)
         lay = QVBoxLayout(self)
         lay.setAlignment(Qt.AlignTop)
+
+        title_frame = RFTitleFrame(self, self.system)
+        lay_title = QVBoxLayout(title_frame)
+        lay_title.addWidget(QLabel(
+            f'<h4>{self.title}</h4>', alignment=Qt.AlignCenter))
+
         dtls = QTabWidget(self)
         dtls.setObjectName(self.section+'Tab')
         dtls.setStyleSheet(
@@ -58,8 +65,7 @@ class LoopsDetails(SiriusDialog):
         wid_polar.setLayout(self._specificLoopsLayout('Polar'))
         dtls.addTab(wid_polar, 'Polar Loops')
 
-        lay.addWidget(QLabel(
-            f'<h4>{self.title}</h4>', alignment=Qt.AlignCenter))
+        lay.addWidget(title_frame)
         lay.addWidget(dtls)
 
     def _loopsControlLayout(self):

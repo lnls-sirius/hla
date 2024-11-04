@@ -6,6 +6,7 @@ from qtpy.QtWidgets import QGridLayout, QGroupBox, QLabel, QVBoxLayout
 
 from ...widgets import SiriusDialog, SiriusLabel, SiriusLedAlert, \
     SiriusLedState, SiriusPushButton, SiriusScaleIndicator
+from ..custom_widgets import RFTitleFrame
 from ..util import DEFAULT_STYLESHEET, SEC_2_CHANNELS
 
 
@@ -37,8 +38,11 @@ class HardwareDetails(SiriusDialog):
         lay.setHorizontalSpacing(18)
         lay.setVerticalSpacing(9)
 
-        lay.addWidget(QLabel(
-            f'<h4>{self.title}</h4>', alignment=Qt.AlignCenter), 0, 0, 1, 5)
+        title_frame = RFTitleFrame(self, self.system)
+        lay_title = QVBoxLayout(title_frame)
+        lay_title.addWidget(QLabel(
+            f'<h4>{self.title}</h4>', alignment=Qt.AlignCenter))
+        lay.addWidget(title_frame, 0, 0, 1, 5)
 
         # FPGA Temps
         gbox_fpga = QGroupBox('FPGA Temps', self)

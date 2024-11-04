@@ -29,7 +29,7 @@ class RFEnblDsblButton(QWidget):
 class RFTitleFrame(QFrame):
     """QFrame with background color set depending on the specific system."""
 
-    def __init__(self, parent=None, system=None):
+    def __init__(self, parent=None, system=''):
         super().__init__(parent)
-        if system is not None:
+        if system != '':
             self.setStyleSheet(f'background-color: {SYSTEM_COLORS[system]};')

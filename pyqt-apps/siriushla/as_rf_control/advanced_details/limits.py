@@ -4,6 +4,7 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGridLayout, QLabel
 
 from ...widgets import SiriusDialog, SiriusLabel, SiriusLineEdit, SiriusSpinbox
+from ..custom_widgets import RFTitleFrame
 from ..util import DEFAULT_STYLESHEET, SEC_2_CHANNELS
 
 
@@ -38,8 +39,12 @@ class LimitsDetails(SiriusDialog):
         lay = QGridLayout(self)
         lay.setAlignment(Qt.AlignTop)
         lay.setSpacing(9)
-        lay.addWidget(QLabel(
-            f'<h4>{self.title}</h4>', alignment=Qt.AlignCenter), 0, 0, 1, 4)
+
+        title_frame = RFTitleFrame(self, self.system)
+        lay_title = QGridLayout(title_frame)
+        lay_title.addWidget(QLabel(
+            f'<h4>{self.title}</h4>', alignment=Qt.AlignCenter), 0, 0)
+        lay.addWidget(title_frame, 0, 0, 1, 4)
 
         row = 1
         for key, val in self.syst_dict.items():

@@ -6,6 +6,7 @@ from qtpy.QtWidgets import QGridLayout, QLabel, QSizePolicy as QSzPlcy, \
 
 from ...widgets import PyDMStateButton, SiriusDialog, SiriusEnumComboBox, \
     SiriusLabel, SiriusLedState, SiriusSpinbox
+from ..custom_widgets import RFTitleFrame
 from ..util import DEFAULT_STYLESHEET, SEC_2_CHANNELS
 
 
@@ -35,8 +36,12 @@ class ADCDACDetails(SiriusDialog):
         lay = QGridLayout(self)
         lay.setAlignment(Qt.AlignTop)
         lay.setSpacing(9)
-        lay.addWidget(QLabel(
-            f'<h4>{self.title}</h4>', alignment=Qt.AlignCenter), 0, 0, 1, 9)
+
+        title_frame = RFTitleFrame(self, self.system)
+        lay_title = QGridLayout(title_frame)
+        lay_title.addWidget(QLabel(
+            f'<h4>{self.title}</h4>', alignment=Qt.AlignCenter), 0, 0)
+        lay.addWidget(title_frame, 0, 0, 1, 9)
 
         for k, sub_dict in self.syst_dict.items():
             row = 1
