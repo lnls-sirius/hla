@@ -209,7 +209,6 @@ class AdvancedInterlockDetails(SiriusDialog):
         lb_curr.showUnits = True
         lb_delta = SiriusLabel(self, self.prefix+chs_dict['Curr Delta']+'-RB')
         lb_delta.showUnits = True
-        lb_delta.setStyleSheet('background-color: white')
 
         lay.addWidget(QLabel(
             '<h4>Readback</h4>', alignment=Qt.AlignCenter), 0, 1)
@@ -237,7 +236,7 @@ class AdvancedInterlockDetails(SiriusDialog):
             '<h4>Offset</h4>', alignment=Qt.AlignCenter), 3, 5, 1, 2)
 
         # # Body
-        keys = ['Rev Cav', 'Fwd Cav', 'Quench']
+        keys = ['Fwd Cav', 'Rev Cav', 'Quench']
         row = 4
         for key in keys:
             chs = chs_dict[key]
@@ -251,10 +250,10 @@ class AdvancedInterlockDetails(SiriusDialog):
 
             lay_enable = QHBoxLayout()
             lay_enable.addWidget(PyDMStateButton(
-                self, self.prefix+chs['Enable']+'-SP'),
+                self, self.prefix+chs['Enable']+'-Sel'),
                 alignment=Qt.AlignCenter)
             lay_enable.addWidget(SiriusLedState(
-                self, self.prefix+chs['Enable']+'-RB'),
+                self, self.prefix+chs['Enable']+'-Sts'),
                 alignment=Qt.AlignCenter)
 
             lay.addWidget(QLabel(f'<h4>{chs["Label"]}</h4>',
@@ -271,6 +270,12 @@ class AdvancedInterlockDetails(SiriusDialog):
             lay.addWidget(lb_ofs, row, 6, alignment=Qt.AlignCenter)
 
             row += 1
+
+        lay.addItem(QSpacerItem(0, 20, QSzPlcy.Ignored, QSzPlcy.Fixed), row, 0)
+        lay.addWidget(QLabel(
+            "Out = Coef * Current + Offset",
+            alignment=Qt.AlignCenter), row+1, 0, 1, 2)
+        row += 2
 
         return lay
 
