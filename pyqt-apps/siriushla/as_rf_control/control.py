@@ -16,7 +16,7 @@ from ..widgets import PyDMLed, PyDMLedMultiChannel, PyDMStateButton, \
     SiriusConnectionSignal, SiriusLabel, SiriusLedAlert, SiriusLedState, \
     SiriusMainWindow, SiriusPushButton, SiriusSpinbox, SiriusTimePlot, \
     SiriusWaveformPlot
-from .custom_widgets import RFEnblDsblButton
+from .custom_widgets import RFEnblDsblButton, RFTitleFrame
 from .util import DEFAULT_STYLESHEET, SEC_2_CHANNELS, SYSTEM_COLORS
 
 
@@ -1751,9 +1751,11 @@ class RFMainControl(SiriusMainWindow):
 
     def _create_slc_lay(self, lay_slc, key, chs_dict, offset):
         if key:
-            lay_slc.addWidget(QLabel(
-                f'<h4>{key}<h4>', self, alignment=Qt.AlignRight),
-                1, offset)
+            frame_key = RFTitleFrame(system=key)
+            frame_lay = QHBoxLayout(frame_key)
+            frame_lay.addWidget(QLabel(
+                f'<h4>{key}</h4>', alignment=Qt.AlignCenter))
+            lay_slc.addWidget(frame_key, 1, offset, 1, 2)
 
         lb_slmode = SiriusLabel(
             self, self.prefix+chs_dict['Mode']+'-Sts')

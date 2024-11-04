@@ -1,7 +1,7 @@
-
-
-from qtpy.QtWidgets import QHBoxLayout, QWidget
+from qtpy.QtWidgets import QFrame, QHBoxLayout, QWidget
 from siriushla.widgets import SiriusPushButton
+
+from .util import SYSTEM_COLORS
 
 
 class RFEnblDsblButton(QWidget):
@@ -24,3 +24,15 @@ class RFEnblDsblButton(QWidget):
         lay.addWidget(self.pb_off)
         lay.addWidget(self.pb_on)
         lay.addStretch()
+
+
+class RFTitleFrame(QFrame):
+    """QFrame with background color set depending on the specific system."""
+
+    def __init__(self, parent=None, system=None):
+        super().__init__(parent)
+        if system is not None:
+            self.setStyleSheet(f"""
+                background-color: {SYSTEM_COLORS[system]};
+                margin: 2px
+            """)
