@@ -17,7 +17,7 @@ from ..widgets import PyDMLed, PyDMLedMultiChannel, PyDMStateButton, \
     SiriusMainWindow, SiriusPushButton, SiriusSpinbox, SiriusTimePlot, \
     SiriusWaveformPlot
 from .custom_widgets import RFEnblDsblButton
-from .util import DEFAULT_STYLESHEET, SEC_2_CHANNELS
+from .util import DEFAULT_STYLESHEET, SEC_2_CHANNELS, SYSTEM_COLORS
 
 
 class RFMainControl(SiriusMainWindow):
@@ -1239,15 +1239,23 @@ class RFMainControl(SiriusMainWindow):
             for key, val in self.chs['CavVGap'].items():
                 ld_cavvgap = QLabel(
                     f'Gap Voltage {key}:', self, alignment=Qt.AlignCenter)
-                ld_cavvgap.setStyleSheet('QLabel{font-size: 15pt;}')
+                ld_cavvgap.setStyleSheet(
+                    f"""QLabel{{font-size: 15pt; background-color:
+                     {SYSTEM_COLORS[key]}}}""")
                 lb_cavvgap = SiriusLabel(self, self.prefix+val)
-                lb_cavvgap.setStyleSheet('QLabel{font-size: 15pt;}')
+                lb_cavvgap.setStyleSheet(
+                    f"""QLabel{{font-size: 15pt; background-color:
+                     {SYSTEM_COLORS[key]}}}""")
                 lb_cavvgap.showUnits = True
                 lbl_refvol = QLabel(
                     f'Ref Voltage {key}:', self, alignment=Qt.AlignCenter)
+                lbl_refvol.setStyleSheet(
+                    f'background-color: {SYSTEM_COLORS[key]}')
                 rb_refvol = SiriusLabel(
                     self, self.prefix+self.chs['SL']['ASet'][key]+'-RB')
                 rb_refvol.showUnits = True
+                rb_refvol.setStyleSheet(
+                    f'background-color: {SYSTEM_COLORS[key]}')
                 lay_cavvgap.addWidget(ld_cavvgap, offset, 0)
                 lay_cavvgap.addWidget(lb_cavvgap, offset, 1)
                 lay_cavvgap.addWidget(lbl_refvol, offset+1, 0)

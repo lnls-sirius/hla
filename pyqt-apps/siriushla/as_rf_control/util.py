@@ -20,6 +20,11 @@ DEFAULT_STYLESHEET = """
                 max-height:1.5em; min-width:4em;
             }"""
 
+SYSTEM_COLORS = {
+    'A': 'royalBlue',
+    'B': 'lightBlue'
+}
+
 SEC_2_CHANNELS = {
     'BO': {
         'Emergency': 'BO-05D:RF-Intlk:EStop-Mon',
