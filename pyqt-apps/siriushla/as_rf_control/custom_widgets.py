@@ -32,7 +32,4 @@ class RFTitleFrame(QFrame):
     def __init__(self, parent=None, system=None):
         super().__init__(parent)
         if system is not None:
-            self.setStyleSheet(f"""
-                background-color: {SYSTEM_COLORS[system]};
-                margin: 2px
-            """)
+            self.setStyleSheet(f'background-color: {SYSTEM_COLORS[system]};')

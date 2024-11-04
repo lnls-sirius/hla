@@ -530,6 +530,7 @@ class RFMainControl(SiriusMainWindow):
             offset = 2
             for key, chs_dict in self.chs['Tun'].items():
                 lb_plg = QLabel(key, alignment=Qt.AlignCenter)
+                lb_plg.setStyleSheet(f'background-color: {SYSTEM_COLORS[key]}')
                 led_plg_dn = PyDMLed(
                     self, self.prefix+chs_dict['Pl1Down'])
                 led_plg_dn.offColor = QColor(64, 64, 64)
@@ -1622,9 +1623,11 @@ class RFMainControl(SiriusMainWindow):
 
     def _create_tun_set_wid(self, lay_tunset, column, chs_dict, offset):
         if column:
-            lay_tunset.addWidget(QLabel(
-                f'<h4>{column}</h4>', self, alignment=Qt.AlignCenter),
-                0, offset)
+            frame_title = RFTitleFrame(system=column)
+            frame_lay = QHBoxLayout(frame_title)
+            frame_lay.addWidget(QLabel(
+                f'<h4>{column}</h4>', self, alignment=Qt.AlignCenter))
+            lay_tunset.addWidget(frame_title, 0, offset)
 
         bt_autotun = PyDMStateButton(
             self, self.prefix+chs_dict['Auto']+'-Sel')
@@ -1715,12 +1718,16 @@ class RFMainControl(SiriusMainWindow):
             pb_fdldtls, cmd.split(" "), is_window=True, parent=self)
 
         if key:
-            title = key
+            frame_title = RFTitleFrame(system=key)
+            frame_lay = QHBoxLayout(frame_title)
+            frame_lay.addWidget(QLabel(f'<h4> • {key} - Amplitude</h4>',
+                self, alignment=Qt.AlignLeft | Qt.AlignVCenter))
+            frame_lay.addWidget(pb_fdldtls, alignment=Qt.AlignRight)
+            lay_section.addWidget(frame_title)
         else:
-            title = 'FDL Data'
-        lay_section.addWidget(QLabel(
-            f'<h4> • {title} - Amplitude</h4>', self, alignment=Qt.AlignLeft))
-        lay_section.addWidget(pb_fdldtls, alignment=Qt.AlignRight)
+            lay_section.addWidget(QLabel('<h4> • FDL Data - Amplitude</h4>',
+                self, alignment=Qt.AlignLeft))
+            lay_section.addWidget(pb_fdldtls, alignment=Qt.AlignRight)
 
         lay_fdl.addLayout(lay_section)
         lay_fdl.addLayout(lay_checks)
@@ -1728,11 +1735,11 @@ class RFMainControl(SiriusMainWindow):
 
     def _create_diag_lay(self, lay_diag, key, chs, column):
         if key is not None:
-            lay_diag.addWidget(QLabel(
-                f'<h4>{key}</h4>', alignment=Qt.AlignCenter),
-                0, column, 1, 2)
-            lay_diag.addItem(QSpacerItem(
-                0, 9, QSzPlcy.Ignored, QSzPlcy.Fixed), 1, column)
+            frame_diag = RFTitleFrame(system=key)
+            frame_lay = QHBoxLayout(frame_diag)
+            frame_lay.addWidget(QLabel(
+                f'<h4>{key}</h4>', alignment=Qt.AlignCenter))
+            lay_diag.addWidget(frame_diag, 0, column, 1, 2)
         else:
             lay_diag.addItem(QSpacerItem(
                 0, 18, QSzPlcy.Ignored, QSzPlcy.Fixed), 0, column)
