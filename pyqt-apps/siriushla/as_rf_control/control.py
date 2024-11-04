@@ -16,8 +16,8 @@ from ..widgets import PyDMLed, PyDMLedMultiChannel, PyDMStateButton, \
     SiriusConnectionSignal, SiriusLabel, SiriusLedAlert, SiriusLedState, \
     SiriusMainWindow, SiriusPushButton, SiriusSpinbox, SiriusTimePlot, \
     SiriusWaveformPlot
-from .custom_widgets import RFEnblDsblButton, RFTitleFrame
-from .util import DEFAULT_STYLESHEET, SEC_2_CHANNELS, SYSTEM_COLORS
+from .custom_widgets import RFEnblDsblButton
+from .util import DEFAULT_STYLESHEET, SEC_2_CHANNELS
 
 
 class RFMainControl(SiriusMainWindow):
@@ -530,7 +530,6 @@ class RFMainControl(SiriusMainWindow):
             offset = 2
             for key, chs_dict in self.chs['Tun'].items():
                 lb_plg = QLabel(key, alignment=Qt.AlignCenter)
-                lb_plg.setStyleSheet(f'background-color: {SYSTEM_COLORS[key]}')
                 led_plg_dn = PyDMLed(
                     self, self.prefix+chs_dict['Pl1Down'])
                 led_plg_dn.offColor = QColor(64, 64, 64)
@@ -1240,23 +1239,15 @@ class RFMainControl(SiriusMainWindow):
             for key, val in self.chs['CavVGap'].items():
                 ld_cavvgap = QLabel(
                     f'Gap Voltage {key}:', self, alignment=Qt.AlignCenter)
-                ld_cavvgap.setStyleSheet(
-                    f"""QLabel{{font-size: 15pt; background-color:
-                     {SYSTEM_COLORS[key]}}}""")
+                ld_cavvgap.setStyleSheet('QLabel{font-size: 15pt;}')
                 lb_cavvgap = SiriusLabel(self, self.prefix+val)
-                lb_cavvgap.setStyleSheet(
-                    f"""QLabel{{font-size: 15pt; background-color:
-                     {SYSTEM_COLORS[key]}}}""")
+                lb_cavvgap.setStyleSheet('QLabel{font-size: 15pt;}')
                 lb_cavvgap.showUnits = True
                 lbl_refvol = QLabel(
                     f'Ref Voltage {key}:', self, alignment=Qt.AlignCenter)
-                lbl_refvol.setStyleSheet(
-                    f'background-color: {SYSTEM_COLORS[key]}')
                 rb_refvol = SiriusLabel(
                     self, self.prefix+self.chs['SL']['ASet'][key]+'-RB')
                 rb_refvol.showUnits = True
-                rb_refvol.setStyleSheet(
-                    f'background-color: {SYSTEM_COLORS[key]}')
                 lay_cavvgap.addWidget(ld_cavvgap, offset, 0)
                 lay_cavvgap.addWidget(lb_cavvgap, offset, 1)
                 lay_cavvgap.addWidget(lbl_refvol, offset+1, 0)
@@ -1623,11 +1614,9 @@ class RFMainControl(SiriusMainWindow):
 
     def _create_tun_set_wid(self, lay_tunset, column, chs_dict, offset):
         if column:
-            frame_title = RFTitleFrame(system=column)
-            frame_lay = QHBoxLayout(frame_title)
-            frame_lay.addWidget(QLabel(
-                f'<h4>{column}</h4>', self, alignment=Qt.AlignCenter))
-            lay_tunset.addWidget(frame_title, 0, offset)
+            lay_tunset.addWidget(QLabel(
+                f'<h4>{column}</h4>', self, alignment=Qt.AlignCenter),
+                0, offset)
 
         bt_autotun = PyDMStateButton(
             self, self.prefix+chs_dict['Auto']+'-Sel')
@@ -1718,16 +1707,12 @@ class RFMainControl(SiriusMainWindow):
             pb_fdldtls, cmd.split(" "), is_window=True, parent=self)
 
         if key:
-            frame_title = RFTitleFrame(system=key)
-            frame_lay = QHBoxLayout(frame_title)
-            frame_lay.addWidget(QLabel(f'<h4> • {key} - Amplitude</h4>',
-                self, alignment=Qt.AlignLeft | Qt.AlignVCenter))
-            frame_lay.addWidget(pb_fdldtls, alignment=Qt.AlignRight)
-            lay_section.addWidget(frame_title)
+            title = key
         else:
-            lay_section.addWidget(QLabel('<h4> • FDL Data - Amplitude</h4>',
-                self, alignment=Qt.AlignLeft))
-            lay_section.addWidget(pb_fdldtls, alignment=Qt.AlignRight)
+            title = 'FDL Data'
+        lay_section.addWidget(QLabel(
+            f'<h4> • {title} - Amplitude</h4>', self, alignment=Qt.AlignLeft))
+        lay_section.addWidget(pb_fdldtls, alignment=Qt.AlignRight)
 
         lay_fdl.addLayout(lay_section)
         lay_fdl.addLayout(lay_checks)
@@ -1735,11 +1720,11 @@ class RFMainControl(SiriusMainWindow):
 
     def _create_diag_lay(self, lay_diag, key, chs, column):
         if key is not None:
-            frame_diag = RFTitleFrame(system=key)
-            frame_lay = QHBoxLayout(frame_diag)
-            frame_lay.addWidget(QLabel(
-                f'<h4>{key}</h4>', alignment=Qt.AlignCenter))
-            lay_diag.addWidget(frame_diag, 0, column, 1, 2)
+            lay_diag.addWidget(QLabel(
+                f'<h4>{key}</h4>', alignment=Qt.AlignCenter),
+                0, column, 1, 2)
+            lay_diag.addItem(QSpacerItem(
+                0, 9, QSzPlcy.Ignored, QSzPlcy.Fixed), 1, column)
         else:
             lay_diag.addItem(QSpacerItem(
                 0, 18, QSzPlcy.Ignored, QSzPlcy.Fixed), 0, column)
@@ -1758,11 +1743,8 @@ class RFMainControl(SiriusMainWindow):
 
     def _create_slc_lay(self, lay_slc, key, chs_dict, offset):
         if key:
-            frame_key = RFTitleFrame(system=key)
-            frame_lay = QHBoxLayout(frame_key)
-            frame_lay.addWidget(QLabel(
-                f'<h4>{key}</h4>', alignment=Qt.AlignCenter))
-            lay_slc.addWidget(frame_key, 1, offset, 1, 2)
+            lay_slc.addWidget(QLabel(
+                f'<h4>{key}</h4>', alignment=Qt.AlignCenter), 1, offset, 1, 2)
 
         lb_slmode = SiriusLabel(
             self, self.prefix+chs_dict['Mode']+'-Sts')
