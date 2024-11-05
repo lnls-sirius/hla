@@ -8,6 +8,7 @@ from qtpy.QtWidgets import QCheckBox, QComboBox, QGridLayout, QGroupBox, \
 from ...widgets import PyDMStateButton, SiriusDialog, SiriusLabel, \
     SiriusLedAlert, SiriusLedState, SiriusLineEdit, SiriusPushButton, \
     SiriusSpinbox, SiriusWaveformPlot
+from ..custom_widgets import RFTitleFrame
 from ..util import DEFAULT_STYLESHEET, SEC_2_CHANNELS
 
 
@@ -39,7 +40,9 @@ class FDLDetails(SiriusDialog):
         lay = QVBoxLayout(self)
         lay.setAlignment(Qt.AlignTop)
 
-        lay.addWidget(QLabel(
+        title_frame = RFTitleFrame(self, self.system)
+        lay_title = QHBoxLayout(title_frame)
+        lay_title.addWidget(QLabel(
             f'<h4>{self.title}</h4>', alignment=Qt.AlignCenter))
 
         controls = QGroupBox('Controls', self)
@@ -48,6 +51,7 @@ class FDLDetails(SiriusDialog):
         graphs = QGroupBox('Graphs', self)
         graphs.setLayout(self._graphsLayout())
 
+        lay.addWidget(title_frame)
         lay.addWidget(controls)
         lay.addWidget(graphs)
 
