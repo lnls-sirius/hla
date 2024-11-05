@@ -10,7 +10,8 @@ from qtpy.QtWidgets import QCheckBox, QGridLayout, QGroupBox, QHBoxLayout, \
 from ...util import connect_window
 from ...widgets import PyDMLed, PyDMLedMultiChannel, SiriusDialog, \
     SiriusLabel, SiriusLedAlert, SiriusLedState, SiriusTimePlot
-from ..advanced_details import SSACurrentsDetails, ACPanelDetails
+from ..advanced_details import ACPanelDetails, SSACurrentsDetails
+from ..custom_widgets import RFTitleFrame
 from ..util import DEFAULT_STYLESHEET, SEC_2_CHANNELS
 
 
@@ -37,6 +38,11 @@ class SSADetailsSI(SiriusDialog):
         lay = QVBoxLayout(self)
         lay.setAlignment(Qt.AlignTop)
 
+        title_frame = RFTitleFrame(self, self.system)
+        lay_title = QHBoxLayout(title_frame)
+        lay_title.addWidget(QLabel(
+            f'<h4>SSA 0{self.num} Details</h4>', alignment=Qt.AlignCenter))
+
         dtls = QTabWidget(self)
         dtls.setObjectName(self.section+'Tab')
         dtls.setStyleSheet(
@@ -53,8 +59,7 @@ class SSADetailsSI(SiriusDialog):
         wid_graphs.setLayout(self._setupGraphsLay())
         dtls.addTab(wid_graphs, 'Graphs')
 
-        title = f'<h4>SSA 0{self.num} Details</h4>'
-        lay.addWidget(QLabel(title, alignment=Qt.AlignCenter))
+        lay.addWidget(title_frame)
         lay.addWidget(dtls)
 
     def _setupDiagLay(self):
@@ -418,6 +423,11 @@ class SSADetailsBO(SiriusDialog):
         lay.setSpacing(9)
         lay.setAlignment(Qt.AlignTop)
 
+        title_frame = RFTitleFrame(self)
+        lay_title = QHBoxLayout(title_frame)
+        lay_title.addWidget(QLabel(
+            '<h4>SSA Details</h4>', alignment=Qt.AlignCenter))
+
         dtls = QTabWidget(self)
         dtls.setObjectName(self.section+'Tab')
         dtls.setStyleSheet(
@@ -434,8 +444,7 @@ class SSADetailsBO(SiriusDialog):
         wid_graphs.setLayout(self._setupGraphsLay())
         dtls.addTab(wid_graphs, 'Graphs')
 
-        title = '<h4>SSA Details</h4>'
-        lay.addWidget(QLabel(title, alignment=Qt.AlignCenter))
+        lay.addWidget(title_frame)
         lay.addWidget(dtls)
 
     def _setupDiagLay(self):

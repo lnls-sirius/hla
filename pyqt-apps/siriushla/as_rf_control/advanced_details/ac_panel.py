@@ -5,6 +5,7 @@ from qtpy.QtWidgets import QGridLayout, QLabel, QSizePolicy as QSzPlcy, \
     QSpacerItem
 
 from ...widgets import SiriusDialog, SiriusLabel
+from ..custom_widgets import RFTitleFrame
 from ..util import DEFAULT_STYLESHEET, SEC_2_CHANNELS
 
 
@@ -38,8 +39,12 @@ class ACPanelDetails(SiriusDialog):
         lay.setAlignment(Qt.AlignTop)
         lay.setSpacing(9)
 
-        lay.addWidget(QLabel(
-            f'<h4>{self.title}</h4>', alignment=Qt.AlignCenter), 0, 0, 1, 7)
+        title_frame = RFTitleFrame(self, self.system)
+        lay_title = QGridLayout(title_frame)
+        lay_title.addWidget(QLabel(
+            f'<h4>{self.title}</h4>', alignment=Qt.AlignCenter), 0, 0)
+
+        lay.addWidget(title_frame, 0, 0, 1, 7)
         lay.addItem(QSpacerItem(0, 18, QSzPlcy.Ignored, QSzPlcy.Fixed), 1, 0)
 
         # Phases
