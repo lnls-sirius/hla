@@ -52,12 +52,12 @@ class LLRFInterlockDetails(SiriusDialog):
         if self.section == 'SI':
             offset = 1
             for key, chs_dict in self.chs['LLRF Intlk Details'].items():
-                self._setupDetails(lay_scr, key, chs_dict, offset)
+                self._setupDetails(lay_scr, chs_dict, offset, key)
                 offset += 4
         else:
-            self._setupDetails(lay_scr, None, self.chs['LLRF Intlk Details'], 1)
+            self._setupDetails(lay_scr, self.chs['LLRF Intlk Details'], 1)
 
-    def _setupDetails(self, lay, system, chs_dict, offset):
+    def _setupDetails(self, lay, chs_dict, offset, system=''):
         if system:
             lay.addWidget(QLabel(
                 f'<h4>LLRF {system}</h4>', self,

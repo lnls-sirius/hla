@@ -8,6 +8,7 @@ from qtpy.QtWidgets import QGridLayout, QGroupBox, QHBoxLayout, QLabel, \
 from ...widgets import PyDMStateButton, SiriusDialog, SiriusLabel, \
     SiriusLedAlert, SiriusLedState, SiriusLineEdit, SiriusPushButton, \
     SiriusSpinbox
+from ..custom_widgets import RFTitleFrame
 from ..util import DEFAULT_STYLESHEET, SEC_2_CHANNELS
 
 
@@ -36,6 +37,12 @@ class AdvancedInterlockDetails(SiriusDialog):
         self.setStyleSheet(DEFAULT_STYLESHEET)
         lay = QVBoxLayout(self)
         lay.setAlignment(Qt.AlignTop)
+
+        title_frame = RFTitleFrame(self, self.system)
+        lay_title = QVBoxLayout(title_frame)
+        lay_title.addWidget(QLabel(
+            f'<h4>{self.title}</h4>', alignment=Qt.AlignCenter))
+
         dtls = QTabWidget(self)
         dtls.setObjectName(self.section+'Tab')
         dtls.setStyleSheet(
@@ -49,17 +56,17 @@ class AdvancedInterlockDetails(SiriusDialog):
             self._diagnosticsLayout(self.syst_dict['Diagnostics']))
         dtls.addTab(wid_diag, 'Diagnostics')
 
-        wid_dyn = QWidget(self)
-        wid_dyn.setLayout(
-            self._dynamicInterlockLayout(self.syst_dict['Dynamic']))
-        dtls.addTab(wid_dyn, 'Dynamic Interlock')
+        if self.section == 'SI':
+            wid_dyn = QWidget(self)
+            wid_dyn.setLayout(
+                self._dynamicInterlockLayout(self.syst_dict['Dynamic']))
+            dtls.addTab(wid_dyn, 'Dynamic Interlock')
 
         wid_bypass = QWidget(self)
         wid_bypass.setLayout(self._bypassLayout(self.syst_dict['Bypass']))
         dtls.addTab(wid_bypass, 'Interlock Bypass')
 
-        lay.addWidget(QLabel(
-            f'<h4>{self.title}</h4>', alignment=Qt.AlignCenter))
+        lay.addWidget(title_frame)
         lay.addWidget(dtls)
 
     def _diagnosticsLayout(self, chs_dict):
