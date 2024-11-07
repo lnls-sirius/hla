@@ -691,13 +691,18 @@ class RFMainControl(SiriusMainWindow):
         lay_diag = QGridLayout(wid_diag)
         lay_diag.setAlignment(Qt.AlignTop)
         lay_diag.setSpacing(9)
+
+        add_labels = True
         if self.section == 'SI':
             column = 1
             for k, chs in self.chs['Diagnostics'].items():
-                self._create_diag_lay(lay_diag, k, chs, column)
-                column += 2
+                self._create_diag_lay(lay_diag, k, chs, column, add_labels)
+                if add_labels:
+                    add_labels = False
+                column += 1
         else:
-            self._create_diag_lay(lay_diag, None, self.chs['Diagnostics'], 0)
+            self._create_diag_lay(
+                lay_diag, None, self.chs['Diagnostics'], 1, add_labels)
 
         # # FDL
         wid_fdl = QWidget()
@@ -1718,11 +1723,19 @@ class RFMainControl(SiriusMainWindow):
         lay_fdl.addLayout(lay_checks)
         lay_fdl.addWidget(self.amp_graph)
 
-    def _create_diag_lay(self, lay_diag, key, chs, column):
+    def _create_diag_lay(self, lay_diag, key, chs, column, add_labels):
+        if add_labels:
+            row = 2
+            for _, val in chs.items():
+                lay_diag.addWidget(
+                    QLabel(val[0], alignment=Qt.AlignRight | Qt.AlignVCenter),
+                    row, column-1)
+                row += 1
+
         if key is not None:
             lay_diag.addWidget(QLabel(
                 f'<h4>{key}</h4>', alignment=Qt.AlignCenter),
-                0, column, 1, 2)
+                0, column)
             lay_diag.addItem(QSpacerItem(
                 0, 9, QSzPlcy.Ignored, QSzPlcy.Fixed), 1, column)
         else:
@@ -1735,10 +1748,7 @@ class RFMainControl(SiriusMainWindow):
                 led = SiriusLedAlert(self, self.prefix+val[1])
             else:
                 led = SiriusLedState(self, self.prefix+val[1])
-            lay_diag.addWidget(QLabel(
-                val[0], alignment=Qt.AlignRight), row, column)
-            lay_diag.addWidget(led, row, column+1,
-                alignment=Qt.AlignCenter)
+            lay_diag.addWidget(led, row, column, alignment=Qt.AlignCenter)
             row += 1
 
     def _create_slc_lay(self, lay_slc, key, chs_dict, offset):
