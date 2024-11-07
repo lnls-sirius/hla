@@ -1,5 +1,6 @@
 """Advanced details related to interlocks."""
 
+from pydm.widgets import PyDMLabel
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGridLayout, QGroupBox, QHBoxLayout, QLabel, \
     QScrollArea, QSizePolicy as QSzPlcy, QSpacerItem, QTabWidget, \
@@ -212,9 +213,9 @@ class AdvancedInterlockDetails(SiriusDialog):
         lay.setSpacing(9)
 
         # Current
-        lb_curr = SiriusLabel(self, self.prefix+chs_dict['Curr'])
+        lb_curr = PyDMLabel(self, self.prefix+chs_dict['Curr'])
         lb_curr.showUnits = True
-        lb_delta = SiriusLabel(self, self.prefix+chs_dict['Curr Delta']+'-RB')
+        lb_delta = PyDMLabel(self, self.prefix+chs_dict['Curr Delta']+'-RB')
         lb_delta.showUnits = True
 
         lay.addWidget(QLabel(
@@ -248,11 +249,11 @@ class AdvancedInterlockDetails(SiriusDialog):
         for key in keys:
             chs = chs_dict[key]
 
-            lb_value = SiriusLabel(self, self.prefix+chs['Value'])
+            lb_value = PyDMLabel(self, self.prefix+chs['Value'])
             lb_value.showUnits = True
-            lb_coeff = SiriusLabel(self, self.prefix+chs['Coeff']+'-RB')
+            lb_coeff = PyDMLabel(self, self.prefix+chs['Coeff']+'-RB')
             lb_coeff.showUnits = True
-            lb_ofs = SiriusLabel(self, self.prefix+chs['Offset']+'-RB')
+            lb_ofs = PyDMLabel(self, self.prefix+chs['Offset']+'-RB')
             lb_ofs.showUnits = True
 
             lay_enable = QHBoxLayout()
@@ -265,7 +266,7 @@ class AdvancedInterlockDetails(SiriusDialog):
 
             lay.addWidget(QLabel(f'<h4>{chs["Label"]}</h4>',
                 alignment=Qt.AlignRight | Qt.AlignVCenter), row, 0)
-            lay.addWidget(lb_value, row, 1)
+            lay.addWidget(lb_value, row, 1, alignment=Qt.AlignCenter)
             lay.addLayout(lay_enable, row, 2)
             lay.addWidget(SiriusLineEdit(
                 self, self.prefix+chs['Coeff']+'-SP'),
@@ -280,7 +281,7 @@ class AdvancedInterlockDetails(SiriusDialog):
 
         lay.addItem(QSpacerItem(0, 20, QSzPlcy.Ignored, QSzPlcy.Fixed), row, 0)
         lay.addWidget(QLabel(
-            "Out = Coef * Current + Offset",
+            "Out = Coeff * Current + Offset",
             alignment=Qt.AlignCenter), row+1, 0, 1, 2)
         row += 2
 
