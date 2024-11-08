@@ -7,8 +7,8 @@ from pydm.widgets import PyDMEnumComboBox, PyDMLineEdit
 from pyqtgraph import InfiniteLine, mkPen
 from qtpy.QtCore import Qt
 from qtpy.QtGui import QColor
-from qtpy.QtWidgets import QCheckBox, QComboBox, QGridLayout, QGroupBox, \
-    QHBoxLayout, QLabel, QPushButton, QRadioButton, QScrollArea, \
+from qtpy.QtWidgets import QCheckBox, QComboBox, QFrame, QGridLayout, \
+    QGroupBox, QHBoxLayout, QLabel, QPushButton, QRadioButton, QScrollArea, \
     QSizePolicy as QSzPlcy, QSpacerItem, QTabWidget, QVBoxLayout, QWidget
 
 from ..util import connect_newprocess, get_appropriate_color
@@ -420,9 +420,14 @@ class RFMainControl(SiriusMainWindow):
         # # Slow Loop Control
         wid_sl = QWidget()
         lay_slc = QGridLayout(wid_sl)
-        lay_slc.setAlignment(Qt.AlignTop | Qt.AlignHCenter)
+        lay_slc.setAlignment(Qt.AlignTop)
         lay_slc.setVerticalSpacing(6)
         lay_slc.setHorizontalSpacing(20)
+
+        if self.section == 'BO':
+            lay_slc.setColumnStretch(0, 1)
+            lay_slc.setColumnStretch(1, 2)
+            lay_slc.setColumnStretch(2, 2)
 
         lay_slc.addWidget(QLabel(
             '<h4>Mode</h4>', self, alignment=Qt.AlignCenter), 2, 0)
@@ -446,7 +451,13 @@ class RFMainControl(SiriusMainWindow):
         offset = 1
         if self.section == 'SI':
             for key, chs_dict in self.chs['SL']['Over'].items():
-                self._create_slc_lay(lay_slc, key, chs_dict, offset)
+                line = QFrame()
+                line.setFrameShape(QFrame.VLine)
+                line.setFrameShadow(QFrame.Plain)
+                line.setLineWidth(2)
+                line.setStyleSheet('color: gray')
+                lay_slc.addWidget(line, 0, offset, 17, 1)
+                self._create_slc_lay(lay_slc, key, chs_dict, offset+1)
                 offset += 3
         else:
             self._create_slc_lay(lay_slc, None, self.chs['SL']['Over'], 1)
@@ -473,7 +484,7 @@ class RFMainControl(SiriusMainWindow):
         lay_details.addWidget(self.pb_errdtls, alignment=Qt.AlignCenter)
         lay_details.addWidget(self.pb_paramdtls, alignment=Qt.AlignCenter)
 
-        lay_slc.addWidget(gbox_details, 17, 0, 2, offset)
+        lay_slc.addWidget(gbox_details, 17, 0, 1, offset)
 
         # # Tuning
         # # # Tuning settings
