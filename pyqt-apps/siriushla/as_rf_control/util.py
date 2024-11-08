@@ -1595,10 +1595,6 @@ SEC_2_CHANNELS = {
                     '6': 'RA-RaSIA01:RF-LLRF:IntlkTs6-Mon',
                     '7': 'RA-RaSIA01:RF-LLRF:IntlkTs7-Mon',
                 },
-                'Quench1': {
-                    'Rv': 'RA-RaSIA01:RF-LLRF:QuenchCond1RvRatio',
-                    'Dly': 'RA-RaSIA01:RF-LLRF:QuenchCond1Dly'
-                }
             },
             'B': {
                 'Inputs': {
@@ -1669,10 +1665,6 @@ SEC_2_CHANNELS = {
                     '5': 'RA-RaSIB01:RF-LLRF:IntlkTs5-Mon',
                     '6': 'RA-RaSIB01:RF-LLRF:IntlkTs6-Mon',
                     '7': 'RA-RaSIB01:RF-LLRF:IntlkTs7-Mon',
-                },
-                'Quench1': {
-                    'Rv': 'RA-RaSIB01:RF-LLRF:QuenchCond1RvRatio',
-                    'Dly': 'RA-RaSIB01:RF-LLRF:QuenchCond1Dly'
                 }
             }
         },
@@ -4156,6 +4148,10 @@ SEC_2_CHANNELS = {
                         'Inp': 'RA-RaSIA01:RF-LLRF:GPIOInp-Mon',
                         'Intlk': 'RA-RaSIA01:RF-LLRF:GPIOIntlk-Mon',
                         'Out': 'RA-RaSIA01:RF-LLRF:GPIOOut-Mon'
+                    },
+                    'Quench1': {
+                        'Rv': 'RA-RaSIA01:RF-LLRF:QuenchCond1RvRatio',
+                        'Dly': 'RA-RaSIA01:RF-LLRF:QuenchCond1Dly'
                     }
                 },
                 'Dynamic': {
@@ -4249,6 +4245,10 @@ SEC_2_CHANNELS = {
                         'Inp': 'RA-RaSIB01:RF-LLRF:GPIOInp-Mon',
                         'Intlk': 'RA-RaSIB01:RF-LLRF:GPIOIntlk-Mon',
                         'Out': 'RA-RaSIB01:RF-LLRF:GPIOOut-Mon'
+                    },
+                    'Quench1': {
+                        'Rv': 'RA-RaSIB01:RF-LLRF:QuenchCond1RvRatio',
+                        'Dly': 'RA-RaSIB01:RF-LLRF:QuenchCond1Dly'
                     }
                 },
                 'Dynamic': {
