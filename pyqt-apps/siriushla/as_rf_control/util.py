@@ -87,6 +87,7 @@ SEC_2_CHANNELS = {
                         'Circulator Out Fwd (RF In 14)',
                         'Circulator Out Rev (RF In 15)',
                         'LLRF Beam Trip',
+                        'Quench Condition 1'
                     ),
                 }
             },
@@ -1250,6 +1251,10 @@ SEC_2_CHANNELS = {
                     'Inp': 'RA-RaBO01:RF-LLRF:GPIOInp-Mon',
                     'Intlk': 'RA-RaBO01:RF-LLRF:GPIOIntlk-Mon',
                     'Out': 'RA-RaBO01:RF-LLRF:GPIOOut-Mon'
+                },
+                'Quench1': {
+                    'Rv': 'RA-RaBO01:RF-LLRF:QuenchCond1RvRatio',
+                    'Dly': 'RA-RaBO01:RF-LLRF:QuenchCond1Dly'
                 }
             },
             'Bypass': {
@@ -1267,6 +1272,7 @@ SEC_2_CHANNELS = {
                 '817 1': ['End Switch Down 1', 'RA-RaBO01:RF-LLRF:FIMPLG1Down'],
                 '816 2': ['End Switch Up 2', 'RA-RaBO01:RF-LLRF:FIMPLG2Up'],
                 '817 2': ['End Switch Down 2', 'RA-RaBO01:RF-LLRF:FIMPLG2Down'],
+                '853': ['Quench Condition 1', 'RA-RaBO01:RF-LLRF:FIMQuenchCond1'],
                 '835': ['ILK VCav', 'RA-RaBO01:RF-LLRF:FIMCav'],
                 '836': ['ILK Fwd Cav', 'RA-RaBO01:RF-LLRF:FIMFwdCav'],
                 '837': ['ILK Fw SSA 1', 'RA-RaBO01:RF-LLRF:FIMFwdSSA1'],

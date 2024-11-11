@@ -156,36 +156,34 @@ class AdvancedInterlockDetails(SiriusDialog):
         gbox_gen.setLayout(self._genDiagLayout(chs_dict['General']))
 
         # Quench Cond. 1
-        if self.section == 'SI':
-            gbox_quench = QGroupBox('Quench Cond. 1', self)
-            lay_quench = QGridLayout(gbox_quench)
-            lay_quench.setAlignment(Qt.AlignTop)
-            lay_quench.setSpacing(9)
+        gbox_quench = QGroupBox('Quench Cond. 1', self)
+        lay_quench = QGridLayout(gbox_quench)
+        lay_quench.setAlignment(Qt.AlignTop)
+        lay_quench.setSpacing(9)
 
-            rv_ch = self.prefix+chs_dict['Quench1']['Rv']
-            dly_ch = self.prefix+chs_dict['Quench1']['Dly']
-            lb_dly = SiriusLabel(self, dly_ch+'-RB')
-            lb_dly.showUnits = True
+        rv_ch = self.prefix+chs_dict['Quench1']['Rv']
+        dly_ch = self.prefix+chs_dict['Quench1']['Dly']
+        lb_dly = SiriusLabel(self, dly_ch+'-RB')
+        lb_dly.showUnits = True
 
-            lay_quench.addWidget(QLabel(
-                'Rv Ratio'), 0, 0, alignment=Qt.AlignRight | Qt.AlignVCenter)
-            lay_quench.addWidget(SiriusSpinbox(
-                self, rv_ch+'-SP'), 0, 1, alignment=Qt.AlignCenter)
-            lay_quench.addWidget(SiriusLabel(
-                self, self.prefix+rv_ch+'-RB'), 0, 2, alignment=Qt.AlignCenter)
-            lay_quench.addWidget(QLabel(
-                'Delay'), 1, 0, alignment=Qt.AlignRight | Qt.AlignVCenter)
-            lay_quench.addWidget(SiriusSpinbox(
-                self, dly_ch+'-SP'), 1, 1, alignment=Qt.AlignCenter)
-            lay_quench.addWidget(lb_dly, 1, 2, alignment=Qt.AlignCenter)
+        lay_quench.addWidget(QLabel(
+            'Rv Ratio'), 0, 0, alignment=Qt.AlignRight | Qt.AlignVCenter)
+        lay_quench.addWidget(SiriusSpinbox(
+            self, rv_ch+'-SP'), 0, 1, alignment=Qt.AlignCenter)
+        lay_quench.addWidget(SiriusLabel(
+            self, self.prefix+rv_ch+'-RB'), 0, 2, alignment=Qt.AlignCenter)
+        lay_quench.addWidget(QLabel(
+            'Delay'), 1, 0, alignment=Qt.AlignRight | Qt.AlignVCenter)
+        lay_quench.addWidget(SiriusSpinbox(
+            self, dly_ch+'-SP'), 1, 1, alignment=Qt.AlignCenter)
+        lay_quench.addWidget(lb_dly, 1, 2, alignment=Qt.AlignCenter)
 
         lay.addWidget(gbox_lvls, 0, 0)
         lay.addWidget(gbox_inp, 0, 1)
         lay.addWidget(gbox_intlk, 0, 2)
         lay.addWidget(gbox_out, 0, 3)
         lay.addWidget(gbox_gen, 1, 0, 1, 2)
-        if self.section == 'SI':
-            lay.addWidget(gbox_quench, 1, 2, 1, 2)
+        lay.addWidget(gbox_quench, 1, 2, 1, 2)
 
         return lay
 
