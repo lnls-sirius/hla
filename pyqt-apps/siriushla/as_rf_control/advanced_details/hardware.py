@@ -1,6 +1,7 @@
 """Advanced details related to the hardware."""
 
 from pydm.widgets import PyDMEnumComboBox
+from pydm.widgets.display_format import DisplayFormat
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGridLayout, QGroupBox, QLabel, QVBoxLayout
 
@@ -157,6 +158,9 @@ class HardwareDetails(SiriusDialog):
         for key, val in chs_dict.items():
             lb_value = SiriusLabel(self, self.prefix+val)
             lb_value.showUnits = True
+            if key == 'Firmware':
+                lb_value.displayFormat = DisplayFormat.Hex
+
             lay.addWidget(QLabel(key, alignment=Qt.AlignRight), row, 0)
             lay.addWidget(lb_value, row, 1)
             row += 1
