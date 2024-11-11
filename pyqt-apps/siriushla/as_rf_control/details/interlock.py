@@ -6,7 +6,7 @@ from qtpy.QtWidgets import QGridLayout, QGroupBox, QLabel, QPushButton, \
     QScrollArea, QVBoxLayout, QWidget
 
 from ...util import connect_window
-from ...widgets import SiriusDialog, SiriusLabel, SiriusLedAlert, SiriusSpinbox
+from ...widgets import SiriusDialog, SiriusLabel, SiriusLedAlert
 from ..advanced_details import AdvancedInterlockDetails
 from ..util import DEFAULT_STYLESHEET, SEC_2_CHANNELS
 
