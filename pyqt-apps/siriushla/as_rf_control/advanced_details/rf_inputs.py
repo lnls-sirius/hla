@@ -5,6 +5,7 @@ from qtpy.QtWidgets import QGridLayout, QLabel, QSizePolicy as QSzPlcy, \
     QSpacerItem
 
 from ...widgets import SiriusDialog, SiriusLabel
+from ..custom_widgets import RFTitleFrame
 from ..util import DEFAULT_STYLESHEET, SEC_2_CHANNELS
 
 
@@ -36,8 +37,12 @@ class RFInputsDetails(SiriusDialog):
         lay.setVerticalSpacing(9)
         lay.setHorizontalSpacing(18)
 
-        lay.addWidget(QLabel(
-            f'<h4>{self.title}</h4>', alignment=Qt.AlignCenter), 0, 0, 1, 9)
+        title_frame = RFTitleFrame(self, self.system)
+        lay_title = QGridLayout(title_frame)
+        lay_title.addWidget(QLabel(
+            f'<h4>{self.title}</h4>', alignment=Qt.AlignCenter), 0, 0)
+        lay.addWidget(title_frame, 0, 0, 1, 9)
+
         lay.addWidget(QLabel('In-Phase', alignment=Qt.AlignCenter), 1, 2)
         lay.addWidget(QLabel('Quadrature', alignment=Qt.AlignCenter), 1, 3)
         lay.addWidget(QLabel('Amp', alignment=Qt.AlignCenter), 1, 4)

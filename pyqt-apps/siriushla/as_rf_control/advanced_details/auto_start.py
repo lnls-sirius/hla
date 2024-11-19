@@ -5,6 +5,7 @@ from qtpy.QtWidgets import QGridLayout, QGroupBox, QLabel, QVBoxLayout
 
 from ...widgets import PyDMStateButton, SiriusDialog, SiriusEnumComboBox, \
     SiriusLabel, SiriusLedAlert, SiriusLedState
+from ..custom_widgets import RFTitleFrame
 from ..util import DEFAULT_STYLESHEET, SEC_2_CHANNELS
 
 
@@ -34,6 +35,12 @@ class AutoStartDetails(SiriusDialog):
         lay = QVBoxLayout(self)
         lay.setAlignment(Qt.AlignTop)
         lay.setSpacing(9)
+
+        # Title
+        title_frame = RFTitleFrame(self, self.system)
+        lay_title = QVBoxLayout(title_frame)
+        lay_title.addWidget(QLabel(
+            f'<h4>{self.title}</h4>', alignment=Qt.AlignCenter))
 
         # General
         gbox_gen = QGroupBox('General')
@@ -75,8 +82,7 @@ class AutoStartDetails(SiriusDialog):
             self._setupLabelLed(diag_lay, key, val, row, key == '401')
             row += 1
 
-        lay.addWidget(QLabel(
-            f'<h4>{self.title}</h4>', alignment=Qt.AlignCenter))
+        lay.addWidget(title_frame)
         lay.addWidget(gbox_gen)
         lay.addWidget(gbox_diag)
 

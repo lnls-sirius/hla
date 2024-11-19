@@ -8,6 +8,7 @@ from qtpy.QtWidgets import QGridLayout, QGroupBox, QLabel, \
 from ...widgets import PyDMStateButton, SiriusDialog, SiriusEnumComboBox, \
     SiriusLabel, SiriusLedAlert, SiriusLedState, SiriusPushButton, \
     SiriusSpinbox
+from ..custom_widgets import RFTitleFrame
 from ..util import DEFAULT_STYLESHEET, SEC_2_CHANNELS
 
 
@@ -37,8 +38,12 @@ class TuningDetails(SiriusDialog):
         lay = QGridLayout(self)
         lay.setAlignment(Qt.AlignTop)
         lay.setSpacing(9)
-        lay.addWidget(QLabel(
-            f'<h4>{self.title}</h4>', alignment=Qt.AlignCenter), 0, 0, 1, 3)
+
+        title_frame = RFTitleFrame(self, self.system)
+        lay_title = QGridLayout(title_frame)
+        lay_title.addWidget(QLabel(
+            f'<h4>{self.title}</h4>', alignment=Qt.AlignCenter), 0, 0)
+        lay.addWidget(title_frame, 0, 0, 1, 3)
 
         gbox_gen = QGroupBox('General')
         gbox_gen.setLayout(self._generalLayout(self.syst_dict['General']))

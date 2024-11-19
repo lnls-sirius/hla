@@ -20,6 +20,11 @@ DEFAULT_STYLESHEET = """
                 max-height:1.5em; min-width:4em;
             }"""
 
+SYSTEM_COLORS = {
+    'A': 'royalBlue',
+    'B': 'lightBlue'
+}
+
 SEC_2_CHANNELS = {
     'BO': {
         'Emergency': 'BO-05D:RF-Intlk:EStop-Mon',
@@ -82,6 +87,7 @@ SEC_2_CHANNELS = {
                         'Circulator Out Fwd (RF In 14)',
                         'Circulator Out Rev (RF In 15)',
                         'LLRF Beam Trip',
+                        'Quench Condition 1'
                     ),
                 }
             },
@@ -1245,6 +1251,10 @@ SEC_2_CHANNELS = {
                     'Inp': 'RA-RaBO01:RF-LLRF:GPIOInp-Mon',
                     'Intlk': 'RA-RaBO01:RF-LLRF:GPIOIntlk-Mon',
                     'Out': 'RA-RaBO01:RF-LLRF:GPIOOut-Mon'
+                },
+                'Quench1': {
+                    'Rv': 'RA-RaBO01:RF-LLRF:QuenchCond1RvRatio',
+                    'Dly': 'RA-RaBO01:RF-LLRF:QuenchCond1Dly'
                 }
             },
             'Bypass': {
@@ -1262,6 +1272,7 @@ SEC_2_CHANNELS = {
                 '817 1': ['End Switch Down 1', 'RA-RaBO01:RF-LLRF:FIMPLG1Down'],
                 '816 2': ['End Switch Up 2', 'RA-RaBO01:RF-LLRF:FIMPLG2Up'],
                 '817 2': ['End Switch Down 2', 'RA-RaBO01:RF-LLRF:FIMPLG2Down'],
+                '853': ['Quench Condition 1', 'RA-RaBO01:RF-LLRF:FIMQuenchCond1'],
                 '835': ['ILK VCav', 'RA-RaBO01:RF-LLRF:FIMCav'],
                 '836': ['ILK Fwd Cav', 'RA-RaBO01:RF-LLRF:FIMFwdCav'],
                 '837': ['ILK Fw SSA 1', 'RA-RaBO01:RF-LLRF:FIMFwdSSA1'],
@@ -1590,10 +1601,6 @@ SEC_2_CHANNELS = {
                     '6': 'RA-RaSIA01:RF-LLRF:IntlkTs6-Mon',
                     '7': 'RA-RaSIA01:RF-LLRF:IntlkTs7-Mon',
                 },
-                'Quench1': {
-                    'Rv': 'RA-RaSIA01:RF-LLRF:QuenchCond1RvRatio',
-                    'Dly': 'RA-RaSIA01:RF-LLRF:QuenchCond1Dly'
-                }
             },
             'B': {
                 'Inputs': {
@@ -1664,10 +1671,6 @@ SEC_2_CHANNELS = {
                     '5': 'RA-RaSIB01:RF-LLRF:IntlkTs5-Mon',
                     '6': 'RA-RaSIB01:RF-LLRF:IntlkTs6-Mon',
                     '7': 'RA-RaSIB01:RF-LLRF:IntlkTs7-Mon',
-                },
-                'Quench1': {
-                    'Rv': 'RA-RaSIB01:RF-LLRF:QuenchCond1RvRatio',
-                    'Dly': 'RA-RaSIB01:RF-LLRF:QuenchCond1Dly'
                 }
             }
         },
@@ -4151,6 +4154,10 @@ SEC_2_CHANNELS = {
                         'Inp': 'RA-RaSIA01:RF-LLRF:GPIOInp-Mon',
                         'Intlk': 'RA-RaSIA01:RF-LLRF:GPIOIntlk-Mon',
                         'Out': 'RA-RaSIA01:RF-LLRF:GPIOOut-Mon'
+                    },
+                    'Quench1': {
+                        'Rv': 'RA-RaSIA01:RF-LLRF:QuenchCond1RvRatio',
+                        'Dly': 'RA-RaSIA01:RF-LLRF:QuenchCond1Dly'
                     }
                 },
                 'Dynamic': {
@@ -4244,6 +4251,10 @@ SEC_2_CHANNELS = {
                         'Inp': 'RA-RaSIB01:RF-LLRF:GPIOInp-Mon',
                         'Intlk': 'RA-RaSIB01:RF-LLRF:GPIOIntlk-Mon',
                         'Out': 'RA-RaSIB01:RF-LLRF:GPIOOut-Mon'
+                    },
+                    'Quench1': {
+                        'Rv': 'RA-RaSIB01:RF-LLRF:QuenchCond1RvRatio',
+                        'Dly': 'RA-RaSIB01:RF-LLRF:QuenchCond1Dly'
                     }
                 },
                 'Dynamic': {

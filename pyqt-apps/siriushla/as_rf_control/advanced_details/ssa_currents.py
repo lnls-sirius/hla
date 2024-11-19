@@ -6,6 +6,7 @@ from qtpy.QtWidgets import QGridLayout, QGroupBox, QHBoxLayout, QLabel, \
     QVBoxLayout, QWidget
 
 from ...widgets import SiriusDialog, SiriusLabel, SiriusLedState, SiriusSpinbox
+from ..custom_widgets import RFTitleFrame
 from ..util import DEFAULT_STYLESHEET, SEC_2_CHANNELS
 
 
@@ -39,6 +40,11 @@ class SSACurrentsDetails(SiriusDialog):
         lay = QVBoxLayout(self)
         lay.setAlignment(Qt.AlignTop)
 
+        title_frame = RFTitleFrame(self, self.system)
+        lay_title = QHBoxLayout(title_frame)
+        lay_title.addWidget(QLabel(
+            f'<h4>{self.title}</h4>', alignment=Qt.AlignCenter))
+
         dtls = QTabWidget(self)
         dtls.setObjectName(self.section+'Tab')
         dtls.setStyleSheet(
@@ -55,8 +61,7 @@ class SSACurrentsDetails(SiriusDialog):
         wid_graphs.setLayout(self._setupAlarmLay())
         dtls.addTab(wid_graphs, 'Alarm Limits')
 
-        lay.addWidget(QLabel(
-            f'<h4>{self.title}</h4>', alignment=Qt.AlignCenter))
+        lay.addWidget(title_frame)
         lay.addWidget(dtls)
 
     def _setupDiagLay(self):

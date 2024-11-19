@@ -6,7 +6,7 @@ from qtpy.QtWidgets import QGridLayout, QGroupBox, QLabel, QPushButton, \
     QScrollArea, QVBoxLayout, QWidget
 
 from ...util import connect_window
-from ...widgets import SiriusDialog, SiriusLabel, SiriusLedAlert, SiriusSpinbox
+from ...widgets import SiriusDialog, SiriusLabel, SiriusLedAlert
 from ..advanced_details import AdvancedInterlockDetails
 from ..util import DEFAULT_STYLESHEET, SEC_2_CHANNELS
 
@@ -52,12 +52,12 @@ class LLRFInterlockDetails(SiriusDialog):
         if self.section == 'SI':
             offset = 1
             for key, chs_dict in self.chs['LLRF Intlk Details'].items():
-                self._setupDetails(lay_scr, key, chs_dict, offset)
-                offset += 4
+                self._setupDetails(lay_scr, chs_dict, offset, key)
+                offset += 3
         else:
-            self._setupDetails(lay_scr, None, self.chs['LLRF Intlk Details'], 1)
+            self._setupDetails(lay_scr, self.chs['LLRF Intlk Details'], 1)
 
-    def _setupDetails(self, lay, system, chs_dict, offset):
+    def _setupDetails(self, lay, chs_dict, offset, system=''):
         if system:
             lay.addWidget(QLabel(
                 f'<h4>LLRF {system}</h4>', self,
@@ -94,7 +94,7 @@ class LLRFInterlockDetails(SiriusDialog):
                 lbl.setStyleSheet('QLabel{min-width:12em;}')
                 lay_intlk.addWidget(lbl, irow, icol)
 
-            lay.addWidget(gbox, offset+1, col, 3, 1)
+            lay.addWidget(gbox, offset+1, col, 2, 1)
             col += 1
 
         # timestamps
@@ -113,31 +113,6 @@ class LLRFInterlockDetails(SiriusDialog):
             lay_time.addWidget(lbl, irow, 1)
         lay.addWidget(gbox_time, offset+1, col)
 
-        # quench
-        if self.section == 'SI':
-            gbox_quench = QGroupBox('Quench Cond. 1', self)
-            lay_quench = QGridLayout(gbox_quench)
-            lay_quench.setAlignment(Qt.AlignTop)
-            lay_quench.setSpacing(9)
-
-            rv_ch = self.prefix+chs_dict['Quench1']['Rv']
-            dly_ch = self.prefix+chs_dict['Quench1']['Dly']
-            lb_dly = SiriusLabel(self, dly_ch+'-RB')
-            lb_dly.showUnits = True
-
-            lay_quench.addWidget(QLabel(
-                'Rv Ratio'), 0, 0, alignment=Qt.AlignRight | Qt.AlignVCenter)
-            lay_quench.addWidget(SiriusSpinbox(
-                self, rv_ch+'-SP'), 0, 1, alignment=Qt.AlignCenter)
-            lay_quench.addWidget(SiriusLabel(
-                self, self.prefix+rv_ch+'-RB'), 0, 2, alignment=Qt.AlignCenter)
-            lay_quench.addWidget(QLabel(
-                'Delay'), 1, 0, alignment=Qt.AlignRight | Qt.AlignVCenter)
-            lay_quench.addWidget(SiriusSpinbox(
-                self, dly_ch+'-SP'), 1, 1, alignment=Qt.AlignCenter)
-            lay_quench.addWidget(lb_dly, 1, 2, alignment=Qt.AlignCenter)
-            lay.addWidget(gbox_quench, offset+2, col)
-
         # advanced details
         pb_dtls = QPushButton(
             qta.icon('fa5s.external-link-alt'), ' Advanced Details', self)
@@ -145,4 +120,4 @@ class LLRFInterlockDetails(SiriusDialog):
         connect_window(
             pb_dtls, AdvancedInterlockDetails, parent=self,
             prefix=self.prefix, section=self.section, system=system)
-        lay.addWidget(pb_dtls, offset+3, col, alignment=Qt.AlignCenter)
+        lay.addWidget(pb_dtls, offset+2, col, alignment=Qt.AlignCenter)

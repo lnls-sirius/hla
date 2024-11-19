@@ -7,8 +7,8 @@ from pydm.widgets import PyDMEnumComboBox, PyDMLineEdit
 from pyqtgraph import InfiniteLine, mkPen
 from qtpy.QtCore import Qt
 from qtpy.QtGui import QColor
-from qtpy.QtWidgets import QCheckBox, QComboBox, QGridLayout, QGroupBox, \
-    QHBoxLayout, QLabel, QPushButton, QRadioButton, QScrollArea, \
+from qtpy.QtWidgets import QCheckBox, QComboBox, QFrame, QGridLayout, \
+    QGroupBox, QHBoxLayout, QLabel, QPushButton, QRadioButton, QScrollArea, \
     QSizePolicy as QSzPlcy, QSpacerItem, QTabWidget, QVBoxLayout, QWidget
 
 from ..util import connect_newprocess, get_appropriate_color
@@ -420,9 +420,14 @@ class RFMainControl(SiriusMainWindow):
         # # Slow Loop Control
         wid_sl = QWidget()
         lay_slc = QGridLayout(wid_sl)
-        lay_slc.setAlignment(Qt.AlignTop | Qt.AlignHCenter)
+        lay_slc.setAlignment(Qt.AlignTop)
         lay_slc.setVerticalSpacing(6)
         lay_slc.setHorizontalSpacing(20)
+
+        if self.section == 'BO':
+            lay_slc.setColumnStretch(0, 1)
+            lay_slc.setColumnStretch(1, 2)
+            lay_slc.setColumnStretch(2, 2)
 
         lay_slc.addWidget(QLabel(
             '<h4>Mode</h4>', self, alignment=Qt.AlignCenter), 2, 0)
@@ -446,7 +451,13 @@ class RFMainControl(SiriusMainWindow):
         offset = 1
         if self.section == 'SI':
             for key, chs_dict in self.chs['SL']['Over'].items():
-                self._create_slc_lay(lay_slc, key, chs_dict, offset)
+                line = QFrame()
+                line.setFrameShape(QFrame.VLine)
+                line.setFrameShadow(QFrame.Plain)
+                line.setLineWidth(2)
+                line.setStyleSheet('color: gray')
+                lay_slc.addWidget(line, 0, offset, 17, 1)
+                self._create_slc_lay(lay_slc, key, chs_dict, offset+1)
                 offset += 3
         else:
             self._create_slc_lay(lay_slc, None, self.chs['SL']['Over'], 1)
@@ -473,7 +484,7 @@ class RFMainControl(SiriusMainWindow):
         lay_details.addWidget(self.pb_errdtls, alignment=Qt.AlignCenter)
         lay_details.addWidget(self.pb_paramdtls, alignment=Qt.AlignCenter)
 
-        lay_slc.addWidget(gbox_details, 17, 0, 2, offset)
+        lay_slc.addWidget(gbox_details, 17, 0, 1, offset)
 
         # # Tuning
         # # # Tuning settings
@@ -691,13 +702,18 @@ class RFMainControl(SiriusMainWindow):
         lay_diag = QGridLayout(wid_diag)
         lay_diag.setAlignment(Qt.AlignTop)
         lay_diag.setSpacing(9)
+
+        add_labels = True
         if self.section == 'SI':
             column = 1
             for k, chs in self.chs['Diagnostics'].items():
-                self._create_diag_lay(lay_diag, k, chs, column)
-                column += 2
+                self._create_diag_lay(lay_diag, k, chs, column, add_labels)
+                if add_labels:
+                    add_labels = False
+                column += 1
         else:
-            self._create_diag_lay(lay_diag, None, self.chs['Diagnostics'], 0)
+            self._create_diag_lay(
+                lay_diag, None, self.chs['Diagnostics'], 1, add_labels)
 
         # # FDL
         wid_fdl = QWidget()
@@ -1718,11 +1734,19 @@ class RFMainControl(SiriusMainWindow):
         lay_fdl.addLayout(lay_checks)
         lay_fdl.addWidget(self.amp_graph)
 
-    def _create_diag_lay(self, lay_diag, key, chs, column):
+    def _create_diag_lay(self, lay_diag, key, chs, column, add_labels):
+        if add_labels:
+            row = 2
+            for _, val in chs.items():
+                lay_diag.addWidget(
+                    QLabel(val[0], alignment=Qt.AlignRight | Qt.AlignVCenter),
+                    row, column-1)
+                row += 1
+
         if key is not None:
             lay_diag.addWidget(QLabel(
                 f'<h4>{key}</h4>', alignment=Qt.AlignCenter),
-                0, column, 1, 2)
+                0, column)
             lay_diag.addItem(QSpacerItem(
                 0, 9, QSzPlcy.Ignored, QSzPlcy.Fixed), 1, column)
         else:
@@ -1735,17 +1759,13 @@ class RFMainControl(SiriusMainWindow):
                 led = SiriusLedAlert(self, self.prefix+val[1])
             else:
                 led = SiriusLedState(self, self.prefix+val[1])
-            lay_diag.addWidget(QLabel(
-                val[0], alignment=Qt.AlignRight), row, column)
-            lay_diag.addWidget(led, row, column+1,
-                alignment=Qt.AlignCenter)
+            lay_diag.addWidget(led, row, column, alignment=Qt.AlignCenter)
             row += 1
 
     def _create_slc_lay(self, lay_slc, key, chs_dict, offset):
         if key:
             lay_slc.addWidget(QLabel(
-                f'<h4>{key}<h4>', self, alignment=Qt.AlignRight),
-                1, offset)
+                f'<h4>{key}</h4>', alignment=Qt.AlignCenter), 1, offset, 1, 2)
 
         lb_slmode = SiriusLabel(
             self, self.prefix+chs_dict['Mode']+'-Sts')
