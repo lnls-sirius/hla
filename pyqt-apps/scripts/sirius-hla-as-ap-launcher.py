@@ -15,12 +15,14 @@ parser = _argparse.ArgumentParser(
 parser.add_argument(
     '-p', "--prefix", type=str, default=VACA_PREFIX,
     help="Define the prefix for the PVs in the window.")
+parser.add_argument('-f', "--force-new-window", action='store_true',
+    help="Force the creation of a new window")
 args = parser.parse_args()
 
 need_new_window = True
 returnval = _subprocess.getoutput(
     'ps h -A -o pid,sess,command= | grep "[s]irius-hla-as-ap-launcher.py"')
-if returnval:
+if not args.force_new_window and returnval:
     for info in returnval.split('\n'):
         pid, _, comm = info.split()[:3]
         window = util.check_window_by_pid(pid, comm)
