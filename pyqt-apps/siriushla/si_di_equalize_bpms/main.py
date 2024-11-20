@@ -1,6 +1,5 @@
 """Main module of the Application Interface."""
 import os as _os
-import sys as _sys
 import logging as _log
 from threading import Thread
 import pathlib as _pathlib
@@ -35,15 +34,7 @@ class BPMsEqualizeSwitching(SiriusMainWindow):
         """."""
         super().__init__(parent=parent)
 
-        root = _log.getLogger()
-        handler = _log.StreamHandler(_sys.stdout)
-        root.setLevel(_log.INFO)
-        handler.setLevel(_log.INFO)
-        formatter = _log.Formatter('%(levelname)7s ::: %(message)s')
-        handler.setFormatter(formatter)
-        root.addHandler(handler)
-
-        self.bpms_eq = EqualizeBPMs(logger=root)
+        self.bpms_eq = EqualizeBPMs()
         self._last_dir = self.DEFAULT_DIR
         self._thread = Thread()
         self._orbits = None
