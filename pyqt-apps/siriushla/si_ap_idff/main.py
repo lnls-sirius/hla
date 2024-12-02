@@ -119,7 +119,7 @@ class IDFFWindow(SiriusMainWindow):
             section='ID', title='FeedForward Status')
 
         self.clear_alarms = PyDMPushButton(
-            self, "Clear Alarms",
+            self, "Clear Alarms", pressValue=1,
             init_channel=self.dev_pref.substitute(propty='ClearFlags-Cmd'))
 
         lbl_plc_counter = QLabel('PLC Counter: ', self)
