@@ -119,7 +119,6 @@ def get_prop2width(psname):
             'strength_rb': 6,
             'strength_mon': 8})
     if psmodel == 'FBP':
-        dic.update({'sofbmode': 6})
         dic.update({'idffmode': 6})
     if psname.dis == 'PU':
         dic.update({'pulse': 8})
@@ -176,7 +175,6 @@ def get_prop2label(psname):
             'strength_rb': strength + '-RB',
             'strength_mon': strength + '-Mon'})
     if psmodel == 'FBP':
-        dic.update({'sofbmode': 'SOFBMode'})
         dic.update({'idffmode': 'IDFFMode'})
     if psname.dis == 'PU':
         dic.update({'pulse': 'Pulse'})
@@ -189,7 +187,7 @@ def sort_propties(labels):
     default_order = (
         'detail', 'bbb', 'udc', 'opmode', 'ctrlmode', 'state', 'pulse',
         'intlk', 'alarm', 'reset', 'conn', 'ctrlloop', 'wfmupdate',
-        'updparms', 'sofbmode', 'idffmode', 'accgain', 'accfreeze', 'accclear',
+        'updparms', 'idffmode', 'accgain', 'accfreeze', 'accclear',
         'setpoint', 'readback', 'monitor', 'strength_sp',
         'strength_rb', 'strength_mon', 'trim')
     idcs = list()
@@ -242,7 +240,6 @@ class SummaryWidget(QWidget):
             and not self._is_regatron and not self._is_fofb
         self._has_parmupdt = not self._is_linac and not self._is_regatron\
             and not self._is_fofb
-        self._has_sofbmode = self._is_fbp
         self._has_idffmode = self._is_fbp
         self._has_wfmupdt = self._has_parmupdt and not self._is_dclink
         self._has_analsp = not self._is_reg_slave
@@ -345,11 +342,6 @@ class SummaryWidget(QWidget):
             self.updparms_wid = self._build_widget(name='updparms')
             self._widgets_dict['updparms'] = self.updparms_wid
             lay.addWidget(self.updparms_wid)
-
-        if self._has_sofbmode:
-            self.sofbmode_wid = self._build_widget(name='sofbmode')
-            self._widgets_dict['sofbmode'] = self.sofbmode_wid
-            lay.addWidget(self.sofbmode_wid)
 
         if self._has_idffmode:
             self.idffmode_wid = self._build_widget(name='idffmode')
@@ -528,12 +520,6 @@ class SummaryWidget(QWidget):
             self._updparms_cmd = self._prefixed_name.substitute(
                 propty='ParamUpdate-Cmd')
 
-        if self._has_sofbmode:
-            self._sofbmode_sel = self._prefixed_name.substitute(
-                propty='SOFBMode-Sel')
-            self._sofbmode_sts = self._prefixed_name.substitute(
-                propty='SOFBMode-Sts')
-
         if self._has_idffmode:
             self._idffmode_sel = self._prefixed_name.substitute(
                 propty='IDFFMode-Sel')
@@ -691,11 +677,6 @@ class SummaryWidget(QWidget):
             self.updparms_bt.setStyleSheet(
                 '#updparms_bt{min-width:25px;max-width:25px;icon-size:20px;}')
             self.updparms_wid.layout().addWidget(self.updparms_bt)
-        elif name == 'sofbmode' and self._has_sofbmode:
-            self.sofbmode_bt = PyDMStateButton(self, self._sofbmode_sel)
-            self.sofbmode_led = SiriusLedState(self, self._sofbmode_sts)
-            self.sofbmode_wid.layout().addWidget(self.sofbmode_bt)
-            self.sofbmode_wid.layout().addWidget(self.sofbmode_led)
         elif name == 'idffmode' and self._has_idffmode:
             self.idffmode_bt = PyDMStateButton(self, self._idffmode_sel)
             self.idffmode_led = SiriusLedState(self, self._idffmode_sts)
@@ -847,20 +828,6 @@ class SummaryWidget(QWidget):
         if hasattr(self, 'updparms_bt'):
             if self.updparms_bt.isEnabled():
                 self.updparms_bt.sendValue()
-
-    def sofbmode_on(self):
-        """Turn SOFBMode on."""
-        if hasattr(self, 'sofbmode_bt'):
-            if self.sofbmode_bt.isEnabled():
-                if not self.sofbmode_bt.value:
-                    self.sofbmode_bt.send_value()
-
-    def sofbmode_off(self):
-        """Turn SOFBMode off."""
-        if hasattr(self, 'sofbmode_bt'):
-            if self.sofbmode_bt.isEnabled():
-                if self.sofbmode_bt.value:
-                    self.sofbmode_bt.send_value()
 
     def idffmode_on(self):
         """Turn IDFFMode on."""

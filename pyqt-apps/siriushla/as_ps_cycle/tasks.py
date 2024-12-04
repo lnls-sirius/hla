@@ -182,23 +182,6 @@ class PrepareTiming(BaseTask):
         self._controller.prepare_timing()
 
 
-class PreparePSSOFBMode(BaseTask):
-    """Prepare power suplies to cycle."""
-
-    def __init__(self, **kwargs):
-        super().__init__(need_controller=True, **kwargs)
-
-    def size(self):
-        return self._controller.prepare_ps_sofbmode_size
-
-    def duration(self):
-        """Return task maximum duration."""
-        return self._controller.prepare_ps_sofbmode_max_duration
-
-    def function(self):
-        self._controller.prepare_pwrsupplies_sofbmode()
-
-
 class PreparePSIDFFMode(BaseTask):
     """Prepare power suplies to cycle."""
 
