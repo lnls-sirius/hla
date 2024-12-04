@@ -24,7 +24,8 @@ from ..widgets.pvnames_tree import PVNameTree
 from ..widgets.dialog import ProgressDialog, PSStatusDialog
 from .tasks import CreateCyclers, VerifyPS, \
     SaveTiming, PrepareTiming, RestoreTiming, \
-    PreparePSSOFBMode, PreparePSOpModeSlowRef, PreparePSCurrentZero, \
+    PreparePSSOFBMode, PreparePSIDFFMode, \
+    PreparePSOpModeSlowRef, PreparePSCurrentZero, \
     PreparePSParams, PreparePSOpModeCycle, Cycle, CycleTrims
 
 
@@ -56,6 +57,7 @@ class CycleWindow(SiriusMainWindow):
         self._prepared_init_vals = {
             'timing': False,
             'ps_sofbmode': False,
+            'ps_idffmode': False,
             'ps_om_slowref': False,
             'ps_current': False,
             'ps_params': False,
@@ -73,6 +75,7 @@ class CycleWindow(SiriusMainWindow):
             'save_timing': SaveTiming,
             'timing': PrepareTiming,
             'ps_sofbmode': PreparePSSOFBMode,
+            'ps_idffmode': PreparePSIDFFMode,
             'ps_om_slowref': PreparePSOpModeSlowRef,
             'ps_current': PreparePSCurrentZero,
             'ps_params': PreparePSParams,
@@ -144,6 +147,17 @@ class CycleWindow(SiriusMainWindow):
 
         self.set_ps_sofbmode_off_lb = QLabel(self)
         self.set_ps_sofbmode_off_lb.setPixmap(self._pixmap_not)
+
+        self.set_ps_idffmode_off_bt = QPushButton(
+            '3. Turn off PS IDFFMode', self)
+        self.set_ps_idffmode_off_bt.setToolTip(
+            'Turn off power supplies IDFFMode.')
+        self.set_ps_idffmode_off_bt.clicked.connect(
+            _part(self._run_task, 'ps_idffmode'))
+        self.set_ps_idffmode_off_bt.clicked.connect(self._set_lastcomm)
+
+        self.set_ps_idffmode_off_lb = QLabel(self)
+        self.set_ps_idffmode_off_lb.setPixmap(self._pixmap_not)
 
         self.set_ps_opmode_slowref_bt = QPushButton(
             '4. Set PS OpMode to SlowRef', self)
@@ -226,6 +240,7 @@ class CycleWindow(SiriusMainWindow):
         self._prepared_labels = {
             'timing': self.prepare_timing_lb,
             'ps_sofbmode': self.set_ps_sofbmode_off_lb,
+            'ps_idffmode': self.set_ps_idffmode_off_lb,
             'ps_om_slowref': self.set_ps_opmode_slowref_lb,
             'ps_current': self.set_ps_current_zero_lb,
             'ps_params': self.prepare_ps_params_lb,
@@ -250,26 +265,28 @@ class CycleWindow(SiriusMainWindow):
         lay_commsts.addWidget(self.psconn_led, 5, 1)
         lay_commsts.addWidget(self.set_ps_sofbmode_off_bt, 6, 0)
         lay_commsts.addWidget(self.set_ps_sofbmode_off_lb, 6, 1)
-        lay_commsts.addWidget(self.set_ps_opmode_slowref_bt, 7, 0)
-        lay_commsts.addWidget(self.set_ps_opmode_slowref_lb, 7, 1)
-        lay_commsts.addWidget(self.set_ps_current_zero_bt, 8, 0)
-        lay_commsts.addWidget(self.set_ps_current_zero_lb, 8, 1)
-        lay_commsts.addWidget(self.prepare_ps_params_bt, 9, 0)
-        lay_commsts.addWidget(self.prepare_ps_params_lb, 9, 1)
-        lay_commsts.addWidget(self.prepare_ps_opmode_bt, 10, 0)
-        lay_commsts.addWidget(self.prepare_ps_opmode_lb, 10, 1)
+        lay_commsts.addWidget(self.set_ps_idffmode_off_bt, 7, 0)
+        lay_commsts.addWidget(self.set_ps_idffmode_off_lb, 7, 1)
+        lay_commsts.addWidget(self.set_ps_opmode_slowref_bt, 8, 0)
+        lay_commsts.addWidget(self.set_ps_opmode_slowref_lb, 8, 1)
+        lay_commsts.addWidget(self.set_ps_current_zero_bt, 9, 0)
+        lay_commsts.addWidget(self.set_ps_current_zero_lb, 9, 1)
+        lay_commsts.addWidget(self.prepare_ps_params_bt, 10, 0)
+        lay_commsts.addWidget(self.prepare_ps_params_lb, 10, 1)
+        lay_commsts.addWidget(self.prepare_ps_opmode_bt, 11, 0)
+        lay_commsts.addWidget(self.prepare_ps_opmode_lb, 11, 1)
         lay_commsts.addItem(
-            QSpacerItem(1, 1, QSzPlcy.Ignored, QSzPlcy.Expanding), 11, 0)
-        lay_commsts.addWidget(lb_cycle, 12, 0)
-        lay_commsts.addWidget(self.cycle_trims_bt, 13, 0)
-        lay_commsts.addWidget(self.cycle_trims_lb, 13, 1)
-        lay_commsts.addWidget(self.cycle_bt, 14, 0)
+            QSpacerItem(1, 1, QSzPlcy.Ignored, QSzPlcy.Expanding), 12, 0)
+        lay_commsts.addWidget(lb_cycle, 13, 0)
+        lay_commsts.addWidget(self.cycle_trims_bt, 14, 0)
+        lay_commsts.addWidget(self.cycle_trims_lb, 14, 1)
+        lay_commsts.addWidget(self.cycle_bt, 15, 0)
         lay_commsts.addItem(
-            QSpacerItem(1, 1, QSzPlcy.Ignored, QSzPlcy.Expanding), 15, 0)
-        lay_commsts.addWidget(lb_rest_ti, 16, 0)
-        lay_commsts.addWidget(self.restore_timing_bt, 17, 0)
+            QSpacerItem(1, 1, QSzPlcy.Ignored, QSzPlcy.Expanding), 16, 0)
+        lay_commsts.addWidget(lb_rest_ti, 17, 0)
+        lay_commsts.addWidget(self.restore_timing_bt, 18, 0)
         lay_commsts.addItem(
-            QSpacerItem(1, 1, QSzPlcy.Ignored, QSzPlcy.Expanding), 18, 0)
+            QSpacerItem(1, 1, QSzPlcy.Ignored, QSzPlcy.Expanding), 19, 0)
         lay_commsts.setColumnStretch(0, 10)
         lay_commsts.setColumnStretch(1, 1)
         lay_commsts.setVerticalSpacing(12)
@@ -435,6 +452,7 @@ class CycleWindow(SiriusMainWindow):
         self.save_timing_bt.setEnabled(enable)
         self.prepare_timing_bt.setEnabled(enable)
         self.set_ps_sofbmode_off_bt.setEnabled(enable)
+        self.set_ps_idffmode_off_bt.setEnabled(enable)
         self.set_ps_opmode_slowref_bt.setEnabled(enable)
         self.set_ps_current_zero_bt.setEnabled(enable)
         self.prepare_ps_params_bt.setEnabled(enable)

@@ -270,6 +270,7 @@ class PSDetailWidget(_BaseDetailWidget):
         'WfmIndex-Mon', 'WfmSyncPulseCount-Mon',
         'WfmUpdateAuto-Sel', 'WfmUpdateAuto-Sts',
         'SOFBMode-Sel', 'SOFBMode-Sts', 'SOFBUpdate-Cmd',
+        'IDFFMode-Sel', 'IDFFMode-Sts',
         'PRUCtrlQueueSize-Mon', 'SyncPulse-Cmd',
         'Wfm-SP', 'Wfm-RB', 'WfmRef-Mon', 'Wfm-Mon',
         'Voltage-SP', 'Voltage-RB', 'VoltageRef-Mon', 'Voltage-Mon',
