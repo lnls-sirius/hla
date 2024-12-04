@@ -183,7 +183,7 @@ class PrepareTiming(BaseTask):
 
 
 class PreparePSSOFBMode(BaseTask):
-    """Prepare power suplies to SOFBMode."""
+    """Prepare power suplies to cycle."""
 
     def __init__(self, **kwargs):
         super().__init__(need_controller=True, **kwargs)
@@ -200,7 +200,7 @@ class PreparePSSOFBMode(BaseTask):
 
 
 class PreparePSIDFFMode(BaseTask):
-    """Prepare power suplies to IDFFMode."""
+    """Prepare power suplies to cycle."""
 
     def __init__(self, **kwargs):
         super().__init__(need_controller=True, **kwargs)
