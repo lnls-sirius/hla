@@ -149,7 +149,7 @@ class CycleWindow(SiriusMainWindow):
         self.set_ps_sofbmode_off_lb.setPixmap(self._pixmap_not)
 
         self.set_ps_idffmode_off_bt = QPushButton(
-            '3. Turn off PS IDFFMode', self)
+            '4. Turn off PS IDFFMode', self)
         self.set_ps_idffmode_off_bt.setToolTip(
             'Turn off power supplies IDFFMode.')
         self.set_ps_idffmode_off_bt.clicked.connect(
@@ -160,7 +160,7 @@ class CycleWindow(SiriusMainWindow):
         self.set_ps_idffmode_off_lb.setPixmap(self._pixmap_not)
 
         self.set_ps_opmode_slowref_bt = QPushButton(
-            '4. Set PS OpMode to SlowRef', self)
+            '5. Set PS OpMode to SlowRef', self)
         self.set_ps_opmode_slowref_bt.setToolTip(
             'Set power supplies OpMode to SlowRef.')
         self.set_ps_opmode_slowref_bt.clicked.connect(
@@ -171,7 +171,7 @@ class CycleWindow(SiriusMainWindow):
         self.set_ps_opmode_slowref_lb.setPixmap(self._pixmap_not)
 
         self.set_ps_current_zero_bt = QPushButton(
-            '5. Set PS current to zero', self)
+            '6. Set PS current to zero', self)
         self.set_ps_current_zero_bt.setToolTip(
             'Set power supplies current to zero.')
         self.set_ps_current_zero_bt.clicked.connect(
@@ -182,7 +182,7 @@ class CycleWindow(SiriusMainWindow):
         self.set_ps_current_zero_lb.setPixmap(self._pixmap_not)
 
         self.prepare_ps_params_bt = QPushButton(
-            '6. Prepare PS Parameters', self)
+            '7. Prepare PS Parameters', self)
         self.prepare_ps_params_bt.setToolTip(
             'Check power supplies OpMode in SlowRef, check\n'
             'current is zero and configure cycle parameters.')
@@ -194,7 +194,7 @@ class CycleWindow(SiriusMainWindow):
         self.prepare_ps_params_lb.setPixmap(self._pixmap_not)
 
         self.prepare_ps_opmode_bt = QPushButton(
-            '7. Prepare PS OpMode', self)
+            '8. Prepare PS OpMode', self)
         self.prepare_ps_opmode_bt.setToolTip(
             'Set power supplies OpMode to Cycle.')
         self.prepare_ps_opmode_bt.clicked.connect(
@@ -207,7 +207,8 @@ class CycleWindow(SiriusMainWindow):
         lb_cycle = QLabel('<h4>Cycle</h4>', self,
                           alignment=Qt.AlignCenter)
 
-        self.cycle_trims_bt = QPushButton('8. Cycle Trims', self)
+        self.cycle_trims_bt = QPushButton(
+            '9. Cycle Trims', self)
         self.cycle_trims_bt.setToolTip(
             'Cycle trims:\nStep 1) CH, QS and QTrims\nStep 2) CV')
         self.cycle_trims_bt.clicked.connect(
@@ -219,7 +220,8 @@ class CycleWindow(SiriusMainWindow):
         self.cycle_trims_lb.setPixmap(self._pixmap_check)
         self.cycle_trims_lb.setVisible(False)
 
-        self.cycle_bt = QPushButton('8. Cycle', self)
+        self.cycle_bt = QPushButton(
+            '10. Cycle', self)
         self.cycle_bt.setToolTip(
             'Check all configurations,\nenable triggers and run cycle.')
         self.cycle_bt.clicked.connect(
@@ -230,7 +232,7 @@ class CycleWindow(SiriusMainWindow):
         lb_rest_ti = QLabel('<h4>Restore Timing</h4>', self,
                             alignment=Qt.AlignCenter)
         self.restore_timing_bt = QPushButton(
-            '9. Restore Timing Initial State', self)
+            '11. Restore Timing Initial State', self)
         self.restore_timing_bt.setToolTip(
             'Restore timing initial state.')
         self.restore_timing_bt.clicked.connect(
