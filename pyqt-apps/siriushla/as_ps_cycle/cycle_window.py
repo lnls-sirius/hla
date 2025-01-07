@@ -207,8 +207,7 @@ class CycleWindow(SiriusMainWindow):
         lb_cycle = QLabel('<h4>Cycle</h4>', self,
                           alignment=Qt.AlignCenter)
 
-        self.cycle_trims_bt = QPushButton(
-            '9. Cycle Trims', self)
+        self.cycle_trims_bt = QPushButton('9. Cycle Trims', self)
         self.cycle_trims_bt.setToolTip(
             'Cycle trims:\nStep 1) CH, QS and QTrims\nStep 2) CV')
         self.cycle_trims_bt.clicked.connect(
@@ -220,8 +219,7 @@ class CycleWindow(SiriusMainWindow):
         self.cycle_trims_lb.setPixmap(self._pixmap_check)
         self.cycle_trims_lb.setVisible(False)
 
-        self.cycle_bt = QPushButton(
-            '10. Cycle', self)
+        self.cycle_bt = QPushButton('10. Cycle', self)
         self.cycle_bt.setToolTip(
             'Check all configurations,\nenable triggers and run cycle.')
         self.cycle_bt.clicked.connect(
@@ -565,16 +563,16 @@ class CycleWindow(SiriusMainWindow):
                 has_sifam |= item.checkState(0) != 0
 
             if not has_sifam:
-                self.cycle_bt.setText('8. Cycle')
+                self.cycle_bt.setText('9. Cycle')
                 self.restore_timing_bt.setText(
-                    '9. Restore Timing Initial State')
+                    '10. Restore Timing Initial State')
                 self.cycle_trims_bt.setVisible(False)
                 self.cycle_trims_lb.setVisible(False)
                 self._prepared['trims'] = True
             else:
-                self.cycle_bt.setText('9. Cycle')
+                self.cycle_bt.setText('10. Cycle')
                 self.restore_timing_bt.setText(
-                    '10. Restore Timing Initial State')
+                    '11. Restore Timing Initial State')
                 self.cycle_trims_bt.setVisible(True)
                 self.cycle_trims_lb.setVisible(True)
                 self._prepared['trims'] = False
