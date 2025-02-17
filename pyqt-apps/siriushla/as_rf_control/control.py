@@ -1604,11 +1604,12 @@ class RFMainControl(SiriusMainWindow):
         if self.section == 'SI':
             pre_drive_ch = pre_drive_ch['Value']
         pre_drive_ch = self.prefix + pre_drive_ch
-        rules = (
-            '[{"name": "EnblRule", "property": "Enable", "expression":' +
-            '"ch[0] < ' + str(chs_dict['PreDriveThrs']) + '", "channels":' +
-            '[{"channel": "'+ pre_drive_ch + '", "trigger": true}]}]')
-        bt_pinsw.pb_on.rules = rules
+        if self.section != 'SI':
+            rules = (
+                '[{"name": "EnblRule", "property": "Enable", "expression":' +
+                '"ch[0] < ' + str(chs_dict['PreDriveThrs']) + '", "channels":' +
+                '[{"channel": "'+ pre_drive_ch + '", "trigger": true}]}]')
+            bt_pinsw.pb_on.rules = rules
         led_pinsw = SiriusLedState(self, self.prefix+chs_dict['PinSw']['Mon'])
         lay_amp.addLayout(self._create_vlay(bt_pinsw, led_pinsw), row, 7)
 
