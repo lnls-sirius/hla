@@ -35,7 +35,10 @@ class ParamsSettings(BaseWidget):
             gdl = QGridLayout(grpbx)
             props = (
                 ('RFFEasyn.CNCT', 'RFFE Connected'),
-                ('ADCAD9510PllStatus-Mon', 'ADC Clock Synched'))
+                ('ADCAD9510PllStatus-Mon', 'FMC PLL Clock Locked'),
+                ('MMCMLocked-Mon', 'MMCM Clock Locked'),
+                ('ClksLocked-Mon', 'All Clocks Locked'),
+            )
             for i, prop in enumerate(props):
                 led = SiriusLedState(grpbx, init_channel=self.get_pvname(prop[0]))
                 led.setOffColor(led.Red)
@@ -423,6 +426,8 @@ class BPMHardwareSettings(BaseWidget):
 
     def _setupADCCommonWidget(self):
         return self._create_formlayout_groupbox('ADC Common', (
+            ('MMCMLocked-Mon', 'MMCM Status',
+             [('ledstate', SiriusLedState.Red, SiriusLedState.LightGreen)]),
             ('ADCTrigDir-Sel', 'Trigger Direction'),
             ('ADCTrigTerm-Sel', 'Trigger Termination'),
             ('ADCTestDataEn-Sel', 'Enable test data',
