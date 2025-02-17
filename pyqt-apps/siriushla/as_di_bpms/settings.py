@@ -417,12 +417,12 @@ class BPMHardwareSettings(BaseWidget):
         vlay0.addWidget(self._setupActiveClockWidget())
         vlay0.addWidget(self._setupAD9510PLLWidget())
 
-        vlay1 = QVBoxLayout()
-        vlay1.setContentsMargins(0, 0, 0, 0)
-        vlay1.addWidget(self._setupADCsWidget())
+        # vlay1 = QVBoxLayout()
+        # vlay1.setContentsMargins(0, 0, 0, 0)
+        # vlay1.addWidget(self._setupADCsWidget())
 
         lay.addLayout(vlay0, 1, 0)
-        lay.addLayout(vlay1, 1, 1)
+        # lay.addLayout(vlay1, 1, 1)
 
     def _setupADCCommonWidget(self):
         return self._create_formlayout_groupbox('ADC Common', (
@@ -438,8 +438,8 @@ class BPMHardwareSettings(BaseWidget):
         return self._create_formlayout_groupbox('AD9510 PLL', (
             ('ADCAD9510PllStatus-Mon', 'PLL Status',
              [('ledstate', SiriusLedState.Red, SiriusLedState.LightGreen)]),
-            ('ADCAD9510Defaults-Sel', 'Reset',
-             [('pushbutton', 'Reset', None, 1, 0)]),
+            # ('ADCAD9510Defaults-Sel', 'Reset',
+            #  [('pushbutton', 'Reset', None, 1, 0)]),
             ('ADCAD9510ADiv-SP', 'A divider', ['lineedit', 'label']),
             ('ADCAD9510BDiv-SP', 'B divider', ['lineedit', 'label']),
             ('ADCAD9510RDiv-SP', 'R divider', ['lineedit', 'label']),
@@ -447,7 +447,6 @@ class BPMHardwareSettings(BaseWidget):
 
     def _setupActiveClockWidget(self):
         return self._create_formlayout_groupbox('Active Clock', (
-            ('INFOClkFreq-SP', 'Clock Frequency [Hz]', ['lineedit', 'label']),
             ('ADCSi57xOe-Sel', 'Osc. output enable',
              ['statebutton', 'ledstate']),
             ('ADCSi57xFreq-SP', 'Osc. Frequency [Hz]', ['lineedit', 'label']),
