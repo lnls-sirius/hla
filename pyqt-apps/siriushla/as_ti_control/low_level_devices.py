@@ -760,7 +760,7 @@ class EVG(BaseWidget):
 
         ld_bufsub = QLabel('<b>Subsec buffer</b>', self)
         rffreq = _PV("RF-Gen:GeneralFreq-RB").value
-        func = lambda vec: _np.round(vec * 4 / rffreq, decimals=10)  
+        func = lambda vec: _np.round(vec * 4 / rffreq, decimals=10)
         # from EVG clock to seconds
         self.tb_bufsub = self._create_logbuffer_table(
             prop='SUBSECbuffer', transform=func)
@@ -1581,30 +1581,32 @@ class AFC(BaseWidget):
         for i, locktype in enumerate(['', 'Ltc']):
             lb = QLabel(
                 '<b>Locked' + (' Latch' if locktype else '') + '</b>')
-            widlbl = QWidget()
-            hbxlbl = QHBoxLayout(widlbl)
-            hbxlbl.setSpacing(10)
-            hbxlbl.setContentsMargins(0, 0, 0, 0)
-            hbxlbl.setAlignment(Qt.AlignLeft)
             widctl = QWidget()
-            hbxctl = QHBoxLayout(widctl)
-            hbxctl.setSpacing(1)
-            hbxctl.setContentsMargins(0, 0, 0, 0)
-            for dev in ['AFC', 'RTM', 'GT0']:
-                pvname = self.get_pvname(f'{dev}ClkLocked{locktype}-Mon')
-                rb = SiriusLedAlert(self, init_channel=pvname)
-                rb.offColor, rb.onColor = rb.onColor, rb.offColor
-                hbxctl.addWidget(rb)
-                hbxlbl.addWidget(QLabel(dev, self))
+            gridlay = QGridLayout(widctl)
+            gridlay.setSpacing(1)
+            gridlay.setContentsMargins(0, 0, 0, 0)
+            dev2clk = [
+                ('AFC', ('Freq', 'Phase')),
+                ('RTM', ('Freq', 'Phase')),
+                ('GT0', ('Clk', ''))
+            ]
+            for col, (dev, clks) in enumerate(dev2clk):
+                gridlay.addWidget(QLabel(dev, self, alignment=Qt.AlignCenter), 0, col)
+                for row, clk in enumerate(clks):
+                    if not clk:
+                        continue
+                    pvname = self.get_pvname(f'{dev}{clk}Locked{locktype}-Mon')
+                    rb = SiriusLedAlert(self, init_channel=pvname)
+                    rb.offColor, rb.onColor = rb.onColor, rb.offColor
+                    gridlay.addWidget(rb, row+1, col)
 
-            if locktype == 'Ltc':
-                rst = SiriusPushButton(
-                    self, label='', icon=qta.icon('fa5s.sync'), pressValue=1,
-                    init_channel=self.get_pvname('ClkLockedLtcRst-Cmd'))
-                hbxctl.addWidget(rst)
-                hbxlbl.addWidget(QLabel('   ', self))
+                if locktype == 'Ltc':
+                    rst = SiriusPushButton(
+                        self, label='', icon=qta.icon('fa5s.sync'), pressValue=1,
+                        init_channel=self.get_pvname('ClkLockedLtcRst-Cmd'))
+                    gridlay.addWidget(rst, 1, len(dev2clk)+1)
 
-            gb = self._create_small_group('', status_wid, (lb, widctl, widlbl))
+            gb = self._create_small_group('', status_wid, (lb, widctl))
             status_lay.addWidget(gb, 0, 2+i)
 
         lb = QLabel("<b>UP Link</b>")
