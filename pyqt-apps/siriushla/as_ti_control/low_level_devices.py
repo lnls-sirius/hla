@@ -1598,6 +1598,8 @@ class AFC(BaseWidget):
                     pvname = self.get_pvname(f'{dev}{clk}Locked{locktype}-Mon')
                     rb = SiriusLedAlert(self, init_channel=pvname)
                     rb.offColor, rb.onColor = rb.onColor, rb.offColor
+                    if locktype == 'Ltc':
+                        rb.offColor = rb.Yellow
                     gridlay.addWidget(rb, row+1, col)
 
                 if locktype == 'Ltc':
