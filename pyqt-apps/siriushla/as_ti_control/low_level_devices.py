@@ -2283,7 +2283,7 @@ class EVGFOUTOUTList(BaseList):
         'position': 'Position',
         'outdelay': 'OutDelay',
         'rxlocked': 'RX Locked',
-        'rxlockedltc': 'RX Locked Lacth',
+        'rxlockedltc': 'RX Locked Latch',
         'downlinksts': 'Downlink',
         'rxenbl': 'RX Enbl',
         'connection': 'Connection',
