@@ -439,6 +439,10 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
         tab.addTab(self._setupPacketLossTab(), 'Packet Loss Detection')
         tab.addTab(self._setupIntlkTab(), 'Loop Interlock')
         tab.addTab(self._setupSYSIDExc(), 'SYSID Excitation States')
+        tab.addTab(
+            self._setupErrCntTab(),
+            'Frame Error Count - Auxiliary Packet Loss Diagnosis'
+        )
         tab.setCurrentIndex(self.tab_selected)
 
         lay = QVBoxLayout(self)
@@ -929,6 +933,38 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
             lay.addWidget(ledacc, row, 1, alignment=Qt.AlignTop)
             lay.addWidget(ledbpm, row, 2, alignment=Qt.AlignTop)
             lay.addWidget(ledsum, row, 3)
+
+        return self._build_scroll_area(wid)
+
+    def _setupErrCntTab(self):
+        wid = QWidget()
+        wid.setToolTip(
+            "If there is any counter increment, "
+            "there is a packet loss problem.")
+        lay = QGridLayout(wid)
+        lay.setSpacing(1)
+        lay.setAlignment(Qt.AlignLeft | Qt.AlignTop)
+
+        # header
+        lay.addWidget(
+            QLabel('<h4>Device</h4>', self, alignment=Qt.AlignCenter), 0, 0)
+        for i in range(8):
+            lay.addWidget(
+                QLabel(
+                    f'<h4>Error CH{i}</h4>', self, alignment=Qt.AlignCenter),
+                0, i+1)
+
+        # table
+        for dccidx, dcc in enumerate(['FMC', 'P2P']):
+            for ctrlidx, ctl in enumerate(self.ctrlrs):
+                row = dccidx*len(self.ctrlrs) + ctrlidx + 1
+                lbl = QLabel(f"{ctl}:DCC{dcc}", self, alignment=Qt.AlignCenter)
+                lay.addWidget(lbl, row, 0)
+                for i in range(8):
+                    pvnerr = _PVName(ctl).substitute(
+                        prefix=self.prefix, propty=f'DCC{dcc}FrameErrCntCH{i}-Mon')
+                    lblerr = SiriusLabel(self, pvnerr)
+                    lay.addWidget(lblerr, row, i+1, alignment=Qt.AlignTop)
 
         return self._build_scroll_area(wid)
 
