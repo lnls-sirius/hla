@@ -760,7 +760,7 @@ class EVG(BaseWidget):
 
         ld_bufsub = QLabel('<b>Subsec buffer</b>', self)
         rffreq = _PV("RF-Gen:GeneralFreq-RB").value
-        func = lambda vec: _np.round(vec * 4 / rffreq, decimals=10)  
+        func = lambda vec: _np.round(vec * 4 / rffreq, decimals=10)
         # from EVG clock to seconds
         self.tb_bufsub = self._create_logbuffer_table(
             prop='SUBSECbuffer', transform=func)
@@ -1581,30 +1581,34 @@ class AFC(BaseWidget):
         for i, locktype in enumerate(['', 'Ltc']):
             lb = QLabel(
                 '<b>Locked' + (' Latch' if locktype else '') + '</b>')
-            widlbl = QWidget()
-            hbxlbl = QHBoxLayout(widlbl)
-            hbxlbl.setSpacing(10)
-            hbxlbl.setContentsMargins(0, 0, 0, 0)
-            hbxlbl.setAlignment(Qt.AlignLeft)
             widctl = QWidget()
-            hbxctl = QHBoxLayout(widctl)
-            hbxctl.setSpacing(1)
-            hbxctl.setContentsMargins(0, 0, 0, 0)
-            for dev in ['AFC', 'RTM', 'GT0']:
-                pvname = self.get_pvname(f'{dev}ClkLocked{locktype}-Mon')
-                rb = SiriusLedAlert(self, init_channel=pvname)
-                rb.offColor, rb.onColor = rb.onColor, rb.offColor
-                hbxctl.addWidget(rb)
-                hbxlbl.addWidget(QLabel(dev, self))
+            gridlay = QGridLayout(widctl)
+            gridlay.setSpacing(1)
+            gridlay.setContentsMargins(0, 0, 0, 0)
+            dev2clk = [
+                ('AFC', ('Freq', 'Phase')),
+                ('RTM', ('Freq', 'Phase')),
+                ('GT0', ('Clk', ''))
+            ]
+            for col, (dev, clks) in enumerate(dev2clk):
+                gridlay.addWidget(QLabel(dev, self, alignment=Qt.AlignCenter), 0, col)
+                for row, clk in enumerate(clks):
+                    if not clk:
+                        continue
+                    pvname = self.get_pvname(f'{dev}{clk}Locked{locktype}-Mon')
+                    rb = SiriusLedAlert(self, init_channel=pvname)
+                    rb.offColor, rb.onColor = rb.onColor, rb.offColor
+                    if locktype == 'Ltc':
+                        rb.offColor = rb.Yellow
+                    gridlay.addWidget(rb, row+1, col)
 
-            if locktype == 'Ltc':
-                rst = SiriusPushButton(
-                    self, label='', icon=qta.icon('fa5s.sync'), pressValue=1,
-                    init_channel=self.get_pvname('ClkLockedLtcRst-Cmd'))
-                hbxctl.addWidget(rst)
-                hbxlbl.addWidget(QLabel('   ', self))
+                if locktype == 'Ltc':
+                    rst = SiriusPushButton(
+                        self, label='', icon=qta.icon('fa5s.sync'), pressValue=1,
+                        init_channel=self.get_pvname('ClkLockedLtcRst-Cmd'))
+                    gridlay.addWidget(rst, 1, len(dev2clk)+1)
 
-            gb = self._create_small_group('', status_wid, (lb, widctl, widlbl))
+            gb = self._create_small_group('', status_wid, (lb, widctl))
             status_lay.addWidget(gb, 0, 2+i)
 
         lb = QLabel("<b>UP Link</b>")
@@ -1639,6 +1643,32 @@ class AFC(BaseWidget):
         hlproc.addWidget(omsl)
         gb = self._create_small_group('', info_wid, (lb, mon, proc))
         info_lay.addWidget(gb, 0, 0)
+
+        lb = QLabel("<b>Debug Mode</b>")
+        pvname = self.get_pvname('UpstreamDebugEn-Sts')
+        lblmon = SiriusLabel(self, init_channel=pvname)
+        ledmon = PyDMLed(self, init_channel=pvname)
+        ledmon.offColor = ledmon.LightGreen
+        ledmon.onColor = ledmon.Yellow
+        but = QPushButton(self)
+        but.setToolTip('Open Upstream Debug details')
+        but.setIcon(qta.icon('fa5s.ellipsis-v'))
+        but.setDefault(False)
+        but.setAutoDefault(False)
+        but.setObjectName('but')
+        but.setStyleSheet(
+            '#but{min-width:25px; max-width:25px;\
+            min-height:25px; max-height:25px;\
+            icon-size:20px;}')
+        but.clicked.connect(self._open_debugmode_detail_dialog)
+        dbg = QWidget()
+        hldbg = QHBoxLayout(dbg)
+        hldbg.setContentsMargins(0, 0, 0, 0)
+        hldbg.addWidget(lblmon)
+        hldbg.addWidget(ledmon)
+        hldbg.addWidget(but)
+        gb = self._create_small_group('', info_wid, (lb, dbg))
+        info_lay.addWidget(gb, 0, 1)
 
         return info_wid
 
@@ -1813,6 +1843,77 @@ class AFC(BaseWidget):
         """)
 
         return gbox
+
+    def _create_debugmode_detail_dialog(self):
+        dialog = SiriusDialog()
+        dialog.setObjectName('ASApp')
+        title = self.device + ' Upstream Debug Settings'
+        dialog.setWindowTitle(title)
+        dialog.setWindowIcon(self.windowIcon())
+
+        lay = QGridLayout(dialog)
+        row = 0
+
+        title = QLabel("<h4>"+title+"</h4>", self, alignment=Qt.AlignCenter)
+        lay.addWidget(title, row, 0, 1, 3)
+        row += 1
+
+        # enable
+        desc = QLabel("Enable: ", self, alignment=Qt.AlignRight)
+        pvname = self.get_pvname('UpstreamDebugEn-Sel')
+        sp = PyDMStateButton(self, init_channel=pvname)
+        pvname = self.get_pvname('UpstreamDebugEn-Sts')
+        rb = PyDMLed(self, init_channel=pvname)
+        lay.addWidget(desc, row, 0)
+        lay.addWidget(sp, row, 1)
+        lay.addWidget(rb, row, 2)
+        row += 1
+
+        # counter
+        desc = QLabel("Counter: ", self, alignment=Qt.AlignRight)
+        pvname = self.get_pvname('UpstreamDebugCounter-Mon')
+        mon = SiriusLabel(self, init_channel=pvname)
+        pvname = self.get_pvname('UpstreamDebugCounterRst-Cmd')
+        rst = SiriusPushButton(
+            self, label="", icon=qta.icon('fa5s.sync'), pressValue=1,
+            init_channel=pvname,
+        )
+        rst.setDefault(False)
+        rst.setAutoDefault(False)
+        rst.setObjectName('rst')
+        rst.setStyleSheet(
+            '#rst{min-width:25px; max-width:25px;\
+            min-height:25px; max-height:25px;\
+            icon-size:20px;}')
+        lay.addWidget(desc, row, 0)
+        lay.addWidget(mon, row, 1)
+        lay.addWidget(rst, row, 2)
+        row += 1
+
+        # settings
+        settings_desc2pvs = {
+            "Event In": ("UpstreamDebugEvtIn-SP", "UpstreamDebugEvtIn-RB"),
+            "Event Out": ("UpstreamDebugEvtOut-SP", "UpstreamDebugEvtOut-RB"),
+            "Spacing": ("UpstreamDebugSpacing-SP", "UpstreamDebugSpacing-RB"),
+            "Repetitions": ("UpstreamDebugReps-SP", "UpstreamDebugReps-RB"),
+        }
+        for desc, pvs in settings_desc2pvs.items():
+            desc = QLabel(f"{desc}: ", self, alignment=Qt.AlignRight)
+            sp = PyDMLineEdit(self, init_channel=self.get_pvname(pvs[0]))
+            rb = SiriusLabel(self, init_channel=self.get_pvname(pvs[1]))
+            lay.addWidget(desc, row, 0)
+            lay.addWidget(sp, row, 1)
+            lay.addWidget(rb, row, 2)
+            row += 1
+
+        return dialog
+
+    def _open_debugmode_detail_dialog(self):
+        if not hasattr(self, 'detail_wind'):
+            self.detail_wind = self._create_debugmode_detail_dialog()
+            self.detail_wind.show()
+        else:
+            self.detail_wind.showNormal()
 
 
 class _EVR_EVE(BaseWidget):

@@ -34,7 +34,7 @@ class LLButton(QWidget):
             name = self.device.dev + (
                 '-' + self.device.idx if self.device.idx else '')
         elif self.device.dev == 'AMCFPGAEVR':
-            name = 'AMC-' + (
+            name = 'AFCTI-' + (
                 'TL' if 'TL' in self.device.sub else self.device.sub[:2])
         elif self.device.sec == 'LA':
             if 'RaCtrl' in self.device.sub:
