@@ -948,29 +948,23 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
         # header
         lay.addWidget(
             QLabel('<h4>Device</h4>', self, alignment=Qt.AlignCenter), 0, 0)
-        lay.addWidget(
-            QLabel('<h4>Error CH 0</h4>', self, alignment=Qt.AlignCenter),
-            0, 1)
-        lay.addWidget(
-            QLabel('<h4>Error CH 1</h4>', self, alignment=Qt.AlignCenter),
-            0, 2)
-        lay.addWidget(
-            QLabel('<h4>Error CH 2</h4>', self, alignment=Qt.AlignCenter),
-            0, 3)
-        lay.addWidget(
-            QLabel('<h4>Error CH 3</h4>', self, alignment=Qt.AlignCenter),
-            0, 4)
+        for i in range(8):
+            lay.addWidget(
+                QLabel(
+                    f'<h4>Error CH{i}</h4>', self, alignment=Qt.AlignCenter),
+                0, i+1)
 
         # table
-        for idx, ctl in enumerate(self.ctrlrs):
-            row = idx + 1
-            lbl = QLabel(ctl, self, alignment=Qt.AlignCenter)
-            lay.addWidget(lbl, row, 0)
-            for i in range(4):
-                pvnerr = _PVName(ctl).substitute(
-                    prefix=self.prefix, propty=f'DCCFMCFrameErrCntCH{i}-Mon')
-                lblerr = SiriusLabel(self, pvnerr)
-                lay.addWidget(lblerr, row, i+1, alignment=Qt.AlignTop)
+        for dccidx, dcc in enumerate(['FMC', 'P2P']):
+            for ctrlidx, ctl in enumerate(self.ctrlrs):
+                row = dccidx*len(self.ctrlrs) + ctrlidx + 1
+                lbl = QLabel(f"{ctl}:DCC{dcc}", self, alignment=Qt.AlignCenter)
+                lay.addWidget(lbl, row, 0)
+                for i in range(8):
+                    pvnerr = _PVName(ctl).substitute(
+                        prefix=self.prefix, propty=f'DCC{dcc}FrameErrCntCH{i}-Mon')
+                    lblerr = SiriusLabel(self, pvnerr)
+                    lay.addWidget(lblerr, row, i+1, alignment=Qt.AlignTop)
 
         return self._build_scroll_area(wid)
 
