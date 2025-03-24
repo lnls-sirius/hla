@@ -211,6 +211,7 @@ class SummaryWidget(QWidget):
         self.visible_props = sort_propties(visible_props)
         self.filled_widgets = set()
         self._prefixed_name = self._name.substitute(prefix=VACA_PREFIX)
+        self._test_prefixed_name = self._name.substitute(prefix='test')
 
         self._analog_name = get_analog_name(self._name)
         self._strength_name = get_strength_name(self._name)
@@ -558,11 +559,11 @@ class SummaryWidget(QWidget):
         # strength
         if self._has_strength:
             st = self._strength_name
-            self._strength_sp = self._prefixed_name.substitute(
+            self._strength_sp = self._test_prefixed_name.substitute(
                 propty='{}-SP'.format(st))
-            self._strength_rb = self._prefixed_name.substitute(
+            self._strength_rb = self._test_prefixed_name.substitute(
                 propty='{}-RB'.format(st))
-            self._strength_mon = self._prefixed_name.substitute(
+            self._strength_mon = self._test_prefixed_name.substitute(
                 propty='{}-Mon'.format(st))
 
     def _build_widget(self, name='', orientation='h'):
