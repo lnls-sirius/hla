@@ -747,7 +747,7 @@ def get_object(ismenubar=True, parent=None):
             ps_indiv = {
                 'Correctors': {
                     'device': 'corrector-slow',
-                    'graphs': {'All': 'C(H|V)', 'CH': 'CH', 'CV': 'CV'},
+                    'graphs': {'All': '(CH|CV|CC)', 'CH': 'CH', 'CV': 'CV', 'CC': 'CC'},
                 },
                 'Trims': {
                     'device': 'trim-quadrupole',

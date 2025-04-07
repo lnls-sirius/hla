@@ -6,7 +6,7 @@ class IDFFCorrectorControlWidget(BasePSControlWidget):
     """IDFF corrector control widget."""
 
     def _getFilter(self, subsection=None):
-        return {"sec": "SI", "sub": subsection, "dev": "(CH|CV|QS)"}
+        return {"sec": "SI", "sub": subsection, "dev": "(CH|CV|CC|QS)"}
 
     def _hasTrimButton(self):
         return False
@@ -15,6 +15,9 @@ class IDFFCorrectorControlWidget(BasePSControlWidget):
         return True
 
     def _getGroups(self):
-        return [('Horizontal Correctors', '-CH'),
-                ('Vertical Corretors', '-CV'),
-                ('Skew Quadrupole', '-QS')]
+        return [
+            ('Horizontal Correctors', '-CH'),
+            ('Vertical Corretors', '-CV'),
+            ('Skew Quadrupole', '-QS'),
+            ('Other Corrector Coils', '-CC')
+            ]
