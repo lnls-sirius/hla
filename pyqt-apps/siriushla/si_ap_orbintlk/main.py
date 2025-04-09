@@ -272,8 +272,11 @@ class BPMOrbIntlkMainWindow(BaseObject, SiriusMainWindow):
             parent=self, pressValue=1, icon=qta.icon('fa5s.sync'),
             init_channel=self.hlprefix.substitute(
                 prefix=self.prefix, propty='PsMtmAcqConfig-Cmd'))
+        pvname = self.hlprefix.substitute(propty=f'PsMtmAcqStatus-Mon')
+        led_configsts = SiriusLedAlert(self, pvname)
         lay.addWidget(ld_config, 3, 0)
         lay.addWidget(bt_config, 3, 1, alignment=Qt.AlignCenter)
+        lay.addWidget(led_configsts, 3, 2)
 
         return wid
 
