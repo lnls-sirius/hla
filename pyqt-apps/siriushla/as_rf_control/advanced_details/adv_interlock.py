@@ -326,7 +326,8 @@ class AdvancedInterlockDetails(SiriusDialog):
         lay.addWidget(scarea)
 
         lay_scr = QGridLayout(scr_ar_wid)
-        lay_scr.setSpacing(9)
+        lay_scr.setHorizontalSpacing(20)
+        lay_scr.setVerticalSpacing(9)
 
         lbs_header = ['Diagnostics', 'Ext LLRF', 'Tx PLC', 'FDL Trigger',
             'Pin Diode', 'Loops Standby']
@@ -334,27 +335,27 @@ class AdvancedInterlockDetails(SiriusDialog):
         column = 2
         for lb in lbs_header:
             label = QLabel(lb, alignment=Qt.AlignCenter)
-            label.setStyleSheet('min-width: 8em')
+            label.setStyleSheet('QLabel{min-width:6em;}')
             lay_scr.addWidget(label, 0, column)
             column += 2
 
-        for i in range(1, column):
-            if i % 2 == 0 or i == 1:
-                lay_scr.setColumnStretch(i, 1)
-        lay_scr.setColumnMinimumWidth(1, 120)
-
         row = 1
         for key, val in chs_dict.items():
-            lay_scr.addWidget(QLabel(key.split()[0]), row, 0)
-            lay_scr.addWidget(QLabel(val[0]), row, 1)
+            lb_idx = QLabel(key.split()[0])
+            lb_idx.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Preferred)
+            lay_scr.addWidget(lb_idx, row, 0)
+            lb_desc = QLabel(val[0])
+            lb_desc.setStyleSheet('QLabel{min-width:12em;}')
+            lay_scr.addWidget(lb_desc, row, 1, alignment=Qt.AlignLeft)
             column = 2
             for bit in reversed(range(len(lbs_header))):
                 lay_state = QHBoxLayout()
+                lay_state.setSpacing(9)
                 pb = PyDMStateButton(self, self.prefix+val[1]+'-Sel', bit=bit)
+                led = SiriusLedState(self, self.prefix+val[1]+'-Sts', bit)
+                led.setStyleSheet('QLed{min-width: 1.29em;}')
                 lay_state.addWidget(pb, alignment=Qt.AlignRight)
-                lay_state.addWidget(SiriusLedState(
-                    self, self.prefix+val[1]+'-Sts', bit),
-                    alignment=Qt.AlignLeft)
+                lay_state.addWidget(led, alignment=Qt.AlignLeft)
                 lay_scr.addLayout(lay_state, row, column)
                 lay_scr.addItem(QSpacerItem(
                     9, 0, QSzPlcy.Ignored, QSzPlcy.Fixed), row, column+1)
