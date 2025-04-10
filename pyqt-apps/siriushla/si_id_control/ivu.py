@@ -89,7 +89,7 @@ class IVUControlWindow(IDCommonControlWindow, IVUControlWindowUtils):
 
             if title in ("Moving"):
                 self._createMotion(pv_info, lay, row)
-            elif title in ["KParam", "KParam Speed", 
+            elif title in ["KParam", "KParam Speed",
                     "KParam Taper", "Center Offset", "Pitch Offset"]:
                 self._createParam(pv_info, lay, row)
             elif title in ["Pitch Mode", "Center Mode"]:
@@ -115,9 +115,9 @@ class IVUControlWindow(IDCommonControlWindow, IVUControlWindowUtils):
         self.mode_sp.rules = (
             '[{"name": "VisibleWarning", "property": "Enable", "expression": "ch[0] == 0",' +
             '"channels": [{"channel": "'+pvname_mon+'", "trigger": true}]}]')
-        
+
         lay.addWidget(self.mode_sp, row, 1)
-    
+
         pvname = self.dev_pref.substitute(propty=pv_info["Sts"])
         self.mode_rb = PyDMLed(init_channel=pvname)
         lay.addWidget(self.mode_rb, row, 2)
@@ -177,27 +177,6 @@ class IVUControlWindow(IDCommonControlWindow, IVUControlWindowUtils):
         led = PyDMLed(self, init_channel=pvname)
         led.setMaximumWidth(50)
         lay.addWidget(led, row, 1, 1, 1)
-
-    def _createDetailedLedBtn(self, pv_tuple):
-
-        btn = QPushButton('', self)
-        btn.setIcon(qta.icon('fa5s.list-ul'))
-        btn.setObjectName('sts')
-        btn.setStyleSheet(
-            '#sts{min-width:25px; max-width:25px; icon-size:20px;}')
-        pvname = self.dev_pref.substitute(propty=pv_tuple[0])
-        pvname_labels = self.dev_pref.substitute(propty=pv_tuple[1])
-
-        try:
-            pv = PV(pvname_labels)
-            pv.wait_for_connection(timeout=5)
-            labels = pv.get()
-            connect_window(
-                btn, StatusDetailDialog, self, pvname=pvname,
-                labels=list(labels), section="ID")
-        except:
-            btn.setEnabled(False)
-        return btn
 
     def _createIconBtns(self, pv_info, lay, row):
         btn = PyDMPushButton(self, label='', icon=qta.icon(pv_info["icon"]))

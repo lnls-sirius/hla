@@ -36,13 +36,17 @@ class IDFFWindow(SiriusMainWindow):
         """Initialize."""
         super().__init__(parent)
         self.prefix = prefix or _VACA_PREFIX
-        self.idname = idname
-        self._is_ivu = "IVU" in idname
+        self.idname = _PVName(idname)
+        self._is_llidff = self.idname.dev.startswith(("IVU", "VPU"))
         self._idffname = IDFFConst(idname).idffname
         self._idffdata = IDSearch.conv_idname_2_idff(self.idname)
         self.device = _PVName(self._idffname)
-        self.dev_pref = _PVName(f"SI-{self.device.sub}:BS-IDFF-CHCV:") if self._is_ivu else \
-            self.device.substitute(prefix=prefix)
+        self.dev_pref = _PVName(
+            f"SI-{self.device.sub}:BS-IDFF-CHCV:"
+                if (self._is_llidff and self.idname.dev.startswith("IVU"))
+            else f"SI-{self.device.sub}:BS-IDFF-CC:"
+                if (self._is_llidff and self.idname.dev.startswith("VPU"))
+            else self.device.substitute(prefix=prefix))
         self.setObjectName('IDApp')
         self.setWindowTitle(self.device)
         self.setWindowIcon(get_idff_icon())
@@ -57,18 +61,23 @@ class IDFFWindow(SiriusMainWindow):
         wid = QWidget()
         lay = QGridLayout(wid)
         lay.addWidget(self.title, 0, 0, 1, 2)
-        if not self._is_ivu:
+        if self._is_llidff:
+            corrs = []
+            if self.idname.dev.startswith("IVU"):
+                corrs = ["CH1", "CH2", "CV1", "CV2"]
+            elif self.idname.dev.startswith("VPU"):
+                corrs = ["CC1-1", "CC2-1", "CC1-2", "CC2-2"]
+            lay.addWidget(self._llStatusWidget(), 1, 0, 1, 1)
+            lay.addWidget(self._llSettingsWidget(corrs), 2, 0, 3, 1)
+        else:
             lay.addWidget(self._idStatusWidget(), 1, 0)
             lay.addWidget(self._corrStatusWidget(), 2, 0)
             lay.addWidget(self._basicSettingsWidget(), 3, 0)
             lay.addWidget(self._logWidget(), 4, 0)
-        else:
-            lay.addWidget(self._ivuStatusWidget(), 1, 0, 1, 1)
-            lay.addWidget(self._ivuSettingsWidget(), 2, 0, 3, 1)
         lay.addWidget(self._corrsMonitorWidget(), 1, 1, 4, 1)
         self.setCentralWidget(wid)
 
-    def _ivuStatusWidget(self):
+    def _llStatusWidget(self):
         gbox = QGroupBox('ID Status', self)
         hlay = QHBoxLayout(gbox)
 
@@ -87,7 +96,7 @@ class IDFFWindow(SiriusMainWindow):
         self.timestamp.setText(strftime(
             '%Y-%m-%d %H:%M:%S', localtime(value/1000)))
 
-    def _ivuSettingsWidget(self):
+    def _llSettingsWidget(self, corrs):
         gbox = QGroupBox('Settings', self)
         lay = QGridLayout(gbox)
 
@@ -140,12 +149,12 @@ class IDFFWindow(SiriusMainWindow):
 
         self.stack = QStackedWidget()
         self.plot_dict = {}
-        for idx, name in enumerate(["CH1", "CH2", "CV1", "CV2"]):
+        for idx, name in enumerate(corrs):
             channel_btn = QRadioButton(name)
             vlay.addWidget(channel_btn)
             self.button_group.addButton(channel_btn, idx)
 
-            if name == "CH1":
+            if idx == 0:
                 channel_btn.setChecked(True)
 
             graph = SiriusWaveformPlot()
@@ -158,7 +167,7 @@ class IDFFWindow(SiriusMainWindow):
             graph.setLabel('bottom', text='Index')
             graph.setLabel('left', text='Current [A]')
             graph.setBackgroundColor(QColor(255, 255, 255))
-            self.addNewTableCurve(graph, name, idx)
+            self._addNewTableCurve(graph, name, idx)
             self.stack.addWidget(graph)
             self.plot_dict[name] = graph
 
@@ -180,11 +189,13 @@ class IDFFWindow(SiriusMainWindow):
 
         return gbox
 
-    def addNewTableCurve(self, plt, name, section):
-        if 'CH' in name:
+    def _addNewTableCurve(self, plt, name, section):
+        if "CH" in name:
             color_sp, color_rb = 'blue', 'darkBlue'
-        else:
+        elif "CV" in name:
             color_sp, color_rb = 'red', 'darkRed'
+        else:
+            color_sp, color_rb = 'green', 'darkGreen'
 
         curve_sp = SectionedWaveformCurveItem(
             section=section,
