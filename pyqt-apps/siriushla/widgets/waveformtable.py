@@ -26,6 +26,6 @@ class SiriusWaveformTable(PyDMWaveformTable):
             return
         elif isinstance(new_waveform, (float, int)):
             new_waveform = _np.array([new_waveform])
-        if self.transform is not None:
+        if self.transform is not None and len(new_waveform) > 0:
             new_waveform = self.transform(new_waveform)
         super().value_changed(new_waveform)
