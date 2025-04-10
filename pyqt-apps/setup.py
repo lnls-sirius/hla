@@ -114,6 +114,7 @@ setup(
         'scripts/sirius-hla-si-bs-fofbsysid.py',
         'scripts/sirius-hla-si-di-bbb.py',
         'scripts/sirius-hla-si-di-equalize_bpms_switching.py',
+        'scripts/sirius-hla-si-di-fpmosc.py',
         'scripts/sirius-hla-si-di-scraps.py',
         'scripts/sirius-hla-si-di-tune.py',
         'scripts/sirius-hla-si-di-vlight.py',
