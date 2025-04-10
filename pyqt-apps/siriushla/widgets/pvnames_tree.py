@@ -286,7 +286,7 @@ class PVNameTree(QWidget):
             return 'Solenoid'
         elif re.match('^S\w*(-[0-9])?$', name.dev):
             return 'Sextupole'
-        elif re.match('^C(H|V)(-[0-9])?$', name.dev):
+        elif re.match('^C(H|V|C)(-[0-9])?$', name.dev):
             return 'Corrector'
         elif re.match('^FC\w*(-[0-9])?$', name.dev):
             return 'Fast Corrector'

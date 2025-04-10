@@ -115,7 +115,7 @@ class PSGraphDevicesSelWidget(QWidget):
                                  '.*SA', '.*SB', '.*SP'])
 
         self._choose_dev = {
-            sec: ['CH', 'CV', 'C(H|V)'] for sec in self._choose_sec}
+            sec: ['CH', 'CV', 'CC', 'C(H|V|C)'] for sec in self._choose_sec}
         self._choose_dev['SI'].extend(
             ['QS', 'QFA', 'QFB', 'QFP', 'QF.*',
              'QDA', 'QDB1', 'QDB2', 'QDP1', 'QDP2', 'QD.*',
