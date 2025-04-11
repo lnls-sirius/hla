@@ -231,11 +231,31 @@ class IDFFWindow(SiriusMainWindow):
         self.lb_loopfreq = SiriusLabel(
             self, self.dev_pref.substitute(propty='LoopFreq-RB'))
 
+        chnames = IDSearch.conv_idname_2_idff_chnames(self.idname)
+        cvnames = IDSearch.conv_idname_2_idff_cvnames(self.idname)
+        qsnames = IDSearch.conv_idname_2_idff_qsnames(self.idname)
+        lcnames = IDSearch.conv_idname_2_idff_lcnames(self.idname)
+        qnnames = IDSearch.conv_idname_2_idff_qnnames(self.idname)
+        # ccnames = IDSearch.conv_idname_2_idff_ccnames(self.idname)
+
         ld_calccorr = QLabel(
             'Calc. values:', self, alignment=Qt.AlignRight)
         glay_calccorr = QGridLayout()
         glay_calccorr.addWidget(ld_calccorr, 0, 0)
-        for ridx, corr in enumerate(['CH', 'CV', 'QS']):
+        corr_fams = ['CH', 'CV', 'QS', 'LCH', 'QD1', 'QF', 'QD2', 'CC']
+        for ridx, corr in enumerate(corr_fams):
+            if corr == 'CH' and not chnames:
+                continue
+            if corr == 'CV' and not cvnames:
+                continue
+            if corr == 'QS' and not qsnames:
+                continue
+            if corr == 'LCH' and not lcnames:
+                continue
+            if corr in ('QD1', 'QF', 'QD2') and not qnnames:
+                continue
+            # if corr == 'CC' and not ccnames:
+            #     continue
             row = ridx + 1
             hheader = QLabel(f'{corr}', alignment=Qt.AlignCenter)
             hheader.setStyleSheet('.QLabel{font-weight: bold;}')
@@ -246,7 +266,7 @@ class IDFFWindow(SiriusMainWindow):
                     vheader = QLabel(f'{col}', alignment=Qt.AlignCenter)
                     vheader.setStyleSheet('.QLabel{font-weight: bold;}')
                     glay_calccorr.addWidget(vheader, 0, col)
-                propty = f'Corr{corr}{col}Current-Mon'
+                propty = f'Corr{corr}_{col}Current-Mon'
                 pvname = self.dev_pref.substitute(propty=propty)
                 lbl = SiriusLabel(self, pvname, keep_unit=True)
                 lbl.showUnits = True
@@ -266,19 +286,81 @@ class IDFFWindow(SiriusMainWindow):
         lay.addWidget(self.lb_configname, 4, 1, 1, 3)
         lay.addItem(QSpacerItem(0, 15, QSzPlcy.Ignored, QSzPlcy.Fixed), 6, 0)
 
-        if IDSearch.conv_idname_2_idff_qsnames(self.idname):
+        row = 5
+
+        if chnames:
+            ld_controlch = QLabel(
+                'Control CH: ', self, alignment=Qt.AlignRight)
+            self.sb_controlch = PyDMStateButton(
+                self, self.dev_pref.substitute(propty='ControlCH-Sel'))
+            self.lb_controlch = SiriusLedState(
+                self, self.dev_pref.substitute(propty='ControlCH-Sts'))
+            lay.addWidget(ld_controlch, row, 0)
+            lay.addWidget(self.sb_controlch, row, 1)
+            lay.addWidget(self.lb_controlch, row, 2)
+            row += 1
+
+        if cvnames:
+            ld_controlcv = QLabel(
+                'Control CV: ', self, alignment=Qt.AlignRight)
+            self.sb_controlcv = PyDMStateButton(
+                self, self.dev_pref.substitute(propty='ControlCV-Sel'))
+            self.lb_controlcv = SiriusLedState(
+                self, self.dev_pref.substitute(propty='ControlCV-Sts'))
+            lay.addWidget(ld_controlcv, row, 0)
+            lay.addWidget(self.sb_controlcv, row, 1)
+            lay.addWidget(self.lb_controlcv, row, 2)
+            row += 1
+
+        if qsnames:
             ld_controlqs = QLabel(
                 'Control QS: ', self, alignment=Qt.AlignRight)
             self.sb_controlqs = PyDMStateButton(
                 self, self.dev_pref.substitute(propty='ControlQS-Sel'))
             self.lb_controlqs = SiriusLedState(
                 self, self.dev_pref.substitute(propty='ControlQS-Sts'))
+            lay.addWidget(ld_controlqs, row, 0)
+            lay.addWidget(self.sb_controlqs, row, 1)
+            lay.addWidget(self.lb_controlqs, row, 2)
+            row += 1
 
-            lay.addWidget(ld_controlqs, 5, 0)
-            lay.addWidget(self.sb_controlqs, 5, 1)
-            lay.addWidget(self.lb_controlqs, 5, 2)
+        if lcnames:
+            ld_controllc = QLabel(
+                'Control LC: ', self, alignment=Qt.AlignRight)
+            self.sb_controllc = PyDMStateButton(
+                self, self.dev_pref.substitute(propty='ControlLC-Sel'))
+            self.lb_controllc = SiriusLedState(
+                self, self.dev_pref.substitute(propty='ControlLC-Sts'))
+            lay.addWidget(ld_controllc, row, 0)
+            lay.addWidget(self.sb_controllc, row, 1)
+            lay.addWidget(self.lb_controllc, row, 2)
+            row += 1
 
-        lay.addLayout(glay_calccorr, 7, 0, 1, 3)
+        if qnnames:
+            ld_controlqn = QLabel(
+                'Control QN: ', self, alignment=Qt.AlignRight)
+            self.sb_controlqn = PyDMStateButton(
+                self, self.dev_pref.substitute(propty='ControlQN-Sel'))
+            self.lb_controlqn = SiriusLedState(
+                self, self.dev_pref.substitute(propty='ControlQN-Sts'))
+            lay.addWidget(ld_controlqn, row, 0)
+            lay.addWidget(self.sb_controlqn, row, 1)
+            lay.addWidget(self.lb_controlqn, row, 2)
+            row += 1
+
+        # if ccnames:
+        #     ld_controlcc = QLabel(
+        #         'Control CC: ', self, alignment=Qt.AlignRight)
+        #     self.sb_controlcc = PyDMStateButton(
+        #         self, self.dev_pref.substitute(propty='ControlCC-Sel'))
+        #     self.lb_controlcc = SiriusLedState(
+        #         self, self.dev_pref.substitute(propty='ControlCC-Sts'))
+        #     lay.addWidget(ld_controlcc, row, 0)
+        #     lay.addWidget(self.sb_controlcc, row, 1)
+        #     lay.addWidget(self.lb_controlcc, row, 2)
+        #     row += 1
+
+        lay.addLayout(glay_calccorr, row, 0, 1, 3)
 
         return gbox
 
