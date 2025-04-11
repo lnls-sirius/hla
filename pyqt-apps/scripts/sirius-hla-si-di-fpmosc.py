@@ -1,6 +1,6 @@
 #!/usr/bin/env python-sirius
 
-"""Open DCCT window of specified section."""
+"""Open Filling Pattern monitor window."""
 
 import argparse as _argparse
 import sys
