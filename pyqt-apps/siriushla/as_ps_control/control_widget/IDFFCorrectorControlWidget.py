@@ -11,7 +11,7 @@ class IDFFCorrectorControlWidget(BasePSControlWidget):
         qf = "QF" + subsectype
         qd1 = qd + "1"  # for B and P type sections
         qd2 = qd + "2"  # for B and P type sections
-        trims = qd | "|" + qd1 + "|" + qf + "|" + qd2
+        trims = qd + "|" + qd1 + "|" + qf + "|" + qd2
         dev = "(CH|CV|QS|" + trims + "|LCH|CC1|CC2)"
         return {"sec": "SI", "sub": subsection, "dev": dev}
 
