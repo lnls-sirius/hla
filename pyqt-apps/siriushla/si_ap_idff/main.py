@@ -254,6 +254,8 @@ class IDFFWindow(SiriusMainWindow):
                 continue
             if corr in ('QD1', 'QF', 'QD2') and not qnnames:
                 continue
+            if corr == 'CC':
+                continue
             # if corr == 'CC' and not ccnames:
             #     continue
             row = ridx + 1
