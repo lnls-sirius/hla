@@ -409,14 +409,14 @@ class VPUDetails(IDCommonDialog):
             parent, prefix, device, title=device+' Servo Motor and Mode Details')
 
     def _setupUi(self):
-        ld_speed = QLabel('Speed', self)
-        ld_pos = QLabel('Pos.', self)
-        ld_posmin = QLabel('Min Pos.', self)
-        ld_posmax = QLabel('Max Pos.', self)
-        ld_error = QLabel('Error', self)
-        ld_errenc = QLabel('Error Encoder', self)
-        ld_ncstate = QLabel('NC State', self)
-        ld_status = QLabel('Status', self)
+        ld_speed = QLabel('<h4>Speed</h4>', self)
+        ld_pos = QLabel('<h4>Pos.</h4>', self)
+        ld_posmin = QLabel('<h4>Min Pos.</h4>', self)
+        ld_posmax = QLabel('<h4>Max Pos.</h4>', self)
+        ld_error = QLabel('<h4>Error</h4>', self)
+        ld_errenc = QLabel('<h4>Error Encoder</h4>', self)
+        ld_ncstate = QLabel('<h4>NC State</h4>', self)
+        ld_status = QLabel('<h4>Status</h4>', self)
 
         gbox = QGroupBox('Status Details', self)
         glay = QGridLayout(gbox)
@@ -433,7 +433,7 @@ class VPUDetails(IDCommonDialog):
             "KParam",
             "CenterOffset",
             "Taper",
-            "Pitch",
+            "PitchOffset",
             "ServoMotor1",
             "ServoMotor2",
             "ServoMotor3",
@@ -442,8 +442,11 @@ class VPUDetails(IDCommonDialog):
 
         for idx, title in enumerate(details):
             col = idx + 1
-            posname = 'Pos' if title != 'KParam' else ''
-            ld_dtl = QLabel(title, self)
+            posname = 'Pos' if title not in \
+                ['KParam', 'Taper', 'CenterOffset', 'PitchOffset'] else ''
+            minmaxposname = 'Pos' if title not in \
+                ['KParam', ] else ''
+            ld_dtl = QLabel('<h4>'+title+'</h4>', self)
 
             pvname = self.dev_pref.substitute(
                 propty=f'{title}Velo-Mon')
@@ -454,11 +457,11 @@ class VPUDetails(IDCommonDialog):
             lb_pos = SiriusLabel(self, pvname)
 
             pvname = self.dev_pref.substitute(
-                propty=f'{title}Min{posname}-Cte')
+                propty=f'{title}Min{minmaxposname}-Cte')
             lb_posmin = SiriusLabel(self, pvname)
 
             pvname = self.dev_pref.substitute(
-                propty=f'{title}Max{posname}-Cte')
+                propty=f'{title}Max{minmaxposname}-Cte')
             lb_posmax = SiriusLabel(self, pvname)
 
             pvname = self.dev_pref.substitute(
