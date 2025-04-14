@@ -627,6 +627,15 @@ def get_object(ismenubar=True, parent=None):
                         act_dev, ['sirius-hla-as-di-scrn.py', dev])
                 diag.addMenu(Scrns)
             else:
+                # Filling Pattern Monitor (FPMOsc)
+                fpmosc = QAction('FPMOsc', diag)
+                fpmosc.setIcon(qta.icon('mdi.basket-fill'))
+                fpmosc.setObjectName(sec.upper()+'App')
+                self.connect_newprocess(
+                    fpmosc, ['sirius-hla-si-di-fpmosc.py']
+                )
+                diag.addAction(fpmosc)
+
                 Scrap = QAction('Scrapers', diag)
                 self.connect_newprocess(Scrap, 'sirius-hla-si-di-scraps.py')
                 diag.addAction(Scrap)
@@ -747,7 +756,7 @@ def get_object(ismenubar=True, parent=None):
             ps_indiv = {
                 'Correctors': {
                     'device': 'corrector-slow',
-                    'graphs': {'All': 'C(H|V)', 'CH': 'CH', 'CV': 'CV'},
+                    'graphs': {'All': '(CH|CV|CC)', 'CH': 'CH', 'CV': 'CV', 'CC': 'CC'},
                 },
                 'Trims': {
                     'device': 'trim-quadrupole',
