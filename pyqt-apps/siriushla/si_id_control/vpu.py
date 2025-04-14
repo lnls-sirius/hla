@@ -220,7 +220,14 @@ class VPUControlWindow(IDCommonControlWindow):
             lbl = QLabel(
                 title, self,
                 alignment=Qt.AlignRight | Qt.AlignVCenter)
-            led = SiriusLedAlert(self, pvname)
+            if title == 'Warning':
+                read = SiriusLedAlert(self, pvname)
+                read.onColor = SiriusLedAlert.Yellow
+            elif title == 'Alarm':
+                read = SiriusLedAlert(self, pvname)
+                read.onColor = SiriusLedAlert.Yellow
+            else:
+                read = SiriusLabel(self, pvname)
             pbt = QPushButton('', self)
             pbt.setIcon(qta.icon('fa5s.ellipsis-v'))
             pbt.setObjectName('sts')
@@ -230,7 +237,7 @@ class VPUControlWindow(IDCommonControlWindow):
                 pbt, StatusDetailDialog, pvname=pvname, parent=self,
                 labels=labels, section="ID", title=f'{title} Detailed')
             lay.addWidget(lbl, row, 0)
-            lay.addWidget(led, row, 1, alignment=Qt.AlignRight)
+            lay.addWidget(read, row, 1, alignment=Qt.AlignRight)
             lay.addWidget(pbt, row, 2, alignment=Qt.AlignLeft)
             row += 1
 
