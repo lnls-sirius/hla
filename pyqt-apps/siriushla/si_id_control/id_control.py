@@ -15,6 +15,7 @@ from ..widgets import SiriusMainWindow, SiriusConnectionSignal
 from .apu import APUSummaryHeader, APUSummaryWidget
 from .delta import DELTASummaryHeader, DELTASummaryWidget
 from .ivu import IVUSummaryHeader, IVUSummaryWidget
+from .vpu import VPUSummaryHeader, VPUSummaryWidget
 from .util import get_id_icon
 
 
@@ -57,19 +58,23 @@ class IDControl(SiriusMainWindow):
         self._gbox_apu = QGroupBox('APU', self)
         self._gbox_apu.setLayout(self._setupAPULayout())
 
-        self._gbox_epu = QGroupBox('DELTA', self)
-        self._gbox_epu.setLayout(self._setupDELTALayout())
+        self._gbox_delta = QGroupBox('DELTA', self)
+        self._gbox_delta.setLayout(self._setupDELTALayout())
 
         self._gbox_ivu = QGroupBox('IVU', self)
         self._gbox_ivu.setLayout(self._setupIVULayout())
+
+        self._gbox_vpu = QGroupBox('VPU', self)
+        self._gbox_vpu.setLayout(self._setupVPULayout())
 
         lay = QGridLayout(cwid)
         lay.addWidget(self.label_mov1, 0, 0)
         lay.addWidget(label, 0, 1)
         lay.addWidget(self.label_mov2, 0, 2)
         lay.addWidget(self._gbox_apu, 1, 0, 1, 3)
-        lay.addWidget(self._gbox_epu, 2, 0, 1, 3)
+        lay.addWidget(self._gbox_delta, 2, 0, 1, 3)
         lay.addWidget(self._gbox_ivu, 3, 0, 1, 3)
+        lay.addWidget(self._gbox_vpu, 4, 0, 1, 3)
         lay.setColumnStretch(0, 1)
         lay.setColumnStretch(1, 15)
         lay.setColumnStretch(2, 1)
@@ -81,9 +86,12 @@ class IDControl(SiriusMainWindow):
         self._apu_header = APUSummaryHeader(self)
         lay.addWidget(self._apu_header)
 
-        idlist = ['SI-06SB:ID-APU22', 'SI-07SP:ID-APU22',
-                  'SI-09SA:ID-APU22', 'SI-11SP:ID-APU58',
-                  'SI-17SA:ID-APU22']
+        idlist = [
+            'SI-07SP:ID-APU22',
+            'SI-09SA:ID-APU22',
+            'SI-11SP:ID-APU58',
+            'SI-17SA:ID-APU22',
+        ]
         for idname in idlist:
             apu_wid = APUSummaryWidget(self, self._prefix, idname)
             lay.addWidget(apu_wid)
@@ -94,25 +102,6 @@ class IDControl(SiriusMainWindow):
             self._channels_mov.append(ch_mov)
 
         return lay
-
-    # def _setupEPULayout(self):
-    #     lay = QVBoxLayout()
-    #     lay.setAlignment(Qt.AlignTop)
-
-    #     self._epu_header = EPUSummaryHeader(self)
-    #     lay.addWidget(self._epu_header)
-
-    #     idlist = ['SI-10SB:ID-EPU50', ]
-    #     for idname in idlist:
-    #         epu_wid = EPUSummaryWidget(self, self._prefix, idname)
-    #         lay.addWidget(epu_wid)
-    #         self._id_widgets.append(epu_wid)
-    #         ch_mov = SiriusConnectionSignal(_PVName(idname).substitute(
-    #             prefix=self._prefix, propty='Moving-Mon'))
-    #         ch_mov.new_value_signal[int].connect(self._handle_moving_vis)
-    #         self._channels_mov.append(ch_mov)
-
-    #     return lay
 
     def _setupDELTALayout(self):
         lay = QVBoxLayout()
@@ -132,7 +121,7 @@ class IDControl(SiriusMainWindow):
             self._channels_mov.append(ch_mov)
 
         return lay
-    
+
     def _setupIVULayout(self):
         lay = QVBoxLayout()
         lay.setAlignment(Qt.AlignTop)
@@ -142,9 +131,9 @@ class IDControl(SiriusMainWindow):
 
         idlist = ['SI-08SB:ID-IVU18', 'SI-14SB:ID-IVU18']
         for idname in idlist:
-            delta_wid = IVUSummaryWidget(self, self._prefix, idname)
-            lay.addWidget(delta_wid)
-            self._id_widgets.append(delta_wid)
+            ivu_wid = IVUSummaryWidget(self, self._prefix, idname)
+            lay.addWidget(ivu_wid)
+            self._id_widgets.append(ivu_wid)
             ch_mov = SiriusConnectionSignal(_PVName(idname).substitute(
                 prefix=self._prefix, propty='Moving-Mon'))
             ch_mov.new_value_signal[int].connect(self._handle_moving_vis)
@@ -152,24 +141,24 @@ class IDControl(SiriusMainWindow):
 
         return lay
 
-    # def _setupPAPULayout(self):
-    #     lay = QVBoxLayout()
-    #     lay.setAlignment(Qt.AlignTop)
+    def _setupVPULayout(self):
+        lay = QVBoxLayout()
+        lay.setAlignment(Qt.AlignTop)
 
-    #     self._epu_header = PAPUSummaryHeader(self)
-    #     lay.addWidget(self._epu_header)
+        self._delta_header = VPUSummaryHeader(self)
+        lay.addWidget(self._delta_header)
 
-    #     idlist = ['SI-17SA:ID-PAPU50', ]
-    #     for idname in idlist:
-    #         epu_wid = PAPUSummaryWidget(self, self._prefix, idname)
-    #         lay.addWidget(epu_wid)
-    #         self._id_widgets.append(epu_wid)
-    #         ch_mov = SiriusConnectionSignal(_PVName(idname).substitute(
-    #             prefix=self._prefix, propty='Moving-Mon'))
-    #         ch_mov.new_value_signal[int].connect(self._handle_moving_vis)
-    #         self._channels_mov.append(ch_mov)
+        idlist = ['SI-06SB:ID-VPU29', ]
+        for idname in idlist:
+            vpu_wid = VPUSummaryWidget(self, self._prefix, idname)
+            lay.addWidget(vpu_wid)
+            self._id_widgets.append(vpu_wid)
+            ch_mov = SiriusConnectionSignal(_PVName(idname).substitute(
+                prefix=self._prefix, propty='Moving-Mon'))
+            ch_mov.new_value_signal[int].connect(self._handle_moving_vis)
+            self._channels_mov.append(ch_mov)
 
-    #     return lay
+        return lay
 
     def _create_actions(self):
         self.blctrl_enbl_act = QAction("Enable Beamline Control", self)
