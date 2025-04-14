@@ -347,7 +347,7 @@ class VPUSummaryBase(IDCommonSummaryBase):
     MODEL_WIDTHS = (
         ('Alarms', 4),
         ('KParam', 6),
-        ('KParam Speed', 6),
+        ('Speed', 6),
         ('Start', 4),
         ('Stop', 4),
     )
@@ -373,8 +373,8 @@ class VPUSummaryWidget(IDCommonSummaryWidget, VPUSummaryBase):
             lbl = SiriusLabel(
                 self, self.dev_pref.substitute(propty='KParam-Mon'))
             wids.append(lbl)
-        elif prop == 'KParam Speed':
-            spb = SiriusSpinbox(
+        elif prop == 'Speed':
+            spb = SiriusLineEdit(
                 self, self.dev_pref.substitute(propty='MoveVelo-SP'))
             wids.append(spb)
             lbl = SiriusLabel(
@@ -382,7 +382,7 @@ class VPUSummaryWidget(IDCommonSummaryWidget, VPUSummaryBase):
             wids.append(lbl)
         elif prop == 'Start':
             btn = PyDMPushButton(self, label='', icon=qta.icon('fa5s.play'))
-            btn.channel = self.dev_pref.substitute(propty='KParamChange-Cmd')
+            btn.channel = self.dev_pref.substitute(propty='MoveStart-Cmd')
             btn.pressValue = 1
             btn.setObjectName('Start')
             btn.setStyleSheet(
