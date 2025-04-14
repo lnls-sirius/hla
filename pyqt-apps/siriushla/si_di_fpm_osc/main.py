@@ -15,7 +15,7 @@ from siriuspy.namesys import SiriusPVName
 
 class FPMOscMain(SiriusMainWindow):
     """DCCT Main Window."""
-    FPM_PV_PREFIX = 'VA-SI-Glob:DI-FPMOsc'
+    FPM_PV_PREFIX = 'SI-Glob:DI-FPMOsc'
 
     def __init__(self, parent=None, prefix=''):
         """Initialize."""
