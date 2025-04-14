@@ -269,7 +269,7 @@ class VPUControlWindow(IDCommonControlWindow):
         return gbox
 
     def _auxCommandsWidget(self):
-        self._ld_speedlim = QLabel('Max Phase\nSpeed [mm/s]', self)
+        self._ld_speedlim = QLabel('Max Speed [mm/s]', self)
         self._sb_speedlim = SiriusSpinbox(
             self, self.dev_pref.substitute(propty='KParamMaxVelo-SP'))
         self._sb_speedlim.setStyleSheet('max-width:4.5em;')
