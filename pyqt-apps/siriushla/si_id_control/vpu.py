@@ -124,34 +124,21 @@ class VPUControlWindow(IDCommonControlWindow):
     def _statusWidget(self):
         gbox = QGroupBox('Status')
         gbox.setSizePolicy(
-            QSizePolicy.MinimumExpanding, QSizePolicy.Preferred)
+            QSizePolicy.MinimumExpanding, QSizePolicy.MinimumExpanding)
         lay = QGridLayout(gbox)
+        lay.setVerticalSpacing(15)
+        row = 0
 
-        status2labels = {
-            'State-Mon': [
-                'Error',
-                'LimitSw_SW_MIN',
-                'LimitSw_SW_MAX',
-                'LimitSw_HW_MIN',
-                'LimitSW_HW_MAX',
-                'KillSW_HW_MIN',
-                'KillSW_HW_MAX',
-                'BrakeDisabled',
-                'ControllerEnabled',
-            ],
-            'Flags-Mon': [
-                'Connected',
-                'Error',
-                'LocalControl',
-                'RemoteControl',
-                'Moving',
-                'Debug',
-                'SWLimitSwitchEnabled',
-                'HWLimitSwitchEnabled',
-                'KillSwitchEnabled',
-                'INT_Permission_To_Move',
-                'INT_ZF_GAP',
-            ],
+        self._pb_dtls = QPushButton('Servo Motors and Mode Details', self)
+        self._pb_dtls.setIcon(qta.icon('fa5s.list-ul'))
+        self._pb_dtls.setToolTip('Open Servo Motor Detailed Status View')
+        connect_window(
+            self._pb_dtls, VPUDetails, self,
+            prefix=self._prefix, device=self._device)
+        lay.addWidget(self._pb_dtls, row, 0, 1, 2)
+        row += 1
+
+        alarm2labels = {
             'Warning-Mon': [
                 'Motor_axis_1_max_sw',
                 'Motor_axis_1_min_sw',
@@ -212,22 +199,17 @@ class VPUControlWindow(IDCommonControlWindow):
                 'Drive_circuit_breaker',
             ],
         }
-
-        row = 0
-        for status, labels in  status2labels.items():
+        alay = QGridLayout()
+        arow = 0
+        for status, labels in  alarm2labels.items():
             pvname = self.dev_pref.substitute(propty=status)
             title = status.split('-')[0]
             lbl = QLabel(
                 title, self,
                 alignment=Qt.AlignRight | Qt.AlignVCenter)
+            read = SiriusLedAlert(self, pvname)
             if title == 'Warning':
-                read = SiriusLedAlert(self, pvname)
                 read.onColor = SiriusLedAlert.Yellow
-            elif title == 'Alarm':
-                read = SiriusLedAlert(self, pvname)
-                read.onColor = SiriusLedAlert.Yellow
-            else:
-                read = SiriusLabel(self, pvname)
             pbt = QPushButton('', self)
             pbt.setIcon(qta.icon('fa5s.ellipsis-v'))
             pbt.setObjectName('sts')
@@ -236,18 +218,53 @@ class VPUControlWindow(IDCommonControlWindow):
             connect_window(
                 pbt, StatusDetailDialog, pvname=pvname, parent=self,
                 labels=labels, section="ID", title=f'{title} Detailed')
-            lay.addWidget(lbl, row, 0)
-            lay.addWidget(read, row, 1, alignment=Qt.AlignRight)
-            lay.addWidget(pbt, row, 2, alignment=Qt.AlignLeft)
-            row += 1
+            alay.addWidget(lbl, arow, 0)
+            alay.addWidget(read, arow, 1, alignment=Qt.AlignRight)
+            alay.addWidget(pbt, arow, 2, alignment=Qt.AlignLeft)
+            arow += 1
+        lay.addLayout(alay, 1, 0, 1, 2, alignment=Qt.AlignHCenter)
+        row += 1
 
-        self._pb_dtls = QPushButton('Servo Motors and Mode Details', self)
-        self._pb_dtls.setIcon(qta.icon('fa5s.list-ul'))
-        self._pb_dtls.setToolTip('Open Servo Motor Detailed Status View')
-        connect_window(
-            self._pb_dtls, VPUDetails, self,
-            prefix=self._prefix, device=self._device)
-        lay.addWidget(self._pb_dtls, row, 0, 1, 3)
+        status2labels = {
+            'State-Mon': [
+                'Error',
+                'LimitSw_SW_MIN',
+                'LimitSw_SW_MAX',
+                'LimitSw_HW_MIN',
+                'LimitSW_HW_MAX',
+                'KillSW_HW_MIN',
+                'KillSW_HW_MAX',
+                'BrakeDisabled',
+                'ControllerEnabled',
+            ],
+            'Flags-Mon': [
+                'Connected',
+                'Error',
+                'LocalControl',
+                'RemoteControl',
+                'Moving',
+                'Debug',
+                'SWLimitSwitchEnabled',
+                'HWLimitSwitchEnabled',
+                'KillSwitchEnabled',
+                'INT_Permission_To_Move',
+                'INT_ZF_GAP',
+            ],
+        }
+        vcol = 0
+        for status, labels in status2labels.items():
+            pvname = self.dev_pref.substitute(propty=status)
+            vlay = QGridLayout()
+            lbl = QLabel('<h4>'+status+'</h4>', self, alignment=Qt.AlignCenter)
+            vlay.addWidget(lbl, 0, 0, 1, 2)
+            for idx, lbl in enumerate(labels):
+                irow = idx + 1
+                read = SiriusLedState(self, pvname, bit=idx)
+                read.onColor = SiriusLedState.Yellow
+                vlay.addWidget(read, irow, 0)
+                vlay.addWidget(QLabel(lbl), irow, 1)
+            lay.addLayout(vlay, row, vcol, alignment=Qt.AlignTop)
+            vcol += 1
 
         return gbox
 
