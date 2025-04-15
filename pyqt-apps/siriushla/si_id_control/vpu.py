@@ -1,7 +1,7 @@
 """VPU Control Module."""
 
 from qtpy.QtCore import Qt, QSize
-from qtpy.QtWidgets import QGroupBox, QLabel, \
+from qtpy.QtWidgets import QGroupBox, QLabel, QWidget, \
     QPushButton, QHBoxLayout, QGridLayout, QSizePolicy
 import qtawesome as qta
 from pydm.widgets import PyDMPushButton
@@ -23,12 +23,12 @@ class VPUControlWindow(IDCommonControlWindow):
     MAIN_CONTROL_PVS = {
         "KParam": {
             "SP": "KParam-SP",
-            "RB": "KParam-SP",   # this undulator doesn't have RB PVs
+            "RB": "KParam-RB",
             "Mon": "KParam-Mon",
         },
         "Taper": {
             "SP": "Taper-SP",
-            "RB": "Taper-SP",  # this undulator doesn't have RB PVs
+            "RB": "Taper-RB",
             "Mon": "Taper-Mon",
         },
         "Taper Speed": {
@@ -36,7 +36,7 @@ class VPUControlWindow(IDCommonControlWindow):
         },
         "Center Offset": {
             "SP": "CenterOffset-SP",
-            "RB": "CenterOffset-SP",  # this undulator doesn't have RB PVs
+            "RB": "CenterOffset-RB",
             "Mon": "CenterOffset-Mon",
         },
         "Center Offset Speed": {
@@ -50,11 +50,11 @@ class VPUControlWindow(IDCommonControlWindow):
         },
         "Movement Speed": {
             "SP": "MoveVelo-SP",
-            "RB": "MoveVelo-SP",   # this undulator doesn't have RB PVs
+            "RB": "MoveVelo-RB",
         },
         "Movement Acceleration": {
             "SP": "MoveAcc-SP",
-            "RB": "MoveAcc-SP",   # this undulator doesn't have RB PVs
+            "RB": "MoveAcc-RB",
         },
         "Start Movement": {
             "Cmd": "MoveStart-Cmd",
@@ -71,6 +71,9 @@ class VPUControlWindow(IDCommonControlWindow):
         "Moving": {
             "StateMon": "Moving-Mon",
         },
+    }
+
+    SCAN_CONTROL_PVS = {
         "Scan Mode": {
             "SP": "ScanMode-Sel",
             "RB": "ScanMode-Sel",
@@ -124,34 +127,21 @@ class VPUControlWindow(IDCommonControlWindow):
     def _statusWidget(self):
         gbox = QGroupBox('Status')
         gbox.setSizePolicy(
-            QSizePolicy.MinimumExpanding, QSizePolicy.Preferred)
+            QSizePolicy.MinimumExpanding, QSizePolicy.MinimumExpanding)
         lay = QGridLayout(gbox)
+        lay.setVerticalSpacing(15)
+        row = 0
 
-        status2labels = {
-            'State-Mon': [
-                'Error',
-                'LimitSw_SW_MIN',
-                'LimitSw_SW_MAX',
-                'LimitSw_HW_MIN',
-                'LimitSW_HW_MAX',
-                'KillSW_HW_MIN',
-                'KillSW_HW_MAX',
-                'BrakeDisabled',
-                'ControllerEnabled',
-            ],
-            'Flags-Mon': [
-                'Connected',
-                'Error',
-                'LocalControl',
-                'RemoteControl',
-                'Moving',
-                'Debug',
-                'SWLimitSwitchEnabled',
-                'HWLimitSwitchEnabled',
-                'KillSwitchEnabled',
-                'INT_Permission_To_Move',
-                'INT_ZF_GAP',
-            ],
+        self._pb_dtls = QPushButton('Servo Motors and Mode Details', self)
+        self._pb_dtls.setIcon(qta.icon('fa5s.list-ul'))
+        self._pb_dtls.setToolTip('Open Servo Motor Detailed Status View')
+        connect_window(
+            self._pb_dtls, VPUDetails, self,
+            prefix=self._prefix, device=self._device)
+        lay.addWidget(self._pb_dtls, row, 0, 1, 2)
+        row += 1
+
+        alarm2labels = {
             'Warning-Mon': [
                 'Motor_axis_1_max_sw',
                 'Motor_axis_1_min_sw',
@@ -212,22 +202,17 @@ class VPUControlWindow(IDCommonControlWindow):
                 'Drive_circuit_breaker',
             ],
         }
-
-        row = 0
-        for status, labels in  status2labels.items():
+        alay = QGridLayout()
+        arow = 0
+        for status, labels in  alarm2labels.items():
             pvname = self.dev_pref.substitute(propty=status)
             title = status.split('-')[0]
             lbl = QLabel(
                 title, self,
                 alignment=Qt.AlignRight | Qt.AlignVCenter)
+            read = SiriusLedAlert(self, pvname)
             if title == 'Warning':
-                read = SiriusLedAlert(self, pvname)
                 read.onColor = SiriusLedAlert.Yellow
-            elif title == 'Alarm':
-                read = SiriusLedAlert(self, pvname)
-                read.onColor = SiriusLedAlert.Yellow
-            else:
-                read = SiriusLabel(self, pvname)
             pbt = QPushButton('', self)
             pbt.setIcon(qta.icon('fa5s.ellipsis-v'))
             pbt.setObjectName('sts')
@@ -236,23 +221,93 @@ class VPUControlWindow(IDCommonControlWindow):
             connect_window(
                 pbt, StatusDetailDialog, pvname=pvname, parent=self,
                 labels=labels, section="ID", title=f'{title} Detailed')
-            lay.addWidget(lbl, row, 0)
-            lay.addWidget(read, row, 1, alignment=Qt.AlignRight)
-            lay.addWidget(pbt, row, 2, alignment=Qt.AlignLeft)
-            row += 1
+            alay.addWidget(lbl, arow, 0)
+            alay.addWidget(read, arow, 1, alignment=Qt.AlignRight)
+            alay.addWidget(pbt, arow, 2, alignment=Qt.AlignLeft)
+            arow += 1
+        lay.addLayout(alay, 1, 0, 1, 2, alignment=Qt.AlignHCenter)
+        row += 1
 
-        self._pb_dtls = QPushButton('Servo Motors and Mode Details', self)
-        self._pb_dtls.setIcon(qta.icon('fa5s.list-ul'))
-        self._pb_dtls.setToolTip('Open Servo Motor Detailed Status View')
-        connect_window(
-            self._pb_dtls, VPUDetails, self,
-            prefix=self._prefix, device=self._device)
-        lay.addWidget(self._pb_dtls, row, 0, 1, 3)
+        status2labels = {
+            'State-Mon': [
+                'Error',
+                'LimitSw_SW_MIN',
+                'LimitSw_SW_MAX',
+                'LimitSw_HW_MIN',
+                'LimitSW_HW_MAX',
+                'KillSW_HW_MIN',
+                'KillSW_HW_MAX',
+                'BrakeDisabled',
+                'ControllerEnabled',
+            ],
+            'Flags-Mon': [
+                'Connected',
+                'Error',
+                'LocalControl',
+                'RemoteControl',
+                'Moving',
+                'Debug',
+                'SWLimitSwitchEnabled',
+                'HWLimitSwitchEnabled',
+                'KillSwitchEnabled',
+                'INT_Permission_To_Move',
+                'INT_ZF_GAP',
+            ],
+        }
+        vcol = 0
+        for status, labels in status2labels.items():
+            pvname = self.dev_pref.substitute(propty=status)
+            vlay = QGridLayout()
+            lbl = QLabel('<h4>'+status+'</h4>', self, alignment=Qt.AlignCenter)
+            vlay.addWidget(lbl, 0, 0, 1, 2)
+            for idx, lbl in enumerate(labels):
+                irow = idx + 1
+                read = SiriusLedState(self, pvname, bit=idx)
+                if lbl == 'Error':
+                    read.onColor = SiriusLedState.Red
+                else:
+                    read.onColor = SiriusLedState.Yellow
+                vlay.addWidget(read, irow, 0)
+                vlay.addWidget(QLabel(lbl), irow, 1)
+            lay.addLayout(vlay, row, vcol, alignment=Qt.AlignTop)
+            vcol += 1
 
         return gbox
 
     def _auxCommandsWidget(self):
-        self._ld_speedlim = QLabel('Max Phase\nSpeed [mm/s]', self)
+        # scan controls
+        scangroup = QGroupBox('Scan Controls')
+        scanlay = QGridLayout()
+        scanlay.setContentsMargins(3, 3, 3, 3)
+        scangroup.setLayout(scanlay)
+
+        scanlay.addWidget(
+            QLabel('<h4>SP</h4>', self, alignment=Qt.AlignCenter), 0, 1)
+        scanlay.addWidget(
+            QLabel('<h4>RB</h4>', self, alignment=Qt.AlignCenter), 0, 2)
+
+        row = 1
+        for title, pv_info in self.SCAN_CONTROL_PVS.items():
+            label = QLabel(
+                title, self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            label.setFixedWidth(150)
+            scanlay.addWidget(label, row, 0)
+
+            if isinstance(pv_info, dict):
+                if "Cmd" in pv_info:
+                    self._createCmdBtns(pv_info, scanlay, row)
+                elif "StateMon" in pv_info:
+                    self._createLedState(pv_info, scanlay, row)
+                else:
+                    self._createParam(pv_info, scanlay, row)
+            else:
+                raise NotImplementedError
+            row += 1
+
+        # auxiliary Parameters
+        auxgbox = QGroupBox('Auxiliary Parameters', self)
+
+        self._ld_speedlim = QLabel('Max Speed [mm/s]', self)
         self._sb_speedlim = SiriusSpinbox(
             self, self.dev_pref.substitute(propty='KParamMaxVelo-SP'))
         self._sb_speedlim.setStyleSheet('max-width:4.5em;')
@@ -269,18 +324,23 @@ class VPUControlWindow(IDCommonControlWindow):
 
         # TODO: add StartParking-Cmd if implemented
 
-        gbox = QGroupBox('Auxiliary Parameters', self)
-        lay = QGridLayout(gbox)
-        lay.addWidget(self._ld_speedlim, 0, 0)
-        lay.addWidget(self._sb_speedlim, 0, 1)
-        lay.addWidget(self._lb_speedlim, 0, 2)
-        lay.addWidget(self._ld_periodlen, 1, 0)
-        lay.addWidget(self._lb_periodlen, 1, 1)
-        lay.addWidget(self._ld_park, 2, 0)
-        lay.addWidget(self._lb_park, 2, 1)
-        gbox.setStyleSheet(
+        auxlay = QGridLayout(auxgbox)
+        auxlay.addWidget(self._ld_speedlim, 0, 0)
+        auxlay.addWidget(self._sb_speedlim, 0, 1)
+        auxlay.addWidget(self._lb_speedlim, 0, 2)
+        auxlay.addWidget(self._ld_periodlen, 1, 0)
+        auxlay.addWidget(self._lb_periodlen, 1, 1)
+        auxlay.addWidget(self._ld_park, 2, 0)
+        auxlay.addWidget(self._lb_park, 2, 1)
+        auxgbox.setStyleSheet(
             '.QLabel{qproperty-alignment: "AlignRight | AlignVCenter";}')
-        return gbox
+
+        group = QWidget()
+        lay = QGridLayout(group)
+        lay.setContentsMargins(0, 0, 0, 0)
+        lay.addWidget(scangroup, 0, 0)
+        lay.addWidget(auxgbox, 1, 0)
+        return group
 
     def _ffSettingsWidget(self):
         but = QPushButton('Feedforward Settings', self)
@@ -330,7 +390,7 @@ class VPUSummaryBase(IDCommonSummaryBase):
     MODEL_WIDTHS = (
         ('Alarms', 4),
         ('KParam', 6),
-        ('KParam Speed', 6),
+        ('Speed', 6),
         ('Start', 4),
         ('Stop', 4),
     )
@@ -356,8 +416,8 @@ class VPUSummaryWidget(IDCommonSummaryWidget, VPUSummaryBase):
             lbl = SiriusLabel(
                 self, self.dev_pref.substitute(propty='KParam-Mon'))
             wids.append(lbl)
-        elif prop == 'KParam Speed':
-            spb = SiriusSpinbox(
+        elif prop == 'Speed':
+            spb = SiriusLineEdit(
                 self, self.dev_pref.substitute(propty='MoveVelo-SP'))
             wids.append(spb)
             lbl = SiriusLabel(
@@ -365,7 +425,7 @@ class VPUSummaryWidget(IDCommonSummaryWidget, VPUSummaryBase):
             wids.append(lbl)
         elif prop == 'Start':
             btn = PyDMPushButton(self, label='', icon=qta.icon('fa5s.play'))
-            btn.channel = self.dev_pref.substitute(propty='KParamChange-Cmd')
+            btn.channel = self.dev_pref.substitute(propty='MoveStart-Cmd')
             btn.pressValue = 1
             btn.setObjectName('Start')
             btn.setStyleSheet(
@@ -392,14 +452,14 @@ class VPUDetails(IDCommonDialog):
             parent, prefix, device, title=device+' Servo Motor and Mode Details')
 
     def _setupUi(self):
-        ld_speed = QLabel('Speed', self)
-        ld_pos = QLabel('Pos.', self)
-        ld_posmin = QLabel('Min Pos.', self)
-        ld_posmax = QLabel('Max Pos.', self)
-        ld_error = QLabel('Error', self)
-        ld_errenc = QLabel('Error Encoder', self)
-        ld_ncstate = QLabel('NC State', self)
-        ld_status = QLabel('Status', self)
+        ld_speed = QLabel('<h4>Speed</h4>', self)
+        ld_pos = QLabel('<h4>Pos.</h4>', self)
+        ld_posmin = QLabel('<h4>Min Pos.</h4>', self)
+        ld_posmax = QLabel('<h4>Max Pos.</h4>', self)
+        ld_error = QLabel('<h4>Error</h4>', self)
+        ld_errenc = QLabel('<h4>Error Encoder</h4>', self)
+        ld_ncstate = QLabel('<h4>NC State</h4>', self)
+        ld_status = QLabel('<h4>Status</h4>', self)
 
         gbox = QGroupBox('Status Details', self)
         glay = QGridLayout(gbox)
@@ -416,7 +476,7 @@ class VPUDetails(IDCommonDialog):
             "KParam",
             "CenterOffset",
             "Taper",
-            "Pitch",
+            "PitchOffset",
             "ServoMotor1",
             "ServoMotor2",
             "ServoMotor3",
@@ -425,8 +485,11 @@ class VPUDetails(IDCommonDialog):
 
         for idx, title in enumerate(details):
             col = idx + 1
-            posname = 'Pos' if title != 'KParam' else ''
-            ld_dtl = QLabel(title, self)
+            posname = 'Pos' if title not in \
+                ['KParam', 'Taper', 'CenterOffset', 'PitchOffset'] else ''
+            minmaxposname = 'Pos' if title not in \
+                ['KParam', ] else ''
+            ld_dtl = QLabel('<h4>'+title+'</h4>', self)
 
             pvname = self.dev_pref.substitute(
                 propty=f'{title}Velo-Mon')
@@ -437,11 +500,11 @@ class VPUDetails(IDCommonDialog):
             lb_pos = SiriusLabel(self, pvname)
 
             pvname = self.dev_pref.substitute(
-                propty=f'{title}Min{posname}-Cte')
+                propty=f'{title}Min{minmaxposname}-Cte')
             lb_posmin = SiriusLabel(self, pvname)
 
             pvname = self.dev_pref.substitute(
-                propty=f'{title}Max{posname}-Cte')
+                propty=f'{title}Max{minmaxposname}-Cte')
             lb_posmax = SiriusLabel(self, pvname)
 
             pvname = self.dev_pref.substitute(
