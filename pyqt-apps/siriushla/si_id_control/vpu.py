@@ -263,7 +263,10 @@ class VPUControlWindow(IDCommonControlWindow):
             for idx, lbl in enumerate(labels):
                 irow = idx + 1
                 read = SiriusLedState(self, pvname, bit=idx)
-                read.onColor = SiriusLedState.Yellow
+                if lbl == 'Error':
+                    read.onColor = SiriusLedState.Red
+                else:
+                    read.onColor = SiriusLedState.Yellow
                 vlay.addWidget(read, irow, 0)
                 vlay.addWidget(QLabel(lbl), irow, 1)
             lay.addLayout(vlay, row, vcol, alignment=Qt.AlignTop)
