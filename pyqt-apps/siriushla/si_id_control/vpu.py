@@ -1,7 +1,7 @@
 """VPU Control Module."""
 
 from qtpy.QtCore import Qt, QSize
-from qtpy.QtWidgets import QGroupBox, QLabel, \
+from qtpy.QtWidgets import QGroupBox, QLabel, QWidget, \
     QPushButton, QHBoxLayout, QGridLayout, QSizePolicy
 import qtawesome as qta
 from pydm.widgets import PyDMPushButton
@@ -71,6 +71,9 @@ class VPUControlWindow(IDCommonControlWindow):
         "Moving": {
             "StateMon": "Moving-Mon",
         },
+    }
+
+    SCAN_CONTROL_PVS = {
         "Scan Mode": {
             "SP": "ScanMode-Sel",
             "RB": "ScanMode-Sel",
@@ -269,6 +272,38 @@ class VPUControlWindow(IDCommonControlWindow):
         return gbox
 
     def _auxCommandsWidget(self):
+        # scan controls
+        scangroup = QGroupBox('Scan Controls')
+        scanlay = QGridLayout()
+        scanlay.setContentsMargins(3, 3, 3, 3)
+        scangroup.setLayout(scanlay)
+
+        scanlay.addWidget(
+            QLabel('<h4>SP</h4>', self, alignment=Qt.AlignCenter), 0, 1)
+        scanlay.addWidget(
+            QLabel('<h4>RB</h4>', self, alignment=Qt.AlignCenter), 0, 2)
+
+        row = 1
+        for title, pv_info in self.SCAN_CONTROL_PVS.items():
+            label = QLabel(
+                title, self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            label.setFixedWidth(150)
+            scanlay.addWidget(label, row, 0)
+
+            if isinstance(pv_info, dict):
+                if "Cmd" in pv_info:
+                    self._createCmdBtns(pv_info, scanlay, row)
+                elif "StateMon" in pv_info:
+                    self._createLedState(pv_info, scanlay, row)
+                else:
+                    self._createParam(pv_info, scanlay, row)
+            else:
+                raise NotImplementedError
+            row += 1
+
+        # auxiliary Parameters
+        auxgbox = QGroupBox('Auxiliary Parameters', self)
+
         self._ld_speedlim = QLabel('Max Speed [mm/s]', self)
         self._sb_speedlim = SiriusSpinbox(
             self, self.dev_pref.substitute(propty='KParamMaxVelo-SP'))
@@ -286,18 +321,23 @@ class VPUControlWindow(IDCommonControlWindow):
 
         # TODO: add StartParking-Cmd if implemented
 
-        gbox = QGroupBox('Auxiliary Parameters', self)
-        lay = QGridLayout(gbox)
-        lay.addWidget(self._ld_speedlim, 0, 0)
-        lay.addWidget(self._sb_speedlim, 0, 1)
-        lay.addWidget(self._lb_speedlim, 0, 2)
-        lay.addWidget(self._ld_periodlen, 1, 0)
-        lay.addWidget(self._lb_periodlen, 1, 1)
-        lay.addWidget(self._ld_park, 2, 0)
-        lay.addWidget(self._lb_park, 2, 1)
-        gbox.setStyleSheet(
+        auxlay = QGridLayout(auxgbox)
+        auxlay.addWidget(self._ld_speedlim, 0, 0)
+        auxlay.addWidget(self._sb_speedlim, 0, 1)
+        auxlay.addWidget(self._lb_speedlim, 0, 2)
+        auxlay.addWidget(self._ld_periodlen, 1, 0)
+        auxlay.addWidget(self._lb_periodlen, 1, 1)
+        auxlay.addWidget(self._ld_park, 2, 0)
+        auxlay.addWidget(self._lb_park, 2, 1)
+        auxgbox.setStyleSheet(
             '.QLabel{qproperty-alignment: "AlignRight | AlignVCenter";}')
-        return gbox
+
+        group = QWidget()
+        lay = QGridLayout(group)
+        lay.setContentsMargins(0, 0, 0, 0)
+        lay.addWidget(scangroup, 0, 0)
+        lay.addWidget(auxgbox, 1, 0)
+        return group
 
     def _ffSettingsWidget(self):
         but = QPushButton('Feedforward Settings', self)
