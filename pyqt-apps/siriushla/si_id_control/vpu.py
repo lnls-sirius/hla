@@ -23,12 +23,12 @@ class VPUControlWindow(IDCommonControlWindow):
     MAIN_CONTROL_PVS = {
         "KParam": {
             "SP": "KParam-SP",
-            "RB": "KParam-SP",   # this undulator doesn't have RB PVs
+            "RB": "KParam-RB",
             "Mon": "KParam-Mon",
         },
         "Taper": {
             "SP": "Taper-SP",
-            "RB": "Taper-SP",  # this undulator doesn't have RB PVs
+            "RB": "Taper-RB",
             "Mon": "Taper-Mon",
         },
         "Taper Speed": {
@@ -36,7 +36,7 @@ class VPUControlWindow(IDCommonControlWindow):
         },
         "Center Offset": {
             "SP": "CenterOffset-SP",
-            "RB": "CenterOffset-SP",  # this undulator doesn't have RB PVs
+            "RB": "CenterOffset-RB",
             "Mon": "CenterOffset-Mon",
         },
         "Center Offset Speed": {
@@ -50,11 +50,11 @@ class VPUControlWindow(IDCommonControlWindow):
         },
         "Movement Speed": {
             "SP": "MoveVelo-SP",
-            "RB": "MoveVelo-SP",   # this undulator doesn't have RB PVs
+            "RB": "MoveVelo-RB",
         },
         "Movement Acceleration": {
             "SP": "MoveAcc-SP",
-            "RB": "MoveAcc-SP",   # this undulator doesn't have RB PVs
+            "RB": "MoveAcc-RB",
         },
         "Start Movement": {
             "Cmd": "MoveStart-Cmd",
