@@ -71,6 +71,12 @@ class IVUControlWindowUtils():
         }
     }
 
+    SCAN_CONTROL_PVS = {
+        "Master Mode": "Fly_Master_Mode",
+        "Slave Mode": "Fly_Slave_Mode",
+        "Step Mode": "Step_Mode"
+    }
+
 
 class IVUControlWindow(IDCommonControlWindow, IVUControlWindowUtils):
     """IVU Control Window."""
@@ -107,6 +113,40 @@ class IVUControlWindow(IDCommonControlWindow, IVUControlWindowUtils):
             row += 1
 
         return group
+
+    def _auxCommandsWidget(self):
+        group = QGroupBox('Main Controls')
+        lay = QGridLayout()
+        group.setLayout(lay)
+
+        row = 0
+        for title, pv_info in self.MAIN_CONTROL_PVS.items():
+            label = QLabel(
+                title, self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            label.setFixedWidth(150)
+            lay.addWidget(label, row, 0)
+
+            if title in ("Moving"):
+                self._createMotion(pv_info, lay, row)
+            elif title in ["KParam", "KParam Speed",
+                    "KParam Taper", "Center Offset", "Pitch Offset"]:
+                self._createParam(pv_info, lay, row)
+            elif title in ["Pitch Mode", "Center Mode"]:
+                self._createModeSwitch(pv_info, lay, row)
+            elif isinstance(pv_info, str):
+                pvname = self.dev_pref.substitute(propty=pv_info)
+                lbl = SiriusLabel(self, init_channel=pvname)
+                lbl.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+                lbl.setMinimumWidth(125)
+                lbl.showUnits = True
+                lbl.setMaximumHeight(40)
+                lay.addWidget(lbl, row, 1, 1, 2)
+            else:
+                self._createIconBtns(pv_info, lay, row)
+            row += 1
+
+        return group
+
 
     def _createModeSwitch(self, pv_info, lay, row):
         pvname = self.dev_pref.substitute(propty=pv_info["Sel"])
@@ -151,8 +191,6 @@ class IVUControlWindow(IDCommonControlWindow, IVUControlWindowUtils):
         connect_newprocess(
             but, ['sirius-hla-si-ap-idff.py', self._device])
         return but
-
-    # --- auxiliary methods ---
 
     def _createParam(self, pv_info, lay, row):
         pvname = self.dev_pref.substitute(propty=pv_info["SP"])
