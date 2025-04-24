@@ -164,6 +164,7 @@ class IVUControlWindow(IDCommonControlWindow, IVUControlWindowUtils):
         widget = QWidget()
         vlay = QVBoxLayout()
         widget.setLayout(vlay)
+        vlay.setContentsMargins(0, 0, 0, 0)
         vlay.addWidget(self._auxParametersWidget())
         vlay.addWidget(self._scanControlsWidget())
         return widget
