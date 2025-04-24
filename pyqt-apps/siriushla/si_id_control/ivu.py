@@ -2,8 +2,8 @@
 
 from qtpy.QtCore import Qt, QSize
 from qtpy.QtWidgets import QGroupBox, QLabel, \
-    QHBoxLayout, QPushButton, \
-    QGridLayout
+    QHBoxLayout, QPushButton, QWidget, \
+    QGridLayout, QVBoxLayout
 import qtawesome as qta
 from pydm.widgets import PyDMPushButton
 
@@ -30,10 +30,6 @@ class IVUControlWindowUtils():
         "KParam Speed": {
             "SP": "KParamVelo-SP",
             "RB": "KParamVelo-RB"
-        },
-        "Max Speed": {
-            "SP": "KParamMaxVelo-SP",
-            "RB": "KParamMaxVelo-RB"
         },
         "KParam Taper": {
             "SP": "KParamTaper-SP",
@@ -92,6 +88,13 @@ class IVUControlWindowUtils():
             "Mon": "Step_Mode"
         }
     }
+    
+    AUXILIARY_PVS = {
+        "Max Speed": {
+            "SP": "KParamMaxVelo-SP",
+            "RB": "KParamMaxVelo-RB"
+        }
+    }
 
 
 class IVUControlWindow(IDCommonControlWindow, IVUControlWindowUtils):
@@ -130,23 +133,40 @@ class IVUControlWindow(IDCommonControlWindow, IVUControlWindowUtils):
 
         return group
 
-    def _auxCommandsWidget(self):
+    def _auxParametersWidget(self):
+        group = QGroupBox('Auxiliary Parameters')
+        lay = QGridLayout()
+        group.setLayout(lay)
+
+        for row, (title, pv_info) in enumerate(self.AUXILIARY_PVS.items()):
+            label = QLabel(
+                title, self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            label.setFixedWidth(150)
+            lay.addWidget(label, row, 0)
+            self._createParam(pv_info, lay, row)
+        return group
+
+    def _scanControlsWidget(self):
         group = QGroupBox('Scan Mode Controls')
         lay = QGridLayout()
         group.setLayout(lay)
 
-        row = 0
-        for title, pv_info in self.SCAN_CONTROL_PVS.items():
+        for row, (title, pv_info) in enumerate(self.SCAN_CONTROL_PVS.items()):
             label = QLabel(
                 title, self, alignment=Qt.AlignRight | Qt.AlignVCenter)
             label.setFixedWidth(150)
             lay.addWidget(label, row, 0)
 
             self._createModeSwitch(pv_info, lay, row)
-            row += 1
-
         return group
 
+    def _auxCommandsWidget(self):
+        widget = QWidget()
+        vlay = QVBoxLayout()
+        widget.setLayout(vlay)
+        vlay.addWidget(self._auxParametersWidget())
+        vlay.addWidget(self._scanControlsWidget())
+        return widget
 
     def _createModeSwitch(self, pv_info, lay, row):
         pvname = self.dev_pref.substitute(propty=pv_info["Sel"])
