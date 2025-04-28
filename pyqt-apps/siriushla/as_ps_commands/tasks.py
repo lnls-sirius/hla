@@ -182,6 +182,22 @@ class CheckSOFBMode(BaseTask):
         self._check(method='check_sofbmode', state=self._state)
 
 
+class CheckIDFFMode(BaseTask):
+    """Check PS IDFFMode."""
+
+    def function(self):
+        """Check PS IDFFMode."""
+        self._check(method='check_idffmode', state=self._state)
+
+
+class SetIDFFMode(BaseTask):
+    """Set PS IDFFMode."""
+
+    def function(self):
+        """Set PS IDFFMode."""
+        self._set(method='set_idffmode', state=self._state)
+
+
 class SetOpMode(BaseTask):
     """Set PS OpMode."""
 
