@@ -2,8 +2,8 @@
 
 from qtpy.QtCore import Qt, QSize
 from qtpy.QtWidgets import QGroupBox, QLabel, \
-    QHBoxLayout, QPushButton, \
-    QGridLayout
+    QHBoxLayout, QPushButton, QWidget, \
+    QGridLayout, QVBoxLayout
 import qtawesome as qta
 from pydm.widgets import PyDMPushButton
 
@@ -71,6 +71,31 @@ class IVUControlWindowUtils():
         }
     }
 
+    SCAN_CONTROL_PVS = {
+        "Master": {
+            "Sel": "Fly_Master_Mode",
+            "Sts": "Fly_Master_Mode",
+            "Mon": "Fly_Master_Mode"
+        },
+        "Slave": {
+            "Sel": "Fly_Slave_Mode",
+            "Sts": "Fly_Slave_Mode",
+            "Mon": "Fly_Slave_Mode"
+        },
+        "Step": {
+            "Sel": "Step_Mode",
+            "Sts": "Step_Mode",
+            "Mon": "Step_Mode"
+        }
+    }
+    
+    AUXILIARY_PVS = {
+        "Max Speed": {
+            "SP": "KParamMaxVelo-SP",
+            "RB": "KParamMaxVelo-RB"
+        }
+    }
+
 
 class IVUControlWindow(IDCommonControlWindow, IVUControlWindowUtils):
     """IVU Control Window."""
@@ -89,7 +114,7 @@ class IVUControlWindow(IDCommonControlWindow, IVUControlWindowUtils):
 
             if title in ("Moving"):
                 self._createMotion(pv_info, lay, row)
-            elif title in ["KParam", "KParam Speed",
+            elif title in ["KParam", "KParam Speed", "Max Speed",
                     "KParam Taper", "Center Offset", "Pitch Offset"]:
                 self._createParam(pv_info, lay, row)
             elif title in ["Pitch Mode", "Center Mode"]:
@@ -107,6 +132,42 @@ class IVUControlWindow(IDCommonControlWindow, IVUControlWindowUtils):
             row += 1
 
         return group
+
+    def _auxParametersWidget(self):
+        group = QGroupBox('Auxiliary Parameters')
+        lay = QGridLayout()
+        group.setLayout(lay)
+
+        for row, (title, pv_info) in enumerate(self.AUXILIARY_PVS.items()):
+            label = QLabel(
+                title, self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            label.setFixedWidth(150)
+            lay.addWidget(label, row, 0)
+            self._createParam(pv_info, lay, row)
+        return group
+
+    def _scanControlsWidget(self):
+        group = QGroupBox('Scan Mode Controls')
+        lay = QGridLayout()
+        group.setLayout(lay)
+
+        for row, (title, pv_info) in enumerate(self.SCAN_CONTROL_PVS.items()):
+            label = QLabel(
+                title, self, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            label.setFixedWidth(150)
+            lay.addWidget(label, row, 0)
+
+            self._createModeSwitch(pv_info, lay, row)
+        return group
+
+    def _auxCommandsWidget(self):
+        widget = QWidget()
+        vlay = QVBoxLayout()
+        widget.setLayout(vlay)
+        vlay.setContentsMargins(0, 0, 0, 0)
+        vlay.addWidget(self._auxParametersWidget())
+        vlay.addWidget(self._scanControlsWidget())
+        return widget
 
     def _createModeSwitch(self, pv_info, lay, row):
         pvname = self.dev_pref.substitute(propty=pv_info["Sel"])
@@ -151,8 +212,6 @@ class IVUControlWindow(IDCommonControlWindow, IVUControlWindowUtils):
         connect_newprocess(
             but, ['sirius-hla-si-ap-idff.py', self._device])
         return but
-
-    # --- auxiliary methods ---
 
     def _createParam(self, pv_info, lay, row):
         pvname = self.dev_pref.substitute(propty=pv_info["SP"])
