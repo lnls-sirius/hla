@@ -404,7 +404,8 @@ class PVNameTree(QWidget):
                         parent = new_item
                     parent_key = item_key
         elif pvname.startswith('RA'):
-            sec = 'BO' if pvname.startswith('RA-RaBO') else 'SI'
+            sec = 'BO' if pvname.startswith(
+                ('RA-RaBO', 'RA-ToBO', 'RA-RF:PowerSensor')) else 'SI'
             dic_ = {'sec': sec, 'dis': 'RF', 'dev': 'LLRF'}
             for p in self._pnames:
                 key = dic_.get(p, 'LLRF')
