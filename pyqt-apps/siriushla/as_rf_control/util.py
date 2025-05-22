@@ -2558,7 +2558,7 @@ SEC_2_CHANNELS = {
         'Quench Ratio': {
             'A': {
                 'Quench Cond 1': 'RA-RaSIA01:RF-LLRF:QuenchCond1RvRatio-Mon',
-                'E-quench': 'RA-RaSIA01:RF-LLRF:EQuenchFwRatio-Mon',        
+                'E-quench': 'RA-RaSIA01:RF-LLRF:EQuenchFwRatio-Mon',
             },
             'B': {
                 'Quench Cond 1': 'RA-RaSIB01:RF-LLRF:QuenchCond1RvRatio-Mon',

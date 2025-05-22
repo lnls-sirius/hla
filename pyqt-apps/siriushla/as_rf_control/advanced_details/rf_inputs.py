@@ -74,21 +74,25 @@ class RFInputsDetails(SiriusDialog):
 
         # Ratio Calculation
         if self.section == 'SI':
+            quench_ratio = SiriusLabel(
+                self, self.prefix+self.syst_dict_2['Quench Cond 1'])
+            quench_ratio.showUnits = True
+
+            equench_ratio = SiriusLabel(
+                self, self.prefix+self.syst_dict_2['E-quench'])
+            equench_ratio.showUnits = True
+
             lay.addWidget(self.horizontal_separator(), row, 0, 1, 9)
             row += 1
             lay.addWidget(QLabel(
                 'Quench Condition 1 (Rev Cav/Fwd Cav)', alignment=Qt.AlignRight), 
                 row, 0, 1, 2)
-            lay.addWidget(SiriusLabel(
-                self, self.prefix+self.syst_dict_2['Quench Cond 1']),
-                row, 4, 1, 6, alignment=Qt.AlignLeft)
+            lay.addWidget(quench_ratio, row, 4, 1, 6, alignment=Qt.AlignLeft)
             row += 1
             lay.addWidget(QLabel(
                 'E-Quench (Fwd Cav/V Cav)', alignment=Qt.AlignRight), 
                 row, 0, 1, 2)
-            lay.addWidget(SiriusLabel(
-                self, self.prefix+self.syst_dict_2['E-quench']),
-                row, 4, 1, 6, alignment=Qt.AlignLeft)
+            lay.addWidget(equench_ratio, row, 4, 1, 6, alignment=Qt.AlignLeft)
             row += 1
             lay.addWidget(self.horizontal_separator(), row, 0, 1, 9)
 

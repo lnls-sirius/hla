@@ -175,6 +175,9 @@ class AdvancedInterlockDetails(SiriusDialog):
         tab1_layout.setSpacing(9)
 
         rv_ch = self.prefix+chs_dict['Quench1']['Rv']
+        lb_rv = SiriusLabel(self, rv_ch+'-RB')
+        lb_rv.showUnits = True
+
         dly_ch = self.prefix+chs_dict['Quench1']['Dly']
         lb_dly = SiriusLabel(self, dly_ch+'-RB')
         lb_dly.showUnits = True
@@ -183,8 +186,8 @@ class AdvancedInterlockDetails(SiriusDialog):
             'Rv Ratio'), 0, 0, alignment=Qt.AlignRight | Qt.AlignVCenter)
         tab1_layout.addWidget(SiriusSpinbox(
             self, rv_ch + '-SP'), 0, 1, alignment=Qt.AlignCenter)
-        tab1_layout.addWidget(SiriusLabel(
-            self, rv_ch + '-RB'), 0, 2, alignment=Qt.AlignCenter)
+        tab1_layout.addWidget(lb_rv, 0, 2, alignment=Qt.AlignCenter)
+        
         tab1_layout.addWidget(QLabel(
             'Delay'), 1, 0, alignment=Qt.AlignRight | Qt.AlignVCenter)
         tab1_layout.addWidget(SiriusSpinbox(
@@ -199,6 +202,9 @@ class AdvancedInterlockDetails(SiriusDialog):
         tab2_layout.setSpacing(9)
 
         fw_ch = self.prefix+chs_dict['E-Quench']['Fw']
+        lb_fw = SiriusLabel(self, fw_ch+'-RB')
+        lb_fw.showUnits = True
+
         dly_ch_e = self.prefix+chs_dict['E-Quench']['Dly']
         lb_dly_e = SiriusLabel(self, dly_ch_e+'-RB')
         lb_dly_e.showUnits = True
@@ -207,8 +213,8 @@ class AdvancedInterlockDetails(SiriusDialog):
             'Fw Ratio'), 0, 0, alignment=Qt.AlignRight | Qt.AlignVCenter)
         tab2_layout.addWidget(SiriusSpinbox(
             self, fw_ch+'-SP'), 0, 1, alignment=Qt.AlignCenter)
-        tab2_layout.addWidget(SiriusLabel(
-            self, self.prefix+fw_ch+'-RB'), 0, 2, alignment=Qt.AlignCenter)
+        tab2_layout.addWidget(lb_fw, 0, 2, alignment=Qt.AlignCenter)
+        
         tab2_layout.addWidget(QLabel(
             'Delay'), 1, 0, alignment=Qt.AlignRight | Qt.AlignVCenter)
         tab2_layout.addWidget(SiriusSpinbox(
