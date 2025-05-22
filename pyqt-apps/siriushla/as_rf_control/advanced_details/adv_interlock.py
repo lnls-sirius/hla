@@ -155,28 +155,67 @@ class AdvancedInterlockDetails(SiriusDialog):
         gbox_gen = QGroupBox('General Controls')
         gbox_gen.setLayout(self._genDiagLayout(chs_dict['General']))
 
-        # Quench Cond. 1
-        gbox_quench = QGroupBox('Quench Cond. 1', self)
-        lay_quench = QGridLayout(gbox_quench)
+        #Quench
+        gbox_quench = QGroupBox('Quench', self)
+        lay_quench = QVBoxLayout(gbox_quench)
         lay_quench.setAlignment(Qt.AlignTop)
         lay_quench.setSpacing(9)
+
+        tabwidget = QTabWidget(gbox_quench)
+        lay_quench.addWidget(tabwidget)
+        tabwidget.setStyleSheet(
+            "#"+self.section+'Tab'+"::pane {"
+            "    border-left: 2px solid gray;"
+            "    border-bottom: 2px solid gray;"
+            "    border-right: 2px solid gray;}")
+        
+        tab1 = QWidget()
+        tab1_layout = QGridLayout(tab1)
+        tab1_layout.setAlignment(Qt.AlignTop)
+        tab1_layout.setSpacing(9)
 
         rv_ch = self.prefix+chs_dict['Quench1']['Rv']
         dly_ch = self.prefix+chs_dict['Quench1']['Dly']
         lb_dly = SiriusLabel(self, dly_ch+'-RB')
         lb_dly.showUnits = True
 
-        lay_quench.addWidget(QLabel(
+        tab1_layout.addWidget(QLabel(
             'Rv Ratio'), 0, 0, alignment=Qt.AlignRight | Qt.AlignVCenter)
-        lay_quench.addWidget(SiriusSpinbox(
-            self, rv_ch+'-SP'), 0, 1, alignment=Qt.AlignCenter)
-        lay_quench.addWidget(SiriusLabel(
-            self, self.prefix+rv_ch+'-RB'), 0, 2, alignment=Qt.AlignCenter)
-        lay_quench.addWidget(QLabel(
+        tab1_layout.addWidget(SiriusSpinbox(
+            self, rv_ch + '-SP'), 0, 1, alignment=Qt.AlignCenter)
+        tab1_layout.addWidget(SiriusLabel(
+            self, rv_ch + '-RB'), 0, 2, alignment=Qt.AlignCenter)
+        tab1_layout.addWidget(QLabel(
             'Delay'), 1, 0, alignment=Qt.AlignRight | Qt.AlignVCenter)
-        lay_quench.addWidget(SiriusSpinbox(
-            self, dly_ch+'-SP'), 1, 1, alignment=Qt.AlignCenter)
-        lay_quench.addWidget(lb_dly, 1, 2, alignment=Qt.AlignCenter)
+        tab1_layout.addWidget(SiriusSpinbox(
+            self, dly_ch + '-SP'), 1, 1, alignment=Qt.AlignCenter)
+        tab1_layout.addWidget(lb_dly, 1, 2, alignment=Qt.AlignCenter)
+
+        tabwidget.addTab(tab1, 'Quench Cond. 1')
+
+        tab2 = QWidget()
+        tab2_layout = QGridLayout(tab2)
+        tab2_layout.setAlignment(Qt.AlignTop)
+        tab2_layout.setSpacing(9)
+
+        fw_ch = self.prefix+chs_dict['E-Quench']['Fw']
+        dly_ch_e = self.prefix+chs_dict['E-Quench']['Dly']
+        lb_dly_e = SiriusLabel(self, dly_ch_e+'-RB')
+        lb_dly_e.showUnits = True
+
+        tab2_layout.addWidget(QLabel(
+            'Fw Ratio'), 0, 0, alignment=Qt.AlignRight | Qt.AlignVCenter)
+        tab2_layout.addWidget(SiriusSpinbox(
+            self, fw_ch+'-SP'), 0, 1, alignment=Qt.AlignCenter)
+        tab2_layout.addWidget(SiriusLabel(
+            self, self.prefix+fw_ch+'-RB'), 0, 2, alignment=Qt.AlignCenter)
+        tab2_layout.addWidget(QLabel(
+            'Delay'), 1, 0, alignment=Qt.AlignRight | Qt.AlignVCenter)
+        tab2_layout.addWidget(SiriusSpinbox(
+            self, dly_ch_e+'-SP'), 1, 1, alignment=Qt.AlignCenter)
+        tab2_layout.addWidget(lb_dly_e, 1, 2, alignment=Qt.AlignCenter)
+
+        tabwidget.addTab(tab2, 'E-Quench')
 
         lay.addWidget(gbox_lvls, 0, 0)
         lay.addWidget(gbox_inp, 0, 1)
@@ -268,8 +307,8 @@ class AdvancedInterlockDetails(SiriusDialog):
             '<h4>Offset</h4>', alignment=Qt.AlignCenter), 3, 5, 1, 2)
 
         # # Body
-        keys = ['Fwd Cav', 'Rev Cav', 'Quench']
-        row = 4
+        keys = ['Fwd Cav', 'Rev Cav', 'Quench', 'E-Quench']
+        row = 5
         for key in keys:
             chs = chs_dict[key]
 
