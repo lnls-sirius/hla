@@ -77,10 +77,12 @@ class RFInputsDetails(SiriusDialog):
             quench_ratio = SiriusLabel(
                 self, self.prefix+self.syst_dict_2['Quench Cond 1'])
             quench_ratio.showUnits = True
+            quench_ratio._keep_unit = True
 
             equench_ratio = SiriusLabel(
                 self, self.prefix+self.syst_dict_2['E-quench'])
             equench_ratio.showUnits = True
+            equench_ratio._keep_unit = True
 
             lay.addWidget(self.horizontal_separator(), row, 0, 1, 9)
             row += 1

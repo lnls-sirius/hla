@@ -177,6 +177,7 @@ class AdvancedInterlockDetails(SiriusDialog):
         rv_ch = self.prefix+chs_dict['Quench1']['Rv']
         lb_rv = SiriusLabel(self, rv_ch+'-RB')
         lb_rv.showUnits = True
+        lb_rv._keep_unit = True
 
         dly_ch = self.prefix+chs_dict['Quench1']['Dly']
         lb_dly = SiriusLabel(self, dly_ch+'-RB')
@@ -204,6 +205,7 @@ class AdvancedInterlockDetails(SiriusDialog):
         fw_ch = self.prefix+chs_dict['E-Quench']['Fw']
         lb_fw = SiriusLabel(self, fw_ch+'-RB')
         lb_fw.showUnits = True
+        lb_fw._keep_unit = True 
 
         dly_ch_e = self.prefix+chs_dict['E-Quench']['Dly']
         lb_dly_e = SiriusLabel(self, dly_ch_e+'-RB')
