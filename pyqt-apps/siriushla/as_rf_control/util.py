@@ -87,7 +87,8 @@ SEC_2_CHANNELS = {
                         'Circulator Out Fwd (RF In 14)',
                         'Circulator Out Rev (RF In 15)',
                         'Not Used (old beam trip)',
-                        'Quench Condition 1'
+                        'Quench Condition 1',
+                        'E-Quench'
                     ),
                 }
             },
@@ -1255,6 +1256,10 @@ SEC_2_CHANNELS = {
                 'Quench1': {
                     'Rv': 'RA-RaBO01:RF-LLRF:QuenchCond1RvRatio',
                     'Dly': 'RA-RaBO01:RF-LLRF:QuenchCond1Dly'
+                },
+                'E-Quench': {
+                    'Fw': 'RA-RaBO01:RF-LLRF:EQuenchFwRatio',
+                    'Dly': 'RA-RaBO01:RF-LLRF:EQuenchDly'
                 }
             },
             'Bypass': {
@@ -1273,6 +1278,7 @@ SEC_2_CHANNELS = {
                 '816 2': ['End Switch Up 2', 'RA-RaBO01:RF-LLRF:FIMPLG2Up'],
                 '817 2': ['End Switch Down 2', 'RA-RaBO01:RF-LLRF:FIMPLG2Down'],
                 '853': ['Quench Condition 1', 'RA-RaBO01:RF-LLRF:FIMQuenchCond1'],
+                '857': ['E-Quench', 'RA-RaBO01:RF-LLRF:FIMEQuench'],
                 '835': ['ILK VCav', 'RA-RaBO01:RF-LLRF:FIMCav'],
                 '836': ['ILK Fwd Cav', 'RA-RaBO01:RF-LLRF:FIMFwdCav'],
                 '837': ['ILK Fw SSA 1', 'RA-RaBO01:RF-LLRF:FIMFwdSSA1'],
@@ -1588,7 +1594,8 @@ SEC_2_CHANNELS = {
                             'Fwd Load (RF In 14)',
                             'Rev In Load (RF In 15)',
                             'Not Used (old beam trip)',
-                            'Quench Condition 1'
+                            'Quench Condition 1',
+                            'E-Quench'
                         ),
                     },
                 },
@@ -1659,7 +1666,8 @@ SEC_2_CHANNELS = {
                             'Fwd Load (RF In 14)',
                             'Rev In Load (RF In 15)',
                             'Not Used (old beam trip)',
-                            'Quench Condition 1'
+                            'Quench Condition 1',
+                            'E-Quench'
                         ),
                     },
                 },
@@ -2545,6 +2553,16 @@ SEC_2_CHANNELS = {
                         '35': ['Gain', 'RA-RaSIB01:RF-LLRF:CavMonGain'],
                     }
                 }
+            }
+        },
+        'Quench Ratio': {
+            'A': {
+                'Quench Cond 1': 'RA-RaSIA01:RF-LLRF:QuenchCond1RvRatio-Mon',
+                'E-quench': 'RA-RaSIA01:RF-LLRF:EQuenchFwRatio-Mon',
+            },
+            'B': {
+                'Quench Cond 1': 'RA-RaSIB01:RF-LLRF:QuenchCond1RvRatio-Mon',
+                'E-quench': 'RA-RaSIB01:RF-LLRF:EQuenchFwRatio-Mon', 
             }
         },
         'RF Inputs': {
@@ -4158,6 +4176,10 @@ SEC_2_CHANNELS = {
                     'Quench1': {
                         'Rv': 'RA-RaSIA01:RF-LLRF:QuenchCond1RvRatio',
                         'Dly': 'RA-RaSIA01:RF-LLRF:QuenchCond1Dly'
+                    },
+                    'E-Quench': {
+                        'Fw': 'RA-RaSIA01:RF-LLRF:EQuenchFwRatio',
+                        'Dly': 'RA-RaSIA01:RF-LLRF:EQuenchDly'
                     }
                 },
                 'Dynamic': {
@@ -4184,6 +4206,13 @@ SEC_2_CHANNELS = {
                         'Coeff': 'RA-RaSIA01:RF-LLRF:QuenchCond1RvRatioCoeff',
                         'Offset': 'RA-RaSIA01:RF-LLRF:QuenchCond1RvRatioOffset'
                     },
+                    'E-Quench': {
+                        'Label': 'E-Quench Ratio',
+                        'Value': 'RA-RaSIA01:RF-LLRF:EQuenchFwRatio-RB',
+                        'Enable': 'RA-RaSIA01:RF-LLRF:EQuenchFwRatioEn',
+                        'Coeff': 'RA-RaSIA01:RF-LLRF:EQuenchFwRatioCoeff',
+                        'Offset': 'RA-RaSIA01:RF-LLRF:EQuenchFwRatioOffset'
+                    }
                 },
                 'Bypass': {
                     '806': ['Rev SSA 1', 'RA-RaSIA01:RF-LLRF:FIMRevSSA1'],
@@ -4201,6 +4230,7 @@ SEC_2_CHANNELS = {
                     '816 2': ['End Switch Up 2', 'RA-RaSIA01:RF-LLRF:FIMPLG2Up'],
                     '817 2': ['End Switch Down 2', 'RA-RaSIA01:RF-LLRF:FIMPLG2Down'],
                     '853': ['Quench Condition 1', 'RA-RaSIA01:RF-LLRF:FIMQuenchCond1'],
+                    '857': ['E-Quench', 'RA-RaSIA01:RF-LLRF:FIMEQuench'],
                     '835': ['ILK VCav', 'RA-RaSIA01:RF-LLRF:FIMCav'],
                     '836': ['ILK Fwd Cav', 'RA-RaSIA01:RF-LLRF:FIMFwdCav'],
                     '837': ['ILK Fw SSA 1', 'RA-RaSIA01:RF-LLRF:FIMFwdSSA1'],
@@ -4255,6 +4285,10 @@ SEC_2_CHANNELS = {
                     'Quench1': {
                         'Rv': 'RA-RaSIB01:RF-LLRF:QuenchCond1RvRatio',
                         'Dly': 'RA-RaSIB01:RF-LLRF:QuenchCond1Dly'
+                    },
+                    'E-Quench': {
+                        'Fw': 'RA-RaSIB01:RF-LLRF:EQuenchFwRatio',
+                        'Dly': 'RA-RaSIB01:RF-LLRF:EQuenchDly'
                     }
                 },
                 'Dynamic': {
@@ -4281,6 +4315,13 @@ SEC_2_CHANNELS = {
                         'Coeff': 'RA-RaSIB01:RF-LLRF:QuenchCond1RvRatioCoeff',
                         'Offset': 'RA-RaSIB01:RF-LLRF:QuenchCond1RvRatioOffset'
                     },
+                    'E-Quench': {
+                        'Label': 'E-Quench Ratio',
+                        'Value': 'RA-RaSIB01:RF-LLRF:EQuenchFwRatio-RB',
+                        'Enable': 'RA-RaSIB01:RF-LLRF:EQuenchFwRatioEn',
+                        'Coeff': 'RA-RaSIB01:RF-LLRF:EQuenchFwRatioCoeff',
+                        'Offset': 'RA-RaSIB01:RF-LLRF:EQuenchFwRatioOffset'
+                    }
                 },
                 'Bypass': {
                     '806': ['Rev SSA 1', 'RA-RaSIB01:RF-LLRF:FIMRevSSA1'],
@@ -4298,6 +4339,7 @@ SEC_2_CHANNELS = {
                     '816 2': ['End Switch Up 2', 'RA-RaSIB01:RF-LLRF:FIMPLG2Up'],
                     '817 2': ['End Switch Down 2', 'RA-RaSIB01:RF-LLRF:FIMPLG2Down'],
                     '853': ['Quench Condition 1', 'RA-RaSIB01:RF-LLRF:FIMQuenchCond1'],
+                    '857': ['E-Quench', 'RA-RaSIB01:RF-LLRF:FIMEQuench'],
                     '835': ['ILK VCav', 'RA-RaSIB01:RF-LLRF:FIMCav'],
                     '836': ['ILK Fwd Cav', 'RA-RaSIB01:RF-LLRF:FIMFwdCav'],
                     '837': ['ILK Fw SSA 1', 'RA-RaSIB01:RF-LLRF:FIMFwdSSA1'],

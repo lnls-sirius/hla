@@ -2,7 +2,7 @@
 
 from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QGridLayout, QLabel, QSizePolicy as QSzPlcy, \
-    QSpacerItem
+    QSpacerItem, QFrame
 
 from ...widgets import SiriusDialog, SiriusLabel
 from ..custom_widgets import RFTitleFrame
@@ -26,6 +26,7 @@ class RFInputsDetails(SiriusDialog):
         self.setWindowTitle(self.title)
         if self.section == 'SI':
             self.syst_dict = self.chs['RF Inputs'][self.system]
+            self.syst_dict_2 = self.chs['Quench Ratio'][self.system]
         else:
             self.syst_dict = self.chs['RF Inputs']
         self._setupUi()
@@ -70,3 +71,35 @@ class RFInputsDetails(SiriusDialog):
                 if column == 6:
                     column += 1
             row += 1
+
+        # Ratio Calculation
+        if self.section == 'SI':
+            quench_ratio = SiriusLabel(
+                self, self.prefix+self.syst_dict_2['Quench Cond 1'])
+            quench_ratio.showUnits = True
+            quench_ratio._keep_unit = True
+
+            equench_ratio = SiriusLabel(
+                self, self.prefix+self.syst_dict_2['E-quench'])
+            equench_ratio.showUnits = True
+            equench_ratio._keep_unit = True
+
+            lay.addWidget(self.horizontal_separator(), row, 0, 1, 9)
+            row += 1
+            lay.addWidget(QLabel(
+                'Quench Condition 1 (Rev Cav/Fwd Cav)', alignment=Qt.AlignRight), 
+                row, 0, 1, 2)
+            lay.addWidget(quench_ratio, row, 4, 1, 6, alignment=Qt.AlignLeft)
+            row += 1
+            lay.addWidget(QLabel(
+                'E-Quench (Fwd Cav/V Cav)', alignment=Qt.AlignRight), 
+                row, 0, 1, 2)
+            lay.addWidget(equench_ratio, row, 4, 1, 6, alignment=Qt.AlignLeft)
+            row += 1
+            lay.addWidget(self.horizontal_separator(), row, 0, 1, 9)
+
+    def horizontal_separator(self):
+            line = QFrame()
+            line.setFrameShape(QFrame.HLine)
+            line.setFrameShadow(QFrame.Sunken)
+            return line
