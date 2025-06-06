@@ -4,9 +4,11 @@ INSTALL_DESIGNER_DIR ?= /usr/local/share/Qt/designer
 PACKAGE=siriushla
 PREFIX ?=
 PIP ?= pip
+PYTHON ?= python
 ifeq ($(CONDA_PREFIX),)
 	PREFIX=sudo -H
 	PIP=pip-sirius
+	PYTHON=python-sirius
 endif
 
 install-designer:
@@ -27,3 +29,6 @@ develop-install: develop-uninstall
 
 develop-uninstall:
 	$(PIP) uninstall -y $(PACKAGE)
+
+run-tests:
+	$(PYTHON) tests/run_tests.py
