@@ -28,7 +28,7 @@ license-files= [ "LICENSE", ]
 [project.urls]
 Homepage = "https://github.com/lnls-sirius/hla"
 Download = "https://github.com/lnls-sirius/hla"
-Repository = "https://github.com/lnls-sirius/hla"
+Repository = "https://github.com/lnls-sirius/hla.git"
 Issues = "https://github.com/lnls-sirius/hla/issues"
 
 # --- Setuptools specific configurations ---
