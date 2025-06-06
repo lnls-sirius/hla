@@ -1,0 +1,177 @@
+[build-system]
+requires = ["setuptools>=44"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "siriushla"
+authors = [{ name = "lnls-sirius" } ]
+maintainers = [
+  {name = "Ana Oliveira", email = "ana.clara@lnls.br"},
+  {name = "Ximenes Resende", email = "xresende@gmail.com"},
+  {name = "Fernando H. de Sá", email = "fernandohds564@gmail.com"},
+  {name = "Murilo Barbosa Alves", email= "murilo.alves@lnls.br"}
+]
+description = "Client Applications for Sirius"
+readme = "README.md"
+dynamic = ["version", "dependencies"]
+requires-python = ">=3.6"
+classifiers = [
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python",
+    "Topic :: Scientific/Engineering",
+]
+keywords = ["SIRIUS", "python", "EPICS"]
+
+license = "GPL-3.0"
+license-files= [ "LICENSE", ]
+
+[project.urls]
+Homepage = "https://github.com/lnls-sirius/hla"
+Download = "https://github.com/lnls-sirius/hla"
+Repository = "https://github.com/lnls-sirius/hla"
+Issues = "https://github.com/lnls-sirius/hla/issues"
+
+# --- Setuptools specific configurations ---
+[tool.setuptools]
+include-package-data = true
+# NOTE: This is not the standard way of defining scripts.
+#     Once we abandon phython3.6 and the setup.py file, we should
+#     consider using the table [projec.scripts], defining valid entrypoints.
+script-files = [
+    "scripts/sirius-hla-as-ap-configdb.py",
+    "scripts/sirius-hla-as-ap-effmon.py",
+    "scripts/sirius-hla-as-ap-energybutton.py",
+    "scripts/sirius-hla-as-ap-injection.py",
+    "scripts/sirius-hla-as-ap-launcher.py",
+    "scripts/sirius-hla-as-ap-macreport.py",
+    "scripts/sirius-hla-as-ap-magoffconv.py",
+    "scripts/sirius-hla-as-ap-monitor.py",
+    "scripts/sirius-hla-as-ap-pvsconfigs.py",
+    "scripts/sirius-hla-as-ap-pvsconfigs-save.py",
+    "scripts/sirius-hla-as-ap-pvsconfigs-load.py",
+    "scripts/sirius-hla-as-ap-rabpmmon.py",
+    "scripts/sirius-hla-as-ap-radmon.py",
+    "scripts/sirius-hla-as-di-bpm.py",
+    "scripts/sirius-hla-as-di-dcct.py",
+    "scripts/sirius-hla-as-di-scrn.py",
+    "scripts/sirius-hla-as-ps-commands.py",
+    "scripts/sirius-hla-as-ps-cycle.py",
+    "scripts/sirius-hla-as-ps-detail.py",
+    "scripts/sirius-hla-as-ps-diag.py",
+    "scripts/sirius-hla-as-ps-graphmon.py",
+    "scripts/sirius-hla-as-ps-monitor.py",
+    "scripts/sirius-hla-as-pu-control.py",
+    "scripts/sirius-hla-as-pu-detail.py",
+    "scripts/sirius-hla-as-ti-afc.py",
+    "scripts/sirius-hla-as-ti-control.py",
+    "scripts/sirius-hla-as-ti-eve.py",
+    "scripts/sirius-hla-as-ti-evg.py",
+    "scripts/sirius-hla-as-ti-evr.py",
+    "scripts/sirius-hla-as-ti-fout.py",
+    "scripts/sirius-hla-bl-ap-imgproc.py",
+    "scripts/sirius-hla-bo-ap-chargemon.py",
+    "scripts/sirius-hla-bo-ap-chromcorr.py",
+    "scripts/sirius-hla-bo-ap-injcontrol.py",
+    "scripts/sirius-hla-bo-ap-ramp.py",
+    "scripts/sirius-hla-bo-ap-sofb.py",
+    "scripts/sirius-hla-bo-ap-tunecorr.py",
+    "scripts/sirius-hla-bo-di-tune.py",
+    "scripts/sirius-hla-bo-di-vlight.py",
+    "scripts/sirius-hla-bo-offconfig.py",
+    "scripts/sirius-hla-bo-ps-control.py",
+    "scripts/sirius-hla-bo-ps-wfmerror.py",
+    "scripts/sirius-hla-bo-pu-control.py",
+    "scripts/sirius-hla-bo-rf-control.py",
+    "scripts/sirius-hla-it-di-vlight.py",
+    "scripts/sirius-hla-it-eg-control.py",
+    "scripts/sirius-hla-it-ps-control.py",
+    "scripts/sirius-hla-it-ti-control.py",
+    "scripts/sirius-hla-li-ap-emittance.py",
+    "scripts/sirius-hla-li-ap-energy.py",
+    "scripts/sirius-hla-li-ap-mpscon.py",
+    "scripts/sirius-hla-li-ap-mpsmon.py",
+    "scripts/sirius-hla-li-di-bpms.py",
+    "scripts/sirius-hla-li-di-scrns.py",
+    "scripts/sirius-hla-li-eg-control.py",
+    "scripts/sirius-hla-li-ps-control.py",
+    "scripts/sirius-hla-li-pu-modltr.py",
+    "scripts/sirius-hla-li-rf-llrf.py",
+    "scripts/sirius-hla-li-va-control.py",
+    "scripts/sirius-hla-as-cr-control.py",
+    "scripts/sirius-hla-si-ap-chromcorr.py",
+    "scripts/sirius-hla-si-ap-currlt.py",
+    "scripts/sirius-hla-si-ap-fofb.py",
+    "scripts/sirius-hla-si-ap-genstatus.py",
+    "scripts/sirius-hla-si-ap-idff.py",
+    "scripts/sirius-hla-si-ap-orbintlk.py",
+    "scripts/sirius-hla-si-ap-sofb.py",
+    "scripts/sirius-hla-si-ap-tunecorr.py",
+    "scripts/sirius-hla-si-bs-fofbsysid.py",
+    "scripts/sirius-hla-si-di-bbb.py",
+    "scripts/sirius-hla-si-di-equalize_bpms_switching.py",
+    "scripts/sirius-hla-si-di-fpmosc.py",
+    "scripts/sirius-hla-si-di-scraps.py",
+    "scripts/sirius-hla-si-di-tune.py",
+    "scripts/sirius-hla-si-di-vlight.py",
+    "scripts/sirius-hla-si-id-control.py",
+    "scripts/sirius-hla-si-offconfig.py",
+    "scripts/sirius-hla-si-ps-control.py",
+    "scripts/sirius-hla-si-ps-fastcorracq.py",
+    "scripts/sirius-hla-si-pu-control.py",
+    "scripts/sirius-hla-si-rf-control.py",
+    "scripts/sirius-hla-tb-ap-control.py",
+    "scripts/sirius-hla-tb-ap-emittance.py",
+    "scripts/sirius-hla-tb-ap-posang.py",
+    "scripts/sirius-hla-tb-ap-sofb.py",
+    "scripts/sirius-hla-tb-di-icts.py",
+    "scripts/sirius-hla-tb-di-slits.py",
+    "scripts/sirius-hla-tb-ps-control.py",
+    "scripts/sirius-hla-tb-pu-control.py",
+    "scripts/sirius-hla-ts-ap-control.py",
+    "scripts/sirius-hla-ts-ap-posang.py",
+    "scripts/sirius-hla-ts-ap-sofb.py",
+    "scripts/sirius-hla-ts-di-icts.py",
+    "scripts/sirius-hla-ts-ps-control.py",
+    "scripts/sirius-hla-ts-pu-control.py",
+]
+
+[tool.setuptools.dynamic]
+version = { file = "VERSION" }
+dependencies = { file = "requirements.txt" }
+
+[tool.setuptools.package-data]
+siriushla = ["VERSION"]
+"siriushla.si_di_bbb" = ["*.png", ]
+"siriushla.si_id_control" = ["*.gif", ]
+
+# --- linter and formatter configurations ---
+[tool.ruff]
+select = [
+    "W", "E", "A", "B", "C90", "D", "I002", "N", "F", "G", "ARG", "S", "NPY"]
+ignore = [
+    "D203", "D204", "D213", "D215", "D400", "D401", "D404", "D406", "D407",
+    "D408", "D409", "D413", "E203", "E226"]
+ignore-init-module-imports = true
+preview = true
+line-length = 79
+fix = true
+
+[tool.ruff.extend-per-file-ignores]
+"__init__.py" = ["F401", "F821"]
+
+[tool.ruff.format]
+skip-magic-trailing-comma = true
+
+[tool.ruff.lint.isort]
+split-on-trailing-comma = false
+combine-as-imports = true
+
+[tool.isort]
+split_on_trailing_comma = false
+combine_as_imports = true
+combine_star = true
+multi_line_output = "HANGING_INDENT"
+order_by_type = false
+
+[tool.black]
+line-length = 79
