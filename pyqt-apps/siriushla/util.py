@@ -121,10 +121,12 @@ def check_process(cmd, is_window=True, is_pydm=False):
 
 def check_window_by_pid(pid, comm):
     if 'edm' in comm:
-        wind = _subprocess.getoutput('wmctrl -lpx | grep edm | grep SIRIUS')
+        sts, wind = _subprocess.getstatusoutput(
+            'wmctrl -lpx | grep edm | grep SIRIUS'
+        )
     else:
-        wind = _subprocess.getoutput('wmctrl -lpx | grep ' + pid)
-    if not wind:
+        sts, wind = _subprocess.getstatusoutput('wmctrl -lpx | grep ' + pid)
+    if sts or not wind:
         return ''
     window = wind.split('\n')[0].split()[0]
     return window
@@ -134,7 +136,8 @@ def run_newprocess(cmd, is_window=True, is_pydm=False, **kwargs):
     pid, window = check_process(cmd, is_window=is_window, is_pydm=is_pydm)
     if window:
         _subprocess.run(
-            "wmctrl -iR " + window, stdin=_subprocess.PIPE, shell=True)
+            "wmctrl -iR " + window, stdin=_subprocess.PIPE, shell=True
+        )
     elif not pid:
         _subprocess.Popen(cmd, **kwargs)
 
