@@ -7,10 +7,7 @@ on:
 
 jobs:
   deploy-docs:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-22.04, ubuntu-24.04]
+    runs-on: ubuntu-22.04
     permissions:
       contents: write
     steps:
