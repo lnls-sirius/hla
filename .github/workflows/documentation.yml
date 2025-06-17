@@ -3,19 +3,22 @@ name: Documentation
 on:
   pull_request:
     branches:
-      - master
+      - dev/maint/modernize-install
 
 jobs:
   deploy-docs:
-    runs-on: ubuntu-latest
+    runs-on: runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-22.04, ubuntu-24.04]
     permissions:
       contents: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Python
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v4
 
       - name: Install siriushla dependencies
         run: pip install -r pyqt-apps/requirements.txt
@@ -30,7 +33,7 @@ jobs:
         run: sphinx-build -b html pyqt-apps/docs/source/ ./public
 
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v4
         with:
           publish_branch: gh-pages
           github_token: ${{ secrets.GITHUB_TOKEN }}
