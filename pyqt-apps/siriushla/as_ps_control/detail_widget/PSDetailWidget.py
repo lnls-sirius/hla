@@ -269,7 +269,7 @@ class PSDetailWidget(_BaseDetailWidget):
         'CycleAuxParam-SP', 'CycleAuxParam-RB',
         'WfmIndex-Mon', 'WfmSyncPulseCount-Mon',
         'WfmUpdateAuto-Sel', 'WfmUpdateAuto-Sts',
-        'SOFBMode-Sel', 'SOFBMode-Sts', 'SOFBUpdate-Cmd',
+        'IDFFMode-Sel', 'IDFFMode-Sts',
         'PRUCtrlQueueSize-Mon', 'SyncPulse-Cmd',
         'Wfm-SP', 'Wfm-RB', 'WfmRef-Mon', 'Wfm-Mon',
         'Voltage-SP', 'Voltage-RB', 'VoltageRef-Mon', 'Voltage-Mon',
@@ -759,13 +759,6 @@ class PSDetailWidget(_BaseDetailWidget):
         return layout
 
     def _iocModeLayout(self):
-        sofb_mode_sel = self._prefixed_psname + ':SOFBMode-Sel'
-        sofb_mode_sts = self._prefixed_psname + ':SOFBMode-Sts'
-
-        sofb_mode_label = QLabel('SOFB', self)
-        sofb_mode_btn = PyDMStateButton(self, sofb_mode_sel)
-        sofb_mode_led = SiriusLedState(self, sofb_mode_sts)
-
         idff_mode_sel = self._prefixed_psname + ':IDFFMode-Sel'
         idff_mode_sts = self._prefixed_psname + ':IDFFMode-Sts'
 
@@ -775,13 +768,10 @@ class PSDetailWidget(_BaseDetailWidget):
 
         layout = QGridLayout()
         layout.setAlignment(Qt.AlignTop)
-        layout.setColumnStretch(3, 1)
-        layout.addWidget(sofb_mode_label, 0, 0, Qt.AlignRight)
-        layout.addWidget(sofb_mode_btn, 0, 1, Qt.AlignHCenter)
-        layout.addWidget(sofb_mode_led, 0, 2)
-        layout.addWidget(idff_mode_label, 1, 0, Qt.AlignRight)
-        layout.addWidget(idff_mode_btn, 1, 1, Qt.AlignHCenter)
-        layout.addWidget(idff_mode_led, 1, 2)
+        layout.setColumnStretch(2, 1)
+        layout.addWidget(idff_mode_label, 0, 0, Qt.AlignRight)
+        layout.addWidget(idff_mode_btn, 0, 1, Qt.AlignHCenter)
+        layout.addWidget(idff_mode_led, 0, 2)
         return layout
 
     def _genParamsLayout(self):
