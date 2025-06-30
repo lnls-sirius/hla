@@ -1244,16 +1244,16 @@ class RFMainControl(SiriusMainWindow):
             cmd = f'sirius-hla-{self.section.lower()}-rf-control.py'
             cmd = f'{cmd} -d rf-inputs'.split(" ")
             connect_newprocess(pb_rfinp, cmd, is_window=True, parent=self)
-            
+
             lb_cavphs = QLabel('Phase', self, alignment=Qt.AlignCenter)
             self.lb_cavphs = SiriusLabel(
                 self, self.prefix+'BO-05D:RF-P5Cav:Cell3Phs-Mon')
             self.lb_cavphs.showUnits = True
-            
+
             lay_vals.addWidget(pb_rfinp, 0, 0, alignment=Qt.AlignCenter)
             lay_vals.addWidget(lb_rfinp, 0, 1)
-            lay_vals.addWidget(lb_cavphs, 5, 2, alignment=Qt.AlignCenter)
-            lay_vals.addWidget(self.lb_cavphs, 5, 3)
+            lay_vals.addWidget(lb_cavphs, 5, 1, alignment=Qt.AlignCenter)
+            lay_vals.addWidget(self.lb_cavphs, 5, 2)
         else:
             for name in data:
                 self.curves[name+' W'].setVisible('Coup' in name)
