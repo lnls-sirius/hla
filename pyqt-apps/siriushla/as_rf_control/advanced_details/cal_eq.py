@@ -65,36 +65,61 @@ class CalEqDetails(SiriusDialog):
                 column = 0
                 row += 1
 
-        lay_extra = QGridLayout()
-        lay_extra.setVerticalSpacing(12)
-
-        lay_extra.addItem(
+        lay_extra_pol = QGridLayout()
+        lay_extra_pol.setVerticalSpacing(12)
+        lay_extra_pol.addItem(
             QSpacerItem(0, 18, QSzPlcy.Ignored, QSzPlcy.Fixed), 0, 0)
-        lay_extra.addWidget(QLabel(
+        lay_extra_pol.addWidget(QLabel(
             'C0 + C1*F + C2*F^2 + C3*F^3 + C4*F^4',
             alignment=Qt.AlignCenter), 1, 0, 1, 2)
+        
+        lay_extra_rq = QGridLayout()
+        lay_extra_rq.setVerticalSpacing(12)
+        lay_extra_rq.addItem(
+            QSpacerItem(0, 18, QSzPlcy.Ignored, QSzPlcy.Fixed), 0, 0)
+        
+        lay_extra_q0 = QGridLayout()
+        lay_extra_q0.setVerticalSpacing(12)
+        lay_extra_q0.addItem(
+            QSpacerItem(0, 18, QSzPlcy.Ignored, QSzPlcy.Fixed), 0, 0)
+
+        lay_extra_rsh = QGridLayout()
+        lay_extra_rsh.setVerticalSpacing(12)
+        lay_extra_rsh.addItem(
+            QSpacerItem(0, 18, QSzPlcy.Ignored, QSzPlcy.Fixed), 0, 0)
+
         if self.section == 'SI':
             lb_rq = SiriusLabel(self, self.prefix+self.syst_dict['r/Q'])
             lb_rq.showUnits = True
+            lb_rq.precisionFromPV = False
+            lb_rq.precision = 2
             lb_q0 = SiriusLabel(self, self.prefix+self.syst_dict['Q0'])
             lb_q0.showUnits = True
-            lay_extra.addWidget(QLabel(
-                'r/Q', alignment=Qt.AlignRight | Qt.AlignVCenter),
-                2, 0)
-            lay_extra.addWidget(lb_rq, 2, 1, alignment=Qt.AlignCenter)
-            lay_extra.addWidget(QLabel(
-                'Q0', alignment=Qt.AlignRight | Qt.AlignVCenter),
-                3, 0)
-            lay_extra.addWidget(lb_q0, 3, 1, alignment=Qt.AlignCenter)
+            lb_q0.precisionFromPV = False
+            lb_q0.precision = 2
+            lb_q0.displayFormat = DisplayFormat.Exponential
+            lay_extra_rq.addWidget(QLabel(
+                'r/Q', alignment=Qt.AlignHCenter | Qt.AlignVCenter),
+                1, 2, 1, 1)
+            lay_extra_rq.addWidget(lb_rq, 1, 3, 1, 1, alignment=Qt.AlignRight | Qt.AlignVCenter)
+            lay_extra_q0.addWidget(QLabel(
+                'Q0', alignment=Qt.AlignHCenter | Qt.AlignVCenter),
+                1, 4, 1, 1)
+            lay_extra_q0.addWidget(lb_q0, 1, 5, 1, 1, alignment=Qt.AlignRight | Qt.AlignVCenter)
         else:
             lb_rsh = SiriusLabel(self, self.prefix+self.syst_dict['Rsh'])
             lb_rsh.showUnits = True
-            lay_extra.addWidget(QLabel(
-                'Rsh (Ohm)', alignment=Qt.AlignRight | Qt.AlignVCenter),
-                2, 0)
-            lay_extra.addWidget(lb_rsh, 2, 1, alignment=Qt.AlignCenter)
+            lb_rsh.precisionFromPV = False
+            lb_rsh.precision = 2
+            lay_extra_rsh.addWidget(QLabel(
+                'Rsh (Ohm)', alignment=Qt.AlignHCenter | Qt.AlignVCenter),
+                1, 1, 1, 1)
+            lay_extra_rsh.addWidget(lb_rsh, 1, 2, 1, 1, alignment=Qt.AlignRight | Qt.AlignVCenter)
 
-        lay.addLayout(lay_extra, row, column, alignment=Qt.AlignHCenter)
+        lay.addLayout(lay_extra_pol, row, column, alignment=Qt.AlignHCenter)
+        lay.addLayout(lay_extra_rq, row, column+1, alignment=Qt.AlignHCenter)
+        lay.addLayout(lay_extra_q0, row, column+2, alignment=Qt.AlignHCenter)
+        lay.addLayout(lay_extra_rsh, row, column+1, alignment=Qt.AlignHCenter)
 
     def _genericStatisticsLayout(self, chs_dict):
         lay = QGridLayout()

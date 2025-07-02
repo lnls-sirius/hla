@@ -45,7 +45,7 @@ SEC_2_CHANNELS = {
                         'Mon': 'RA-RaBO01:RF-LLRF:Inp1Intlk-Mon',
                     },
                     'Labels': (
-                        'Rev Out SSA',
+                        'Rev Out SSA (LSB)',
                         'Not Used (RevSSA2)',
                         'Not Used (RefSSA3)',
                         'Not Used (RevSSA4)',
@@ -74,7 +74,7 @@ SEC_2_CHANNELS = {
                         'Mon': 'RA-RaBO01:RF-LLRF:Inp2Intlk-Mon',
                     },
                     'Labels': (
-                        'Cavity Voltage',
+                        'Cavity Voltage (LSB)',
                         'Cavity Fwd',
                         'SSA 1 Out Fwd',
                         'Cell 2 Voltage (RF In 7)',
@@ -1457,68 +1457,65 @@ SEC_2_CHANNELS = {
             }
         },
         'Equations': {
-            'Cav': {
+            'Cav (RF In 1)': {
                 'Raw-U': 'RA-RaBO01:RF-LLRF:CavSysCal',
-                'U-Raw': 'RA-RaBO01:RF-LLRF:CavSysCalInv',
                 'OFS': 'RA-RaBO01:RF-LLRF:CavOffset'
             },
-            'Fwd Cav': {
+            'Fwd Cav (RF In 2)': {
                 'Raw-U': 'RA-RaBO01:RF-LLRF:FwdCavSysCal',
-                'U-Raw': 'RA-RaBO01:RF-LLRF:FwdCavSysCalInv',
                 'OFS': 'RA-RaBO01:RF-LLRF:FwdCavOffset'
             },
-            'Rev Cav': {
+            'Rev Cav (RF In 3)': {
                 'Raw-U': 'RA-RaBO01:RF-LLRF:RevCavSysCal',
                 'OFS': 'RA-RaBO01:RF-LLRF:RevCavOffset'
             },
-            'Fwd SSA 1': {
-                'Raw-U': 'RA-RaBO01:RF-LLRF:FwdSSA1SysCal',
-                'U-Raw': 'RA-RaBO01:RF-LLRF:FwdSSA1SysCalInv',
-                'OFS': 'RA-RaBO01:RF-LLRF:FwdSSA1Offset'
-            },
-            'Rev SSA 1': {
-                'Raw-U': 'RA-RaBO01:RF-LLRF:RevSSA1SysCal',
-                'OFS': 'RA-RaBO01:RF-LLRF:RevSSA1Offset'
-            },
-            'In Pre': {
-                'Raw-U': 'RA-RaBO01:RF-LLRF:InPre1AmpSysCal',
-                'OFS': 'RA-RaBO01:RF-LLRF:InPre1AmpOffset'
-            },
-            'Fwd Pre': {
-                'Raw-U': 'RA-RaBO01:RF-LLRF:FwdPre1SysCal',
-                'OFS': 'RA-RaBO01:RF-LLRF:FwdPre1Offset'
-            },
-            'Rev Pre': {
-                'Raw-U': 'RA-RaBO01:RF-LLRF:RevPreAmpSysCal',
-                'OFS': 'RA-RaBO01:RF-LLRF:RevPreAmpOffset'
-            },
-            'Fwd Circ': {
-                'Raw-U': 'RA-RaBO01:RF-LLRF:FwdCircSysCal',
-                'OFS': 'RA-RaBO01:RF-LLRF:FwdCircOffset'
-            },
-            'Rev Circ': {
-                'Raw-U': 'RA-RaBO01:RF-LLRF:RevCircSysCal',
-                'OFS': 'RA-RaBO01:RF-LLRF:RevCircOffset'
-            },
-            'MO': {
+            'MO (RF In 4)': {
                 'Raw-U': 'RA-RaBO01:RF-LLRF:MOSysCal',
                 'OFS': 'RA-RaBO01:RF-LLRF:MOOffset'
             },
-            'Cell 1': {
-                'Raw-U': 'RA-RaBO01:RF-LLRF:Cell1SysCal',
-                'OFS': 'RA-RaBO01:RF-LLRF:Cell1Offset'
+            'Fwd SSA 1 (RF In 5)': {
+                'Raw-U': 'RA-RaBO01:RF-LLRF:FwdSSA1SysCal',
+                'OFS': 'RA-RaBO01:RF-LLRF:FwdSSA1Offset'
             },
-            'Cell 2': {
+            'Rev SSA 1 (RF In 6)': {
+                'Raw-U': 'RA-RaBO01:RF-LLRF:RevSSA1SysCal',
+                'OFS': 'RA-RaBO01:RF-LLRF:RevSSA1Offset'
+            },
+            'Cell 2 (RF In 7)': {
                 'Raw-U': 'RA-RaBO01:RF-LLRF:Cell2SysCal',
                 'OFS': 'RA-RaBO01:RF-LLRF:Cell2Offset'
             },
-            'Cell 4': {
+            'Cell 4 (RF In 8)': {
                 'Raw-U': 'RA-RaBO01:RF-LLRF:Cell4SysCal',
                 'OFS': 'RA-RaBO01:RF-LLRF:Cell4Offset'
             },
-            'Cell 5': {
+            'Cell 1 (RF In 9)': {
+                'Raw-U': 'RA-RaBO01:RF-LLRF:Cell1SysCal',
+                'OFS': 'RA-RaBO01:RF-LLRF:Cell1Offset'
+            },
+            'Cell 5 (RF In 10)': {
                 'Raw-U': 'RA-RaBO01:RF-LLRF:Cell5SysCal',
                 'OFS': 'RA-RaBO01:RF-LLRF:Cell5Offset'
+            },
+            'In Pre (RF In 11)': {
+                'Raw-U': 'RA-RaBO01:RF-LLRF:InPre1AmpSysCal',
+                'OFS': 'RA-RaBO01:RF-LLRF:InPre1AmpOffset'
+            },
+            'Fwd Pre (RF In 12)': {
+                'Raw-U': 'RA-RaBO01:RF-LLRF:FwdPre1SysCal',
+                'OFS': 'RA-RaBO01:RF-LLRF:FwdPre1Offset'
+            },
+            'Rev Pre (RF In 13)': {
+                'Raw-U': 'RA-RaBO01:RF-LLRF:RevPreAmpSysCal',
+                'OFS': 'RA-RaBO01:RF-LLRF:RevPreAmpOffset'
+            },
+            'Fwd Circ (RF In 14)': {
+                'Raw-U': 'RA-RaBO01:RF-LLRF:FwdCircSysCal',
+                'OFS': 'RA-RaBO01:RF-LLRF:FwdCircOffset'
+            },
+            'Rev Circ (RF In 15)': {
+                'Raw-U': 'RA-RaBO01:RF-LLRF:RevCircSysCal',
+                'OFS': 'RA-RaBO01:RF-LLRF:RevCircOffset'
             },
             'VGap': {
                 'Hw to Amp': 'RA-RaBO01:RF-LLRF:Hw2AmpVCavCoeff',
@@ -1552,7 +1549,7 @@ SEC_2_CHANNELS = {
                             'Mon': 'RA-RaSIA01:RF-LLRF:Inp1Intlk-Mon',
                         },
                         'Labels': (
-                            'Rev Out SSA 1',
+                            'Rev Out SSA 1 (LSB)',
                             'Rev Out SSA 2',
                             'Not Used (RefSSA3)',
                             'Not Used (RevSSA4)',
@@ -1581,7 +1578,7 @@ SEC_2_CHANNELS = {
                             'Mon': 'RA-RaSIA01:RF-LLRF:Inp2Intlk-Mon',
                         },
                         'Labels': (
-                            'Cavity Voltage',
+                            'Cavity Voltage (LSB)',
                             'Cavity Fwd',
                             'SSA 1 Out Fwd',
                             'Fwd SSA 2 (RF In 7)',
@@ -1624,7 +1621,7 @@ SEC_2_CHANNELS = {
                             'Mon': 'RA-RaSIB01:RF-LLRF:Inp1Intlk-Mon',
                         },
                         'Labels': (
-                            'Rev Out SSA 1',
+                            'Rev Out SSA 1 (LSB)',
                             'Rev Out SSA 2',
                             'Not Used (RefSSA3)',
                             'Not Used (RevSSA4)',
@@ -1653,7 +1650,7 @@ SEC_2_CHANNELS = {
                             'Mon': 'RA-RaSIB01:RF-LLRF:Inp2Intlk-Mon',
                         },
                         'Labels': (
-                            'Cavity Voltage',
+                            'Cavity Voltage (LSB)',
                             'Cavity Fwd',
                             'SSA 1 Out Fwd',
                             'Fwd SSA 2 (RF In 7)',
@@ -1742,6 +1739,100 @@ SEC_2_CHANNELS = {
                 'Geral': 'SI-03SP:RF-CryoMod-B:Intlk-Mon'
             }
         },
+        'Cryo Module': {
+            'Cryo Module 1': {
+                'RF Stop 1': {
+                    'label': 'SI-03SP:RF-CryoMod-1:CM_RFStop1Intlk-Mon',
+                    'led': 'SI-03SP:RF-CryoMod-1:CM_RFStop1IntlkState-Mon'
+                },
+                'RF Stop 2': {
+                    'label': 'SI-03SP:RF-CryoMod-1:CM_RFStop2Intlk-Mon',
+                    'led': 'SI-03SP:RF-CryoMod-1:CM_RFStop2IntlkState-Mon'
+                },
+                'RF Stop 3': {
+                    'label': 'SI-03SP:RF-CryoMod-1:CM_RFStop3Intlk-Mon',
+                    'led': 'SI-03SP:RF-CryoMod-1:CM_RFStop3IntlkState-Mon'
+                },
+                'Heater Stop': {
+                    'label': 'SI-03SP:RF-CryoMod-1:CM_HeaterStopIntlk-Mon',
+                    'led': 'SI-03SP:RF-CryoMod-1:CM_HeaterStopIntlkState-Mon'
+                },
+                'Cryo Supply Stop': {
+                    'label': 'SI-03SP:RF-CryoMod-1:CM_CryoSupplyStopIntlk-Mon',
+                    'led': 'SI-03SP:RF-CryoMod-1:CM_CryoSupplyStopIntlkState-Mon'
+                },
+                'Cryo Return Stop': {
+                    'label': 'SI-03SP:RF-CryoMod-1:CM_CryoReturnStopIntlk-Mon',
+                    'led': 'SI-03SP:RF-CryoMod-1:CM_CryoReturnStopIntlkState-Mon'
+                },
+                'Valve Box': {
+                    'RF Stop 4': {
+                        'label': 'SI-03SP:RF-CryoMod-1:VB_RFStop4Intlk-Mon',
+                        'led': 'SI-03SP:RF-CryoMod-1:VB_RFStop4IntlkState-Mon' 
+                    },
+                    'Heater Stop': {
+                        'label': 'SI-03SP:RF-CryoMod-1:VB_HeaterStopIntlk-Mon',
+                        'led': 'SI-03SP:RF-CryoMod-1:VB_HeaterStopIntlkState-Mon' 
+                    },
+                    'Cryo Supply Stop': {
+                        'label': 'SI-03SP:RF-CryoMod-1:VB_CryoSupplyStopIntlk-Mon',
+                        'led': 'SI-03SP:RF-CryoMod-1:VB_CryoSupplyStopIntlkState-Mon'
+                    },
+                    'Cryo Return Stop': {
+                        'label': 'SI-03SP:RF-CryoMod-1:VB_CryoReturnStopIntlk-Mon',
+                        'led': 'SI-03SP:RF-CryoMod-1:VB_CryoReturnStopIntlkState-Mon'
+                    }
+                },
+            },
+            'Cryo Module 2': {
+                'RF Stop 1': {
+                    'label': 'SI-03SP:RF-CryoMod-2:CM_RFStop1Intlk-Mon',
+                    'led': 'SI-03SP:RF-CryoMod-2:CM_RFStop1IntlkState-Mon'
+                },
+                'RF Stop 2': {
+                    'label': 'SI-03SP:RF-CryoMod-2:CM_RFStop2Intlk-Mon',
+                    'led': 'SI-03SP:RF-CryoMod-2:CM_RFStop2IntlkState-Mon'
+                },
+                'RF Stop 3': {
+                    'label': 'SI-03SP:RF-CryoMod-2:CM_RFStop3Intlk-Mon',
+                    'led': 'SI-03SP:RF-CryoMod-2:CM_RFStop3IntlkState-Mon'
+                },
+                'Heater Stop': {
+                    'label': 'SI-03SP:RF-CryoMod-2:CM_HeaterStopIntlk-Mon',
+                    'led': 'SI-03SP:RF-CryoMod-2:CM_HeaterStopIntlkState-Mon'
+                },
+                'Cryo Supply Stop': {
+                    'label': 'SI-03SP:RF-CryoMod-2:CM_CryoSupplyStopIntlk-Mon',
+                    'led': 'SI-03SP:RF-CryoMod-2:CM_CryoSupplyStopIntlkState-Mon'
+                },
+                'Cryo Return Stop': {
+                    'label': 'SI-03SP:RF-CryoMod-2:CM_CryoReturnStopIntlk-Mon',
+                    'led': 'SI-03SP:RF-CryoMod-2:CM_CryoReturnStopIntlkState-Mon'
+                },
+                'Valve Box': {
+                    'RF Stop 4': {
+                        'label': 'SI-03SP:RF-CryoMod-2:VB_RFStop4Intlk-Mon',
+                        'led': 'SI-03SP:RF-CryoMod-2:VB_RFStop4IntlkState-Mon' 
+                    },
+                    'Heater Stop': {
+                        'label': 'SI-03SP:RF-CryoMod-2:VB_HeaterStopIntlk-Mon',
+                        'led': 'SI-03SP:RF-CryoMod-2:VB_HeaterStopIntlkState-Mon' 
+                    },
+                    'Cryo Supply Stop': {
+                        'label': 'SI-03SP:RF-CryoMod-2:VB_CryoSupplyStopIntlk-Mon',
+                        'led': 'SI-03SP:RF-CryoMod-2:VB_CryoSupplyStopIntlkState-Mon'
+                    },
+                    'Cryo Return Stop': {
+                        'label': 'SI-03SP:RF-CryoMod-2:VB_CryoReturnStopIntlk-Mon',
+                        'led': 'SI-03SP:RF-CryoMod-2:VB_CryoReturnStopIntlkState-Mon'
+                    }
+                },
+            },
+            'External Stop': {
+                'label': 'SI-03SP:RF-ValveBox:ExtStop1Intlk-Mon',
+                'led': 'SI-03SP:RF-ValveBox:ExtStop1IntlkState-Mon'
+            }
+        },        
         'TL Sts': {
             'A': {
                 'Geral': 'RA-TLSIA:RF-TrLine:Sts-Mon',
@@ -4684,129 +4775,129 @@ SEC_2_CHANNELS = {
         },
         'Equations': {
             'A': {
-                'Cav': {
+                'Cav (RF In 1)': {
                     'Raw-U': 'RA-RaSIA01:RF-LLRF:CavSysCal',
                     'OFS': 'RA-RaSIA01:RF-LLRF:CavOffset'
                 },
-                'Fwd Cav': {
+                'Fwd Cav (RF In 2)': {
                     'Raw-U': 'RA-RaSIA01:RF-LLRF:FwdCavSysCal',
                     'OFS': 'RA-RaSIA01:RF-LLRF:FwdCavOffset'
                 },
-                'Rev Cav': {
+                'Rev Cav (RF In 3)': {
                     'Raw-U': 'RA-RaSIA01:RF-LLRF:RevCavSysCal',
                     'OFS': 'RA-RaSIA01:RF-LLRF:RevCavOffset'
                 },
-                'Fwd SSA 1': {
-                    'Raw-U': 'RA-RaSIA01:RF-LLRF:FwdSSA1SysCal',
-                    'OFS': 'RA-RaSIA01:RF-LLRF:FwdSSA1Offset'
-                },
-                'Rev SSA 1': {
-                    'Raw-U': 'RA-RaSIA01:RF-LLRF:RevSSA1SysCal',
-                    'OFS': 'RA-RaSIA01:RF-LLRF:RevSSA1Offset'
-                },
-                'Fwd SSA 2': {
-                    'Raw-U': 'RA-RaSIA01:RF-LLRF:FwdSSA2SysCal',
-                    'OFS': 'RA-RaSIA01:RF-LLRF:FwdSSA2Offset'
-                },
-                'Rev SSA 2': {
-                    'Raw-U': 'RA-RaSIA01:RF-LLRF:RevSSA2SysCal',
-                    'OFS': 'RA-RaSIA01:RF-LLRF:RevSSA2Offset'
-                },
-                'In Pre 1': {
-                    'Raw-U': 'RA-RaSIA01:RF-LLRF:In1PreAmpSysCal',
-                    'OFS': 'RA-RaSIA01:RF-LLRF:In1PreAmpOffset'
-                },
-                'In Pre 2': {
-                    'Raw-U': 'RA-RaSIA01:RF-LLRF:In2PreAmpSysCal',
-                    'OFS': 'RA-RaSIA01:RF-LLRF:In2PreAmpOffset'
-                },
-                'Fwd Load': {
-                    'Raw-U': 'RA-RaSIA01:RF-LLRF:FwdLoadSysCal',
-                    'OFS': 'RA-RaSIA01:RF-LLRF:FwdLoadOffset'
-                },
-                'Rev In Load': {
-                    'Raw-U': 'RA-RaSIA01:RF-LLRF:RevLoadSysCal',
-                    'OFS': 'RA-RaSIA01:RF-LLRF:RevLoadOffset'
-                },
-                'MO': {
+                'MO (RF In 4)': {
                     'Raw-U': 'RA-RaSIA01:RF-LLRF:MOSysCal',
                     'OFS': 'RA-RaSIA01:RF-LLRF:MOOffset'
                 },
-                'FBTN Top': {
+                'Fwd SSA 1 (RF In 5)': {
+                    'Raw-U': 'RA-RaSIA01:RF-LLRF:FwdSSA1SysCal',
+                    'OFS': 'RA-RaSIA01:RF-LLRF:FwdSSA1Offset'
+                },
+                'Rev SSA 1 (RF In 6)': {
+                    'Raw-U': 'RA-RaSIA01:RF-LLRF:RevSSA1SysCal',
+                    'OFS': 'RA-RaSIA01:RF-LLRF:RevSSA1Offset'
+                },
+                'Fwd SSA 2 (RF In 7)': {
+                    'Raw-U': 'RA-RaSIA01:RF-LLRF:FwdSSA2SysCal',
+                    'OFS': 'RA-RaSIA01:RF-LLRF:FwdSSA2Offset'
+                },
+                'Rev SSA 2 (RF In 8)': {
+                    'Raw-U': 'RA-RaSIA01:RF-LLRF:RevSSA2SysCal',
+                    'OFS': 'RA-RaSIA01:RF-LLRF:RevSSA2Offset'
+                },
+                'FBTN Top (RF In 9)': {
                     'Raw-U': 'RA-RaSIA01:RF-LLRF:FBTntSysCal',
                     'OFS': 'RA-RaSIA01:RF-LLRF:FBTntOffset'
                 },
-                'Rev In Circ ': {
+                'Fwd In Circ (RF In 10)': {
+                    'Raw-U': 'RA-RaSIA01:RF-LLRF:FwdInCircSysCal',
+                    'OFS': 'RA-RaSIA01:RF-LLRF:FwdInCircOffset'
+                },
+                'Rev In Circ (RF In 11)': {
                     'Raw-U': 'RA-RaSIA01:RF-LLRF:RevInCircSysCal',
                     'OFS': 'RA-RaSIA01:RF-LLRF:RevInCircOffset'
                 },
-                'Fwd In Circ ': {
-                    'Raw-U': 'RA-RaSIA01:RF-LLRF:FwdInCircSysCal',
-                    'OFS': 'RA-RaSIA01:RF-LLRF:FwdInCircOffset'
+                'In Pre 1 (RF In 12)': {
+                    'Raw-U': 'RA-RaSIA01:RF-LLRF:In1PreAmpSysCal',
+                    'OFS': 'RA-RaSIA01:RF-LLRF:In1PreAmpOffset'
+                },
+                'In Pre 2 (RF In 13)': {
+                    'Raw-U': 'RA-RaSIA01:RF-LLRF:In2PreAmpSysCal',
+                    'OFS': 'RA-RaSIA01:RF-LLRF:In2PreAmpOffset'
+                },
+                'Fwd Load (RF In 14)': {
+                    'Raw-U': 'RA-RaSIA01:RF-LLRF:FwdLoadSysCal',
+                    'OFS': 'RA-RaSIA01:RF-LLRF:FwdLoadOffset'
+                },
+                'Rev In Load (RF In 15)': {
+                    'Raw-U': 'RA-RaSIA01:RF-LLRF:RevLoadSysCal',
+                    'OFS': 'RA-RaSIA01:RF-LLRF:RevLoadOffset'
                 },
                 'r/Q': 'SI-03SP:RF-SRFCav-A:RoverQ-Cte',
                 'Q0': 'SI-03SP:RF-SRFCav-A:Q0-Cte'
             },
             'B': {
-                'Cav': {
+                'Cav (RF In 1)': {
                     'Raw-U': 'RA-RaSIB01:RF-LLRF:CavSysCal',
                     'OFS': 'RA-RaSIB01:RF-LLRF:CavOffset'
                 },
-                'Fwd Cav': {
+                'Fwd Cav (RF In 2)': {
                     'Raw-U': 'RA-RaSIB01:RF-LLRF:FwdCavSysCal',
                     'OFS': 'RA-RaSIB01:RF-LLRF:FwdCavOffset'
                 },
-                'Rev Cav': {
+                'Rev Cav (RF In 3)': {
                     'Raw-U': 'RA-RaSIB01:RF-LLRF:RevCavSysCal',
                     'OFS': 'RA-RaSIB01:RF-LLRF:RevCavOffset'
                 },
-                'Fwd SSA 1': {
-                    'Raw-U': 'RA-RaSIB01:RF-LLRF:FwdSSA1SysCal',
-                    'OFS': 'RA-RaSIB01:RF-LLRF:FwdSSA1Offset'
-                },
-                'Rev SSA 1': {
-                    'Raw-U': 'RA-RaSIB01:RF-LLRF:RevSSA1SysCal',
-                    'OFS': 'RA-RaSIB01:RF-LLRF:RevSSA1Offset'
-                },
-                'Fwd SSA 2': {
-                    'Raw-U': 'RA-RaSIB01:RF-LLRF:FwdSSA2SysCal',
-                    'OFS': 'RA-RaSIB01:RF-LLRF:FwdSSA2Offset'
-                },
-                'Rev SSA 2': {
-                    'Raw-U': 'RA-RaSIB01:RF-LLRF:RevSSA2SysCal',
-                    'OFS': 'RA-RaSIB01:RF-LLRF:RevSSA2Offset'
-                },
-                'In Pre 1': {
-                    'Raw-U': 'RA-RaSIB01:RF-LLRF:In1PreAmpSysCal',
-                    'OFS': 'RA-RaSIB01:RF-LLRF:In1PreAmpOffset'
-                },
-                'In Pre 2': {
-                    'Raw-U': 'RA-RaSIB01:RF-LLRF:In2PreAmpSysCal',
-                    'OFS': 'RA-RaSIB01:RF-LLRF:In2PreAmpOffset'
-                },
-                'Fwd Load': {
-                    'Raw-U': 'RA-RaSIB01:RF-LLRF:FwdLoadSysCal',
-                    'OFS': 'RA-RaSIB01:RF-LLRF:FwdLoadOffset'
-                },
-                'Rev In Load': {
-                    'Raw-U': 'RA-RaSIB01:RF-LLRF:RevLoadSysCal',
-                    'OFS': 'RA-RaSIB01:RF-LLRF:RevLoadOffset'
-                },
-                'MO': {
+                'MO (RF In 4)': {
                     'Raw-U': 'RA-RaSIB01:RF-LLRF:MOSysCal',
                     'OFS': 'RA-RaSIB01:RF-LLRF:MOOffset'
                 },
-                'FBTN Top': {
+                'Fwd SSA 1 (RF In 5)': {
+                    'Raw-U': 'RA-RaSIB01:RF-LLRF:FwdSSA1SysCal',
+                    'OFS': 'RA-RaSIB01:RF-LLRF:FwdSSA1Offset'
+                },
+                'Rev SSA 1 (RF In 6)': {
+                    'Raw-U': 'RA-RaSIB01:RF-LLRF:RevSSA1SysCal',
+                    'OFS': 'RA-RaSIB01:RF-LLRF:RevSSA1Offset'
+                },
+                'Fwd SSA 2 (RF In 7)': {
+                    'Raw-U': 'RA-RaSIB01:RF-LLRF:FwdSSA2SysCal',
+                    'OFS': 'RA-RaSIB01:RF-LLRF:FwdSSA2Offset'
+                },
+                'Rev SSA 2 (RF In 8)': {
+                    'Raw-U': 'RA-RaSIB01:RF-LLRF:RevSSA2SysCal',
+                    'OFS': 'RA-RaSIB01:RF-LLRF:RevSSA2Offset'
+                },
+                'FBTN Top (RF In 9)': {
                     'Raw-U': 'RA-RaSIB01:RF-LLRF:FBTntSysCal',
                     'OFS': 'RA-RaSIB01:RF-LLRF:FBTntOffset'
                 },
-                'Rev In Circ ': {
+                'Fwd In Circ (RF In 10)': {
+                    'Raw-U': 'RA-RaSIB01:RF-LLRF:FwdInCircSysCal',
+                    'OFS': 'RA-RaSIB01:RF-LLRF:FwdInCircOffset'
+                },
+                'Rev In Circ (RF In 11)': {
                     'Raw-U': 'RA-RaSIB01:RF-LLRF:RevInCircSysCal',
                     'OFS': 'RA-RaSIB01:RF-LLRF:RevInCircOffset'
                 },
-                'Fwd In Circ ': {
-                    'Raw-U': 'RA-RaSIB01:RF-LLRF:FwdInCircSysCal',
-                    'OFS': 'RA-RaSIB01:RF-LLRF:FwdInCircOffset'
+                'In Pre 1 (RF In 12)': {
+                    'Raw-U': 'RA-RaSIB01:RF-LLRF:In1PreAmpSysCal',
+                    'OFS': 'RA-RaSIB01:RF-LLRF:In1PreAmpOffset'
+                },
+                'In Pre 2 (RF In 13)': {
+                    'Raw-U': 'RA-RaSIB01:RF-LLRF:In2PreAmpSysCal',
+                    'OFS': 'RA-RaSIB01:RF-LLRF:In2PreAmpOffset'
+                },
+                'Fwd Load (RF In 14)': {
+                    'Raw-U': 'RA-RaSIB01:RF-LLRF:FwdLoadSysCal',
+                    'OFS': 'RA-RaSIB01:RF-LLRF:FwdLoadOffset'
+                },
+                'Rev In Load (RF In 15)': {
+                    'Raw-U': 'RA-RaSIB01:RF-LLRF:RevLoadSysCal',
+                    'OFS': 'RA-RaSIB01:RF-LLRF:RevLoadOffset'
                 },
                 'r/Q': 'SI-03SP:RF-SRFCav-B:RoverQ-Cte',
                 'Q0': 'SI-03SP:RF-SRFCav-B:Q0-Cte'
