@@ -116,12 +116,13 @@ class PosAngCorr(SiriusMainWindow):
                               stop:1 rgba(213, 213, 213, 255));""")
 
         # warning
-        self.lb_rule_warning = CALabel(self)
-        self.lb_rule_warning.setText(
-            "WARNING:Disable injection standby mode to change PosAng.")
         if self._tl != 'TB':
+            self.lb_rule_warning = CALabel(self)
+            self.lb_rule_warning.setText(
+                "WARNING:Disable injection standby mode to change PosAng.")
             self.lb_rule_warning.rules = self.injctrl_vis_rules
-        self.lb_rule_warning.setStyleSheet("color: yellow; font-weight: bold;")
+            self.lb_rule_warning.setStyleSheet(
+                "QLabel{font-weight: bold; background-color: orange;}")
 
         # update reference button
         self.pb_updateref = PyDMPushButton(
@@ -164,7 +165,8 @@ class PosAngCorr(SiriusMainWindow):
         glay.setHorizontalSpacing(12)
         glay.setVerticalSpacing(12)
         glay.addWidget(lab, 0, 0, 1, 2)
-        glay.addWidget(self.lb_rule_warning, 1, 0, 1, 2)
+        if self._tl != 'TB':
+            glay.addWidget(self.lb_rule_warning, 1, 0, 1, 2)
         glay.addLayout(box_ref, 2, 0, 1, 2)
         glay.addWidget(self.hgbox, 3, 0)
         glay.addWidget(self.vgbox, 3, 1)
