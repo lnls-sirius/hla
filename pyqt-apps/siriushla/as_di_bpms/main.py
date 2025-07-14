@@ -9,6 +9,10 @@ from siriushla.as_di_bpms.monit import MonitData
 from siriushla.as_di_bpms.trig_acq_config import BPMGENAcquisition, \
     BPMPMAcquisition, PBPMGENAcquisition, PBPMPMAcquisition
 from siriushla.si_ap_orbintlk import BPMOrbIntlkDetailWindow
+import qtawesome as qta
+from siriushla.widgets import SiriusPushButton, SiriusLabel
+from siriushla.common.afc_board import utils
+from siriushla.common.afc_board.afc_settings import AFCAdvancedSettings
 
 
 class BPMMain(BaseWidget):
@@ -45,6 +49,30 @@ class BPMMain(BaseWidget):
         self.layoutv.addWidget(grpbx)
         self.layoutv.addSpacing(20)
         self.layoutv.addStretch()
+
+        grbx = CustomGroupBox('AFC Details', self)
+        grbx_lay = QHBoxLayout(grbx)
+        grbx_lay.setSpacing(20)
+        slot = utils.device2slot(self.bpm)
+        pbt = QPushButton('AFC Settings')
+        Window = create_window_from_widget(
+            AFCAdvancedSettings, title=self.bpm+': AFC Settings')
+        util.connect_window(
+            pbt, Window, parent=self, prefix=self.prefix, display=self.bpm)
+        grbx_lay.addWidget(pbt)
+        pv_list_fru = utils.AFCv3_1_PV_LIST['FRU']
+        crate = utils.device2crate(self.bpm)
+        cmd_button = SiriusPushButton(
+            self, label='Reset', icon=qta.icon('mdi.restart'),
+            init_channel=f"{crate}:{utils.DIS}-AMC-{slot}:{pv_list_fru['SoftRst']}"
+        )
+        label_mon = SiriusLabel(
+            self, f"{crate}:{utils.DIS}-AMC-{slot}:{pv_list_fru['SoftRstSts']}"
+        )
+        grbx_lay.addWidget(cmd_button)
+        grbx_lay.addWidget(label_mon)
+        self.layoutv.addWidget(grbx)
+        self.layoutv.addSpacing(20)
 
         grpbx = CustomGroupBox('Triggered Acquisitions', self)
         hbl = QHBoxLayout(grpbx)
