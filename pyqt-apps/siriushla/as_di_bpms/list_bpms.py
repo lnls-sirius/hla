@@ -18,7 +18,7 @@ class BPMSummary(BaseWidget):
     def setupui(self):
         hbl = QHBoxLayout(self)
         hbl.setContentsMargins(0, 0, 0, 0)
-        chan2vals = {'RFFEasyn.CNCT': 1, 'ADCAD9510PllStatus-Mon': 1}
+        chan2vals = {'RFFEasyn.CNCT': 1, 'ClksLocked-Mon': 1}
         chan2vals = {self.get_pvname(k): v for k, v in chan2vals.items()}
         led = PyDMLedMultiChannel(self, channels2values=chan2vals)
         led.setToolTip(self.bpm)

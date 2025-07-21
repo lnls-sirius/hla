@@ -1210,7 +1210,7 @@ class PSCmdWindow(SiriusMainWindow):
         # add SI Corrs
         psnames.extend(PSSearch.get_psnames(
             {'sec': 'SI', 'sub': '[0-2][0-9].*', 'dis': 'PS',
-             'dev': '(LCH|CH|CV)'}))
+             'dev': '(LCH|CH|CV|CC)'}))
         # add SI QTrims
         psnames.extend(PSSearch.get_psnames(
             {'sec': 'SI', 'sub': '[0-2][0-9].*', 'dis': 'PS',

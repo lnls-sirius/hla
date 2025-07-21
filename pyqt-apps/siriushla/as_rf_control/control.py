@@ -1237,12 +1237,23 @@ class RFMainControl(SiriusMainWindow):
                 self.curves[name+' dBm'].setVisible(False)
                 self.curves[name+' mV'].setVisible(False)
 
+            lb_rfinp = QLabel('<h4>RF Inputs</h4>', self, alignment=Qt.AlignCenter)
+            pb_rfinp = QPushButton(qta.icon('fa5s.ellipsis-v'), '', self)
+            pb_rfinp.setStyleSheet(
+                    'min-width:18px;max-width:18px;icon-size:20px;')
+            cmd = f'sirius-hla-{self.section.lower()}-rf-control.py'
+            cmd = f'{cmd} -d rf-inputs'.split(" ")
+            connect_newprocess(pb_rfinp, cmd, is_window=True, parent=self)
+
             lb_cavphs = QLabel('Phase', self, alignment=Qt.AlignCenter)
             self.lb_cavphs = SiriusLabel(
                 self, self.prefix+'BO-05D:RF-P5Cav:Cell3Phs-Mon')
             self.lb_cavphs.showUnits = True
-            lay_vals.addWidget(lb_cavphs, 5, 2, alignment=Qt.AlignCenter)
-            lay_vals.addWidget(self.lb_cavphs, 5, 3)
+
+            lay_vals.addWidget(pb_rfinp, 0, 0, alignment=Qt.AlignCenter)
+            lay_vals.addWidget(lb_rfinp, 0, 1)
+            lay_vals.addWidget(lb_cavphs, 5, 1, alignment=Qt.AlignCenter)
+            lay_vals.addWidget(self.lb_cavphs, 5, 2)
         else:
             for name in data:
                 self.curves[name+' W'].setVisible('Coup' in name)
@@ -1604,11 +1615,12 @@ class RFMainControl(SiriusMainWindow):
         if self.section == 'SI':
             pre_drive_ch = pre_drive_ch['Value']
         pre_drive_ch = self.prefix + pre_drive_ch
-        rules = (
-            '[{"name": "EnblRule", "property": "Enable", "expression":' +
-            '"ch[0] < ' + str(chs_dict['PreDriveThrs']) + '", "channels":' +
-            '[{"channel": "'+ pre_drive_ch + '", "trigger": true}]}]')
-        bt_pinsw.pb_on.rules = rules
+        if self.section != 'SI':
+            rules = (
+                '[{"name": "EnblRule", "property": "Enable", "expression":' +
+                '"ch[0] < ' + str(chs_dict['PreDriveThrs']) + '", "channels":' +
+                '[{"channel": "'+ pre_drive_ch + '", "trigger": true}]}]')
+            bt_pinsw.pb_on.rules = rules
         led_pinsw = SiriusLedState(self, self.prefix+chs_dict['PinSw']['Mon'])
         lay_amp.addLayout(self._create_vlay(bt_pinsw, led_pinsw), row, 7)
 
