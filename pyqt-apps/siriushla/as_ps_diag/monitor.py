@@ -111,7 +111,7 @@ class PSMonitor(QWidget):
                     aux = devices.pop(-1)
                     devices.insert(0, aux)
             elif sec == 'SI':
-                if label not in ['FCH', 'FCV']:
+                if label not in ['FCH', 'FCV', 'ID-CH/CV/QS/CC']:
                     aux = devices.pop(-1)
                     devices.insert(0, aux)
                 if label == 'Trims':

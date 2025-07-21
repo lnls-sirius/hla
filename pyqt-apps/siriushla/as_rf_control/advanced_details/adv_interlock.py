@@ -155,28 +155,75 @@ class AdvancedInterlockDetails(SiriusDialog):
         gbox_gen = QGroupBox('General Controls')
         gbox_gen.setLayout(self._genDiagLayout(chs_dict['General']))
 
-        # Quench Cond. 1
-        gbox_quench = QGroupBox('Quench Cond. 1', self)
-        lay_quench = QGridLayout(gbox_quench)
+        #Quench
+        gbox_quench = QGroupBox('Quench', self)
+        lay_quench = QVBoxLayout(gbox_quench)
         lay_quench.setAlignment(Qt.AlignTop)
         lay_quench.setSpacing(9)
 
+        tabwidget = QTabWidget(gbox_quench)
+        lay_quench.addWidget(tabwidget)
+        tabwidget.setStyleSheet(
+            "#"+self.section+'Tab'+"::pane {"
+            "    border-left: 2px solid gray;"
+            "    border-bottom: 2px solid gray;"
+            "    border-right: 2px solid gray;}")
+        
+        tab1 = QWidget()
+        tab1_layout = QGridLayout(tab1)
+        tab1_layout.setAlignment(Qt.AlignTop)
+        tab1_layout.setSpacing(9)
+
         rv_ch = self.prefix+chs_dict['Quench1']['Rv']
+        lb_rv = SiriusLabel(self, rv_ch+'-RB')
+        lb_rv.showUnits = True
+        lb_rv._keep_unit = True
+
         dly_ch = self.prefix+chs_dict['Quench1']['Dly']
         lb_dly = SiriusLabel(self, dly_ch+'-RB')
         lb_dly.showUnits = True
 
-        lay_quench.addWidget(QLabel(
+        tab1_layout.addWidget(QLabel(
             'Rv Ratio'), 0, 0, alignment=Qt.AlignRight | Qt.AlignVCenter)
-        lay_quench.addWidget(SiriusSpinbox(
-            self, rv_ch+'-SP'), 0, 1, alignment=Qt.AlignCenter)
-        lay_quench.addWidget(SiriusLabel(
-            self, self.prefix+rv_ch+'-RB'), 0, 2, alignment=Qt.AlignCenter)
-        lay_quench.addWidget(QLabel(
+        tab1_layout.addWidget(SiriusSpinbox(
+            self, rv_ch + '-SP'), 0, 1, alignment=Qt.AlignCenter)
+        tab1_layout.addWidget(lb_rv, 0, 2, alignment=Qt.AlignCenter)
+        
+        tab1_layout.addWidget(QLabel(
             'Delay'), 1, 0, alignment=Qt.AlignRight | Qt.AlignVCenter)
-        lay_quench.addWidget(SiriusSpinbox(
-            self, dly_ch+'-SP'), 1, 1, alignment=Qt.AlignCenter)
-        lay_quench.addWidget(lb_dly, 1, 2, alignment=Qt.AlignCenter)
+        tab1_layout.addWidget(SiriusSpinbox(
+            self, dly_ch + '-SP'), 1, 1, alignment=Qt.AlignCenter)
+        tab1_layout.addWidget(lb_dly, 1, 2, alignment=Qt.AlignCenter)
+
+        tabwidget.addTab(tab1, 'Quench Cond. 1')
+
+        tab2 = QWidget()
+        tab2_layout = QGridLayout(tab2)
+        tab2_layout.setAlignment(Qt.AlignTop)
+        tab2_layout.setSpacing(9)
+
+        fw_ch = self.prefix+chs_dict['E-Quench']['Fw']
+        lb_fw = SiriusLabel(self, fw_ch+'-RB')
+        lb_fw.showUnits = True
+        lb_fw._keep_unit = True 
+
+        dly_ch_e = self.prefix+chs_dict['E-Quench']['Dly']
+        lb_dly_e = SiriusLabel(self, dly_ch_e+'-RB')
+        lb_dly_e.showUnits = True
+
+        tab2_layout.addWidget(QLabel(
+            'Fw Ratio'), 0, 0, alignment=Qt.AlignRight | Qt.AlignVCenter)
+        tab2_layout.addWidget(SiriusSpinbox(
+            self, fw_ch+'-SP'), 0, 1, alignment=Qt.AlignCenter)
+        tab2_layout.addWidget(lb_fw, 0, 2, alignment=Qt.AlignCenter)
+        
+        tab2_layout.addWidget(QLabel(
+            'Delay'), 1, 0, alignment=Qt.AlignRight | Qt.AlignVCenter)
+        tab2_layout.addWidget(SiriusSpinbox(
+            self, dly_ch_e+'-SP'), 1, 1, alignment=Qt.AlignCenter)
+        tab2_layout.addWidget(lb_dly_e, 1, 2, alignment=Qt.AlignCenter)
+
+        tabwidget.addTab(tab2, 'E-Quench')
 
         lay.addWidget(gbox_lvls, 0, 0)
         lay.addWidget(gbox_inp, 0, 1)
@@ -268,8 +315,8 @@ class AdvancedInterlockDetails(SiriusDialog):
             '<h4>Offset</h4>', alignment=Qt.AlignCenter), 3, 5, 1, 2)
 
         # # Body
-        keys = ['Fwd Cav', 'Rev Cav', 'Quench']
-        row = 4
+        keys = ['Fwd Cav', 'Rev Cav', 'Quench', 'E-Quench']
+        row = 5
         for key in keys:
             chs = chs_dict[key]
 
@@ -326,7 +373,8 @@ class AdvancedInterlockDetails(SiriusDialog):
         lay.addWidget(scarea)
 
         lay_scr = QGridLayout(scr_ar_wid)
-        lay_scr.setSpacing(9)
+        lay_scr.setHorizontalSpacing(20)
+        lay_scr.setVerticalSpacing(9)
 
         lbs_header = ['Diagnostics', 'Ext LLRF', 'Tx PLC', 'FDL Trigger',
             'Pin Diode', 'Loops Standby']
@@ -334,27 +382,27 @@ class AdvancedInterlockDetails(SiriusDialog):
         column = 2
         for lb in lbs_header:
             label = QLabel(lb, alignment=Qt.AlignCenter)
-            label.setStyleSheet('min-width: 8em')
+            label.setStyleSheet('QLabel{min-width:6em;}')
             lay_scr.addWidget(label, 0, column)
             column += 2
 
-        for i in range(1, column):
-            if i % 2 == 0 or i == 1:
-                lay_scr.setColumnStretch(i, 1)
-        lay_scr.setColumnMinimumWidth(1, 120)
-
         row = 1
         for key, val in chs_dict.items():
-            lay_scr.addWidget(QLabel(key.split()[0]), row, 0)
-            lay_scr.addWidget(QLabel(val[0]), row, 1)
+            lb_idx = QLabel(key.split()[0])
+            lb_idx.setSizePolicy(QSzPlcy.Maximum, QSzPlcy.Preferred)
+            lay_scr.addWidget(lb_idx, row, 0)
+            lb_desc = QLabel(val[0])
+            lb_desc.setStyleSheet('QLabel{min-width:12em;}')
+            lay_scr.addWidget(lb_desc, row, 1, alignment=Qt.AlignLeft)
             column = 2
             for bit in reversed(range(len(lbs_header))):
                 lay_state = QHBoxLayout()
+                lay_state.setSpacing(9)
                 pb = PyDMStateButton(self, self.prefix+val[1]+'-Sel', bit=bit)
+                led = SiriusLedState(self, self.prefix+val[1]+'-Sts', bit)
+                led.setStyleSheet('QLed{min-width: 1.29em;}')
                 lay_state.addWidget(pb, alignment=Qt.AlignRight)
-                lay_state.addWidget(SiriusLedState(
-                    self, self.prefix+val[1]+'-Sts', bit),
-                    alignment=Qt.AlignLeft)
+                lay_state.addWidget(led, alignment=Qt.AlignLeft)
                 lay_scr.addLayout(lay_state, row, column)
                 lay_scr.addItem(QSpacerItem(
                     9, 0, QSzPlcy.Ignored, QSzPlcy.Fixed), row, column+1)

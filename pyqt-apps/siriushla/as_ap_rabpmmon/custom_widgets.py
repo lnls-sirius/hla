@@ -67,7 +67,7 @@ class BPMMonLed(_BaseMonLedMultiChan):
     """BPM monitor led."""
 
     def __init__(self, parent=None, device='', prefix=''):
-        p2v = {'ADCAD9510PllStatus-Mon': 1}
+        p2v = {'ClksLocked-Mon': 1}
         super().__init__(
             parent, device=device, propties2values=p2v, prefix=prefix,
             command='sirius-hla-as-di-bpm.py')

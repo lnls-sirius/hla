@@ -28,7 +28,7 @@ class BPMMain(BaseWidget):
         hbl.addSpacing(10)
         hbl.addStretch()
         if not self.is_pbpm:
-            chan2vals = {'RFFEasyn.CNCT': 1, 'ADCAD9510PllStatus-Mon': 1}
+            chan2vals = {'RFFEasyn.CNCT': 1, 'ClksLocked-Mon': 1}
             chan2vals = {self.get_pvname(k): v for k, v in chan2vals.items()}
             led = PyDMLedMultiChannel(self, channels2values=chan2vals)
             hbl.addWidget(led)

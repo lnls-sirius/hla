@@ -16,9 +16,9 @@ from siriuspy.magnet.factory import NormalizerFactory
 Dipole = re.compile("^.*:MA-(B|Spect).*$")
 Quadrupole = re.compile("^.*Fam:MA-Q.*$")
 Sextupole = re.compile("^.*:MA-S.*$")
-Corrector = re.compile("^.*:MA-(CH|CV|FCH|FCV).*$")
+Corrector = re.compile("^.*:MA-(CH|CV|CC|FCH|FCV).*$")
 PulsedMagnet = re.compile("^.*:PM-.*$")
-Multipole = re.compile("^.*:(MA)-(Q|S|QS|CH|CV|FCH|FCV).*$")
+Multipole = re.compile("^.*:(MA)-(Q|S|QS|CH|CV|CC|FCH|FCV).*$")
 Trim = re.compile("^SI-.*[0-2][0-9].*:MA-Q(D|F|[1-4]).*$")
 
 
