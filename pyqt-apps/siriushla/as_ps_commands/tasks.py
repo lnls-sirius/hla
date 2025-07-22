@@ -166,20 +166,20 @@ class CheckIntlk(BaseTask):
         self._check(method='check_intlk')
 
 
-class SetSOFBMode(BaseTask):
-    """Set PS SOFBMode."""
+class CheckIDFFMode(BaseTask):
+    """Check PS IDFFMode."""
 
     def function(self):
-        """Set PS SOFBMode."""
-        self._set(method='set_sofbmode', state=self._state)
+        """Check PS IDFFMode."""
+        self._check(method='check_idffmode', state=self._state)
 
 
-class CheckSOFBMode(BaseTask):
-    """Check PS SOFBMode."""
+class SetIDFFMode(BaseTask):
+    """Set PS IDFFMode."""
 
     def function(self):
-        """Check PS SOFBMode."""
-        self._check(method='check_sofbmode', state=self._state)
+        """Set PS IDFFMode."""
+        self._set(method='set_idffmode', state=self._state)
 
 
 class SetOpMode(BaseTask):

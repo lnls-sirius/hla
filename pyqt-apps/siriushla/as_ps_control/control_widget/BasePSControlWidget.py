@@ -505,14 +505,14 @@ class BasePSControlWidget(QWidget):
         self.updparms_act = QAction("Update Parameters", self)
         self.updparms_act.triggered.connect(self._update_params)
         self.updparms_act.setEnabled(False)
-        self.sofbmode_on_act = QAction("Set SOFBMode On", self)
-        self.sofbmode_on_act.triggered.connect(
-            lambda: self._set_sofbmode(True))
-        self.sofbmode_on_act.setEnabled(False)
-        self.sofbmode_off_act = QAction("Set SOFBMode Off", self)
-        self.sofbmode_off_act.triggered.connect(
-            lambda: self._set_sofbmode(False))
-        self.sofbmode_off_act.setEnabled(False)
+        self.idffmode_on_act = QAction("Set IDFFMode On", self)
+        self.idffmode_on_act.triggered.connect(
+            lambda: self._set_idffmode(True))
+        self.idffmode_on_act.setEnabled(False)
+        self.idffmode_off_act = QAction("Set IDFFMode Off", self)
+        self.idffmode_off_act.triggered.connect(
+            lambda: self._set_idffmode(False))
+        self.idffmode_off_act.setEnabled(False)
         self.set_accfreeze_frozen_act = QAction(
             "Set AccFreeze to frozen", self)
         self.set_accfreeze_frozen_act.triggered.connect(
@@ -552,10 +552,10 @@ class BasePSControlWidget(QWidget):
         if 'updparms' in self.visible_props and \
                 not self.updparms_act.isEnabled():
             self.updparms_act.setEnabled(True)
-        if 'sofbmode' in self.visible_props and \
-                not self.sofbmode_on_act.isEnabled():
-            self.sofbmode_on_act.setEnabled(True)
-            self.sofbmode_off_act.setEnabled(True)
+        if 'idffmode' in self.visible_props and \
+                not self.idffmode_on_act.isEnabled():
+            self.idffmode_on_act.setEnabled(True)
+            self.idffmode_off_act.setEnabled(True)
         if 'accfreeze' in self.visible_props and \
                 not self.set_accfreeze_frozen_act.isEnabled():
             self.set_accfreeze_frozen_act.setEnabled(True)
@@ -650,15 +650,15 @@ class BasePSControlWidget(QWidget):
                     pass
 
     @Slot(bool)
-    def _set_sofbmode(self, state):
-        """Execute turn SOFBMode on/off actions."""
+    def _set_idffmode(self, state):
+        """Execute turn IDFFMode on/off actions."""
         for key, widget in self.ps_widgets_dict.items():
             if key in self.filtered_widgets:
                 try:
                     if state:
-                        widget.sofbmode_on()
+                        widget.idffmode_on()
                     else:
-                        widget.sofbmode_off()
+                        widget.idffmode_off()
                 except TypeError:
                     pass
 
@@ -706,8 +706,8 @@ class BasePSControlWidget(QWidget):
             menu.addAction(self.set_accfreeze_unfrozen_act)
             menu.addAction(self.acc_clear_act)
         if PSSearch.conv_psname_2_psmodel(self._dev_list[0]) == 'FBP':
-            menu.addAction(self.sofbmode_on_act)
-            menu.addAction(self.sofbmode_off_act)
+            menu.addAction(self.idffmode_on_act)
+            menu.addAction(self.idffmode_off_act)
         menu.addSeparator()
         action = menu.addAction('Show Connections...')
         action.triggered.connect(self.show_connections)
