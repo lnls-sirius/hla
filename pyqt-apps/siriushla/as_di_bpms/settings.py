@@ -1,17 +1,20 @@
 """BPM Settings."""
 
 from qtpy.QtWidgets import QHBoxLayout, QVBoxLayout, QGridLayout, \
-    QLabel, QPushButton, QGroupBox, QWidget, QScrollArea
+    QLabel, QPushButton, QGroupBox, QWidget, QScrollArea, \
+    QTabWidget
 from qtpy.QtCore import Qt
 
 from siriuspy.diagbeam.bpm.csdev import Const as _csbpm
 
 from siriushla import util
 from siriushla.widgets import PyDMStateButton, SiriusLedState, \
-    SiriusLedAlert, SiriusWaveformLineEdit, SiriusLabel
+    SiriusLedAlert, SiriusWaveformLineEdit, SiriusLabel, SiriusEnumComboBox, \
+    PyDMLed
 from siriushla.widgets.windows import create_window_from_widget
 from siriushla.as_di_bpms.base import BaseWidget, CustomGroupBox
 from siriushla.common.afc_acq_core import PhysicalTriggers, LogicalTriggers
+from siriushla.as_di_bpms import afcs_pvs
 
 
 class ParamsSettings(BaseWidget):
@@ -491,3 +494,357 @@ class PBPMHardwareSettings(BaseWidget):
             'FMCPICO',
             ((f'FMCPICORngR{i}-Sel', f'RNG R{i}') for i in range(4))
         )
+
+
+class AFCAdvancedSettings(BaseWidget):
+    def __init__(self, parent=None, prefix='', bpm='', **kwargs):
+        super().__init__(parent=parent, prefix=prefix, bpm=bpm, **kwargs)
+        self.setupui()
+
+    def setupui(self):
+        lay = QVBoxLayout(self)
+        lab = QLabel(
+            f'<h2>{self.bpm} AFCv3.1 Settings</h2>', self,
+            alignment=Qt.AlignCenter)
+        lay.addWidget(lab)
+
+        tab = QTabWidget(self)
+        tab.setObjectName('afc3.1_tab')
+
+        if self.bpm[:2] == 'SI':
+            if self.bpm[5:9] == 'SBFE' or self.bpm[5:9] == 'SPFE' or self.bpm[5:9] == 'SAFE':
+                amc_tab = self._amcTab(4)
+                tab.addTab(
+                    amc_tab, 'AMC-4'
+                )
+            elif self.bpm[5:9] == 'BCFE':
+                amc_tab = self._amcTab(5)
+                tab.addTab(
+                    amc_tab, 'AMC-5'
+                )
+            elif self.bpm[5:8] == 'SA:' or self.bpm[5:8] == 'SB:' or self.bpm[5:8] == 'SP:':
+                amc_tab = self._amcTab(6)
+                tab.addTab(
+                    amc_tab, 'AMC-6'
+                )
+            elif self.bpm[5:7] == 'M1' or self.bpm[5:7] == 'M2':
+                amc_tab = self._amcTab(7)
+                tab.addTab(
+                    amc_tab, 'AMC-7'
+                )
+            elif self.bpm[5:7] == 'C1':
+                amc_tab = self._amcTab(8)
+                tab.addTab(
+                    amc_tab, 'AMC-8'
+                )
+            elif self.bpm[5:7] == 'C2' or self.bpm[5:16] == 'C3:DI-BPM-1':
+                amc_tab = self._amcTab(9)
+                tab.addTab(
+                    amc_tab, 'AMC-9'
+                )
+            elif self.bpm[5:7] == 'C4' or self.bpm[5:16] == 'C3:DI-BPM-2':
+                amc_tab = self._amcTab(10)
+                tab.addTab(
+                    amc_tab, 'AMC-10'
+                )
+        elif self.bpm[:2] == 'BO':
+            if int(self.bpm[3:5]) in afcs_pvs.BO_N or int(self.bpm[3:5]) - 1 in afcs_pvs.BO_N:
+                amc_tab = self._amcTab(11)
+                tab.addTab(
+                    amc_tab, 'AMC-11'
+                )
+            elif int(self.bpm[3:5]) - 2 in afcs_pvs.BO_N:
+                amc_tab = self._amcTab(12)
+                tab.addTab(
+                    amc_tab, 'AMC-12'
+                )
+        elif self.bpm[:2] == 'TB':
+            if self.bpm[3:5] == '01':
+                amc_tab = self._amcTab(6)
+                tab.addTab(
+                    amc_tab, 'AMC-6'
+                )
+            elif self.bpm[3:5] == '02':
+                amc_tab = self._amcTab(7)
+                tab.addTab(
+                    amc_tab, 'AMC-7'
+                )
+            elif self.bpm[3:5] == '03' or self.bpm[3:5] == '04':
+                amc_tab = self._amcTab(8)
+                tab.addTab(
+                    amc_tab, 'AMC-8'
+                )
+        elif self.bpm[:2] == 'TS':
+            if self.bpm[3:5] == '01' or self.bpm[3:5] == '02':
+                amc_tab = self._amcTab(9)
+                tab.addTab(
+                    amc_tab, 'AMC-9'
+                )
+            elif self.bpm[3:5] == '03' or self.bpm[3:14] == '04:DI-BPM-1':
+                amc_tab = self._amcTab(10)
+                tab.addTab(
+                    amc_tab, 'AMC-10'
+                )
+            elif self.bpm[3:14] == '04:DI-BPM-2':
+                amc_tab = self._amcTab(11)
+                tab.addTab(
+                    amc_tab, 'AMC-11'
+                )
+        lay.addWidget(tab)
+
+    def _amcTab(self, amc_number):
+        amc_widget = QWidget()
+        amc_lay = QVBoxLayout(amc_widget)
+
+        sub_tab = QTabWidget(self)
+        sub_tab.setObjectName(f'amc{amc_number}_subtab')
+
+        sensors_widget = self._sensorsAFC31(amc_number)
+        sub_tab.addTab(sensors_widget, 'Sensors')
+
+        fru_widget = self._fruAFC31(amc_number)
+        sub_tab.addTab(fru_widget, 'FRU')
+
+        amc_lay.addWidget(sub_tab)
+
+        return amc_widget
+
+    def _sensorsAFC31(self, amc_number):
+        wid = QWidget(self)
+        wid.setObjectName('wid')
+        wid.setStyleSheet('#wid{background-color: transparent;}')
+        lay_sensor = QGridLayout(wid)
+        lay_sensor.setSpacing(1)
+
+        lay_sensor.addWidget(
+            QLabel('<h4>Device</h4>', self, alignment=Qt.AlignCenter), 0, 0)
+        lay_sensor.addWidget(
+            QLabel('<h4>Measurement</h4>', self, alignment=Qt.AlignCenter), 0, 1)
+
+        row = 1
+
+        pv_list_sensors = afcs_pvs.AFCv3_1_PV_LIST['sensors']
+
+        for k, pv_name in pv_list_sensors.items():
+            if 'Mon' in pv_name:
+                if self.bpm[:2] == 'TS' or self.bpm[:2] == 'TB':
+                    lab_pv = QLabel(k, alignment=Qt.AlignCenter)
+                    slab_pv = SiriusLabel(
+                        self, f"IA-20RaBPMTL:{afcs_pvs.DIS}-AMC-{amc_number}:{pv_name}"
+                        )
+                elif self.bpm[:2] == 'BO':
+                    bo_num = int(self.bpm.split('-')[1][:2])
+                    if bo_num in afcs_pvs.BO_N:
+                        area_index = afcs_pvs.BO_N.index(bo_num) + 1
+                        area_str = f"{area_index:02}"
+                        lab_pv = QLabel(k, alignment=Qt.AlignCenter)
+                        slab_pv = SiriusLabel(
+                            self, f"IA-{area_str}RaBPM:{afcs_pvs.DIS}-AMC-{amc_number}:{pv_name}"
+                            )
+                    elif bo_num in afcs_pvs.BO_N1:
+                        area_index = afcs_pvs.BO_N1.index(bo_num) + 1
+                        area_str = f"{area_index:02}"
+                        lab_pv = QLabel(k, alignment=Qt.AlignCenter)
+                        slab_pv = SiriusLabel(
+                            self, f"IA-{area_str}RaBPM:{afcs_pvs.DIS}-AMC-{amc_number}:{pv_name}"
+                            )
+                    elif bo_num in afcs_pvs.BO_N2:
+                        area_index = afcs_pvs.BO_N2.index(bo_num) + 1
+                        area_str = f"{area_index:02}"
+                        lab_pv = QLabel(k, alignment=Qt.AlignCenter)
+                        slab_pv = SiriusLabel(
+                            self, f"IA-{area_str}RaBPM:{afcs_pvs.DIS}-AMC-{amc_number}:{pv_name}"
+                            )
+                else:
+                    lab_pv = QLabel(k, alignment=Qt.AlignCenter)
+                    slab_pv = SiriusLabel(
+                        self, f"IA-{self.bpm[3:5]}RaBPM:{afcs_pvs.DIS}-AMC-{amc_number}:{pv_name}"
+                        )
+                lay_sensor.addWidget(lab_pv, row, 0)
+                lay_sensor.addWidget(slab_pv, row, 1)
+
+            elif 'Cte' in pv_name:
+                if self.bpm[:2] == 'TS' or self.bpm[:2] == 'TB':
+                    led_pv = SiriusLedAlert(
+                        self, f"IA-20RaBPMTL:{afcs_pvs.DIS}-AMC-{amc_number}:{pv_name}"
+                        )
+                elif self.bpm[:2] == 'BO':
+                    bo_num = int(self.bpm.split('-')[1][:2])
+                    if bo_num in afcs_pvs.BO_N:
+                        area_index = afcs_pvs.BO_N.index(bo_num) + 1
+                        area_str = f"{area_index:02}"
+                        led_pv = SiriusLedAlert(
+                            self, f"IA-{area_str}RaBPM:{afcs_pvs.DIS}-AMC-{amc_number}:{pv_name}"
+                            )
+                    elif bo_num in afcs_pvs.BO_N1:
+                        area_index = afcs_pvs.BO_N1.index(bo_num) + 1
+                        area_str = f"{area_index:02}"
+                        led_pv = SiriusLedAlert(
+                            self, f"IA-{area_str}RaBPM:{afcs_pvs.DIS}-AMC-{amc_number}:{pv_name}"
+                            )
+                    elif bo_num in afcs_pvs.BO_N2:
+                        area_index = afcs_pvs.BO_N2.index(bo_num) + 1
+                        area_str = f"{area_index:02}"
+                        led_pv = SiriusLedAlert(
+                            self, f"IA-{area_str}RaBPM:{afcs_pvs.DIS}-AMC-{amc_number}:{pv_name}"
+                            )
+                else:
+                    led_pv = SiriusLedAlert(
+                        self, f"IA-{self.bpm[3:5]}RaBPM:{afcs_pvs.DIS}-AMC-{amc_number}:{pv_name}"
+                        )
+                led_pv.onColor = PyDMLed.LightGreen
+                led_pv.offColor = PyDMLed.Red
+                lay_sensor.addWidget(led_pv, row, 2, 1, 3, alignment=Qt.AlignLeft)
+                row += 1
+
+        return self._build_scroll_area(wid)
+
+    def _fruAFC31(self, amc_number):
+        wid = QWidget(self)
+        wid.setObjectName('wid')
+        wid.setStyleSheet('#wid{background-color: transparent;}')
+        lay_fru = QGridLayout(wid)
+        lay_fru.setSpacing(1)
+
+        lay_fru.addWidget(
+            QLabel('<h4>Device</h4>', self, alignment=Qt.AlignCenter), 0, 0)
+        lay_fru.addWidget(
+            QLabel('<h4>Measurement</h4>', self, alignment=Qt.AlignCenter), 0, 1)
+
+        row = 1
+        pv_list_fru = afcs_pvs.AFCv3_1_PV_LIST['FRU']
+
+        for k, pv_name in pv_list_fru.items():
+            if 'Sel' in pv_name:
+                grbx = CustomGroupBox('Power Control', self)
+                grbx_lay = QGridLayout(grbx)
+                grbx_lay.setSpacing(1)
+                if self.bpm[:2] == 'TS' or self.bpm[:2] == 'TB':
+                    scbx_pv = SiriusEnumComboBox(
+                        self, f"IA-20RaBPMTL:{afcs_pvs.DIS}-AMC-{amc_number}:{pv_name}"
+                        )
+                elif self.bpm[:2] == 'BO':
+                    bo_num = int(self.bpm.split('-')[1][:2])
+                    if bo_num in afcs_pvs.BO_N:
+                        area_index = afcs_pvs.BO_N.index(bo_num) + 1
+                        area_str = f"{area_index:02}"
+                        scbx_pv = SiriusEnumComboBox(
+                            self, f"IA-{area_str}RaBPM:{afcs_pvs.DIS}-AMC-{amc_number}:{pv_name}"
+                            )
+                    elif bo_num in afcs_pvs.BO_N1:
+                        area_index = afcs_pvs.BO_N1.index(bo_num) + 1
+                        area_str = f"{area_index:02}"
+                        scbx_pv = SiriusEnumComboBox(
+                            self, f"IA-{area_str}RaBPM:{afcs_pvs.DIS}-AMC-{amc_number}:{pv_name}"
+                            )
+                    elif bo_num in afcs_pvs.BO_N2:
+                        area_index = afcs_pvs.BO_N2.index(bo_num) + 1
+                        area_str = f"{area_index:02}"
+                        scbx_pv = SiriusEnumComboBox(
+                            self, f"IA-{area_str}RaBPM:{afcs_pvs.DIS}-AMC-{amc_number}:{pv_name}"
+                            )
+                else:
+                    scbx_pv = SiriusEnumComboBox(
+                        self, f"IA-{self.bpm[3:5]}RaBPM:{afcs_pvs.DIS}-AMC-{amc_number}:{pv_name}"
+                        )
+                grbx_lay.addWidget(scbx_pv, 0, 1)
+            elif 'Pwr-Mon' in pv_name:
+                if self.bpm[:2] == 'TS' or self.bpm[:2] == 'TB':
+                    label_mon = SiriusLabel(
+                        self, f"IA-20RaBPMTL:{afcs_pvs.DIS}-AMC-{amc_number}:{pv_name}",
+                        alignment=Qt.AlignCenter)
+                    label_mon.setStyleSheet(
+                        'QLabel{border: none; background: transparent;}'
+                        )
+                elif self.bpm[:2] == 'BO':
+                    bo_num = int(self.bpm.split('-')[1][:2])
+                    if bo_num in afcs_pvs.BO_N:
+                        area_index = afcs_pvs.BO_N.index(bo_num) + 1
+                        area_str = f"{area_index:02}"
+                        label_mon = SiriusLabel(
+                            self, f"IA-{area_str}RaBPM:{afcs_pvs.DIS}-AMC-{amc_number}:{pv_name}",
+                            alignment=Qt.AlignCenter)
+                        label_mon.setStyleSheet(
+                        'QLabel{border: none; background: transparent;}'
+                        )
+                    elif bo_num in afcs_pvs.BO_N1:
+                        area_index = afcs_pvs.BO_N1.index(bo_num) + 1
+                        area_str = f"{area_index:02}"
+                        label_mon = SiriusLabel(
+                            self, f"IA-{area_str}RaBPM:{afcs_pvs.DIS}-AMC-{amc_number}:{pv_name}",
+                            alignment=Qt.AlignCenter)
+                        label_mon.setStyleSheet(
+                        'QLabel{border: none; background: transparent;}'
+                        )
+                    elif bo_num in afcs_pvs.BO_N2:
+                        area_index = afcs_pvs.BO_N2.index(bo_num) + 1
+                        area_str = f"{area_index:02}"
+                        label_mon = SiriusLabel(
+                            self, f"IA-{area_str}RaBPM:{afcs_pvs.DIS}-AMC-{amc_number}:{pv_name}",
+                            alignment=Qt.AlignCenter)
+                        label_mon.setStyleSheet(
+                        'QLabel{border: none; background: transparent;}'
+                        )
+                else:
+                    label_mon = SiriusLabel(
+                        self, f"IA-{self.bpm[3:5]}RaBPM:{afcs_pvs.DIS}-AMC-{amc_number}:{pv_name}",
+                        alignment=Qt.AlignCenter)
+                    label_mon.setStyleSheet(
+                        'QLabel{border: none; background: transparent;}'
+                        )
+                grbx_lay.addWidget(label_mon, 0, 2)
+                lay_fru.addWidget(grbx, row, 0, 1, 3)
+                row += 2
+
+            elif 'Cte' in pv_name:
+                if self.bpm[:2] == 'TS' or self.bpm[:2] == 'TB':
+                    label = QLabel(k, alignment=Qt.AlignCenter)
+                    slab_pv = SiriusLabel(
+                        self, f"IA-20RaBPMTL:{afcs_pvs.DIS}-AMC-{amc_number}:{pv_name}"
+                        )
+                elif self.bpm[:2] == 'BO':
+                    bo_num = int(self.bpm.split('-')[1][:2])
+                    if bo_num in afcs_pvs.BO_N:
+                        area_index = afcs_pvs.BO_N.index(bo_num) + 1
+                        area_str = f"{area_index:02}"
+                        label = QLabel(k, alignment=Qt.AlignCenter)
+                        slab_pv = SiriusLabel(
+                            self, f"IA-{area_str}RaBPM:{afcs_pvs.DIS}-AMC-{amc_number}:{pv_name}"
+                            )
+                    elif bo_num in afcs_pvs.BO_N1:
+                        area_index = afcs_pvs.BO_N1.index(bo_num) + 1
+                        area_str = f"{area_index:02}"
+                        label = QLabel(k, alignment=Qt.AlignCenter)
+                        slab_pv = SiriusLabel(
+                            self, f"IA-{area_str}RaBPM:{afcs_pvs.DIS}-AMC-{amc_number}:{pv_name}"
+                            )
+                    elif bo_num in afcs_pvs.BO_N2:
+                        area_index = afcs_pvs.BO_N2.index(bo_num) + 1
+                        area_str = f"{area_index:02}"
+                        label = QLabel(k, alignment=Qt.AlignCenter)
+                        slab_pv = SiriusLabel(
+                            self, f"IA-{area_str}RaBPM:{afcs_pvs.DIS}-AMC-{amc_number}:{pv_name}"
+                        )
+                else:
+                    label = QLabel(k, alignment=Qt.AlignCenter)
+                    slab_pv = SiriusLabel(
+                        self, f"IA-{self.bpm[3:5]}RaBPM:{afcs_pvs.DIS}-AMC-{amc_number}:{pv_name}"
+                        )
+                lay_fru.addWidget(label, row, 0)
+                lay_fru.addWidget(slab_pv, row, 1)
+                row += 1
+
+        return self._build_scroll_area(wid)
+
+    def _build_scroll_area(self, widget):
+        area = QScrollArea(self)
+        area.setSizeAdjustPolicy(QScrollArea.AdjustToContentsOnFirstShow)
+        area.setWidgetResizable(True)
+        area.setWidget(widget)
+        widget.setObjectName('widget')
+        widget.setStyleSheet(
+            '#widget{background-color: transparent;}'
+            'QLabel{border: 1px solid gray; min-height: 1.5em;}'
+            '#lbl_bpmname{border: 0px solid gray; min-height: 1.5em;}'
+            '#led_status{border: 1px solid gray; min-height: 1.5em;}')
+        return area

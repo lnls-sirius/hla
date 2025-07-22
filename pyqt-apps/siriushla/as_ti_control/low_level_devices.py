@@ -7,9 +7,11 @@ from qtpy.QtCore import Qt, Slot
 from qtpy.QtGui import QColor, QBrush
 from qtpy.QtWidgets import QLabel, QPushButton, QGroupBox, QVBoxLayout, \
     QHBoxLayout, QGridLayout, QMenuBar, QSplitter, QTabWidget, QWidget, \
-    QSizePolicy as QSzPol, QCheckBox, QFrame
+    QSizePolicy as QSzPol, QCheckBox, QFrame, QScrollArea
 import qtawesome as qta
 from pydm.widgets import PyDMLineEdit, PyDMPushButton
+
+from siriushla import util
 
 from siriuspy.search import LLTimeSearch, HLTimeSearch
 from siriuspy.namesys import SiriusPVName as _PVName
@@ -25,6 +27,8 @@ from ..util import connect_window, get_appropriate_color
 
 from .base import BaseList, BaseWidget
 from .allowed_buckets import AllowedBucketsMatrix
+
+from siriushla.as_di_bpms import afcs_pvs
 
 
 # ###################### Event Generator ######################
@@ -1497,6 +1501,10 @@ class AFC(BaseWidget):
         stattab.addTab(self.status_wid, 'Status')
         self.info_wid = self._setup_info_wid()
         stattab.addTab(self.info_wid, 'Fw && IOC')
+
+        self.info_wid = self._softReset(1)
+        stattab.addTab(self.info_wid, 'AFC Details')
+
         self.my_layout.addWidget(stattab, 2, 0)
         stattab.setSizePolicy(QSzPol.Preferred, QSzPol.Maximum)
 
@@ -1915,6 +1923,266 @@ class AFC(BaseWidget):
         else:
             self.detail_wind.showNormal()
 
+    def _softReset(self, amc_number):
+        info_wid = QWidget(self)
+        info_lay = QGridLayout(info_wid)
+        info_lay.setHorizontalSpacing(30)
+
+        pv_list_fru = afcs_pvs.AFCv3_1_PV_LIST['FRU']
+        pv_name = pv_list_fru['SoftRst']
+
+        head_lbl = QLabel(
+            '<h4>AFC Settings Details</h4>', self, alignment=Qt.AlignCenter)
+        head_lbl.setObjectName('head_lbl')
+        head_lbl.setStyleSheet('QLabel{border: none; background: transparent;}')
+
+        pbt = QPushButton(qta.icon('fa5s.ellipsis-v'), '', self)
+        pbt.setObjectName('pbt')
+        pbt.setStyleSheet(
+            '#pbt{min-width:25px; max-width:25px; icon-size:20px;}')
+        pbt.setDefault(False)
+        pbt.setAutoDefault(False)
+        Window = create_window_from_widget(
+            AFCAdvancedSettings, title='AFC Advanced Settings'
+        )
+        util.connect_window(
+            pbt, Window, parent=self, prefix=self.prefix, device=self.device
+        )
+
+        if self.device.device_name[5:12] == 'RaBPMTL':
+            lbl = QLabel(f"IA-{self.device.device_name[3:5]}RaBPMTL", self,
+                         alignment=Qt.AlignCenter)
+            cmd_button = SiriusPushButton(
+                self, label='Reset', icon=qta.icon('mdi.restart'),
+                init_channel=f"IA-20RaBPMTL:{afcs_pvs.DIS}-AMC-{amc_number}:{pv_name}"
+                )
+            cmd_button.setObjectName('cmd_button')
+            cmd_button.setStyleSheet(
+                '#cmd_button{min-width:120px; max-width:120px; icon-size:20px;}')
+        else:
+            lbl = QLabel(f"IA-{self.device.device_name[3:5]}RaBPM", self,
+                         alignment=Qt.AlignCenter)
+            cmd_button = SiriusPushButton(
+                self, label='Reset', icon=qta.icon('mdi.restart'),
+                init_channel=f"IA-{self.device.device_name[3:5]}RaBPM:{afcs_pvs.DIS}-AMC-{amc_number}:{pv_name}"
+                )
+            cmd_button.setObjectName('cmd_button')
+            cmd_button.setStyleSheet(
+                '#cmd_button{min-width:120px; max-width:120px; icon-size:20px;}')
+        lbl.setStyleSheet(
+            'QLabel{border: none; background: transparent;}'
+            )
+
+        proc = QWidget()
+        hlproc = QHBoxLayout(proc)
+        hlproc.setContentsMargins(0, 0, 0, 0)
+        hlproc.addWidget(pbt)
+        hlproc.addWidget(lbl)
+        gb = self._create_small_group('', info_wid, (head_lbl, proc))
+        info_lay.addWidget(gb, 0, 0)
+
+        sr_lbl = QLabel(
+            '<h4>Soft Reset</h4>', self, alignment=Qt.AlignCenter)
+        sr_lbl.setObjectName('sr_lbl')
+        sr_lbl.setStyleSheet('QLabel{border: none; background: transparent;}')
+
+        pv_name = pv_list_fru['SoftRstSts']
+
+        if self.device.device_name[5:12] == 'RaBPMTL':
+            label_mon = SiriusLabel(
+                self, f"IA-20RaBPMTL:{afcs_pvs.DIS}-AMC-{amc_number}:{pv_name}",
+                alignment=Qt.AlignCenter)
+            label_mon.setStyleSheet(
+                'QLabel{border: none; background: transparent;}'
+                )
+        else:
+            label_mon = SiriusLabel(
+                self, f"IA-{self.device.device_name[3:5]}RaBPM:{afcs_pvs.DIS}-AMC-{amc_number}:{pv_name}",
+                alignment=Qt.AlignCenter)
+            label_mon.setStyleSheet(
+                'QLabel{border: none; background: transparent;}'
+                )
+
+        proc = QWidget()
+        hlproc = QHBoxLayout(proc)
+        hlproc.setContentsMargins(0, 0, 0, 0)
+        hlproc.addWidget(cmd_button)
+        hlproc.addWidget(label_mon)
+        gb = self._create_small_group('', info_wid, (sr_lbl, proc))
+        info_lay.addWidget(gb, 0, 1)
+
+        return self._build_scroll_area(info_wid)
+
+    def _build_scroll_area(self, widget):
+        area = QScrollArea(self)
+        area.setSizeAdjustPolicy(QScrollArea.AdjustToContentsOnFirstShow)
+        area.setWidgetResizable(True)
+        area.setWidget(widget)
+        widget.setObjectName('widget')
+        widget.setStyleSheet(
+            '#widget{background-color: transparent;}'
+            'QLabel{border: 1px solid gray; min-height: 1.5em;}'
+            '#lbl_bpmname{border: 0px solid gray; min-height: 1.5em;}'
+            '#led_status{border: 1px solid gray; min-height: 1.5em;}')
+        return area
+
+class AFCAdvancedSettings(BaseWidget):
+    def __init__(self, parent=None, prefix='', device='', **kwargs):
+        super().__init__(parent=parent, prefix=prefix, device=device, **kwargs)
+        self._setupUi()
+
+    def _setupUi(self):
+        lay = QVBoxLayout(self)
+        if self.device.device_name[5:12] == 'RaBPMTL':
+            lab = QLabel(
+                f'<h2> AFCv3.1 Settings - {self.device.device_name[3:5]}RaBPMTL</h2>', self,
+                alignment=Qt.AlignCenter)
+        else:
+            lab = QLabel(
+                f'<h2> AFCv3.1 Settings - {self.device.device_name[3:5]}RaBPM</h2>', self,
+                alignment=Qt.AlignCenter)
+        lay.addWidget(lab)
+        amcTab_widget = self._amcTab()
+        lay.addWidget(amcTab_widget)
+
+    def _amcTab(self):
+        amc_widget = QWidget()
+        amc_lay = QVBoxLayout(amc_widget)
+
+        sub_tab = QTabWidget(self)
+        sub_tab.setObjectName(f'amc{1}_subtab')
+
+        sensors_widget = self._sensorsAFC31(1)
+        sub_tab.addTab(sensors_widget, 'Sensors')
+
+        fru_widget = self._fruAFC31(1)
+        sub_tab.addTab(fru_widget, 'FRU')
+
+        amc_lay.addWidget(sub_tab)
+
+        return amc_widget
+
+    def _sensorsAFC31(self, amc_number):
+        wid = QWidget(self)
+        lay_sensor = QGridLayout(wid)
+        lay_sensor.setSpacing(0)
+
+        lay_sensor.addWidget(
+            QLabel('<h4>Device</h4>', self, alignment=Qt.AlignCenter), 0, 0)
+        lay_sensor.addWidget(
+            QLabel('<h4>Measurement</h4>', self, alignment=Qt.AlignCenter), 0, 1)
+
+        row = 1
+
+        pv_list_sensors = afcs_pvs.AFCv3_1_PV_LIST['sensors']
+
+        for k, pv_name in pv_list_sensors.items():
+            if 'Mon' in pv_name:
+                if self.device.device_name[5:12] == 'RaBPMTL':
+                    lab_pv = QLabel(k, alignment=Qt.AlignCenter)
+                    slab_pv = SiriusLabel(
+                        self, f"IA-20RaBPMTL:{afcs_pvs.DIS}-AMC-{amc_number}:{pv_name}"
+                        )
+                else:
+                    lab_pv = QLabel(k, alignment=Qt.AlignCenter)
+                    slab_pv = SiriusLabel(
+                        self, f"IA-{self.device.device_name[3:5]}RaBPM:{afcs_pvs.DIS}-AMC-{amc_number}:{pv_name}"
+                        )
+                lay_sensor.addWidget(lab_pv, row, 0)
+                lay_sensor.addWidget(slab_pv, row, 1)
+
+            elif 'Cte' in pv_name:
+                if self.device.device_name[5:12] == 'RaBPMTL':
+                    led_pv = SiriusLedAlert(
+                        self, f"IA-20RaBPMTL:{afcs_pvs.DIS}-AMC-{amc_number}:{pv_name}"
+                        )
+                else:
+                    led_pv = SiriusLedAlert(
+                        self, f"IA-{self.device.device_name[3:5]}RaBPM:{afcs_pvs.DIS}-AMC-{amc_number}:{pv_name}"
+                        )
+
+                led_pv.onColor = PyDMLed.LightGreen
+                led_pv.offColor = PyDMLed.Red
+                lay_sensor.addWidget(led_pv, row, 2, 1, 3, alignment=Qt.AlignLeft)
+
+                row += 1
+
+        return self._build_scroll_area(wid)
+
+    def _fruAFC31(self, amc_number):
+        wid = QWidget(self)
+        lay_fru = QGridLayout(wid)
+        lay_fru.setSpacing(0)
+
+        lay_fru.addWidget(
+            QLabel('<h4>Device</h4>', self, alignment=Qt.AlignCenter), 0, 0)
+        lay_fru.addWidget(
+            QLabel('<h4>Measurement</h4>', self, alignment=Qt.AlignCenter), 0, 1)
+
+        row = 1
+        pv_list_fru = afcs_pvs.AFCv3_1_PV_LIST['FRU']
+
+        for k, pv_name in pv_list_fru.items():
+            if 'Sel' in pv_name:
+                grbx = QGroupBox('Power Control', self)
+                grbx_lay = QGridLayout(grbx)
+                grbx_lay.setSpacing(1)
+                if self.device.device_name[5:12] == 'RaBPMTL':
+                    scbx_pv = SiriusEnumComboBox(
+                        self, f"IA-20RaBPMTL:{afcs_pvs.DIS}-AMC-{amc_number}:{pv_name}"
+                        )
+                else:
+                    scbx_pv = SiriusEnumComboBox(
+                        self, f"IA-{self.device.device_name[3:5]}RaBPM:{afcs_pvs.DIS}-AMC-{amc_number}:{pv_name}"
+                        )
+                grbx_lay.addWidget(scbx_pv, 0, 1)
+                if 'Pwr-Mon' in pv_name:
+                    if self.device.device_name[5:12] == 'RaBPMTL':
+                        label_mon = SiriusLabel(
+                            self, f"IA-20RaBPMTL:{afcs_pvs.DIS}-AMC-{amc_number}:{pv_name}",
+                            alignment=Qt.AlignCenter)
+                        label_mon.setStyleSheet(
+                            'QLabel{border: none; background: transparent;}'
+                            )
+                    else:
+                        label_mon = SiriusLabel(
+                            self, f"IA-{self.device.device_name[3:5]}RaBPM:{afcs_pvs.DIS}-AMC-{amc_number}:{pv_name}",
+                            alignment=Qt.AlignCenter)
+                        label_mon.setStyleSheet(
+                            'QLabel{border: none; background: transparent;}'
+                            )
+                    grbx_lay.addWidget(label_mon, 0, 2)
+                lay_fru.addWidget(grbx, row, 0, 1, 3)
+                row += 2
+            elif 'Cte' in pv_name:
+                if self.device.device_name[5:12] == 'RaBPMTL':
+                    label = QLabel(k, alignment=Qt.AlignCenter)
+                    slab_pv = SiriusLabel(
+                        self, f"IA-20RaBPMTL:{afcs_pvs.DIS}-AMC-{amc_number}:{pv_name}"
+                        )
+                else:
+                    label = QLabel(k, alignment=Qt.AlignCenter)
+                    slab_pv = SiriusLabel(
+                        self, f"IA-{self.device.device_name[3:5]}RaBPM:{afcs_pvs.DIS}-AMC-{amc_number}:{pv_name}"
+                        )
+                lay_fru.addWidget(label, row, 0)
+                lay_fru.addWidget(slab_pv, row, 1)
+                row += 1
+
+        return self._build_scroll_area(wid)
+
+    def _build_scroll_area(self, widget):
+        area = QScrollArea(self)
+        area.setSizeAdjustPolicy(QScrollArea.AdjustToContentsOnFirstShow)
+        area.setWidgetResizable(True)
+        area.setWidget(widget)
+        widget.setObjectName('widget')
+        widget.setStyleSheet(
+            '#widget{background-color: transparent;}'
+            'QLabel{border: 1px solid gray; min-height: 1.5em;}'
+            '#lbl_bpmname{border: 0px solid gray; min-height: 1.5em;}'
+            '#led_status{border: 1px solid gray; min-height: 1.5em;}')
+        return area
 
 class _EVR_EVE(BaseWidget):
     """Template for control of High Level Triggers."""
