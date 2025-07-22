@@ -1518,7 +1518,7 @@ class RFMainControl(SiriusMainWindow):
             self.humidity_graphs = {}
             systems = ['A', 'B']
 
-            lb_temp_area = QLabel('<h4> Room Temperature </h4>', self)
+            lb_temp_area = QLabel('<h4> Room Temperature [°C] </h4>', self)
             lay_rfarea.addWidget(lb_temp_area, alignment=Qt.AlignLeft)
 
             for i in range(len(systems)):
@@ -1537,7 +1537,7 @@ class RFMainControl(SiriusMainWindow):
                 graph.addYChannel(
                     y_channel=self.prefix+self.chs['RF Area'][f'{systems[i]}']['Temp'],
                     name=f'Temp_{systems[i]}', color='red', lineStyle=Qt.SolidLine, lineWidth=1)
-                graph.setLabel('left', '')
+                graph.setLabel('left', '°C')
                 lay_rfarea.addWidget(graph)
                 lay_rfarea.addItem(QSpacerItem(
                     0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed))
@@ -1549,7 +1549,7 @@ class RFMainControl(SiriusMainWindow):
                 0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed))
 
             # # Humidity
-            lb_humidity_area = QLabel('<h4> Room Humidity </h4>', self)
+            lb_humidity_area = QLabel('<h4> Room Humidity [%] </h4>', self)
             lay_rfarea.addWidget(lb_humidity_area, alignment=Qt.AlignLeft)
 
             for i in range(len(systems)):
@@ -1568,7 +1568,7 @@ class RFMainControl(SiriusMainWindow):
                 graph.addYChannel(
                     y_channel=self.prefix+self.chs['RF Area'][f'{systems[i]}']['Humidity'],
                     name=f'Humidity_{systems[i]}', color='green', lineStyle=Qt.SolidLine, lineWidth=1)
-                graph.setLabel('left', '')
+                graph.setLabel('left', '%')
                 lay_rfarea.addWidget(graph)
                 lay_rfarea.addItem(QSpacerItem(
                     0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed))
