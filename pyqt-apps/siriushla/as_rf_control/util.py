@@ -1768,11 +1768,11 @@ SEC_2_CHANNELS = {
                 'Valve Box': {
                     'RF Stop 4': {
                         'label': 'SI-03SP:RF-CryoMod-1:VB_RFStop4Intlk-Mon',
-                        'led': 'SI-03SP:RF-CryoMod-1:VB_RFStop4IntlkState-Mon' 
+                        'led': 'SI-03SP:RF-CryoMod-1:VB_RFStop4IntlkState-Mon'
                     },
                     'Heater Stop': {
                         'label': 'SI-03SP:RF-CryoMod-1:VB_HeaterStopIntlk-Mon',
-                        'led': 'SI-03SP:RF-CryoMod-1:VB_HeaterStopIntlkState-Mon' 
+                        'led': 'SI-03SP:RF-CryoMod-1:VB_HeaterStopIntlkState-Mon'
                     },
                     'Cryo Supply Stop': {
                         'label': 'SI-03SP:RF-CryoMod-1:VB_CryoSupplyStopIntlk-Mon',
@@ -1812,11 +1812,11 @@ SEC_2_CHANNELS = {
                 'Valve Box': {
                     'RF Stop 4': {
                         'label': 'SI-03SP:RF-CryoMod-2:VB_RFStop4Intlk-Mon',
-                        'led': 'SI-03SP:RF-CryoMod-2:VB_RFStop4IntlkState-Mon' 
+                        'led': 'SI-03SP:RF-CryoMod-2:VB_RFStop4IntlkState-Mon'
                     },
                     'Heater Stop': {
                         'label': 'SI-03SP:RF-CryoMod-2:VB_HeaterStopIntlk-Mon',
-                        'led': 'SI-03SP:RF-CryoMod-2:VB_HeaterStopIntlkState-Mon' 
+                        'led': 'SI-03SP:RF-CryoMod-2:VB_HeaterStopIntlkState-Mon'
                     },
                     'Cryo Supply Stop': {
                         'label': 'SI-03SP:RF-CryoMod-2:VB_CryoSupplyStopIntlk-Mon',
@@ -1832,7 +1832,7 @@ SEC_2_CHANNELS = {
                 'label': 'SI-03SP:RF-ValveBox:ExtStop1Intlk-Mon',
                 'led': 'SI-03SP:RF-ValveBox:ExtStop1IntlkState-Mon'
             }
-        },        
+        },
         'TL Sts': {
             'A': {
                 'Geral': 'RA-TLSIA:RF-TrLine:Sts-Mon',
@@ -2653,7 +2653,7 @@ SEC_2_CHANNELS = {
             },
             'B': {
                 'Quench Cond 1': 'RA-RaSIB01:RF-LLRF:QuenchCond1RvRatio-Mon',
-                'E-quench': 'RA-RaSIB01:RF-LLRF:EQuenchFwRatio-Mon', 
+                'E-quench': 'RA-RaSIB01:RF-LLRF:EQuenchFwRatio-Mon',
             }
         },
         'RF Inputs': {
@@ -4944,6 +4944,16 @@ SEC_2_CHANNELS = {
                     'Q': 'RA-ToSIB0$(NB):RF-ACPanel:PwrQ-Mon'
                 }
             },
-        }
+        },
+        'RF Area': {
+            'A': {
+                'Temp': 'RA-RaSIA02:RF-THSensor:Temp-Mon',
+                'Humidity': 'RA-RaSIA02:RF-THSensor:Humidity-Mon',
+            },
+            'B': {
+                'Temp': 'RA-RaSIB02:RF-THSensor:Temp-Mon',
+                'Humidity': 'RA-RaSIB02:RF-THSensor:Humidity-Mon',
+            },
+        },
     },
 }
