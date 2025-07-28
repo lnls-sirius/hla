@@ -25,7 +25,6 @@ from ..as_ti_control import HLTriggerDetailed
 from .tasks import CreateTesters, \
     CheckComm, CheckStatus, \
     ResetIntlk, CheckIntlk, \
-    SetSOFBMode, CheckSOFBMode, \
     SetIDFFMode, CheckIDFFMode, \
     SetOpMode, CheckOpMode, \
     SetPwrState, CheckPwrState, CheckInitOk, \
@@ -107,9 +106,6 @@ class PSCmdWindow(SiriusMainWindow):
                             'cmd': _part(
                                 self._set_check_trigger_state, 'PS', 'dsbl'),
                         },
-                        'Turn Off SOFBMode': {
-                            'cmd': _part(self._set_check_fbp_sofbmode, 'off'),
-                        },
                         'Turn Off IDFFMode': {
                             'cmd': _part(self._set_check_fbp_idffmode, 'off'),
                         },
@@ -176,9 +172,6 @@ class PSCmdWindow(SiriusMainWindow):
                             'cmd': _part(
                                 self._set_check_trigger_state, 'PS', 'dsbl'),
                         },
-                        'Turn Off SOFBMode': {
-                            'cmd': _part(self._set_check_fbp_sofbmode, 'off'),
-                        },
                         'Turn Off IDFFMode': {
                             'cmd': _part(self._set_check_fbp_idffmode, 'off'),
                         },
@@ -216,9 +209,6 @@ class PSCmdWindow(SiriusMainWindow):
                         'Disable PS triggers': {
                             'cmd': _part(
                                 self._set_check_trigger_state, 'PS', 'dsbl'),
-                        },
-                        'Turn Off SOFBMode': {
-                            'cmd': _part(self._set_check_fbp_sofbmode, 'off'),
                         },
                         'Turn Off IDFFMode': {
                             'cmd': _part(self._set_check_fbp_idffmode, 'off'),
@@ -962,28 +952,6 @@ class PSCmdWindow(SiriusMainWindow):
                   'Setting capacitor bank voltage...',
                   'Checking capacitor bank voltage...']
         tasks = [task0, task1, task2]
-        dlg = ProgressDialog(labels, tasks, self)
-        dlg.exec_()
-
-    def _set_check_fbp_sofbmode(self, state):
-        self.ok_ps.clear()
-        self.nok_ps.clear()
-        devices = self._get_selected_ps()
-        devices = [dev for dev in devices
-                   if PSSearch.conv_psname_2_psmodel(dev) == 'FBP']
-        if not devices:
-            return
-
-        task0 = CreateTesters(devices, parent=self)
-        task1 = SetSOFBMode(devices, state=state, parent=self)
-        task2 = CheckSOFBMode(devices, state=state, parent=self)
-        task2.itemDone.connect(self._log)
-        tasks = [task0, task1, task2]
-
-        labels = ['Connecting to devices...',
-                  'Turning PS SOFBMode '+state+'...',
-                  'Checking PS SOFBMode '+state+'...']
-
         dlg = ProgressDialog(labels, tasks, self)
         dlg.exec_()
 
