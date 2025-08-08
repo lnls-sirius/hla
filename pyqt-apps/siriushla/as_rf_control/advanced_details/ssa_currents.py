@@ -220,7 +220,7 @@ class SSACurrentsDetails(SiriusDialog):
                 0, 1, 1, 2)
 
             # Currents
-            for i in range(1, 17):
+            for i in range(1, 18):
                 if i < 10:
                     m_num = f'0{i}'
                 else:
@@ -237,10 +237,21 @@ class SSACurrentsDetails(SiriusDialog):
                     self.curr_pvs[hs_num].append(pv_curr_1)
                     self.curr_pvs[hs_num].append(pv_curr_2)
 
-                lb_curr_1 = SiriusLabel(self, pv_curr_1)
+                if (hs_num, m_num) in [(1, '01'), (3, 17), (4, '01'), (6, 17)]:
+                    lb_curr_1 = QLabel('Pre Amp.', alignment=Qt.AlignCenter)
+                    lb_curr_2 = QLabel('Pre Amp.', alignment=Qt.AlignCenter)
+
+                elif (hs_num, m_num) in [(2, '01'), (5, '01')]:
+                    lb_curr_1 = QLabel('Not in use', alignment=Qt.AlignCenter)
+                    lb_curr_2 = QLabel('Not in use', alignment=Qt.AlignCenter)
+
+                else:
+                    lb_curr_1 = SiriusLabel(self, pv_curr_1)
+                    lb_curr_2 = SiriusLabel(self, pv_curr_2)
+
                 lb_curr_1.showUnits = True
                 lb_curr_1.setStyleSheet('SiriusLabel{min-width:4.5em;}')
-                lb_curr_2 = SiriusLabel(self, pv_curr_2)
+
                 lb_curr_2.showUnits = True
                 lb_curr_2.setStyleSheet('SiriusLabel{min-width:4.5em;}')
 
