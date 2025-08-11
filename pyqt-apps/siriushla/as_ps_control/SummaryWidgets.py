@@ -15,6 +15,7 @@ from siriushla.widgets import PyDMStateButton, SiriusLedState, \
     SiriusLedAlert, PyDMSpinboxScrollbar, PyDMLedMultiChannel, \
     SiriusEnumComboBox, SiriusLabel, SiriusSpinbox
 from .detail_widget.custom_widgets import LISpectIntlkLed
+from .PSDetailWindow import BBBNAME2IP
 
 
 Dipole = re.compile("^.*:PS-B.*$")
@@ -227,7 +228,9 @@ class SummaryWidget(QWidget):
         self._udc_name = ''
         if not self._is_pulsed and not self._is_linac and \
                 not self._is_regatron and not self._is_fofb:
-            self._bbb_name = PSSearch.conv_psname_2_bbbname(self._name)
+            bbb_name = PSSearch.conv_psname_2_bbbname(self._name)
+            bbb_ip = BBBNAME2IP[bbb_name]
+            self._bbb_name = f'{bbb_name}({bbb_ip})'
             self._udc_name = PSSearch.conv_psname_2_udc(self._name)
         self._has_opmode = not self._is_linac and not self._is_pulsed
         self._has_ctrlmode = not self._is_regatron and not self._is_linac\
