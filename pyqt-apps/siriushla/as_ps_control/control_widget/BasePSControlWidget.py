@@ -12,7 +12,7 @@ from pydm.connection_inspector import ConnectionInspector
 from siriuspy.search import PSSearch
 from siriuspy.namesys import SiriusPVName as PVName
 from siriushla.util import connect_window, connect_newprocess
-from ..PSDetailWindow import BBBNAME2IP, PSDetailWindow
+from ..PSDetailWindow import PSDetailWindow
 from ..SummaryWidgets import SummaryWidget, SummaryHeader, \
     get_prop2label, sort_propties
 
@@ -39,7 +39,7 @@ class PSContainer(QWidget):
             if self.dclinks_type != 'REGATRON_DCLink':
                 for dc in dclinks:
                     bbb_name = PSSearch.conv_psname_2_bbbname(dc)
-                    bbb_ip = BBBNAME2IP[bbb_name]
+                    bbb_ip = PSSearch.conv_bbbname_2_bbbip(bbb_name)
                     self.dclinksbbbname.add(f'{bbb_name}({bbb_ip})')
                     self.dclinksudcname.add(PSSearch.conv_psname_2_udc(dc))
             self.all_props = get_prop2label(PVName(dclinks[0]))

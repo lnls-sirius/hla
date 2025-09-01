@@ -3,8 +3,6 @@
 from qtpy.QtWidgets import QPushButton, QMenu, QAction
 import qtawesome as qta
 
-from siriuspy.util import read_text_data
-from siriuspy.clientweb import beaglebone_ip_list
 
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.search import PSSearch
@@ -12,9 +10,6 @@ from siriushla.util import connect_window, connect_newprocess, \
     get_appropriate_color
 from siriushla.widgets import SiriusMainWindow
 from .detail_widget.DetailWidgetFactory import DetailWidgetFactory
-
-_bbbiptext, _ = read_text_data(beaglebone_ip_list())
-BBBNAME2IP = {name: ip for name, ip in _bbbiptext}
 
 
 class PSDetailWindow(SiriusMainWindow):
