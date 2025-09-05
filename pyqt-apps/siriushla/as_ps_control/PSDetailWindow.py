@@ -2,6 +2,8 @@
 
 from qtpy.QtWidgets import QPushButton, QMenu, QAction
 import qtawesome as qta
+
+
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.search import PSSearch
 from siriushla.util import connect_window, connect_newprocess, \

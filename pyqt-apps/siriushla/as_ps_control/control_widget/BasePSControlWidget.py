@@ -38,7 +38,9 @@ class PSContainer(QWidget):
             self.dclinks_type = PSSearch.conv_psname_2_psmodel(dclinks[0])
             if self.dclinks_type != 'REGATRON_DCLink':
                 for dc in dclinks:
-                    self.dclinksbbbname.add(PSSearch.conv_psname_2_bbbname(dc))
+                    bbb_name = PSSearch.conv_psname_2_bbbname(dc)
+                    bbb_ip = PSSearch.conv_bbbname_2_bbbip(bbb_name)
+                    self.dclinksbbbname.add(f'{bbb_name}({bbb_ip})')
                     self.dclinksudcname.add(PSSearch.conv_psname_2_udc(dc))
             self.all_props = get_prop2label(PVName(dclinks[0]))
 
@@ -694,7 +696,7 @@ class BasePSControlWidget(QWidget):
         menu.addAction(self.turn_off_act)
         menu.addAction(self.set_current_sp_act)
         menu.addAction(self.reset_act)
-        if not self._dev_list[0].dev in ('FCH', 'FCV'):
+        if self._dev_list[0].dev not in ('FCH', 'FCV'):
             menu.addAction(self.ctrlloop_close_act)
             menu.addAction(self.ctrlloop_open_act)
             menu.addAction(self.set_slowref_act)
