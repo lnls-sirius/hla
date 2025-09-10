@@ -4232,7 +4232,7 @@ SEC_2_CHANNELS = {
                 'Diagnostics': {
                     'General': {
                         'Manual': ['Manual Interlock', 'RA-RaSIA01:RF-LLRF:IntlkManual'],
-                        'EndSw': ['End Switches', 'RA-RaSIA01:RF-LLRF:EndSwLogicInv'],
+                        'EndSw': ['End Switches Logic Inversion', 'RA-RaSIA01:RF-LLRF:EndSwLogicInv'],
                         'Delay': 'RA-RaSIA01:RF-LLRF:IntlkDly',
                         'HW': 'RA-RaSIA01:RF-LLRF:FDLHwTrig-Mon',
                         'Beam Inv': ['Logic Inv. LLRF Beam Trip', 'RA-RaSIA01:RF-LLRF:OrbitIntlkLogicInv'],
@@ -4318,7 +4318,7 @@ SEC_2_CHANNELS = {
                     '815': ['Ext LLRF 3', 'RA-RaSIA01:RF-LLRF:FIMLLRF3'],
                     '816 1': ['End Switch Up 1', 'RA-RaSIA01:RF-LLRF:FIMTunerHigh'],
                     '817 1': ['End Switch Down 1', 'RA-RaSIA01:RF-LLRF:FIMTunerLow'],
-                    '816 2': ['End Switch Up 2', 'RA-RaSIA01:RF-LLRF:FIMPLG2Up'],
+                    '816 2': ['Cryo Mod Intlk (End Switch Up 2)', 'RA-RaSIA01:RF-LLRF:FIMPLG2Up'],
                     '817 2': ['End Switch Down 2', 'RA-RaSIA01:RF-LLRF:FIMPLG2Down'],
                     '853': ['Quench Condition 1', 'RA-RaSIA01:RF-LLRF:FIMQuenchCond1'],
                     '857': ['E-Quench', 'RA-RaSIA01:RF-LLRF:FIMEQuench'],
@@ -4341,7 +4341,7 @@ SEC_2_CHANNELS = {
                 'Diagnostics': {
                     'General': {
                         'Manual': ['Manual Interlock', 'RA-RaSIB01:RF-LLRF:IntlkManual'],
-                        'EndSw': ['End Switches', 'RA-RaSIB01:RF-LLRF:EndSwLogicInv'],
+                        'EndSw': ['End Switches Logic Inversion', 'RA-RaSIB01:RF-LLRF:EndSwLogicInv'],
                         'Delay': 'RA-RaSIB01:RF-LLRF:IntlkDly',
                         'HW': 'RA-RaSIB01:RF-LLRF:FDLHwTrig-Mon',
                         'Beam Inv': ['Logic Inv. LLRF Beam Trip', 'RA-RaSIB01:RF-LLRF:OrbitIntlkLogicInv'],
@@ -4427,7 +4427,7 @@ SEC_2_CHANNELS = {
                     '815': ['Ext LLRF 3', 'RA-RaSIB01:RF-LLRF:FIMLLRF3'],
                     '816 1': ['End Switch Up 1', 'RA-RaSIB01:RF-LLRF:FIMTunerHigh'],
                     '817 1': ['End Switch Down 1', 'RA-RaSIB01:RF-LLRF:FIMTunerLow'],
-                    '816 2': ['End Switch Up 2', 'RA-RaSIB01:RF-LLRF:FIMPLG2Up'],
+                    '816 2': ['Cryo Mod Intlk (End Switch Up 2)', 'RA-RaSIB01:RF-LLRF:FIMPLG2Up'],
                     '817 2': ['End Switch Down 2', 'RA-RaSIB01:RF-LLRF:FIMPLG2Down'],
                     '853': ['Quench Condition 1', 'RA-RaSIB01:RF-LLRF:FIMQuenchCond1'],
                     '857': ['E-Quench', 'RA-RaSIB01:RF-LLRF:FIMEQuench'],

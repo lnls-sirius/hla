@@ -168,7 +168,7 @@ class AdvancedInterlockDetails(SiriusDialog):
             "    border-left: 2px solid gray;"
             "    border-bottom: 2px solid gray;"
             "    border-right: 2px solid gray;}")
-        
+
         tab1 = QWidget()
         tab1_layout = QGridLayout(tab1)
         tab1_layout.setAlignment(Qt.AlignTop)
@@ -188,7 +188,7 @@ class AdvancedInterlockDetails(SiriusDialog):
         tab1_layout.addWidget(SiriusSpinbox(
             self, rv_ch + '-SP'), 0, 1, alignment=Qt.AlignCenter)
         tab1_layout.addWidget(lb_rv, 0, 2, alignment=Qt.AlignCenter)
-        
+
         tab1_layout.addWidget(QLabel(
             'Delay'), 1, 0, alignment=Qt.AlignRight | Qt.AlignVCenter)
         tab1_layout.addWidget(SiriusSpinbox(
@@ -205,7 +205,7 @@ class AdvancedInterlockDetails(SiriusDialog):
         fw_ch = self.prefix+chs_dict['E-Quench']['Fw']
         lb_fw = SiriusLabel(self, fw_ch+'-RB')
         lb_fw.showUnits = True
-        lb_fw._keep_unit = True 
+        lb_fw._keep_unit = True
 
         dly_ch_e = self.prefix+chs_dict['E-Quench']['Dly']
         lb_dly_e = SiriusLabel(self, dly_ch_e+'-RB')
@@ -216,7 +216,7 @@ class AdvancedInterlockDetails(SiriusDialog):
         tab2_layout.addWidget(SiriusSpinbox(
             self, fw_ch+'-SP'), 0, 1, alignment=Qt.AlignCenter)
         tab2_layout.addWidget(lb_fw, 0, 2, alignment=Qt.AlignCenter)
-        
+
         tab2_layout.addWidget(QLabel(
             'Delay'), 1, 0, alignment=Qt.AlignRight | Qt.AlignVCenter)
         tab2_layout.addWidget(SiriusSpinbox(
@@ -237,21 +237,21 @@ class AdvancedInterlockDetails(SiriusDialog):
     def _genDiagLayout(self, chs_dict):
         lay = QGridLayout()
         lay.setAlignment(Qt.AlignTop)
-        lay.setSpacing(9)
+        lay.setSpacing(12)
 
         # Interlocks Delay
         lb_dly = SiriusLabel(self, self.prefix+chs_dict['Delay']+'-RB')
         lb_dly.showUnits = True
 
-        lay.addWidget(QLabel('Interlocks Delay'), 0, 0)
+        lay.addWidget(QLabel('Interlocks Delay'), 0, 0, alignment=Qt.AlignRight)
         lay.addWidget(SiriusSpinbox(
-            self, self.prefix+chs_dict['Delay']+'-SP'), 0, 1)
-        lay.addWidget(lb_dly, 0, 2)
+            self, self.prefix+chs_dict['Delay']+'-SP'), 0, 1, alignment=Qt.AlignLeft)
+        lay.addWidget(lb_dly, 0, 2, alignment=Qt.AlignLeft)
 
         # HW Interlock
-        lay.addWidget(QLabel('HW Interlock'), 1, 0)
+        lay.addWidget(QLabel('HW Interlock'), 1, 0, alignment=Qt.AlignRight)
         lay.addWidget(SiriusLedAlert(
-            self, self.prefix+chs_dict['HW']), 1, 2, alignment=Qt.AlignCenter)
+            self, self.prefix+chs_dict['HW']), 1, 2, alignment=Qt.AlignLeft)
 
         # Manual Interlock, End Switches and Logic Inversions
         keys = ['Manual', 'EndSw', 'Beam Inv',
@@ -259,16 +259,17 @@ class AdvancedInterlockDetails(SiriusDialog):
         row = 2
         column = 0
         for key in keys:
-            lay.addWidget(QLabel(chs_dict[key][0]), row, column)
+            lay.addWidget(QLabel(chs_dict[key][0]), row, column, alignment=Qt.AlignRight)
             lay.addWidget(PyDMStateButton(
-                self, self.prefix+chs_dict[key][1]+'-Sel'), row, column+1)
+                self, self.prefix+chs_dict[key][1]+'-Sel'), row, column+1, alignment=Qt.AlignLeft)
             lay.addWidget(SiriusLedState(
                 self, self.prefix+chs_dict[key][1]+'-Sts'),
-                row, column+2, alignment=Qt.AlignCenter)
+                row, column+2, alignment=Qt.AlignLeft)
             row += 1
             if row == 4:
                 row = 0
                 column += 3
+                lay.setColumnMinimumWidth(2, 130)
 
         return lay
 
