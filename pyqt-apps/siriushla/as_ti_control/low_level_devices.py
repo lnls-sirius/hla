@@ -11,6 +11,8 @@ from qtpy.QtWidgets import QLabel, QPushButton, QGroupBox, QVBoxLayout, \
 import qtawesome as qta
 from pydm.widgets import PyDMLineEdit, PyDMPushButton
 
+from siriushla import util
+
 from siriuspy.search import LLTimeSearch, HLTimeSearch
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.timesys import csdev as _cstime
@@ -25,6 +27,9 @@ from ..util import connect_window, get_appropriate_color
 
 from .base import BaseList, BaseWidget
 from .allowed_buckets import AllowedBucketsMatrix
+
+from siriushla.common.afc_board import utils
+from siriushla.common.afc_board.afc_settings import AFCAdvancedSettings
 
 
 # ###################### Event Generator ######################
@@ -1497,6 +1502,10 @@ class AFC(BaseWidget):
         stattab.addTab(self.status_wid, 'Status')
         self.info_wid = self._setup_info_wid()
         stattab.addTab(self.info_wid, 'Fw && IOC')
+
+        self.info_wid = self._softReset(1)
+        stattab.addTab(self.info_wid, 'AFC Details')
+
         self.my_layout.addWidget(stattab, 2, 0)
         stattab.setSizePolicy(QSzPol.Preferred, QSzPol.Maximum)
 
@@ -1914,6 +1923,86 @@ class AFC(BaseWidget):
             self.detail_wind.show()
         else:
             self.detail_wind.showNormal()
+
+    def _softReset(self, amc_number):
+        info_wid = QWidget(self)
+        info_lay = QGridLayout(info_wid)
+        info_lay.setHorizontalSpacing(30)
+
+        pv_list_fru = utils.AFCv3_1_PV_LIST['FRU']
+        pv_name = pv_list_fru['SoftRst']
+
+        head_lbl = QLabel(
+            '<h4>AFC Settings Details</h4>', self, alignment=Qt.AlignCenter)
+        head_lbl.setObjectName('head_lbl')
+        head_lbl.setStyleSheet('QLabel{border: none; background: transparent;}')
+
+        pbt = QPushButton(qta.icon('fa5s.ellipsis-v'), '', self)
+        pbt.setObjectName('pbt')
+        pbt.setStyleSheet(
+            '#pbt{min-width:25px; max-width:25px; icon-size:20px;}')
+        pbt.setDefault(False)
+        pbt.setAutoDefault(False)
+        Window = create_window_from_widget(
+            AFCAdvancedSettings, title='AFC Advanced Settings'
+        )
+        util.connect_window(
+            pbt, Window, parent=None, prefix=self.prefix, display=self.device
+        )
+
+        crate = utils.device2crate(self.device)
+        lbl = QLabel(f"{crate}", self, alignment=Qt.AlignCenter)
+        cmd_button = SiriusPushButton(
+            self, label='Reset', icon=qta.icon('mdi.restart'),
+            init_channel=f"{crate}:{utils.DIS}-AMC-{amc_number}:{pv_name}"
+            )
+        cmd_button.setObjectName('cmd_button')
+        cmd_button.setStyleSheet(
+            '#cmd_button{min-width:120px; max-width:120px; icon-size:20px;}')
+
+        lbl.setStyleSheet(
+            'QLabel{border: none; background: transparent;}'
+            )
+
+        proc = QWidget()
+        hlproc = QHBoxLayout(proc)
+        hlproc.setContentsMargins(0, 0, 0, 0)
+        hlproc.addWidget(pbt)
+        hlproc.addWidget(lbl)
+        gb = self._create_small_group('', info_wid, (head_lbl, proc))
+        info_lay.addWidget(gb, 0, 0)
+
+        sr_lbl = QLabel(
+            '<h4>Soft Reset</h4>', self, alignment=Qt.AlignCenter)
+        sr_lbl.setObjectName('sr_lbl')
+        sr_lbl.setStyleSheet('QLabel{border: none; background: transparent;}')
+
+        pv_name = pv_list_fru['SoftRstSts']
+
+        label_mon = SiriusLabel(
+            self, f"{crate}:{utils.DIS}-AMC-{amc_number}:{pv_name}",
+            alignment=Qt.AlignCenter)
+        label_mon.setStyleSheet(
+            'QLabel{border: none; background: transparent;}'
+            )
+
+        proc = QWidget()
+        hlproc = QHBoxLayout(proc)
+        hlproc.setContentsMargins(0, 0, 0, 0)
+        hlproc.addWidget(cmd_button)
+        hlproc.addWidget(label_mon)
+        gb = self._create_small_group('', info_wid, (sr_lbl, proc))
+        info_lay.addWidget(gb, 0, 1)
+
+        info_wid.setObjectName('widget')
+        info_wid.setStyleSheet(
+            '#widget{background-color: transparent;}'
+            'QLabel{border: 1px solid gray; min-height: 1.5em;}'
+            '#lbl_bpmname{border: 0px solid gray; min-height: 1.5em;}'
+            '#led_status{border: 1px solid gray; min-height: 1.5em;}'
+        )
+
+        return info_wid
 
 
 class _EVR_EVE(BaseWidget):

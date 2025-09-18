@@ -9,6 +9,7 @@ from siriushla.as_di_bpms.monit import MonitData
 from siriushla.as_di_bpms.trig_acq_config import BPMGENAcquisition, \
     BPMPMAcquisition, PBPMGENAcquisition, PBPMPMAcquisition
 from siriushla.si_ap_orbintlk import BPMOrbIntlkDetailWindow
+from siriushla.common.afc_board.afc_settings import AFCAdvancedSettings
 
 
 class BPMMain(BaseWidget):
@@ -45,6 +46,19 @@ class BPMMain(BaseWidget):
         self.layoutv.addWidget(grpbx)
         self.layoutv.addSpacing(20)
         self.layoutv.addStretch()
+
+        grbx = CustomGroupBox('AFC Details', self)
+        grbx_lay = QHBoxLayout(grbx)
+        grbx_lay.setSpacing(20)
+        pbt = QPushButton('AFC Settings')
+        pbt.setFixedSize(90, 23)
+        Window = create_window_from_widget(
+            AFCAdvancedSettings, title=self.bpm+': AFC Settings')
+        util.connect_window(
+            pbt, Window, parent=self, prefix=self.prefix, display=self.bpm)
+        grbx_lay.addWidget(pbt)
+        self.layoutv.addWidget(grbx)
+        self.layoutv.addSpacing(20)
 
         grpbx = CustomGroupBox('Triggered Acquisitions', self)
         hbl = QHBoxLayout(grpbx)
