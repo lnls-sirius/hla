@@ -22,7 +22,7 @@ from siriuspy.namesys import SiriusPVName
 from siriuspy.envars import VACA_PREFIX
 from siriuspy.search import PSSearch
 from siriuspy.pwrsupply.csdev import get_ps_propty_database, get_ps_modules, \
-    DEF_WFMSIZE_FBP, DEF_WFMSIZE_OTHERS, PS_LI_INTLK_THRS as _PS_LI_INTLK, \
+    DEF_WFMSIZE_FBP, DEF_WFMSIZE, PS_LI_INTLK_THRS as _PS_LI_INTLK, \
     ETypes as _PSet, get_ps_scopesourcemap
 from siriuspy.devices import PowerSupply
 
@@ -724,7 +724,7 @@ class PSDetailWidget(_BaseDetailWidget):
 
         if self._siggen is not None:
             self._siggen_nrpts = DEF_WFMSIZE_FBP if self._psmodel == 'FBP' \
-                else DEF_WFMSIZE_OTHERS
+                else DEF_WFMSIZE
             self._siggen_w = self._siggen.get_waveform(self._siggen_nrpts)
 
             self.curve_siggen = SiriusWaveformPlot()
