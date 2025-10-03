@@ -37,13 +37,13 @@ class IDFFWindow(SiriusMainWindow):
         super().__init__(parent)
         self.prefix = prefix or _VACA_PREFIX
         self.idname = _PVName(idname)
-        self._is_llidff = self.idname.dev.startswith(("IVU", "VPU"))
+        self._is_llidff = self.idname.dev.startswith(("IVU", "SIMUL", "VPU"))
         self._idffname = IDFFConst(idname).idffname
         self._idffdata = IDSearch.conv_idname_2_idff(self.idname)
         self.device = _PVName(self._idffname)
         self.dev_pref = _PVName(
             f"SI-{self.device.sub}:BS-IDFF-CHCV:"
-                if (self._is_llidff and self.idname.dev.startswith("IVU"))
+                if (self._is_llidff and self.idname.dev.startswith(("IVU", "SIMUL")))
             else f"SI-{self.device.sub}:BS-IDFF-CC:"
                 if (self._is_llidff and self.idname.dev.startswith("VPU"))
             else self.device.substitute(prefix=prefix))
@@ -64,6 +64,8 @@ class IDFFWindow(SiriusMainWindow):
         if self._is_llidff:
             corrs = []
             if self.idname.dev.startswith("IVU"):
+                corrs = ["CH1", "CH2", "CV1", "CV2"]
+            elif self.idname.dev.startswith("SIMUL"):
                 corrs = ["CH1", "CH2", "CV1", "CV2"]
             elif self.idname.dev.startswith("VPU"):
                 corrs = ["CC1-1", "CC2-1", "CC1-2", "CC2-2"]
