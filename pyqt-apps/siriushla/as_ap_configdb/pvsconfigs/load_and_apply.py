@@ -18,7 +18,7 @@ from siriushla.widgets.dialog import ReportDialog, ProgressDialog
 from .. import LoadConfigDialog
 from ..models import ConfigPVsTypeModel
 
-from .special_checks import SOFBSyncPSCheck
+from .special_checks import ApplyCheckSOFBSyncPS
 
 class SelectAndApplyPVsWidget(QWidget):
     """Select and Apply PVs widget."""
@@ -27,6 +27,7 @@ class SelectAndApplyPVsWidget(QWidget):
 
     def __init__(self, parent, client, wrapper=PyEpicsWrapper):
         super().__init__(parent=parent)
+        self._sofbsyncpscheck = SOFBSyncPSCheck()
         self._client = client
         self._wrapper = wrapper
         self._current_config = None
@@ -35,8 +36,6 @@ class SelectAndApplyPVsWidget(QWidget):
         self.logger.setLevel(logging.INFO)
 
         self.setupui()
-
-        self._sofbsyncpscheck = SOFBSyncPSCheck()
 
     def setupui(self):
         """Setup widget."""
@@ -105,6 +104,19 @@ class SelectAndApplyPVsWidget(QWidget):
             self.logger.warning(msg)
             QMessageBox.warning(self, 'Warning', msg)
             return
+
+        # special checks
+        msg = self._sofbsyncpscheck.check(set_pvs_tuple)
+        if msg:
+            self.logger.warning(msg)
+            dlg = QMessageBox(self)
+            dlg.setWindowTitle('Special Checks Warning')
+            dlg.setText(msg + 'How to proceed ?')
+            dlg.setStandardButtons(QMessageBox.Apply | QMessageBox.Cancel)
+            dlg.setIcon(QMessageBox.Question)
+            button = dlg.exec()
+            if button == QMessageBox.Cancel:
+                return
 
         # Create thread
         failed_items = []
