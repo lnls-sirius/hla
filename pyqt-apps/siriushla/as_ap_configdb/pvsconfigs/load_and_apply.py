@@ -18,6 +18,7 @@ from siriushla.widgets.dialog import ReportDialog, ProgressDialog
 from .. import LoadConfigDialog
 from ..models import ConfigPVsTypeModel
 
+from .special_checks import SOFBSyncPSCheck
 
 class SelectAndApplyPVsWidget(QWidget):
     """Select and Apply PVs widget."""
@@ -34,6 +35,8 @@ class SelectAndApplyPVsWidget(QWidget):
         self.logger.setLevel(logging.INFO)
 
         self.setupui()
+
+        self._sofbsyncpscheck = SOFBSyncPSCheck()
 
     def setupui(self):
         """Setup widget."""
