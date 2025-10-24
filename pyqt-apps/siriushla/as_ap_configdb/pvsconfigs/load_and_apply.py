@@ -27,7 +27,7 @@ class SelectAndApplyPVsWidget(QWidget):
 
     def __init__(self, parent, client, wrapper=PyEpicsWrapper):
         super().__init__(parent=parent)
-        self._sofbsyncpscheck = SOFBSyncPSCheck()
+        self._sofbsyncpscheck = ApplyCheckSOFBSyncPS()
         self._client = client
         self._wrapper = wrapper
         self._current_config = None
