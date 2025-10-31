@@ -327,9 +327,12 @@ class PVNameTree(QWidget):
             pass
         # Deal with LI LLRF PVs:
         if pvname.startswith('LA'):
-            dic_ = {'sec': 'LI', 'dis': 'RF', 'dev': 'LLRF'}
+            dic_ = {'sec': 'LI', 'dis': 'RF', 'dev': 'DLLRF'}
             for p in self._pnames:
-                key = dic_.get(p, 'DLLRF')
+                aux = 'BUN1' if 'BUN1' in pvname else \
+                    'KLY1' if 'KLY1' in pvname else \
+                    'KLY2' if 'KLY2' in pvname else 'DLLRF'
+                key = dic_.get(p, aux)
                 if key:
                     item_key = parent_key + key
                     # item = self._item_map.symbol(item_key)
@@ -408,7 +411,13 @@ class PVNameTree(QWidget):
                 ('RA-RaBO', 'RA-ToBO', 'RA-RF:PowerSensor')) else 'SI'
             dic_ = {'sec': sec, 'dis': 'RF', 'dev': 'LLRF'}
             for p in self._pnames:
-                key = dic_.get(p, 'LLRF')
+                if sec ==  'SI':
+                    if pvname.startswith(('RA-RaSIA', 'RA-ToSIA')):
+                        key = dic_.get(p, 'SIA')
+                    elif pvname.startswith(('RA-RaSIB', 'RA-ToSIB')):
+                        key = dic_.get(p, 'SIB')
+                else:
+                    key = dic_.get(p, 'LLRF')
                 if key:
                     item_key = parent_key + key
                     item = self._item_map[item_key] \
