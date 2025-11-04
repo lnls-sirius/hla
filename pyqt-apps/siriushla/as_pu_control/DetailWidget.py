@@ -57,6 +57,7 @@ class PUDetailWidget(QWidget):
         self._intlk5_mon_pv = self._pdev.substitute(propty='Intlk5-Mon')
         self._intlk6_mon_pv = self._pdev.substitute(propty='Intlk6-Mon')
         self._intlk7_mon_pv = self._pdev.substitute(propty='Intlk7-Mon')
+        self._intlk9_mon_pv = self._pdev.substitute(propty='Intlk9-Mon')
         self._intlk1_lbcte_pv = self._pdev.substitute(propty='Intlk1Label-Cte')
         self._intlk2_lbcte_pv = self._pdev.substitute(propty='Intlk2Label-Cte')
         self._intlk3_lbcte_pv = self._pdev.substitute(propty='Intlk3Label-Cte')
@@ -64,6 +65,7 @@ class PUDetailWidget(QWidget):
         self._intlk5_lbcte_pv = self._pdev.substitute(propty='Intlk5Label-Cte')
         self._intlk6_lbcte_pv = self._pdev.substitute(propty='Intlk6Label-Cte')
         self._intlk7_lbcte_pv = self._pdev.substitute(propty='Intlk7Label-Cte')
+        self._intlk9_lbcte_pv = self._pdev.substitute(propty='Intlk9Label-Cte')
         if 'Sept' not in self._devname:
             self._intlk8_mon_pv = self._pdev.substitute(propty='Intlk8-Mon')
             self._intlk8_lbcte_pv = \
@@ -132,9 +134,9 @@ class PUDetailWidget(QWidget):
 
     def _interlock_layout(self):
         interlock_layout = QGridLayout()
-
-        intlk_cnt = 8 if 'Sept' not in self._devname else 7
-        for i in range(intlk_cnt):
+        for i in range(9):
+            if (i+1 == 8) and 'Sept' in self._devname:
+                continue
             label = SiriusLabel(
                 self, getattr(self, '_intlk' + str(i+1) + '_lbcte_pv'))
             led = PyDMLed(
