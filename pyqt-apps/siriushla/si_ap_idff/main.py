@@ -526,4 +526,4 @@ class IDFFWindow(SiriusMainWindow):
         # 3 - add 'nrpts' and 'time_interval' parameters as edit widgets
         if not self._idffdev.ctrldev.loopstate:
             self._idffdev.rampup_corr_currents(
-                nrpts=50, time_interval=10, dry_run=True, use_ioc_tables=True)
+                nrpts=50, time_interval=10, dry_run=False, use_ioc_tables=True)
