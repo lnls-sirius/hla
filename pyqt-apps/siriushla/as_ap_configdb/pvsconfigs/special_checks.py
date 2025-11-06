@@ -1,7 +1,8 @@
 """Module for special checks."""
 
+from siriuspy.clientconfigdb.types.global_config import PVS_AS_PU, \
+    PVS_SI_PS_CH, PVS_SI_PS_CV
 from siriuspy.devices import InjCtrl, SOFB
-from siriuspy.search import PSSearch
 
 
 class ApplyCheckSOFBSyncPS:
@@ -9,17 +10,17 @@ class ApplyCheckSOFBSyncPS:
 
     def __init__(self):
         """."""
+        self.pvnames = self._create_list_of_relevant_pvnames()
         props2init = ('CorrSync-Sts',)
         self.sofb = SOFB(SOFB.DEVICES.SI, props2init=props2init)
         self.sofb.wait_for_connection(timeout=0.1)
-        self.corr_pvnames = self._create_list_of_relevant_pvnames()
 
     def check(self, set_pvs_tuple):
         """."""
         # check if set of selected PVs contains correctors' PVs.
         resp = ''
         config_pvnames = {tpl[0] for tpl in set_pvs_tuple}
-        collision = bool(set(config_pvnames) & set(self.corr_pvnames))
+        collision = bool(set(config_pvnames) & set(self.pvnames))
         if not collision:
             return resp
 
@@ -39,12 +40,10 @@ class ApplyCheckSOFBSyncPS:
 
     @staticmethod
     def _create_list_of_relevant_pvnames():
-        filters = {'sec': 'SI', 'sub': '.*(M|C).*', 'dev': 'C(H|V)'}
-        psnames = PSSearch.get_psnames(filters)
-        corr_pvnames = set()
-        corr_pvnames.update(psname + ':Current-SP' for psname in psnames)
-        corr_pvnames.update(psname + ':WfmOffset-SP' for psname in psnames)
-        return corr_pvnames
+        pvnames = set()
+        pvnames.update(tlp[0] for tlp in PVS_SI_PS_CH)
+        pvnames.update(tlp[0] for tlp in PVS_SI_PS_CV)
+        return pvnames
 
 
 class ReadCheckInjMode:
@@ -52,7 +51,9 @@ class ReadCheckInjMode:
 
     def __init__(self):
         """."""
+        self.pvnames = self._create_list_of_relevant_pvnames()
         self.props2init = (
+            'Mode-Sts',
             'TopUpBOInjKckrStandbyEnbl-Sts',
             'TopUpBOEjeKckrStandbyEnbl-Sts',
             'TopUpSIInjDpKckrStandbyEnbl-Sts',
@@ -67,22 +68,40 @@ class ReadCheckInjMode:
         self.injctrl = InjCtrl(props2init=self.props2init)
         self.injctrl.wait_for_connection(timeout=0.1)
 
-    def check(self):
+    def check(self, set_pvs_tuple):
         """."""
+        # check if set of selected PVs contains PU' PVs.
         resp = ''
+        config_pvnames = {tpl[0] for tpl in set_pvs_tuple}
+        collision = bool(set(config_pvnames) & set(self.pvnames))
+        if not collision:
+            return resp
 
+        # injctrl device not connected
         if not self.injctrl.connected:
             resp = (
                 'InjCtrl device not connected! '
-                'Make sure InjCtrl is configured not to operate with '
+                'Make sure InjCtrl is not configured to operate in TopUp with '
                 'PUs in Standby! '
             )
+
+        # not in TopUp mode
+        if self.injctrl.injmode_str != 'TopUp':
+            return resp
+
+        # PU in standby
         for prop in self.props2init:
             if self.injctrl[prop] != 0:
                 resp = (
-                    'InjCtrl is configured to operate '
+                    'InjCtrl is configured to operate in TopUp'
                     'with PUs in Standby! '
-                    'Please correct this before applying configuration! '
+                    'Please correct this before saving configuration! '
                 )
                 break
         return resp
+
+    @staticmethod
+    def _create_list_of_relevant_pvnames():
+        pvnames = set()
+        pvnames.update(tlp[0] for tlp in PVS_AS_PU)
+        return pvnames

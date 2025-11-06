@@ -106,17 +106,19 @@ class SelectAndApplyPVsWidget(QWidget):
             return
 
         # special checks
-        msg = self._sofbsyncpscheck.check(set_pvs_tuple)
-        if msg:
-            self.logger.warning(msg)
-            dlg = QMessageBox(self)
-            dlg.setWindowTitle('Special Checks Warning')
-            dlg.setText(msg + 'How to proceed ?')
-            dlg.setStandardButtons(QMessageBox.Apply | QMessageBox.Cancel)
-            dlg.setIcon(QMessageBox.Question)
-            button = dlg.exec()
-            if button == QMessageBox.Cancel:
-                return
+        config_type = self._current_config['config_type']
+        if config_type in ('global_config', ):
+            msg = self._sofbsyncpscheck.check(set_pvs_tuple)
+            if msg:
+                self.logger.warning(msg)
+                dlg = QMessageBox(self)
+                dlg.setWindowTitle('Special Checks Warning')
+                dlg.setText(msg + 'How to proceed ?')
+                dlg.setStandardButtons(QMessageBox.Apply | QMessageBox.Cancel)
+                dlg.setIcon(QMessageBox.Question)
+                button = dlg.exec()
+                if button == QMessageBox.Cancel:
+                    return
 
         # Create thread
         failed_items = []
