@@ -26,15 +26,14 @@ class ApplyCheckSOFBSyncPS:
 
         if not self.sofb.connected:
             resp = (
-                'SOFB device not connected! '
-                'Make sure SOFB is configured not to operate with correctors '
-                'in SlowRef mode! '
+                'SOFB device not connected!\n'
+                'Make sure SOFB is configured to operate '
+                'correctors in SlowRef!'
             )
         if self.sofb.synckicksts_str != 'Off':
             resp = (
-                'SOFB is configured not to operate '
-                'with correctors in SlowRef! '
-                'Please correct this before applying configuration! '
+                'SOFB is not configured to operate correctors in SlowRef!\n'
+                'Please correct this before applying configuration!'
             )
         return resp
 
@@ -80,9 +79,9 @@ class ReadCheckInjMode:
         # injctrl device not connected
         if not self.injctrl.connected:
             resp = (
-                'InjCtrl device not connected! '
-                'Make sure InjCtrl is not configured to operate in TopUp with '
-                'PUs in Standby! '
+                'InjCtrl device not connected!\n'
+                'Make sure InjCtrl is not configured to operate in \n'
+                'TopUp with PUs in Standby! '
             )
 
         # not in TopUp mode
