@@ -16,6 +16,7 @@ from siriushla.widgets.dialog import ReportDialog, ProgressDialog
 from ..models import ConfigPVsTypeModel, PVConfigurationTableModel
 from .. import SaveConfigDialog
 from .delegate import PVConfigurationDelegate
+from .special_checks import ReadCheckInjMode
 
 
 class _CustomTable(QTableView):
@@ -54,6 +55,7 @@ class ReadAndSaveConfig2ServerWindow(SiriusMainWindow):
     def __init__(self, client, wrapper=PyEpicsWrapper, parent=None):
         """Constructor."""
         super().__init__(parent)
+        self._injmodecheck = ReadCheckInjMode()
         self._client = client
         self._wrapper = wrapper
 
@@ -128,6 +130,22 @@ class ReadAndSaveConfig2ServerWindow(SiriusMainWindow):
     def _read(self):
         failed_items = []
         tbl_data = self._table.model().model_data
+
+        # special checks
+        config_type = self._type_cb.currentText()
+        if config_type in ('global_config', ):
+            msg = self._injmodecheck.check(tbl_data)
+            if msg:
+                self.logger.warning(msg)
+                dlg = QMessageBox(self)
+                dlg.setWindowTitle('Special Checks Warning')
+                dlg.setText(msg + 'How to proceed ?')
+                dlg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+                dlg.setIcon(QMessageBox.Question)
+                button = dlg.exec()
+                if button == QMessageBox.Cancel:
+                    return
+
         # Get PVs
         vp = _VACA_PREFIX
         pvs = {data[0]: i for i, data in enumerate(tbl_data)}
