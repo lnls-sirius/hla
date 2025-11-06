@@ -1,6 +1,7 @@
 """Module for special checks."""
 
-from siriuspy.devices import SOFB, InjCtrl
+from siriuspy.devices import InjCtrl, SOFB
+from siriuspy.search import PSSearch
 
 
 class ApplyCheckSOFBSyncPS:
@@ -11,13 +12,17 @@ class ApplyCheckSOFBSyncPS:
         props2init = ('CorrSync-Sts',)
         self.sofb = SOFB(SOFB.DEVICES.SI, props2init=props2init)
         self.sofb.wait_for_connection(timeout=0.1)
+        self.corr_pvnames = self._create_list_of_relevant_pvnames()
 
     def check(self, set_pvs_tuple):
         """."""
-        # NOTE: add filter to check if correctors setpoints are
-        # in set_pvs_tuple.
-        _ = set_pvs_tuple
+        # check if set of selected PVs contains correctors' PVs.
         resp = ''
+        config_pvnames = {tpl[0] for tpl in set_pvs_tuple}
+        collision = bool(set(config_pvnames) & set(self.corr_pvnames))
+        if not collision:
+            return resp
+
         if not self.sofb.connected:
             resp = (
                 'SOFB device not connected! '
@@ -31,6 +36,15 @@ class ApplyCheckSOFBSyncPS:
                 'Please correct this before applying configuration! '
             )
         return resp
+
+    @staticmethod
+    def _create_list_of_relevant_pvnames():
+        filters = {'sec': 'SI', 'sub': '.*(M|C).*', 'dev': 'C(H|V)'}
+        psnames = PSSearch.get_psnames(filters)
+        corr_pvnames = set()
+        corr_pvnames.update(psname + ':Current-SP' for psname in psnames)
+        corr_pvnames.update(psname + ':WfmOffset-SP' for psname in psnames)
+        return corr_pvnames
 
 
 class ReadCheckInjMode:
