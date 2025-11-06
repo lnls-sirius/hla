@@ -20,7 +20,7 @@ class ApplyCheckSOFBSyncPS:
         # check if set of selected PVs contains correctors' PVs.
         resp = ''
         config_pvnames = {tpl[0] for tpl in set_pvs_tuple}
-        collision = bool(set(config_pvnames) & set(self.pvnames))
+        collision = bool(config_pvnames & self.pvnames)
         if not collision:
             return resp
 
@@ -73,7 +73,7 @@ class ReadCheckInjMode:
         # check if set of selected PVs contains PU' PVs.
         resp = ''
         config_pvnames = {tpl[0] for tpl in set_pvs_tuple}
-        collision = bool(set(config_pvnames) & set(self.pvnames))
+        collision = bool(config_pvnames & self.pvnames)
         if not collision:
             return resp
 
