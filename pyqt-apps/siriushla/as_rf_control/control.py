@@ -273,6 +273,21 @@ class RFMainControl(SiriusMainWindow):
             lay.addWidget(self.led_tlsts, row, 1, alignment=Qt.AlignCenter)
             row += 1
 
+        # # RF Area
+        if self.section == 'SI':
+            self.ld_rfarea = QLabel('RF Area', self, alignment=Qt.AlignRight)
+            self.ld_rfarea.setStyleSheet('min-width: 6em')
+            lay.addWidget(self.ld_rfarea, row, 0, alignment=Qt.AlignVCenter)
+            row += 1
+
+            for key, chs_dict in self.chs['RF Area'].items():
+                ld_rfarea = QLabel(
+                    f'• {key}', alignment=Qt.AlignRight | Qt.AlignVCenter)
+                led_rfarea = SiriusLedAlert(self, self.prefix+chs_dict['Geral'])
+                lay.addWidget(ld_rfarea, row, 0)
+                lay.addWidget(led_rfarea, row, 1, alignment=Qt.AlignCenter)
+                row += 1
+
         # Reset
         self._ld_reset = QLabel('<h4>Reset</h4>', self, alignment=Qt.AlignLeft)
         lay.addWidget(self._ld_reset, row, 0, 1, 3)
@@ -1508,7 +1523,6 @@ class RFMainControl(SiriusMainWindow):
 
         # Room
         if self.section == 'SI':
-            # # Temperature
             self.temparea_wid = QWidget()
             lay_rfarea = QVBoxLayout(self.temparea_wid)
             lay_rfarea.setAlignment(Qt.AlignTop)
@@ -1518,12 +1532,37 @@ class RFMainControl(SiriusMainWindow):
             self.humidity_graphs = {}
             systems = ['A', 'B']
 
+            # # Temperature
             lb_temp_area = QLabel('<h4> Room Temperature [°C] </h4>', self)
             lay_rfarea.addWidget(lb_temp_area, alignment=Qt.AlignLeft)
 
+            row_t = 0
+
             for i in range(len(systems)):
+                lay_grid_temp = QGridLayout()
                 lb_temp_area_sys = QLabel(f'<h3> • {systems[i]} </h3>', self)
-                lay_rfarea.addWidget(lb_temp_area_sys, alignment=Qt.AlignLeft)
+                lay_grid_temp.addWidget(lb_temp_area_sys, row_t, 0, alignment=Qt.AlignLeft)
+
+                temp_rb = SiriusLabel(self, self.prefix+self.chs['RF Area'][f'{systems[i]}']['Temp'])
+                temp_rb.showUnits = True
+                temp_rb.precisionFromPV = False
+                temp_rb.precision = 1
+                temp_rb.setStyleSheet("""
+                    SiriusLabel {
+                        border: none;
+                    }
+                """)
+                lay_grid_temp.addWidget(temp_rb, row_t, 1, alignment=Qt.AlignLeft)
+
+                lay_grid_temp.addItem(QSpacerItem(
+                    200, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), row_t, 2)
+
+                led_rfarea = SiriusLedAlert(self, self.prefix+self.chs['RF Area'][f'{systems[i]}']['Geral'])
+                lay_grid_temp.addWidget(led_rfarea, row_t, 3, alignment=Qt.AlignRight)
+
+                row_t += 1
+
+                lay_rfarea.addLayout(lay_grid_temp)
 
                 graph = SiriusTimePlot(self)
                 graph.setObjectName(f'system_temp_{systems[i]}_graph')
@@ -1552,9 +1591,33 @@ class RFMainControl(SiriusMainWindow):
             lb_humidity_area = QLabel('<h4> Room Humidity [%] </h4>', self)
             lay_rfarea.addWidget(lb_humidity_area, alignment=Qt.AlignLeft)
 
+            row_h = 0
+
             for i in range(len(systems)):
+                lay_grid_hmdt = QGridLayout()
                 lb_humidity_area_sys = QLabel(f'<h3> • {systems[i]} </h3>', self)
-                lay_rfarea.addWidget(lb_humidity_area_sys, alignment=Qt.AlignLeft)
+                lay_grid_hmdt.addWidget(lb_humidity_area_sys, row_h, 0, alignment=Qt.AlignLeft)
+
+                hmdt_rb = SiriusLabel(self, self.prefix+self.chs['RF Area'][f'{systems[i]}']['Humidity'])
+                hmdt_rb.showUnits = True
+                hmdt_rb.precisionFromPV = False
+                hmdt_rb.precision = 1
+                hmdt_rb.setStyleSheet("""
+                    SiriusLabel {
+                        border: none;
+                    }
+                """)
+                unity_lb_hmdt = QLabel('%', self)
+
+                lay_grid_hmdt.addWidget(hmdt_rb, row_h, 1, alignment=Qt.AlignRight)
+                lay_grid_hmdt.addWidget(unity_lb_hmdt, row_h, 2, alignment=Qt.AlignLeft)
+
+                lay_grid_hmdt.addItem(QSpacerItem(
+                    300, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), row_h, 3)
+
+                row_h += 1
+
+                lay_rfarea.addLayout(lay_grid_hmdt)
 
                 graph = SiriusTimePlot(self)
                 graph.setObjectName(f'system_temp_{systems[i]}_graph')
