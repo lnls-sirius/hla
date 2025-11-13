@@ -1911,6 +1911,18 @@ SEC_2_CHANNELS = {
                 'Circ Limits': (19.0, 23.0),
             }
         },
+        'RF Area': {
+            'A': {
+                'Geral': 'RA-RaSIA02:RF-THSensor:TempUp-Mon',
+                'Temp': 'RA-RaSIA02:RF-THSensor:Temp-Mon',
+                'Humidity': 'RA-RaSIA02:RF-THSensor:Humidity-Mon',
+            },
+            'B': {
+                'Geral': 'RA-RaSIB02:RF-THSensor:TempUp-Mon',
+                'Temp': 'RA-RaSIB02:RF-THSensor:Temp-Mon',
+                'Humidity': 'RA-RaSIB02:RF-THSensor:Humidity-Mon',
+            },
+        },
         'SSA': {
             '1': {
                 'Name': 'SSA 01',
@@ -2073,6 +2085,9 @@ SEC_2_CHANNELS = {
                     'RA-ToSIA0$(NB):RF-SSAmpTower:HwPwrRevOut-Mon',
                     'RA-ToSIA0$(NB):RF-SSAmpTower:PwrRevOutSts-Mon'
                 ],
+                'Out Temp': {
+                    'Temp': 'RA-ToSIA0$(NB):RF-SSAmpTower:OutT-Mon',
+                },
                 'Alerts': {
                     'PhsFlt': ['Phase Fault', 'RA-ToSIA0$(NB):RF-ACPanel:PhsFlt-Mon'],
                     'SSAFlwRt': ['SSA Rotameter Flow', 'RA-ToSIA0$(NB):RF-SSAmpTower:HdFlwRt-Mon'],
@@ -2127,6 +2142,9 @@ SEC_2_CHANNELS = {
                     'RA-ToSIB0$(NB):RF-SSAmpTower:HwPwrRevOut-Mon',
                     'RA-ToSIB0$(NB):RF-SSAmpTower:PwrRevOutSts-Mon'
                 ],
+                'Out Temp': {
+                    'Temp': 'RA-ToSIB0$(NB):RF-SSAmpTower:OutT-Mon',
+                },
                 'Alerts': {
                     'PhsFlt': ['Phase Fault', 'RA-ToSIB0$(NB):RF-ACPanel:PhsFlt-Mon'],
                     'SSAFlwRt': ['SSA Rotameter Flow', 'RA-ToSIB0$(NB):RF-SSAmpTower:HdFlwRt-Mon'],
@@ -4943,16 +4961,6 @@ SEC_2_CHANNELS = {
                     'P': 'RA-ToSIB0$(NB):RF-ACPanel:PwrP-Mon',
                     'Q': 'RA-ToSIB0$(NB):RF-ACPanel:PwrQ-Mon'
                 }
-            },
-        },
-        'RF Area': {
-            'A': {
-                'Temp': 'RA-RaSIA02:RF-THSensor:Temp-Mon',
-                'Humidity': 'RA-RaSIA02:RF-THSensor:Humidity-Mon',
-            },
-            'B': {
-                'Temp': 'RA-RaSIB02:RF-THSensor:Temp-Mon',
-                'Humidity': 'RA-RaSIB02:RF-THSensor:Humidity-Mon',
             },
         },
     },
