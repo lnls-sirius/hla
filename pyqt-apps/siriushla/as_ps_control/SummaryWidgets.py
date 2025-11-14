@@ -469,6 +469,8 @@ class SummaryWidget(QWidget):
                 self._intlk.extend([
                     self._prefixed_name.substitute(propty=f'Intlk{i}-Mon')
                     for i in range(1, 8)])
+                self._intlk.append(self._prefixed_name.substitute(
+                    propty='Intlk9-Mon'))
                 if 'Sept' not in self._name.dev:
                     self._intlk.append(self._prefixed_name.substitute(
                         propty='Intlk8-Mon'))
