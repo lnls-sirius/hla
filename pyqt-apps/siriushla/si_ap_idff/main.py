@@ -12,7 +12,7 @@ import qtawesome as qta
 
 from pydm.widgets import PyDMPushButton
 
-from siriuspy.devices import IDFF
+from siriuspy.devices import IDFF, IDFFCtrl, IDFFCtrlSoft
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.search import IDSearch
@@ -510,7 +510,13 @@ class IDFFWindow(SiriusMainWindow):
         return gbox
 
     def _create_idffdev(self):
-        props2init_ctrl = ('Table-RB',)
+        idffclass = IDFFCtrl.get_idffclass(self._idffname)
+        props2init_ctrl = ('LoopState-Sts', )
+        # PVNames to initialize depend whether a soft or hard IDFF
+        if issubclass(idffclass, IDFFCtrlSoft):
+            props2init_ctrl += ('ConfigName-RB',)
+        else:
+            props2init_ctrl += ('Table-RB',)
         props2init_corrs = ('Current-Mon', 'Current-SP',)
         idffdev = IDFF(
             self._idffname,
@@ -524,6 +530,18 @@ class IDFFWindow(SiriusMainWindow):
         # 1 - implement this ramp as a separate thread
         # 2 - add a time icon to indicate when this therad is running
         # 3 - add 'nrpts' and 'time_interval' parameters as edit widgets
-        if not self._idffdev.ctrldev.loopstate:
+        devctrl = self._idffdev.ctrldev
+        if not devctrl.loopstate:
+            # if softidff first must guarantee a config is loaded
+            # from clientconfig
+            is_soft = isinstance(devctrl, IDFFCtrlSoft)
+            if is_soft:
+                configname = devctrl.configname
+                if configname != self._idffdev.idffconfig.name:
+                    self._idffdev.load_config(configname)
+            # run correctors' ramp
             self._idffdev.rampup_corr_currents(
-                nrpts=50, time_interval=10, dry_run=False, use_ioc_tables=True)
+                nrpts=50, time_interval=10, dry_run=False)
+        else:
+            # NOTE: lauunch a popup warning window...
+            pass
