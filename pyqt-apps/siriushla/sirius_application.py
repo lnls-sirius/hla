@@ -5,6 +5,7 @@ import time
 import traceback
 import logging as _log
 from io import StringIO
+from pathlib import Path
 from qtpy.QtWidgets import QMessageBox
 from pydm import PyDMApplication, data_plugins
 
@@ -14,7 +15,12 @@ from .util import get_window_id, set_style
 os.umask(0)
 
 # Create log file
-LOGFILE = '/tmp/sirius-hla.log'
+LOGDIR = os.path.join(os.path.expanduser('~'), '.local', 'state', 'hla')
+if not os.path.isdir(LOGDIR):
+    os.makedirs(LOGDIR, exist_ok=True)
+
+LOGFILE = os.path.join(LOGDIR, 'sirius-hla.log')
+
 try:
     open(LOGFILE, 'a').close()
     os.chmod(LOGFILE, 0o666)
