@@ -5,7 +5,6 @@ import time
 import traceback
 import logging as _log
 from io import StringIO
-from pathlib import Path
 from qtpy.QtWidgets import QMessageBox
 from pydm import PyDMApplication, data_plugins
 
