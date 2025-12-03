@@ -462,7 +462,7 @@ def get_object(ismenubar=True, parent=None):
                 All, ['sirius-hla-si-id-control.py', '-isall'])
             self.add_object_to_level1(menu, All)
 
-            idlist = ['SI-06SB:ID-VPU29', 'SI-07SP:ID-APU22',
+            idlist = ['SI-06SB:ID-VPU29', 'SI-07SP:ID-VPU29',
                       'SI-08SB:ID-IVU18', 'SI-09SA:ID-APU22',
                       'SI-10SB:ID-DELTA52', 'SI-11SP:ID-APU58',
                       'SI-14SB:ID-IVU18', 'SI-17SA:ID-APU22']

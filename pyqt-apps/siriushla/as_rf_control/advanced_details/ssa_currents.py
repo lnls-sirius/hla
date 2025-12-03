@@ -181,12 +181,36 @@ class SSACurrentsDetails(SiriusDialog):
 
                 lb_a_1 = SiriusLabel(self, pv_a_1)
                 lb_a_1.showUnits = True
+                lb_a_1.precisionFromPV = False
+                lb_a_1.precision = 2
+                lb_a_1.setStyleSheet("""
+                    background: #349ae3;
+                    """)
+
                 lb_a_2 = SiriusLabel(self, pv_a_2)
                 lb_a_2.showUnits = True
+                lb_a_2.precisionFromPV = False
+                lb_a_2.precision = 2
+                lb_a_2.setStyleSheet("""
+                    background: #349ae3;
+                    """)
+
                 lb_b_1 = SiriusLabel(self, pv_b_1)
                 lb_b_1.showUnits = True
+                lb_b_1.precisionFromPV = False
+                lb_b_1.precision = 2
+                lb_b_1.setStyleSheet("""
+                    background: #349ae3;
+                    """)
+
                 lb_b_2 = SiriusLabel(self, pv_b_2)
                 lb_b_2.showUnits = True
+                lb_b_2.precisionFromPV = False
+                lb_b_2.precision = 2
+                lb_b_2.setStyleSheet("""
+                    background: #349ae3;
+                    """)
+
 
                 if row_label == 'left':
                     lay.addWidget(QLabel(
@@ -220,7 +244,7 @@ class SSACurrentsDetails(SiriusDialog):
                 0, 1, 1, 2)
 
             # Currents
-            for i in range(1, 17):
+            for i in range(1, 18):
                 if i < 10:
                     m_num = f'0{i}'
                 else:
@@ -237,10 +261,21 @@ class SSACurrentsDetails(SiriusDialog):
                     self.curr_pvs[hs_num].append(pv_curr_1)
                     self.curr_pvs[hs_num].append(pv_curr_2)
 
-                lb_curr_1 = SiriusLabel(self, pv_curr_1)
+                if (hs_num, m_num) in [(1, '01'), (3, 17), (4, '01'), (6, 17)]:
+                    lb_curr_1 = QLabel('Pre Amp.', alignment=Qt.AlignCenter)
+                    lb_curr_2 = QLabel('Pre Amp.', alignment=Qt.AlignCenter)
+
+                elif (hs_num, m_num) in [(2, '01'), (5, '01')]:
+                    lb_curr_1 = QLabel('Not in use', alignment=Qt.AlignCenter)
+                    lb_curr_2 = QLabel('Not in use', alignment=Qt.AlignCenter)
+
+                else:
+                    lb_curr_1 = SiriusLabel(self, pv_curr_1)
+                    lb_curr_2 = SiriusLabel(self, pv_curr_2)
+
                 lb_curr_1.showUnits = True
                 lb_curr_1.setStyleSheet('SiriusLabel{min-width:4.5em;}')
-                lb_curr_2 = SiriusLabel(self, pv_curr_2)
+
                 lb_curr_2.showUnits = True
                 lb_curr_2.setStyleSheet('SiriusLabel{min-width:4.5em;}')
 
@@ -283,16 +318,20 @@ class SSACurrentsDetails(SiriusDialog):
         column = 0
         if self.section == 'SI':
             # Heat Sinks
-            for i in range(2, 9, 2):
+            for i in range(1, 9):
                 label = QLabel(
                     f'<h4>Heat Sink {i}</h4>', alignment=Qt.AlignCenter)
                 label.setStyleSheet("min-width:6em;")
                 lb_1 = SiriusLabel(self, self._substitute_macros(
                     self.prefix+chs_dict['HS'], i, curr_num='1'))
                 lb_1.showUnits = True
+                lb_1.precisionFromPV = False
+                lb_1.precision = 2
                 lb_2 = SiriusLabel(self, self._substitute_macros(
                     self.prefix+chs_dict['HS'], i, curr_num='2'))
                 lb_2.showUnits = True
+                lb_2.precisionFromPV = False
+                lb_2.precision = 2
 
                 lay.addWidget(label, row, column)
                 lay.addWidget(lb_1, row+1, column)
@@ -302,19 +341,6 @@ class SSACurrentsDetails(SiriusDialog):
                 if column > 1:
                     row += 3
                     column = 0
-
-            # Pre Amp
-            label = QLabel('<h4>PreAmp</h4>', alignment=Qt.AlignCenter)
-            lb_1 = SiriusLabel(self, self._substitute_macros(
-                self.prefix+chs_dict['PreAmp'], curr_num='1'))
-            lb_1.showUnits = True
-            lb_2 = SiriusLabel(self, self._substitute_macros(
-                self.prefix+chs_dict['PreAmp'], curr_num='2'))
-            lb_2.showUnits = True
-
-            lay.addWidget(label, row, 0, 1, 2)
-            lay.addWidget(lb_1, row+1, 0, 1, 2)
-            lay.addWidget(lb_2, row+2, 0, 1, 2)
 
         else:
             # Heat Sinks

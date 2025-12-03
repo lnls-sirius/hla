@@ -32,6 +32,7 @@ class MachShiftLabel(QWidget):
             SiriusFrame.DarkGray,  # Shutdown
             SiriusFrame.MediumBlue,  # MachineStartup
             SiriusFrame.LightSalmon,  # BeamlineCommissioning
+            SiriusFrame.DarkGray,  # Unattended
         ]
         self.frame = SiriusFrame(
             self, pvname,

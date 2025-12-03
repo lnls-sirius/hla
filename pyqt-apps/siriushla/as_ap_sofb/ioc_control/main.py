@@ -220,49 +220,55 @@ class SOFBControl(BaseWidget):
         gdl = QGridLayout(wid)
         gdl.setAlignment(Qt.AlignTop)
 
-        headers = [
-            'Description', 'Setpoint', 'Status', 'Monitor', '%']
-        for col, text in enumerate(headers):
-            lbl = QLabel(text, wid, alignment=Qt.AlignHCenter)
-            lbl.setStyleSheet('QLabel{max-height: 1.2em;}')
-            gdl.addWidget(lbl, 0, col+1)
+        prp = 'FOFBDownloadKicks'
+        lbl = QLabel('Download Kicks', wid, alignment=Qt.AlignCenter)
+        lb1 = QLabel('State', wid)
+        lb2 = QLabel('Percent [%]', wid)
+        spt = PyDMStateButton(wid, self.devpref.substitute(propty=prp+'-Sel'))
+        rdb = SiriusLedState(wid, self.devpref.substitute(propty=prp+'-Sts'))
+        mon = SiriusLedState(wid, self.devpref.substitute(propty=prp+'-Mon'))
+        sb2 = SiriusSpinbox(wid, self.devpref.substitute(propty=prp+'Perc-SP'))
+        rb2 = SiriusLabel(wid, self.devpref.substitute(propty=prp+'Perc-RB'))
+        rb2.showUnits = False
+        gdl.addWidget(lbl, 0, 0, 1, 4, alignment=Qt.AlignCenter)
+        gdl.addWidget(lb1, 1, 0)
+        gdl.addWidget(spt, 1, 1)
+        gdl.addWidget(rdb, 1, 2)
+        gdl.addWidget(mon, 1, 3)
+        gdl.addWidget(lb2, 2, 0)
+        gdl.addWidget(sb2, 2, 1)
+        gdl.addWidget(rb2, 2, 2, 1, 2)
 
-        props = [
-            'FOFBDownloadKicks', 'FOFBUpdateRefOrb',
-            'FOFBNullSpaceProj', 'FOFBZeroDistortionAtBPMs']
-        desc = [
-            'Download Kicks', 'Update RefOrb',
-            'Project in Kernel', 'Zero Distortion']
-        vislist = list()
-        for i, (prop, des) in enumerate(zip(props, desc)):
-            lbl = QLabel(des, wid)
-            spt = PyDMStateButton(
-                wid, self.devpref.substitute(propty=prop+'-Sel'))
-            rdb = SiriusLedState(
-                wid, self.devpref.substitute(propty=prop+'-Sts'))
-            mon = SiriusLedState(
-                wid, self.devpref.substitute(propty=prop+'-Mon'))
-            wids = [lbl, spt, rdb, mon]
-            gdl.addWidget(lbl, i+1, 0, 1, 2)
-            gdl.addWidget(spt, i+1, 2)
-            gdl.addWidget(rdb, i+1, 3)
-            gdl.addWidget(mon, i+1, 4)
-            if prop in ['FOFBDownloadKicks', 'FOFBUpdateRefOrb']:
-                sbp = SiriusSpinbox(
-                    wid, self.devpref.substitute(propty=prop+'Perc-SP'))
-                rbp = SiriusLabel(
-                    wid, self.devpref.substitute(propty=prop+'Perc-RB'))
-                rbp.showUnits = False
-                gdl2 = QGridLayout()
-                gdl2.setContentsMargins(0, 0, 0, 0)
-                gdl2.addWidget(sbp, 0, 0)
-                gdl2.addWidget(rbp, 1, 0)
-                gdl.addLayout(gdl2, i+1, 5)
-                wids.extend([sbp, rbp])
-            if prop != 'FOFBDownloadKicks':
-                vislist.extend(wids)
-                for w in wids:
-                    w.setVisible(False)
+        gdl.setRowStretch(3, 2)
+
+        prp = 'FOFBUpdateRefOrb'
+        lbl = QLabel('Update RefOrb', wid, alignment=Qt.AlignCenter)
+        lb1 = QLabel('State', wid)
+        lb2 = QLabel('Percent [%]', wid)
+        lb3 = QLabel('Rate [loop iters]', wid)
+        spt = PyDMStateButton(wid, self.devpref.substitute(propty=prp+'-Sel'))
+        rdb = SiriusLedState(wid, self.devpref.substitute(propty=prp+'-Sts'))
+        mon = SiriusLedState(wid, self.devpref.substitute(propty=prp+'-Mon'))
+        sb2 = SiriusSpinbox(wid, self.devpref.substitute(propty=prp+'Perc-SP'))
+        rb2 = SiriusLabel(wid, self.devpref.substitute(propty=prp+'Perc-RB'))
+        sb3 = SiriusSpinbox(wid, self.devpref.substitute(propty=prp+'Rate-SP'))
+        rb3 = SiriusLabel(wid, self.devpref.substitute(propty=prp+'Rate-RB'))
+        rb2.showUnits = False
+        rb3.showUnits = False
+        gdl.addWidget(lbl, 4, 0, 1, 4, alignment=Qt.AlignCenter)
+        gdl.addWidget(lb1, 5, 0)
+        gdl.addWidget(spt, 5, 1)
+        gdl.addWidget(rdb, 5, 2)
+        gdl.addWidget(mon, 5, 3)
+        gdl.addWidget(lb2, 6, 0)
+        gdl.addWidget(sb2, 6, 1)
+        gdl.addWidget(rb2, 6, 2, 1, 2)
+        gdl.addWidget(lb3, 7, 0)
+        gdl.addWidget(sb3, 7, 1)
+        gdl.addWidget(rb3, 7, 2, 1, 2)
+        vislist = [lbl, spt, rdb, mon, lb1, lb2, lb3, sb2, rb2, sb3, rb3]
+        for w in vislist:
+            w.setVisible(False)
 
         btmore = QPushButton(qta.icon('fa5s.angle-down'), '', self)
         btmore.setToolTip('Show advanced SOFB <-> FOFB interaction options')

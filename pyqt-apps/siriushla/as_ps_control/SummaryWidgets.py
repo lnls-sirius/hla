@@ -119,7 +119,7 @@ def get_prop2width(psname):
             'strength_rb': 6,
             'strength_mon': 8})
     if psmodel == 'FBP':
-        dic.update({'sofbmode': 6})
+        dic.update({'idffmode': 6})
     if psname.dis == 'PU':
         dic.update({'pulse': 8})
     if HasTrim.match(psname):
@@ -175,7 +175,7 @@ def get_prop2label(psname):
             'strength_rb': strength + '-RB',
             'strength_mon': strength + '-Mon'})
     if psmodel == 'FBP':
-        dic.update({'sofbmode': 'SOFBMode'})
+        dic.update({'idffmode': 'IDFFMode'})
     if psname.dis == 'PU':
         dic.update({'pulse': 'Pulse'})
     if HasTrim.match(psname):
@@ -187,7 +187,7 @@ def sort_propties(labels):
     default_order = (
         'detail', 'bbb', 'udc', 'opmode', 'ctrlmode', 'state', 'pulse',
         'intlk', 'alarm', 'reset', 'conn', 'ctrlloop', 'wfmupdate',
-        'updparms', 'sofbmode', 'accgain', 'accfreeze', 'accclear',
+        'updparms', 'idffmode', 'accgain', 'accfreeze', 'accclear',
         'setpoint', 'readback', 'monitor', 'strength_sp',
         'strength_rb', 'strength_mon', 'trim')
     idcs = list()
@@ -227,7 +227,9 @@ class SummaryWidget(QWidget):
         self._udc_name = ''
         if not self._is_pulsed and not self._is_linac and \
                 not self._is_regatron and not self._is_fofb:
-            self._bbb_name = PSSearch.conv_psname_2_bbbname(self._name)
+            bbb_name = PSSearch.conv_psname_2_bbbname(self._name)
+            bbb_ip = PSSearch.conv_bbbname_2_bbbip(bbb_name)
+            self._bbb_name = f'{bbb_name}\n{bbb_ip}'
             self._udc_name = PSSearch.conv_psname_2_udc(self._name)
         self._has_opmode = not self._is_linac and not self._is_pulsed
         self._has_ctrlmode = not self._is_regatron and not self._is_linac\
@@ -240,7 +242,7 @@ class SummaryWidget(QWidget):
             and not self._is_regatron and not self._is_fofb
         self._has_parmupdt = not self._is_linac and not self._is_regatron\
             and not self._is_fofb
-        self._has_sofbmode = self._is_fbp
+        self._has_idffmode = self._is_fbp
         self._has_wfmupdt = self._has_parmupdt and not self._is_dclink
         self._has_analsp = not self._is_reg_slave
         self._has_analrb = not self._is_regatron
@@ -343,10 +345,10 @@ class SummaryWidget(QWidget):
             self._widgets_dict['updparms'] = self.updparms_wid
             lay.addWidget(self.updparms_wid)
 
-        if self._has_sofbmode:
-            self.sofbmode_wid = self._build_widget(name='sofbmode')
-            self._widgets_dict['sofbmode'] = self.sofbmode_wid
-            lay.addWidget(self.sofbmode_wid)
+        if self._has_idffmode:
+            self.idffmode_wid = self._build_widget(name='idffmode')
+            self._widgets_dict['idffmode'] = self.idffmode_wid
+            lay.addWidget(self.idffmode_wid)
 
         if self._is_fofb:
             self.accgain_wid = self._build_widget(
@@ -520,11 +522,11 @@ class SummaryWidget(QWidget):
             self._updparms_cmd = self._prefixed_name.substitute(
                 propty='ParamUpdate-Cmd')
 
-        if self._has_sofbmode:
-            self._sofbmode_sel = self._prefixed_name.substitute(
-                propty='SOFBMode-Sel')
-            self._sofbmode_sts = self._prefixed_name.substitute(
-                propty='SOFBMode-Sts')
+        if self._has_idffmode:
+            self._idffmode_sel = self._prefixed_name.substitute(
+                propty='IDFFMode-Sel')
+            self._idffmode_sts = self._prefixed_name.substitute(
+                propty='IDFFMode-Sts')
 
         if self._is_fofb:
             self._accgain_sp = self._prefixed_name.substitute(
@@ -677,11 +679,11 @@ class SummaryWidget(QWidget):
             self.updparms_bt.setStyleSheet(
                 '#updparms_bt{min-width:25px;max-width:25px;icon-size:20px;}')
             self.updparms_wid.layout().addWidget(self.updparms_bt)
-        elif name == 'sofbmode' and self._has_sofbmode:
-            self.sofbmode_bt = PyDMStateButton(self, self._sofbmode_sel)
-            self.sofbmode_led = SiriusLedState(self, self._sofbmode_sts)
-            self.sofbmode_wid.layout().addWidget(self.sofbmode_bt)
-            self.sofbmode_wid.layout().addWidget(self.sofbmode_led)
+        elif name == 'idffmode' and self._has_idffmode:
+            self.idffmode_bt = PyDMStateButton(self, self._idffmode_sel)
+            self.idffmode_led = SiriusLedState(self, self._idffmode_sts)
+            self.idffmode_wid.layout().addWidget(self.idffmode_bt)
+            self.idffmode_wid.layout().addWidget(self.idffmode_led)
         elif name == 'accgain' and self._is_fofb:
             self.accgain_sp = SiriusSpinbox(self, self._accgain_sp)
             self.accgain_sp.precisionFromPV = False
@@ -829,19 +831,19 @@ class SummaryWidget(QWidget):
             if self.updparms_bt.isEnabled():
                 self.updparms_bt.sendValue()
 
-    def sofbmode_on(self):
-        """Turn SOFBMode on."""
-        if hasattr(self, 'sofbmode_bt'):
-            if self.sofbmode_bt.isEnabled():
-                if not self.sofbmode_bt.value:
-                    self.sofbmode_bt.send_value()
+    def idffmode_on(self):
+        """Turn IDFFMode on."""
+        if hasattr(self, 'idffmode_bt'):
+            if self.idffmode_bt.isEnabled():
+                if not self.idffmode_bt.value:
+                    self.idffmode_bt.send_value()
 
-    def sofbmode_off(self):
-        """Turn SOFBMode off."""
-        if hasattr(self, 'sofbmode_bt'):
-            if self.sofbmode_bt.isEnabled():
-                if self.sofbmode_bt.value:
-                    self.sofbmode_bt.send_value()
+    def idffmode_off(self):
+        """Turn IDFFMode off."""
+        if hasattr(self, 'idffmode_bt'):
+            if self.idffmode_bt.isEnabled():
+                if self.idffmode_bt.value:
+                    self.idffmode_bt.send_value()
 
     def set_accfreeze_frozen(self):
         """Set power supply AccFreeze to frozen."""

@@ -124,6 +124,19 @@ class SSADetailsSI(SiriusDialog):
                 row_general, 3, alignment=Qt.AlignCenter)
             row_general += 1
 
+        # Out Temp
+        lb_out_temp = SiriusLabel(
+            self, self._substitute_pv_macros(
+                self.prefix+self.syst_dict['Out Temp']['Temp']))
+        lb_out_temp.showUnits = True
+        lb_out_temp.precisionFromPV = False
+        lb_out_temp.precision = 2
+        lay.addWidget(QLabel('Out Temperature', alignment=Qt.AlignRight), row_general, 0)
+        lay.addWidget(lb_out_temp, row_general, 1)
+        lay.addWidget(QLabel('-', alignment=Qt.AlignCenter), row_general, 2)
+        lay.addWidget(QLabel('-', alignment=Qt.AlignCenter), row_general, 3)
+        row_general += 1
+
         # Currents
         buttons_lay = QHBoxLayout()
         pb_curr = QPushButton(

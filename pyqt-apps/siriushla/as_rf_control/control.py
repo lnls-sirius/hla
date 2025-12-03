@@ -273,6 +273,21 @@ class RFMainControl(SiriusMainWindow):
             lay.addWidget(self.led_tlsts, row, 1, alignment=Qt.AlignCenter)
             row += 1
 
+        # # RF Area
+        if self.section == 'SI':
+            self.ld_rfarea = QLabel('RF Area', self, alignment=Qt.AlignRight)
+            self.ld_rfarea.setStyleSheet('min-width: 6em')
+            lay.addWidget(self.ld_rfarea, row, 0, alignment=Qt.AlignVCenter)
+            row += 1
+
+            for key, chs_dict in self.chs['RF Area'].items():
+                ld_rfarea = QLabel(
+                    f'• {key}', alignment=Qt.AlignRight | Qt.AlignVCenter)
+                led_rfarea = SiriusLedAlert(self, self.prefix+chs_dict['Geral'])
+                lay.addWidget(ld_rfarea, row, 0)
+                lay.addWidget(led_rfarea, row, 1, alignment=Qt.AlignCenter)
+                row += 1
+
         # Reset
         self._ld_reset = QLabel('<h4>Reset</h4>', self, alignment=Qt.AlignLeft)
         lay.addWidget(self._ld_reset, row, 0, 1, 3)
@@ -1237,12 +1252,23 @@ class RFMainControl(SiriusMainWindow):
                 self.curves[name+' dBm'].setVisible(False)
                 self.curves[name+' mV'].setVisible(False)
 
+            lb_rfinp = QLabel('<h4>RF Inputs</h4>', self, alignment=Qt.AlignCenter)
+            pb_rfinp = QPushButton(qta.icon('fa5s.ellipsis-v'), '', self)
+            pb_rfinp.setStyleSheet(
+                    'min-width:18px;max-width:18px;icon-size:20px;')
+            cmd = f'sirius-hla-{self.section.lower()}-rf-control.py'
+            cmd = f'{cmd} -d rf-inputs'.split(" ")
+            connect_newprocess(pb_rfinp, cmd, is_window=True, parent=self)
+
             lb_cavphs = QLabel('Phase', self, alignment=Qt.AlignCenter)
             self.lb_cavphs = SiriusLabel(
                 self, self.prefix+'BO-05D:RF-P5Cav:Cell3Phs-Mon')
             self.lb_cavphs.showUnits = True
-            lay_vals.addWidget(lb_cavphs, 5, 2, alignment=Qt.AlignCenter)
-            lay_vals.addWidget(self.lb_cavphs, 5, 3)
+
+            lay_vals.addWidget(pb_rfinp, 0, 0, alignment=Qt.AlignCenter)
+            lay_vals.addWidget(lb_rfinp, 0, 1)
+            lay_vals.addWidget(lb_cavphs, 5, 1, alignment=Qt.AlignCenter)
+            lay_vals.addWidget(self.lb_cavphs, 5, 2)
         else:
             for name in data:
                 self.curves[name+' W'].setVisible('Coup' in name)
@@ -1417,6 +1443,8 @@ class RFMainControl(SiriusMainWindow):
                 0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed))
             lay_cavtemp.addLayout(hbox_tempcoup_state)
             lay_cavtemp.addWidget(self.tempcoup_graph)
+            lay_cavtemp.addWidget(self.horizontal_separator())
+            lay_cavtemp.addWidget(self.vacuum_widget())
 
             self.temp_tab.addTab(self.cavtemp_wid, 'Cavity')
 
@@ -1488,10 +1516,147 @@ class RFMainControl(SiriusMainWindow):
         lay_trltemp.setContentsMargins(0, 0, 0, 9)
         lay_trltemp.addLayout(hbox_tempcirc_state)
         lay_trltemp.addWidget(self.tempcirc_graph)
+        lay_trltemp.addWidget(self.horizontal_separator())
+        lay_trltemp.addWidget(self.vacuum_widget())
 
         self.temp_tab.addTab(self.trltemp_wid, 'Transm. Line')
 
-        # Vacuum
+        # Room
+        if self.section == 'SI':
+            self.temparea_wid = QWidget()
+            lay_rfarea = QVBoxLayout(self.temparea_wid)
+            lay_rfarea.setAlignment(Qt.AlignTop)
+            lay_rfarea.setContentsMargins(0, 0, 0, 9)
+
+            self.temparea_graphs = {}
+            self.humidity_graphs = {}
+            systems = ['A', 'B']
+
+            # # Temperature
+            lb_temp_area = QLabel('<h4> Room Temperature [°C] </h4>', self)
+            lay_rfarea.addWidget(lb_temp_area, alignment=Qt.AlignLeft)
+
+            row_t = 0
+
+            for i in range(len(systems)):
+                lay_grid_temp = QGridLayout()
+                lb_temp_area_sys = QLabel(f'<h3> • {systems[i]} </h3>', self)
+                lay_grid_temp.addWidget(lb_temp_area_sys, row_t, 0, alignment=Qt.AlignLeft)
+
+                temp_rb = SiriusLabel(self, self.prefix+self.chs['RF Area'][f'{systems[i]}']['Temp'])
+                temp_rb.showUnits = True
+                temp_rb.precisionFromPV = False
+                temp_rb.precision = 1
+                temp_rb.setStyleSheet("""
+                    SiriusLabel {
+                        border: none;
+                    }
+                """)
+                lay_grid_temp.addWidget(temp_rb, row_t, 1, alignment=Qt.AlignLeft)
+
+                lay_grid_temp.addItem(QSpacerItem(
+                    200, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), row_t, 2)
+
+                led_rfarea = SiriusLedAlert(self, self.prefix+self.chs['RF Area'][f'{systems[i]}']['Geral'])
+                lay_grid_temp.addWidget(led_rfarea, row_t, 3, alignment=Qt.AlignRight)
+
+                row_t += 1
+
+                lay_rfarea.addLayout(lay_grid_temp)
+
+                graph = SiriusTimePlot(self)
+                graph.setObjectName(f'system_temp_{systems[i]}_graph')
+                graph.autoRangeX = True
+                graph.autoRangeY = True
+                graph.backgroundColor = QColor(255, 255, 255)
+                graph.showXGrid = True
+                graph.showYGrid = True
+                graph.timeSpan = 1800
+                graph.maxRedrawRate = 2
+                graph.addYChannel(
+                    y_channel=self.prefix+self.chs['RF Area'][f'{systems[i]}']['Temp'],
+                    name=f'Temp_{systems[i]}', color='red', lineStyle=Qt.SolidLine, lineWidth=1)
+                graph.setLabel('left', '°C')
+                lay_rfarea.addWidget(graph)
+                lay_rfarea.addItem(QSpacerItem(
+                    0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed))
+
+                self.temparea_graphs[systems[i]] = graph
+
+            lay_rfarea.addWidget(self.horizontal_separator())
+            lay_rfarea.addItem(QSpacerItem(
+                0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed))
+
+            # # Humidity
+            lb_humidity_area = QLabel('<h4> Room Humidity [%] </h4>', self)
+            lay_rfarea.addWidget(lb_humidity_area, alignment=Qt.AlignLeft)
+
+            row_h = 0
+
+            for i in range(len(systems)):
+                lay_grid_hmdt = QGridLayout()
+                lb_humidity_area_sys = QLabel(f'<h3> • {systems[i]} </h3>', self)
+                lay_grid_hmdt.addWidget(lb_humidity_area_sys, row_h, 0, alignment=Qt.AlignLeft)
+
+                hmdt_rb = SiriusLabel(self, self.prefix+self.chs['RF Area'][f'{systems[i]}']['Humidity'])
+                hmdt_rb.showUnits = True
+                hmdt_rb.precisionFromPV = False
+                hmdt_rb.precision = 1
+                hmdt_rb.setStyleSheet("""
+                    SiriusLabel {
+                        border: none;
+                    }
+                """)
+                unity_lb_hmdt = QLabel('%', self)
+
+                lay_grid_hmdt.addWidget(hmdt_rb, row_h, 1, alignment=Qt.AlignRight)
+                lay_grid_hmdt.addWidget(unity_lb_hmdt, row_h, 2, alignment=Qt.AlignLeft)
+
+                lay_grid_hmdt.addItem(QSpacerItem(
+                    300, 0, QSzPlcy.Fixed, QSzPlcy.Ignored), row_h, 3)
+
+                row_h += 1
+
+                lay_rfarea.addLayout(lay_grid_hmdt)
+
+                graph = SiriusTimePlot(self)
+                graph.setObjectName(f'system_temp_{systems[i]}_graph')
+                graph.autoRangeX = True
+                graph.autoRangeY = True
+                graph.backgroundColor = QColor(255, 255, 255)
+                graph.showXGrid = True
+                graph.showYGrid = True
+                graph.timeSpan = 1800
+                graph.maxRedrawRate = 2
+                graph.addYChannel(
+                    y_channel=self.prefix+self.chs['RF Area'][f'{systems[i]}']['Humidity'],
+                    name=f'Humidity_{systems[i]}', color='green', lineStyle=Qt.SolidLine, lineWidth=1)
+                graph.setLabel('left', '%')
+                lay_rfarea.addWidget(graph)
+                lay_rfarea.addItem(QSpacerItem(
+                    0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed))
+
+                self.humidity_graphs[systems[i]] = graph
+
+            lay_rfarea.addItem(QSpacerItem(
+                0, 10, QSzPlcy.Ignored, QSzPlcy.Fixed))
+
+            self.temp_tab.addTab(self.temparea_wid, 'RF Area')
+
+        lay = QGridLayout()
+        lay.setContentsMargins(0, 0, 0, 0)
+        lay.addWidget(self.temp_wid, 0, 0)
+        return lay
+
+    def horizontal_separator(self):
+        line = QFrame()
+        line.setFrameShape(QFrame.HLine)
+        line.setFrameShadow(QFrame.Sunken)
+        return line
+
+    def vacuum_widget(self):
+        self.vacuum_wid = QWidget()
+        lay_vacuum = QVBoxLayout(self.vacuum_wid)
         lb_vacuum = QLabel('<h3>Vacuum: Pressure [mBar]</h3>', self)
         self.led_condrun = PyDMLed(self)
         self.led_condrun.setToolTip('Conditioning acting')
@@ -1499,9 +1664,11 @@ class RFMainControl(SiriusMainWindow):
             self.chs['Cav Sts']['Vac']['Cond']
         self.led_condrun.offColor = QColor(128, 77, 0)
         self.led_condrun.onColor = PyDMLed.Yellow
+
         hbox_vacuum_state = QHBoxLayout()
         hbox_vacuum_state.addWidget(lb_vacuum, alignment=Qt.AlignLeft)
         hbox_vacuum_state.addWidget(self.led_condrun, alignment=Qt.AlignRight)
+        lay_vacuum.addLayout(hbox_vacuum_state)
 
         self.vacuum_graph = SiriusTimePlot(self)
         self.vacuum_graph.setObjectName('vacuum_graph')
@@ -1516,22 +1683,8 @@ class RFMainControl(SiriusMainWindow):
             y_channel=self.prefix+self.chs['Cav Sts']['Vac']['Cells'],
             name='Vacuum', color='black', lineStyle=Qt.SolidLine, lineWidth=1)
         self.vacuum_graph.setLabel('left', '')
-
-        self.vac_wid = QWidget()
-        self.vac_wid.setStyleSheet("""
-            #vacuum_graph{
-                min-width: 30em; min-height: 10.5em; max-height: 10.5em;}
-        """)
-        lay_vac = QVBoxLayout(self.vac_wid)
-        lay_vac.setAlignment(Qt.AlignTop)
-        lay_vac.addLayout(hbox_vacuum_state)
-        lay_vac.addWidget(self.vacuum_graph)
-
-        lay = QGridLayout()
-        lay.setContentsMargins(0, 0, 0, 0)
-        lay.addWidget(self.temp_wid, 0, 0)
-        lay.addWidget(self.vac_wid, 1, 0)
-        return lay
+        lay_vacuum.addWidget(self.vacuum_graph)
+        return self.vacuum_wid
 
     def _create_vlay(self, widget1, widget2):
         lay = QVBoxLayout()

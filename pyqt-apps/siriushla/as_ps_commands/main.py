@@ -25,7 +25,7 @@ from ..as_ti_control import HLTriggerDetailed
 from .tasks import CreateTesters, \
     CheckComm, CheckStatus, \
     ResetIntlk, CheckIntlk, \
-    SetSOFBMode, CheckSOFBMode, \
+    SetIDFFMode, CheckIDFFMode, \
     SetOpMode, CheckOpMode, \
     SetPwrState, CheckPwrState, CheckInitOk, \
     SetPulse, CheckPulse, \
@@ -106,8 +106,8 @@ class PSCmdWindow(SiriusMainWindow):
                             'cmd': _part(
                                 self._set_check_trigger_state, 'PS', 'dsbl'),
                         },
-                        'Turn Off SOFBMode': {
-                            'cmd': _part(self._set_check_fbp_sofbmode, 'off'),
+                        'Turn Off IDFFMode': {
+                            'cmd': _part(self._set_check_fbp_idffmode, 'off'),
                         },
                         'Set PS and DCLinks to SlowRef': {
                             'cmd': self._set_check_opmode_slowref,
@@ -172,8 +172,8 @@ class PSCmdWindow(SiriusMainWindow):
                             'cmd': _part(
                                 self._set_check_trigger_state, 'PS', 'dsbl'),
                         },
-                        'Turn Off SOFBMode': {
-                            'cmd': _part(self._set_check_fbp_sofbmode, 'off'),
+                        'Turn Off IDFFMode': {
+                            'cmd': _part(self._set_check_fbp_idffmode, 'off'),
                         },
                         'Set PS and DCLinks to SlowRef': {
                             'cmd': self._set_check_opmode_slowref,
@@ -210,8 +210,8 @@ class PSCmdWindow(SiriusMainWindow):
                             'cmd': _part(
                                 self._set_check_trigger_state, 'PS', 'dsbl'),
                         },
-                        'Turn Off SOFBMode': {
-                            'cmd': _part(self._set_check_fbp_sofbmode, 'off'),
+                        'Turn Off IDFFMode': {
+                            'cmd': _part(self._set_check_fbp_idffmode, 'off'),
                         },
                         'Reset PS and DCLinks': {
                             'cmd': _part(self._reset_intlk, 'PS'),
@@ -955,7 +955,7 @@ class PSCmdWindow(SiriusMainWindow):
         dlg = ProgressDialog(labels, tasks, self)
         dlg.exec_()
 
-    def _set_check_fbp_sofbmode(self, state):
+    def _set_check_fbp_idffmode(self, state):
         self.ok_ps.clear()
         self.nok_ps.clear()
         devices = self._get_selected_ps()
@@ -965,14 +965,14 @@ class PSCmdWindow(SiriusMainWindow):
             return
 
         task0 = CreateTesters(devices, parent=self)
-        task1 = SetSOFBMode(devices, state=state, parent=self)
-        task2 = CheckSOFBMode(devices, state=state, parent=self)
+        task1 = SetIDFFMode(devices, state=state, parent=self)
+        task2 = CheckIDFFMode(devices, state=state, parent=self)
         task2.itemDone.connect(self._log)
         tasks = [task0, task1, task2]
 
         labels = ['Connecting to devices...',
-                  'Turning PS SOFBMode '+state+'...',
-                  'Checking PS SOFBMode '+state+'...']
+                  'Turning PS IDFFMode '+state+'...',
+                  'Checking PS IDFFMode '+state+'...']
 
         dlg = ProgressDialog(labels, tasks, self)
         dlg.exec_()

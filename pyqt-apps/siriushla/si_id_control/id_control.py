@@ -87,7 +87,6 @@ class IDControl(SiriusMainWindow):
         lay.addWidget(self._apu_header)
 
         idlist = [
-            'SI-07SP:ID-APU22',
             'SI-09SA:ID-APU22',
             'SI-11SP:ID-APU58',
             'SI-17SA:ID-APU22',
@@ -148,7 +147,7 @@ class IDControl(SiriusMainWindow):
         self._delta_header = VPUSummaryHeader(self)
         lay.addWidget(self._delta_header)
 
-        idlist = ['SI-06SB:ID-VPU29', ]
+        idlist = ['SI-06SB:ID-VPU29', 'SI-07SP:ID-VPU29']
         for idname in idlist:
             vpu_wid = VPUSummaryWidget(self, self._prefix, idname)
             lay.addWidget(vpu_wid)

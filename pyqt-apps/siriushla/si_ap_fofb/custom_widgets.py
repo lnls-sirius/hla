@@ -870,10 +870,10 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
             btn.setDefault(False)
             btn.setAutoDefault(False)
             win = create_window_from_widget(
-                LogicalTriggers, title=bpm+': ACQ Logical Triggers')
+                LogicalTriggers, title=bpm+': General Logical Triggers')
             connect_window(
                 btn, win, parent=self, prefix=self.prefix, device=bpm,
-                names=_csbpm.LogTrigIntern._fields)
+                names=_csbpm.LogTrigIntern._fields, trig_tp='_GEN')
             lbl = QLabel(bpm, self, alignment=Qt.AlignCenter)
             lbl.setObjectName('lbl_bpmname')
             hwid = QWidget()
@@ -887,7 +887,7 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
             c2v = dict()
             for idx, prop in enumerate(propties):
                 pvn = _PVName(bpm).substitute(
-                    prefix=self.prefix, propty='TRIGGER'+str(trigid)+prop)
+                    prefix=self.prefix, propty='TRIGGER_GEN'+str(trigid)+prop)
                 dval = FamFOFBControllers.DEF_BPMTRIG_RCVIN if 'RcvIn' \
                     in prop else FamFOFBControllers.DEF_BPMTRIG_RCVSRC
                 c2v[pvn] = dval

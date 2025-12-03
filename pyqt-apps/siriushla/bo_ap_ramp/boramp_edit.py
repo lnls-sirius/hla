@@ -13,8 +13,7 @@ from qtpy.QtWidgets import QGroupBox, QLabel, QWidget, QMessageBox, \
     QTableWidget, QTableWidgetItem, QSizePolicy as QSzPlcy
 import qtawesome as qta
 
-from siriuspy.pwrsupply.csdev import MAX_WFMSIZE_FBP
-from siriuspy.pwrsupply.csdev import MAX_WFMSIZE_OTHERS
+from siriuspy.pwrsupply.csdev import MAX_WFMSIZE_FBP, MAX_WFMSIZE
 from siriuspy.search import MASearch as _MASearch, PSSearch as _PSSearch
 from siriuspy.ramp import ramp, exceptions
 from siriuspy.ramp.magnet import get_magnet as _get_magnet
@@ -214,7 +213,7 @@ class DipoleRamp(QWidget):
                                      alignment=Qt.AlignVCenter)
         self.sb_nrpoints_fams = QDoubleSpinBoxPlus(self)
         self.sb_nrpoints_fams.setMinimum(1)
-        self.sb_nrpoints_fams.setMaximum(MAX_WFMSIZE_OTHERS)
+        self.sb_nrpoints_fams.setMaximum(MAX_WFMSIZE)
         self.sb_nrpoints_fams.setDecimals(0)
         self.sb_nrpoints_fams.setSingleStep(1)
         self.sb_nrpoints_fams.editingFinished.connect(
