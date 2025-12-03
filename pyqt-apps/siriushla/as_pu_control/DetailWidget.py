@@ -136,6 +136,7 @@ class PUDetailWidget(QWidget):
         interlock_layout = QGridLayout()
         for i in range(9):
             if (i+1 == 8) and 'Sept' in self._devname:
+                # Intlk8 is only valid for kickers, so we omitted it for septa
                 continue
             label = SiriusLabel(
                 self, getattr(self, '_intlk' + str(i+1) + '_lbcte_pv'))
