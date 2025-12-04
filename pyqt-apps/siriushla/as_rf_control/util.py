@@ -323,7 +323,7 @@ SEC_2_CHANNELS = {
             'DPhase': 'RA-RaBO01:RF-LLRF:TuneDephs-Mon',
             'Acting': 'RA-RaBO01:RF-LLRF:TuneOut-Mon',
             'Deadbnd': 'RA-RaBO01:RF-LLRF:TuneMarginHI',
-            'Oversht': 'RA-RaBO01:RF-LLRF:TuneMarginHI',
+            'Oversht': 'RA-RaBO01:RF-LLRF:TuneMarginLO',
             'Pl1Down': 'BO-05D:RF-P5Cav:Plg1MoveDown-Mon',
             'Pl1Up': 'BO-05D:RF-P5Cav:Plg1MoveUp-Mon',
             'Pl2Down': 'BO-05D:RF-P5Cav:Plg2MoveDown-Mon',
