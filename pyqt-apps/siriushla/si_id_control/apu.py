@@ -18,12 +18,6 @@ class APUControlWindow(IDCommonControlWindow):
     """APU Control Window."""
 
     def _mainControlsWidget(self):
-        self._ld_kx = QLabel('Kx', self)
-        self._sb_kx = SiriusSpinbox(
-            self, self.dev_pref.substitute(propty='Kx-SP'))
-        self._lb_kx = SiriusLabel(
-            self, self.dev_pref.substitute(propty='Kx-Mon'))
-
         self._ld_phs = QLabel('Phase [mm]', self)
         self._sb_phs = SiriusSpinbox(
             self, self.dev_pref.substitute(propty='Phase-SP'))
@@ -66,19 +60,16 @@ class APUControlWindow(IDCommonControlWindow):
 
         gbox = QGroupBox('Main Controls', self)
         lay = QGridLayout(gbox)
-        lay.addWidget(self._ld_kx, 0, 0)
-        lay.addWidget(self._sb_kx, 0, 1)
-        lay.addWidget(self._lb_kx, 0, 2)
-        lay.addWidget(self._ld_phs, 1, 0)
-        lay.addWidget(self._sb_phs, 1, 1)
-        lay.addWidget(self._lb_phs, 1, 2)
-        lay.addWidget(self._ld_phsspd, 2, 0)
-        lay.addWidget(self._sb_phsspd, 2, 1)
-        lay.addWidget(self._lb_phsspd, 2, 2)
+        lay.addWidget(self._ld_phs, 0, 0)
+        lay.addWidget(self._sb_phs, 0, 1)
+        lay.addWidget(self._lb_phs, 0, 2)
+        lay.addWidget(self._ld_phsspd, 1, 0)
+        lay.addWidget(self._sb_phsspd, 1, 1)
+        lay.addWidget(self._lb_phsspd, 1, 2)
         lay.addItem(
-            QSpacerItem(1, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), 3, 0)
-        lay.addWidget(self._ld_ismov, 4, 0)
-        lay.addLayout(hbox_motion, 4, 1, 1, 2)
+            QSpacerItem(1, 10, QSzPlcy.Ignored, QSzPlcy.Fixed), 2, 0)
+        lay.addWidget(self._ld_ismov, 3, 0)
+        lay.addLayout(hbox_motion, 3, 1, 1, 2)
         gbox.setStyleSheet(
             '.QLabel{qproperty-alignment: "AlignRight | AlignVCenter";}')
         return gbox
