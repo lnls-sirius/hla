@@ -4,7 +4,7 @@ from qtpy.QtCore import Qt
 from qtpy.QtWidgets import QFormLayout, QGridLayout, QHBoxLayout, QLabel, QFrame
 
 from ...widgets import PyDMLedMultiChannel, SiriusDialog, SiriusLabel, \
-    SiriusLedAlert
+    SiriusLedAlert, SiriusConnectionSignal
 from ..util import DEFAULT_STYLESHEET, SEC_2_CHANNELS
 
 
@@ -17,6 +17,12 @@ class CavityStatusDetails(SiriusDialog):
         self.prefix += ('-' if prefix and not prefix.endswith('-') else '')
         self.section = section.upper()
         self.chs = SEC_2_CHANNELS[self.section]
+        for group in ['Coupler', 'Cells']:
+            key = group+' Limits PVs'
+            for pvn in self.chs['Cav Sts']['Temp'][key]:
+                channel = SiriusConnectionSignal(self.prefix+pvn)
+                channel.new_value_signal[float].connect(
+                    self._update_temp_limits)
         self.setObjectName(self.section + 'App')
         if self.section == 'SI':
             self.setWindowTitle(self.section + ' Cryo Module Detailed Status')
@@ -27,6 +33,8 @@ class CavityStatusDetails(SiriusDialog):
 
     def _setupUi_BO(self):
         self.setStyleSheet(DEFAULT_STYLESHEET)
+
+        # cell and coupler PT100
         lay_temp1 = QFormLayout()
         lay_temp1.setHorizontalSpacing(9)
         lay_temp1.setVerticalSpacing(9)
@@ -36,6 +44,8 @@ class CavityStatusDetails(SiriusDialog):
         lb_temp1.setStyleSheet(
             'font-weight:bold; qproperty-alignment:AlignCenter;')
         lay_temp1.addRow(lb_temp1)
+
+        # Cells
         lims = self.chs['Cav Sts']['Temp']['Cells Limits']
         tooltip = 'Interlock limits: \nMin: ' + str(lims[0]) + \
             '°C, Max: '+str(lims[1])+'°C'
@@ -54,24 +64,28 @@ class CavityStatusDetails(SiriusDialog):
             hbox.addWidget(lbl)
             hbox.addWidget(led)
             lay_temp1.addRow('Cell '+str(idx + 1)+': ', hbox)
+
+        # Coupler
         ch_coup = self.chs['Cav Sts']['Temp']['Coupler'][0]
         lims_coup = self.chs['Cav Sts']['Temp']['Coupler Limits']
         lb_coup = SiriusLabel(self, self.prefix+ch_coup)
         lb_coup.setStyleSheet('min-width:3.5em; max-width:3.5em;')
         lb_coup.showUnits = True
-        led_coup = PyDMLedMultiChannel(
+        self.led_coup = PyDMLedMultiChannel(
             self,
             {self.prefix+ch_coup: {'comp': 'wt', 'value': lims_coup},
             self.prefix+ch_coup.replace('T-Mon', 'TUp-Mon'): 0,
             self.prefix+ch_coup.replace('T-Mon', 'TDown-Mon'): 0})
-        led_coup.setToolTip(
+        self.led_coup.setToolTip(
             'Interlock limits: \n'
             'Min: '+str(lims_coup[0])+'°C, Max: '+str(lims_coup[1])+'°C')
         hb_coup = QHBoxLayout()
         hb_coup.setAlignment(Qt.AlignLeft)
         hb_coup.addWidget(lb_coup)
-        hb_coup.addWidget(led_coup)
+        hb_coup.addWidget(self.led_coup)
         lay_temp1.addRow('Coupler: ', hb_coup)
+
+        # thermostats
         lay_temp2 = QFormLayout()
         lay_temp2.setHorizontalSpacing(9)
         lay_temp2.setVerticalSpacing(9)
@@ -86,6 +100,8 @@ class CavityStatusDetails(SiriusDialog):
             led.setToolTip('Interlock limits:\nMax: 60°C')
             led.channel = self.prefix+cell[0].replace('T-Mon', 'Tms-Mon')
             lay_temp2.addRow('Cell '+str(idx + 1)+': ', led)
+
+        # discs
         lay_dtemp = QFormLayout()
         lay_dtemp.setHorizontalSpacing(9)
         lay_dtemp.setVerticalSpacing(9)
@@ -100,6 +116,8 @@ class CavityStatusDetails(SiriusDialog):
             led.setToolTip('Interlock limits:\nMax: 60°C')
             led.channel = self.prefix+disc
             lay_dtemp.addRow('Disc '+str(idx)+': ', led)
+
+        # flow swiches
         lay_flwrt = QFormLayout()
         lay_flwrt.setHorizontalSpacing(9)
         lay_flwrt.setVerticalSpacing(9)
@@ -118,6 +136,8 @@ class CavityStatusDetails(SiriusDialog):
         self.led_pressure.setToolTip('Interlock limits:\nMax: 5e-7mBar')
         self.led_pressure.channel = \
             self.prefix+self.chs['Cav Sts']['Vac']['Cells ok']
+
+        # vacuum
         lay_vac = QFormLayout()
         lay_vac.setHorizontalSpacing(9)
         lay_vac.setVerticalSpacing(9)
@@ -132,6 +152,8 @@ class CavityStatusDetails(SiriusDialog):
         lbl = QLabel('Cavity - Detailed Status', self)
         lbl.setStyleSheet(
             'font-weight:bold; qproperty-alignment:AlignCenter;')
+
+        # global layout
         lay = QGridLayout(self)
         lay.setHorizontalSpacing(30)
         lay.setVerticalSpacing(20)
@@ -156,14 +178,14 @@ class CavityStatusDetails(SiriusDialog):
 
         lbl_cm1 = QLabel('<h4>Cryo Module 1</h4>', self)
         lay.addWidget(lbl_cm1, 1, 1)
-            
+
         lbl_cm2 = QLabel('<h4>Cryo Module 2</h4>', self)
         lay.addWidget(lbl_cm2, 1, 3)
 
         lbl_rfs1 = QLabel('RF Stop 1', self)
         slbl_rfs1cm1 = SiriusLabel(self, self.chs['Cryo Module']['Cryo Module 1']['RF Stop 1']['label'])
         led_rfs1cm1 = SiriusLedAlert(self, self.chs['Cryo Module']['Cryo Module 1']['RF Stop 1']['led'])
-            
+
         slbl_rfs1cm2 = SiriusLabel(self, self.chs['Cryo Module']['Cryo Module 2']['RF Stop 1']['label'])
         led_rfs1cm2 = SiriusLedAlert(self, self.chs['Cryo Module']['Cryo Module 2']['RF Stop 1']['led'])
 
@@ -179,20 +201,20 @@ class CavityStatusDetails(SiriusDialog):
 
         slbl_rfs2cm2 = SiriusLabel(self, self.chs['Cryo Module']['Cryo Module 2']['RF Stop 2']['label'])
         led_rfs2cm2 = SiriusLedAlert(self, self.chs['Cryo Module']['Cryo Module 2']['RF Stop 2']['led'])
-            
+
         lay.addWidget(lbl_rfs2, 3, 0, alignment=Qt.AlignRight)
         lay.addWidget(slbl_rfs2cm1, 3, 1)
         lay.addWidget(led_rfs2cm1, 3, 2)
         lay.addWidget(slbl_rfs2cm2, 3, 3)
         lay.addWidget(led_rfs2cm2, 3, 4)
-            
+
         lbl_rfs3 = QLabel('RF Stop 3', self)
         slbl_rfs3cm1 = SiriusLabel(self, self.chs['Cryo Module']['Cryo Module 1']['RF Stop 3']['label'])
         led_rfs3cm1 = SiriusLedAlert(self, self.chs['Cryo Module']['Cryo Module 1']['RF Stop 3']['led'])
 
         slbl_rfs3cm2 = SiriusLabel(self, self.chs['Cryo Module']['Cryo Module 2']['RF Stop 3']['label'])
         led_rfs3cm2 = SiriusLedAlert(self, self.chs['Cryo Module']['Cryo Module 2']['RF Stop 3']['led'])
-            
+
         lay.addWidget(lbl_rfs3, 4, 0, alignment=Qt.AlignRight)
         lay.addWidget(slbl_rfs3cm1, 4, 1)
         lay.addWidget(led_rfs3cm1, 4, 2)
@@ -322,4 +344,21 @@ class CavityStatusDetails(SiriusDialog):
         line.setFrameShape(QFrame.HLine)
         line.setFrameShadow(QFrame.Sunken)
         return line
-    
+
+    def _update_temp_limits(self, value):
+        address = self.sender().address
+        if 'Coup' in address:
+            if 'Lower' in address:
+                self.chs['Cav Sts']['Temp']['Coupler Limits'][0] = value
+            else:
+                self.chs['Cav Sts']['Temp']['Coupler Limits'][1] = value
+            lims = self.chs['Cav Sts']['Temp']['Coupler Limits']
+            ch2vals = self.led_coup.channels2values
+            ch2vals[self.prefix+self.chs['Cav Sts']['Temp']['Coupler'][0]] = {
+                'comp': 'wt', 'value': lims}
+            self.led_coup.set_channels2values(ch2vals)
+        else:
+            if 'Lower' in address:
+                self.chs['Cav Sts']['Temp']['Cells Limits'][0] = value
+            else:
+                self.chs['Cav Sts']['Temp']['Cells Limits'][1] = value
