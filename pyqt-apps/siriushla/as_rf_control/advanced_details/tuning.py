@@ -215,10 +215,16 @@ class TuningDetails(SiriusDialog):
                     'Current'), 1, 0, alignment=Qt.AlignCenter)
                 gbox_lay.addWidget(lb_curr, 1, 1, alignment=Qt.AlignCenter)
             else:
-                gbox_lay.addWidget(QLabel('Fault'), 1, 0)
+                lb_curr = SiriusLabel(self, self.prefix+chs_dict[d][2])
+                lb_curr.showUnits = True
+                gbox_lay.addWidget(QLabel(
+                    'Current'), 1, 0, alignment=Qt.AlignCenter)
+                gbox_lay.addWidget(lb_curr, 1, 1, alignment=Qt.AlignCenter)
+                gbox_lay.addWidget(QLabel(
+                    'Fault'), 2, 0, alignment=Qt.AlignCenter)
                 gbox_lay.addWidget(SiriusLedAlert(
                     self, self.prefix+chs_dict[d][1]),
-                    1, 1, alignment=Qt.AlignCenter)
+                    2, 1, alignment=Qt.AlignCenter)
 
             lay.addWidget(gbox, row, 0, 1, 3)
             row += 1

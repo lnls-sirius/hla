@@ -26,12 +26,12 @@ class CavityStatusDetails(SiriusDialog):
         self.setObjectName(self.section + 'App')
         if self.section == 'SI':
             self.setWindowTitle(self.section + ' Cryo Module Detailed Status')
-            self._setupUi_SI()
+            self._setupui_si()
         else:
             self.setWindowTitle(self.section + ' Cavity Detailed Status')
-            self._setupUi_BO()
+            self._setupui_bo()
 
-    def _setupUi_BO(self):
+    def _setupui_bo(self):
         self.setStyleSheet(DEFAULT_STYLESHEET)
 
         # cell and coupler PT100
@@ -49,6 +49,7 @@ class CavityStatusDetails(SiriusDialog):
         lims = self.chs['Cav Sts']['Temp']['Cells Limits']
         tooltip = 'Interlock limits: \nMin: ' + str(lims[0]) + \
             '°C, Max: '+str(lims[1])+'°C'
+        self.led_cells = {}
         for idx, cell in enumerate(self.chs['Cav Sts']['Temp']['Cells']):
             lbl = SiriusLabel(self, self.prefix+cell[0])
             lbl.showUnits = True
@@ -59,6 +60,7 @@ class CavityStatusDetails(SiriusDialog):
                 self.prefix+cell[0].replace('T-Mon', 'TUp-Mon'): 0,
                 self.prefix+cell[0].replace('T-Mon', 'TDown-Mon'): 0})
             led.setToolTip(tooltip)
+            self.led_cells[self.prefix+cell[0]] = led
             hbox = QHBoxLayout()
             hbox.setAlignment(Qt.AlignLeft)
             hbox.addWidget(lbl)
@@ -164,13 +166,14 @@ class CavityStatusDetails(SiriusDialog):
         lay.addLayout(lay_flwrt, 1, 3)
         lay.addLayout(lay_vac, 2, 3)
 
-    def _setupUi_SI(self):
+    def _setupui_si(self):
         self.setStyleSheet(DEFAULT_STYLESHEET)
         lay = QGridLayout(self)
         lay.setSpacing(1)
         lay.setHorizontalSpacing(25)
         lay.setVerticalSpacing(20)
 
+        # Cryo Module
         lbl = QLabel('Cryo Module - Detailed Status', self)
         lbl.setStyleSheet(
             'font-weight:bold; qproperty-alignment:AlignCenter;')
@@ -183,11 +186,22 @@ class CavityStatusDetails(SiriusDialog):
         lay.addWidget(lbl_cm2, 1, 3)
 
         lbl_rfs1 = QLabel('RF Stop 1', self)
-        slbl_rfs1cm1 = SiriusLabel(self, self.chs['Cryo Module']['Cryo Module 1']['RF Stop 1']['label'])
-        led_rfs1cm1 = SiriusLedAlert(self, self.chs['Cryo Module']['Cryo Module 1']['RF Stop 1']['led'])
-
-        slbl_rfs1cm2 = SiriusLabel(self, self.chs['Cryo Module']['Cryo Module 2']['RF Stop 1']['label'])
-        led_rfs1cm2 = SiriusLedAlert(self, self.chs['Cryo Module']['Cryo Module 2']['RF Stop 1']['led'])
+        slbl_rfs1cm1 = SiriusLabel(
+            self,
+            self.chs['Cryo Module']['Cryo Module 1']
+                    ['RF Stop 1']['label'])
+        led_rfs1cm1 = SiriusLedAlert(
+            self,
+            self.chs['Cryo Module']['Cryo Module 1']
+                    ['RF Stop 1']['led'])
+        slbl_rfs1cm2 = SiriusLabel(
+            self,
+            self.chs['Cryo Module']['Cryo Module 2']
+                    ['RF Stop 1']['label'])
+        led_rfs1cm2 = SiriusLedAlert(
+            self,
+            self.chs['Cryo Module']['Cryo Module 2']
+                    ['RF Stop 1']['led'])
 
         lay.addWidget(lbl_rfs1, 2, 0, alignment=Qt.AlignRight)
         lay.addWidget(slbl_rfs1cm1, 2, 1)
@@ -196,11 +210,22 @@ class CavityStatusDetails(SiriusDialog):
         lay.addWidget(led_rfs1cm2, 2, 4)
 
         lbl_rfs2 = QLabel('RF Stop 2', self)
-        slbl_rfs2cm1 = SiriusLabel(self, self.chs['Cryo Module']['Cryo Module 1']['RF Stop 2']['label'])
-        led_rfs2cm1 = SiriusLedAlert(self, self.chs['Cryo Module']['Cryo Module 1']['RF Stop 2']['led'])
-
-        slbl_rfs2cm2 = SiriusLabel(self, self.chs['Cryo Module']['Cryo Module 2']['RF Stop 2']['label'])
-        led_rfs2cm2 = SiriusLedAlert(self, self.chs['Cryo Module']['Cryo Module 2']['RF Stop 2']['led'])
+        slbl_rfs2cm1 = SiriusLabel(
+            self,
+            self.chs['Cryo Module']['Cryo Module 1']
+                    ['RF Stop 2']['label'])
+        led_rfs2cm1 = SiriusLedAlert(
+            self,
+            self.chs['Cryo Module']['Cryo Module 1']
+                    ['RF Stop 2']['led'])
+        slbl_rfs2cm2 = SiriusLabel(
+            self,
+            self.chs['Cryo Module']['Cryo Module 2']
+                    ['RF Stop 2']['label'])
+        led_rfs2cm2 = SiriusLedAlert(
+            self,
+            self.chs['Cryo Module']['Cryo Module 2']
+                    ['RF Stop 2']['led'])
 
         lay.addWidget(lbl_rfs2, 3, 0, alignment=Qt.AlignRight)
         lay.addWidget(slbl_rfs2cm1, 3, 1)
@@ -209,11 +234,22 @@ class CavityStatusDetails(SiriusDialog):
         lay.addWidget(led_rfs2cm2, 3, 4)
 
         lbl_rfs3 = QLabel('RF Stop 3', self)
-        slbl_rfs3cm1 = SiriusLabel(self, self.chs['Cryo Module']['Cryo Module 1']['RF Stop 3']['label'])
-        led_rfs3cm1 = SiriusLedAlert(self, self.chs['Cryo Module']['Cryo Module 1']['RF Stop 3']['led'])
-
-        slbl_rfs3cm2 = SiriusLabel(self, self.chs['Cryo Module']['Cryo Module 2']['RF Stop 3']['label'])
-        led_rfs3cm2 = SiriusLedAlert(self, self.chs['Cryo Module']['Cryo Module 2']['RF Stop 3']['led'])
+        slbl_rfs3cm1 = SiriusLabel(
+            self,
+            self.chs['Cryo Module']['Cryo Module 1']
+                    ['RF Stop 3']['label'])
+        led_rfs3cm1 = SiriusLedAlert(
+            self,
+            self.chs['Cryo Module']['Cryo Module 1']
+                    ['RF Stop 3']['led'])
+        slbl_rfs3cm2 = SiriusLabel(
+            self,
+            self.chs['Cryo Module']['Cryo Module 2']
+                    ['RF Stop 3']['label'])
+        led_rfs3cm2 = SiriusLedAlert(
+            self,
+            self.chs['Cryo Module']['Cryo Module 2']
+                    ['RF Stop 3']['led'])
 
         lay.addWidget(lbl_rfs3, 4, 0, alignment=Qt.AlignRight)
         lay.addWidget(slbl_rfs3cm1, 4, 1)
@@ -222,11 +258,22 @@ class CavityStatusDetails(SiriusDialog):
         lay.addWidget(led_rfs3cm2, 4, 4)
 
         lbl_hs = QLabel('Heater Stop', self)
-        slbl_hscm1 = SiriusLabel(self, self.chs['Cryo Module']['Cryo Module 1']['Heater Stop']['label'])
-        led_hscm1 = SiriusLedAlert(self, self.chs['Cryo Module']['Cryo Module 1']['Heater Stop']['led'])
-
-        slbl_hscm2 = SiriusLabel(self, self.chs['Cryo Module']['Cryo Module 2']['Heater Stop']['label'])
-        led_hscm2 = SiriusLedAlert(self, self.chs['Cryo Module']['Cryo Module 2']['Heater Stop']['led'])
+        slbl_hscm1 = SiriusLabel(
+            self,
+            self.chs['Cryo Module']['Cryo Module 1']
+                    ['Heater Stop']['label'])
+        led_hscm1 = SiriusLedAlert(
+            self,
+            self.chs['Cryo Module']['Cryo Module 1']
+                    ['Heater Stop']['led'])
+        slbl_hscm2 = SiriusLabel(
+            self,
+            self.chs['Cryo Module']['Cryo Module 2']
+                    ['Heater Stop']['label'])
+        led_hscm2 = SiriusLedAlert(
+            self,
+            self.chs['Cryo Module']['Cryo Module 2']
+                    ['Heater Stop']['led'])
 
         lay.addWidget(lbl_hs, 5, 0, alignment=Qt.AlignRight)
         lay.addWidget(slbl_hscm1, 5, 1)
@@ -235,11 +282,22 @@ class CavityStatusDetails(SiriusDialog):
         lay.addWidget(led_hscm2, 5, 4)
 
         lbl_css = QLabel('Cryo Supply Stop', self)
-        slbl_csscm1 = SiriusLabel(self, self.chs['Cryo Module']['Cryo Module 1']['Cryo Supply Stop']['label'])
-        led_csscm1 = SiriusLedAlert(self, self.chs['Cryo Module']['Cryo Module 1']['Cryo Supply Stop']['led'])
-
-        slbl_csscm2 = SiriusLabel(self, self.chs['Cryo Module']['Cryo Module 2']['Cryo Supply Stop']['label'])
-        led_csscm2 = SiriusLedAlert(self, self.chs['Cryo Module']['Cryo Module 2']['Cryo Supply Stop']['led'])
+        slbl_csscm1 = SiriusLabel(
+            self,
+            self.chs['Cryo Module']['Cryo Module 1']
+                    ['Cryo Supply Stop']['label'])
+        led_csscm1 = SiriusLedAlert(
+            self,
+            self.chs['Cryo Module']['Cryo Module 1']
+                    ['Cryo Supply Stop']['led'])
+        slbl_csscm2 = SiriusLabel(
+            self,
+            self.chs['Cryo Module']['Cryo Module 2']
+                    ['Cryo Supply Stop']['label'])
+        led_csscm2 = SiriusLedAlert(
+            self,
+            self.chs['Cryo Module']['Cryo Module 2']
+                    ['Cryo Supply Stop']['led'])
 
         lay.addWidget(lbl_css, 6, 0, alignment=Qt.AlignRight)
         lay.addWidget(slbl_csscm1, 6, 1)
@@ -248,11 +306,22 @@ class CavityStatusDetails(SiriusDialog):
         lay.addWidget(led_csscm2, 6, 4)
 
         lbl_crs = QLabel('Cryo Return Stop', self)
-        slbl_crscm1 = SiriusLabel(self, self.chs['Cryo Module']['Cryo Module 1']['Cryo Return Stop']['label'])
-        led_crscm1 = SiriusLedAlert(self, self.chs['Cryo Module']['Cryo Module 1']['Cryo Return Stop']['led'])
-
-        slbl_crscm2 = SiriusLabel(self, self.chs['Cryo Module']['Cryo Module 2']['Cryo Return Stop']['label'])
-        led_crscm2 = SiriusLedAlert(self, self.chs['Cryo Module']['Cryo Module 2']['Cryo Return Stop']['led'])
+        slbl_crscm1 = SiriusLabel(
+            self,
+            self.chs['Cryo Module']['Cryo Module 1']
+                    ['Cryo Return Stop']['label'])
+        led_crscm1 = SiriusLedAlert(
+            self,
+            self.chs['Cryo Module']['Cryo Module 1']
+                    ['Cryo Return Stop']['led'])
+        slbl_crscm2 = SiriusLabel(
+            self,
+            self.chs['Cryo Module']['Cryo Module 2']
+                    ['Cryo Return Stop']['label'])
+        led_crscm2 = SiriusLedAlert(
+            self,
+            self.chs['Cryo Module']['Cryo Module 2']
+                    ['Cryo Return Stop']['led'])
 
         lay.addWidget(lbl_crs, 7, 0, alignment=Qt.AlignRight)
         lay.addWidget(slbl_crscm1, 7, 1)
@@ -260,72 +329,118 @@ class CavityStatusDetails(SiriusDialog):
         lay.addWidget(slbl_crscm2, 7, 3)
         lay.addWidget(led_crscm2, 7, 4)
 
-        lay.addWidget(self.horizontal_separator(), 8, 0, 1, 7)
-        lbl_VB = QLabel('<h4>Valve Box</h4>', self)
-        lay.addWidget(lbl_VB, 9, 0, alignment=Qt.AlignRight)
+        lay.addWidget(self._horizontal_separator(), 8, 0, 1, 7)
+        lbl_vb = QLabel('<h4>Valve Box</h4>', self)
+        lay.addWidget(lbl_vb, 9, 0, alignment=Qt.AlignRight)
 
-        lbl_rfs4_VB = QLabel('RF Stop 4', self)
-        slbl_rfs4cm1 = SiriusLabel(self, self.chs['Cryo Module']['Cryo Module 1']['Valve Box']['RF Stop 4']['label'])
-        led_rfs4cm1 = SiriusLedAlert(self, self.chs['Cryo Module']['Cryo Module 1']['Valve Box']['RF Stop 4']['led'])
+        lbl_rfs4_vb = QLabel('RF Stop 4', self)
+        slbl_rfs4cm1 = SiriusLabel(
+            self,
+            self.chs['Cryo Module']['Cryo Module 1']['Valve Box']
+                    ['RF Stop 4']['label'])
+        led_rfs4cm1 = SiriusLedAlert(
+            self,
+            self.chs['Cryo Module']['Cryo Module 1']['Valve Box']
+                    ['RF Stop 4']['led'])
+        slbl_rfs4cm2 = SiriusLabel(
+            self,
+            self.chs['Cryo Module']['Cryo Module 2']['Valve Box']
+                    ['RF Stop 4']['label'])
+        led_rfs4cm2 = SiriusLedAlert(
+            self,
+            self.chs['Cryo Module']['Cryo Module 2']['Valve Box']
+                    ['RF Stop 4']['led'])
 
-        slbl_rfs4cm2 = SiriusLabel(self, self.chs['Cryo Module']['Cryo Module 2']['Valve Box']['RF Stop 4']['label'])
-        led_rfs4cm2 = SiriusLedAlert(self, self.chs['Cryo Module']['Cryo Module 2']['Valve Box']['RF Stop 4']['led'])
-
-        lay.addWidget(lbl_rfs4_VB, 10, 0, alignment=Qt.AlignRight)
+        lay.addWidget(lbl_rfs4_vb, 10, 0, alignment=Qt.AlignRight)
         lay.addWidget(slbl_rfs4cm1, 10, 1)
         lay.addWidget(led_rfs4cm1, 10, 2)
         lay.addWidget(slbl_rfs4cm2, 10, 3)
         lay.addWidget(led_rfs4cm2, 10, 4)
 
-        lbl_hs_VB = QLabel('Heater Stop', self)
-        slbl_hsvbcm1 = SiriusLabel(self, self.chs['Cryo Module']['Cryo Module 1']['Valve Box']['Heater Stop']['label'])
-        led_hsvbcm1 = SiriusLedAlert(self, self.chs['Cryo Module']['Cryo Module 1']['Valve Box']['Heater Stop']['led'])
+        lbl_hs_vb = QLabel('Heater Stop', self)
+        slbl_hsvbcm1 = SiriusLabel(
+            self,
+            self.chs['Cryo Module']['Cryo Module 1']['Valve Box']
+                    ['Heater Stop']['label'])
+        led_hsvbcm1 = SiriusLedAlert(
+            self,
+            self.chs['Cryo Module']['Cryo Module 1']['Valve Box']
+                    ['Heater Stop']['led'])
+        slbl_hsvbcm2 = SiriusLabel(
+            self,
+            self.chs['Cryo Module']['Cryo Module 2']['Valve Box']
+                    ['Heater Stop']['label'])
+        led_hsvbcm2 = SiriusLedAlert(
+            self,
+            self.chs['Cryo Module']['Cryo Module 2']['Valve Box']
+                    ['Heater Stop']['led'])
 
-        slbl_hsvbcm2 = SiriusLabel(self, self.chs['Cryo Module']['Cryo Module 2']['Valve Box']['Heater Stop']['label'])
-        led_hsvbcm2 = SiriusLedAlert(self, self.chs['Cryo Module']['Cryo Module 2']['Valve Box']['Heater Stop']['led'])
-
-        lay.addWidget(lbl_hs_VB, 11, 0, alignment=Qt.AlignRight)
+        lay.addWidget(lbl_hs_vb, 11, 0, alignment=Qt.AlignRight)
         lay.addWidget(slbl_hsvbcm1, 11, 1)
         lay.addWidget(led_hsvbcm1, 11, 2)
         lay.addWidget(slbl_hsvbcm2, 11, 3)
         lay.addWidget(led_hsvbcm2, 11, 4)
 
-        lbl_css_VB = QLabel('Cryo Supply Stop', self)
-        slbl_cssvbcm1 = SiriusLabel(self, self.chs['Cryo Module']['Cryo Module 1']['Valve Box']['Cryo Supply Stop']['label'])
-        led_cssvbcm1 = SiriusLedAlert(self, self.chs['Cryo Module']['Cryo Module 1']['Valve Box']['Cryo Supply Stop']['led'])
+        lbl_css_vb = QLabel('Cryo Supply Stop', self)
+        slbl_cssvbcm1 = SiriusLabel(
+            self,
+            self.chs['Cryo Module']['Cryo Module 1']['Valve Box']
+                    ['Cryo Supply Stop']['label'])
+        led_cssvbcm1 = SiriusLedAlert(
+            self,
+            self.chs['Cryo Module']['Cryo Module 1']['Valve Box']
+                    ['Cryo Supply Stop']['led'])
+        slbl_cssvbcm2 = SiriusLabel(
+            self,
+            self.chs['Cryo Module']['Cryo Module 2']['Valve Box']
+                    ['Cryo Supply Stop']['label'])
+        led_cssvbcm2 = SiriusLedAlert(
+            self,
+            self.chs['Cryo Module']['Cryo Module 2']['Valve Box']
+                    ['Cryo Supply Stop']['led'])
 
-        slbl_cssvbcm2 = SiriusLabel(self, self.chs['Cryo Module']['Cryo Module 2']['Valve Box']['Cryo Supply Stop']['label'])
-        led_cssvbcm2 = SiriusLedAlert(self, self.chs['Cryo Module']['Cryo Module 2']['Valve Box']['Cryo Supply Stop']['led'])
-
-        lay.addWidget(lbl_css_VB, 12, 0, alignment=Qt.AlignRight)
+        lay.addWidget(lbl_css_vb, 12, 0, alignment=Qt.AlignRight)
         lay.addWidget(slbl_cssvbcm1, 12, 1)
         lay.addWidget(led_cssvbcm1, 12, 2)
         lay.addWidget(slbl_cssvbcm2, 12, 3)
         lay.addWidget(led_cssvbcm2, 12, 4)
 
-        lbl_crs_VB = QLabel('Cryo Return Stop', self)
-        slbl_crsvbcm1 = SiriusLabel(self, self.chs['Cryo Module']['Cryo Module 1']['Valve Box']['Cryo Return Stop']['label'])
-        led_crsvbcm1 = SiriusLedAlert(self, self.chs['Cryo Module']['Cryo Module 1']['Valve Box']['Cryo Return Stop']['led'])
+        lbl_crs_vb = QLabel('Cryo Return Stop', self)
+        slbl_crsvbcm1 = SiriusLabel(
+            self,
+            self.chs['Cryo Module']['Cryo Module 1']['Valve Box']
+                    ['Cryo Return Stop']['label'])
+        led_crsvbcm1 = SiriusLedAlert(
+            self,
+            self.chs['Cryo Module']['Cryo Module 1']['Valve Box']
+                    ['Cryo Return Stop']['led'])
+        slbl_crsvbcm2 = SiriusLabel(
+            self,
+            self.chs['Cryo Module']['Cryo Module 2']['Valve Box']
+                    ['Cryo Return Stop']['label'])
+        led_crsvbcm2 = SiriusLedAlert(
+            self,
+            self.chs['Cryo Module']['Cryo Module 2']['Valve Box']
+                    ['Cryo Return Stop']['led'])
 
-        slbl_crsvbcm2 = SiriusLabel(self, self.chs['Cryo Module']['Cryo Module 2']['Valve Box']['Cryo Return Stop']['label'])
-        led_crsvbcm2 = SiriusLedAlert(self, self.chs['Cryo Module']['Cryo Module 2']['Valve Box']['Cryo Return Stop']['led'])
-
-        lay.addWidget(lbl_crs_VB, 13, 0, alignment=Qt.AlignRight)
+        lay.addWidget(lbl_crs_vb, 13, 0, alignment=Qt.AlignRight)
         lay.addWidget(slbl_crsvbcm1, 13, 1)
         lay.addWidget(led_crsvbcm1, 13, 2)
         lay.addWidget(slbl_crsvbcm2, 13, 3)
         lay.addWidget(led_crsvbcm2, 13, 4)
 
-        lay.addWidget(self.horizontal_separator(), 14, 0, 1, 7)
-        lbl_ES = QLabel('<h4>External Stop</h4>', self)
-        slbl_ES = SiriusLabel(self, self.chs['Cryo Module']['External Stop']['label'])
-        led_ES = SiriusLedAlert(self, self.chs['Cryo Module']['External Stop']['led'])
+        lay.addWidget(self._horizontal_separator(), 14, 0, 1, 7)
+        lbl_es = QLabel('<h4>External Stop</h4>', self)
+        slbl_es = SiriusLabel(
+            self, self.chs['Cryo Module']['External Stop']['label'])
+        led_es = SiriusLedAlert(
+            self, self.chs['Cryo Module']['External Stop']['led'])
 
-        lay.addWidget(lbl_ES, 15, 1, alignment=Qt.AlignRight)
-        lay.addWidget(slbl_ES, 15, 2)
-        lay.addWidget(led_ES, 15, 3)
+        lay.addWidget(lbl_es, 15, 1, alignment=Qt.AlignRight)
+        lay.addWidget(slbl_es, 15, 2)
+        lay.addWidget(led_es, 15, 3)
 
-        lay.addWidget(self.horizontal_separator(), 16, 0, 1, 7)
+        lay.addWidget(self._horizontal_separator(), 16, 0, 1, 7)
 
         self.setStyleSheet("""
             SiriusLabel{
@@ -339,11 +454,18 @@ class CavityStatusDetails(SiriusDialog):
                 qproperty-alignment: AlignRight;
             }""")
 
-    def horizontal_separator(self):
+    def _horizontal_separator(self):
         line = QFrame()
         line.setFrameShape(QFrame.HLine)
         line.setFrameShadow(QFrame.Sunken)
         return line
+
+    def _tooltip_leds(self, lims):
+        return (
+            'Interlock limits: \n'
+            f'Min: {lims[0]:.1f} °C, '
+            f'Max: {lims[1]:.1f} °C'
+        )
 
     def _update_temp_limits(self, value):
         address = self.sender().address
@@ -353,12 +475,21 @@ class CavityStatusDetails(SiriusDialog):
             else:
                 self.chs['Cav Sts']['Temp']['Coupler Limits'][1] = value
             lims = self.chs['Cav Sts']['Temp']['Coupler Limits']
+            tooltip_coup = self._tooltip_leds(lims)
             ch2vals = self.led_coup.channels2values
             ch2vals[self.prefix+self.chs['Cav Sts']['Temp']['Coupler'][0]] = {
                 'comp': 'wt', 'value': lims}
             self.led_coup.set_channels2values(ch2vals)
+            self.led_coup.setToolTip(tooltip_coup)
         else:
             if 'Lower' in address:
                 self.chs['Cav Sts']['Temp']['Cells Limits'][0] = value
             else:
                 self.chs['Cav Sts']['Temp']['Cells Limits'][1] = value
+            lims = self.chs['Cav Sts']['Temp']['Cells Limits']
+            tooltip_cells = self._tooltip_leds(lims)
+            for pv, led in self.led_cells.items():
+                ch2vals = led.channels2values
+                ch2vals[pv] = {'comp': 'wt', 'value': lims}
+                led.set_channels2values(ch2vals)
+                led.setToolTip(tooltip_cells)
