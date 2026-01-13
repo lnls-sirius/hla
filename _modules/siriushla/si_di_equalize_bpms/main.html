@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>siriushla.si_di_equalize_bpms.main &mdash; siriushla 1.14.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=01009efc"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            siriushla
+          </a>
+              <div class="version">
+                1.14.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">GUIs:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_configdb.html">siriushla.as_ap_configdb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_currinfo.html">siriushla.as_ap_currinfo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_energybutton.html">siriushla.as_ap_energybutton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_injcontrol.html">siriushla.as_ap_injcontrol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_injection.html">siriushla.as_ap_injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_launcher.html">siriushla.as_ap_launcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_machshift.html">siriushla.as_ap_machshift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_macreport.html">siriushla.as_ap_macreport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_magoffconv.html">siriushla.as_ap_magoffconv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_measure.html">siriushla.as_ap_measure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_monitor.html">siriushla.as_ap_monitor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_opticscorr.html">siriushla.as_ap_opticscorr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_posang.html">siriushla.as_ap_posang</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_rabpmmon.html">siriushla.as_ap_rabpmmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_radmon.html">siriushla.as_ap_radmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_sofb.html">siriushla.as_ap_sofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_bpms.html">siriushla.as_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_dccts.html">siriushla.as_di_dccts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_icts.html">siriushla.as_di_icts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_scrns.html">siriushla.as_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_tune.html">siriushla.as_di_tune</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_vlight.html">siriushla.as_di_vlight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_commands.html">siriushla.as_ps_commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_control.html">siriushla.as_ps_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_cycle.html">siriushla.as_ps_cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_diag.html">siriushla.as_ps_diag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_pu_control.html">siriushla.as_pu_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_rf_control.html">siriushla.as_rf_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ti_control.html">siriushla.as_ti_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.bl_ap_imgproc.html">siriushla.bl_ap_imgproc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.bo_ap_ramp.html">siriushla.bo_ap_ramp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.common.html">siriushla.common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_ap_mps.html">siriushla.li_ap_mps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_di_bpms.html">siriushla.li_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_di_scrns.html">siriushla.li_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_eg_control.html">siriushla.li_eg_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_pu_modltr.html">siriushla.li_pu_modltr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_rf_llrf.html">siriushla.li_rf_llrf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_va_control.html">siriushla.li_va_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_fofb.html">siriushla.si_ap_fofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_genstatus.html">siriushla.si_ap_genstatus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_idff.html">siriushla.si_ap_idff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_orbintlk.html">siriushla.si_ap_orbintlk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_bbb.html">siriushla.si_di_bbb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_equalize_bpms.html">siriushla.si_di_equalize_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_scraps.html">siriushla.si_di_scraps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_id_control.html">siriushla.si_id_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.tb_di_slits.html">siriushla.tb_di_slits</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Widgets:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.html">Sirius HLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.widgets.html">Widgets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Source Code:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lnls-sirius/hla">HLA Github</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">siriushla</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">siriushla.si_di_equalize_bpms.main</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for siriushla.si_di_equalize_bpms.main</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Main module of the Application Interface.&quot;&quot;&quot;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">_os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">_sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">_log</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">threading</span><span class="w"> </span><span class="kn">import</span> <span class="n">Thread</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">_pathlib</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtCore</span><span class="w"> </span><span class="kn">import</span> <span class="n">Qt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtWidgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">QWidget</span><span class="p">,</span> <span class="n">QPushButton</span><span class="p">,</span> <span class="n">QGridLayout</span><span class="p">,</span> <span class="n">QSpinBox</span><span class="p">,</span> \
+    <span class="n">QLabel</span><span class="p">,</span> <span class="n">QGroupBox</span><span class="p">,</span> <span class="n">QDoubleSpinBox</span><span class="p">,</span> <span class="n">QComboBox</span><span class="p">,</span> <span class="n">QFileDialog</span><span class="p">,</span> <span class="n">QMessageBox</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">qtawesome</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">qta</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriuspy.devices</span><span class="w"> </span><span class="kn">import</span> <span class="n">EqualizeBPMs</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriuspy.clientconfigdb</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConfigDBException</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriushla</span><span class="w"> </span><span class="kn">import</span> <span class="n">util</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriushla.widgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">SiriusMainWindow</span><span class="p">,</span> <span class="n">SiriusLogDisplay</span><span class="p">,</span> \
+    <span class="n">MatplotlibWidget</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriushla.widgets.windows</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_window_from_widget</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriushla.as_ap_configdb</span><span class="w"> </span><span class="kn">import</span> <span class="n">LoadConfigDialog</span><span class="p">,</span> <span class="n">SaveConfigDialog</span>
+
+
+<div class="viewcode-block" id="BPMsEqualizeSwitching">
+<a class="viewcode-back" href="../../../siriushla.si_di_equalize_bpms.html#siriushla.si_di_equalize_bpms.main.BPMsEqualizeSwitching">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">BPMsEqualizeSwitching</span><span class="p">(</span><span class="n">SiriusMainWindow</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+
+    <span class="n">EXTS</span> <span class="o">=</span> <span class="s1">&#39;.pickle&#39;</span><span class="p">,</span> <span class="s1">&#39;.pkl&#39;</span><span class="p">,</span> <span class="s1">&#39;.h5&#39;</span><span class="p">,</span> <span class="s1">&#39;.hdf5&#39;</span><span class="p">,</span> <span class="s1">&#39;.hdf&#39;</span><span class="p">,</span> <span class="s1">&#39;.hd5&#39;</span>
+    <span class="n">EXT_FLT</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s1">&#39;Pickle Files (*.pickle *.pkl);;&#39;</span>
+        <span class="s1">&#39;HDF5 file (*.h5 *.hdf5 *.hdf *.hd5)&#39;</span><span class="p">)</span>
+    <span class="n">DEFAULT_DIR</span> <span class="o">=</span> <span class="n">_pathlib</span><span class="o">.</span><span class="n">Path</span><span class="o">.</span><span class="n">home</span><span class="p">()</span><span class="o">.</span><span class="n">as_posix</span><span class="p">()</span>
+    <span class="n">DEFAULT_DIR</span> <span class="o">+=</span> <span class="n">_os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">sep</span> <span class="o">+</span> <span class="n">_os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+        <span class="s1">&#39;shared&#39;</span><span class="p">,</span> <span class="s1">&#39;screens-iocs&#39;</span><span class="p">,</span> <span class="s1">&#39;data_by_day&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">)</span>
+
+        <span class="n">root</span> <span class="o">=</span> <span class="n">_log</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span>
+        <span class="n">handler</span> <span class="o">=</span> <span class="n">_log</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">(</span><span class="n">_sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
+        <span class="n">root</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">_log</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+        <span class="n">handler</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">_log</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+        <span class="n">formatter</span> <span class="o">=</span> <span class="n">_log</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%(levelname)7s</span><span class="s1"> ::: </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">handler</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">formatter</span><span class="p">)</span>
+        <span class="n">root</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">handler</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">bpms_eq</span> <span class="o">=</span> <span class="n">EqualizeBPMs</span><span class="p">(</span><span class="n">logger</span><span class="o">=</span><span class="n">root</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_last_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DEFAULT_DIR</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_thread</span> <span class="o">=</span> <span class="n">Thread</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_orbits</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setupui</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;SIApp&#39;</span><span class="p">)</span>
+        <span class="n">color</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">get_appropriate_color</span><span class="p">(</span><span class="s1">&#39;SI&#39;</span><span class="p">)</span>
+        <span class="n">icon</span> <span class="o">=</span> <span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span>
+            <span class="s1">&#39;mdi.approximately-equal-box&#39;</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="p">[</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowIcon</span><span class="p">(</span><span class="n">icon</span><span class="p">)</span>
+
+<div class="viewcode-block" id="BPMsEqualizeSwitching.setupui">
+<a class="viewcode-back" href="../../../siriushla.si_di_equalize_bpms.html#siriushla.si_di_equalize_bpms.main.BPMsEqualizeSwitching.setupui">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setupui</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowModality</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">WindowModal</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&quot;SI - BPMs - Equalize Switching&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setDocumentMode</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setDockNestingEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">mwid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_central_widget</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setCentralWidget</span><span class="p">(</span><span class="n">mwid</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BPMsEqualizeSwitching.create_central_widget">
+<a class="viewcode-back" href="../../../siriushla.si_di_equalize_bpms.html#siriushla.si_di_equalize_bpms.main.BPMsEqualizeSwitching.create_central_widget">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_central_widget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="n">wid</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">lay</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">()</span>
+        <span class="n">wid</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">lay</span><span class="p">)</span>
+
+        <span class="n">wid</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span>
+            <span class="n">QLabel</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;&lt;h1&gt;Equalize Switching &lt;/h1&gt;&#39;</span><span class="p">,</span> <span class="n">wid</span><span class="p">),</span>
+            <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+
+        <span class="n">ctrls</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_acq_control_widget</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+        <span class="n">anly</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_analysis_control_widget</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_status_widget</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+        <span class="n">apply</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_application_widget</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+        <span class="n">saveload</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_saveload_widget</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+        <span class="n">plots</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_plots_widget</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+        <span class="n">check</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_check_data_widget</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+        <span class="n">updt_orb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_update_reforb_widget</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">ctrls</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">saveload</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">anly</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">plots</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">apply</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">check</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">updt_orb</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">status</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">wid</span></div>
+
+
+<div class="viewcode-block" id="BPMsEqualizeSwitching.get_acq_control_widget">
+<a class="viewcode-back" href="../../../siriushla.si_di_equalize_bpms.html#siriushla.si_di_equalize_bpms.main.BPMsEqualizeSwitching.get_acq_control_widget">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_acq_control_widget</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="n">wid</span> <span class="o">=</span> <span class="n">QGroupBox</span><span class="p">(</span><span class="s1">&#39;Measurement Control&#39;</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+        <span class="n">lay</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">()</span>
+        <span class="n">wid</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">lay</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">cb_acqstrat</span> <span class="o">=</span> <span class="n">QComboBox</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cb_acqstrat</span><span class="o">.</span><span class="n">addItems</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bpms_eq</span><span class="o">.</span><span class="n">AcqStrategies</span><span class="o">.</span><span class="n">_fields</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cb_acqstrat</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bpms_eq</span><span class="o">.</span><span class="n">acq_strategy</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">sp_invredgain</span> <span class="o">=</span> <span class="n">QDoubleSpinBox</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sp_invredgain</span><span class="o">.</span><span class="n">setRange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sp_invredgain</span><span class="o">.</span><span class="n">setSingleStep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sp_invredgain</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bpms_eq</span><span class="o">.</span><span class="n">acq_inverse_reduced_gain</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">sp_acqtimeout</span> <span class="o">=</span> <span class="n">QDoubleSpinBox</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sp_acqtimeout</span><span class="o">.</span><span class="n">setRange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">120</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sp_acqtimeout</span><span class="o">.</span><span class="n">setSingleStep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sp_acqtimeout</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bpms_eq</span><span class="o">.</span><span class="n">acq_timeout</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">sp_nrpoints</span> <span class="o">=</span> <span class="n">QSpinBox</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sp_nrpoints</span><span class="o">.</span><span class="n">setRange</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100000</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sp_nrpoints</span><span class="o">.</span><span class="n">setSingleStep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sp_nrpoints</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bpms_eq</span><span class="o">.</span><span class="n">acq_nrpoints</span><span class="p">)</span>
+
+        <span class="n">pusb_start</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span><span class="s1">&#39;mdi.play&#39;</span><span class="p">),</span> <span class="s1">&#39;Acquire Data&#39;</span><span class="p">,</span> <span class="n">wid</span><span class="p">)</span>
+        <span class="n">pusb_start</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_start_activity</span><span class="p">)</span>
+        <span class="n">pusb_start</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;meas&#39;</span><span class="p">)</span>
+
+        <span class="n">lb_acqstrat</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Acquisition Strategy&#39;</span><span class="p">,</span> <span class="n">wid</span><span class="p">)</span>
+        <span class="n">lb_invredgain</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Inverse Reduced Gain&#39;</span><span class="p">,</span> <span class="n">wid</span><span class="p">)</span>
+        <span class="n">lb_acqtimeout</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Timeout [s]&#39;</span><span class="p">,</span> <span class="n">wid</span><span class="p">)</span>
+        <span class="n">lb_nrpoints</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Number of Points&#39;</span><span class="p">,</span> <span class="n">wid</span><span class="p">)</span>
+
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lb_acqstrat</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cb_acqstrat</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lb_invredgain</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sp_invredgain</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lb_acqtimeout</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sp_acqtimeout</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lb_nrpoints</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sp_nrpoints</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">pusb_start</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setRowMinimumHeight</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setColumnStretch</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setColumnStretch</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">wid</span></div>
+
+
+<div class="viewcode-block" id="BPMsEqualizeSwitching.get_analysis_control_widget">
+<a class="viewcode-back" href="../../../siriushla.si_di_equalize_bpms.html#siriushla.si_di_equalize_bpms.main.BPMsEqualizeSwitching.get_analysis_control_widget">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_analysis_control_widget</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="n">wid</span> <span class="o">=</span> <span class="n">QGroupBox</span><span class="p">(</span><span class="s1">&#39;Analysis Control&#39;</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+        <span class="n">lay</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">()</span>
+        <span class="n">wid</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">lay</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cb_procmeth</span> <span class="o">=</span> <span class="n">QComboBox</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cb_procmeth</span><span class="o">.</span><span class="n">addItems</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bpms_eq</span><span class="o">.</span><span class="n">ProcMethods</span><span class="o">.</span><span class="n">_fields</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cb_procmeth</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bpms_eq</span><span class="o">.</span><span class="n">proc_method</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_procmeth</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_procmeth</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bpms_eq</span><span class="o">.</span><span class="n">PROCMETHODSMEANING</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">bpms_eq</span><span class="o">.</span><span class="n">proc_method_str</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cb_procmeth</span><span class="o">.</span><span class="n">currentTextChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">lb_procmeth</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">bpms_eq</span><span class="o">.</span><span class="n">PROCMETHODSMEANING</span><span class="p">[</span><span class="n">x</span><span class="p">]))</span>
+
+        <span class="n">pusb_proc</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span><span class="s1">&#39;mdi.chart-line&#39;</span><span class="p">),</span> <span class="s1">&#39;Process&#39;</span><span class="p">,</span> <span class="n">wid</span><span class="p">)</span>
+        <span class="n">pusb_proc</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_start_activity</span><span class="p">)</span>
+        <span class="n">pusb_proc</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;proc&#39;</span><span class="p">)</span>
+
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Process Method:&#39;</span><span class="p">,</span> <span class="n">wid</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cb_procmeth</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">pusb_proc</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_procmeth</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setColumnStretch</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setColumnStretch</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">wid</span></div>
+
+
+<div class="viewcode-block" id="BPMsEqualizeSwitching.get_check_data_widget">
+<a class="viewcode-back" href="../../../siriushla.si_di_equalize_bpms.html#siriushla.si_di_equalize_bpms.main.BPMsEqualizeSwitching.get_check_data_widget">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_check_data_widget</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="n">wid</span> <span class="o">=</span> <span class="n">QGroupBox</span><span class="p">(</span><span class="s1">&#39;Check Equalization&#39;</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+        <span class="n">lay</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">()</span>
+        <span class="n">wid</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">lay</span><span class="p">)</span>
+
+        <span class="n">pusb_check</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span>
+            <span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span><span class="s1">&#39;mdi.play&#39;</span><span class="p">),</span> <span class="s1">&#39;Get Data for Check&#39;</span><span class="p">,</span> <span class="n">wid</span><span class="p">)</span>
+        <span class="n">pusb_check</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_start_activity</span><span class="p">)</span>
+        <span class="n">pusb_check</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;check&#39;</span><span class="p">)</span>
+
+        <span class="n">pusb_pcheck</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;Plot to Check&#39;</span><span class="p">,</span> <span class="n">wid</span><span class="p">)</span>
+        <span class="n">pusb_pcheck</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;check&#39;</span><span class="p">)</span>
+        <span class="n">pusb_pcheck</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_plot</span><span class="p">)</span>
+
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">pusb_check</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">pusb_pcheck</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setColumnStretch</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setColumnStretch</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setColumnStretch</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">wid</span></div>
+
+
+<div class="viewcode-block" id="BPMsEqualizeSwitching.get_status_widget">
+<a class="viewcode-back" href="../../../siriushla.si_di_equalize_bpms.html#siriushla.si_di_equalize_bpms.main.BPMsEqualizeSwitching.get_status_widget">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_status_widget</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="n">wid</span> <span class="o">=</span> <span class="n">QGroupBox</span><span class="p">(</span><span class="s1">&#39;Status&#39;</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+        <span class="n">lay</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">()</span>
+        <span class="n">wid</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">lay</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_label</span> <span class="o">=</span> <span class="n">SiriusLogDisplay</span><span class="p">(</span><span class="n">wid</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">_log</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_label</span><span class="o">.</span><span class="n">logFormat</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%(message)s</span><span class="s1">&#39;</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log_label</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">wid</span></div>
+
+
+<div class="viewcode-block" id="BPMsEqualizeSwitching.get_application_widget">
+<a class="viewcode-back" href="../../../siriushla.si_di_equalize_bpms.html#siriushla.si_di_equalize_bpms.main.BPMsEqualizeSwitching.get_application_widget">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_application_widget</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="n">wid</span> <span class="o">=</span> <span class="n">QGroupBox</span><span class="p">(</span><span class="s1">&#39;Apply to BPMs&#39;</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+        <span class="n">lay</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">()</span>
+        <span class="n">wid</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">lay</span><span class="p">)</span>
+        <span class="n">pusb_appnew</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span>
+            <span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span><span class="s1">&#39;ei.arrow-down&#39;</span><span class="p">),</span> <span class="s1">&#39;Apply New Gains&#39;</span><span class="p">,</span> <span class="n">wid</span><span class="p">)</span>
+        <span class="n">pusb_appnew</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_apply_new</span><span class="p">)</span>
+        <span class="n">pusb_appold</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span>
+            <span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span><span class="s1">&#39;ei.arrow-down&#39;</span><span class="p">),</span> <span class="s1">&#39;Restore Initial Gains&#39;</span><span class="p">,</span> <span class="n">wid</span><span class="p">)</span>
+        <span class="n">pusb_appold</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_apply_old</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">pusb_appnew</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">pusb_appold</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setColumnStretch</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setColumnStretch</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setColumnStretch</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">wid</span></div>
+
+
+<div class="viewcode-block" id="BPMsEqualizeSwitching.get_saveload_widget">
+<a class="viewcode-back" href="../../../siriushla.si_di_equalize_bpms.html#siriushla.si_di_equalize_bpms.main.BPMsEqualizeSwitching.get_saveload_widget">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_saveload_widget</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="n">svld_wid</span> <span class="o">=</span> <span class="n">QGroupBox</span><span class="p">(</span><span class="s1">&#39;Save and Load Data&#39;</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+        <span class="n">svld_lay</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">(</span><span class="n">svld_wid</span><span class="p">)</span>
+
+        <span class="n">pbld</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;Load&#39;</span><span class="p">,</span> <span class="n">svld_wid</span><span class="p">)</span>
+        <span class="n">pbld</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span><span class="s1">&#39;mdi.file-upload-outline&#39;</span><span class="p">))</span>
+        <span class="n">pbld</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="s1">&#39;Load data from file&#39;</span><span class="p">)</span>
+        <span class="n">pbld</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_load_data_from_file</span><span class="p">)</span>
+
+        <span class="n">pbsv</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;Save&#39;</span><span class="p">,</span> <span class="n">svld_wid</span><span class="p">)</span>
+        <span class="n">pbsv</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span><span class="s1">&#39;mdi.file-download-outline&#39;</span><span class="p">))</span>
+        <span class="n">pbsv</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="s1">&#39;Save data to file&#39;</span><span class="p">)</span>
+        <span class="n">pbsv</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_save_data_to_file</span><span class="p">)</span>
+
+        <span class="n">svld_lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">pbsv</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">svld_lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">pbld</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">svld_lay</span><span class="o">.</span><span class="n">setColumnStretch</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">svld_lay</span><span class="o">.</span><span class="n">setColumnStretch</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">svld_lay</span><span class="o">.</span><span class="n">setColumnStretch</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">svld_wid</span></div>
+
+
+<div class="viewcode-block" id="BPMsEqualizeSwitching.get_plots_widget">
+<a class="viewcode-back" href="../../../siriushla.si_di_equalize_bpms.html#siriushla.si_di_equalize_bpms.main.BPMsEqualizeSwitching.get_plots_widget">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_plots_widget</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="n">wid</span> <span class="o">=</span> <span class="n">QGroupBox</span><span class="p">(</span><span class="s1">&#39;Make Some Plots&#39;</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+        <span class="n">lay</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+        <span class="n">wid</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">lay</span><span class="p">)</span>
+
+        <span class="n">pusb_mean</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;Antennas Mean&#39;</span><span class="p">,</span> <span class="n">wid</span><span class="p">)</span>
+        <span class="n">pusb_mean</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_plot</span><span class="p">)</span>
+        <span class="n">pusb_mean</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;mean&#39;</span><span class="p">)</span>
+        <span class="n">pusb_gains</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;Antennas Gains&#39;</span><span class="p">,</span> <span class="n">wid</span><span class="p">)</span>
+        <span class="n">pusb_gains</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_plot</span><span class="p">)</span>
+        <span class="n">pusb_gains</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;gains&#39;</span><span class="p">)</span>
+        <span class="n">pusb_dorb</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;Orbit Variation&#39;</span><span class="p">,</span> <span class="n">wid</span><span class="p">)</span>
+        <span class="n">pusb_dorb</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;dorb&#39;</span><span class="p">)</span>
+        <span class="n">pusb_dorb</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_plot</span><span class="p">)</span>
+        <span class="n">pusb_idcs</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;Cycle Indices&#39;</span><span class="p">,</span> <span class="n">wid</span><span class="p">)</span>
+        <span class="n">pusb_idcs</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;idcs&#39;</span><span class="p">)</span>
+        <span class="n">pusb_idcs</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_plot</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">pusb_mean</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">pusb_gains</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">pusb_dorb</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">pusb_idcs</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setRowStretch</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setRowStretch</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setColumnStretch</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setColumnStretch</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setColumnStretch</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">wid</span></div>
+
+
+<div class="viewcode-block" id="BPMsEqualizeSwitching.get_update_reforb_widget">
+<a class="viewcode-back" href="../../../siriushla.si_di_equalize_bpms.html#siriushla.si_di_equalize_bpms.main.BPMsEqualizeSwitching.get_update_reforb_widget">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_update_reforb_widget</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="n">wid</span> <span class="o">=</span> <span class="n">QGroupBox</span><span class="p">(</span><span class="s1">&#39;Update Orbits&#39;</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+        <span class="n">lay</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+        <span class="n">wid</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">lay</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">cb_orb</span> <span class="o">=</span> <span class="n">QComboBox</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cb_orb</span><span class="o">.</span><span class="n">addItems</span><span class="p">([</span><span class="s1">&#39;bba_orb&#39;</span><span class="p">,</span> <span class="s1">&#39;ref_orb&#39;</span><span class="p">,</span> <span class="s1">&#39;servconf&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cb_orb</span><span class="o">.</span><span class="n">currentTextChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_load_orbit</span><span class="p">)</span>
+        <span class="n">pb_orb</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span>
+            <span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span><span class="s1">&#39;ei.arrow-down&#39;</span><span class="p">),</span> <span class="s1">&#39;Save New Orbit&#39;</span><span class="p">,</span> <span class="n">wid</span><span class="p">)</span>
+        <span class="n">pb_orb</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_save_orbit</span><span class="p">)</span>
+
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span>
+            <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Config to change: &#39;</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cb_orb</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">pb_orb</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setColumnStretch</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setRowStretch</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">wid</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_start_activity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_thread</span><span class="o">.</span><span class="n">is_alive</span><span class="p">():</span>
+            <span class="n">_log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;There is another measurement happening.&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sender</span><span class="p">()</span><span class="o">.</span><span class="n">objectName</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;meas&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_thread</span> <span class="o">=</span> <span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_do_meas</span><span class="p">,</span> <span class="n">daemon</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">sender</span><span class="p">()</span><span class="o">.</span><span class="n">objectName</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;check&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_thread</span> <span class="o">=</span> <span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_do_check</span><span class="p">,</span> <span class="n">daemon</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_thread</span> <span class="o">=</span> <span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_process_data</span><span class="p">,</span> <span class="n">daemon</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_thread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_do_check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bpms_eq</span><span class="o">.</span><span class="n">acquire_data_for_checking</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="n">_log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="p">))</span>
+            <span class="k">return</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_do_meas</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bpms_eq</span><span class="o">.</span><span class="n">acq_strategy</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cb_acqstrat</span><span class="o">.</span><span class="n">currentIndex</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bpms_eq</span><span class="o">.</span><span class="n">acq_nrpoints</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sp_nrpoints</span><span class="o">.</span><span class="n">value</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bpms_eq</span><span class="o">.</span><span class="n">acq_inverse_reduced_gain</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sp_invredgain</span><span class="o">.</span><span class="n">value</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bpms_eq</span><span class="o">.</span><span class="n">acq_timeout</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sp_acqtimeout</span><span class="o">.</span><span class="n">value</span><span class="p">())</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bpms_eq</span><span class="o">.</span><span class="n">acquire_bpm_data</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="n">_log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="p">))</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_process_data</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_process_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">_log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Processing data&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bpms_eq</span><span class="o">.</span><span class="n">proc_method</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cb_procmeth</span><span class="o">.</span><span class="n">currentIndex</span><span class="p">())</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bpms_eq</span><span class="o">.</span><span class="n">process_data</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="n">_log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Problem processing data.&#39;</span><span class="p">)</span>
+            <span class="n">_log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="p">))</span>
+        <span class="n">_log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Processing Done!&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_apply_new</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">gains</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bpms_eq</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;gains_new&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">gains</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">_log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;New gains not found.&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bpms_eq</span><span class="o">.</span><span class="n">set_gains</span><span class="p">(</span><span class="n">gains</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="n">_log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="p">))</span>
+        <span class="n">_log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;New gains applied.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_apply_old</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">gains</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bpms_eq</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;gains_init&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">gains</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">_log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Initial gains not found.&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bpms_eq</span><span class="o">.</span><span class="n">set_gains</span><span class="p">(</span><span class="n">gains</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="n">_log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="p">))</span>
+        <span class="n">_log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Old gains applied.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_save_data_to_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_</span><span class="p">):</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">QFileDialog</span><span class="o">.</span><span class="n">getSaveFileName</span><span class="p">(</span>
+            <span class="n">caption</span><span class="o">=</span><span class="s1">&#39;Define a File Name to Save Data&#39;</span><span class="p">,</span>
+            <span class="n">directory</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_last_dir</span><span class="p">,</span>
+            <span class="nb">filter</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">EXT_FLT</span><span class="p">)</span>
+        <span class="n">fname</span> <span class="o">=</span> <span class="n">filename</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">fname</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_last_dir</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bpms_eq</span><span class="o">.</span><span class="n">save_data</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">_log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;File Saved ... </span><span class="si">{</span><span class="n">fname</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_load_data_from_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">QFileDialog</span><span class="o">.</span><span class="n">getOpenFileName</span><span class="p">(</span>
+            <span class="n">caption</span><span class="o">=</span><span class="s1">&#39;Select a Data File.&#39;</span><span class="p">,</span> <span class="n">directory</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_last_dir</span><span class="p">,</span>
+            <span class="nb">filter</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">EXT_FLT</span><span class="p">)</span>
+        <span class="n">fname</span> <span class="o">=</span> <span class="n">filename</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">fname</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_last_dir</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bpms_eq</span><span class="o">.</span><span class="n">load_data</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+        <span class="n">_log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;File Loaded ... </span><span class="si">{</span><span class="n">fname</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cb_acqstrat</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bpms_eq</span><span class="o">.</span><span class="n">acq_strategy</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sp_nrpoints</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bpms_eq</span><span class="o">.</span><span class="n">acq_nrpoints</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sp_invredgain</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bpms_eq</span><span class="o">.</span><span class="n">acq_inverse_reduced_gain</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sp_acqtimeout</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bpms_eq</span><span class="o">.</span><span class="n">acq_timeout</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cb_procmeth</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bpms_eq</span><span class="o">.</span><span class="n">proc_method</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_plot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sender</span><span class="p">()</span><span class="o">.</span><span class="n">objectName</span><span class="p">()</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;dorb&#39;</span><span class="p">):</span>
+            <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bpms_eq</span><span class="o">.</span><span class="n">plot_orbit_distortion</span><span class="p">()</span>
+            <span class="n">winname</span> <span class="o">=</span> <span class="s1">&#39;Orbit Variation&#39;</span>
+        <span class="k">elif</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;gains&#39;</span><span class="p">):</span>
+            <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bpms_eq</span><span class="o">.</span><span class="n">plot_gains</span><span class="p">()</span>
+            <span class="n">winname</span> <span class="o">=</span> <span class="s1">&#39;Gains&#39;</span>
+        <span class="k">elif</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;mean&#39;</span><span class="p">):</span>
+            <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bpms_eq</span><span class="o">.</span><span class="n">plot_antennas_mean</span><span class="p">()</span>
+            <span class="n">winname</span> <span class="o">=</span> <span class="s1">&#39;Antennas Mean&#39;</span>
+        <span class="k">elif</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;idcs&#39;</span><span class="p">):</span>
+            <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bpms_eq</span><span class="o">.</span><span class="n">plot_semicycle_indices</span><span class="p">()</span>
+            <span class="n">winname</span> <span class="o">=</span> <span class="s1">&#39;Cycle Indices&#39;</span>
+        <span class="k">elif</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;check&#39;</span><span class="p">):</span>
+            <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bpms_eq</span><span class="o">.</span><span class="n">plot_antennas_for_check</span><span class="p">()</span>
+            <span class="n">winname</span> <span class="o">=</span> <span class="s1">&#39;Check Equalization&#39;</span>
+        <span class="k">if</span> <span class="n">fig</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">_log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Error with plot.&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">get_figheight</span><span class="p">()</span>
+        <span class="n">width</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">get_figwidth</span><span class="p">()</span>
+        <span class="n">wind</span> <span class="o">=</span> <span class="n">create_window_from_widget</span><span class="p">(</span><span class="n">MatplotlibWidget</span><span class="p">,</span> <span class="n">winname</span><span class="p">)</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="n">wind</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">figure</span><span class="o">=</span><span class="n">fig</span><span class="p">)</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">width</span><span class="o">*</span><span class="mi">100</span><span class="p">,</span> <span class="n">height</span><span class="o">*</span><span class="mi">100</span><span class="p">)</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_load_orbit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">confname</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">confname</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">confname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sender</span><span class="p">()</span><span class="o">.</span><span class="n">currentText</span><span class="p">()</span>
+        <span class="n">win</span> <span class="o">=</span> <span class="n">LoadConfigDialog</span><span class="p">(</span><span class="s1">&#39;si_orbit&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">confname</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;servconf&#39;</span><span class="p">):</span>
+            <span class="n">confname</span><span class="p">,</span> <span class="n">status</span> <span class="o">=</span> <span class="n">win</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">status</span><span class="p">:</span>
+                <span class="n">_log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Loading aborted by user.&#39;</span><span class="p">)</span>
+                <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_orbits</span> <span class="o">=</span> <span class="n">win</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get_config_value</span><span class="p">(</span>
+            <span class="n">confname</span><span class="p">,</span> <span class="n">config_type</span><span class="o">=</span><span class="s1">&#39;si_orbit&#39;</span><span class="p">)</span>
+        <span class="n">_log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Orbit configuration named </span><span class="si">{</span><span class="n">confname</span><span class="si">}</span><span class="s1"> was loaded.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_save_orbit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_orbits</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_load_orbit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cb_orb</span><span class="o">.</span><span class="n">currentText</span><span class="p">())</span>
+        <span class="n">dorbx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bpms_eq</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;dorbx&#39;</span><span class="p">)</span>
+        <span class="n">dorby</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bpms_eq</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;dorby&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">dorbx</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">_log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Must Acquire and process data first.&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">data</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_orbits</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">dorbx</span>
+        <span class="n">data</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_orbits</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">dorby</span>
+
+        <span class="n">win</span> <span class="o">=</span> <span class="n">SaveConfigDialog</span><span class="p">(</span><span class="s1">&#39;si_orbit&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">_save</span><span class="p">(</span><span class="n">confname</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">win</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">insert_config</span><span class="p">(</span>
+                    <span class="n">confname</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">config_type</span><span class="o">=</span><span class="s1">&#39;si_orbit&#39;</span><span class="p">)</span>
+            <span class="k">except</span> <span class="p">(</span><span class="n">ConfigDBException</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">)</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+                <span class="n">_log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="p">))</span>
+                <span class="n">QMessageBox</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;Warning&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="p">),</span> <span class="n">QMessageBox</span><span class="o">.</span><span class="n">Ok</span><span class="p">)</span>
+
+        <span class="c1"># win.configname.connect(_save)</span>
+        <span class="n">confname</span><span class="p">,</span> <span class="n">status</span> <span class="o">=</span> <span class="n">win</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">status</span><span class="p">:</span>
+            <span class="n">_log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Saving aborted by user.&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="n">_save</span><span class="p">(</span><span class="n">confname</span><span class="p">)</span>
+        <span class="n">_log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Configuration saved.&#39;</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, lnls-sirius.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>siriushla.as_ap_sofb &mdash; siriushla 1.14.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=01009efc"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="siriushla.as_ap_sofb.graphics" href="siriushla.as_ap_sofb.graphics.html" />
+    <link rel="prev" title="siriushla.as_ap_radmon" href="siriushla.as_ap_radmon.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            siriushla
+          </a>
+              <div class="version">
+                1.14.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">GUIs:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_configdb.html">siriushla.as_ap_configdb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_currinfo.html">siriushla.as_ap_currinfo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_energybutton.html">siriushla.as_ap_energybutton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_injcontrol.html">siriushla.as_ap_injcontrol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_injection.html">siriushla.as_ap_injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_launcher.html">siriushla.as_ap_launcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_machshift.html">siriushla.as_ap_machshift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_macreport.html">siriushla.as_ap_macreport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_magoffconv.html">siriushla.as_ap_magoffconv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_measure.html">siriushla.as_ap_measure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_monitor.html">siriushla.as_ap_monitor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_opticscorr.html">siriushla.as_ap_opticscorr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_posang.html">siriushla.as_ap_posang</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_rabpmmon.html">siriushla.as_ap_rabpmmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_radmon.html">siriushla.as_ap_radmon</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">siriushla.as_ap_sofb</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html">siriushla.as_ap_sofb.graphics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html">siriushla.as_ap_sofb.ioc_control</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.as_ap_sofb.main">siriushla.as_ap_sofb.main module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ap_sofb.main.MainWindow"><code class="docutils literal notranslate"><span class="pre">MainWindow</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ap_sofb.main.MainWindow.acc"><code class="docutils literal notranslate"><span class="pre">MainWindow.acc</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ap_sofb.main.MainWindow.acc_idx"><code class="docutils literal notranslate"><span class="pre">MainWindow.acc_idx</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ap_sofb.main.MainWindow.isring"><code class="docutils literal notranslate"><span class="pre">MainWindow.isring</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ap_sofb.main.MainWindow.setupui"><code class="docutils literal notranslate"><span class="pre">MainWindow.setupui()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.as_ap_sofb.orbit_register">siriushla.as_ap_sofb.orbit_register module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ap_sofb.orbit_register.OrbitRegister"><code class="docutils literal notranslate"><span class="pre">OrbitRegister</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ap_sofb.orbit_register.OrbitRegister.DEFAULT_DIR"><code class="docutils literal notranslate"><span class="pre">OrbitRegister.DEFAULT_DIR</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ap_sofb.orbit_register.OrbitRegister.MAX_BUMP_CURR"><code class="docutils literal notranslate"><span class="pre">OrbitRegister.MAX_BUMP_CURR</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ap_sofb.orbit_register.OrbitRegister.getorbx"><code class="docutils literal notranslate"><span class="pre">OrbitRegister.getorbx()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ap_sofb.orbit_register.OrbitRegister.getorby"><code class="docutils literal notranslate"><span class="pre">OrbitRegister.getorby()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ap_sofb.orbit_register.OrbitRegister.new_orbx_signal"><code class="docutils literal notranslate"><span class="pre">OrbitRegister.new_orbx_signal</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ap_sofb.orbit_register.OrbitRegister.new_orby_signal"><code class="docutils literal notranslate"><span class="pre">OrbitRegister.new_orby_signal</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ap_sofb.orbit_register.OrbitRegister.new_string_signal"><code class="docutils literal notranslate"><span class="pre">OrbitRegister.new_string_signal</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ap_sofb.orbit_register.OrbitRegister.orbx"><code class="docutils literal notranslate"><span class="pre">OrbitRegister.orbx</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ap_sofb.orbit_register.OrbitRegister.orby"><code class="docutils literal notranslate"><span class="pre">OrbitRegister.orby</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ap_sofb.orbit_register.OrbitRegister.setup_ui"><code class="docutils literal notranslate"><span class="pre">OrbitRegister.setup_ui()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ap_sofb.orbit_register.OrbitRegisters"><code class="docutils literal notranslate"><span class="pre">OrbitRegisters</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ap_sofb.orbit_register.OrbitRegisters.channels"><code class="docutils literal notranslate"><span class="pre">OrbitRegisters.channels()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ap_sofb.orbit_register.OrbitRegisters.get_registers_control"><code class="docutils literal notranslate"><span class="pre">OrbitRegisters.get_registers_control()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ap_sofb.orbit_register.OrbitRegisters.setupui"><code class="docutils literal notranslate"><span class="pre">OrbitRegisters.setupui()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.as_ap_sofb">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_bpms.html">siriushla.as_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_dccts.html">siriushla.as_di_dccts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_icts.html">siriushla.as_di_icts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_scrns.html">siriushla.as_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_tune.html">siriushla.as_di_tune</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_vlight.html">siriushla.as_di_vlight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_commands.html">siriushla.as_ps_commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_control.html">siriushla.as_ps_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_cycle.html">siriushla.as_ps_cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_diag.html">siriushla.as_ps_diag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_pu_control.html">siriushla.as_pu_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_rf_control.html">siriushla.as_rf_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ti_control.html">siriushla.as_ti_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.bl_ap_imgproc.html">siriushla.bl_ap_imgproc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.bo_ap_ramp.html">siriushla.bo_ap_ramp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.common.html">siriushla.common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_ap_mps.html">siriushla.li_ap_mps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_di_bpms.html">siriushla.li_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_di_scrns.html">siriushla.li_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_eg_control.html">siriushla.li_eg_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_pu_modltr.html">siriushla.li_pu_modltr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_rf_llrf.html">siriushla.li_rf_llrf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_va_control.html">siriushla.li_va_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_fofb.html">siriushla.si_ap_fofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_genstatus.html">siriushla.si_ap_genstatus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_idff.html">siriushla.si_ap_idff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_orbintlk.html">siriushla.si_ap_orbintlk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_bbb.html">siriushla.si_di_bbb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_equalize_bpms.html">siriushla.si_di_equalize_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_scraps.html">siriushla.si_di_scraps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_id_control.html">siriushla.si_id_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.tb_di_slits.html">siriushla.tb_di_slits</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Widgets:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.html">Sirius HLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.widgets.html">Widgets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Source Code:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lnls-sirius/hla">HLA Github</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">siriushla</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">siriushla.as_ap_sofb</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/lnls-sirius/hla/blob/master/pyqt-apps/docs/source/siriushla.as_ap_sofb.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="siriushla-as-ap-sofb">
+<h1>siriushla.as_ap_sofb<a class="headerlink" href="#siriushla-as-ap-sofb" title="Link to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html">siriushla.as_ap_sofb.graphics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#module-siriushla.as_ap_sofb.graphics.base">siriushla.as_ap_sofb.graphics.base module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.BaseWidget"><code class="docutils literal notranslate"><span class="pre">BaseWidget</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.BaseWidget.DEFAULT_DIR"><code class="docutils literal notranslate"><span class="pre">BaseWidget.DEFAULT_DIR</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.BaseWidget.acc"><code class="docutils literal notranslate"><span class="pre">BaseWidget.acc</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.BaseWidget.acc_idx"><code class="docutils literal notranslate"><span class="pre">BaseWidget.acc_idx</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.BaseWidget.channels"><code class="docutils literal notranslate"><span class="pre">BaseWidget.channels()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.BaseWidget.connect_signals"><code class="docutils literal notranslate"><span class="pre">BaseWidget.connect_signals()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.BaseWidget.isring"><code class="docutils literal notranslate"><span class="pre">BaseWidget.isring</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.BaseWidget.setupui"><code class="docutils literal notranslate"><span class="pre">BaseWidget.setupui()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.BaseWidget.uicreate_combobox"><code class="docutils literal notranslate"><span class="pre">BaseWidget.uicreate_combobox()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.BaseWidget.uicreate_groupbox"><code class="docutils literal notranslate"><span class="pre">BaseWidget.uicreate_groupbox()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.BaseWidget.uicreate_label"><code class="docutils literal notranslate"><span class="pre">BaseWidget.uicreate_label()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.BaseWidget.uigetgraph"><code class="docutils literal notranslate"><span class="pre">BaseWidget.uigetgraph()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.Graph"><code class="docutils literal notranslate"><span class="pre">Graph</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.Graph.doubleclick"><code class="docutils literal notranslate"><span class="pre">Graph.doubleclick</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.Graph.mouseDoubleClickEvent"><code class="docutils literal notranslate"><span class="pre">Graph.mouseDoubleClickEvent()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.InfLine"><code class="docutils literal notranslate"><span class="pre">InfLine</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.InfLine.setValue"><code class="docutils literal notranslate"><span class="pre">InfLine.setValue()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.Label"><code class="docutils literal notranslate"><span class="pre">Label</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.Label.FMT"><code class="docutils literal notranslate"><span class="pre">Label.FMT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.Label.setFloat"><code class="docutils literal notranslate"><span class="pre">Label.setFloat()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.UpdateGraph"><code class="docutils literal notranslate"><span class="pre">UpdateGraph</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.UpdateGraph.UNIT"><code class="docutils literal notranslate"><span class="pre">UpdateGraph.UNIT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.UpdateGraph.ave_mstdx"><code class="docutils literal notranslate"><span class="pre">UpdateGraph.ave_mstdx</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.UpdateGraph.ave_mstdy"><code class="docutils literal notranslate"><span class="pre">UpdateGraph.ave_mstdy</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.UpdateGraph.ave_pstdx"><code class="docutils literal notranslate"><span class="pre">UpdateGraph.ave_pstdx</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.UpdateGraph.ave_pstdy"><code class="docutils literal notranslate"><span class="pre">UpdateGraph.ave_pstdy</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.UpdateGraph.avex"><code class="docutils literal notranslate"><span class="pre">UpdateGraph.avex</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.UpdateGraph.avey"><code class="docutils literal notranslate"><span class="pre">UpdateGraph.avey</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.UpdateGraph.data_sigx"><code class="docutils literal notranslate"><span class="pre">UpdateGraph.data_sigx</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.UpdateGraph.data_sigy"><code class="docutils literal notranslate"><span class="pre">UpdateGraph.data_sigy</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.UpdateGraph.p2px"><code class="docutils literal notranslate"><span class="pre">UpdateGraph.p2px</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.UpdateGraph.p2py"><code class="docutils literal notranslate"><span class="pre">UpdateGraph.p2py</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.UpdateGraph.ref_sigx"><code class="docutils literal notranslate"><span class="pre">UpdateGraph.ref_sigx</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.UpdateGraph.ref_sigy"><code class="docutils literal notranslate"><span class="pre">UpdateGraph.ref_sigy</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.UpdateGraph.set_enbl_list"><code class="docutils literal notranslate"><span class="pre">UpdateGraph.set_enbl_list()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.UpdateGraph.set_visible"><code class="docutils literal notranslate"><span class="pre">UpdateGraph.set_visible()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.UpdateGraph.some_changed"><code class="docutils literal notranslate"><span class="pre">UpdateGraph.some_changed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.UpdateGraph.stdx"><code class="docutils literal notranslate"><span class="pre">UpdateGraph.stdx</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.UpdateGraph.stdy"><code class="docutils literal notranslate"><span class="pre">UpdateGraph.stdy</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.base.UpdateGraph.update_graphic"><code class="docutils literal notranslate"><span class="pre">UpdateGraph.update_graphic()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#module-siriushla.as_ap_sofb.graphics.correctors">siriushla.as_ap_sofb.graphics.correctors module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.correctors.CorrectorsWidget"><code class="docutils literal notranslate"><span class="pre">CorrectorsWidget</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.correctors.CorrectorsWidget.add_RF_kicks"><code class="docutils literal notranslate"><span class="pre">CorrectorsWidget.add_RF_kicks()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.correctors.CorrectorsWidget.add_kicklimits_curves"><code class="docutils literal notranslate"><span class="pre">CorrectorsWidget.add_kicklimits_curves()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.correctors.CorrectorsWidget.channels"><code class="docutils literal notranslate"><span class="pre">CorrectorsWidget.channels()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.correctors.CorrectorsWidget.get_default_ctrls"><code class="docutils literal notranslate"><span class="pre">CorrectorsWidget.get_default_ctrls()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#module-siriushla.as_ap_sofb.graphics.orbit">siriushla.as_ap_sofb.graphics.orbit module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.orbit.MultiTurnSumWidget"><code class="docutils literal notranslate"><span class="pre">MultiTurnSumWidget</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.orbit.MultiTurnSumWidget.mouseDoubleClickEvent"><code class="docutils literal notranslate"><span class="pre">MultiTurnSumWidget.mouseDoubleClickEvent()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.orbit.MultiTurnSumWidget.ratio_sum_avg"><code class="docutils literal notranslate"><span class="pre">MultiTurnSumWidget.ratio_sum_avg</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.orbit.MultiTurnSumWidget.ratio_sum_std"><code class="docutils literal notranslate"><span class="pre">MultiTurnSumWidget.ratio_sum_std</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.orbit.MultiTurnSumWidget.setupui"><code class="docutils literal notranslate"><span class="pre">MultiTurnSumWidget.setupui()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.orbit.MultiTurnSumWidget.update_graph"><code class="docutils literal notranslate"><span class="pre">MultiTurnSumWidget.update_graph()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.orbit.MultiTurnWidget"><code class="docutils literal notranslate"><span class="pre">MultiTurnWidget</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.orbit.MultiTurnWidget.hideEvent"><code class="docutils literal notranslate"><span class="pre">MultiTurnWidget.hideEvent()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.orbit.MultiTurnWidget.setreforbits"><code class="docutils literal notranslate"><span class="pre">MultiTurnWidget.setreforbits()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.orbit.MultiTurnWidget.setupui"><code class="docutils literal notranslate"><span class="pre">MultiTurnWidget.setupui()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.orbit.MultiTurnWidget.showEvent"><code class="docutils literal notranslate"><span class="pre">MultiTurnWidget.showEvent()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.orbit.OrbitWidget"><code class="docutils literal notranslate"><span class="pre">OrbitWidget</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.orbit.OrbitWidget.add_buttons_for_images"><code class="docutils literal notranslate"><span class="pre">OrbitWidget.add_buttons_for_images()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.orbit.OrbitWidget.channels"><code class="docutils literal notranslate"><span class="pre">OrbitWidget.channels()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.orbit.OrbitWidget.get_default_ctrls"><code class="docutils literal notranslate"><span class="pre">OrbitWidget.get_default_ctrls()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.orbit.SinglePassSumWidget"><code class="docutils literal notranslate"><span class="pre">SinglePassSumWidget</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.orbit.SinglePassSumWidget.setupui"><code class="docutils literal notranslate"><span class="pre">SinglePassSumWidget.setupui()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.orbit.Spectrogram"><code class="docutils literal notranslate"><span class="pre">Spectrogram</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.orbit.Spectrogram.RULE_PROPERTIES"><code class="docutils literal notranslate"><span class="pre">Spectrogram.RULE_PROPERTIES</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.orbit.Spectrogram.channels"><code class="docutils literal notranslate"><span class="pre">Spectrogram.channels()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.orbit.Spectrogram.mouseDoubleClickEvent"><code class="docutils literal notranslate"><span class="pre">Spectrogram.mouseDoubleClickEvent()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.orbit.Spectrogram.new_data_sig"><code class="docutils literal notranslate"><span class="pre">Spectrogram.new_data_sig</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.orbit.Spectrogram.process_image"><code class="docutils literal notranslate"><span class="pre">Spectrogram.process_image()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.orbit.Spectrogram.setreforbit"><code class="docutils literal notranslate"><span class="pre">Spectrogram.setreforbit()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#module-siriushla.as_ap_sofb.graphics.respmat">siriushla.as_ap_sofb.graphics.respmat module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.respmat.ShowMatrixWidget"><code class="docutils literal notranslate"><span class="pre">ShowMatrixWidget</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.respmat.ShowMatrixWidget.setupui"><code class="docutils literal notranslate"><span class="pre">ShowMatrixWidget.setupui()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.respmat.SingularValues"><code class="docutils literal notranslate"><span class="pre">SingularValues</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.respmat.SingularValues.setValue"><code class="docutils literal notranslate"><span class="pre">SingularValues.setValue()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#siriushla.as_ap_sofb.graphics.respmat.SingularValues.setupui"><code class="docutils literal notranslate"><span class="pre">SingularValues.setupui()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_sofb.graphics.html#module-siriushla.as_ap_sofb.graphics">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html">siriushla.as_ap_sofb.ioc_control</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#module-siriushla.as_ap_sofb.ioc_control.base">siriushla.as_ap_sofb.ioc_control.base module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.base.BaseCombo"><code class="docutils literal notranslate"><span class="pre">BaseCombo</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.base.BaseCombo.acc"><code class="docutils literal notranslate"><span class="pre">BaseCombo.acc</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.base.BaseCombo.acc_idx"><code class="docutils literal notranslate"><span class="pre">BaseCombo.acc_idx</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.base.BaseCombo.channels"><code class="docutils literal notranslate"><span class="pre">BaseCombo.channels()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.base.BaseCombo.configname"><code class="docutils literal notranslate"><span class="pre">BaseCombo.configname</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.base.BaseCombo.connect_signals"><code class="docutils literal notranslate"><span class="pre">BaseCombo.connect_signals()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.base.BaseCombo.ioc_orbit_changed"><code class="docutils literal notranslate"><span class="pre">BaseCombo.ioc_orbit_changed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.base.BaseCombo.isring"><code class="docutils literal notranslate"><span class="pre">BaseCombo.isring</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.base.BaseCombo.setup_ui"><code class="docutils literal notranslate"><span class="pre">BaseCombo.setup_ui()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.base.BaseObject"><code class="docutils literal notranslate"><span class="pre">BaseObject</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.base.BaseObject.acc"><code class="docutils literal notranslate"><span class="pre">BaseObject.acc</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.base.BaseObject.acc_idx"><code class="docutils literal notranslate"><span class="pre">BaseObject.acc_idx</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.base.BaseObject.isring"><code class="docutils literal notranslate"><span class="pre">BaseObject.isring</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.base.BaseWidget"><code class="docutils literal notranslate"><span class="pre">BaseWidget</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.base.BaseWidget.create_pair"><code class="docutils literal notranslate"><span class="pre">BaseWidget.create_pair()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.base.BaseWidget.create_pair_butled"><code class="docutils literal notranslate"><span class="pre">BaseWidget.create_pair_butled()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.base.BaseWidget.create_pair_sel"><code class="docutils literal notranslate"><span class="pre">BaseWidget.create_pair_sel()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#module-siriushla.as_ap_sofb.ioc_control.drive_window">siriushla.as_ap_sofb.ioc_control.drive_window module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.drive_window.DriveControl"><code class="docutils literal notranslate"><span class="pre">DriveControl</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.drive_window.DriveControl.setupui"><code class="docutils literal notranslate"><span class="pre">DriveControl.setupui()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#module-siriushla.as_ap_sofb.ioc_control.kicks_config">siriushla.as_ap_sofb.ioc_control.kicks_config module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.kicks_config.KicksConfigWidget"><code class="docutils literal notranslate"><span class="pre">KicksConfigWidget</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.kicks_config.KicksConfigWidget.get_details_widget"><code class="docutils literal notranslate"><span class="pre">KicksConfigWidget.get_details_widget()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.kicks_config.KicksConfigWidget.get_status_widget"><code class="docutils literal notranslate"><span class="pre">KicksConfigWidget.get_status_widget()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.kicks_config.KicksConfigWidget.setupui"><code class="docutils literal notranslate"><span class="pre">KicksConfigWidget.setupui()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#module-siriushla.as_ap_sofb.ioc_control.main">siriushla.as_ap_sofb.ioc_control.main module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.main.PerformanceWidget"><code class="docutils literal notranslate"><span class="pre">PerformanceWidget</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.main.RefControl"><code class="docutils literal notranslate"><span class="pre">RefControl</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.main.RefControl.setup_ui"><code class="docutils literal notranslate"><span class="pre">RefControl.setup_ui()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.main.SOFBControl"><code class="docutils literal notranslate"><span class="pre">SOFBControl</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.main.SOFBControl.get_auto_correction_widget"><code class="docutils literal notranslate"><span class="pre">SOFBControl.get_auto_correction_widget()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.main.SOFBControl.get_correction_widget"><code class="docutils literal notranslate"><span class="pre">SOFBControl.get_correction_widget()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.main.SOFBControl.get_fofb_widget"><code class="docutils literal notranslate"><span class="pre">SOFBControl.get_fofb_widget()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.main.SOFBControl.get_main_widget"><code class="docutils literal notranslate"><span class="pre">SOFBControl.get_main_widget()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.main.SOFBControl.get_manual_correction_widget"><code class="docutils literal notranslate"><span class="pre">SOFBControl.get_manual_correction_widget()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.main.SOFBControl.get_orbit_widget"><code class="docutils literal notranslate"><span class="pre">SOFBControl.get_orbit_widget()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.main.SOFBControl.setupui"><code class="docutils literal notranslate"><span class="pre">SOFBControl.setupui()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#module-siriushla.as_ap_sofb.ioc_control.orbit_acquisition">siriushla.as_ap_sofb.ioc_control.orbit_acquisition module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.orbit_acquisition.AcqControlWidget"><code class="docutils literal notranslate"><span class="pre">AcqControlWidget</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.orbit_acquisition.AcqControlWidget.setupui"><code class="docutils literal notranslate"><span class="pre">AcqControlWidget.setupui()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#module-siriushla.as_ap_sofb.ioc_control.respmat">siriushla.as_ap_sofb.ioc_control.respmat module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.respmat.RespMatWidget"><code class="docutils literal notranslate"><span class="pre">RespMatWidget</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.respmat.RespMatWidget.DEFAULT_DIR"><code class="docutils literal notranslate"><span class="pre">RespMatWidget.DEFAULT_DIR</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.respmat.RespMatWidget.get_main_widget"><code class="docutils literal notranslate"><span class="pre">RespMatWidget.get_main_widget()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.respmat.RespMatWidget.get_measurement_widget"><code class="docutils literal notranslate"><span class="pre">RespMatWidget.get_measurement_widget()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.respmat.RespMatWidget.get_saveload_widget"><code class="docutils literal notranslate"><span class="pre">RespMatWidget.get_saveload_widget()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.respmat.RespMatWidget.get_selection_lists_widget"><code class="docutils literal notranslate"><span class="pre">RespMatWidget.get_selection_lists_widget()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.respmat.RespMatWidget.get_singular_values_widget"><code class="docutils literal notranslate"><span class="pre">RespMatWidget.get_singular_values_widget()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.respmat.RespMatWidget.setupui"><code class="docutils literal notranslate"><span class="pre">RespMatWidget.setupui()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#module-siriushla.as_ap_sofb.ioc_control.respmat_enbllist">siriushla.as_ap_sofb.ioc_control.respmat_enbllist module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.respmat_enbllist.SelectionMatrix"><code class="docutils literal notranslate"><span class="pre">SelectionMatrix</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.respmat_enbllist.SingleSelMatrix"><code class="docutils literal notranslate"><span class="pre">SingleSelMatrix</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.respmat_enbllist.SingleSelMatrix.RULE_PROPERTIES"><code class="docutils literal notranslate"><span class="pre">SingleSelMatrix.RULE_PROPERTIES</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.respmat_enbllist.SingleSelMatrix.connection_changed"><code class="docutils literal notranslate"><span class="pre">SingleSelMatrix.connection_changed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.respmat_enbllist.SingleSelMatrix.get_headers"><code class="docutils literal notranslate"><span class="pre">SingleSelMatrix.get_headers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.respmat_enbllist.SingleSelMatrix.get_positions"><code class="docutils literal notranslate"><span class="pre">SingleSelMatrix.get_positions()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.respmat_enbllist.SingleSelMatrix.get_widgets"><code class="docutils literal notranslate"><span class="pre">SingleSelMatrix.get_widgets()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.respmat_enbllist.SingleSelMatrix.send_value"><code class="docutils literal notranslate"><span class="pre">SingleSelMatrix.send_value()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.respmat_enbllist.SingleSelMatrix.sizeHint"><code class="docutils literal notranslate"><span class="pre">SingleSelMatrix.sizeHint()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.respmat_enbllist.SingleSelMatrix.value_changed"><code class="docutils literal notranslate"><span class="pre">SingleSelMatrix.value_changed()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#module-siriushla.as_ap_sofb.ioc_control.status">siriushla.as_ap_sofb.ioc_control.status module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.status.StatusWidget"><code class="docutils literal notranslate"><span class="pre">StatusWidget</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.status.StatusWidget.creategroupbox"><code class="docutils literal notranslate"><span class="pre">StatusWidget.creategroupbox()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#siriushla.as_ap_sofb.ioc_control.status.StatusWidget.setupui"><code class="docutils literal notranslate"><span class="pre">StatusWidget.setupui()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html#module-siriushla.as_ap_sofb.ioc_control">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="code-documentation">
+<h2>Code Documentation<a class="headerlink" href="#code-documentation" title="Link to this heading"></a></h2>
+</section>
+<section id="module-siriushla.as_ap_sofb.main">
+<span id="siriushla-as-ap-sofb-main-module"></span><h2>siriushla.as_ap_sofb.main module<a class="headerlink" href="#module-siriushla.as_ap_sofb.main" title="Link to this heading"></a></h2>
+<p>Main module of the Application Interface.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.main.MainWindow">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ap_sofb.main.</span></span><span class="sig-name descname"><span class="pre">MainWindow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'SI'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/main.html#MainWindow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.main.MainWindow" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_SiriusWindow</span></code></p>
+<dl class="py property">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.main.MainWindow.acc">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">acc</span></span><a class="headerlink" href="#siriushla.as_ap_sofb.main.MainWindow.acc" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.main.MainWindow.acc_idx">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">acc_idx</span></span><a class="headerlink" href="#siriushla.as_ap_sofb.main.MainWindow.acc_idx" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.main.MainWindow.isring">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">isring</span></span><a class="headerlink" href="#siriushla.as_ap_sofb.main.MainWindow.isring" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.main.MainWindow.setupui">
+<span class="sig-name descname"><span class="pre">setupui</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/main.html#MainWindow.setupui"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.main.MainWindow.setupui" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-siriushla.as_ap_sofb.orbit_register">
+<span id="siriushla-as-ap-sofb-orbit-register-module"></span><h2>siriushla.as_ap_sofb.orbit_register module<a class="headerlink" href="#module-siriushla.as_ap_sofb.orbit_register" title="Link to this heading"></a></h2>
+<p>Creates the Contextes Menus for the Register.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.orbit_register.OrbitRegister">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ap_sofb.orbit_register.</span></span><span class="sig-name descname"><span class="pre">OrbitRegister</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orbits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'SI'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/orbit_register.html#OrbitRegister"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.orbit_register.OrbitRegister" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QWidget</span></code></p>
+<p>Create the Context Menu for the Registers.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.orbit_register.OrbitRegister.DEFAULT_DIR">
+<span class="sig-name descname"><span class="pre">DEFAULT_DIR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'/home/sirius/shared/screens-iocs'</span></em><a class="headerlink" href="#siriushla.as_ap_sofb.orbit_register.OrbitRegister.DEFAULT_DIR" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.orbit_register.OrbitRegister.MAX_BUMP_CURR">
+<span class="sig-name descname"><span class="pre">MAX_BUMP_CURR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10</span></em><a class="headerlink" href="#siriushla.as_ap_sofb.orbit_register.OrbitRegister.MAX_BUMP_CURR" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.orbit_register.OrbitRegister.getorbx">
+<span class="sig-name descname"><span class="pre">getorbx</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/orbit_register.html#OrbitRegister.getorbx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.orbit_register.OrbitRegister.getorbx" title="Link to this definition"></a></dt>
+<dd><p>Return the horizontal orbit.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.orbit_register.OrbitRegister.getorby">
+<span class="sig-name descname"><span class="pre">getorby</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/orbit_register.html#OrbitRegister.getorby"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.orbit_register.OrbitRegister.getorby" title="Link to this definition"></a></dt>
+<dd><p>Return the Vertical orbit.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.orbit_register.OrbitRegister.new_orbx_signal">
+<span class="sig-name descname"><span class="pre">new_orbx_signal</span></span><a class="headerlink" href="#siriushla.as_ap_sofb.orbit_register.OrbitRegister.new_orbx_signal" title="Link to this definition"></a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id1"><span class="problematic" id="id2">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.orbit_register.OrbitRegister.new_orby_signal">
+<span class="sig-name descname"><span class="pre">new_orby_signal</span></span><a class="headerlink" href="#siriushla.as_ap_sofb.orbit_register.OrbitRegister.new_orby_signal" title="Link to this definition"></a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id3"><span class="problematic" id="id4">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.orbit_register.OrbitRegister.new_string_signal">
+<span class="sig-name descname"><span class="pre">new_string_signal</span></span><a class="headerlink" href="#siriushla.as_ap_sofb.orbit_register.OrbitRegister.new_string_signal" title="Link to this definition"></a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id5"><span class="problematic" id="id6">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.orbit_register.OrbitRegister.orbx">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">orbx</span></span><a class="headerlink" href="#siriushla.as_ap_sofb.orbit_register.OrbitRegister.orbx" title="Link to this definition"></a></dt>
+<dd><p>Return the horizontal orbit.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.orbit_register.OrbitRegister.orby">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">orby</span></span><a class="headerlink" href="#siriushla.as_ap_sofb.orbit_register.OrbitRegister.orby" title="Link to this definition"></a></dt>
+<dd><p>Return the Vertical orbit.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.orbit_register.OrbitRegister.setup_ui">
+<span class="sig-name descname"><span class="pre">setup_ui</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/orbit_register.html#OrbitRegister.setup_ui"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.orbit_register.OrbitRegister.setup_ui" title="Link to this definition"></a></dt>
+<dd><p>Set up Ui of Context Menu.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.orbit_register.OrbitRegisters">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ap_sofb.orbit_register.</span></span><span class="sig-name descname"><span class="pre">OrbitRegisters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nr_registers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">9</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/orbit_register.html#OrbitRegisters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.orbit_register.OrbitRegisters" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QWidget</span></code></p>
+<p>.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.orbit_register.OrbitRegisters.channels">
+<span class="sig-name descname"><span class="pre">channels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/orbit_register.html#OrbitRegisters.channels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.orbit_register.OrbitRegisters.channels" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.orbit_register.OrbitRegisters.get_registers_control">
+<span class="sig-name descname"><span class="pre">get_registers_control</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/orbit_register.html#OrbitRegisters.get_registers_control"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.orbit_register.OrbitRegisters.get_registers_control" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.orbit_register.OrbitRegisters.setupui">
+<span class="sig-name descname"><span class="pre">setupui</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/orbit_register.html#OrbitRegisters.setupui"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.orbit_register.OrbitRegisters.setupui" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-siriushla.as_ap_sofb">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-siriushla.as_ap_sofb" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="siriushla.as_ap_radmon.html" class="btn btn-neutral float-left" title="siriushla.as_ap_radmon" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="siriushla.as_ap_sofb.graphics.html" class="btn btn-neutral float-right" title="siriushla.as_ap_sofb.graphics" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, lnls-sirius.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

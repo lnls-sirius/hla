@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>siriushla.as_ap_configdb &mdash; siriushla 1.14.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=01009efc"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="siriushla.as_ap_configdb.models" href="siriushla.as_ap_configdb.models.html" />
+    <link rel="prev" title="Welcome to Sirius HLA’s documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            siriushla
+          </a>
+              <div class="version">
+                1.14.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">GUIs:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">siriushla.as_ap_configdb</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.as_ap_configdb.models.html">siriushla.as_ap_configdb.models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html">siriushla.as_ap_configdb.normconfigs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.as_ap_configdb.pvsconfigs.html">siriushla.as_ap_configdb.pvsconfigs</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.as_ap_configdb.client_configdb">siriushla.as_ap_configdb.client_configdb module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ap_configdb.client_configdb.ConfigurationManager"><code class="docutils literal notranslate"><span class="pre">ConfigurationManager</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ap_configdb.client_configdb.ConfigurationManager.CONFIG_TYPE_COL"><code class="docutils literal notranslate"><span class="pre">ConfigurationManager.CONFIG_TYPE_COL</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ap_configdb.client_configdb.ConfigurationManager.NAME_COL"><code class="docutils literal notranslate"><span class="pre">ConfigurationManager.NAME_COL</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ap_configdb.client_configdb.JsonTreeModel"><code class="docutils literal notranslate"><span class="pre">JsonTreeModel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ap_configdb.client_configdb.JsonTreeModel.columnCount"><code class="docutils literal notranslate"><span class="pre">JsonTreeModel.columnCount()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ap_configdb.client_configdb.JsonTreeModel.data"><code class="docutils literal notranslate"><span class="pre">JsonTreeModel.data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ap_configdb.client_configdb.JsonTreeModel.flags"><code class="docutils literal notranslate"><span class="pre">JsonTreeModel.flags()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ap_configdb.client_configdb.JsonTreeModel.headerData"><code class="docutils literal notranslate"><span class="pre">JsonTreeModel.headerData()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ap_configdb.client_configdb.JsonTreeModel.index"><code class="docutils literal notranslate"><span class="pre">JsonTreeModel.index()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ap_configdb.client_configdb.JsonTreeModel.parent"><code class="docutils literal notranslate"><span class="pre">JsonTreeModel.parent()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ap_configdb.client_configdb.JsonTreeModel.rowCount"><code class="docutils literal notranslate"><span class="pre">JsonTreeModel.rowCount()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ap_configdb.client_configdb.JsonTreeModel.setupModelData"><code class="docutils literal notranslate"><span class="pre">JsonTreeModel.setupModelData()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ap_configdb.client_configdb.TreeItem"><code class="docutils literal notranslate"><span class="pre">TreeItem</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ap_configdb.client_configdb.TreeItem.appendChild"><code class="docutils literal notranslate"><span class="pre">TreeItem.appendChild()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ap_configdb.client_configdb.TreeItem.child"><code class="docutils literal notranslate"><span class="pre">TreeItem.child()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ap_configdb.client_configdb.TreeItem.childCount"><code class="docutils literal notranslate"><span class="pre">TreeItem.childCount()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ap_configdb.client_configdb.TreeItem.columnCount"><code class="docutils literal notranslate"><span class="pre">TreeItem.columnCount()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ap_configdb.client_configdb.TreeItem.data"><code class="docutils literal notranslate"><span class="pre">TreeItem.data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ap_configdb.client_configdb.TreeItem.parentItem"><code class="docutils literal notranslate"><span class="pre">TreeItem.parentItem()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ap_configdb.client_configdb.TreeItem.row"><code class="docutils literal notranslate"><span class="pre">TreeItem.row()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.as_ap_configdb.configdialogs">siriushla.as_ap_configdb.configdialogs module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ap_configdb.configdialogs.LoadConfigDialog"><code class="docutils literal notranslate"><span class="pre">LoadConfigDialog</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ap_configdb.configdialogs.RenameConfigDialog"><code class="docutils literal notranslate"><span class="pre">RenameConfigDialog</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ap_configdb.configdialogs.RenameConfigDialog.configname"><code class="docutils literal notranslate"><span class="pre">RenameConfigDialog.configname</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ap_configdb.configdialogs.SaveConfigDialog"><code class="docutils literal notranslate"><span class="pre">SaveConfigDialog</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ap_configdb.configdialogs.SaveConfigDialog.config_name"><code class="docutils literal notranslate"><span class="pre">SaveConfigDialog.config_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ap_configdb.configdialogs.SaveConfigDialog.configname"><code class="docutils literal notranslate"><span class="pre">SaveConfigDialog.configname</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.as_ap_configdb.configwidgets">siriushla.as_ap_configdb.configwidgets module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ap_configdb.configwidgets.ConfigDBInfoHeader"><code class="docutils literal notranslate"><span class="pre">ConfigDBInfoHeader</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ap_configdb.configwidgets.ConfigDBInfoHeader.setupui"><code class="docutils literal notranslate"><span class="pre">ConfigDBInfoHeader.setupui()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ap_configdb.configwidgets.ConfigDBSearchEngine"><code class="docutils literal notranslate"><span class="pre">ConfigDBSearchEngine</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ap_configdb.configwidgets.ConfigDBSearchEngine.CONFIG_TYPE_COL"><code class="docutils literal notranslate"><span class="pre">ConfigDBSearchEngine.CONFIG_TYPE_COL</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ap_configdb.configwidgets.ConfigDBSearchEngine.NAME_COL"><code class="docutils literal notranslate"><span class="pre">ConfigDBSearchEngine.NAME_COL</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ap_configdb.configwidgets.ConfigDBSearchEngine.filteredidcs"><code class="docutils literal notranslate"><span class="pre">ConfigDBSearchEngine.filteredidcs</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ap_configdb.configwidgets.ConfigTableWidget"><code class="docutils literal notranslate"><span class="pre">ConfigTableWidget</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ap_configdb.configwidgets.ConfigTableWidget.CONFIG_TYPE_COL"><code class="docutils literal notranslate"><span class="pre">ConfigTableWidget.CONFIG_TYPE_COL</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ap_configdb.configwidgets.ConfigTableWidget.NAME_COL"><code class="docutils literal notranslate"><span class="pre">ConfigTableWidget.NAME_COL</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ap_configdb.configwidgets.ConfigTableWidget.configChanged"><code class="docutils literal notranslate"><span class="pre">ConfigTableWidget.configChanged</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ap_configdb.configwidgets.ConfigTableWidget.config_name"><code class="docutils literal notranslate"><span class="pre">ConfigTableWidget.config_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ap_configdb.configwidgets.ConfigTableWidget.config_type"><code class="docutils literal notranslate"><span class="pre">ConfigTableWidget.config_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ap_configdb.configwidgets.ConfigTableWidget.connectionError"><code class="docutils literal notranslate"><span class="pre">ConfigTableWidget.connectionError</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ap_configdb.configwidgets.ConfigTableWidget.resizeEvent"><code class="docutils literal notranslate"><span class="pre">ConfigTableWidget.resizeEvent()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.as_ap_configdb">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_currinfo.html">siriushla.as_ap_currinfo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_energybutton.html">siriushla.as_ap_energybutton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_injcontrol.html">siriushla.as_ap_injcontrol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_injection.html">siriushla.as_ap_injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_launcher.html">siriushla.as_ap_launcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_machshift.html">siriushla.as_ap_machshift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_macreport.html">siriushla.as_ap_macreport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_magoffconv.html">siriushla.as_ap_magoffconv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_measure.html">siriushla.as_ap_measure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_monitor.html">siriushla.as_ap_monitor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_opticscorr.html">siriushla.as_ap_opticscorr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_posang.html">siriushla.as_ap_posang</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_rabpmmon.html">siriushla.as_ap_rabpmmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_radmon.html">siriushla.as_ap_radmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_sofb.html">siriushla.as_ap_sofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_bpms.html">siriushla.as_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_dccts.html">siriushla.as_di_dccts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_icts.html">siriushla.as_di_icts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_scrns.html">siriushla.as_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_tune.html">siriushla.as_di_tune</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_vlight.html">siriushla.as_di_vlight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_commands.html">siriushla.as_ps_commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_control.html">siriushla.as_ps_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_cycle.html">siriushla.as_ps_cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_diag.html">siriushla.as_ps_diag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_pu_control.html">siriushla.as_pu_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_rf_control.html">siriushla.as_rf_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ti_control.html">siriushla.as_ti_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.bl_ap_imgproc.html">siriushla.bl_ap_imgproc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.bo_ap_ramp.html">siriushla.bo_ap_ramp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.common.html">siriushla.common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_ap_mps.html">siriushla.li_ap_mps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_di_bpms.html">siriushla.li_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_di_scrns.html">siriushla.li_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_eg_control.html">siriushla.li_eg_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_pu_modltr.html">siriushla.li_pu_modltr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_rf_llrf.html">siriushla.li_rf_llrf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_va_control.html">siriushla.li_va_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_fofb.html">siriushla.si_ap_fofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_genstatus.html">siriushla.si_ap_genstatus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_idff.html">siriushla.si_ap_idff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_orbintlk.html">siriushla.si_ap_orbintlk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_bbb.html">siriushla.si_di_bbb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_equalize_bpms.html">siriushla.si_di_equalize_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_scraps.html">siriushla.si_di_scraps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_id_control.html">siriushla.si_id_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.tb_di_slits.html">siriushla.tb_di_slits</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Widgets:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.html">Sirius HLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.widgets.html">Widgets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Source Code:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lnls-sirius/hla">HLA Github</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">siriushla</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">siriushla.as_ap_configdb</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/lnls-sirius/hla/blob/master/pyqt-apps/docs/source/siriushla.as_ap_configdb.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="siriushla-as-ap-configdb">
+<h1>siriushla.as_ap_configdb<a class="headerlink" href="#siriushla-as-ap-configdb" title="Link to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_configdb.models.html">siriushla.as_ap_configdb.models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_configdb.models.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_configdb.models.html#module-siriushla.as_ap_configdb.models.config_db_table_model">siriushla.as_ap_configdb.models.config_db_table_model module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.as_ap_configdb.models.html#siriushla.as_ap_configdb.models.config_db_table_model.ConfigDbTableModel"><code class="docutils literal notranslate"><span class="pre">ConfigDbTableModel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.models.html#siriushla.as_ap_configdb.models.config_db_table_model.ConfigDbTableModel.columnCount"><code class="docutils literal notranslate"><span class="pre">ConfigDbTableModel.columnCount()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.models.html#siriushla.as_ap_configdb.models.config_db_table_model.ConfigDbTableModel.config_type"><code class="docutils literal notranslate"><span class="pre">ConfigDbTableModel.config_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.models.html#siriushla.as_ap_configdb.models.config_db_table_model.ConfigDbTableModel.connectionError"><code class="docutils literal notranslate"><span class="pre">ConfigDbTableModel.connectionError</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.models.html#siriushla.as_ap_configdb.models.config_db_table_model.ConfigDbTableModel.data"><code class="docutils literal notranslate"><span class="pre">ConfigDbTableModel.data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.models.html#siriushla.as_ap_configdb.models.config_db_table_model.ConfigDbTableModel.flags"><code class="docutils literal notranslate"><span class="pre">ConfigDbTableModel.flags()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.models.html#siriushla.as_ap_configdb.models.config_db_table_model.ConfigDbTableModel.headerData"><code class="docutils literal notranslate"><span class="pre">ConfigDbTableModel.headerData()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.models.html#siriushla.as_ap_configdb.models.config_db_table_model.ConfigDbTableModel.horizontalHeader"><code class="docutils literal notranslate"><span class="pre">ConfigDbTableModel.horizontalHeader</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.models.html#siriushla.as_ap_configdb.models.config_db_table_model.ConfigDbTableModel.removeRow"><code class="docutils literal notranslate"><span class="pre">ConfigDbTableModel.removeRow</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.models.html#siriushla.as_ap_configdb.models.config_db_table_model.ConfigDbTableModel.removeRows"><code class="docutils literal notranslate"><span class="pre">ConfigDbTableModel.removeRows()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.models.html#siriushla.as_ap_configdb.models.config_db_table_model.ConfigDbTableModel.rowCount"><code class="docutils literal notranslate"><span class="pre">ConfigDbTableModel.rowCount()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.models.html#siriushla.as_ap_configdb.models.config_db_table_model.ConfigDbTableModel.setupModelData"><code class="docutils literal notranslate"><span class="pre">ConfigDbTableModel.setupModelData()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.models.html#siriushla.as_ap_configdb.models.config_db_table_model.ConfigDbTableModel.sort"><code class="docutils literal notranslate"><span class="pre">ConfigDbTableModel.sort()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_configdb.models.html#module-siriushla.as_ap_configdb.models.config_names_model">siriushla.as_ap_configdb.models.config_names_model module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.as_ap_configdb.models.html#siriushla.as_ap_configdb.models.config_names_model.ConfigNamesModel"><code class="docutils literal notranslate"><span class="pre">ConfigNamesModel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.models.html#siriushla.as_ap_configdb.models.config_names_model.ConfigNamesModel.columnCount"><code class="docutils literal notranslate"><span class="pre">ConfigNamesModel.columnCount()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.models.html#siriushla.as_ap_configdb.models.config_names_model.ConfigNamesModel.config_type"><code class="docutils literal notranslate"><span class="pre">ConfigNamesModel.config_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.models.html#siriushla.as_ap_configdb.models.config_names_model.ConfigNamesModel.data"><code class="docutils literal notranslate"><span class="pre">ConfigNamesModel.data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.models.html#siriushla.as_ap_configdb.models.config_names_model.ConfigNamesModel.rowCount"><code class="docutils literal notranslate"><span class="pre">ConfigNamesModel.rowCount()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.models.html#siriushla.as_ap_configdb.models.config_names_model.ConfigNamesModel.setupModelData"><code class="docutils literal notranslate"><span class="pre">ConfigNamesModel.setupModelData()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_configdb.models.html#module-siriushla.as_ap_configdb.models.config_types_model">siriushla.as_ap_configdb.models.config_types_model module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.as_ap_configdb.models.html#siriushla.as_ap_configdb.models.config_types_model.ConfigPVsTypeModel"><code class="docutils literal notranslate"><span class="pre">ConfigPVsTypeModel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.models.html#siriushla.as_ap_configdb.models.config_types_model.ConfigPVsTypeModel.setupModelData"><code class="docutils literal notranslate"><span class="pre">ConfigPVsTypeModel.setupModelData()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.as_ap_configdb.models.html#siriushla.as_ap_configdb.models.config_types_model.ConfigTypeModel"><code class="docutils literal notranslate"><span class="pre">ConfigTypeModel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.models.html#siriushla.as_ap_configdb.models.config_types_model.ConfigTypeModel.columnCount"><code class="docutils literal notranslate"><span class="pre">ConfigTypeModel.columnCount()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.models.html#siriushla.as_ap_configdb.models.config_types_model.ConfigTypeModel.data"><code class="docutils literal notranslate"><span class="pre">ConfigTypeModel.data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.models.html#siriushla.as_ap_configdb.models.config_types_model.ConfigTypeModel.rowCount"><code class="docutils literal notranslate"><span class="pre">ConfigTypeModel.rowCount()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.models.html#siriushla.as_ap_configdb.models.config_types_model.ConfigTypeModel.setupModelData"><code class="docutils literal notranslate"><span class="pre">ConfigTypeModel.setupModelData()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_configdb.models.html#module-siriushla.as_ap_configdb.models.pv_configuration_model">siriushla.as_ap_configdb.models.pv_configuration_model module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.as_ap_configdb.models.html#siriushla.as_ap_configdb.models.pv_configuration_model.PVConfigurationTableModel"><code class="docutils literal notranslate"><span class="pre">PVConfigurationTableModel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.models.html#siriushla.as_ap_configdb.models.pv_configuration_model.PVConfigurationTableModel.columnCount"><code class="docutils literal notranslate"><span class="pre">PVConfigurationTableModel.columnCount()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.models.html#siriushla.as_ap_configdb.models.pv_configuration_model.PVConfigurationTableModel.config_type"><code class="docutils literal notranslate"><span class="pre">PVConfigurationTableModel.config_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.models.html#siriushla.as_ap_configdb.models.pv_configuration_model.PVConfigurationTableModel.data"><code class="docutils literal notranslate"><span class="pre">PVConfigurationTableModel.data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.models.html#siriushla.as_ap_configdb.models.pv_configuration_model.PVConfigurationTableModel.flags"><code class="docutils literal notranslate"><span class="pre">PVConfigurationTableModel.flags()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.models.html#siriushla.as_ap_configdb.models.pv_configuration_model.PVConfigurationTableModel.headerData"><code class="docutils literal notranslate"><span class="pre">PVConfigurationTableModel.headerData()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.models.html#siriushla.as_ap_configdb.models.pv_configuration_model.PVConfigurationTableModel.model_data"><code class="docutils literal notranslate"><span class="pre">PVConfigurationTableModel.model_data</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.models.html#siriushla.as_ap_configdb.models.pv_configuration_model.PVConfigurationTableModel.rowCount"><code class="docutils literal notranslate"><span class="pre">PVConfigurationTableModel.rowCount()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.models.html#siriushla.as_ap_configdb.models.pv_configuration_model.PVConfigurationTableModel.setData"><code class="docutils literal notranslate"><span class="pre">PVConfigurationTableModel.setData()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.models.html#siriushla.as_ap_configdb.models.pv_configuration_model.PVConfigurationTableModel.setupModelData"><code class="docutils literal notranslate"><span class="pre">PVConfigurationTableModel.setupModelData()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html">siriushla.as_ap_configdb.normconfigs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#module-siriushla.as_ap_configdb.normconfigs.ConfigManagerWindow">siriushla.as_ap_configdb.normconfigs.ConfigManagerWindow module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigManagerWindow.ConfigManagerWindow"><code class="docutils literal notranslate"><span class="pre">ConfigManagerWindow</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigManagerWindow.ConfigManagerWindow.NEW_CONFIGURATION"><code class="docutils literal notranslate"><span class="pre">ConfigManagerWindow.NEW_CONFIGURATION</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigManagerWindow.ConfigManagerWindow.closeEvent"><code class="docutils literal notranslate"><span class="pre">ConfigManagerWindow.closeEvent()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigManagerWindow.ConfigManagerWindow.keyPressEvent"><code class="docutils literal notranslate"><span class="pre">ConfigManagerWindow.keyPressEvent()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#module-siriushla.as_ap_configdb.normconfigs.ConfigModel">siriushla.as_ap_configdb.normconfigs.ConfigModel module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigDelegate"><code class="docutils literal notranslate"><span class="pre">ConfigDelegate</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigDelegate.createEditor"><code class="docutils literal notranslate"><span class="pre">ConfigDelegate.createEditor()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigDelegate.paint"><code class="docutils literal notranslate"><span class="pre">ConfigDelegate.paint()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigDelegate.setEditorData"><code class="docutils literal notranslate"><span class="pre">ConfigDelegate.setEditorData()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel"><code class="docutils literal notranslate"><span class="pre">ConfigModel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.CHROMATICITY"><code class="docutils literal notranslate"><span class="pre">ConfigModel.CHROMATICITY</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.TUNE"><code class="docutils literal notranslate"><span class="pre">ConfigModel.TUNE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.UNDO_MEMORY"><code class="docutils literal notranslate"><span class="pre">ConfigModel.UNDO_MEMORY</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.cleanUndo"><code class="docutils literal notranslate"><span class="pre">ConfigModel.cleanUndo()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.closeConfiguration"><code class="docutils literal notranslate"><span class="pre">ConfigModel.closeConfiguration()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.columnCount"><code class="docutils literal notranslate"><span class="pre">ConfigModel.columnCount()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.configurations"><code class="docutils literal notranslate"><span class="pre">ConfigModel.configurations</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.data"><code class="docutils literal notranslate"><span class="pre">ConfigModel.data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.deleteConfiguration"><code class="docutils literal notranslate"><span class="pre">ConfigModel.deleteConfiguration()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.deriveConfiguration"><code class="docutils literal notranslate"><span class="pre">ConfigModel.deriveConfiguration()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.flags"><code class="docutils literal notranslate"><span class="pre">ConfigModel.flags()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.getConfigurationColumn"><code class="docutils literal notranslate"><span class="pre">ConfigModel.getConfigurationColumn()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.getConfigurations"><code class="docutils literal notranslate"><span class="pre">ConfigModel.getConfigurations()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.getTuneMatrix"><code class="docutils literal notranslate"><span class="pre">ConfigModel.getTuneMatrix()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.headerData"><code class="docutils literal notranslate"><span class="pre">ConfigModel.headerData()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.insertColumn"><code class="docutils literal notranslate"><span class="pre">ConfigModel.insertColumn()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.interpolateConfiguration"><code class="docutils literal notranslate"><span class="pre">ConfigModel.interpolateConfiguration()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.loadConfiguration"><code class="docutils literal notranslate"><span class="pre">ConfigModel.loadConfiguration()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.removeColumns"><code class="docutils literal notranslate"><span class="pre">ConfigModel.removeColumns()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.renameConfiguration"><code class="docutils literal notranslate"><span class="pre">ConfigModel.renameConfiguration()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.rowCount"><code class="docutils literal notranslate"><span class="pre">ConfigModel.rowCount()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.saveConfiguration"><code class="docutils literal notranslate"><span class="pre">ConfigModel.saveConfiguration()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.setData"><code class="docutils literal notranslate"><span class="pre">ConfigModel.setData()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.setDataAlt"><code class="docutils literal notranslate"><span class="pre">ConfigModel.setDataAlt()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.Configuration"><code class="docutils literal notranslate"><span class="pre">Configuration</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.Configuration.delete"><code class="docutils literal notranslate"><span class="pre">Configuration.delete()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.Configuration.delete_config"><code class="docutils literal notranslate"><span class="pre">Configuration.delete_config()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.Configuration.dirty"><code class="docutils literal notranslate"><span class="pre">Configuration.dirty</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.Configuration.loadConfiguration"><code class="docutils literal notranslate"><span class="pre">Configuration.loadConfiguration()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.Configuration.name"><code class="docutils literal notranslate"><span class="pre">Configuration.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.Configuration.newConfiguration"><code class="docutils literal notranslate"><span class="pre">Configuration.newConfiguration()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.Configuration.old_name"><code class="docutils literal notranslate"><span class="pre">Configuration.old_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.Configuration.save"><code class="docutils literal notranslate"><span class="pre">Configuration.save()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.Configuration.setValue"><code class="docutils literal notranslate"><span class="pre">Configuration.setValue()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.Configuration.values"><code class="docutils literal notranslate"><span class="pre">Configuration.values</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#module-siriushla.as_ap_configdb.normconfigs.LoadingThread">siriushla.as_ap_configdb.normconfigs.LoadingThread module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.LoadingThread.LoadingThread"><code class="docutils literal notranslate"><span class="pre">LoadingThread</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.LoadingThread.LoadingThread.VACA_PREFIX"><code class="docutils literal notranslate"><span class="pre">LoadingThread.VACA_PREFIX</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.LoadingThread.LoadingThread.run"><code class="docutils literal notranslate"><span class="pre">LoadingThread.run()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.LoadingThread.LoadingThread.taskFinished"><code class="docutils literal notranslate"><span class="pre">LoadingThread.taskFinished</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.LoadingThread.LoadingThread.taskUpdated"><code class="docutils literal notranslate"><span class="pre">LoadingThread.taskUpdated</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#module-siriushla.as_ap_configdb.normconfigs.TuneDlg">siriushla.as_ap_configdb.normconfigs.TuneDlg module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.TuneDlg.TuneDlg"><code class="docutils literal notranslate"><span class="pre">TuneDlg</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_configdb.normconfigs.html#module-siriushla.as_ap_configdb.normconfigs">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_configdb.pvsconfigs.html">siriushla.as_ap_configdb.pvsconfigs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_configdb.pvsconfigs.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.as_ap_configdb.pvsconfigs.delegate.html">siriushla.as_ap_configdb.pvsconfigs.delegate</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.pvsconfigs.delegate.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.pvsconfigs.delegate.html#module-siriushla.as_ap_configdb.pvsconfigs.delegate.pv_configuration_delegate">siriushla.as_ap_configdb.pvsconfigs.delegate.pv_configuration_delegate module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.pvsconfigs.delegate.html#module-siriushla.as_ap_configdb.pvsconfigs.delegate">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_configdb.pvsconfigs.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_configdb.pvsconfigs.html#module-siriushla.as_ap_configdb.pvsconfigs.load_and_apply">siriushla.as_ap_configdb.pvsconfigs.load_and_apply module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.as_ap_configdb.pvsconfigs.html#siriushla.as_ap_configdb.pvsconfigs.load_and_apply.LoadAndApplyConfig2MachineWindow"><code class="docutils literal notranslate"><span class="pre">LoadAndApplyConfig2MachineWindow</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.as_ap_configdb.pvsconfigs.html#siriushla.as_ap_configdb.pvsconfigs.load_and_apply.SelectAndApplyPVsWidget"><code class="docutils literal notranslate"><span class="pre">SelectAndApplyPVsWidget</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.pvsconfigs.html#siriushla.as_ap_configdb.pvsconfigs.load_and_apply.SelectAndApplyPVsWidget.current_config"><code class="docutils literal notranslate"><span class="pre">SelectAndApplyPVsWidget.current_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.pvsconfigs.html#siriushla.as_ap_configdb.pvsconfigs.load_and_apply.SelectAndApplyPVsWidget.current_config_type"><code class="docutils literal notranslate"><span class="pre">SelectAndApplyPVsWidget.current_config_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.pvsconfigs.html#siriushla.as_ap_configdb.pvsconfigs.load_and_apply.SelectAndApplyPVsWidget.fill_config"><code class="docutils literal notranslate"><span class="pre">SelectAndApplyPVsWidget.fill_config()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.pvsconfigs.html#siriushla.as_ap_configdb.pvsconfigs.load_and_apply.SelectAndApplyPVsWidget.settingFinished"><code class="docutils literal notranslate"><span class="pre">SelectAndApplyPVsWidget.settingFinished</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.pvsconfigs.html#siriushla.as_ap_configdb.pvsconfigs.load_and_apply.SelectAndApplyPVsWidget.setupui"><code class="docutils literal notranslate"><span class="pre">SelectAndApplyPVsWidget.setupui()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.as_ap_configdb.pvsconfigs.html#siriushla.as_ap_configdb.pvsconfigs.load_and_apply.SelectConfigWidget"><code class="docutils literal notranslate"><span class="pre">SelectConfigWidget</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.pvsconfigs.html#siriushla.as_ap_configdb.pvsconfigs.load_and_apply.SelectConfigWidget.configChanged"><code class="docutils literal notranslate"><span class="pre">SelectConfigWidget.configChanged</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.pvsconfigs.html#siriushla.as_ap_configdb.pvsconfigs.load_and_apply.SelectConfigWidget.current_config_type"><code class="docutils literal notranslate"><span class="pre">SelectConfigWidget.current_config_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="siriushla.as_ap_configdb.pvsconfigs.html#siriushla.as_ap_configdb.pvsconfigs.load_and_apply.SelectConfigWidget.setupui"><code class="docutils literal notranslate"><span class="pre">SelectConfigWidget.setupui()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_configdb.pvsconfigs.html#module-siriushla.as_ap_configdb.pvsconfigs.main">siriushla.as_ap_configdb.pvsconfigs.main module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.as_ap_configdb.pvsconfigs.html#siriushla.as_ap_configdb.pvsconfigs.main.PVsConfigManager"><code class="docutils literal notranslate"><span class="pre">PVsConfigManager</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_configdb.pvsconfigs.html#module-siriushla.as_ap_configdb.pvsconfigs.read_and_save">siriushla.as_ap_configdb.pvsconfigs.read_and_save module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.as_ap_configdb.pvsconfigs.html#siriushla.as_ap_configdb.pvsconfigs.read_and_save.ReadAndSaveConfig2ServerWindow"><code class="docutils literal notranslate"><span class="pre">ReadAndSaveConfig2ServerWindow</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_configdb.pvsconfigs.html#module-siriushla.as_ap_configdb.pvsconfigs">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="code-documentation">
+<h2>Code Documentation<a class="headerlink" href="#code-documentation" title="Link to this heading"></a></h2>
+</section>
+<section id="module-siriushla.as_ap_configdb.client_configdb">
+<span id="siriushla-as-ap-configdb-client-configdb-module"></span><h2>siriushla.as_ap_configdb.client_configdb module<a class="headerlink" href="#module-siriushla.as_ap_configdb.client_configdb" title="Link to this heading"></a></h2>
+<p>Window to manage configurations.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.client_configdb.ConfigurationManager">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ap_configdb.client_configdb.</span></span><span class="sig-name descname"><span class="pre">ConfigurationManager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/client_configdb.html#ConfigurationManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.client_configdb.ConfigurationManager" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_SiriusWindow</span></code></p>
+<p>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.client_configdb.ConfigurationManager.CONFIG_TYPE_COL">
+<span class="sig-name descname"><span class="pre">CONFIG_TYPE_COL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#siriushla.as_ap_configdb.client_configdb.ConfigurationManager.CONFIG_TYPE_COL" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.client_configdb.ConfigurationManager.NAME_COL">
+<span class="sig-name descname"><span class="pre">NAME_COL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#siriushla.as_ap_configdb.client_configdb.ConfigurationManager.NAME_COL" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.client_configdb.JsonTreeModel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ap_configdb.client_configdb.</span></span><span class="sig-name descname"><span class="pre">JsonTreeModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connection</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/client_configdb.html#JsonTreeModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.client_configdb.JsonTreeModel" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QAbstractItemModel</span></code></p>
+<p>Model for a tree that represent a JSON document.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.client_configdb.JsonTreeModel.columnCount">
+<span class="sig-name descname"><span class="pre">columnCount</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/client_configdb.html#JsonTreeModel.columnCount"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.client_configdb.JsonTreeModel.columnCount" title="Link to this definition"></a></dt>
+<dd><p>Return index column count.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.client_configdb.JsonTreeModel.data">
+<span class="sig-name descname"><span class="pre">data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">role</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/client_configdb.html#JsonTreeModel.data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.client_configdb.JsonTreeModel.data" title="Link to this definition"></a></dt>
+<dd><p>Return data at index.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.client_configdb.JsonTreeModel.flags">
+<span class="sig-name descname"><span class="pre">flags</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/client_configdb.html#JsonTreeModel.flags"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.client_configdb.JsonTreeModel.flags" title="Link to this definition"></a></dt>
+<dd><p>Read-only.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.client_configdb.JsonTreeModel.headerData">
+<span class="sig-name descname"><span class="pre">headerData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">section</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">role</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/client_configdb.html#JsonTreeModel.headerData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.client_configdb.JsonTreeModel.headerData" title="Link to this definition"></a></dt>
+<dd><p>Return data stored in root item.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.client_configdb.JsonTreeModel.index">
+<span class="sig-name descname"><span class="pre">index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/client_configdb.html#JsonTreeModel.index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.client_configdb.JsonTreeModel.index" title="Link to this definition"></a></dt>
+<dd><p>Provide and index.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.client_configdb.JsonTreeModel.parent">
+<span class="sig-name descname"><span class="pre">parent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/client_configdb.html#JsonTreeModel.parent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.client_configdb.JsonTreeModel.parent" title="Link to this definition"></a></dt>
+<dd><p>Return parent of given index.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.client_configdb.JsonTreeModel.rowCount">
+<span class="sig-name descname"><span class="pre">rowCount</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/client_configdb.html#JsonTreeModel.rowCount"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.client_configdb.JsonTreeModel.rowCount" title="Link to this definition"></a></dt>
+<dd><p>Return index row count.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.client_configdb.JsonTreeModel.setupModelData">
+<span class="sig-name descname"><span class="pre">setupModelData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/client_configdb.html#JsonTreeModel.setupModelData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.client_configdb.JsonTreeModel.setupModelData" title="Link to this definition"></a></dt>
+<dd><p>Set model data.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.client_configdb.TreeItem">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ap_configdb.client_configdb.</span></span><span class="sig-name descname"><span class="pre">TreeItem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parentItem</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/client_configdb.html#TreeItem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.client_configdb.TreeItem" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>An item of a tree.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.client_configdb.TreeItem.appendChild">
+<span class="sig-name descname"><span class="pre">appendChild</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/client_configdb.html#TreeItem.appendChild"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.client_configdb.TreeItem.appendChild" title="Link to this definition"></a></dt>
+<dd><p>Append a child item.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.client_configdb.TreeItem.child">
+<span class="sig-name descname"><span class="pre">child</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/client_configdb.html#TreeItem.child"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.client_configdb.TreeItem.child" title="Link to this definition"></a></dt>
+<dd><p>Return child at given row.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.client_configdb.TreeItem.childCount">
+<span class="sig-name descname"><span class="pre">childCount</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/client_configdb.html#TreeItem.childCount"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.client_configdb.TreeItem.childCount" title="Link to this definition"></a></dt>
+<dd><p>Return number of children.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.client_configdb.TreeItem.columnCount">
+<span class="sig-name descname"><span class="pre">columnCount</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/client_configdb.html#TreeItem.columnCount"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.client_configdb.TreeItem.columnCount" title="Link to this definition"></a></dt>
+<dd><p>Return number of columns of data.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.client_configdb.TreeItem.data">
+<span class="sig-name descname"><span class="pre">data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/client_configdb.html#TreeItem.data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.client_configdb.TreeItem.data" title="Link to this definition"></a></dt>
+<dd><p>Return data at given column.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.client_configdb.TreeItem.parentItem">
+<span class="sig-name descname"><span class="pre">parentItem</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/client_configdb.html#TreeItem.parentItem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.client_configdb.TreeItem.parentItem" title="Link to this definition"></a></dt>
+<dd><p>Return parent item.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.client_configdb.TreeItem.row">
+<span class="sig-name descname"><span class="pre">row</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/client_configdb.html#TreeItem.row"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.client_configdb.TreeItem.row" title="Link to this definition"></a></dt>
+<dd><p>Report the item’s location within its parent’s list of items.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-siriushla.as_ap_configdb.configdialogs">
+<span id="siriushla-as-ap-configdb-configdialogs-module"></span><h2>siriushla.as_ap_configdb.configdialogs module<a class="headerlink" href="#module-siriushla.as_ap_configdb.configdialogs" title="Link to this heading"></a></h2>
+<p>Define a window to save configurations.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.configdialogs.LoadConfigDialog">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ap_configdb.configdialogs.</span></span><span class="sig-name descname"><span class="pre">LoadConfigDialog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/configdialogs.html#LoadConfigDialog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.configdialogs.LoadConfigDialog" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseConfigManipulation</span></code></p>
+<p>Load configurations.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.configdialogs.RenameConfigDialog">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ap_configdb.configdialogs.</span></span><span class="sig-name descname"><span class="pre">RenameConfigDialog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/configdialogs.html#RenameConfigDialog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.configdialogs.RenameConfigDialog" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ap_configdb.configdialogs.SaveConfigDialog" title="siriushla.as_ap_configdb.configdialogs.SaveConfigDialog"><code class="xref py py-class docutils literal notranslate"><span class="pre">SaveConfigDialog</span></code></a></p>
+<p>Rename configurations.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.configdialogs.RenameConfigDialog.configname">
+<span class="sig-name descname"><span class="pre">configname</span></span><a class="headerlink" href="#siriushla.as_ap_configdb.configdialogs.RenameConfigDialog.configname" title="Link to this definition"></a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id1"><span class="problematic" id="id2">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.configdialogs.SaveConfigDialog">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ap_configdb.configdialogs.</span></span><span class="sig-name descname"><span class="pre">SaveConfigDialog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/configdialogs.html#SaveConfigDialog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.configdialogs.SaveConfigDialog" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseConfigManipulation</span></code></p>
+<p>Save configurations.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.configdialogs.SaveConfigDialog.config_name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">config_name</span></span><a class="headerlink" href="#siriushla.as_ap_configdb.configdialogs.SaveConfigDialog.config_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.configdialogs.SaveConfigDialog.configname">
+<span class="sig-name descname"><span class="pre">configname</span></span><a class="headerlink" href="#siriushla.as_ap_configdb.configdialogs.SaveConfigDialog.configname" title="Link to this definition"></a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id3"><span class="problematic" id="id4">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-siriushla.as_ap_configdb.configwidgets">
+<span id="siriushla-as-ap-configdb-configwidgets-module"></span><h2>siriushla.as_ap_configdb.configwidgets module<a class="headerlink" href="#module-siriushla.as_ap_configdb.configwidgets" title="Link to this heading"></a></h2>
+<p>Load Configuration Widget.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.configwidgets.ConfigDBInfoHeader">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ap_configdb.configwidgets.</span></span><span class="sig-name descname"><span class="pre">ConfigDBInfoHeader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/configwidgets.html#ConfigDBInfoHeader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.configwidgets.ConfigDBInfoHeader" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QFrame</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.configwidgets.ConfigDBInfoHeader.setupui">
+<span class="sig-name descname"><span class="pre">setupui</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/configwidgets.html#ConfigDBInfoHeader.setupui"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.configwidgets.ConfigDBInfoHeader.setupui" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.configwidgets.ConfigDBSearchEngine">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ap_configdb.configwidgets.</span></span><span class="sig-name descname"><span class="pre">ConfigDBSearchEngine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/configwidgets.html#ConfigDBSearchEngine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.configwidgets.ConfigDBSearchEngine" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QLineEdit</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.configwidgets.ConfigDBSearchEngine.CONFIG_TYPE_COL">
+<span class="sig-name descname"><span class="pre">CONFIG_TYPE_COL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#siriushla.as_ap_configdb.configwidgets.ConfigDBSearchEngine.CONFIG_TYPE_COL" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.configwidgets.ConfigDBSearchEngine.NAME_COL">
+<span class="sig-name descname"><span class="pre">NAME_COL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#siriushla.as_ap_configdb.configwidgets.ConfigDBSearchEngine.NAME_COL" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.configwidgets.ConfigDBSearchEngine.filteredidcs">
+<span class="sig-name descname"><span class="pre">filteredidcs</span></span><a class="headerlink" href="#siriushla.as_ap_configdb.configwidgets.ConfigDBSearchEngine.filteredidcs" title="Link to this definition"></a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id5"><span class="problematic" id="id6">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.configwidgets.ConfigTableWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ap_configdb.configwidgets.</span></span><span class="sig-name descname"><span class="pre">ConfigTableWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/configwidgets.html#ConfigTableWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.configwidgets.ConfigTableWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QTableView</span></code></p>
+<p>Widget that loads a configuration.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.configwidgets.ConfigTableWidget.CONFIG_TYPE_COL">
+<span class="sig-name descname"><span class="pre">CONFIG_TYPE_COL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#siriushla.as_ap_configdb.configwidgets.ConfigTableWidget.CONFIG_TYPE_COL" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.configwidgets.ConfigTableWidget.NAME_COL">
+<span class="sig-name descname"><span class="pre">NAME_COL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#siriushla.as_ap_configdb.configwidgets.ConfigTableWidget.NAME_COL" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.configwidgets.ConfigTableWidget.configChanged">
+<span class="sig-name descname"><span class="pre">configChanged</span></span><a class="headerlink" href="#siriushla.as_ap_configdb.configwidgets.ConfigTableWidget.configChanged" title="Link to this definition"></a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id7"><span class="problematic" id="id8">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.configwidgets.ConfigTableWidget.config_name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">config_name</span></span><a class="headerlink" href="#siriushla.as_ap_configdb.configwidgets.ConfigTableWidget.config_name" title="Link to this definition"></a></dt>
+<dd><p>Return selected configuration name.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.configwidgets.ConfigTableWidget.config_type">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">config_type</span></span><a class="headerlink" href="#siriushla.as_ap_configdb.configwidgets.ConfigTableWidget.config_type" title="Link to this definition"></a></dt>
+<dd><p>selected_configConfiguration type name.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.configwidgets.ConfigTableWidget.connectionError">
+<span class="sig-name descname"><span class="pre">connectionError</span></span><a class="headerlink" href="#siriushla.as_ap_configdb.configwidgets.ConfigTableWidget.connectionError" title="Link to this definition"></a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id9"><span class="problematic" id="id10">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.configwidgets.ConfigTableWidget.resizeEvent">
+<span class="sig-name descname"><span class="pre">resizeEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/configwidgets.html#ConfigTableWidget.resizeEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.configwidgets.ConfigTableWidget.resizeEvent" title="Link to this definition"></a></dt>
+<dd><p>Reimplement resize event.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-siriushla.as_ap_configdb">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-siriushla.as_ap_configdb" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to Sirius HLA’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="siriushla.as_ap_configdb.models.html" class="btn btn-neutral float-right" title="siriushla.as_ap_configdb.models" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, lnls-sirius.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

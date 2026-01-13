@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>siriushla.as_ap_sofb.graphics &mdash; siriushla 1.14.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=01009efc"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="siriushla.as_ap_sofb.ioc_control" href="siriushla.as_ap_sofb.ioc_control.html" />
+    <link rel="prev" title="siriushla.as_ap_sofb" href="siriushla.as_ap_sofb.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            siriushla
+          </a>
+              <div class="version">
+                1.14.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">GUIs:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_configdb.html">siriushla.as_ap_configdb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_currinfo.html">siriushla.as_ap_currinfo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_energybutton.html">siriushla.as_ap_energybutton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_injcontrol.html">siriushla.as_ap_injcontrol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_injection.html">siriushla.as_ap_injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_launcher.html">siriushla.as_ap_launcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_machshift.html">siriushla.as_ap_machshift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_macreport.html">siriushla.as_ap_macreport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_magoffconv.html">siriushla.as_ap_magoffconv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_measure.html">siriushla.as_ap_measure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_monitor.html">siriushla.as_ap_monitor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_opticscorr.html">siriushla.as_ap_opticscorr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_posang.html">siriushla.as_ap_posang</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_rabpmmon.html">siriushla.as_ap_rabpmmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_radmon.html">siriushla.as_ap_radmon</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="siriushla.as_ap_sofb.html">siriushla.as_ap_sofb</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="siriushla.as_ap_sofb.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">siriushla.as_ap_sofb.graphics</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#code-documentation">Code Documentation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-siriushla.as_ap_sofb.graphics.base">siriushla.as_ap_sofb.graphics.base module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-siriushla.as_ap_sofb.graphics.correctors">siriushla.as_ap_sofb.graphics.correctors module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-siriushla.as_ap_sofb.graphics.orbit">siriushla.as_ap_sofb.graphics.orbit module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-siriushla.as_ap_sofb.graphics.respmat">siriushla.as_ap_sofb.graphics.respmat module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-siriushla.as_ap_sofb.graphics">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.as_ap_sofb.ioc_control.html">siriushla.as_ap_sofb.ioc_control</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_sofb.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_sofb.html#module-siriushla.as_ap_sofb.main">siriushla.as_ap_sofb.main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_sofb.html#module-siriushla.as_ap_sofb.orbit_register">siriushla.as_ap_sofb.orbit_register module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_sofb.html#module-siriushla.as_ap_sofb">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_bpms.html">siriushla.as_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_dccts.html">siriushla.as_di_dccts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_icts.html">siriushla.as_di_icts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_scrns.html">siriushla.as_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_tune.html">siriushla.as_di_tune</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_vlight.html">siriushla.as_di_vlight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_commands.html">siriushla.as_ps_commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_control.html">siriushla.as_ps_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_cycle.html">siriushla.as_ps_cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_diag.html">siriushla.as_ps_diag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_pu_control.html">siriushla.as_pu_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_rf_control.html">siriushla.as_rf_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ti_control.html">siriushla.as_ti_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.bl_ap_imgproc.html">siriushla.bl_ap_imgproc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.bo_ap_ramp.html">siriushla.bo_ap_ramp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.common.html">siriushla.common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_ap_mps.html">siriushla.li_ap_mps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_di_bpms.html">siriushla.li_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_di_scrns.html">siriushla.li_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_eg_control.html">siriushla.li_eg_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_pu_modltr.html">siriushla.li_pu_modltr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_rf_llrf.html">siriushla.li_rf_llrf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_va_control.html">siriushla.li_va_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_fofb.html">siriushla.si_ap_fofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_genstatus.html">siriushla.si_ap_genstatus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_idff.html">siriushla.si_ap_idff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_orbintlk.html">siriushla.si_ap_orbintlk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_bbb.html">siriushla.si_di_bbb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_equalize_bpms.html">siriushla.si_di_equalize_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_scraps.html">siriushla.si_di_scraps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_id_control.html">siriushla.si_id_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.tb_di_slits.html">siriushla.tb_di_slits</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Widgets:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.html">Sirius HLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.widgets.html">Widgets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Source Code:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lnls-sirius/hla">HLA Github</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">siriushla</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="siriushla.as_ap_sofb.html">siriushla.as_ap_sofb</a></li>
+      <li class="breadcrumb-item active">siriushla.as_ap_sofb.graphics</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/lnls-sirius/hla/blob/master/pyqt-apps/docs/source/siriushla.as_ap_sofb.graphics.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="siriushla-as-ap-sofb-graphics">
+<h1>siriushla.as_ap_sofb.graphics<a class="headerlink" href="#siriushla-as-ap-sofb-graphics" title="Link to this heading"></a></h1>
+<section id="code-documentation">
+<h2>Code Documentation<a class="headerlink" href="#code-documentation" title="Link to this heading"></a></h2>
+</section>
+<section id="module-siriushla.as_ap_sofb.graphics.base">
+<span id="siriushla-as-ap-sofb-graphics-base-module"></span><h2>siriushla.as_ap_sofb.graphics.base module<a class="headerlink" href="#module-siriushla.as_ap_sofb.graphics.base" title="Link to this heading"></a></h2>
+<p>Control the Orbit Graphic Displnay.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.base.BaseWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ap_sofb.graphics.base.</span></span><span class="sig-name descname"><span class="pre">BaseWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctrls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_orb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'SI'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/graphics/base.html#BaseWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.base.BaseWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QWidget</span></code></p>
+<p>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.base.BaseWidget.DEFAULT_DIR">
+<span class="sig-name descname"><span class="pre">DEFAULT_DIR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'/home/sirius/shared/screens-iocs'</span></em><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.base.BaseWidget.DEFAULT_DIR" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.base.BaseWidget.acc">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">acc</span></span><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.base.BaseWidget.acc" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.base.BaseWidget.acc_idx">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">acc_idx</span></span><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.base.BaseWidget.acc_idx" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.base.BaseWidget.channels">
+<span class="sig-name descname"><span class="pre">channels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/graphics/base.html#BaseWidget.channels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.base.BaseWidget.channels" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.base.BaseWidget.connect_signals">
+<span class="sig-name descname"><span class="pre">connect_signals</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/graphics/base.html#BaseWidget.connect_signals"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.base.BaseWidget.connect_signals" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.base.BaseWidget.isring">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">isring</span></span><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.base.BaseWidget.isring" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.base.BaseWidget.setupui">
+<span class="sig-name descname"><span class="pre">setupui</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/graphics/base.html#BaseWidget.setupui"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.base.BaseWidget.setupui" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.base.BaseWidget.uicreate_combobox">
+<span class="sig-name descname"><span class="pre">uicreate_combobox</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orb_tp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/graphics/base.html#BaseWidget.uicreate_combobox"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.base.BaseWidget.uicreate_combobox" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.base.BaseWidget.uicreate_groupbox">
+<span class="sig-name descname"><span class="pre">uicreate_groupbox</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/graphics/base.html#BaseWidget.uicreate_groupbox"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.base.BaseWidget.uicreate_groupbox" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.base.BaseWidget.uicreate_label">
+<span class="sig-name descname"><span class="pre">uicreate_label</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lab</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/graphics/base.html#BaseWidget.uicreate_label"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.base.BaseWidget.uicreate_label" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.base.BaseWidget.uigetgraph">
+<span class="sig-name descname"><span class="pre">uigetgraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pln</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/graphics/base.html#BaseWidget.uigetgraph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.base.BaseWidget.uigetgraph" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.base.Graph">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ap_sofb.graphics.base.</span></span><span class="sig-name descname"><span class="pre">Graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/graphics/base.html#Graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.base.Graph" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="siriushla.widgets.html#siriushla.widgets.waveformplot.SiriusWaveformPlot" title="siriushla.widgets.waveformplot.SiriusWaveformPlot"><code class="xref py py-class docutils literal notranslate"><span class="pre">SiriusWaveformPlot</span></code></a></p>
+<p>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.base.Graph.doubleclick">
+<span class="sig-name descname"><span class="pre">doubleclick</span></span><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.base.Graph.doubleclick" title="Link to this definition"></a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id1"><span class="problematic" id="id2">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.base.Graph.mouseDoubleClickEvent">
+<span class="sig-name descname"><span class="pre">mouseDoubleClickEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ev</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/graphics/base.html#Graph.mouseDoubleClickEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.base.Graph.mouseDoubleClickEvent" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.base.InfLine">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ap_sofb.graphics.base.</span></span><span class="sig-name descname"><span class="pre">InfLine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/graphics/base.html#InfLine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.base.InfLine" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">InfiniteLine</span></code></p>
+<p>.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.base.InfLine.setValue">
+<span class="sig-name descname"><span class="pre">setValue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/graphics/base.html#InfLine.setValue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.base.InfLine.setValue" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.base.Label">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ap_sofb.graphics.base.</span></span><span class="sig-name descname"><span class="pre">Label</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unit</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/graphics/base.html#Label"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.base.Label" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QLabel</span></code></p>
+<p>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.base.Label.FMT">
+<span class="sig-name descname"><span class="pre">FMT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'{0:.2f}'</span></em><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.base.Label.FMT" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.base.Label.setFloat">
+<span class="sig-name descname"><span class="pre">setFloat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/graphics/base.html#Label.setFloat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.base.Label.setFloat" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.base.UpdateGraph">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ap_sofb.graphics.base.</span></span><span class="sig-name descname"><span class="pre">UpdateGraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctrls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_orb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'SI'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/graphics/base.html#UpdateGraph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.base.UpdateGraph" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QObject</span></code></p>
+<p>Worker to update graphics.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.base.UpdateGraph.UNIT">
+<span class="sig-name descname"><span class="pre">UNIT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1e-06</span></em><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.base.UpdateGraph.UNIT" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.base.UpdateGraph.ave_mstdx">
+<span class="sig-name descname"><span class="pre">ave_mstdx</span></span><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.base.UpdateGraph.ave_mstdx" title="Link to this definition"></a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id3"><span class="problematic" id="id4">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.base.UpdateGraph.ave_mstdy">
+<span class="sig-name descname"><span class="pre">ave_mstdy</span></span><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.base.UpdateGraph.ave_mstdy" title="Link to this definition"></a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id5"><span class="problematic" id="id6">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.base.UpdateGraph.ave_pstdx">
+<span class="sig-name descname"><span class="pre">ave_pstdx</span></span><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.base.UpdateGraph.ave_pstdx" title="Link to this definition"></a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id7"><span class="problematic" id="id8">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.base.UpdateGraph.ave_pstdy">
+<span class="sig-name descname"><span class="pre">ave_pstdy</span></span><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.base.UpdateGraph.ave_pstdy" title="Link to this definition"></a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id9"><span class="problematic" id="id10">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.base.UpdateGraph.avex">
+<span class="sig-name descname"><span class="pre">avex</span></span><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.base.UpdateGraph.avex" title="Link to this definition"></a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id11"><span class="problematic" id="id12">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.base.UpdateGraph.avey">
+<span class="sig-name descname"><span class="pre">avey</span></span><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.base.UpdateGraph.avey" title="Link to this definition"></a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id13"><span class="problematic" id="id14">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.base.UpdateGraph.data_sigx">
+<span class="sig-name descname"><span class="pre">data_sigx</span></span><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.base.UpdateGraph.data_sigx" title="Link to this definition"></a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id15"><span class="problematic" id="id16">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.base.UpdateGraph.data_sigy">
+<span class="sig-name descname"><span class="pre">data_sigy</span></span><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.base.UpdateGraph.data_sigy" title="Link to this definition"></a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id17"><span class="problematic" id="id18">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.base.UpdateGraph.p2px">
+<span class="sig-name descname"><span class="pre">p2px</span></span><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.base.UpdateGraph.p2px" title="Link to this definition"></a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id19"><span class="problematic" id="id20">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.base.UpdateGraph.p2py">
+<span class="sig-name descname"><span class="pre">p2py</span></span><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.base.UpdateGraph.p2py" title="Link to this definition"></a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id21"><span class="problematic" id="id22">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.base.UpdateGraph.ref_sigx">
+<span class="sig-name descname"><span class="pre">ref_sigx</span></span><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.base.UpdateGraph.ref_sigx" title="Link to this definition"></a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id23"><span class="problematic" id="id24">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.base.UpdateGraph.ref_sigy">
+<span class="sig-name descname"><span class="pre">ref_sigy</span></span><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.base.UpdateGraph.ref_sigy" title="Link to this definition"></a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id25"><span class="problematic" id="id26">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.base.UpdateGraph.set_enbl_list">
+<span class="sig-name descname"><span class="pre">set_enbl_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pln</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enbls</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/graphics/base.html#UpdateGraph.set_enbl_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.base.UpdateGraph.set_enbl_list" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.base.UpdateGraph.set_visible">
+<span class="sig-name descname"><span class="pre">set_visible</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">boo</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/graphics/base.html#UpdateGraph.set_visible"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.base.UpdateGraph.set_visible" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.base.UpdateGraph.some_changed">
+<span class="sig-name descname"><span class="pre">some_changed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">orb_tp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/graphics/base.html#UpdateGraph.some_changed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.base.UpdateGraph.some_changed" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.base.UpdateGraph.stdx">
+<span class="sig-name descname"><span class="pre">stdx</span></span><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.base.UpdateGraph.stdx" title="Link to this definition"></a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id27"><span class="problematic" id="id28">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.base.UpdateGraph.stdy">
+<span class="sig-name descname"><span class="pre">stdy</span></span><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.base.UpdateGraph.stdy" title="Link to this definition"></a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id29"><span class="problematic" id="id30">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.base.UpdateGraph.update_graphic">
+<span class="sig-name descname"><span class="pre">update_graphic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pln</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/graphics/base.html#UpdateGraph.update_graphic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.base.UpdateGraph.update_graphic" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-siriushla.as_ap_sofb.graphics.correctors">
+<span id="siriushla-as-ap-sofb-graphics-correctors-module"></span><h2>siriushla.as_ap_sofb.graphics.correctors module<a class="headerlink" href="#module-siriushla.as_ap_sofb.graphics.correctors" title="Link to this heading"></a></h2>
+<p>Control the Correctors Graphic Displnay.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.correctors.CorrectorsWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ap_sofb.graphics.correctors.</span></span><span class="sig-name descname"><span class="pre">CorrectorsWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctrls</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'SI'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/graphics/correctors.html#CorrectorsWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.correctors.CorrectorsWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ap_sofb.graphics.base.BaseWidget" title="siriushla.as_ap_sofb.graphics.base.BaseWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseWidget</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.correctors.CorrectorsWidget.add_RF_kicks">
+<span class="sig-name descname"><span class="pre">add_RF_kicks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/graphics/correctors.html#CorrectorsWidget.add_RF_kicks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.correctors.CorrectorsWidget.add_RF_kicks" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.correctors.CorrectorsWidget.add_kicklimits_curves">
+<span class="sig-name descname"><span class="pre">add_kicklimits_curves</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/graphics/correctors.html#CorrectorsWidget.add_kicklimits_curves"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.correctors.CorrectorsWidget.add_kicklimits_curves" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.correctors.CorrectorsWidget.channels">
+<span class="sig-name descname"><span class="pre">channels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/graphics/correctors.html#CorrectorsWidget.channels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.correctors.CorrectorsWidget.channels" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.correctors.CorrectorsWidget.get_default_ctrls">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_default_ctrls</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/graphics/correctors.html#CorrectorsWidget.get_default_ctrls"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.correctors.CorrectorsWidget.get_default_ctrls" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-siriushla.as_ap_sofb.graphics.orbit">
+<span id="siriushla-as-ap-sofb-graphics-orbit-module"></span><h2>siriushla.as_ap_sofb.graphics.orbit module<a class="headerlink" href="#module-siriushla.as_ap_sofb.graphics.orbit" title="Link to this heading"></a></h2>
+<p>Control the Orbit Graphic Displnay.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.orbit.MultiTurnSumWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ap_sofb.graphics.orbit.</span></span><span class="sig-name descname"><span class="pre">MultiTurnSumWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orbtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sum'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">csorb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/graphics/orbit.html#MultiTurnSumWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.orbit.MultiTurnSumWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QWidget</span></code></p>
+<p>.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.orbit.MultiTurnSumWidget.mouseDoubleClickEvent">
+<span class="sig-name descname"><span class="pre">mouseDoubleClickEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ev</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/graphics/orbit.html#MultiTurnSumWidget.mouseDoubleClickEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.orbit.MultiTurnSumWidget.mouseDoubleClickEvent" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.orbit.MultiTurnSumWidget.ratio_sum_avg">
+<span class="sig-name descname"><span class="pre">ratio_sum_avg</span></span><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.orbit.MultiTurnSumWidget.ratio_sum_avg" title="Link to this definition"></a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id31"><span class="problematic" id="id32">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.orbit.MultiTurnSumWidget.ratio_sum_std">
+<span class="sig-name descname"><span class="pre">ratio_sum_std</span></span><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.orbit.MultiTurnSumWidget.ratio_sum_std" title="Link to this definition"></a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id33"><span class="problematic" id="id34">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.orbit.MultiTurnSumWidget.setupui">
+<span class="sig-name descname"><span class="pre">setupui</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/graphics/orbit.html#MultiTurnSumWidget.setupui"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.orbit.MultiTurnSumWidget.setupui" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.orbit.MultiTurnSumWidget.update_graph">
+<span class="sig-name descname"><span class="pre">update_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/graphics/orbit.html#MultiTurnSumWidget.update_graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.orbit.MultiTurnSumWidget.update_graph" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.orbit.MultiTurnWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ap_sofb.graphics.orbit.</span></span><span class="sig-name descname"><span class="pre">MultiTurnWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">csorb</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/graphics/orbit.html#MultiTurnWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.orbit.MultiTurnWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QWidget</span></code></p>
+<p>.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.orbit.MultiTurnWidget.hideEvent">
+<span class="sig-name descname"><span class="pre">hideEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/graphics/orbit.html#MultiTurnWidget.hideEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.orbit.MultiTurnWidget.hideEvent" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.orbit.MultiTurnWidget.setreforbits">
+<span class="sig-name descname"><span class="pre">setreforbits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pln</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orb</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/graphics/orbit.html#MultiTurnWidget.setreforbits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.orbit.MultiTurnWidget.setreforbits" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.orbit.MultiTurnWidget.setupui">
+<span class="sig-name descname"><span class="pre">setupui</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/graphics/orbit.html#MultiTurnWidget.setupui"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.orbit.MultiTurnWidget.setupui" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.orbit.MultiTurnWidget.showEvent">
+<span class="sig-name descname"><span class="pre">showEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/graphics/orbit.html#MultiTurnWidget.showEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.orbit.MultiTurnWidget.showEvent" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.orbit.OrbitWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ap_sofb.graphics.orbit.</span></span><span class="sig-name descname"><span class="pre">OrbitWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctrls</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'SI'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/graphics/orbit.html#OrbitWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.orbit.OrbitWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ap_sofb.graphics.base.BaseWidget" title="siriushla.as_ap_sofb.graphics.base.BaseWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseWidget</span></code></a></p>
+<p>.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.orbit.OrbitWidget.add_buttons_for_images">
+<span class="sig-name descname"><span class="pre">add_buttons_for_images</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/graphics/orbit.html#OrbitWidget.add_buttons_for_images"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.orbit.OrbitWidget.add_buttons_for_images" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.orbit.OrbitWidget.channels">
+<span class="sig-name descname"><span class="pre">channels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/graphics/orbit.html#OrbitWidget.channels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.orbit.OrbitWidget.channels" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.orbit.OrbitWidget.get_default_ctrls">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_default_ctrls</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'SI'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/graphics/orbit.html#OrbitWidget.get_default_ctrls"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.orbit.OrbitWidget.get_default_ctrls" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.orbit.SinglePassSumWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ap_sofb.graphics.orbit.</span></span><span class="sig-name descname"><span class="pre">SinglePassSumWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">csorb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/graphics/orbit.html#SinglePassSumWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.orbit.SinglePassSumWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QWidget</span></code></p>
+<p>.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.orbit.SinglePassSumWidget.setupui">
+<span class="sig-name descname"><span class="pre">setupui</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/graphics/orbit.html#SinglePassSumWidget.setupui"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.orbit.SinglePassSumWidget.setupui" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.orbit.Spectrogram">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ap_sofb.graphics.orbit.</span></span><span class="sig-name descname"><span class="pre">Spectrogram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/graphics/orbit.html#Spectrogram"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.orbit.Spectrogram" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="siriushla.widgets.html#siriushla.widgets.spectrogram_view.SiriusSpectrogramView" title="siriushla.widgets.spectrogram_view.SiriusSpectrogramView"><code class="xref py py-class docutils literal notranslate"><span class="pre">SiriusSpectrogramView</span></code></a></p>
+<p>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.orbit.Spectrogram.RULE_PROPERTIES">
+<span class="sig-name descname"><span class="pre">RULE_PROPERTIES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Enable':</span> <span class="pre">['setEnabled',</span> <span class="pre">&lt;class</span> <span class="pre">'bool'&gt;],</span> <span class="pre">'Opacity':</span> <span class="pre">['set_opacity',</span> <span class="pre">&lt;class</span> <span class="pre">'float'&gt;],</span> <span class="pre">'Position</span> <span class="pre">-</span> <span class="pre">X':</span> <span class="pre">['setX',</span> <span class="pre">&lt;class</span> <span class="pre">'int'&gt;],</span> <span class="pre">'Position</span> <span class="pre">-</span> <span class="pre">Y':</span> <span class="pre">['setY',</span> <span class="pre">&lt;class</span> <span class="pre">'int'&gt;],</span> <span class="pre">'Visible':</span> <span class="pre">['setVisible',</span> <span class="pre">&lt;class</span> <span class="pre">'bool'&gt;]}</span></em><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.orbit.Spectrogram.RULE_PROPERTIES" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.orbit.Spectrogram.channels">
+<span class="sig-name descname"><span class="pre">channels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/graphics/orbit.html#Spectrogram.channels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.orbit.Spectrogram.channels" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.orbit.Spectrogram.mouseDoubleClickEvent">
+<span class="sig-name descname"><span class="pre">mouseDoubleClickEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ev</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/graphics/orbit.html#Spectrogram.mouseDoubleClickEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.orbit.Spectrogram.mouseDoubleClickEvent" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.orbit.Spectrogram.new_data_sig">
+<span class="sig-name descname"><span class="pre">new_data_sig</span></span><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.orbit.Spectrogram.new_data_sig" title="Link to this definition"></a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id35"><span class="problematic" id="id36">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.orbit.Spectrogram.process_image">
+<span class="sig-name descname"><span class="pre">process_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/graphics/orbit.html#Spectrogram.process_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.orbit.Spectrogram.process_image" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.orbit.Spectrogram.setreforbit">
+<span class="sig-name descname"><span class="pre">setreforbit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">orb</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/graphics/orbit.html#Spectrogram.setreforbit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.orbit.Spectrogram.setreforbit" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-siriushla.as_ap_sofb.graphics.respmat">
+<span id="siriushla-as-ap-sofb-graphics-respmat-module"></span><h2>siriushla.as_ap_sofb.graphics.respmat module<a class="headerlink" href="#module-siriushla.as_ap_sofb.graphics.respmat" title="Link to this heading"></a></h2>
+<p>Control the Orbit Graphic Display.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.respmat.ShowMatrixWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ap_sofb.graphics.respmat.</span></span><span class="sig-name descname"><span class="pre">ShowMatrixWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/graphics/respmat.html#ShowMatrixWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.respmat.ShowMatrixWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QWidget</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.respmat.ShowMatrixWidget.setupui">
+<span class="sig-name descname"><span class="pre">setupui</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/graphics/respmat.html#ShowMatrixWidget.setupui"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.respmat.ShowMatrixWidget.setupui" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.respmat.SingularValues">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ap_sofb.graphics.respmat.</span></span><span class="sig-name descname"><span class="pre">SingularValues</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/graphics/respmat.html#SingularValues"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.respmat.SingularValues" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QWidget</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.respmat.SingularValues.setValue">
+<span class="sig-name descname"><span class="pre">setValue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/graphics/respmat.html#SingularValues.setValue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.respmat.SingularValues.setValue" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_sofb.graphics.respmat.SingularValues.setupui">
+<span class="sig-name descname"><span class="pre">setupui</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_sofb/graphics/respmat.html#SingularValues.setupui"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_sofb.graphics.respmat.SingularValues.setupui" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-siriushla.as_ap_sofb.graphics">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-siriushla.as_ap_sofb.graphics" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="siriushla.as_ap_sofb.html" class="btn btn-neutral float-left" title="siriushla.as_ap_sofb" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="siriushla.as_ap_sofb.ioc_control.html" class="btn btn-neutral float-right" title="siriushla.as_ap_sofb.ioc_control" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, lnls-sirius.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>siriushla.common.diff_ctrl &mdash; siriushla 1.14.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=01009efc"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="siriushla.common.epics" href="siriushla.common.epics.html" />
+    <link rel="prev" title="siriushla.common.cam_basler" href="siriushla.common.cam_basler.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            siriushla
+          </a>
+              <div class="version">
+                1.14.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">GUIs:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_configdb.html">siriushla.as_ap_configdb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_currinfo.html">siriushla.as_ap_currinfo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_energybutton.html">siriushla.as_ap_energybutton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_injcontrol.html">siriushla.as_ap_injcontrol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_injection.html">siriushla.as_ap_injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_launcher.html">siriushla.as_ap_launcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_machshift.html">siriushla.as_ap_machshift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_macreport.html">siriushla.as_ap_macreport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_magoffconv.html">siriushla.as_ap_magoffconv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_measure.html">siriushla.as_ap_measure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_monitor.html">siriushla.as_ap_monitor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_opticscorr.html">siriushla.as_ap_opticscorr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_posang.html">siriushla.as_ap_posang</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_rabpmmon.html">siriushla.as_ap_rabpmmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_radmon.html">siriushla.as_ap_radmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_sofb.html">siriushla.as_ap_sofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_bpms.html">siriushla.as_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_dccts.html">siriushla.as_di_dccts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_icts.html">siriushla.as_di_icts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_scrns.html">siriushla.as_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_tune.html">siriushla.as_di_tune</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_vlight.html">siriushla.as_di_vlight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_commands.html">siriushla.as_ps_commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_control.html">siriushla.as_ps_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_cycle.html">siriushla.as_ps_cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_diag.html">siriushla.as_ps_diag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_pu_control.html">siriushla.as_pu_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_rf_control.html">siriushla.as_rf_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ti_control.html">siriushla.as_ti_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.bl_ap_imgproc.html">siriushla.bl_ap_imgproc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.bo_ap_ramp.html">siriushla.bo_ap_ramp</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="siriushla.common.html">siriushla.common</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="siriushla.common.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="siriushla.common.afc_acq_core.html">siriushla.common.afc_acq_core</a></li>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.common.cam_basler.html">siriushla.common.cam_basler</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">siriushla.common.diff_ctrl</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#code-documentation">Code Documentation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-siriushla.common.diff_ctrl.base">siriushla.common.diff_ctrl.base module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-siriushla.common.diff_ctrl.details">siriushla.common.diff_ctrl.details module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-siriushla.common.diff_ctrl">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.common.epics.html">siriushla.common.epics</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.common.html#module-siriushla.common">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_ap_mps.html">siriushla.li_ap_mps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_di_bpms.html">siriushla.li_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_di_scrns.html">siriushla.li_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_eg_control.html">siriushla.li_eg_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_pu_modltr.html">siriushla.li_pu_modltr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_rf_llrf.html">siriushla.li_rf_llrf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_va_control.html">siriushla.li_va_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_fofb.html">siriushla.si_ap_fofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_genstatus.html">siriushla.si_ap_genstatus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_idff.html">siriushla.si_ap_idff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_orbintlk.html">siriushla.si_ap_orbintlk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_bbb.html">siriushla.si_di_bbb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_equalize_bpms.html">siriushla.si_di_equalize_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_scraps.html">siriushla.si_di_scraps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_id_control.html">siriushla.si_id_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.tb_di_slits.html">siriushla.tb_di_slits</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Widgets:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.html">Sirius HLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.widgets.html">Widgets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Source Code:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lnls-sirius/hla">HLA Github</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">siriushla</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="siriushla.common.html">siriushla.common</a></li>
+      <li class="breadcrumb-item active">siriushla.common.diff_ctrl</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/lnls-sirius/hla/blob/master/pyqt-apps/docs/source/siriushla.common.diff_ctrl.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="siriushla-common-diff-ctrl">
+<h1>siriushla.common.diff_ctrl<a class="headerlink" href="#siriushla-common-diff-ctrl" title="Link to this heading"></a></h1>
+<section id="code-documentation">
+<h2>Code Documentation<a class="headerlink" href="#code-documentation" title="Link to this heading"></a></h2>
+</section>
+<section id="module-siriushla.common.diff_ctrl.base">
+<span id="siriushla-common-diff-ctrl-base-module"></span><h2>siriushla.common.diff_ctrl.base module<a class="headerlink" href="#module-siriushla.common.diff_ctrl.base" title="Link to this heading"></a></h2>
+<p>Scraper and Slit Monitor Base class.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.common.diff_ctrl.base.DiffCtrlDevMonitor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.common.diff_ctrl.base.</span></span><span class="sig-name descname"><span class="pre">DiffCtrlDevMonitor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/common/diff_ctrl/base.html#DiffCtrlDevMonitor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.common.diff_ctrl.base.DiffCtrlDevMonitor" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QWidget</span></code></p>
+<p>Diff Ctrl Dev Monitor Widget.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.common.diff_ctrl.base.DiffCtrlDevMonitor.channels">
+<span class="sig-name descname"><span class="pre">channels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/common/diff_ctrl/base.html#DiffCtrlDevMonitor.channels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.common.diff_ctrl.base.DiffCtrlDevMonitor.channels" title="Link to this definition"></a></dt>
+<dd><p>Return channels.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.common.diff_ctrl.base.DiffCtrlDevMonitor.updateDevWidget">
+<span class="sig-name descname"><span class="pre">updateDevWidget</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/common/diff_ctrl/base.html#DiffCtrlDevMonitor.updateDevWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.common.diff_ctrl.base.DiffCtrlDevMonitor.updateDevWidget" title="Link to this definition"></a></dt>
+<dd><p>Update device illustration.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.common.diff_ctrl.base.DiffCtrlView">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.common.diff_ctrl.base.</span></span><span class="sig-name descname"><span class="pre">DiffCtrlView</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/common/diff_ctrl/base.html#DiffCtrlView"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.common.diff_ctrl.base.DiffCtrlView" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QWidget</span></code></p>
+<p>Diff Ctrl View Widget.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.common.diff_ctrl.base.DiffCtrlView.DEVICE_CLASS">
+<span class="sig-name descname"><span class="pre">DEVICE_CLASS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#siriushla.common.diff_ctrl.base.DiffCtrlView.DEVICE_CLASS" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.common.diff_ctrl.base.DiffCtrlView.DEVICE_PREFIX">
+<span class="sig-name descname"><span class="pre">DEVICE_PREFIX</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#siriushla.common.diff_ctrl.base.DiffCtrlView.DEVICE_PREFIX" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.common.diff_ctrl.base.DiffCtrlView.changeEvent">
+<span class="sig-name descname"><span class="pre">changeEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/common/diff_ctrl/base.html#DiffCtrlView.changeEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.common.diff_ctrl.base.DiffCtrlView.changeEvent" title="Link to this definition"></a></dt>
+<dd><p>Reimplement changeEvent.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-siriushla.common.diff_ctrl.details">
+<span id="siriushla-common-diff-ctrl-details-module"></span><h2>siriushla.common.diff_ctrl.details module<a class="headerlink" href="#module-siriushla.common.diff_ctrl.details" title="Link to this heading"></a></h2>
+<p>DiffCtrl Details.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.common.diff_ctrl.details.DiffCtrlDetails">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.common.diff_ctrl.details.</span></span><span class="sig-name descname"><span class="pre">DiffCtrlDetails</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">neg_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/common/diff_ctrl/details.html#DiffCtrlDetails"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.common.diff_ctrl.details.DiffCtrlDetails" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_SiriusWindow</span></code></p>
+<p>DiffCtrl Details.</p>
+</dd></dl>
+
+</section>
+<section id="module-siriushla.common.diff_ctrl">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-siriushla.common.diff_ctrl" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="siriushla.common.cam_basler.html" class="btn btn-neutral float-left" title="siriushla.common.cam_basler" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="siriushla.common.epics.html" class="btn btn-neutral float-right" title="siriushla.common.epics" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, lnls-sirius.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

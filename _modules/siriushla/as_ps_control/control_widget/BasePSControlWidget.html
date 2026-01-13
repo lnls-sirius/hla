@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>siriushla.as_ps_control.control_widget.BasePSControlWidget &mdash; siriushla 1.14.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../_static/documentation_options.js?v=01009efc"></script>
+        <script src="../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            siriushla
+          </a>
+              <div class="version">
+                1.14.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">GUIs:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_configdb.html">siriushla.as_ap_configdb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_currinfo.html">siriushla.as_ap_currinfo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_energybutton.html">siriushla.as_ap_energybutton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_injcontrol.html">siriushla.as_ap_injcontrol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_injection.html">siriushla.as_ap_injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_launcher.html">siriushla.as_ap_launcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_machshift.html">siriushla.as_ap_machshift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_macreport.html">siriushla.as_ap_macreport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_magoffconv.html">siriushla.as_ap_magoffconv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_measure.html">siriushla.as_ap_measure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_monitor.html">siriushla.as_ap_monitor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_opticscorr.html">siriushla.as_ap_opticscorr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_posang.html">siriushla.as_ap_posang</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_rabpmmon.html">siriushla.as_ap_rabpmmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_radmon.html">siriushla.as_ap_radmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_sofb.html">siriushla.as_ap_sofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_di_bpms.html">siriushla.as_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_di_dccts.html">siriushla.as_di_dccts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_di_icts.html">siriushla.as_di_icts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_di_scrns.html">siriushla.as_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_di_tune.html">siriushla.as_di_tune</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_di_vlight.html">siriushla.as_di_vlight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ps_commands.html">siriushla.as_ps_commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ps_control.html">siriushla.as_ps_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ps_cycle.html">siriushla.as_ps_cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ps_diag.html">siriushla.as_ps_diag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_pu_control.html">siriushla.as_pu_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_rf_control.html">siriushla.as_rf_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ti_control.html">siriushla.as_ti_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.bl_ap_imgproc.html">siriushla.bl_ap_imgproc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.bo_ap_ramp.html">siriushla.bo_ap_ramp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.common.html">siriushla.common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.li_ap_mps.html">siriushla.li_ap_mps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.li_di_bpms.html">siriushla.li_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.li_di_scrns.html">siriushla.li_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.li_eg_control.html">siriushla.li_eg_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.li_pu_modltr.html">siriushla.li_pu_modltr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.li_rf_llrf.html">siriushla.li_rf_llrf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.li_va_control.html">siriushla.li_va_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.si_ap_fofb.html">siriushla.si_ap_fofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.si_ap_genstatus.html">siriushla.si_ap_genstatus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.si_ap_idff.html">siriushla.si_ap_idff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.si_ap_orbintlk.html">siriushla.si_ap_orbintlk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.si_di_bbb.html">siriushla.si_di_bbb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.si_di_equalize_bpms.html">siriushla.si_di_equalize_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.si_di_scraps.html">siriushla.si_di_scraps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.si_id_control.html">siriushla.si_id_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.tb_di_slits.html">siriushla.tb_di_slits</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Widgets:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.html">Sirius HLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.widgets.html">Widgets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Source Code:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lnls-sirius/hla">HLA Github</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">siriushla</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">siriushla.as_ps_control.control_widget.BasePSControlWidget</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for siriushla.as_ps_control.control_widget.BasePSControlWidget</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Base class for controlling a power supply.&quot;&quot;&quot;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtCore</span><span class="w"> </span><span class="kn">import</span> <span class="n">Qt</span><span class="p">,</span> <span class="n">Slot</span><span class="p">,</span> <span class="n">QLocale</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtWidgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">QWidget</span><span class="p">,</span> <span class="n">QVBoxLayout</span><span class="p">,</span> <span class="n">QGroupBox</span><span class="p">,</span> \
+    <span class="n">QGridLayout</span><span class="p">,</span> <span class="n">QLabel</span><span class="p">,</span> <span class="n">QHBoxLayout</span><span class="p">,</span> <span class="n">QScrollArea</span><span class="p">,</span> <span class="n">QLineEdit</span><span class="p">,</span> <span class="n">QAction</span><span class="p">,</span> \
+    <span class="n">QMenu</span><span class="p">,</span> <span class="n">QInputDialog</span><span class="p">,</span> <span class="n">QFrame</span><span class="p">,</span> <span class="n">QPushButton</span><span class="p">,</span> <span class="n">QSplitter</span><span class="p">,</span> \
+    <span class="n">QSizePolicy</span> <span class="k">as</span> <span class="n">QSzPlcy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">qtawesome</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">qta</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydm.connection_inspector</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConnectionInspector</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriuspy.search</span><span class="w"> </span><span class="kn">import</span> <span class="n">PSSearch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriuspy.namesys</span><span class="w"> </span><span class="kn">import</span> <span class="n">SiriusPVName</span> <span class="k">as</span> <span class="n">PVName</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriushla.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">connect_window</span><span class="p">,</span> <span class="n">connect_newprocess</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..PSDetailWindow</span><span class="w"> </span><span class="kn">import</span> <span class="n">PSDetailWindow</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..SummaryWidgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">SummaryWidget</span><span class="p">,</span> <span class="n">SummaryHeader</span><span class="p">,</span> \
+    <span class="n">get_prop2label</span><span class="p">,</span> <span class="n">sort_propties</span>
+
+
+<div class="viewcode-block" id="PSContainer">
+<a class="viewcode-back" href="../../../../siriushla.as_ps_control.control_widget.html#siriushla.as_ps_control.control_widget.BasePSControlWidget.PSContainer">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">PSContainer</span><span class="p">(</span><span class="n">QWidget</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;PSContainer.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">widget</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_widget</span> <span class="o">=</span> <span class="n">widget</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">widget</span><span class="o">.</span><span class="n">devname</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bbbname</span> <span class="o">=</span> <span class="n">widget</span><span class="o">.</span><span class="n">bbbname</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">udcname</span> <span class="o">=</span> <span class="n">widget</span><span class="o">.</span><span class="n">udcname</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">dclinks</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dclinks_type</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dclink_widgets</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dclinksbbbname</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dclinksudcname</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">dclinks</span> <span class="o">=</span> <span class="n">PSSearch</span><span class="o">.</span><span class="n">conv_psname_2_dclink</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">dclinks</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dclinks</span> <span class="o">=</span> <span class="n">dclinks</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dclinks_type</span> <span class="o">=</span> <span class="n">PSSearch</span><span class="o">.</span><span class="n">conv_psname_2_psmodel</span><span class="p">(</span><span class="n">dclinks</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dclinks_type</span> <span class="o">!=</span> <span class="s1">&#39;REGATRON_DCLink&#39;</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">dc</span> <span class="ow">in</span> <span class="n">dclinks</span><span class="p">:</span>
+                    <span class="n">bbb_name</span> <span class="o">=</span> <span class="n">PSSearch</span><span class="o">.</span><span class="n">conv_psname_2_bbbname</span><span class="p">(</span><span class="n">dc</span><span class="p">)</span>
+                    <span class="n">bbb_ip</span> <span class="o">=</span> <span class="n">PSSearch</span><span class="o">.</span><span class="n">conv_bbbname_2_bbbip</span><span class="p">(</span><span class="n">bbb_name</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">dclinksbbbname</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">bbb_name</span><span class="si">}</span><span class="s1">(</span><span class="si">{</span><span class="n">bbb_ip</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">dclinksudcname</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">PSSearch</span><span class="o">.</span><span class="n">conv_psname_2_udc</span><span class="p">(</span><span class="n">dc</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">all_props</span> <span class="o">=</span> <span class="n">get_prop2label</span><span class="p">(</span><span class="n">PVName</span><span class="p">(</span><span class="n">dclinks</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">visible_props</span> <span class="o">=</span> <span class="n">sort_propties</span><span class="p">([</span>
+            <span class="s1">&#39;detail&#39;</span><span class="p">,</span> <span class="s1">&#39;state&#39;</span><span class="p">,</span> <span class="s1">&#39;intlk&#39;</span><span class="p">,</span> <span class="s1">&#39;setpoint&#39;</span><span class="p">,</span> <span class="s1">&#39;monitor&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setup_ui</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_create_actions</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_enable_actions</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            #HideButton {</span>
+<span class="s2">                min-width: 10px;</span>
+<span class="s2">                max-width: 10px;</span>
+<span class="s2">            }</span>
+<span class="s2">            #DCLinkContainer {</span>
+<span class="s2">                background-color: lightgrey;</span>
+<span class="s2">            }</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_setup_ui</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Setup widget UI.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_layout</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_layout</span><span class="o">.</span><span class="n">setSpacing</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_layout</span><span class="o">.</span><span class="n">setContentsMargins</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_layout</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dclink_container</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dclink_container</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;DCLinkContainer&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dclink_container</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">QVBoxLayout</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dclink_is_filled</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dclinks</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_hide</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span><span class="s1">&#39;mdi.plus&#39;</span><span class="p">),</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_hide</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_hide</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_hide</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;HideButton&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_hide</span><span class="o">.</span><span class="n">setSizePolicy</span><span class="p">(</span><span class="n">QSzPlcy</span><span class="o">.</span><span class="n">Maximum</span><span class="p">,</span> <span class="n">QSzPlcy</span><span class="o">.</span><span class="n">Maximum</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_hide</span><span class="o">.</span><span class="n">setFlat</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_hide</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_widget</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dclink_container</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># Configure</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dclink_container</span><span class="o">.</span><span class="n">setHidden</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_hide</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_toggle_dclink</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_toggle_dclink</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dclink_container</span><span class="o">.</span><span class="n">isHidden</span><span class="p">():</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dclink_is_filled</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_fill_dclink_container</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_enable_actions</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_hide</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span><span class="s1">&#39;mdi.minus&#39;</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dclink_container</span><span class="o">.</span><span class="n">setHidden</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_hide</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span><span class="s1">&#39;mdi.plus&#39;</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dclink_container</span><span class="o">.</span><span class="n">setHidden</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_fill_dclink_container</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dclink_is_filled</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dclink_container</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span>
+            <span class="n">SummaryHeader</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dclinks</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">visible_props</span><span class="p">,</span> <span class="bp">self</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">dclink_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dclinks</span><span class="p">:</span>
+            <span class="n">w</span> <span class="o">=</span> <span class="n">SummaryWidget</span><span class="p">(</span><span class="n">dclink_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">visible_props</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dclinks_type</span> <span class="o">==</span> <span class="s1">&#39;REGATRON_DCLink&#39;</span><span class="p">:</span>
+                <span class="n">connect_newprocess</span><span class="p">(</span>
+                    <span class="n">w</span><span class="o">.</span><span class="n">detail_bt</span><span class="p">,</span>
+                    <span class="p">[</span><span class="s1">&#39;sirius-hla-as-ps-regatron-individual&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;-dev&#39;</span><span class="p">,</span> <span class="n">dclink_name</span><span class="p">],</span>
+                    <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_pydm</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">connect_window</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">detail_bt</span><span class="p">,</span> <span class="n">PSDetailWindow</span><span class="p">,</span>
+                               <span class="bp">self</span><span class="p">,</span> <span class="n">psname</span><span class="o">=</span><span class="n">dclink_name</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dclink_container</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dclink_widgets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+
+<div class="viewcode-block" id="PSContainer.update_visible_props">
+<a class="viewcode-back" href="../../../../siriushla.as_ps_control.control_widget.html#siriushla.as_ps_control.control_widget.BasePSControlWidget.PSContainer.update_visible_props">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_visible_props</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">visible_props</span> <span class="o">=</span> <span class="n">sort_propties</span><span class="p">(</span><span class="n">new_value</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_enable_actions</span><span class="p">()</span></div>
+
+
+    <span class="c1"># Action methods</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_create_actions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_turn_on_action</span> <span class="o">=</span> <span class="n">QAction</span><span class="p">(</span><span class="s1">&#39;Turn DCLinks On&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_turn_on_action</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_dclink_pwrstate</span><span class="p">(</span><span class="kc">True</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_turn_on_action</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_turn_off_action</span> <span class="o">=</span> <span class="n">QAction</span><span class="p">(</span><span class="s1">&#39;Turn DCLinks Off&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_turn_off_action</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_dclink_pwrstate</span><span class="p">(</span><span class="kc">False</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_turn_off_action</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_open_loop_action</span> <span class="o">=</span> <span class="n">QAction</span><span class="p">(</span><span class="s1">&#39;Open DCLinks Control Loop&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_open_loop_action</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_dclink_control_loop</span><span class="p">(</span><span class="kc">False</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_open_loop_action</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_close_loop_action</span> <span class="o">=</span> <span class="n">QAction</span><span class="p">(</span><span class="s1">&#39;Close DCLinks Control Loop&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_close_loop_action</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_dclink_control_loop</span><span class="p">(</span><span class="kc">True</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_close_loop_action</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_setpoint_action</span> <span class="o">=</span> <span class="n">QAction</span><span class="p">(</span><span class="s1">&#39;Set DCLinks Voltage&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_setpoint_action</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_set_setpoint</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_setpoint_action</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reset_intlk_action</span> <span class="o">=</span> <span class="n">QAction</span><span class="p">(</span><span class="s1">&#39;Reset DCLinks Interlocks&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reset_intlk_action</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_reset_intlk</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reset_intlk_action</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_enable_actions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s1">&#39;state&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">visible_props</span> <span class="ow">and</span> \
+                <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_turn_on_action</span><span class="o">.</span><span class="n">isEnabled</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_turn_on_action</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_turn_off_action</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s1">&#39;ctrlloop&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">visible_props</span> <span class="ow">and</span> \
+                <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_open_loop_action</span><span class="o">.</span><span class="n">isEnabled</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_open_loop_action</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_close_loop_action</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s1">&#39;setpoint&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">visible_props</span> <span class="ow">and</span> \
+                <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_setpoint_action</span><span class="o">.</span><span class="n">isEnabled</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_set_setpoint_action</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s1">&#39;reset&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">visible_props</span> <span class="ow">and</span> \
+                <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reset_intlk_action</span><span class="o">.</span><span class="n">isEnabled</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_reset_intlk_action</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_set_dclink_pwrstate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">dclink</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dclink_widgets</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">value</span><span class="p">:</span>
+                <span class="n">dclink</span><span class="o">.</span><span class="n">turn_on</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">dclink</span><span class="o">.</span><span class="n">turn_off</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_set_dclink_control_loop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">dclink</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dclink_widgets</span><span class="p">:</span>
+            <span class="n">btn</span> <span class="o">=</span> <span class="n">dclink</span><span class="o">.</span><span class="n">ctrlloop_bt</span>
+            <span class="k">if</span> <span class="n">value</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">btn</span><span class="o">.</span><span class="n">_bit_val</span><span class="p">:</span>
+                    <span class="n">btn</span><span class="o">.</span><span class="n">send_value</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">btn</span><span class="o">.</span><span class="n">_bit_val</span><span class="p">:</span>
+                    <span class="n">btn</span><span class="o">.</span><span class="n">send_value</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_set_setpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set current setpoint for every visible widget.&quot;&quot;&quot;</span>
+        <span class="n">dlg</span> <span class="o">=</span> <span class="n">QInputDialog</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">dlg</span><span class="o">.</span><span class="n">setLocale</span><span class="p">(</span><span class="n">QLocale</span><span class="p">(</span><span class="n">QLocale</span><span class="o">.</span><span class="n">English</span><span class="p">))</span>
+        <span class="n">new_value</span><span class="p">,</span> <span class="n">ok</span> <span class="o">=</span> <span class="n">dlg</span><span class="o">.</span><span class="n">getDouble</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;New setpoint&quot;</span><span class="p">,</span> <span class="s2">&quot;Value&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ok</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">dclink</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dclink_widgets</span><span class="p">:</span>
+                <span class="n">sp</span> <span class="o">=</span> <span class="n">dclink</span><span class="o">.</span><span class="n">setpoint</span><span class="o">.</span><span class="n">spinbox</span>
+                <span class="n">sp</span><span class="o">.</span><span class="n">value_changed</span><span class="p">(</span><span class="n">new_value</span><span class="p">)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">sp</span><span class="o">.</span><span class="n">send_value</span><span class="p">()</span>
+                <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+                    <span class="k">pass</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_reset_intlk</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">dclink</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dclink_widgets</span><span class="p">:</span>
+            <span class="n">dclink</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+
+    <span class="c1"># Overloaded method</span>
+<div class="viewcode-block" id="PSContainer.contextMenuEvent">
+<a class="viewcode-back" href="../../../../siriushla.as_ps_control.control_widget.html#siriushla.as_ps_control.control_widget.BasePSControlWidget.PSContainer.contextMenuEvent">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">contextMenuEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Overload to create a custom context menu.&quot;&quot;&quot;</span>
+        <span class="n">widget</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">childAt</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">pos</span><span class="p">())</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">widget</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="n">widget</span><span class="o">.</span><span class="n">parent</span><span class="p">()</span>
+        <span class="n">grand_parent</span> <span class="o">=</span> <span class="n">parent</span><span class="o">.</span><span class="n">parent</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">widget</span><span class="o">.</span><span class="n">objectName</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;DCLinkContainer&#39;</span> <span class="ow">or</span> \
+                <span class="n">parent</span><span class="o">.</span><span class="n">objectName</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;DCLinkContainer&#39;</span> <span class="ow">or</span> \
+                <span class="n">grand_parent</span><span class="o">.</span><span class="n">objectName</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;DCLinkContainer&#39;</span><span class="p">:</span>
+            <span class="n">menu</span> <span class="o">=</span> <span class="n">QMenu</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_turn_on_action</span><span class="p">)</span>
+            <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_turn_off_action</span><span class="p">)</span>
+            <span class="n">menu</span><span class="o">.</span><span class="n">addSeparator</span><span class="p">()</span>
+            <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_close_loop_action</span><span class="p">)</span>
+            <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_open_loop_action</span><span class="p">)</span>
+            <span class="n">menu</span><span class="o">.</span><span class="n">addSeparator</span><span class="p">()</span>
+            <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_set_setpoint_action</span><span class="p">)</span>
+            <span class="n">menu</span><span class="o">.</span><span class="n">addSeparator</span><span class="p">()</span>
+            <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_reset_intlk_action</span><span class="p">)</span>
+            <span class="n">menu</span><span class="o">.</span><span class="n">addSeparator</span><span class="p">()</span>
+            <span class="n">action</span> <span class="o">=</span> <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="s1">&#39;Show Connections...&#39;</span><span class="p">)</span>
+            <span class="n">action</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">show_connections</span><span class="p">)</span>
+            <span class="n">menu</span><span class="o">.</span><span class="n">popup</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">globalPos</span><span class="p">())</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">contextMenuEvent</span><span class="p">(</span><span class="n">event</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PSContainer.show_connections">
+<a class="viewcode-back" href="../../../../siriushla.as_ps_control.control_widget.html#siriushla.as_ps_control.control_widget.BasePSControlWidget.PSContainer.show_connections">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">show_connections</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">checked</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="n">_</span> <span class="o">=</span> <span class="n">checked</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">ConnectionInspector</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="BasePSControlWidget">
+<a class="viewcode-back" href="../../../../siriushla.as_ps_control.control_widget.html#siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">BasePSControlWidget</span><span class="p">(</span><span class="n">QWidget</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Base widget class to control power supply.&quot;&quot;&quot;</span>
+
+    <span class="n">HORIZONTAL</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">VERTICAL</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subsection</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Class constructor.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        subsection</span>
+<span class="sd">            Default to None. To be used in filters defined in subclass.</span>
+<span class="sd">        orientation</span>
+<span class="sd">            Default to HORIZONTAL. Define how the different groups</span>
+<span class="sd">            (defined in subclasses) will be laid out.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">BasePSControlWidget</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_orientation</span> <span class="o">=</span> <span class="n">orientation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_subsection</span> <span class="o">=</span> <span class="n">subsection</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dev_list</span> <span class="o">=</span> <span class="n">PSSearch</span><span class="o">.</span><span class="n">get_psnames</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_getFilter</span><span class="p">(</span><span class="n">subsection</span><span class="p">))</span>
+        <span class="n">dev0</span> <span class="o">=</span> <span class="n">PVName</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dev_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">dev0</span><span class="o">.</span><span class="n">sec</span> <span class="o">==</span> <span class="s1">&#39;LI&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">dev0</span><span class="o">.</span><span class="n">dev</span> <span class="o">==</span> <span class="s1">&#39;Slnd&#39;</span><span class="p">:</span>
+                <span class="n">idcs</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">PVName</span><span class="p">(</span><span class="n">dev</span><span class="p">)</span><span class="o">.</span><span class="n">idx</span><span class="p">)</span> <span class="k">for</span> <span class="n">dev</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dev_list</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_dev_list</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="n">x</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">idcs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dev_list</span><span class="p">))]</span>
+            <span class="k">if</span> <span class="s1">&#39;Q&#39;</span> <span class="ow">in</span> <span class="n">dev0</span><span class="o">.</span><span class="n">dev</span><span class="p">:</span>
+                <span class="n">all_props</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+                <span class="k">for</span> <span class="n">dev</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dev_list</span><span class="p">:</span>
+                    <span class="n">all_props</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">get_prop2label</span><span class="p">(</span><span class="n">dev</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">all_props</span> <span class="o">=</span> <span class="n">sort_propties</span><span class="p">(</span><span class="n">all_props</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">all_props</span> <span class="o">=</span> <span class="n">get_prop2label</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dev_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">all_props</span> <span class="o">=</span> <span class="n">get_prop2label</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dev_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">visible_props</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getVisibleProps</span><span class="p">()</span>
+        <span class="k">if</span> <span class="s1">&#39;trim&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_props</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">visible_props</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;trim&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">visible_props</span> <span class="o">=</span> <span class="n">sort_propties</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">visible_props</span><span class="p">)</span>
+
+        <span class="c1"># Data used to filter the widgets</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ps_widgets_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">containers_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filtered_widgets</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>  <span class="c1"># Set with key of visible widgets</span>
+
+        <span class="c1"># Get groups and respective power supplies</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">groups</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">groups2devs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(),</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getGroups</span><span class="p">():</span>
+            <span class="n">pwrsupplies</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+            <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">group</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">el</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dev_list</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">pattern</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">el</span><span class="p">):</span>
+                    <span class="n">pwrsupplies</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">el</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">pwrsupplies</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">groups</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">groups2devs</span><span class="p">[</span><span class="n">group</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">pwrsupplies</span>
+
+        <span class="c1"># Setup the UI</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setup_ui</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_create_actions</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_enable_actions</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">groups</span><span class="p">)</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;cw&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s1">&#39;#cw{min-height: 40em;}&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_setup_ui</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layout</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">()</span>
+
+        <span class="c1"># Create filters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">search_le</span> <span class="o">=</span> <span class="n">QLineEdit</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">search_le</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s2">&quot;search_lineedit&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">search_le</span><span class="o">.</span><span class="n">setPlaceholderText</span><span class="p">(</span><span class="s2">&quot;Search for a power supply...&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">search_le</span><span class="o">.</span><span class="n">textEdited</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_filter_pwrsupplies</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filter_pb</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span><span class="s1">&#39;mdi.view-column&#39;</span><span class="p">),</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">search_menu</span> <span class="o">=</span> <span class="n">QMenu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filter_pb</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filter_pb</span><span class="o">.</span><span class="n">setMenu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">search_menu</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">prop</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_props</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">act</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">search_menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+            <span class="n">act</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="n">prop</span><span class="p">)</span>
+            <span class="n">act</span><span class="o">.</span><span class="n">setCheckable</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">act</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="n">prop</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">visible_props</span><span class="p">)</span>
+            <span class="n">act</span><span class="o">.</span><span class="n">toggled</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_set_widgets_visibility</span><span class="p">)</span>
+        <span class="n">hlay_filter</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">hlay_filter</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">search_le</span><span class="p">)</span>
+        <span class="n">hlay_filter</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filter_pb</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">hlay_filter</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">count_label</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">count_label</span><span class="o">.</span><span class="n">setSizePolicy</span><span class="p">(</span><span class="n">QSzPlcy</span><span class="o">.</span><span class="n">Maximum</span><span class="p">,</span> <span class="n">QSzPlcy</span><span class="o">.</span><span class="n">Maximum</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">count_label</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">pwrsupplies_layout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getSplitter</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pwrsupplies_layout</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">groups</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">splitt_v</span> <span class="o">=</span> <span class="n">QSplitter</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">Vertical</span><span class="p">)</span>
+
+        <span class="c1"># Build power supply Layout</span>
+        <span class="c1"># Create group boxes and pop. layout</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">group</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">groups</span><span class="p">):</span>
+            <span class="n">pwrsupplies</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">groups2devs</span><span class="p">[</span><span class="n">group</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+
+            <span class="c1"># Create header</span>
+            <span class="n">header</span> <span class="o">=</span> <span class="n">SummaryHeader</span><span class="p">(</span><span class="n">pwrsupplies</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                                   <span class="n">visible_props</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">visible_props</span><span class="p">,</span>
+                                   <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">containers_dict</span><span class="p">[</span><span class="s1">&#39;header &#39;</span><span class="o">+</span><span class="n">group</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">header</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">filtered_widgets</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;header &#39;</span><span class="o">+</span><span class="n">group</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+            <span class="c1"># Loop power supply to create all the widgets of a groupbox</span>
+            <span class="n">group_widgets</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">psname</span> <span class="ow">in</span> <span class="n">pwrsupplies</span><span class="p">:</span>
+                <span class="n">ps_widget</span> <span class="o">=</span> <span class="n">SummaryWidget</span><span class="p">(</span>
+                    <span class="n">name</span><span class="o">=</span><span class="n">psname</span><span class="p">,</span> <span class="n">visible_props</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">visible_props</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+                <span class="n">pscontainer</span> <span class="o">=</span> <span class="n">PSContainer</span><span class="p">(</span><span class="n">ps_widget</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+                <span class="n">group_widgets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pscontainer</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">containers_dict</span><span class="p">[</span><span class="n">psname</span><span class="p">]</span> <span class="o">=</span> <span class="n">pscontainer</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">filtered_widgets</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">psname</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ps_widgets_dict</span><span class="p">[</span><span class="n">psname</span><span class="p">]</span> <span class="o">=</span> <span class="n">ps_widget</span>
+
+            <span class="c1"># Create group</span>
+            <span class="n">wid_type</span> <span class="o">=</span> <span class="s1">&#39;groupbox&#39;</span> <span class="k">if</span> <span class="n">group</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">else</span> <span class="s1">&#39;widget&#39;</span>
+            <span class="n">group_wid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_createGroupWidget</span><span class="p">(</span>
+                <span class="n">group</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">header</span><span class="p">,</span> <span class="n">group_widgets</span><span class="p">,</span> <span class="n">wid_type</span><span class="o">=</span><span class="n">wid_type</span><span class="p">)</span>
+
+            <span class="c1"># Add group box to grid layout</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">groups</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">idx</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]:</span>
+                    <span class="n">splitt_v</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">group_wid</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">pwrsupplies_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">splitt_v</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">pwrsupplies_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">group_wid</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">pwrsupplies_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">group_wid</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">count_label</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span>
+            <span class="s2">&quot;Showing </span><span class="si">{}</span><span class="s2"> power supplies.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filtered_widgets</span><span class="p">)</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">groups</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_createGroupWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">header</span><span class="p">,</span> <span class="n">widget_group</span><span class="p">,</span>
+                           <span class="n">wid_type</span><span class="o">=</span><span class="s1">&#39;groupbox&#39;</span><span class="p">):</span>
+        <span class="n">scr_area_wid</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">scr_area_wid</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;scr_ar_wid&#39;</span><span class="p">)</span>
+        <span class="n">scr_area_wid</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span>
+            <span class="s1">&#39;#scr_ar_wid {background-color: transparent;}&#39;</span><span class="p">)</span>
+        <span class="n">w_lay</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">(</span><span class="n">scr_area_wid</span><span class="p">)</span>
+        <span class="n">w_lay</span><span class="o">.</span><span class="n">setSpacing</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">w_lay</span><span class="o">.</span><span class="n">setContentsMargins</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">widget</span> <span class="ow">in</span> <span class="n">widget_group</span><span class="p">:</span>
+            <span class="n">w_lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">widget</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignLeft</span><span class="p">)</span>
+        <span class="n">w_lay</span><span class="o">.</span><span class="n">addStretch</span><span class="p">()</span>
+
+        <span class="n">scr_area</span> <span class="o">=</span> <span class="n">QScrollArea</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">scr_area</span><span class="o">.</span><span class="n">setVerticalScrollBarPolicy</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">ScrollBarAsNeeded</span><span class="p">)</span>
+        <span class="n">scr_area</span><span class="o">.</span><span class="n">setHorizontalScrollBarPolicy</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">ScrollBarAsNeeded</span><span class="p">)</span>
+        <span class="n">scr_area</span><span class="o">.</span><span class="n">setWidgetResizable</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">scr_area</span><span class="o">.</span><span class="n">setFrameShape</span><span class="p">(</span><span class="n">QFrame</span><span class="o">.</span><span class="n">NoFrame</span><span class="p">)</span>
+        <span class="n">scr_area</span><span class="o">.</span><span class="n">setWidget</span><span class="p">(</span><span class="n">scr_area_wid</span><span class="p">)</span>
+
+        <span class="n">wid</span> <span class="o">=</span> <span class="n">QGroupBox</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span> <span class="k">if</span> <span class="n">wid_type</span> <span class="o">==</span> <span class="s1">&#39;groupbox&#39;</span> \
+            <span class="k">else</span> <span class="n">QWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">gb_lay</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+        <span class="n">gb_lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">header</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignLeft</span><span class="p">)</span>
+        <span class="n">gb_lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">scr_area</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">wid</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_getSplitter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_orientation</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">HORIZONTAL</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">QSplitter</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">Horizontal</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">QSplitter</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">Vertical</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_getVisibleProps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Default visible properties.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;detail&#39;</span><span class="p">,</span> <span class="s1">&#39;state&#39;</span><span class="p">,</span> <span class="s1">&#39;intlk&#39;</span><span class="p">,</span> <span class="s1">&#39;setpoint&#39;</span><span class="p">,</span> <span class="s1">&#39;monitor&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;strength_sp&#39;</span><span class="p">,</span> <span class="s1">&#39;strength_mon&#39;</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_filter_pwrsupplies</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Filter power supply widgets based on text inserted at line edit.&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">I</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>  <span class="c1"># Ignore malformed patterns?</span>
+            <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;malformed&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Clear filtered widgets and add the ones that match the new pattern</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filtered_widgets</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">container</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">containers_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">cond</span> <span class="o">=</span> <span class="s1">&#39;header&#39;</span> <span class="ow">in</span> <span class="n">name</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">cond</span><span class="p">:</span>
+                <span class="n">cond</span> <span class="o">|=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">pattern</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+                <span class="n">cond</span> <span class="o">|=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">pattern</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">container</span><span class="o">.</span><span class="n">bbbname</span><span class="p">))</span>
+                <span class="n">cond</span> <span class="o">|=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">pattern</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">container</span><span class="o">.</span><span class="n">udcname</span><span class="p">))</span>
+                <span class="k">for</span> <span class="n">dc</span> <span class="ow">in</span> <span class="n">container</span><span class="o">.</span><span class="n">dclinks</span><span class="p">:</span>
+                    <span class="n">cond</span> <span class="o">|=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">pattern</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">dc</span><span class="p">))</span>
+                <span class="k">for</span> <span class="n">dc</span> <span class="ow">in</span> <span class="n">container</span><span class="o">.</span><span class="n">dclinksbbbname</span><span class="p">:</span>
+                    <span class="n">cond</span> <span class="o">|=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">pattern</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">dc</span><span class="p">))</span>
+                <span class="k">for</span> <span class="n">dc</span> <span class="ow">in</span> <span class="n">container</span><span class="o">.</span><span class="n">dclinksudcname</span><span class="p">:</span>
+                    <span class="n">cond</span> <span class="o">|=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">pattern</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">dc</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">cond</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">filtered_widgets</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="c1"># Set widgets visibility and the number of widgets matched</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_widgets_visibility</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">count_label</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span>
+            <span class="s2">&quot;Showing </span><span class="si">{}</span><span class="s2"> power supplies&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filtered_widgets</span><span class="p">)</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">groups</span><span class="p">)))</span>
+
+        <span class="c1"># Scroll to top</span>
+        <span class="k">for</span> <span class="n">scroll_area</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">findChildren</span><span class="p">(</span><span class="n">QScrollArea</span><span class="p">):</span>
+            <span class="n">scroll_area</span><span class="o">.</span><span class="n">verticalScrollBar</span><span class="p">()</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_set_widgets_visibility</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set visibility of the widgets.&quot;&quot;&quot;</span>
+        <span class="n">props</span> <span class="o">=</span> <span class="p">[</span><span class="n">act</span><span class="o">.</span><span class="n">objectName</span><span class="p">()</span> <span class="k">for</span> <span class="n">act</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">search_menu</span><span class="o">.</span><span class="n">actions</span><span class="p">()</span>
+                 <span class="k">if</span> <span class="n">act</span><span class="o">.</span><span class="n">isChecked</span><span class="p">()]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">visible_props</span> <span class="o">=</span> <span class="n">sort_propties</span><span class="p">(</span><span class="n">props</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_enable_actions</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">wid</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">containers_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">wid</span><span class="o">.</span><span class="n">update_visible_props</span><span class="p">(</span><span class="n">props</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s1">&#39;header&#39;</span> <span class="ow">in</span> <span class="n">key</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">ob</span> <span class="ow">in</span> <span class="n">wid</span><span class="o">.</span><span class="n">findChildren</span><span class="p">(</span><span class="n">QWidget</span><span class="p">):</span>
+                    <span class="n">name</span> <span class="o">=</span> <span class="n">ob</span><span class="o">.</span><span class="n">objectName</span><span class="p">()</span>
+                    <span class="n">ob</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="n">name</span> <span class="ow">in</span> <span class="n">props</span> <span class="ow">or</span> <span class="s1">&#39;Hidden&#39;</span> <span class="ow">in</span> <span class="n">name</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">vis</span> <span class="o">=</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">filtered_widgets</span>
+                <span class="n">wid</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="n">vis</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">vis</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">objs</span> <span class="o">=</span> <span class="n">wid</span><span class="o">.</span><span class="n">findChildren</span><span class="p">(</span><span class="n">SummaryWidget</span><span class="p">)</span>
+                <span class="n">objs</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">wid</span><span class="o">.</span><span class="n">findChildren</span><span class="p">(</span><span class="n">SummaryHeader</span><span class="p">))</span>
+                <span class="k">for</span> <span class="n">ob</span> <span class="ow">in</span> <span class="n">objs</span><span class="p">:</span>
+                    <span class="n">chil</span> <span class="o">=</span> <span class="n">ob</span><span class="o">.</span><span class="n">findChildren</span><span class="p">(</span>
+                        <span class="n">QWidget</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">FindDirectChildrenOnly</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">chil</span><span class="p">:</span>
+                        <span class="n">name</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">objectName</span><span class="p">()</span>
+                        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ob</span><span class="p">,</span> <span class="n">SummaryWidget</span><span class="p">)</span> <span class="ow">and</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">props</span><span class="p">:</span>
+                            <span class="n">ob</span><span class="o">.</span><span class="n">fillWidget</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+                        <span class="n">c</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="n">name</span> <span class="ow">in</span> <span class="n">props</span><span class="p">)</span>
+
+    <span class="c1"># Actions methods</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_create_actions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">turn_on_act</span> <span class="o">=</span> <span class="n">QAction</span><span class="p">(</span><span class="s2">&quot;Turn On&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">turn_on_act</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_pwrstate</span><span class="p">(</span><span class="kc">True</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">turn_on_act</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">turn_off_act</span> <span class="o">=</span> <span class="n">QAction</span><span class="p">(</span><span class="s2">&quot;Turn Off&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">turn_off_act</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_pwrstate</span><span class="p">(</span><span class="kc">False</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">turn_off_act</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ctrlloop_close_act</span> <span class="o">=</span> <span class="n">QAction</span><span class="p">(</span><span class="s2">&quot;Close Control Loop&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ctrlloop_close_act</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_ctrlloop</span><span class="p">(</span><span class="kc">True</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ctrlloop_close_act</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ctrlloop_open_act</span> <span class="o">=</span> <span class="n">QAction</span><span class="p">(</span><span class="s2">&quot;Open Control Loop&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ctrlloop_open_act</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_ctrlloop</span><span class="p">(</span><span class="kc">False</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ctrlloop_open_act</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_slowref_act</span> <span class="o">=</span> <span class="n">QAction</span><span class="p">(</span><span class="s2">&quot;Set OpMode to SlowRef&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_slowref_act</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_set_slowref</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_slowref_act</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_current_sp_act</span> <span class="o">=</span> <span class="n">QAction</span><span class="p">(</span><span class="s2">&quot;Set Current SP&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_current_sp_act</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_set_current_sp</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_current_sp_act</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset_act</span> <span class="o">=</span> <span class="n">QAction</span><span class="p">(</span><span class="s2">&quot;Reset Interlocks&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset_act</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_reset_interlocks</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset_act</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wfmupdate_on_act</span> <span class="o">=</span> <span class="n">QAction</span><span class="p">(</span><span class="s2">&quot;Wfm Update Auto Enable&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wfmupdate_on_act</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_wfmupdate</span><span class="p">(</span><span class="kc">True</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wfmupdate_on_act</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wfmupdate_off_act</span> <span class="o">=</span> <span class="n">QAction</span><span class="p">(</span><span class="s2">&quot;Wfm Update Auto Disable&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wfmupdate_off_act</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_wfmupdate</span><span class="p">(</span><span class="kc">False</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wfmupdate_off_act</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">updparms_act</span> <span class="o">=</span> <span class="n">QAction</span><span class="p">(</span><span class="s2">&quot;Update Parameters&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">updparms_act</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_update_params</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">updparms_act</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">idffmode_on_act</span> <span class="o">=</span> <span class="n">QAction</span><span class="p">(</span><span class="s2">&quot;Set IDFFMode On&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">idffmode_on_act</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_idffmode</span><span class="p">(</span><span class="kc">True</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">idffmode_on_act</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">idffmode_off_act</span> <span class="o">=</span> <span class="n">QAction</span><span class="p">(</span><span class="s2">&quot;Set IDFFMode Off&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">idffmode_off_act</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_idffmode</span><span class="p">(</span><span class="kc">False</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">idffmode_off_act</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_accfreeze_frozen_act</span> <span class="o">=</span> <span class="n">QAction</span><span class="p">(</span>
+            <span class="s2">&quot;Set AccFreeze to frozen&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_accfreeze_frozen_act</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_acc_freeze</span><span class="p">(</span><span class="kc">True</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_accfreeze_frozen_act</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_accfreeze_unfrozen_act</span> <span class="o">=</span> <span class="n">QAction</span><span class="p">(</span>
+            <span class="s2">&quot;Set AccFreeze to unfrozen&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_accfreeze_unfrozen_act</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_acc_freeze</span><span class="p">(</span><span class="kc">False</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_accfreeze_unfrozen_act</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">acc_clear_act</span> <span class="o">=</span> <span class="n">QAction</span><span class="p">(</span><span class="s2">&quot;Clear Acc&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">acc_clear_act</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_acc_clear_cmd</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">acc_clear_act</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_enable_actions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s1">&#39;state&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">visible_props</span> <span class="ow">and</span> \
+                <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">turn_on_act</span><span class="o">.</span><span class="n">isEnabled</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">turn_on_act</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">turn_off_act</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s1">&#39;ctrlloop&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">visible_props</span> <span class="ow">and</span> \
+                <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctrlloop_close_act</span><span class="o">.</span><span class="n">isEnabled</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ctrlloop_close_act</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ctrlloop_open_act</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s1">&#39;opmode&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">visible_props</span> <span class="ow">and</span> \
+                <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_slowref_act</span><span class="o">.</span><span class="n">isEnabled</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_slowref_act</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s1">&#39;setpoint&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">visible_props</span> <span class="ow">and</span> \
+                <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_current_sp_act</span><span class="o">.</span><span class="n">isEnabled</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_current_sp_act</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s1">&#39;reset&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">visible_props</span> <span class="ow">and</span> \
+                <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">reset_act</span><span class="o">.</span><span class="n">isEnabled</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reset_act</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s1">&#39;wfmupdate&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">visible_props</span> <span class="ow">and</span> \
+                <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">wfmupdate_on_act</span><span class="o">.</span><span class="n">isEnabled</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wfmupdate_on_act</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wfmupdate_off_act</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s1">&#39;updparms&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">visible_props</span> <span class="ow">and</span> \
+                <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">updparms_act</span><span class="o">.</span><span class="n">isEnabled</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">updparms_act</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s1">&#39;idffmode&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">visible_props</span> <span class="ow">and</span> \
+                <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">idffmode_on_act</span><span class="o">.</span><span class="n">isEnabled</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">idffmode_on_act</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">idffmode_off_act</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s1">&#39;accfreeze&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">visible_props</span> <span class="ow">and</span> \
+                <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_accfreeze_frozen_act</span><span class="o">.</span><span class="n">isEnabled</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_accfreeze_frozen_act</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_accfreeze_unfrozen_act</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s1">&#39;accclear&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">visible_props</span> <span class="ow">and</span> \
+                <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">acc_clear_act</span><span class="o">.</span><span class="n">isEnabled</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">acc_clear_act</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="nd">@Slot</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_set_pwrstate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Execute turn on/off actions.&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">widget</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ps_widgets_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">filtered_widgets</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">state</span><span class="p">:</span>
+                        <span class="n">widget</span><span class="o">.</span><span class="n">turn_on</span><span class="p">()</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">widget</span><span class="o">.</span><span class="n">turn_off</span><span class="p">()</span>
+                <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+                    <span class="k">pass</span>
+
+    <span class="nd">@Slot</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_set_ctrlloop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Execute close/open control loop actions.&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">widget</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ps_widgets_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">filtered_widgets</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">state</span><span class="p">:</span>
+                        <span class="n">widget</span><span class="o">.</span><span class="n">ctrlloop_close</span><span class="p">()</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">widget</span><span class="o">.</span><span class="n">ctrlloop_open</span><span class="p">()</span>
+                <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+                    <span class="k">pass</span>
+
+    <span class="nd">@Slot</span><span class="p">()</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_set_slowref</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set opmode to SlowRef for every visible widget.&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">widget</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ps_widgets_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">filtered_widgets</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">widget</span><span class="o">.</span><span class="n">set_opmode_slowref</span><span class="p">()</span>
+                <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+                    <span class="k">pass</span>
+
+    <span class="nd">@Slot</span><span class="p">()</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_set_current_sp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set current setpoint for every visible widget.&quot;&quot;&quot;</span>
+        <span class="n">dlg</span> <span class="o">=</span> <span class="n">QInputDialog</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">dlg</span><span class="o">.</span><span class="n">setLocale</span><span class="p">(</span><span class="n">QLocale</span><span class="p">(</span><span class="n">QLocale</span><span class="o">.</span><span class="n">English</span><span class="p">))</span>
+        <span class="n">new_value</span><span class="p">,</span> <span class="n">ok</span> <span class="o">=</span> <span class="n">dlg</span><span class="o">.</span><span class="n">getDouble</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;Insert current setpoint&quot;</span><span class="p">,</span> <span class="s2">&quot;Value&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ok</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">widget</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ps_widgets_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">filtered_widgets</span><span class="p">:</span>
+                    <span class="n">sp</span> <span class="o">=</span> <span class="n">widget</span><span class="o">.</span><span class="n">setpoint</span><span class="o">.</span><span class="n">spinbox</span>
+                    <span class="n">sp</span><span class="o">.</span><span class="n">value_changed</span><span class="p">(</span><span class="n">new_value</span><span class="p">)</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">sp</span><span class="o">.</span><span class="n">send_value</span><span class="p">()</span>
+                    <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+                        <span class="k">pass</span>
+
+    <span class="nd">@Slot</span><span class="p">()</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_reset_interlocks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Reset interlocks.&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">widget</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ps_widgets_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">filtered_widgets</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">widget</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+                <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+                    <span class="k">pass</span>
+
+    <span class="nd">@Slot</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_set_wfmupdate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Execute turn WfmUpdateAuto on/off actions.&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">widget</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ps_widgets_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">filtered_widgets</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">state</span><span class="p">:</span>
+                        <span class="n">widget</span><span class="o">.</span><span class="n">wfmupdate_on</span><span class="p">()</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">widget</span><span class="o">.</span><span class="n">wfmupdate_off</span><span class="p">()</span>
+                <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+                    <span class="k">pass</span>
+
+    <span class="nd">@Slot</span><span class="p">()</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_update_params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Update parameters.&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">widget</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ps_widgets_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">filtered_widgets</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">widget</span><span class="o">.</span><span class="n">update_params</span><span class="p">()</span>
+                <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+                    <span class="k">pass</span>
+
+    <span class="nd">@Slot</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_set_idffmode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Execute turn IDFFMode on/off actions.&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">widget</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ps_widgets_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">filtered_widgets</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">state</span><span class="p">:</span>
+                        <span class="n">widget</span><span class="o">.</span><span class="n">idffmode_on</span><span class="p">()</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">widget</span><span class="o">.</span><span class="n">idffmode_off</span><span class="p">()</span>
+                <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+                    <span class="k">pass</span>
+
+    <span class="nd">@Slot</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_set_acc_freeze</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Execute turn AccFreeze frozen/unfrozen actions.&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">widget</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ps_widgets_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">filtered_widgets</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">state</span><span class="p">:</span>
+                        <span class="n">widget</span><span class="o">.</span><span class="n">set_accfreeze_frozen</span><span class="p">()</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">widget</span><span class="o">.</span><span class="n">set_accfreeze_unfrozen</span><span class="p">()</span>
+                <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+                    <span class="k">pass</span>
+
+    <span class="nd">@Slot</span><span class="p">()</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_acc_clear_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Reset interlocks.&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">widget</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ps_widgets_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">filtered_widgets</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">widget</span><span class="o">.</span><span class="n">acc_clear</span><span class="p">()</span>
+                <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+                    <span class="k">pass</span>
+
+    <span class="c1"># Overloaded method</span>
+<div class="viewcode-block" id="BasePSControlWidget.contextMenuEvent">
+<a class="viewcode-back" href="../../../../siriushla.as_ps_control.control_widget.html#siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget.contextMenuEvent">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">contextMenuEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Show a custom context menu.&quot;&quot;&quot;</span>
+        <span class="n">point</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">pos</span><span class="p">()</span>
+        <span class="n">menu</span> <span class="o">=</span> <span class="n">QMenu</span><span class="p">(</span><span class="s2">&quot;Actions&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">turn_on_act</span><span class="p">)</span>
+        <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">turn_off_act</span><span class="p">)</span>
+        <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">set_current_sp_act</span><span class="p">)</span>
+        <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reset_act</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dev_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">dev</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;FCH&#39;</span><span class="p">,</span> <span class="s1">&#39;FCV&#39;</span><span class="p">):</span>
+            <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ctrlloop_close_act</span><span class="p">)</span>
+            <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ctrlloop_open_act</span><span class="p">)</span>
+            <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">set_slowref_act</span><span class="p">)</span>
+            <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wfmupdate_on_act</span><span class="p">)</span>
+            <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wfmupdate_off_act</span><span class="p">)</span>
+            <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">updparms_act</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">set_accfreeze_frozen_act</span><span class="p">)</span>
+            <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">set_accfreeze_unfrozen_act</span><span class="p">)</span>
+            <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">acc_clear_act</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">PSSearch</span><span class="o">.</span><span class="n">conv_psname_2_psmodel</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dev_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="s1">&#39;FBP&#39;</span><span class="p">:</span>
+            <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">idffmode_on_act</span><span class="p">)</span>
+            <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">idffmode_off_act</span><span class="p">)</span>
+        <span class="n">menu</span><span class="o">.</span><span class="n">addSeparator</span><span class="p">()</span>
+        <span class="n">action</span> <span class="o">=</span> <span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="s1">&#39;Show Connections...&#39;</span><span class="p">)</span>
+        <span class="n">action</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">show_connections</span><span class="p">)</span>
+        <span class="n">menu</span><span class="o">.</span><span class="n">popup</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mapToGlobal</span><span class="p">(</span><span class="n">point</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="BasePSControlWidget.show_connections">
+<a class="viewcode-back" href="../../../../siriushla.as_ps_control.control_widget.html#siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget.show_connections">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">show_connections</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">checked</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+        <span class="n">_</span> <span class="o">=</span> <span class="n">checked</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="n">ConnectionInspector</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="BasePSControlWidget.get_summary_widgets">
+<a class="viewcode-back" href="../../../../siriushla.as_ps_control.control_widget.html#siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget.get_summary_widgets">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_summary_widgets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return Summary Widgets.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">findChildren</span><span class="p">(</span><span class="n">SummaryWidget</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, lnls-sirius.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

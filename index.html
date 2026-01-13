@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welcome to Sirius HLA’s documentation! &mdash; siriushla 1.14.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=01009efc"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="siriushla.as_ap_configdb" href="siriushla.as_ap_configdb.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="#" class="icon icon-home">
+            siriushla
+          </a>
+              <div class="version">
+                1.14.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">GUIs:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_configdb.html">siriushla.as_ap_configdb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_currinfo.html">siriushla.as_ap_currinfo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_energybutton.html">siriushla.as_ap_energybutton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_injcontrol.html">siriushla.as_ap_injcontrol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_injection.html">siriushla.as_ap_injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_launcher.html">siriushla.as_ap_launcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_machshift.html">siriushla.as_ap_machshift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_macreport.html">siriushla.as_ap_macreport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_magoffconv.html">siriushla.as_ap_magoffconv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_measure.html">siriushla.as_ap_measure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_monitor.html">siriushla.as_ap_monitor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_opticscorr.html">siriushla.as_ap_opticscorr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_posang.html">siriushla.as_ap_posang</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_rabpmmon.html">siriushla.as_ap_rabpmmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_radmon.html">siriushla.as_ap_radmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_sofb.html">siriushla.as_ap_sofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_bpms.html">siriushla.as_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_dccts.html">siriushla.as_di_dccts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_icts.html">siriushla.as_di_icts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_scrns.html">siriushla.as_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_tune.html">siriushla.as_di_tune</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_vlight.html">siriushla.as_di_vlight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_commands.html">siriushla.as_ps_commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_control.html">siriushla.as_ps_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_cycle.html">siriushla.as_ps_cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_diag.html">siriushla.as_ps_diag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_pu_control.html">siriushla.as_pu_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_rf_control.html">siriushla.as_rf_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ti_control.html">siriushla.as_ti_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.bl_ap_imgproc.html">siriushla.bl_ap_imgproc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.bo_ap_ramp.html">siriushla.bo_ap_ramp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.common.html">siriushla.common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_ap_mps.html">siriushla.li_ap_mps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_di_bpms.html">siriushla.li_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_di_scrns.html">siriushla.li_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_eg_control.html">siriushla.li_eg_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_pu_modltr.html">siriushla.li_pu_modltr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_rf_llrf.html">siriushla.li_rf_llrf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_va_control.html">siriushla.li_va_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_fofb.html">siriushla.si_ap_fofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_genstatus.html">siriushla.si_ap_genstatus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_idff.html">siriushla.si_ap_idff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_orbintlk.html">siriushla.si_ap_orbintlk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_bbb.html">siriushla.si_di_bbb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_equalize_bpms.html">siriushla.si_di_equalize_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_scraps.html">siriushla.si_di_scraps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_id_control.html">siriushla.si_id_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.tb_di_slits.html">siriushla.tb_di_slits</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Widgets:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.html">Sirius HLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.widgets.html">Widgets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Source Code:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lnls-sirius/hla">HLA Github</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">siriushla</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Welcome to Sirius HLA’s documentation!</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/lnls-sirius/hla/blob/master/pyqt-apps/docs/source/index.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-siriushla">
+<span id="welcome-to-sirius-hla-s-documentation"></span><h1>Welcome to Sirius HLA’s documentation!<a class="headerlink" href="#module-siriushla" title="Link to this heading"></a></h1>
+<p>SiriusHLA.</p>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">GUIs:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_configdb.html">siriushla.as_ap_configdb</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_configdb.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_configdb.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_configdb.html#module-siriushla.as_ap_configdb.client_configdb">siriushla.as_ap_configdb.client_configdb module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_configdb.html#module-siriushla.as_ap_configdb.configdialogs">siriushla.as_ap_configdb.configdialogs module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_configdb.html#module-siriushla.as_ap_configdb.configwidgets">siriushla.as_ap_configdb.configwidgets module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_configdb.html#module-siriushla.as_ap_configdb">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_currinfo.html">siriushla.as_ap_currinfo</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_currinfo.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_currinfo.html#module-siriushla.as_ap_currinfo.charge_monitor">siriushla.as_ap_currinfo.charge_monitor module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_currinfo.html#module-siriushla.as_ap_currinfo.current_and_lifetime">siriushla.as_ap_currinfo.current_and_lifetime module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_currinfo.html#module-siriushla.as_ap_currinfo.efficiency_monitor">siriushla.as_ap_currinfo.efficiency_monitor module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_currinfo.html#module-siriushla.as_ap_currinfo">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_energybutton.html">siriushla.as_ap_energybutton</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_energybutton.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_energybutton.html#module-siriushla.as_ap_energybutton.energy_button">siriushla.as_ap_energybutton.energy_button module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_energybutton.html#module-siriushla.as_ap_energybutton.energy_setter_window">siriushla.as_ap_energybutton.energy_setter_window module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_energybutton.html#module-siriushla.as_ap_energybutton.set_energy">siriushla.as_ap_energybutton.set_energy module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_energybutton.html#module-siriushla.as_ap_energybutton">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_injcontrol.html">siriushla.as_ap_injcontrol</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_injcontrol.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_injcontrol.html#module-siriushla.as_ap_injcontrol.base">siriushla.as_ap_injcontrol.base module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_injcontrol.html#module-siriushla.as_ap_injcontrol.injbo">siriushla.as_ap_injcontrol.injbo module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_injcontrol.html#module-siriushla.as_ap_injcontrol.tbts">siriushla.as_ap_injcontrol.tbts module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_injcontrol.html#module-siriushla.as_ap_injcontrol">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_injection.html">siriushla.as_ap_injection</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_injection.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_injection.html#module-siriushla.as_ap_injection.auxiliary_dialogs">siriushla.as_ap_injection.auxiliary_dialogs module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_injection.html#module-siriushla.as_ap_injection.killbeam_widgets">siriushla.as_ap_injection.killbeam_widgets module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_injection.html#module-siriushla.as_ap_injection.main">siriushla.as_ap_injection.main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_injection.html#module-siriushla.as_ap_injection.widgets">siriushla.as_ap_injection.widgets module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_injection.html#module-siriushla.as_ap_injection">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_launcher.html">siriushla.as_ap_launcher</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_launcher.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_launcher.html#module-siriushla.as_ap_launcher.main">siriushla.as_ap_launcher.main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_launcher.html#module-siriushla.as_ap_launcher.menu">siriushla.as_ap_launcher.menu module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_launcher.html#module-siriushla.as_ap_launcher">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_machshift.html">siriushla.as_ap_machshift</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_machshift.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_machshift.html#module-siriushla.as_ap_machshift.widgets">siriushla.as_ap_machshift.widgets module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_machshift.html#module-siriushla.as_ap_machshift">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_macreport.html">siriushla.as_ap_macreport</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_macreport.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_macreport.html#module-siriushla.as_ap_macreport.main">siriushla.as_ap_macreport.main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_macreport.html#module-siriushla.as_ap_macreport">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_magoffconv.html">siriushla.as_ap_magoffconv</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_magoffconv.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_magoffconv.html#module-siriushla.as_ap_magoffconv.main">siriushla.as_ap_magoffconv.main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_magoffconv.html#module-siriushla.as_ap_magoffconv">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_measure.html">siriushla.as_ap_measure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_measure.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_measure.html#siriushla-as-ap-measure-emittance-meas-module">siriushla.as_ap_measure.emittance_meas module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_measure.html#module-siriushla.as_ap_measure.energy_meas">siriushla.as_ap_measure.energy_meas module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_measure.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_monitor.html">siriushla.as_ap_monitor</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_monitor.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_monitor.html#module-siriushla.as_ap_monitor.main">siriushla.as_ap_monitor.main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_monitor.html#module-siriushla.as_ap_monitor.util">siriushla.as_ap_monitor.util module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_monitor.html#module-siriushla.as_ap_monitor">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_opticscorr.html">siriushla.as_ap_opticscorr</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_opticscorr.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_opticscorr.html#module-siriushla.as_ap_opticscorr.custom_widgets">siriushla.as_ap_opticscorr.custom_widgets module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_opticscorr.html#module-siriushla.as_ap_opticscorr.details">siriushla.as_ap_opticscorr.details module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_opticscorr.html#module-siriushla.as_ap_opticscorr.main">siriushla.as_ap_opticscorr.main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_opticscorr.html#module-siriushla.as_ap_opticscorr">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_posang.html">siriushla.as_ap_posang</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_posang.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_posang.html#module-siriushla.as_ap_posang.HLPosAng">siriushla.as_ap_posang.HLPosAng module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_posang.html#module-siriushla.as_ap_posang">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_rabpmmon.html">siriushla.as_ap_rabpmmon</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_rabpmmon.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_rabpmmon.html#siriushla-as-ap-rabpmmon-custom-widgets-module">siriushla.as_ap_rabpmmon.custom_widgets module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_rabpmmon.html#siriushla-as-ap-rabpmmon-main-module">siriushla.as_ap_rabpmmon.main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_rabpmmon.html#module-siriushla.as_ap_rabpmmon.util">siriushla.as_ap_rabpmmon.util module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_rabpmmon.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_radmon.html">siriushla.as_ap_radmon</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_radmon.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_radmon.html#module-siriushla.as_ap_radmon.main">siriushla.as_ap_radmon.main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_radmon.html#module-siriushla.as_ap_radmon">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_sofb.html">siriushla.as_ap_sofb</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_sofb.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_sofb.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_sofb.html#module-siriushla.as_ap_sofb.main">siriushla.as_ap_sofb.main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_sofb.html#module-siriushla.as_ap_sofb.orbit_register">siriushla.as_ap_sofb.orbit_register module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_sofb.html#module-siriushla.as_ap_sofb">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_bpms.html">siriushla.as_di_bpms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_di_bpms.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_di_bpms.html#module-siriushla.as_di_bpms.base">siriushla.as_di_bpms.base module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_di_bpms.html#module-siriushla.as_di_bpms.list_bpms">siriushla.as_di_bpms.list_bpms module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_di_bpms.html#module-siriushla.as_di_bpms.main">siriushla.as_di_bpms.main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_di_bpms.html#module-siriushla.as_di_bpms.monit">siriushla.as_di_bpms.monit module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_di_bpms.html#module-siriushla.as_di_bpms.settings">siriushla.as_di_bpms.settings module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_di_bpms.html#module-siriushla.as_di_bpms.trig_acq_config">siriushla.as_di_bpms.trig_acq_config module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_di_bpms.html#module-siriushla.as_di_bpms">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_dccts.html">siriushla.as_di_dccts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_di_dccts.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_di_dccts.html#module-siriushla.as_di_dccts.graphics">siriushla.as_di_dccts.graphics module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_di_dccts.html#module-siriushla.as_di_dccts.main">siriushla.as_di_dccts.main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_di_dccts.html#module-siriushla.as_di_dccts.settings">siriushla.as_di_dccts.settings module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_di_dccts.html#module-siriushla.as_di_dccts">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_icts.html">siriushla.as_di_icts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_di_icts.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_di_icts.html#module-siriushla.as_di_icts.ICT_monitor">siriushla.as_di_icts.ICT_monitor module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_di_icts.html#module-siriushla.as_di_icts">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_scrns.html">siriushla.as_di_scrns</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_di_scrns.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_di_scrns.html#module-siriushla.as_di_scrns.list_scrns">siriushla.as_di_scrns.list_scrns module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_di_scrns.html#module-siriushla.as_di_scrns.main">siriushla.as_di_scrns.main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_di_scrns.html#module-siriushla.as_di_scrns.scrn_calib">siriushla.as_di_scrns.scrn_calib module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_di_scrns.html#module-siriushla.as_di_scrns.scrn_details">siriushla.as_di_scrns.scrn_details module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_di_scrns.html#module-siriushla.as_di_scrns">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_tune.html">siriushla.as_di_tune</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_di_tune.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_di_tune.html#module-siriushla.as_di_tune.controls">siriushla.as_di_tune.controls module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_di_tune.html#module-siriushla.as_di_tune.details">siriushla.as_di_tune.details module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_di_tune.html#module-siriushla.as_di_tune.main">siriushla.as_di_tune.main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_di_tune.html#module-siriushla.as_di_tune.spectra">siriushla.as_di_tune.spectra module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_di_tune.html#module-siriushla.as_di_tune.spectrogram">siriushla.as_di_tune.spectrogram module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_di_tune.html#module-siriushla.as_di_tune.util">siriushla.as_di_tune.util module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_di_tune.html#module-siriushla.as_di_tune">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_vlight.html">siriushla.as_di_vlight</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_di_vlight.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_di_vlight.html#module-siriushla.as_di_vlight.main">siriushla.as_di_vlight.main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_di_vlight.html#module-siriushla.as_di_vlight">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_commands.html">siriushla.as_ps_commands</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ps_commands.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ps_commands.html#module-siriushla.as_ps_commands.main">siriushla.as_ps_commands.main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ps_commands.html#module-siriushla.as_ps_commands.tasks">siriushla.as_ps_commands.tasks module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ps_commands.html#module-siriushla.as_ps_commands">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_control.html">siriushla.as_ps_control</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ps_control.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ps_control.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ps_control.html#module-siriushla.as_ps_control.PSControlWindow">siriushla.as_ps_control.PSControlWindow module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ps_control.html#module-siriushla.as_ps_control.PSDetailWindow">siriushla.as_ps_control.PSDetailWindow module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ps_control.html#module-siriushla.as_ps_control.PSTabControlWindow">siriushla.as_ps_control.PSTabControlWindow module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ps_control.html#module-siriushla.as_ps_control.PSTrimWindow">siriushla.as_ps_control.PSTrimWindow module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ps_control.html#module-siriushla.as_ps_control.SummaryWidgets">siriushla.as_ps_control.SummaryWidgets module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ps_control.html#module-siriushla.as_ps_control.ps_wfmerror_mon">siriushla.as_ps_control.ps_wfmerror_mon module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ps_control.html#module-siriushla.as_ps_control">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_cycle.html">siriushla.as_ps_cycle</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ps_cycle.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ps_cycle.html#module-siriushla.as_ps_cycle.cycle_window">siriushla.as_ps_cycle.cycle_window module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ps_cycle.html#module-siriushla.as_ps_cycle.tasks">siriushla.as_ps_cycle.tasks module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ps_cycle.html#module-siriushla.as_ps_cycle">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_diag.html">siriushla.as_ps_diag</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ps_diag.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ps_diag.html#module-siriushla.as_ps_diag.main">siriushla.as_ps_diag.main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ps_diag.html#module-siriushla.as_ps_diag.monitor">siriushla.as_ps_diag.monitor module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ps_diag.html#module-siriushla.as_ps_diag.ps_graph_mon">siriushla.as_ps_diag.ps_graph_mon module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ps_diag.html#module-siriushla.as_ps_diag.util">siriushla.as_ps_diag.util module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ps_diag.html#module-siriushla.as_ps_diag">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_pu_control.html">siriushla.as_pu_control</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_pu_control.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_pu_control.html#module-siriushla.as_pu_control.ControlWindow">siriushla.as_pu_control.ControlWindow module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_pu_control.html#module-siriushla.as_pu_control.DetailWidget">siriushla.as_pu_control.DetailWidget module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_pu_control.html#module-siriushla.as_pu_control.DetailWindow">siriushla.as_pu_control.DetailWindow module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_pu_control.html#module-siriushla.as_pu_control">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_rf_control.html">siriushla.as_rf_control</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_rf_control.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_rf_control.html#module-siriushla.as_rf_control.control">siriushla.as_rf_control.control module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_rf_control.html#module-siriushla.as_rf_control.custom_widgets">siriushla.as_rf_control.custom_widgets module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_rf_control.html#module-siriushla.as_rf_control.details">siriushla.as_rf_control.details module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_rf_control.html#module-siriushla.as_rf_control.util">siriushla.as_rf_control.util module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_rf_control.html#module-siriushla.as_rf_control">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ti_control.html">siriushla.as_ti_control</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ti_control.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ti_control.html#module-siriushla.as_ti_control.base">siriushla.as_ti_control.base module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ti_control.html#module-siriushla.as_ti_control.hl_trigger">siriushla.as_ti_control.hl_trigger module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ti_control.html#module-siriushla.as_ti_control.hltiming">siriushla.as_ti_control.hltiming module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ti_control.html#module-siriushla.as_ti_control.low_level_devices">siriushla.as_ti_control.low_level_devices module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ti_control.html#module-siriushla.as_ti_control.monitor">siriushla.as_ti_control.monitor module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ti_control.html#module-siriushla.as_ti_control.widgets">siriushla.as_ti_control.widgets module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ti_control.html#module-siriushla.as_ti_control">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.bl_ap_imgproc.html">siriushla.bl_ap_imgproc</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.bl_ap_imgproc.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.bl_ap_imgproc.html#module-siriushla.bl_ap_imgproc.blintlkctl">siriushla.bl_ap_imgproc.blintlkctl module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.bl_ap_imgproc.html#module-siriushla.bl_ap_imgproc.image">siriushla.bl_ap_imgproc.image module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.bl_ap_imgproc.html#module-siriushla.bl_ap_imgproc.main">siriushla.bl_ap_imgproc.main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.bl_ap_imgproc.html#module-siriushla.bl_ap_imgproc.util">siriushla.bl_ap_imgproc.util module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.bl_ap_imgproc.html#module-siriushla.bl_ap_imgproc">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.bo_ap_ramp.html">siriushla.bo_ap_ramp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.bo_ap_ramp.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.bo_ap_ramp.html#siriushla-bo-ap-ramp-auxiliary-dialogs-module">siriushla.bo_ap_ramp.auxiliary_dialogs module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.bo_ap_ramp.html#siriushla-bo-ap-ramp-bonormalized-edit-module">siriushla.bo_ap_ramp.bonormalized_edit module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.bo_ap_ramp.html#siriushla-bo-ap-ramp-boramp-edit-module">siriushla.bo_ap_ramp.boramp_edit module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.bo_ap_ramp.html#module-siriushla.bo_ap_ramp.custom_widgets">siriushla.bo_ap_ramp.custom_widgets module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.bo_ap_ramp.html#siriushla-bo-ap-ramp-main-window-module">siriushla.bo_ap_ramp.main_window module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.bo_ap_ramp.html#siriushla-bo-ap-ramp-menu-module">siriushla.bo_ap_ramp.menu module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.bo_ap_ramp.html#siriushla-bo-ap-ramp-status-and-commands-module">siriushla.bo_ap_ramp.status_and_commands module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.bo_ap_ramp.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.common.html">siriushla.common</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.common.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.common.html#module-siriushla.common">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_ap_mps.html">siriushla.li_ap_mps</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.li_ap_mps.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.li_ap_mps.html#module-siriushla.li_ap_mps.bypass_btn">siriushla.li_ap_mps.bypass_btn module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.li_ap_mps.html#module-siriushla.li_ap_mps.main">siriushla.li_ap_mps.main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.li_ap_mps.html#module-siriushla.li_ap_mps.monitor">siriushla.li_ap_mps.monitor module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.li_ap_mps.html#module-siriushla.li_ap_mps.util">siriushla.li_ap_mps.util module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.li_ap_mps.html#module-siriushla.li_ap_mps">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_di_bpms.html">siriushla.li_di_bpms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.li_di_bpms.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.li_di_bpms.html#module-siriushla.li_di_bpms.bpm_main">siriushla.li_di_bpms.bpm_main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.li_di_bpms.html#module-siriushla.li_di_bpms">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_di_scrns.html">siriushla.li_di_scrns</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.li_di_scrns.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.li_di_scrns.html#module-siriushla.li_di_scrns.main">siriushla.li_di_scrns.main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.li_di_scrns.html#module-siriushla.li_di_scrns.motorBtn">siriushla.li_di_scrns.motorBtn module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.li_di_scrns.html#module-siriushla.li_di_scrns.util">siriushla.li_di_scrns.util module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.li_di_scrns.html#module-siriushla.li_di_scrns">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_eg_control.html">siriushla.li_eg_control</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.li_eg_control.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.li_eg_control.html#module-siriushla.li_eg_control.main">siriushla.li_eg_control.main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.li_eg_control.html#module-siriushla.li_eg_control">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_pu_modltr.html">siriushla.li_pu_modltr</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.li_pu_modltr.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.li_pu_modltr.html#module-siriushla.li_pu_modltr.auxiliary_dialogs">siriushla.li_pu_modltr.auxiliary_dialogs module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.li_pu_modltr.html#module-siriushla.li_pu_modltr.main">siriushla.li_pu_modltr.main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.li_pu_modltr.html#module-siriushla.li_pu_modltr">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_rf_llrf.html">siriushla.li_rf_llrf</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.li_rf_llrf.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.li_rf_llrf.html#module-siriushla.li_rf_llrf.chart">siriushla.li_rf_llrf.chart module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.li_rf_llrf.html#module-siriushla.li_rf_llrf.controls">siriushla.li_rf_llrf.controls module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.li_rf_llrf.html#module-siriushla.li_rf_llrf.details">siriushla.li_rf_llrf.details module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.li_rf_llrf.html#module-siriushla.li_rf_llrf.main">siriushla.li_rf_llrf.main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.li_rf_llrf.html#module-siriushla.li_rf_llrf.motor_control">siriushla.li_rf_llrf.motor_control module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.li_rf_llrf.html#module-siriushla.li_rf_llrf.util">siriushla.li_rf_llrf.util module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.li_rf_llrf.html#module-siriushla.li_rf_llrf.widgets">siriushla.li_rf_llrf.widgets module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.li_rf_llrf.html#module-siriushla.li_rf_llrf">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_va_control.html">siriushla.li_va_control</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.li_va_control.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.li_va_control.html#module-siriushla.li_va_control.chart">siriushla.li_va_control.chart module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.li_va_control.html#module-siriushla.li_va_control.details">siriushla.li_va_control.details module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.li_va_control.html#module-siriushla.li_va_control.functions">siriushla.li_va_control.functions module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.li_va_control.html#module-siriushla.li_va_control.main">siriushla.li_va_control.main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.li_va_control.html#module-siriushla.li_va_control.util">siriushla.li_va_control.util module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.li_va_control.html#module-siriushla.li_va_control.widgets">siriushla.li_va_control.widgets module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.li_va_control.html#module-siriushla.li_va_control">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_fofb.html">siriushla.si_ap_fofb</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.si_ap_fofb.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.si_ap_fofb.html#module-siriushla.si_ap_fofb.base">siriushla.si_ap_fofb.base module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.si_ap_fofb.html#module-siriushla.si_ap_fofb.custom_widgets">siriushla.si_ap_fofb.custom_widgets module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.si_ap_fofb.html#module-siriushla.si_ap_fofb.graphics">siriushla.si_ap_fofb.graphics module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.si_ap_fofb.html#module-siriushla.si_ap_fofb.main">siriushla.si_ap_fofb.main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.si_ap_fofb.html#module-siriushla.si_ap_fofb.respmat">siriushla.si_ap_fofb.respmat module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.si_ap_fofb.html#module-siriushla.si_ap_fofb.trig_acq_config">siriushla.si_ap_fofb.trig_acq_config module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.si_ap_fofb.html#module-siriushla.si_ap_fofb">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_genstatus.html">siriushla.si_ap_genstatus</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.si_ap_genstatus.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.si_ap_genstatus.html#module-siriushla.si_ap_genstatus.main">siriushla.si_ap_genstatus.main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.si_ap_genstatus.html#module-siriushla.si_ap_genstatus">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_idff.html">siriushla.si_ap_idff</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.si_ap_idff.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.si_ap_idff.html#module-siriushla.si_ap_idff.custom_widgets">siriushla.si_ap_idff.custom_widgets module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.si_ap_idff.html#module-siriushla.si_ap_idff.main">siriushla.si_ap_idff.main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.si_ap_idff.html#module-siriushla.si_ap_idff.util">siriushla.si_ap_idff.util module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.si_ap_idff.html#module-siriushla.si_ap_idff">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_orbintlk.html">siriushla.si_ap_orbintlk</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.si_ap_orbintlk.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.si_ap_orbintlk.html#module-siriushla.si_ap_orbintlk.base">siriushla.si_ap_orbintlk.base module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.si_ap_orbintlk.html#module-siriushla.si_ap_orbintlk.bpmdetail">siriushla.si_ap_orbintlk.bpmdetail module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.si_ap_orbintlk.html#module-siriushla.si_ap_orbintlk.custom_widgets">siriushla.si_ap_orbintlk.custom_widgets module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.si_ap_orbintlk.html#module-siriushla.si_ap_orbintlk.graphics">siriushla.si_ap_orbintlk.graphics module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.si_ap_orbintlk.html#module-siriushla.si_ap_orbintlk.main">siriushla.si_ap_orbintlk.main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.si_ap_orbintlk.html#module-siriushla.si_ap_orbintlk">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_bbb.html">siriushla.si_di_bbb</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.si_di_bbb.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.si_di_bbb.html#module-siriushla.si_di_bbb.acquisition">siriushla.si_di_bbb.acquisition module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.si_di_bbb.html#module-siriushla.si_di_bbb.advanced_settings">siriushla.si_di_bbb.advanced_settings module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.si_di_bbb.html#module-siriushla.si_di_bbb.bbb">siriushla.si_di_bbb.bbb module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.si_di_bbb.html#module-siriushla.si_di_bbb.coefficients">siriushla.si_di_bbb.coefficients module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.si_di_bbb.html#module-siriushla.si_di_bbb.custom_widgets">siriushla.si_di_bbb.custom_widgets module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.si_di_bbb.html#module-siriushla.si_di_bbb.drive">siriushla.si_di_bbb.drive module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.si_di_bbb.html#module-siriushla.si_di_bbb.environment">siriushla.si_di_bbb.environment module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.si_di_bbb.html#module-siriushla.si_di_bbb.gpio">siriushla.si_di_bbb.gpio module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.si_di_bbb.html#module-siriushla.si_di_bbb.main">siriushla.si_di_bbb.main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.si_di_bbb.html#module-siriushla.si_di_bbb.masks">siriushla.si_di_bbb.masks module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.si_di_bbb.html#module-siriushla.si_di_bbb.pwr_amps">siriushla.si_di_bbb.pwr_amps module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.si_di_bbb.html#module-siriushla.si_di_bbb.timing">siriushla.si_di_bbb.timing module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.si_di_bbb.html#module-siriushla.si_di_bbb.util">siriushla.si_di_bbb.util module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.si_di_bbb.html#module-siriushla.si_di_bbb">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_equalize_bpms.html">siriushla.si_di_equalize_bpms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.si_di_equalize_bpms.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.si_di_equalize_bpms.html#module-siriushla.si_di_equalize_bpms.main">siriushla.si_di_equalize_bpms.main module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.si_di_equalize_bpms.html#module-siriushla.si_di_equalize_bpms">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_scraps.html">siriushla.si_di_scraps</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.si_di_scraps.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.si_di_scraps.html#module-siriushla.si_di_scraps.Scrap_monitor">siriushla.si_di_scraps.Scrap_monitor module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.si_di_scraps.html#module-siriushla.si_di_scraps">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_id_control.html">siriushla.si_id_control</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.si_id_control.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.si_id_control.html#module-siriushla.si_id_control.apu">siriushla.si_id_control.apu module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.si_id_control.html#module-siriushla.si_id_control.base">siriushla.si_id_control.base module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.si_id_control.html#module-siriushla.si_id_control.delta">siriushla.si_id_control.delta module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.si_id_control.html#module-siriushla.si_id_control.epu">siriushla.si_id_control.epu module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.si_id_control.html#module-siriushla.si_id_control.id_control">siriushla.si_id_control.id_control module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.si_id_control.html#module-siriushla.si_id_control.papu">siriushla.si_id_control.papu module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.si_id_control.html#module-siriushla.si_id_control.util">siriushla.si_id_control.util module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.si_id_control.html#module-siriushla.si_id_control">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.tb_di_slits.html">siriushla.tb_di_slits</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.tb_di_slits.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.tb_di_slits.html#module-siriushla.tb_di_slits.Slit_monitor">siriushla.tb_di_slits.Slit_monitor module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.tb_di_slits.html#module-siriushla.tb_di_slits">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Widgets:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.html">Sirius HLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.widgets.html">Widgets</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Source Code:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lnls-sirius/hla">HLA Github</a></li>
+</ul>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="siriushla.as_ap_configdb.html" class="btn btn-neutral float-right" title="siriushla.as_ap_configdb" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, lnls-sirius.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

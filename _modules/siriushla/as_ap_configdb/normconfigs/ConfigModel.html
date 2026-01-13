@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>siriushla.as_ap_configdb.normconfigs.ConfigModel &mdash; siriushla 1.14.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../_static/documentation_options.js?v=01009efc"></script>
+        <script src="../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            siriushla
+          </a>
+              <div class="version">
+                1.14.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">GUIs:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_configdb.html">siriushla.as_ap_configdb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_currinfo.html">siriushla.as_ap_currinfo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_energybutton.html">siriushla.as_ap_energybutton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_injcontrol.html">siriushla.as_ap_injcontrol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_injection.html">siriushla.as_ap_injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_launcher.html">siriushla.as_ap_launcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_machshift.html">siriushla.as_ap_machshift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_macreport.html">siriushla.as_ap_macreport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_magoffconv.html">siriushla.as_ap_magoffconv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_measure.html">siriushla.as_ap_measure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_monitor.html">siriushla.as_ap_monitor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_opticscorr.html">siriushla.as_ap_opticscorr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_posang.html">siriushla.as_ap_posang</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_rabpmmon.html">siriushla.as_ap_rabpmmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_radmon.html">siriushla.as_ap_radmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ap_sofb.html">siriushla.as_ap_sofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_di_bpms.html">siriushla.as_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_di_dccts.html">siriushla.as_di_dccts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_di_icts.html">siriushla.as_di_icts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_di_scrns.html">siriushla.as_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_di_tune.html">siriushla.as_di_tune</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_di_vlight.html">siriushla.as_di_vlight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ps_commands.html">siriushla.as_ps_commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ps_control.html">siriushla.as_ps_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ps_cycle.html">siriushla.as_ps_cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ps_diag.html">siriushla.as_ps_diag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_pu_control.html">siriushla.as_pu_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_rf_control.html">siriushla.as_rf_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.as_ti_control.html">siriushla.as_ti_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.bl_ap_imgproc.html">siriushla.bl_ap_imgproc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.bo_ap_ramp.html">siriushla.bo_ap_ramp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.common.html">siriushla.common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.li_ap_mps.html">siriushla.li_ap_mps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.li_di_bpms.html">siriushla.li_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.li_di_scrns.html">siriushla.li_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.li_eg_control.html">siriushla.li_eg_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.li_pu_modltr.html">siriushla.li_pu_modltr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.li_rf_llrf.html">siriushla.li_rf_llrf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.li_va_control.html">siriushla.li_va_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.si_ap_fofb.html">siriushla.si_ap_fofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.si_ap_genstatus.html">siriushla.si_ap_genstatus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.si_ap_idff.html">siriushla.si_ap_idff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.si_ap_orbintlk.html">siriushla.si_ap_orbintlk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.si_di_bbb.html">siriushla.si_di_bbb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.si_di_equalize_bpms.html">siriushla.si_di_equalize_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.si_di_scraps.html">siriushla.si_di_scraps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.si_id_control.html">siriushla.si_id_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.tb_di_slits.html">siriushla.tb_di_slits</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Widgets:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.html">Sirius HLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../siriushla.widgets.html">Widgets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Source Code:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lnls-sirius/hla">HLA Github</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">siriushla</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">siriushla.as_ap_configdb.normconfigs.ConfigModel</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for siriushla.as_ap_configdb.normconfigs.ConfigModel</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Configuration window model definition.&quot;&quot;&quot;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtCore</span><span class="w"> </span><span class="kn">import</span> <span class="n">Qt</span><span class="p">,</span> <span class="n">QAbstractTableModel</span><span class="p">,</span> <span class="n">QModelIndex</span><span class="p">,</span> <span class="n">QVariant</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtWidgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">QItemDelegate</span><span class="p">,</span> <span class="n">QDoubleSpinBox</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtGui</span><span class="w"> </span><span class="kn">import</span> <span class="n">QColor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriuspy.clientconfigdb</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConfigDBClient</span>
+
+
+<div class="viewcode-block" id="Configuration">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.Configuration">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Configuration</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Represents a configuration.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">config_type</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">new</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_config_type</span> <span class="o">=</span> <span class="n">config_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_values</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="s1">&#39;pvs&#39;</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_old_name</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_renamed</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dirty_pvs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_is_new</span> <span class="o">=</span> <span class="n">new</span>
+
+<div class="viewcode-block" id="Configuration.newConfiguration">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.Configuration.newConfiguration">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">newConfiguration</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">config_type</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create new configuration.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Configuration</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">config_type</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Configuration.loadConfiguration">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.Configuration.loadConfiguration">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">loadConfiguration</span><span class="p">(</span><span class="n">config_type</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Load existing configuration.&quot;&quot;&quot;</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">Configuration</span><span class="o">.</span><span class="n">_load</span><span class="p">(</span><span class="n">config_type</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>  <span class="c1"># Might fail</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+        <span class="n">config_type</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;config_type&quot;</span><span class="p">]</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">Configuration</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">config_type</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span></div>
+
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_load</span><span class="p">(</span><span class="n">config_type</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="n">db</span> <span class="o">=</span> <span class="n">ConfigDBClient</span><span class="p">()</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_config_info</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">config_type</span><span class="o">=</span><span class="n">config_type</span><span class="p">)</span>
+        <span class="n">data</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_config_value</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">config_type</span><span class="o">=</span><span class="n">config_type</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">data</span>
+
+<div class="viewcode-block" id="Configuration.delete_config">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.Configuration.delete_config">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">delete_config</span><span class="p">(</span><span class="n">config_type</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Delete configuration.&quot;&quot;&quot;</span>
+        <span class="n">db</span> <span class="o">=</span> <span class="n">ConfigDBClient</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">db</span><span class="o">.</span><span class="n">delete_config</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">config_type</span><span class="o">=</span><span class="n">config_type</span><span class="p">)</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Configuration name.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span>
+
+    <span class="nd">@name</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set new name to configuration.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">new_name</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_old_name</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_renamed</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_old_name</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_renamed</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_old_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="n">new_name</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">old_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Configuration name in database.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_old_name</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;PV values.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;pvs&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_values</span><span class="p">}</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">dirty</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return wether thre is unsaved data.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dirty_pvs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_renamed</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_new</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+<div class="viewcode-block" id="Configuration.setValue">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.Configuration.setValue">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setValue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pv_name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set value of a given pv.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_values</span><span class="p">[</span><span class="n">pv_name</span><span class="p">]:</span>
+            <span class="c1"># If the configuration is new there is no need to set dirty flags</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_new</span><span class="p">:</span>
+                <span class="c1"># Clean dirty flag</span>
+                <span class="k">if</span> <span class="n">pv_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dirty_pvs</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> \
+                        <span class="ow">and</span> <span class="n">value</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dirty_pvs</span><span class="p">[</span><span class="n">pv_name</span><span class="p">]:</span>
+                    <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dirty_pvs</span><span class="p">[</span><span class="n">pv_name</span><span class="p">]</span>
+                <span class="c1"># Set dirty flag</span>
+                <span class="k">elif</span> <span class="n">pv_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dirty_pvs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_dirty_pvs</span><span class="p">[</span><span class="n">pv_name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_values</span><span class="p">[</span><span class="n">pv_name</span><span class="p">]</span>
+            <span class="c1"># Finally set value</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_values</span><span class="p">[</span><span class="n">pv_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span></div>
+
+
+<div class="viewcode-block" id="Configuration.save">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.Configuration.save">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Save data.&quot;&quot;&quot;</span>
+        <span class="n">db</span> <span class="o">=</span> <span class="n">ConfigDBClient</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_new</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_renamed</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dirty_pvs</span><span class="p">:</span>
+            <span class="c1"># Insert configuration</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">insert_config</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;pvs&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_values</span><span class="p">},</span>
+                <span class="n">config_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_config_type</span><span class="p">)</span>
+            <span class="c1"># Clear flags</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_is_new</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_renamed</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dirty_pvs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Configuration.delete">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.Configuration.delete">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Delete configuration.&quot;&quot;&quot;</span>
+        <span class="n">db</span> <span class="o">=</span> <span class="n">ConfigDBClient</span><span class="p">()</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">delete_config</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span> <span class="n">config_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_config_type</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="ConfigDelegate">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigDelegate">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ConfigDelegate</span><span class="p">(</span><span class="n">QItemDelegate</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Styling.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ConfigDelegate.paint">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigDelegate.paint">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">paint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">painter</span><span class="p">,</span> <span class="n">option</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Override paint function.</span>
+
+<span class="sd">        Responsible for painting dirt columns and cells.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">col</span> <span class="o">=</span> <span class="n">index</span><span class="o">.</span><span class="n">column</span><span class="p">()</span>
+        <span class="n">pvname</span> <span class="o">=</span> <span class="n">index</span><span class="o">.</span><span class="n">model</span><span class="p">()</span><span class="o">.</span><span class="n">_vertical_header</span><span class="p">[</span><span class="n">index</span><span class="o">.</span><span class="n">row</span><span class="p">()][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">pvname</span> <span class="ow">in</span> <span class="n">index</span><span class="o">.</span><span class="n">model</span><span class="p">()</span><span class="o">.</span><span class="n">configurations</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">_dirty_pvs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">color</span> <span class="o">=</span> <span class="n">QColor</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">painter</span><span class="o">.</span><span class="n">fillRect</span><span class="p">(</span><span class="n">option</span><span class="o">.</span><span class="n">rect</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
+            <span class="n">QItemDelegate</span><span class="o">.</span><span class="n">paint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">painter</span><span class="p">,</span> <span class="n">option</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">index</span><span class="o">.</span><span class="n">model</span><span class="p">()</span><span class="o">.</span><span class="n">configurations</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">dirty</span><span class="p">:</span>
+            <span class="n">color</span> <span class="o">=</span> <span class="n">QColor</span><span class="p">(</span><span class="mi">230</span><span class="p">,</span> <span class="mi">230</span><span class="p">,</span> <span class="mi">230</span><span class="p">)</span>
+            <span class="n">painter</span><span class="o">.</span><span class="n">fillRect</span><span class="p">(</span><span class="n">option</span><span class="o">.</span><span class="n">rect</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
+            <span class="n">QItemDelegate</span><span class="o">.</span><span class="n">paint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">painter</span><span class="p">,</span> <span class="n">option</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">QItemDelegate</span><span class="o">.</span><span class="n">paint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">painter</span><span class="p">,</span> <span class="n">option</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ConfigDelegate.createEditor">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigDelegate.createEditor">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">createEditor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">option</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Override.</span>
+
+<span class="sd">        Create and editor based on the cell type</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">editor</span> <span class="o">=</span> <span class="n">QDoubleSpinBox</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="n">editor</span><span class="o">.</span><span class="n">setDecimals</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">editor</span></div>
+
+
+<div class="viewcode-block" id="ConfigDelegate.setEditorData">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigDelegate.setEditorData">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setEditorData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">editor</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Override.</span>
+
+<span class="sd">        Set cell data as float.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">index</span><span class="o">.</span><span class="n">model</span><span class="p">()</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">Qt</span><span class="o">.</span><span class="n">DisplayRole</span><span class="p">)</span>
+        <span class="n">editor</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">value</span><span class="p">()))</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="ConfigModel">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ConfigModel</span><span class="p">(</span><span class="n">QAbstractTableModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Model for the configuration table.&quot;&quot;&quot;</span>
+
+    <span class="n">TUNE</span><span class="p">,</span> <span class="n">CHROMATICITY</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">UNDO_MEMORY</span> <span class="o">=</span> <span class="mi">75</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_type</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Class constructor.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ConfigModel</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_config_type</span> <span class="o">=</span> <span class="n">config_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setVerticalHeader</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_types</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_configurations</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_undo</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_redo</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">configurations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return list of open configurations.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_configurations</span>
+
+    <span class="c1"># QAbstractTableModel Overriden functions</span>
+<div class="viewcode-block" id="ConfigModel.rowCount">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.rowCount">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">rowCount</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">QModelIndex</span><span class="p">()):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the number of PVs for this configuration type.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_vertical_header</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ConfigModel.columnCount">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.columnCount">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">columnCount</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">QModelIndex</span><span class="p">()):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the number of configurations currently open.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_configurations</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ConfigModel.data">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.data">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">role</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">DisplayRole</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set data of the table (override).&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">role</span> <span class="o">==</span> <span class="n">Qt</span><span class="o">.</span><span class="n">DisplayRole</span><span class="p">:</span>
+            <span class="n">pvname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertical_header</span><span class="p">[</span><span class="n">index</span><span class="o">.</span><span class="n">row</span><span class="p">()][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+            <span class="n">pvtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertical_header</span><span class="p">[</span><span class="n">index</span><span class="o">.</span><span class="n">row</span><span class="p">()][</span><span class="s1">&#39;type&#39;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">pvtype</span> <span class="o">==</span> <span class="nb">float</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">QVariant</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:8.5f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_configurations</span><span class="p">[</span><span class="n">index</span><span class="o">.</span><span class="n">column</span><span class="p">()]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">pvname</span><span class="p">]))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+
+<div class="viewcode-block" id="ConfigModel.headerData">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.headerData">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">headerData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section</span><span class="p">,</span> <span class="n">orientation</span><span class="p">,</span> <span class="n">role</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">DisplayRole</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set headers of the table (override).&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">role</span> <span class="o">==</span> <span class="n">Qt</span><span class="o">.</span><span class="n">TextAlignmentRole</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">if</span> <span class="n">role</span> <span class="o">!=</span> <span class="n">Qt</span><span class="o">.</span><span class="n">DisplayRole</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">QVariant</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">orientation</span> <span class="o">==</span> <span class="n">Qt</span><span class="o">.</span><span class="n">Horizontal</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_configurations</span><span class="p">[</span><span class="n">section</span><span class="p">]</span><span class="o">.</span><span class="n">dirty</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">QVariant</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_configurations</span><span class="p">[</span><span class="n">section</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">QVariant</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_configurations</span><span class="p">[</span><span class="n">section</span><span class="p">]</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;*&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">orientation</span> <span class="o">==</span> <span class="n">Qt</span><span class="o">.</span><span class="n">Vertical</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">role</span> <span class="o">==</span> <span class="n">Qt</span><span class="o">.</span><span class="n">DisplayRole</span><span class="p">:</span>
+                <span class="n">pvname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertical_header</span><span class="p">[</span><span class="n">section</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+                <span class="n">vheader</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pvname</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">QVariant</span><span class="p">(</span><span class="n">vheader</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">QVariant</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">section</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="ConfigModel.flags">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.flags">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">flags</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Override to make cells editable.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">index</span><span class="o">.</span><span class="n">isValid</span><span class="p">():</span>
+            <span class="k">return</span> <span class="n">Qt</span><span class="o">.</span><span class="n">ItemIsEnabled</span>
+        <span class="k">return</span> <span class="n">Qt</span><span class="o">.</span><span class="n">ItemFlags</span><span class="p">(</span>
+            <span class="n">QAbstractTableModel</span><span class="o">.</span><span class="n">flags</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span> <span class="o">|</span> <span class="n">Qt</span><span class="o">.</span><span class="n">ItemIsEditable</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ConfigModel.setData">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.setData">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">role</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">EditRole</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set cell data.&quot;&quot;&quot;</span>
+        <span class="n">row</span> <span class="o">=</span> <span class="n">index</span><span class="o">.</span><span class="n">row</span><span class="p">()</span>
+        <span class="n">col</span> <span class="o">=</span> <span class="n">index</span><span class="o">.</span><span class="n">column</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">index</span><span class="o">.</span><span class="n">isValid</span><span class="p">()</span> <span class="ow">and</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">row</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_vertical_header</span><span class="p">):</span>
+            <span class="n">pvname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertical_header</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+            <span class="n">config_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_configurations</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">name</span>
+            <span class="n">old_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_configurations</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">pvname</span><span class="p">]</span>
+            <span class="c1"># Clean undo if it is the case</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_undo</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">UNDO_MEMORY</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_undo</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="c1"># Append new undo action</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_undo</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">config_name</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">setDataAlt</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">config_name</span><span class="p">,</span>
+                                                      <span class="n">value</span><span class="p">,</span> <span class="n">old_value</span><span class="p">)))</span>
+            <span class="c1"># Update Value</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_configurations</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">pvname</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+            <span class="c1"># Update view</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">headerDataChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">Horizontal</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">col</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dataChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="ConfigModel.insertColumn">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.insertColumn">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">insertColumn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">QModelIndex</span><span class="p">()):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Update table widget telling it a new column was inserted.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">beginInsertColumns</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">column</span><span class="p">,</span> <span class="n">column</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">endInsertColumns</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="ConfigModel.removeColumns">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.removeColumns">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">removeColumns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="p">,</span> <span class="n">count</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">QModelIndex</span><span class="p">()):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Update table widget telling it a column was removed.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">beginRemoveColumns</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">column</span><span class="p">,</span> <span class="n">column</span> <span class="o">+</span> <span class="n">count</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">endRemoveColumns</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+
+    <span class="c1"># Private members</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_setVerticalHeader</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Used to sort section elements dict</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">subSection</span><span class="p">(</span><span class="n">elem</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">&#39;-Fam&#39;</span><span class="p">,</span> <span class="n">elem</span><span class="p">):</span>
+                <span class="k">return</span> <span class="mi">0</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="mi">1</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">elem</span><span class="p">(</span><span class="n">elem</span><span class="p">):</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">elem</span>
+            <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">&#39;-B&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+                <span class="k">return</span> <span class="mi">0</span>
+            <span class="k">elif</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">&#39;-QF&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+                <span class="k">return</span> <span class="mi">2</span>
+            <span class="k">elif</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">&#39;-QD&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+                <span class="k">return</span> <span class="mi">4</span>
+            <span class="k">elif</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">&#39;-Q[0-9]&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+                <span class="k">return</span> <span class="mi">6</span>
+            <span class="k">elif</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">&#39;-SF&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+                <span class="k">return</span> <span class="mi">8</span>
+            <span class="k">elif</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">&#39;-SD&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+                <span class="k">return</span> <span class="mi">10</span>
+            <span class="k">elif</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">&#39;-CH&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+                <span class="k">return</span> <span class="mi">12</span>
+            <span class="k">elif</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">&#39;-CV&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+                <span class="k">return</span> <span class="mi">14</span>
+            <span class="k">elif</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">&#39;-FCH&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+                <span class="k">return</span> <span class="mi">16</span>
+            <span class="k">elif</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">&#39;-FCV&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+                <span class="k">return</span> <span class="mi">18</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="mi">20</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vertical_header</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="n">client</span> <span class="o">=</span> <span class="n">ConfigDBClient</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_config_type</span> <span class="o">==</span> <span class="s1">&#39;bo_normalized&#39;</span><span class="p">:</span>
+            <span class="n">pvs</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_value_from_template</span><span class="p">(</span><span class="s1">&#39;bo_normalized&#39;</span><span class="p">)[</span><span class="s1">&#39;pvs&#39;</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_config_type</span> <span class="o">==</span> <span class="s1">&#39;si_normalized&#39;</span><span class="p">:</span>
+            <span class="n">pvs</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_value_from_template</span><span class="p">(</span><span class="s1">&#39;si_normalized&#39;</span><span class="p">)[</span><span class="s1">&#39;pvs&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Module </span><span class="si">{}</span><span class="s2"> not found&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_config_type</span><span class="p">))</span>
+        <span class="c1"># pvs = get_dict()[&quot;value&quot;]</span>
+        <span class="c1"># pvs = getattr(ConfigurationPvs, self._config_type)().pvs()</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">pvs</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_vertical_header</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vertical_header</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span>
+            <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">elem</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span> <span class="o">+</span> <span class="n">subSection</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]))</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_addConfiguration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                          <span class="n">config_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add new configuration to table.&quot;&quot;&quot;</span>
+        <span class="c1"># Create new configuration</span>
+        <span class="k">if</span> <span class="n">values</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">new_configuration</span> <span class="o">=</span> <span class="n">Configuration</span><span class="o">.</span><span class="n">loadConfiguration</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_config_type</span><span class="p">,</span> <span class="n">config_name</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">new_configuration</span> <span class="o">=</span> <span class="n">Configuration</span><span class="o">.</span><span class="n">newConfiguration</span><span class="p">(</span>
+                <span class="n">config_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_config_type</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
+        <span class="c1"># Add to model in case it was successfully created</span>
+        <span class="k">if</span> <span class="n">column</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">columnCount</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_configurations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_configuration</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_configurations</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">column</span><span class="p">,</span> <span class="n">new_configuration</span><span class="p">)</span>
+        <span class="c1"># Call insertColumns to update table widget</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">insertColumn</span><span class="p">(</span><span class="n">column</span><span class="p">)</span>
+
+    <span class="c1"># Interface functions view - model</span>
+<div class="viewcode-block" id="ConfigModel.getConfigurationColumn">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.getConfigurationColumn">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getConfigurationColumn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return column number of the given configuration.&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">configuration</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_configurations</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">config_name</span> <span class="ow">in</span> <span class="p">(</span><span class="n">configuration</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">configuration</span><span class="o">.</span><span class="n">old_name</span><span class="p">):</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_configurations</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">configuration</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span></div>
+
+
+<div class="viewcode-block" id="ConfigModel.getConfigurations">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.getConfigurations">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getConfigurations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">deleted</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return name of saved configurations.&quot;&quot;&quot;</span>
+        <span class="n">db</span> <span class="o">=</span> <span class="n">ConfigDBClient</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">db</span><span class="o">.</span><span class="n">find_configs</span><span class="p">(</span>
+            <span class="n">config_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_config_type</span><span class="p">,</span> <span class="n">discarded</span><span class="o">=</span><span class="n">deleted</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ConfigModel.getTuneMatrix">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.getTuneMatrix">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getTuneMatrix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get tune matrix from db.&quot;&quot;&quot;</span>
+        <span class="n">db</span> <span class="o">=</span> <span class="n">ConfigDBClient</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">db</span><span class="o">.</span><span class="n">get_config_value</span><span class="p">(</span><span class="s2">&quot;tune_matrix&quot;</span><span class="p">,</span> <span class="s2">&quot;tune_matrix&quot;</span><span class="p">)</span></div>
+
+
+    <span class="c1"># Actions</span>
+<div class="viewcode-block" id="ConfigModel.saveConfiguration">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.saveConfiguration">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">saveConfiguration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Save configuration if it is dirty.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_configurations</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">dirty</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_configurations</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="c1"># Issue a change in the table and header</span>
+        <span class="n">idx1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">column</span><span class="p">)</span>
+        <span class="n">idx2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rowCount</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">column</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dataChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">idx1</span><span class="p">,</span> <span class="n">idx2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">headerDataChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">Horizontal</span><span class="p">,</span> <span class="n">column</span><span class="p">,</span> <span class="n">column</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ConfigModel.renameConfiguration">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.renameConfiguration">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">renameConfiguration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="p">,</span> <span class="n">new_name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Change configuration name.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_configurations</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">new_name</span></div>
+
+
+<div class="viewcode-block" id="ConfigModel.deriveConfiguration">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.deriveConfiguration">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">deriveConfiguration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_name</span><span class="p">,</span> <span class="n">base_column</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create new configuration from existing one TUNE or CHROMATICITY.&quot;&quot;&quot;</span>
+        <span class="c1"># Derives new configuration</span>
+        <span class="n">new_configuration</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">pv</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertical_header</span><span class="p">:</span>
+            <span class="n">pvname</span> <span class="o">=</span> <span class="n">pv</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+            <span class="c1"># pvtype = pv[&#39;type&#39;]</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_configurations</span><span class="p">[</span><span class="n">base_column</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">pvname</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">func</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">TUNE</span><span class="p">:</span>  <span class="c1"># Applied to quadrupoles</span>
+                <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;-QD&quot;</span><span class="p">,</span> <span class="n">pvname</span><span class="p">):</span>
+                    <span class="n">new_value</span> <span class="o">=</span> <span class="n">value</span> <span class="o">+</span> <span class="n">parameters</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">elif</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;QF&quot;</span><span class="p">,</span> <span class="n">pvname</span><span class="p">):</span>
+                    <span class="n">new_value</span> <span class="o">=</span> <span class="n">value</span> <span class="o">+</span> <span class="n">parameters</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">new_value</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="k">elif</span> <span class="n">func</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">CHROMATICITY</span><span class="p">:</span>
+                <span class="n">new_value</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">new_value</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="n">new_configuration</span><span class="p">[</span><span class="n">pvname</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_value</span>
+        <span class="c1"># Add configuration to table as a new column</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_addConfiguration</span><span class="p">(</span>
+            <span class="n">base_column</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">config_name</span><span class="o">=</span><span class="n">config_name</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="n">new_configuration</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ConfigModel.closeConfiguration">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.closeConfiguration">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">closeConfiguration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Close a configuration.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_configurations</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_configurations</span><span class="p">[</span><span class="n">column</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">removeColumns</span><span class="p">(</span><span class="n">column</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ConfigModel.interpolateConfiguration">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.interpolateConfiguration">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">interpolateConfiguration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_name</span><span class="p">,</span> <span class="n">column1</span><span class="p">,</span> <span class="n">column2</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Linear interpolation of 2 configurations.&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">type_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getTypes</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">type_</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot interpolate non-numeric values&quot;</span><span class="p">)</span>
+
+        <span class="n">new_configuration</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">pv</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertical_header</span><span class="p">:</span>
+            <span class="n">pvname</span> <span class="o">=</span> <span class="n">pv</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+            <span class="n">value1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_configurations</span><span class="p">[</span><span class="n">column1</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">pvname</span><span class="p">]</span>
+            <span class="n">value2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_configurations</span><span class="p">[</span><span class="n">column2</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">pvname</span><span class="p">]</span>
+            <span class="n">new_configuration</span><span class="p">[</span><span class="n">pvname</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">value1</span> <span class="o">+</span> <span class="n">value2</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+        <span class="c1"># Choose where to place new column</span>
+        <span class="n">new_column</span> <span class="o">=</span> <span class="n">column1</span> <span class="k">if</span> <span class="n">column1</span> <span class="o">&gt;</span> <span class="n">column2</span> <span class="k">else</span> <span class="n">column2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_addConfiguration</span><span class="p">(</span>
+            <span class="n">new_column</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">config_name</span><span class="o">=</span><span class="n">config_name</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="n">new_configuration</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ConfigModel.loadConfiguration">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.loadConfiguration">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">loadConfiguration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Load configuration from database.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">values</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># Load existing config</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_addConfiguration</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">columnCount</span><span class="p">(),</span> <span class="n">config_name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># New config</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_addConfiguration</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">columnCount</span><span class="p">(),</span> <span class="n">config_name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="n">values</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ConfigModel.deleteConfiguration">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.deleteConfiguration">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">deleteConfiguration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_info</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Delete configuration from database.&quot;&quot;&quot;</span>
+        <span class="n">col</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getConfigurationColumn</span><span class="p">(</span><span class="n">config_info</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">])</span>
+        <span class="n">Configuration</span><span class="o">.</span><span class="n">delete_config</span><span class="p">(</span><span class="n">config_info</span><span class="p">[</span><span class="s1">&#39;config_type&#39;</span><span class="p">],</span> <span class="n">config_info</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">col</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">closeConfiguration</span><span class="p">(</span><span class="n">col</span><span class="p">)</span></div>
+
+
+    <span class="c1"># Implements undo/redo</span>
+<div class="viewcode-block" id="ConfigModel.setDataAlt">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.setDataAlt">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setDataAlt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">config_name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">old_value</span><span class="p">,</span> <span class="n">redo</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Called by the undo/redo methods to change data on table.&quot;&quot;&quot;</span>
+        <span class="n">pvname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertical_header</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+        <span class="c1"># pvtype = self._vertical_header[row][&#39;type&#39;]</span>
+        <span class="n">column</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getConfigurationColumn</span><span class="p">(</span><span class="n">config_name</span><span class="p">)</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">column</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_configurations</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">pvname</span><span class="p">,</span> <span class="n">old_value</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">redo</span><span class="p">:</span>
+            <span class="c1"># Clean redo if bigger than memort</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_redo</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">UNDO_MEMORY</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_redo</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="c1"># Append new redo action</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_redo</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">config_name</span><span class="p">,</span>
+                 <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">setDataAlt</span><span class="p">(</span>
+                    <span class="n">row</span><span class="p">,</span> <span class="n">config_name</span><span class="p">,</span> <span class="n">old_value</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="kc">False</span><span class="p">)))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Clean undo if bigger than memory</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_undo</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">UNDO_MEMORY</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_undo</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="c1"># Append new undo action</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_undo</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">config_name</span><span class="p">,</span>
+                 <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">setDataAlt</span><span class="p">(</span>
+                    <span class="n">row</span><span class="p">,</span> <span class="n">config_name</span><span class="p">,</span> <span class="n">old_value</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="kc">True</span><span class="p">)))</span>
+        <span class="c1"># Update view</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">headerDataChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span>
+            <span class="n">Qt</span><span class="o">.</span><span class="n">Horizontal</span><span class="p">,</span> <span class="n">index</span><span class="o">.</span><span class="n">column</span><span class="p">(),</span> <span class="n">index</span><span class="o">.</span><span class="n">column</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dataChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ConfigModel.cleanUndo">
+<a class="viewcode-back" href="../../../../siriushla.as_ap_configdb.normconfigs.html#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.cleanUndo">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">cleanUndo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Clean undo/redo actions for given column.&quot;&quot;&quot;</span>
+        <span class="n">config_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_configurations</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">name</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">action</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_undo</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">action</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">config_name</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_undo</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">action</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_redo</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">action</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">config_name</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_redo</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">i</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_getTypes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_types</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">pv</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vertical_header</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_types</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">pv</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">])</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_types</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, lnls-sirius.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

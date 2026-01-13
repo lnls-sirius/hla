@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>siriushla.as_di_bpms.base &mdash; siriushla 1.14.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=01009efc"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            siriushla
+          </a>
+              <div class="version">
+                1.14.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">GUIs:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_configdb.html">siriushla.as_ap_configdb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_currinfo.html">siriushla.as_ap_currinfo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_energybutton.html">siriushla.as_ap_energybutton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_injcontrol.html">siriushla.as_ap_injcontrol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_injection.html">siriushla.as_ap_injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_launcher.html">siriushla.as_ap_launcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_machshift.html">siriushla.as_ap_machshift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_macreport.html">siriushla.as_ap_macreport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_magoffconv.html">siriushla.as_ap_magoffconv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_measure.html">siriushla.as_ap_measure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_monitor.html">siriushla.as_ap_monitor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_opticscorr.html">siriushla.as_ap_opticscorr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_posang.html">siriushla.as_ap_posang</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_rabpmmon.html">siriushla.as_ap_rabpmmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_radmon.html">siriushla.as_ap_radmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_sofb.html">siriushla.as_ap_sofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_bpms.html">siriushla.as_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_dccts.html">siriushla.as_di_dccts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_icts.html">siriushla.as_di_icts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_scrns.html">siriushla.as_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_tune.html">siriushla.as_di_tune</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_vlight.html">siriushla.as_di_vlight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_commands.html">siriushla.as_ps_commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_control.html">siriushla.as_ps_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_cycle.html">siriushla.as_ps_cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_diag.html">siriushla.as_ps_diag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_pu_control.html">siriushla.as_pu_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_rf_control.html">siriushla.as_rf_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ti_control.html">siriushla.as_ti_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.bl_ap_imgproc.html">siriushla.bl_ap_imgproc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.bo_ap_ramp.html">siriushla.bo_ap_ramp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.common.html">siriushla.common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_ap_mps.html">siriushla.li_ap_mps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_di_bpms.html">siriushla.li_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_di_scrns.html">siriushla.li_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_eg_control.html">siriushla.li_eg_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_pu_modltr.html">siriushla.li_pu_modltr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_rf_llrf.html">siriushla.li_rf_llrf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_va_control.html">siriushla.li_va_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_fofb.html">siriushla.si_ap_fofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_genstatus.html">siriushla.si_ap_genstatus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_idff.html">siriushla.si_ap_idff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_orbintlk.html">siriushla.si_ap_orbintlk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_bbb.html">siriushla.si_di_bbb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_equalize_bpms.html">siriushla.si_di_equalize_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_scraps.html">siriushla.si_di_scraps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_id_control.html">siriushla.si_id_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.tb_di_slits.html">siriushla.tb_di_slits</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Widgets:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.html">Sirius HLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.widgets.html">Widgets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Source Code:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lnls-sirius/hla">HLA Github</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">siriushla</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">siriushla.as_di_bpms.base</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for siriushla.as_di_bpms.base</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Base module.&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span> <span class="k">as</span> <span class="n">_part</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtCore</span><span class="w"> </span><span class="kn">import</span> <span class="n">Qt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtWidgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">QWidget</span><span class="p">,</span> <span class="n">QHBoxLayout</span><span class="p">,</span> <span class="n">QVBoxLayout</span><span class="p">,</span> <span class="n">QCheckBox</span><span class="p">,</span> \
+    <span class="n">QFormLayout</span><span class="p">,</span> <span class="n">QGroupBox</span><span class="p">,</span> <span class="n">QLabel</span><span class="p">,</span> <span class="n">QSizePolicy</span> <span class="k">as</span> <span class="n">QSzPlcy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtGui</span><span class="w"> </span><span class="kn">import</span> <span class="n">QColor</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriuspy.namesys</span><span class="w"> </span><span class="kn">import</span> <span class="n">SiriusPVName</span> <span class="k">as</span> <span class="n">_PVName</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriushla.widgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">SiriusConnectionSignal</span><span class="p">,</span> <span class="n">SiriusLabel</span><span class="p">,</span> \
+    <span class="n">SiriusSpinbox</span><span class="p">,</span> <span class="n">SiriusTimePlot</span><span class="p">,</span> <span class="n">SiriusWaveformPlot</span><span class="p">,</span> <span class="n">SiriusLedState</span><span class="p">,</span> \
+    <span class="n">SiriusLedAlert</span><span class="p">,</span> <span class="n">PyDMStateButton</span><span class="p">,</span> <span class="n">SiriusEnumComboBox</span><span class="p">,</span> <span class="n">SiriusPushButton</span><span class="p">,</span> \
+    <span class="n">SiriusLineEdit</span><span class="p">,</span> <span class="n">pydmwidget_factory</span>
+
+
+<div class="viewcode-block" id="BaseWidget">
+<a class="viewcode-back" href="../../../siriushla.as_di_bpms.html#siriushla.as_di_bpms.base.BaseWidget">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">BaseWidget</span><span class="p">(</span><span class="n">QWidget</span><span class="p">):</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">bpm</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">data_prefix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="n">prefix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bpm</span> <span class="o">=</span> <span class="n">_PVName</span><span class="p">(</span><span class="n">bpm</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_pbpm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bpm</span><span class="o">.</span><span class="n">dev</span> <span class="o">==</span> <span class="s1">&#39;PBPM&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bpm</span><span class="o">.</span><span class="n">sec</span><span class="o">+</span><span class="s1">&#39;App&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_prefix</span> <span class="o">=</span> <span class="n">data_prefix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_chans</span> <span class="o">=</span> <span class="p">[]</span>
+
+<div class="viewcode-block" id="BaseWidget.channels">
+<a class="viewcode-back" href="../../../siriushla.as_di_bpms.html#siriushla.as_di_bpms.base.BaseWidget.channels">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">channels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_chans</span></div>
+
+
+<div class="viewcode-block" id="BaseWidget.get_pvname">
+<a class="viewcode-back" href="../../../siriushla.as_di_bpms.html#siriushla.as_di_bpms.base.BaseWidget.get_pvname">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_pvname</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">propty</span><span class="p">,</span> <span class="n">is_data</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="n">addr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bpm</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+            <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="p">,</span>
+            <span class="n">propty</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_prefix</span> <span class="k">if</span> <span class="n">is_data</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">+</span><span class="n">propty</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">addr</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_create_formlayout_groupbox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">props</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">title</span><span class="p">:</span>
+            <span class="n">grpbx</span> <span class="o">=</span> <span class="n">CustomGroupBox</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">grpbx</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">fbl</span> <span class="o">=</span> <span class="n">QFormLayout</span><span class="p">(</span><span class="n">grpbx</span><span class="p">)</span>
+        <span class="n">grpbx</span><span class="o">.</span><span class="n">layoutf</span> <span class="o">=</span> <span class="n">fbl</span>
+        <span class="n">fbl</span><span class="o">.</span><span class="n">setLabelAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignVCenter</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">prop</span> <span class="ow">in</span> <span class="n">props</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">prop</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">pvs</span><span class="p">,</span> <span class="n">txt</span> <span class="o">=</span> <span class="n">prop</span>
+                <span class="n">isdata</span><span class="p">,</span> <span class="n">prec</span><span class="p">,</span> <span class="n">widgets</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">prop</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="n">pvs</span><span class="p">,</span> <span class="n">txt</span><span class="p">,</span> <span class="n">aux</span> <span class="o">=</span> <span class="n">prop</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">aux</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+                    <span class="n">isdata</span><span class="p">,</span> <span class="n">prec</span><span class="p">,</span> <span class="n">widgets</span> <span class="o">=</span> <span class="n">aux</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+                <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">aux</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+                    <span class="n">isdata</span><span class="p">,</span> <span class="n">prec</span><span class="p">,</span> <span class="n">widgets</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">aux</span><span class="p">,</span> <span class="kc">None</span>
+                <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">aux</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                    <span class="n">isdata</span> <span class="o">=</span> <span class="n">aux</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;isdata&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+                    <span class="n">prec</span> <span class="o">=</span> <span class="n">aux</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;prec&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                    <span class="n">widgets</span> <span class="o">=</span> <span class="n">aux</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;widgets&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">isdata</span><span class="p">,</span> <span class="n">prec</span><span class="p">,</span> <span class="n">widgets</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">aux</span>
+
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pvs</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="n">pv1</span> <span class="o">=</span> <span class="n">pvs</span>
+                <span class="n">pv2</span> <span class="o">=</span> <span class="n">pv1</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;-SP&#39;</span><span class="p">,</span> <span class="s1">&#39;-RB&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;-Sel&#39;</span><span class="p">,</span> <span class="s1">&#39;-Sts&#39;</span><span class="p">)</span>
+                <span class="n">pvs</span> <span class="o">=</span> <span class="p">[</span><span class="n">pv1</span><span class="p">,</span> <span class="p">]</span>
+                <span class="k">if</span> <span class="n">pv2</span> <span class="o">!=</span> <span class="n">pv1</span><span class="p">:</span>
+                    <span class="n">pvs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pv2</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">pv1</span> <span class="o">=</span> <span class="n">pvs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">widgets</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">pv2</span> <span class="o">!=</span> <span class="n">pv1</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">pv1</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;-SP&#39;</span><span class="p">):</span>
+                        <span class="n">widgets</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;spin&#39;</span><span class="p">,</span> <span class="s1">&#39;label&#39;</span><span class="p">]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">widgets</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;combo&#39;</span><span class="p">,</span> <span class="s1">&#39;label&#39;</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">widgets</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">,</span> <span class="p">]</span>
+
+            <span class="n">lab</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span>
+            <span class="n">lab</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="n">pv1</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">lab</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;min-width:10em;&quot;</span><span class="p">)</span>
+
+            <span class="n">hbl</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">wid</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">widgets</span><span class="p">):</span>
+                <span class="n">hbl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_widget</span><span class="p">(</span><span class="n">wid</span><span class="p">,</span> <span class="n">pvs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">isdata</span><span class="p">,</span> <span class="n">prec</span><span class="p">))</span>
+
+            <span class="n">fbl</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">lab</span><span class="p">,</span> <span class="n">hbl</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">grpbx</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_widget</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">widtype</span><span class="p">,</span> <span class="n">pvname</span><span class="p">,</span> <span class="n">isdata</span><span class="p">,</span> <span class="n">prec</span><span class="p">):</span>
+        <span class="n">pvname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pvname</span><span class="p">(</span><span class="n">pvname</span><span class="p">,</span> <span class="n">is_data</span><span class="o">=</span><span class="n">isdata</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">widtype</span> <span class="o">==</span> <span class="s1">&#39;combo&#39;</span><span class="p">:</span>
+            <span class="n">wid</span> <span class="o">=</span> <span class="n">SiriusEnumComboBox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pvname</span><span class="p">)</span>
+            <span class="n">wid</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;QWidget{min-width:5em;}&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">widtype</span> <span class="o">==</span> <span class="s1">&#39;spin&#39;</span><span class="p">:</span>
+            <span class="n">wid</span> <span class="o">=</span> <span class="n">SiriusSpinbox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pvname</span><span class="p">)</span>
+            <span class="n">wid</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;QWidget{min-width:5em;}&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">prec</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">wid</span><span class="o">.</span><span class="n">precisionFromPV</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="n">wid</span><span class="o">.</span><span class="n">precision</span> <span class="o">=</span> <span class="n">prec</span>
+        <span class="k">elif</span> <span class="n">widtype</span> <span class="o">==</span> <span class="s1">&#39;lineedit&#39;</span><span class="p">:</span>
+            <span class="n">wid</span> <span class="o">=</span> <span class="n">SiriusLineEdit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pvname</span><span class="p">)</span>
+            <span class="n">wid</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;QWidget{min-width:5em;}&quot;</span><span class="p">)</span>
+            <span class="n">wid</span><span class="o">.</span><span class="n">setSizePolicy</span><span class="p">(</span><span class="n">QSzPlcy</span><span class="o">.</span><span class="n">Maximum</span><span class="p">,</span> <span class="n">QSzPlcy</span><span class="o">.</span><span class="n">Preferred</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">prec</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">wid</span><span class="o">.</span><span class="n">precisionFromPV</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="n">wid</span><span class="o">.</span><span class="n">precision</span> <span class="o">=</span> <span class="n">prec</span>
+        <span class="k">elif</span> <span class="n">widtype</span> <span class="o">==</span> <span class="s1">&#39;label&#39;</span><span class="p">:</span>
+            <span class="n">wid</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pvname</span><span class="p">)</span>
+            <span class="n">wid</span><span class="o">.</span><span class="n">showUnits</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">if</span> <span class="n">prec</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">wid</span><span class="o">.</span><span class="n">precisionFromPV</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="n">wid</span><span class="o">.</span><span class="n">precision</span> <span class="o">=</span> <span class="n">prec</span>
+            <span class="n">wid</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;QLabel{min-width:6em;}&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">widtype</span> <span class="o">==</span> <span class="s1">&#39;ledstate&#39;</span><span class="p">:</span>
+            <span class="n">wid</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pvname</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">widtype</span> <span class="o">==</span> <span class="s1">&#39;ledalert&#39;</span><span class="p">:</span>
+            <span class="n">wid</span> <span class="o">=</span> <span class="n">SiriusLedAlert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pvname</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">widtype</span> <span class="o">==</span> <span class="s1">&#39;statebutton&#39;</span><span class="p">:</span>
+            <span class="n">wid</span> <span class="o">=</span> <span class="n">PyDMStateButton</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pvname</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">widtype</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">widtype</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;pushbutton&#39;</span><span class="p">:</span>
+                <span class="n">kws</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+                    <span class="n">label</span><span class="o">=</span><span class="n">widtype</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">icon</span><span class="o">=</span><span class="n">widtype</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                    <span class="n">pressValue</span><span class="o">=</span><span class="n">widtype</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">widtype</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">3</span> <span class="k">else</span> <span class="mi">1</span><span class="p">,</span>
+                    <span class="n">init_channel</span><span class="o">=</span><span class="n">pvname</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">widtype</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">4</span><span class="p">:</span>
+                    <span class="n">kws</span><span class="p">[</span><span class="s1">&#39;releaseValue&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">widtype</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+                <span class="n">wid</span> <span class="o">=</span> <span class="n">SiriusPushButton</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kws</span><span class="p">)</span>
+                <span class="n">wid</span><span class="o">.</span><span class="n">setDefault</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+                <span class="n">wid</span><span class="o">.</span><span class="n">setAutoDefault</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">widtype</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;ledstate&#39;</span><span class="p">:</span>
+                <span class="n">wid</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pvname</span><span class="p">)</span>
+                <span class="n">wid</span><span class="o">.</span><span class="n">offColor</span> <span class="o">=</span> <span class="n">widtype</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">wid</span><span class="o">.</span><span class="n">onColor</span> <span class="o">=</span> <span class="n">widtype</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="n">widtype</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;ledalert&#39;</span><span class="p">:</span>
+                <span class="n">wid</span> <span class="o">=</span> <span class="n">SiriusLedAlert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pvname</span><span class="p">)</span>
+                <span class="n">wid</span><span class="o">.</span><span class="n">offColor</span> <span class="o">=</span> <span class="n">widtype</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">wid</span><span class="o">.</span><span class="n">onColor</span> <span class="o">=</span> <span class="n">widtype</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;widget not defined for type </span><span class="si">{</span><span class="n">widtype</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">wid</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">pvname</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">wid</span>
+
+<div class="viewcode-block" id="BaseWidget.basic_rule">
+<a class="viewcode-back" href="../../../siriushla.as_di_bpms.html#siriushla.as_di_bpms.base.BaseWidget.basic_rule">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">basic_rule</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">channel</span><span class="p">,</span> <span class="n">flag</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="n">chan</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pvname</span><span class="p">(</span><span class="n">channel</span><span class="p">)</span>
+        <span class="n">opr</span> <span class="o">=</span> <span class="s1">&#39;==&#39;</span> <span class="k">if</span> <span class="n">flag</span> <span class="k">else</span> <span class="s1">&#39;!=&#39;</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+        <span class="n">rules</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s1">&#39;[{&quot;name&quot;: &quot;VisRule&quot;, &quot;property&quot;: &quot;Visible&quot;, &#39;</span> <span class="o">+</span>
+            <span class="s1">&#39;&quot;expression&quot;: &quot;ch[0] &#39;</span><span class="o">+</span><span class="n">opr</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">val</span><span class="o">+</span><span class="s1">&#39;&quot;, &quot;channels&quot;: &#39;</span> <span class="o">+</span>
+            <span class="s1">&#39;[{&quot;channel&quot;: &quot;&#39;</span><span class="o">+</span><span class="n">chan</span><span class="o">+</span><span class="s1">&#39;&quot;, &quot;trigger&quot;: true}]}]&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">rules</span></div>
+</div>
+
+
+
+<span class="n">CustomGroupBox</span> <span class="o">=</span> <span class="n">pydmwidget_factory</span><span class="p">(</span><span class="n">QGroupBox</span><span class="p">,</span> <span class="n">pydm_class</span><span class="o">=</span><span class="s1">&#39;primi&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="get_custom_widget_class">
+<a class="viewcode-back" href="../../../siriushla.as_di_bpms.html#siriushla.as_di_bpms.base.get_custom_widget_class">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_custom_widget_class</span><span class="p">(</span><span class="n">CLASS</span><span class="p">):</span>
+    <span class="k">class</span><span class="w"> </span><span class="nc">MyWidget</span><span class="p">(</span><span class="n">CLASS</span><span class="p">):</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kws</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Initialize object.&quot;&quot;&quot;</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">,</span> <span class="o">**</span><span class="n">kws</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setFocusPolicy</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">StrongFocus</span><span class="p">)</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">wheelEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Reimplement wheel event to ignore event when out of focus.&quot;&quot;&quot;</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">hasFocus</span><span class="p">():</span>
+                <span class="n">event</span><span class="o">.</span><span class="n">ignore</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">wheelEvent</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">MyWidget</span></div>
+
+
+
+<div class="viewcode-block" id="BaseGraph">
+<a class="viewcode-back" href="../../../siriushla.as_di_bpms.html#siriushla.as_di_bpms.base.BaseGraph">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">BaseGraph</span><span class="p">(</span><span class="n">BaseWidget</span><span class="p">):</span>
+    <span class="n">CLASS</span> <span class="o">=</span> <span class="n">get_custom_widget_class</span><span class="p">(</span><span class="n">SiriusWaveformPlot</span><span class="p">)</span>
+    <span class="n">DATA_CLASS</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">bpm</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">data_prefix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">parent</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">,</span> <span class="n">bpm</span><span class="o">=</span><span class="n">bpm</span><span class="p">,</span> <span class="n">data_prefix</span><span class="o">=</span><span class="n">data_prefix</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graph</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">CLASS</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setupgraph</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setupui</span><span class="p">()</span>
+
+<div class="viewcode-block" id="BaseGraph.setupgraph">
+<a class="viewcode-back" href="../../../siriushla.as_di_bpms.html#siriushla.as_di_bpms.base.BaseGraph.setupgraph">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setupgraph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graph</span><span class="p">):</span>
+        <span class="n">graph</span><span class="o">.</span><span class="n">mouseEnabledX</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">graph</span><span class="o">.</span><span class="n">setShowXGrid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">graph</span><span class="o">.</span><span class="n">setShowYGrid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">graph</span><span class="o">.</span><span class="n">setBackgroundColor</span><span class="p">(</span><span class="n">QColor</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">))</span>
+        <span class="n">graph</span><span class="o">.</span><span class="n">setAutoRangeX</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">graph</span><span class="o">.</span><span class="n">setAutoRangeY</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">graph</span><span class="o">.</span><span class="n">setMinXRange</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+        <span class="n">graph</span><span class="o">.</span><span class="n">setMaxXRange</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+        <span class="n">graph</span><span class="o">.</span><span class="n">setAxisColor</span><span class="p">(</span><span class="n">QColor</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="n">graph</span><span class="o">.</span><span class="n">plotItem</span><span class="o">.</span><span class="n">getAxis</span><span class="p">(</span><span class="s1">&#39;bottom&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">setStyle</span><span class="p">(</span><span class="n">tickTextOffset</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+        <span class="n">graph</span><span class="o">.</span><span class="n">plotItem</span><span class="o">.</span><span class="n">getAxis</span><span class="p">(</span><span class="s1">&#39;left&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">setStyle</span><span class="p">(</span>
+            <span class="n">tickTextOffset</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">autoExpandTextSpace</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">tickTextWidth</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BaseGraph.setupui">
+<a class="viewcode-back" href="../../../siriushla.as_di_bpms.html#siriushla.as_di_bpms.base.BaseGraph.setupui">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setupui</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">hbl</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vbl</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">()</span>
+        <span class="n">hbl</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vbl</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vbl</span><span class="o">.</span><span class="n">addStretch</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="BaseGraph.setLabel">
+<a class="viewcode-back" href="../../../siriushla.as_di_bpms.html#siriushla.as_di_bpms.base.BaseGraph.setLabel">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">setLabel</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BaseGraph.curveAtIndex">
+<a class="viewcode-back" href="../../../siriushla.as_di_bpms.html#siriushla.as_di_bpms.base.BaseGraph.curveAtIndex">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">curveAtIndex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">curveAtIndex</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_add_channel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="n">cdta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">curveAtIndex</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">cbx</span> <span class="o">=</span> <span class="n">QCheckBox</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">plt</span> <span class="o">=</span> <span class="n">cbx</span><span class="o">.</span><span class="n">palette</span><span class="p">()</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">setColor</span><span class="p">(</span><span class="n">plt</span><span class="o">.</span><span class="n">WindowText</span><span class="p">,</span> <span class="n">cdta</span><span class="o">.</span><span class="n">color</span><span class="p">)</span>
+        <span class="n">cbx</span><span class="o">.</span><span class="n">setPalette</span><span class="p">(</span><span class="n">plt</span><span class="p">)</span>
+        <span class="n">cbx</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vbl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">cbx</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vbl</span><span class="o">.</span><span class="n">addStretch</span><span class="p">()</span>
+        <span class="n">cbx</span><span class="o">.</span><span class="n">toggled</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">cdta</span><span class="o">.</span><span class="n">setVisible</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_add_scale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">channel</span><span class="p">,</span> <span class="n">scale</span><span class="p">):</span>
+        <span class="n">cdta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">curveAtIndex</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">chan</span> <span class="o">=</span> <span class="n">SiriusConnectionSignal</span><span class="p">(</span><span class="n">channel</span><span class="p">)</span>
+        <span class="n">chan</span><span class="o">.</span><span class="n">new_value_signal</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">DATA_CLASS</span><span class="p">]</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="n">_part</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_apply_scale</span><span class="p">,</span> <span class="n">cdta</span><span class="p">,</span> <span class="n">scale</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_chans</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">chan</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_apply_scale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cdta</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">DATA_CLASS</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+            <span class="n">cdta</span><span class="o">.</span><span class="n">receiveYWaveform</span><span class="p">(</span><span class="n">value</span><span class="o">*</span><span class="n">scale</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cdta</span><span class="o">.</span><span class="n">receiveNewValue</span><span class="p">(</span><span class="n">value</span><span class="o">*</span><span class="n">scale</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="GraphWave">
+<a class="viewcode-back" href="../../../siriushla.as_di_bpms.html#siriushla.as_di_bpms.base.GraphWave">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">GraphWave</span><span class="p">(</span><span class="n">BaseGraph</span><span class="p">):</span>
+
+<div class="viewcode-block" id="GraphWave.addChannel">
+<a class="viewcode-back" href="../../../siriushla.as_di_bpms.html#siriushla.as_di_bpms.base.GraphWave.addChannel">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">addChannel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">opts</span><span class="p">):</span>
+        <span class="n">scale</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;add_scale&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">addChannel</span><span class="p">(</span><span class="o">**</span><span class="n">opts</span><span class="p">)</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_channel</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">scale</span><span class="p">:</span>
+            <span class="n">channel</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;y_channel&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_add_scale</span><span class="p">(</span><span class="n">channel</span><span class="p">,</span> <span class="n">scale</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="GraphTime">
+<a class="viewcode-back" href="../../../siriushla.as_di_bpms.html#siriushla.as_di_bpms.base.GraphTime">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">GraphTime</span><span class="p">(</span><span class="n">BaseGraph</span><span class="p">):</span>
+    <span class="n">CLASS</span> <span class="o">=</span> <span class="n">get_custom_widget_class</span><span class="p">(</span><span class="n">SiriusTimePlot</span><span class="p">)</span>
+    <span class="n">DATA_CLASS</span> <span class="o">=</span> <span class="nb">float</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">timeSpan</span> <span class="o">=</span> <span class="mi">100</span>
+
+<div class="viewcode-block" id="GraphTime.addYChannel">
+<a class="viewcode-back" href="../../../siriushla.as_di_bpms.html#siriushla.as_di_bpms.base.GraphTime.addYChannel">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">addYChannel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">opts</span><span class="p">):</span>
+        <span class="n">scale</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;add_scale&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">ychan</span> <span class="o">=</span> <span class="n">opts</span><span class="p">[</span><span class="s1">&#39;y_channel&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">scale</span><span class="p">:</span>
+            <span class="n">opts</span><span class="p">[</span><span class="s1">&#39;y_channel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;A&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">addYChannel</span><span class="p">(</span><span class="o">**</span><span class="n">opts</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">scale</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_add_scale</span><span class="p">(</span><span class="n">ychan</span><span class="p">,</span> <span class="n">scale</span><span class="p">)</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_channel</span><span class="p">(</span><span class="n">name</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, lnls-sirius.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

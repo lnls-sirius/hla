@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>siriushla.as_ps_diag.main &mdash; siriushla 1.14.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=01009efc"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            siriushla
+          </a>
+              <div class="version">
+                1.14.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">GUIs:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_configdb.html">siriushla.as_ap_configdb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_currinfo.html">siriushla.as_ap_currinfo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_energybutton.html">siriushla.as_ap_energybutton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_injcontrol.html">siriushla.as_ap_injcontrol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_injection.html">siriushla.as_ap_injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_launcher.html">siriushla.as_ap_launcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_machshift.html">siriushla.as_ap_machshift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_macreport.html">siriushla.as_ap_macreport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_magoffconv.html">siriushla.as_ap_magoffconv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_measure.html">siriushla.as_ap_measure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_monitor.html">siriushla.as_ap_monitor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_opticscorr.html">siriushla.as_ap_opticscorr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_posang.html">siriushla.as_ap_posang</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_rabpmmon.html">siriushla.as_ap_rabpmmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_radmon.html">siriushla.as_ap_radmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_sofb.html">siriushla.as_ap_sofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_bpms.html">siriushla.as_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_dccts.html">siriushla.as_di_dccts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_icts.html">siriushla.as_di_icts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_scrns.html">siriushla.as_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_tune.html">siriushla.as_di_tune</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_vlight.html">siriushla.as_di_vlight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_commands.html">siriushla.as_ps_commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_control.html">siriushla.as_ps_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_cycle.html">siriushla.as_ps_cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_diag.html">siriushla.as_ps_diag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_pu_control.html">siriushla.as_pu_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_rf_control.html">siriushla.as_rf_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ti_control.html">siriushla.as_ti_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.bl_ap_imgproc.html">siriushla.bl_ap_imgproc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.bo_ap_ramp.html">siriushla.bo_ap_ramp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.common.html">siriushla.common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_ap_mps.html">siriushla.li_ap_mps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_di_bpms.html">siriushla.li_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_di_scrns.html">siriushla.li_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_eg_control.html">siriushla.li_eg_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_pu_modltr.html">siriushla.li_pu_modltr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_rf_llrf.html">siriushla.li_rf_llrf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_va_control.html">siriushla.li_va_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_fofb.html">siriushla.si_ap_fofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_genstatus.html">siriushla.si_ap_genstatus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_idff.html">siriushla.si_ap_idff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_orbintlk.html">siriushla.si_ap_orbintlk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_bbb.html">siriushla.si_di_bbb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_equalize_bpms.html">siriushla.si_di_equalize_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_scraps.html">siriushla.si_di_scraps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_id_control.html">siriushla.si_id_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.tb_di_slits.html">siriushla.tb_di_slits</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Widgets:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.html">Sirius HLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.widgets.html">Widgets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Source Code:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lnls-sirius/hla">HLA Github</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">siriushla</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">siriushla.as_ps_diag.main</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for siriushla.as_ps_diag.main</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Interface to handle power supply diagnostic.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">_re</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">_log</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span> <span class="k">as</span> <span class="n">_datetime</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span> <span class="k">as</span> <span class="n">_partial</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">pcaspy</span><span class="w"> </span><span class="kn">import</span> <span class="n">Severity</span> <span class="k">as</span> <span class="n">_Sev</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">_np</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtGui</span><span class="w"> </span><span class="kn">import</span> <span class="n">QStandardItemModel</span><span class="p">,</span> <span class="n">QStandardItem</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtCore</span><span class="w"> </span><span class="kn">import</span> <span class="n">Qt</span><span class="p">,</span> <span class="n">Slot</span><span class="p">,</span> <span class="n">Signal</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtWidgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">QWidget</span><span class="p">,</span> <span class="n">QLabel</span><span class="p">,</span> <span class="n">QPushButton</span><span class="p">,</span> \
+    <span class="n">QGridLayout</span><span class="p">,</span> <span class="n">QSpacerItem</span><span class="p">,</span> <span class="n">QSizePolicy</span> <span class="k">as</span> <span class="n">QSzPlcy</span><span class="p">,</span> <span class="n">QLineEdit</span><span class="p">,</span> \
+    <span class="n">QTreeView</span><span class="p">,</span> <span class="n">QItemDelegate</span><span class="p">,</span> <span class="n">QHeaderView</span><span class="p">,</span> <span class="n">QAbstractItemView</span><span class="p">,</span> \
+    <span class="n">QStackedLayout</span><span class="p">,</span> <span class="n">QRadioButton</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">qtawesome</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">qta</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydm.widgets.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">PyDMWidget</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriuspy.envars</span><span class="w"> </span><span class="kn">import</span> <span class="n">VACA_PREFIX</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriuspy.pwrsupply.csdev</span><span class="w"> </span><span class="kn">import</span> <span class="n">Const</span> <span class="k">as</span> <span class="n">_PSConst</span><span class="p">,</span> \
+    <span class="n">ETypes</span> <span class="k">as</span> <span class="n">_PSEnums</span><span class="p">,</span> <span class="n">PS_LI_INTLK_THRS</span> <span class="k">as</span> <span class="n">_PS_LI_INTLK</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriuspy.search</span><span class="w"> </span><span class="kn">import</span> <span class="n">PSSearch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriuspy.namesys</span><span class="w"> </span><span class="kn">import</span> <span class="n">SiriusPVName</span> <span class="k">as</span> <span class="n">_PVName</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriushla.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">run_newprocess</span> <span class="k">as</span> <span class="n">_run_newprocess</span><span class="p">,</span> \
+    <span class="n">get_appropriate_color</span> <span class="k">as</span> <span class="n">_get_appropriate_color</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriushla.widgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">SiriusMainWindow</span><span class="p">,</span> <span class="n">SiriusConnectionSignal</span><span class="p">,</span> \
+    <span class="n">PyDMLedMultiChannel</span><span class="p">,</span> <span class="n">PyDMLed</span><span class="p">,</span> <span class="n">PyDMLedMultiConnection</span><span class="p">,</span> <span class="n">QLed</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriushla.as_ps_control.detail_widget.custom_widgets</span><span class="w"> </span><span class="kn">import</span> \
+    <span class="n">LISpectIntlkLed</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriushla.as_ps_diag.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">asps2filters</span><span class="p">,</span> <span class="n">lips2filters</span><span class="p">,</span> <span class="n">sips2filters</span>
+
+
+<div class="viewcode-block" id="PSDiag">
+<a class="viewcode-back" href="../../../siriushla.as_ps_diag.html#siriushla.as_ps_diag.main.PSDiag">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">PSDiag</span><span class="p">(</span><span class="n">SiriusMainWindow</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Power Supply Diagnostic.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="n">VACA_PREFIX</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_prefix</span> <span class="o">=</span> <span class="n">prefix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s1">&#39;PS Diagnostics&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;ASApp&#39;</span><span class="p">)</span>
+        <span class="n">cor</span> <span class="o">=</span> <span class="n">_get_appropriate_color</span><span class="p">(</span><span class="n">section</span><span class="o">=</span><span class="s1">&#39;AS&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowIcon</span><span class="p">(</span><span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span><span class="s1">&#39;mdi.stethoscope&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">cor</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setupUi</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_initialized</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Leds Panel</span>
+        <span class="n">cw</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">panel</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">(</span><span class="n">cw</span><span class="p">)</span>
+        <span class="n">panel_lay</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">()</span>
+        <span class="n">panel_lay</span><span class="o">.</span><span class="n">setVerticalSpacing</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">panel_lay</span><span class="o">.</span><span class="n">setHorizontalSpacing</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+        <span class="n">panel</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">panel_lay</span><span class="p">)</span>
+
+        <span class="c1"># # Leds Header</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">lab</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([</span>
+                <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;PS</span><span class="se">\n</span><span class="s1">Conn?&#39;</span><span class="p">,</span> <span class="s1">&#39;Power</span><span class="se">\n</span><span class="s1">State&#39;</span><span class="p">,</span> <span class="s1">&#39;Interlock&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;OpMode</span><span class="se">\n</span><span class="s1">SlowRef?&#39;</span><span class="p">,</span> <span class="s1">&#39;Current</span><span class="se">\n</span><span class="s1">Diff&#39;</span><span class="p">]):</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="n">lab</span><span class="p">,</span> <span class="n">panel</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+            <span class="n">label</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s1">&#39;min-width:3.4em; max-width:3.4em;&#39;</span><span class="p">)</span>
+            <span class="n">panel_lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+
+        <span class="c1"># # Leds panel</span>
+        <span class="n">_on</span> <span class="o">=</span> <span class="n">_PSConst</span><span class="o">.</span><span class="n">PwrStateSts</span><span class="o">.</span><span class="n">On</span>
+        <span class="n">_slowref</span> <span class="o">=</span> <span class="n">_PSConst</span><span class="o">.</span><span class="n">States</span><span class="o">.</span><span class="n">SlowRef</span>
+        <span class="n">_rmpwfm</span> <span class="o">=</span> <span class="n">_PSConst</span><span class="o">.</span><span class="n">States</span><span class="o">.</span><span class="n">RmpWfm</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="k">for</span> <span class="n">sec</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;LI&#39;</span><span class="p">,</span> <span class="s1">&#39;TB&#39;</span><span class="p">,</span> <span class="s1">&#39;BO&#39;</span><span class="p">,</span> <span class="s1">&#39;TS&#39;</span><span class="p">,</span> <span class="s1">&#39;SI&#39;</span><span class="p">]:</span>
+            <span class="n">seclabel</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;&lt;h3&gt;&#39;</span><span class="o">+</span><span class="n">sec</span><span class="o">+</span><span class="s1">&#39;&lt;/h3&gt;&#39;</span><span class="p">,</span> <span class="n">panel</span><span class="p">)</span>
+            <span class="n">panel_lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">seclabel</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">sec</span> <span class="o">==</span> <span class="s1">&#39;LI&#39;</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">filt</span> <span class="ow">in</span> <span class="n">lips2filters</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="n">ps_label</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span>
+                        <span class="n">label</span><span class="p">,</span> <span class="n">panel</span><span class="p">,</span>
+                        <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span> <span class="o">|</span> <span class="n">Qt</span><span class="o">.</span><span class="n">AlignVCenter</span><span class="p">)</span>
+                    <span class="n">psnames</span> <span class="o">=</span> <span class="n">PSSearch</span><span class="o">.</span><span class="n">get_psnames</span><span class="p">(</span><span class="n">filters</span><span class="o">=</span><span class="n">filt</span><span class="p">)</span>
+                    <span class="n">ps_c2v</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+                    <span class="n">ilk_c2v</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+                    <span class="n">conn_chs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+                    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">psnames</span><span class="p">:</span>
+                        <span class="n">pvn</span> <span class="o">=</span> <span class="n">_PVName</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_prefix</span><span class="p">)</span>
+                        <span class="n">conn_chs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pvn</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;PwrState-Sts&#39;</span><span class="p">))</span>
+                        <span class="n">ps_c2v</span><span class="p">[</span><span class="n">pvn</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;PwrState-Sts&#39;</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">1</span>
+                        <span class="n">ilk_c2v</span><span class="p">[</span><span class="n">pvn</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;StatusIntlk-Mon&#39;</span><span class="p">)]</span> <span class="o">=</span> \
+                            <span class="p">{</span><span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="n">_PS_LI_INTLK</span><span class="p">,</span> <span class="s1">&#39;comp&#39;</span><span class="p">:</span> <span class="s1">&#39;lt&#39;</span><span class="p">}</span>
+
+                    <span class="n">f</span> <span class="o">=</span> <span class="s1">&#39;LI-.*:PS-&#39;</span><span class="o">+</span><span class="n">filt</span><span class="p">[</span><span class="s1">&#39;dev&#39;</span><span class="p">]</span>
+                    <span class="n">conn_led</span> <span class="o">=</span> <span class="n">MyLedMultiConnection</span><span class="p">(</span>
+                        <span class="n">filters</span><span class="o">=</span><span class="n">f</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">panel</span><span class="p">,</span> <span class="n">channels</span><span class="o">=</span><span class="n">conn_chs</span><span class="p">)</span>
+                    <span class="n">ps_led</span> <span class="o">=</span> <span class="n">MyLedMultiChannel</span><span class="p">(</span>
+                        <span class="n">filters</span><span class="o">=</span><span class="n">f</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">panel</span><span class="p">,</span> <span class="n">channels2values</span><span class="o">=</span><span class="n">ps_c2v</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="s1">&#39;Spect&#39;</span> <span class="ow">in</span> <span class="n">filt</span><span class="p">[</span><span class="s1">&#39;dev&#39;</span><span class="p">]:</span>
+                        <span class="n">intlk_led</span> <span class="o">=</span> <span class="n">LISpectIntlkLed</span><span class="p">(</span><span class="n">panel</span><span class="p">,</span> <span class="n">filters</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">intlk_led</span> <span class="o">=</span> <span class="n">MyLedMultiChannel</span><span class="p">(</span>
+                            <span class="n">filters</span><span class="o">=</span><span class="n">f</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">panel</span><span class="p">,</span>
+                            <span class="n">channels2values</span><span class="o">=</span><span class="n">ilk_c2v</span><span class="p">)</span>
+
+                    <span class="n">suf</span> <span class="o">=</span> <span class="n">sec</span><span class="o">+</span><span class="n">filt</span><span class="p">[</span><span class="s1">&#39;dev&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;.*&#39;</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;_led&#39;</span>
+                    <span class="n">conn_led</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;conn&#39;</span> <span class="o">+</span> <span class="n">suf</span><span class="p">)</span>
+                    <span class="n">ps_led</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;ps&#39;</span> <span class="o">+</span> <span class="n">suf</span><span class="p">)</span>
+                    <span class="n">intlk_led</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;intlk&#39;</span> <span class="o">+</span> <span class="n">suf</span><span class="p">)</span>
+
+                    <span class="n">panel_lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">ps_label</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+                    <span class="n">panel_lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">conn_led</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                    <span class="n">panel_lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">ps_led</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+                    <span class="n">panel_lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">intlk_led</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+                    <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">l2f</span> <span class="o">=</span> <span class="n">sips2filters</span> <span class="k">if</span> <span class="n">sec</span> <span class="o">==</span> <span class="s1">&#39;SI&#39;</span> <span class="k">else</span> <span class="n">asps2filters</span>
+                <span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">filt</span> <span class="ow">in</span> <span class="n">l2f</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="n">filt</span><span class="p">[</span><span class="s1">&#39;sec&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sec</span>
+                    <span class="n">psnames</span> <span class="o">=</span> <span class="n">PSSearch</span><span class="o">.</span><span class="n">get_psnames</span><span class="p">(</span><span class="n">filters</span><span class="o">=</span><span class="n">filt</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">psnames</span><span class="p">:</span>
+                        <span class="k">continue</span>
+                    <span class="n">psconn_chs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+                    <span class="n">ps_c2v</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+                    <span class="n">ilk_c2v</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+                    <span class="n">opm_c2v</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+                    <span class="n">df_c2v</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+                    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">psnames</span><span class="p">:</span>
+                        <span class="n">pvn</span> <span class="o">=</span> <span class="n">_PVName</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_prefix</span><span class="p">)</span>
+                        <span class="n">ps_c2v</span><span class="p">[</span><span class="n">pvn</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;PwrState-Sts&#39;</span><span class="p">)]</span> <span class="o">=</span> <span class="n">_on</span>
+                        <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">dis</span> <span class="o">==</span> <span class="s1">&#39;PS&#39;</span><span class="p">:</span>
+                            <span class="n">psconn_chs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                                <span class="n">pvn</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;Version-Cte&#39;</span><span class="p">))</span>
+                            <span class="n">ilk_c2v</span><span class="p">[</span><span class="n">pvn</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;IntlkSoft-Mon&#39;</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span>
+                            <span class="n">ilk_c2v</span><span class="p">[</span><span class="n">pvn</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;IntlkHard-Mon&#39;</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span>
+                            <span class="n">opm_pvn</span> <span class="o">=</span> <span class="n">pvn</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;OpMode-Sts&#39;</span><span class="p">)</span>
+                            <span class="k">if</span> <span class="n">sec</span> <span class="o">==</span> <span class="s1">&#39;BO&#39;</span><span class="p">:</span>
+                                <span class="n">opm_c2v</span><span class="p">[</span><span class="n">opm_pvn</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                                    <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">_slowref</span><span class="p">,</span> <span class="n">_rmpwfm</span><span class="p">],</span> <span class="s1">&#39;comp&#39;</span><span class="p">:</span> <span class="s1">&#39;in&#39;</span><span class="p">}</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="n">opm_c2v</span><span class="p">[</span><span class="n">opm_pvn</span><span class="p">]</span> <span class="o">=</span> <span class="n">_slowref</span>
+                            <span class="n">df_c2v</span><span class="p">[</span><span class="n">pvn</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;DiagStatus-Mon&#39;</span><span class="p">)]</span> <span class="o">=</span> \
+                                <span class="p">{</span><span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;bit&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">}</span>
+                        <span class="k">elif</span> <span class="n">name</span><span class="o">.</span><span class="n">dis</span> <span class="o">==</span> <span class="s1">&#39;PU&#39;</span><span class="p">:</span>
+                            <span class="n">psconn_chs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                                <span class="n">pvn</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;PwrState-Sts&#39;</span><span class="p">))</span>
+                            <span class="n">intlkcount</span> <span class="o">=</span> <span class="mi">7</span> <span class="k">if</span> <span class="s1">&#39;Sept&#39;</span> <span class="ow">in</span> <span class="n">name</span><span class="o">.</span><span class="n">dev</span> <span class="k">else</span> <span class="mi">8</span>
+                            <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">intlkcount</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+                                <span class="n">ppty</span> <span class="o">=</span> <span class="s1">&#39;Intlk&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;-Mon&#39;</span>
+                                <span class="n">pvn</span> <span class="o">=</span> <span class="n">pvn</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="n">ppty</span><span class="p">)</span>
+                                <span class="n">ilk_c2v</span><span class="p">[</span><span class="n">pvn</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+                    <span class="n">f</span> <span class="o">=</span> <span class="n">sec</span><span class="o">+</span><span class="s1">&#39;-&#39;</span><span class="o">+</span><span class="n">filt</span><span class="p">[</span><span class="s1">&#39;sub&#39;</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39;:&#39;</span><span class="o">+</span><span class="n">psnames</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">dis</span><span class="o">+</span><span class="s1">&#39;-&#39;</span><span class="o">+</span><span class="n">filt</span><span class="p">[</span><span class="s1">&#39;dev&#39;</span><span class="p">]</span>
+                    <span class="n">ps_label</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span>
+                        <span class="n">label</span><span class="p">,</span> <span class="n">panel</span><span class="p">,</span>
+                        <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span> <span class="o">|</span> <span class="n">Qt</span><span class="o">.</span><span class="n">AlignVCenter</span><span class="p">)</span>
+                    <span class="n">psconn_led</span> <span class="o">=</span> <span class="n">MyLedMultiConnection</span><span class="p">(</span>
+                        <span class="n">filters</span><span class="o">=</span><span class="n">f</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">panel</span><span class="p">,</span> <span class="n">channels</span><span class="o">=</span><span class="n">psconn_chs</span><span class="p">)</span>
+                    <span class="n">ps_led</span> <span class="o">=</span> <span class="n">MyLedMultiChannel</span><span class="p">(</span>
+                        <span class="n">filters</span><span class="o">=</span><span class="n">f</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">panel</span><span class="p">,</span> <span class="n">channels2values</span><span class="o">=</span><span class="n">ps_c2v</span><span class="p">)</span>
+                    <span class="n">intlk_led</span> <span class="o">=</span> <span class="n">MyLedMultiChannel</span><span class="p">(</span>
+                        <span class="n">filters</span><span class="o">=</span><span class="n">f</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">panel</span><span class="p">,</span> <span class="n">channels2values</span><span class="o">=</span><span class="n">ilk_c2v</span><span class="p">)</span>
+
+                    <span class="n">suf</span> <span class="o">=</span> <span class="n">sec</span><span class="o">+</span><span class="n">filt</span><span class="p">[</span><span class="s1">&#39;dev&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;.*&#39;</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;_led&#39;</span>
+                    <span class="n">psconn_led</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;psconn&#39;</span> <span class="o">+</span> <span class="n">suf</span><span class="p">)</span>
+                    <span class="n">ps_led</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;ps&#39;</span> <span class="o">+</span> <span class="n">suf</span><span class="p">)</span>
+                    <span class="n">intlk_led</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;intlk&#39;</span> <span class="o">+</span> <span class="n">suf</span><span class="p">)</span>
+
+                    <span class="n">panel_lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">ps_label</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+                    <span class="n">panel_lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">psconn_led</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                    <span class="n">panel_lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">ps_led</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+                    <span class="n">panel_lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">intlk_led</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+
+                    <span class="k">if</span> <span class="n">psnames</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">dis</span> <span class="o">==</span> <span class="s1">&#39;PS&#39;</span><span class="p">:</span>
+                        <span class="n">opm_led</span> <span class="o">=</span> <span class="n">MyLedMultiChannel</span><span class="p">(</span>
+                            <span class="n">filters</span><span class="o">=</span><span class="n">f</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">panel</span><span class="p">,</span>
+                            <span class="n">channels2values</span><span class="o">=</span><span class="n">opm_c2v</span><span class="p">)</span>
+                        <span class="n">opm_led</span><span class="o">.</span><span class="n">setOnColor</span><span class="p">(</span><span class="n">PyDMLed</span><span class="o">.</span><span class="n">LightGreen</span><span class="p">)</span>
+                        <span class="n">opm_led</span><span class="o">.</span><span class="n">setOffColor</span><span class="p">(</span><span class="n">PyDMLed</span><span class="o">.</span><span class="n">Yellow</span><span class="p">)</span>
+                        <span class="n">diff_led</span> <span class="o">=</span> <span class="n">MyLedMultiChannel</span><span class="p">(</span>
+                            <span class="n">filters</span><span class="o">=</span><span class="n">f</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">panel</span><span class="p">,</span>
+                            <span class="n">channels2values</span><span class="o">=</span><span class="n">df_c2v</span><span class="p">)</span>
+
+                        <span class="n">opm_led</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;opm&#39;</span> <span class="o">+</span> <span class="n">suf</span><span class="p">)</span>
+                        <span class="n">diff_led</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;diff&#39;</span> <span class="o">+</span> <span class="n">suf</span><span class="p">)</span>
+
+                        <span class="n">panel_lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">opm_led</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+                        <span class="n">panel_lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">diff_led</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+
+                    <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">panel_lay</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="n">QSpacerItem</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">QSzPlcy</span><span class="o">.</span><span class="n">Ignored</span><span class="p">,</span>
+                              <span class="n">QSzPlcy</span><span class="o">.</span><span class="n">MinimumExpanding</span><span class="p">),</span> <span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="c1"># Current State and Log Tables</span>
+        <span class="n">table_label2px</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;Date&#39;</span><span class="p">:</span> <span class="mi">110</span><span class="p">,</span>
+            <span class="s1">&#39;Time&#39;</span><span class="p">:</span> <span class="mi">85</span><span class="p">,</span>
+            <span class="s1">&#39;Type&#39;</span><span class="p">:</span> <span class="mi">70</span><span class="p">,</span>
+            <span class="s1">&#39;PS Name&#39;</span><span class="p">:</span> <span class="mi">145</span><span class="p">,</span>
+            <span class="s1">&#39;Property&#39;</span><span class="p">:</span> <span class="mi">85</span><span class="p">,</span>
+            <span class="s1">&#39;Value&#39;</span><span class="p">:</span> <span class="mi">120</span><span class="p">}</span>
+
+        <span class="n">channels</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">ps</span> <span class="ow">in</span> <span class="n">PSSearch</span><span class="o">.</span><span class="n">get_psnames</span><span class="p">(</span><span class="n">filters</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;dis&#39;</span><span class="p">:</span> <span class="s1">&#39;PS&#39;</span><span class="p">}):</span>
+            <span class="n">channels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_PVName</span><span class="p">(</span><span class="n">ps</span><span class="p">)</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+                <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_prefix</span><span class="p">,</span> <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;DiagCurrentDiff-Mon&#39;</span><span class="p">))</span>
+            <span class="n">channels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_PVName</span><span class="p">(</span><span class="n">ps</span><span class="p">)</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+                <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_prefix</span><span class="p">,</span> <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;OpMode-Sts&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_status</span> <span class="o">=</span> <span class="n">LogTable</span><span class="p">(</span><span class="n">cw</span><span class="p">,</span> <span class="n">channels</span><span class="p">,</span> <span class="n">table_label2px</span><span class="p">,</span> <span class="n">is_status</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_status</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;status_table&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_status</span><span class="o">.</span><span class="n">setVerticalScrollBarPolicy</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">ScrollBarAlwaysOn</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_status</span><span class="o">.</span><span class="n">updated</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_filter_table</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_log</span> <span class="o">=</span> <span class="n">LogTable</span><span class="p">(</span><span class="n">cw</span><span class="p">,</span> <span class="n">channels</span><span class="p">,</span> <span class="n">table_label2px</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;log_table&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">setVerticalScrollBarPolicy</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">ScrollBarAlwaysOn</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tables_stack</span> <span class="o">=</span> <span class="n">QStackedLayout</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tables_stack</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_status</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tables_stack</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rb_status</span> <span class="o">=</span> <span class="n">QRadioButton</span><span class="p">(</span><span class="s1">&#39;Status&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rb_status</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;rb_status&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rb_status</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_visible_table</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_status</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rb_status</span><span class="o">.</span><span class="n">toggled</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">_partial</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_toggle_table</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rb_log</span> <span class="o">=</span> <span class="n">QRadioButton</span><span class="p">(</span><span class="s1">&#39;Log&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rb_log</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;rb_log&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rb_log</span><span class="o">.</span><span class="n">toggled</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">_partial</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_toggle_table</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">width</span> <span class="ow">in</span> <span class="n">table_label2px</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">attr</span> <span class="o">=</span> <span class="s1">&#39;_search_&#39;</span><span class="o">+</span><span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">,</span> <span class="n">QLineEdit</span><span class="p">())</span>
+            <span class="n">le</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span>
+            <span class="n">le</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">le</span><span class="o">.</span><span class="n">setPlaceholderText</span><span class="p">(</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;...&#39;</span><span class="p">)</span>
+            <span class="n">le</span><span class="o">.</span><span class="n">editingFinished</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_filter_table</span><span class="p">)</span>
+            <span class="n">width</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">width</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;Value&#39;</span><span class="p">:</span>
+                <span class="n">le</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span>
+                    <span class="s1">&#39;#&#39;</span><span class="o">+</span><span class="n">name</span><span class="o">+</span><span class="s1">&#39;{min-width:&#39;</span><span class="o">+</span><span class="n">width</span><span class="o">+</span><span class="s1">&#39;px;}&#39;</span><span class="p">)</span>
+                <span class="n">le</span><span class="o">.</span><span class="n">setSizePolicy</span><span class="p">(</span><span class="n">QSzPlcy</span><span class="o">.</span><span class="n">Expanding</span><span class="p">,</span> <span class="n">QSzPlcy</span><span class="o">.</span><span class="n">Maximum</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">le</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span>
+                    <span class="s1">&#39;#&#39;</span><span class="o">+</span><span class="n">name</span><span class="o">+</span><span class="s1">&#39;{min-width:&#39;</span><span class="o">+</span><span class="n">width</span><span class="o">+</span><span class="s1">&#39;px; max-width:&#39;</span><span class="o">+</span><span class="n">width</span><span class="o">+</span><span class="s1">&#39;px;}&#39;</span><span class="p">)</span>
+                <span class="n">le</span><span class="o">.</span><span class="n">setSizePolicy</span><span class="p">(</span><span class="n">QSzPlcy</span><span class="o">.</span><span class="n">Maximum</span><span class="p">,</span> <span class="n">QSzPlcy</span><span class="o">.</span><span class="n">Maximum</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_scrollup_pb</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;↟&#39;</span><span class="p">,</span> <span class="n">cw</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_scrollup_pb</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;scrollup_pb&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_scrollup_pb</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_arrange_table</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_scrolldown_pb</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;↡&#39;</span><span class="p">,</span> <span class="n">cw</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_scrolldown_pb</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;scrolldown_pb&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_scrolldown_pb</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_arrange_table</span><span class="p">)</span>
+
+        <span class="n">tables_lay</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">()</span>
+        <span class="n">tables_lay</span><span class="o">.</span><span class="n">setVerticalSpacing</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">tables_lay</span><span class="o">.</span><span class="n">setHorizontalSpacing</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">tables_lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_search_date</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">tables_lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_search_time</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">tables_lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_search_type</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">tables_lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_search_psname</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">tables_lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_search_property</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="n">tables_lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_search_value</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+        <span class="n">tables_lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_scrollup_pb</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span><span class="p">)</span>
+        <span class="n">tables_lay</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tables_stack</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span>
+        <span class="n">tables_lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_rb_status</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignLeft</span><span class="p">)</span>
+        <span class="n">tables_lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_rb_log</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignLeft</span><span class="p">)</span>
+        <span class="n">tables_lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_scrolldown_pb</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span>
+                             <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span><span class="p">)</span>
+        <span class="n">tables</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">(</span><span class="n">cw</span><span class="p">)</span>
+        <span class="n">tables</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;tables&#39;</span><span class="p">)</span>
+        <span class="n">tables</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">tables_lay</span><span class="p">)</span>
+
+        <span class="c1"># Connect signals</span>
+        <span class="k">for</span> <span class="n">led</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">findChildren</span><span class="p">(</span><span class="n">QLed</span><span class="p">):</span>
+            <span class="n">led</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="n">PyDMLed</span><span class="o">.</span><span class="n">ShapeMap</span><span class="o">.</span><span class="n">Round</span>
+            <span class="n">led</span><span class="o">.</span><span class="n">filterlog</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_filter_table</span><span class="p">)</span>
+            <span class="n">led</span><span class="o">.</span><span class="n">warning</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">add_log_slot</span><span class="p">)</span>
+            <span class="n">led</span><span class="o">.</span><span class="n">warning</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_status</span><span class="o">.</span><span class="n">add_log_slot</span><span class="p">)</span>
+            <span class="n">led</span><span class="o">.</span><span class="n">normal</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_status</span><span class="o">.</span><span class="n">remove_log_slot</span><span class="p">)</span>
+
+        <span class="c1"># Layout</span>
+        <span class="n">window_title</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;&lt;h2&gt;Power Supplies Diagnostics&lt;/h2&gt;&#39;</span><span class="p">,</span> <span class="n">cw</span><span class="p">,</span>
+                              <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+        <span class="n">layout</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">()</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">setVerticalSpacing</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">setHorizontalSpacing</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">window_title</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">panel</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">tables</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">cw</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            #scrollup_pb, #scrolldown_pb{</span>
+<span class="s2">                max-height: 1em;</span>
+<span class="s2">                max-width: 0.7em;</span>
+<span class="s2">                color: #464646;</span>
+<span class="s2">            }</span>
+<span class="s2">            QLineEdit{</span>
+<span class="s2">                max-height: 1em;</span>
+<span class="s2">            }</span>
+<span class="s2">            #status_table, #log_table{</span>
+<span class="s2">                border: 1px solid #bebebe;</span>
+<span class="s2">            }</span>
+<span class="s2">            #tables{</span>
+<span class="s2">                min-width: 700px;</span>
+<span class="s2">            }</span>
+<span class="s2">            #rb_status, #rb_log{</span>
+<span class="s2">                min-width: 5em;</span>
+<span class="s2">                max-width: 5em;</span>
+<span class="s2">                max-height: 1em;</span>
+<span class="s2">            }&quot;&quot;&quot;</span><span class="p">)</span>
+        <span class="n">cw</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">layout</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setCentralWidget</span><span class="p">(</span><span class="n">cw</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_arrange_table</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sender</span><span class="p">()</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+        <span class="k">if</span> <span class="s1">&#39;↟&#39;</span> <span class="ow">in</span> <span class="n">text</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_visible_table</span><span class="o">.</span><span class="n">scrollToTop</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="s1">&#39;↡&#39;</span> <span class="ow">in</span> <span class="n">text</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_visible_table</span><span class="o">.</span><span class="n">scrollToBottom</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_filter_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="c1"># identify first user interaction</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sender</span><span class="p">(),</span> <span class="p">(</span><span class="n">QLineEdit</span><span class="p">,</span> <span class="n">QLed</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_initialized</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="c1"># ignore initializing</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_initialized</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="c1"># set led&#39;s filter</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sender</span><span class="p">(),</span> <span class="n">QLed</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_search_psname</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="c1"># get search filters</span>
+        <span class="n">pats</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="n">date_txt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_search_date</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+        <span class="n">time_txt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_search_time</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+        <span class="n">logtype_txt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_search_type</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+        <span class="n">psname_txt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_search_psname</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+        <span class="n">property_txt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_search_property</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+        <span class="n">value_txt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_search_value</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">date_txt</span><span class="p">:</span>
+                <span class="n">pats</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">_re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">date_txt</span><span class="p">,</span> <span class="n">_re</span><span class="o">.</span><span class="n">I</span><span class="p">),</span> <span class="mi">0</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">time_txt</span><span class="p">:</span>
+                <span class="n">pats</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">_re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">time_txt</span><span class="p">,</span> <span class="n">_re</span><span class="o">.</span><span class="n">I</span><span class="p">),</span> <span class="mi">1</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">logtype_txt</span><span class="p">:</span>
+                <span class="n">pats</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">_re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">logtype_txt</span><span class="p">,</span> <span class="n">_re</span><span class="o">.</span><span class="n">I</span><span class="p">),</span> <span class="mi">2</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">psname_txt</span><span class="p">:</span>
+                <span class="n">pats</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">_re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">psname_txt</span><span class="p">,</span> <span class="n">_re</span><span class="o">.</span><span class="n">I</span><span class="p">),</span> <span class="mi">3</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">property_txt</span><span class="p">:</span>
+                <span class="n">pats</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">_re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">property_txt</span><span class="p">,</span> <span class="n">_re</span><span class="o">.</span><span class="n">I</span><span class="p">),</span> <span class="mi">4</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">value_txt</span><span class="p">:</span>
+                <span class="n">pats</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">_re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">value_txt</span><span class="p">,</span> <span class="n">_re</span><span class="o">.</span><span class="n">I</span><span class="p">),</span> <span class="mi">5</span><span class="p">])</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="n">m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_visible_table</span><span class="o">.</span><span class="n">model</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">rowCount</span><span class="p">()):</span>
+            <span class="k">for</span> <span class="n">pat</span><span class="p">,</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">pats</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">pat</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">))):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_visible_table</span><span class="o">.</span><span class="n">setRowHidden</span><span class="p">(</span>
+                        <span class="n">row</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_visible_table</span><span class="o">.</span><span class="n">rootIndex</span><span class="p">(),</span> <span class="kc">True</span><span class="p">)</span>
+                    <span class="k">break</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_visible_table</span><span class="o">.</span><span class="n">setRowHidden</span><span class="p">(</span>
+                    <span class="n">row</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_visible_table</span><span class="o">.</span><span class="n">rootIndex</span><span class="p">(),</span> <span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_toggle_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">toggle</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">toggle</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tables_stack</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">updated</span><span class="o">.</span><span class="n">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_filter_table</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_status</span><span class="o">.</span><span class="n">updated</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_filter_table</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_visible_table</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_status</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_status</span><span class="o">.</span><span class="n">updated</span><span class="o">.</span><span class="n">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_filter_table</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="o">.</span><span class="n">updated</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_filter_table</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_visible_table</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_log</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_filter_table</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="LogTable">
+<a class="viewcode-back" href="../../../siriushla.as_ps_diag.html#siriushla.as_ps_diag.main.LogTable">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">LogTable</span><span class="p">(</span><span class="n">QTreeView</span><span class="p">,</span> <span class="n">PyDMWidget</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Log Table.&quot;&quot;&quot;</span>
+
+    <span class="n">updated</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">channels</span><span class="o">=</span><span class="nb">list</span><span class="p">(),</span> <span class="n">label2width</span><span class="o">=</span><span class="nb">dict</span><span class="p">(),</span>
+                 <span class="n">is_status</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="c1"># QTableView.__init__(self, parent)</span>
+        <span class="n">QTreeView</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+        <span class="n">PyDMWidget</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="c1"># setup table</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_is_status</span> <span class="o">=</span> <span class="n">is_status</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_date_fmt</span> <span class="o">=</span> <span class="s1">&#39; %Y/%m/</span><span class="si">%d</span><span class="s1"> &#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_time_fmt</span> <span class="o">=</span> <span class="s1">&#39; %H:%M:%S &#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">headerLabels</span> <span class="o">=</span> <span class="n">label2width</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="n">QStandardItemModel</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">setHorizontalHeaderLabels</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">headerLabels</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setModel</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setUniformRowHeights</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setHeader</span><span class="p">(</span><span class="n">QHeaderView</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">Horizontal</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">width</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">label2width</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">()</span><span class="o">.</span><span class="n">resizeSection</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">width</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">()</span><span class="o">.</span><span class="n">resizeSections</span><span class="p">(</span><span class="n">QHeaderView</span><span class="o">.</span><span class="n">Fixed</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">()</span><span class="o">.</span><span class="n">setStretchLastSection</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setSortingEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setEditTriggers</span><span class="p">(</span><span class="n">QAbstractItemView</span><span class="o">.</span><span class="n">NoEditTriggers</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setItemDelegateForColumn</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">LogItemDelegate</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setSelectionBehavior</span><span class="p">(</span><span class="n">QAbstractItemView</span><span class="o">.</span><span class="n">SelectItems</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setSelectionMode</span><span class="p">(</span><span class="n">QAbstractItemView</span><span class="o">.</span><span class="n">SingleSelection</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;gridline-color: #ffffff;&quot;</span><span class="p">)</span>
+
+        <span class="c1"># set channels</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">address2conn</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">address2channels</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">address</span> <span class="ow">in</span> <span class="n">channels</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">address2conn</span><span class="p">[</span><span class="n">address</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">channel</span> <span class="o">=</span> <span class="n">SiriusConnectionSignal</span><span class="p">(</span>
+                <span class="n">address</span><span class="o">=</span><span class="n">address</span><span class="p">,</span>
+                <span class="n">connection_slot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">connection_changed</span><span class="p">,</span>
+                <span class="n">value_slot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">value_changed</span><span class="p">,</span>
+                <span class="n">severity_slot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">alarm_severity_changed</span><span class="p">)</span>
+            <span class="n">channel</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">address2channels</span><span class="p">[</span><span class="n">address</span><span class="p">]</span> <span class="o">=</span> <span class="n">channel</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_channels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">channel</span><span class="p">)</span>
+
+<div class="viewcode-block" id="LogTable.connection_changed">
+<a class="viewcode-back" href="../../../siriushla.as_ps_diag.html#siriushla.as_ps_diag.main.LogTable.connection_changed">[docs]</a>
+    <span class="nd">@Slot</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">connection_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conn</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Reimplement connection_changed to handle all channels.&quot;&quot;&quot;</span>
+        <span class="n">address</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sender</span><span class="p">()</span><span class="o">.</span><span class="n">address</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">address2conn</span><span class="p">[</span><span class="n">address</span><span class="p">]</span> <span class="o">=</span> <span class="n">conn</span>
+        <span class="n">allconn</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">for</span> <span class="n">conn</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">address2conn</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">allconn</span> <span class="o">&amp;=</span> <span class="n">conn</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setState</span><span class="p">(</span><span class="n">allconn</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span> <span class="o">=</span> <span class="n">allconn</span></div>
+
+
+<div class="viewcode-block" id="LogTable.add_log_slot">
+<a class="viewcode-back" href="../../../siriushla.as_ps_diag.html#siriushla.as_ps_diag.main.LogTable.add_log_slot">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_log_slot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">updated</span><span class="p">):</span>
+        <span class="n">new_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_newitem_data</span><span class="p">(</span><span class="n">updated</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">new_value</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_log</span><span class="p">(</span><span class="n">new_value</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LogTable.add_log">
+<a class="viewcode-back" href="../../../siriushla.as_ps_diag.html#siriushla.as_ps_diag.main.LogTable.add_log">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_status</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">remove_log</span><span class="p">(</span><span class="n">new_value</span><span class="p">)</span>
+
+        <span class="n">datetime_now</span> <span class="o">=</span> <span class="n">_datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="n">item_data</span> <span class="o">=</span> <span class="p">[</span><span class="n">QStandardItem</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="k">for</span> <span class="n">text</span> <span class="ow">in</span> <span class="p">(</span>
+            <span class="n">datetime_now</span><span class="o">.</span><span class="n">date</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_date_fmt</span><span class="p">),</span>
+            <span class="n">datetime_now</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_time_fmt</span><span class="p">),</span>
+            <span class="n">new_value</span><span class="p">[</span><span class="s1">&#39;logtype&#39;</span><span class="p">],</span> <span class="n">new_value</span><span class="p">[</span><span class="s1">&#39;psname&#39;</span><span class="p">],</span>
+            <span class="n">new_value</span><span class="p">[</span><span class="s1">&#39;propty&#39;</span><span class="p">],</span> <span class="n">new_value</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">])]</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">item_data</span><span class="p">:</span>
+            <span class="n">item</span><span class="o">.</span><span class="n">setTextAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">insertRow</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">item_data</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">rowCount</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">10000</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">removeRow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">rowCount</span><span class="p">()</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">updated</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="LogTable.remove_log_slot">
+<a class="viewcode-back" href="../../../siriushla.as_ps_diag.html#siriushla.as_ps_diag.main.LogTable.remove_log_slot">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">remove_log_slot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">updated</span><span class="p">):</span>
+        <span class="n">new_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_newitem_data</span><span class="p">(</span><span class="n">updated</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">new_value</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">remove_log</span><span class="p">(</span><span class="n">new_value</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LogTable.remove_log">
+<a class="viewcode-back" href="../../../siriushla.as_ps_diag.html#siriushla.as_ps_diag.main.LogTable.remove_log">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">remove_log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_value</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">rowCount</span><span class="p">()):</span>
+            <span class="n">logtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">logtype</span> <span class="o">!=</span> <span class="n">new_value</span><span class="p">[</span><span class="s1">&#39;logtype&#39;</span><span class="p">]:</span>
+                <span class="k">continue</span>
+            <span class="n">psname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">psname</span> <span class="o">!=</span> <span class="n">new_value</span><span class="p">[</span><span class="s1">&#39;psname&#39;</span><span class="p">]:</span>
+                <span class="k">continue</span>
+            <span class="n">propty</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">propty</span> <span class="o">!=</span> <span class="n">new_value</span><span class="p">[</span><span class="s1">&#39;propty&#39;</span><span class="p">]:</span>
+                <span class="k">continue</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">removeRow</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">updated</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="LogTable.alarm_severity_changed">
+<a class="viewcode-back" href="../../../siriushla.as_ps_diag.html#siriushla.as_ps_diag.main.LogTable.alarm_severity_changed">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">alarm_severity_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_alarm_severity</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Reimplement alarm_severity_changed.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sender</span><span class="p">():</span>
+            <span class="n">pv_diff</span> <span class="o">=</span> <span class="n">_PVName</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sender</span><span class="p">()</span><span class="o">.</span><span class="n">address</span><span class="p">)</span>
+            <span class="n">val_diff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">address2channels</span><span class="p">[</span><span class="n">pv_diff</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+
+            <span class="n">pv_opmd</span> <span class="o">=</span> <span class="n">pv_diff</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+                <span class="n">propty_name</span><span class="o">=</span><span class="s1">&#39;OpMode&#39;</span><span class="p">,</span> <span class="n">propty_suffix</span><span class="o">=</span><span class="s1">&#39;Sts&#39;</span><span class="p">)</span>
+            <span class="n">val_opmd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">address2channels</span><span class="p">[</span><span class="n">pv_opmd</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+            <span class="n">is_slowref</span> <span class="o">=</span> <span class="n">val_opmd</span> <span class="o">==</span> <span class="n">_PSConst</span><span class="o">.</span><span class="n">States</span><span class="o">.</span><span class="n">SlowRef</span>
+
+            <span class="n">new_value</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;logtype&#39;</span><span class="p">:</span> <span class="s1">&#39;WARN&#39;</span><span class="p">,</span> <span class="s1">&#39;psname&#39;</span><span class="p">:</span> <span class="n">pv_diff</span><span class="o">.</span><span class="n">device_name</span><span class="p">,</span>
+                         <span class="s1">&#39;propty&#39;</span><span class="p">:</span> <span class="n">pv_diff</span><span class="o">.</span><span class="n">propty_name</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">val_diff</span><span class="p">)}</span>
+            <span class="k">if</span> <span class="n">new_alarm_severity</span> <span class="ow">in</span> <span class="p">[</span><span class="n">_Sev</span><span class="o">.</span><span class="n">MINOR_ALARM</span><span class="p">,</span> <span class="n">_Sev</span><span class="o">.</span><span class="n">MAJOR_ALARM</span><span class="p">]</span> <span class="ow">and</span> \
+                    <span class="n">is_slowref</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">add_log</span><span class="p">(</span><span class="n">new_value</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_status</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">remove_log</span><span class="p">(</span><span class="n">new_value</span><span class="p">)</span>
+
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">alarm_severity_changed</span><span class="p">(</span><span class="n">new_alarm_severity</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_newitem_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">updated</span><span class="p">):</span>
+        <span class="n">pv</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">updated</span>
+        <span class="n">pv</span> <span class="o">=</span> <span class="n">_PVName</span><span class="p">(</span><span class="n">pv</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">_np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="n">_log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;PSDiag window received a numpy array to &#39;</span> <span class="o">+</span>
+                         <span class="n">pv</span><span class="o">+</span><span class="s1">&#39; (&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;)!&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="s1">&#39;conn&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sender</span><span class="p">()</span><span class="o">.</span><span class="n">objectName</span><span class="p">():</span>
+            <span class="n">str_value</span> <span class="o">=</span> <span class="s1">&#39;disconnected&#39;</span>
+            <span class="n">logtype</span> <span class="o">=</span> <span class="s1">&#39;DISCONN&#39;</span>
+        <span class="k">elif</span> <span class="n">pv</span><span class="o">.</span><span class="n">propty_name</span> <span class="o">==</span> <span class="s1">&#39;PwrState&#39;</span><span class="p">:</span>
+            <span class="n">str_value</span> <span class="o">=</span> <span class="n">_PSEnums</span><span class="o">.</span><span class="n">PWRSTATE_STS</span><span class="p">[</span><span class="n">value</span><span class="p">]</span>
+            <span class="n">logtype</span> <span class="o">=</span> <span class="s1">&#39;ERR&#39;</span>
+        <span class="k">elif</span> <span class="n">pv</span><span class="o">.</span><span class="n">propty_name</span> <span class="o">==</span> <span class="s1">&#39;OpMode&#39;</span><span class="p">:</span>
+            <span class="n">str_value</span> <span class="o">=</span> <span class="n">_PSEnums</span><span class="o">.</span><span class="n">STATES</span><span class="p">[</span><span class="n">value</span><span class="p">]</span>
+            <span class="n">logtype</span> <span class="o">=</span> <span class="s1">&#39;WARN&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">str_value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="n">logtype</span> <span class="o">=</span> <span class="s1">&#39;ERR&#39;</span>
+
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;logtype&#39;</span><span class="p">:</span> <span class="n">logtype</span><span class="p">,</span>
+                <span class="s1">&#39;psname&#39;</span><span class="p">:</span> <span class="n">pv</span><span class="o">.</span><span class="n">device_name</span><span class="p">,</span>
+                <span class="s1">&#39;propty&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span> <span class="k">if</span> <span class="n">logtype</span> <span class="o">==</span> <span class="s1">&#39;DISCONN&#39;</span> <span class="k">else</span> <span class="n">pv</span><span class="o">.</span><span class="n">propty_name</span><span class="p">,</span>
+                <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="n">str_value</span><span class="p">}</span>
+
+<div class="viewcode-block" id="LogTable.mouseDoubleClickEvent">
+<a class="viewcode-back" href="../../../siriushla.as_ps_diag.html#siriushla.as_ps_diag.main.LogTable.mouseDoubleClickEvent">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">mouseDoubleClickEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ev</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Trigger open PS detail window.&quot;&quot;&quot;</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">selectedIndexes</span><span class="p">()</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">row</span><span class="p">(),</span> <span class="mi">3</span><span class="p">))</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">_PVName</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">text</span><span class="o">.</span><span class="n">dis</span> <span class="o">==</span> <span class="s1">&#39;PS&#39;</span><span class="p">:</span>
+            <span class="n">_run_newprocess</span><span class="p">([</span><span class="s1">&#39;sirius-hla-as-ps-detail.py&#39;</span><span class="p">,</span> <span class="n">text</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="n">text</span><span class="o">.</span><span class="n">dis</span> <span class="o">==</span> <span class="s1">&#39;PU&#39;</span><span class="p">:</span>
+            <span class="n">_run_newprocess</span><span class="p">([</span><span class="s1">&#39;sirius-hla-as-pu-detail.py&#39;</span><span class="p">,</span> <span class="n">text</span><span class="p">])</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">mouseDoubleClickEvent</span><span class="p">(</span><span class="n">ev</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="LogItemDelegate">
+<a class="viewcode-back" href="../../../siriushla.as_ps_diag.html#siriushla.as_ps_diag.main.LogItemDelegate">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">LogItemDelegate</span><span class="p">(</span><span class="n">QItemDelegate</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Log Item Delegate.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="LogItemDelegate.paint">
+<a class="viewcode-back" href="../../../siriushla.as_ps_diag.html#siriushla.as_ps_diag.main.LogItemDelegate.paint">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">paint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">painter</span><span class="p">,</span> <span class="n">option</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Paint.&quot;&quot;&quot;</span>
+        <span class="n">logtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="p">()</span><span class="o">.</span><span class="n">model</span><span class="p">()</span><span class="o">.</span><span class="n">data</span><span class="p">(</span>
+            <span class="n">index</span><span class="o">.</span><span class="n">sibling</span><span class="p">(</span><span class="n">index</span><span class="o">.</span><span class="n">row</span><span class="p">(),</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">logtype</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;WARN&#39;</span><span class="p">:</span>
+            <span class="n">painter</span><span class="o">.</span><span class="n">fillRect</span><span class="p">(</span><span class="n">option</span><span class="o">.</span><span class="n">rect</span><span class="p">,</span> <span class="n">PyDMLed</span><span class="o">.</span><span class="n">Yellow</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">logtype</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;ERR&#39;</span><span class="p">:</span>
+            <span class="n">painter</span><span class="o">.</span><span class="n">fillRect</span><span class="p">(</span><span class="n">option</span><span class="o">.</span><span class="n">rect</span><span class="p">,</span> <span class="n">PyDMLed</span><span class="o">.</span><span class="n">Red</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">logtype</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;DISCONN&#39;</span><span class="p">:</span>
+            <span class="n">painter</span><span class="o">.</span><span class="n">fillRect</span><span class="p">(</span><span class="n">option</span><span class="o">.</span><span class="n">rect</span><span class="p">,</span> <span class="n">PyDMLed</span><span class="o">.</span><span class="n">Gray</span><span class="p">)</span>
+
+        <span class="n">QItemDelegate</span><span class="o">.</span><span class="n">paint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">painter</span><span class="p">,</span> <span class="n">option</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="create_led_class">
+<a class="viewcode-back" href="../../../siriushla.as_ps_diag.html#siriushla.as_ps_diag.main.create_led_class">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_led_class</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;multichannel&#39;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="s1">&#39;multichannel&#39;</span><span class="p">:</span>
+        <span class="n">led_class</span> <span class="o">=</span> <span class="n">PyDMLedMultiChannel</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">led_class</span> <span class="o">=</span> <span class="n">PyDMLedMultiConnection</span>
+
+    <span class="k">class</span><span class="w"> </span><span class="nc">MyLed</span><span class="p">(</span><span class="n">led_class</span><span class="p">):</span>
+
+        <span class="n">filterlog</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filters</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">filter</span> <span class="o">=</span> <span class="n">filters</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">mouseDoubleClickEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ev</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">filterlog</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">MyLed</span></div>
+
+
+
+<span class="n">MyLedMultiChannel</span> <span class="o">=</span> <span class="n">create_led_class</span><span class="p">(</span><span class="s1">&#39;multichannel&#39;</span><span class="p">)</span>
+<span class="n">MyLedMultiConnection</span> <span class="o">=</span> <span class="n">create_led_class</span><span class="p">(</span><span class="s1">&#39;multiconn&#39;</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, lnls-sirius.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

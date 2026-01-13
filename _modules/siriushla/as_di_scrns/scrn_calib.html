@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>siriushla.as_di_scrns.scrn_calib &mdash; siriushla 1.14.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=01009efc"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            siriushla
+          </a>
+              <div class="version">
+                1.14.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">GUIs:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_configdb.html">siriushla.as_ap_configdb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_currinfo.html">siriushla.as_ap_currinfo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_energybutton.html">siriushla.as_ap_energybutton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_injcontrol.html">siriushla.as_ap_injcontrol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_injection.html">siriushla.as_ap_injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_launcher.html">siriushla.as_ap_launcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_machshift.html">siriushla.as_ap_machshift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_macreport.html">siriushla.as_ap_macreport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_magoffconv.html">siriushla.as_ap_magoffconv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_measure.html">siriushla.as_ap_measure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_monitor.html">siriushla.as_ap_monitor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_opticscorr.html">siriushla.as_ap_opticscorr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_posang.html">siriushla.as_ap_posang</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_rabpmmon.html">siriushla.as_ap_rabpmmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_radmon.html">siriushla.as_ap_radmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_sofb.html">siriushla.as_ap_sofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_bpms.html">siriushla.as_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_dccts.html">siriushla.as_di_dccts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_icts.html">siriushla.as_di_icts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_scrns.html">siriushla.as_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_tune.html">siriushla.as_di_tune</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_vlight.html">siriushla.as_di_vlight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_commands.html">siriushla.as_ps_commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_control.html">siriushla.as_ps_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_cycle.html">siriushla.as_ps_cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_diag.html">siriushla.as_ps_diag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_pu_control.html">siriushla.as_pu_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_rf_control.html">siriushla.as_rf_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ti_control.html">siriushla.as_ti_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.bl_ap_imgproc.html">siriushla.bl_ap_imgproc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.bo_ap_ramp.html">siriushla.bo_ap_ramp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.common.html">siriushla.common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_ap_mps.html">siriushla.li_ap_mps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_di_bpms.html">siriushla.li_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_di_scrns.html">siriushla.li_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_eg_control.html">siriushla.li_eg_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_pu_modltr.html">siriushla.li_pu_modltr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_rf_llrf.html">siriushla.li_rf_llrf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_va_control.html">siriushla.li_va_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_fofb.html">siriushla.si_ap_fofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_genstatus.html">siriushla.si_ap_genstatus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_idff.html">siriushla.si_ap_idff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_orbintlk.html">siriushla.si_ap_orbintlk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_bbb.html">siriushla.si_di_bbb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_equalize_bpms.html">siriushla.si_di_equalize_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_scraps.html">siriushla.si_di_scraps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_id_control.html">siriushla.si_id_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.tb_di_slits.html">siriushla.tb_di_slits</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Widgets:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.html">Sirius HLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.widgets.html">Widgets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Source Code:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lnls-sirius/hla">HLA Github</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">siriushla</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">siriushla.as_di_scrns.scrn_calib</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for siriushla.as_di_scrns.scrn_calib</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;SiriusScrnView widget.&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtWidgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">QFormLayout</span><span class="p">,</span> <span class="n">QSizePolicy</span> <span class="k">as</span> <span class="n">QSzPlcy</span><span class="p">,</span> <span class="n">QVBoxLayout</span><span class="p">,</span> \
+                           <span class="n">QSpacerItem</span><span class="p">,</span> <span class="n">QGroupBox</span><span class="p">,</span> <span class="n">QLabel</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtCore</span><span class="w"> </span><span class="kn">import</span> <span class="n">Qt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriuspy.namesys</span><span class="w"> </span><span class="kn">import</span> <span class="n">SiriusPVName</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriushla.widgets.windows</span><span class="w"> </span><span class="kn">import</span> <span class="n">SiriusDialog</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriushla.common.cam_basler</span><span class="w"> </span><span class="kn">import</span> \
+    <span class="n">create_propty_layout</span> <span class="k">as</span> <span class="n">_create_propty_layout</span>
+
+
+<div class="viewcode-block" id="ScrnCalibrationSettings">
+<a class="viewcode-back" href="../../../siriushla.as_di_scrns.html#siriushla.as_di_scrns.scrn_calib.ScrnCalibrationSettings">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ScrnCalibrationSettings</span><span class="p">(</span><span class="n">SiriusDialog</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Scrn Calibration Settings Dialog.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="n">prefix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">SiriusPVName</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scrn_prefix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s1">&#39;Screen Calibration&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scrn_prefix</span><span class="o">.</span><span class="n">sec</span><span class="o">+</span><span class="s1">&#39;App&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setupUi</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;&lt;h3&gt;&#39;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">scrn_prefix</span><span class="o">+</span><span class="s1">&#39; Calibration&lt;/h3&gt;&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span>
+                       <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+
+        <span class="n">positioning</span> <span class="o">=</span> <span class="n">QGroupBox</span><span class="p">(</span><span class="s1">&#39;Positioning&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">positioning</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            .QLabel{</span>
+<span class="s2">                min-width:16em;</span><span class="se">\n</span><span class="s2">max-width:16em;</span>
+<span class="s2">                qproperty-alignment: AlignRight;</span><span class="se">\n</span><span class="s2">}&quot;&quot;&quot;</span><span class="p">)</span>
+        <span class="n">positioning</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_setupPositionLayout</span><span class="p">())</span>
+
+        <span class="n">LED</span> <span class="o">=</span> <span class="n">QGroupBox</span><span class="p">(</span><span class="s1">&#39;LED Brightness&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">LED</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            .QLabel{</span>
+<span class="s2">                min-width:11em;</span><span class="se">\n</span><span class="s2">max-width:11em;</span>
+<span class="s2">                qproperty-alignment: AlignRight;</span><span class="se">\n</span><span class="s2">}&quot;&quot;&quot;</span><span class="p">)</span>
+        <span class="n">LED</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_setupLEDLayout</span><span class="p">())</span>
+
+        <span class="n">Img</span> <span class="o">=</span> <span class="n">QGroupBox</span><span class="p">(</span><span class="s1">&#39;Statistics Unit Conversion (Pixels→mm)&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">Img</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            .QLabel{</span>
+<span class="s2">                min-width:12em;</span><span class="se">\n</span><span class="s2">max-width:12em;</span>
+<span class="s2">                qproperty-alignment: AlignRight;</span><span class="se">\n</span><span class="s2">}&quot;&quot;&quot;</span><span class="p">)</span>
+        <span class="n">Img</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_setupImageCalibLayout</span><span class="p">())</span>
+
+        <span class="n">vlay</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">()</span>
+        <span class="n">vlay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+        <span class="n">vlay</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span>
+            <span class="n">QSpacerItem</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">QSzPlcy</span><span class="o">.</span><span class="n">Fixed</span><span class="p">,</span> <span class="n">QSzPlcy</span><span class="o">.</span><span class="n">MinimumExpanding</span><span class="p">))</span>
+        <span class="n">vlay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">positioning</span><span class="p">)</span>
+        <span class="n">vlay</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span>
+            <span class="n">QSpacerItem</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">QSzPlcy</span><span class="o">.</span><span class="n">Fixed</span><span class="p">,</span> <span class="n">QSzPlcy</span><span class="o">.</span><span class="n">MinimumExpanding</span><span class="p">))</span>
+        <span class="n">vlay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">LED</span><span class="p">)</span>
+        <span class="n">vlay</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span>
+            <span class="n">QSpacerItem</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">QSzPlcy</span><span class="o">.</span><span class="n">Fixed</span><span class="p">,</span> <span class="n">QSzPlcy</span><span class="o">.</span><span class="n">MinimumExpanding</span><span class="p">))</span>
+        <span class="n">vlay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">Img</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">vlay</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_setupPositionLayout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">label_AcceptedErr</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Error Tolerance [mm]: &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_AcceptedErr</span> <span class="o">=</span> <span class="n">_create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">scrn_prefix</span><span class="p">,</span> <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;AcceptedErr&#39;</span><span class="p">,</span>
+            <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;sprb&#39;</span><span class="p">)</span>
+
+        <span class="n">label_FluorScrnPos</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Fluorescent Screen Position [mm]: &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_FluorScrnPos</span> <span class="o">=</span> <span class="n">_create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">scrn_prefix</span><span class="p">,</span> <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;FluorScrnPos&#39;</span><span class="p">,</span>
+            <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;sprb&#39;</span><span class="p">,</span> <span class="n">cmd</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="s1">&#39;Get Position&#39;</span><span class="p">,</span>
+                                     <span class="s1">&#39;pressValue&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                                     <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;GetFluorScrnPos&#39;</span><span class="p">})</span>
+
+        <span class="n">label_CalScrnPos</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Calibration Screen Position [mm]: &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_CalScrnPos</span> <span class="o">=</span> <span class="n">_create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">scrn_prefix</span><span class="p">,</span> <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;CalScrnPos&#39;</span><span class="p">,</span>
+            <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;sprb&#39;</span><span class="p">,</span> <span class="n">cmd</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="s1">&#39;Get Position&#39;</span><span class="p">,</span>
+                                     <span class="s1">&#39;pressValue&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                                     <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;GetCalScrnPos&#39;</span><span class="p">})</span>
+
+        <span class="n">label_NoneScrnPos</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Receded Screen Position [mm]: &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_NoneScrnPos</span> <span class="o">=</span> <span class="n">_create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">scrn_prefix</span><span class="p">,</span> <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;NoneScrnPos&#39;</span><span class="p">,</span>
+            <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;sprb&#39;</span><span class="p">,</span> <span class="n">cmd</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="s1">&#39;Get Position&#39;</span><span class="p">,</span>
+                                     <span class="s1">&#39;pressValue&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                                     <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;GetNoneScrnPos&#39;</span><span class="p">})</span>
+
+        <span class="n">flay_pos</span> <span class="o">=</span> <span class="n">QFormLayout</span><span class="p">()</span>
+        <span class="n">flay_pos</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span>
+            <span class="n">QSpacerItem</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">QSzPlcy</span><span class="o">.</span><span class="n">Fixed</span><span class="p">,</span> <span class="n">QSzPlcy</span><span class="o">.</span><span class="n">MinimumExpanding</span><span class="p">))</span>
+        <span class="n">flay_pos</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_AcceptedErr</span><span class="p">,</span> <span class="n">hbox_AcceptedErr</span><span class="p">)</span>
+        <span class="n">flay_pos</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_FluorScrnPos</span><span class="p">,</span> <span class="n">hbox_FluorScrnPos</span><span class="p">)</span>
+        <span class="n">flay_pos</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_CalScrnPos</span><span class="p">,</span> <span class="n">hbox_CalScrnPos</span><span class="p">)</span>
+        <span class="n">flay_pos</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_NoneScrnPos</span><span class="p">,</span> <span class="n">hbox_NoneScrnPos</span><span class="p">)</span>
+        <span class="n">flay_pos</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span>
+            <span class="n">QSpacerItem</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">QSzPlcy</span><span class="o">.</span><span class="n">Fixed</span><span class="p">,</span> <span class="n">QSzPlcy</span><span class="o">.</span><span class="n">MinimumExpanding</span><span class="p">))</span>
+        <span class="n">flay_pos</span><span class="o">.</span><span class="n">setLabelAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span><span class="p">)</span>
+        <span class="n">flay_pos</span><span class="o">.</span><span class="n">setFormAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">flay_pos</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_setupLEDLayout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">label_LedPwrLvl</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Intensity [%]: &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_LedPwrLvl</span> <span class="o">=</span> <span class="n">_create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">scrn_prefix</span><span class="p">,</span> <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;LEDPwrLvl&#39;</span><span class="p">,</span>
+            <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;sprb&#39;</span><span class="p">)</span>
+
+        <span class="n">label_LedPwrScaleFactor</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Power Scale Factor: &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_LedPwrScaleFactor</span> <span class="o">=</span> <span class="n">_create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">scrn_prefix</span><span class="p">,</span> <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;LEDPwrScaleFactor&#39;</span><span class="p">,</span>
+            <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;sprb&#39;</span><span class="p">)</span>
+
+        <span class="n">label_LedThold</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Voltage Threshold [V]: &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_LedThold</span> <span class="o">=</span> <span class="n">_create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">scrn_prefix</span><span class="p">,</span> <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;LEDThold&#39;</span><span class="p">,</span>
+            <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;sprb&#39;</span><span class="p">)</span>
+
+        <span class="n">flay_LED</span> <span class="o">=</span> <span class="n">QFormLayout</span><span class="p">()</span>
+        <span class="n">flay_LED</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span>
+            <span class="n">QSpacerItem</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">QSzPlcy</span><span class="o">.</span><span class="n">Fixed</span><span class="p">,</span> <span class="n">QSzPlcy</span><span class="o">.</span><span class="n">MinimumExpanding</span><span class="p">))</span>
+        <span class="n">flay_LED</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_LedPwrLvl</span><span class="p">,</span> <span class="n">hbox_LedPwrLvl</span><span class="p">)</span>
+        <span class="n">flay_LED</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_LedPwrScaleFactor</span><span class="p">,</span> <span class="n">hbox_LedPwrScaleFactor</span><span class="p">)</span>
+        <span class="n">flay_LED</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_LedThold</span><span class="p">,</span> <span class="n">hbox_LedThold</span><span class="p">)</span>
+        <span class="n">flay_LED</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span>
+            <span class="n">QSpacerItem</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">QSzPlcy</span><span class="o">.</span><span class="n">Fixed</span><span class="p">,</span> <span class="n">QSzPlcy</span><span class="o">.</span><span class="n">MinimumExpanding</span><span class="p">))</span>
+        <span class="n">flay_LED</span><span class="o">.</span><span class="n">setLabelAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span><span class="p">)</span>
+        <span class="n">flay_LED</span><span class="o">.</span><span class="n">setFormAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">flay_LED</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_setupImageCalibLayout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cam_prefix</span> <span class="o">=</span> <span class="n">SiriusPVName</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scrn_prefix</span><span class="p">)</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">dev</span><span class="o">=</span><span class="s1">&#39;ScrnCam&#39;</span><span class="p">)</span>
+
+        <span class="n">label_ImgScaleFactorX</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Scale Factor X: &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_ImgScaleFactorX</span> <span class="o">=</span> <span class="n">_create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="n">cam_prefix</span><span class="p">,</span> <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;ScaleFactorX&#39;</span><span class="p">,</span>
+            <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;sprb&#39;</span><span class="p">)</span>
+
+        <span class="n">label_ImgScaleFactorY</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Scale Factor Y: &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_ImgScaleFactorY</span> <span class="o">=</span> <span class="n">_create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="n">cam_prefix</span><span class="p">,</span> <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;ScaleFactorY&#39;</span><span class="p">,</span>
+            <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;sprb&#39;</span><span class="p">)</span>
+
+        <span class="n">label_ImgCenterOffsetX</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Center Offset X [pixels]: &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_ImgCenterOffsetX</span> <span class="o">=</span> <span class="n">_create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="n">cam_prefix</span><span class="p">,</span> <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;CenterOffsetX&#39;</span><span class="p">,</span>
+            <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;sprb&#39;</span><span class="p">)</span>
+
+        <span class="n">label_ImgCenterOffsetY</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Center Offset Y [pixels]: &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_ImgCenterOffsetY</span> <span class="o">=</span> <span class="n">_create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="n">cam_prefix</span><span class="p">,</span> <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;CenterOffsetY&#39;</span><span class="p">,</span>
+            <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;sprb&#39;</span><span class="p">)</span>
+
+        <span class="n">label_ImgThetaOffset</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Theta Offset [pixels]: &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">hbox_ImgThetaOffset</span> <span class="o">=</span> <span class="n">_create_propty_layout</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="n">cam_prefix</span><span class="p">,</span> <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;ThetaOffset&#39;</span><span class="p">,</span>
+            <span class="n">propty_type</span><span class="o">=</span><span class="s1">&#39;sprb&#39;</span><span class="p">)</span>
+
+        <span class="n">flay_Img</span> <span class="o">=</span> <span class="n">QFormLayout</span><span class="p">()</span>
+        <span class="n">flay_Img</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span>
+            <span class="n">QSpacerItem</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">QSzPlcy</span><span class="o">.</span><span class="n">Fixed</span><span class="p">,</span> <span class="n">QSzPlcy</span><span class="o">.</span><span class="n">MinimumExpanding</span><span class="p">))</span>
+        <span class="n">flay_Img</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_ImgScaleFactorX</span><span class="p">,</span> <span class="n">hbox_ImgScaleFactorX</span><span class="p">)</span>
+        <span class="n">flay_Img</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_ImgScaleFactorY</span><span class="p">,</span> <span class="n">hbox_ImgScaleFactorY</span><span class="p">)</span>
+        <span class="n">flay_Img</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_ImgCenterOffsetX</span><span class="p">,</span> <span class="n">hbox_ImgCenterOffsetX</span><span class="p">)</span>
+        <span class="n">flay_Img</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_ImgCenterOffsetY</span><span class="p">,</span> <span class="n">hbox_ImgCenterOffsetY</span><span class="p">)</span>
+        <span class="n">flay_Img</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">label_ImgThetaOffset</span><span class="p">,</span> <span class="n">hbox_ImgThetaOffset</span><span class="p">)</span>
+        <span class="n">flay_Img</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span>
+            <span class="n">QSpacerItem</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">QSzPlcy</span><span class="o">.</span><span class="n">Fixed</span><span class="p">,</span> <span class="n">QSzPlcy</span><span class="o">.</span><span class="n">MinimumExpanding</span><span class="p">))</span>
+        <span class="n">flay_Img</span><span class="o">.</span><span class="n">setLabelAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span><span class="p">)</span>
+        <span class="n">flay_Img</span><span class="o">.</span><span class="n">setFormAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">flay_Img</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, lnls-sirius.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

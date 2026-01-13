@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>siriushla.as_ps_diag &mdash; siriushla 1.14.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=01009efc"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="siriushla.as_pu_control" href="siriushla.as_pu_control.html" />
+    <link rel="prev" title="siriushla.as_ps_cycle" href="siriushla.as_ps_cycle.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            siriushla
+          </a>
+              <div class="version">
+                1.14.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">GUIs:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_configdb.html">siriushla.as_ap_configdb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_currinfo.html">siriushla.as_ap_currinfo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_energybutton.html">siriushla.as_ap_energybutton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_injcontrol.html">siriushla.as_ap_injcontrol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_injection.html">siriushla.as_ap_injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_launcher.html">siriushla.as_ap_launcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_machshift.html">siriushla.as_ap_machshift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_macreport.html">siriushla.as_ap_macreport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_magoffconv.html">siriushla.as_ap_magoffconv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_measure.html">siriushla.as_ap_measure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_monitor.html">siriushla.as_ap_monitor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_opticscorr.html">siriushla.as_ap_opticscorr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_posang.html">siriushla.as_ap_posang</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_rabpmmon.html">siriushla.as_ap_rabpmmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_radmon.html">siriushla.as_ap_radmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_sofb.html">siriushla.as_ap_sofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_bpms.html">siriushla.as_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_dccts.html">siriushla.as_di_dccts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_icts.html">siriushla.as_di_icts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_scrns.html">siriushla.as_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_tune.html">siriushla.as_di_tune</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_vlight.html">siriushla.as_di_vlight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_commands.html">siriushla.as_ps_commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_control.html">siriushla.as_ps_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_cycle.html">siriushla.as_ps_cycle</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">siriushla.as_ps_diag</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.as_ps_diag.main">siriushla.as_ps_diag.main module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ps_diag.main.LogItemDelegate"><code class="docutils literal notranslate"><span class="pre">LogItemDelegate</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_diag.main.LogItemDelegate.paint"><code class="docutils literal notranslate"><span class="pre">LogItemDelegate.paint()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ps_diag.main.LogTable"><code class="docutils literal notranslate"><span class="pre">LogTable</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_diag.main.LogTable.RULE_PROPERTIES"><code class="docutils literal notranslate"><span class="pre">LogTable.RULE_PROPERTIES</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_diag.main.LogTable.add_log"><code class="docutils literal notranslate"><span class="pre">LogTable.add_log()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_diag.main.LogTable.add_log_slot"><code class="docutils literal notranslate"><span class="pre">LogTable.add_log_slot()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_diag.main.LogTable.alarm_severity_changed"><code class="docutils literal notranslate"><span class="pre">LogTable.alarm_severity_changed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_diag.main.LogTable.connection_changed"><code class="docutils literal notranslate"><span class="pre">LogTable.connection_changed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_diag.main.LogTable.mouseDoubleClickEvent"><code class="docutils literal notranslate"><span class="pre">LogTable.mouseDoubleClickEvent()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_diag.main.LogTable.remove_log"><code class="docutils literal notranslate"><span class="pre">LogTable.remove_log()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_diag.main.LogTable.remove_log_slot"><code class="docutils literal notranslate"><span class="pre">LogTable.remove_log_slot()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_diag.main.LogTable.updated"><code class="docutils literal notranslate"><span class="pre">LogTable.updated</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ps_diag.main.MyLedMultiChannel"><code class="docutils literal notranslate"><span class="pre">MyLedMultiChannel</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ps_diag.main.MyLedMultiConnection"><code class="docutils literal notranslate"><span class="pre">MyLedMultiConnection</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ps_diag.main.PSDiag"><code class="docutils literal notranslate"><span class="pre">PSDiag</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ps_diag.main.create_led_class"><code class="docutils literal notranslate"><span class="pre">create_led_class()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.as_ps_diag.monitor">siriushla.as_ps_diag.monitor module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ps_diag.monitor.MyLed"><code class="docutils literal notranslate"><span class="pre">MyLed</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_diag.monitor.MyLed.RULE_PROPERTIES"><code class="docutils literal notranslate"><span class="pre">MyLed.RULE_PROPERTIES</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_diag.monitor.MyLed.default_colorlist"><code class="docutils literal notranslate"><span class="pre">MyLed.default_colorlist</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_diag.monitor.MyLed.mouseDoubleClickEvent"><code class="docutils literal notranslate"><span class="pre">MyLed.mouseDoubleClickEvent()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_diag.monitor.MyLed.mousePressEvent"><code class="docutils literal notranslate"><span class="pre">MyLed.mousePressEvent()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_diag.monitor.MyLed.value_changed"><code class="docutils literal notranslate"><span class="pre">MyLed.value_changed()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ps_diag.monitor.PSMonitor"><code class="docutils literal notranslate"><span class="pre">PSMonitor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.as_ps_diag.ps_graph_mon">siriushla.as_ps_diag.ps_graph_mon module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraph"><code class="docutils literal notranslate"><span class="pre">PSGraph</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraph.mouseDoubleClickEvent"><code class="docutils literal notranslate"><span class="pre">PSGraph.mouseDoubleClickEvent()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraph.mouseMoveEvent"><code class="docutils literal notranslate"><span class="pre">PSGraph.mouseMoveEvent()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraph.psnames"><code class="docutils literal notranslate"><span class="pre">PSGraph.psnames</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraph.sector"><code class="docutils literal notranslate"><span class="pre">PSGraph.sector</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraph.symbols"><code class="docutils literal notranslate"><span class="pre">PSGraph.symbols</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraph.tooltips"><code class="docutils literal notranslate"><span class="pre">PSGraph.tooltips</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraph.x_data"><code class="docutils literal notranslate"><span class="pre">PSGraph.x_data</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraph.y_data"><code class="docutils literal notranslate"><span class="pre">PSGraph.y_data</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraphDevicesSelWidget"><code class="docutils literal notranslate"><span class="pre">PSGraphDevicesSelWidget</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraphDevicesSelWidget.matype_changed"><code class="docutils literal notranslate"><span class="pre">PSGraphDevicesSelWidget.matype_changed</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraphDevicesSelWidget.psnames_changed"><code class="docutils literal notranslate"><span class="pre">PSGraphDevicesSelWidget.psnames_changed</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraphMonWidget"><code class="docutils literal notranslate"><span class="pre">PSGraphMonWidget</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraphMonWidget.contextMenuEvent"><code class="docutils literal notranslate"><span class="pre">PSGraphMonWidget.contextMenuEvent()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraphMonWidget.propLineChanged"><code class="docutils literal notranslate"><span class="pre">PSGraphMonWidget.propLineChanged</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraphMonWidget.propSymbChanged"><code class="docutils literal notranslate"><span class="pre">PSGraphMonWidget.propSymbChanged</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraphMonWidget.psnamesChanged"><code class="docutils literal notranslate"><span class="pre">PSGraphMonWidget.psnamesChanged</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraphMonWidget.update_property_line"><code class="docutils literal notranslate"><span class="pre">PSGraphMonWidget.update_property_line()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraphMonWidget.update_property_symb"><code class="docutils literal notranslate"><span class="pre">PSGraphMonWidget.update_property_symb()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraphMonWidget.update_psnames"><code class="docutils literal notranslate"><span class="pre">PSGraphMonWidget.update_psnames()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraphMonWindow"><code class="docutils literal notranslate"><span class="pre">PSGraphMonWindow</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraphMonWindow.contextMenuEvent"><code class="docutils literal notranslate"><span class="pre">PSGraphMonWindow.contextMenuEvent()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraphMonWindow.show_connections"><code class="docutils literal notranslate"><span class="pre">PSGraphMonWindow.show_connections()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraphProptySelWidget"><code class="docutils literal notranslate"><span class="pre">PSGraphProptySelWidget</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraphProptySelWidget.PROP_LINE_DEFAULT"><code class="docutils literal notranslate"><span class="pre">PSGraphProptySelWidget.PROP_LINE_DEFAULT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraphProptySelWidget.PROP_LINE_FASTCORR"><code class="docutils literal notranslate"><span class="pre">PSGraphProptySelWidget.PROP_LINE_FASTCORR</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraphProptySelWidget.PROP_SYMB_DEFAULT"><code class="docutils literal notranslate"><span class="pre">PSGraphProptySelWidget.PROP_SYMB_DEFAULT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraphProptySelWidget.PROP_SYMB_FASTCORR"><code class="docutils literal notranslate"><span class="pre">PSGraphProptySelWidget.PROP_SYMB_FASTCORR</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraphProptySelWidget.change_matype"><code class="docutils literal notranslate"><span class="pre">PSGraphProptySelWidget.change_matype()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraphProptySelWidget.propty_line_changed"><code class="docutils literal notranslate"><span class="pre">PSGraphProptySelWidget.propty_line_changed</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraphProptySelWidget.propty_symb_changed"><code class="docutils literal notranslate"><span class="pre">PSGraphProptySelWidget.propty_symb_changed</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.as_ps_diag.util">siriushla.as_ps_diag.util module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ps_diag.util.get_col2dev_count"><code class="docutils literal notranslate"><span class="pre">get_col2dev_count()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ps_diag.util.get_dev2sub_labels"><code class="docutils literal notranslate"><span class="pre">get_dev2sub_labels()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ps_diag.util.get_label2devices"><code class="docutils literal notranslate"><span class="pre">get_label2devices()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ps_diag.util.get_sec2dev_laypos"><code class="docutils literal notranslate"><span class="pre">get_sec2dev_laypos()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.as_ps_diag">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_pu_control.html">siriushla.as_pu_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_rf_control.html">siriushla.as_rf_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ti_control.html">siriushla.as_ti_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.bl_ap_imgproc.html">siriushla.bl_ap_imgproc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.bo_ap_ramp.html">siriushla.bo_ap_ramp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.common.html">siriushla.common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_ap_mps.html">siriushla.li_ap_mps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_di_bpms.html">siriushla.li_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_di_scrns.html">siriushla.li_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_eg_control.html">siriushla.li_eg_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_pu_modltr.html">siriushla.li_pu_modltr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_rf_llrf.html">siriushla.li_rf_llrf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_va_control.html">siriushla.li_va_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_fofb.html">siriushla.si_ap_fofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_genstatus.html">siriushla.si_ap_genstatus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_idff.html">siriushla.si_ap_idff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_orbintlk.html">siriushla.si_ap_orbintlk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_bbb.html">siriushla.si_di_bbb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_equalize_bpms.html">siriushla.si_di_equalize_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_scraps.html">siriushla.si_di_scraps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_id_control.html">siriushla.si_id_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.tb_di_slits.html">siriushla.tb_di_slits</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Widgets:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.html">Sirius HLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.widgets.html">Widgets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Source Code:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lnls-sirius/hla">HLA Github</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">siriushla</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">siriushla.as_ps_diag</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/lnls-sirius/hla/blob/master/pyqt-apps/docs/source/siriushla.as_ps_diag.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="siriushla-as-ps-diag">
+<h1>siriushla.as_ps_diag<a class="headerlink" href="#siriushla-as-ps-diag" title="Link to this heading"></a></h1>
+<section id="code-documentation">
+<h2>Code Documentation<a class="headerlink" href="#code-documentation" title="Link to this heading"></a></h2>
+</section>
+<section id="module-siriushla.as_ps_diag.main">
+<span id="siriushla-as-ps-diag-main-module"></span><h2>siriushla.as_ps_diag.main module<a class="headerlink" href="#module-siriushla.as_ps_diag.main" title="Link to this heading"></a></h2>
+<p>Interface to handle power supply diagnostic.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.main.LogItemDelegate">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_diag.main.</span></span><span class="sig-name descname"><span class="pre">LogItemDelegate</span></span><a class="reference internal" href="_modules/siriushla/as_ps_diag/main.html#LogItemDelegate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_diag.main.LogItemDelegate" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QItemDelegate</span></code></p>
+<p>Log Item Delegate.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.main.LogItemDelegate.paint">
+<span class="sig-name descname"><span class="pre">paint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">painter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">option</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_diag/main.html#LogItemDelegate.paint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_diag.main.LogItemDelegate.paint" title="Link to this definition"></a></dt>
+<dd><p>Paint.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.main.LogTable">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_diag.main.</span></span><span class="sig-name descname"><span class="pre">LogTable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label2width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_status</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_diag/main.html#LogTable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_diag.main.LogTable" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QTreeView</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">PyDMWidget</span></code></p>
+<p>Log Table.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.main.LogTable.RULE_PROPERTIES">
+<span class="sig-name descname"><span class="pre">RULE_PROPERTIES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Enable':</span> <span class="pre">['setEnabled',</span> <span class="pre">&lt;class</span> <span class="pre">'bool'&gt;],</span> <span class="pre">'Opacity':</span> <span class="pre">['set_opacity',</span> <span class="pre">&lt;class</span> <span class="pre">'float'&gt;],</span> <span class="pre">'Position</span> <span class="pre">-</span> <span class="pre">X':</span> <span class="pre">['setX',</span> <span class="pre">&lt;class</span> <span class="pre">'int'&gt;],</span> <span class="pre">'Position</span> <span class="pre">-</span> <span class="pre">Y':</span> <span class="pre">['setY',</span> <span class="pre">&lt;class</span> <span class="pre">'int'&gt;],</span> <span class="pre">'Visible':</span> <span class="pre">['setVisible',</span> <span class="pre">&lt;class</span> <span class="pre">'bool'&gt;]}</span></em><a class="headerlink" href="#siriushla.as_ps_diag.main.LogTable.RULE_PROPERTIES" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.main.LogTable.add_log">
+<span class="sig-name descname"><span class="pre">add_log</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_diag/main.html#LogTable.add_log"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_diag.main.LogTable.add_log" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.main.LogTable.add_log_slot">
+<span class="sig-name descname"><span class="pre">add_log_slot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">updated</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_diag/main.html#LogTable.add_log_slot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_diag.main.LogTable.add_log_slot" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.main.LogTable.alarm_severity_changed">
+<span class="sig-name descname"><span class="pre">alarm_severity_changed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_alarm_severity</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_diag/main.html#LogTable.alarm_severity_changed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_diag.main.LogTable.alarm_severity_changed" title="Link to this definition"></a></dt>
+<dd><p>Reimplement alarm_severity_changed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.main.LogTable.connection_changed">
+<span class="sig-name descname"><span class="pre">connection_changed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_diag/main.html#LogTable.connection_changed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_diag.main.LogTable.connection_changed" title="Link to this definition"></a></dt>
+<dd><p>Reimplement connection_changed to handle all channels.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.main.LogTable.mouseDoubleClickEvent">
+<span class="sig-name descname"><span class="pre">mouseDoubleClickEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ev</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_diag/main.html#LogTable.mouseDoubleClickEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_diag.main.LogTable.mouseDoubleClickEvent" title="Link to this definition"></a></dt>
+<dd><p>Trigger open PS detail window.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.main.LogTable.remove_log">
+<span class="sig-name descname"><span class="pre">remove_log</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_diag/main.html#LogTable.remove_log"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_diag.main.LogTable.remove_log" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.main.LogTable.remove_log_slot">
+<span class="sig-name descname"><span class="pre">remove_log_slot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">updated</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_diag/main.html#LogTable.remove_log_slot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_diag.main.LogTable.remove_log_slot" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.main.LogTable.updated">
+<span class="sig-name descname"><span class="pre">updated</span></span><a class="headerlink" href="#siriushla.as_ps_diag.main.LogTable.updated" title="Link to this definition"></a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id1"><span class="problematic" id="id2">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.main.MyLedMultiChannel">
+<span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_diag.main.</span></span><span class="sig-name descname"><span class="pre">MyLedMultiChannel</span></span><a class="headerlink" href="#siriushla.as_ps_diag.main.MyLedMultiChannel" title="Link to this definition"></a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">MyLed</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.main.MyLedMultiConnection">
+<span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_diag.main.</span></span><span class="sig-name descname"><span class="pre">MyLedMultiConnection</span></span><a class="headerlink" href="#siriushla.as_ps_diag.main.MyLedMultiConnection" title="Link to this definition"></a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">MyLed</span></code></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.main.PSDiag">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_diag.main.</span></span><span class="sig-name descname"><span class="pre">PSDiag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">siriuspy.envars.VACA_PREFIX</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_diag/main.html#PSDiag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_diag.main.PSDiag" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_SiriusWindow</span></code></p>
+<p>Power Supply Diagnostic.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.main.create_led_class">
+<span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_diag.main.</span></span><span class="sig-name descname"><span class="pre">create_led_class</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'multichannel'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_diag/main.html#create_led_class"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_diag.main.create_led_class" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-siriushla.as_ps_diag.monitor">
+<span id="siriushla-as-ps-diag-monitor-module"></span><h2>siriushla.as_ps_diag.monitor module<a class="headerlink" href="#module-siriushla.as_ps_diag.monitor" title="Link to this heading"></a></h2>
+<p>Interface to handle general status.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.monitor.MyLed">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_diag.monitor.</span></span><span class="sig-name descname"><span class="pre">MyLed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_tooltip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_diag/monitor.html#MyLed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_diag.monitor.MyLed" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="siriushla.widgets.html#siriushla.widgets.led.PyDMLed" title="siriushla.widgets.led.PyDMLed"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyDMLed</span></code></a></p>
+<p>Monitor Led.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.monitor.MyLed.RULE_PROPERTIES">
+<span class="sig-name descname"><span class="pre">RULE_PROPERTIES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Enable':</span> <span class="pre">['setEnabled',</span> <span class="pre">&lt;class</span> <span class="pre">'bool'&gt;],</span> <span class="pre">'Opacity':</span> <span class="pre">['set_opacity',</span> <span class="pre">&lt;class</span> <span class="pre">'float'&gt;],</span> <span class="pre">'Position</span> <span class="pre">-</span> <span class="pre">X':</span> <span class="pre">['setX',</span> <span class="pre">&lt;class</span> <span class="pre">'int'&gt;],</span> <span class="pre">'Position</span> <span class="pre">-</span> <span class="pre">Y':</span> <span class="pre">['setY',</span> <span class="pre">&lt;class</span> <span class="pre">'int'&gt;],</span> <span class="pre">'Visible':</span> <span class="pre">['setVisible',</span> <span class="pre">&lt;class</span> <span class="pre">'bool'&gt;]}</span></em><a class="headerlink" href="#siriushla.as_ps_diag.monitor.MyLed.RULE_PROPERTIES" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.monitor.MyLed.default_colorlist">
+<span class="sig-name descname"><span class="pre">default_colorlist</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[&lt;PyQt5.QtGui.QColor</span> <span class="pre">object&gt;,</span> <span class="pre">&lt;PyQt5.QtGui.QColor</span> <span class="pre">object&gt;,</span> <span class="pre">&lt;PyQt5.QtGui.QColor</span> <span class="pre">object&gt;]</span></em><a class="headerlink" href="#siriushla.as_ps_diag.monitor.MyLed.default_colorlist" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.monitor.MyLed.mouseDoubleClickEvent">
+<span class="sig-name descname"><span class="pre">mouseDoubleClickEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_diag/monitor.html#MyLed.mouseDoubleClickEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_diag.monitor.MyLed.mouseDoubleClickEvent" title="Link to this definition"></a></dt>
+<dd><p>Reimplement mouseDoubleClickEvent.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.monitor.MyLed.mousePressEvent">
+<span class="sig-name descname"><span class="pre">mousePressEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_diag/monitor.html#MyLed.mousePressEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_diag.monitor.MyLed.mousePressEvent" title="Link to this definition"></a></dt>
+<dd><p>Reimplement mousePressEvent.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.monitor.MyLed.value_changed">
+<span class="sig-name descname"><span class="pre">value_changed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_val</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_diag/monitor.html#MyLed.value_changed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_diag.monitor.MyLed.value_changed" title="Link to this definition"></a></dt>
+<dd><p>Receive new value and set led color accordingly.</p>
+<p>For int or float data type the standard led behaviour is to be red when
+the value is 0, and green otherwise.</p>
+<p>If a <code class="xref py py-attr docutils literal notranslate"><span class="pre">bit</span></code> is set the value received will be treated as an int
+and the bit value is extracted using a mask. The led represents the
+value of the chosen bit.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.monitor.PSMonitor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_diag.monitor.</span></span><span class="sig-name descname"><span class="pre">PSMonitor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">siriuspy.envars.VACA_PREFIX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">get_label2devices_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">get_dev2sublabels_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">get_col2devcount_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">get_sec2devlaypos_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_diag/monitor.html#PSMonitor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_diag.monitor.PSMonitor" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QWidget</span></code></p>
+<p>PS Monitor.</p>
+</dd></dl>
+
+</section>
+<section id="module-siriushla.as_ps_diag.ps_graph_mon">
+<span id="siriushla-as-ps-diag-ps-graph-mon-module"></span><h2>siriushla.as_ps_diag.ps_graph_mon module<a class="headerlink" href="#module-siriushla.as_ps_diag.ps_graph_mon" title="Link to this heading"></a></h2>
+<p>PS Graph Monitor.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.ps_graph_mon.PSGraph">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_diag.ps_graph_mon.</span></span><span class="sig-name descname"><span class="pre">PSGraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">psnames</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symbols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'blue'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_diag/ps_graph_mon.html#PSGraph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraph" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="siriushla.widgets.html#siriushla.widgets.waveformplot.SiriusWaveformPlot" title="siriushla.widgets.waveformplot.SiriusWaveformPlot"><code class="xref py py-class docutils literal notranslate"><span class="pre">SiriusWaveformPlot</span></code></a></p>
+<p>Power supply data graph.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.ps_graph_mon.PSGraph.mouseDoubleClickEvent">
+<span class="sig-name descname"><span class="pre">mouseDoubleClickEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_diag/ps_graph_mon.html#PSGraph.mouseDoubleClickEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraph.mouseDoubleClickEvent" title="Link to this definition"></a></dt>
+<dd><p>Reimplement mouseDoubleClickEvent.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.ps_graph_mon.PSGraph.mouseMoveEvent">
+<span class="sig-name descname"><span class="pre">mouseMoveEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_diag/ps_graph_mon.html#PSGraph.mouseMoveEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraph.mouseMoveEvent" title="Link to this definition"></a></dt>
+<dd><p>Reimplement mouseMoveEvent.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.ps_graph_mon.PSGraph.psnames">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">psnames</span></span><a class="headerlink" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraph.psnames" title="Link to this definition"></a></dt>
+<dd><p>Return psnames.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.ps_graph_mon.PSGraph.sector">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sector</span></span><a class="headerlink" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraph.sector" title="Link to this definition"></a></dt>
+<dd><p>Return sector.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.ps_graph_mon.PSGraph.symbols">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">symbols</span></span><a class="headerlink" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraph.symbols" title="Link to this definition"></a></dt>
+<dd><p>Return symbols.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.ps_graph_mon.PSGraph.tooltips">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tooltips</span></span><a class="headerlink" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraph.tooltips" title="Link to this definition"></a></dt>
+<dd><p>Return tooltips.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.ps_graph_mon.PSGraph.x_data">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">x_data</span></span><a class="headerlink" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraph.x_data" title="Link to this definition"></a></dt>
+<dd><p>Return x_data.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.ps_graph_mon.PSGraph.y_data">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">y_data</span></span><a class="headerlink" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraph.y_data" title="Link to this definition"></a></dt>
+<dd><p>Return y_data.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.ps_graph_mon.PSGraphDevicesSelWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_diag.ps_graph_mon.</span></span><span class="sig-name descname"><span class="pre">PSGraphDevicesSelWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">psnames</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_diag/ps_graph_mon.html#PSGraphDevicesSelWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraphDevicesSelWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QWidget</span></code></p>
+<p>Power supply selection widget.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.ps_graph_mon.PSGraphDevicesSelWidget.matype_changed">
+<span class="sig-name descname"><span class="pre">matype_changed</span></span><a class="headerlink" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraphDevicesSelWidget.matype_changed" title="Link to this definition"></a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id3"><span class="problematic" id="id4">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.ps_graph_mon.PSGraphDevicesSelWidget.psnames_changed">
+<span class="sig-name descname"><span class="pre">psnames_changed</span></span><a class="headerlink" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraphDevicesSelWidget.psnames_changed" title="Link to this definition"></a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id5"><span class="problematic" id="id6">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.ps_graph_mon.PSGraphMonWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_diag.ps_graph_mon.</span></span><span class="sig-name descname"><span class="pre">PSGraphMonWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">siriuspy.envars.VACA_PREFIX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">psnames</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_diag/ps_graph_mon.html#PSGraphMonWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraphMonWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QWidget</span></code></p>
+<p>Power supply graph monitor widget.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.ps_graph_mon.PSGraphMonWidget.contextMenuEvent">
+<span class="sig-name descname"><span class="pre">contextMenuEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_menu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_diag/ps_graph_mon.html#PSGraphMonWidget.contextMenuEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraphMonWidget.contextMenuEvent" title="Link to this definition"></a></dt>
+<dd><p>Show a custom context menu.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.ps_graph_mon.PSGraphMonWidget.propLineChanged">
+<span class="sig-name descname"><span class="pre">propLineChanged</span></span><a class="headerlink" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraphMonWidget.propLineChanged" title="Link to this definition"></a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id7"><span class="problematic" id="id8">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.ps_graph_mon.PSGraphMonWidget.propSymbChanged">
+<span class="sig-name descname"><span class="pre">propSymbChanged</span></span><a class="headerlink" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraphMonWidget.propSymbChanged" title="Link to this definition"></a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id9"><span class="problematic" id="id10">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.ps_graph_mon.PSGraphMonWidget.psnamesChanged">
+<span class="sig-name descname"><span class="pre">psnamesChanged</span></span><a class="headerlink" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraphMonWidget.psnamesChanged" title="Link to this definition"></a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id11"><span class="problematic" id="id12">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.ps_graph_mon.PSGraphMonWidget.update_property_line">
+<span class="sig-name descname"><span class="pre">update_property_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_diag/ps_graph_mon.html#PSGraphMonWidget.update_property_line"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraphMonWidget.update_property_line" title="Link to this definition"></a></dt>
+<dd><p>Update property line.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.ps_graph_mon.PSGraphMonWidget.update_property_symb">
+<span class="sig-name descname"><span class="pre">update_property_symb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_diag/ps_graph_mon.html#PSGraphMonWidget.update_property_symb"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraphMonWidget.update_property_symb" title="Link to this definition"></a></dt>
+<dd><p>Update property symbol.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.ps_graph_mon.PSGraphMonWidget.update_psnames">
+<span class="sig-name descname"><span class="pre">update_psnames</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">psnames</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_diag/ps_graph_mon.html#PSGraphMonWidget.update_psnames"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraphMonWidget.update_psnames" title="Link to this definition"></a></dt>
+<dd><p>Update psnames.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.ps_graph_mon.PSGraphMonWindow">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_diag.ps_graph_mon.</span></span><span class="sig-name descname"><span class="pre">PSGraphMonWindow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">siriuspy.envars.VACA_PREFIX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_diag/ps_graph_mon.html#PSGraphMonWindow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraphMonWindow" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_SiriusWindow</span></code></p>
+<p>Power supply graph monitor window.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.ps_graph_mon.PSGraphMonWindow.contextMenuEvent">
+<span class="sig-name descname"><span class="pre">contextMenuEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_diag/ps_graph_mon.html#PSGraphMonWindow.contextMenuEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraphMonWindow.contextMenuEvent" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.ps_graph_mon.PSGraphMonWindow.show_connections">
+<span class="sig-name descname"><span class="pre">show_connections</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">checked</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_diag/ps_graph_mon.html#PSGraphMonWindow.show_connections"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraphMonWindow.show_connections" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.ps_graph_mon.PSGraphProptySelWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_diag.ps_graph_mon.</span></span><span class="sig-name descname"><span class="pre">PSGraphProptySelWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_diag/ps_graph_mon.html#PSGraphProptySelWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraphProptySelWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QWidget</span></code></p>
+<p>Power supply property selection widget.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.ps_graph_mon.PSGraphProptySelWidget.PROP_LINE_DEFAULT">
+<span class="sig-name descname"><span class="pre">PROP_LINE_DEFAULT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['Current-Mon',</span> <span class="pre">'Current-SP',</span> <span class="pre">'Current-RB',</span> <span class="pre">'CurrentRef-Mon',</span> <span class="pre">'DiagCurrentDiff-Mon',</span> <span class="pre">'WfmSyncPulseCount-Mon',</span> <span class="pre">'PRUCtrlQueueSize-Mon']</span></em><a class="headerlink" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraphProptySelWidget.PROP_LINE_DEFAULT" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.ps_graph_mon.PSGraphProptySelWidget.PROP_LINE_FASTCORR">
+<span class="sig-name descname"><span class="pre">PROP_LINE_FASTCORR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['Current-Mon',</span> <span class="pre">'Current-SP',</span> <span class="pre">'Current-RB',</span> <span class="pre">'CurrentRef-Mon',</span> <span class="pre">'DiagCurrentDiff-Mon']</span></em><a class="headerlink" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraphProptySelWidget.PROP_LINE_FASTCORR" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.ps_graph_mon.PSGraphProptySelWidget.PROP_SYMB_DEFAULT">
+<span class="sig-name descname"><span class="pre">PROP_SYMB_DEFAULT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['DiagStatus-Mon',</span> <span class="pre">'IntlkSoft-Mon',</span> <span class="pre">'IntlkHard-Mon',</span> <span class="pre">'PwrState-Sel',</span> <span class="pre">'PwrState-Sts',</span> <span class="pre">'OpMode-Sel',</span> <span class="pre">'OpMode-Sts',</span> <span class="pre">'CtrlMode-Mon',</span> <span class="pre">'CtrlLoop-Sel',</span> <span class="pre">'CtrlLoop-Sts',</span> <span class="pre">'CycleEnbl-Mon']</span></em><a class="headerlink" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraphProptySelWidget.PROP_SYMB_DEFAULT" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.ps_graph_mon.PSGraphProptySelWidget.PROP_SYMB_FASTCORR">
+<span class="sig-name descname"><span class="pre">PROP_SYMB_FASTCORR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['DiagStatus-Mon',</span> <span class="pre">'AlarmsAmp-Mon',</span> <span class="pre">'AlarmsAmpLtc-Mon',</span> <span class="pre">'PwrState-Sel',</span> <span class="pre">'PwrState-Sts']</span></em><a class="headerlink" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraphProptySelWidget.PROP_SYMB_FASTCORR" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.ps_graph_mon.PSGraphProptySelWidget.change_matype">
+<span class="sig-name descname"><span class="pre">change_matype</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">magfunc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pstype</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_diag/ps_graph_mon.html#PSGraphProptySelWidget.change_matype"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraphProptySelWidget.change_matype" title="Link to this definition"></a></dt>
+<dd><p>Change MA type.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.ps_graph_mon.PSGraphProptySelWidget.propty_line_changed">
+<span class="sig-name descname"><span class="pre">propty_line_changed</span></span><a class="headerlink" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraphProptySelWidget.propty_line_changed" title="Link to this definition"></a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id13"><span class="problematic" id="id14">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.ps_graph_mon.PSGraphProptySelWidget.propty_symb_changed">
+<span class="sig-name descname"><span class="pre">propty_symb_changed</span></span><a class="headerlink" href="#siriushla.as_ps_diag.ps_graph_mon.PSGraphProptySelWidget.propty_symb_changed" title="Link to this definition"></a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id15"><span class="problematic" id="id16">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-siriushla.as_ps_diag.util">
+<span id="siriushla-as-ps-diag-util-module"></span><h2>siriushla.as_ps_diag.util module<a class="headerlink" href="#module-siriushla.as_ps_diag.util" title="Link to this heading"></a></h2>
+<p>Util module.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.util.get_col2dev_count">
+<span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_diag.util.</span></span><span class="sig-name descname"><span class="pre">get_col2dev_count</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_diag/util.html#get_col2dev_count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_diag.util.get_col2dev_count" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.util.get_dev2sub_labels">
+<span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_diag.util.</span></span><span class="sig-name descname"><span class="pre">get_dev2sub_labels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_diag/util.html#get_dev2sub_labels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_diag.util.get_dev2sub_labels" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.util.get_label2devices">
+<span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_diag.util.</span></span><span class="sig-name descname"><span class="pre">get_label2devices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sec</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_diag/util.html#get_label2devices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_diag.util.get_label2devices" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="siriushla.as_ps_diag.util.get_sec2dev_laypos">
+<span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_diag.util.</span></span><span class="sig-name descname"><span class="pre">get_sec2dev_laypos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_diag/util.html#get_sec2dev_laypos"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_diag.util.get_sec2dev_laypos" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-siriushla.as_ps_diag">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-siriushla.as_ps_diag" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="siriushla.as_ps_cycle.html" class="btn btn-neutral float-left" title="siriushla.as_ps_cycle" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="siriushla.as_pu_control.html" class="btn btn-neutral float-right" title="siriushla.as_pu_control" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, lnls-sirius.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

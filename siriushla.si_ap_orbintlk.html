@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>siriushla.si_ap_orbintlk &mdash; siriushla 1.14.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=01009efc"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="siriushla.si_di_bbb" href="siriushla.si_di_bbb.html" />
+    <link rel="prev" title="siriushla.si_ap_idff" href="siriushla.si_ap_idff.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            siriushla
+          </a>
+              <div class="version">
+                1.14.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">GUIs:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_configdb.html">siriushla.as_ap_configdb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_currinfo.html">siriushla.as_ap_currinfo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_energybutton.html">siriushla.as_ap_energybutton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_injcontrol.html">siriushla.as_ap_injcontrol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_injection.html">siriushla.as_ap_injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_launcher.html">siriushla.as_ap_launcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_machshift.html">siriushla.as_ap_machshift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_macreport.html">siriushla.as_ap_macreport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_magoffconv.html">siriushla.as_ap_magoffconv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_measure.html">siriushla.as_ap_measure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_monitor.html">siriushla.as_ap_monitor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_opticscorr.html">siriushla.as_ap_opticscorr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_posang.html">siriushla.as_ap_posang</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_rabpmmon.html">siriushla.as_ap_rabpmmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_radmon.html">siriushla.as_ap_radmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_sofb.html">siriushla.as_ap_sofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_bpms.html">siriushla.as_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_dccts.html">siriushla.as_di_dccts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_icts.html">siriushla.as_di_icts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_scrns.html">siriushla.as_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_tune.html">siriushla.as_di_tune</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_vlight.html">siriushla.as_di_vlight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_commands.html">siriushla.as_ps_commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_control.html">siriushla.as_ps_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_cycle.html">siriushla.as_ps_cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_diag.html">siriushla.as_ps_diag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_pu_control.html">siriushla.as_pu_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_rf_control.html">siriushla.as_rf_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ti_control.html">siriushla.as_ti_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.bl_ap_imgproc.html">siriushla.bl_ap_imgproc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.bo_ap_ramp.html">siriushla.bo_ap_ramp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.common.html">siriushla.common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_ap_mps.html">siriushla.li_ap_mps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_di_bpms.html">siriushla.li_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_di_scrns.html">siriushla.li_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_eg_control.html">siriushla.li_eg_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_pu_modltr.html">siriushla.li_pu_modltr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_rf_llrf.html">siriushla.li_rf_llrf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_va_control.html">siriushla.li_va_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_fofb.html">siriushla.si_ap_fofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_genstatus.html">siriushla.si_ap_genstatus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_idff.html">siriushla.si_ap_idff</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">siriushla.si_ap_orbintlk</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.si_ap_orbintlk.base">siriushla.si_ap_orbintlk.base module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_ap_orbintlk.base.BaseObject"><code class="docutils literal notranslate"><span class="pre">BaseObject</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.base.BaseObject.CONV_NM2M"><code class="docutils literal notranslate"><span class="pre">BaseObject.CONV_NM2M</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.base.BaseObject.CONV_UM2NM"><code class="docutils literal notranslate"><span class="pre">BaseObject.CONV_UM2NM</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.base.BaseObject.get_ref_orb"><code class="docutils literal notranslate"><span class="pre">BaseObject.get_ref_orb()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.base.BaseObject.monitsum2intlksum_factor"><code class="docutils literal notranslate"><span class="pre">BaseObject.monitsum2intlksum_factor</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.si_ap_orbintlk.bpmdetail">siriushla.si_ap_orbintlk.bpmdetail module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_ap_orbintlk.bpmdetail.BPMOrbIntlkDetailWindow"><code class="docutils literal notranslate"><span class="pre">BPMOrbIntlkDetailWindow</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.si_ap_orbintlk.custom_widgets">siriushla.si_ap_orbintlk.custom_widgets module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_ap_orbintlk.custom_widgets.BPMIntlkEnblWidget"><code class="docutils literal notranslate"><span class="pre">BPMIntlkEnblWidget</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.custom_widgets.BPMIntlkEnblWidget.RULE_PROPERTIES"><code class="docutils literal notranslate"><span class="pre">BPMIntlkEnblWidget.RULE_PROPERTIES</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.custom_widgets.BPMIntlkEnblWidget.connection_changed"><code class="docutils literal notranslate"><span class="pre">BPMIntlkEnblWidget.connection_changed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.custom_widgets.BPMIntlkEnblWidget.send_value"><code class="docutils literal notranslate"><span class="pre">BPMIntlkEnblWidget.send_value()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.custom_widgets.BPMIntlkEnblWidget.value_changed"><code class="docutils literal notranslate"><span class="pre">BPMIntlkEnblWidget.value_changed()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_ap_orbintlk.custom_widgets.BPMIntlkLimSPWidget"><code class="docutils literal notranslate"><span class="pre">BPMIntlkLimSPWidget</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.custom_widgets.BPMIntlkLimSPWidget.send_value"><code class="docutils literal notranslate"><span class="pre">BPMIntlkLimSPWidget.send_value()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_ap_orbintlk.custom_widgets.MonitoredDevicesDialog"><code class="docutils literal notranslate"><span class="pre">MonitoredDevicesDialog</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_ap_orbintlk.custom_widgets.RefOrbComboBox"><code class="docutils literal notranslate"><span class="pre">RefOrbComboBox</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.custom_widgets.RefOrbComboBox.refOrbChanged"><code class="docutils literal notranslate"><span class="pre">RefOrbComboBox.refOrbChanged</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.si_ap_orbintlk.graphics">siriushla.si_ap_orbintlk.graphics module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.AngXGraphWidget"><code class="docutils literal notranslate"><span class="pre">AngXGraphWidget</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.AngXGraphWidget.INTLKTYPE"><code class="docutils literal notranslate"><span class="pre">AngXGraphWidget.INTLKTYPE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.AngXGraphWidget.PROPTY_MAX_DATA"><code class="docutils literal notranslate"><span class="pre">AngXGraphWidget.PROPTY_MAX_DATA</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.AngXGraphWidget.PROPTY_MAX_SYMB"><code class="docutils literal notranslate"><span class="pre">AngXGraphWidget.PROPTY_MAX_SYMB</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.AngXGraphWidget.PROPTY_MEAS_DATA"><code class="docutils literal notranslate"><span class="pre">AngXGraphWidget.PROPTY_MEAS_DATA</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.AngXGraphWidget.PROPTY_MEAS_SYMB"><code class="docutils literal notranslate"><span class="pre">AngXGraphWidget.PROPTY_MEAS_SYMB</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.AngXGraphWidget.PROPTY_MIN_DATA"><code class="docutils literal notranslate"><span class="pre">AngXGraphWidget.PROPTY_MIN_DATA</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.AngXGraphWidget.PROPTY_MIN_SYMB"><code class="docutils literal notranslate"><span class="pre">AngXGraphWidget.PROPTY_MIN_SYMB</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.AngYGraphWidget"><code class="docutils literal notranslate"><span class="pre">AngYGraphWidget</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.AngYGraphWidget.INTLKTYPE"><code class="docutils literal notranslate"><span class="pre">AngYGraphWidget.INTLKTYPE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.AngYGraphWidget.PROPTY_MAX_DATA"><code class="docutils literal notranslate"><span class="pre">AngYGraphWidget.PROPTY_MAX_DATA</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.AngYGraphWidget.PROPTY_MAX_SYMB"><code class="docutils literal notranslate"><span class="pre">AngYGraphWidget.PROPTY_MAX_SYMB</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.AngYGraphWidget.PROPTY_MEAS_DATA"><code class="docutils literal notranslate"><span class="pre">AngYGraphWidget.PROPTY_MEAS_DATA</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.AngYGraphWidget.PROPTY_MEAS_SYMB"><code class="docutils literal notranslate"><span class="pre">AngYGraphWidget.PROPTY_MEAS_SYMB</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.AngYGraphWidget.PROPTY_MIN_DATA"><code class="docutils literal notranslate"><span class="pre">AngYGraphWidget.PROPTY_MIN_DATA</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.AngYGraphWidget.PROPTY_MIN_SYMB"><code class="docutils literal notranslate"><span class="pre">AngYGraphWidget.PROPTY_MIN_SYMB</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.Graph"><code class="docutils literal notranslate"><span class="pre">Graph</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.Graph.mouseDoubleClickEvent"><code class="docutils literal notranslate"><span class="pre">Graph.mouseDoubleClickEvent()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.Graph.symbols_max"><code class="docutils literal notranslate"><span class="pre">Graph.symbols_max</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.Graph.symbols_meas"><code class="docutils literal notranslate"><span class="pre">Graph.symbols_meas</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.Graph.symbols_min"><code class="docutils literal notranslate"><span class="pre">Graph.symbols_min</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.Graph.tooltips"><code class="docutils literal notranslate"><span class="pre">Graph.tooltips</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.Graph.x_data"><code class="docutils literal notranslate"><span class="pre">Graph.x_data</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.Graph.y_data_max"><code class="docutils literal notranslate"><span class="pre">Graph.y_data_max</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.Graph.y_data_meas"><code class="docutils literal notranslate"><span class="pre">Graph.y_data_meas</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.Graph.y_data_min"><code class="docutils literal notranslate"><span class="pre">Graph.y_data_min</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.GraphLegendWidget"><code class="docutils literal notranslate"><span class="pre">GraphLegendWidget</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.GraphMonitorWidget"><code class="docutils literal notranslate"><span class="pre">GraphMonitorWidget</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.GraphProptySelWidget"><code class="docutils literal notranslate"><span class="pre">GraphProptySelWidget</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.GraphProptySelWidget.propty_comp_changed"><code class="docutils literal notranslate"><span class="pre">GraphProptySelWidget.propty_comp_changed</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.GraphProptySelWidget.propty_intlk_changed"><code class="docutils literal notranslate"><span class="pre">GraphProptySelWidget.propty_intlk_changed</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.GraphProptySelWidget.propty_reforb_changed"><code class="docutils literal notranslate"><span class="pre">GraphProptySelWidget.propty_reforb_changed</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.MinSumGraphWidget"><code class="docutils literal notranslate"><span class="pre">MinSumGraphWidget</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.MinSumGraphWidget.INTLKTYPE"><code class="docutils literal notranslate"><span class="pre">MinSumGraphWidget.INTLKTYPE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.MinSumGraphWidget.PROPTY_MAX_DATA"><code class="docutils literal notranslate"><span class="pre">MinSumGraphWidget.PROPTY_MAX_DATA</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.MinSumGraphWidget.PROPTY_MAX_SYMB"><code class="docutils literal notranslate"><span class="pre">MinSumGraphWidget.PROPTY_MAX_SYMB</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.MinSumGraphWidget.PROPTY_MEAS_DATA"><code class="docutils literal notranslate"><span class="pre">MinSumGraphWidget.PROPTY_MEAS_DATA</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.MinSumGraphWidget.PROPTY_MEAS_SYMB"><code class="docutils literal notranslate"><span class="pre">MinSumGraphWidget.PROPTY_MEAS_SYMB</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.MinSumGraphWidget.PROPTY_MIN_DATA"><code class="docutils literal notranslate"><span class="pre">MinSumGraphWidget.PROPTY_MIN_DATA</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.MinSumGraphWidget.PROPTY_MIN_SYMB"><code class="docutils literal notranslate"><span class="pre">MinSumGraphWidget.PROPTY_MIN_SYMB</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.PosXGraphWidget"><code class="docutils literal notranslate"><span class="pre">PosXGraphWidget</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.PosXGraphWidget.INTLKTYPE"><code class="docutils literal notranslate"><span class="pre">PosXGraphWidget.INTLKTYPE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.PosXGraphWidget.PROPTY_MAX_DATA"><code class="docutils literal notranslate"><span class="pre">PosXGraphWidget.PROPTY_MAX_DATA</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.PosXGraphWidget.PROPTY_MAX_SYMB"><code class="docutils literal notranslate"><span class="pre">PosXGraphWidget.PROPTY_MAX_SYMB</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.PosXGraphWidget.PROPTY_MEAS_DATA"><code class="docutils literal notranslate"><span class="pre">PosXGraphWidget.PROPTY_MEAS_DATA</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.PosXGraphWidget.PROPTY_MEAS_SYMB"><code class="docutils literal notranslate"><span class="pre">PosXGraphWidget.PROPTY_MEAS_SYMB</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.PosXGraphWidget.PROPTY_MIN_DATA"><code class="docutils literal notranslate"><span class="pre">PosXGraphWidget.PROPTY_MIN_DATA</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.PosXGraphWidget.PROPTY_MIN_SYMB"><code class="docutils literal notranslate"><span class="pre">PosXGraphWidget.PROPTY_MIN_SYMB</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.PosYGraphWidget"><code class="docutils literal notranslate"><span class="pre">PosYGraphWidget</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.PosYGraphWidget.INTLKTYPE"><code class="docutils literal notranslate"><span class="pre">PosYGraphWidget.INTLKTYPE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.PosYGraphWidget.PROPTY_MAX_DATA"><code class="docutils literal notranslate"><span class="pre">PosYGraphWidget.PROPTY_MAX_DATA</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.PosYGraphWidget.PROPTY_MAX_SYMB"><code class="docutils literal notranslate"><span class="pre">PosYGraphWidget.PROPTY_MAX_SYMB</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.PosYGraphWidget.PROPTY_MEAS_DATA"><code class="docutils literal notranslate"><span class="pre">PosYGraphWidget.PROPTY_MEAS_DATA</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.PosYGraphWidget.PROPTY_MEAS_SYMB"><code class="docutils literal notranslate"><span class="pre">PosYGraphWidget.PROPTY_MEAS_SYMB</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.PosYGraphWidget.PROPTY_MIN_DATA"><code class="docutils literal notranslate"><span class="pre">PosYGraphWidget.PROPTY_MIN_DATA</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_ap_orbintlk.graphics.PosYGraphWidget.PROPTY_MIN_SYMB"><code class="docutils literal notranslate"><span class="pre">PosYGraphWidget.PROPTY_MIN_SYMB</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.si_ap_orbintlk.main">siriushla.si_ap_orbintlk.main module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_ap_orbintlk.main.BPMOrbIntlkMainWindow"><code class="docutils literal notranslate"><span class="pre">BPMOrbIntlkMainWindow</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.si_ap_orbintlk">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_bbb.html">siriushla.si_di_bbb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_equalize_bpms.html">siriushla.si_di_equalize_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_scraps.html">siriushla.si_di_scraps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_id_control.html">siriushla.si_id_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.tb_di_slits.html">siriushla.tb_di_slits</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Widgets:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.html">Sirius HLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.widgets.html">Widgets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Source Code:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lnls-sirius/hla">HLA Github</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">siriushla</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">siriushla.si_ap_orbintlk</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/lnls-sirius/hla/blob/master/pyqt-apps/docs/source/siriushla.si_ap_orbintlk.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="siriushla-si-ap-orbintlk">
+<h1>siriushla.si_ap_orbintlk<a class="headerlink" href="#siriushla-si-ap-orbintlk" title="Link to this heading"></a></h1>
+<section id="code-documentation">
+<h2>Code Documentation<a class="headerlink" href="#code-documentation" title="Link to this heading"></a></h2>
+</section>
+<section id="module-siriushla.si_ap_orbintlk.base">
+<span id="siriushla-si-ap-orbintlk-base-module"></span><h2>siriushla.si_ap_orbintlk.base module<a class="headerlink" href="#module-siriushla.si_ap_orbintlk.base" title="Link to this heading"></a></h2>
+<p>Base Object.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.base.BaseObject">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_ap_orbintlk.base.</span></span><span class="sig-name descname"><span class="pre">BaseObject</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_ap_orbintlk/base.html#BaseObject"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_ap_orbintlk.base.BaseObject" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseOrbitIntlk</span></code></p>
+<p>Base SI BPM info object.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.base.BaseObject.CONV_NM2M">
+<span class="sig-name descname"><span class="pre">CONV_NM2M</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1e-09</span></em><a class="headerlink" href="#siriushla.si_ap_orbintlk.base.BaseObject.CONV_NM2M" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.base.BaseObject.CONV_UM2NM">
+<span class="sig-name descname"><span class="pre">CONV_UM2NM</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1000.0</span></em><a class="headerlink" href="#siriushla.si_ap_orbintlk.base.BaseObject.CONV_UM2NM" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.base.BaseObject.get_ref_orb">
+<span class="sig-name descname"><span class="pre">get_ref_orb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configname</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_ap_orbintlk/base.html#BaseObject.get_ref_orb"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_ap_orbintlk.base.BaseObject.get_ref_orb" title="Link to this definition"></a></dt>
+<dd><p>Get reference orbit from config [um].</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>configname</strong> (<em>str</em>) – si orbit configuration name.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>si orbit configuration value from ConfigDB</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>si_orbit</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.base.BaseObject.monitsum2intlksum_factor">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">monitsum2intlksum_factor</span></span><a class="headerlink" href="#siriushla.si_ap_orbintlk.base.BaseObject.monitsum2intlksum_factor" title="Link to this definition"></a></dt>
+<dd><p>Return factor between BPM Monit Sum and interlock Sum.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-siriushla.si_ap_orbintlk.bpmdetail">
+<span id="siriushla-si-ap-orbintlk-bpmdetail-module"></span><h2>siriushla.si_ap_orbintlk.bpmdetail module<a class="headerlink" href="#module-siriushla.si_ap_orbintlk.bpmdetail" title="Link to this heading"></a></h2>
+<p>Individual BPM Orbit Interlock Window.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.bpmdetail.BPMOrbIntlkDetailWindow">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_ap_orbintlk.bpmdetail.</span></span><span class="sig-name descname"><span class="pre">BPMOrbIntlkDetailWindow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_ap_orbintlk/bpmdetail.html#BPMOrbIntlkDetailWindow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_ap_orbintlk.bpmdetail.BPMOrbIntlkDetailWindow" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.si_ap_orbintlk.base.BaseObject" title="siriushla.si_ap_orbintlk.base.BaseObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseObject</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">_SiriusWindow</span></code></p>
+<p>Individual BPM Orbit Interlock Window.</p>
+</dd></dl>
+
+</section>
+<section id="module-siriushla.si_ap_orbintlk.custom_widgets">
+<span id="siriushla-si-ap-orbintlk-custom-widgets-module"></span><h2>siriushla.si_ap_orbintlk.custom_widgets module<a class="headerlink" href="#module-siriushla.si_ap_orbintlk.custom_widgets" title="Link to this heading"></a></h2>
+<p>BPM Interlock Buttons.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.custom_widgets.BPMIntlkEnblWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_ap_orbintlk.custom_widgets.</span></span><span class="sig-name descname"><span class="pre">BPMIntlkEnblWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_ap_orbintlk/custom_widgets.html#BPMIntlkEnblWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_ap_orbintlk.custom_widgets.BPMIntlkEnblWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BPMSelectionWidget</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">PyDMWidget</span></code></p>
+<p>BPM Orbit Interlock Enable Widget.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.custom_widgets.BPMIntlkEnblWidget.RULE_PROPERTIES">
+<span class="sig-name descname"><span class="pre">RULE_PROPERTIES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Enable':</span> <span class="pre">['setEnabled',</span> <span class="pre">&lt;class</span> <span class="pre">'bool'&gt;],</span> <span class="pre">'Opacity':</span> <span class="pre">['set_opacity',</span> <span class="pre">&lt;class</span> <span class="pre">'float'&gt;],</span> <span class="pre">'Position</span> <span class="pre">-</span> <span class="pre">X':</span> <span class="pre">['setX',</span> <span class="pre">&lt;class</span> <span class="pre">'int'&gt;],</span> <span class="pre">'Position</span> <span class="pre">-</span> <span class="pre">Y':</span> <span class="pre">['setY',</span> <span class="pre">&lt;class</span> <span class="pre">'int'&gt;],</span> <span class="pre">'Visible':</span> <span class="pre">['setVisible',</span> <span class="pre">&lt;class</span> <span class="pre">'bool'&gt;]}</span></em><a class="headerlink" href="#siriushla.si_ap_orbintlk.custom_widgets.BPMIntlkEnblWidget.RULE_PROPERTIES" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.custom_widgets.BPMIntlkEnblWidget.connection_changed">
+<span class="sig-name descname"><span class="pre">connection_changed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_conn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_ap_orbintlk/custom_widgets.html#BPMIntlkEnblWidget.connection_changed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_ap_orbintlk.custom_widgets.BPMIntlkEnblWidget.connection_changed" title="Link to this definition"></a></dt>
+<dd><p>Callback invoked when the connection state of the Channel is changed.
+This callback acts on the connection state to enable/disable the widget
+and also trigger the change on alarm severity to ALARM_DISCONNECTED.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>connected</strong> (<em>int</em>) – When this value is 0 the channel is disconnected, 1 otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.custom_widgets.BPMIntlkEnblWidget.send_value">
+<span class="sig-name descname"><span class="pre">send_value</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_ap_orbintlk/custom_widgets.html#BPMIntlkEnblWidget.send_value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_ap_orbintlk.custom_widgets.BPMIntlkEnblWidget.send_value" title="Link to this definition"></a></dt>
+<dd><p>Send new value.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.custom_widgets.BPMIntlkEnblWidget.value_changed">
+<span class="sig-name descname"><span class="pre">value_changed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_val</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_ap_orbintlk/custom_widgets.html#BPMIntlkEnblWidget.value_changed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_ap_orbintlk.custom_widgets.BPMIntlkEnblWidget.value_changed" title="Link to this definition"></a></dt>
+<dd><p>Callback invoked when the Channel value is changed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>new_val</strong> (<em>str</em><em>, </em><em>int</em><em>, </em><em>float</em><em>, </em><em>bool</em><em> or </em><em>np.ndarray</em>) – The new value from the channel. The type depends on the channel.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.custom_widgets.BPMIntlkLimSPWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_ap_orbintlk.custom_widgets.</span></span><span class="sig-name descname"><span class="pre">BPMIntlkLimSPWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_ap_orbintlk/custom_widgets.html#BPMIntlkLimSPWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_ap_orbintlk.custom_widgets.BPMIntlkLimSPWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.si_ap_orbintlk.base.BaseObject" title="siriushla.si_ap_orbintlk.base.BaseObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseObject</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">QWidget</span></code></p>
+<p>BPM Orbit Interlock Limit Setpoint Widget.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.custom_widgets.BPMIntlkLimSPWidget.send_value">
+<span class="sig-name descname"><span class="pre">send_value</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_ap_orbintlk/custom_widgets.html#BPMIntlkLimSPWidget.send_value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_ap_orbintlk.custom_widgets.BPMIntlkLimSPWidget.send_value" title="Link to this definition"></a></dt>
+<dd><p>Send new value.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.custom_widgets.MonitoredDevicesDialog">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_ap_orbintlk.custom_widgets.</span></span><span class="sig-name descname"><span class="pre">MonitoredDevicesDialog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_ap_orbintlk/custom_widgets.html#MonitoredDevicesDialog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_ap_orbintlk.custom_widgets.MonitoredDevicesDialog" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.si_ap_orbintlk.base.BaseObject" title="siriushla.si_ap_orbintlk.base.BaseObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseObject</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">QDialog</span></code></p>
+<p>Monitored Devices Detail Dialog.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.custom_widgets.RefOrbComboBox">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_ap_orbintlk.custom_widgets.</span></span><span class="sig-name descname"><span class="pre">RefOrbComboBox</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_ap_orbintlk/custom_widgets.html#RefOrbComboBox"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_ap_orbintlk.custom_widgets.RefOrbComboBox" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QComboBox</span></code></p>
+<p>Reference Orbit Selection ComboBox.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.custom_widgets.RefOrbComboBox.refOrbChanged">
+<span class="sig-name descname"><span class="pre">refOrbChanged</span></span><a class="headerlink" href="#siriushla.si_ap_orbintlk.custom_widgets.RefOrbComboBox.refOrbChanged" title="Link to this definition"></a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id1"><span class="problematic" id="id2">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-siriushla.si_ap_orbintlk.graphics">
+<span id="siriushla-si-ap-orbintlk-graphics-module"></span><h2>siriushla.si_ap_orbintlk.graphics module<a class="headerlink" href="#module-siriushla.si_ap_orbintlk.graphics" title="Link to this heading"></a></h2>
+<p>Graph Widgets.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.AngXGraphWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_ap_orbintlk.graphics.</span></span><span class="sig-name descname"><span class="pre">AngXGraphWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_ap_orbintlk/graphics.html#AngXGraphWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.AngXGraphWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseGraphWidget</span></code></p>
+<p>Angulation Graph Widget.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.AngXGraphWidget.INTLKTYPE">
+<span class="sig-name descname"><span class="pre">INTLKTYPE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'AngX'</span></em><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.AngXGraphWidget.INTLKTYPE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.AngXGraphWidget.PROPTY_MAX_DATA">
+<span class="sig-name descname"><span class="pre">PROPTY_MAX_DATA</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'IntlkLmtAngMaxX-RB'</span></em><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.AngXGraphWidget.PROPTY_MAX_DATA" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.AngXGraphWidget.PROPTY_MAX_SYMB">
+<span class="sig-name descname"><span class="pre">PROPTY_MAX_SYMB</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Instantaneous':</span> <span class="pre">'IntlkAngUpperX-Mon',</span> <span class="pre">'Latch':</span> <span class="pre">'IntlkAngUpperLtcX-Mon'}</span></em><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.AngXGraphWidget.PROPTY_MAX_SYMB" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.AngXGraphWidget.PROPTY_MEAS_DATA">
+<span class="sig-name descname"><span class="pre">PROPTY_MEAS_DATA</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'IntlkAngX-Mon'</span></em><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.AngXGraphWidget.PROPTY_MEAS_DATA" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.AngXGraphWidget.PROPTY_MEAS_SYMB">
+<span class="sig-name descname"><span class="pre">PROPTY_MEAS_SYMB</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Instantaneous':</span> <span class="pre">{'General':</span> <span class="pre">'Intlk-Mon'},</span> <span class="pre">'Latch':</span> <span class="pre">{'General':</span> <span class="pre">'IntlkLtc-Mon'}}</span></em><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.AngXGraphWidget.PROPTY_MEAS_SYMB" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.AngXGraphWidget.PROPTY_MIN_DATA">
+<span class="sig-name descname"><span class="pre">PROPTY_MIN_DATA</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'IntlkLmtAngMinX-RB'</span></em><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.AngXGraphWidget.PROPTY_MIN_DATA" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.AngXGraphWidget.PROPTY_MIN_SYMB">
+<span class="sig-name descname"><span class="pre">PROPTY_MIN_SYMB</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Instantaneous':</span> <span class="pre">'IntlkAngLowerX-Mon',</span> <span class="pre">'Latch':</span> <span class="pre">'IntlkAngLowerLtcX-Mon'}</span></em><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.AngXGraphWidget.PROPTY_MIN_SYMB" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.AngYGraphWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_ap_orbintlk.graphics.</span></span><span class="sig-name descname"><span class="pre">AngYGraphWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_ap_orbintlk/graphics.html#AngYGraphWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.AngYGraphWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseGraphWidget</span></code></p>
+<p>Angulation Graph Widget.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.AngYGraphWidget.INTLKTYPE">
+<span class="sig-name descname"><span class="pre">INTLKTYPE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'AngY'</span></em><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.AngYGraphWidget.INTLKTYPE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.AngYGraphWidget.PROPTY_MAX_DATA">
+<span class="sig-name descname"><span class="pre">PROPTY_MAX_DATA</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'IntlkLmtAngMaxY-RB'</span></em><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.AngYGraphWidget.PROPTY_MAX_DATA" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.AngYGraphWidget.PROPTY_MAX_SYMB">
+<span class="sig-name descname"><span class="pre">PROPTY_MAX_SYMB</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Instantaneous':</span> <span class="pre">'IntlkAngUpperY-Mon',</span> <span class="pre">'Latch':</span> <span class="pre">'IntlkAngUpperLtcY-Mon'}</span></em><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.AngYGraphWidget.PROPTY_MAX_SYMB" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.AngYGraphWidget.PROPTY_MEAS_DATA">
+<span class="sig-name descname"><span class="pre">PROPTY_MEAS_DATA</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'IntlkAngY-Mon'</span></em><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.AngYGraphWidget.PROPTY_MEAS_DATA" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.AngYGraphWidget.PROPTY_MEAS_SYMB">
+<span class="sig-name descname"><span class="pre">PROPTY_MEAS_SYMB</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Instantaneous':</span> <span class="pre">{'General':</span> <span class="pre">'Intlk-Mon'},</span> <span class="pre">'Latch':</span> <span class="pre">{'General':</span> <span class="pre">'IntlkLtc-Mon'}}</span></em><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.AngYGraphWidget.PROPTY_MEAS_SYMB" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.AngYGraphWidget.PROPTY_MIN_DATA">
+<span class="sig-name descname"><span class="pre">PROPTY_MIN_DATA</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'IntlkLmtAngMinY-RB'</span></em><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.AngYGraphWidget.PROPTY_MIN_DATA" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.AngYGraphWidget.PROPTY_MIN_SYMB">
+<span class="sig-name descname"><span class="pre">PROPTY_MIN_SYMB</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Instantaneous':</span> <span class="pre">'IntlkAngLowerY-Mon',</span> <span class="pre">'Latch':</span> <span class="pre">'IntlkAngLowerLtcY-Mon'}</span></em><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.AngYGraphWidget.PROPTY_MIN_SYMB" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.Graph">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_ap_orbintlk.graphics.</span></span><span class="sig-name descname"><span class="pre">Graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_ap_orbintlk/graphics.html#Graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.Graph" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.si_ap_orbintlk.base.BaseObject" title="siriushla.si_ap_orbintlk.base.BaseObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseObject</span></code></a>, <a class="reference internal" href="siriushla.widgets.html#siriushla.widgets.waveformplot.SiriusWaveformPlot" title="siriushla.widgets.waveformplot.SiriusWaveformPlot"><code class="xref py py-class docutils literal notranslate"><span class="pre">SiriusWaveformPlot</span></code></a></p>
+<p>BPM orbit interlock data graph.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.Graph.mouseDoubleClickEvent">
+<span class="sig-name descname"><span class="pre">mouseDoubleClickEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_ap_orbintlk/graphics.html#Graph.mouseDoubleClickEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.Graph.mouseDoubleClickEvent" title="Link to this definition"></a></dt>
+<dd><p>Reimplement mouseDoubleClickEvent.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.Graph.symbols_max">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">symbols_max</span></span><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.Graph.symbols_max" title="Link to this definition"></a></dt>
+<dd><p>Return symbols for max curve.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.Graph.symbols_meas">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">symbols_meas</span></span><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.Graph.symbols_meas" title="Link to this definition"></a></dt>
+<dd><p>Return symbols for meas curve.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.Graph.symbols_min">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">symbols_min</span></span><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.Graph.symbols_min" title="Link to this definition"></a></dt>
+<dd><p>Return symbols for min curve.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.Graph.tooltips">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tooltips</span></span><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.Graph.tooltips" title="Link to this definition"></a></dt>
+<dd><p>Return tooltips.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.Graph.x_data">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">x_data</span></span><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.Graph.x_data" title="Link to this definition"></a></dt>
+<dd><p>Return x_data.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.Graph.y_data_max">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">y_data_max</span></span><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.Graph.y_data_max" title="Link to this definition"></a></dt>
+<dd><p>Return y_data for max curve.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.Graph.y_data_meas">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">y_data_meas</span></span><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.Graph.y_data_meas" title="Link to this definition"></a></dt>
+<dd><p>Return y_data for meas curve.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.Graph.y_data_min">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">y_data_min</span></span><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.Graph.y_data_min" title="Link to this definition"></a></dt>
+<dd><p>Return y_data for min curve.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.GraphLegendWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_ap_orbintlk.graphics.</span></span><span class="sig-name descname"><span class="pre">GraphLegendWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plan</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_ap_orbintlk/graphics.html#GraphLegendWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.GraphLegendWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QWidget</span></code></p>
+<p>Graph Legend Widget.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.GraphMonitorWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_ap_orbintlk.graphics.</span></span><span class="sig-name descname"><span class="pre">GraphMonitorWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">siriuspy.envars.VACA_PREFIX</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_ap_orbintlk/graphics.html#GraphMonitorWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.GraphMonitorWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QWidget</span></code></p>
+<p>Graph Monitor Widget.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.GraphProptySelWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_ap_orbintlk.graphics.</span></span><span class="sig-name descname"><span class="pre">GraphProptySelWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_ap_orbintlk/graphics.html#GraphProptySelWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.GraphProptySelWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QWidget</span></code></p>
+<p>Graph Interlock and Comparision Type Selelction Widget.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.GraphProptySelWidget.propty_comp_changed">
+<span class="sig-name descname"><span class="pre">propty_comp_changed</span></span><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.GraphProptySelWidget.propty_comp_changed" title="Link to this definition"></a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id3"><span class="problematic" id="id4">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.GraphProptySelWidget.propty_intlk_changed">
+<span class="sig-name descname"><span class="pre">propty_intlk_changed</span></span><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.GraphProptySelWidget.propty_intlk_changed" title="Link to this definition"></a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id5"><span class="problematic" id="id6">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.GraphProptySelWidget.propty_reforb_changed">
+<span class="sig-name descname"><span class="pre">propty_reforb_changed</span></span><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.GraphProptySelWidget.propty_reforb_changed" title="Link to this definition"></a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id7"><span class="problematic" id="id8">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.MinSumGraphWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_ap_orbintlk.graphics.</span></span><span class="sig-name descname"><span class="pre">MinSumGraphWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_ap_orbintlk/graphics.html#MinSumGraphWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.MinSumGraphWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseGraphWidget</span></code></p>
+<p>MinSum Graph Widget.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.MinSumGraphWidget.INTLKTYPE">
+<span class="sig-name descname"><span class="pre">INTLKTYPE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'MinSum'</span></em><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.MinSumGraphWidget.INTLKTYPE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.MinSumGraphWidget.PROPTY_MAX_DATA">
+<span class="sig-name descname"><span class="pre">PROPTY_MAX_DATA</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.MinSumGraphWidget.PROPTY_MAX_DATA" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.MinSumGraphWidget.PROPTY_MAX_SYMB">
+<span class="sig-name descname"><span class="pre">PROPTY_MAX_SYMB</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.MinSumGraphWidget.PROPTY_MAX_SYMB" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.MinSumGraphWidget.PROPTY_MEAS_DATA">
+<span class="sig-name descname"><span class="pre">PROPTY_MEAS_DATA</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'SlowSumRaw-Mon'</span></em><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.MinSumGraphWidget.PROPTY_MEAS_DATA" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.MinSumGraphWidget.PROPTY_MEAS_SYMB">
+<span class="sig-name descname"><span class="pre">PROPTY_MEAS_SYMB</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.MinSumGraphWidget.PROPTY_MEAS_SYMB" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.MinSumGraphWidget.PROPTY_MIN_DATA">
+<span class="sig-name descname"><span class="pre">PROPTY_MIN_DATA</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'IntlkLmtMinSum-RB'</span></em><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.MinSumGraphWidget.PROPTY_MIN_DATA" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.MinSumGraphWidget.PROPTY_MIN_SYMB">
+<span class="sig-name descname"><span class="pre">PROPTY_MIN_SYMB</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.MinSumGraphWidget.PROPTY_MIN_SYMB" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.PosXGraphWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_ap_orbintlk.graphics.</span></span><span class="sig-name descname"><span class="pre">PosXGraphWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_ap_orbintlk/graphics.html#PosXGraphWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.PosXGraphWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseGraphWidget</span></code></p>
+<p>Position Graph Widget.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.PosXGraphWidget.INTLKTYPE">
+<span class="sig-name descname"><span class="pre">INTLKTYPE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'PosX'</span></em><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.PosXGraphWidget.INTLKTYPE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.PosXGraphWidget.PROPTY_MAX_DATA">
+<span class="sig-name descname"><span class="pre">PROPTY_MAX_DATA</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'IntlkLmtPosMaxX-RB'</span></em><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.PosXGraphWidget.PROPTY_MAX_DATA" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.PosXGraphWidget.PROPTY_MAX_SYMB">
+<span class="sig-name descname"><span class="pre">PROPTY_MAX_SYMB</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Instantaneous':</span> <span class="pre">'IntlkPosUpperX-Mon',</span> <span class="pre">'Latch':</span> <span class="pre">'IntlkPosUpperLtcX-Mon'}</span></em><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.PosXGraphWidget.PROPTY_MAX_SYMB" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.PosXGraphWidget.PROPTY_MEAS_DATA">
+<span class="sig-name descname"><span class="pre">PROPTY_MEAS_DATA</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'IntlkPosX-Mon'</span></em><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.PosXGraphWidget.PROPTY_MEAS_DATA" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.PosXGraphWidget.PROPTY_MEAS_SYMB">
+<span class="sig-name descname"><span class="pre">PROPTY_MEAS_SYMB</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Instantaneous':</span> <span class="pre">{'General':</span> <span class="pre">'Intlk-Mon'},</span> <span class="pre">'Latch':</span> <span class="pre">{'General':</span> <span class="pre">'IntlkLtc-Mon'}}</span></em><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.PosXGraphWidget.PROPTY_MEAS_SYMB" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.PosXGraphWidget.PROPTY_MIN_DATA">
+<span class="sig-name descname"><span class="pre">PROPTY_MIN_DATA</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'IntlkLmtPosMinX-RB'</span></em><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.PosXGraphWidget.PROPTY_MIN_DATA" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.PosXGraphWidget.PROPTY_MIN_SYMB">
+<span class="sig-name descname"><span class="pre">PROPTY_MIN_SYMB</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Instantaneous':</span> <span class="pre">'IntlkPosLowerX-Mon',</span> <span class="pre">'Latch':</span> <span class="pre">'IntlkPosLowerLtcX-Mon'}</span></em><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.PosXGraphWidget.PROPTY_MIN_SYMB" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.PosYGraphWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_ap_orbintlk.graphics.</span></span><span class="sig-name descname"><span class="pre">PosYGraphWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_ap_orbintlk/graphics.html#PosYGraphWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.PosYGraphWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseGraphWidget</span></code></p>
+<p>Position Graph Widget.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.PosYGraphWidget.INTLKTYPE">
+<span class="sig-name descname"><span class="pre">INTLKTYPE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'PosY'</span></em><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.PosYGraphWidget.INTLKTYPE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.PosYGraphWidget.PROPTY_MAX_DATA">
+<span class="sig-name descname"><span class="pre">PROPTY_MAX_DATA</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'IntlkLmtPosMaxY-RB'</span></em><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.PosYGraphWidget.PROPTY_MAX_DATA" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.PosYGraphWidget.PROPTY_MAX_SYMB">
+<span class="sig-name descname"><span class="pre">PROPTY_MAX_SYMB</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Instantaneous':</span> <span class="pre">'IntlkPosUpperY-Mon',</span> <span class="pre">'Latch':</span> <span class="pre">'IntlkPosUpperLtcY-Mon'}</span></em><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.PosYGraphWidget.PROPTY_MAX_SYMB" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.PosYGraphWidget.PROPTY_MEAS_DATA">
+<span class="sig-name descname"><span class="pre">PROPTY_MEAS_DATA</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'IntlkPosY-Mon'</span></em><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.PosYGraphWidget.PROPTY_MEAS_DATA" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.PosYGraphWidget.PROPTY_MEAS_SYMB">
+<span class="sig-name descname"><span class="pre">PROPTY_MEAS_SYMB</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Instantaneous':</span> <span class="pre">{'General':</span> <span class="pre">'Intlk-Mon'},</span> <span class="pre">'Latch':</span> <span class="pre">{'General':</span> <span class="pre">'IntlkLtc-Mon'}}</span></em><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.PosYGraphWidget.PROPTY_MEAS_SYMB" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.PosYGraphWidget.PROPTY_MIN_DATA">
+<span class="sig-name descname"><span class="pre">PROPTY_MIN_DATA</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'IntlkLmtPosMinY-RB'</span></em><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.PosYGraphWidget.PROPTY_MIN_DATA" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.graphics.PosYGraphWidget.PROPTY_MIN_SYMB">
+<span class="sig-name descname"><span class="pre">PROPTY_MIN_SYMB</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Instantaneous':</span> <span class="pre">'IntlkPosLowerY-Mon',</span> <span class="pre">'Latch':</span> <span class="pre">'IntlkPosLowerLtcY-Mon'}</span></em><a class="headerlink" href="#siriushla.si_ap_orbintlk.graphics.PosYGraphWidget.PROPTY_MIN_SYMB" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-siriushla.si_ap_orbintlk.main">
+<span id="siriushla-si-ap-orbintlk-main-module"></span><h2>siriushla.si_ap_orbintlk.main module<a class="headerlink" href="#module-siriushla.si_ap_orbintlk.main" title="Link to this heading"></a></h2>
+<p>BPM Orbit Interlock Main Window.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_ap_orbintlk.main.BPMOrbIntlkMainWindow">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_ap_orbintlk.main.</span></span><span class="sig-name descname"><span class="pre">BPMOrbIntlkMainWindow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_ap_orbintlk/main.html#BPMOrbIntlkMainWindow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_ap_orbintlk.main.BPMOrbIntlkMainWindow" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.si_ap_orbintlk.base.BaseObject" title="siriushla.si_ap_orbintlk.base.BaseObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseObject</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">_SiriusWindow</span></code></p>
+<p>BPM Orbit Interlock Control Window.</p>
+</dd></dl>
+
+</section>
+<section id="module-siriushla.si_ap_orbintlk">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-siriushla.si_ap_orbintlk" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="siriushla.si_ap_idff.html" class="btn btn-neutral float-left" title="siriushla.si_ap_idff" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="siriushla.si_di_bbb.html" class="btn btn-neutral float-right" title="siriushla.si_di_bbb" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, lnls-sirius.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

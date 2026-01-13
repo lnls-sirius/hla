@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>siriushla.as_ti_control.hl_trigger &mdash; siriushla 1.14.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=01009efc"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            siriushla
+          </a>
+              <div class="version">
+                1.14.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">GUIs:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_configdb.html">siriushla.as_ap_configdb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_currinfo.html">siriushla.as_ap_currinfo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_energybutton.html">siriushla.as_ap_energybutton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_injcontrol.html">siriushla.as_ap_injcontrol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_injection.html">siriushla.as_ap_injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_launcher.html">siriushla.as_ap_launcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_machshift.html">siriushla.as_ap_machshift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_macreport.html">siriushla.as_ap_macreport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_magoffconv.html">siriushla.as_ap_magoffconv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_measure.html">siriushla.as_ap_measure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_monitor.html">siriushla.as_ap_monitor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_opticscorr.html">siriushla.as_ap_opticscorr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_posang.html">siriushla.as_ap_posang</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_rabpmmon.html">siriushla.as_ap_rabpmmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_radmon.html">siriushla.as_ap_radmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_sofb.html">siriushla.as_ap_sofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_bpms.html">siriushla.as_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_dccts.html">siriushla.as_di_dccts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_icts.html">siriushla.as_di_icts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_scrns.html">siriushla.as_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_tune.html">siriushla.as_di_tune</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_vlight.html">siriushla.as_di_vlight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_commands.html">siriushla.as_ps_commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_control.html">siriushla.as_ps_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_cycle.html">siriushla.as_ps_cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_diag.html">siriushla.as_ps_diag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_pu_control.html">siriushla.as_pu_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_rf_control.html">siriushla.as_rf_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ti_control.html">siriushla.as_ti_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.bl_ap_imgproc.html">siriushla.bl_ap_imgproc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.bo_ap_ramp.html">siriushla.bo_ap_ramp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.common.html">siriushla.common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_ap_mps.html">siriushla.li_ap_mps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_di_bpms.html">siriushla.li_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_di_scrns.html">siriushla.li_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_eg_control.html">siriushla.li_eg_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_pu_modltr.html">siriushla.li_pu_modltr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_rf_llrf.html">siriushla.li_rf_llrf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_va_control.html">siriushla.li_va_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_fofb.html">siriushla.si_ap_fofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_genstatus.html">siriushla.si_ap_genstatus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_idff.html">siriushla.si_ap_idff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_orbintlk.html">siriushla.si_ap_orbintlk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_bbb.html">siriushla.si_di_bbb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_equalize_bpms.html">siriushla.si_di_equalize_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_scraps.html">siriushla.si_di_scraps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_id_control.html">siriushla.si_id_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.tb_di_slits.html">siriushla.tb_di_slits</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Widgets:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.html">Sirius HLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.widgets.html">Widgets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Source Code:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lnls-sirius/hla">HLA Github</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">siriushla</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">siriushla.as_ti_control.hl_trigger</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for siriushla.as_ti_control.hl_trigger</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span> <span class="k">as</span> <span class="n">_dcopy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span> <span class="k">as</span> <span class="n">_partial</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">_np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtCore</span><span class="w"> </span><span class="kn">import</span> <span class="n">Qt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtWidgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">QGroupBox</span><span class="p">,</span> <span class="n">QLabel</span><span class="p">,</span> <span class="n">QPushButton</span><span class="p">,</span> <span class="n">QFormLayout</span><span class="p">,</span> \
+    <span class="n">QVBoxLayout</span><span class="p">,</span> <span class="n">QGridLayout</span><span class="p">,</span> <span class="n">QWidget</span><span class="p">,</span> <span class="n">QDoubleSpinBox</span><span class="p">,</span> <span class="n">QHBoxLayout</span><span class="p">,</span> \
+    <span class="n">QFrame</span><span class="p">,</span> <span class="n">QScrollArea</span><span class="p">,</span> <span class="n">QTabWidget</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">qtawesome</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">qta</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydm.widgets.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">PyDMWritableWidget</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriuspy.search</span><span class="w"> </span><span class="kn">import</span> <span class="n">HLTimeSearch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriuspy.timesys</span><span class="w"> </span><span class="kn">import</span> <span class="n">csdev</span> <span class="k">as</span> <span class="n">_cstime</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..util</span><span class="w"> </span><span class="kn">import</span> <span class="n">connect_window</span><span class="p">,</span> <span class="n">get_appropriate_color</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..widgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">PyDMLed</span><span class="p">,</span> <span class="n">SiriusLedAlert</span><span class="p">,</span> <span class="n">PyDMStateButton</span><span class="p">,</span> \
+    <span class="n">SiriusLabel</span><span class="p">,</span> <span class="n">SiriusSpinbox</span><span class="p">,</span> <span class="n">PyDMLedMultiChannel</span><span class="p">,</span> \
+    <span class="n">SiriusEnumComboBox</span><span class="p">,</span> <span class="n">SiriusLedState</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..widgets.windows</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_window_from_widget</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseList</span><span class="p">,</span> <span class="n">BaseWidget</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.low_level_devices</span><span class="w"> </span><span class="kn">import</span> <span class="n">LLTriggerList</span><span class="p">,</span> \
+    <span class="n">EVREVEOTPList</span><span class="p">,</span> <span class="n">EVREVEOUTList</span><span class="p">,</span> <span class="n">AFCOUTList</span><span class="p">,</span> <span class="n">EVREVEDIList</span>
+
+
+<div class="viewcode-block" id="HLTriggerSimple">
+<a class="viewcode-back" href="../../../siriushla.as_ti_control.html#siriushla.as_ti_control.hl_trigger.HLTriggerSimple">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">HLTriggerSimple</span><span class="p">(</span><span class="n">BaseWidget</span><span class="p">):</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">delayraw</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">duration</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">widthraw</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">nrpulses</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">src</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">deltadelay</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">deltadelayraw</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">prefix</span><span class="p">)</span>
+        <span class="n">flay</span> <span class="o">=</span> <span class="n">QFormLayout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">setLabelAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">setFormAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+
+        <span class="n">l_TIstatus</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Status: &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">ledmulti_TIStatus</span> <span class="o">=</span> <span class="n">PyDMLedMultiChannel</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">channels2values</span><span class="o">=</span><span class="p">{</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">get_pvname</span><span class="p">(</span><span class="s1">&#39;State-Sts&#39;</span><span class="p">):</span> <span class="mi">1</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">get_pvname</span><span class="p">(</span><span class="s1">&#39;Status-Mon&#39;</span><span class="p">):</span> <span class="mi">0</span><span class="p">})</span>
+        <span class="n">ledmulti_TIStatus</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span>
+            <span class="s2">&quot;min-width:1.29em; max-width:1.29em;&quot;</span>
+            <span class="s2">&quot;min-height:1.29em; max-height:1.29em;&quot;</span><span class="p">)</span>
+        <span class="n">pb_trgdetails</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span><span class="s1">&#39;fa5s.ellipsis-h&#39;</span><span class="p">),</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">pb_trgdetails</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="s1">&#39;Open details&#39;</span><span class="p">)</span>
+        <span class="n">pb_trgdetails</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;detail&#39;</span><span class="p">)</span>
+        <span class="n">pb_trgdetails</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span>
+            <span class="s2">&quot;#detail{min-width:25px; max-width:25px; icon-size:20px;}&quot;</span><span class="p">)</span>
+        <span class="n">trg_w</span> <span class="o">=</span> <span class="n">create_window_from_widget</span><span class="p">(</span>
+            <span class="n">HLTriggerDetailed</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">device</span><span class="o">+</span><span class="s1">&#39; Detailed Settings&#39;</span><span class="p">,</span>
+            <span class="n">is_main</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">connect_window</span><span class="p">(</span>
+            <span class="n">pb_trgdetails</span><span class="p">,</span> <span class="n">trg_w</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="p">)</span>
+        <span class="n">hlay_TIstatus</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">hlay_TIstatus</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">ledmulti_TIStatus</span><span class="p">)</span>
+        <span class="n">hlay_TIstatus</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">pb_trgdetails</span><span class="p">)</span>
+        <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">l_TIstatus</span><span class="p">,</span> <span class="n">hlay_TIstatus</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">delay</span><span class="p">:</span>
+            <span class="n">l_delay</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Delay [us]: &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+            <span class="n">l_delay</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;min-width:5em;&quot;</span><span class="p">)</span>
+            <span class="n">hlay_delay</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_propty_layout</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;Delay-SP&#39;</span><span class="p">)</span>
+            <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">l_delay</span><span class="p">,</span> <span class="n">hlay_delay</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">delayraw</span><span class="p">:</span>
+            <span class="n">l_delay</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;DelayRaw: &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+            <span class="n">l_delay</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;min-width:5em;&quot;</span><span class="p">)</span>
+            <span class="n">hlay_delay</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_propty_layout</span><span class="p">(</span>
+                <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;DelayRaw-SP&#39;</span><span class="p">,</span> <span class="n">show_unit</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">l_delay</span><span class="p">,</span> <span class="n">hlay_delay</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">duration</span><span class="p">:</span>
+            <span class="n">l_duration</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Duration [us]: &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+            <span class="n">l_duration</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;min-width:5em;&quot;</span><span class="p">)</span>
+            <span class="n">hlay_duration</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_propty_layout</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;Duration-SP&#39;</span><span class="p">)</span>
+            <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">l_duration</span><span class="p">,</span> <span class="n">hlay_duration</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">widthraw</span><span class="p">:</span>
+            <span class="n">l_widthraw</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;WidthRaw: &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+            <span class="n">l_widthraw</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;min-width:5em;&quot;</span><span class="p">)</span>
+            <span class="n">hlay_widthraw</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_propty_layout</span><span class="p">(</span>
+                <span class="n">propty</span><span class="o">=</span><span class="s1">&#39;WidthRaw-SP&#39;</span><span class="p">)</span>
+            <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">l_widthraw</span><span class="p">,</span> <span class="n">hlay_widthraw</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">nrpulses</span><span class="p">:</span>
+            <span class="n">l_nrpulses</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Nr Pulses: &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+            <span class="n">l_nrpulses</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;min-width:5em;&quot;</span><span class="p">)</span>
+            <span class="n">hlay_nrpulses</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_propty_layout</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;NrPulses-SP&#39;</span><span class="p">)</span>
+            <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">l_nrpulses</span><span class="p">,</span> <span class="n">hlay_nrpulses</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">src</span><span class="p">:</span>
+            <span class="n">l_src</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Source: &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+            <span class="n">l_src</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;min-width:5em;&quot;</span><span class="p">)</span>
+            <span class="n">hlay_src</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_propty_layout</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;Src-Sel&#39;</span><span class="p">)</span>
+            <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">l_src</span><span class="p">,</span> <span class="n">hlay_src</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">deltadelay</span> <span class="ow">or</span> <span class="n">deltadelayraw</span><span class="p">:</span>
+            <span class="n">tab_deltadelay</span> <span class="o">=</span> <span class="n">QTabWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="n">tab_deltadelay</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">sec</span><span class="o">+</span><span class="s1">&#39;Tab&#39;</span><span class="p">)</span>
+            <span class="n">tab_deltadelay</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">                #</span><span class="si">{}</span><span class="s2">Tab::pane {{</span>
+<span class="s2">                    border-left: 2px solid gray;</span>
+<span class="s2">                    border-bottom: 2px solid gray;</span>
+<span class="s2">                    border-right: 2px solid gray;</span>
+<span class="s2">                }}&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">sec</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">tab</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;DeltaDelay&#39;</span><span class="p">,</span> <span class="s1">&#39;DeltaDelayRaw&#39;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="s1">&#39;Raw&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">tab</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">deltadelay</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="k">if</span> <span class="s1">&#39;Raw&#39;</span> <span class="ow">in</span> <span class="n">tab</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">deltadelayraw</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">unit</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span> <span class="k">if</span> <span class="s1">&#39;Raw&#39;</span> <span class="ow">in</span> <span class="n">tab</span> <span class="k">else</span> <span class="s1">&#39; [us]&#39;</span>
+                <span class="n">wid</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+                <span class="n">lay</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+                <span class="n">lay</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignTop</span><span class="p">)</span>
+                <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span>
+                    <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;&lt;h4&gt;Low Level&lt;/h4&gt;&#39;</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+                <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span>
+                    <span class="n">QLabel</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;&lt;h4&gt;SP</span><span class="si">{</span><span class="n">unit</span><span class="si">:</span><span class="s1">s</span><span class="si">}</span><span class="s1">&lt;/h4&gt;&#39;</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+                <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span>
+                    <span class="n">QLabel</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;&lt;h4&gt;RB</span><span class="si">{</span><span class="n">unit</span><span class="si">:</span><span class="s1">s</span><span class="si">}</span><span class="s1">&lt;/h4&gt;&#39;</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+                <span class="n">devname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">device_name</span>
+                <span class="n">ll_obj_names</span> <span class="o">=</span> <span class="n">HLTimeSearch</span><span class="o">.</span><span class="n">get_ll_trigger_names</span><span class="p">(</span><span class="n">devname</span><span class="p">)</span>
+                <span class="n">hl_obj_names</span> <span class="o">=</span> <span class="n">HLTimeSearch</span><span class="o">.</span><span class="n">get_hl_trigger_channels</span><span class="p">(</span><span class="n">devname</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">objs</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">ll_obj_names</span><span class="p">,</span> <span class="n">hl_obj_names</span><span class="p">)):</span>
+                    <span class="n">nam</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span>
+                        <span class="n">objs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">(&#39;</span> <span class="o">+</span> <span class="n">objs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;)&#39;</span><span class="p">,</span> <span class="n">wid</span><span class="p">,</span>
+                        <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+                    <span class="n">spin</span> <span class="o">=</span> <span class="n">_SpinBox</span><span class="p">(</span>
+                        <span class="n">wid</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_pvname</span><span class="p">(</span><span class="n">tab</span><span class="o">+</span><span class="s1">&#39;-SP&#39;</span><span class="p">),</span>
+                        <span class="n">index</span><span class="o">=</span><span class="n">idx</span><span class="p">)</span>
+                    <span class="n">spin</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s1">&#39;min-width:7em;&#39;</span><span class="p">)</span>
+                    <span class="n">lbl</span> <span class="o">=</span> <span class="n">_Label</span><span class="p">(</span>
+                        <span class="n">wid</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_pvname</span><span class="p">(</span><span class="n">tab</span><span class="o">+</span><span class="s1">&#39;-RB&#39;</span><span class="p">),</span>
+                        <span class="n">index</span><span class="o">=</span><span class="n">idx</span><span class="p">)</span>
+                    <span class="n">lbl</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s1">&#39;min-width:6em;&#39;</span><span class="p">)</span>
+                    <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">nam</span><span class="p">,</span> <span class="n">idx</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+                    <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">spin</span><span class="p">,</span> <span class="n">idx</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                    <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl</span><span class="p">,</span> <span class="n">idx</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+                <span class="n">tab_deltadelay</span><span class="o">.</span><span class="n">addTab</span><span class="p">(</span><span class="n">wid</span><span class="p">,</span> <span class="n">tab</span><span class="p">)</span>
+            <span class="n">flay</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">tab_deltadelay</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="HLTriggerDetailed">
+<a class="viewcode-back" href="../../../siriushla.as_ti_control.html#siriushla.as_ti_control.hl_trigger.HLTriggerDetailed">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">HLTriggerDetailed</span><span class="p">(</span><span class="n">BaseWidget</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Template for control of High Level Triggers.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize object.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">prefix</span><span class="p">)</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">sec</span> <span class="o">+</span> <span class="s1">&#39;App&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setupUi</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">my_layout</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">my_layout</span><span class="o">.</span><span class="n">setHorizontalSpacing</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">my_layout</span><span class="o">.</span><span class="n">setVerticalSpacing</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">lab</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;&lt;h1&gt;&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">device_name</span> <span class="o">+</span> <span class="s1">&#39;&lt;/h1&gt;&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">my_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lab</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">my_layout</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">lab</span><span class="p">,</span> <span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">status_wid</span> <span class="o">=</span> <span class="n">QGroupBox</span><span class="p">(</span><span class="s1">&#39;Status&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">my_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">status_wid</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setup_status_wid</span><span class="p">()</span>
+
+        <span class="n">init_channel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pvname</span><span class="p">(</span><span class="s1">&#39;InInjTable-Mon&#39;</span><span class="p">)</span>
+        <span class="n">rb</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">init_channel</span><span class="p">)</span>
+        <span class="n">gbinjtab</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_small_group</span><span class="p">(</span><span class="s1">&#39;In Injection Table?&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="p">(</span><span class="n">rb</span><span class="p">,))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">my_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">gbinjtab</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ll_list_wid</span> <span class="o">=</span> <span class="n">QGroupBox</span><span class="p">(</span><span class="s1">&#39;Configs&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">my_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ll_list_wid</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setup_ll_list_wid</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_setup_status_wid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">status_layout</span> <span class="o">=</span> <span class="n">QFormLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">status_wid</span><span class="p">)</span>
+        <span class="n">status_layout</span><span class="o">.</span><span class="n">setHorizontalSpacing</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+        <span class="n">status_layout</span><span class="o">.</span><span class="n">setVerticalSpacing</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">bit</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">_cstime</span><span class="o">.</span><span class="n">Const</span><span class="o">.</span><span class="n">HLTrigStatusLabels</span><span class="p">):</span>
+            <span class="n">led</span> <span class="o">=</span> <span class="n">SiriusLedAlert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pvname</span><span class="p">(</span><span class="s1">&#39;Status-Mon&#39;</span><span class="p">),</span> <span class="n">bit</span><span class="p">)</span>
+            <span class="n">lab</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+            <span class="n">status_layout</span><span class="o">.</span><span class="n">addRow</span><span class="p">(</span><span class="n">led</span><span class="p">,</span> <span class="n">lab</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_setup_ll_list_wid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">ll_list_layout</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ll_list_wid</span><span class="p">)</span>
+        <span class="n">ll_list_layout</span><span class="o">.</span><span class="n">setHorizontalSpacing</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+        <span class="n">ll_list_layout</span><span class="o">.</span><span class="n">setVerticalSpacing</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+
+        <span class="n">but</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;Open LL Triggers&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">but</span><span class="o">.</span><span class="n">setAutoDefault</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">but</span><span class="o">.</span><span class="n">setDefault</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">obj_names</span> <span class="o">=</span> <span class="n">HLTimeSearch</span><span class="o">.</span><span class="n">get_ll_trigger_names</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">device_name</span><span class="p">)</span>
+        <span class="n">icon</span> <span class="o">=</span> <span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span>
+            <span class="s1">&#39;mdi.timer&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">get_appropriate_color</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">sec</span><span class="p">))</span>
+        <span class="n">Window</span> <span class="o">=</span> <span class="n">create_window_from_widget</span><span class="p">(</span>
+            <span class="n">LLTriggers</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">device_name</span><span class="o">+</span><span class="s1">&#39;: LL Triggers&#39;</span><span class="p">,</span>
+            <span class="n">icon</span><span class="o">=</span><span class="n">icon</span><span class="p">)</span>
+        <span class="n">connect_window</span><span class="p">(</span>
+            <span class="n">but</span><span class="p">,</span> <span class="n">Window</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="p">,</span>
+            <span class="n">hltrigger</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">device_name</span><span class="p">,</span> <span class="n">obj_names</span><span class="o">=</span><span class="n">obj_names</span><span class="p">)</span>
+        <span class="n">lay</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">ll_list_layout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">lay</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">but</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addStretch</span><span class="p">()</span>
+
+        <span class="n">pbt_bl</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;&gt;&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">pbt_bl</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="s1">&#39;Show Delta Delay information.&#39;</span><span class="p">)</span>
+        <span class="n">pbt_bl</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s1">&#39;QPushButton{max-width: 0.8em;}&#39;</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">pbt_bl</span><span class="p">)</span>
+
+        <span class="n">init_channel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pvname</span><span class="p">(</span><span class="s1">&#39;LowLvlLock-Sel&#39;</span><span class="p">)</span>
+        <span class="n">sp</span> <span class="o">=</span> <span class="n">PyDMStateButton</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">init_channel</span><span class="p">)</span>
+        <span class="n">init_channel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pvname</span><span class="p">(</span><span class="s1">&#39;LowLvlLock-Sts&#39;</span><span class="p">)</span>
+        <span class="n">rb</span> <span class="o">=</span> <span class="n">PyDMLed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">init_channel</span><span class="p">)</span>
+        <span class="n">gb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_small_group</span><span class="p">(</span>
+            <span class="s1">&#39;Lock Low Level&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ll_list_wid</span><span class="p">,</span> <span class="p">(</span><span class="n">sp</span><span class="p">,</span> <span class="n">rb</span><span class="p">))</span>
+        <span class="n">ll_list_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">gb</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">init_channel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pvname</span><span class="p">(</span><span class="s1">&#39;State-Sel&#39;</span><span class="p">)</span>
+        <span class="n">sp</span> <span class="o">=</span> <span class="n">PyDMStateButton</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">init_channel</span><span class="p">)</span>
+        <span class="n">init_channel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pvname</span><span class="p">(</span><span class="s1">&#39;State-Sts&#39;</span><span class="p">)</span>
+        <span class="n">rb</span> <span class="o">=</span> <span class="n">PyDMLed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">init_channel</span><span class="p">)</span>
+        <span class="n">gb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_small_group</span><span class="p">(</span><span class="s1">&#39;Enabled&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ll_list_wid</span><span class="p">,</span> <span class="p">(</span><span class="n">sp</span><span class="p">,</span> <span class="n">rb</span><span class="p">))</span>
+        <span class="n">ll_list_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">gb</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">init_channel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pvname</span><span class="p">(</span><span class="s1">&#39;Polarity-Sel&#39;</span><span class="p">)</span>
+        <span class="n">sp</span> <span class="o">=</span> <span class="n">SiriusEnumComboBox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">init_channel</span><span class="p">)</span>
+        <span class="n">init_channel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pvname</span><span class="p">(</span><span class="s1">&#39;Polarity-Sts&#39;</span><span class="p">)</span>
+        <span class="n">rb</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">init_channel</span><span class="p">)</span>
+        <span class="n">gb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_small_group</span><span class="p">(</span><span class="s1">&#39;Polarity&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ll_list_wid</span><span class="p">,</span> <span class="p">(</span><span class="n">sp</span><span class="p">,</span> <span class="n">rb</span><span class="p">))</span>
+        <span class="n">ll_list_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">gb</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="n">init_channel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pvname</span><span class="p">(</span><span class="s1">&#39;Src-Sel&#39;</span><span class="p">)</span>
+        <span class="n">sp</span> <span class="o">=</span> <span class="n">SiriusEnumComboBox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">init_channel</span><span class="p">)</span>
+        <span class="n">init_channel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pvname</span><span class="p">(</span><span class="s1">&#39;Src-Sts&#39;</span><span class="p">)</span>
+        <span class="n">rb</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">init_channel</span><span class="p">)</span>
+        <span class="n">gb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_small_group</span><span class="p">(</span><span class="s1">&#39;Source&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ll_list_wid</span><span class="p">,</span> <span class="p">(</span><span class="n">sp</span><span class="p">,</span> <span class="n">rb</span><span class="p">))</span>
+        <span class="n">ll_list_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">gb</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">HLTimeSearch</span><span class="o">.</span><span class="n">has_log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">device_name</span><span class="p">):</span>
+            <span class="n">init_channel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pvname</span><span class="p">(</span><span class="s1">&#39;Log-Sel&#39;</span><span class="p">)</span>
+            <span class="n">sp</span> <span class="o">=</span> <span class="n">PyDMStateButton</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">init_channel</span><span class="p">)</span>
+            <span class="n">init_channel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pvname</span><span class="p">(</span><span class="s1">&#39;Log-Sts&#39;</span><span class="p">)</span>
+            <span class="n">rb</span> <span class="o">=</span> <span class="n">PyDMLed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">init_channel</span><span class="p">)</span>
+            <span class="n">gb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_small_group</span><span class="p">(</span><span class="s1">&#39;Log&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ll_list_wid</span><span class="p">,</span> <span class="p">(</span><span class="n">sp</span><span class="p">,</span> <span class="n">rb</span><span class="p">))</span>
+            <span class="n">ll_list_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">gb</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">HLTimeSearch</span><span class="o">.</span><span class="n">is_digital_input</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">device_name</span><span class="p">):</span>
+            <span class="k">return</span>
+
+        <span class="n">init_channel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pvname</span><span class="p">(</span><span class="s1">&#39;NrPulses-SP&#39;</span><span class="p">)</span>
+        <span class="n">sp</span> <span class="o">=</span> <span class="n">SiriusSpinbox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">init_channel</span><span class="p">)</span>
+        <span class="n">init_channel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pvname</span><span class="p">(</span><span class="s1">&#39;NrPulses-RB&#39;</span><span class="p">)</span>
+        <span class="n">rb</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">init_channel</span><span class="p">)</span>
+        <span class="n">gb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_small_group</span><span class="p">(</span><span class="s1">&#39;Nr Pulses&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ll_list_wid</span><span class="p">,</span> <span class="p">(</span><span class="n">sp</span><span class="p">,</span> <span class="n">rb</span><span class="p">))</span>
+        <span class="n">ll_list_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">gb</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">init_channel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pvname</span><span class="p">(</span><span class="s1">&#39;Duration-SP&#39;</span><span class="p">)</span>
+        <span class="n">sp</span> <span class="o">=</span> <span class="n">SiriusSpinbox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">init_channel</span><span class="p">)</span>
+        <span class="n">init_channel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pvname</span><span class="p">(</span><span class="s1">&#39;Duration-RB&#39;</span><span class="p">)</span>
+        <span class="n">rb</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">init_channel</span><span class="p">)</span>
+        <span class="n">gbdur</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_small_group</span><span class="p">(</span>
+            <span class="s1">&#39;Duration [us]&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ll_list_wid</span><span class="p">,</span> <span class="p">(</span><span class="n">sp</span><span class="p">,</span> <span class="n">rb</span><span class="p">))</span>
+
+        <span class="n">init_channel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pvname</span><span class="p">(</span><span class="s1">&#39;WidthRaw-SP&#39;</span><span class="p">)</span>
+        <span class="n">sp</span> <span class="o">=</span> <span class="n">SiriusSpinbox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">init_channel</span><span class="p">)</span>
+        <span class="n">init_channel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pvname</span><span class="p">(</span><span class="s1">&#39;WidthRaw-RB&#39;</span><span class="p">)</span>
+        <span class="n">rb</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">init_channel</span><span class="p">)</span>
+        <span class="n">gbwid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_small_group</span><span class="p">(</span>
+            <span class="s1">&#39;WidthRaw&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ll_list_wid</span><span class="p">,</span> <span class="p">(</span><span class="n">sp</span><span class="p">,</span> <span class="n">rb</span><span class="p">))</span>
+
+        <span class="n">widd</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ll_list_wid</span><span class="p">)</span>
+        <span class="n">widd</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">QHBoxLayout</span><span class="p">())</span>
+        <span class="n">widd</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">gbdur</span><span class="p">)</span>
+        <span class="n">widd</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">gbwid</span><span class="p">)</span>
+        <span class="n">ll_list_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">widd</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="n">init_channel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pvname</span><span class="p">(</span><span class="s1">&#39;Delay-SP&#39;</span><span class="p">)</span>
+        <span class="n">sp</span> <span class="o">=</span> <span class="n">SiriusSpinbox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">init_channel</span><span class="p">)</span>
+        <span class="n">init_channel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pvname</span><span class="p">(</span><span class="s1">&#39;Delay-RB&#39;</span><span class="p">)</span>
+        <span class="n">rb</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">init_channel</span><span class="p">)</span>
+        <span class="n">gbdel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_small_group</span><span class="p">(</span><span class="s1">&#39;[us]&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ll_list_wid</span><span class="p">,</span> <span class="p">(</span><span class="n">sp</span><span class="p">,</span> <span class="n">rb</span><span class="p">))</span>
+
+        <span class="n">init_channel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pvname</span><span class="p">(</span><span class="s1">&#39;DelayRaw-SP&#39;</span><span class="p">)</span>
+        <span class="n">sp</span> <span class="o">=</span> <span class="n">SiriusSpinbox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">init_channel</span><span class="p">)</span>
+        <span class="n">init_channel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pvname</span><span class="p">(</span><span class="s1">&#39;DelayRaw-RB&#39;</span><span class="p">)</span>
+        <span class="n">rb</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">init_channel</span><span class="p">)</span>
+        <span class="n">gbdelr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_small_group</span><span class="p">(</span><span class="s1">&#39;Raw&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ll_list_wid</span><span class="p">,</span> <span class="p">(</span><span class="n">sp</span><span class="p">,</span> <span class="n">rb</span><span class="p">))</span>
+
+        <span class="n">init_channel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pvname</span><span class="p">(</span><span class="s1">&#39;TotalDelay-Mon&#39;</span><span class="p">)</span>
+        <span class="n">rb</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">init_channel</span><span class="p">)</span>
+        <span class="n">gbtdel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_small_group</span><span class="p">(</span><span class="s1">&#39;[us]&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ll_list_wid</span><span class="p">,</span> <span class="p">(</span><span class="n">rb</span><span class="p">,</span> <span class="p">))</span>
+
+        <span class="n">init_channel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pvname</span><span class="p">(</span><span class="s1">&#39;TotalDelayRaw-Mon&#39;</span><span class="p">)</span>
+        <span class="n">rb</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">init_channel</span><span class="p">)</span>
+        <span class="n">gbtdelr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_small_group</span><span class="p">(</span><span class="s1">&#39;Raw&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ll_list_wid</span><span class="p">,</span> <span class="p">(</span><span class="n">rb</span><span class="p">,</span> <span class="p">))</span>
+
+        <span class="n">widd</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ll_list_wid</span><span class="p">)</span>
+        <span class="n">widd</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">QHBoxLayout</span><span class="p">())</span>
+        <span class="n">widd</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">gbdel</span><span class="p">)</span>
+        <span class="n">widd</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">gbdelr</span><span class="p">)</span>
+
+        <span class="n">widt</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ll_list_wid</span><span class="p">)</span>
+        <span class="n">widt</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">QHBoxLayout</span><span class="p">())</span>
+        <span class="n">widt</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">gbtdel</span><span class="p">)</span>
+        <span class="n">widt</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">gbtdelr</span><span class="p">)</span>
+
+        <span class="n">tabdel</span> <span class="o">=</span> <span class="n">QTabWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">tabdel</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">sec</span> <span class="o">+</span> <span class="s1">&#39;Tab&#39;</span><span class="p">)</span>
+        <span class="n">tabdel</span><span class="o">.</span><span class="n">addTab</span><span class="p">(</span><span class="n">widd</span><span class="p">,</span> <span class="s1">&#39;Delay&#39;</span><span class="p">)</span>
+        <span class="n">tabdel</span><span class="o">.</span><span class="n">addTab</span><span class="p">(</span><span class="n">widt</span><span class="p">,</span> <span class="s1">&#39;Total Delay&#39;</span><span class="p">)</span>
+        <span class="n">ll_list_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">tabdel</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">HLTimeSearch</span><span class="o">.</span><span class="n">has_delay_type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">device_name</span><span class="p">):</span>
+            <span class="n">init_channel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pvname</span><span class="p">(</span><span class="s1">&#39;RFDelayType-Sel&#39;</span><span class="p">)</span>
+            <span class="n">sp</span> <span class="o">=</span> <span class="n">SiriusEnumComboBox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">init_channel</span><span class="p">)</span>
+            <span class="n">init_channel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pvname</span><span class="p">(</span><span class="s1">&#39;RFDelayType-Sts&#39;</span><span class="p">)</span>
+            <span class="n">rb</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">init_channel</span><span class="p">)</span>
+            <span class="n">gb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_small_group</span><span class="p">(</span>
+                <span class="s1">&#39;Delay Type&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ll_list_wid</span><span class="p">,</span> <span class="p">(</span><span class="n">sp</span><span class="p">,</span> <span class="n">rb</span><span class="p">))</span>
+            <span class="n">ll_list_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">gb</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">HLTimeSearch</span><span class="o">.</span><span class="n">has_direction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">device_name</span><span class="p">):</span>
+            <span class="n">init_channel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pvname</span><span class="p">(</span><span class="s1">&#39;Direction-Sel&#39;</span><span class="p">)</span>
+            <span class="n">sp</span> <span class="o">=</span> <span class="n">SiriusEnumComboBox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">init_channel</span><span class="p">)</span>
+            <span class="n">init_channel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pvname</span><span class="p">(</span><span class="s1">&#39;Direction-Sts&#39;</span><span class="p">)</span>
+            <span class="n">rb</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">init_channel</span><span class="p">)</span>
+            <span class="n">gb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_small_group</span><span class="p">(</span>
+                <span class="s1">&#39;Direction&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ll_list_wid</span><span class="p">,</span> <span class="p">(</span><span class="n">sp</span><span class="p">,</span> <span class="n">rb</span><span class="p">))</span>
+            <span class="n">ll_list_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">gb</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="n">tabdelta</span> <span class="o">=</span> <span class="n">QTabWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">tabdelta</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">sec</span> <span class="o">+</span> <span class="s1">&#39;Tab&#39;</span><span class="p">)</span>
+        <span class="n">deltaus</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_deltadelay</span><span class="p">(</span><span class="n">israw</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">deltaraw</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_deltadelay</span><span class="p">(</span><span class="n">israw</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">tabdelta</span><span class="o">.</span><span class="n">addTab</span><span class="p">(</span><span class="n">deltaus</span><span class="p">,</span> <span class="s1">&#39;Delta Delay&#39;</span><span class="p">)</span>
+        <span class="n">tabdelta</span><span class="o">.</span><span class="n">addTab</span><span class="p">(</span><span class="n">deltaraw</span><span class="p">,</span> <span class="s1">&#39;Delta Delay Raw&#39;</span><span class="p">)</span>
+
+        <span class="n">tabdelta</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">pbt_bl</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">_partial</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_toggle_visibility</span><span class="p">,</span> <span class="n">tabdelta</span><span class="p">,</span> <span class="n">pbt_bl</span><span class="p">))</span>
+        <span class="n">ll_list_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">tabdelta</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_toggle_visibility</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wid</span><span class="p">,</span> <span class="n">but</span><span class="p">):</span>
+        <span class="n">show</span> <span class="o">=</span> <span class="n">wid</span><span class="o">.</span><span class="n">isHidden</span><span class="p">()</span>
+        <span class="n">wid</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="n">show</span><span class="p">)</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;&lt;&#39;</span> <span class="k">if</span> <span class="n">show</span> <span class="k">else</span> <span class="s1">&#39;&gt;&#39;</span>
+        <span class="n">but</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+        <span class="n">tooltip</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Hide&#39;</span> <span class="k">if</span> <span class="n">show</span> <span class="k">else</span> <span class="s1">&#39;Show&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">but</span><span class="o">.</span><span class="n">toolTip</span><span class="p">()[</span><span class="mi">4</span><span class="p">:]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sender</span><span class="p">()</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="n">tooltip</span><span class="p">)</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="n">but</span><span class="o">.</span><span class="n">parent</span><span class="p">()</span>
+        <span class="k">while</span> <span class="n">parent</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">parent</span><span class="o">.</span><span class="n">adjustSize</span><span class="p">()</span>
+            <span class="n">parent</span> <span class="o">=</span> <span class="n">parent</span><span class="o">.</span><span class="n">parent</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_create_deltadelay</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">israw</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">unit</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span> <span class="k">if</span> <span class="n">israw</span> <span class="k">else</span> <span class="s1">&#39; [us]&#39;</span>
+        <span class="n">pvn</span> <span class="o">=</span> <span class="s1">&#39;DeltaDelay&#39;</span> <span class="o">+</span> <span class="p">(</span><span class="s1">&#39;Raw&#39;</span> <span class="k">if</span> <span class="n">israw</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">wid_</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">()</span>
+        <span class="n">lay</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">(</span><span class="n">wid_</span><span class="p">)</span>
+        <span class="n">sc_area</span> <span class="o">=</span> <span class="n">QScrollArea</span><span class="p">()</span>
+        <span class="n">sc_area</span><span class="o">.</span><span class="n">setWidgetResizable</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">sc_area</span><span class="o">.</span><span class="n">setFrameShape</span><span class="p">(</span><span class="n">QFrame</span><span class="o">.</span><span class="n">NoFrame</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">sc_area</span><span class="p">)</span>
+
+        <span class="n">wid</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">(</span><span class="n">sc_area</span><span class="p">)</span>
+        <span class="n">wid</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;wid&#39;</span><span class="p">)</span>
+        <span class="n">wid</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s1">&#39;#wid {background-color: transparent;}&#39;</span><span class="p">)</span>
+        <span class="n">sc_area</span><span class="o">.</span><span class="n">setWidget</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+
+        <span class="n">lay</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignTop</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;&lt;h4&gt;Low Level&lt;/h4&gt;&#39;</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;&lt;h4&gt;SP</span><span class="si">{</span><span class="n">unit</span><span class="si">:</span><span class="s1">s</span><span class="si">}</span><span class="s1">&lt;/h4&gt;&#39;</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;&lt;h4&gt;RB</span><span class="si">{</span><span class="n">unit</span><span class="si">:</span><span class="s1">s</span><span class="si">}</span><span class="s1">&lt;/h4&gt;&#39;</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+        <span class="n">ll_obj_names</span> <span class="o">=</span> <span class="n">HLTimeSearch</span><span class="o">.</span><span class="n">get_ll_trigger_names</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">device_name</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">obj</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ll_obj_names</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">nam</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">wid</span><span class="p">)</span>
+            <span class="n">spin</span> <span class="o">=</span> <span class="n">_SpinBox</span><span class="p">(</span>
+                <span class="n">wid</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_pvname</span><span class="p">(</span><span class="n">pvn</span><span class="o">+</span><span class="s1">&#39;-SP&#39;</span><span class="p">),</span>
+                <span class="n">index</span><span class="o">=</span><span class="n">idx</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">spin</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s1">&#39;min-width:7em;&#39;</span><span class="p">)</span>
+            <span class="n">lbl</span> <span class="o">=</span> <span class="n">_Label</span><span class="p">(</span>
+                <span class="n">wid</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_pvname</span><span class="p">(</span><span class="n">pvn</span><span class="o">+</span><span class="s1">&#39;-RB&#39;</span><span class="p">),</span>
+                <span class="n">index</span><span class="o">=</span><span class="n">idx</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">lbl</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s1">&#39;min-width:6em;&#39;</span><span class="p">)</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">nam</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">spin</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lbl</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">sc_area</span><span class="o">.</span><span class="n">setSizeAdjustPolicy</span><span class="p">(</span><span class="n">QScrollArea</span><span class="o">.</span><span class="n">AdjustToContentsOnFirstShow</span><span class="p">)</span>
+        <span class="n">sc_area</span><span class="o">.</span><span class="n">setVerticalScrollBarPolicy</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">ScrollBarAsNeeded</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">wid_</span></div>
+
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">_SpinBox</span><span class="p">(</span><span class="n">SiriusSpinbox</span><span class="p">):</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_index</span> <span class="o">=</span> <span class="n">index</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">init_channel</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">value_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">valueBeingSet</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">_np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">value</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_index</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">valueBeingSet</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">PyDMWritableWidget</span><span class="o">.</span><span class="n">value_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">send_value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method invoked to send the current value on the QDoubleSpinBox to</span>
+<span class="sd">        the channel using the `send_value_signal`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">QDoubleSpinBox</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="n">_dcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">_np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="n">val</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_index</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">valueBeingSet</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">send_value_signal</span><span class="p">[</span><span class="n">_np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">valueBeingSet</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">send_value_signal</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">_Label</span><span class="p">(</span><span class="n">SiriusLabel</span><span class="p">):</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_index</span> <span class="o">=</span> <span class="n">index</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">init_channel</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">value_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">_np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_index</span><span class="p">]</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">value_changed</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="LLTriggers">
+<a class="viewcode-back" href="../../../siriushla.as_ti_control.html#siriushla.as_ti_control.hl_trigger.LLTriggers">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">LLTriggers</span><span class="p">(</span><span class="n">QWidget</span><span class="p">):</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hltrigger</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">obj_names</span><span class="o">=</span><span class="nb">list</span><span class="p">()):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="n">vl</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">vl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span>
+            <span class="s1">&#39;&lt;h1&gt;Low Level Triggers of &#39;</span><span class="o">+</span><span class="n">hltrigger</span><span class="o">+</span><span class="s1">&#39;&lt;/h1&gt;&#39;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="n">hltrigger</span><span class="o">.</span><span class="n">sec</span><span class="o">+</span><span class="s1">&#39;App&#39;</span><span class="p">)</span>
+
+        <span class="n">amc_list</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">otp_list</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">out_list</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">din_list</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">obj_names</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s1">&#39;AMC&#39;</span> <span class="ow">in</span> <span class="n">name</span><span class="o">.</span><span class="n">dev</span><span class="p">:</span>
+                <span class="n">amc_list</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="s1">&#39;OTP&#39;</span> <span class="ow">in</span> <span class="n">name</span><span class="o">.</span><span class="n">propty_name</span><span class="p">:</span>
+                <span class="n">otp_list</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="s1">&#39;OUT&#39;</span> <span class="ow">in</span> <span class="n">name</span><span class="o">.</span><span class="n">propty_name</span><span class="p">:</span>
+                <span class="n">out_list</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="s1">&#39;DIN&#39;</span> <span class="ow">in</span> <span class="n">name</span><span class="o">.</span><span class="n">propty_name</span><span class="p">:</span>
+                <span class="n">din_list</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">amc_list</span><span class="p">:</span>
+            <span class="n">props</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">AFCOUTList</span><span class="o">.</span><span class="n">_ALL_PROPS</span><span class="p">)</span>
+            <span class="n">props</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="s1">&#39;widthraw&#39;</span><span class="p">)</span>
+            <span class="n">props</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="s1">&#39;delayraw&#39;</span><span class="p">)</span>
+            <span class="n">props</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;device&#39;</span><span class="p">)</span>
+            <span class="n">amc_wid</span> <span class="o">=</span> <span class="n">LLTriggerList</span><span class="p">(</span>
+                <span class="n">name</span><span class="o">=</span><span class="s1">&#39;AMCs&#39;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">props</span><span class="o">=</span><span class="n">props</span><span class="p">,</span>
+                <span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">,</span> <span class="n">obj_names</span><span class="o">=</span><span class="nb">sorted</span><span class="p">(</span><span class="n">amc_list</span><span class="p">))</span>
+            <span class="n">amc_wid</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;amc_wid&#39;</span><span class="p">)</span>
+            <span class="n">vl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">amc_wid</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">otp_list</span><span class="p">:</span>
+            <span class="n">props</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">EVREVEOTPList</span><span class="o">.</span><span class="n">_ALL_PROPS</span><span class="p">)</span>
+            <span class="n">props</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="s1">&#39;width&#39;</span><span class="p">)</span>
+            <span class="n">props</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="s1">&#39;delay&#39;</span><span class="p">)</span>
+            <span class="n">props</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;device&#39;</span><span class="p">)</span>
+            <span class="n">otp_wid</span> <span class="o">=</span> <span class="n">LLTriggerList</span><span class="p">(</span>
+                <span class="n">name</span><span class="o">=</span><span class="s1">&#39;OTPs&#39;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">props</span><span class="o">=</span><span class="n">props</span><span class="p">,</span>
+                <span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">,</span> <span class="n">obj_names</span><span class="o">=</span><span class="nb">sorted</span><span class="p">(</span><span class="n">otp_list</span><span class="p">))</span>
+            <span class="n">otp_wid</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;otp_wid&#39;</span><span class="p">)</span>
+            <span class="n">vl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">otp_wid</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">out_list</span><span class="p">:</span>
+            <span class="n">props</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">EVREVEOTPList</span><span class="o">.</span><span class="n">_ALL_PROPS</span><span class="p">)</span>
+            <span class="n">props</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">EVREVEOUTList</span><span class="o">.</span><span class="n">_ALL_PROPS</span><span class="p">)</span>
+            <span class="n">props</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="s1">&#39;width&#39;</span><span class="p">)</span>
+            <span class="n">props</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="s1">&#39;delay&#39;</span><span class="p">)</span>
+            <span class="n">props</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="s1">&#39;fine_delay&#39;</span><span class="p">)</span>
+            <span class="n">props</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="s1">&#39;rf_delay&#39;</span><span class="p">)</span>
+            <span class="n">props</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;device&#39;</span><span class="p">)</span>
+            <span class="n">out_wid</span> <span class="o">=</span> <span class="n">LLTriggerList</span><span class="p">(</span>
+                <span class="n">name</span><span class="o">=</span><span class="s1">&#39;OUTs&#39;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">props</span><span class="o">=</span><span class="n">props</span><span class="p">,</span>
+                <span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">,</span> <span class="n">obj_names</span><span class="o">=</span><span class="nb">sorted</span><span class="p">(</span><span class="n">out_list</span><span class="p">))</span>
+            <span class="n">out_wid</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;out_wid&#39;</span><span class="p">)</span>
+            <span class="n">vl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">out_wid</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">din_list</span><span class="p">:</span>
+            <span class="n">din_wid</span> <span class="o">=</span> <span class="n">EVREVEDIList</span><span class="p">(</span>
+                <span class="n">name</span><span class="o">=</span><span class="s1">&#39;DINs&#39;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">,</span>
+                <span class="n">obj_names</span><span class="o">=</span><span class="nb">sorted</span><span class="p">(</span><span class="n">din_list</span><span class="p">))</span>
+            <span class="n">din_wid</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;din_wid&#39;</span><span class="p">)</span>
+            <span class="n">vl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">din_wid</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="HLTriggerList">
+<a class="viewcode-back" href="../../../siriushla.as_ti_control.html#siriushla.as_ti_control.hl_trigger.HLTriggerList">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">HLTriggerList</span><span class="p">(</span><span class="n">BaseList</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Template for control of High Level Triggers.&quot;&quot;&quot;</span>
+
+    <span class="n">_MIN_WIDs</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+        <span class="s1">&#39;detailed&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+        <span class="s1">&#39;status&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+        <span class="s1">&#39;state&#39;</span><span class="p">:</span> <span class="mf">3.8</span><span class="p">,</span>
+        <span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="mf">4.8</span><span class="p">,</span>
+        <span class="s1">&#39;pulses&#39;</span><span class="p">:</span> <span class="mf">4.8</span><span class="p">,</span>
+        <span class="s1">&#39;duration&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+        <span class="s1">&#39;widthraw&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+        <span class="s1">&#39;polarity&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+        <span class="s1">&#39;log&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+        <span class="s1">&#39;delay_type&#39;</span><span class="p">:</span> <span class="mf">4.2</span><span class="p">,</span>
+        <span class="s1">&#39;direction&#39;</span><span class="p">:</span> <span class="mf">4.2</span><span class="p">,</span>
+        <span class="s1">&#39;delay&#39;</span><span class="p">:</span> <span class="mf">5.5</span><span class="p">,</span>
+        <span class="s1">&#39;delayraw&#39;</span><span class="p">:</span> <span class="mf">5.5</span><span class="p">,</span>
+        <span class="s1">&#39;total_delay&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+        <span class="s1">&#39;total_delayraw&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+        <span class="s1">&#39;ininjtable&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="n">_LABELS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;detailed&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Name&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;status&#39;</span><span class="p">:</span> <span class="s1">&#39;Status&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;state&#39;</span><span class="p">:</span> <span class="s1">&#39;Enabled&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="s1">&#39;Source&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;pulses&#39;</span><span class="p">:</span> <span class="s1">&#39;Nr Pulses&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;duration&#39;</span><span class="p">:</span> <span class="s1">&#39;Duration [us]&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;widthraw&#39;</span><span class="p">:</span> <span class="s1">&#39;WidthRaw&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;polarity&#39;</span><span class="p">:</span> <span class="s1">&#39;Polarity&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;log&#39;</span><span class="p">:</span> <span class="s1">&#39;Log&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;delay_type&#39;</span><span class="p">:</span> <span class="s1">&#39;Type&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;direction&#39;</span><span class="p">:</span> <span class="s1">&#39;Direction&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;delay&#39;</span><span class="p">:</span> <span class="s1">&#39;Delay [us]&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;delayraw&#39;</span><span class="p">:</span> <span class="s1">&#39;DelayRaw&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;total_delay&#39;</span><span class="p">:</span> <span class="s1">&#39;Total Dly [us]&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;total_delayraw&#39;</span><span class="p">:</span> <span class="s1">&#39;Total DlyRaw&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;ininjtable&#39;</span><span class="p">:</span> <span class="s1">&#39;InInjTable&#39;</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="n">_ALL_PROPS</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s1">&#39;detailed&#39;</span><span class="p">,</span> <span class="s1">&#39;status&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;state&#39;</span><span class="p">,</span> <span class="s1">&#39;source&#39;</span><span class="p">,</span> <span class="s1">&#39;polarity&#39;</span><span class="p">,</span> <span class="s1">&#39;pulses&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;duration&#39;</span><span class="p">,</span> <span class="s1">&#39;widthraw&#39;</span><span class="p">,</span> <span class="s1">&#39;delay_type&#39;</span><span class="p">,</span> <span class="s1">&#39;direction&#39;</span><span class="p">,</span> <span class="s1">&#39;delay&#39;</span><span class="p">,</span> <span class="s1">&#39;delayraw&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;total_delay&#39;</span><span class="p">,</span> <span class="s1">&#39;total_delayraw&#39;</span><span class="p">,</span> <span class="s1">&#39;ininjtable&#39;</span><span class="p">,</span> <span class="s1">&#39;log&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">srch</span> <span class="o">=</span> <span class="nb">set</span><span class="p">((</span><span class="s1">&#39;source&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;polarity&#39;</span><span class="p">,</span> <span class="s1">&#39;state&#39;</span><span class="p">))</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;props2search&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">srch</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;ASApp&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_createObjs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">prop</span><span class="p">):</span>
+        <span class="n">devname</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">device_name</span>
+        <span class="n">has_delay_type</span> <span class="o">=</span> <span class="n">HLTimeSearch</span><span class="o">.</span><span class="n">has_delay_type</span><span class="p">(</span><span class="n">devname</span><span class="p">)</span>
+        <span class="n">has_direction</span> <span class="o">=</span> <span class="n">HLTimeSearch</span><span class="o">.</span><span class="n">has_direction</span><span class="p">(</span><span class="n">devname</span><span class="p">)</span>
+        <span class="n">has_log</span> <span class="o">=</span> <span class="n">HLTimeSearch</span><span class="o">.</span><span class="n">has_log</span><span class="p">(</span><span class="n">devname</span><span class="p">)</span>
+        <span class="n">is_digital_input</span> <span class="o">=</span> <span class="n">HLTimeSearch</span><span class="o">.</span><span class="n">is_digital_input</span><span class="p">(</span><span class="n">devname</span><span class="p">)</span>
+        <span class="n">sp</span> <span class="o">=</span> <span class="n">rb</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">prop</span> <span class="o">==</span> <span class="s1">&#39;name&#39;</span><span class="p">:</span>
+            <span class="n">sp</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="n">device</span><span class="o">.</span><span class="n">device_name</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">prop</span> <span class="o">==</span> <span class="s1">&#39;status&#39;</span><span class="p">:</span>
+            <span class="n">init_channel</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;Status-Mon&#39;</span><span class="p">)</span>
+            <span class="n">sp</span> <span class="o">=</span> <span class="n">SiriusLedAlert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">init_channel</span><span class="p">)</span>
+            <span class="n">sp</span><span class="o">.</span><span class="n">setShape</span><span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">ShapeMap</span><span class="o">.</span><span class="n">Square</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">prop</span> <span class="o">==</span> <span class="s1">&#39;detailed&#39;</span><span class="p">:</span>
+            <span class="n">sp</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="n">but</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">sp</span><span class="p">)</span>
+            <span class="n">but</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="s1">&#39;Open Detailed View Window&#39;</span><span class="p">)</span>
+            <span class="n">but</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span><span class="s1">&#39;fa5s.list-ul&#39;</span><span class="p">))</span>
+            <span class="n">but</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;but&#39;</span><span class="p">)</span>
+            <span class="n">but</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span>
+                <span class="s1">&#39;#but{min-width:25px; max-width:25px;</span><span class="se">\</span>
+<span class="s1">                min-height:25px; max-height:25px;</span><span class="se">\</span>
+<span class="s1">                icon-size:20px;}&#39;</span><span class="p">)</span>
+            <span class="n">icon</span> <span class="o">=</span> <span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span>
+                <span class="s1">&#39;mdi.timer&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">get_appropriate_color</span><span class="p">(</span><span class="n">device</span><span class="o">.</span><span class="n">sec</span><span class="p">))</span>
+            <span class="n">Window</span> <span class="o">=</span> <span class="n">create_window_from_widget</span><span class="p">(</span>
+                <span class="n">HLTriggerDetailed</span><span class="p">,</span>
+                <span class="n">title</span><span class="o">=</span><span class="n">device</span><span class="o">.</span><span class="n">device_name</span><span class="o">+</span><span class="s1">&#39;: HL Trigger Detailed&#39;</span><span class="p">,</span>
+                <span class="n">icon</span><span class="o">=</span><span class="n">icon</span><span class="p">)</span>
+            <span class="n">connect_window</span><span class="p">(</span>
+                <span class="n">but</span><span class="p">,</span> <span class="n">Window</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="p">)</span>
+            <span class="n">QHBoxLayout</span><span class="p">(</span><span class="n">sp</span><span class="p">)</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">but</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">prop</span> <span class="o">==</span> <span class="s1">&#39;state&#39;</span><span class="p">:</span>
+            <span class="n">init_channel</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;State-Sel&#39;</span><span class="p">)</span>
+            <span class="n">sp</span> <span class="o">=</span> <span class="n">PyDMStateButton</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">init_channel</span><span class="p">)</span>
+            <span class="n">init_channel</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;State-Sts&#39;</span><span class="p">)</span>
+            <span class="n">rb</span> <span class="o">=</span> <span class="n">PyDMLed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">init_channel</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">prop</span> <span class="o">==</span> <span class="s1">&#39;source&#39;</span><span class="p">:</span>
+            <span class="n">init_channel</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;Src-Sel&#39;</span><span class="p">)</span>
+            <span class="n">sp</span> <span class="o">=</span> <span class="n">SiriusEnumComboBox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">init_channel</span><span class="p">)</span>
+            <span class="n">init_channel</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;Src-Sts&#39;</span><span class="p">)</span>
+            <span class="n">rb</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">init_channel</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">prop</span> <span class="o">==</span> <span class="s1">&#39;pulses&#39;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">is_digital_input</span><span class="p">:</span>
+            <span class="n">init_channel</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;NrPulses-SP&#39;</span><span class="p">)</span>
+            <span class="n">sp</span> <span class="o">=</span> <span class="n">SiriusSpinbox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">init_channel</span><span class="p">)</span>
+            <span class="n">init_channel</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;NrPulses-RB&#39;</span><span class="p">)</span>
+            <span class="n">rb</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">init_channel</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">prop</span> <span class="o">==</span> <span class="s1">&#39;duration&#39;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">is_digital_input</span><span class="p">:</span>
+            <span class="n">init_channel</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;Duration-SP&#39;</span><span class="p">)</span>
+            <span class="n">sp</span> <span class="o">=</span> <span class="n">SiriusSpinbox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">init_channel</span><span class="p">)</span>
+            <span class="n">init_channel</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;Duration-RB&#39;</span><span class="p">)</span>
+            <span class="n">rb</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">init_channel</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">prop</span> <span class="o">==</span> <span class="s1">&#39;widthraw&#39;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">is_digital_input</span><span class="p">:</span>
+            <span class="n">init_channel</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;WidthRaw-SP&#39;</span><span class="p">)</span>
+            <span class="n">sp</span> <span class="o">=</span> <span class="n">SiriusSpinbox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">init_channel</span><span class="p">)</span>
+            <span class="n">init_channel</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;WidthRaw-RB&#39;</span><span class="p">)</span>
+            <span class="n">rb</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">init_channel</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">prop</span> <span class="o">==</span> <span class="s1">&#39;polarity&#39;</span><span class="p">:</span>
+            <span class="n">init_channel</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;Polarity-Sel&#39;</span><span class="p">)</span>
+            <span class="n">sp</span> <span class="o">=</span> <span class="n">SiriusEnumComboBox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">init_channel</span><span class="p">)</span>
+            <span class="n">init_channel</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;Polarity-Sts&#39;</span><span class="p">)</span>
+            <span class="n">rb</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">init_channel</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">prop</span> <span class="o">==</span> <span class="s1">&#39;log&#39;</span> <span class="ow">and</span> <span class="n">has_log</span><span class="p">:</span>
+            <span class="n">init_channel</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;Log-Sel&#39;</span><span class="p">)</span>
+            <span class="n">sp</span> <span class="o">=</span> <span class="n">PyDMStateButton</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">init_channel</span><span class="p">)</span>
+            <span class="n">init_channel</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;Log-Sts&#39;</span><span class="p">)</span>
+            <span class="n">rb</span> <span class="o">=</span> <span class="n">PyDMLed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">init_channel</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">prop</span> <span class="o">==</span> <span class="s1">&#39;delay_type&#39;</span> <span class="ow">and</span> <span class="n">has_delay_type</span><span class="p">:</span>
+            <span class="n">init_channel</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;RFDelayType-Sel&#39;</span><span class="p">)</span>
+            <span class="n">sp</span> <span class="o">=</span> <span class="n">SiriusEnumComboBox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">init_channel</span><span class="p">)</span>
+            <span class="n">init_channel</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;RFDelayType-Sts&#39;</span><span class="p">)</span>
+            <span class="n">rb</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">init_channel</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">prop</span> <span class="o">==</span> <span class="s1">&#39;direction&#39;</span><span class="ow">and</span> <span class="n">has_direction</span><span class="p">:</span>
+            <span class="n">init_channel</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;Direction-Sel&#39;</span><span class="p">)</span>
+            <span class="n">sp</span> <span class="o">=</span> <span class="n">SiriusEnumComboBox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">init_channel</span><span class="p">)</span>
+            <span class="n">init_channel</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;Direction-Sts&#39;</span><span class="p">)</span>
+            <span class="n">rb</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">init_channel</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">prop</span> <span class="o">==</span> <span class="s1">&#39;delay&#39;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">is_digital_input</span><span class="p">:</span>
+            <span class="n">init_channel</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;Delay-SP&#39;</span><span class="p">)</span>
+            <span class="n">sp</span> <span class="o">=</span> <span class="n">SiriusSpinbox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">init_channel</span><span class="p">)</span>
+            <span class="n">init_channel</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;Delay-RB&#39;</span><span class="p">)</span>
+            <span class="n">rb</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">init_channel</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">prop</span> <span class="o">==</span> <span class="s1">&#39;delayraw&#39;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">is_digital_input</span><span class="p">:</span>
+            <span class="n">init_channel</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;DelayRaw-SP&#39;</span><span class="p">)</span>
+            <span class="n">sp</span> <span class="o">=</span> <span class="n">SiriusSpinbox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">init_channel</span><span class="p">)</span>
+            <span class="n">init_channel</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;DelayRaw-RB&#39;</span><span class="p">)</span>
+            <span class="n">rb</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">init_channel</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">prop</span> <span class="o">==</span> <span class="s1">&#39;total_delay&#39;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">is_digital_input</span><span class="p">:</span>
+            <span class="n">init_channel</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;TotalDelay-Mon&#39;</span><span class="p">)</span>
+            <span class="n">sp</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">init_channel</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">prop</span> <span class="o">==</span> <span class="s1">&#39;total_delayraw&#39;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">is_digital_input</span><span class="p">:</span>
+            <span class="n">init_channel</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;TotalDelayRaw-Mon&#39;</span><span class="p">)</span>
+            <span class="n">sp</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">init_channel</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">prop</span> <span class="o">==</span> <span class="s1">&#39;ininjtable&#39;</span><span class="p">:</span>
+            <span class="n">init_channel</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">propty</span><span class="o">=</span><span class="s1">&#39;InInjTable-Mon&#39;</span><span class="p">)</span>
+            <span class="n">sp</span> <span class="o">=</span> <span class="n">SiriusLedState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">init_channel</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">prop</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ALL_PROPS</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Property unknown&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">rb</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">sp</span><span class="p">,</span> <span class="p">)</span>
+        <span class="k">return</span> <span class="n">sp</span><span class="p">,</span> <span class="n">rb</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, lnls-sirius.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

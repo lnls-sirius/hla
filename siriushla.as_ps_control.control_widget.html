@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>siriushla.as_ps_control.control_widget &mdash; siriushla 1.14.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=01009efc"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="siriushla.as_ps_control.detail_widget" href="siriushla.as_ps_control.detail_widget.html" />
+    <link rel="prev" title="siriushla.as_ps_control" href="siriushla.as_ps_control.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            siriushla
+          </a>
+              <div class="version">
+                1.14.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">GUIs:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_configdb.html">siriushla.as_ap_configdb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_currinfo.html">siriushla.as_ap_currinfo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_energybutton.html">siriushla.as_ap_energybutton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_injcontrol.html">siriushla.as_ap_injcontrol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_injection.html">siriushla.as_ap_injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_launcher.html">siriushla.as_ap_launcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_machshift.html">siriushla.as_ap_machshift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_macreport.html">siriushla.as_ap_macreport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_magoffconv.html">siriushla.as_ap_magoffconv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_measure.html">siriushla.as_ap_measure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_monitor.html">siriushla.as_ap_monitor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_opticscorr.html">siriushla.as_ap_opticscorr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_posang.html">siriushla.as_ap_posang</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_rabpmmon.html">siriushla.as_ap_rabpmmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_radmon.html">siriushla.as_ap_radmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_sofb.html">siriushla.as_ap_sofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_bpms.html">siriushla.as_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_dccts.html">siriushla.as_di_dccts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_icts.html">siriushla.as_di_icts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_scrns.html">siriushla.as_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_tune.html">siriushla.as_di_tune</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_vlight.html">siriushla.as_di_vlight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_commands.html">siriushla.as_ps_commands</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="siriushla.as_ps_control.html">siriushla.as_ps_control</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="siriushla.as_ps_control.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">siriushla.as_ps_control.control_widget</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#code-documentation">Code Documentation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-siriushla.as_ps_control.control_widget.BasePSControlWidget">siriushla.as_ps_control.control_widget.BasePSControlWidget module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-siriushla.as_ps_control.control_widget.ControlWidgetFactory">siriushla.as_ps_control.control_widget.ControlWidgetFactory module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-siriushla.as_ps_control.control_widget.DipoleControlWidget">siriushla.as_ps_control.control_widget.DipoleControlWidget module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-siriushla.as_ps_control.control_widget.FamQuadrupoleControlWidget">siriushla.as_ps_control.control_widget.FamQuadrupoleControlWidget module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-siriushla.as_ps_control.control_widget.FamSextupoleControlWidget">siriushla.as_ps_control.control_widget.FamSextupoleControlWidget module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-siriushla.as_ps_control.control_widget.FastCorrectorControlWidget">siriushla.as_ps_control.control_widget.FastCorrectorControlWidget module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-siriushla.as_ps_control.control_widget.IDFFCorrectorControlWidget">siriushla.as_ps_control.control_widget.IDFFCorrectorControlWidget module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-siriushla.as_ps_control.control_widget.LensControlWidget">siriushla.as_ps_control.control_widget.LensControlWidget module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-siriushla.as_ps_control.control_widget.SeptFFCorrectorControlWidget">siriushla.as_ps_control.control_widget.SeptFFCorrectorControlWidget module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-siriushla.as_ps_control.control_widget.SkewQuadControlWidget">siriushla.as_ps_control.control_widget.SkewQuadControlWidget module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-siriushla.as_ps_control.control_widget.SlowCorrectorControlWidget">siriushla.as_ps_control.control_widget.SlowCorrectorControlWidget module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-siriushla.as_ps_control.control_widget.SolenoidControlWidget">siriushla.as_ps_control.control_widget.SolenoidControlWidget module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-siriushla.as_ps_control.control_widget.TrimAllControlWidget">siriushla.as_ps_control.control_widget.TrimAllControlWidget module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-siriushla.as_ps_control.control_widget.TrimFamControlWidget">siriushla.as_ps_control.control_widget.TrimFamControlWidget module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-siriushla.as_ps_control.control_widget">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.as_ps_control.detail_widget.html">siriushla.as_ps_control.detail_widget</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ps_control.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ps_control.html#module-siriushla.as_ps_control.PSControlWindow">siriushla.as_ps_control.PSControlWindow module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ps_control.html#module-siriushla.as_ps_control.PSDetailWindow">siriushla.as_ps_control.PSDetailWindow module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ps_control.html#module-siriushla.as_ps_control.PSTabControlWindow">siriushla.as_ps_control.PSTabControlWindow module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ps_control.html#module-siriushla.as_ps_control.PSTrimWindow">siriushla.as_ps_control.PSTrimWindow module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ps_control.html#module-siriushla.as_ps_control.SummaryWidgets">siriushla.as_ps_control.SummaryWidgets module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ps_control.html#module-siriushla.as_ps_control.ps_wfmerror_mon">siriushla.as_ps_control.ps_wfmerror_mon module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ps_control.html#module-siriushla.as_ps_control">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_cycle.html">siriushla.as_ps_cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_diag.html">siriushla.as_ps_diag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_pu_control.html">siriushla.as_pu_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_rf_control.html">siriushla.as_rf_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ti_control.html">siriushla.as_ti_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.bl_ap_imgproc.html">siriushla.bl_ap_imgproc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.bo_ap_ramp.html">siriushla.bo_ap_ramp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.common.html">siriushla.common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_ap_mps.html">siriushla.li_ap_mps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_di_bpms.html">siriushla.li_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_di_scrns.html">siriushla.li_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_eg_control.html">siriushla.li_eg_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_pu_modltr.html">siriushla.li_pu_modltr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_rf_llrf.html">siriushla.li_rf_llrf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_va_control.html">siriushla.li_va_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_fofb.html">siriushla.si_ap_fofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_genstatus.html">siriushla.si_ap_genstatus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_idff.html">siriushla.si_ap_idff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_orbintlk.html">siriushla.si_ap_orbintlk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_bbb.html">siriushla.si_di_bbb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_equalize_bpms.html">siriushla.si_di_equalize_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_scraps.html">siriushla.si_di_scraps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_id_control.html">siriushla.si_id_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.tb_di_slits.html">siriushla.tb_di_slits</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Widgets:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.html">Sirius HLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.widgets.html">Widgets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Source Code:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lnls-sirius/hla">HLA Github</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">siriushla</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="siriushla.as_ps_control.html">siriushla.as_ps_control</a></li>
+      <li class="breadcrumb-item active">siriushla.as_ps_control.control_widget</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/lnls-sirius/hla/blob/master/pyqt-apps/docs/source/siriushla.as_ps_control.control_widget.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="siriushla-as-ps-control-control-widget">
+<h1>siriushla.as_ps_control.control_widget<a class="headerlink" href="#siriushla-as-ps-control-control-widget" title="Link to this heading"></a></h1>
+<section id="code-documentation">
+<h2>Code Documentation<a class="headerlink" href="#code-documentation" title="Link to this heading"></a></h2>
+</section>
+<section id="module-siriushla.as_ps_control.control_widget.BasePSControlWidget">
+<span id="siriushla-as-ps-control-control-widget-basepscontrolwidget-module"></span><h2>siriushla.as_ps_control.control_widget.BasePSControlWidget module<a class="headerlink" href="#module-siriushla.as_ps_control.control_widget.BasePSControlWidget" title="Link to this heading"></a></h2>
+<p>Base class for controlling a power supply.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_control.control_widget.BasePSControlWidget.</span></span><span class="sig-name descname"><span class="pre">BasePSControlWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subsection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_control/control_widget/BasePSControlWidget.html#BasePSControlWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QWidget</span></code></p>
+<p>Base widget class to control power supply.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget.HORIZONTAL">
+<span class="sig-name descname"><span class="pre">HORIZONTAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget.HORIZONTAL" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget.VERTICAL">
+<span class="sig-name descname"><span class="pre">VERTICAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget.VERTICAL" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget.contextMenuEvent">
+<span class="sig-name descname"><span class="pre">contextMenuEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_control/control_widget/BasePSControlWidget.html#BasePSControlWidget.contextMenuEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget.contextMenuEvent" title="Link to this definition"></a></dt>
+<dd><p>Show a custom context menu.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget.get_summary_widgets">
+<span class="sig-name descname"><span class="pre">get_summary_widgets</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_control/control_widget/BasePSControlWidget.html#BasePSControlWidget.get_summary_widgets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget.get_summary_widgets" title="Link to this definition"></a></dt>
+<dd><p>Return Summary Widgets.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget.show_connections">
+<span class="sig-name descname"><span class="pre">show_connections</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">checked</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_control/control_widget/BasePSControlWidget.html#BasePSControlWidget.show_connections"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget.show_connections" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_control.control_widget.BasePSControlWidget.PSContainer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_control.control_widget.BasePSControlWidget.</span></span><span class="sig-name descname"><span class="pre">PSContainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">widget</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_control/control_widget/BasePSControlWidget.html#PSContainer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_control.control_widget.BasePSControlWidget.PSContainer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QWidget</span></code></p>
+<p>PSContainer.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_control.control_widget.BasePSControlWidget.PSContainer.contextMenuEvent">
+<span class="sig-name descname"><span class="pre">contextMenuEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_control/control_widget/BasePSControlWidget.html#PSContainer.contextMenuEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_control.control_widget.BasePSControlWidget.PSContainer.contextMenuEvent" title="Link to this definition"></a></dt>
+<dd><p>Overload to create a custom context menu.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_control.control_widget.BasePSControlWidget.PSContainer.show_connections">
+<span class="sig-name descname"><span class="pre">show_connections</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">checked</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_control/control_widget/BasePSControlWidget.html#PSContainer.show_connections"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_control.control_widget.BasePSControlWidget.PSContainer.show_connections" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_control.control_widget.BasePSControlWidget.PSContainer.update_visible_props">
+<span class="sig-name descname"><span class="pre">update_visible_props</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_control/control_widget/BasePSControlWidget.html#PSContainer.update_visible_props"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_control.control_widget.BasePSControlWidget.PSContainer.update_visible_props" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-siriushla.as_ps_control.control_widget.ControlWidgetFactory">
+<span id="siriushla-as-ps-control-control-widget-controlwidgetfactory-module"></span><h2>siriushla.as_ps_control.control_widget.ControlWidgetFactory module<a class="headerlink" href="#module-siriushla.as_ps_control.control_widget.ControlWidgetFactory" title="Link to this heading"></a></h2>
+<p>Define factory class to get a control widget.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_control.control_widget.ControlWidgetFactory.ControlWidgetFactory">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_control.control_widget.ControlWidgetFactory.</span></span><span class="sig-name descname"><span class="pre">ControlWidgetFactory</span></span><a class="reference internal" href="_modules/siriushla/as_ps_control/control_widget/ControlWidgetFactory.html#ControlWidgetFactory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_control.control_widget.ControlWidgetFactory.ControlWidgetFactory" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Return a control widget.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_control.control_widget.ControlWidgetFactory.ControlWidgetFactory.factory">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">factory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">section</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subsection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_control/control_widget/ControlWidgetFactory.html#ControlWidgetFactory.factory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_control.control_widget.ControlWidgetFactory.ControlWidgetFactory.factory" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-siriushla.as_ps_control.control_widget.DipoleControlWidget">
+<span id="siriushla-as-ps-control-control-widget-dipolecontrolwidget-module"></span><h2>siriushla.as_ps_control.control_widget.DipoleControlWidget module<a class="headerlink" href="#module-siriushla.as_ps_control.control_widget.DipoleControlWidget" title="Link to this heading"></a></h2>
+<p>Widgets to control Dipoles.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_control.control_widget.DipoleControlWidget.BODipoleControlWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_control.control_widget.DipoleControlWidget.</span></span><span class="sig-name descname"><span class="pre">BODipoleControlWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subsection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_control/control_widget/DipoleControlWidget.html#BODipoleControlWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_control.control_widget.DipoleControlWidget.BODipoleControlWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget" title="siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">BasePSControlWidget</span></code></a></p>
+<p>Class to control Dipole power supplies.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_control.control_widget.DipoleControlWidget.LISpectControlWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_control.control_widget.DipoleControlWidget.</span></span><span class="sig-name descname"><span class="pre">LISpectControlWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subsection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_control/control_widget/DipoleControlWidget.html#LISpectControlWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_control.control_widget.DipoleControlWidget.LISpectControlWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget" title="siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">BasePSControlWidget</span></code></a></p>
+<p>Class to control Dipole power supplies.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_control.control_widget.DipoleControlWidget.SIDipoleControlWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_control.control_widget.DipoleControlWidget.</span></span><span class="sig-name descname"><span class="pre">SIDipoleControlWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subsection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_control/control_widget/DipoleControlWidget.html#SIDipoleControlWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_control.control_widget.DipoleControlWidget.SIDipoleControlWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget" title="siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">BasePSControlWidget</span></code></a></p>
+<p>Class to control Dipole power supplies.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_control.control_widget.DipoleControlWidget.TBDipoleControlWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_control.control_widget.DipoleControlWidget.</span></span><span class="sig-name descname"><span class="pre">TBDipoleControlWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subsection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_control/control_widget/DipoleControlWidget.html#TBDipoleControlWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_control.control_widget.DipoleControlWidget.TBDipoleControlWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget" title="siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">BasePSControlWidget</span></code></a></p>
+<p>Class to control Dipole power supplies.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_control.control_widget.DipoleControlWidget.TSDipoleControlWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_control.control_widget.DipoleControlWidget.</span></span><span class="sig-name descname"><span class="pre">TSDipoleControlWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subsection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_control/control_widget/DipoleControlWidget.html#TSDipoleControlWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_control.control_widget.DipoleControlWidget.TSDipoleControlWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget" title="siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">BasePSControlWidget</span></code></a></p>
+<p>Class to control Dipole power supplies.</p>
+</dd></dl>
+
+</section>
+<section id="module-siriushla.as_ps_control.control_widget.FamQuadrupoleControlWidget">
+<span id="siriushla-as-ps-control-control-widget-famquadrupolecontrolwidget-module"></span><h2>siriushla.as_ps_control.control_widget.FamQuadrupoleControlWidget module<a class="headerlink" href="#module-siriushla.as_ps_control.control_widget.FamQuadrupoleControlWidget" title="Link to this heading"></a></h2>
+<p>Widgets to control Fam Quadrupoles magnets.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_control.control_widget.FamQuadrupoleControlWidget.BOFamQuadrupoleControlWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_control.control_widget.FamQuadrupoleControlWidget.</span></span><span class="sig-name descname"><span class="pre">BOFamQuadrupoleControlWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subsection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_control/control_widget/FamQuadrupoleControlWidget.html#BOFamQuadrupoleControlWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_control.control_widget.FamQuadrupoleControlWidget.BOFamQuadrupoleControlWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ps_control.control_widget.FamQuadrupoleControlWidget.SIFamQuadrupoleControlWidget" title="siriushla.as_ps_control.control_widget.FamQuadrupoleControlWidget.SIFamQuadrupoleControlWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">SIFamQuadrupoleControlWidget</span></code></a></p>
+<p>Class to control all Fam Quad from the Booster section.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_control.control_widget.FamQuadrupoleControlWidget.LIQuadrupoleControlWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_control.control_widget.FamQuadrupoleControlWidget.</span></span><span class="sig-name descname"><span class="pre">LIQuadrupoleControlWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subsection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_control/control_widget/FamQuadrupoleControlWidget.html#LIQuadrupoleControlWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_control.control_widget.FamQuadrupoleControlWidget.LIQuadrupoleControlWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget" title="siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">BasePSControlWidget</span></code></a></p>
+<p>Class to control all quads from the LI section.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_control.control_widget.FamQuadrupoleControlWidget.SIFamQuadrupoleControlWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_control.control_widget.FamQuadrupoleControlWidget.</span></span><span class="sig-name descname"><span class="pre">SIFamQuadrupoleControlWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subsection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_control/control_widget/FamQuadrupoleControlWidget.html#SIFamQuadrupoleControlWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_control.control_widget.FamQuadrupoleControlWidget.SIFamQuadrupoleControlWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget" title="siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">BasePSControlWidget</span></code></a></p>
+<p>Class to control all Fam Quad from the Sirius section.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_control.control_widget.FamQuadrupoleControlWidget.TBQuadrupoleControlWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_control.control_widget.FamQuadrupoleControlWidget.</span></span><span class="sig-name descname"><span class="pre">TBQuadrupoleControlWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subsection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_control/control_widget/FamQuadrupoleControlWidget.html#TBQuadrupoleControlWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_control.control_widget.FamQuadrupoleControlWidget.TBQuadrupoleControlWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget" title="siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">BasePSControlWidget</span></code></a></p>
+<p>Class to control all quads from the TB transport line.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_control.control_widget.FamQuadrupoleControlWidget.TSQuadrupoleControlWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_control.control_widget.FamQuadrupoleControlWidget.</span></span><span class="sig-name descname"><span class="pre">TSQuadrupoleControlWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subsection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_control/control_widget/FamQuadrupoleControlWidget.html#TSQuadrupoleControlWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_control.control_widget.FamQuadrupoleControlWidget.TSQuadrupoleControlWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget" title="siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">BasePSControlWidget</span></code></a></p>
+<p>Class to control all quads from the TB transport line.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="siriushla.as_ps_control.control_widget.FamQuadrupoleControlWidget.run_test">
+<span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_control.control_widget.FamQuadrupoleControlWidget.</span></span><span class="sig-name descname"><span class="pre">run_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">psname_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_control/control_widget/FamQuadrupoleControlWidget.html#run_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_control.control_widget.FamQuadrupoleControlWidget.run_test" title="Link to this definition"></a></dt>
+<dd><p>Run test application.</p>
+</dd></dl>
+
+</section>
+<section id="module-siriushla.as_ps_control.control_widget.FamSextupoleControlWidget">
+<span id="siriushla-as-ps-control-control-widget-famsextupolecontrolwidget-module"></span><h2>siriushla.as_ps_control.control_widget.FamSextupoleControlWidget module<a class="headerlink" href="#module-siriushla.as_ps_control.control_widget.FamSextupoleControlWidget" title="Link to this heading"></a></h2>
+<p>Define control widget for family sextupoles.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_control.control_widget.FamSextupoleControlWidget.BOFamSextupoleControlWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_control.control_widget.FamSextupoleControlWidget.</span></span><span class="sig-name descname"><span class="pre">BOFamSextupoleControlWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subsection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_control/control_widget/FamSextupoleControlWidget.html#BOFamSextupoleControlWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_control.control_widget.FamSextupoleControlWidget.BOFamSextupoleControlWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ps_control.control_widget.FamSextupoleControlWidget.SIFamSextupoleControlWidget" title="siriushla.as_ps_control.control_widget.FamSextupoleControlWidget.SIFamSextupoleControlWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">SIFamSextupoleControlWidget</span></code></a></p>
+<p>Booster sextupoles.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_control.control_widget.FamSextupoleControlWidget.SIFamSextupoleControlWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_control.control_widget.FamSextupoleControlWidget.</span></span><span class="sig-name descname"><span class="pre">SIFamSextupoleControlWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subsection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_control/control_widget/FamSextupoleControlWidget.html#SIFamSextupoleControlWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_control.control_widget.FamSextupoleControlWidget.SIFamSextupoleControlWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget" title="siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">BasePSControlWidget</span></code></a></p>
+<p>Storage ring sextupoles.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="siriushla.as_ps_control.control_widget.FamSextupoleControlWidget.run_test">
+<span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_control.control_widget.FamSextupoleControlWidget.</span></span><span class="sig-name descname"><span class="pre">run_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">psname_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_control/control_widget/FamSextupoleControlWidget.html#run_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_control.control_widget.FamSextupoleControlWidget.run_test" title="Link to this definition"></a></dt>
+<dd><p>Run test application.</p>
+</dd></dl>
+
+</section>
+<section id="module-siriushla.as_ps_control.control_widget.FastCorrectorControlWidget">
+<span id="siriushla-as-ps-control-control-widget-fastcorrectorcontrolwidget-module"></span><h2>siriushla.as_ps_control.control_widget.FastCorrectorControlWidget module<a class="headerlink" href="#module-siriushla.as_ps_control.control_widget.FastCorrectorControlWidget" title="Link to this heading"></a></h2>
+<p>Define control widget for fast correctors.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_control.control_widget.FastCorrectorControlWidget.SIFastCorrectorControlWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_control.control_widget.FastCorrectorControlWidget.</span></span><span class="sig-name descname"><span class="pre">SIFastCorrectorControlWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subsection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_control/control_widget/FastCorrectorControlWidget.html#SIFastCorrectorControlWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_control.control_widget.FastCorrectorControlWidget.SIFastCorrectorControlWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget" title="siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">BasePSControlWidget</span></code></a></p>
+<p>Storage ring fast correctors.</p>
+</dd></dl>
+
+</section>
+<section id="module-siriushla.as_ps_control.control_widget.IDFFCorrectorControlWidget">
+<span id="siriushla-as-ps-control-control-widget-idffcorrectorcontrolwidget-module"></span><h2>siriushla.as_ps_control.control_widget.IDFFCorrectorControlWidget module<a class="headerlink" href="#module-siriushla.as_ps_control.control_widget.IDFFCorrectorControlWidget" title="Link to this heading"></a></h2>
+<p>Define widget for controlling idff correctors.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_control.control_widget.IDFFCorrectorControlWidget.IDFFCorrectorControlWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_control.control_widget.IDFFCorrectorControlWidget.</span></span><span class="sig-name descname"><span class="pre">IDFFCorrectorControlWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subsection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_control/control_widget/IDFFCorrectorControlWidget.html#IDFFCorrectorControlWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_control.control_widget.IDFFCorrectorControlWidget.IDFFCorrectorControlWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget" title="siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">BasePSControlWidget</span></code></a></p>
+<p>IDFF corrector control widget.</p>
+</dd></dl>
+
+</section>
+<section id="module-siriushla.as_ps_control.control_widget.LensControlWidget">
+<span id="siriushla-as-ps-control-control-widget-lenscontrolwidget-module"></span><h2>siriushla.as_ps_control.control_widget.LensControlWidget module<a class="headerlink" href="#module-siriushla.as_ps_control.control_widget.LensControlWidget" title="Link to this heading"></a></h2>
+<p>Define widget for controlling slow correctors.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_control.control_widget.LensControlWidget.ITLensControlWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_control.control_widget.LensControlWidget.</span></span><span class="sig-name descname"><span class="pre">ITLensControlWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subsection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_control/control_widget/LensControlWidget.html#ITLensControlWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_control.control_widget.LensControlWidget.ITLensControlWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget" title="siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">BasePSControlWidget</span></code></a></p>
+<p>Injector Test Lens control widget.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_control.control_widget.LensControlWidget.LILensControlWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_control.control_widget.LensControlWidget.</span></span><span class="sig-name descname"><span class="pre">LILensControlWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subsection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_control/control_widget/LensControlWidget.html#LILensControlWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_control.control_widget.LensControlWidget.LILensControlWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget" title="siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">BasePSControlWidget</span></code></a></p>
+<p>Linac Lens control widget.</p>
+</dd></dl>
+
+</section>
+<section id="module-siriushla.as_ps_control.control_widget.SeptFFCorrectorControlWidget">
+<span id="siriushla-as-ps-control-control-widget-septffcorrectorcontrolwidget-module"></span><h2>siriushla.as_ps_control.control_widget.SeptFFCorrectorControlWidget module<a class="headerlink" href="#module-siriushla.as_ps_control.control_widget.SeptFFCorrectorControlWidget" title="Link to this heading"></a></h2>
+<p>Define control widget for fast correctors.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_control.control_widget.SeptFFCorrectorControlWidget.SISeptFFCorrectorControlWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_control.control_widget.SeptFFCorrectorControlWidget.</span></span><span class="sig-name descname"><span class="pre">SISeptFFCorrectorControlWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subsection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_control/control_widget/SeptFFCorrectorControlWidget.html#SISeptFFCorrectorControlWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_control.control_widget.SeptFFCorrectorControlWidget.SISeptFFCorrectorControlWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget" title="siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">BasePSControlWidget</span></code></a></p>
+<p>Storage ring fast correctors.</p>
+</dd></dl>
+
+</section>
+<section id="module-siriushla.as_ps_control.control_widget.SkewQuadControlWidget">
+<span id="siriushla-as-ps-control-control-widget-skewquadcontrolwidget-module"></span><h2>siriushla.as_ps_control.control_widget.SkewQuadControlWidget module<a class="headerlink" href="#module-siriushla.as_ps_control.control_widget.SkewQuadControlWidget" title="Link to this heading"></a></h2>
+<p>Sked Quadrupole control widgets.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_control.control_widget.SkewQuadControlWidget.BOSkewQuadControlWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_control.control_widget.SkewQuadControlWidget.</span></span><span class="sig-name descname"><span class="pre">BOSkewQuadControlWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subsection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_control/control_widget/SkewQuadControlWidget.html#BOSkewQuadControlWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_control.control_widget.SkewQuadControlWidget.BOSkewQuadControlWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ps_control.control_widget.SkewQuadControlWidget.SISkewQuadControlWidget" title="siriushla.as_ps_control.control_widget.SkewQuadControlWidget.SISkewQuadControlWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">SISkewQuadControlWidget</span></code></a></p>
+<p>Booster skew quads.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_control.control_widget.SkewQuadControlWidget.SISkewQuadControlWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_control.control_widget.SkewQuadControlWidget.</span></span><span class="sig-name descname"><span class="pre">SISkewQuadControlWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subsection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_control/control_widget/SkewQuadControlWidget.html#SISkewQuadControlWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_control.control_widget.SkewQuadControlWidget.SISkewQuadControlWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget" title="siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">BasePSControlWidget</span></code></a></p>
+<p>Storage ring skew quads.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="siriushla.as_ps_control.control_widget.SkewQuadControlWidget.run_test">
+<span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_control.control_widget.SkewQuadControlWidget.</span></span><span class="sig-name descname"><span class="pre">run_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">psname_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_control/control_widget/SkewQuadControlWidget.html#run_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_control.control_widget.SkewQuadControlWidget.run_test" title="Link to this definition"></a></dt>
+<dd><p>Run test application.</p>
+</dd></dl>
+
+</section>
+<section id="module-siriushla.as_ps_control.control_widget.SlowCorrectorControlWidget">
+<span id="siriushla-as-ps-control-control-widget-slowcorrectorcontrolwidget-module"></span><h2>siriushla.as_ps_control.control_widget.SlowCorrectorControlWidget module<a class="headerlink" href="#module-siriushla.as_ps_control.control_widget.SlowCorrectorControlWidget" title="Link to this heading"></a></h2>
+<p>Define widget for controlling slow correctors.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_control.control_widget.SlowCorrectorControlWidget.BoSlowCorrectorControlWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_control.control_widget.SlowCorrectorControlWidget.</span></span><span class="sig-name descname"><span class="pre">BoSlowCorrectorControlWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subsection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_control/control_widget/SlowCorrectorControlWidget.html#BoSlowCorrectorControlWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_control.control_widget.SlowCorrectorControlWidget.BoSlowCorrectorControlWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ps_control.control_widget.SlowCorrectorControlWidget.SISlowCorrectorControlWidget" title="siriushla.as_ps_control.control_widget.SlowCorrectorControlWidget.SISlowCorrectorControlWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">SISlowCorrectorControlWidget</span></code></a></p>
+<p>Booster slow corretors.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_control.control_widget.SlowCorrectorControlWidget.LISlowCorrectorControlWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_control.control_widget.SlowCorrectorControlWidget.</span></span><span class="sig-name descname"><span class="pre">LISlowCorrectorControlWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subsection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_control/control_widget/SlowCorrectorControlWidget.html#LISlowCorrectorControlWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_control.control_widget.SlowCorrectorControlWidget.LISlowCorrectorControlWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ps_control.control_widget.SlowCorrectorControlWidget.SISlowCorrectorControlWidget" title="siriushla.as_ps_control.control_widget.SlowCorrectorControlWidget.SISlowCorrectorControlWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">SISlowCorrectorControlWidget</span></code></a></p>
+<p>To booster transport line slow corrector.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_control.control_widget.SlowCorrectorControlWidget.SISlowCorrectorControlWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_control.control_widget.SlowCorrectorControlWidget.</span></span><span class="sig-name descname"><span class="pre">SISlowCorrectorControlWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subsection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_control/control_widget/SlowCorrectorControlWidget.html#SISlowCorrectorControlWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_control.control_widget.SlowCorrectorControlWidget.SISlowCorrectorControlWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget" title="siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">BasePSControlWidget</span></code></a></p>
+<p>Storage ring slow correctors.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_control.control_widget.SlowCorrectorControlWidget.TBSlowCorrectorControlWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_control.control_widget.SlowCorrectorControlWidget.</span></span><span class="sig-name descname"><span class="pre">TBSlowCorrectorControlWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subsection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_control/control_widget/SlowCorrectorControlWidget.html#TBSlowCorrectorControlWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_control.control_widget.SlowCorrectorControlWidget.TBSlowCorrectorControlWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ps_control.control_widget.SlowCorrectorControlWidget.SISlowCorrectorControlWidget" title="siriushla.as_ps_control.control_widget.SlowCorrectorControlWidget.SISlowCorrectorControlWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">SISlowCorrectorControlWidget</span></code></a></p>
+<p>To booster transport line slow corrector.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_control.control_widget.SlowCorrectorControlWidget.TSSlowCorrectorControlWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_control.control_widget.SlowCorrectorControlWidget.</span></span><span class="sig-name descname"><span class="pre">TSSlowCorrectorControlWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subsection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_control/control_widget/SlowCorrectorControlWidget.html#TSSlowCorrectorControlWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_control.control_widget.SlowCorrectorControlWidget.TSSlowCorrectorControlWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ps_control.control_widget.SlowCorrectorControlWidget.SISlowCorrectorControlWidget" title="siriushla.as_ps_control.control_widget.SlowCorrectorControlWidget.SISlowCorrectorControlWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">SISlowCorrectorControlWidget</span></code></a></p>
+<p>To sirius transport line slow correctors.</p>
+</dd></dl>
+
+</section>
+<section id="module-siriushla.as_ps_control.control_widget.SolenoidControlWidget">
+<span id="siriushla-as-ps-control-control-widget-solenoidcontrolwidget-module"></span><h2>siriushla.as_ps_control.control_widget.SolenoidControlWidget module<a class="headerlink" href="#module-siriushla.as_ps_control.control_widget.SolenoidControlWidget" title="Link to this heading"></a></h2>
+<p>Define widget for controlling slow correctors.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_control.control_widget.SolenoidControlWidget.LISolenoidControlWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_control.control_widget.SolenoidControlWidget.</span></span><span class="sig-name descname"><span class="pre">LISolenoidControlWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subsection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_control/control_widget/SolenoidControlWidget.html#LISolenoidControlWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_control.control_widget.SolenoidControlWidget.LISolenoidControlWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget" title="siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">BasePSControlWidget</span></code></a></p>
+<p>Storage ring slow correctors.</p>
+</dd></dl>
+
+</section>
+<section id="module-siriushla.as_ps_control.control_widget.TrimAllControlWidget">
+<span id="siriushla-as-ps-control-control-widget-trimallcontrolwidget-module"></span><h2>siriushla.as_ps_control.control_widget.TrimAllControlWidget module<a class="headerlink" href="#module-siriushla.as_ps_control.control_widget.TrimAllControlWidget" title="Link to this heading"></a></h2>
+<p>Widgets to control Trim Quadrupoles magnets.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_control.control_widget.TrimAllControlWidget.SITrimAllControlWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_control.control_widget.TrimAllControlWidget.</span></span><span class="sig-name descname"><span class="pre">SITrimAllControlWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subsection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_control/control_widget/TrimAllControlWidget.html#SITrimAllControlWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_control.control_widget.TrimAllControlWidget.SITrimAllControlWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget" title="siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">BasePSControlWidget</span></code></a></p>
+<p>Class to control a Fam Quad from the Sirius section.</p>
+</dd></dl>
+
+</section>
+<section id="module-siriushla.as_ps_control.control_widget.TrimFamControlWidget">
+<span id="siriushla-as-ps-control-control-widget-trimfamcontrolwidget-module"></span><h2>siriushla.as_ps_control.control_widget.TrimFamControlWidget module<a class="headerlink" href="#module-siriushla.as_ps_control.control_widget.TrimFamControlWidget" title="Link to this heading"></a></h2>
+<p>Widgets to control Trim Quadrupoles magnets.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_control.control_widget.TrimFamControlWidget.SITrimFamControlWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_control.control_widget.TrimFamControlWidget.</span></span><span class="sig-name descname"><span class="pre">SITrimFamControlWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trim</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_control/control_widget/TrimFamControlWidget.html#SITrimFamControlWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_control.control_widget.TrimFamControlWidget.SITrimFamControlWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget" title="siriushla.as_ps_control.control_widget.BasePSControlWidget.BasePSControlWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">BasePSControlWidget</span></code></a></p>
+<p>Class to control a Fam Quad from the Sirius section.</p>
+</dd></dl>
+
+</section>
+<section id="module-siriushla.as_ps_control.control_widget">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-siriushla.as_ps_control.control_widget" title="Link to this heading"></a></h2>
+<p>Control widgets for power supplies.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="siriushla.as_ps_control.html" class="btn btn-neutral float-left" title="siriushla.as_ps_control" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="siriushla.as_ps_control.detail_widget.html" class="btn btn-neutral float-right" title="siriushla.as_ps_control.detail_widget" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, lnls-sirius.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

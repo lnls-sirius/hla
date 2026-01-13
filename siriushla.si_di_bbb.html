@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>siriushla.si_di_bbb &mdash; siriushla 1.14.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=01009efc"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="siriushla.si_di_equalize_bpms" href="siriushla.si_di_equalize_bpms.html" />
+    <link rel="prev" title="siriushla.si_ap_orbintlk" href="siriushla.si_ap_orbintlk.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            siriushla
+          </a>
+              <div class="version">
+                1.14.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">GUIs:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_configdb.html">siriushla.as_ap_configdb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_currinfo.html">siriushla.as_ap_currinfo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_energybutton.html">siriushla.as_ap_energybutton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_injcontrol.html">siriushla.as_ap_injcontrol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_injection.html">siriushla.as_ap_injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_launcher.html">siriushla.as_ap_launcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_machshift.html">siriushla.as_ap_machshift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_macreport.html">siriushla.as_ap_macreport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_magoffconv.html">siriushla.as_ap_magoffconv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_measure.html">siriushla.as_ap_measure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_monitor.html">siriushla.as_ap_monitor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_opticscorr.html">siriushla.as_ap_opticscorr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_posang.html">siriushla.as_ap_posang</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_rabpmmon.html">siriushla.as_ap_rabpmmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_radmon.html">siriushla.as_ap_radmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_sofb.html">siriushla.as_ap_sofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_bpms.html">siriushla.as_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_dccts.html">siriushla.as_di_dccts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_icts.html">siriushla.as_di_icts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_scrns.html">siriushla.as_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_tune.html">siriushla.as_di_tune</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_vlight.html">siriushla.as_di_vlight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_commands.html">siriushla.as_ps_commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_control.html">siriushla.as_ps_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_cycle.html">siriushla.as_ps_cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_diag.html">siriushla.as_ps_diag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_pu_control.html">siriushla.as_pu_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_rf_control.html">siriushla.as_rf_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ti_control.html">siriushla.as_ti_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.bl_ap_imgproc.html">siriushla.bl_ap_imgproc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.bo_ap_ramp.html">siriushla.bo_ap_ramp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.common.html">siriushla.common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_ap_mps.html">siriushla.li_ap_mps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_di_bpms.html">siriushla.li_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_di_scrns.html">siriushla.li_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_eg_control.html">siriushla.li_eg_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_pu_modltr.html">siriushla.li_pu_modltr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_rf_llrf.html">siriushla.li_rf_llrf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_va_control.html">siriushla.li_va_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_fofb.html">siriushla.si_ap_fofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_genstatus.html">siriushla.si_ap_genstatus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_idff.html">siriushla.si_ap_idff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_orbintlk.html">siriushla.si_ap_orbintlk</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">siriushla.si_di_bbb</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.si_di_bbb.acquisition">siriushla.si_di_bbb.acquisition module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_di_bbb.acquisition.BbBAcqBRAM"><code class="docutils literal notranslate"><span class="pre">BbBAcqBRAM</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_di_bbb.acquisition.BbBAcqBRAM.TYPE"><code class="docutils literal notranslate"><span class="pre">BbBAcqBRAM.TYPE</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_di_bbb.acquisition.BbBAcqSB"><code class="docutils literal notranslate"><span class="pre">BbBAcqSB</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_di_bbb.acquisition.BbBAcqSRAM"><code class="docutils literal notranslate"><span class="pre">BbBAcqSRAM</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_di_bbb.acquisition.BbBAcqSRAM.TYPE"><code class="docutils literal notranslate"><span class="pre">BbBAcqSRAM.TYPE</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.si_di_bbb.advanced_settings">siriushla.si_di_bbb.advanced_settings module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_di_bbb.advanced_settings.BbBADCWidget"><code class="docutils literal notranslate"><span class="pre">BbBADCWidget</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_di_bbb.advanced_settings.BbBAdvancedSettingsWidget"><code class="docutils literal notranslate"><span class="pre">BbBAdvancedSettingsWidget</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_di_bbb.advanced_settings.BbBGeneralSettingsWidget"><code class="docutils literal notranslate"><span class="pre">BbBGeneralSettingsWidget</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_di_bbb.advanced_settings.BbBInterlock"><code class="docutils literal notranslate"><span class="pre">BbBInterlock</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_di_bbb.advanced_settings.BbBSlowDACsWidget"><code class="docutils literal notranslate"><span class="pre">BbBSlowDACsWidget</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.si_di_bbb.bbb">siriushla.si_di_bbb.bbb module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_di_bbb.bbb.BbBControlWindow"><code class="docutils literal notranslate"><span class="pre">BbBControlWindow</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_di_bbb.bbb.BbBInfoWidget"><code class="docutils literal notranslate"><span class="pre">BbBInfoWidget</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_di_bbb.bbb.BbBMainSettingsWidget"><code class="docutils literal notranslate"><span class="pre">BbBMainSettingsWidget</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_di_bbb.bbb.BbBStatusWidget"><code class="docutils literal notranslate"><span class="pre">BbBStatusWidget</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.si_di_bbb.coefficients">siriushla.si_di_bbb.coefficients module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_di_bbb.coefficients.BbBCoefficientsWidget"><code class="docutils literal notranslate"><span class="pre">BbBCoefficientsWidget</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_di_bbb.coefficients.Label"><code class="docutils literal notranslate"><span class="pre">Label</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_di_bbb.coefficients.Label.RULE_PROPERTIES"><code class="docutils literal notranslate"><span class="pre">Label.RULE_PROPERTIES</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_di_bbb.coefficients.Label.value_changed"><code class="docutils literal notranslate"><span class="pre">Label.value_changed()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.si_di_bbb.custom_widgets">siriushla.si_di_bbb.custom_widgets module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_di_bbb.custom_widgets.TimeGraph"><code class="docutils literal notranslate"><span class="pre">TimeGraph</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_di_bbb.custom_widgets.WfmGraph"><code class="docutils literal notranslate"><span class="pre">WfmGraph</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_di_bbb.custom_widgets.WfmGraph.add_marker"><code class="docutils literal notranslate"><span class="pre">WfmGraph.add_marker()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.si_di_bbb.custom_widgets.WfmGraph.add_scatter_curve"><code class="docutils literal notranslate"><span class="pre">WfmGraph.add_scatter_curve()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.si_di_bbb.drive">siriushla.si_di_bbb.drive module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_di_bbb.drive.BbBDriveSettingsWidget"><code class="docutils literal notranslate"><span class="pre">BbBDriveSettingsWidget</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_di_bbb.drive.BbBSingleDriveSettingsWidget"><code class="docutils literal notranslate"><span class="pre">BbBSingleDriveSettingsWidget</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.si_di_bbb.environment">siriushla.si_di_bbb.environment module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_di_bbb.environment.BbBEnvironmMonWidget"><code class="docutils literal notranslate"><span class="pre">BbBEnvironmMonWidget</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.si_di_bbb.gpio">siriushla.si_di_bbb.gpio module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_di_bbb.gpio.BbBGPIOWidget"><code class="docutils literal notranslate"><span class="pre">BbBGPIOWidget</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.si_di_bbb.main">siriushla.si_di_bbb.main module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_di_bbb.main.BbBMainWindow"><code class="docutils literal notranslate"><span class="pre">BbBMainWindow</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.si_di_bbb.masks">siriushla.si_di_bbb.masks module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_di_bbb.masks.BbBMasksWidget"><code class="docutils literal notranslate"><span class="pre">BbBMasksWidget</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.si_di_bbb.pwr_amps">siriushla.si_di_bbb.pwr_amps module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_di_bbb.pwr_amps.BbBPwrAmpsWidget"><code class="docutils literal notranslate"><span class="pre">BbBPwrAmpsWidget</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.si_di_bbb.timing">siriushla.si_di_bbb.timing module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_di_bbb.timing.BbBTimingWidget"><code class="docutils literal notranslate"><span class="pre">BbBTimingWidget</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.si_di_bbb.util">siriushla.si_di_bbb.util module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_di_bbb.util.get_bbb_icon"><code class="docutils literal notranslate"><span class="pre">get_bbb_icon()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.si_di_bbb.util.set_bbb_color"><code class="docutils literal notranslate"><span class="pre">set_bbb_color()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.si_di_bbb">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_equalize_bpms.html">siriushla.si_di_equalize_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_scraps.html">siriushla.si_di_scraps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_id_control.html">siriushla.si_id_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.tb_di_slits.html">siriushla.tb_di_slits</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Widgets:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.html">Sirius HLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.widgets.html">Widgets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Source Code:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lnls-sirius/hla">HLA Github</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">siriushla</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">siriushla.si_di_bbb</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/lnls-sirius/hla/blob/master/pyqt-apps/docs/source/siriushla.si_di_bbb.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="siriushla-si-di-bbb">
+<h1>siriushla.si_di_bbb<a class="headerlink" href="#siriushla-si-di-bbb" title="Link to this heading"></a></h1>
+<section id="code-documentation">
+<h2>Code Documentation<a class="headerlink" href="#code-documentation" title="Link to this heading"></a></h2>
+</section>
+<section id="module-siriushla.si_di_bbb.acquisition">
+<span id="siriushla-si-di-bbb-acquisition-module"></span><h2>siriushla.si_di_bbb.acquisition module<a class="headerlink" href="#module-siriushla.si_di_bbb.acquisition" title="Link to this heading"></a></h2>
+<p>BbB Acquisition Module.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_di_bbb.acquisition.BbBAcqBRAM">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_di_bbb.acquisition.</span></span><span class="sig-name descname"><span class="pre">BbBAcqBRAM</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">siriuspy.envars.VACA_PREFIX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_di_bbb/acquisition.html#BbBAcqBRAM"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_di_bbb.acquisition.BbBAcqBRAM" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BbBAcqBase</span></code></p>
+<p>BbB BRAM Acquisition Widget.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.si_di_bbb.acquisition.BbBAcqBRAM.TYPE">
+<span class="sig-name descname"><span class="pre">TYPE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'BRAM'</span></em><a class="headerlink" href="#siriushla.si_di_bbb.acquisition.BbBAcqBRAM.TYPE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_di_bbb.acquisition.BbBAcqSB">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_di_bbb.acquisition.</span></span><span class="sig-name descname"><span class="pre">BbBAcqSB</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">siriuspy.envars.VACA_PREFIX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_di_bbb/acquisition.html#BbBAcqSB"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_di_bbb.acquisition.BbBAcqSB" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QWidget</span></code></p>
+<p>BbB Tune Tracking Acquisition Widget.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_di_bbb.acquisition.BbBAcqSRAM">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_di_bbb.acquisition.</span></span><span class="sig-name descname"><span class="pre">BbBAcqSRAM</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">siriuspy.envars.VACA_PREFIX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_di_bbb/acquisition.html#BbBAcqSRAM"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_di_bbb.acquisition.BbBAcqSRAM" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BbBAcqBase</span></code></p>
+<p>BbB SRAM Acquisition Widget.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.si_di_bbb.acquisition.BbBAcqSRAM.TYPE">
+<span class="sig-name descname"><span class="pre">TYPE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'SRAM'</span></em><a class="headerlink" href="#siriushla.si_di_bbb.acquisition.BbBAcqSRAM.TYPE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-siriushla.si_di_bbb.advanced_settings">
+<span id="siriushla-si-di-bbb-advanced-settings-module"></span><h2>siriushla.si_di_bbb.advanced_settings module<a class="headerlink" href="#module-siriushla.si_di_bbb.advanced_settings" title="Link to this heading"></a></h2>
+<p>BbB Devices Module.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_di_bbb.advanced_settings.BbBADCWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_di_bbb.advanced_settings.</span></span><span class="sig-name descname"><span class="pre">BbBADCWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">siriuspy.envars.VACA_PREFIX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_di_bbb/advanced_settings.html#BbBADCWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_di_bbb.advanced_settings.BbBADCWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QWidget</span></code></p>
+<p>BbB 8-Channel ADC Widget.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_di_bbb.advanced_settings.BbBAdvancedSettingsWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_di_bbb.advanced_settings.</span></span><span class="sig-name descname"><span class="pre">BbBAdvancedSettingsWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">siriuspy.envars.VACA_PREFIX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_di_bbb/advanced_settings.html#BbBAdvancedSettingsWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_di_bbb.advanced_settings.BbBAdvancedSettingsWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QWidget</span></code></p>
+<p>BbB Advanced Settings Widget.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_di_bbb.advanced_settings.BbBGeneralSettingsWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_di_bbb.advanced_settings.</span></span><span class="sig-name descname"><span class="pre">BbBGeneralSettingsWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">siriuspy.envars.VACA_PREFIX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_di_bbb/advanced_settings.html#BbBGeneralSettingsWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_di_bbb.advanced_settings.BbBGeneralSettingsWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QWidget</span></code></p>
+<p>BbB General Settings Widget.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_di_bbb.advanced_settings.BbBInterlock">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_di_bbb.advanced_settings.</span></span><span class="sig-name descname"><span class="pre">BbBInterlock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">siriuspy.envars.VACA_PREFIX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_di_bbb/advanced_settings.html#BbBInterlock"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_di_bbb.advanced_settings.BbBInterlock" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QWidget</span></code></p>
+<p>BbB Interlock Settings Widget.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_di_bbb.advanced_settings.BbBSlowDACsWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_di_bbb.advanced_settings.</span></span><span class="sig-name descname"><span class="pre">BbBSlowDACsWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">siriuspy.envars.VACA_PREFIX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_di_bbb/advanced_settings.html#BbBSlowDACsWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_di_bbb.advanced_settings.BbBSlowDACsWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QWidget</span></code></p>
+<p>BbB Slow DACs Settings Widget.</p>
+</dd></dl>
+
+</section>
+<section id="module-siriushla.si_di_bbb.bbb">
+<span id="siriushla-si-di-bbb-bbb-module"></span><h2>siriushla.si_di_bbb.bbb module<a class="headerlink" href="#module-siriushla.si_di_bbb.bbb" title="Link to this heading"></a></h2>
+<p>BbB Control Module.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_di_bbb.bbb.BbBControlWindow">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_di_bbb.bbb.</span></span><span class="sig-name descname"><span class="pre">BbBControlWindow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">siriuspy.envars.VACA_PREFIX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_di_bbb/bbb.html#BbBControlWindow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_di_bbb.bbb.BbBControlWindow" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_SiriusWindow</span></code></p>
+<p>BbB Control Window.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_di_bbb.bbb.BbBInfoWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_di_bbb.bbb.</span></span><span class="sig-name descname"><span class="pre">BbBInfoWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">siriuspy.envars.VACA_PREFIX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_di_bbb/bbb.html#BbBInfoWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_di_bbb.bbb.BbBInfoWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QGroupBox</span></code></p>
+<p>BbB Info Widget.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_di_bbb.bbb.BbBMainSettingsWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_di_bbb.bbb.</span></span><span class="sig-name descname"><span class="pre">BbBMainSettingsWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">siriuspy.envars.VACA_PREFIX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resume</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_di_bbb/bbb.html#BbBMainSettingsWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_di_bbb.bbb.BbBMainSettingsWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QWidget</span></code></p>
+<p>BbB Main Senttings Widget.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_di_bbb.bbb.BbBStatusWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_di_bbb.bbb.</span></span><span class="sig-name descname"><span class="pre">BbBStatusWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">siriuspy.envars.VACA_PREFIX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resume</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_di_bbb/bbb.html#BbBStatusWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_di_bbb.bbb.BbBStatusWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QWidget</span></code></p>
+<p>.</p>
+</dd></dl>
+
+</section>
+<section id="module-siriushla.si_di_bbb.coefficients">
+<span id="siriushla-si-di-bbb-coefficients-module"></span><h2>siriushla.si_di_bbb.coefficients module<a class="headerlink" href="#module-siriushla.si_di_bbb.coefficients" title="Link to this heading"></a></h2>
+<p>BbB Coefficients Module.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_di_bbb.coefficients.BbBCoefficientsWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_di_bbb.coefficients.</span></span><span class="sig-name descname"><span class="pre">BbBCoefficientsWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">siriuspy.envars.VACA_PREFIX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_di_bbb/coefficients.html#BbBCoefficientsWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_di_bbb.coefficients.BbBCoefficientsWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QWidget</span></code></p>
+<p>BbB Coefficients Settings Widget.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_di_bbb.coefficients.Label">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_di_bbb.coefficients.</span></span><span class="sig-name descname"><span class="pre">Label</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_unit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_di_bbb/coefficients.html#Label"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_di_bbb.coefficients.Label" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="siriushla.widgets.html#siriushla.widgets.label.SiriusLabel" title="siriushla.widgets.label.SiriusLabel"><code class="xref py py-class docutils literal notranslate"><span class="pre">SiriusLabel</span></code></a></p>
+<p>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.si_di_bbb.coefficients.Label.RULE_PROPERTIES">
+<span class="sig-name descname"><span class="pre">RULE_PROPERTIES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Enable':</span> <span class="pre">['setEnabled',</span> <span class="pre">&lt;class</span> <span class="pre">'bool'&gt;],</span> <span class="pre">'Opacity':</span> <span class="pre">['set_opacity',</span> <span class="pre">&lt;class</span> <span class="pre">'float'&gt;],</span> <span class="pre">'Position</span> <span class="pre">-</span> <span class="pre">X':</span> <span class="pre">['setX',</span> <span class="pre">&lt;class</span> <span class="pre">'int'&gt;],</span> <span class="pre">'Position</span> <span class="pre">-</span> <span class="pre">Y':</span> <span class="pre">['setY',</span> <span class="pre">&lt;class</span> <span class="pre">'int'&gt;],</span> <span class="pre">'Visible':</span> <span class="pre">['setVisible',</span> <span class="pre">&lt;class</span> <span class="pre">'bool'&gt;]}</span></em><a class="headerlink" href="#siriushla.si_di_bbb.coefficients.Label.RULE_PROPERTIES" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.si_di_bbb.coefficients.Label.value_changed">
+<span class="sig-name descname"><span class="pre">value_changed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_di_bbb/coefficients.html#Label.value_changed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_di_bbb.coefficients.Label.value_changed" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-siriushla.si_di_bbb.custom_widgets">
+<span id="siriushla-si-di-bbb-custom-widgets-module"></span><h2>siriushla.si_di_bbb.custom_widgets module<a class="headerlink" href="#module-siriushla.si_di_bbb.custom_widgets" title="Link to this heading"></a></h2>
+<p>Custom Widgets Module.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_di_bbb.custom_widgets.TimeGraph">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_di_bbb.custom_widgets.</span></span><span class="sig-name descname"><span class="pre">TimeGraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_di_bbb/custom_widgets.html#TimeGraph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_di_bbb.custom_widgets.TimeGraph" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="siriushla.widgets.html#siriushla.widgets.timeplot.SiriusTimePlot" title="siriushla.widgets.timeplot.SiriusTimePlot"><code class="xref py py-class docutils literal notranslate"><span class="pre">SiriusTimePlot</span></code></a></p>
+<p>SiriusTimePlot rederivation.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_di_bbb.custom_widgets.WfmGraph">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_di_bbb.custom_widgets.</span></span><span class="sig-name descname"><span class="pre">WfmGraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_di_bbb/custom_widgets.html#WfmGraph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_di_bbb.custom_widgets.WfmGraph" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="siriushla.widgets.html#siriushla.widgets.waveformplot.SiriusWaveformPlot" title="siriushla.widgets.waveformplot.SiriusWaveformPlot"><code class="xref py py-class docutils literal notranslate"><span class="pre">SiriusWaveformPlot</span></code></a></p>
+<p>SiriusWaveformPlot rederivation.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.si_di_bbb.custom_widgets.WfmGraph.add_marker">
+<span class="sig-name descname"><span class="pre">add_marker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xchannel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ychannel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color=&lt;PyQt5.QtGui.QColor</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symbol='o'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symbolSize=10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_di_bbb/custom_widgets.html#WfmGraph.add_marker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_di_bbb.custom_widgets.WfmGraph.add_marker" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.si_di_bbb.custom_widgets.WfmGraph.add_scatter_curve">
+<span class="sig-name descname"><span class="pre">add_scatter_curve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ychannel=''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xchannel=''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name=''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color=&lt;PyQt5.QtGui.QColor</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lineStyle=0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lineWidth=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symbolSize=10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nchannel=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_di_bbb/custom_widgets.html#WfmGraph.add_scatter_curve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_di_bbb.custom_widgets.WfmGraph.add_scatter_curve" title="Link to this definition"></a></dt>
+<dd><p>.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-siriushla.si_di_bbb.drive">
+<span id="siriushla-si-di-bbb-drive-module"></span><h2>siriushla.si_di_bbb.drive module<a class="headerlink" href="#module-siriushla.si_di_bbb.drive" title="Link to this heading"></a></h2>
+<p>BbB Drive Module.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_di_bbb.drive.BbBDriveSettingsWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_di_bbb.drive.</span></span><span class="sig-name descname"><span class="pre">BbBDriveSettingsWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">siriuspy.envars.VACA_PREFIX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_di_bbb/drive.html#BbBDriveSettingsWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_di_bbb.drive.BbBDriveSettingsWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QWidget</span></code></p>
+<p>BbB Drive Settings Widget.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_di_bbb.drive.BbBSingleDriveSettingsWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_di_bbb.drive.</span></span><span class="sig-name descname"><span class="pre">BbBSingleDriveSettingsWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">siriuspy.envars.VACA_PREFIX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dr_num</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_di_bbb/drive.html#BbBSingleDriveSettingsWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_di_bbb.drive.BbBSingleDriveSettingsWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QWidget</span></code></p>
+<p>BbB Drive Settings Widget.</p>
+</dd></dl>
+
+</section>
+<section id="module-siriushla.si_di_bbb.environment">
+<span id="siriushla-si-di-bbb-environment-module"></span><h2>siriushla.si_di_bbb.environment module<a class="headerlink" href="#module-siriushla.si_di_bbb.environment" title="Link to this heading"></a></h2>
+<p>BbB Environment Module.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_di_bbb.environment.BbBEnvironmMonWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_di_bbb.environment.</span></span><span class="sig-name descname"><span class="pre">BbBEnvironmMonWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">siriuspy.envars.VACA_PREFIX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_di_bbb/environment.html#BbBEnvironmMonWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_di_bbb.environment.BbBEnvironmMonWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QWidget</span></code></p>
+<p>BbB Environment Monitor Widget.</p>
+</dd></dl>
+
+</section>
+<section id="module-siriushla.si_di_bbb.gpio">
+<span id="siriushla-si-di-bbb-gpio-module"></span><h2>siriushla.si_di_bbb.gpio module<a class="headerlink" href="#module-siriushla.si_di_bbb.gpio" title="Link to this heading"></a></h2>
+<p>BbB GPIO Module.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_di_bbb.gpio.BbBGPIOWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_di_bbb.gpio.</span></span><span class="sig-name descname"><span class="pre">BbBGPIOWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">siriuspy.envars.VACA_PREFIX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_di_bbb/gpio.html#BbBGPIOWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_di_bbb.gpio.BbBGPIOWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QWidget</span></code></p>
+<p>BbB GPIO Settings Widget.</p>
+</dd></dl>
+
+</section>
+<section id="module-siriushla.si_di_bbb.main">
+<span id="siriushla-si-di-bbb-main-module"></span><h2>siriushla.si_di_bbb.main module<a class="headerlink" href="#module-siriushla.si_di_bbb.main" title="Link to this heading"></a></h2>
+<p>BbB Main Module.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_di_bbb.main.BbBMainWindow">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_di_bbb.main.</span></span><span class="sig-name descname"><span class="pre">BbBMainWindow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">siriuspy.envars.VACA_PREFIX</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_di_bbb/main.html#BbBMainWindow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_di_bbb.main.BbBMainWindow" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_SiriusWindow</span></code></p>
+<p>BbB Main Window.</p>
+</dd></dl>
+
+</section>
+<section id="module-siriushla.si_di_bbb.masks">
+<span id="siriushla-si-di-bbb-masks-module"></span><h2>siriushla.si_di_bbb.masks module<a class="headerlink" href="#module-siriushla.si_di_bbb.masks" title="Link to this heading"></a></h2>
+<p>BbB Devices Module.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_di_bbb.masks.BbBMasksWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_di_bbb.masks.</span></span><span class="sig-name descname"><span class="pre">BbBMasksWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">siriuspy.envars.VACA_PREFIX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_di_bbb/masks.html#BbBMasksWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_di_bbb.masks.BbBMasksWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QWidget</span></code></p>
+<p>BbB Masks Settings Widget.</p>
+</dd></dl>
+
+</section>
+<section id="module-siriushla.si_di_bbb.pwr_amps">
+<span id="siriushla-si-di-bbb-pwr-amps-module"></span><h2>siriushla.si_di_bbb.pwr_amps module<a class="headerlink" href="#module-siriushla.si_di_bbb.pwr_amps" title="Link to this heading"></a></h2>
+<p>BbB Devices Module.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_di_bbb.pwr_amps.BbBPwrAmpsWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_di_bbb.pwr_amps.</span></span><span class="sig-name descname"><span class="pre">BbBPwrAmpsWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">siriuspy.envars.VACA_PREFIX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_di_bbb/pwr_amps.html#BbBPwrAmpsWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_di_bbb.pwr_amps.BbBPwrAmpsWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QWidget</span></code></p>
+<p>BbB Power Amplifiers Settings Widget.</p>
+</dd></dl>
+
+</section>
+<section id="module-siriushla.si_di_bbb.timing">
+<span id="siriushla-si-di-bbb-timing-module"></span><h2>siriushla.si_di_bbb.timing module<a class="headerlink" href="#module-siriushla.si_di_bbb.timing" title="Link to this heading"></a></h2>
+<p>BbB Timing Module.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.si_di_bbb.timing.BbBTimingWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.si_di_bbb.timing.</span></span><span class="sig-name descname"><span class="pre">BbBTimingWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">siriuspy.envars.VACA_PREFIX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_di_bbb/timing.html#BbBTimingWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_di_bbb.timing.BbBTimingWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QWidget</span></code></p>
+<p>BbB Timing Settings Widget.</p>
+</dd></dl>
+
+</section>
+<section id="module-siriushla.si_di_bbb.util">
+<span id="siriushla-si-di-bbb-util-module"></span><h2>siriushla.si_di_bbb.util module<a class="headerlink" href="#module-siriushla.si_di_bbb.util" title="Link to this heading"></a></h2>
+<p>BbB Util Module.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="siriushla.si_di_bbb.util.get_bbb_icon">
+<span class="sig-prename descclassname"><span class="pre">siriushla.si_di_bbb.util.</span></span><span class="sig-name descname"><span class="pre">get_bbb_icon</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_di_bbb/util.html#get_bbb_icon"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_di_bbb.util.get_bbb_icon" title="Link to this definition"></a></dt>
+<dd><p>Get BbB icon.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="siriushla.si_di_bbb.util.set_bbb_color">
+<span class="sig-prename descclassname"><span class="pre">siriushla.si_di_bbb.util.</span></span><span class="sig-name descname"><span class="pre">set_bbb_color</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/si_di_bbb/util.html#set_bbb_color"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.si_di_bbb.util.set_bbb_color" title="Link to this definition"></a></dt>
+<dd><p>Set BbB color.</p>
+</dd></dl>
+
+</section>
+<section id="module-siriushla.si_di_bbb">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-siriushla.si_di_bbb" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="siriushla.si_ap_orbintlk.html" class="btn btn-neutral float-left" title="siriushla.si_ap_orbintlk" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="siriushla.si_di_equalize_bpms.html" class="btn btn-neutral float-right" title="siriushla.si_di_equalize_bpms" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, lnls-sirius.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

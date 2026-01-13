@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>siriushla.as_ap_injcontrol.tbts &mdash; siriushla 1.14.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=01009efc"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            siriushla
+          </a>
+              <div class="version">
+                1.14.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">GUIs:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_configdb.html">siriushla.as_ap_configdb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_currinfo.html">siriushla.as_ap_currinfo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_energybutton.html">siriushla.as_ap_energybutton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_injcontrol.html">siriushla.as_ap_injcontrol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_injection.html">siriushla.as_ap_injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_launcher.html">siriushla.as_ap_launcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_machshift.html">siriushla.as_ap_machshift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_macreport.html">siriushla.as_ap_macreport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_magoffconv.html">siriushla.as_ap_magoffconv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_measure.html">siriushla.as_ap_measure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_monitor.html">siriushla.as_ap_monitor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_opticscorr.html">siriushla.as_ap_opticscorr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_posang.html">siriushla.as_ap_posang</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_rabpmmon.html">siriushla.as_ap_rabpmmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_radmon.html">siriushla.as_ap_radmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_sofb.html">siriushla.as_ap_sofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_bpms.html">siriushla.as_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_dccts.html">siriushla.as_di_dccts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_icts.html">siriushla.as_di_icts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_scrns.html">siriushla.as_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_tune.html">siriushla.as_di_tune</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_vlight.html">siriushla.as_di_vlight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_commands.html">siriushla.as_ps_commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_control.html">siriushla.as_ps_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_cycle.html">siriushla.as_ps_cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_diag.html">siriushla.as_ps_diag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_pu_control.html">siriushla.as_pu_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_rf_control.html">siriushla.as_rf_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ti_control.html">siriushla.as_ti_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.bl_ap_imgproc.html">siriushla.bl_ap_imgproc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.bo_ap_ramp.html">siriushla.bo_ap_ramp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.common.html">siriushla.common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_ap_mps.html">siriushla.li_ap_mps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_di_bpms.html">siriushla.li_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_di_scrns.html">siriushla.li_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_eg_control.html">siriushla.li_eg_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_pu_modltr.html">siriushla.li_pu_modltr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_rf_llrf.html">siriushla.li_rf_llrf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_va_control.html">siriushla.li_va_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_fofb.html">siriushla.si_ap_fofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_genstatus.html">siriushla.si_ap_genstatus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_idff.html">siriushla.si_ap_idff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_orbintlk.html">siriushla.si_ap_orbintlk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_bbb.html">siriushla.si_di_bbb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_equalize_bpms.html">siriushla.si_di_equalize_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_scraps.html">siriushla.si_di_scraps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_id_control.html">siriushla.si_id_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.tb_di_slits.html">siriushla.tb_di_slits</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Widgets:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.html">Sirius HLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.widgets.html">Widgets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Source Code:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lnls-sirius/hla">HLA Github</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">siriushla</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">siriushla.as_ap_injcontrol.tbts</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for siriushla.as_ap_injcontrol.tbts</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python-sirius</span>
+<span class="sd">&quot;&quot;&quot;HLA TB and TS AP Control Window.&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtWidgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">QVBoxLayout</span><span class="p">,</span> <span class="n">QHBoxLayout</span><span class="p">,</span> <span class="n">QWidget</span><span class="p">,</span> <span class="n">QAction</span><span class="p">,</span> \
+    <span class="n">QSizePolicy</span> <span class="k">as</span> <span class="n">QSzPlcy</span><span class="p">,</span> <span class="n">QTabWidget</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriuspy.envars</span><span class="w"> </span><span class="kn">import</span> <span class="n">VACA_PREFIX</span> <span class="k">as</span> <span class="n">_VACA_PREFIX</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriuspy.namesys</span><span class="w"> </span><span class="kn">import</span> <span class="n">SiriusPVName</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriushla</span><span class="w"> </span><span class="kn">import</span> <span class="n">util</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriushla.as_di_icts</span><span class="w"> </span><span class="kn">import</span> <span class="n">ICTSummary</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriushla.tb_di_slits</span><span class="w"> </span><span class="kn">import</span> <span class="n">SlitMonitoring</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriushla.as_ap_injcontrol.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseWindow</span>
+
+
+<div class="viewcode-block" id="TLControlWindow">
+<a class="viewcode-back" href="../../../siriushla.as_ap_injcontrol.html#siriushla.as_ap_injcontrol.tbts.TLControlWindow">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">TLControlWindow</span><span class="p">(</span><span class="n">BaseWindow</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class to create the main window for TB and TS HLA.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="n">_VACA_PREFIX</span><span class="p">,</span> <span class="n">tl</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize widgets in main window.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">prefix</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="n">tl</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39; Control Window&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="n">tl</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="o">+</span><span class="s1">&#39;App&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tl</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SVG_FILE</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;.svg&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_devices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getTLData</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_scrns</span> <span class="o">=</span> <span class="p">[</span><span class="n">devs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">devs</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_devices</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setupUi</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lattice_wid</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span>
+            <span class="s1">&#39;min-width:62em; min-height:10em; max-height:10em;&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_setupMenu</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># LatticeAndTwiss = QAction(&quot;Show Lattice and Twiss&quot;, self)</span>
+        <span class="c1"># util.connect_window(LatticeAndTwiss, ShowLatticeAndTwiss,</span>
+        <span class="c1">#                         parent=self, tl=self.tl)</span>
+        <span class="c1"># self.menu.addAction(LatticeAndTwiss)</span>
+        <span class="n">PS</span> <span class="o">=</span> <span class="n">QAction</span><span class="p">(</span><span class="s2">&quot;PS&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">util</span><span class="o">.</span><span class="n">connect_newprocess</span><span class="p">(</span>
+            <span class="n">PS</span><span class="p">,</span> <span class="s1">&#39;sirius-hla-&#39;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">tl</span><span class="o">+</span><span class="s1">&#39;-ps-control.py&#39;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="n">PS</span><span class="p">)</span>
+        <span class="n">PU</span> <span class="o">=</span> <span class="n">QAction</span><span class="p">(</span><span class="s2">&quot;PU&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">util</span><span class="o">.</span><span class="n">connect_newprocess</span><span class="p">(</span>
+            <span class="n">PU</span><span class="p">,</span> <span class="s1">&#39;sirius-hla-&#39;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">tl</span><span class="o">+</span><span class="s1">&#39;-pu-control.py&#39;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="n">PU</span><span class="p">)</span>
+        <span class="n">SOFB</span> <span class="o">=</span> <span class="n">QAction</span><span class="p">(</span><span class="s2">&quot;SOFB&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">util</span><span class="o">.</span><span class="n">connect_newprocess</span><span class="p">(</span>
+            <span class="n">SOFB</span><span class="p">,</span> <span class="s1">&#39;sirius-hla-&#39;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">tl</span><span class="o">+</span><span class="s1">&#39;-ap-sofb.py&#39;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="n">SOFB</span><span class="p">)</span>
+        <span class="n">ICTs</span> <span class="o">=</span> <span class="n">QAction</span><span class="p">(</span><span class="s2">&quot;ICTs&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">util</span><span class="o">.</span><span class="n">connect_newprocess</span><span class="p">(</span>
+            <span class="n">ICTs</span><span class="p">,</span> <span class="s1">&#39;sirius-hla-&#39;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">tl</span><span class="o">+</span><span class="s1">&#39;-di-icts.py&#39;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="n">ICTs</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_setupScrnsCorrsWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">lay</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">()</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setContentsMargins</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">headerline</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_headerline</span><span class="p">(</span>
+            <span class="p">((</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+             <span class="p">(</span><span class="s1">&#39;Screen&#39;</span><span class="p">,</span> <span class="mf">6.5</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;Cam&#39;</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;Type-Sel&#39;</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;Type-Sts&#39;</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
+             <span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+             <span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="mf">1.29</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;CH&#39;</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;Kick-SP&#39;</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;Kick-Mon&#39;</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
+             <span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+             <span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="mf">1.29</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;CV&#39;</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;Kick-SP&#39;</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;Kick-Mon&#39;</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
+             <span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)))</span>
+        <span class="n">headerline</span><span class="o">.</span><span class="n">setSizePolicy</span><span class="p">(</span><span class="n">QSzPlcy</span><span class="o">.</span><span class="n">Preferred</span><span class="p">,</span> <span class="n">QSzPlcy</span><span class="o">.</span><span class="n">Maximum</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">headerline</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">scrn_idx</span><span class="p">,</span> <span class="n">devices</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_devices</span><span class="p">):</span>
+            <span class="n">scrnprefix</span><span class="p">,</span> <span class="n">ch_group</span><span class="p">,</span> <span class="n">cv_group</span> <span class="o">=</span> <span class="n">devices</span>
+
+            <span class="n">scrnprefix</span> <span class="o">=</span> <span class="n">SiriusPVName</span><span class="p">(</span><span class="n">scrnprefix</span><span class="p">)</span>
+            <span class="n">scrn_details</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_scrn_summwidget</span><span class="p">(</span><span class="n">scrnprefix</span><span class="p">,</span> <span class="n">scrn_idx</span><span class="p">)</span>
+            <span class="n">scrn_details</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="n">scrnprefix</span><span class="p">)</span>
+            <span class="n">scrn_details</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">setContentsMargins</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">9</span><span class="p">)</span>
+
+            <span class="n">ch_widget</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">()</span>
+            <span class="n">ch_widget</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">QVBoxLayout</span><span class="p">())</span>
+            <span class="n">ch_widget</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">setContentsMargins</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">9</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">ch_group</span><span class="p">:</span>
+                <span class="n">ch</span> <span class="o">=</span> <span class="n">SiriusPVName</span><span class="p">(</span><span class="n">ch</span><span class="p">)</span>
+                <span class="n">ch_details</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_corr_summwidget</span><span class="p">(</span><span class="n">ch</span><span class="p">)</span>
+                <span class="n">ch_details</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="n">ch</span><span class="p">)</span>
+                <span class="n">ch_widget</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">ch_details</span><span class="p">)</span>
+
+            <span class="n">cv_widget</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">()</span>
+            <span class="n">cv_widget</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">QVBoxLayout</span><span class="p">())</span>
+            <span class="n">cv_widget</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">setContentsMargins</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">9</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">cv</span> <span class="ow">in</span> <span class="n">cv_group</span><span class="p">:</span>
+                <span class="n">cv</span> <span class="o">=</span> <span class="n">SiriusPVName</span><span class="p">(</span><span class="n">cv</span><span class="p">)</span>
+                <span class="n">cv_details</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_corr_summwidget</span><span class="p">(</span><span class="n">cv</span><span class="p">)</span>
+                <span class="n">cv_details</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="n">cv</span><span class="p">)</span>
+                <span class="n">cv_widget</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">cv_details</span><span class="p">)</span>
+
+            <span class="n">hlay_scrncorr</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+            <span class="n">hlay_scrncorr</span><span class="o">.</span><span class="n">setContentsMargins</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">hlay_scrncorr</span><span class="o">.</span><span class="n">addStretch</span><span class="p">()</span>
+            <span class="n">hlay_scrncorr</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">scrn_details</span><span class="p">)</span>
+            <span class="n">hlay_scrncorr</span><span class="o">.</span><span class="n">addStretch</span><span class="p">()</span>
+            <span class="n">hlay_scrncorr</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">ch_widget</span><span class="p">)</span>
+            <span class="n">hlay_scrncorr</span><span class="o">.</span><span class="n">addStretch</span><span class="p">()</span>
+            <span class="n">hlay_scrncorr</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">cv_widget</span><span class="p">)</span>
+            <span class="n">hlay_scrncorr</span><span class="o">.</span><span class="n">addStretch</span><span class="p">()</span>
+            <span class="n">widget_scrncorr</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">()</span>
+            <span class="n">widget_scrncorr</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;widget_correctors_scrn&#39;</span><span class="p">)</span>
+            <span class="n">widget_scrncorr</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">hlay_scrncorr</span><span class="p">)</span>
+            <span class="n">widget_scrncorr</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span>
+                <span class="s1">&#39;#widget_correctors_scrn {border-top: 2px solid gray;}&#39;</span><span class="p">)</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">widget_scrncorr</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">corr_wid</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">lay</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_setupDiagWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ictmon</span> <span class="o">=</span> <span class="n">ICTSummary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="p">,</span> <span class="n">tl</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tl</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tl</span> <span class="o">==</span> <span class="s1">&#39;tb&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">auxdig_wid</span> <span class="o">=</span> <span class="n">QTabWidget</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">auxdig_wid</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">                QTabBar::tab{margin-top: 0em;}&quot;&quot;&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">auxdig_wid</span><span class="o">.</span><span class="n">addTab</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ictmon</span><span class="p">,</span> <span class="s1">&#39;ICTs&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">slith</span> <span class="o">=</span> <span class="n">SlitMonitoring</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="p">,</span> <span class="s1">&#39;TB-01:DI-SlitH&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">slith</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;slith&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">slith</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s1">&#39;#slith{max-height:8.5em;}&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">auxdig_wid</span><span class="o">.</span><span class="n">addTab</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">slith</span><span class="p">,</span> <span class="s1">&#39;Slit H&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">slitv</span> <span class="o">=</span> <span class="n">SlitMonitoring</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="p">,</span> <span class="s1">&#39;TB-01:DI-SlitV&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">slitv</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;slitv&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">slitv</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s1">&#39;#slitv{max-height:8.5em;}&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">auxdig_wid</span><span class="o">.</span><span class="n">addTab</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">slitv</span><span class="p">,</span> <span class="s1">&#39;Slit V&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">tl</span> <span class="o">==</span> <span class="s1">&#39;ts&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">auxdig_wid</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">()</span>
+            <span class="n">lay</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">()</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">setContentsMargins</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addStretch</span><span class="p">()</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ictmon</span><span class="p">)</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addStretch</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">auxdig_wid</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">lay</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_getTLData</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return transport line data based on input &#39;tl&#39;.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tl</span> <span class="o">==</span> <span class="s1">&#39;tb&#39;</span><span class="p">:</span>
+            <span class="n">devices</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="p">(</span><span class="s1">&#39;TB-01:DI-Scrn-1&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;LI-01:PS-CH-7&#39;</span><span class="p">,</span> <span class="p">),</span> <span class="p">(</span><span class="s1">&#39;LI-01:PS-CV-7&#39;</span><span class="p">,</span> <span class="p">)),</span>
+                <span class="p">(</span><span class="s1">&#39;TB-01:DI-Scrn-2&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;TB-01:PS-CH-1&#39;</span><span class="p">,</span> <span class="p">),</span> <span class="p">(</span><span class="s1">&#39;TB-01:PS-CV-1&#39;</span><span class="p">,</span> <span class="p">)),</span>
+                <span class="p">(</span><span class="s1">&#39;TB-02:DI-Scrn-1&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;TB-01:PS-CH-2&#39;</span><span class="p">,</span> <span class="p">),</span> <span class="p">(</span><span class="s1">&#39;TB-01:PS-CV-2&#39;</span><span class="p">,</span> <span class="p">)),</span>
+                <span class="p">(</span><span class="s1">&#39;TB-02:DI-Scrn-2&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;TB-02:PS-CH-1&#39;</span><span class="p">,</span> <span class="p">),</span> <span class="p">(</span><span class="s1">&#39;TB-02:PS-CV-1&#39;</span><span class="p">,</span> <span class="p">)),</span>
+                <span class="p">(</span><span class="s1">&#39;TB-03:DI-Scrn&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;TB-02:PS-CH-2&#39;</span><span class="p">,</span> <span class="p">),</span> <span class="p">(</span><span class="s1">&#39;TB-02:PS-CV-2&#39;</span><span class="p">,</span> <span class="p">)),</span>
+                <span class="p">(</span><span class="s1">&#39;TB-04:DI-Scrn&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;TB-04:PS-CH-1&#39;</span><span class="p">,</span> <span class="p">),</span> <span class="p">(</span><span class="s1">&#39;TB-04:PS-CV-1&#39;</span><span class="p">,</span> <span class="p">))</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">tl</span> <span class="o">==</span> <span class="s1">&#39;ts&#39;</span><span class="p">:</span>
+            <span class="n">devices</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="p">(</span><span class="s1">&#39;TS-01:DI-Scrn&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;TS-01:PU-EjeSeptF&#39;</span><span class="p">,</span> <span class="s1">&#39;TS-01:PU-EjeSeptG&#39;</span><span class="p">),</span>
+                 <span class="p">(</span><span class="s1">&#39;TS-01:PS-CV-1&#39;</span><span class="p">,</span> <span class="s1">&#39;TS-01:PS-CV-1E2&#39;</span><span class="p">)),</span>
+                <span class="p">(</span><span class="s1">&#39;TS-02:DI-Scrn&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;TS-01:PS-CH&#39;</span><span class="p">,</span> <span class="p">),</span>
+                 <span class="p">(</span><span class="s1">&#39;TS-01:PS-CV-2&#39;</span><span class="p">,</span> <span class="s1">&#39;TS-02:PS-CV-0&#39;</span><span class="p">)),</span>
+                <span class="p">(</span><span class="s1">&#39;TS-03:DI-Scrn&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;TS-02:PS-CH&#39;</span><span class="p">,</span> <span class="p">),</span> <span class="p">(</span><span class="s1">&#39;TS-02:PS-CV&#39;</span><span class="p">,</span> <span class="p">)),</span>
+                <span class="p">(</span><span class="s1">&#39;TS-04:DI-Scrn-1&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;TS-03:PS-CH&#39;</span><span class="p">,</span> <span class="p">),</span>
+                 <span class="p">(</span><span class="s1">&#39;TS-03:PS-CV&#39;</span><span class="p">,</span> <span class="s1">&#39;TS-04:PS-CV-0&#39;</span><span class="p">)),</span>
+                <span class="p">(</span><span class="s1">&#39;TS-04:DI-Scrn-2&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;TS-04:PS-CH&#39;</span><span class="p">,</span> <span class="p">),</span>
+                 <span class="p">(</span><span class="s1">&#39;TS-04:PS-CV-1&#39;</span><span class="p">,</span> <span class="s1">&#39;TS-04:PS-CV-1E2&#39;</span><span class="p">)),</span>
+                <span class="p">(</span><span class="s1">&#39;TS-04:DI-Scrn-3&#39;</span><span class="p">,</span>
+                 <span class="p">(</span><span class="s1">&#39;TS-04:PU-InjSeptG-1&#39;</span><span class="p">,</span> <span class="s1">&#39;TS-04:PU-InjSeptG-2&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;TS-04:PU-InjSeptF&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;TS-04:PS-CV-2&#39;</span><span class="p">,</span> <span class="p">))</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">devices</span>
+
+<div class="viewcode-block" id="TLControlWindow.keyPressEvent">
+<a class="viewcode-back" href="../../../siriushla.as_ap_injcontrol.html#siriushla.as_ap_injcontrol.tbts.TLControlWindow.keyPressEvent">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">keyPressEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Override keyPressEvent.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">keyPressEvent</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tl</span> <span class="o">==</span> <span class="s1">&#39;tb&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">slith</span><span class="o">.</span><span class="n">updateDevWidget</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">slitv</span><span class="o">.</span><span class="n">updateDevWidget</span><span class="p">()</span></div>
+</div>
+
+
+
+<span class="c1"># import pyaccel as _pyaccel</span>
+<span class="c1"># import pymodels as _pymodels</span>
+<span class="c1"># from siriushla.widgets import MatplotlibWidget</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1"># class ShowLatticeAndTwiss(SiriusMainWindow):</span>
+<span class="c1">#     &quot;&quot;&quot;Class to create Lattice and Twiss Widget.&quot;&quot;&quot;</span>
+<span class="c1">#</span>
+<span class="c1">#     def __init__(self, parent=None, tl=None):</span>
+<span class="c1">#         &quot;&quot;&quot;Create Lattice and Twiss Graph.&quot;&quot;&quot;</span>
+<span class="c1">#         super(ShowLatticeAndTwiss, self).__init__(parent)</span>
+<span class="c1">#         self.setWindowTitle(tl.upper() + &#39; Nominal Lattice and Twiss&#39;)</span>
+<span class="c1">#         if tl == &#39;tb&#39;:</span>
+<span class="c1">#             self.tl, self._twiss_in = _pymodels.tb.create_accelerator()</span>
+<span class="c1">#             fam_data = _pymodels.tb.families.get_family_data(self.tl)</span>
+<span class="c1">#             fam_mapping = _pymodels.tb.family_mapping</span>
+<span class="c1">#         elif tl == &#39;ts&#39;:</span>
+<span class="c1">#             self.tl, self._twiss_in = _pymodels.ts.create_accelerator()</span>
+<span class="c1">#             fam_data = _pymodels.ts.families.get_family_data(self.tl)</span>
+<span class="c1">#             fam_mapping = _pymodels.ts.family_mapping</span>
+<span class="c1">#</span>
+<span class="c1">#         self.tl_twiss, _ = _pyaccel.optics.calc_twiss(</span>
+<span class="c1">#                                                     accelerator=self.tl,</span>
+<span class="c1">#                                                     init_twiss=self._twiss_in)</span>
+<span class="c1">#         self._fig, self._ax = _pyaccel.graphics.plot_twiss(</span>
+<span class="c1">#                                                     accelerator=self.tl,</span>
+<span class="c1">#                                                     twiss=self.tl_twiss,</span>
+<span class="c1">#                                                     family_data=fam_data,</span>
+<span class="c1">#                                                     family_mapping=fam_mapping,</span>
+<span class="c1">#                                                     draw_edges=True,</span>
+<span class="c1">#                                                     height=4,</span>
+<span class="c1">#                                                     show_label=True)</span>
+<span class="c1">#         self.centralwidget = QWidget()</span>
+<span class="c1">#         self.centralwidget.setLayout(QVBoxLayout())</span>
+<span class="c1">#         self.canvas = MatplotlibWidget(figure=self._fig)</span>
+<span class="c1">#         self.canvas.setParent(self.centralwidget)</span>
+<span class="c1">#         self.centralwidget.layout().addWidget(self.canvas)</span>
+<span class="c1">#         self.centralwidget.layout().setContentsMargins(0, 0, 0, 0)</span>
+<span class="c1">#         self.setCentralWidget(self.centralwidget)</span>
+<span class="c1">#         self.centralwidget.setStyleSheet(&quot;&quot;&quot;min-width:90em;max-width:90em;&quot;&quot;&quot;)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, lnls-sirius.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

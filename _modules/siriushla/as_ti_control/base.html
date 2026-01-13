@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>siriushla.as_ti_control.base &mdash; siriushla 1.14.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=01009efc"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            siriushla
+          </a>
+              <div class="version">
+                1.14.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">GUIs:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_configdb.html">siriushla.as_ap_configdb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_currinfo.html">siriushla.as_ap_currinfo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_energybutton.html">siriushla.as_ap_energybutton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_injcontrol.html">siriushla.as_ap_injcontrol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_injection.html">siriushla.as_ap_injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_launcher.html">siriushla.as_ap_launcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_machshift.html">siriushla.as_ap_machshift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_macreport.html">siriushla.as_ap_macreport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_magoffconv.html">siriushla.as_ap_magoffconv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_measure.html">siriushla.as_ap_measure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_monitor.html">siriushla.as_ap_monitor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_opticscorr.html">siriushla.as_ap_opticscorr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_posang.html">siriushla.as_ap_posang</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_rabpmmon.html">siriushla.as_ap_rabpmmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_radmon.html">siriushla.as_ap_radmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_sofb.html">siriushla.as_ap_sofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_bpms.html">siriushla.as_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_dccts.html">siriushla.as_di_dccts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_icts.html">siriushla.as_di_icts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_scrns.html">siriushla.as_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_tune.html">siriushla.as_di_tune</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_vlight.html">siriushla.as_di_vlight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_commands.html">siriushla.as_ps_commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_control.html">siriushla.as_ps_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_cycle.html">siriushla.as_ps_cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_diag.html">siriushla.as_ps_diag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_pu_control.html">siriushla.as_pu_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_rf_control.html">siriushla.as_rf_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ti_control.html">siriushla.as_ti_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.bl_ap_imgproc.html">siriushla.bl_ap_imgproc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.bo_ap_ramp.html">siriushla.bo_ap_ramp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.common.html">siriushla.common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_ap_mps.html">siriushla.li_ap_mps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_di_bpms.html">siriushla.li_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_di_scrns.html">siriushla.li_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_eg_control.html">siriushla.li_eg_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_pu_modltr.html">siriushla.li_pu_modltr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_rf_llrf.html">siriushla.li_rf_llrf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_va_control.html">siriushla.li_va_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_fofb.html">siriushla.si_ap_fofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_genstatus.html">siriushla.si_ap_genstatus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_idff.html">siriushla.si_ap_idff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_orbintlk.html">siriushla.si_ap_orbintlk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_bbb.html">siriushla.si_di_bbb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_equalize_bpms.html">siriushla.si_di_equalize_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_scraps.html">siriushla.si_di_scraps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_id_control.html">siriushla.si_id_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.tb_di_slits.html">siriushla.tb_di_slits</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Widgets:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.html">Sirius HLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.widgets.html">Widgets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Source Code:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lnls-sirius/hla">HLA Github</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">siriushla</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">siriushla.as_ti_control.base</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for siriushla.as_ti_control.base</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;.&quot;&quot;&quot;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtCore</span><span class="w"> </span><span class="kn">import</span> <span class="n">Qt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtWidgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">QWidget</span><span class="p">,</span> <span class="n">QHBoxLayout</span><span class="p">,</span> <span class="n">QVBoxLayout</span><span class="p">,</span> \
+    <span class="n">QScrollArea</span><span class="p">,</span> <span class="n">QGroupBox</span><span class="p">,</span> <span class="n">QLabel</span><span class="p">,</span> <span class="n">QSizePolicy</span> <span class="k">as</span> <span class="n">QSzPol</span><span class="p">,</span> <span class="n">QFrame</span><span class="p">,</span> <span class="n">QMenu</span><span class="p">,</span> \
+    <span class="n">QLineEdit</span><span class="p">,</span> <span class="n">QPushButton</span><span class="p">,</span> <span class="n">QAbstractItemView</span><span class="p">,</span> <span class="n">QHeaderView</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">qtawesome</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">qta</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydm.widgets.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">PyDMPrimitiveWidget</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriuspy.namesys</span><span class="w"> </span><span class="kn">import</span> <span class="n">SiriusPVName</span> <span class="k">as</span> <span class="n">_PVName</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..widgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">SiriusLabel</span><span class="p">,</span> <span class="n">SiriusSpinbox</span><span class="p">,</span> <span class="n">SiriusEnumComboBox</span><span class="p">,</span> \
+    <span class="n">SiriusWaveformTable</span>
+
+
+<div class="viewcode-block" id="BaseWidget">
+<a class="viewcode-back" href="../../../siriushla.as_ti_control.html#siriushla.as_ti_control.base.BaseWidget">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">BaseWidget</span><span class="p">(</span><span class="n">QWidget</span><span class="p">):</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="n">prefix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">_PVName</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+<div class="viewcode-block" id="BaseWidget.channels">
+<a class="viewcode-back" href="../../../siriushla.as_ti_control.html#siriushla.as_ti_control.base.BaseWidget.channels">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">channels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_chans</span></div>
+
+
+<div class="viewcode-block" id="BaseWidget.get_pvname">
+<a class="viewcode-back" href="../../../siriushla.as_ti_control.html#siriushla.as_ti_control.base.BaseWidget.get_pvname">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_pvname</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">propty</span><span class="p">,</span> <span class="n">field</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+            <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="p">,</span> <span class="n">propty</span><span class="o">=</span><span class="n">propty</span><span class="p">,</span> <span class="n">field</span><span class="o">=</span><span class="n">field</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_create_propty_layout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">propty</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">6.0</span><span class="p">,</span> <span class="n">show_unit</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return layout that handles a property according to &#39;propty_type&#39;.&quot;&quot;&quot;</span>
+        <span class="n">layout</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">not_enum</span> <span class="o">=</span> <span class="n">propty</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;-SP&#39;</span><span class="p">)</span>
+        <span class="n">pv2</span> <span class="o">=</span> <span class="n">propty</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;-SP&#39;</span><span class="p">,</span> <span class="s1">&#39;-RB&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;-Sel&#39;</span><span class="p">,</span> <span class="s1">&#39;-Sts&#39;</span><span class="p">)</span>
+
+        <span class="n">style</span> <span class="o">=</span> <span class="s1">&#39;min-width:</span><span class="si">{0}</span><span class="s1">em; max-width:</span><span class="si">{0}</span><span class="s1">em;</span><span class="se">\</span>
+<span class="s1">            min-height:1.29em;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">width</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">pv2</span> <span class="o">!=</span> <span class="n">propty</span><span class="p">:</span>
+            <span class="n">chan1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pvname</span><span class="p">(</span><span class="n">propty</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">not_enum</span><span class="p">:</span>
+                <span class="n">wid</span> <span class="o">=</span> <span class="n">SiriusSpinbox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">chan1</span><span class="p">)</span>
+                <span class="n">wid</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">wid</span> <span class="o">=</span> <span class="n">SiriusEnumComboBox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="n">chan1</span><span class="p">)</span>
+            <span class="n">wid</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="n">style</span><span class="p">)</span>
+            <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+
+        <span class="n">label</span> <span class="o">=</span> <span class="n">SiriusLabel</span><span class="p">(</span>
+            <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">init_channel</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_pvname</span><span class="p">(</span><span class="n">pv2</span><span class="p">))</span>
+        <span class="n">label</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="n">style</span><span class="p">)</span>
+        <span class="n">label</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+        <span class="n">label</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="n">pv2</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+        <span class="n">label</span><span class="o">.</span><span class="n">showUnits</span> <span class="o">=</span> <span class="n">show_unit</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+
+        <span class="n">layout</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignVCenter</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">layout</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_create_small_group</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">wids</span><span class="p">,</span> <span class="n">align_ver</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">no_marg</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">group</span> <span class="o">=</span> <span class="n">QGroupBox</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span> <span class="k">if</span> <span class="n">name</span> <span class="k">else</span> <span class="n">QWidget</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="n">lay</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">(</span><span class="n">group</span><span class="p">)</span> <span class="k">if</span> <span class="n">align_ver</span> <span class="k">else</span> <span class="n">QHBoxLayout</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">align_ver</span><span class="p">:</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">wid</span> <span class="ow">in</span> <span class="n">wids</span><span class="p">:</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">wid</span><span class="p">,</span> <span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">no_marg</span><span class="p">:</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">setContentsMargins</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">group</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_create_logbuffer_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">table</span> <span class="o">=</span> <span class="n">SiriusWaveformTable</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pvname</span><span class="p">(</span><span class="n">prop</span><span class="p">),</span> <span class="n">transform</span><span class="o">=</span><span class="n">transform</span>
+        <span class="p">)</span>
+        <span class="n">table</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;tb&#39;</span><span class="p">)</span>
+        <span class="n">table</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">table</span><span class="o">.</span><span class="n">horizontalHeader</span><span class="p">()</span><span class="o">.</span><span class="n">setSectionResizeMode</span><span class="p">(</span><span class="n">QHeaderView</span><span class="o">.</span><span class="n">Stretch</span><span class="p">)</span>
+        <span class="n">table</span><span class="o">.</span><span class="n">setHorizontalScrollBarPolicy</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">ScrollBarAlwaysOff</span><span class="p">)</span>
+        <span class="n">table</span><span class="o">.</span><span class="n">setVerticalScrollBarPolicy</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">ScrollBarAlwaysOn</span><span class="p">)</span>
+        <span class="n">table</span><span class="o">.</span><span class="n">horizontalHeader</span><span class="p">()</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">table</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span>
+            <span class="s1">&#39;#tb{min-width:6em; max-width:12em; max-height: 16em;}&#39;</span><span class="p">)</span>
+        <span class="n">table</span><span class="o">.</span><span class="n">setEditTriggers</span><span class="p">(</span><span class="n">QAbstractItemView</span><span class="o">.</span><span class="n">NoEditTriggers</span><span class="p">)</span>
+        <span class="n">table</span><span class="o">.</span><span class="n">setColumnCount</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">table</span><span class="o">.</span><span class="n">setSizePolicy</span><span class="p">(</span><span class="n">QSzPol</span><span class="o">.</span><span class="n">MinimumExpanding</span><span class="p">,</span> <span class="n">QSzPol</span><span class="o">.</span><span class="n">Preferred</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">table</span></div>
+
+
+
+<div class="viewcode-block" id="CustomGroupBox">
+<a class="viewcode-back" href="../../../siriushla.as_ti_control.html#siriushla.as_ti_control.base.CustomGroupBox">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CustomGroupBox</span><span class="p">(</span><span class="n">QGroupBox</span><span class="p">,</span> <span class="n">PyDMPrimitiveWidget</span><span class="p">):</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">QGroupBox</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+        <span class="n">PyDMPrimitiveWidget</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="BaseList">
+<a class="viewcode-back" href="../../../siriushla.as_ti_control.html#siriushla.as_ti_control.base.BaseList">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">BaseList</span><span class="p">(</span><span class="n">CustomGroupBox</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Template for control of High Level Triggers.&quot;&quot;&quot;</span>
+
+    <span class="n">_MIN_WIDs</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">_LABELS</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">_ALL_PROPS</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">props</span><span class="o">=</span><span class="nb">set</span><span class="p">(),</span>
+                 <span class="n">obj_names</span><span class="o">=</span><span class="nb">list</span><span class="p">(),</span> <span class="n">has_search</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">props2search</span><span class="o">=</span><span class="nb">set</span><span class="p">()):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize object.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="n">prefix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">props</span> <span class="o">=</span> <span class="n">props</span> <span class="ow">or</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ALL_PROPS</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">has_search</span> <span class="o">=</span> <span class="n">has_search</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">props2search</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">props2search</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">obj_names</span> <span class="o">=</span> <span class="n">obj_names</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setupUi</span><span class="p">()</span>
+
+<div class="viewcode-block" id="BaseList.setupUi">
+<a class="viewcode-back" href="../../../siriushla.as_ti_control.html#siriushla.as_ti_control.base.BaseList.setupUi">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">my_layout</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">my_layout</span><span class="o">.</span><span class="n">setContentsMargins</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_search</span><span class="p">:</span>
+            <span class="n">hbl</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+            <span class="n">hbl</span><span class="o">.</span><span class="n">setSpacing</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">my_layout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">hbl</span><span class="p">)</span>
+            <span class="c1"># Create search bar</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">search_lineedit</span> <span class="o">=</span> <span class="n">QLineEdit</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+            <span class="n">hbl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">search_lineedit</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">search_lineedit</span><span class="o">.</span><span class="n">setPlaceholderText</span><span class="p">(</span><span class="s2">&quot;Search...&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">search_lineedit</span><span class="o">.</span><span class="n">textEdited</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filter_lines</span><span class="p">)</span>
+            <span class="c1"># Create search menu</span>
+            <span class="n">pbt</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s1">&#39;  &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+            <span class="n">pbt</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="s1">&#39;Choose which columns to show&#39;</span><span class="p">)</span>
+            <span class="n">pbt</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;but&#39;</span><span class="p">)</span>
+            <span class="n">pbt</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span><span class="s1">&#39;mdi.view-column&#39;</span><span class="p">))</span>
+            <span class="n">pbt</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">                #but{</span>
+<span class="s2">                    min-width:35px; max-width:35px;</span>
+<span class="s2">                    min-height:25px; max-height:25px;</span>
+<span class="s2">                    icon-size:25px;</span>
+<span class="s2">                }&quot;&quot;&quot;</span><span class="p">)</span>
+            <span class="n">hbl</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">pbt</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">search_menu</span> <span class="o">=</span> <span class="n">QMenu</span><span class="p">(</span><span class="n">pbt</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">search_menu</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filter_lines</span><span class="p">)</span>
+            <span class="n">pbt</span><span class="o">.</span><span class="n">setMenu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">search_menu</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">prop</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ALL_PROPS</span><span class="p">:</span>
+                <span class="n">act</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">search_menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="n">prop</span><span class="p">)</span>
+                <span class="n">act</span><span class="o">.</span><span class="n">setCheckable</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">act</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="n">prop</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">props</span><span class="p">)</span>
+                <span class="n">act</span><span class="o">.</span><span class="n">toggled</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filter_columns</span><span class="p">)</span>
+
+        <span class="c1"># Create header</span>
+        <span class="n">header</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">()</span>
+        <span class="n">headerlay</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">(</span><span class="n">header</span><span class="p">)</span>
+        <span class="n">headerlay</span><span class="o">.</span><span class="n">setContentsMargins</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">my_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">header</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignLeft</span><span class="p">)</span>
+        <span class="n">objs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getLine</span><span class="p">(</span><span class="n">header</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">prop</span><span class="p">,</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">objs</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">objectName</span><span class="p">()</span>
+            <span class="n">obj</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">                #</span><span class="si">{0:s}</span><span class="s2">{{</span>
+<span class="s2">                    min-width:</span><span class="si">{1:.1f}</span><span class="s2">em; max-width: </span><span class="si">{1:.1f}</span><span class="s2">em;</span>
+<span class="s2">                    min-height:1.8em; max-height:1.8em;</span>
+<span class="s2">                }}&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_MIN_WIDs</span><span class="p">[</span><span class="n">prop</span><span class="p">]))</span>
+            <span class="n">headerlay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+
+        <span class="c1"># Create scrollarea</span>
+        <span class="n">sc_area</span> <span class="o">=</span> <span class="n">QScrollArea</span><span class="p">()</span>
+        <span class="n">sc_area</span><span class="o">.</span><span class="n">setVerticalScrollBarPolicy</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">ScrollBarAsNeeded</span><span class="p">)</span>
+        <span class="n">sc_area</span><span class="o">.</span><span class="n">setHorizontalScrollBarPolicy</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">ScrollBarAsNeeded</span><span class="p">)</span>
+        <span class="n">sc_area</span><span class="o">.</span><span class="n">setWidgetResizable</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">sc_area</span><span class="o">.</span><span class="n">setFrameShape</span><span class="p">(</span><span class="n">QFrame</span><span class="o">.</span><span class="n">NoFrame</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">my_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">sc_area</span><span class="p">)</span>
+
+        <span class="c1"># ScrollArea Widget</span>
+        <span class="n">wid</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">()</span>
+        <span class="n">wid</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;wid&#39;</span><span class="p">)</span>
+        <span class="n">wid</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s1">&#39;#wid {background-color: transparent;}&#39;</span><span class="p">)</span>
+        <span class="n">lay</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setSpacing</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setContentsMargins</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignTop</span><span class="p">)</span>
+        <span class="n">sc_area</span><span class="o">.</span><span class="n">setWidget</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">lines</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filtered_lines</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">obj_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_names</span><span class="p">:</span>
+            <span class="n">pref</span> <span class="o">=</span> <span class="n">_PVName</span><span class="p">(</span><span class="n">obj_name</span><span class="p">)</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="p">)</span>
+            <span class="n">objs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getLine</span><span class="p">(</span><span class="n">pref</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="p">[</span><span class="n">pref</span><span class="p">]</span> <span class="o">=</span> <span class="n">objs</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">filtered_lines</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">pref</span><span class="p">)</span>
+            <span class="n">lwid</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">()</span>
+            <span class="n">hlay</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">(</span><span class="n">lwid</span><span class="p">)</span>
+            <span class="n">hlay</span><span class="o">.</span><span class="n">setContentsMargins</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">prop</span><span class="p">,</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">objs</span><span class="p">:</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">objectName</span><span class="p">()</span>
+                <span class="n">obj</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">                    #</span><span class="si">{0:s}</span><span class="s2">{{</span>
+<span class="s2">                        min-width:</span><span class="si">{1:.1f}</span><span class="s2">em; max-width: </span><span class="si">{1:.1f}</span><span class="s2">em;</span>
+<span class="s2">                    }}&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_MIN_WIDs</span><span class="p">[</span><span class="n">prop</span><span class="p">]))</span>
+                <span class="n">hlay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">lwid</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignLeft</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BaseList.getLine">
+<a class="viewcode-back" href="../../../siriushla.as_ti_control.html#siriushla.as_ti_control.base.BaseList.getLine">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getLine</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">objects</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">prop</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ALL_PROPS</span><span class="p">:</span>
+            <span class="n">widget</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getColumn</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">header</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">widget</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">objects</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">prop</span><span class="p">,</span> <span class="n">widget</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">objects</span></div>
+
+
+<div class="viewcode-block" id="BaseList.getColumn">
+<a class="viewcode-back" href="../../../siriushla.as_ti_control.html#siriushla.as_ti_control.base.BaseList.getColumn">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getColumn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">header</span><span class="p">):</span>
+        <span class="n">widget</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">widget</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="n">prop</span><span class="p">)</span>
+        <span class="n">widget</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="n">prop</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">props</span><span class="p">)</span>
+        <span class="n">widget</span><span class="o">.</span><span class="n">setSizePolicy</span><span class="p">(</span><span class="n">QSzPol</span><span class="o">.</span><span class="n">Fixed</span><span class="p">,</span> <span class="n">QSzPol</span><span class="o">.</span><span class="n">Fixed</span><span class="p">)</span>
+        <span class="n">lay</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">(</span><span class="n">widget</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setSpacing</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setContentsMargins</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+        <span class="n">fun</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_createObjs</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">header</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_headerLabel</span>
+        <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">fun</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">prop</span><span class="p">):</span>
+            <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+            <span class="n">obj</span><span class="o">.</span><span class="n">setSizePolicy</span><span class="p">(</span><span class="n">QSzPol</span><span class="o">.</span><span class="n">MinimumExpanding</span><span class="p">,</span> <span class="n">QSzPol</span><span class="o">.</span><span class="n">Maximum</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">widget</span></div>
+
+
+<div class="viewcode-block" id="BaseList.filter_columns">
+<a class="viewcode-back" href="../../../siriushla.as_ti_control.html#siriushla.as_ti_control.base.BaseList.filter_columns">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">filter_columns</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">txt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sender</span><span class="p">()</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+        <span class="n">visi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sender</span><span class="p">()</span><span class="o">.</span><span class="n">isChecked</span><span class="p">()</span>
+        <span class="n">objs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">findChildren</span><span class="p">(</span><span class="n">QWidget</span><span class="p">,</span> <span class="n">txt</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">objs</span><span class="p">:</span>
+            <span class="n">objname</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">objectName</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">objname</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">txt</span><span class="p">):</span>
+                <span class="n">obj</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="n">visi</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BaseList.filter_lines">
+<a class="viewcode-back" href="../../../siriushla.as_ti_control.html#siriushla.as_ti_control.base.BaseList.filter_lines">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">filter_lines</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Filter lines according to the regexp filter.&quot;&quot;&quot;</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">search_lineedit</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">I</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">filtered_lines</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">line</span><span class="p">,</span> <span class="n">objs</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">keep</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">for</span> <span class="n">prop</span><span class="p">,</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">objs</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">keep</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">filtered_lines</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+                    <span class="k">break</span>
+                <span class="k">if</span> <span class="n">prop</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">props2search</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">cnt</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+                <span class="n">wid</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">layout</span><span class="p">()</span><span class="o">.</span><span class="n">itemAt</span><span class="p">(</span><span class="n">cnt</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">widget</span><span class="p">()</span>
+                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">wid</span><span class="p">,</span> <span class="s1">&#39;text&#39;</span><span class="p">):</span>
+                    <span class="n">keep</span> <span class="o">|=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">pattern</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">wid</span><span class="o">.</span><span class="n">text</span><span class="p">()))</span>
+                    <span class="k">continue</span>
+                <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">wid</span><span class="p">,</span> <span class="s1">&#39;enum_strings&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">wid</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">):</span>
+                    <span class="n">conds</span> <span class="o">=</span> <span class="n">wid</span><span class="o">.</span><span class="n">enum_strings</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                    <span class="k">if</span> <span class="n">conds</span><span class="p">:</span>
+                        <span class="n">conds</span> <span class="o">&amp;=</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">wid</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
+                        <span class="n">conds</span> <span class="o">&amp;=</span> <span class="n">wid</span><span class="o">.</span><span class="n">value</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">wid</span><span class="o">.</span><span class="n">enum_strings</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">conds</span><span class="p">:</span>
+                        <span class="n">enum</span> <span class="o">=</span> <span class="n">wid</span><span class="o">.</span><span class="n">enum_strings</span><span class="p">[</span><span class="n">wid</span><span class="o">.</span><span class="n">value</span><span class="p">]</span>
+                        <span class="n">keep</span> <span class="o">|=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">pattern</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">enum</span><span class="p">))</span>
+                        <span class="k">continue</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_lines_visibility</span><span class="p">()</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_set_lines_visibility</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">props</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">a</span><span class="o">.</span><span class="n">text</span><span class="p">()</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">search_menu</span><span class="o">.</span><span class="n">actions</span><span class="p">()</span> <span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">isChecked</span><span class="p">()}</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">objs</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">filtered_lines</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">wid</span> <span class="ow">in</span> <span class="n">objs</span><span class="p">:</span>
+                    <span class="n">wid</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="n">wid</span><span class="o">.</span><span class="n">objectName</span><span class="p">()</span> <span class="ow">in</span> <span class="n">props</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">wid</span> <span class="ow">in</span> <span class="n">objs</span><span class="p">:</span>
+                    <span class="n">wid</span><span class="o">.</span><span class="n">setVisible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_headerLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">prop</span><span class="p">):</span>
+        <span class="n">lbl</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;&lt;h4&gt;&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_LABELS</span><span class="p">[</span><span class="n">prop</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;&lt;/h4&gt;&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">lbl</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignHCenter</span> <span class="o">|</span> <span class="n">Qt</span><span class="o">.</span><span class="n">AlignTop</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">lbl</span><span class="p">,</span> <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_createObjs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">prop</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">()</span>  <span class="c1"># return tuple of widgets</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, lnls-sirius.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

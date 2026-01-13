@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>siriushla.as_ap_configdb.normconfigs &mdash; siriushla 1.14.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=01009efc"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="siriushla.as_ap_configdb.pvsconfigs" href="siriushla.as_ap_configdb.pvsconfigs.html" />
+    <link rel="prev" title="siriushla.as_ap_configdb.models" href="siriushla.as_ap_configdb.models.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            siriushla
+          </a>
+              <div class="version">
+                1.14.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">GUIs:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="siriushla.as_ap_configdb.html">siriushla.as_ap_configdb</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="siriushla.as_ap_configdb.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="siriushla.as_ap_configdb.models.html">siriushla.as_ap_configdb.models</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">siriushla.as_ap_configdb.normconfigs</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#code-documentation">Code Documentation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-siriushla.as_ap_configdb.normconfigs.ConfigManagerWindow">siriushla.as_ap_configdb.normconfigs.ConfigManagerWindow module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-siriushla.as_ap_configdb.normconfigs.ConfigModel">siriushla.as_ap_configdb.normconfigs.ConfigModel module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-siriushla.as_ap_configdb.normconfigs.LoadingThread">siriushla.as_ap_configdb.normconfigs.LoadingThread module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-siriushla.as_ap_configdb.normconfigs.TuneDlg">siriushla.as_ap_configdb.normconfigs.TuneDlg module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-siriushla.as_ap_configdb.normconfigs">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="siriushla.as_ap_configdb.pvsconfigs.html">siriushla.as_ap_configdb.pvsconfigs</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_configdb.html#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_configdb.html#module-siriushla.as_ap_configdb.client_configdb">siriushla.as_ap_configdb.client_configdb module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_configdb.html#module-siriushla.as_ap_configdb.configdialogs">siriushla.as_ap_configdb.configdialogs module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_configdb.html#module-siriushla.as_ap_configdb.configwidgets">siriushla.as_ap_configdb.configwidgets module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="siriushla.as_ap_configdb.html#module-siriushla.as_ap_configdb">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_currinfo.html">siriushla.as_ap_currinfo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_energybutton.html">siriushla.as_ap_energybutton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_injcontrol.html">siriushla.as_ap_injcontrol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_injection.html">siriushla.as_ap_injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_launcher.html">siriushla.as_ap_launcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_machshift.html">siriushla.as_ap_machshift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_macreport.html">siriushla.as_ap_macreport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_magoffconv.html">siriushla.as_ap_magoffconv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_measure.html">siriushla.as_ap_measure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_monitor.html">siriushla.as_ap_monitor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_opticscorr.html">siriushla.as_ap_opticscorr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_posang.html">siriushla.as_ap_posang</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_rabpmmon.html">siriushla.as_ap_rabpmmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_radmon.html">siriushla.as_ap_radmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_sofb.html">siriushla.as_ap_sofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_bpms.html">siriushla.as_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_dccts.html">siriushla.as_di_dccts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_icts.html">siriushla.as_di_icts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_scrns.html">siriushla.as_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_tune.html">siriushla.as_di_tune</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_vlight.html">siriushla.as_di_vlight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_commands.html">siriushla.as_ps_commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_control.html">siriushla.as_ps_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_cycle.html">siriushla.as_ps_cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_diag.html">siriushla.as_ps_diag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_pu_control.html">siriushla.as_pu_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_rf_control.html">siriushla.as_rf_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ti_control.html">siriushla.as_ti_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.bl_ap_imgproc.html">siriushla.bl_ap_imgproc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.bo_ap_ramp.html">siriushla.bo_ap_ramp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.common.html">siriushla.common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_ap_mps.html">siriushla.li_ap_mps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_di_bpms.html">siriushla.li_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_di_scrns.html">siriushla.li_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_eg_control.html">siriushla.li_eg_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_pu_modltr.html">siriushla.li_pu_modltr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_rf_llrf.html">siriushla.li_rf_llrf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_va_control.html">siriushla.li_va_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_fofb.html">siriushla.si_ap_fofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_genstatus.html">siriushla.si_ap_genstatus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_idff.html">siriushla.si_ap_idff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_orbintlk.html">siriushla.si_ap_orbintlk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_bbb.html">siriushla.si_di_bbb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_equalize_bpms.html">siriushla.si_di_equalize_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_scraps.html">siriushla.si_di_scraps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_id_control.html">siriushla.si_id_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.tb_di_slits.html">siriushla.tb_di_slits</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Widgets:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.html">Sirius HLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.widgets.html">Widgets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Source Code:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lnls-sirius/hla">HLA Github</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">siriushla</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="siriushla.as_ap_configdb.html">siriushla.as_ap_configdb</a></li>
+      <li class="breadcrumb-item active">siriushla.as_ap_configdb.normconfigs</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/lnls-sirius/hla/blob/master/pyqt-apps/docs/source/siriushla.as_ap_configdb.normconfigs.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="siriushla-as-ap-configdb-normconfigs">
+<h1>siriushla.as_ap_configdb.normconfigs<a class="headerlink" href="#siriushla-as-ap-configdb-normconfigs" title="Link to this heading"></a></h1>
+<section id="code-documentation">
+<h2>Code Documentation<a class="headerlink" href="#code-documentation" title="Link to this heading"></a></h2>
+</section>
+<section id="module-siriushla.as_ap_configdb.normconfigs.ConfigManagerWindow">
+<span id="siriushla-as-ap-configdb-normconfigs-configmanagerwindow-module"></span><h2>siriushla.as_ap_configdb.normconfigs.ConfigManagerWindow module<a class="headerlink" href="#module-siriushla.as_ap_configdb.normconfigs.ConfigManagerWindow" title="Link to this heading"></a></h2>
+<p>Define a window to manage offline configurations.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.normconfigs.ConfigManagerWindow.ConfigManagerWindow">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ap_configdb.normconfigs.ConfigManagerWindow.</span></span><span class="sig-name descname"><span class="pre">ConfigManagerWindow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/normconfigs/ConfigManagerWindow.html#ConfigManagerWindow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.normconfigs.ConfigManagerWindow.ConfigManagerWindow" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_SiriusWindow</span></code></p>
+<p>Window to manage offline configuration of BO and SI devices.</p>
+<p>This window allows the user to create new configurations as well as
+interpolate or apply a tune or chromaticity delta to a configuration.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.normconfigs.ConfigManagerWindow.ConfigManagerWindow.NEW_CONFIGURATION">
+<span class="sig-name descname"><span class="pre">NEW_CONFIGURATION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#siriushla.as_ap_configdb.normconfigs.ConfigManagerWindow.ConfigManagerWindow.NEW_CONFIGURATION" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.normconfigs.ConfigManagerWindow.ConfigManagerWindow.closeEvent">
+<span class="sig-name descname"><span class="pre">closeEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/normconfigs/ConfigManagerWindow.html#ConfigManagerWindow.closeEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.normconfigs.ConfigManagerWindow.ConfigManagerWindow.closeEvent" title="Link to this definition"></a></dt>
+<dd><p>Close window.</p>
+<p>The user is warned if there are any unsaved changes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.normconfigs.ConfigManagerWindow.ConfigManagerWindow.keyPressEvent">
+<span class="sig-name descname"><span class="pre">keyPressEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/normconfigs/ConfigManagerWindow.html#ConfigManagerWindow.keyPressEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.normconfigs.ConfigManagerWindow.ConfigManagerWindow.keyPressEvent" title="Link to this definition"></a></dt>
+<dd><p>Override keyPressEvent.</p>
+<p>Ctrl+S - Save changes
+Ctrl+W - Close configuration on focus
+F2 - Rename configuration on focus
+Ctrl+Z - Undo
+Ctrl+R - Redo</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-siriushla.as_ap_configdb.normconfigs.ConfigModel">
+<span id="siriushla-as-ap-configdb-normconfigs-configmodel-module"></span><h2>siriushla.as_ap_configdb.normconfigs.ConfigModel module<a class="headerlink" href="#module-siriushla.as_ap_configdb.normconfigs.ConfigModel" title="Link to this heading"></a></h2>
+<p>Configuration window model definition.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigDelegate">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ap_configdb.normconfigs.ConfigModel.</span></span><span class="sig-name descname"><span class="pre">ConfigDelegate</span></span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/normconfigs/ConfigModel.html#ConfigDelegate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigDelegate" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QItemDelegate</span></code></p>
+<p>Styling.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigDelegate.createEditor">
+<span class="sig-name descname"><span class="pre">createEditor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">option</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/normconfigs/ConfigModel.html#ConfigDelegate.createEditor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigDelegate.createEditor" title="Link to this definition"></a></dt>
+<dd><p>Override.</p>
+<p>Create and editor based on the cell type</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigDelegate.paint">
+<span class="sig-name descname"><span class="pre">paint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">painter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">option</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/normconfigs/ConfigModel.html#ConfigDelegate.paint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigDelegate.paint" title="Link to this definition"></a></dt>
+<dd><p>Override paint function.</p>
+<p>Responsible for painting dirt columns and cells.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigDelegate.setEditorData">
+<span class="sig-name descname"><span class="pre">setEditorData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">editor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/normconfigs/ConfigModel.html#ConfigDelegate.setEditorData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigDelegate.setEditorData" title="Link to this definition"></a></dt>
+<dd><p>Override.</p>
+<p>Set cell data as float.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ap_configdb.normconfigs.ConfigModel.</span></span><span class="sig-name descname"><span class="pre">ConfigModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/normconfigs/ConfigModel.html#ConfigModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QAbstractTableModel</span></code></p>
+<p>Model for the configuration table.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.CHROMATICITY">
+<span class="sig-name descname"><span class="pre">CHROMATICITY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.CHROMATICITY" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.TUNE">
+<span class="sig-name descname"><span class="pre">TUNE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.TUNE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.UNDO_MEMORY">
+<span class="sig-name descname"><span class="pre">UNDO_MEMORY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">75</span></em><a class="headerlink" href="#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.UNDO_MEMORY" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.cleanUndo">
+<span class="sig-name descname"><span class="pre">cleanUndo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/normconfigs/ConfigModel.html#ConfigModel.cleanUndo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.cleanUndo" title="Link to this definition"></a></dt>
+<dd><p>Clean undo/redo actions for given column.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.closeConfiguration">
+<span class="sig-name descname"><span class="pre">closeConfiguration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/normconfigs/ConfigModel.html#ConfigModel.closeConfiguration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.closeConfiguration" title="Link to this definition"></a></dt>
+<dd><p>Close a configuration.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.columnCount">
+<span class="sig-name descname"><span class="pre">columnCount</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index=&lt;PyQt5.QtCore.QModelIndex</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/normconfigs/ConfigModel.html#ConfigModel.columnCount"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.columnCount" title="Link to this definition"></a></dt>
+<dd><p>Return the number of configurations currently open.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.configurations">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">configurations</span></span><a class="headerlink" href="#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.configurations" title="Link to this definition"></a></dt>
+<dd><p>Return list of open configurations.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.data">
+<span class="sig-name descname"><span class="pre">data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">role</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/normconfigs/ConfigModel.html#ConfigModel.data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.data" title="Link to this definition"></a></dt>
+<dd><p>Set data of the table (override).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.deleteConfiguration">
+<span class="sig-name descname"><span class="pre">deleteConfiguration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_info</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/normconfigs/ConfigModel.html#ConfigModel.deleteConfiguration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.deleteConfiguration" title="Link to this definition"></a></dt>
+<dd><p>Delete configuration from database.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.deriveConfiguration">
+<span class="sig-name descname"><span class="pre">deriveConfiguration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_column</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/normconfigs/ConfigModel.html#ConfigModel.deriveConfiguration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.deriveConfiguration" title="Link to this definition"></a></dt>
+<dd><p>Create new configuration from existing one TUNE or CHROMATICITY.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.flags">
+<span class="sig-name descname"><span class="pre">flags</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/normconfigs/ConfigModel.html#ConfigModel.flags"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.flags" title="Link to this definition"></a></dt>
+<dd><p>Override to make cells editable.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.getConfigurationColumn">
+<span class="sig-name descname"><span class="pre">getConfigurationColumn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/normconfigs/ConfigModel.html#ConfigModel.getConfigurationColumn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.getConfigurationColumn" title="Link to this definition"></a></dt>
+<dd><p>Return column number of the given configuration.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.getConfigurations">
+<span class="sig-name descname"><span class="pre">getConfigurations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deleted</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/normconfigs/ConfigModel.html#ConfigModel.getConfigurations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.getConfigurations" title="Link to this definition"></a></dt>
+<dd><p>Return name of saved configurations.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.getTuneMatrix">
+<span class="sig-name descname"><span class="pre">getTuneMatrix</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/normconfigs/ConfigModel.html#ConfigModel.getTuneMatrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.getTuneMatrix" title="Link to this definition"></a></dt>
+<dd><p>Get tune matrix from db.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.headerData">
+<span class="sig-name descname"><span class="pre">headerData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">section</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">role</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/normconfigs/ConfigModel.html#ConfigModel.headerData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.headerData" title="Link to this definition"></a></dt>
+<dd><p>Set headers of the table (override).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.insertColumn">
+<span class="sig-name descname"><span class="pre">insertColumn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index=&lt;PyQt5.QtCore.QModelIndex</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/normconfigs/ConfigModel.html#ConfigModel.insertColumn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.insertColumn" title="Link to this definition"></a></dt>
+<dd><p>Update table widget telling it a new column was inserted.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.interpolateConfiguration">
+<span class="sig-name descname"><span class="pre">interpolateConfiguration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/normconfigs/ConfigModel.html#ConfigModel.interpolateConfiguration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.interpolateConfiguration" title="Link to this definition"></a></dt>
+<dd><p>Linear interpolation of 2 configurations.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.loadConfiguration">
+<span class="sig-name descname"><span class="pre">loadConfiguration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/normconfigs/ConfigModel.html#ConfigModel.loadConfiguration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.loadConfiguration" title="Link to this definition"></a></dt>
+<dd><p>Load configuration from database.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.removeColumns">
+<span class="sig-name descname"><span class="pre">removeColumns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">count=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index=&lt;PyQt5.QtCore.QModelIndex</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/normconfigs/ConfigModel.html#ConfigModel.removeColumns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.removeColumns" title="Link to this definition"></a></dt>
+<dd><p>Update table widget telling it a column was removed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.renameConfiguration">
+<span class="sig-name descname"><span class="pre">renameConfiguration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/normconfigs/ConfigModel.html#ConfigModel.renameConfiguration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.renameConfiguration" title="Link to this definition"></a></dt>
+<dd><p>Change configuration name.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.rowCount">
+<span class="sig-name descname"><span class="pre">rowCount</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index=&lt;PyQt5.QtCore.QModelIndex</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/normconfigs/ConfigModel.html#ConfigModel.rowCount"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.rowCount" title="Link to this definition"></a></dt>
+<dd><p>Return the number of PVs for this configuration type.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.saveConfiguration">
+<span class="sig-name descname"><span class="pre">saveConfiguration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/normconfigs/ConfigModel.html#ConfigModel.saveConfiguration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.saveConfiguration" title="Link to this definition"></a></dt>
+<dd><p>Save configuration if it is dirty.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.setData">
+<span class="sig-name descname"><span class="pre">setData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">role</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/normconfigs/ConfigModel.html#ConfigModel.setData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.setData" title="Link to this definition"></a></dt>
+<dd><p>Set cell data.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.setDataAlt">
+<span class="sig-name descname"><span class="pre">setDataAlt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">old_value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">redo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/normconfigs/ConfigModel.html#ConfigModel.setDataAlt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.normconfigs.ConfigModel.ConfigModel.setDataAlt" title="Link to this definition"></a></dt>
+<dd><p>Called by the undo/redo methods to change data on table.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.normconfigs.ConfigModel.Configuration">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ap_configdb.normconfigs.ConfigModel.</span></span><span class="sig-name descname"><span class="pre">Configuration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/normconfigs/ConfigModel.html#Configuration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.normconfigs.ConfigModel.Configuration" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents a configuration.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.normconfigs.ConfigModel.Configuration.delete">
+<span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/normconfigs/ConfigModel.html#Configuration.delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.normconfigs.ConfigModel.Configuration.delete" title="Link to this definition"></a></dt>
+<dd><p>Delete configuration.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.normconfigs.ConfigModel.Configuration.delete_config">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">delete_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/normconfigs/ConfigModel.html#Configuration.delete_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.normconfigs.ConfigModel.Configuration.delete_config" title="Link to this definition"></a></dt>
+<dd><p>Delete configuration.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.normconfigs.ConfigModel.Configuration.dirty">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dirty</span></span><a class="headerlink" href="#siriushla.as_ap_configdb.normconfigs.ConfigModel.Configuration.dirty" title="Link to this definition"></a></dt>
+<dd><p>Return wether thre is unsaved data.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.normconfigs.ConfigModel.Configuration.loadConfiguration">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">loadConfiguration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/normconfigs/ConfigModel.html#Configuration.loadConfiguration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.normconfigs.ConfigModel.Configuration.loadConfiguration" title="Link to this definition"></a></dt>
+<dd><p>Load existing configuration.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.normconfigs.ConfigModel.Configuration.name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#siriushla.as_ap_configdb.normconfigs.ConfigModel.Configuration.name" title="Link to this definition"></a></dt>
+<dd><p>Configuration name.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.normconfigs.ConfigModel.Configuration.newConfiguration">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">newConfiguration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/normconfigs/ConfigModel.html#Configuration.newConfiguration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.normconfigs.ConfigModel.Configuration.newConfiguration" title="Link to this definition"></a></dt>
+<dd><p>Create new configuration.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.normconfigs.ConfigModel.Configuration.old_name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">old_name</span></span><a class="headerlink" href="#siriushla.as_ap_configdb.normconfigs.ConfigModel.Configuration.old_name" title="Link to this definition"></a></dt>
+<dd><p>Configuration name in database.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.normconfigs.ConfigModel.Configuration.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/normconfigs/ConfigModel.html#Configuration.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.normconfigs.ConfigModel.Configuration.save" title="Link to this definition"></a></dt>
+<dd><p>Save data.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.normconfigs.ConfigModel.Configuration.setValue">
+<span class="sig-name descname"><span class="pre">setValue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pv_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/normconfigs/ConfigModel.html#Configuration.setValue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.normconfigs.ConfigModel.Configuration.setValue" title="Link to this definition"></a></dt>
+<dd><p>Set value of a given pv.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.normconfigs.ConfigModel.Configuration.values">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">values</span></span><a class="headerlink" href="#siriushla.as_ap_configdb.normconfigs.ConfigModel.Configuration.values" title="Link to this definition"></a></dt>
+<dd><p>PV values.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-siriushla.as_ap_configdb.normconfigs.LoadingThread">
+<span id="siriushla-as-ap-configdb-normconfigs-loadingthread-module"></span><h2>siriushla.as_ap_configdb.normconfigs.LoadingThread module<a class="headerlink" href="#module-siriushla.as_ap_configdb.normconfigs.LoadingThread" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.normconfigs.LoadingThread.LoadingThread">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ap_configdb.normconfigs.LoadingThread.</span></span><span class="sig-name descname"><span class="pre">LoadingThread</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pv_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/normconfigs/LoadingThread.html#LoadingThread"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.normconfigs.LoadingThread.LoadingThread" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QThread</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.normconfigs.LoadingThread.LoadingThread.VACA_PREFIX">
+<span class="sig-name descname"><span class="pre">VACA_PREFIX</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#siriushla.as_ap_configdb.normconfigs.LoadingThread.LoadingThread.VACA_PREFIX" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.normconfigs.LoadingThread.LoadingThread.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/normconfigs/LoadingThread.html#LoadingThread.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.normconfigs.LoadingThread.LoadingThread.run" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.normconfigs.LoadingThread.LoadingThread.taskFinished">
+<span class="sig-name descname"><span class="pre">taskFinished</span></span><a class="headerlink" href="#siriushla.as_ap_configdb.normconfigs.LoadingThread.LoadingThread.taskFinished" title="Link to this definition"></a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id1"><span class="problematic" id="id2">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.normconfigs.LoadingThread.LoadingThread.taskUpdated">
+<span class="sig-name descname"><span class="pre">taskUpdated</span></span><a class="headerlink" href="#siriushla.as_ap_configdb.normconfigs.LoadingThread.LoadingThread.taskUpdated" title="Link to this definition"></a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id3"><span class="problematic" id="id4">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-siriushla.as_ap_configdb.normconfigs.TuneDlg">
+<span id="siriushla-as-ap-configdb-normconfigs-tunedlg-module"></span><h2>siriushla.as_ap_configdb.normconfigs.TuneDlg module<a class="headerlink" href="#module-siriushla.as_ap_configdb.normconfigs.TuneDlg" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ap_configdb.normconfigs.TuneDlg.TuneDlg">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ap_configdb.normconfigs.TuneDlg.</span></span><span class="sig-name descname"><span class="pre">TuneDlg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ap_configdb/normconfigs/TuneDlg.html#TuneDlg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ap_configdb.normconfigs.TuneDlg.TuneDlg" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QDialog</span></code></p>
+</dd></dl>
+
+</section>
+<section id="module-siriushla.as_ap_configdb.normconfigs">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-siriushla.as_ap_configdb.normconfigs" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="siriushla.as_ap_configdb.models.html" class="btn btn-neutral float-left" title="siriushla.as_ap_configdb.models" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="siriushla.as_ap_configdb.pvsconfigs.html" class="btn btn-neutral float-right" title="siriushla.as_ap_configdb.pvsconfigs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, lnls-sirius.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

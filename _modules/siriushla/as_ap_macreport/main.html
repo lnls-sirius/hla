@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>siriushla.as_ap_macreport.main &mdash; siriushla 1.14.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=01009efc"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            siriushla
+          </a>
+              <div class="version">
+                1.14.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">GUIs:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_configdb.html">siriushla.as_ap_configdb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_currinfo.html">siriushla.as_ap_currinfo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_energybutton.html">siriushla.as_ap_energybutton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_injcontrol.html">siriushla.as_ap_injcontrol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_injection.html">siriushla.as_ap_injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_launcher.html">siriushla.as_ap_launcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_machshift.html">siriushla.as_ap_machshift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_macreport.html">siriushla.as_ap_macreport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_magoffconv.html">siriushla.as_ap_magoffconv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_measure.html">siriushla.as_ap_measure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_monitor.html">siriushla.as_ap_monitor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_opticscorr.html">siriushla.as_ap_opticscorr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_posang.html">siriushla.as_ap_posang</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_rabpmmon.html">siriushla.as_ap_rabpmmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_radmon.html">siriushla.as_ap_radmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ap_sofb.html">siriushla.as_ap_sofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_bpms.html">siriushla.as_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_dccts.html">siriushla.as_di_dccts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_icts.html">siriushla.as_di_icts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_scrns.html">siriushla.as_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_tune.html">siriushla.as_di_tune</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_di_vlight.html">siriushla.as_di_vlight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_commands.html">siriushla.as_ps_commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_control.html">siriushla.as_ps_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_cycle.html">siriushla.as_ps_cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ps_diag.html">siriushla.as_ps_diag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_pu_control.html">siriushla.as_pu_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_rf_control.html">siriushla.as_rf_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.as_ti_control.html">siriushla.as_ti_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.bl_ap_imgproc.html">siriushla.bl_ap_imgproc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.bo_ap_ramp.html">siriushla.bo_ap_ramp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.common.html">siriushla.common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_ap_mps.html">siriushla.li_ap_mps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_di_bpms.html">siriushla.li_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_di_scrns.html">siriushla.li_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_eg_control.html">siriushla.li_eg_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_pu_modltr.html">siriushla.li_pu_modltr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_rf_llrf.html">siriushla.li_rf_llrf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.li_va_control.html">siriushla.li_va_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_fofb.html">siriushla.si_ap_fofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_genstatus.html">siriushla.si_ap_genstatus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_idff.html">siriushla.si_ap_idff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_ap_orbintlk.html">siriushla.si_ap_orbintlk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_bbb.html">siriushla.si_di_bbb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_equalize_bpms.html">siriushla.si_di_equalize_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_di_scraps.html">siriushla.si_di_scraps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.si_id_control.html">siriushla.si_id_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.tb_di_slits.html">siriushla.tb_di_slits</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Widgets:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.html">Sirius HLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../siriushla.widgets.html">Widgets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Source Code:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lnls-sirius/hla">HLA Github</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">siriushla</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">siriushla.as_ap_macreport.main</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for siriushla.as_ap_macreport.main</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Machine reports.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">_np</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtCore</span><span class="w"> </span><span class="kn">import</span> <span class="n">Qt</span><span class="p">,</span> <span class="n">Signal</span><span class="p">,</span> <span class="n">QThread</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qtpy.QtWidgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">QWidget</span><span class="p">,</span> <span class="n">QGridLayout</span><span class="p">,</span> <span class="n">QGroupBox</span><span class="p">,</span> <span class="n">QTabWidget</span><span class="p">,</span> \
+    <span class="n">QDateTimeEdit</span><span class="p">,</span> <span class="n">QLabel</span><span class="p">,</span> <span class="n">QPushButton</span><span class="p">,</span> <span class="n">QListWidget</span><span class="p">,</span> <span class="n">QListWidgetItem</span><span class="p">,</span> \
+    <span class="n">QMessageBox</span><span class="p">,</span> <span class="n">QSpacerItem</span><span class="p">,</span> <span class="n">QSizePolicy</span> <span class="k">as</span> <span class="n">QSzPlcy</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">qtawesome</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">qta</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriuspy.clientarch</span><span class="w"> </span><span class="kn">import</span> <span class="n">Time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">siriuspy.machshift.macreport</span><span class="w"> </span><span class="kn">import</span> <span class="n">MacReport</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..widgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">SiriusMainWindow</span><span class="p">,</span> <span class="n">MatplotlibWidget</span><span class="p">,</span> <span class="n">SiriusDialog</span>
+
+
+<div class="viewcode-block" id="MacReportWindow">
+<a class="viewcode-back" href="../../../siriushla.as_ap_macreport.html#siriushla.as_ap_macreport.main.MacReportWindow">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">MacReportWindow</span><span class="p">(</span><span class="n">SiriusMainWindow</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Machine Report Window.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_macreport</span> <span class="o">=</span> <span class="n">MacReport</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_macreport</span><span class="o">.</span><span class="n">connector</span><span class="o">.</span><span class="n">timeout</span> <span class="o">=</span> <span class="mi">5</span><span class="o">*</span><span class="mi">60</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowIcon</span><span class="p">(</span><span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span><span class="s1">&#39;fa5s.book&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s1">&#39;Machine Reports&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fsi</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{:8d}</span><span class="s1">&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fs1</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{:8.3f}</span><span class="s1">&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fs2</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{:8.3f}</span><span class="s1"> ± </span><span class="si">{:8.3f}</span><span class="s1">&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fst1</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{:02d}</span><span class="s1">h</span><span class="si">{:02d}</span><span class="s1">&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fst2</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{:02d}</span><span class="s1">h</span><span class="si">{:02d}</span><span class="s1"> ± </span><span class="si">{:02d}</span><span class="s1">h</span><span class="si">{:02d}</span><span class="s1">&#39;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_task</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setupUi</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setFocusPolicy</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">StrongFocus</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setFocus</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cwid</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setCentralWidget</span><span class="p">(</span><span class="n">cwid</span><span class="p">)</span>
+
+        <span class="n">title</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;&lt;h3&gt;Machine Reports&lt;/h3&gt;&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span>
+                       <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_timesel_gbox</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_setupTimePeriodSelWidget</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_timesel_gbox</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;timesel_gbox&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_timesel_gbox</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span>
+            <span class="s2">&quot;#timesel_gbox{min-height: 8em; max-height: 8em;}&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_progress_list</span> <span class="o">=</span> <span class="n">QListWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_progress_list</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;progress_list&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_progress_list</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span>
+            <span class="s2">&quot;#progress_list{min-height: 8em; max-height: 8em;}&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reports_wid</span> <span class="o">=</span> <span class="n">QTabWidget</span><span class="p">(</span><span class="n">cwid</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reports_wid</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;ASTab&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reports_wid</span><span class="o">.</span><span class="n">addTab</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_setupUserShiftStatsWidget</span><span class="p">(),</span> <span class="s1">&#39;User Shift Stats&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reports_wid</span><span class="o">.</span><span class="n">addTab</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_setupLightSourceUsageStats</span><span class="p">(),</span> <span class="s1">&#39;Light Source Usage Stats&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reports_wid</span><span class="o">.</span><span class="n">addTab</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_setupStoredCurrentStats</span><span class="p">(),</span> <span class="s1">&#39;Stored Current Stats&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pb_showraw</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span>
+            <span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span><span class="s1">&#39;mdi.chart-line&#39;</span><span class="p">),</span> <span class="s1">&#39;Show Raw Data&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pb_showraw</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pb_showraw</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_show_raw_data</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pb_showpvsd</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span>
+            <span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span><span class="s1">&#39;mdi.chart-line&#39;</span><span class="p">),</span>
+            <span class="s1">&#39;Show Progrmd.vs.Delivered Hours&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pb_showpvsd</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pb_showpvsd</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_show_progmd_vs_delivd</span><span class="p">)</span>
+
+        <span class="n">lay</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">(</span><span class="n">cwid</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setVerticalSpacing</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setHorizontalSpacing</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setContentsMargins</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">9</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_timesel_gbox</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_progress_list</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span>
+                      <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignBottom</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_reports_wid</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_pb_showpvsd</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignLeft</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_pb_showraw</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_updateUserShiftStats</span><span class="p">(</span><span class="n">setup</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_updateStoredCurrentStats</span><span class="p">(</span><span class="n">setup</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_updateLightSourceUsageStats</span><span class="p">(</span><span class="n">setup</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_setupTimePeriodSelWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">tnow</span> <span class="o">=</span> <span class="n">Time</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+
+        <span class="n">ld_tstart</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Time start: &#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dt_start</span> <span class="o">=</span> <span class="n">QDateTimeEdit</span><span class="p">(</span><span class="n">tnow</span><span class="o">-</span><span class="mi">10</span><span class="o">*</span><span class="mi">60</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dt_start</span><span class="o">.</span><span class="n">setCalendarPopup</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dt_start</span><span class="o">.</span><span class="n">setMinimumDate</span><span class="p">(</span><span class="n">Time</span><span class="p">(</span><span class="mi">2020</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dt_start</span><span class="o">.</span><span class="n">setDisplayFormat</span><span class="p">(</span><span class="s1">&#39;dd/MM/yyyy hh:mm&#39;</span><span class="p">)</span>
+
+        <span class="n">ld_tstop</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s1">&#39;Time stop: &#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dt_stop</span> <span class="o">=</span> <span class="n">QDateTimeEdit</span><span class="p">(</span><span class="n">tnow</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dt_stop</span><span class="o">.</span><span class="n">setCalendarPopup</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dt_stop</span><span class="o">.</span><span class="n">setMinimumDate</span><span class="p">(</span><span class="n">Time</span><span class="p">(</span><span class="mi">2020</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dt_stop</span><span class="o">.</span><span class="n">setDisplayFormat</span><span class="p">(</span><span class="s1">&#39;dd/MM/yyyy hh:mm&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">pb_search</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span><span class="s1">&#39;fa5s.search&#39;</span><span class="p">),</span> <span class="s1">&#39;Search&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pb_search</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_do_update</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pb_search</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;pb_search&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pb_search</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            #pb_search{</span>
+<span class="s2">                min-width:100px; max-width:100px;</span>
+<span class="s2">                min-height:25px; max-height:25px;</span>
+<span class="s2">                icon-size:20px;}</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span>
+
+        <span class="n">wid</span> <span class="o">=</span> <span class="n">QGroupBox</span><span class="p">(</span><span class="s1">&#39;Select interval: &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">lay</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">ld_tstart</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dt_start</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">ld_tstop</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dt_stop</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pb_search</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">alignment</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignRight</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">wid</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_setupUserShiftStatsWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_uspt</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_usdt</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_ustt</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_uset</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_uspc</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_cav</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_cbav</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_ceav</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_tft</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_bdc</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_mttr</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_mtbf</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_reli</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_tsbt</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_tubt</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_mtbu</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_rsbt</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_itav</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+        <span class="n">wid</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">lay</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setVerticalSpacing</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setHorizontalSpacing</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignTop</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="n">QSpacerItem</span><span class="p">(</span><span class="mi">120</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">QSzPlcy</span><span class="o">.</span><span class="n">Fixed</span><span class="p">,</span> <span class="n">QSzPlcy</span><span class="o">.</span><span class="n">Ignored</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">LbHHeader</span><span class="p">(</span><span class="s1">&#39;Programmed Time (h)&#39;</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_uspt</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">LbHHeader</span><span class="p">(</span><span class="s1">&#39;Delivered Time (h)&#39;</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_usdt</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">LbHHeader</span><span class="p">(</span><span class="s1">&#39;Total Time (h)&#39;</span><span class="p">),</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_ustt</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">LbHHeader</span><span class="p">(</span><span class="s1">&#39;Extra Time (h)&#39;</span><span class="p">),</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_uset</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">LbHHeader</span><span class="p">(</span><span class="s1">&#39;# Programmed Shifts&#39;</span><span class="p">),</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_uspc</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">LbHHeader</span><span class="p">(</span><span class="s1">&#39;Current (avg ± std) (mA)&#39;</span><span class="p">),</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_cav</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">LbHHeader</span><span class="p">(</span>
+            <span class="s1">&#39;Current at the Beg. of the Shift (avg ± std) (mA)&#39;</span><span class="p">),</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_cbav</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">LbHHeader</span><span class="p">(</span>
+            <span class="s1">&#39;Current at the End of the Shift (avg ± std) (mA)&#39;</span><span class="p">),</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_ceav</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">LbHHeader</span><span class="p">(</span><span class="s1">&#39;Total Failures Time (h)&#39;</span><span class="p">),</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_tft</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">LbHHeader</span><span class="p">(</span><span class="s1">&#39;# Beam Dumps&#39;</span><span class="p">),</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_bdc</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">LbHHeader</span><span class="p">(</span><span class="s1">&#39;Time To Recover (avg ± std) (h)&#39;</span><span class="p">),</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_mttr</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">LbHHeader</span><span class="p">(</span><span class="s1">&#39;Time Between Failures (avg) (h)&#39;</span><span class="p">),</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_mtbf</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">LbHHeader</span><span class="p">(</span><span class="s1">&#39;Beam Reliability (%)&#39;</span><span class="p">),</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_reli</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">LbHHeader</span><span class="p">(</span><span class="s1">&#39;Total stable beam time (h)&#39;</span><span class="p">),</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_tsbt</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">LbHHeader</span><span class="p">(</span><span class="s1">&#39;Total unstable beam time (h)&#39;</span><span class="p">),</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_tubt</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">LbHHeader</span><span class="p">(</span>
+            <span class="s1">&#39;Time between unstable beams (avg) (h)&#39;</span><span class="p">),</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_mtbu</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">LbHHeader</span><span class="p">(</span><span class="s1">&#39;Relative stable beam time (%)&#39;</span><span class="p">),</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_rsbt</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">LbHHeader</span><span class="p">(</span><span class="s1">&#39;Injection time (avg ± std) (h)&#39;</span><span class="p">),</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_itav</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="n">QSpacerItem</span><span class="p">(</span><span class="mi">120</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">QSzPlcy</span><span class="o">.</span><span class="n">Fixed</span><span class="p">,</span> <span class="n">QSzPlcy</span><span class="o">.</span><span class="n">Ignored</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">wid</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_updateUserShiftStats</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">setup</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">w2r</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;uspt&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;usershift_progmd_time&#39;</span><span class="p">,</span> <span class="p">],</span>
+            <span class="s1">&#39;usdt&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;usershift_delivd_time&#39;</span><span class="p">,</span> <span class="p">],</span>
+            <span class="s1">&#39;ustt&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;usershift_total_time&#39;</span><span class="p">,</span> <span class="p">],</span>
+            <span class="s1">&#39;uset&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;usershift_extra_time&#39;</span><span class="p">,</span> <span class="p">],</span>
+            <span class="s1">&#39;uspc&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;usershift_progmd_count&#39;</span><span class="p">,</span> <span class="p">],</span>
+            <span class="s1">&#39;cav&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;usershift_current_average&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;usershift_current_stddev&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;cbav&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;usershift_current_beg_average&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;usershift_current_beg_stddev&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;ceav&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;usershift_current_end_average&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;usershift_current_end_stddev&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;tft&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;usershift_total_failures_time&#39;</span><span class="p">,</span> <span class="p">],</span>
+            <span class="s1">&#39;bdc&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;usershift_beam_dump_count&#39;</span><span class="p">,</span> <span class="p">],</span>
+            <span class="s1">&#39;mttr&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;usershift_time_to_recover_average&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;usershift_time_to_recover_stddev&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;mtbf&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;usershift_time_between_failures_average&#39;</span><span class="p">,</span> <span class="p">],</span>
+            <span class="s1">&#39;reli&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;usershift_beam_reliability&#39;</span><span class="p">,</span> <span class="p">],</span>
+            <span class="s1">&#39;tsbt&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;usershift_total_stable_beam_time&#39;</span><span class="p">,</span> <span class="p">],</span>
+            <span class="s1">&#39;tubt&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;usershift_total_unstable_beam_time&#39;</span><span class="p">,</span> <span class="p">],</span>
+            <span class="s1">&#39;mtbu&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;usershift_time_between_unstable_beams_average&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;rsbt&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;usershift_relative_stable_beam_time&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;itav&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;usershift_injection_time_average&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;usershift_injection_time_stddev&#39;</span><span class="p">]}</span>
+
+        <span class="k">for</span> <span class="n">wname</span><span class="p">,</span> <span class="n">rname</span> <span class="ow">in</span> <span class="n">w2r</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">wid</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;lb_&#39;</span><span class="o">+</span><span class="n">wname</span><span class="p">)</span>
+            <span class="n">items</span> <span class="o">=</span> <span class="p">[</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_macreport</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">rname</span><span class="p">]</span>
+            <span class="k">if</span> <span class="s1">&#39;time&#39;</span> <span class="ow">in</span> <span class="n">rname</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="s1">&#39;relative&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">rname</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">items</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">_np</span><span class="o">.</span><span class="n">inf</span><span class="p">]:</span>
+                        <span class="n">hour1</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                        <span class="n">minu1</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">hour1</span><span class="p">)</span><span class="o">*</span><span class="mi">60</span><span class="p">)</span>
+                        <span class="n">hour2</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">items</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                        <span class="n">minu2</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">items</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">hour2</span><span class="p">)</span><span class="o">*</span><span class="mi">60</span><span class="p">)</span>
+                        <span class="n">items</span> <span class="o">=</span> <span class="p">[</span><span class="n">hour1</span><span class="p">,</span> <span class="n">minu1</span><span class="p">,</span> <span class="n">hour2</span><span class="p">,</span> <span class="n">minu2</span><span class="p">]</span>
+                        <span class="n">str2fmt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fst2</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">str2fmt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fs1</span>
+                <span class="k">elif</span> <span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">_np</span><span class="o">.</span><span class="n">inf</span><span class="p">]:</span>
+                    <span class="n">hour</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                    <span class="n">minu</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">hour</span><span class="p">)</span><span class="o">*</span><span class="mi">60</span><span class="p">)</span>
+                    <span class="n">items</span> <span class="o">=</span> <span class="p">[</span><span class="n">hour</span><span class="p">,</span> <span class="n">minu</span><span class="p">]</span>
+                    <span class="n">str2fmt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fst1</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">str2fmt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fs1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">str2fmt</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;_fsi&#39;</span> <span class="k">if</span> <span class="s1">&#39;count&#39;</span> <span class="ow">in</span> <span class="n">rname</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="k">else</span> <span class="s1">&#39;_fs&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rname</span><span class="p">)))</span>
+            <span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span> <span class="k">if</span> <span class="nb">any</span><span class="p">([</span><span class="n">i</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">items</span><span class="p">])</span> \
+                <span class="k">else</span> <span class="n">str2fmt</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">*</span><span class="n">items</span><span class="p">)</span>
+            <span class="n">wid</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">setup</span><span class="p">:</span>
+                <span class="n">wid</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">MacReport</span><span class="p">,</span> <span class="n">rname</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_setupStoredCurrentStats</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_user_mb_avg</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_user_mb_intvl</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_user_sb_avg</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_user_sb_intvl</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_user_tt_avg</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_user_tt_intvl</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_commi_mb_avg</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_commi_mb_intvl</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_commi_sb_avg</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_commi_sb_intvl</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_commi_tt_avg</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_commi_tt_intvl</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_condi_mb_avg</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_condi_mb_intvl</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_condi_sb_avg</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_condi_sb_intvl</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_condi_tt_avg</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_condi_tt_intvl</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_mstdy_mb_avg</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_mstdy_mb_intvl</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_mstdy_sb_avg</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_mstdy_sb_intvl</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_mstdy_tt_avg</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_mstdy_tt_intvl</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_stord_mb_avg</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_stord_mb_intvl</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_stord_sb_avg</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_stord_sb_intvl</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_stord_tt_avg</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_stord_tt_intvl</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+        <span class="n">wid</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">lay</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setVerticalSpacing</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setHorizontalSpacing</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignTop</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">LbHHeader</span><span class="p">(</span>
+            <span class="s1">&#39;Current (avg ± std) (mA) (MB)&#39;</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">LbHHeader</span><span class="p">(</span><span class="s1">&#39;Time in MB mode (h)&#39;</span><span class="p">),</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">LbHHeader</span><span class="p">(</span>
+            <span class="s1">&#39;Current (avg ± std) (mA) (SB)&#39;</span><span class="p">),</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">LbHHeader</span><span class="p">(</span><span class="s1">&#39;Time in SB mode (h)&#39;</span><span class="p">),</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">LbHHeader</span><span class="p">(</span>
+            <span class="s1">&#39;Current (avg ± std) (mA) (SB+MB)&#39;</span><span class="p">),</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">LbHHeader</span><span class="p">(</span><span class="s1">&#39;Total Time (h) (SB+MB)&#39;</span><span class="p">),</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">LbVHeader</span><span class="p">(</span><span class="s1">&#39;Users&#39;</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_user_mb_avg</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_user_mb_intvl</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_user_sb_avg</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_user_sb_intvl</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_user_tt_avg</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_user_tt_intvl</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">LbVHeader</span><span class="p">(</span><span class="s1">&#39;Commissioning&#39;</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_commi_mb_avg</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_commi_mb_intvl</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_commi_sb_avg</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_commi_sb_intvl</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_commi_tt_avg</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_commi_tt_intvl</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">LbVHeader</span><span class="p">(</span><span class="s1">&#39;Conditioning&#39;</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_condi_mb_avg</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_condi_mb_intvl</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_condi_sb_avg</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_condi_sb_intvl</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_condi_tt_avg</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_condi_tt_intvl</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">LbVHeader</span><span class="p">(</span><span class="s1">&#39;Machine Study&#39;</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_mstdy_mb_avg</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_mstdy_mb_intvl</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_mstdy_sb_avg</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_mstdy_sb_intvl</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_mstdy_tt_avg</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_mstdy_tt_intvl</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">LbVHeader</span><span class="p">(</span><span class="s1">&#39;All Stored Beam&#39;</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_stord_mb_avg</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_stord_mb_intvl</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_stord_sb_avg</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_stord_sb_intvl</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_stord_tt_avg</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_stord_tt_intvl</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">wid</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_updateStoredCurrentStats</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">setup</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">shifttype</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;mstdy&#39;</span><span class="p">:</span> <span class="s1">&#39;machinestudy&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;commi&#39;</span><span class="p">:</span> <span class="s1">&#39;commissioning&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;condi&#39;</span><span class="p">:</span> <span class="s1">&#39;conditioning&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;stord&#39;</span><span class="p">:</span> <span class="s1">&#39;ebeam&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;user&#39;</span><span class="p">:</span> <span class="s1">&#39;users&#39;</span><span class="p">}</span>
+        <span class="n">fillmode</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;mb&#39;</span><span class="p">:</span> <span class="s1">&#39;multibunch&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;sb&#39;</span><span class="p">:</span> <span class="s1">&#39;singlebunch&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;tt&#39;</span><span class="p">:</span> <span class="s1">&#39;total&#39;</span><span class="p">}</span>
+        <span class="n">stats</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;avg&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;average&#39;</span><span class="p">,</span> <span class="s1">&#39;stddev&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;intvl&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">,</span> <span class="p">]}</span>
+
+        <span class="k">for</span> <span class="n">wsht</span><span class="p">,</span> <span class="n">rsht</span> <span class="ow">in</span> <span class="n">shifttype</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">wfm</span><span class="p">,</span> <span class="n">rfm</span> <span class="ow">in</span> <span class="n">fillmode</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">for</span> <span class="n">wstt</span><span class="p">,</span> <span class="n">rstt</span> <span class="ow">in</span> <span class="n">stats</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="n">wid</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;lb_&#39;</span><span class="o">+</span><span class="n">wsht</span><span class="o">+</span><span class="s1">&#39;_&#39;</span><span class="o">+</span><span class="n">wfm</span><span class="o">+</span><span class="s1">&#39;_&#39;</span><span class="o">+</span><span class="n">wstt</span><span class="p">)</span>
+                    <span class="n">pname</span> <span class="o">=</span> <span class="s1">&#39;current_&#39;</span><span class="o">+</span><span class="n">rsht</span><span class="o">+</span><span class="s1">&#39;_&#39;</span><span class="o">+</span><span class="n">rfm</span><span class="o">+</span><span class="s1">&#39;_&#39;</span>
+                    <span class="n">items</span> <span class="o">=</span> <span class="p">[</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_macreport</span><span class="p">,</span> <span class="n">pname</span><span class="o">+</span><span class="n">i</span><span class="p">)</span>
+                             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">rstt</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="s1">&#39;time&#39;</span> <span class="ow">in</span> <span class="n">rstt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">hour</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                        <span class="n">minu</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">hour</span><span class="p">)</span><span class="o">*</span><span class="mi">60</span><span class="p">)</span>
+                        <span class="n">items</span> <span class="o">=</span> <span class="p">[</span><span class="n">hour</span><span class="p">,</span> <span class="n">minu</span><span class="p">]</span>
+                    <span class="n">str2fmt</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;_fst1&#39;</span> <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;time&#39;</span> <span class="ow">in</span> <span class="n">rstt</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                        <span class="k">else</span> <span class="s1">&#39;_fs&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rstt</span><span class="p">)))</span>
+                    <span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span> <span class="k">if</span> <span class="nb">any</span><span class="p">([</span><span class="n">i</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">items</span><span class="p">])</span> \
+                        <span class="k">else</span> <span class="n">str2fmt</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">*</span><span class="n">items</span><span class="p">)</span>
+                    <span class="n">wid</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">setup</span><span class="p">:</span>
+                        <span class="n">wid</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span>
+                            <span class="nb">getattr</span><span class="p">(</span><span class="n">MacReport</span><span class="p">,</span> <span class="n">pname</span> <span class="o">+</span> <span class="n">rstt</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_setupLightSourceUsageStats</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_mstdy_fail_intvl</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_mstdy_fail_pcntl</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_mstdy_oper_intvl</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_mstdy_oper_pcntl</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_mstdy_total_intvl</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_mstdy_total_pcntl</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_commi_fail_intvl</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_commi_fail_pcntl</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_commi_oper_intvl</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_commi_oper_pcntl</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_commi_total_intvl</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_commi_total_pcntl</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_condi_fail_intvl</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_condi_fail_pcntl</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_condi_oper_intvl</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_condi_oper_pcntl</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_condi_total_intvl</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_condi_total_pcntl</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_maint_fail_intvl</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_maint_fail_pcntl</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_maint_oper_intvl</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_maint_oper_pcntl</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_maint_total_intvl</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_maint_total_pcntl</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_user_fail_intvl</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_user_fail_pcntl</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_user_oper_intvl</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_user_oper_pcntl</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_user_total_intvl</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_user_total_pcntl</span> <span class="o">=</span> <span class="n">LbData</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_total_intvl</span> <span class="o">=</span> <span class="n">LbHHeader</span><span class="p">(</span><span class="s1">&#39;Total Usage Time (h): - &#39;</span><span class="p">)</span>
+
+        <span class="n">wid</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">lay</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setVerticalSpacing</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setHorizontalSpacing</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignTop</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">LbHHeader</span><span class="p">(</span><span class="s1">&#39;Operational Time (h)&#39;</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">LbHHeader</span><span class="p">(</span><span class="s1">&#39;Operational Percentage (%)&#39;</span><span class="p">),</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">LbHHeader</span><span class="p">(</span><span class="s1">&#39;Failures Time (h)&#39;</span><span class="p">),</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">LbHHeader</span><span class="p">(</span><span class="s1">&#39;Failures Percentage (%)&#39;</span><span class="p">),</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">LbHHeader</span><span class="p">(</span><span class="s1">&#39;Shift Time (h)&#39;</span><span class="p">),</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">LbHHeader</span><span class="p">(</span><span class="s1">&#39;Shift Percentage (%)&#39;</span><span class="p">),</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_total_intvl</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">LbVHeader</span><span class="p">(</span><span class="s1">&#39;Users&#39;</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_user_oper_intvl</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_user_oper_pcntl</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_user_fail_intvl</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_user_fail_pcntl</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_user_total_intvl</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_user_total_pcntl</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">LbVHeader</span><span class="p">(</span><span class="s1">&#39;Commissioning&#39;</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_commi_oper_intvl</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_commi_oper_pcntl</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_commi_fail_intvl</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_commi_fail_pcntl</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_commi_total_intvl</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_commi_total_pcntl</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">LbVHeader</span><span class="p">(</span><span class="s1">&#39;Conditioning&#39;</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_condi_oper_intvl</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_condi_oper_pcntl</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_condi_fail_intvl</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_condi_fail_pcntl</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_condi_total_intvl</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_condi_total_pcntl</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">LbVHeader</span><span class="p">(</span><span class="s1">&#39;Machine Study&#39;</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_mstdy_oper_intvl</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_mstdy_oper_pcntl</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_mstdy_fail_intvl</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_mstdy_fail_pcntl</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_mstdy_total_intvl</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_mstdy_total_pcntl</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">LbVHeader</span><span class="p">(</span><span class="s1">&#39;Maintenance&#39;</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_maint_oper_intvl</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_maint_oper_pcntl</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_maint_fail_intvl</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_maint_fail_pcntl</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_maint_total_intvl</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lb_maint_total_pcntl</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">wid</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_updateLightSourceUsageStats</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">setup</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">shifttype</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;mstdy&#39;</span><span class="p">:</span> <span class="s1">&#39;machinestudy&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;commi&#39;</span><span class="p">:</span> <span class="s1">&#39;commissioning&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;condi&#39;</span><span class="p">:</span> <span class="s1">&#39;conditioning&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;maint&#39;</span><span class="p">:</span> <span class="s1">&#39;maintenance&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;user&#39;</span><span class="p">:</span> <span class="s1">&#39;users&#39;</span><span class="p">}</span>
+        <span class="n">intervaltype</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;fail&#39;</span><span class="p">:</span> <span class="s1">&#39;_failures&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;oper&#39;</span><span class="p">:</span> <span class="s1">&#39;_operational&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;total&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">}</span>
+        <span class="k">for</span> <span class="n">wst</span><span class="p">,</span> <span class="n">rst</span> <span class="ow">in</span> <span class="n">shifttype</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">wit</span><span class="p">,</span> <span class="n">rit</span> <span class="ow">in</span> <span class="n">intervaltype</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">widt</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;lb_&#39;</span><span class="o">+</span><span class="n">wst</span><span class="o">+</span><span class="s1">&#39;_&#39;</span><span class="o">+</span><span class="n">wit</span><span class="o">+</span><span class="s1">&#39;_intvl&#39;</span><span class="p">)</span>
+                <span class="n">tname</span> <span class="o">=</span> <span class="s1">&#39;lsusage_&#39;</span><span class="o">+</span><span class="n">rst</span><span class="o">+</span><span class="n">rit</span><span class="o">+</span><span class="s1">&#39;_time&#39;</span>
+                <span class="n">tval</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_macreport</span><span class="p">,</span> <span class="n">tname</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">tval</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">hour</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">tval</span><span class="p">)</span>
+                    <span class="n">minu</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">tval</span> <span class="o">-</span> <span class="n">hour</span><span class="p">)</span><span class="o">*</span><span class="mi">60</span><span class="p">)</span>
+                    <span class="n">text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fst1</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">hour</span><span class="p">,</span> <span class="n">minu</span><span class="p">)</span>
+                <span class="n">widt</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">setup</span><span class="p">:</span>
+                    <span class="n">widt</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">MacReport</span><span class="p">,</span> <span class="n">tname</span><span class="p">)</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">)</span>
+
+                <span class="n">widp</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;lb_&#39;</span><span class="o">+</span><span class="n">wst</span><span class="o">+</span><span class="s1">&#39;_&#39;</span><span class="o">+</span><span class="n">wit</span><span class="o">+</span><span class="s1">&#39;_pcntl&#39;</span><span class="p">)</span>
+                <span class="n">pname</span> <span class="o">=</span> <span class="s1">&#39;lsusage_&#39;</span><span class="o">+</span><span class="n">rst</span><span class="o">+</span><span class="n">rit</span>
+                <span class="n">pval</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_macreport</span><span class="p">,</span> <span class="n">pname</span><span class="p">)</span>
+                <span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span> <span class="k">if</span> <span class="n">pval</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fs1</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pval</span><span class="p">)</span>
+                <span class="n">widp</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">setup</span><span class="p">:</span>
+                    <span class="n">widp</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">MacReport</span><span class="p">,</span> <span class="n">pname</span><span class="p">)</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">)</span>
+
+        <span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;Total Usage Time (h): &#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_macreport</span><span class="o">.</span><span class="n">lsusage_total_time</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_macreport</span><span class="o">.</span><span class="n">lsusage_total_time</span>
+            <span class="n">hour</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+            <span class="n">minu</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">val</span> <span class="o">-</span> <span class="n">hour</span><span class="p">)</span><span class="o">*</span><span class="mi">60</span><span class="p">)</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fst1</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">hour</span><span class="p">,</span> <span class="n">minu</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lb_total_intvl</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_do_update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sender</span><span class="p">()</span><span class="o">.</span><span class="n">text</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;Abort&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_update_task</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
+            <span class="n">now</span> <span class="o">=</span> <span class="n">Time</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y/%m/</span><span class="si">%d</span><span class="s1">-%H:%M:%S&#39;</span><span class="p">)</span>
+            <span class="n">item</span> <span class="o">=</span> <span class="n">QListWidgetItem</span><span class="p">(</span><span class="n">now</span> <span class="o">+</span> <span class="s1">&#39;  Aborted.&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_progress_list</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_progress_list</span><span class="o">.</span><span class="n">scrollToBottom</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_setup_search_button</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt_start</span><span class="o">.</span><span class="n">dateTime</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt_stop</span><span class="o">.</span><span class="n">dateTime</span><span class="p">()</span> <span class="ow">or</span> \
+                    <span class="bp">self</span><span class="o">.</span><span class="n">dt_start</span><span class="o">.</span><span class="n">dateTime</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">Time</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="ow">or</span> \
+                    <span class="bp">self</span><span class="o">.</span><span class="n">dt_stop</span><span class="o">.</span><span class="n">dateTime</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">Time</span><span class="o">.</span><span class="n">now</span><span class="p">():</span>
+                <span class="n">QMessageBox</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;Ops...&#39;</span><span class="p">,</span> <span class="s1">&#39;Insert a valid time interval.&#39;</span><span class="p">)</span>
+                <span class="k">return</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_macreport</span><span class="o">.</span><span class="n">timestamp_start</span> <span class="o">=</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">dt_start</span><span class="o">.</span><span class="n">dateTime</span><span class="p">()</span><span class="o">.</span><span class="n">toSecsSinceEpoch</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_macreport</span><span class="o">.</span><span class="n">timestamp_stop</span> <span class="o">=</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">dt_stop</span><span class="o">.</span><span class="n">dateTime</span><span class="p">()</span><span class="o">.</span><span class="n">toSecsSinceEpoch</span><span class="p">()</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_progress_list</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_pb_showraw</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_pb_showpvsd</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_setup_search_button</span><span class="p">()</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_update_task</span> <span class="o">=</span> <span class="n">UpdateTask</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_macreport</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_update_task</span><span class="o">.</span><span class="n">updated</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_update_progress</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_update_task</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_update_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="n">item</span> <span class="o">=</span> <span class="n">QListWidgetItem</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_progress_list</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_progress_list</span><span class="o">.</span><span class="n">scrollToBottom</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="s1">&#39;Collected&#39;</span> <span class="ow">in</span> <span class="n">message</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_setup_search_button</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_updateUserShiftStats</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_updateStoredCurrentStats</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_updateLightSourceUsageStats</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_pb_showraw</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_pb_showpvsd</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_setup_search_button</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pb_search</span><span class="o">.</span><span class="n">text</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;Abort&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pb_search</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span><span class="s1">&#39;fa5s.search&#39;</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pb_search</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s1">&#39;Search&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pb_search</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span>
+                <span class="n">qta</span><span class="o">.</span><span class="n">icon</span><span class="p">(</span><span class="s1">&#39;fa5s.spinner&#39;</span><span class="p">,</span> <span class="n">animation</span><span class="o">=</span><span class="n">qta</span><span class="o">.</span><span class="n">Spin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pb_search</span><span class="p">)))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pb_search</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s1">&#39;Abort&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_show_raw_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">dialog</span> <span class="o">=</span> <span class="n">SiriusDialog</span><span class="p">()</span>
+        <span class="n">dialog</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span>
+            <span class="s1">&#39;Machine Reports - Raw Data (&#39;</span> <span class="o">+</span>
+            <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_macreport</span><span class="o">.</span><span class="n">time_start</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; -&gt; &#39;</span> <span class="o">+</span>
+            <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_macreport</span><span class="o">.</span><span class="n">time_stop</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;)&#39;</span><span class="p">)</span>
+        <span class="n">dialog</span><span class="o">.</span><span class="n">setWindowIcon</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">windowIcon</span><span class="p">())</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_macreport</span><span class="o">.</span><span class="n">plot_raw_data</span><span class="p">()</span>
+        <span class="n">wid</span> <span class="o">=</span> <span class="n">MatplotlibWidget</span><span class="p">(</span><span class="n">figure</span><span class="o">=</span><span class="n">fig</span><span class="p">)</span>
+        <span class="n">lay</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">(</span><span class="n">dialog</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+        <span class="n">dialog</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_show_progmd_vs_delivd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">dialog</span> <span class="o">=</span> <span class="n">SiriusDialog</span><span class="p">()</span>
+        <span class="n">dialog</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span>
+            <span class="s1">&#39;Machine Reports - Programmed vs. Delivered Hours (&#39;</span> <span class="o">+</span>
+            <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_macreport</span><span class="o">.</span><span class="n">time_start</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; -&gt; &#39;</span> <span class="o">+</span>
+            <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_macreport</span><span class="o">.</span><span class="n">time_stop</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;)&#39;</span><span class="p">)</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_macreport</span><span class="o">.</span><span class="n">plot_progmd_vs_delivd_hours</span><span class="p">()</span>
+        <span class="n">wid</span> <span class="o">=</span> <span class="n">MatplotlibWidget</span><span class="p">(</span><span class="n">figure</span><span class="o">=</span><span class="n">fig</span><span class="p">)</span>
+        <span class="n">lay</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">(</span><span class="n">dialog</span><span class="p">)</span>
+        <span class="n">lay</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+        <span class="n">dialog</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="UpdateTask">
+<a class="viewcode-back" href="../../../siriushla.as_ap_macreport.html#siriushla.as_ap_macreport.main.UpdateTask">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">UpdateTask</span><span class="p">(</span><span class="n">QThread</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Update task.&quot;&quot;&quot;</span>
+
+    <span class="n">updated</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">macreport</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">macreport</span> <span class="o">=</span> <span class="n">macreport</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">macreport</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_quit_task</span> <span class="o">=</span> <span class="kc">False</span>
+
+<div class="viewcode-block" id="UpdateTask.exit_task">
+<a class="viewcode-back" href="../../../siriushla.as_ap_macreport.html#siriushla.as_ap_macreport.main.UpdateTask.exit_task">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">exit_task</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set flag to quit thread.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_quit_task</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="UpdateTask.run">
+<a class="viewcode-back" href="../../../siriushla.as_ap_macreport.html#siriushla.as_ap_macreport.main.UpdateTask.run">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Run task.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_quit_task</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">macreport</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s1">&#39;Collected data from archiver and machine schedule.&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="UpdateTask.update">
+<a class="viewcode-back" href="../../../siriushla.as_ap_macreport.html#siriushla.as_ap_macreport.main.UpdateTask.update">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Send log.&quot;&quot;&quot;</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="n">Time</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y/%m/</span><span class="si">%d</span><span class="s1">-%H:%M:%S&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">updated</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">now</span><span class="o">+</span><span class="s1">&#39;  &#39;</span><span class="o">+</span><span class="n">message</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="LbData">
+<a class="viewcode-back" href="../../../siriushla.as_ap_macreport.html#siriushla.as_ap_macreport.main.LbData">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">LbData</span><span class="p">(</span><span class="n">QLabel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Data label.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setObjectName</span><span class="p">(</span><span class="s1">&#39;lbdata&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            #lbdata{</span>
+<span class="s2">                border: 1px solid gray;</span>
+<span class="s2">                min-height: 2em; max-height: 3em;</span>
+<span class="s2">                min-width: 8em;</span>
+<span class="s2">                qproperty-alignment: &#39;AlignVCenter | AlignRight&#39;;</span>
+<span class="s2">        }&quot;&quot;&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="LbVHeader">
+<a class="viewcode-back" href="../../../siriushla.as_ap_macreport.html#siriushla.as_ap_macreport.main.LbVHeader">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">LbVHeader</span><span class="p">(</span><span class="n">QLabel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Vertical Header label.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            LbVHeader{</span>
+<span class="s2">                border: 1px solid gray;</span>
+<span class="s2">                min-height: 2em; max-height: 3em;</span>
+<span class="s2">                min-width: 6em;</span>
+<span class="s2">                qproperty-alignment: &#39;AlignVCenter | AlignHCenter&#39;;</span>
+<span class="s2">                font-weight: bold;</span>
+<span class="s2">                background-color: darkGray;</span>
+<span class="s2">        }&quot;&quot;&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="LbHHeader">
+<a class="viewcode-back" href="../../../siriushla.as_ap_macreport.html#siriushla.as_ap_macreport.main.LbHHeader">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">LbHHeader</span><span class="p">(</span><span class="n">QLabel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Horizontal Header label.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Init.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            LbHHeader{</span>
+<span class="s2">                border: 1px solid gray;</span>
+<span class="s2">                min-height: 2em; max-height: 3em;</span>
+<span class="s2">                min-width: 6em;</span>
+<span class="s2">                qproperty-alignment: &#39;AlignVCenter | AlignLeft&#39;;</span>
+<span class="s2">                font-weight: bold;</span>
+<span class="s2">                background-color: lightGray;</span>
+<span class="s2">        }&quot;&quot;&quot;</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, lnls-sirius.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

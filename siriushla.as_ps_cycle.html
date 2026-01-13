@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>siriushla.as_ps_cycle &mdash; siriushla 1.14.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=01009efc"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="siriushla.as_ps_diag" href="siriushla.as_ps_diag.html" />
+    <link rel="prev" title="siriushla.as_ps_control.detail_widget" href="siriushla.as_ps_control.detail_widget.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            siriushla
+          </a>
+              <div class="version">
+                1.14.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">GUIs:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_configdb.html">siriushla.as_ap_configdb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_currinfo.html">siriushla.as_ap_currinfo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_energybutton.html">siriushla.as_ap_energybutton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_injcontrol.html">siriushla.as_ap_injcontrol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_injection.html">siriushla.as_ap_injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_launcher.html">siriushla.as_ap_launcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_machshift.html">siriushla.as_ap_machshift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_macreport.html">siriushla.as_ap_macreport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_magoffconv.html">siriushla.as_ap_magoffconv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_measure.html">siriushla.as_ap_measure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_monitor.html">siriushla.as_ap_monitor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_opticscorr.html">siriushla.as_ap_opticscorr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_posang.html">siriushla.as_ap_posang</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_rabpmmon.html">siriushla.as_ap_rabpmmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_radmon.html">siriushla.as_ap_radmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_sofb.html">siriushla.as_ap_sofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_bpms.html">siriushla.as_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_dccts.html">siriushla.as_di_dccts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_icts.html">siriushla.as_di_icts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_scrns.html">siriushla.as_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_tune.html">siriushla.as_di_tune</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_vlight.html">siriushla.as_di_vlight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_commands.html">siriushla.as_ps_commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_control.html">siriushla.as_ps_control</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">siriushla.as_ps_cycle</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.as_ps_cycle.cycle_window">siriushla.as_ps_cycle.cycle_window module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ps_cycle.cycle_window.CycleWindow"><code class="docutils literal notranslate"><span class="pre">CycleWindow</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_cycle.cycle_window.CycleWindow.closeEvent"><code class="docutils literal notranslate"><span class="pre">CycleWindow.closeEvent()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_cycle.cycle_window.CycleWindow.keyPressEvent"><code class="docutils literal notranslate"><span class="pre">CycleWindow.keyPressEvent()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ps_cycle.cycle_window.MyProgressBar"><code class="docutils literal notranslate"><span class="pre">MyProgressBar</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_cycle.cycle_window.MyProgressBar.increment"><code class="docutils literal notranslate"><span class="pre">MyProgressBar.increment()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ps_cycle.cycle_window.UpdateProgressBar"><code class="docutils literal notranslate"><span class="pre">UpdateProgressBar</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_cycle.cycle_window.UpdateProgressBar.exit_task"><code class="docutils literal notranslate"><span class="pre">UpdateProgressBar.exit_task()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_cycle.cycle_window.UpdateProgressBar.increment"><code class="docutils literal notranslate"><span class="pre">UpdateProgressBar.increment</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_cycle.cycle_window.UpdateProgressBar.run"><code class="docutils literal notranslate"><span class="pre">UpdateProgressBar.run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.as_ps_cycle.tasks">siriushla.as_ps_cycle.tasks module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.BaseTask"><code class="docutils literal notranslate"><span class="pre">BaseTask</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.BaseTask.completed"><code class="docutils literal notranslate"><span class="pre">BaseTask.completed</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.BaseTask.currentItem"><code class="docutils literal notranslate"><span class="pre">BaseTask.currentItem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.BaseTask.duration"><code class="docutils literal notranslate"><span class="pre">BaseTask.duration()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.BaseTask.exit_task"><code class="docutils literal notranslate"><span class="pre">BaseTask.exit_task()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.BaseTask.function"><code class="docutils literal notranslate"><span class="pre">BaseTask.function()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.BaseTask.itemDone"><code class="docutils literal notranslate"><span class="pre">BaseTask.itemDone</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.BaseTask.run"><code class="docutils literal notranslate"><span class="pre">BaseTask.run()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.BaseTask.size"><code class="docutils literal notranslate"><span class="pre">BaseTask.size()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.BaseTask.update"><code class="docutils literal notranslate"><span class="pre">BaseTask.update()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.BaseTask.updated"><code class="docutils literal notranslate"><span class="pre">BaseTask.updated</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.CreateCyclers"><code class="docutils literal notranslate"><span class="pre">CreateCyclers</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.CreateCyclers.function"><code class="docutils literal notranslate"><span class="pre">CreateCyclers.function()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.Cycle"><code class="docutils literal notranslate"><span class="pre">Cycle</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.Cycle.duration"><code class="docutils literal notranslate"><span class="pre">Cycle.duration()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.Cycle.function"><code class="docutils literal notranslate"><span class="pre">Cycle.function()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.Cycle.size"><code class="docutils literal notranslate"><span class="pre">Cycle.size()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.CycleTrims"><code class="docutils literal notranslate"><span class="pre">CycleTrims</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.CycleTrims.duration"><code class="docutils literal notranslate"><span class="pre">CycleTrims.duration()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.CycleTrims.function"><code class="docutils literal notranslate"><span class="pre">CycleTrims.function()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.CycleTrims.size"><code class="docutils literal notranslate"><span class="pre">CycleTrims.size()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.PreparePSCurrentZero"><code class="docutils literal notranslate"><span class="pre">PreparePSCurrentZero</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.PreparePSCurrentZero.duration"><code class="docutils literal notranslate"><span class="pre">PreparePSCurrentZero.duration()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.PreparePSCurrentZero.function"><code class="docutils literal notranslate"><span class="pre">PreparePSCurrentZero.function()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.PreparePSCurrentZero.size"><code class="docutils literal notranslate"><span class="pre">PreparePSCurrentZero.size()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.PreparePSIDFFMode"><code class="docutils literal notranslate"><span class="pre">PreparePSIDFFMode</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.PreparePSIDFFMode.duration"><code class="docutils literal notranslate"><span class="pre">PreparePSIDFFMode.duration()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.PreparePSIDFFMode.function"><code class="docutils literal notranslate"><span class="pre">PreparePSIDFFMode.function()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.PreparePSIDFFMode.size"><code class="docutils literal notranslate"><span class="pre">PreparePSIDFFMode.size()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.PreparePSOpModeCycle"><code class="docutils literal notranslate"><span class="pre">PreparePSOpModeCycle</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.PreparePSOpModeCycle.duration"><code class="docutils literal notranslate"><span class="pre">PreparePSOpModeCycle.duration()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.PreparePSOpModeCycle.function"><code class="docutils literal notranslate"><span class="pre">PreparePSOpModeCycle.function()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.PreparePSOpModeCycle.size"><code class="docutils literal notranslate"><span class="pre">PreparePSOpModeCycle.size()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.PreparePSOpModeSlowRef"><code class="docutils literal notranslate"><span class="pre">PreparePSOpModeSlowRef</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.PreparePSOpModeSlowRef.duration"><code class="docutils literal notranslate"><span class="pre">PreparePSOpModeSlowRef.duration()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.PreparePSOpModeSlowRef.function"><code class="docutils literal notranslate"><span class="pre">PreparePSOpModeSlowRef.function()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.PreparePSOpModeSlowRef.size"><code class="docutils literal notranslate"><span class="pre">PreparePSOpModeSlowRef.size()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.PreparePSParams"><code class="docutils literal notranslate"><span class="pre">PreparePSParams</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.PreparePSParams.duration"><code class="docutils literal notranslate"><span class="pre">PreparePSParams.duration()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.PreparePSParams.function"><code class="docutils literal notranslate"><span class="pre">PreparePSParams.function()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.PreparePSParams.size"><code class="docutils literal notranslate"><span class="pre">PreparePSParams.size()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.PrepareTiming"><code class="docutils literal notranslate"><span class="pre">PrepareTiming</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.PrepareTiming.duration"><code class="docutils literal notranslate"><span class="pre">PrepareTiming.duration()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.PrepareTiming.function"><code class="docutils literal notranslate"><span class="pre">PrepareTiming.function()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.PrepareTiming.size"><code class="docutils literal notranslate"><span class="pre">PrepareTiming.size()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.RestoreTiming"><code class="docutils literal notranslate"><span class="pre">RestoreTiming</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.RestoreTiming.duration"><code class="docutils literal notranslate"><span class="pre">RestoreTiming.duration()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.RestoreTiming.function"><code class="docutils literal notranslate"><span class="pre">RestoreTiming.function()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.RestoreTiming.size"><code class="docutils literal notranslate"><span class="pre">RestoreTiming.size()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.SaveTiming"><code class="docutils literal notranslate"><span class="pre">SaveTiming</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.SaveTiming.duration"><code class="docutils literal notranslate"><span class="pre">SaveTiming.duration()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.SaveTiming.function"><code class="docutils literal notranslate"><span class="pre">SaveTiming.function()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.SaveTiming.size"><code class="docutils literal notranslate"><span class="pre">SaveTiming.size()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.VerifyPS"><code class="docutils literal notranslate"><span class="pre">VerifyPS</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.VerifyPS.function"><code class="docutils literal notranslate"><span class="pre">VerifyPS.function()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ps_cycle.tasks.VerifyPS.size"><code class="docutils literal notranslate"><span class="pre">VerifyPS.size()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.as_ps_cycle">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_diag.html">siriushla.as_ps_diag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_pu_control.html">siriushla.as_pu_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_rf_control.html">siriushla.as_rf_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ti_control.html">siriushla.as_ti_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.bl_ap_imgproc.html">siriushla.bl_ap_imgproc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.bo_ap_ramp.html">siriushla.bo_ap_ramp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.common.html">siriushla.common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_ap_mps.html">siriushla.li_ap_mps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_di_bpms.html">siriushla.li_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_di_scrns.html">siriushla.li_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_eg_control.html">siriushla.li_eg_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_pu_modltr.html">siriushla.li_pu_modltr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_rf_llrf.html">siriushla.li_rf_llrf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_va_control.html">siriushla.li_va_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_fofb.html">siriushla.si_ap_fofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_genstatus.html">siriushla.si_ap_genstatus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_idff.html">siriushla.si_ap_idff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_orbintlk.html">siriushla.si_ap_orbintlk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_bbb.html">siriushla.si_di_bbb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_equalize_bpms.html">siriushla.si_di_equalize_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_scraps.html">siriushla.si_di_scraps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_id_control.html">siriushla.si_id_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.tb_di_slits.html">siriushla.tb_di_slits</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Widgets:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.html">Sirius HLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.widgets.html">Widgets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Source Code:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lnls-sirius/hla">HLA Github</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">siriushla</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">siriushla.as_ps_cycle</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/lnls-sirius/hla/blob/master/pyqt-apps/docs/source/siriushla.as_ps_cycle.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="siriushla-as-ps-cycle">
+<h1>siriushla.as_ps_cycle<a class="headerlink" href="#siriushla-as-ps-cycle" title="Link to this heading"></a></h1>
+<section id="code-documentation">
+<h2>Code Documentation<a class="headerlink" href="#code-documentation" title="Link to this heading"></a></h2>
+</section>
+<section id="module-siriushla.as_ps_cycle.cycle_window">
+<span id="siriushla-as-ps-cycle-cycle-window-module"></span><h2>siriushla.as_ps_cycle.cycle_window module<a class="headerlink" href="#module-siriushla.as_ps_cycle.cycle_window" title="Link to this heading"></a></h2>
+<p>Power supplies cycle window.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.cycle_window.CycleWindow">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_cycle.cycle_window.</span></span><span class="sig-name descname"><span class="pre">CycleWindow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checked_accs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adv_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/cycle_window.html#CycleWindow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.cycle_window.CycleWindow" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_SiriusWindow</span></code></p>
+<p>Power supplies cycle window.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.cycle_window.CycleWindow.closeEvent">
+<span class="sig-name descname"><span class="pre">closeEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">QCloseEvent</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/cycle_window.html#CycleWindow.closeEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.cycle_window.CycleWindow.closeEvent" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.cycle_window.CycleWindow.keyPressEvent">
+<span class="sig-name descname"><span class="pre">keyPressEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">evt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/cycle_window.html#CycleWindow.keyPressEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.cycle_window.CycleWindow.keyPressEvent" title="Link to this definition"></a></dt>
+<dd><p>Implement keyPressEvent.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.cycle_window.MyProgressBar">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_cycle.cycle_window.</span></span><span class="sig-name descname"><span class="pre">MyProgressBar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/cycle_window.html#MyProgressBar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.cycle_window.MyProgressBar" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QProgressBar</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.cycle_window.MyProgressBar.increment">
+<span class="sig-name descname"><span class="pre">increment</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/cycle_window.html#MyProgressBar.increment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.cycle_window.MyProgressBar.increment" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.cycle_window.UpdateProgressBar">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_cycle.cycle_window.</span></span><span class="sig-name descname"><span class="pre">UpdateProgressBar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">duration</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/cycle_window.html#UpdateProgressBar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.cycle_window.UpdateProgressBar" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QThread</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.cycle_window.UpdateProgressBar.exit_task">
+<span class="sig-name descname"><span class="pre">exit_task</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/cycle_window.html#UpdateProgressBar.exit_task"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.cycle_window.UpdateProgressBar.exit_task" title="Link to this definition"></a></dt>
+<dd><p>Set flag to quit thread.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.cycle_window.UpdateProgressBar.increment">
+<span class="sig-name descname"><span class="pre">increment</span></span><a class="headerlink" href="#siriushla.as_ps_cycle.cycle_window.UpdateProgressBar.increment" title="Link to this definition"></a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id1"><span class="problematic" id="id2">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.cycle_window.UpdateProgressBar.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/cycle_window.html#UpdateProgressBar.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.cycle_window.UpdateProgressBar.run" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-siriushla.as_ps_cycle.tasks">
+<span id="siriushla-as-ps-cycle-tasks-module"></span><h2>siriushla.as_ps_cycle.tasks module<a class="headerlink" href="#module-siriushla.as_ps_cycle.tasks" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.BaseTask">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_cycle.tasks.</span></span><span class="sig-name descname"><span class="pre">BaseTask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">psnames</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">need_controller</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isadv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/tasks.html#BaseTask"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.BaseTask" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QThread</span></code></p>
+<p>Base Task.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.BaseTask.completed">
+<span class="sig-name descname"><span class="pre">completed</span></span><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.BaseTask.completed" title="Link to this definition"></a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id3"><span class="problematic" id="id4">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.BaseTask.currentItem">
+<span class="sig-name descname"><span class="pre">currentItem</span></span><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.BaseTask.currentItem" title="Link to this definition"></a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id5"><span class="problematic" id="id6">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.BaseTask.duration">
+<span class="sig-name descname"><span class="pre">duration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/tasks.html#BaseTask.duration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.BaseTask.duration" title="Link to this definition"></a></dt>
+<dd><p>Return task maximum duration.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.BaseTask.exit_task">
+<span class="sig-name descname"><span class="pre">exit_task</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/tasks.html#BaseTask.exit_task"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.BaseTask.exit_task" title="Link to this definition"></a></dt>
+<dd><p>Set flag to quit thread.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.BaseTask.function">
+<span class="sig-name descname"><span class="pre">function</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/tasks.html#BaseTask.function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.BaseTask.function" title="Link to this definition"></a></dt>
+<dd><p>Must be reimplemented in each class.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.BaseTask.itemDone">
+<span class="sig-name descname"><span class="pre">itemDone</span></span><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.BaseTask.itemDone" title="Link to this definition"></a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id7"><span class="problematic" id="id8">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.BaseTask.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/tasks.html#BaseTask.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.BaseTask.run" title="Link to this definition"></a></dt>
+<dd><p>Run task.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.BaseTask.size">
+<span class="sig-name descname"><span class="pre">size</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/tasks.html#BaseTask.size"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.BaseTask.size" title="Link to this definition"></a></dt>
+<dd><p>Return task size.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.BaseTask.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">done</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warning</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/tasks.html#BaseTask.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.BaseTask.update" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.BaseTask.updated">
+<span class="sig-name descname"><span class="pre">updated</span></span><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.BaseTask.updated" title="Link to this definition"></a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id9"><span class="problematic" id="id10">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.CreateCyclers">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_cycle.tasks.</span></span><span class="sig-name descname"><span class="pre">CreateCyclers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">psnames</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">need_controller</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isadv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/tasks.html#CreateCyclers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.CreateCyclers" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ps_cycle.tasks.BaseTask" title="siriushla.as_ps_cycle.tasks.BaseTask"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseTask</span></code></a></p>
+<p>Create cyclers.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.CreateCyclers.function">
+<span class="sig-name descname"><span class="pre">function</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/tasks.html#CreateCyclers.function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.CreateCyclers.function" title="Link to this definition"></a></dt>
+<dd><p>Create cyclers.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.Cycle">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_cycle.tasks.</span></span><span class="sig-name descname"><span class="pre">Cycle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/tasks.html#Cycle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.Cycle" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ps_cycle.tasks.BaseTask" title="siriushla.as_ps_cycle.tasks.BaseTask"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseTask</span></code></a></p>
+<p>Cycle.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.Cycle.duration">
+<span class="sig-name descname"><span class="pre">duration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/tasks.html#Cycle.duration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.Cycle.duration" title="Link to this definition"></a></dt>
+<dd><p>Return task maximum duration.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.Cycle.function">
+<span class="sig-name descname"><span class="pre">function</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/tasks.html#Cycle.function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.Cycle.function" title="Link to this definition"></a></dt>
+<dd><p>Must be reimplemented in each class.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.Cycle.size">
+<span class="sig-name descname"><span class="pre">size</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/tasks.html#Cycle.size"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.Cycle.size" title="Link to this definition"></a></dt>
+<dd><p>Return task size.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.CycleTrims">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_cycle.tasks.</span></span><span class="sig-name descname"><span class="pre">CycleTrims</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/tasks.html#CycleTrims"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.CycleTrims" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ps_cycle.tasks.BaseTask" title="siriushla.as_ps_cycle.tasks.BaseTask"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseTask</span></code></a></p>
+<p>Cycle.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.CycleTrims.duration">
+<span class="sig-name descname"><span class="pre">duration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/tasks.html#CycleTrims.duration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.CycleTrims.duration" title="Link to this definition"></a></dt>
+<dd><p>Return task maximum duration.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.CycleTrims.function">
+<span class="sig-name descname"><span class="pre">function</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/tasks.html#CycleTrims.function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.CycleTrims.function" title="Link to this definition"></a></dt>
+<dd><p>Must be reimplemented in each class.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.CycleTrims.size">
+<span class="sig-name descname"><span class="pre">size</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/tasks.html#CycleTrims.size"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.CycleTrims.size" title="Link to this definition"></a></dt>
+<dd><p>Return task size.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.PreparePSCurrentZero">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_cycle.tasks.</span></span><span class="sig-name descname"><span class="pre">PreparePSCurrentZero</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/tasks.html#PreparePSCurrentZero"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.PreparePSCurrentZero" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ps_cycle.tasks.BaseTask" title="siriushla.as_ps_cycle.tasks.BaseTask"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseTask</span></code></a></p>
+<p>Prepare power suplies to cycle.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.PreparePSCurrentZero.duration">
+<span class="sig-name descname"><span class="pre">duration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/tasks.html#PreparePSCurrentZero.duration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.PreparePSCurrentZero.duration" title="Link to this definition"></a></dt>
+<dd><p>Return task maximum duration.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.PreparePSCurrentZero.function">
+<span class="sig-name descname"><span class="pre">function</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/tasks.html#PreparePSCurrentZero.function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.PreparePSCurrentZero.function" title="Link to this definition"></a></dt>
+<dd><p>Must be reimplemented in each class.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.PreparePSCurrentZero.size">
+<span class="sig-name descname"><span class="pre">size</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/tasks.html#PreparePSCurrentZero.size"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.PreparePSCurrentZero.size" title="Link to this definition"></a></dt>
+<dd><p>Return task size.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.PreparePSIDFFMode">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_cycle.tasks.</span></span><span class="sig-name descname"><span class="pre">PreparePSIDFFMode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/tasks.html#PreparePSIDFFMode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.PreparePSIDFFMode" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ps_cycle.tasks.BaseTask" title="siriushla.as_ps_cycle.tasks.BaseTask"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseTask</span></code></a></p>
+<p>Prepare power suplies to cycle.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.PreparePSIDFFMode.duration">
+<span class="sig-name descname"><span class="pre">duration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/tasks.html#PreparePSIDFFMode.duration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.PreparePSIDFFMode.duration" title="Link to this definition"></a></dt>
+<dd><p>Return task maximum duration.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.PreparePSIDFFMode.function">
+<span class="sig-name descname"><span class="pre">function</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/tasks.html#PreparePSIDFFMode.function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.PreparePSIDFFMode.function" title="Link to this definition"></a></dt>
+<dd><p>Must be reimplemented in each class.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.PreparePSIDFFMode.size">
+<span class="sig-name descname"><span class="pre">size</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/tasks.html#PreparePSIDFFMode.size"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.PreparePSIDFFMode.size" title="Link to this definition"></a></dt>
+<dd><p>Return task size.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.PreparePSOpModeCycle">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_cycle.tasks.</span></span><span class="sig-name descname"><span class="pre">PreparePSOpModeCycle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/tasks.html#PreparePSOpModeCycle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.PreparePSOpModeCycle" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ps_cycle.tasks.BaseTask" title="siriushla.as_ps_cycle.tasks.BaseTask"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseTask</span></code></a></p>
+<p>Prepare power suplies to cycle.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.PreparePSOpModeCycle.duration">
+<span class="sig-name descname"><span class="pre">duration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/tasks.html#PreparePSOpModeCycle.duration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.PreparePSOpModeCycle.duration" title="Link to this definition"></a></dt>
+<dd><p>Return task maximum duration.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.PreparePSOpModeCycle.function">
+<span class="sig-name descname"><span class="pre">function</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/tasks.html#PreparePSOpModeCycle.function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.PreparePSOpModeCycle.function" title="Link to this definition"></a></dt>
+<dd><p>Must be reimplemented in each class.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.PreparePSOpModeCycle.size">
+<span class="sig-name descname"><span class="pre">size</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/tasks.html#PreparePSOpModeCycle.size"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.PreparePSOpModeCycle.size" title="Link to this definition"></a></dt>
+<dd><p>Return task size.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.PreparePSOpModeSlowRef">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_cycle.tasks.</span></span><span class="sig-name descname"><span class="pre">PreparePSOpModeSlowRef</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/tasks.html#PreparePSOpModeSlowRef"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.PreparePSOpModeSlowRef" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ps_cycle.tasks.BaseTask" title="siriushla.as_ps_cycle.tasks.BaseTask"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseTask</span></code></a></p>
+<p>Prepare power suplies to cycle.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.PreparePSOpModeSlowRef.duration">
+<span class="sig-name descname"><span class="pre">duration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/tasks.html#PreparePSOpModeSlowRef.duration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.PreparePSOpModeSlowRef.duration" title="Link to this definition"></a></dt>
+<dd><p>Return task maximum duration.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.PreparePSOpModeSlowRef.function">
+<span class="sig-name descname"><span class="pre">function</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/tasks.html#PreparePSOpModeSlowRef.function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.PreparePSOpModeSlowRef.function" title="Link to this definition"></a></dt>
+<dd><p>Must be reimplemented in each class.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.PreparePSOpModeSlowRef.size">
+<span class="sig-name descname"><span class="pre">size</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/tasks.html#PreparePSOpModeSlowRef.size"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.PreparePSOpModeSlowRef.size" title="Link to this definition"></a></dt>
+<dd><p>Return task size.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.PreparePSParams">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_cycle.tasks.</span></span><span class="sig-name descname"><span class="pre">PreparePSParams</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/tasks.html#PreparePSParams"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.PreparePSParams" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ps_cycle.tasks.BaseTask" title="siriushla.as_ps_cycle.tasks.BaseTask"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseTask</span></code></a></p>
+<p>Prepare power suplies to cycle.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.PreparePSParams.duration">
+<span class="sig-name descname"><span class="pre">duration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/tasks.html#PreparePSParams.duration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.PreparePSParams.duration" title="Link to this definition"></a></dt>
+<dd><p>Return task maximum duration.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.PreparePSParams.function">
+<span class="sig-name descname"><span class="pre">function</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/tasks.html#PreparePSParams.function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.PreparePSParams.function" title="Link to this definition"></a></dt>
+<dd><p>Must be reimplemented in each class.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.PreparePSParams.size">
+<span class="sig-name descname"><span class="pre">size</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/tasks.html#PreparePSParams.size"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.PreparePSParams.size" title="Link to this definition"></a></dt>
+<dd><p>Return task size.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.PrepareTiming">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_cycle.tasks.</span></span><span class="sig-name descname"><span class="pre">PrepareTiming</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/tasks.html#PrepareTiming"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.PrepareTiming" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ps_cycle.tasks.BaseTask" title="siriushla.as_ps_cycle.tasks.BaseTask"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseTask</span></code></a></p>
+<p>Prepare timing to cycle.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.PrepareTiming.duration">
+<span class="sig-name descname"><span class="pre">duration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/tasks.html#PrepareTiming.duration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.PrepareTiming.duration" title="Link to this definition"></a></dt>
+<dd><p>Return task maximum duration.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.PrepareTiming.function">
+<span class="sig-name descname"><span class="pre">function</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/tasks.html#PrepareTiming.function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.PrepareTiming.function" title="Link to this definition"></a></dt>
+<dd><p>Must be reimplemented in each class.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.PrepareTiming.size">
+<span class="sig-name descname"><span class="pre">size</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/tasks.html#PrepareTiming.size"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.PrepareTiming.size" title="Link to this definition"></a></dt>
+<dd><p>Return task size.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.RestoreTiming">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_cycle.tasks.</span></span><span class="sig-name descname"><span class="pre">RestoreTiming</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/tasks.html#RestoreTiming"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.RestoreTiming" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ps_cycle.tasks.BaseTask" title="siriushla.as_ps_cycle.tasks.BaseTask"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseTask</span></code></a></p>
+<p>Restore timing initial state.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.RestoreTiming.duration">
+<span class="sig-name descname"><span class="pre">duration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/tasks.html#RestoreTiming.duration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.RestoreTiming.duration" title="Link to this definition"></a></dt>
+<dd><p>Return task maximum duration.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.RestoreTiming.function">
+<span class="sig-name descname"><span class="pre">function</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/tasks.html#RestoreTiming.function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.RestoreTiming.function" title="Link to this definition"></a></dt>
+<dd><p>Must be reimplemented in each class.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.RestoreTiming.size">
+<span class="sig-name descname"><span class="pre">size</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/tasks.html#RestoreTiming.size"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.RestoreTiming.size" title="Link to this definition"></a></dt>
+<dd><p>Return task size.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.SaveTiming">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_cycle.tasks.</span></span><span class="sig-name descname"><span class="pre">SaveTiming</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/tasks.html#SaveTiming"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.SaveTiming" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ps_cycle.tasks.BaseTask" title="siriushla.as_ps_cycle.tasks.BaseTask"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseTask</span></code></a></p>
+<p>Save timing initial state.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.SaveTiming.duration">
+<span class="sig-name descname"><span class="pre">duration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/tasks.html#SaveTiming.duration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.SaveTiming.duration" title="Link to this definition"></a></dt>
+<dd><p>Return task maximum duration.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.SaveTiming.function">
+<span class="sig-name descname"><span class="pre">function</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/tasks.html#SaveTiming.function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.SaveTiming.function" title="Link to this definition"></a></dt>
+<dd><p>Must be reimplemented in each class.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.SaveTiming.size">
+<span class="sig-name descname"><span class="pre">size</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/tasks.html#SaveTiming.size"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.SaveTiming.size" title="Link to this definition"></a></dt>
+<dd><p>Return task size.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.VerifyPS">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ps_cycle.tasks.</span></span><span class="sig-name descname"><span class="pre">VerifyPS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">psnames</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">need_controller</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isadv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/tasks.html#VerifyPS"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.VerifyPS" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ps_cycle.tasks.BaseTask" title="siriushla.as_ps_cycle.tasks.BaseTask"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseTask</span></code></a></p>
+<p>Verify power supply initial state.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.VerifyPS.function">
+<span class="sig-name descname"><span class="pre">function</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/tasks.html#VerifyPS.function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.VerifyPS.function" title="Link to this definition"></a></dt>
+<dd><p>Verify if PS is ready for cycle.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ps_cycle.tasks.VerifyPS.size">
+<span class="sig-name descname"><span class="pre">size</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ps_cycle/tasks.html#VerifyPS.size"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ps_cycle.tasks.VerifyPS.size" title="Link to this definition"></a></dt>
+<dd><p>Return task size.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-siriushla.as_ps_cycle">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-siriushla.as_ps_cycle" title="Link to this heading"></a></h2>
+<p>HLA to Handle Power Supplies Cycling.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="siriushla.as_ps_control.detail_widget.html" class="btn btn-neutral float-left" title="siriushla.as_ps_control.detail_widget" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="siriushla.as_ps_diag.html" class="btn btn-neutral float-right" title="siriushla.as_ps_diag" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, lnls-sirius.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

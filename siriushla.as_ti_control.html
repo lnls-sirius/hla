@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>siriushla.as_ti_control &mdash; siriushla 1.14.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=01009efc"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="siriushla.bl_ap_imgproc" href="siriushla.bl_ap_imgproc.html" />
+    <link rel="prev" title="siriushla.as_rf_control" href="siriushla.as_rf_control.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            siriushla
+          </a>
+              <div class="version">
+                1.14.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">GUIs:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_configdb.html">siriushla.as_ap_configdb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_currinfo.html">siriushla.as_ap_currinfo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_energybutton.html">siriushla.as_ap_energybutton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_injcontrol.html">siriushla.as_ap_injcontrol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_injection.html">siriushla.as_ap_injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_launcher.html">siriushla.as_ap_launcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_machshift.html">siriushla.as_ap_machshift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_macreport.html">siriushla.as_ap_macreport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_magoffconv.html">siriushla.as_ap_magoffconv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_measure.html">siriushla.as_ap_measure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_monitor.html">siriushla.as_ap_monitor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_opticscorr.html">siriushla.as_ap_opticscorr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_posang.html">siriushla.as_ap_posang</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_rabpmmon.html">siriushla.as_ap_rabpmmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_radmon.html">siriushla.as_ap_radmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_sofb.html">siriushla.as_ap_sofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_bpms.html">siriushla.as_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_dccts.html">siriushla.as_di_dccts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_icts.html">siriushla.as_di_icts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_scrns.html">siriushla.as_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_tune.html">siriushla.as_di_tune</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_vlight.html">siriushla.as_di_vlight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_commands.html">siriushla.as_ps_commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_control.html">siriushla.as_ps_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_cycle.html">siriushla.as_ps_cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_diag.html">siriushla.as_ps_diag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_pu_control.html">siriushla.as_pu_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_rf_control.html">siriushla.as_rf_control</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">siriushla.as_ti_control</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.as_ti_control.base">siriushla.as_ti_control.base module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ti_control.base.BaseList"><code class="docutils literal notranslate"><span class="pre">BaseList</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ti_control.base.BaseList.filter_columns"><code class="docutils literal notranslate"><span class="pre">BaseList.filter_columns()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ti_control.base.BaseList.filter_lines"><code class="docutils literal notranslate"><span class="pre">BaseList.filter_lines()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ti_control.base.BaseList.getColumn"><code class="docutils literal notranslate"><span class="pre">BaseList.getColumn()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ti_control.base.BaseList.getLine"><code class="docutils literal notranslate"><span class="pre">BaseList.getLine()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ti_control.base.BaseList.setupUi"><code class="docutils literal notranslate"><span class="pre">BaseList.setupUi()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ti_control.base.BaseWidget"><code class="docutils literal notranslate"><span class="pre">BaseWidget</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ti_control.base.BaseWidget.channels"><code class="docutils literal notranslate"><span class="pre">BaseWidget.channels()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ti_control.base.BaseWidget.get_pvname"><code class="docutils literal notranslate"><span class="pre">BaseWidget.get_pvname()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ti_control.base.CustomGroupBox"><code class="docutils literal notranslate"><span class="pre">CustomGroupBox</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.as_ti_control.hl_trigger">siriushla.as_ti_control.hl_trigger module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ti_control.hl_trigger.HLTriggerDetailed"><code class="docutils literal notranslate"><span class="pre">HLTriggerDetailed</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ti_control.hl_trigger.HLTriggerList"><code class="docutils literal notranslate"><span class="pre">HLTriggerList</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ti_control.hl_trigger.HLTriggerSimple"><code class="docutils literal notranslate"><span class="pre">HLTriggerSimple</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ti_control.hl_trigger.LLTriggers"><code class="docutils literal notranslate"><span class="pre">LLTriggers</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.as_ti_control.hltiming">siriushla.as_ti_control.hltiming module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ti_control.hltiming.TimingMain"><code class="docutils literal notranslate"><span class="pre">TimingMain</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ti_control.hltiming.TimingMain.setevents"><code class="docutils literal notranslate"><span class="pre">TimingMain.setevents()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ti_control.hltiming.TimingMain.setglobalparameters"><code class="docutils literal notranslate"><span class="pre">TimingMain.setglobalparameters()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ti_control.hltiming.TimingMain.settriggers"><code class="docutils literal notranslate"><span class="pre">TimingMain.settriggers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ti_control.hltiming.TimingMain.setupmenus"><code class="docutils literal notranslate"><span class="pre">TimingMain.setupmenus()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ti_control.hltiming.TimingMain.setupui"><code class="docutils literal notranslate"><span class="pre">TimingMain.setupui()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.as_ti_control.low_level_devices">siriushla.as_ti_control.low_level_devices module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ti_control.low_level_devices.AFC"><code class="docutils literal notranslate"><span class="pre">AFC</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ti_control.low_level_devices.AFCOUTList"><code class="docutils literal notranslate"><span class="pre">AFCOUTList</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ti_control.low_level_devices.BucketList"><code class="docutils literal notranslate"><span class="pre">BucketList</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ti_control.low_level_devices.BucketList.setupui"><code class="docutils literal notranslate"><span class="pre">BucketList.setupui()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ti_control.low_level_devices.BucketListGraph"><code class="docutils literal notranslate"><span class="pre">BucketListGraph</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ti_control.low_level_devices.BucketListLabel"><code class="docutils literal notranslate"><span class="pre">BucketListLabel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ti_control.low_level_devices.BucketListLabel.RULE_PROPERTIES"><code class="docutils literal notranslate"><span class="pre">BucketListLabel.RULE_PROPERTIES</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ti_control.low_level_devices.BucketListLabel.value_changed"><code class="docutils literal notranslate"><span class="pre">BucketListLabel.value_changed()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ti_control.low_level_devices.BucketListLineEdit"><code class="docutils literal notranslate"><span class="pre">BucketListLineEdit</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ti_control.low_level_devices.BucketListLineEdit.RULE_PROPERTIES"><code class="docutils literal notranslate"><span class="pre">BucketListLineEdit.RULE_PROPERTIES</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ti_control.low_level_devices.BucketListLineEdit.value_changed"><code class="docutils literal notranslate"><span class="pre">BucketListLineEdit.value_changed()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ti_control.low_level_devices.ClockList"><code class="docutils literal notranslate"><span class="pre">ClockList</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ti_control.low_level_devices.EVE"><code class="docutils literal notranslate"><span class="pre">EVE</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ti_control.low_level_devices.EVG"><code class="docutils literal notranslate"><span class="pre">EVG</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ti_control.low_level_devices.EVG.setupui"><code class="docutils literal notranslate"><span class="pre">EVG.setupui()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ti_control.low_level_devices.EVGFOUTOUTList"><code class="docutils literal notranslate"><span class="pre">EVGFOUTOUTList</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ti_control.low_level_devices.EVR"><code class="docutils literal notranslate"><span class="pre">EVR</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ti_control.low_level_devices.EVREVEDIList"><code class="docutils literal notranslate"><span class="pre">EVREVEDIList</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ti_control.low_level_devices.EVREVEOTPList"><code class="docutils literal notranslate"><span class="pre">EVREVEOTPList</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ti_control.low_level_devices.EVREVEOUTList"><code class="docutils literal notranslate"><span class="pre">EVREVEOUTList</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ti_control.low_level_devices.EventList"><code class="docutils literal notranslate"><span class="pre">EventList</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ti_control.low_level_devices.FOUT"><code class="docutils literal notranslate"><span class="pre">FOUT</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ti_control.low_level_devices.LLTriggerList"><code class="docutils literal notranslate"><span class="pre">LLTriggerList</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.as_ti_control.monitor">siriushla.as_ti_control.monitor module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ti_control.monitor.HLButton"><code class="docutils literal notranslate"><span class="pre">HLButton</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ti_control.monitor.LLButton"><code class="docutils literal notranslate"><span class="pre">LLButton</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ti_control.monitor.LLButton.setupui"><code class="docutils literal notranslate"><span class="pre">LLButton.setupui()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ti_control.monitor.MonitorHL"><code class="docutils literal notranslate"><span class="pre">MonitorHL</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ti_control.monitor.MonitorLL"><code class="docutils literal notranslate"><span class="pre">MonitorLL</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ti_control.monitor.MonitorLL.drawarrow"><code class="docutils literal notranslate"><span class="pre">MonitorLL.drawarrow()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ti_control.monitor.MonitorLL.drawline"><code class="docutils literal notranslate"><span class="pre">MonitorLL.drawline()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ti_control.monitor.MonitorLL.paintEvent"><code class="docutils literal notranslate"><span class="pre">MonitorLL.paintEvent()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ti_control.monitor.MonitorLL.setupdown"><code class="docutils literal notranslate"><span class="pre">MonitorLL.setupdown()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ti_control.monitor.MonitorWindow"><code class="docutils literal notranslate"><span class="pre">MonitorWindow</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.as_ti_control.widgets">siriushla.as_ti_control.widgets module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ti_control.widgets.EVGContinuousButton"><code class="docutils literal notranslate"><span class="pre">EVGContinuousButton</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ti_control.widgets.EVGContinuousButton.RULE_PROPERTIES"><code class="docutils literal notranslate"><span class="pre">EVGContinuousButton.RULE_PROPERTIES</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ti_control.widgets.EVGContinuousLed"><code class="docutils literal notranslate"><span class="pre">EVGContinuousLed</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ti_control.widgets.EVGContinuousLed.RULE_PROPERTIES"><code class="docutils literal notranslate"><span class="pre">EVGContinuousLed.RULE_PROPERTIES</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ti_control.widgets.EVGInjectionButton"><code class="docutils literal notranslate"><span class="pre">EVGInjectionButton</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ti_control.widgets.EVGInjectionButton.RULE_PROPERTIES"><code class="docutils literal notranslate"><span class="pre">EVGInjectionButton.RULE_PROPERTIES</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ti_control.widgets.EVGInjectionLed"><code class="docutils literal notranslate"><span class="pre">EVGInjectionLed</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ti_control.widgets.EVGInjectionLed.RULE_PROPERTIES"><code class="docutils literal notranslate"><span class="pre">EVGInjectionLed.RULE_PROPERTIES</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ti_control.widgets.EVGUpdateEvtButton"><code class="docutils literal notranslate"><span class="pre">EVGUpdateEvtButton</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ti_control.widgets.EVGUpdateEvtButton.RULE_PROPERTIES"><code class="docutils literal notranslate"><span class="pre">EVGUpdateEvtButton.RULE_PROPERTIES</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_ti_control.widgets.EVGUpdateEvtLed"><code class="docutils literal notranslate"><span class="pre">EVGUpdateEvtLed</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_ti_control.widgets.EVGUpdateEvtLed.RULE_PROPERTIES"><code class="docutils literal notranslate"><span class="pre">EVGUpdateEvtLed.RULE_PROPERTIES</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.as_ti_control">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.bl_ap_imgproc.html">siriushla.bl_ap_imgproc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.bo_ap_ramp.html">siriushla.bo_ap_ramp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.common.html">siriushla.common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_ap_mps.html">siriushla.li_ap_mps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_di_bpms.html">siriushla.li_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_di_scrns.html">siriushla.li_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_eg_control.html">siriushla.li_eg_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_pu_modltr.html">siriushla.li_pu_modltr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_rf_llrf.html">siriushla.li_rf_llrf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_va_control.html">siriushla.li_va_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_fofb.html">siriushla.si_ap_fofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_genstatus.html">siriushla.si_ap_genstatus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_idff.html">siriushla.si_ap_idff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_orbintlk.html">siriushla.si_ap_orbintlk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_bbb.html">siriushla.si_di_bbb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_equalize_bpms.html">siriushla.si_di_equalize_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_scraps.html">siriushla.si_di_scraps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_id_control.html">siriushla.si_id_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.tb_di_slits.html">siriushla.tb_di_slits</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Widgets:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.html">Sirius HLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.widgets.html">Widgets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Source Code:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lnls-sirius/hla">HLA Github</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">siriushla</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">siriushla.as_ti_control</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/lnls-sirius/hla/blob/master/pyqt-apps/docs/source/siriushla.as_ti_control.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="siriushla-as-ti-control">
+<h1>siriushla.as_ti_control<a class="headerlink" href="#siriushla-as-ti-control" title="Link to this heading"></a></h1>
+<section id="code-documentation">
+<h2>Code Documentation<a class="headerlink" href="#code-documentation" title="Link to this heading"></a></h2>
+</section>
+<section id="module-siriushla.as_ti_control.base">
+<span id="siriushla-as-ti-control-base-module"></span><h2>siriushla.as_ti_control.base module<a class="headerlink" href="#module-siriushla.as_ti_control.base" title="Link to this heading"></a></h2>
+<p>.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.base.BaseList">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ti_control.base.</span></span><span class="sig-name descname"><span class="pre">BaseList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">props</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">has_search</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">props2search</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/base.html#BaseList"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.base.BaseList" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ti_control.base.CustomGroupBox" title="siriushla.as_ti_control.base.CustomGroupBox"><code class="xref py py-class docutils literal notranslate"><span class="pre">CustomGroupBox</span></code></a></p>
+<p>Template for control of High Level Triggers.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.base.BaseList.filter_columns">
+<span class="sig-name descname"><span class="pre">filter_columns</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/base.html#BaseList.filter_columns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.base.BaseList.filter_columns" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.base.BaseList.filter_lines">
+<span class="sig-name descname"><span class="pre">filter_lines</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/base.html#BaseList.filter_lines"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.base.BaseList.filter_lines" title="Link to this definition"></a></dt>
+<dd><p>Filter lines according to the regexp filter.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.base.BaseList.getColumn">
+<span class="sig-name descname"><span class="pre">getColumn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prop</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">header</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/base.html#BaseList.getColumn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.base.BaseList.getColumn" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.base.BaseList.getLine">
+<span class="sig-name descname"><span class="pre">getLine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">header</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/base.html#BaseList.getLine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.base.BaseList.getLine" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.base.BaseList.setupUi">
+<span class="sig-name descname"><span class="pre">setupUi</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/base.html#BaseList.setupUi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.base.BaseList.setupUi" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.base.BaseWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ti_control.base.</span></span><span class="sig-name descname"><span class="pre">BaseWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/base.html#BaseWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.base.BaseWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QWidget</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.base.BaseWidget.channels">
+<span class="sig-name descname"><span class="pre">channels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/base.html#BaseWidget.channels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.base.BaseWidget.channels" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.base.BaseWidget.get_pvname">
+<span class="sig-name descname"><span class="pre">get_pvname</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">propty</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/base.html#BaseWidget.get_pvname"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.base.BaseWidget.get_pvname" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.base.CustomGroupBox">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ti_control.base.</span></span><span class="sig-name descname"><span class="pre">CustomGroupBox</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/base.html#CustomGroupBox"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.base.CustomGroupBox" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QGroupBox</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">PyDMPrimitiveWidget</span></code></p>
+</dd></dl>
+
+</section>
+<section id="module-siriushla.as_ti_control.hl_trigger">
+<span id="siriushla-as-ti-control-hl-trigger-module"></span><h2>siriushla.as_ti_control.hl_trigger module<a class="headerlink" href="#module-siriushla.as_ti_control.hl_trigger" title="Link to this heading"></a></h2>
+<p>.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.hl_trigger.HLTriggerDetailed">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ti_control.hl_trigger.</span></span><span class="sig-name descname"><span class="pre">HLTriggerDetailed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/hl_trigger.html#HLTriggerDetailed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.hl_trigger.HLTriggerDetailed" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ti_control.base.BaseWidget" title="siriushla.as_ti_control.base.BaseWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseWidget</span></code></a></p>
+<p>Template for control of High Level Triggers.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.hl_trigger.HLTriggerList">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ti_control.hl_trigger.</span></span><span class="sig-name descname"><span class="pre">HLTriggerList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/hl_trigger.html#HLTriggerList"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.hl_trigger.HLTriggerList" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ti_control.base.BaseList" title="siriushla.as_ti_control.base.BaseList"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseList</span></code></a></p>
+<p>Template for control of High Level Triggers.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.hl_trigger.HLTriggerSimple">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ti_control.hl_trigger.</span></span><span class="sig-name descname"><span class="pre">HLTriggerSimple</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delayraw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">widthraw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nrpulses</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">src</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deltadelay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deltadelayraw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/hl_trigger.html#HLTriggerSimple"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.hl_trigger.HLTriggerSimple" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ti_control.base.BaseWidget" title="siriushla.as_ti_control.base.BaseWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseWidget</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.hl_trigger.LLTriggers">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ti_control.hl_trigger.</span></span><span class="sig-name descname"><span class="pre">LLTriggers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hltrigger</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/hl_trigger.html#LLTriggers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.hl_trigger.LLTriggers" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QWidget</span></code></p>
+</dd></dl>
+
+</section>
+<section id="module-siriushla.as_ti_control.hltiming">
+<span id="siriushla-as-ti-control-hltiming-module"></span><h2>siriushla.as_ti_control.hltiming module<a class="headerlink" href="#module-siriushla.as_ti_control.hltiming" title="Link to this heading"></a></h2>
+<p>Control of EVG Timing Device.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.hltiming.TimingMain">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ti_control.hltiming.</span></span><span class="sig-name descname"><span class="pre">TimingMain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/hltiming.html#TimingMain"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.hltiming.TimingMain" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_SiriusWindow</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.hltiming.TimingMain.setevents">
+<span class="sig-name descname"><span class="pre">setevents</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/hltiming.html#TimingMain.setevents"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.hltiming.TimingMain.setevents" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.hltiming.TimingMain.setglobalparameters">
+<span class="sig-name descname"><span class="pre">setglobalparameters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/hltiming.html#TimingMain.setglobalparameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.hltiming.TimingMain.setglobalparameters" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.hltiming.TimingMain.settriggers">
+<span class="sig-name descname"><span class="pre">settriggers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/hltiming.html#TimingMain.settriggers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.hltiming.TimingMain.settriggers" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.hltiming.TimingMain.setupmenus">
+<span class="sig-name descname"><span class="pre">setupmenus</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/hltiming.html#TimingMain.setupmenus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.hltiming.TimingMain.setupmenus" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.hltiming.TimingMain.setupui">
+<span class="sig-name descname"><span class="pre">setupui</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/hltiming.html#TimingMain.setupui"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.hltiming.TimingMain.setupui" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-siriushla.as_ti_control.low_level_devices">
+<span id="siriushla-as-ti-control-low-level-devices-module"></span><h2>siriushla.as_ti_control.low_level_devices module<a class="headerlink" href="#module-siriushla.as_ti_control.low_level_devices" title="Link to this heading"></a></h2>
+<p>.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.low_level_devices.AFC">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ti_control.low_level_devices.</span></span><span class="sig-name descname"><span class="pre">AFC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/low_level_devices.html#AFC"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.low_level_devices.AFC" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ti_control.base.BaseWidget" title="siriushla.as_ti_control.base.BaseWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseWidget</span></code></a></p>
+<p>Template for control of High Level Triggers.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.low_level_devices.AFCOUTList">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ti_control.low_level_devices.</span></span><span class="sig-name descname"><span class="pre">AFCOUTList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/low_level_devices.html#AFCOUTList"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.low_level_devices.AFCOUTList" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ti_control.low_level_devices.LLTriggerList" title="siriushla.as_ti_control.low_level_devices.LLTriggerList"><code class="xref py py-class docutils literal notranslate"><span class="pre">LLTriggerList</span></code></a></p>
+<p>Template for control of Timing devices Internal Triggers.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.low_level_devices.BucketList">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ti_control.low_level_devices.</span></span><span class="sig-name descname"><span class="pre">BucketList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_graph</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/low_level_devices.html#BucketList"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.low_level_devices.BucketList" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ti_control.base.BaseWidget" title="siriushla.as_ti_control.base.BaseWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseWidget</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.low_level_devices.BucketList.setupui">
+<span class="sig-name descname"><span class="pre">setupui</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/low_level_devices.html#BucketList.setupui"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.low_level_devices.BucketList.setupui" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.low_level_devices.BucketListGraph">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ti_control.low_level_devices.</span></span><span class="sig-name descname"><span class="pre">BucketListGraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/low_level_devices.html#BucketListGraph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.low_level_devices.BucketListGraph" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ti_control.base.BaseWidget" title="siriushla.as_ti_control.base.BaseWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseWidget</span></code></a></p>
+<p>Bucket List Graph.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.low_level_devices.BucketListLabel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ti_control.low_level_devices.</span></span><span class="sig-name descname"><span class="pre">BucketListLabel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_unit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/low_level_devices.html#BucketListLabel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.low_level_devices.BucketListLabel" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="siriushla.widgets.html#siriushla.widgets.label.SiriusLabel" title="siriushla.widgets.label.SiriusLabel"><code class="xref py py-class docutils literal notranslate"><span class="pre">SiriusLabel</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.low_level_devices.BucketListLabel.RULE_PROPERTIES">
+<span class="sig-name descname"><span class="pre">RULE_PROPERTIES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Enable':</span> <span class="pre">['setEnabled',</span> <span class="pre">&lt;class</span> <span class="pre">'bool'&gt;],</span> <span class="pre">'Opacity':</span> <span class="pre">['set_opacity',</span> <span class="pre">&lt;class</span> <span class="pre">'float'&gt;],</span> <span class="pre">'Position</span> <span class="pre">-</span> <span class="pre">X':</span> <span class="pre">['setX',</span> <span class="pre">&lt;class</span> <span class="pre">'int'&gt;],</span> <span class="pre">'Position</span> <span class="pre">-</span> <span class="pre">Y':</span> <span class="pre">['setY',</span> <span class="pre">&lt;class</span> <span class="pre">'int'&gt;],</span> <span class="pre">'Visible':</span> <span class="pre">['setVisible',</span> <span class="pre">&lt;class</span> <span class="pre">'bool'&gt;]}</span></em><a class="headerlink" href="#siriushla.as_ti_control.low_level_devices.BucketListLabel.RULE_PROPERTIES" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.low_level_devices.BucketListLabel.value_changed">
+<span class="sig-name descname"><span class="pre">value_changed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/low_level_devices.html#BucketListLabel.value_changed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.low_level_devices.BucketListLabel.value_changed" title="Link to this definition"></a></dt>
+<dd><p>Callback invoked when the Channel value is changed.
+Sets the value of new_value accordingly at the Label.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>new_value</strong> (<em>str</em><em>, </em><em>int</em><em>, </em><em>float</em><em>, </em><em>bool</em><em> or </em><em>np.ndarray</em>) – The new value from the channel. The type depends on the channel.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.low_level_devices.BucketListLineEdit">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ti_control.low_level_devices.</span></span><span class="sig-name descname"><span class="pre">BucketListLineEdit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/low_level_devices.html#BucketListLineEdit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.low_level_devices.BucketListLineEdit" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PyDMLineEdit</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.low_level_devices.BucketListLineEdit.RULE_PROPERTIES">
+<span class="sig-name descname"><span class="pre">RULE_PROPERTIES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Enable':</span> <span class="pre">['setEnabled',</span> <span class="pre">&lt;class</span> <span class="pre">'bool'&gt;],</span> <span class="pre">'Opacity':</span> <span class="pre">['set_opacity',</span> <span class="pre">&lt;class</span> <span class="pre">'float'&gt;],</span> <span class="pre">'Position</span> <span class="pre">-</span> <span class="pre">X':</span> <span class="pre">['setX',</span> <span class="pre">&lt;class</span> <span class="pre">'int'&gt;],</span> <span class="pre">'Position</span> <span class="pre">-</span> <span class="pre">Y':</span> <span class="pre">['setY',</span> <span class="pre">&lt;class</span> <span class="pre">'int'&gt;],</span> <span class="pre">'Visible':</span> <span class="pre">['setVisible',</span> <span class="pre">&lt;class</span> <span class="pre">'bool'&gt;]}</span></em><a class="headerlink" href="#siriushla.as_ti_control.low_level_devices.BucketListLineEdit.RULE_PROPERTIES" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.low_level_devices.BucketListLineEdit.value_changed">
+<span class="sig-name descname"><span class="pre">value_changed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/low_level_devices.html#BucketListLineEdit.value_changed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.low_level_devices.BucketListLineEdit.value_changed" title="Link to this definition"></a></dt>
+<dd><p>Receive and update the PyDMLineEdit for a new channel value</p>
+<p>The actual value of the input is saved as well as the type received.
+This also resets the PyDMLineEdit display text using
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">set_display()</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>value</strong> (<em>str</em><em>, </em><em>float</em><em> or </em><em>int</em>) – The new value of the channel</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.low_level_devices.ClockList">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ti_control.low_level_devices.</span></span><span class="sig-name descname"><span class="pre">ClockList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">props</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">has_search</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/low_level_devices.html#ClockList"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.low_level_devices.ClockList" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ti_control.base.BaseList" title="siriushla.as_ti_control.base.BaseList"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseList</span></code></a></p>
+<p>Template for control of Low Level Clocks.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.low_level_devices.EVE">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ti_control.low_level_devices.</span></span><span class="sig-name descname"><span class="pre">EVE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/low_level_devices.html#EVE"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.low_level_devices.EVE" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_EVR_EVE</span></code></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.low_level_devices.EVG">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ti_control.low_level_devices.</span></span><span class="sig-name descname"><span class="pre">EVG</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/low_level_devices.html#EVG"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.low_level_devices.EVG" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ti_control.base.BaseWidget" title="siriushla.as_ti_control.base.BaseWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseWidget</span></code></a></p>
+<p>Template for control of High Level Triggers.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.low_level_devices.EVG.setupui">
+<span class="sig-name descname"><span class="pre">setupui</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/low_level_devices.html#EVG.setupui"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.low_level_devices.EVG.setupui" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.low_level_devices.EVGFOUTOUTList">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ti_control.low_level_devices.</span></span><span class="sig-name descname"><span class="pre">EVGFOUTOUTList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/low_level_devices.html#EVGFOUTOUTList"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.low_level_devices.EVGFOUTOUTList" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ti_control.base.BaseList" title="siriushla.as_ti_control.base.BaseList"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseList</span></code></a></p>
+<p>Template for control of Timing devices Internal Triggers.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.low_level_devices.EVR">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ti_control.low_level_devices.</span></span><span class="sig-name descname"><span class="pre">EVR</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/low_level_devices.html#EVR"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.low_level_devices.EVR" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_EVR_EVE</span></code></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.low_level_devices.EVREVEDIList">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ti_control.low_level_devices.</span></span><span class="sig-name descname"><span class="pre">EVREVEDIList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/low_level_devices.html#EVREVEDIList"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.low_level_devices.EVREVEDIList" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ti_control.base.BaseList" title="siriushla.as_ti_control.base.BaseList"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseList</span></code></a></p>
+<p>Template for control of Timing devices Internal Triggers.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.low_level_devices.EVREVEOTPList">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ti_control.low_level_devices.</span></span><span class="sig-name descname"><span class="pre">EVREVEOTPList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/low_level_devices.html#EVREVEOTPList"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.low_level_devices.EVREVEOTPList" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ti_control.low_level_devices.LLTriggerList" title="siriushla.as_ti_control.low_level_devices.LLTriggerList"><code class="xref py py-class docutils literal notranslate"><span class="pre">LLTriggerList</span></code></a></p>
+<p>Template for control of Timing devices Internal Triggers.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.low_level_devices.EVREVEOUTList">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ti_control.low_level_devices.</span></span><span class="sig-name descname"><span class="pre">EVREVEOUTList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/low_level_devices.html#EVREVEOUTList"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.low_level_devices.EVREVEOUTList" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ti_control.low_level_devices.LLTriggerList" title="siriushla.as_ti_control.low_level_devices.LLTriggerList"><code class="xref py py-class docutils literal notranslate"><span class="pre">LLTriggerList</span></code></a></p>
+<p>Template for control of Timing Devices Output Channels.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.low_level_devices.EventList">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ti_control.low_level_devices.</span></span><span class="sig-name descname"><span class="pre">EventList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/low_level_devices.html#EventList"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.low_level_devices.EventList" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ti_control.base.BaseList" title="siriushla.as_ti_control.base.BaseList"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseList</span></code></a></p>
+<p>Template for control of Events.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.low_level_devices.FOUT">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ti_control.low_level_devices.</span></span><span class="sig-name descname"><span class="pre">FOUT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/low_level_devices.html#FOUT"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.low_level_devices.FOUT" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ti_control.base.BaseWidget" title="siriushla.as_ti_control.base.BaseWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseWidget</span></code></a></p>
+<p>Template for control of High Level Triggers.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.low_level_devices.LLTriggerList">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ti_control.low_level_devices.</span></span><span class="sig-name descname"><span class="pre">LLTriggerList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/low_level_devices.html#LLTriggerList"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.low_level_devices.LLTriggerList" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_ti_control.base.BaseList" title="siriushla.as_ti_control.base.BaseList"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseList</span></code></a></p>
+<p>Template for control of High Level Triggers.</p>
+</dd></dl>
+
+</section>
+<section id="module-siriushla.as_ti_control.monitor">
+<span id="siriushla-as-ti-control-monitor-module"></span><h2>siriushla.as_ti_control.monitor module<a class="headerlink" href="#module-siriushla.as_ti_control.monitor" title="Link to this heading"></a></h2>
+<p>.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.monitor.HLButton">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ti_control.monitor.</span></span><span class="sig-name descname"><span class="pre">HLButton</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trigger</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/monitor.html#HLButton"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.monitor.HLButton" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QWidget</span></code></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.monitor.LLButton">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ti_control.monitor.</span></span><span class="sig-name descname"><span class="pre">LLButton</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">link</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/monitor.html#LLButton"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.monitor.LLButton" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QWidget</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.monitor.LLButton.setupui">
+<span class="sig-name descname"><span class="pre">setupui</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/monitor.html#LLButton.setupui"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.monitor.LLButton.setupui" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.monitor.MonitorHL">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ti_control.monitor.</span></span><span class="sig-name descname"><span class="pre">MonitorHL</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/monitor.html#MonitorHL"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.monitor.MonitorHL" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QGroupBox</span></code></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.monitor.MonitorLL">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ti_control.monitor.</span></span><span class="sig-name descname"><span class="pre">MonitorLL</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/monitor.html#MonitorLL"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.monitor.MonitorLL" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QGroupBox</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.monitor.MonitorLL.drawarrow">
+<span class="sig-name descname"><span class="pre">drawarrow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/monitor.html#MonitorLL.drawarrow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.monitor.MonitorLL.drawarrow" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.monitor.MonitorLL.drawline">
+<span class="sig-name descname"><span class="pre">drawline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/monitor.html#MonitorLL.drawline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.monitor.MonitorLL.drawline" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.monitor.MonitorLL.paintEvent">
+<span class="sig-name descname"><span class="pre">paintEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">QPaintEvent</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/monitor.html#MonitorLL.paintEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.monitor.MonitorLL.paintEvent" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.monitor.MonitorLL.setupdown">
+<span class="sig-name descname"><span class="pre">setupdown</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">down</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/monitor.html#MonitorLL.setupdown"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.monitor.MonitorLL.setupdown" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.monitor.MonitorWindow">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ti_control.monitor.</span></span><span class="sig-name descname"><span class="pre">MonitorWindow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/monitor.html#MonitorWindow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.monitor.MonitorWindow" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QWidget</span></code></p>
+</dd></dl>
+
+</section>
+<section id="module-siriushla.as_ti_control.widgets">
+<span id="siriushla-as-ti-control-widgets-module"></span><h2>siriushla.as_ti_control.widgets module<a class="headerlink" href="#module-siriushla.as_ti_control.widgets" title="Link to this heading"></a></h2>
+<p>Timing widgets.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.widgets.EVGContinuousButton">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ti_control.widgets.</span></span><span class="sig-name descname"><span class="pre">EVGContinuousButton</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">siriuspy.envars.VACA_PREFIX</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/widgets.html#EVGContinuousButton"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.widgets.EVGContinuousButton" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="siriushla.widgets.html#siriushla.widgets.state_button.PyDMStateButton" title="siriushla.widgets.state_button.PyDMStateButton"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyDMStateButton</span></code></a></p>
+<p>EVG Continuous State Button.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.widgets.EVGContinuousButton.RULE_PROPERTIES">
+<span class="sig-name descname"><span class="pre">RULE_PROPERTIES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Enable':</span> <span class="pre">['setEnabled',</span> <span class="pre">&lt;class</span> <span class="pre">'bool'&gt;],</span> <span class="pre">'Opacity':</span> <span class="pre">['set_opacity',</span> <span class="pre">&lt;class</span> <span class="pre">'float'&gt;],</span> <span class="pre">'Position</span> <span class="pre">-</span> <span class="pre">X':</span> <span class="pre">['setX',</span> <span class="pre">&lt;class</span> <span class="pre">'int'&gt;],</span> <span class="pre">'Position</span> <span class="pre">-</span> <span class="pre">Y':</span> <span class="pre">['setY',</span> <span class="pre">&lt;class</span> <span class="pre">'int'&gt;],</span> <span class="pre">'Visible':</span> <span class="pre">['setVisible',</span> <span class="pre">&lt;class</span> <span class="pre">'bool'&gt;]}</span></em><a class="headerlink" href="#siriushla.as_ti_control.widgets.EVGContinuousButton.RULE_PROPERTIES" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.widgets.EVGContinuousLed">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ti_control.widgets.</span></span><span class="sig-name descname"><span class="pre">EVGContinuousLed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">siriuspy.envars.VACA_PREFIX</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/widgets.html#EVGContinuousLed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.widgets.EVGContinuousLed" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="siriushla.widgets.html#siriushla.widgets.led.PyDMLed" title="siriushla.widgets.led.PyDMLed"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyDMLed</span></code></a></p>
+<p>EVG Continuous Led.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.widgets.EVGContinuousLed.RULE_PROPERTIES">
+<span class="sig-name descname"><span class="pre">RULE_PROPERTIES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Enable':</span> <span class="pre">['setEnabled',</span> <span class="pre">&lt;class</span> <span class="pre">'bool'&gt;],</span> <span class="pre">'Opacity':</span> <span class="pre">['set_opacity',</span> <span class="pre">&lt;class</span> <span class="pre">'float'&gt;],</span> <span class="pre">'Position</span> <span class="pre">-</span> <span class="pre">X':</span> <span class="pre">['setX',</span> <span class="pre">&lt;class</span> <span class="pre">'int'&gt;],</span> <span class="pre">'Position</span> <span class="pre">-</span> <span class="pre">Y':</span> <span class="pre">['setY',</span> <span class="pre">&lt;class</span> <span class="pre">'int'&gt;],</span> <span class="pre">'Visible':</span> <span class="pre">['setVisible',</span> <span class="pre">&lt;class</span> <span class="pre">'bool'&gt;]}</span></em><a class="headerlink" href="#siriushla.as_ti_control.widgets.EVGContinuousLed.RULE_PROPERTIES" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.widgets.EVGInjectionButton">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ti_control.widgets.</span></span><span class="sig-name descname"><span class="pre">EVGInjectionButton</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">siriuspy.envars.VACA_PREFIX</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/widgets.html#EVGInjectionButton"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.widgets.EVGInjectionButton" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="siriushla.widgets.html#siriushla.widgets.state_button.PyDMStateButton" title="siriushla.widgets.state_button.PyDMStateButton"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyDMStateButton</span></code></a></p>
+<p>EVG Injection State Button.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.widgets.EVGInjectionButton.RULE_PROPERTIES">
+<span class="sig-name descname"><span class="pre">RULE_PROPERTIES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Enable':</span> <span class="pre">['setEnabled',</span> <span class="pre">&lt;class</span> <span class="pre">'bool'&gt;],</span> <span class="pre">'Opacity':</span> <span class="pre">['set_opacity',</span> <span class="pre">&lt;class</span> <span class="pre">'float'&gt;],</span> <span class="pre">'Position</span> <span class="pre">-</span> <span class="pre">X':</span> <span class="pre">['setX',</span> <span class="pre">&lt;class</span> <span class="pre">'int'&gt;],</span> <span class="pre">'Position</span> <span class="pre">-</span> <span class="pre">Y':</span> <span class="pre">['setY',</span> <span class="pre">&lt;class</span> <span class="pre">'int'&gt;],</span> <span class="pre">'Visible':</span> <span class="pre">['setVisible',</span> <span class="pre">&lt;class</span> <span class="pre">'bool'&gt;]}</span></em><a class="headerlink" href="#siriushla.as_ti_control.widgets.EVGInjectionButton.RULE_PROPERTIES" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.widgets.EVGInjectionLed">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ti_control.widgets.</span></span><span class="sig-name descname"><span class="pre">EVGInjectionLed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">siriuspy.envars.VACA_PREFIX</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/widgets.html#EVGInjectionLed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.widgets.EVGInjectionLed" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="siriushla.widgets.html#siriushla.widgets.led.PyDMLed" title="siriushla.widgets.led.PyDMLed"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyDMLed</span></code></a></p>
+<p>EVG Injection Led.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.widgets.EVGInjectionLed.RULE_PROPERTIES">
+<span class="sig-name descname"><span class="pre">RULE_PROPERTIES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Enable':</span> <span class="pre">['setEnabled',</span> <span class="pre">&lt;class</span> <span class="pre">'bool'&gt;],</span> <span class="pre">'Opacity':</span> <span class="pre">['set_opacity',</span> <span class="pre">&lt;class</span> <span class="pre">'float'&gt;],</span> <span class="pre">'Position</span> <span class="pre">-</span> <span class="pre">X':</span> <span class="pre">['setX',</span> <span class="pre">&lt;class</span> <span class="pre">'int'&gt;],</span> <span class="pre">'Position</span> <span class="pre">-</span> <span class="pre">Y':</span> <span class="pre">['setY',</span> <span class="pre">&lt;class</span> <span class="pre">'int'&gt;],</span> <span class="pre">'Visible':</span> <span class="pre">['setVisible',</span> <span class="pre">&lt;class</span> <span class="pre">'bool'&gt;]}</span></em><a class="headerlink" href="#siriushla.as_ti_control.widgets.EVGInjectionLed.RULE_PROPERTIES" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.widgets.EVGUpdateEvtButton">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ti_control.widgets.</span></span><span class="sig-name descname"><span class="pre">EVGUpdateEvtButton</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">siriuspy.envars.VACA_PREFIX</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/widgets.html#EVGUpdateEvtButton"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.widgets.EVGUpdateEvtButton" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PyDMPushButton</span></code></p>
+<p>EVG Update Events Button.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.widgets.EVGUpdateEvtButton.RULE_PROPERTIES">
+<span class="sig-name descname"><span class="pre">RULE_PROPERTIES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Enable':</span> <span class="pre">['setEnabled',</span> <span class="pre">&lt;class</span> <span class="pre">'bool'&gt;],</span> <span class="pre">'Opacity':</span> <span class="pre">['set_opacity',</span> <span class="pre">&lt;class</span> <span class="pre">'float'&gt;],</span> <span class="pre">'Position</span> <span class="pre">-</span> <span class="pre">X':</span> <span class="pre">['setX',</span> <span class="pre">&lt;class</span> <span class="pre">'int'&gt;],</span> <span class="pre">'Position</span> <span class="pre">-</span> <span class="pre">Y':</span> <span class="pre">['setY',</span> <span class="pre">&lt;class</span> <span class="pre">'int'&gt;],</span> <span class="pre">'Visible':</span> <span class="pre">['setVisible',</span> <span class="pre">&lt;class</span> <span class="pre">'bool'&gt;]}</span></em><a class="headerlink" href="#siriushla.as_ti_control.widgets.EVGUpdateEvtButton.RULE_PROPERTIES" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.widgets.EVGUpdateEvtLed">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_ti_control.widgets.</span></span><span class="sig-name descname"><span class="pre">EVGUpdateEvtLed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">siriuspy.envars.VACA_PREFIX</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_ti_control/widgets.html#EVGUpdateEvtLed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_ti_control.widgets.EVGUpdateEvtLed" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="siriushla.widgets.html#siriushla.widgets.led.SiriusLedAlert" title="siriushla.widgets.led.SiriusLedAlert"><code class="xref py py-class docutils literal notranslate"><span class="pre">SiriusLedAlert</span></code></a></p>
+<p>EVG Update Events Led.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_ti_control.widgets.EVGUpdateEvtLed.RULE_PROPERTIES">
+<span class="sig-name descname"><span class="pre">RULE_PROPERTIES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Enable':</span> <span class="pre">['setEnabled',</span> <span class="pre">&lt;class</span> <span class="pre">'bool'&gt;],</span> <span class="pre">'Opacity':</span> <span class="pre">['set_opacity',</span> <span class="pre">&lt;class</span> <span class="pre">'float'&gt;],</span> <span class="pre">'Position</span> <span class="pre">-</span> <span class="pre">X':</span> <span class="pre">['setX',</span> <span class="pre">&lt;class</span> <span class="pre">'int'&gt;],</span> <span class="pre">'Position</span> <span class="pre">-</span> <span class="pre">Y':</span> <span class="pre">['setY',</span> <span class="pre">&lt;class</span> <span class="pre">'int'&gt;],</span> <span class="pre">'Visible':</span> <span class="pre">['setVisible',</span> <span class="pre">&lt;class</span> <span class="pre">'bool'&gt;]}</span></em><a class="headerlink" href="#siriushla.as_ti_control.widgets.EVGUpdateEvtLed.RULE_PROPERTIES" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-siriushla.as_ti_control">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-siriushla.as_ti_control" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="siriushla.as_rf_control.html" class="btn btn-neutral float-left" title="siriushla.as_rf_control" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="siriushla.bl_ap_imgproc.html" class="btn btn-neutral float-right" title="siriushla.bl_ap_imgproc" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, lnls-sirius.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

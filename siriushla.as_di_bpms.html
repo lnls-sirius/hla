@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>siriushla.as_di_bpms &mdash; siriushla 1.14.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=01009efc"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="siriushla.as_di_dccts" href="siriushla.as_di_dccts.html" />
+    <link rel="prev" title="siriushla.as_ap_sofb.ioc_control" href="siriushla.as_ap_sofb.ioc_control.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            siriushla
+          </a>
+              <div class="version">
+                1.14.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">GUIs:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_configdb.html">siriushla.as_ap_configdb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_currinfo.html">siriushla.as_ap_currinfo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_energybutton.html">siriushla.as_ap_energybutton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_injcontrol.html">siriushla.as_ap_injcontrol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_injection.html">siriushla.as_ap_injection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_launcher.html">siriushla.as_ap_launcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_machshift.html">siriushla.as_ap_machshift</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_macreport.html">siriushla.as_ap_macreport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_magoffconv.html">siriushla.as_ap_magoffconv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_measure.html">siriushla.as_ap_measure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_monitor.html">siriushla.as_ap_monitor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_opticscorr.html">siriushla.as_ap_opticscorr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_posang.html">siriushla.as_ap_posang</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_rabpmmon.html">siriushla.as_ap_rabpmmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_radmon.html">siriushla.as_ap_radmon</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ap_sofb.html">siriushla.as_ap_sofb</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">siriushla.as_di_bpms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#code-documentation">Code Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.as_di_bpms.base">siriushla.as_di_bpms.base module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_di_bpms.base.BaseGraph"><code class="docutils literal notranslate"><span class="pre">BaseGraph</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_di_bpms.base.BaseGraph.CLASS"><code class="docutils literal notranslate"><span class="pre">BaseGraph.CLASS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_di_bpms.base.BaseGraph.DATA_CLASS"><code class="docutils literal notranslate"><span class="pre">BaseGraph.DATA_CLASS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_di_bpms.base.BaseGraph.curveAtIndex"><code class="docutils literal notranslate"><span class="pre">BaseGraph.curveAtIndex()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_di_bpms.base.BaseGraph.setLabel"><code class="docutils literal notranslate"><span class="pre">BaseGraph.setLabel()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_di_bpms.base.BaseGraph.setupgraph"><code class="docutils literal notranslate"><span class="pre">BaseGraph.setupgraph()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_di_bpms.base.BaseGraph.setupui"><code class="docutils literal notranslate"><span class="pre">BaseGraph.setupui()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_di_bpms.base.BaseWidget"><code class="docutils literal notranslate"><span class="pre">BaseWidget</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_di_bpms.base.BaseWidget.basic_rule"><code class="docutils literal notranslate"><span class="pre">BaseWidget.basic_rule()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_di_bpms.base.BaseWidget.channels"><code class="docutils literal notranslate"><span class="pre">BaseWidget.channels()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_di_bpms.base.BaseWidget.get_pvname"><code class="docutils literal notranslate"><span class="pre">BaseWidget.get_pvname()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_di_bpms.base.GraphTime"><code class="docutils literal notranslate"><span class="pre">GraphTime</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_di_bpms.base.GraphTime.CLASS"><code class="docutils literal notranslate"><span class="pre">GraphTime.CLASS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_di_bpms.base.GraphTime.DATA_CLASS"><code class="docutils literal notranslate"><span class="pre">GraphTime.DATA_CLASS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_di_bpms.base.GraphTime.addYChannel"><code class="docutils literal notranslate"><span class="pre">GraphTime.addYChannel()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_di_bpms.base.GraphWave"><code class="docutils literal notranslate"><span class="pre">GraphWave</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_di_bpms.base.GraphWave.addChannel"><code class="docutils literal notranslate"><span class="pre">GraphWave.addChannel()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_di_bpms.base.get_custom_widget_class"><code class="docutils literal notranslate"><span class="pre">get_custom_widget_class()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.as_di_bpms.list_bpms">siriushla.as_di_bpms.list_bpms module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_di_bpms.list_bpms.AcqDataSummary"><code class="docutils literal notranslate"><span class="pre">AcqDataSummary</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_di_bpms.list_bpms.AcqDataSummary.create_graph"><code class="docutils literal notranslate"><span class="pre">AcqDataSummary.create_graph()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_di_bpms.list_bpms.AcqDataSummary.setupui"><code class="docutils literal notranslate"><span class="pre">AcqDataSummary.setupui()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_di_bpms.list_bpms.BPMSummary"><code class="docutils literal notranslate"><span class="pre">BPMSummary</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_di_bpms.list_bpms.BPMSummary.setupui"><code class="docutils literal notranslate"><span class="pre">BPMSummary.setupui()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_di_bpms.list_bpms.SelectBPMs"><code class="docutils literal notranslate"><span class="pre">SelectBPMs</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_di_bpms.list_bpms.SelectBPMs.setupui"><code class="docutils literal notranslate"><span class="pre">SelectBPMs.setupui()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.as_di_bpms.main">siriushla.as_di_bpms.main module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_di_bpms.main.BPMMain"><code class="docutils literal notranslate"><span class="pre">BPMMain</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_di_bpms.main.BPMMain.setupui"><code class="docutils literal notranslate"><span class="pre">BPMMain.setupui()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.as_di_bpms.monit">siriushla.as_di_bpms.monit module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_di_bpms.monit.MonitData"><code class="docutils literal notranslate"><span class="pre">MonitData</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_di_bpms.monit.MonitData.setupui"><code class="docutils literal notranslate"><span class="pre">MonitData.setupui()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.as_di_bpms.settings">siriushla.as_di_bpms.settings module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_di_bpms.settings.BPMAdvancedSettings"><code class="docutils literal notranslate"><span class="pre">BPMAdvancedSettings</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_di_bpms.settings.BPMAdvancedSettings.get_acqrate_props"><code class="docutils literal notranslate"><span class="pre">BPMAdvancedSettings.get_acqrate_props()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_di_bpms.settings.BPMAdvancedSettings.setupui"><code class="docutils literal notranslate"><span class="pre">BPMAdvancedSettings.setupui()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_di_bpms.settings.BPMHardwareSettings"><code class="docutils literal notranslate"><span class="pre">BPMHardwareSettings</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_di_bpms.settings.BPMHardwareSettings.setupui"><code class="docutils literal notranslate"><span class="pre">BPMHardwareSettings.setupui()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_di_bpms.settings.PBPMHardwareSettings"><code class="docutils literal notranslate"><span class="pre">PBPMHardwareSettings</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_di_bpms.settings.PBPMHardwareSettings.setupui"><code class="docutils literal notranslate"><span class="pre">PBPMHardwareSettings.setupui()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_di_bpms.settings.ParamsSettings"><code class="docutils literal notranslate"><span class="pre">ParamsSettings</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_di_bpms.settings.ParamsSettings.setupui"><code class="docutils literal notranslate"><span class="pre">ParamsSettings.setupui()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_di_bpms.settings.PolySettings"><code class="docutils literal notranslate"><span class="pre">PolySettings</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_di_bpms.settings.PolySettings.setupui"><code class="docutils literal notranslate"><span class="pre">PolySettings.setupui()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_di_bpms.settings.RFFEAdvancedSettings"><code class="docutils literal notranslate"><span class="pre">RFFEAdvancedSettings</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_di_bpms.settings.RFFEAdvancedSettings.setupui"><code class="docutils literal notranslate"><span class="pre">RFFEAdvancedSettings.setupui()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_di_bpms.settings.TriggersLauncherWidget"><code class="docutils literal notranslate"><span class="pre">TriggersLauncherWidget</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_di_bpms.settings.TriggersLauncherWidget.setupui"><code class="docutils literal notranslate"><span class="pre">TriggersLauncherWidget.setupui()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.as_di_bpms.trig_acq_config">siriushla.as_di_bpms.trig_acq_config module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_di_bpms.trig_acq_config.BPMBaseTriggeredAcquisition"><code class="docutils literal notranslate"><span class="pre">BPMBaseTriggeredAcquisition</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_di_bpms.trig_acq_config.BPMGENAcquisition"><code class="docutils literal notranslate"><span class="pre">BPMGENAcquisition</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_di_bpms.trig_acq_config.BPMGENAcquisition.ACQCORE"><code class="docutils literal notranslate"><span class="pre">BPMGENAcquisition.ACQCORE</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_di_bpms.trig_acq_config.BPMPMAcquisition"><code class="docutils literal notranslate"><span class="pre">BPMPMAcquisition</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_di_bpms.trig_acq_config.BPMPMAcquisition.ACQCORE"><code class="docutils literal notranslate"><span class="pre">BPMPMAcquisition.ACQCORE</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_di_bpms.trig_acq_config.PBPMBaseTriggeredAcquisition"><code class="docutils literal notranslate"><span class="pre">PBPMBaseTriggeredAcquisition</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_di_bpms.trig_acq_config.PBPMGENAcquisition"><code class="docutils literal notranslate"><span class="pre">PBPMGENAcquisition</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_di_bpms.trig_acq_config.PBPMGENAcquisition.ACQCORE"><code class="docutils literal notranslate"><span class="pre">PBPMGENAcquisition.ACQCORE</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#siriushla.as_di_bpms.trig_acq_config.PBPMPMAcquisition"><code class="docutils literal notranslate"><span class="pre">PBPMPMAcquisition</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#siriushla.as_di_bpms.trig_acq_config.PBPMPMAcquisition.ACQCORE"><code class="docutils literal notranslate"><span class="pre">PBPMPMAcquisition.ACQCORE</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-siriushla.as_di_bpms">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_dccts.html">siriushla.as_di_dccts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_icts.html">siriushla.as_di_icts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_scrns.html">siriushla.as_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_tune.html">siriushla.as_di_tune</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_di_vlight.html">siriushla.as_di_vlight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_commands.html">siriushla.as_ps_commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_control.html">siriushla.as_ps_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_cycle.html">siriushla.as_ps_cycle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ps_diag.html">siriushla.as_ps_diag</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_pu_control.html">siriushla.as_pu_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_rf_control.html">siriushla.as_rf_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.as_ti_control.html">siriushla.as_ti_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.bl_ap_imgproc.html">siriushla.bl_ap_imgproc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.bo_ap_ramp.html">siriushla.bo_ap_ramp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.common.html">siriushla.common</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_ap_mps.html">siriushla.li_ap_mps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_di_bpms.html">siriushla.li_di_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_di_scrns.html">siriushla.li_di_scrns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_eg_control.html">siriushla.li_eg_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_pu_modltr.html">siriushla.li_pu_modltr</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_rf_llrf.html">siriushla.li_rf_llrf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.li_va_control.html">siriushla.li_va_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_fofb.html">siriushla.si_ap_fofb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_genstatus.html">siriushla.si_ap_genstatus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_idff.html">siriushla.si_ap_idff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_ap_orbintlk.html">siriushla.si_ap_orbintlk</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_bbb.html">siriushla.si_di_bbb</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_equalize_bpms.html">siriushla.si_di_equalize_bpms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_di_scraps.html">siriushla.si_di_scraps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.si_id_control.html">siriushla.si_id_control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.tb_di_slits.html">siriushla.tb_di_slits</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Widgets:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.html">Sirius HLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="siriushla.widgets.html">Widgets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Source Code:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/lnls-sirius/hla">HLA Github</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">siriushla</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">siriushla.as_di_bpms</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/lnls-sirius/hla/blob/master/pyqt-apps/docs/source/siriushla.as_di_bpms.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="siriushla-as-di-bpms">
+<h1>siriushla.as_di_bpms<a class="headerlink" href="#siriushla-as-di-bpms" title="Link to this heading"></a></h1>
+<section id="code-documentation">
+<h2>Code Documentation<a class="headerlink" href="#code-documentation" title="Link to this heading"></a></h2>
+</section>
+<section id="module-siriushla.as_di_bpms.base">
+<span id="siriushla-as-di-bpms-base-module"></span><h2>siriushla.as_di_bpms.base module<a class="headerlink" href="#module-siriushla.as_di_bpms.base" title="Link to this heading"></a></h2>
+<p>Base module.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_di_bpms.base.BaseGraph">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_di_bpms.base.</span></span><span class="sig-name descname"><span class="pre">BaseGraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bpm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_di_bpms/base.html#BaseGraph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_di_bpms.base.BaseGraph" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_di_bpms.base.BaseWidget" title="siriushla.as_di_bpms.base.BaseWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseWidget</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_di_bpms.base.BaseGraph.CLASS">
+<span class="sig-name descname"><span class="pre">CLASS</span></span><a class="headerlink" href="#siriushla.as_di_bpms.base.BaseGraph.CLASS" title="Link to this definition"></a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">MyWidget</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_di_bpms.base.BaseGraph.DATA_CLASS">
+<span class="sig-name descname"><span class="pre">DATA_CLASS</span></span><a class="headerlink" href="#siriushla.as_di_bpms.base.BaseGraph.DATA_CLASS" title="Link to this definition"></a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_di_bpms.base.BaseGraph.curveAtIndex">
+<span class="sig-name descname"><span class="pre">curveAtIndex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_di_bpms/base.html#BaseGraph.curveAtIndex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_di_bpms.base.BaseGraph.curveAtIndex" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_di_bpms.base.BaseGraph.setLabel">
+<span class="sig-name descname"><span class="pre">setLabel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_di_bpms/base.html#BaseGraph.setLabel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_di_bpms.base.BaseGraph.setLabel" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_di_bpms.base.BaseGraph.setupgraph">
+<span class="sig-name descname"><span class="pre">setupgraph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_di_bpms/base.html#BaseGraph.setupgraph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_di_bpms.base.BaseGraph.setupgraph" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_di_bpms.base.BaseGraph.setupui">
+<span class="sig-name descname"><span class="pre">setupui</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_di_bpms/base.html#BaseGraph.setupui"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_di_bpms.base.BaseGraph.setupui" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_di_bpms.base.BaseWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_di_bpms.base.</span></span><span class="sig-name descname"><span class="pre">BaseWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bpm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_di_bpms/base.html#BaseWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_di_bpms.base.BaseWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QWidget</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_di_bpms.base.BaseWidget.basic_rule">
+<span class="sig-name descname"><span class="pre">basic_rule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flag</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_di_bpms/base.html#BaseWidget.basic_rule"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_di_bpms.base.BaseWidget.basic_rule" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_di_bpms.base.BaseWidget.channels">
+<span class="sig-name descname"><span class="pre">channels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_di_bpms/base.html#BaseWidget.channels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_di_bpms.base.BaseWidget.channels" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_di_bpms.base.BaseWidget.get_pvname">
+<span class="sig-name descname"><span class="pre">get_pvname</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">propty</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_di_bpms/base.html#BaseWidget.get_pvname"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_di_bpms.base.BaseWidget.get_pvname" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_di_bpms.base.GraphTime">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_di_bpms.base.</span></span><span class="sig-name descname"><span class="pre">GraphTime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_di_bpms/base.html#GraphTime"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_di_bpms.base.GraphTime" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_di_bpms.base.BaseGraph" title="siriushla.as_di_bpms.base.BaseGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseGraph</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_di_bpms.base.GraphTime.CLASS">
+<span class="sig-name descname"><span class="pre">CLASS</span></span><a class="headerlink" href="#siriushla.as_di_bpms.base.GraphTime.CLASS" title="Link to this definition"></a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">MyWidget</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_di_bpms.base.GraphTime.DATA_CLASS">
+<span class="sig-name descname"><span class="pre">DATA_CLASS</span></span><a class="headerlink" href="#siriushla.as_di_bpms.base.GraphTime.DATA_CLASS" title="Link to this definition"></a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_di_bpms.base.GraphTime.addYChannel">
+<span class="sig-name descname"><span class="pre">addYChannel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">opts</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_di_bpms/base.html#GraphTime.addYChannel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_di_bpms.base.GraphTime.addYChannel" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_di_bpms.base.GraphWave">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_di_bpms.base.</span></span><span class="sig-name descname"><span class="pre">GraphWave</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bpm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_di_bpms/base.html#GraphWave"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_di_bpms.base.GraphWave" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_di_bpms.base.BaseGraph" title="siriushla.as_di_bpms.base.BaseGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseGraph</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_di_bpms.base.GraphWave.addChannel">
+<span class="sig-name descname"><span class="pre">addChannel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">opts</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_di_bpms/base.html#GraphWave.addChannel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_di_bpms.base.GraphWave.addChannel" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="siriushla.as_di_bpms.base.get_custom_widget_class">
+<span class="sig-prename descclassname"><span class="pre">siriushla.as_di_bpms.base.</span></span><span class="sig-name descname"><span class="pre">get_custom_widget_class</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">CLASS</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_di_bpms/base.html#get_custom_widget_class"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_di_bpms.base.get_custom_widget_class" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-siriushla.as_di_bpms.list_bpms">
+<span id="siriushla-as-di-bpms-list-bpms-module"></span><h2>siriushla.as_di_bpms.list_bpms module<a class="headerlink" href="#module-siriushla.as_di_bpms.list_bpms" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_di_bpms.list_bpms.AcqDataSummary">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_di_bpms.list_bpms.</span></span><span class="sig-name descname"><span class="pre">AcqDataSummary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bpm_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pos'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_di_bpms/list_bpms.html#AcqDataSummary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_di_bpms.list_bpms.AcqDataSummary" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_di_bpms.base.BaseWidget" title="siriushla.as_di_bpms.base.BaseWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseWidget</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_di_bpms.list_bpms.AcqDataSummary.create_graph">
+<span class="sig-name descname"><span class="pre">create_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bpm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">typ</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pos'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_di_bpms/list_bpms.html#AcqDataSummary.create_graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_di_bpms.list_bpms.AcqDataSummary.create_graph" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_di_bpms.list_bpms.AcqDataSummary.setupui">
+<span class="sig-name descname"><span class="pre">setupui</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_di_bpms/list_bpms.html#AcqDataSummary.setupui"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_di_bpms.list_bpms.AcqDataSummary.setupui" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_di_bpms.list_bpms.BPMSummary">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_di_bpms.list_bpms.</span></span><span class="sig-name descname"><span class="pre">BPMSummary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bpm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_di_bpms/list_bpms.html#BPMSummary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_di_bpms.list_bpms.BPMSummary" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_di_bpms.base.BaseWidget" title="siriushla.as_di_bpms.base.BaseWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseWidget</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_di_bpms.list_bpms.BPMSummary.setupui">
+<span class="sig-name descname"><span class="pre">setupui</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_di_bpms/list_bpms.html#BPMSummary.setupui"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_di_bpms.list_bpms.BPMSummary.setupui" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_di_bpms.list_bpms.SelectBPMs">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_di_bpms.list_bpms.</span></span><span class="sig-name descname"><span class="pre">SelectBPMs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bpm_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_di_bpms/list_bpms.html#SelectBPMs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_di_bpms.list_bpms.SelectBPMs" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_di_bpms.base.BaseWidget" title="siriushla.as_di_bpms.base.BaseWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseWidget</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_di_bpms.list_bpms.SelectBPMs.setupui">
+<span class="sig-name descname"><span class="pre">setupui</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_di_bpms/list_bpms.html#SelectBPMs.setupui"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_di_bpms.list_bpms.SelectBPMs.setupui" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-siriushla.as_di_bpms.main">
+<span id="siriushla-as-di-bpms-main-module"></span><h2>siriushla.as_di_bpms.main module<a class="headerlink" href="#module-siriushla.as_di_bpms.main" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_di_bpms.main.BPMMain">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_di_bpms.main.</span></span><span class="sig-name descname"><span class="pre">BPMMain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bpm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_di_bpms/main.html#BPMMain"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_di_bpms.main.BPMMain" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_di_bpms.base.BaseWidget" title="siriushla.as_di_bpms.base.BaseWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseWidget</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_di_bpms.main.BPMMain.setupui">
+<span class="sig-name descname"><span class="pre">setupui</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_di_bpms/main.html#BPMMain.setupui"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_di_bpms.main.BPMMain.setupui" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-siriushla.as_di_bpms.monit">
+<span id="siriushla-as-di-bpms-monit-module"></span><h2>siriushla.as_di_bpms.monit module<a class="headerlink" href="#module-siriushla.as_di_bpms.monit" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_di_bpms.monit.MonitData">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_di_bpms.monit.</span></span><span class="sig-name descname"><span class="pre">MonitData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bpm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_di_bpms/monit.html#MonitData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_di_bpms.monit.MonitData" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_di_bpms.base.BaseWidget" title="siriushla.as_di_bpms.base.BaseWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseWidget</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_di_bpms.monit.MonitData.setupui">
+<span class="sig-name descname"><span class="pre">setupui</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_di_bpms/monit.html#MonitData.setupui"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_di_bpms.monit.MonitData.setupui" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-siriushla.as_di_bpms.settings">
+<span id="siriushla-as-di-bpms-settings-module"></span><h2>siriushla.as_di_bpms.settings module<a class="headerlink" href="#module-siriushla.as_di_bpms.settings" title="Link to this heading"></a></h2>
+<p>BPM Settings.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_di_bpms.settings.BPMAdvancedSettings">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_di_bpms.settings.</span></span><span class="sig-name descname"><span class="pre">BPMAdvancedSettings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bpm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_di_bpms/settings.html#BPMAdvancedSettings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_di_bpms.settings.BPMAdvancedSettings" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_di_bpms.base.BaseWidget" title="siriushla.as_di_bpms.base.BaseWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseWidget</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_di_bpms.settings.BPMAdvancedSettings.get_acqrate_props">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_acqrate_props</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rate</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_di_bpms/settings.html#BPMAdvancedSettings.get_acqrate_props"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_di_bpms.settings.BPMAdvancedSettings.get_acqrate_props" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_di_bpms.settings.BPMAdvancedSettings.setupui">
+<span class="sig-name descname"><span class="pre">setupui</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_di_bpms/settings.html#BPMAdvancedSettings.setupui"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_di_bpms.settings.BPMAdvancedSettings.setupui" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_di_bpms.settings.BPMHardwareSettings">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_di_bpms.settings.</span></span><span class="sig-name descname"><span class="pre">BPMHardwareSettings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bpm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_di_bpms/settings.html#BPMHardwareSettings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_di_bpms.settings.BPMHardwareSettings" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_di_bpms.base.BaseWidget" title="siriushla.as_di_bpms.base.BaseWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseWidget</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_di_bpms.settings.BPMHardwareSettings.setupui">
+<span class="sig-name descname"><span class="pre">setupui</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_di_bpms/settings.html#BPMHardwareSettings.setupui"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_di_bpms.settings.BPMHardwareSettings.setupui" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_di_bpms.settings.PBPMHardwareSettings">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_di_bpms.settings.</span></span><span class="sig-name descname"><span class="pre">PBPMHardwareSettings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bpm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_di_bpms/settings.html#PBPMHardwareSettings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_di_bpms.settings.PBPMHardwareSettings" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_di_bpms.base.BaseWidget" title="siriushla.as_di_bpms.base.BaseWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseWidget</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_di_bpms.settings.PBPMHardwareSettings.setupui">
+<span class="sig-name descname"><span class="pre">setupui</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_di_bpms/settings.html#PBPMHardwareSettings.setupui"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_di_bpms.settings.PBPMHardwareSettings.setupui" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_di_bpms.settings.ParamsSettings">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_di_bpms.settings.</span></span><span class="sig-name descname"><span class="pre">ParamsSettings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bpm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_di_bpms/settings.html#ParamsSettings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_di_bpms.settings.ParamsSettings" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_di_bpms.base.BaseWidget" title="siriushla.as_di_bpms.base.BaseWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseWidget</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_di_bpms.settings.ParamsSettings.setupui">
+<span class="sig-name descname"><span class="pre">setupui</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_di_bpms/settings.html#ParamsSettings.setupui"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_di_bpms.settings.ParamsSettings.setupui" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_di_bpms.settings.PolySettings">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_di_bpms.settings.</span></span><span class="sig-name descname"><span class="pre">PolySettings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bpm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_di_bpms/settings.html#PolySettings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_di_bpms.settings.PolySettings" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_di_bpms.base.BaseWidget" title="siriushla.as_di_bpms.base.BaseWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseWidget</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_di_bpms.settings.PolySettings.setupui">
+<span class="sig-name descname"><span class="pre">setupui</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_di_bpms/settings.html#PolySettings.setupui"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_di_bpms.settings.PolySettings.setupui" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_di_bpms.settings.RFFEAdvancedSettings">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_di_bpms.settings.</span></span><span class="sig-name descname"><span class="pre">RFFEAdvancedSettings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bpm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_di_bpms/settings.html#RFFEAdvancedSettings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_di_bpms.settings.RFFEAdvancedSettings" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_di_bpms.base.BaseWidget" title="siriushla.as_di_bpms.base.BaseWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseWidget</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_di_bpms.settings.RFFEAdvancedSettings.setupui">
+<span class="sig-name descname"><span class="pre">setupui</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_di_bpms/settings.html#RFFEAdvancedSettings.setupui"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_di_bpms.settings.RFFEAdvancedSettings.setupui" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_di_bpms.settings.TriggersLauncherWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_di_bpms.settings.</span></span><span class="sig-name descname"><span class="pre">TriggersLauncherWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bpm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acqcores</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['ACQ',</span> <span class="pre">'PM']</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_di_bpms/settings.html#TriggersLauncherWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_di_bpms.settings.TriggersLauncherWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_di_bpms.base.BaseWidget" title="siriushla.as_di_bpms.base.BaseWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseWidget</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="siriushla.as_di_bpms.settings.TriggersLauncherWidget.setupui">
+<span class="sig-name descname"><span class="pre">setupui</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_di_bpms/settings.html#TriggersLauncherWidget.setupui"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_di_bpms.settings.TriggersLauncherWidget.setupui" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-siriushla.as_di_bpms.trig_acq_config">
+<span id="siriushla-as-di-bpms-trig-acq-config-module"></span><h2>siriushla.as_di_bpms.trig_acq_config module<a class="headerlink" href="#module-siriushla.as_di_bpms.trig_acq_config" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_di_bpms.trig_acq_config.BPMBaseTriggeredAcquisition">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_di_bpms.trig_acq_config.</span></span><span class="sig-name descname"><span class="pre">BPMBaseTriggeredAcquisition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bpm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_di_bpms/trig_acq_config.html#BPMBaseTriggeredAcquisition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_di_bpms.trig_acq_config.BPMBaseTriggeredAcquisition" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">AcqBaseWindow</span></code>, <a class="reference internal" href="#siriushla.as_di_bpms.base.BaseWidget" title="siriushla.as_di_bpms.base.BaseWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseWidget</span></code></a></p>
+<p>BPM Base Triggered Acquisition window.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_di_bpms.trig_acq_config.BPMGENAcquisition">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_di_bpms.trig_acq_config.</span></span><span class="sig-name descname"><span class="pre">BPMGENAcquisition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bpm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_di_bpms/trig_acq_config.html#BPMGENAcquisition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_di_bpms.trig_acq_config.BPMGENAcquisition" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_di_bpms.trig_acq_config.BPMBaseTriggeredAcquisition" title="siriushla.as_di_bpms.trig_acq_config.BPMBaseTriggeredAcquisition"><code class="xref py py-class docutils literal notranslate"><span class="pre">BPMBaseTriggeredAcquisition</span></code></a></p>
+<p>BPM General Triggered Acquisition window</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_di_bpms.trig_acq_config.BPMGENAcquisition.ACQCORE">
+<span class="sig-name descname"><span class="pre">ACQCORE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'GEN'</span></em><a class="headerlink" href="#siriushla.as_di_bpms.trig_acq_config.BPMGENAcquisition.ACQCORE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_di_bpms.trig_acq_config.BPMPMAcquisition">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_di_bpms.trig_acq_config.</span></span><span class="sig-name descname"><span class="pre">BPMPMAcquisition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bpm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_di_bpms/trig_acq_config.html#BPMPMAcquisition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_di_bpms.trig_acq_config.BPMPMAcquisition" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_di_bpms.trig_acq_config.BPMBaseTriggeredAcquisition" title="siriushla.as_di_bpms.trig_acq_config.BPMBaseTriggeredAcquisition"><code class="xref py py-class docutils literal notranslate"><span class="pre">BPMBaseTriggeredAcquisition</span></code></a></p>
+<p>BPM Post Mortem Triggered Acquisition window</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_di_bpms.trig_acq_config.BPMPMAcquisition.ACQCORE">
+<span class="sig-name descname"><span class="pre">ACQCORE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'PM'</span></em><a class="headerlink" href="#siriushla.as_di_bpms.trig_acq_config.BPMPMAcquisition.ACQCORE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_di_bpms.trig_acq_config.PBPMBaseTriggeredAcquisition">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_di_bpms.trig_acq_config.</span></span><span class="sig-name descname"><span class="pre">PBPMBaseTriggeredAcquisition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bpm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_di_bpms/trig_acq_config.html#PBPMBaseTriggeredAcquisition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_di_bpms.trig_acq_config.PBPMBaseTriggeredAcquisition" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">AcqBaseWindow</span></code></p>
+<p>Photon BPM Base Triggered Acquisition window.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_di_bpms.trig_acq_config.PBPMGENAcquisition">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_di_bpms.trig_acq_config.</span></span><span class="sig-name descname"><span class="pre">PBPMGENAcquisition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bpm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_di_bpms/trig_acq_config.html#PBPMGENAcquisition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_di_bpms.trig_acq_config.PBPMGENAcquisition" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_di_bpms.trig_acq_config.PBPMBaseTriggeredAcquisition" title="siriushla.as_di_bpms.trig_acq_config.PBPMBaseTriggeredAcquisition"><code class="xref py py-class docutils literal notranslate"><span class="pre">PBPMBaseTriggeredAcquisition</span></code></a></p>
+<p>PBPM General Triggered Acquisition window</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_di_bpms.trig_acq_config.PBPMGENAcquisition.ACQCORE">
+<span class="sig-name descname"><span class="pre">ACQCORE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'GEN'</span></em><a class="headerlink" href="#siriushla.as_di_bpms.trig_acq_config.PBPMGENAcquisition.ACQCORE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="siriushla.as_di_bpms.trig_acq_config.PBPMPMAcquisition">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">siriushla.as_di_bpms.trig_acq_config.</span></span><span class="sig-name descname"><span class="pre">PBPMPMAcquisition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bpm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/siriushla/as_di_bpms/trig_acq_config.html#PBPMPMAcquisition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#siriushla.as_di_bpms.trig_acq_config.PBPMPMAcquisition" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#siriushla.as_di_bpms.trig_acq_config.PBPMBaseTriggeredAcquisition" title="siriushla.as_di_bpms.trig_acq_config.PBPMBaseTriggeredAcquisition"><code class="xref py py-class docutils literal notranslate"><span class="pre">PBPMBaseTriggeredAcquisition</span></code></a></p>
+<p>PBPM Post Mortem Triggered Acquisition window</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="siriushla.as_di_bpms.trig_acq_config.PBPMPMAcquisition.ACQCORE">
+<span class="sig-name descname"><span class="pre">ACQCORE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'PM'</span></em><a class="headerlink" href="#siriushla.as_di_bpms.trig_acq_config.PBPMPMAcquisition.ACQCORE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-siriushla.as_di_bpms">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-siriushla.as_di_bpms" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="siriushla.as_ap_sofb.ioc_control.html" class="btn btn-neutral float-left" title="siriushla.as_ap_sofb.ioc_control" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="siriushla.as_di_dccts.html" class="btn btn-neutral float-right" title="siriushla.as_di_dccts" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, lnls-sirius.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
