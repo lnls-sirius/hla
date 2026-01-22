@@ -11,7 +11,7 @@ from qtpy.QtWidgets import QLabel, QPushButton, QGroupBox, QVBoxLayout, \
 import qtawesome as qta
 from pydm.widgets import PyDMLineEdit, PyDMPushButton
 
-from siriuspy.search import LLTimeSearch, HLTimeSearch
+from siriuspy.search import LLTimeSearch, HLTimeSearch, RaBPMSearch
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.timesys import csdev as _cstime
 from siriuspy.epics import PV as _PV
@@ -25,6 +25,8 @@ from ..util import connect_window, get_appropriate_color
 
 from .base import BaseList, BaseWidget
 from .allowed_buckets import AllowedBucketsMatrix
+
+from ..common.afc_board.afc_settings import AFCAdvancedSettings
 
 
 # ###################### Event Generator ######################
@@ -1496,7 +1498,8 @@ class AFC(BaseWidget):
         self.status_wid = self._setup_status_wid()
         stattab.addTab(self.status_wid, 'Status')
         self.info_wid = self._setup_info_wid()
-        stattab.addTab(self.info_wid, 'Fw && IOC')
+        stattab.addTab(self.info_wid, 'Fw && IOC && AFC Details')
+
         self.my_layout.addWidget(stattab, 2, 0)
         stattab.setSizePolicy(QSzPol.Preferred, QSzPol.Maximum)
 
@@ -1669,6 +1672,29 @@ class AFC(BaseWidget):
         hldbg.addWidget(but)
         gb = self._create_small_group('', info_wid, (lb, dbg))
         info_lay.addWidget(gb, 0, 1)
+
+        lb = QLabel("<b>AFC Settings Details</b>")
+        pbt = QPushButton(qta.icon('fa5s.ellipsis-v'), '', self)
+        pbt.setObjectName('pbt')
+        pbt.setStyleSheet(
+            '#pbt{min-width:25px; max-width:25px; icon-size:20px;}')
+        pbt.setDefault(False)
+        pbt.setAutoDefault(False)
+        Window = create_window_from_widget(
+            AFCAdvancedSettings, title='AFC Advanced Settings'
+        )
+        connect_window(
+            pbt, Window, parent=None, prefix=self.prefix, display=self.device
+        )
+        crate = RaBPMSearch.conv_devname_2_cratename(self.device)
+        lbl = QLabel(f"{crate}", self, alignment=Qt.AlignCenter)
+        proc = QWidget()
+        hlproc = QHBoxLayout(proc)
+        hlproc.setContentsMargins(0, 0, 0, 0)
+        hlproc.addWidget(pbt)
+        hlproc.addWidget(lbl)
+        gb = self._create_small_group('', info_wid, (lb, proc))
+        info_lay.addWidget(gb, 0, 2)
 
         return info_wid
 

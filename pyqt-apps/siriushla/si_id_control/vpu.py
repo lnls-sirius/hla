@@ -6,8 +6,6 @@ from qtpy.QtWidgets import QGroupBox, QLabel, QWidget, \
 import qtawesome as qta
 from pydm.widgets import PyDMPushButton
 
-from siriuspy.epics import PV
-
 from ..util import connect_newprocess, connect_window
 from ..widgets import SiriusLedAlert, SiriusLabel, SiriusSpinbox, \
     SiriusLedState, SiriusLineEdit, SiriusEnumComboBox
@@ -225,6 +223,12 @@ class VPUControlWindow(IDCommonControlWindow):
             alay.addWidget(read, arow, 1, alignment=Qt.AlignRight)
             alay.addWidget(pbt, arow, 2, alignment=Qt.AlignLeft)
             arow += 1
+        pvname = self.dev_pref.substitute(propty='Warning-Mon')
+        power_off_lbl = QLabel('Power Off')
+        power_off_led = SiriusLedAlert(self, init_channel=pvname, bit=25)
+        power_off_led.onColor = SiriusLedAlert.Yellow
+        alay.addWidget(power_off_lbl, arow, 0)
+        alay.addWidget(power_off_led, arow, 1, alignment=Qt.AlignRight)
         lay.addLayout(alay, 1, 0, 1, 2, alignment=Qt.AlignHCenter)
         row += 1
 

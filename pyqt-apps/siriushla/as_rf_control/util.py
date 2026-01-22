@@ -323,7 +323,7 @@ SEC_2_CHANNELS = {
             'DPhase': 'RA-RaBO01:RF-LLRF:TuneDephs-Mon',
             'Acting': 'RA-RaBO01:RF-LLRF:TuneOut-Mon',
             'Deadbnd': 'RA-RaBO01:RF-LLRF:TuneMarginHI',
-            'Oversht': 'RA-RaBO01:RF-LLRF:TuneMarginHI',
+            'Oversht': 'RA-RaBO01:RF-LLRF:TuneMarginLO',
             'Pl1Down': 'BO-05D:RF-P5Cav:Plg1MoveDown-Mon',
             'Pl1Up': 'BO-05D:RF-P5Cav:Plg1MoveUp-Mon',
             'Pl2Down': 'BO-05D:RF-P5Cav:Plg2MoveDown-Mon',
@@ -1213,8 +1213,8 @@ SEC_2_CHANNELS = {
                 '5V': ['RA-RaBO01:RF-CavPlDrivers:VoltPos5V-Mon', 'RA-RaBO01:RF-CavPlDrivers:Current5V-Mon'],
                 '48V': ['RA-RaBO01:RF-CavPlDrivers:VoltPos48V-Mon'],
                 'Enable': 'RA-RaBO01:RF-CavPlDrivers:DrEnbl',
-                '1': ['RA-RaBO01:RF-CavPlDrivers:Dr1Enbl-Mon', 'RA-RaBO01:RF-CavPlDrivers:Dr1Flt-Mon'],
-                '2': ['RA-RaBO01:RF-CavPlDrivers:Dr2Enbl-Mon', 'RA-RaBO01:RF-CavPlDrivers:Dr2Flt-Mon']
+                '1': ['RA-RaBO01:RF-CavPlDrivers:Dr1Enbl-Mon', 'RA-RaBO01:RF-CavPlDrivers:Dr1Flt-Mon', 'RA-RaBO01:RF-CavPlDrivers:Dr1Current-Mon'],
+                '2': ['RA-RaBO01:RF-CavPlDrivers:Dr2Enbl-Mon', 'RA-RaBO01:RF-CavPlDrivers:Dr2Flt-Mon', 'RA-RaBO01:RF-CavPlDrivers:Dr2Current-Mon']
             }
         },
         'AdvIntlk': {

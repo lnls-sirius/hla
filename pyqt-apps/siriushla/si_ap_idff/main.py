@@ -12,10 +12,11 @@ import qtawesome as qta
 
 from pydm.widgets import PyDMPushButton
 
+from siriuspy.devices import IDFF, IDFFCtrl, IDFFCtrlSoft
 from siriuspy.envars import VACA_PREFIX as _VACA_PREFIX
 from siriuspy.namesys import SiriusPVName as _PVName
 from siriuspy.search import IDSearch
-from siriuspy.idff.csdev import IDFFConst, ETypes as IDFFEnums
+from siriuspy.idff.csdev import ETypes as IDFFEnums
 
 from ..util import connect_window
 from ..widgets import SiriusMainWindow, SiriusLabel, SiriusSpinbox, \
@@ -32,21 +33,29 @@ from .util import get_idff_icon
 class IDFFWindow(SiriusMainWindow):
     """ID FF main window."""
 
+    # NOTE: in order to simplify this HLA class we could try to either
+    # a) implement low level FF for DELTA52 or ...
+    # b) change its soft FF IOC
+    #    so as to provide the same PVs as the low level ioc (particularly
+    #    "IDPos-Mon")
+
     def __init__(self, parent=None, prefix='', idname=''):
         """Initialize."""
         super().__init__(parent)
         self.prefix = prefix or _VACA_PREFIX
         self.idname = _PVName(idname)
         self._is_llidff = self.idname.dev.startswith(("IVU", "VPU"))
-        self._idffname = IDFFConst(idname).idffname
+        if self._is_llidff and self.idname.dev.startswith("IVU"):
+            self._idffname = _PVName(f"SI-{self.idname.sub}:BS-IDFF-CHCV")
+        elif self._is_llidff and self.idname.dev.startswith("VPU"):
+            self._idffname = _PVName(f"SI-{self.idname.sub}:BS-IDFF-CC")
+        else:
+            self._idffname = _PVName(f"SI-{self.idname.sub}:AP-IDFF")
+        self.dev_pref = _PVName(self._idffname + ':')
+        # self._idffname = IDFFConst(idname).idffname
+        self._idffdev = self._create_idffdev()
         self._idffdata = IDSearch.conv_idname_2_idff(self.idname)
         self.device = _PVName(self._idffname)
-        self.dev_pref = _PVName(
-            f"SI-{self.device.sub}:BS-IDFF-CHCV:"
-                if (self._is_llidff and self.idname.dev.startswith("IVU"))
-            else f"SI-{self.device.sub}:BS-IDFF-CC:"
-                if (self._is_llidff and self.idname.dev.startswith("VPU"))
-            else self.device.substitute(prefix=prefix))
         self.setObjectName('IDApp')
         self.setWindowTitle(self.device)
         self.setWindowIcon(get_idff_icon())
@@ -57,16 +66,14 @@ class IDFFWindow(SiriusMainWindow):
         self.title = QLabel(
             '<h2>' + self.idname + ' Feedforward Settings</h2>',
             alignment=Qt.AlignCenter)
-
         wid = QWidget()
         lay = QGridLayout(wid)
         lay.addWidget(self.title, 0, 0, 1, 2)
         if self._is_llidff:
-            corrs = []
-            if self.idname.dev.startswith("IVU"):
-                corrs = ["CH1", "CH2", "CV1", "CV2"]
-            elif self.idname.dev.startswith("VPU"):
-                corrs = ["CC1-1", "CC2-1", "CC1-2", "CC2-2"]
+            corrs = list()
+            corrs += self._idffdev.ctrldev.IDFF_CH_LABELS
+            corrs += self._idffdev.ctrldev.IDFF_CV_LABELS
+            corrs += self._idffdev.ctrldev.IDFF_CC_LABELS
             lay.addWidget(self._llStatusWidget(), 1, 0, 1, 1)
             lay.addWidget(self._llSettingsWidget(corrs), 2, 0, 3, 1)
         else:
@@ -171,6 +178,18 @@ class IDFFWindow(SiriusMainWindow):
             self.stack.addWidget(graph)
             self.plot_dict[name] = graph
 
+        self.lb_rampcorr = QLabel('Ramp Corr: ', self)
+        self.btn_rampcorr = QPushButton('', self)
+        self.btn_rampcorr.clicked.connect(
+            lambda: self._ramp_corr())
+        self.btn_rampcorr.setIcon(qta.icon(
+            'mdi.escalator', scale_factor=1.5
+        ))
+        self.btn_rampcorr.setToolTip('Ramp correctors to correct values')
+        self.btn_rampcorr.setObjectName('rmpbtn')
+        self.btn_rampcorr.setStyleSheet(
+            '#rmpbtn{min-width:25px; max-width:25px; icon-size:20px;}')
+
         lay.addWidget(ld_loopstate, 0, 0)
         lay.addWidget(self.sb_loopstate, 0, 1)
         lay.addWidget(self.lb_loopstate, 0, 2)
@@ -186,13 +205,15 @@ class IDFFWindow(SiriusMainWindow):
         lay.addWidget(self.timestamp, 5, 1, 1, 2)
         lay.addWidget(buttonGroupWid, 6, 0)
         lay.addWidget(self.stack, 6, 1, 1, 2)
+        lay.addWidget(self.lb_rampcorr, 7, 0)
+        lay.addWidget(self.btn_rampcorr, 7, 1, alignment=Qt.AlignHCenter)
 
         return gbox
 
     def _addNewTableCurve(self, plt, name, section):
-        if "CH" in name:
+        if "ch" in name:
             color_sp, color_rb = 'blue', 'darkBlue'
-        elif "CV" in name:
+        elif "cv" in name:
             color_sp, color_rb = 'red', 'darkRed'
         else:
             color_sp, color_rb = 'green', 'darkGreen'
@@ -242,6 +263,18 @@ class IDFFWindow(SiriusMainWindow):
         self.lb_loopfreq = SiriusLabel(
             self, self.dev_pref.substitute(propty='LoopFreq-RB'))
 
+        self.lb_rampcorr = QLabel('Ramp Corr: ', self)
+        self.btn_rampcorr = QPushButton('', self)
+        self.btn_rampcorr.clicked.connect(
+            lambda: self._ramp_corr())
+        self.btn_rampcorr.setIcon(qta.icon(
+            'mdi.escalator', scale_factor=1.5
+        ))
+        self.btn_rampcorr.setToolTip('Ramp correctors to correct values')
+        self.btn_rampcorr.setObjectName('rmpbtn')
+        self.btn_rampcorr.setStyleSheet(
+            '#rmpbtn{min-width:25px; max-width:25px; icon-size:20px;}')
+
         chnames = IDSearch.conv_idname_2_idff_chnames(self.idname)
         cvnames = IDSearch.conv_idname_2_idff_cvnames(self.idname)
         qsnames = IDSearch.conv_idname_2_idff_qsnames(self.idname)
@@ -284,6 +317,7 @@ class IDFFWindow(SiriusMainWindow):
                 lbl = SiriusLabel(self, pvname, keep_unit=True)
                 lbl.showUnits = True
                 glay_calccorr.addWidget(lbl, row, col)
+
 
         gbox = QGroupBox('Settings', self)
         lay = QGridLayout(gbox)
@@ -374,6 +408,9 @@ class IDFFWindow(SiriusMainWindow):
         #     row += 1
 
         lay.addLayout(glay_calccorr, row, 0, 1, 3)
+        row += 1
+        lay.addWidget(self.lb_rampcorr, row, 0, alignment=Qt.AlignHCenter)
+        lay.addWidget(self.btn_rampcorr, row, 1, alignment=Qt.AlignHCenter)
 
         return gbox
 
@@ -471,3 +508,40 @@ class IDFFWindow(SiriusMainWindow):
         lay.setContentsMargins(3, 3, 3, 3)
         lay.addWidget(widget)
         return gbox
+
+    def _create_idffdev(self):
+        idffclass = IDFFCtrl.get_idffclass(self._idffname)
+        props2init_ctrl = ('LoopState-Sts', )
+        # PVNames to initialize depend whether a soft or hard IDFF
+        if issubclass(idffclass, IDFFCtrlSoft):
+            props2init_ctrl += ('ConfigName-RB',)
+        else:
+            props2init_ctrl += ('Table-RB',)
+        props2init_corrs = ('Current-Mon', 'Current-SP',)
+        idffdev = IDFF(
+            self._idffname,
+            props2init_ctrl=props2init_ctrl,
+            props2init_corrs=props2init_corrs
+        )
+        return idffdev
+
+    def _ramp_corr(self):
+        # NOTE:
+        # 1 - implement this ramp as a separate thread
+        # 2 - add a time icon to indicate when this therad is running
+        # 3 - add 'nrpts' and 'time_interval' parameters as edit widgets
+        devctrl = self._idffdev.ctrldev
+        if not devctrl.loopstate:
+            # if softidff first must guarantee a config is loaded
+            # from clientconfig
+            is_soft = isinstance(devctrl, IDFFCtrlSoft)
+            if is_soft:
+                configname = devctrl.configname
+                if configname != self._idffdev.idffconfig.name:
+                    self._idffdev.load_config(configname)
+            # run correctors' ramp
+            self._idffdev.rampup_corr_currents(
+                nrpts=50, time_interval=10, dry_run=False)
+        else:
+            # NOTE: lauunch a popup warning window...
+            pass
