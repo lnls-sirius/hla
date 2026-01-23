@@ -44,8 +44,8 @@ class IDFFWindow(SiriusMainWindow):
         super().__init__(parent)
         self.prefix = prefix or _VACA_PREFIX
         self.idname = _PVName(idname)
-        self._is_llidff = self.idname.dev.startswith(("IVU", "VPU"))
-        if self._is_llidff and self.idname.dev.startswith("IVU"):
+        self._is_llidff = self.idname.dev.startswith(("IVU", "SIMUL", "VPU"))
+        if self._is_llidff and self.idname.dev.startswith(("IVU", "SIMUL")):
             self._idffname = _PVName(f"SI-{self.idname.sub}:BS-IDFF-CHCV")
         elif self._is_llidff and self.idname.dev.startswith("VPU"):
             self._idffname = _PVName(f"SI-{self.idname.sub}:BS-IDFF-CC")
