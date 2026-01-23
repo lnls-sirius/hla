@@ -323,7 +323,7 @@ SEC_2_CHANNELS = {
             'DPhase': 'RA-RaBO01:RF-LLRF:TuneDephs-Mon',
             'Acting': 'RA-RaBO01:RF-LLRF:TuneOut-Mon',
             'Deadbnd': 'RA-RaBO01:RF-LLRF:TuneMarginHI',
-            'Oversht': 'RA-RaBO01:RF-LLRF:TuneMarginHI',
+            'Oversht': 'RA-RaBO01:RF-LLRF:TuneMarginLO',
             'Pl1Down': 'BO-05D:RF-P5Cav:Plg1MoveDown-Mon',
             'Pl1Up': 'BO-05D:RF-P5Cav:Plg1MoveUp-Mon',
             'Pl2Down': 'BO-05D:RF-P5Cav:Plg2MoveDown-Mon',
@@ -1213,8 +1213,8 @@ SEC_2_CHANNELS = {
                 '5V': ['RA-RaBO01:RF-CavPlDrivers:VoltPos5V-Mon', 'RA-RaBO01:RF-CavPlDrivers:Current5V-Mon'],
                 '48V': ['RA-RaBO01:RF-CavPlDrivers:VoltPos48V-Mon'],
                 'Enable': 'RA-RaBO01:RF-CavPlDrivers:DrEnbl',
-                '1': ['RA-RaBO01:RF-CavPlDrivers:Dr1Enbl-Mon', 'RA-RaBO01:RF-CavPlDrivers:Dr1Flt-Mon'],
-                '2': ['RA-RaBO01:RF-CavPlDrivers:Dr2Enbl-Mon', 'RA-RaBO01:RF-CavPlDrivers:Dr2Flt-Mon']
+                '1': ['RA-RaBO01:RF-CavPlDrivers:Dr1Enbl-Mon', 'RA-RaBO01:RF-CavPlDrivers:Dr1Flt-Mon', 'RA-RaBO01:RF-CavPlDrivers:Dr1Current-Mon'],
+                '2': ['RA-RaBO01:RF-CavPlDrivers:Dr2Enbl-Mon', 'RA-RaBO01:RF-CavPlDrivers:Dr2Flt-Mon', 'RA-RaBO01:RF-CavPlDrivers:Dr2Current-Mon']
             }
         },
         'AdvIntlk': {
@@ -1911,6 +1911,18 @@ SEC_2_CHANNELS = {
                 'Circ Limits': (19.0, 23.0),
             }
         },
+        'RF Area': {
+            'A': {
+                'Geral': 'RA-RaSIA02:RF-THSensor:TempUp-Mon',
+                'Temp': 'RA-RaSIA02:RF-THSensor:Temp-Mon',
+                'Humidity': 'RA-RaSIA02:RF-THSensor:Humidity-Mon',
+            },
+            'B': {
+                'Geral': 'RA-RaSIB02:RF-THSensor:TempUp-Mon',
+                'Temp': 'RA-RaSIB02:RF-THSensor:Temp-Mon',
+                'Humidity': 'RA-RaSIB02:RF-THSensor:Humidity-Mon',
+            },
+        },
         'SSA': {
             '1': {
                 'Name': 'SSA 01',
@@ -2073,6 +2085,9 @@ SEC_2_CHANNELS = {
                     'RA-ToSIA0$(NB):RF-SSAmpTower:HwPwrRevOut-Mon',
                     'RA-ToSIA0$(NB):RF-SSAmpTower:PwrRevOutSts-Mon'
                 ],
+                'Out Temp': {
+                    'Temp': 'RA-ToSIA0$(NB):RF-SSAmpTower:OutT-Mon',
+                },
                 'Alerts': {
                     'PhsFlt': ['Phase Fault', 'RA-ToSIA0$(NB):RF-ACPanel:PhsFlt-Mon'],
                     'SSAFlwRt': ['SSA Rotameter Flow', 'RA-ToSIA0$(NB):RF-SSAmpTower:HdFlwRt-Mon'],
@@ -2127,6 +2142,9 @@ SEC_2_CHANNELS = {
                     'RA-ToSIB0$(NB):RF-SSAmpTower:HwPwrRevOut-Mon',
                     'RA-ToSIB0$(NB):RF-SSAmpTower:PwrRevOutSts-Mon'
                 ],
+                'Out Temp': {
+                    'Temp': 'RA-ToSIB0$(NB):RF-SSAmpTower:OutT-Mon',
+                },
                 'Alerts': {
                     'PhsFlt': ['Phase Fault', 'RA-ToSIB0$(NB):RF-ACPanel:PhsFlt-Mon'],
                     'SSAFlwRt': ['SSA Rotameter Flow', 'RA-ToSIB0$(NB):RF-SSAmpTower:HdFlwRt-Mon'],
@@ -4943,16 +4961,6 @@ SEC_2_CHANNELS = {
                     'P': 'RA-ToSIB0$(NB):RF-ACPanel:PwrP-Mon',
                     'Q': 'RA-ToSIB0$(NB):RF-ACPanel:PwrQ-Mon'
                 }
-            },
-        },
-        'RF Area': {
-            'A': {
-                'Temp': 'RA-RaSIA02:RF-THSensor:Temp-Mon',
-                'Humidity': 'RA-RaSIA02:RF-THSensor:Humidity-Mon',
-            },
-            'B': {
-                'Temp': 'RA-RaSIB02:RF-THSensor:Temp-Mon',
-                'Humidity': 'RA-RaSIB02:RF-THSensor:Humidity-Mon',
             },
         },
     },

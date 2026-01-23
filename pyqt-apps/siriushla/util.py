@@ -1,25 +1,22 @@
 """Util module."""
 import os as _os
-import time as _time
 import subprocess as _subprocess
-import pkg_resources as _pkg_resources
+import time as _time
 from functools import partial as _part
 
-from qtpy.QtCore import QFile as _QFile, Signal as _Signal, QThread as _QThread
-from qtpy.QtGui import QColor
-from qtpy.QtWidgets import QPushButton, QAction, QApplication, QDialog, \
-    QHBoxLayout, QLabel
 import qtawesome as qta
 from pydm.utilities.stylesheet import _get_style_data as pydm_get_style_data
-
+from qtpy.QtCore import QFile as _QFile, QThread as _QThread, Signal as _Signal
+from qtpy.QtGui import QColor
+from qtpy.QtWidgets import QAction, QApplication, QDialog, QHBoxLayout, \
+    QLabel, QPushButton
 
 THREAD = None
 
 
 def get_package_version():
-    fname = _pkg_resources.resource_filename(__name__, 'VERSION')
-    with open(fname, 'r') as _f:
-        version = _f.read().strip()
+    """Return siriushla version string."""
+    from siriushla import __version__ as version
     return version
 
 
@@ -124,10 +121,12 @@ def check_process(cmd, is_window=True, is_pydm=False):
 
 def check_window_by_pid(pid, comm):
     if 'edm' in comm:
-        wind = _subprocess.getoutput('wmctrl -lpx | grep edm | grep SIRIUS')
+        sts, wind = _subprocess.getstatusoutput(
+            'wmctrl -lpx | grep edm | grep SIRIUS'
+        )
     else:
-        wind = _subprocess.getoutput('wmctrl -lpx | grep ' + pid)
-    if not wind:
+        sts, wind = _subprocess.getstatusoutput('wmctrl -lpx | grep ' + pid)
+    if sts or not wind:
         return ''
     window = wind.split('\n')[0].split()[0]
     return window
@@ -137,7 +136,8 @@ def run_newprocess(cmd, is_window=True, is_pydm=False, **kwargs):
     pid, window = check_process(cmd, is_window=is_window, is_pydm=is_pydm)
     if window:
         _subprocess.run(
-            "wmctrl -iR " + window, stdin=_subprocess.PIPE, shell=True)
+            "wmctrl -iR " + window, stdin=_subprocess.PIPE, shell=True
+        )
     elif not pid:
         _subprocess.Popen(cmd, **kwargs)
 

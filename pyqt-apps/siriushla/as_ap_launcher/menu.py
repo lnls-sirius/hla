@@ -193,7 +193,9 @@ def get_object(ismenubar=True, parent=None):
 
             try:
                 host = _sbp.getoutput('hostname')
-                exist_xrandr = not bool(_sbp.getoutput('xrandr | grep missing'))
+                exist_xrandr = not bool(
+                    _sbp.getoutput('xrandr | grep missing')
+                )
                 hosts = {'lnls449-linux', 'lnls451-linux', 'lnls454-linux'}
             except Exception:
                 return menu
@@ -460,10 +462,17 @@ def get_object(ismenubar=True, parent=None):
                 All, ['sirius-hla-si-id-control.py', '-isall'])
             self.add_object_to_level1(menu, All)
 
-            idlist = ['SI-06SB:ID-VPU29', 'SI-07SP:ID-VPU29',
-                      'SI-08SB:ID-IVU18', 'SI-09SA:ID-APU22',
-                      'SI-10SB:ID-DELTA52', 'SI-11SP:ID-APU58',
-                      'SI-14SB:ID-IVU18', 'SI-17SA:ID-APU22']
+            idlist = [
+                'SI-06SB:ID-VPU29',
+                'SI-07SP:ID-VPU29',
+                'SI-08SB:ID-IVU18',
+                'SI-09SA:ID-APU22',
+                'SI-10SB:ID-DELTA52',
+                'SI-11SP:ID-APU58',
+                'SI-14SB:ID-IVU18',
+                'SI-17SA:ID-APU22',
+                'SI-20SB:ID-APU22',
+            ]
             for idname in idlist:
                 idname = SiriusPVName(idname)
                 beamline = IDSearch.conv_idname_2_beamline(idname)
@@ -985,7 +994,7 @@ def get_object(ismenubar=True, parent=None):
             disps = [o for o in out if ' connected' in o]
             ds_names = [d.split(' ')[0] for d in disps]
 
-            reg = '[0-9]{4}x[0-9]{4}\+([0-9]{1,4})\+[0-9]{1,4}'
+            reg = r'[0-9]{4}x[0-9]{4}\+([0-9]{1,4})\+[0-9]{1,4}'
             ds_pos = [
                 _re.findall(reg, d)[0] for di in disps
                 for d in di.split(' ') if _re.match(reg, d)]

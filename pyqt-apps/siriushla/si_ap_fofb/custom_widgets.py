@@ -22,13 +22,16 @@ from pydm.widgets import PyDMPushButton
 from ..util import connect_window
 from ..widgets import SiriusConnectionSignal as _ConnSignal, SiriusLedAlert, \
     SiriusDialog, PyDMLedMultiChannel, SiriusLabel, PyDMLed, SiriusLedState, \
-    CAPushButton
+    CAPushButton, SiriusPushButton
 from ..widgets.windows import create_window_from_widget
 from ..as_ap_configdb import LoadConfigDialog, SaveConfigDialog
 from ..common.afc_acq_core import LogicalTriggers
 from ..as_ap_sofb.graphics.base import Graph
 from .base import BaseObject, get_fofb_icon
 from .graphics import RefOrbViewWidget
+
+from ..common.afc_board import ipmi_mngr_pvs
+from ..common.afc_board.afc_settings import AFCAdvancedSettings
 
 
 class RefOrbWidget(BaseObject, QWidget):
@@ -443,6 +446,8 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
             self._setupErrCntTab(),
             'Frame Error Count - Auxiliary Packet Loss Diagnosis'
         )
+        tab.addTab(self._softReset(), 'AFC Details')
+
         tab.setCurrentIndex(self.tab_selected)
 
         lay = QVBoxLayout(self)
@@ -965,6 +970,78 @@ class ControllersDetailDialog(BaseObject, SiriusDialog):
                         prefix=self.prefix, propty=f'DCC{dcc}FrameErrCntCH{i}-Mon')
                     lblerr = SiriusLabel(self, pvnerr)
                     lay.addWidget(lblerr, row, i+1, alignment=Qt.AlignTop)
+
+        return self._build_scroll_area(wid)
+
+    def _softReset(self):
+        wid = QWidget(self)
+        wid.setObjectName('wid')
+        lay_fru = QGridLayout(wid)
+        lay_fru.setSpacing(1)
+        pv_list_fru = ipmi_mngr_pvs.AFCv4_0_PV_LIST['FRU']
+
+        head_lbl = QLabel(
+            '<h4>AFC Settings Details</h4>', self, alignment=Qt.AlignCenter)
+        lay_fru.addWidget(head_lbl, 0, 0, 2, 1)
+
+        sr_lbl = QLabel(
+            '<h4>Soft Reset</h4>', self, alignment=Qt.AlignCenter)
+        lay_fru.addWidget(sr_lbl, 0, 1, 2, 1)
+
+        for idx, ctl in enumerate(self.ctrlrs):
+            ctl = _PVName(ctl)
+            row = idx + 2
+
+            pv_name = pv_list_fru['SoftRst']
+
+            pbt = QPushButton(qta.icon('fa5s.ellipsis-h'), '', self)
+            pbt.setObjectName('pbt')
+            pbt.setStyleSheet(
+                '#pbt{min-width:25px; max-width:25px; icon-size:20px;}')
+            pbt.setDefault(False)
+            pbt.setAutoDefault(False)
+            Window = create_window_from_widget(
+                AFCAdvancedSettings, title='AFC Advanced Settings'
+            )
+            connect_window(
+                pbt, Window, parent=self, prefix=self.prefix, display=ctl
+            )
+
+            lbl = QLabel(f"IA-{ctl.sub}", self, alignment=Qt.AlignCenter)
+            lbl.setStyleSheet(
+                'QLabel{border: none; background: transparent;}'
+            )
+            lbl.setObjectName('lbl_afcname')
+            hwid = QWidget()
+            hwid.setObjectName('wid')
+            hwid.setStyleSheet('#wid{border: 1px solid gray;}')
+            hlay = QHBoxLayout(hwid)
+            hlay.setContentsMargins(2, 0, 2, 0)
+            hlay.addWidget(pbt)
+            hlay.addWidget(lbl)
+            lay_fru.addWidget(hwid, row, 0)
+
+            cmd_button = SiriusPushButton(
+                self, label='Reset', icon=qta.icon('mdi.restart'),
+                init_channel=f"IA-{ctl.sub}:{ipmi_mngr_pvs.DIS}-AMC-{2}:{pv_name}"
+            )
+            cmd_button.setObjectName('cmd_button')
+            cmd_button.setStyleSheet(
+                '#cmd_button{min-width:120px; max-width:120px; icon-size:20px;}')
+
+            lay_fru.addWidget(cmd_button, row, 1)
+
+            pv_name = pv_list_fru['SoftRstSts']
+            label_mon = SiriusLabel(
+                self, f"IA-{ctl.sub}:{ipmi_mngr_pvs.DIS}-AMC-{2}:{pv_name}",
+                alignment=Qt.AlignCenter)
+            label_mon.setStyleSheet(
+                'QLabel{border: none; background: transparent;}'
+            )
+
+            lay_fru.addWidget(label_mon, row, 2, alignment=Qt.AlignLeft)
+
+            row += 1
 
         return self._build_scroll_area(wid)
 
